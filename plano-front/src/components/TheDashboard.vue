@@ -1,10 +1,10 @@
 <template>
   <div class="TheDashboard">
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-      <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Plano Departamental</a>
+      <router-link :to="{ name: 'dashboard' }" class="navbar-brand col-sm-3 col-md-2 mr-0">Plano Departamental</router-link>
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
-          <a class="nav-link" href="#">Sign out</a>
+          <router-link :to="{ name: 'logout' }" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</router-link>
         </li>
       </ul>
     </nav>
@@ -14,10 +14,39 @@
           <div class="sidebar-sticky">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <router-link :to="{ name: 'dashboard' }" class="nav-link active"><i class="fas fa-home"></i> Dashboard</router-link>
+                <router-link :to="{ name: 'dashboard' }" class="nav-link"><i class="fas fa-home"></i> Dashboard</router-link>
               </li>
+            </ul>
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span>Plano</span>
+              <a class="d-flex align-items-center" href="#">
+                <i class="far fa-calendar-alt mr-1"></i> {{year}}
+              </a>
+            </h6>
+            <ul class="nav flex-column mb-2">
               <li class="nav-item">
                 <router-link :to="{ name: 'pedidos' }" class="nav-link"><i class="fas fa-clipboard"></i> Pedidos</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link :to="{ name: 'turmas' }" class="nav-link"><i class="fas fa-bars"></i> Turmas</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link :to="{ name: 'relatorios' }" class="nav-link"><i class="fas fa-chart-line"></i> Relatórios</router-link>
+              </li>
+            </ul>
+            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">Gerenciar</h6>
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <router-link :to="{ name: 'cursos' }" class="nav-link"><i class="fas fa-graduation-cap"></i> Cursos</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link :to="{ name: 'docentes' }" class="nav-link"><i class="fas fa-users"></i> Docentes</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link :to="{ name: 'grades' }" class="nav-link"><i class="fas fa-sitemap"></i> Grades</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link :to="{ name: 'perfis' }" class="nav-link"><i class="fas fa-th"></i> Perfis</router-link>
               </li>
             </ul>
           </div>
@@ -33,7 +62,22 @@
 
 <script>
 export default {
-  name: 'TheDashboard'
+  name: 'TheDashboard',
+
+  computed: {
+    year () {
+      return this.$store.state.year
+    }
+  },
+
+  created () {
+    this.$socket.open()
+  },
+
+  beforeDestroy () {
+    this.$socket.close()
+  }
+
 }
 </script>
 

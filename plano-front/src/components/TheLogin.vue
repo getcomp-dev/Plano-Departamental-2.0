@@ -45,7 +45,7 @@ export default {
     }
   },
 
-  created () {
+  beforeCreate () {
     this.$store.dispatch('fetchUsuario').then(() => {
       this.$router.replace('/dashboard')
     }).catch(() => {})

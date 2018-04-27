@@ -13,7 +13,8 @@ import {
 
 const state = {
   httpRequestCount: 0,
-  isLoading: false
+  isLoading: false,
+  year: localStorage.getItem('year') || 2018
 }
 
 const mutations = {

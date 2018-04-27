@@ -6,10 +6,12 @@ exports.initialize = function (server) {
 
   io.on('connection', function (socket) {
 
+    console.log('Usuário conectado!');
     io.emit('message', {'msg': 'Novo usuário conectado!'})
 
-    socket.on('event', function () {
-    })
+    socket.on('disconnect', function () {
+      console.log('Usuário Disconectado!');
+    });
 
   })
 

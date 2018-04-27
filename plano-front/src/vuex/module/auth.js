@@ -67,7 +67,7 @@ const actions = {
 
 const getters = {
   getUsuarioFirstName: state => {
-    return state.usuario ? _.words(state.usuario.name)[0] : ''
+    return state.usuario ? _.words(state.usuario.nome)[0] : ''
   }
 }
 
