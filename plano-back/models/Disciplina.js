@@ -28,19 +28,22 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: {
         name: 'Disciplina',
         allowNull: false
-      }
+      },
+      onDelete: 'RESTRICT'
     })
 
     Disciplina.hasMany(models.Pedido, {
       foreignKey: {
         name: 'Disciplina',
         allowNull: false
-      }
+      },
+      onDelete: 'RESTRICT'
     })
 
     Disciplina.belongsToMany(models.Grade, {
       through: models.DisciplinaGrade,
-      foreignKey: 'Disciplina'
+      foreignKey: 'Disciplina',
+      onDelete: 'RESTRICT'
     })
   }
 

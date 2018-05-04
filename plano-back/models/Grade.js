@@ -15,7 +15,8 @@ module.exports = function (sequelize, DataTypes) {
 
     Grade.belongsToMany(models.Disciplina, {
       through: models.DisciplinaGrade,
-      foreignKey: 'Grade'
+      foreignKey: 'Grade',
+      onDelete: 'RESTRICT'
     })
 
   }

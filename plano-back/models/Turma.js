@@ -24,17 +24,20 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: {
         name: 'Turma',
         allowNull: false
-      }
+      },
+      onDelete: 'RESTRICT'
     })
 
     Turma.belongsToMany(models.Curso, {
       through: models.Vaga,
-      foreignKey: 'Turma'
+      foreignKey: 'Turma',
+      onDelete: 'RESTRICT'
     })
 
     Turma.belongsToMany(models.Docente, {
       through: models.DocenteTurma,
-      foreignKey: 'Turma'
+      foreignKey: 'Turma',
+      onDelete: 'RESTRICT'
     })
   }
 

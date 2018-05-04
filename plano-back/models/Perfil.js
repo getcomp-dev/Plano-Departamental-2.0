@@ -30,12 +30,14 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: {
         name: 'Perfil',
         allowNull: false
-      }
+      },
+      onDelete: 'RESTRICT'
     })
 
     Perfil.belongsToMany(models.Docente, {
       through: models.DocentePerfil,
-      foreignKey: 'Perfil'
+      foreignKey: 'Perfil',
+      onDelete: 'RESTRICT'
     })
   }
 

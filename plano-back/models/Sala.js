@@ -21,7 +21,8 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: {
         name: 'Sala',
         allowNull: false
-      }
+      },
+      onDelete: 'RESTRICT'
     })
   }
 
