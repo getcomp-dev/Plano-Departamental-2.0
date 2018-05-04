@@ -52,7 +52,12 @@
           </div>
         </nav>
 
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        <div id="loading" v-if="isLoading">
+          <div class="cube1"></div>
+          <div class="cube2"></div>
+        </div>
+
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" v-if="!isLoading">
           <router-view></router-view>
         </main>
       </div>
@@ -61,17 +66,34 @@
 </template>
 
 <script>
+import {COMPONENT_LOADING, COMPONENT_LOADED} from '../vuex/mutation-types'
+
 export default {
   name: 'TheDashboard',
 
   computed: {
     year () {
       return this.$store.state.year
+    },
+
+    httpRequestCount () {
+      return this.$store.state.httpRequestCount
+    },
+
+    isLoading () {
+      return this.$store.state.isLoading
     }
   },
 
   created () {
-    this.$socket.open()
+    this.$store.commit(COMPONENT_LOADING)
+    this.$store.dispatch('fetchAll').then(() => {
+      this.$socket.open()
+      this.$store.commit(COMPONENT_LOADED)
+    }).catch(response => {
+      console.log("ERRORRR")
+      console.log(response)
+    })
   },
 
   beforeDestroy () {
@@ -150,6 +172,73 @@ export default {
   padding: .75rem 1rem;
   border-width: 0;
   border-radius: 0;
+}
+
+/* Page Loading */
+#loading {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 64px;
+  height: 64px;
+  margin-left: -32px;
+  margin-top: -32px;
+  z-index: 99999;
+}
+
+.cube1, .cube2 {
+  background-color: #333;
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  -webkit-animation: cubemove 1.8s infinite ease-in-out;
+  animation: cubemove 1.8s infinite ease-in-out;
+}
+
+.cube2 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+
+@-webkit-keyframes cubemove {
+  25% {
+    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5)
+  }
+  50% {
+    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg)
+  }
+  75% {
+    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5)
+  }
+  100% {
+    -webkit-transform: rotate(-360deg)
+  }
+}
+
+@keyframes cubemove {
+  25% {
+    transform: translateX(42px) rotate(-90deg) scale(0.5);
+    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
+  }
+  50% {
+    transform: translateX(42px) translateY(42px) rotate(-179deg);
+    -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
+  }
+  50.1% {
+    transform: translateX(42px) translateY(42px) rotate(-180deg);
+    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
+  }
+  75% {
+    transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+  }
+  100% {
+    transform: rotate(-360deg);
+    -webkit-transform: rotate(-360deg);
+  }
 }
 
 </style>

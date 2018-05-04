@@ -6,7 +6,7 @@ import {AUTHENTICATE, AUTHENTICATE_FAILURE, USER_FETCHED, USER_LOGGED_OUT} from 
 
 const state = {
   token: localStorage.getItem('token'),
-  usuario: undefined,
+  Usuario: undefined,
   error: undefined
 }
 
@@ -14,7 +14,7 @@ const mutations = {
   [AUTHENTICATE] (state, data) {
     state.token = data.token
     localStorage.setItem('token', state.token)
-    state.usuario = data.Usuario
+    state.Usuario = data.Usuario
   },
 
   [AUTHENTICATE_FAILURE] (state, data) {
@@ -22,13 +22,13 @@ const mutations = {
   },
 
   [USER_FETCHED] (state, data) {
-    state.usuario = data.Usuario
+    state.Usuario = data.Usuario
   },
 
   [USER_LOGGED_OUT] (state) {
     state.token = undefined
     localStorage.removeItem('token')
-    state.usuario = undefined
+    state.Usuario = undefined
   }
 }
 
@@ -49,7 +49,7 @@ const actions = {
 
   fetchUsuario ({commit, state}) {
     return new Promise((resolve, reject) => {
-      if (state.usuario) {
+      if (state.Usuario) {
         resolve()
       } else if (state.token) {
         authService.fetch().then(response => {
@@ -67,7 +67,7 @@ const actions = {
 
 const getters = {
   getUsuarioFirstName: state => {
-    return state.usuario ? _.words(state.usuario.nome)[0] : ''
+    return state.Usuario ? _.words(state.Usuario.nome)[0] : ''
   }
 }
 
