@@ -7,7 +7,8 @@
 const app = require('../app'),
   http = require('http'),
   io = require('../library/socketIO'),
-  models = require('../models/index')
+  models = require('../models/index'),
+  env = process.env.NODE_ENV || 'development'
 
 /**
  * Get port from environment and store in Express.
@@ -32,6 +33,13 @@ io.initialize(server)
  */
 
 models.sequelize.sync().then(function () {
+  if(env === 'development') {  // If dev, create test user
+    models.Usuario.create({
+        nome: 'Teste',
+        login: 'teste',
+        senha: 'sha1$d7861064$1$e8fb367962f97998cffb2b9855d01746d3a182ca'
+      }).catch(function (err) {})
+  }
   server.listen(port)
   server.on('error', onError)
   server.on('listening', onListening)
