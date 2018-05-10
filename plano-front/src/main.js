@@ -18,6 +18,10 @@ import './assets/css/fontawesome-all.css'
 
 Vue.use(BootstrapVue)
 
+import Notifications from 'vue-notification'
+
+Vue.use(Notifications)
+
 import socketio from 'socket.io-client'
 import VueSocketio from 'vue-socket.io'
 

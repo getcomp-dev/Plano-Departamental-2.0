@@ -1,13 +1,14 @@
 <template>
   <div class="DashboardPerfis row">
     <div class="col">
-      <h3>Lista Perfis</h3>
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Lista Perfis</h1>
+      </div>
       <table class="table table-hover table-sm">
         <thead class="thead-light">
         <tr>
           <th scope="col">Nome</th>
           <th scope="col">Abreviação</th>
-          <th scope="col"></th>
         </tr>
         </thead>
         <tbody>
@@ -15,12 +16,11 @@
           <tr v-for="perfil in Perfis" :key="perfil.id" v-on:click.prevent="showPerfil(perfil)">
             <td>{{perfil.nome}}</td>
             <td>{{perfil.abreviacao}}</td>
-            <td></td>
           </tr>
         </template>
         <template v-else>
           <tr>
-            <td colspan="3" class="text-center"><i class="fas fa-exclamation-triangle"></i> Nenhum perfil encontrado!
+            <td colspan="2" class="text-center"><i class="fas fa-exclamation-triangle"></i> Nenhum perfil encontrado!
             </td>
           </tr>
         </template>
@@ -28,12 +28,14 @@
       </table>
     </div>
     <div class="col">
-      <template v-if="isEdit">
-        <h3>Editar Perfil</h3>
-      </template>
-      <template v-else>
-        <h3>Adicionar Perfil</h3>
-      </template>
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <template v-if="isEdit">
+          <h1 class="h2">Editar Perfil</h1>
+        </template>
+        <template v-else>
+          <h1 class="h2">Adicionar Perfil</h1>
+        </template>
+      </div>
       <b-alert :show="Boolean(error)" variant="danger" dismissible>
         {{error}}
       </b-alert>
@@ -53,13 +55,13 @@
         <div class="form-group row">
           <div class="col-sm-10">
             <template v-if="isEdit">
-              <button type="button" class="btn btn-success m-2" v-on:click.prevent="editPerfil">Editar</button>
-              <button type="button" class="btn btn-danger m-2" v-on:click.prevent="deletePerfil">Excluir</button>
-              <button type="button" class="btn btn-secondary m-2" v-on:click.prevent="cleanPerfil">Cancelar</button>
+              <button type="button" class="btn btn-success m-2" v-on:click.prevent="editPerfil" :key="1">Editar</button>
+              <button type="button" class="btn btn-danger m-2" v-on:click.prevent="deletePerfil" :key="3">Excluir</button>
+              <button type="button" class="btn btn-secondary m-2" v-on:click.prevent="cleanPerfil" :key="2">Cancelar</button>
             </template>
             <template v-else>
-              <button type="button" class="btn btn-success m-2" v-on:click.prevent="addPerfil">Adicionar</button>
-              <button type="button" class="btn btn-secondary m-2" v-on:click.prevent="cleanPerfil">Resetar</button>
+              <button type="button" class="btn btn-success m-2" v-on:click.prevent="addPerfil" :key="1">Adicionar</button>
+              <button type="button" class="btn btn-secondary m-2" v-on:click.prevent="cleanPerfil" :key="2">Resetar</button>
             </template>
           </div>
         </div>
@@ -90,8 +92,14 @@ export default {
 
   methods: {
     addPerfil () {
-      perfilService.create(this.perfilForm).then(() => {
+      perfilService.create(this.perfilForm).then((response) => {
         this.cleanPerfil()
+        this.$notify({
+          group: 'general',
+          title: `Sucesso!`,
+          text: `O Perfil ${response.Perfil.nome} foi criado!`,
+          type: 'success'
+        })
       }).catch(() => {
         this.error = 'Erro ao criar Perfil'
       })

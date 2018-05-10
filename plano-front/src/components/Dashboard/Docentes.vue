@@ -1,6 +1,8 @@
 <template>
   <div class="DashboardDocentes">
-    <h3>Docentes</h3>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="h2">Docentes</h1>
+    </div>
   </div>
 </template>
 
