@@ -4,15 +4,28 @@ module.exports = function (sequelize, DataTypes) {
   const Curso = sequelize.define('Curso', {
     nome: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      defaultValue: '',
+      validate: {
+        notEmpty: {msg: 'O nome não deve estar vazio'}
+      }
     },
     codigo: {
       type: DataTypes.STRING,
-      allowNull: false
+      unique: {msg: 'Já existe um Curso com esse código'},
+      allowNull: false,
+      defaultValue: '',
+      validate: {
+        notEmpty: {msg: 'O codigo não deve estar vazio'}
+      }
     },
     turno: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      defaultValue: '',
+      validate: {
+        notEmpty: {msg: 'O turno não deve estar vazio'}
+      }
     }
   }, {
     freezeTableName: true,

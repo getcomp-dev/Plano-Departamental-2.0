@@ -8,7 +8,8 @@ const express = require('express'),
   SequelizeValidationError = require('./models/index').Sequelize.ValidationError,
   authenticateRoute = require('./routes/authenticate'),
   usuarioRoute = require('./routes/usuario'),
-  perfilRoute = require('./routes/perfil')
+  perfilRoute = require('./routes/perfil'),
+  cursoRoute = require('./routes/curso')
 
 const app = express()
 
@@ -34,6 +35,7 @@ app.use(jwt({secret: config.jwt.secret, requestProperty: 'usuario'}).unless({
 app.use('/authenticate', authenticateRoute)
 app.use('/usuario', usuarioRoute)
 app.use('/perfil', perfilRoute)
+app.use('/curso', cursoRoute)
 
 // Error handlers
 // Catch 404 and forward to error handler
@@ -49,11 +51,14 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 400)
 
     if (err instanceof SequelizeValidationError) {
+      let fullMessage = ''
       let errors = []
       err.errors.forEach(function (error) {
         errors.push({'field': error.path, 'message': error.message})
+        fullMessage += error.message + '\n'
       })
-      res.send({success: false, status: err.status, message: 'Validation errors ocurred', errors: errors})
+
+      res.send({success: false, status: err.status, message: 'Validation errors ocurred', errors: errors, fullMessage: fullMessage})
     } else {
       res.send({success: false, status: err.status, message: err.message, data: err.data})
     }

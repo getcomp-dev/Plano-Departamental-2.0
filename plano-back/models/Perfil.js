@@ -5,19 +5,17 @@ module.exports = function (sequelize, DataTypes) {
     nome: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: '',
       validate: {
-        notEmpty: {
-          msg: 'O nome não deve estar vazio'
-        }
+        notEmpty: {msg: 'O nome não deve estar vazio'}
       }
     },
     abreviacao: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: '',
       validate: {
-        notEmpty: {
-          msg: 'A abreviação não deve estar vazia'
-        }
+        notEmpty: {msg: 'A abreviação não deve estar vazia'}
       }
     }
   }, {
