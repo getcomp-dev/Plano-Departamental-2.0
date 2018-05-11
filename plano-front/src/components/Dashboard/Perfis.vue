@@ -106,11 +106,30 @@ export default {
     },
 
     editPerfil () {
-
+      perfilService.update(this.perfilForm.id, this.perfilForm).then((response) => {
+        this.$notify({
+          group: 'general',
+          title: `Sucesso!`,
+          text: `O Perfil ${response.Perfil.nome} foi atualizado!`,
+          type: 'success'
+        })
+      }).catch(() => {
+        this.error = 'Erro ao atualizar Perfil'
+      })
     },
 
     deletePerfil () {
-
+      perfilService.delete(this.perfilForm.id, this.perfilForm).then((response) => {
+        this.cleanPerfil()
+        this.$notify({
+          group: 'general',
+          title: `Sucesso!`,
+          text: `O Perfil ${response.Perfil.nome} foi excluído!`,
+          type: 'success'
+        })
+      }).catch(() => {
+        this.error = 'Erro ao atualizar Perfil'
+      })
     },
 
     cleanPerfil () {
