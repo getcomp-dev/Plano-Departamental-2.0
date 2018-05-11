@@ -23,7 +23,8 @@ export default {
       form: {
         login: undefined,
         senha: undefined
-      }
+      },
+      error: undefined
     }
   },
 
@@ -35,13 +36,13 @@ export default {
         } else {
           this.$router.replace('/dashboard')
         }
-      }).catch(() => {})
-    }
-  },
-
-  computed: {
-    error () {
-      return this.$store.state.auth.error
+      }).catch((error) => {
+        if (error.response) {
+          this.error = error.response.data.message
+        } else {
+          this.error = 'Erro na requisição! Tente novamente.'
+        }
+      })
     }
   },
 

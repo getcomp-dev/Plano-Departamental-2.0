@@ -2,12 +2,11 @@
 import _ from 'lodash'
 import authService from '../../common/services/auth'
 
-import {AUTHENTICATE, AUTHENTICATE_FAILURE, USER_FETCHED, USER_LOGGED_OUT} from '../mutation-types'
+import {AUTHENTICATE, USER_FETCHED, USER_LOGGED_OUT} from '../mutation-types'
 
 const state = {
   token: localStorage.getItem('token'),
-  Usuario: undefined,
-  error: undefined
+  Usuario: undefined
 }
 
 const mutations = {
@@ -15,10 +14,6 @@ const mutations = {
     state.token = data.token
     localStorage.setItem('token', state.token)
     state.Usuario = data.Usuario
-  },
-
-  [AUTHENTICATE_FAILURE] (state, data) {
-    state.error = data.message
   },
 
   [USER_FETCHED] (state, data) {
@@ -38,12 +33,7 @@ const actions = {
       authService.authenticate(payload).then(response => {
         commit(AUTHENTICATE, response)
         resolve()
-      }).catch(error => {
-        if (error.response) {
-          commit(AUTHENTICATE_FAILURE, error.response.data)
-        }
-        reject()
-      })
+      }).catch(error => reject(error))
     })
   },
 

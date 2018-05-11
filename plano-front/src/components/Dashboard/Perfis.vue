@@ -1,7 +1,8 @@
 <template>
   <div class="DashboardPerfis row">
     <div class="col">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <div
+          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Lista Perfis</h1>
       </div>
       <table class="table table-hover table-sm">
@@ -28,7 +29,8 @@
       </table>
     </div>
     <div class="col">
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <div
+          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <template v-if="isEdit">
           <h1 class="h2">Editar Perfil</h1>
         </template>
@@ -36,8 +38,7 @@
           <h1 class="h2">Adicionar Perfil</h1>
         </template>
       </div>
-      <b-alert :show="Boolean(error)" variant="danger" dismissible>
-        {{error}}
+      <b-alert :show="Boolean(error)" variant="danger" dismissible v-html="error">
       </b-alert>
       <form>
         <div class="form-group row">
@@ -56,12 +57,16 @@
           <div class="col-sm-10">
             <template v-if="isEdit">
               <button type="button" class="btn btn-success m-2" v-on:click.prevent="editPerfil" :key="1">Editar</button>
-              <button type="button" class="btn btn-danger m-2" v-on:click.prevent="deletePerfil" :key="3">Excluir</button>
-              <button type="button" class="btn btn-secondary m-2" v-on:click.prevent="cleanPerfil" :key="2">Cancelar</button>
+              <button type="button" class="btn btn-danger m-2" v-on:click.prevent="deletePerfil" :key="3">Excluir
+              </button>
+              <button type="button" class="btn btn-secondary m-2" v-on:click.prevent="cleanPerfil" :key="2">Cancelar
+              </button>
             </template>
             <template v-else>
-              <button type="button" class="btn btn-success m-2" v-on:click.prevent="addPerfil" :key="1">Adicionar</button>
-              <button type="button" class="btn btn-secondary m-2" v-on:click.prevent="cleanPerfil" :key="2">Resetar</button>
+              <button type="button" class="btn btn-success m-2" v-on:click.prevent="addPerfil" :key="1">Adicionar
+              </button>
+              <button type="button" class="btn btn-secondary m-2" v-on:click.prevent="cleanPerfil" :key="2">Resetar
+              </button>
             </template>
           </div>
         </div>
@@ -72,7 +77,7 @@
 
 <script>
 import _ from 'lodash'
-import perfilService from  '../../common/services/perfil'
+import perfilService from '../../common/services/perfil'
 
 const emptyPerfil = {
   id: undefined,
@@ -100,8 +105,11 @@ export default {
           text: `O Perfil ${response.Perfil.nome} foi criado!`,
           type: 'success'
         })
-      }).catch(() => {
-        this.error = 'Erro ao criar Perfil'
+      }).catch(error => {
+        this.error = '<b>Erro ao criar Perfil</b>'
+        if (error.response.data.fullMessage) {
+          this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
+        }
       })
     },
 
@@ -113,8 +121,11 @@ export default {
           text: `O Perfil ${response.Perfil.nome} foi atualizado!`,
           type: 'success'
         })
-      }).catch(() => {
-        this.error = 'Erro ao atualizar Perfil'
+      }).catch(error => {
+        this.error = '<b>Erro ao atualizar Perfil</b>'
+        if (error.response.data.fullMessage) {
+          this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
+        }
       })
     },
 
@@ -128,7 +139,7 @@ export default {
           type: 'success'
         })
       }).catch(() => {
-        this.error = 'Erro ao atualizar Perfil'
+        this.error = '<b>Erro ao excluir Perfil</b>'
       })
     },
 

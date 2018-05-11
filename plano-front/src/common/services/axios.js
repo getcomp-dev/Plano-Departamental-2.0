@@ -27,10 +27,9 @@ export default function (Vue, store) {
     return response
   }, function (error) {
     store.commit(HTTP_REQUEST_DECREMENT)
-    console.log('RESPONSE ERROR')
-    console.log(error)
-    if (error.response) {
-      console.log(error.response)
+    if (!error.response) {
+      console.log('RESPONSE ERROR')
+      console.log(error)
     }
     return Promise.reject(error)
   })

@@ -28,7 +28,8 @@ body {
 
 .vue-notification {
   padding: 10px;
-  margin: 15px;
+  margin-top: 15px;
+  margin-right: 15px;
 
   font-size: 12px;
 
