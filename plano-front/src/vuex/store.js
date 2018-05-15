@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 
 import auth from './module/auth'
 import perfil from './module/perfil'
+import curso from './module/curso'
 
 import {
   USER_LOGGED_OUT,
@@ -53,7 +54,8 @@ export default new Vuex.Store({
   getters,
   modules: {
     auth,
-    perfil
+    perfil,
+    curso
   },
   strict: process.env.NODE_ENV !== 'production'
 })
