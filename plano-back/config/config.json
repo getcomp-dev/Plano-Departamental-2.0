@@ -2,7 +2,7 @@
   "development": {
     "database": {
       "username": "root",
-      "password": "root",
+      "password": "",
       "database": "plano_dev",
       "options": {
         "host": "127.0.0.1",

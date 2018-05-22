@@ -48,6 +48,9 @@
               <li class="nav-item">
                 <router-link :to="{ name: 'perfis' }" class="nav-link"><i class="fas fa-th"></i> Perfis</router-link>
               </li>
+              <li class="nav-item">
+                <router-link :to="{ name: 'disciplinas' }" class="nav-link"><i class="fas fa-table"></i>Disciplina</router-link>
+              </li>
             </ul>
           </div>
         </nav>

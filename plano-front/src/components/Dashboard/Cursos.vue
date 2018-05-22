@@ -1,5 +1,5 @@
 <template>
-  <div class="DashboardPerfis row">
+  <div class="DashboardCursos row">
     <div class="col">
       <div
               class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -19,6 +19,7 @@
             <td>{{curso.nome}}</td>
             <td>{{curso.codigo}}</td>
             <td>{{curso.turno}}</td>
+
           </tr>
         </template>
         <template v-else>
@@ -58,7 +59,11 @@
         <div class="form-group row">
           <label for="turno" class="col-sm-2 col-form-label">Turno</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="turno" v-model="cursoForm.turno">
+            <div id="turno">
+              <input type="radio" name="truno" value="Diurno" v-model="cursoForm.turno"> Diurno<br/>
+              <input type="radio" name="truno" value="Integral" v-model="cursoForm.turno"> Integral<br/>
+              <input type="radio" name="truno" value="Noturno" v-model="cursoForm.turno"> Noturno<br/>
+            </div>
           </div>
         </div>
         <div class="form-group row">
@@ -162,7 +167,14 @@ export default {
 
         showCurso(curso) {
             this.cleanCurso()
-            this.cursoForm = _.clone(curso)
+            this.cursoForm = _.clone(curso);
+            (function smoothscroll(){
+                var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
+                if (currentScroll > 0) {
+                    window.requestAnimationFrame(smoothscroll);
+                    window.scrollTo (0,currentScroll - (currentScroll/5));
+                }
+            })();
         }
     },
 

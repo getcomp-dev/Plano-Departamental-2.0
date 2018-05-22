@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import auth from './module/auth'
 import perfil from './module/perfil'
 import curso from './module/curso'
+import disciplina from './module/disciplina'
 
 import {
   USER_LOGGED_OUT,
@@ -55,7 +56,8 @@ export default new Vuex.Store({
   modules: {
     auth,
     perfil,
-    curso
+    curso,
+    disciplina
   },
   strict: process.env.NODE_ENV !== 'production'
 })
