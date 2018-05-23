@@ -15,6 +15,7 @@ import DashboardGrades from './components/Dashboard/Grades'
 import DashboardPerfis from './components/Dashboard/Perfis'
 import DashboardDisciplinas from './components/Dashboard/Disciplinas'
 
+
 import {USER_LOGGED_OUT} from './vuex/mutation-types'
 
 Vue.use(VueRouter)

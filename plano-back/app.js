@@ -10,7 +10,9 @@ const express = require('express'),
   usuarioRoute = require('./routes/usuario'),
   perfilRoute = require('./routes/perfil'),
   cursoRoute = require('./routes/curso'),
-  disciplinaRoute = require('./routes/disciplina')
+  disciplinaRoute = require('./routes/disciplina'),
+  pedidoRoute = require('./routes/pedido')
+
 
 const app = express()
 
@@ -38,6 +40,7 @@ app.use('/usuario', usuarioRoute)
 app.use('/perfil', perfilRoute)
 app.use('/curso', cursoRoute)
 app.use('/disciplina', disciplinaRoute)
+app.use('/pedido', pedidoRoute)
 
 // Error handlers
 // Catch 404 and forward to error handler
