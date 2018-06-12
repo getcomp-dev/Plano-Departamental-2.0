@@ -39,6 +39,15 @@ module.exports = function (sequelize, DataTypes) {
       foreignKey: 'Turma',
       onDelete: 'RESTRICT'
     })
+
+    Turma.belongsToMany(models.Curso, {
+      through: models.Pedido,
+      foreignKey: {
+        name:'Turma',
+        allowNull:false
+      },
+      onDelete:'RESTRICT'
+    })
   }
 
   return Turma

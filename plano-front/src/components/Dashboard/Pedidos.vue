@@ -14,8 +14,6 @@
           <th scope="col">Descrição</th>
           <th scope="col">Vagas Periodizadas Solicitadas</th>
           <th scope="col">Vagas Não Periodizadas Solicitadas</th>
-          <th scope="col">Vagas Periodizadas Atendidas</th>
-          <th scope="col">Vagas Não Periodizadas Atendidas</th>
           <th scope="col">Disciplina</th>
         </tr>
         </thead>
@@ -26,10 +24,8 @@
             <td>{{pedido.responsavel}}</td>
             <td>{{pedido.telefone}}</td>
             <td>{{pedido.descricao}}</td>
-            <td>{{pedido.vagasPeriodizadasSolicitadas}}</td>
-            <td>{{pedido.vagasNaoPeriodizadasSolicitadas}}</td>
-            <td>{{pedido.vagasPeriodizadasAtendidas}}</td>
-            <td>{{pedido.vagasNaoPeriodizadasAtendidas}}</td>
+            <td>{{pedido.vagasPeriodizadasAtendidas}}/{{pedido.vagasPeriodizadasSolicitadas}}</td>
+            <td>{{pedido.vagasNaoPeriodizadasAtendidas}}/{{pedido.vagasNaoPeriodizadasSolicitadas}}</td>
             <template v-for="disciplina in Disciplinas">
               <td v-if="disciplina.id===pedido.Disciplina" :key="disciplina.id">{{disciplina.nome}}</td>
             </template>
@@ -166,7 +162,7 @@
         methods: {
             addPedido() {
                 pedidoService.create(this.pedidoForm).then((response) => {
-                    this.cleanDisciplina()
+                    this.cleanPedido()
                     this.$notify({
                         group: 'general',
                         title: `Sucesso!`,
@@ -201,7 +197,7 @@
 
             deletePedido() {
                 pedidoService.delete(this.pedidoForm.id, this.pedidoForm).then((response) => {
-                    this.cleanDisciplina()
+                    this.cleanPedido()
                     this.$notify({
                         group: 'general',
                         title: `Sucesso!`,

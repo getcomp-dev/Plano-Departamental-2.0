@@ -11,7 +11,11 @@ const express = require('express'),
   perfilRoute = require('./routes/perfil'),
   cursoRoute = require('./routes/curso'),
   disciplinaRoute = require('./routes/disciplina'),
-  pedidoRoute = require('./routes/pedido')
+  pedidoRoute = require('./routes/pedido'),
+  docenteRoute = require('./routes/docente'),
+  gradeRoute = require('./routes/grade'),
+  disciplinaGradeRoute = require('./routes/disciplinaGrade'),
+  turmaRoute = require('./routes/turma')
 
 
 const app = express()
@@ -41,6 +45,10 @@ app.use('/perfil', perfilRoute)
 app.use('/curso', cursoRoute)
 app.use('/disciplina', disciplinaRoute)
 app.use('/pedido', pedidoRoute)
+app.use('/docente', docenteRoute)
+app.use('/disciplinaGrade', disciplinaGradeRoute)
+app.use('/grade', gradeRoute)
+app.use('/turma', turmaRoute)
 
 // Error handlers
 // Catch 404 and forward to error handler

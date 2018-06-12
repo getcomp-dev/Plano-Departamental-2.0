@@ -14,6 +14,7 @@ import DashboardDocentes from './components/Dashboard/Docentes'
 import DashboardGrades from './components/Dashboard/Grades'
 import DashboardPerfis from './components/Dashboard/Perfis'
 import DashboardDisciplinas from './components/Dashboard/Disciplinas'
+import DashboardPrototipo from './components/Dashboard/DashboardPrototipo'
 
 
 import {USER_LOGGED_OUT} from './vuex/mutation-types'
@@ -47,7 +48,8 @@ const routes = [
       {path: 'docentes', name: 'docentes', component: DashboardDocentes},
       {path: 'grades', name: 'grades', component: DashboardGrades},
       {path: 'disciplinas', name: 'disciplinas', component: DashboardDisciplinas},
-      {path: 'perfis', name: 'perfis', component: DashboardPerfis}
+      {path: 'perfis', name: 'perfis', component: DashboardPerfis},
+      {path: 'prototipo', name: 'prototipo', component: DashboardPrototipo}
     ]
   },
   {

@@ -17,7 +17,7 @@
                 </thead>
                 <tbody>
                 <template v-if="Disciplinas.length > 0">
-                    <tr v-for="disciplina in Disciplinas" :key="disciplina.id" v-on:click.prevent="showDisciplinas(disciplina)">
+                    <tr v-for="disciplina in Disciplinas" :key="disciplina.id" v-on:click.prevent="showDisciplina(disciplina)">
                         <td>{{disciplina.nome}}</td>
                         <td>{{disciplina.codigo}}</td>
                         <td>{{disciplina.cargaTeorica}}</td>
@@ -183,7 +183,7 @@
                 this.error = undefined
             },
 
-            showDisciplinas(disciplina) {
+            showDisciplina(disciplina) {
                 this.cleanDisciplina()
                 this.disciplinaForm = _.clone(disciplina);
                 (function smoothscroll(){

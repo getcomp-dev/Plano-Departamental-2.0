@@ -6,6 +6,10 @@ import perfil from './module/perfil'
 import curso from './module/curso'
 import disciplina from './module/disciplina'
 import pedido from './module/pedido'
+import grade from './module/grade'
+import disciplinaGrade from './module/disciplinaGrade'
+import docente from './module/docente'
+import turma from './module/turma'
 
 import {
   USER_LOGGED_OUT,
@@ -59,7 +63,11 @@ export default new Vuex.Store({
     perfil,
     curso,
     disciplina,
-    pedido
+    pedido,
+    grade,
+    disciplinaGrade,
+    docente,
+    turma
   },
   strict: process.env.NODE_ENV !== 'production'
 })

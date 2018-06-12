@@ -2,39 +2,13 @@
 
 module.exports = function (sequelize, DataTypes) {
   const Pedido = sequelize.define('Pedido', {
-    departamento: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    responsavel: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    telefone: {
-      type: DataTypes.STRING,
-      allowNull: false
-    },
-    descricao: {
-      type: DataTypes.TEXT,
-      allowNull: true
-    },
-    vagasPeriodizadasSolicitadas: {
+    vagasPeriodizadas: {
       type: DataTypes.INTEGER,
       allowNull: false
     },
-    vagasNaoPeriodizadasSolicitadas: {
+    vagasNaoPeriodizadas: {
       type: DataTypes.INTEGER,
       allowNull: false
-    },
-    vagasPeriodizadasAtendidas: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0
-    },
-    vagasNaoPeriodizadasAtendidas: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0
     }
   }, {
     freezeTableName: true
