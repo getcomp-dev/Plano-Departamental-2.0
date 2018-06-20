@@ -35,7 +35,7 @@ app.use(bodyParser.json())
 //Logger
 app.use(logger('dev'))
 
-app.use(jwt({secret: config.jwt.secret, requestProperty: 'usuario'}).unless({
+app.use('/api', jwt({secret: config.jwt.secret, requestProperty: 'usuario'}).unless({
   path: [{
     url: '/api/authenticate', methods: ['POST']
   }, {

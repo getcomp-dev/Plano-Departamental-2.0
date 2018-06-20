@@ -193,3 +193,13 @@ $RECYCLE.BIN/
 
 
 # End of https://www.gitignore.io/api/node,macos,linux,windows,phpstorm
+data-backup/salas.csv
+data-backup/perfis.csv
+data-backup/horarios.csv
+data-backup/docentes.csv
+data-backup/disciplinas.csv
+data-backup/curso.csv
+.idea/vcs.xml
+.idea/Plano-Departamental-2.0.iml
+.idea/modules.xml
+.idea/misc.xml
