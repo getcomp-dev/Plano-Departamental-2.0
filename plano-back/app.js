@@ -3,6 +3,7 @@ const express = require('express'),
   logger = require('morgan'),
   bodyParser = require('body-parser'),
   jwt = require('express-jwt'),
+  history = require('connect-history-api-fallback'),
   config = require('./config/index'),
   ValidationErrors = require('./library/ValidationError'),
   SequelizeValidationError = require('./models/index').Sequelize.ValidationError,
@@ -22,6 +23,8 @@ const express = require('express'),
 
 const app = express()
 
+app.use(express.static('public'));
+
 //Allow cors
 app.use(cors())
 
@@ -34,26 +37,28 @@ app.use(logger('dev'))
 
 app.use(jwt({secret: config.jwt.secret, requestProperty: 'usuario'}).unless({
   path: [{
-    url: '/authenticate', methods: ['POST']
+    url: '/api/authenticate', methods: ['POST']
   }, {
-    url: '/usuario', methods: ['POST']
+    url: '/api/usuario', methods: ['POST']
   }]
 }))
 
 //Mapping routes
-app.use('/authenticate', authenticateRoute)
-app.use('/usuario', usuarioRoute)
-app.use('/perfil', perfilRoute)
-app.use('/curso', cursoRoute)
-app.use('/disciplina', disciplinaRoute)
-app.use('/pedido', pedidoRoute)
-app.use('/docente', docenteRoute)
-app.use('/disciplinaGrade', disciplinaGradeRoute)
-app.use('/grade', gradeRoute)
-app.use('/turma', turmaRoute)
-app.use('/sala', salaRoute)
-app.use('/horario', horarioRoute)
+app.use('/api/authenticate', authenticateRoute)
+app.use('/api/usuario', usuarioRoute)
+app.use('/api/perfil', perfilRoute)
+app.use('/api/curso', cursoRoute)
+app.use('/api/disciplina', disciplinaRoute)
+app.use('/api/pedido', pedidoRoute)
+app.use('/api/docente', docenteRoute)
+app.use('/api/disciplinaGrade', disciplinaGradeRoute)
+app.use('/api/grade', gradeRoute)
+app.use('/api/turma', turmaRoute)
+app.use('/api/sala', salaRoute)
+app.use('/api/horario', horarioRoute)
 
+
+app.use(history())
 // Error handlers
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
