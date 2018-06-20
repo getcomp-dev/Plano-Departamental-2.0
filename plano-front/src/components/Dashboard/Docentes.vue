@@ -9,6 +9,7 @@
         <thead class="thead-light">
         <tr>
           <th scope="col">Nome</th>
+          <th scope="col">Apelido</th>
           <th scope="col">Créditos</th>
           <th scope="col">Ativo</th>
         </tr>
@@ -17,6 +18,7 @@
         <template v-if="Docentes.length > 0">
           <tr v-for="docente in Docentes" :key="docente.id" v-on:click.prevent="showDocentes(docente)">
             <td>{{docente.nome}}</td>
+            <td>{{docente.apelido}}</td>
             <td>{{docente.creditos}}</td>
             <td>{{docente.ativo}}</td>
           </tr>
@@ -47,6 +49,12 @@
           <label for="nome" class="col-sm-2 col-form-label">Nome</label>
           <div class="col-sm-10">
             <input type="text" class="form-control" id="nome" v-model="docenteForm.nome">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="apelido" class="col-sm-2 col-form-label">Apelido</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="apelido" v-model="docenteForm.apelido">
           </div>
         </div>
         <div class="form-group row">
@@ -91,6 +99,7 @@
     const emptyDocente = {
         id:undefined,
         nome:undefined,
+        apelido:undefined,
         creditos:undefined,
         ativo:1
     }

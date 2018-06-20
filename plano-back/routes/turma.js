@@ -8,8 +8,16 @@ router.post('/', function (req, res, next) {
     models.Turma.create({
         periodo: req.body.periodo,
         letra: req.body.letra,
-        turno:  req.body.turno,
-        Disciplina: req.body.Disciplina
+        turno1:  req.body.turno1,
+        turno2: req.body.turno2,
+        Disciplina: req.body.Disciplina,
+        Docente1: req.body.Docente1,
+        Docente2: req.body.Docente2,
+        Horario1: req.body.Horario1,
+        Horario2: req.body.Horario2,
+        Sala1: req.body.Sala1,
+        Sala2: req.body.Sala2
+
     }).then(function (turma) {
         ioBroadcast(SM.TURMA_CREATED, {'msg': 'Turma criada!', 'Turma': turma})
 
@@ -45,10 +53,18 @@ router.post('/:id([0-9]+)', function (req, res, next) {
             throw new CustomError(400, 'Turma inválida')
 
         return turma.updateAttributes({
+
             periodo: req.body.periodo,
             letra: req.body.letra,
-            turno:  req.body.turno,
-            Disciplina: req.body.Disciplina
+            turno1:  req.body.turno1,
+            turno2: req.body.turno2,
+            Disciplina: req.body.Disciplina,
+            Docente1: req.body.Docente1,
+            Docente2: req.body.Docente2,
+            Horario1: req.body.Horario1,
+            Horario2: req.body.Horario2,
+            Sala1: req.body.Sala1,
+            Sala2: req.body.Sala2
         })
     }).then(function (turma) {
         ioBroadcast(SM.TURMA_UPDATED, {'msg': 'Turma atualizada!', 'Turma': turma})

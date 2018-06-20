@@ -5,14 +5,8 @@ const models = require('../models/index'),
 
 router.post('/', function (req, res, next) {
     models.Pedido.create({
-        departamento: req.body.departamento,
-        responsavel: req.body.responsavel,
-        telefone: req.body.telefone,
-        descricao: req.body.descricao,
-        vagasPeriodizadasSolicitadas: req.body.vagasPeriodizadasSolicitadas,
-        vagasNaoPeriodizadasSolicitadas: req.body.vagasNaoPeriodizadasSolicitadas,
-        vagasPeriodizadasAtendidas: req.body.vagasPeriodizadasAtendidas,
-        vagasNaoPeriodizadasAtendidas: req.body.vagasNaoPeriodizadasAtendidas,
+        vagasPeriodizadas: req.body.vagasPeriodizadas,
+        vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
         Disciplina: req.body.Disciplina
     }).then(function (pedido) {
         ioBroadcast(SM.PEDIDO_CREATED, {'msg': 'Pedido criado!', 'Pedido': pedido})
@@ -49,14 +43,8 @@ router.post('/:id([0-9]+)', function (req, res, next) {
             throw new CustomError(400, 'Pedido inválido')
 
         return pedido.updateAttributes({
-            departamento: req.body.departamento,
-            responsavel: req.body.responsavel,
-            telefone: req.body.telefone,
-            descricao: req.body.descricao,
-            vagasPeriodizadasSolicitadas: req.body.vagasPeriodizadasSolicitadas,
-            vagasNaoPeriodizadasSolicitadas: req.body.vagasNaoPeriodizadasSolicitadas,
-            vagasPeriodizadasAtendidas: req.body.vagasPeriodizadasAtendidas,
-            vagasNaoPeriodizadasAtendidas: req.body.vagasNaoPeriodizadasAtendidas,
+            vagasPeriodizadas: req.body.vagasPeriodizadas,
+            vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
             Disciplina: req.body.Disciplina
         })
     }).then(function (pedido) {

@@ -11,11 +11,11 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false
     },
     cargaTeorica: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: false
     },
     cargaPratica: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.FLOAT,
       allowNull: false
     }
   }, {

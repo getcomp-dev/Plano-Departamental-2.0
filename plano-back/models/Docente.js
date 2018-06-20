@@ -6,6 +6,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false
     },
+    apelido: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     creditos: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -21,17 +25,21 @@ module.exports = function (sequelize, DataTypes) {
   })
 
   Docente.associate = function (models) {
-    Docente.belongsToMany(models.Turma, {
-      through: models.DocenteTurma,
-      foreignKey: 'Docente',
+    Docente.hasMany(models.Turma, {
+      foreignKey: {
+        name: 'Docente1',
+        allowNull:false
+      },
       onDelete: 'RESTRICT'
     })
 
-    Docente.belongsToMany(models.Perfil, {
-      through: models.DocentePerfil,
-      foreignKey: 'Docente',
-      onDelete: 'RESTRICT'
-    })
+      Docente.hasMany(models.Turma, {
+          foreignKey: {
+              name: 'Docente2',
+              allowNull:true
+          },
+          onDelete: 'RESTRICT'
+      })
   }
 
   return Docente

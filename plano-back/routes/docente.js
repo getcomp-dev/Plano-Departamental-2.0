@@ -6,6 +6,7 @@ const models = require('../models/index'),
 router.post('/', function (req, res, next) {
     models.Docente.create({
         nome: req.body.nome,
+        apelido: req.body.apelido,
         creditos: req.body.creditos,
         ativo: req.body.ativo
     }).then(function (docente) {
@@ -44,6 +45,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
 
         return docente.updateAttributes({
             nome: req.body.nome,
+            apelido: req.body.apelido,
             creditos: req.body.creditos,
             ativo: req.body.ativo
         })

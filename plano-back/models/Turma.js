@@ -7,12 +7,16 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false
     },
     letra: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    turno: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    turno1: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    turno2: {
+      type: DataTypes.STRING,
+      allowNull: true
     }
   }, {
     freezeTableName: true,
@@ -20,22 +24,8 @@ module.exports = function (sequelize, DataTypes) {
   })
 
   Turma.associate = function (models) {
-    Turma.hasMany(models.Horario, {
-      foreignKey: {
-        name: 'Turma',
-        allowNull: false
-      },
-      onDelete: 'RESTRICT'
-    })
-
     Turma.belongsToMany(models.Curso, {
       through: models.Vaga,
-      foreignKey: 'Turma',
-      onDelete: 'RESTRICT'
-    })
-
-    Turma.belongsToMany(models.Docente, {
-      through: models.DocenteTurma,
       foreignKey: 'Turma',
       onDelete: 'RESTRICT'
     })

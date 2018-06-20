@@ -17,10 +17,18 @@ module.exports = function (sequelize, DataTypes) {
   })
 
   Sala.associate = function (models) {
-    Sala.hasMany(models.Horario, {
+    Sala.hasMany(models.Turma, {
       foreignKey: {
-        name: 'Sala',
-        allowNull: false
+        name: 'Sala1',
+        allowNull: true
+      },
+      onDelete: 'RESTRICT'
+    })
+
+    Sala.hasMany(models.Turma, {
+      foreignKey: {
+          name: 'Sala2',
+          allowNull: true
       },
       onDelete: 'RESTRICT'
     })

@@ -1,22 +1,32 @@
 'use strict'
 
 module.exports = function (sequelize, DataTypes) {
-  const Horario = sequelize.define('Horario', {
-    dia: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    inicio: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
-    fim: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    }
-  }, {
-    freezeTableName: true,
-    timestamps: false
-  })
-  return Horario
+    const Horario = sequelize.define('Horario', {
+        horario: {
+            type: DataTypes.STRING,
+            allowNull: false
+        }
+    }, {
+        freezeTableName: true,
+        timestamps: false
+    })
+
+    Horario.associate = function (models) {
+        Horario.hasMany(models.Turma, {
+            foreignKey: {
+                name: 'Horario1',
+                allowNull: false
+            },
+            onDelete: 'RESTRICT'
+        })
+
+        Horario.hasMany(models.Turma, {
+            foreignKey: {
+                name: 'Horario2',
+                allowNull: true
+            },
+            onDelete: 'RESTRICT'
+        })    }
+
+    return Horario
 }
