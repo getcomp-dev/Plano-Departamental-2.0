@@ -47,7 +47,7 @@
                             <input v-if="docente.id===turma.Docente2" :key="docente.id" v-model="docente.nome">
                         </template>
                     </td>
-                    <td>{{turma.turno1}}{{turma.turno2}}</td>
+                    <td style="overflow-wrap: normal">{{turma.turno1}}{{turma.turno2}}</td>
                     <td>
                         <template v-for="sala in Salas">
                             <input v-if="sala.id===turma.Sala1" :key="sala.id" v-model="sala.nome">

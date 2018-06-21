@@ -9,7 +9,7 @@
         <thead class="thead-light">
         <tr>
           <th scope="col">Período</th>
-          <th scope="col">Letra</th>
+          <th scope="col">Turma</th>
           <th scope="col">Turno 1</th>
           <th scope="col">Turno 2</th>
           <th scope="col">Disciplina</th>
@@ -81,7 +81,7 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="letra" class="col-sm-2 col-form-label">Letra</label>
+          <label for="letra" class="col-sm-2 col-form-label">Turma</label>
           <div class="col-sm-10">
             <input type="text" class="form-control" id="letra" v-model="turmaForm.letra">
           </div>
