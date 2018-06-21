@@ -9,12 +9,12 @@
                 <th scope="col" style="width:16px">S.</th>
                 <th scope="col" style="width:64px">Cod</th>
                 <th scope="col" style="width:170px">Disciplina</th>
-                <th scope="col" style="width:16px">C.</th>
+                <th scope="col" style="width:20px">C.</th>
                 <th scope="col" style="width:52px">Turma</th>
-                <th scope="col" style="width:72px">Horário</th>
+                <th scope="col" style="width:78px">Horário</th>
                 <th scope="col" style="width:144px">Docente</th>
-                <th scope="col" style="width:54px">Turno</th>
-                <th scope="col" style="width:36px">Sala</th>
+                <th scope="col" style="width:66px">Turno</th>
+                <th scope="col" style="width:52px">Sala</th>
                 <th scope="col" style="width:52px">Total</th>
                 <th v-for="curso in Cursos" :key="curso.id" style="width: 64px">{{curso.codigo}}</th>
             </tr>
