@@ -1,64 +1,188 @@
 <template>
-    <div class="DashboardPrototipo" style="overflow-x:scroll; overflow-y:scroll;">
-        <div class="d-flex center-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Plano</h1>
+    <div class="DashboardPrototipo" style="overflow: auto">
+        <div class="d-flex center-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" style="overflow: auto;">
+            <h1 class="h2" style="clear: right">Plano</h1>
+            <div style="float: right">
+                <template v-if="isAdd">
+                    <button type="button" class="btn btn-success" v-on:click.prevent="addTurma"style=""> Confirmar </button>
+                    <button type="button" class="btn btn-success" v-on:click.prevent="toggleAdd" style="margin-left: 10px;">Cancelar </button>
+                </template>
+                <template v-else>
+                    <button type="button" class="btn btn-success" v-on:click.prevent="toggleAdd"style="">Adicionar </button>
+                </template>
+            </div>
         </div>
-        <table class="table table-hover table-sm" style="width: 100%">
+        <table class="table table-hover table-sm">
             <thead class="thead-light">
             <tr>
                 <th scope="col" style="width:16px">S.</th>
                 <th scope="col" style="width:64px">Cod</th>
-                <th scope="col" style="width:170px">Disciplina</th>
+                <th scope="col" style="width:178px">Disciplina</th>
                 <th scope="col" style="width:20px">C.</th>
                 <th scope="col" style="width:52px">Turma</th>
-                <th scope="col" style="width:78px">Horário</th>
+                <th scope="col" style="width:90px">Horário</th>
                 <th scope="col" style="width:144px">Docente</th>
-                <th scope="col" style="width:66px">Turno</th>
-                <th scope="col" style="width:52px">Sala</th>
+                <th scope="col" style="width:84px">Turno</th>
+                <th scope="col" style="width:60px">Sala</th>
                 <th scope="col" style="width:52px">Total</th>
                 <th v-for="curso in Cursos" :key="curso.id" style="width: 64px">{{curso.codigo}}</th>
             </tr>
             </thead>
             <tbody>
             <template v-if="Turmas.length>0">
-                <tr v-for="turma in Turmas" :key="turma.id">
-                    <td>{{turma.periodo}}</td>
-                    <template v-for="disciplina in Disciplinas">
-                        <template v-if="disciplina.id===turma.Disciplina">
-                            <td :key="disciplina.id">{{disciplina.codigo}}</td>
-                            <td :key="disciplina.id">{{disciplina.nome}}</td>
-                            <td :key="disciplina.id">{{disciplina.cargaPratica + disciplina.cargaTeorica}}</td>
-                        </template>
-                    </template>
-                    <td>{{turma.letra}}</td>
+                <template v-if="isAdd">
+                <tr>
                     <td>
-                        <template v-for="horario in Horarios">
-                            <input v-if="horario.id===turma.Horario1" :key="horario.id" v-model="horario.horario">
-                        </template>
-                        <template v-for="horario in Horarios">
-                            <input v-if="horario.id===turma.Horario2" :key="horario.id" v-model="horario.horario">
+                        <input type="text" style="width: 16px;" id="periodo" v-model="turmaForm.periodo">
+                    </td>
+                    <td>
+                        <template v-for="disciplina in Disciplinas">
+                            <template v-if="disciplina.id===turmaForm.Disciplina">
+                                <p :key="disciplina.id" style="width:64px">{{disciplina.codigo}}</p>
+                            </template>
                         </template>
                     </td>
                     <td>
-                        <template v-for="docente in Docentes">
-                            <input v-if="docente.id===turma.Docente1" :key="docente.id" v-model="docente.nome">
-                        </template>
-                        <template v-for="docente in Docentes">
-                            <input v-if="docente.id===turma.Docente2" :key="docente.id" v-model="docente.nome">
-                        </template>
+                        <select type="text" style="width:170px;" id="disciplina" v-model="turmaForm.Disciplina">
+                            <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
+                            <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">{{disciplina.nome}}</option>
+                        </select>
                     </td>
-                    <td style="overflow-wrap: normal">{{turma.turno1}} {{turma.turno2}}</td>
+                    <p style="width:20px; min-width: 20px;">
+                        <template v-for="disciplina in Disciplinas">
+                            <template v-if="disciplina.id===turmaForm.Disciplina">
+                                {{disciplina.cargaPratica + disciplina.cargaTeorica}}
+                            </template>
+                        </template>
+                    </p>
                     <td>
-                        <template v-for="sala in Salas">
-                            <input v-if="sala.id===turma.Sala1" :key="sala.id" v-model="sala.nome">
-                        </template>
-                        <template v-for="sala in Salas">
-                            <input v-if="sala.id===turma.Sala2" :key="sala.id" v-model="sala.nome">
+                        <input type="text" style="width: 16px" id="turma" v-model="turmaForm.letra">
+                    </td>
+                    <td>
+                        <select type="text" style="width: 86px" id="horario1" v-model="turmaForm.Horario1">
+                            <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
+                            <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
+                        </select>
+                    <br/>
+                        <select type="text" style="width: 86px" id="horario2" v-model="turmaForm.Horario2">
+                            <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
+                            <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
+                        </select>
+                    </td>
+                    <td>
+                            <select type="text" style="width:144px" id="docente1" v-model="turmaForm.Docente1">
+                                <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
+                                <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.nome}}</option>
+                            </select>
+                    <br/>
+                            <select type="text" style="width:144px;" id="docente2" v-model="turmaForm.Docente2">
+                                <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
+                                <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.nome}}</option>
+                            </select>
+                    </td>
+                    <td>
+                        <select type="text" style="width: 84px" id="turno1" v-model="turmaForm.turno1">
+                            <option value="Diurno">Diurno</option>
+                            <option value="Integral">Integral</option>
+                            <option value="Noturno">Noturno</option>
+                        </select>
+                    <br/>
+                        <select type="text" style="width: 84px" id="turno2" v-model="turmaForm.turno2">
+                            <option value="Diurno">Diurno</option>
+                            <option value="Integral">Integral</option>
+                            <option value="Noturno">Noturno</option>
+                        </select>
+                    </td>
+                    <td>
+                            <select type="text" style="width:60px" id="sala1" v-model="turmaForm.Sala1">
+                                <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
+                                <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
+                            </select>
+                        <br/>
+                            <select type="text" style="width: 60px" id="sala2" v-model="turmaForm.Sala2">
+                                <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
+                                <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
+                            </select>
+                    </td>
+                </tr>
+                </template>
+                <tr v-for="turma in Turmas" :key="turma.id" v-on:click.prevent="showTurma(turma)">
+                    <td>
+                        <input type="text" style="width: 16px;" id="periodo" v-model="turma.periodo">
+                    </td>
+                    <td>
+                        <template v-for="disciplina in Disciplinas">
+                            <template v-if="disciplina.id===turma.Disciplina">
+                                <p :key="disciplina.id" style="width:64px">{{disciplina.codigo}}</p>
+                            </template>
                         </template>
                     </td>
-                    <td>0</td>
+                    <td>
+                        <select type="text" style="width:170px;" id="disciplina" v-model="turma.Disciplina">
+                            <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
+                            <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">{{disciplina.nome}}</option>
+                        </select>
+                    </td>
+                    <p style="width:20px; min-width: 20px;">
+                        <template v-for="disciplina in Disciplinas">
+                            <template v-if="disciplina.id===turma.Disciplina">
+                                {{disciplina.cargaPratica + disciplina.cargaTeorica}}
+                            </template>
+                        </template>
+                    </p>
+
+                    <td>
+                        <input type="text" style="width: 16px" v-model="turma.letra">
+                    </td>
+                    <td>
+                        <select type="text" style="width: 86px" id="horario1" v-model="turma.Horario1">
+                            <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
+                            <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
+                        </select>
+                        <br/>
+                        <select type="text" style="width: 86px" id="horario2" v-model="turma.Horario2">
+                            <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
+                            <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select type="text" style="width:144px" id="docente1" v-model="turma.Docente1">
+                            <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
+                            <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.nome}}</option>
+                        </select>
+                        <br/>
+                        <select type="text" style="width:144px;" id="docente2" v-model="turma.Docente2">
+                            <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
+                            <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.nome}}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select type="text" style="width: 84px" id="turno1" v-model="turma.turno1">
+                            <option value="Diurno">Diurno</option>
+                            <option value="Integral">Integral</option>
+                            <option value="Noturno">Noturno</option>
+                        </select>
+                        <br/>
+                        <select type="text" style="width: 84px" id="turno2" v-model="turma.turno2">
+                            <option value="Diurno">Diurno</option>
+                            <option value="Integral">Integral</option>
+                            <option value="Noturno">Noturno</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select type="text" style="width:60px" id="sala1" v-model="turma.Sala1">
+                            <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
+                            <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
+                        </select>
+                        <br/>
+                        <select type="text" style="width: 60px" id="sala2" v-model="turma.Sala2">
+                            <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
+                            <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
+                        </select>
+                    </td>
+                    <td style="width:52px">0</td>
                     <template v-for="curso in Cursos">
-                        <td scope="col" :key="curso.id"><input type="text"><br><input type="text"></td>
+                        <td scope="col" :key="curso.id" style="width: 64px"><input type="text" style="width: 64px"><br><input type="text" style="width: 64px"></td>
                     </template>
                 </tr>
             </template>
@@ -68,10 +192,103 @@
 </template>
 
 <script>
-    //import _ from 'lodash'
+    import _ from 'lodash'
+    import turmaService from '../../common/services/turma'
+
+    const emptyTurma = {
+        id:undefined,
+        periodo:undefined,
+        letra:undefined,
+        turno1:undefined,
+        turno2:undefined,
+        Disciplina:undefined,
+        Docente1:undefined,
+        Docente2:undefined,
+        Horario1:undefined,
+        Horario2:undefined,
+        Sala1:undefined,
+        Sala2:undefined
+    }
 
     export default {
+
         name: 'DashboardPrototipo',
+
+        data () {
+            return {
+                turmaForm: _.clone(emptyTurma),
+                error: undefined,
+                isAdd:false
+            }
+        },
+
+        methods: {
+            addTurma() {
+                turmaService.create(this.turmaForm).then((response) => {
+                    this.cleanTurma()
+                    this.$notify({
+                        group: 'general',
+                        title: `Sucesso!`,
+                        text: `A Turma ${response.Turma.letra} foi criada!`,
+                        type: 'success'
+                    })
+                }).
+                catch(error => {
+                    this.error = '<b>Erro ao criar Turma</b>'
+                    if (error.response.data.fullMessage) {
+                        this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
+                    }
+                })
+            },
+
+            editTurma() {
+                turmaService.update(this.turmaForm.id, this.turmaForm).then((response) => {
+                    this.$notify({
+                        group: 'general',
+                        title: `Sucesso!`,
+                        text: `A Turma ${response.Turma.letra} foi atualizada!`,
+                        type: 'success'
+                    })
+                }).
+                catch(error => {
+                    this.error = '<b>Erro ao atualizar Turma</b>'
+                    if (error.response.data.fullMessage) {
+                        this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
+                    }
+                })
+            },
+
+            deleteTurma() {
+                turmaService.delete(this.turmaForm.id, this.turmaForm).then((response) => {
+                    this.cleanTurma()
+                    this.$notify({
+                        group: 'general',
+                        title: `Sucesso!`,
+                        text: `A Turma ${response.Turma.letra} foi excluída!`,
+                        type: 'success'
+                    })
+                }).
+                catch(() => {
+                    this.error = '<b>Erro ao excluir Turma</b>'
+                })
+            },
+
+            cleanTurma() {
+                this.turmaForm = _.clone(emptyTurma)
+                this.error = undefined
+            },
+
+            showTurma(turma) {
+                this.cleanTurma()
+                this.turmaForm = _.clone(turma);
+            },
+
+            toggleAdd() {
+                this.cleanTurma()
+                this.isAdd = !this.isAdd;
+            }
+        },
+
 
         computed: {
             Cursos () {
@@ -97,6 +314,7 @@
             Turmas () {
                 return this.$store.state.turma.Turmas
             }
+
         }
     }
 </script>
@@ -105,23 +323,22 @@
 <style scoped>
 
     .DashboardPrototipo{
-        hieght: 100%;
-        width: 100%;
+        max-height: 90vh;
+        max-width: 90vw;
         overflow: hidden;
     }
     table {
+        text-align: left;
         table-layout: fixed;
-        text-align: center;
+        overflow: auto;
+        max-height: 100%;
+        max-width: 100%;
     }
 
-    tbody {
-        overflow-x: scroll;
-        overflow-y: scroll;
-    }
 
     input {
-        width:100%;
-        text-align: center;
+        width:auto;
+        text-align: left;
     }
 
     tr:nth-child(odd) {
@@ -131,5 +348,13 @@
 
     tr:nth-child(even) {
         background: whitesmoke;
+    }
+
+    thead th {
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0;
+        background: white;
+        z-index: 10;
     }
 </style>
