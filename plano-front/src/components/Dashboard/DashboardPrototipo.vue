@@ -1,14 +1,14 @@
 <template>
     <div class="DashboardPrototipo" style="overflow: auto">
         <div class="d-flex center-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" style="overflow: auto;">
-            <h1 class="h2" style="clear: right">Plano</h1>
-            <div style="float: right">
+            <h1 class="h2" style="clear: right;">Plano</h1>
+            <div class="floating">
                 <template v-if="isAdd">
-                    <button type="button" class="btn btn-success" v-on:click.prevent="addTurma"style=""> Confirmar </button>
+                    <button type="button" class="btn btn-success" v-on:click.prevent="addTurma" style=""> Confirmar </button>
                     <button type="button" class="btn btn-success" v-on:click.prevent="toggleAdd" style="margin-left: 10px;">Cancelar </button>
                 </template>
                 <template v-else>
-                    <button type="button" class="btn btn-success" v-on:click.prevent="toggleAdd"style="">Adicionar </button>
+                    <button type="button" class="btn btn-success" v-on:click.prevent="toggleAdd" style="">Adicionar </button>
                 </template>
             </div>
         </div>
@@ -16,7 +16,7 @@
             <thead class="thead-light">
             <tr>
                 <th scope="col" style="width:16px">S.</th>
-                <th scope="col" style="width:64px">Cod</th>
+                <th scope="col" style="width:72px">Cod</th>
                 <th scope="col" style="width:178px">Disciplina</th>
                 <th scope="col" style="width:20px">C.</th>
                 <th scope="col" style="width:52px">Turma</th>
@@ -29,8 +29,8 @@
             </tr>
             </thead>
             <tbody>
-            <template v-if="Turmas.length>0">
-                <template v-if="isAdd">
+
+            <template v-if="isAdd">
                 <tr>
                     <td>
                         <input type="text" style="width: 16px;" id="periodo" v-model="turmaForm.periodo">
@@ -38,7 +38,7 @@
                     <td>
                         <template v-for="disciplina in Disciplinas">
                             <template v-if="disciplina.id===turmaForm.Disciplina">
-                                <p :key="disciplina.id" style="width:64px">{{disciplina.codigo}}</p>
+                                <p :key="disciplina.id" style="width:72px">{{disciplina.codigo}}</p>
                             </template>
                         </template>
                     </td>
@@ -56,7 +56,7 @@
                         </template>
                     </p>
                     <td>
-                        <input type="text" style="width: 16px" id="turma" v-model="turmaForm.letra">
+                        <input type="text" style="width: 32px" id="turma" v-model="turmaForm.letra">
                     </td>
                     <td>
                         <select type="text" style="width: 86px" id="horario1" v-model="turmaForm.Horario1">
@@ -105,7 +105,8 @@
                             </select>
                     </td>
                 </tr>
-                </template>
+            </template>
+            <template v-if="Turmas.length>0">
                 <tr v-for="turma in Turmas" :key="turma.id" v-on:click.prevent="showTurma(turma)">
                     <td>
                         <input type="text" style="width: 16px;" id="periodo" v-model="turma.periodo">
@@ -113,7 +114,7 @@
                     <td>
                         <template v-for="disciplina in Disciplinas">
                             <template v-if="disciplina.id===turma.Disciplina">
-                                <p :key="disciplina.id" style="width:64px">{{disciplina.codigo}}</p>
+                                <p :key="disciplina.id" style="width:72px">{{disciplina.codigo}}</p>
                             </template>
                         </template>
                     </td>
@@ -132,7 +133,7 @@
                     </p>
 
                     <td>
-                        <input type="text" style="width: 16px" v-model="turma.letra">
+                        <input type="text" style="width: 32px" v-model="turma.letra">
                     </td>
                     <td>
                         <select type="text" style="width: 86px" id="horario1" v-model="turma.Horario1">
@@ -356,5 +357,10 @@
         top: 0;
         background: white;
         z-index: 10;
+    }
+
+    .floating {
+        display: inline !important;
+        float: right !important;
     }
 </style>

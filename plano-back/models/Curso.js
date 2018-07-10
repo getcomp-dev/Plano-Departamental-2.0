@@ -32,6 +32,11 @@ module.exports = function (sequelize, DataTypes) {
     timestamps: false
   })
 
+    Curso.hook('beforeCreate', (curso, options) => {
+        curso.nome = curso.nome.toLowerCase();
+        curso.nome = curso.nome.charAt(0).toUpperCase() + curso.nome.slice(1);
+    });
+
   Curso.associate = function (models) {
     Curso.hasMany(models.Grade, {
       foreignKey: {
