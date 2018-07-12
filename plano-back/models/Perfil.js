@@ -23,6 +23,14 @@ module.exports = function (sequelize, DataTypes) {
     timestamps: false
   })
 
+    Perfil.hook('beforeCreate', (perfil, options) => {
+        perfil.nome = perfil.nome.toLowerCase();
+        perfil.nome = perfil.nome.charAt(0).toUpperCase() + perfil.nome.slice(1);
+        perfil.nome = perfil.nome.replace(/\s./g, function(txt){
+            return txt.toUpperCase();
+        })
+    });
+
   Perfil.associate = function (models) {
     Perfil.hasMany(models.Disciplina, {
       foreignKey: {

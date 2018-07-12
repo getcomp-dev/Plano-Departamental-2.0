@@ -23,6 +23,14 @@ module.exports = function (sequelize, DataTypes) {
     timestamps: false
   })
 
+  Disciplina.hook('beforeCreate', (disciplina, options) => {
+      disciplina.nome = disciplina.nome.toLowerCase();
+      disciplina.nome = disciplina.nome.charAt(0).toUpperCase() + disciplina.nome.slice(1);
+      disciplina.nome = disciplina.nome.replace(/\s./g, function(txt){
+          return txt.toUpperCase();
+      })
+  });
+
   Disciplina.associate = function (models) {
     Disciplina.hasMany(models.Turma, {
       foreignKey: {

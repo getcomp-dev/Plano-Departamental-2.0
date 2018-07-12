@@ -1,22 +1,22 @@
 <template>
     <div class="DashboardPrototipo" style="overflow: auto">
-        <div class="d-flex center-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" style="overflow: auto;">
-            <h1 class="h2" style="clear: right;">Plano</h1>
-            <div class="floating">
+        <div class="d-flex center-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" style="overflow: auto; width: 100%">
+            <h1 class="h2">Plano</h1>
                 <template v-if="isAdd">
-                    <button type="button" class="btn btn-success" v-on:click.prevent="addTurma" style=""> Confirmar </button>
-                    <button type="button" class="btn btn-success" v-on:click.prevent="toggleAdd" style="margin-left: 10px;">Cancelar </button>
+                    <div class="col-sm-9"></div>
+                    <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="addTurma" style=""> Confirmar </button>
+                    <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="margin-left: 10px;">Cancelar </button>
                 </template>
                 <template v-else>
-                    <button type="button" class="btn btn-success" v-on:click.prevent="toggleAdd" style="">Adicionar </button>
+                    <div class="col-sm-10"></div>
+                    <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="">Adicionar </button>
                 </template>
-            </div>
         </div>
         <table class="table table-hover table-sm">
             <thead class="thead-light">
             <tr>
                 <th scope="col" style="width:16px">S.</th>
-                <th scope="col" style="width:72px">Cod</th>
+                <th scope="col" style="width:80px">Cod</th>
                 <th scope="col" style="width:178px">Disciplina</th>
                 <th scope="col" style="width:20px">C.</th>
                 <th scope="col" style="width:52px">Turma</th>
@@ -38,7 +38,7 @@
                     <td>
                         <template v-for="disciplina in Disciplinas">
                             <template v-if="disciplina.id===turmaForm.Disciplina">
-                                <p :key="disciplina.id" style="width:72px">{{disciplina.codigo}}</p>
+                                <p :key="disciplina.id" style="width:80px">{{disciplina.codigo}}</p>
                             </template>
                         </template>
                     </td>
@@ -56,7 +56,7 @@
                         </template>
                     </p>
                     <td>
-                        <input type="text" style="width: 32px" id="turma" v-model="turmaForm.letra">
+                        <input type="text" style="width: 28px" id="turma" v-model="turmaForm.letra">
                     </td>
                     <td>
                         <select type="text" style="width: 86px" id="horario1" v-model="turmaForm.Horario1">
@@ -114,7 +114,7 @@
                     <td>
                         <template v-for="disciplina in Disciplinas">
                             <template v-if="disciplina.id===turma.Disciplina">
-                                <p :key="disciplina.id" style="width:72px">{{disciplina.codigo}}</p>
+                                <p :key="disciplina.id" style="width:80px">{{disciplina.codigo}}</p>
                             </template>
                         </template>
                     </td>
@@ -133,7 +133,7 @@
                     </p>
 
                     <td>
-                        <input type="text" style="width: 32px" v-model="turma.letra">
+                        <input type="text" style="width: 28px" v-model="turma.letra">
                     </td>
                     <td>
                         <select type="text" style="width: 86px" id="horario1" v-model="turma.Horario1">
@@ -297,7 +297,7 @@
             },
 
             Disciplinas () {
-                return this.$store.state.disciplina.Disciplinas
+                return _.orderBy(this.$store.state.disciplina.Disciplinas, 'Perfil')
             },
 
             Docentes () {
@@ -312,8 +312,8 @@
                 return this.$store.state.sala.Salas
             },
 
-            Turmas () {
-                return this.$store.state.turma.Turmas
+            Turmas() {
+               return _.orderBy(_.orderBy(this.$store.state.turma.Turmas, 'letra'), 'Disciplina')
             }
 
         }
@@ -329,13 +329,19 @@
         overflow: hidden;
     }
     table {
-        text-align: left;
         table-layout: fixed;
         overflow: auto;
         max-height: 100%;
         max-width: 100%;
     }
 
+    td {
+        text-align: left;
+    }
+
+    th {
+        text-align: center;
+    }
 
     input {
         width:auto;
@@ -360,7 +366,8 @@
     }
 
     .floating {
-        display: inline !important;
+        display: block;
         float: right !important;
+        clear: right !important;
     }
 </style>
