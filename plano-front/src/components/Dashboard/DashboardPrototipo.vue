@@ -107,7 +107,8 @@
                 </tr>
             </template>
             <template v-if="Turmas.length>0">
-                <tr v-for="turma in Turmas" :key="turma.id" v-on:click.prevent="showTurma(turma)">
+            <template v-for="perfil in Perfis">
+                <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" :key="turma.id" v-on:click.prevent="showTurma(turma)">
                     <td>
                         <input type="text" style="width: 16px;" id="periodo" v-model="turma.periodo">
                     </td>
@@ -187,6 +188,7 @@
                     </template>
                 </tr>
             </template>
+            </template>
             </tbody>
         </table>
     </div>
@@ -224,6 +226,13 @@
         },
 
         methods: {
+            inPerfil: function (perfil, turmas, disciplinas) {
+                return turmas.filter(function (turma) {
+                    var disciplina = _.find(disciplinas, function(disc) { return disc.id===turma.Disciplina})
+                    return disciplina.Perfil===perfil.id
+                })
+
+            },
             addTurma() {
                 turmaService.create(this.turmaForm).then((response) => {
                     this.cleanTurma()
@@ -297,7 +306,7 @@
             },
 
             Disciplinas () {
-                return _.orderBy(this.$store.state.disciplina.Disciplinas, 'Perfil')
+                return this.$store.state.disciplina.Disciplinas
             },
 
             Docentes () {
@@ -312,7 +321,12 @@
                 return this.$store.state.sala.Salas
             },
 
+            Perfis () {
+                return this.$store.state.perfil.Perfis
+            },
+
             Turmas() {
+
                return _.orderBy(_.orderBy(this.$store.state.turma.Turmas, 'letra'), 'Disciplina')
             }
 
@@ -333,6 +347,10 @@
         overflow: auto;
         max-height: 100%;
         max-width: 100%;
+    }
+
+    input {
+        height: 25px;
     }
 
     td {
