@@ -8,31 +8,25 @@ export default {
     },
 
     get (docentePerfilDocente, docentePerfilPerfil, config = {}) {
-        return Vue.axios.get('/docentePefil/', {params: {
-            DisciplinaId: docentePerfilDocente,
-            Perfil: docentePerfilPerfil}}, config)
+        return Vue.axios.get(`/docentePerfil/${doscentePerfilDocente}&&${docentePerfilPerfil}`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     },
 
     create (payload, config = {}) {
-        return Vue.axios.post('/disciplinaGrade', payload, config)
+        return Vue.axios.post('/docentePerfil', payload, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     },
 
     update (docentePerfilDocente, docentePerfilPerfil, config = {}) {
-        return Vue.axios.post('/docentePefil/', {params: {
-                DisciplinaId: docentePerfilDocente,
-                Perfil: docentePerfilPerfil}}, config)
+        return Vue.axios.post(`/docentePerfil/${doscentePerfilDocente}&&${docentePerfilPerfil}`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     },
 
     delete (docentePerfilDocente, docentePerfilPerfil, config = {}) {
-        return Vue.axios.delete('/docentePefil/', {params: {
-                DisciplinaId: docentePerfilDocente,
-                Perfil: docentePerfilPerfil}}, config)
+        return Vue.axios.delete(`/docentePerfil/${doscentePerfilDocente}&&${docentePerfilPerfil}`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     }

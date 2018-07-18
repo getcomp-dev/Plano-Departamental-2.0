@@ -277,7 +277,7 @@
             },
 
             Disciplinas () {
-                return this.$store.state.disciplina.Disciplinas
+                return _.sortBy(this.$store.state.disciplina.Disciplinas, 'nome')
             },
 
             DisciplinaGrades () {

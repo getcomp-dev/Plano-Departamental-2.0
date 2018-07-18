@@ -32,11 +32,11 @@ router.get('/', function (req, res, next) {
     })
 })
 
-router.post('/:id([0-9]+)', function (req, res, next) {
+router.post('/:Docente([0-9]+)&&:Perfil([0-9+])', function (req, res, next) {
     models.DocentePerfil.findOne({
         where: {
             Perfil: req.params.Perfil,
-            DocenteId: req.params.DocenteId
+            Docente: req.params.DocenteId
         }
     }).then(function (docentePerfil) {
         if (!docentePerfil)
@@ -44,7 +44,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
 
         return docentePerfil.updateAttributes({
             Perfil: req.params.Perfil,
-            DocenteId: req.params.DocenteId
+            DocenteId: req.params.Docente
         })
     }).then(function (docentePerfil) {
         ioBroadcast(SM.DOCENTE_PERFIL_UPDATED, {'msg': 'Relação Docente Perfil atualizada!', 'DocentePerfil': docentePerfil})
@@ -59,11 +59,11 @@ router.post('/:id([0-9]+)', function (req, res, next) {
     })
 })
 
-router.delete('/:id([0-9]+)', function (req, res, next) {
+router.delete('/:Docente([0-9]+)&&:Perfil([0-9+])', function (req, res, next) {
     models.DocentePerfil.findOne({
         where: {
             Perfil: req.params.Perfil,
-            DocenteId: req.params.DocenteId
+            Docente: req.params.Docente
         }
     }).then(function (docentePerfil) {
         if (!docentePerfil)

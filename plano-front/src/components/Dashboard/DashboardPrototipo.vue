@@ -12,6 +12,7 @@
                     <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="">Adicionar </button>
                 </template>
         </div>
+    <div style="width: 100%;height: 79vh; overflow: scroll;">
         <table class="table table-hover table-sm">
             <thead class="thead-light">
             <tr>
@@ -191,6 +192,7 @@
             </template>
             </tbody>
         </table>
+    </div>    
     </div>
 </template>
 
@@ -383,9 +385,4 @@
         z-index: 10;
     }
 
-    .floating {
-        display: block;
-        float: right !important;
-        clear: right !important;
-    }
 </style>
