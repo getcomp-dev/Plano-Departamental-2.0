@@ -2,13 +2,15 @@ import Vue from 'vue'
 
 export default {
     fetchAll (config = {}) {
-        return Vue.axios.get(`/disciplinaGrade`, config)
+        return Vue.axios.get(`/docentePerfil`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     },
 
-    get (disciplinaGradeId, config = {}) {
-        return Vue.axios.get(`/disciplinaGrade/${disciplinaGradeId}`, config)
+    get (docentePerfilDocente, docentePerfilPerfil, config = {}) {
+        return Vue.axios.get('/docentePefil/', {params: {
+            DisciplinaId: docentePerfilDocente,
+            Perfil: docentePerfilPerfil}}, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     },
@@ -19,14 +21,18 @@ export default {
             .catch((error) => Promise.reject(error))
     },
 
-    update (disciplinaGradeDisciplina, disciplinaGradeGrade, config = {}) {
-        return Vue.axios.post(`/disciplinaGrade/${disciplinaGradeDisciplina}&&${disciplinaGradeGrade}`, config)
+    update (docentePerfilDocente, docentePerfilPerfil, config = {}) {
+        return Vue.axios.post('/docentePefil/', {params: {
+                DisciplinaId: docentePerfilDocente,
+                Perfil: docentePerfilPerfil}}, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     },
 
-    delete (disciplinaGradeDisciplina, disciplinaGradeGrade, config = {}) {
-        return Vue.axios.delete(`/disciplinaGrade/${disciplinaGradeDisciplina}&&${disciplinaGradeGrade}`, config)
+    delete (docentePerfilDocente, docentePerfilPerfil, config = {}) {
+        return Vue.axios.delete('/docentePefil/', {params: {
+                DisciplinaId: docentePerfilDocente,
+                Perfil: docentePerfilPerfil}}, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     }

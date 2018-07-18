@@ -64,6 +64,16 @@
           </div>
         </div>
         <div class="form-group row">
+          <label for="perfis" class="col-sm-2 col-form-label">Perfis</label>
+          <div class="col-sm-10">
+            <b-form-select multiple class="mb-3" v-model="perfisAssociados">
+              <option v-if="Perfis.length===0" type="text" value="">Nenhum perfil adicionado</option>
+              <option v-for="perfil in Perfis" :key="perfil.id" :value="perfil.id">{{perfil.abreviacao}}</option>
+            </b-form-select>
+            <input type="text" class="form-control" id="perfis" v-model="perfis">
+          </div>
+        </div>
+        <div class="form-group row">
           <div class="col-sm-12">
             <label for="ativo" class="col-form-label">
               <input type="checkbox" id="ativo" value="1" v-model="docenteForm.ativo">
@@ -95,6 +105,7 @@
 <script>
     import _ from 'lodash'
     import docenteService from '../../common/services/docente'
+    //import docentePerfilService from '../../common/services/docentePerfil'
 
     const emptyDocente = {
         id:undefined,
@@ -110,6 +121,7 @@
         data () {
             return {
                 docenteForm: _.clone(emptyDocente),
+                perfisAssociados: undefined,
                 error: undefined
             }
         },
@@ -189,9 +201,9 @@
                 return this.$store.state.docente.Docentes
             },
 
-            /*Perfis () {
+            Perfis () {
                 return this.$store.state.perfil.Perfis
-            },*/
+            },
 
             isEdit () {
                 return this.docenteForm.id !== undefined

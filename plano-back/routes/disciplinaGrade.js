@@ -33,10 +33,11 @@ router.get('/', function (req, res, next) {
     })
 })
 
-router.post('/:id([0-9]+)', function (req, res, next) {
+router.post('/:Disciplina([0-9]+)&&:Grade([0-9]+)', function (req, res, next) {
     models.DisciplinaGrade.findOne({
         where: {
-            id: req.params.id
+            Disciplina: req.params.Disciplina,
+            Grade: req.params.Grade
         }
     }).then(function (disciplinaGrade) {
         if (!disciplinaGrade)
@@ -60,10 +61,11 @@ router.post('/:id([0-9]+)', function (req, res, next) {
     })
 })
 
-router.delete('/:id([0-9]+)', function (req, res, next) {
+router.delete('/:Disciplina([0-9]+)&&:Grade([0-9]+)', function (req, res, next) {
     models.DisciplinaGrade.findOne({
         where: {
-            id: req.params.id
+            Disciplina: req.params.Disciplina,
+            Grade: req.params.Grade
         }
     }).then(function (disciplinaGrade) {
         if (!disciplinaGrade)

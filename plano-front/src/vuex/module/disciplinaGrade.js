@@ -17,12 +17,12 @@ const mutations = {
     },
 
     [SOCKET_DISCIPLINA_GRADE_UPDATED] (state, data) {
-        let index = _.findIndex(state.DisciplinaGrades, disciplinaGrade => disciplinaGrade.id === data[0].DisciplinaGrade.id);
+        let index = _.findIndex(state.DisciplinaGrades, disciplinaGrade => (disciplinaGrade.Disciplina === data[0].DisciplinaGrade.Disciplina & disciplinaGrade.Grade === data[0].DisciplinaGrade.Grade));
         Vue.set(state.DisciplinaGrades, index, data[0].DisciplinaGrade)
     },
 
     [SOCKET_DISCIPLINA_GRADE_DELETED] (state, data) {
-        let index = _.findIndex(state.DisciplinaGrades, disciplinaGrade => disciplinaGrade.id === data[0].DisciplinaGrade.id);
+        let index = _.findIndex(state.DisciplinaGrades, disciplinaGrade => (disciplinaGrade.Disciplina === data[0].DisciplinaGrade.Disciplina & disciplinaGrade.Grade === data[0].DisciplinaGrade.Grade));
         state.DisciplinaGrades.splice(index, 1)
     }
 }

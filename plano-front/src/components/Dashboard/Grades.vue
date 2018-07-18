@@ -5,30 +5,36 @@
               class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Lista Disciplinas</h1>
       </div>
-      <table class="table table-hover table-sm">
-        <thead class="thead-light">
-        <tr>
-          <th scope="col">Período de Início</th>
-          <th scope="col">Curso</th>
-        </tr>
-        </thead>
-        <tbody>
+      <div class="col sm6 dataContainer">
+        <div class="header" style="width: 15%;">Início</div>
+        <div class="header" style="width: 40%;">Curso</div>
+        <div class="header" style="width: 5%;">P.</div>
+        <div class="header" style="width: 40%;">Disciplina</div>
+        <br/>
         <template v-if="Grades.length > 0">
-          <tr v-for="grade in Grades" :key="grade.id" v-on:click.prevent="showGrade(grade)">
-            <td>{{grade.periodoInicio}}</td>
+          <div v-for="grade in Grades" :key="grade.id" v-on:click.prevent="showGrade(grade)">
+            <div class="data" style="width: 15%">{{grade.periodoInicio}}</div>
             <template v-for="curso in Cursos">
-              <td v-if="curso.id===grade.Curso" :key="curso.id">{{curso.nome}}</td>
+              <template v-if="curso.id===grade.Curso">
+                <div class="data" style="width: 40%">{{curso.nome}}</div>
+                <template v-for="disciplinaGrade in DisciplinaGrades">
+                  <template v-if="disciplinaGrade.Grade===grade.id">
+                    <div class="data" style="width: 5%">{{disciplinaGrade.periodo}}</div>
+                    <template v-for="disciplina in Disciplinas">
+                      <template v-if="andConnector(grade, disciplina, disciplinaGrade)">
+                        <div class="data" style="width: 40%" v-on:click.prevent="showDisciplina(disciplinaGrade)">{{disciplina.nome}}</div>
+                      </template>
+                    </template>
+                    <br/>
+                    <div class="header" style="width: 55%"></div>
+                  </template>
+                </template>
+              </template>
             </template>
-          </tr>
+          <br/>
+          </div>
         </template>
-        <template v-else>
-          <tr>
-            <td colspan="2" class="text-center"><i class="fas fa-exclamation-triangle"></i> Nenhuma grade encontrada!
-            </td>
-          </tr>
-        </template>
-        </tbody>
-      </table>
+      </div>
     </div>
     <div class="col">
       <div
@@ -61,6 +67,25 @@
         <div class="form-group row">
           <div class="col-sm-10">
             <template v-if="isEdit">
+              <div class="form-group row">
+                <label for="periodoDisciplina" class="col-sm-2 col-form-label">Período da Disciplina</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="periodoDisciplina" v-model="disciplinaGradeForm.periodo">
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="disciplina" class="col-sm-2 col-form-label">Disciplina</label>
+                <div class="col-sm-10">
+                  <select type="text" class="form-control" id="disciplina" v-model="disciplinaGradeForm.Disciplina">
+                    <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
+                    <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">{{disciplina.nome}}</option>
+                  </select>
+                </div>
+              </div>
+              <button type="button" class="btn btn-success m-2" v-on:click.prevent="addDisciplinaGrade" :key="4">Adicionar à Grade</button>
+              <button type="button" class="btn btn-success m-2" v-on:click.prevent="editDisciplinaGrade" :key="4">Editar Período</button>
+              <button type="button" class="btn btn-danger m-2" v-on:click.prevent="deleteDisciplinaGrade" :key="4">Excluir Disciplina</button>
+            <br/>
               <button type="button" class="btn btn-success m-2" v-on:click.prevent="editGrade" :key="1">Editar</button>
               <button type="button" class="btn btn-danger m-2" v-on:click.prevent="deleteGrade" :key="3">Excluir
               </button>
@@ -83,11 +108,18 @@
 <script>
     import _ from 'lodash'
     import gradeService from '../../common/services/grade'
+    import disciplinaGradeService from '../../common/services/disciplinaGrade'
 
     const emptyGrade = {
         id:undefined,
         periodoInicio:undefined,
         Curso:undefined
+    }
+
+    const emptyDisciplinaGrade = {
+        periodo: undefined,
+        Disciplina: undefined,
+        Grade: undefined
     }
 
     export default {
@@ -96,6 +128,7 @@
         data () {
             return {
                 gradeForm: _.clone(emptyGrade),
+                disciplinaGradeForm: _.clone(emptyDisciplinaGrade),
                 error: undefined
             }
         },
@@ -156,9 +189,14 @@
                 this.error = undefined
             },
 
+            cleanDisciplina() {
+                this.disciplinaGradeForm = _.clone(emptyDisciplinaGrade)
+            },
+
             showGrade(grade) {
                 this.cleanGrade()
                 this.gradeForm = _.clone(grade);
+                this.disciplinaGradeForm.Grade = this.gradeForm.id;
                 (function smoothscroll(){
                     var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
                     if (currentScroll > 0) {
@@ -166,6 +204,65 @@
                         window.scrollTo (0,currentScroll - (currentScroll/5));
                     }
                 })();
+            },
+
+            addDisciplinaGrade(){
+              disciplinaGradeService.create(this.disciplinaGradeForm).then((response) => {
+                this.disciplinaGradeForm.Disciplina = undefined;
+                this.$notify({
+                    group: 'general',
+                    title: `Sucesso!`,
+                    text: `A Disciplina ${response.Disciplina} foi adicionada à Grade ${response.Grade}!`,
+                    type: 'success'
+                })
+              }).
+              catch(error => {
+                this.error = '<b>Erro ao incluir Disciplina</b>'
+                if (error.response.data.fullMessage) {
+                    this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
+                }
+              })
+            },
+
+            editDisciplinaGrade(){
+                disciplinaGradeService.update(this.disciplinaGradeForm.Disciplina, this.disciplinaGradeForm.Grade, this.disciplinaGradeForm).then((response) => {
+                    this.$notify({
+                        group: 'general',
+                        title: `Sucesso!`,
+                        text: `A Disciplina ${response.Disciplina} foi atualizada!`,
+                        type: 'success'
+                    })
+                }).
+                catch(error => {
+                    this.error = '<b>Erro ao atualizar Disciplina</b>'
+                    if (error.response.data.fullMessage) {
+                        this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
+                    }
+                })
+            },
+
+            deleteDisciplinaGrade() {
+                disciplinaGradeService.delete(this.disciplinaGradeForm.Disciplina, this.disciplinaGradeForm.Grade, this.disciplinaGradeForm).then((response) => {
+                    this.cleanGrade()
+                    this.$notify({
+                        group: 'general',
+                        title: `Sucesso!`,
+                        text: `A Disciplina ${response.Disciplina} foi excluída!`,
+                        type: 'success'
+                    })
+                }).
+                catch(() => {
+                    this.error = '<b>Erro ao excluir Disciplina</b>'
+                })
+            },
+
+            showDisciplina: function(disciplinaGrade) {
+                this.cleanDisciplina
+                this.disciplinaGradeForm = _.clone(disciplinaGrade)
+            },
+
+            andConnector: function(grade, disciplina, disciplinaGrade) {
+                return (grade.id===disciplinaGrade.Grade && disciplina.id===disciplinaGrade.Disciplina)
             }
 
         },
@@ -179,6 +276,14 @@
                 return this.$store.state.curso.Cursos
             },
 
+            Disciplinas () {
+                return this.$store.state.disciplina.Disciplinas
+            },
+
+            DisciplinaGrades () {
+                return _.sortBy(this.$store.state.disciplinaGrade.DisciplinaGrades, 'periodo')
+            },
+
             isEdit () {
                 return this.gradeForm.id !== undefined
             }
@@ -187,4 +292,11 @@
 </script>
 
 <style scoped>
+  .header {
+    display: inline-block;
+  }
+
+  .data {
+    display: inline-flex;
+  }
 </style>
