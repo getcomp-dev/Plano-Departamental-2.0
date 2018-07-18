@@ -1,5 +1,5 @@
 <template>
-    <div class="DashboardPrototipo" style="overflow: auto">
+    <div class="DashboardPrototipo" style="height: calc(100vh - 48px)">
         <div class="d-flex center-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" style="overflow: auto; width: 100%">
             <h1 class="h2">Plano</h1>
                 <template v-if="isAdd">
@@ -12,7 +12,7 @@
                     <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="">Adicionar </button>
                 </template>
         </div>
-    <div style="width: 100%;height: 79vh; overflow: scroll;">
+    <div style="width: 100%;height: 100%; overflow: scroll;">
         <table class="table table-hover table-sm">
             <thead class="thead-light">
             <tr>
