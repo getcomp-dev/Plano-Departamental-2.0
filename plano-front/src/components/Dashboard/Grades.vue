@@ -5,26 +5,33 @@
               class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Lista Disciplinas</h1>
       </div>
+      <label for="gradeAtual" class="col-sm-2 col-form-label">Grade</label>
+      <select id="gradeAtual" v-model="currentGrade">
+        <option v-for="grade in Grades" :value="grade.id">{{grade.periodoInicio}}</option>
+      </select>
       <div class="col sm6 dataContainer">
         <div class="header" style="width: 15%;">Início</div>
         <div class="header" style="width: 40%;">Curso</div>
         <div class="header" style="width: 5%;">P.</div>
         <div class="header" style="width: 40%;">Disciplina</div>
         <br/>
-        <template v-if="Grades.length > 0">
+        <template v-if="currentGrade!=undefined">
           <div v-for="grade in Grades" :key="grade.id" v-on:click.prevent="showGrade(grade)">
+            <template v-if="grade.id===currentGrade">
             <div class="data" style="width: 15%">{{grade.periodoInicio}}</div>
             <template v-for="curso in Cursos">
               <template v-if="curso.id===grade.Curso">
                 <div class="data" style="width: 40%">{{curso.nome}}</div>
                 <template v-for="disciplinaGrade in DisciplinaGrades">
                   <template v-if="disciplinaGrade.Grade===grade.id">
+                    <div v-bind:class="{'even':isEven(disciplinaGrade.periodo)}">
                     <div class="data" style="width: 5%">{{disciplinaGrade.periodo}}</div>
                     <template v-for="disciplina in Disciplinas">
                       <template v-if="andConnector(grade, disciplina, disciplinaGrade)">
                         <div class="data" style="width: 40%" v-on:click.prevent="showDisciplina(disciplinaGrade)">{{disciplina.nome}}</div>
                       </template>
                     </template>
+                    </div>
                     <br/>
                     <div class="header" style="width: 55%"></div>
                   </template>
@@ -32,6 +39,7 @@
               </template>
             </template>
           <br/>
+          </template>
           </div>
         </template>
       </div>
@@ -129,7 +137,8 @@
             return {
                 gradeForm: _.clone(emptyGrade),
                 disciplinaGradeForm: _.clone(emptyDisciplinaGrade),
-                error: undefined
+                error: undefined,
+                currentGrade: undefined
             }
         },
 
@@ -263,13 +272,17 @@
 
             andConnector: function(grade, disciplina, disciplinaGrade) {
                 return (grade.id===disciplinaGrade.Grade && disciplina.id===disciplinaGrade.Disciplina)
+            },
+
+            isEven(number) {
+                return (number % 2 === 0)
             }
 
         },
 
         computed: {
             Grades () {
-                return this.$store.state.grade.Grades
+                return _.orderBy(this.$store.state.grade.Grades, 'periodoInicio', 'desc')
             },
 
             Cursos () {
@@ -298,5 +311,9 @@
 
   .data {
     display: inline-flex;
+  }
+
+  .even {
+    background-color: #a5a7a4;
   }
 </style>
