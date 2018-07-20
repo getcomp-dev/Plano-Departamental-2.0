@@ -8,7 +8,7 @@ export default {
     },
 
     get (docentePerfilDocente, docentePerfilPerfil, config = {}) {
-        return Vue.axios.get(`/docentePerfil/${doscentePerfilDocente}&&${docentePerfilPerfil}`, config)
+        return Vue.axios.get(`/docentePerfil/${docentePerfilDocente}&&${docentePerfilPerfil}`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     },
@@ -20,13 +20,13 @@ export default {
     },
 
     update (docentePerfilDocente, docentePerfilPerfil, config = {}) {
-        return Vue.axios.post(`/docentePerfil/${doscentePerfilDocente}&&${docentePerfilPerfil}`, config)
+        return Vue.axios.post(`/docentePerfil/${docentePerfilDocente}&&${docentePerfilPerfil}`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     },
 
     delete (docentePerfilDocente, docentePerfilPerfil, config = {}) {
-        return Vue.axios.delete(`/docentePerfil/${doscentePerfilDocente}&&${docentePerfilPerfil}`, config)
+        return Vue.axios.delete(`/docentePerfil/${docentePerfilDocente}&&${docentePerfilPerfil}`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     }

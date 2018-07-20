@@ -9,6 +9,7 @@ import pedido from './module/pedido'
 import grade from './module/grade'
 import disciplinaGrade from './module/disciplinaGrade'
 import docente from './module/docente'
+import docentePerfil from './module/docentePerfil'
 import turma from './module/turma'
 import sala from './module/sala'
 import horario from './module/horario'
@@ -69,6 +70,7 @@ export default new Vuex.Store({
     grade,
     disciplinaGrade,
     docente,
+    docentePerfil,
     turma,
     sala,
     horario

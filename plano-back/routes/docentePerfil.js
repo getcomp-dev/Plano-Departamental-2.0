@@ -6,7 +6,7 @@ const models = require('../models/index'),
 router.post('/', function (req, res, next) {
     models.DocentePerfil.create({
         Perfil: req.body.Perfil,
-        DocenteId: req.body.DocenteId
+        DocenteId: req.body.Docente
     }).then(function (docentePerfil) {
         ioBroadcast(SM.DOCENTE_PERFIL_CREATED, {'msg': 'Relação Docente Perfil criada!', 'DocentePerfil': docentePerfil})
 
@@ -36,7 +36,7 @@ router.post('/:Docente([0-9]+)&&:Perfil([0-9+])', function (req, res, next) {
     models.DocentePerfil.findOne({
         where: {
             Perfil: req.params.Perfil,
-            Docente: req.params.DocenteId
+            DocenteId: req.params.DocenteId
         }
     }).then(function (docentePerfil) {
         if (!docentePerfil)
@@ -63,7 +63,7 @@ router.delete('/:Docente([0-9]+)&&:Perfil([0-9+])', function (req, res, next) {
     models.DocentePerfil.findOne({
         where: {
             Perfil: req.params.Perfil,
-            Docente: req.params.Docente
+            DocenteId: req.params.Docente
         }
     }).then(function (docentePerfil) {
         if (!docentePerfil)

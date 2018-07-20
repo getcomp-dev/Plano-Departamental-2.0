@@ -16,7 +16,7 @@
         </thead>
         <tbody>
         <template v-if="Docentes.length > 0">
-          <tr v-for="docente in Docentes" :key="docente.id" v-on:click.prevent="showDocentes(docente)">
+          <tr v-for="docente in Docentes" :key="docente.id" v-on:click.prevent="showDocentes(docente, DocentePerfis)">
             <td>{{docente.nome}}</td>
             <td>{{docente.apelido}}</td>
             <td>{{docente.creditos}}</td>
@@ -65,12 +65,11 @@
         </div>
         <div class="form-group row">
           <label for="perfis" class="col-sm-2 col-form-label">Perfis</label>
-          <div class="col-sm-10">
-            <b-form-select multiple class="mb-3" v-model="perfisAssociados">
-              <option v-if="Perfis.length===0" type="text" value="">Nenhum perfil adicionado</option>
-              <option v-for="perfil in Perfis" :key="perfil.id" :value="perfil.id">{{perfil.abreviacao}}</option>
-            </b-form-select>
-            <input type="text" class="form-control" id="perfis" v-model="perfis">
+          <div class="col-sm-10" id="perfis">
+            <b-form-checkbox-group stacked v-model="perfisAssociados">
+              <b-form-checkbox v-for="perfil in Perfis" :value="perfil.id" v-on:change="managePerfil(perfil.id)">{{perfil.nome}}</b-form-checkbox>
+            </b-form-checkbox-group>
+            <p>{{perfisAssociados}}</p>
           </div>
         </div>
         <div class="form-group row">
@@ -105,7 +104,7 @@
 <script>
     import _ from 'lodash'
     import docenteService from '../../common/services/docente'
-    //import docentePerfilService from '../../common/services/docentePerfil'
+    import docentePerfilService from '../../common/services/docentePerfil'
 
     const emptyDocente = {
         id:undefined,
@@ -115,14 +114,20 @@
         ativo:1
     }
 
+    const emptyPerfil = {
+        Doncente:undefined,
+        Perfil:undefined
+    }
+
     export default {
         name: 'DashboardDocente',
 
         data () {
             return {
                 docenteForm: _.clone(emptyDocente),
-                perfisAssociados: undefined,
-                error: undefined
+                perfisAssociados: [],
+                error: undefined,
+                docentePerfil: _.clone(emptyPerfil)
             }
         },
 
@@ -182,9 +187,18 @@
                 this.error = undefined
             },
 
-            showDocentes(docente) {
+            showDocentes(docente, docentes) {
                 this.cleanDocente()
                 this.docenteForm = _.clone(docente);
+                this.perfisAssociados = [];
+                console.log(docentes)
+                for (var i = 0;i < docentes.length;i++) {
+                    console.log(docentes[i])
+                    if(docentes[i].DocenteId===docente.id) {
+                        console.log("ack")
+                        this.perfisAssociados.push(docentes[i].Perfil)
+                    }
+                }
                 (function smoothscroll(){
                     var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
                     if (currentScroll > 0) {
@@ -192,7 +206,51 @@
                         window.scrollTo (0,currentScroll - (currentScroll/5));
                     }
                 })();
+            },
+
+            addPerfil(perfil) {
+                this.docentePerfil.Docente = this.docenteForm.id
+                this.docentePerfil.Perfil = perfil
+                docentePerfilService.create(this.docentePerfil).then((response) => {
+                    this.$notify({
+                        group: 'general',
+                        title: `Sucesso!`,
+                        text: `O Perfil ${response.Perfil} foi associado ao Docente ${response.Docente}!`,
+                        type: 'success'
+                    })
+                }).
+                catch(error => {
+                    this.error = '<b>Erro ao associar Perfil</b>'
+                    if (error.response.data.fullMessage) {
+                        this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
+                    }
+                })
+            },
+
+            deletePerfil(perfil) {
+                docentePerfilService.delete(this.docenteForm.id, perfil).then((response) => {
+                    this.$notify({
+                        group: 'general',
+                        title: `Sucesso!`,
+                        text: `O Perfil ${response.Perfil} foi exluído do Docente ${response.Docente}!`,
+                        type: 'success'
+                    })
+                }).
+                catch(() => {
+                    this.error = '<b>Erro ao excluir Perfil</b>'
+                })
+
+            },
+
+            managePerfil(perfil) {
+                if (_.indexOf(this.perfisAssociados, perfil) === -1){
+                    this.addPerfil(perfil)
+                }else{
+                    this.deletePerfil(perfil)
+                }
             }
+
+
 
         },
 
@@ -203,6 +261,10 @@
 
             Perfis () {
                 return this.$store.state.perfil.Perfis
+            },
+
+            DocentePerfis () {
+                return this.$store.state.docentePerfil.DocentePerfis
             },
 
             isEdit () {

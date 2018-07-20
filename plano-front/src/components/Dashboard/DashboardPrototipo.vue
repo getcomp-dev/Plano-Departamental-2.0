@@ -380,7 +380,7 @@
     thead th {
         position: sticky;
         position: -webkit-sticky;
-        top: 0;
+        top: -1px;
         background: white;
         z-index: 10;
     }
