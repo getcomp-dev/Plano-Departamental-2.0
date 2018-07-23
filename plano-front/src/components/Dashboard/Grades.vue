@@ -27,16 +27,15 @@
               </div>
                 <template v-for="disciplinaGrade in DisciplinaGrades">
                   <template v-if="disciplinaGrade.Grade===grade.id">
-                    <div v-bind:class="{'even':isEven(disciplinaGrade.periodo)}">
-                    <div class="data" style="width: 5%">{{disciplinaGrade.periodo}}</div>
+                    <div class="data" style="width: 45%;" v-bind:class="{'even':isEven(disciplinaGrade.periodo)}">
+                    <div class="data" style="width: 11.1111%">{{disciplinaGrade.periodo}}</div>
                     <template v-for="disciplina in Disciplinas">
                       <template v-if="andConnector(grade, disciplina, disciplinaGrade)">
-                        <div class="data" style="width: 40%" v-on:click.prevent="showDisciplina(disciplinaGrade)">{{disciplina.nome}}</div>
+                        <div class="data" style="width: 88.8889%" v-on:click.prevent="showDisciplina(disciplinaGrade)">{{disciplina.nome}}</div>
                       </template>
                     </template>
                     </div>
-                    <br/>
-                    <div class="header" style="width: 55%"></div>
+                    <div class="header" style="width: 55%;"></div>
                   </template>
                 </template>
 
@@ -314,7 +313,7 @@
   }
 
   .data {
-    display: inline-flex;
+    display: inline-block;
   }
 
   .even {
