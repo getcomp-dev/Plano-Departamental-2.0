@@ -19,9 +19,12 @@
           <div v-for="grade in Grades" :key="grade.id" v-on:click.prevent="showGrade(grade)">
             <template v-if="grade.id===currentGrade">
             <div class="data" style="width: 15%">{{grade.periodoInicio}}</div>
-            <template v-for="curso in Cursos">
-              <template v-if="curso.id===grade.Curso">
-                <div class="data" style="width: 40%">{{curso.nome}}</div>
+              <div class="data" style="width: 40%">
+                <template v-if="grade.Curso===1">Ciência da Computação Diurno</template>
+                <template v-else-if="grade.Curso===2">Ciência da Computação Noturno</template>
+                <template v-else-if="grade.Curso===3">Sistemas de Informação</template>
+                <template v-else-if="grade.Curso===4">Engenharia Computacional</template>
+              </div>
                 <template v-for="disciplinaGrade in DisciplinaGrades">
                   <template v-if="disciplinaGrade.Grade===grade.id">
                     <div v-bind:class="{'even':isEven(disciplinaGrade.periodo)}">
@@ -36,8 +39,7 @@
                     <div class="header" style="width: 55%"></div>
                   </template>
                 </template>
-              </template>
-            </template>
+
           <br/>
           </template>
           </div>
@@ -67,8 +69,10 @@
           <label for="curso" class="col-sm-2 col-form-label">Curso</label>
           <div class="col-sm-10">
             <select type="text" class="form-control" id="curso" v-model="gradeForm.Curso">
-              <option v-if="Cursos.length===0" type="text" value="">Nenhum Curso Encontrado</option>
-              <option v-for="curso in Cursos" :key="curso.id" :value="curso.id">{{curso.nome}}</option>
+              <option value="1">Ciência da Computação Diurno</option>
+              <option value="2">Ciência da Computação Noturno</option>
+              <option value="3">Sistemas de Informação</option>
+              <option value="4">Engenharia Computacional</option>
             </select>
           </div>
         </div>

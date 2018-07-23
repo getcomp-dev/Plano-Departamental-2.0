@@ -32,7 +32,7 @@ router.get('/', function (req, res, next) {
     })
 })
 
-router.post('/:Docente([0-9]+)&&:Perfil([0-9+])', function (req, res, next) {
+router.post('/:Docente([0-9]+)&&:Perfil([0-9]+)', function (req, res, next) {
     models.DocentePerfil.findOne({
         where: {
             Perfil: req.params.Perfil,
