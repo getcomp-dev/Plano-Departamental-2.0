@@ -33,6 +33,9 @@
               <li class="nav-item">
                 <router-link :to="{ name: 'relatorios' }" class="nav-link"><i class="fas fa-chart-line"></i> Relatórios</router-link>
               </li>
+              <li class="nav-item">
+                <router-link :to="{ name: 'horarios' }" class="nav-link"><i class="fas fa-calendar-alt"></i> Horários</router-link>
+              </li>
             </ul>
             <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">Gerenciar</h6>
             <ul class="nav flex-column">

@@ -6,7 +6,7 @@
         <h1 class="h2">Lista Disciplinas</h1>
       </div>
       <label for="gradeAtual" class="col-sm-2 col-form-label">Grade</label>
-      <select id="gradeAtual" v-model="currentGrade">
+      <select id="gradeAtual" v-model="currentGrade" v-on:change="findGrade()">
         <option v-for="grade in Grades" :value="grade.id">{{grade.periodoInicio}}</option>
       </select>
       <div class="col sm6 dataContainer">
@@ -203,6 +203,7 @@
 
             cleanDisciplina() {
                 this.disciplinaGradeForm = _.clone(emptyDisciplinaGrade)
+
             },
 
             showGrade(grade) {
@@ -216,6 +217,11 @@
                         window.scrollTo (0,currentScroll - (currentScroll/5));
                     }
                 })();
+            },
+
+            findGrade() {
+                var grade = _.find(this.$store.state.grade.Grades,['id',this.currentGrade])
+                this.showGrade(grade)
             },
 
             addDisciplinaGrade(){

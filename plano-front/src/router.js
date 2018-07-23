@@ -9,6 +9,7 @@ import DashboardHome from './components/Dashboard/Home'
 import DashboardPedidos from './components/Dashboard/Pedidos'
 import DashboardTurmas from './components/Dashboard/Turmas'
 import DashboardRelatorios from './components/Dashboard/Relatorios'
+import DashboardHorarios from './components/Dashboard/Horarios'
 import DashboardCursos from './components/Dashboard/Cursos'
 import DashboardDocentes from './components/Dashboard/Docentes'
 import DashboardGrades from './components/Dashboard/Grades'
@@ -44,6 +45,7 @@ const routes = [
       {path: 'pedidos', name: 'pedidos', component: DashboardPedidos},
       {path: 'turmas', name: 'turmas', component: DashboardTurmas},
       {path: 'relatorios', name: 'relatorios', component: DashboardRelatorios},
+      {path: 'horarios', name: 'horarios', component: DashboardHorarios} ,
       {path: 'cursos', name: 'cursos', component: DashboardCursos},
       {path: 'docentes', name: 'docentes', component: DashboardDocentes},
       {path: 'grades', name: 'grades', component: DashboardGrades},

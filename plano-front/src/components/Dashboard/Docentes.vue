@@ -65,12 +65,14 @@
         </div>
         <div class="form-group row">
           <label for="perfis" class="col-sm-2 col-form-label">Perfis</label>
+          <template v-if="docenteForm.id!=undefined">
           <div class="col-sm-10" id="perfis">
             <b-form-checkbox-group stacked v-model="perfisAssociados">
               <b-form-checkbox v-for="perfil in Perfis" :value="perfil.id" v-on:change="managePerfil(perfil.id)">{{perfil.nome}}</b-form-checkbox>
             </b-form-checkbox-group>
             <p>{{perfisAssociados}}</p>
           </div>
+          </template>
         </div>
         <div class="form-group row">
           <div class="col-sm-12">
