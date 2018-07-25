@@ -13,6 +13,7 @@ import docentePerfil from './module/docentePerfil'
 import turma from './module/turma'
 import sala from './module/sala'
 import horario from './module/horario'
+import vaga from './module/vaga'
 
 import {
   USER_LOGGED_OUT,
@@ -73,7 +74,8 @@ export default new Vuex.Store({
     docentePerfil,
     turma,
     sala,
-    horario
+    horario,
+    vaga
   },
   strict: process.env.NODE_ENV !== 'production'
 })

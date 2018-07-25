@@ -185,7 +185,7 @@
                     </td>
                     <td style="width:52px">0</td>
                     <template v-for="curso in Cursos">
-                        <td scope="col" :key="curso.id" style="width: 64px"><input type="text" style="width: 64px"><br><input type="text" style="width: 64px"></td>
+                        <td scope="col" :key="curso.id" style="width: 64px"><input type="text" style="width: 64px" v-model="vaga.numero" @focus="loadPedido" @blur="persistPedido"><br><input type="text" style="width: 64px"></td>
                     </template>
                 </tr>
             </template>
@@ -199,6 +199,7 @@
 <script>
     import _ from 'lodash'
     import turmaService from '../../common/services/turma'
+    import vagaService from '../../common/services/vaga'
 
     const emptyTurma = {
         id:undefined,
@@ -298,7 +299,12 @@
             toggleAdd() {
                 this.cleanTurma()
                 this.isAdd = !this.isAdd;
-            }
+            },
+
+
+
+
+
         },
 
 
@@ -327,9 +333,13 @@
                 return this.$store.state.perfil.Perfis
             },
 
-            Turmas() {
+            Turmas () {
 
                return _.orderBy(_.orderBy(this.$store.state.turma.Turmas, 'letra'), 'Disciplina')
+            },
+
+            Vagas () {
+                return this.$store.state.vaga.Vagas
             }
 
         }

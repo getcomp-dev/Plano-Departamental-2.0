@@ -7,7 +7,8 @@ router.post('/', function (req, res, next) {
     models.Pedido.create({
         vagasPeriodizadas: req.body.vagasPeriodizadas,
         vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
-        Disciplina: req.body.Disciplina
+        Curso: req.body.Curso,
+        Turma: req.body.Turma
     }).then(function (pedido) {
         ioBroadcast(SM.PEDIDO_CREATED, {'msg': 'Pedido criado!', 'Pedido': pedido})
 
@@ -33,10 +34,11 @@ router.get('/', function (req, res, next) {
     })
 })
 
-router.post('/:id([0-9]+)', function (req, res, next) {
+router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
     models.Pedido.findOne({
         where: {
-            id: req.params.id
+            Curso: req.params.Curso,
+            Turma: req.params.Turma
         }
     }).then(function (pedido) {
         if (!pedido)
@@ -45,7 +47,8 @@ router.post('/:id([0-9]+)', function (req, res, next) {
         return pedido.updateAttributes({
             vagasPeriodizadas: req.body.vagasPeriodizadas,
             vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
-            Disciplina: req.body.Disciplina
+            Curso: req.body.Curso,
+            Turma: req.body.Turma
         })
     }).then(function (pedido) {
         ioBroadcast(SM.PEDIDO_UPDATED, {'msg': 'Pedido atualizado!', 'Pedido': pedido})
@@ -60,10 +63,11 @@ router.post('/:id([0-9]+)', function (req, res, next) {
     })
 })
 
-router.delete('/:id([0-9]+)', function (req, res, next) {
+router.delete('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
     models.Pedido.findOne({
         where: {
-            id: req.params.id
+            Curso: req.params.Curso,
+            Turma: req.params.Turma
         }
     }).then(function (pedido) {
         if (!pedido)

@@ -1,75 +1,73 @@
 <template>
     <div class="DashboardHorarios row">
         <div class="col">
-            <div
-                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Lista Horarios</h1>
             </div>
-            <table class="table table-hover table-sm">
-                <thead class="thead-light">
-                <tr>
-                    <th scope="col">Nome</th>
-                    <th scope="col">Abreviação</th>
-                </tr>
-                </thead>
-                <tbody>
-                <template v-if="Perfis.length > 0">
-                    <tr v-for="perfil in Perfis" :key="perfil.id" v-on:click.prevent="showPerfil(perfil)">
-                        <td>{{perfil.nome}}</td>
-                        <td>{{perfil.abreviacao}}</td>
-                    </tr>
-                </template>
-                <template v-else>
-                    <tr>
-                        <td colspan="2" class="text-center"><i class="fas fa-exclamation-triangle"></i> Nenhum perfil encontrado!
-                        </td>
-                    </tr>
-                </template>
-                </tbody>
-            </table>
+
         </div>
         <div class="col">
-            <div
-                    class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <template v-if="isEdit">
-                    <h1 class="h2">Editar Perfil</h1>
-                </template>
-                <template v-else>
-                    <h1 class="h2">Adicionar Perfil</h1>
-                </template>
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1>Definir Grades</h1>
             </div>
             <b-alert :show="Boolean(error)" variant="danger" dismissible v-html="error">
             </b-alert>
             <form>
                 <div class="form-group row">
-                    <label for="nome" class="col-sm-2 col-form-label">Nome</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="nome" v-model="perfilForm.nome">
+                    <b-form-checkbox-group v-model="cursos" buttons button-variant="primary" size="lg" name="cursosCheck" :options="options">
+                    </b-form-checkbox-group>
+                        <p>{{cursos}}</p>
+                </div>
+                <div class="form-group row">
+                  <div v-if="activeCCD">
+                      <label for="formCCD">Ciência da Computação Diurno</label>
+                      <form name="formCCD" id="formCCD" ref="formCCD">
+                        <div v-for="n in rangeCCD" :key="n" class="grade">
+                          <label for="selectGrade">Grade</label>
+                          <b-form-select id="selectGrade" class="sm-12">
+                              <option v-for="grade in GradesCCD" :value="grade.id">{{grade.periodoInicio}}</option>
+                          </b-form-select>
+                          <label for="inicio">Período Início</label>
+                          <b-form-input id="inicio" class="inicio"></b-form-input>
+                          <label for="fim">Período Fim</label>
+                          <b-form-input id="fim" class="fim"></b-form-input>
+                          <br/>
+                        </div>
+                      </form>
+                      <b-form-radio-group id="radioCCD" v-model="evenCCD">
+                          <b-form-radio value="false">Períodos Ímpares</b-form-radio>
+                          <b-form-radio value="true">Períodos Pares</b-form-radio>
+                      </b-form-radio-group>
+                      <b-button variant="success" v-on:click="addGradeCCD">Adicionar nova Grade</b-button>
+                      <b-button variant="success" v-on:click="removeGradeCCD">Remover última Grade</b-button>
+                  </div>
+                </div>
+                <div class="form-group row">
+                    <div v-if="activeCCN">
+                        <label for="formCCN">Ciência da Computação Noturno</label>
+                        <form name="formCCN" id="formCCN" ref="formCCN">
+                            <p>{{cursos}}</p>
+                        </form>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="abreviacao" class="col-sm-2 col-form-label">Abreviação</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control" id="abreviacao" v-model="perfilForm.abreviacao">
+                    <div v-if="activeSI">
+                        <label for="formSI">Sistemas de Informação</label>
+                        <form name="formSI" id="formSI" ref="formSI">
+                            <p>{{cursos}}</p>
+                        </form>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <div class="col-sm-10">
-                        <template v-if="isEdit">
-                            <button type="button" class="btn btn-success m-2" v-on:click.prevent="editPerfil" :key="1">Editar</button>
-                            <button type="button" class="btn btn-danger m-2" v-on:click.prevent="deletePerfil" :key="3">Excluir
-                            </button>
-                            <button type="button" class="btn btn-secondary m-2" v-on:click.prevent="cleanPerfil" :key="2">Cancelar
-                            </button>
-                        </template>
-                        <template v-else>
-                            <button type="button" class="btn btn-success m-2" v-on:click.prevent="addPerfil" :key="1">Adicionar
-                            </button>
-                            <button type="button" class="btn btn-secondary m-2" v-on:click.prevent="cleanPerfil" :key="2">Resetar
-                            </button>
-                        </template>
+                    <div v-if="activeEC">
+                        <label for="formEC">Engenharia Computacional</label>
+                        <form name="formEC" id="formEC" ref="formEC">
+                            <p>{{cursos}}</p>
+                        </form>
                     </div>
                 </div>
+                <b-button v-if="cursos!=undefined" variant="success" v-on:click="createHorarios">Gerar Horários</b-button>
+
             </form>
         </div>
     </div>
@@ -77,7 +75,6 @@
 
 <script>
     import _ from 'lodash'
-    import perfilService from '../../common/services/perfil'
 
     const emptyPerfil = {
         id: undefined,
@@ -90,85 +87,106 @@
 
         data () {
             return {
-                perfilForm: _.clone(emptyPerfil),
-                error: undefined
+                cursos: undefined,
+                error: undefined,
+                options: [
+                    {text: "CC Diurno", value:1},
+                    {text: "CC Noturno", value:2},
+                    {text: "SI", value:3},
+                    {text: "Eng. Comp.", value:4},
+                ],
+                rangeCCD: 1,
+                evenCCD:"false"
             }
         },
 
         methods: {
-            addPerfil () {
-                perfilService.create(this.perfilForm).then((response) => {
-                    this.cleanPerfil()
-                    this.$notify({
-                        group: 'general',
-                        title: `Sucesso!`,
-                        text: `O Perfil ${response.Perfil.nome} foi criado!`,
-                        type: 'success'
-                    })
-                }).catch(error => {
-                    this.error = '<b>Erro ao criar Perfil</b>'
-                    if (error.response.data.fullMessage) {
-                        this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
+            addGradeCCD () {
+                this.rangeCCD++
+            },
+
+            removeGradeCCD () {
+                this.rangeCCD--
+            },
+
+            isEven (number) {
+                if(number%2===0)
+                    return 'true'
+                else
+                    return 'false'
+            },
+
+            createHorarios () {
+                var grade
+                var inicio
+                var fim
+                var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades
+                var turmas = this.$store.state.turma.Turmas
+                //CC Diurno está selecionado
+                if(_.indexOf(this.cursos, 1)>-1) {
+                    for (var i = 0; i < this.rangeCCD; i++) {
+                        //grade
+                        grade = this.$refs.formCCD[i].value
+                        //inicio
+                        inicio = this.$refs.formCCD[i+1].value
+                        //fim
+                        fim = this.$refs.formCCD[i+2].value
+
+                        for (var i = 0; i < disciplinaGrades.length; i++){
+                            if((disciplinaGrades[i].Grade==grade) && (this.isEven(disciplinaGrades[i].periodo)==this.evenCCD) && (disciplinaGrades[i].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[i].periodo<=parseInt(fim, 10))){
+                                for(var j = 0; j < turmas.length; j++){
+
+                                    if(turmas[j].Disciplina==disciplinaGrades[i].Disciplina){
+                                        console.log([turmas[j].Horario1, turmas[j].Horario2])
+                                    }
+                                }
+                            }
+                        }
                     }
-                })
-            },
-
-            editPerfil () {
-                perfilService.update(this.perfilForm.id, this.perfilForm).then((response) => {
-                    this.$notify({
-                        group: 'general',
-                        title: `Sucesso!`,
-                        text: `O Perfil ${response.Perfil.nome} foi atualizado!`,
-                        type: 'success'
-                    })
-                }).catch(error => {
-                    this.error = '<b>Erro ao atualizar Perfil</b>'
-                    if (error.response.data.fullMessage) {
-                        this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
-                    }
-                })
-            },
-
-            deletePerfil () {
-                perfilService.delete(this.perfilForm.id, this.perfilForm).then((response) => {
-                    this.cleanPerfil()
-                    this.$notify({
-                        group: 'general',
-                        title: `Sucesso!`,
-                        text: `O Perfil ${response.Perfil.nome} foi excluído!`,
-                        type: 'success'
-                    })
-                }).catch(() => {
-                    this.error = '<b>Erro ao excluir Perfil</b>'
-                })
-            },
-
-            cleanPerfil () {
-                this.perfilForm = _.clone(emptyPerfil)
-                this.error = undefined
-            },
-
-            showPerfil (perfil) {
-                this.cleanPerfil()
-                this.perfilForm = _.clone(perfil);
-                (function smoothscroll(){
-                    var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
-                    if (currentScroll > 0) {
-                        window.requestAnimationFrame(smoothscroll);
-                        window.scrollTo (0,currentScroll - (currentScroll/5));
-                    }
-                })();
+                }
             }
         },
 
         computed: {
-            Perfis () {
-                return this.$store.state.perfil.Perfis
+            Grades () {
+                return this.$store.state.grade.Grades
             },
 
-            isEdit () {
-                return this.perfilForm.id !== undefined
+            DisciplinaGrades () {
+                return this.$store.state.disciplinaGrade.DisciplinaGrades
+            },
+
+            GradesCCD () {
+                return _.filter(this.$store.state.grade.Grades, ['Curso', 1])
+            },
+
+            GradesCCN () {
+                return _.filter(this.$store.state.grade.Grades, ['Curso', 2])
+            },
+            GradesSI () {
+                return _.filter(this.$store.state.grade.Grades, ['Curso', 3])
+            },
+
+            GradesEC () {
+                return _.filter(this.$store.state.grade.Grades, ['Curso', 4])
+            },
+
+            activeCCD () {
+                return _.indexOf(this.cursos, 1)>-1
+            },
+
+            activeCCN () {
+                return _.indexOf(this.cursos, 2)>-1
+            },
+
+            activeSI () {
+                return _.indexOf(this.cursos, 3)>-1
+            },
+
+            activeEC () {
+                return _.indexOf(this.cursos, 4)>-1
             }
+
         }
     }
 </script>
