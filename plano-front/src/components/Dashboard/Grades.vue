@@ -5,9 +5,16 @@
               class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Lista Disciplinas</h1>
       </div>
+      <label for="cursoAtual" class="col-sm-2 col-form-label">Curso</label>
+      <select id="cursoAtual" v-model="currentCurso" v-on:change="setGradesCurso(currentCurso)">
+        <option value="1">Ciência da Computação Diurno</option>
+        <option value="2">Ciência da Computação Noturno</option>
+        <option value="3">Sistemas de Informação</option>
+        <option value="4">Engenharia Computacional</option>
+      </select>
       <label for="gradeAtual" class="col-sm-2 col-form-label">Grade</label>
-      <select id="gradeAtual" v-model="currentGrade" v-on:change="findGrade()">
-        <option v-for="grade in Grades" :value="grade.id">{{grade.periodoInicio}}</option>
+      <select id="gradeAtual" v-model="currentGrade" v-on:change="findGrade()" style="width: 60px;">
+        <option v-for="grade in grades" :value="grade.id">{{grade.periodoInicio}}</option>
       </select>
       <div class="col sm6 dataContainer">
         <div class="header" style="width: 15%;">Início</div>
@@ -141,7 +148,9 @@
                 gradeForm: _.clone(emptyGrade),
                 disciplinaGradeForm: _.clone(emptyDisciplinaGrade),
                 error: undefined,
-                currentGrade: undefined
+                currentGrade: undefined,
+                currentCurso: undefined,
+                grades: []
             }
         },
 
@@ -285,7 +294,23 @@
 
             isEven(number) {
                 return (number % 2 === 0)
-            }
+            },
+
+            setGradesCurso: function(curso){
+                  this.grades=[]
+                console.log(curso)
+                    if (curso===undefined) {
+                        return
+                    }else {
+                        for (var i = 0; i < this.$store.state.grade.Grades.length; i++) {
+                            if (this.$store.state.grade.Grades[i].Curso === parseInt(curso, 10)) {
+                               this.grades.push(this.$store.state.grade.Grades[i])
+                                console.log(this.grades)
+                            }
+                        }
+                    }
+                }
+
 
         },
 
@@ -308,7 +333,8 @@
 
             isEdit () {
                 return this.gradeForm.id !== undefined
-            }
+            },
+
         }
     }
 </script>

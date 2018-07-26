@@ -185,7 +185,10 @@
                     </td>
                     <td style="width:52px">0</td>
                     <template v-for="curso in Cursos">
-                        <td scope="col" :key="curso.id" style="width: 64px"><input type="text" style="width: 64px" v-model="vaga.numero" @focus="loadPedido" @blur="persistPedido"><br><input type="text" style="width: 64px"></td>
+                        <td>
+                            <input style="width: 64px">
+                            <input style="width: 64px">
+                        </td>
                     </template>
                 </tr>
             </template>
@@ -301,7 +304,9 @@
                 this.isAdd = !this.isAdd;
             },
 
+            pedidoPeriodizado(turma, curso) {
 
+            }
 
 
 

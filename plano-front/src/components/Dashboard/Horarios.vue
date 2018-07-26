@@ -132,11 +132,11 @@
                         //fim
                         fim = this.$refs.formCCD[i+2].value
 
-                        for (var i = 0; i < disciplinaGrades.length; i++){
-                            if((disciplinaGrades[i].Grade==grade) && (this.isEven(disciplinaGrades[i].periodo)==this.evenCCD) && (disciplinaGrades[i].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[i].periodo<=parseInt(fim, 10))){
+                        for (var k = 0; k < disciplinaGrades.length; k++){
+                            if((disciplinaGrades[k].Grade==grade) && (this.isEven(disciplinaGrades[k].periodo)==this.evenCCD) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo<=parseInt(fim, 10))){
                                 for(var j = 0; j < turmas.length; j++){
 
-                                    if(turmas[j].Disciplina==disciplinaGrades[i].Disciplina){
+                                    if(turmas[j].Disciplina==disciplinaGrades[k].Disciplina){
                                         console.log([turmas[j].Horario1, turmas[j].Horario2])
                                     }
                                 }
