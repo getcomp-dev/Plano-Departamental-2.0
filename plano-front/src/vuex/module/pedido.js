@@ -17,12 +17,12 @@ const mutations = {
     },
 
     [SOCKET_PEDIDO_UPDATED] (state, data) {
-        let index = _.findIndex(state.Pedidos, pedido => pedido.id === data[0].Pedido.id);
+        let index = _.findIndex(state.Pedidos, pedido => (pedido.Curso === data[0].Pedido.Curso & pedido.Turma === data[0].Pedido.Turma));
         Vue.set(state.Pedidos, index, data[0].Pedido)
     },
 
     [SOCKET_PEDIDO_DELETED] (state, data) {
-        let index = _.findIndex(state.Pedidos, pedido => pedido.id === data[0].Pedido.id);
+        let index = _.findIndex(state.Pedidos, pedido => (pedido.Curso === data[0].Pedido.Curso & pedido.Turma === data[0].Pedido.Turma));
         state.Pedidos.splice(index, 1)
     }
 }
