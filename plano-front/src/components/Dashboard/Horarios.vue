@@ -20,34 +20,32 @@
                 </div>
                 <div class="form-group row">
                   <div v-if="activeCCD">
-                      <label for="formCCD">Ciência da Computação Diurno</label>
-                      <form name="formCCD" id="formCCD" ref="formCCD">
-                        <div v-for="n in rangeCCD" :key="n" class="grade">
-                          <label for="selectGrade">Grade</label>
-                          <b-form-select id="selectGrade" class="sm-12">
-                              <option v-for="grade in GradesCCD" :value="grade.id">{{grade.periodoInicio}}</option>
-                          </b-form-select>
-                          <label for="inicio">Período Início</label>
-                          <b-form-input id="inicio" class="inicio"></b-form-input>
-                          <label for="fim">Período Fim</label>
-                          <b-form-input id="fim" class="fim"></b-form-input>
-                          <br/>
-                        </div>
-                      </form>
-                      <b-form-radio-group id="radioCCD" v-model="evenCCD">
-                          <b-form-radio value="false">Períodos Ímpares</b-form-radio>
-                          <b-form-radio value="true">Períodos Pares</b-form-radio>
-                      </b-form-radio-group>
-                      <b-button variant="success" v-on:click="addGradeCCD">Adicionar nova Grade</b-button>
-                      <b-button variant="success" v-on:click="removeGradeCCD">Remover última Grade</b-button>
+                      <label for="formCCN">Ciência da Computação Diurno</label>
+                      <p>{{cursos}}</p>
                   </div>
                 </div>
                 <div class="form-group row">
                     <div v-if="activeCCN">
                         <label for="formCCN">Ciência da Computação Noturno</label>
                         <form name="formCCN" id="formCCN" ref="formCCN">
-                            <p>{{cursos}}</p>
+                            <div v-for="n in rangeCCN" :key="n" class="grade">
+                                <label for="selectGrade">Grade</label>
+                                <b-form-select id="selectGrade" class="sm-12">
+                                    <option v-for="grade in GradesCCN" :value="grade.id">{{grade.periodoInicio}}</option>
+                                </b-form-select>
+                                <label for="inicio">Período Início</label>
+                                <b-form-input id="inicio" class="inicio"></b-form-input>
+                                <label for="fim">Período Fim</label>
+                                <b-form-input id="fim" class="fim"></b-form-input>
+                                <br/>
+                            </div>
                         </form>
+                        <b-form-radio-group id="radioCCN" v-model="evenCCN">
+                            <b-form-radio value="false">Períodos Ímpares</b-form-radio>
+                            <b-form-radio value="true">Períodos Pares</b-form-radio>
+                        </b-form-radio-group>
+                        <b-button variant="success" v-on:click="addGradeCCN">Adicionar nova Grade</b-button>
+                        <b-button variant="success" v-on:click="removeGradeCCN">Remover última Grade</b-button>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -95,18 +93,18 @@
                     {text: "SI", value:3},
                     {text: "Eng. Comp.", value:4},
                 ],
-                rangeCCD: 1,
-                evenCCD:"false"
+                rangeCCN: 1,
+                evenCCN:"false"
             }
         },
 
         methods: {
-            addGradeCCD () {
-                this.rangeCCD++
+            addGradeCCN () {
+                this.rangeCCN++
             },
 
-            removeGradeCCD () {
-                this.rangeCCD--
+            removeGradeCCN () {
+                this.rangeCCN--
             },
 
             isEven (number) {
@@ -122,18 +120,18 @@
                 var fim
                 var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades
                 var turmas = this.$store.state.turma.Turmas
-                //CC Diurno está selecionado
-                if(_.indexOf(this.cursos, 1)>-1) {
-                    for (var i = 0; i < this.rangeCCD; i++) {
+                //CC Noturno está selecionado
+                if(_.indexOf(this.cursos, 2)>-1) {
+                    for (var i = 0; i < this.rangeCCN; i++) {
                         //grade
-                        grade = this.$refs.formCCD[i].value
+                        grade = this.$refs.formCCN[i].value
                         //inicio
-                        inicio = this.$refs.formCCD[i+1].value
+                        inicio = this.$refs.formCCN[i+1].value
                         //fim
-                        fim = this.$refs.formCCD[i+2].value
+                        fim = this.$refs.formCCN[i+2].value
 
                         for (var k = 0; k < disciplinaGrades.length; k++){
-                            if((disciplinaGrades[k].Grade==grade) && (this.isEven(disciplinaGrades[k].periodo)==this.evenCCD) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo<=parseInt(fim, 10))){
+                            if((disciplinaGrades[k].Grade==grade) && (this.isEven(disciplinaGrades[k].periodo)==this.evenCCN) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo<=parseInt(fim, 10))){
                                 for(var j = 0; j < turmas.length; j++){
 
                                     if(turmas[j].Disciplina==disciplinaGrades[k].Disciplina){
