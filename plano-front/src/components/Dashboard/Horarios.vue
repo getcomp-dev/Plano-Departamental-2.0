@@ -5,7 +5,7 @@
                 <h1 class="h2">Lista Horarios</h1>
             </div>
             <template v-if="ccnSelecionado">
-                <h3>Ciência da Computação Noturno</h3>
+                <h4>Ciência da Computação Noturno</h4>
             </template>
             <template v-if="!horarioVazio(CCN[0])">
                 <h5>1 Período</h5>
@@ -343,10 +343,6 @@
                 console.log(this.CCN)
             },
 
-            ccnSelecionado(){
-              return (!(_.isEqual(this.CCN, emptyHorariosNoturnos)) && (_.indexOf(this.cursos, 2) > -1))
-            },
-
             horarioVazio(horario){
                 return _.isEqual(horario, emptyHorarioNoturno)
             }
@@ -390,6 +386,10 @@
 
             activeEC () {
                 return _.indexOf(this.cursos, 4)>-1
+            },
+
+            ccnSelecionado() {
+                return ((_.indexOf(this.cursos, 2) > -1))
             }
 
         }

@@ -171,6 +171,7 @@
                         this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
                     }
                 })
+                this.setGradesCurso(this.currentCurso)
             },
 
             editGrade() {

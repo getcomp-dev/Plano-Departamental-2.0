@@ -12,20 +12,20 @@
                     <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="">Adicionar </button>
                 </template>
         </div>
-    <div style="width: 100%;height: 100%; overflow: scroll;">
+    <div style="width: 100%;height: 80%; overflow: scroll;">
         <table class="table table-hover table-sm">
             <thead class="thead-light">
             <tr>
-                <th scope="col" style="width:16px">S.</th>
-                <th scope="col" style="width:80px">Cod</th>
-                <th scope="col" style="width:178px">Disciplina</th>
-                <th scope="col" style="width:20px">C.</th>
-                <th scope="col" style="width:52px">Turma</th>
-                <th scope="col" style="width:90px">Horário</th>
-                <th scope="col" style="width:144px">Docente</th>
-                <th scope="col" style="width:84px">Turno</th>
-                <th scope="col" style="width:60px">Sala</th>
-                <th scope="col" style="width:52px">Total</th>
+                <th scope="col" class="sticky" style="width:16px">S.</th>
+                <th scope="col" class="sticky" style="width:80px">Cod</th>
+                <th scope="col" class="sticky" style="width:178px">Disciplina</th> class="sticky"
+                <th scope="col" class="sticky" style="width:20px">C.</th>
+                <th scope="col" class="sticky" style="width:52px">Turma</th>
+                <th scope="col" class="sticky" style="width:90px">Horário</th>
+                <th scope="col" class="sticky" style="width:144px">Docente</th>
+                <th scope="col" class="sticky" style="width:84px">Turno</th>
+                <th scope="col" class="sticky" style="width:60px">Sala</th>
+                <th scope="col" class="sticky" style="width:52px">Total</th>
                 <th v-for="curso in Cursos" :key="curso.id" style="width: 64px">{{curso.codigo}}</th>
             </tr>
             </thead>
@@ -33,17 +33,17 @@
 
             <template v-if="isAdd">
                 <tr>
-                    <td>
+                    <td class="sticky">
                         <input type="text" style="width: 16px;" id="periodo" v-model="turmaForm.periodo">
                     </td>
-                    <td>
+                    <td class="sticky">
                         <template v-for="disciplina in Disciplinas">
                             <template v-if="disciplina.id===turmaForm.Disciplina">
                                 <p :key="disciplina.id" style="width:80px">{{disciplina.codigo}}</p>
                             </template>
                         </template>
                     </td>
-                    <td>
+                    <td class="sticky">
                         <select type="text" style="width:170px;" id="disciplina" v-model="turmaForm.Disciplina">
                             <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
                             <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">{{disciplina.nome}}</option>
@@ -56,10 +56,10 @@
                             </template>
                         </template>
                     </p>
-                    <td>
+                    <td class="sticky">
                         <input type="text" style="width: 28px" id="turma" v-model="turmaForm.letra">
                     </td>
-                    <td>
+                    <td class="sticky">
                         <select type="text" style="width: 86px" id="horario1" v-model="turmaForm.Horario1">
                             <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
                             <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
@@ -70,7 +70,7 @@
                             <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
                         </select>
                     </td>
-                    <td>
+                    <td class="sticky">
                             <select type="text" style="width:144px" id="docente1" v-model="turmaForm.Docente1">
                                 <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
                                 <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.nome}}</option>
@@ -81,7 +81,7 @@
                                 <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.nome}}</option>
                             </select>
                     </td>
-                    <td>
+                    <td class="sticky">
                         <select type="text" style="width: 84px" id="turno1" v-model="turmaForm.turno1">
                             <option value="Diurno">Diurno</option>
                             <option value="Integral">Integral</option>
@@ -94,7 +94,7 @@
                             <option value="Noturno">Noturno</option>
                         </select>
                     </td>
-                    <td>
+                    <td class="sticky">
                             <select type="text" style="width:60px" id="sala1" v-model="turmaForm.Sala1">
                                 <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
                                 <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
@@ -109,18 +109,18 @@
             </template>
             <template v-if="Turmas.length>0">
             <template v-for="perfil in Perfis">
-                <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" :key="turma.id" v-on:click.prevent="showTurma(turma)">
-                    <td>
+                <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" :key="turma.id" v-on:click.prevent="showTurma(turma)"  v-bind:class="{'avancado':perfil.id==2}">
+                    <td class="sticky">
                         <input type="text" style="width: 16px;" id="periodo" v-model="turma.periodo">
                     </td>
-                    <td>
+                    <td class="sticky">
                         <template v-for="disciplina in Disciplinas">
                             <template v-if="disciplina.id===turma.Disciplina">
                                 <p :key="disciplina.id" style="width:80px">{{disciplina.codigo}}</p>
                             </template>
                         </template>
                     </td>
-                    <td>
+                    <td class="sticky">
                         <select type="text" style="width:170px;" id="disciplina" v-model="turma.Disciplina">
                             <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
                             <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">{{disciplina.nome}}</option>
@@ -134,10 +134,10 @@
                         </template>
                     </p>
 
-                    <td>
+                    <td class="sticky">
                         <input type="text" style="width: 28px" v-model="turma.letra">
                     </td>
-                    <td>
+                    <td class="sticky">
                         <select type="text" style="width: 86px" id="horario1" v-model="turma.Horario1">
                             <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
                             <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
@@ -148,7 +148,7 @@
                             <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
                         </select>
                     </td>
-                    <td>
+                    <td class="sticky">
                         <select type="text" style="width:144px" id="docente1" v-model="turma.Docente1">
                             <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
                             <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.nome}}</option>
@@ -159,7 +159,7 @@
                             <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.nome}}</option>
                         </select>
                     </td>
-                    <td>
+                    <td class="sticky">
                         <select type="text" style="width: 84px" id="turno1" v-model="turma.turno1">
                             <option value="Diurno">Diurno</option>
                             <option value="Integral">Integral</option>
@@ -172,7 +172,7 @@
                             <option value="Noturno">Noturno</option>
                         </select>
                     </td>
-                    <td>
+                    <td class="sticky">
                         <select type="text" style="width:60px" id="sala1" v-model="turma.Sala1">
                             <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
                             <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
@@ -183,7 +183,7 @@
                             <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
                         </select>
                     </td>
-                    <td style="width:52px">0</td>
+                    <td class="sticky" style="width:52px">0</td>
                     <template v-for="curso in Cursos">
                         <td>
                             <input type="text" :value="pedidoPeriodizado(turma.id, curso.id)" style="width: 64px" v-on:focus="focusPedido(turma.id, curso.id)" v-on:blur="blurPedidoPeriodizado(turma.id, curso.id, $event)">
@@ -564,6 +564,16 @@
         top: -1px;
         background: white;
         z-index: 10;
+    }
+
+    .avancado {
+        background-color: #7c997f !important;
+    }
+
+    .sticky {
+        /*position:absolute;
+        top:auto;
+        left:auto;*/
     }
 
 </style>
