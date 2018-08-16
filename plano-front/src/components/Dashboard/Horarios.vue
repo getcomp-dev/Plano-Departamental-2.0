@@ -4,7 +4,49 @@
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Lista Horarios</h1>
             </div>
-            <template v-if="ccnSelecionado">
+
+            <template v-if="activeCCD">
+                <h4>Ciência da Computação Diurno</h4>
+            </template>
+            <template v-if="!horarioVazio(CCD[0])">
+                <h5>1 Período</h5>
+                <b-table responsive :items="CCD[0]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(CCD[1])">
+                <h5>2 Período</h5>
+                <b-table responsive :items="CCD[1]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(CCD[2])">
+                <h5>3 Período</h5>
+                <b-table responsive :items="CCD[2]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(CCD[3])">
+                <h5>4 Período</h5>
+                <b-table responsive :items="CCD[3]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(CCD[4])">
+                <h5>5 Período</h5>
+                <b-table responsive :items="CCD[4]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(CCD[5])">
+                <h5>6 Período</h5>
+                <b-table responsive :items="CCD[5]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(CCD[6])">
+                <h5>7 Período</h5>
+                <b-table responsive :items="CCD[6]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(CCD[7])">
+                <h5>8 Período</h5>
+                <b-table responsive :items="CCD[7]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(CCD[8])">
+                <h5>9 Período</h5>
+                <b-table responsive :items="CCD[8]"></b-table>
+            </template>
+
+
+            <template v-if="activeCCN">
                 <h4>Ciência da Computação Noturno</h4>
             </template>
             <template v-if="!horarioVazio(CCN[0])">
@@ -44,6 +86,86 @@
                 <b-table responsive :items="CCN[8]"></b-table>
             </template>
 
+            <template v-if="activeSI">
+                <h4>Sistemas de Informação</h4>
+            </template>
+            <template v-if="!horarioVazio(SI[0])">
+                <h5>1 Período</h5>
+                <b-table responsive :items="SI[0]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(SI[1])">
+                <h5>2 Período</h5>
+                <b-table responsive :items="SI[1]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(SI[2])">
+                <h5>3 Período</h5>
+                <b-table responsive :items="SI[2]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(SI[3])">
+                <h5>4 Período</h5>
+                <b-table responsive :items="SI[3]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(SI[4])">
+                <h5>5 Período</h5>
+                <b-table responsive :items="SI[4]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(SI[5])">
+                <h5>6 Período</h5>
+                <b-table responsive :items="SI[5]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(SI[6])">
+                <h5>7 Período</h5>
+                <b-table responsive :items="SI[6]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(SI[7])">
+                <h5>8 Período</h5>
+                <b-table responsive :items="SI[7]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(SI[8])">
+                <h5>9 Período</h5>
+                <b-table responsive :items="SI[8]"></b-table>
+            </template>
+
+            <template v-if="activeEC">
+                <h4>Engenharia Computacional</h4>
+            </template>
+            <template v-if="!horarioVazio(EC[0])">
+                <h5>1 Período</h5>
+                <b-table responsive :items="EC[0]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(EC[1])">
+                <h5>2 Período</h5>
+                <b-table responsive :items="EC[1]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(EC[2])">
+                <h5>3 Período</h5>
+                <b-table responsive :items="EC[2]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(EC[3])">
+                <h5>4 Período</h5>
+                <b-table responsive :items="EC[3]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(EC[4])">
+                <h5>5 Período</h5>
+                <b-table responsive :items="EC[4]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(EC[5])">
+                <h5>6 Período</h5>
+                <b-table responsive :items="EC[5]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(EC[6])">
+                <h5>7 Período</h5>
+                <b-table responsive :items="EC[6]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(EC[7])">
+                <h5>8 Período</h5>
+                <b-table responsive :items="EC[7]"></b-table>
+            </template>
+            <template v-if="!horarioVazio(EC[8])">
+                <h5>9 Período</h5>
+                <b-table responsive :items="EC[8]"></b-table>
+            </template>
+
         </div>
         <div class="col">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -55,12 +177,29 @@
                 <div class="form-group row">
                     <b-form-checkbox-group v-model="cursos" buttons button-variant="primary" size="lg" name="cursosCheck" :options="options">
                     </b-form-checkbox-group>
-                        <p>{{cursos}}</p>
                 </div>
                 <div class="form-group row">
                   <div v-if="activeCCD">
-                      <label for="formCCN">Ciência da Computação Diurno</label>
-                      <p>{{cursos}}</p>
+                      <label for="formCCD">Ciência da Computação Diurno</label>
+                      <form name="formCCD" id="formCCD" ref="formCCD">
+                          <div v-for="n in rangeCCD" :key="n" class="grade">
+                              <label for="selectGrade">Grade</label>
+                              <b-form-select id="selectGrade" class="sm-12">
+                                  <option v-for="grade in GradesCCD" :value="grade.id">{{grade.periodoInicio}}</option>
+                              </b-form-select>
+                              <label for="inicio">Período Início</label>
+                              <b-form-input id="inicio" class="inicio"></b-form-input>
+                              <label for="fim">Período Fim</label>
+                              <b-form-input id="fim" class="fim"></b-form-input>
+                              <br/>
+                          </div>
+                      </form>
+                      <b-form-radio-group id="radioCCD" v-model="evenCCD">
+                          <b-form-radio value="false">Períodos Ímpares</b-form-radio>
+                          <b-form-radio value="true">Períodos Pares</b-form-radio>
+                      </b-form-radio-group>
+                      <b-button variant="success" v-on:click="addGradeCCD">Adicionar nova Grade</b-button>
+                      <b-button variant="success" v-on:click="removeGradeCCD">Remover última Grade</b-button>
                   </div>
                 </div>
                 <div class="form-group row">
@@ -91,15 +230,49 @@
                     <div v-if="activeSI">
                         <label for="formSI">Sistemas de Informação</label>
                         <form name="formSI" id="formSI" ref="formSI">
-                            <p>{{cursos}}</p>
+                            <div v-for="n in rangeSI" :key="n" class="grade">
+                                <label for="selectGrade">Grade</label>
+                                <b-form-select id="selectGrade" class="sm-12">
+                                    <option v-for="grade in GradesSI" :value="grade.id">{{grade.periodoInicio}}</option>
+                                </b-form-select>
+                                <label for="inicio">Período Início</label>
+                                <b-form-input id="inicio" class="inicio"></b-form-input>
+                                <label for="fim">Período Fim</label>
+                                <b-form-input id="fim" class="fim"></b-form-input>
+                                <br/>
+                            </div>
                         </form>
+                        <b-form-radio-group id="radioSI" v-model="evenSI">
+                            <b-form-radio value="false">Períodos Ímpares</b-form-radio>
+                            <b-form-radio value="true">Períodos Pares</b-form-radio>
+                        </b-form-radio-group>
+                        <b-button variant="success" v-on:click="addGradeSI">Adicionar nova Grade</b-button>
+                        <b-button variant="success" v-on:click="removeGradeSI">Remover última Grade</b-button>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div v-if="activeEC">
                         <label for="formEC">Engenharia Computacional</label>
                         <form name="formEC" id="formEC" ref="formEC">
-                            <p>{{cursos}}</p>
+                            <form name="formEC" id="formEC" ref="formEC">
+                                <div v-for="n in rangeEC" :key="n" class="grade">
+                                    <label for="selectGrade">Grade</label>
+                                    <b-form-select id="selectGrade" class="sm-12">
+                                        <option v-for="grade in GradesEC" :value="grade.id">{{grade.periodoInicio}}</option>
+                                    </b-form-select>
+                                    <label for="inicio">Período Início</label>
+                                    <b-form-input id="inicio" class="inicio"></b-form-input>
+                                    <label for="fim">Período Fim</label>
+                                    <b-form-input id="fim" class="fim"></b-form-input>
+                                    <br/>
+                                </div>
+                            </form>
+                            <b-form-radio-group id="radioEC" v-model="evenEC">
+                                <b-form-radio value="false">Períodos Ímpares</b-form-radio>
+                                <b-form-radio value="true">Períodos Pares</b-form-radio>
+                            </b-form-radio-group>
+                            <b-button variant="success" v-on:click="addGradeEC">Adicionar nova Grade</b-button>
+                            <b-button variant="success" v-on:click="removeGradeEC">Remover última Grade</b-button>
                         </form>
                     </div>
                 </div>
@@ -116,6 +289,10 @@
     const emptyHorarioNoturno = [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
                                  {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
                                 ]
+    const emptyHorarioDiurno =  [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+    ]
 
     const emptyHorariosNoturnos = [[{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
         {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
@@ -145,6 +322,43 @@
             {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
         ]]
 
+    const emptyHorariosDiurnos = [[{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+    ],
+        [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+            {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+            {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+        ],
+        [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+            {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+            {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+        ],
+        [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+            {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+            {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+        ],
+        [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+            {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+            {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+        ],
+        [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+            {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+            {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+        ],
+        [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+            {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+            {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+        ],
+        [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+            {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+            {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+        ],
+        [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+            {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+            {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+        ]]
+
     export default {
         name: 'DashboardHorarios',
 
@@ -159,7 +373,13 @@
                     {text: "Eng. Comp.", value:4},
                 ],
                 rangeCCN: 1,
+                rangeCCD: 1,
+                rangeSI: 1,
+                rangeEC: 1,
                 evenCCN:"false",
+                evenCCD:"false",
+                evenEC:"false",
+                evenSI:"false",
                 CCN:[[{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
                                  {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
                                 ],
@@ -186,7 +406,109 @@
                                 ],
                     [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
                                  {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-                                ]]
+                                ]],
+
+                CCD: [[{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                    {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                    {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ]],
+
+                EC: [[{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                    {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                    {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                ],
+                    [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ]],
+
+                SI:[[{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                    {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                ],
+                    [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ],
+                    [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                        {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
+                    ]]
 
             }
         },
@@ -198,6 +520,30 @@
 
             removeGradeCCN () {
                 this.rangeCCN--
+            },
+
+            addGradeCCD () {
+                this.rangeCCD++
+            },
+
+            removeGradeCCD () {
+                this.rangeCCD--
+            },
+
+            addGradeSI () {
+                this.rangeSI++
+            },
+
+            removeGradeSI () {
+                this.rangeSI--
+            },
+
+            addGradeEC () {
+                this.rangeEC++
+            },
+
+            removeGradeEC () {
+                this.rangeEC--
             },
 
             isEven (number) {
@@ -340,11 +686,134 @@
                         }
                     }
                 }
-                console.log(this.CCN)
+                //SI está selecionado
+                if(_.indexOf(this.cursos, 3)>-1) {
+                    for (var i = 0; i < this.rangeSI; i++) {
+                        //grade
+                        grade = this.$refs.formSI[3*i].value
+                        //inicio
+                        inicio = this.$refs.formSI[3*i+1].value
+                        //fim
+                        fim = this.$refs.formSI[3*i+2].value
+                        for (var k = 0; k < disciplinaGrades.length; k++){
+                            if((disciplinaGrades[k].Grade==grade) && (this.isEven(disciplinaGrades[k].periodo)==this.evenSI) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo<=parseInt(fim, 10))){
+                                for(var j = 0; j < turmas.length; j++){
+                                    if(turmas[j].Disciplina==disciplinaGrades[k].Disciplina){
+                                        for(var p = 0; p < pedidos.length; p++){
+                                            if((pedidos[p].vagasPeriodizadas>0)&&(pedidos[p].Turma==turmas[j].id)){
+                                                switch(turmas[j].Horario1){
+                                                    case 5:this.SI[disciplinaGrades[k].periodo-1][0].seg = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].seg)
+                                                        break;
+                                                    case 6:this.SI[disciplinaGrades[k].periodo-1][1].seg = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].seg)
+                                                        break;
+                                                    case 11:this.SI[disciplinaGrades[k].periodo-1][0].ter = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].ter)
+                                                        break;
+                                                    case 12:this.SI[disciplinaGrades[k].periodo-1][1].ter = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].ter)
+                                                        break;
+                                                    case 17:this.SI[disciplinaGrades[k].periodo-1][0].qua = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].qua)
+                                                        break;
+                                                    case 18:this.SI[disciplinaGrades[k].periodo-1][1].qua = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].qua)
+                                                        break;
+                                                    case 23:this.SI[disciplinaGrades[k].periodo-1][0].qui = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].qui)
+                                                        break;
+                                                    case 24:this.SI[disciplinaGrades[k].periodo-1][1].qui = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].qui)
+                                                        break;
+                                                    case 29:this.SI[disciplinaGrades[k].periodo-1][0].sex = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].sex)
+                                                        break;
+                                                    case 30:this.SI[disciplinaGrades[k].periodo-1][1].sex = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].sex)
+                                                        break;
+                                                    default: break;
+                                                }
+                                                switch(turmas[j].Horario2){
+                                                    case 5:this.SI[disciplinaGrades[k].periodo-1][0].seg = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].seg)
+                                                        break;
+                                                    case 6:this.SI[disciplinaGrades[k].periodo-1][1].seg = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].seg)
+                                                        break;
+                                                    case 11:this.SI[disciplinaGrades[k].periodo-1][0].ter = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].ter)
+                                                        break;
+                                                    case 12:this.SI[disciplinaGrades[k].periodo-1][1].ter = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].ter)
+                                                        break;
+                                                    case 17:this.SI[disciplinaGrades[k].periodo-1][0].qua = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].qua)
+                                                        break;
+                                                    case 18:this.SI[disciplinaGrades[k].periodo-1][1].qua = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].qua)
+                                                        break;
+                                                    case 23:this.SI[disciplinaGrades[k].periodo-1][0].qui = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].qui)
+                                                        break;
+                                                    case 24:this.SI[disciplinaGrades[k].periodo-1][1].qui = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].qui)
+                                                        break;
+                                                    case 29:this.SI[disciplinaGrades[k].periodo-1][0].sex = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].sex)
+                                                        break;
+                                                    case 30:this.SI[disciplinaGrades[k].periodo-1][1].sex = turmas[j].Disciplina
+                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].sex)
+                                                        break;
+                                                    default: break;
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    for(var i=0; i<9;i++){
+                        for(var j=0; j<disciplinas.length;j++){
+                            if(this.CCN[i][0].seg == disciplinas[j].id){
+                                this.CCN[i][0].seg = disciplinas[j].codigo
+                            }
+                            if(this.CCN[i][1].seg == disciplinas[j].id){
+                                this.CCN[i][1].seg = disciplinas[j].codigo
+                            }
+                            if(this.CCN[i][0].ter == disciplinas[j].id){
+                                this.CCN[i][0].ter = disciplinas[j].codigo
+                            }
+                            if(this.CCN[i][1].ter == disciplinas[j].id){
+                                this.CCN[i][1].ter = disciplinas[j].codigo
+                            }
+                            if(this.CCN[i][0].qua == disciplinas[j].id){
+                                this.CCN[i][0].qua = disciplinas[j].codigo
+                            }
+                            if(this.CCN[i][1].qua == disciplinas[j].id){
+                                this.CCN[i][1].qua = disciplinas[j].codigo
+                            }
+                            if(this.CCN[i][0].qui == disciplinas[j].id){
+                                this.CCN[i][0].qui = disciplinas[j].codigo
+                            }
+                            if(this.CCN[i][1].qui == disciplinas[j].id){
+                                this.CCN[i][1].qui = disciplinas[j].codigo
+                            }
+                            if(this.CCN[i][0].sex == disciplinas[j].id){
+                                this.CCN[i][0].sex = disciplinas[j].codigo
+                            }
+                            if(this.CCN[i][1].sex == disciplinas[j].id){
+                                this.CCN[i][1].sex = disciplinas[j].codigo
+                            }
+                        }
+                    }
+                }
             },
 
             horarioVazio(horario){
-                return _.isEqual(horario, emptyHorarioNoturno)
+                return (_.isEqual(horario, emptyHorarioNoturno)||_.isEqual(horario, emptyHorarioDiurno))
             }
         },
 
@@ -388,9 +857,6 @@
                 return _.indexOf(this.cursos, 4)>-1
             },
 
-            ccnSelecionado() {
-                return ((_.indexOf(this.cursos, 2) > -1))
-            }
 
         }
     }
