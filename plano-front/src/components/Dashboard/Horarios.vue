@@ -554,7 +554,6 @@
             },
 
             createHorarios () {
-                this.CCN = _.clone(emptyHorariosNoturnos)
                 var grade
                 var inicio
                 var fim
@@ -562,6 +561,178 @@
                 var disciplinas = this.$store.state.disciplina.Disciplinas
                 var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades
                 var turmas = this.$store.state.turma.Turmas
+
+                //CC Diurno está selecionado
+                if(_.indexOf(this.cursos, 1)>-1) {
+                    pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 16])
+                    for (var i = 0; i < this.rangeCCD; i++) {
+                        //grade
+                        grade = this.$refs.formCCD[3*i].value
+                        //inicio
+                        inicio = this.$refs.formCCD[3*i+1].value
+                        //fim
+                        fim = this.$refs.formCCD[3*i+2].value
+                        for (var k = 0; k < disciplinaGrades.length; k++){
+                            if((disciplinaGrades[k].Grade==grade) && (this.isEven(disciplinaGrades[k].periodo)==this.evenCCD) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo<=parseInt(fim, 10))){
+                                for(var j = 0; j < turmas.length; j++){
+                                    if(turmas[j].Disciplina==disciplinaGrades[k].Disciplina){
+                                        for(var p = 0; p < pedidos.length; p++){
+                                            if((pedidos[p].vagasPeriodizadas>0)&&(pedidos[p].Turma==turmas[j].id)){
+                                                switch(turmas[j].Horario1){
+                                                    case 2:this.CCD[disciplinaGrades[k].periodo-1][0].seg = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].seg)
+                                                        break;
+                                                    case 3:this.CCD[disciplinaGrades[k].periodo-1][1].seg = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].seg)
+                                                        break;
+                                                    case 4:this.CCD[disciplinaGrades[k].periodo-1][2].seg = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].seg)
+                                                        break;
+                                                    case 8:this.CCD[disciplinaGrades[k].periodo-1][0].ter = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].ter)
+                                                        break;
+                                                    case 9:this.CCD[disciplinaGrades[k].periodo-1][1].ter = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].ter)
+                                                        break;
+                                                    case 10:this.CCD[disciplinaGrades[k].periodo-1][2].ter = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].ter)
+                                                        break;
+                                                    case 14:this.CCD[disciplinaGrades[k].periodo-1][0].qua = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].qua)
+                                                        break;
+                                                    case 15:this.CCD[disciplinaGrades[k].periodo-1][1].qua = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].qua)
+                                                        break;
+                                                    case 16:this.CCD[disciplinaGrades[k].periodo-1][2].qua = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].qua)
+                                                        break;
+                                                    case 20:this.CCD[disciplinaGrades[k].periodo-1][0].qui = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].qui)
+                                                        break;
+                                                    case 21:this.CCD[disciplinaGrades[k].periodo-1][1].qui = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].qui)
+                                                        break;
+                                                    case 22:this.CCD[disciplinaGrades[k].periodo-1][2].qui = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].qui)
+                                                        break;
+                                                    case 26:this.CCD[disciplinaGrades[k].periodo-1][0].sex = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].sex)
+                                                        break;
+                                                    case 27:this.CCD[disciplinaGrades[k].periodo-1][1].sex = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].sex)
+                                                        break;
+                                                    case 28:this.CCD[disciplinaGrades[k].periodo-1][2].sex = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].sex)
+                                                        break;
+                                                    default: break;
+                                                }
+                                                switch(turmas[j].Horario2){
+                                                    case 2:this.CCD[disciplinaGrades[k].periodo-1][0].seg = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].seg)
+                                                        break;
+                                                    case 3:this.CCD[disciplinaGrades[k].periodo-1][1].seg = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].seg)
+                                                        break;
+                                                    case 4:this.CCD[disciplinaGrades[k].periodo-1][2].seg = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].seg)
+                                                        break;
+                                                    case 8:this.CCD[disciplinaGrades[k].periodo-1][0].ter = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].ter)
+                                                        break;
+                                                    case 9:this.CCD[disciplinaGrades[k].periodo-1][1].ter = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].ter)
+                                                        break;
+                                                    case 10:this.CCD[disciplinaGrades[k].periodo-1][2].ter = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].ter)
+                                                        break;
+                                                    case 14:this.CCD[disciplinaGrades[k].periodo-1][0].qua = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].qua)
+                                                        break;
+                                                    case 15:this.CCD[disciplinaGrades[k].periodo-1][1].qua = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].qua)
+                                                        break;
+                                                    case 16:this.CCD[disciplinaGrades[k].periodo-1][2].qua = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].qua)
+                                                        break;
+                                                    case 20:this.CCD[disciplinaGrades[k].periodo-1][0].qui = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].qui)
+                                                        break;
+                                                    case 21:this.CCD[disciplinaGrades[k].periodo-1][1].qui = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].qui)
+                                                        break;
+                                                    case 22:this.CCD[disciplinaGrades[k].periodo-1][2].qui = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].qui)
+                                                        break;
+                                                    case 26:this.CCD[disciplinaGrades[k].periodo-1][0].sex = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].sex)
+                                                        break;
+                                                    case 27:this.CCD[disciplinaGrades[k].periodo-1][1].sex = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].sex)
+                                                        break;
+                                                    case 28:this.CCD[disciplinaGrades[k].periodo-1][2].sex = turmas[j].Disciplina
+                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].sex)
+                                                        break;
+                                                    default: break;
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    for(var i=0; i<9;i++){
+                        for(var j=0; j<disciplinas.length;j++){
+                            if(this.CCD[i][0].seg == disciplinas[j].id){
+                                this.CCD[i][0].seg = disciplinas[j].codigo
+                            }
+                            if(this.CCD[i][1].seg == disciplinas[j].id){
+                                this.CCD[i][1].seg = disciplinas[j].codigo
+                            }
+                            if(this.CCD[i][2].seg == disciplinas[j].id){
+                                this.CCD[i][2].seg = disciplinas[j].codigo
+                            }
+                            if(this.CCD[i][0].ter == disciplinas[j].id){
+                                this.CCD[i][0].ter = disciplinas[j].codigo
+                            }
+                            if(this.CCD[i][1].ter == disciplinas[j].id){
+                                this.CCD[i][1].ter = disciplinas[j].codigo
+                            }
+                            if(this.CCD[i][2].ter == disciplinas[j].id){
+                                this.CCD[i][2].ter = disciplinas[j].codigo
+                            }
+                            if(this.CCD[i][0].qua == disciplinas[j].id){
+                                this.CCD[i][0].qua = disciplinas[j].codigo
+                            }
+                            if(this.CCD[i][1].qua == disciplinas[j].id){
+                                this.CCD[i][1].qua = disciplinas[j].codigo
+                            }
+                            if(this.CCD[i][2].qua == disciplinas[j].id){
+                                this.CCD[i][2].qua = disciplinas[j].codigo
+                            }
+                            if(this.CCD[i][0].qui == disciplinas[j].id){
+                                this.CCD[i][0].qui = disciplinas[j].codigo
+                            }
+                            if(this.CCD[i][1].qui == disciplinas[j].id){
+                                this.CCD[i][1].qui = disciplinas[j].codigo
+                            }
+                            if(this.CCD[i][2].qui == disciplinas[j].id){
+                                this.CCD[i][2].qui = disciplinas[j].codigo
+                            }
+                            if(this.CCD[i][0].sex == disciplinas[j].id){
+                                this.CCD[i][0].sex = disciplinas[j].codigo
+                            }
+                            if(this.CCD[i][1].sex == disciplinas[j].id){
+                                this.CCD[i][1].sex = disciplinas[j].codigo
+                            }
+                            if(this.CCD[i][2].sex == disciplinas[j].id){
+                                this.CCD[i][2].sex = disciplinas[j].codigo
+                            }
+                        }
+                    }
+                }
+
                 //CC Noturno está selecionado
                 if(_.indexOf(this.cursos, 2)>-1) {
                     pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 1])
@@ -687,6 +858,7 @@
                         }
                     }
                 }
+
                 //SI está selecionado
                 if(_.indexOf(this.cursos, 3)>-1) {
                     pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 3])
@@ -779,35 +951,206 @@
                     }
                     for(var i=0; i<9;i++){
                         for(var j=0; j<disciplinas.length;j++){
-                            if(this.CCN[i][0].seg == disciplinas[j].id){
-                                this.CCN[i][0].seg = disciplinas[j].codigo
+                            if(this.SI[i][0].seg == disciplinas[j].id){
+                                this.SI[i][0].seg = disciplinas[j].codigo
                             }
-                            if(this.CCN[i][1].seg == disciplinas[j].id){
-                                this.CCN[i][1].seg = disciplinas[j].codigo
+                            if(this.SI[i][1].seg == disciplinas[j].id){
+                                this.SI[i][1].seg = disciplinas[j].codigo
                             }
-                            if(this.CCN[i][0].ter == disciplinas[j].id){
-                                this.CCN[i][0].ter = disciplinas[j].codigo
+                            if(this.SI[i][0].ter == disciplinas[j].id){
+                                this.SI[i][0].ter = disciplinas[j].codigo
                             }
-                            if(this.CCN[i][1].ter == disciplinas[j].id){
-                                this.CCN[i][1].ter = disciplinas[j].codigo
+                            if(this.SI[i][1].ter == disciplinas[j].id){
+                                this.SI[i][1].ter = disciplinas[j].codigo
                             }
-                            if(this.CCN[i][0].qua == disciplinas[j].id){
-                                this.CCN[i][0].qua = disciplinas[j].codigo
+                            if(this.SI[i][0].qua == disciplinas[j].id){
+                                this.SI[i][0].qua = disciplinas[j].codigo
                             }
-                            if(this.CCN[i][1].qua == disciplinas[j].id){
-                                this.CCN[i][1].qua = disciplinas[j].codigo
+                            if(this.SI[i][1].qua == disciplinas[j].id){
+                                this.SI[i][1].qua = disciplinas[j].codigo
                             }
-                            if(this.CCN[i][0].qui == disciplinas[j].id){
-                                this.CCN[i][0].qui = disciplinas[j].codigo
+                            if(this.SI[i][0].qui == disciplinas[j].id){
+                                this.SI[i][0].qui = disciplinas[j].codigo
                             }
-                            if(this.CCN[i][1].qui == disciplinas[j].id){
-                                this.CCN[i][1].qui = disciplinas[j].codigo
+                            if(this.SI[i][1].qui == disciplinas[j].id){
+                                this.SI[i][1].qui = disciplinas[j].codigo
                             }
-                            if(this.CCN[i][0].sex == disciplinas[j].id){
-                                this.CCN[i][0].sex = disciplinas[j].codigo
+                            if(this.SI[i][0].sex == disciplinas[j].id){
+                                this.SI[i][0].sex = disciplinas[j].codigo
                             }
-                            if(this.CCN[i][1].sex == disciplinas[j].id){
-                                this.CCN[i][1].sex = disciplinas[j].codigo
+                            if(this.SI[i][1].sex == disciplinas[j].id){
+                                this.SI[i][1].sex = disciplinas[j].codigo
+                            }
+                        }
+                    }
+                }
+
+                //Engenharia Computacional está selecionado
+                if(_.indexOf(this.cursos, 4)>-1) {
+                    pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 2])
+                    for (var i = 0; i < this.rangeEC; i++) {
+                        //grade
+                        grade = this.$refs.formEC[3*i].value
+                        //inicio
+                        inicio = this.$refs.formEC[3*i+1].value
+                        //fim
+                        fim = this.$refs.formEC[3*i+2].value
+                        for (var k = 0; k < disciplinaGrades.length; k++){
+                            if((disciplinaGrades[k].Grade==grade) && (this.isEven(disciplinaGrades[k].periodo)==this.evenEC) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo<=parseInt(fim, 10))){
+                                for(var j = 0; j < turmas.length; j++){
+                                    if(turmas[j].Disciplina==disciplinaGrades[k].Disciplina){
+                                        for(var p = 0; p < pedidos.length; p++){
+                                            if((pedidos[p].vagasPeriodizadas>0)&&(pedidos[p].Turma==turmas[j].id)){
+                                                switch(turmas[j].Horario1){
+                                                    case 2:this.EC[disciplinaGrades[k].periodo-1][0].seg = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].seg)
+                                                        break;
+                                                    case 3:this.EC[disciplinaGrades[k].periodo-1][1].seg = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].seg)
+                                                        break;
+                                                    case 4:this.EC[disciplinaGrades[k].periodo-1][2].seg = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].seg)
+                                                        break;
+                                                    case 8:this.EC[disciplinaGrades[k].periodo-1][0].ter = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].ter)
+                                                        break;
+                                                    case 9:this.EC[disciplinaGrades[k].periodo-1][1].ter = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].ter)
+                                                        break;
+                                                    case 10:this.EC[disciplinaGrades[k].periodo-1][2].ter = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].ter)
+                                                        break;
+                                                    case 14:this.EC[disciplinaGrades[k].periodo-1][0].qua = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].qua)
+                                                        break;
+                                                    case 15:this.EC[disciplinaGrades[k].periodo-1][1].qua = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].qua)
+                                                        break;
+                                                    case 16:this.EC[disciplinaGrades[k].periodo-1][2].qua = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].qua)
+                                                        break;
+                                                    case 20:this.EC[disciplinaGrades[k].periodo-1][0].qui = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].qui)
+                                                        break;
+                                                    case 21:this.EC[disciplinaGrades[k].periodo-1][1].qui = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].qui)
+                                                        break;
+                                                    case 22:this.EC[disciplinaGrades[k].periodo-1][2].qui = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].qui)
+                                                        break;
+                                                    case 26:this.EC[disciplinaGrades[k].periodo-1][0].sex = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].sex)
+                                                        break;
+                                                    case 27:this.EC[disciplinaGrades[k].periodo-1][1].sex = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].sex)
+                                                        break;
+                                                    case 28:this.EC[disciplinaGrades[k].periodo-1][2].sex = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].sex)
+                                                        break;
+                                                    default: break;
+                                                }
+                                                switch(turmas[j].Horario2){
+                                                    case 2:this.EC[disciplinaGrades[k].periodo-1][0].seg = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].seg)
+                                                        break;
+                                                    case 3:this.EC[disciplinaGrades[k].periodo-1][1].seg = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].seg)
+                                                        break;
+                                                    case 4:this.EC[disciplinaGrades[k].periodo-1][2].seg = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].seg)
+                                                        break;
+                                                    case 8:this.EC[disciplinaGrades[k].periodo-1][0].ter = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].ter)
+                                                        break;
+                                                    case 9:this.EC[disciplinaGrades[k].periodo-1][1].ter = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].ter)
+                                                        break;
+                                                    case 10:this.EC[disciplinaGrades[k].periodo-1][2].ter = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].ter)
+                                                        break;
+                                                    case 14:this.EC[disciplinaGrades[k].periodo-1][0].qua = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].qua)
+                                                        break;
+                                                    case 15:this.EC[disciplinaGrades[k].periodo-1][1].qua = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].qua)
+                                                        break;
+                                                    case 16:this.EC[disciplinaGrades[k].periodo-1][2].qua = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].qua)
+                                                        break;
+                                                    case 20:this.EC[disciplinaGrades[k].periodo-1][0].qui = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].qui)
+                                                        break;
+                                                    case 21:this.EC[disciplinaGrades[k].periodo-1][1].qui = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].qui)
+                                                        break;
+                                                    case 22:this.EC[disciplinaGrades[k].periodo-1][2].qui = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].qui)
+                                                        break;
+                                                    case 26:this.EC[disciplinaGrades[k].periodo-1][0].sex = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].sex)
+                                                        break;
+                                                    case 27:this.EC[disciplinaGrades[k].periodo-1][1].sex = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].sex)
+                                                        break;
+                                                    case 28:this.EC[disciplinaGrades[k].periodo-1][2].sex = turmas[j].Disciplina
+                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].sex)
+                                                        break;
+                                                    default: break;
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    for(var i=0; i<9;i++){
+                        for(var j=0; j<disciplinas.length;j++){
+                            if(this.EC[i][0].seg == disciplinas[j].id){
+                                this.EC[i][0].seg = disciplinas[j].codigo
+                            }
+                            if(this.EC[i][1].seg == disciplinas[j].id){
+                                this.EC[i][1].seg = disciplinas[j].codigo
+                            }
+                            if(this.EC[i][2].seg == disciplinas[j].id){
+                                this.EC[i][2].seg = disciplinas[j].codigo
+                            }
+                            if(this.EC[i][0].ter == disciplinas[j].id){
+                                this.EC[i][0].ter = disciplinas[j].codigo
+                            }
+                            if(this.EC[i][1].ter == disciplinas[j].id){
+                                this.EC[i][1].ter = disciplinas[j].codigo
+                            }
+                            if(this.EC[i][2].ter == disciplinas[j].id){
+                                this.EC[i][2].ter = disciplinas[j].codigo
+                            }
+                            if(this.EC[i][0].qua == disciplinas[j].id){
+                                this.EC[i][0].qua = disciplinas[j].codigo
+                            }
+                            if(this.EC[i][1].qua == disciplinas[j].id){
+                                this.EC[i][1].qua = disciplinas[j].codigo
+                            }
+                            if(this.EC[i][2].qua == disciplinas[j].id){
+                                this.EC[i][2].qua = disciplinas[j].codigo
+                            }
+                            if(this.EC[i][0].qui == disciplinas[j].id){
+                                this.EC[i][0].qui = disciplinas[j].codigo
+                            }
+                            if(this.EC[i][1].qui == disciplinas[j].id){
+                                this.EC[i][1].qui = disciplinas[j].codigo
+                            }
+                            if(this.EC[i][2].qui == disciplinas[j].id){
+                                this.EC[i][2].qui = disciplinas[j].codigo
+                            }
+                            if(this.EC[i][0].sex == disciplinas[j].id){
+                                this.EC[i][0].sex = disciplinas[j].codigo
+                            }
+                            if(this.EC[i][1].sex == disciplinas[j].id){
+                                this.EC[i][1].sex = disciplinas[j].codigo
+                            }
+                            if(this.EC[i][2].sex == disciplinas[j].id){
+                                this.EC[i][2].sex = disciplinas[j].codigo
                             }
                         }
                     }
