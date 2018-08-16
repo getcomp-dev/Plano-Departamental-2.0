@@ -558,12 +558,13 @@
                 var grade
                 var inicio
                 var fim
-                var pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 1])
+                var pedidos
                 var disciplinas = this.$store.state.disciplina.Disciplinas
                 var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades
                 var turmas = this.$store.state.turma.Turmas
                 //CC Noturno está selecionado
                 if(_.indexOf(this.cursos, 2)>-1) {
+                    pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 1])
                     for (var i = 0; i < this.rangeCCN; i++) {
                         //grade
                         grade = this.$refs.formCCN[3*i].value
@@ -688,6 +689,7 @@
                 }
                 //SI está selecionado
                 if(_.indexOf(this.cursos, 3)>-1) {
+                    pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 3])
                     for (var i = 0; i < this.rangeSI; i++) {
                         //grade
                         grade = this.$refs.formSI[3*i].value
