@@ -564,7 +564,7 @@
 
                 //CC Diurno está selecionado
                 if(_.indexOf(this.cursos, 1)>-1) {
-                    pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 16])
+                    pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 4])
                     for (var i = 0; i < this.rangeCCD; i++) {
                         //grade
                         grade = this.$refs.formCCD[3*i].value
