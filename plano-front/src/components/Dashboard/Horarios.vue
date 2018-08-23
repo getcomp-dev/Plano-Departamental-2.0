@@ -178,9 +178,12 @@
                     <b-form-checkbox-group v-model="cursos" buttons button-variant="primary" size="lg" name="cursosCheck" :options="options">
                     </b-form-checkbox-group>
                 </div>
+                <b-button v-if="cursos!=undefined" variant="success" v-on:click="createHorarios" class="generate">Gerar Horários</b-button>
                 <div class="form-group row">
                   <div v-if="activeCCD">
                       <label for="formCCD">Ciência da Computação Diurno</label>
+                      <b-button variant="success" v-on:click="addGradeCCD" class="quant"><i class="fas fa-plus"></i></b-button>
+                      <b-button variant="success" v-on:click="removeGradeCCD" class="quant"><i class="fas fa-minus"></i></b-button>
                       <form name="formCCD" id="formCCD" ref="formCCD">
                           <div v-for="n in rangeCCD" :key="n" class="grade">
                               <label for="selectGrade">Grade</label>
@@ -198,13 +201,13 @@
                           <b-form-radio value="false">Períodos Ímpares</b-form-radio>
                           <b-form-radio value="true">Períodos Pares</b-form-radio>
                       </b-form-radio-group>
-                      <b-button variant="success" v-on:click="addGradeCCD">Adicionar nova Grade</b-button>
-                      <b-button variant="success" v-on:click="removeGradeCCD">Remover última Grade</b-button>
                   </div>
                 </div>
                 <div class="form-group row">
                     <div v-if="activeCCN">
                         <label for="formCCN">Ciência da Computação Noturno</label>
+                        <b-button variant="success" v-on:click="addGradeCCN" class="quant"><i class="fas fa-plus"></i></b-button>
+                        <b-button variant="success" v-on:click="removeGradeCCN" class="quant"><i class="fas fa-minus"></i></b-button>
                         <form name="formCCN" id="formCCN" ref="formCCN">
                             <div v-for="n in rangeCCN" :key="n" class="grade">
                                 <label for="selectGrade">Grade</label>
@@ -222,13 +225,13 @@
                             <b-form-radio value="false">Períodos Ímpares</b-form-radio>
                             <b-form-radio value="true">Períodos Pares</b-form-radio>
                         </b-form-radio-group>
-                        <b-button variant="success" v-on:click="addGradeCCN">Adicionar nova Grade</b-button>
-                        <b-button variant="success" v-on:click="removeGradeCCN">Remover última Grade</b-button>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div v-if="activeSI">
                         <label for="formSI">Sistemas de Informação</label>
+                        <b-button variant="success" v-on:click="addGradeSI" class="quant"><i class="fas fa-plus"></i></b-button>
+                        <b-button variant="success" v-on:click="removeGradeSI" class="quant"><i class="fas fa-minus"></i></b-button>
                         <form name="formSI" id="formSI" ref="formSI">
                             <div v-for="n in rangeSI" :key="n" class="grade">
                                 <label for="selectGrade">Grade</label>
@@ -246,14 +249,13 @@
                             <b-form-radio value="false">Períodos Ímpares</b-form-radio>
                             <b-form-radio value="true">Períodos Pares</b-form-radio>
                         </b-form-radio-group>
-                        <b-button variant="success" v-on:click="addGradeSI">Adicionar nova Grade</b-button>
-                        <b-button variant="success" v-on:click="removeGradeSI">Remover última Grade</b-button>
                     </div>
                 </div>
                 <div class="form-group row">
                     <div v-if="activeEC">
                         <label for="formEC">Engenharia Computacional</label>
-                        <form name="formEC" id="formEC" ref="formEC">
+                        <b-button variant="success" v-on:click="addGradeEC" class="quant"><i class="fas fa-plus"></i></b-button>
+                        <b-button variant="success" v-on:click="removeGradeEC" class="quant"><i class="fas fa-minus"></i></b-button>
                             <form name="formEC" id="formEC" ref="formEC">
                                 <div v-for="n in rangeEC" :key="n" class="grade">
                                     <label for="selectGrade">Grade</label>
@@ -271,12 +273,10 @@
                                 <b-form-radio value="false">Períodos Ímpares</b-form-radio>
                                 <b-form-radio value="true">Períodos Pares</b-form-radio>
                             </b-form-radio-group>
-                            <b-button variant="success" v-on:click="addGradeEC">Adicionar nova Grade</b-button>
-                            <b-button variant="success" v-on:click="removeGradeEC">Remover última Grade</b-button>
-                        </form>
+
                     </div>
                 </div>
-                <b-button v-if="cursos!=undefined" variant="success" v-on:click="createHorarios">Gerar Horários</b-button>
+
 
             </form>
         </div>
@@ -1208,4 +1208,19 @@
 </script>
 
 <style scoped>
+
+    .quant {
+        margin: 10px;
+        padding-left: 4.5px;
+        padding-right: 4.5px;
+        padding-top: 0px;
+        padding-bottom: 10.5px;
+        height: 25px;
+        width:25px;
+        border-radius: 15px;
+    }
+
+    .generate {
+
+    }
 </style>

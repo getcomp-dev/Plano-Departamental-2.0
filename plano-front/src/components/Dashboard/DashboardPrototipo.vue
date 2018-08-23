@@ -115,7 +115,7 @@
                  'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
                  'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
                     <td>
-                        <input type="text" style="width: 16px;" id="periodo" v-model="turma.periodo">
+                        <input type="text" style="width: 16px;" id="periodo" v-model="turma.periodo" v-on:blur="editTurma(turma)">
                     </td>
                     <td>
                         <template v-for="disciplina in Disciplinas">
@@ -125,7 +125,7 @@
                         </template>
                     </td>
                     <td>
-                        <select type="text" style="width:170px;" id="disciplina" v-model="turma.Disciplina">
+                        <select type="text" style="width:170px;" id="disciplina" v-model="turma.Disciplina" v-on:change="editTurma(turma)">
                             <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
                             <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">{{disciplina.nome}}</option>
                         </select>
@@ -140,50 +140,50 @@
                         </p>
                     </td>
                     <td>
-                        <input type="text" style="width: 28px" v-model="turma.letra">
+                        <input type="text" style="width: 28px" v-model="turma.letra" v-on:blur="editTurma(turma)">
                     </td>
                     <td>
-                        <select type="text" style="width: 86px" id="horario1" v-model="turma.Horario1">
+                        <select type="text" style="width: 86px" id="horario1" v-model="turma.Horario1" v-on:change="editTurma(turma)">
                             <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
                             <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
                         </select>
                         <br/>
-                        <select type="text" style="width: 86px" id="horario2" v-model="turma.Horario2">
+                        <select type="text" style="width: 86px" id="horario2" v-model="turma.Horario2" v-on:change="editTurma(turma)">
                             <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
                             <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
                         </select>
                     </td>
                     <td>
-                        <select type="text" style="width:144px" id="docente1" v-model="turma.Docente1">
+                        <select type="text" style="width:144px" id="docente1" v-model="turma.Docente1" v-on:change="editTurma(turma)">
                             <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
                             <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.nome}}</option>
                         </select>
                         <br/>
-                        <select type="text" style="width:144px;" id="docente2" v-model="turma.Docente2">
+                        <select type="text" style="width:144px;" id="docente2" v-model="turma.Docente2" v-on:change="editTurma(turma)">
                             <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
                             <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.nome}}</option>
                         </select>
                     </td>
                     <td>
-                        <select type="text" style="width: 84px" id="turno1" v-model="turma.turno1">
+                        <select type="text" style="width: 84px" id="turno1" v-model="turma.turno1" v-on:change="editTurma(turma)">
                             <option value="Diurno">Diurno</option>
                             <option value="Integral">Integral</option>
                             <option value="Noturno">Noturno</option>
                         </select>
                         <br/>
-                        <select type="text" style="width: 84px" id="turno2" v-model="turma.turno2">
+                        <select type="text" style="width: 84px" id="turno2" v-model="turma.turno2" v-on:change="editTurma(turma)">
                             <option value="Diurno">Diurno</option>
                             <option value="Integral">Integral</option>
                             <option value="Noturno">Noturno</option>
                         </select>
                     </td>
                     <td>
-                        <select type="text" style="width:60px" id="sala1" v-model="turma.Sala1">
+                        <select type="text" style="width:60px" id="sala1" v-model="turma.Sala1" v-on:change="editTurma(turma)">
                             <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
                             <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
                         </select>
                         <br/>
-                        <select type="text" style="width: 60px" id="sala2" v-model="turma.Sala2">
+                        <select type="text" style="width: 60px" id="sala2" v-model="turma.Sala2" v-on:change="editTurma(turma)">
                             <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
                             <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
                         </select>
@@ -228,7 +228,7 @@
         vagasPeriodizadas: undefined,
         vagasNaoPeriodizadas: undefined,
         Curso: undefined,
-        Turma: undefined
+        Turma: undefined,
     }
 
     export default {
@@ -239,7 +239,9 @@
             return {
                 turmaForm: _.clone(emptyTurma),
                 error: undefined,
-                isAdd:false
+                isAdd:false,
+                isDelete:false,
+                deleteTurmas:[]
             }
         },
 
@@ -269,8 +271,8 @@
                 })
             },
 
-            editTurma() {
-                turmaService.update(this.turmaForm.id, this.turmaForm).then((response) => {
+            editTurma(turma) {
+                turmaService.update(turma.id, turma).then((response) => {
                     this.$notify({
                         group: 'general',
                         title: `Sucesso!`,
@@ -573,6 +575,13 @@
         top: -1px;
         background: white;
         z-index: 10;
+    }
+
+    table.scrolling td:nth-child(-n+10),
+    table.scrolling th:nth-child(-n+10) {
+        position: -webkit-sticky;
+        position: sticky;
+        left:0;
     }
 
     .avancado {
