@@ -8,8 +8,17 @@
                     <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="margin-left: 10px;">Cancelar </button>
                 </template>
                 <template v-else>
-                    <div class="col-sm-10"></div>
-                    <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="">Adicionar </button>
+                    <div class="col-sm-9"></div>
+
+                    <template v-if="isDelete">
+                        <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="confirmDelete" style="">Confirmar </button>
+                        <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleDelete" style="margin-left: 10px;">Cancelar</button>
+                    </template>
+                    <template v-else>
+                        <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="">Adicionar </button>
+                        <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleDelete" style="margin-left: 10px;">Excluir </button>
+                    </template>
+
                 </template>
         </div>
     <div style="width: 100%;height: 80%; overflow: scroll;">
@@ -111,11 +120,12 @@
             </template>
             <template v-if="Turmas.length>0">
             <template v-for="perfil in Perfis">
-                <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" :key="turma.id" v-on:click.prevent="showTurma(turma)"  v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
+                <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" :key="turma.id"  v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
                  'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
                  'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
                     <td>
                         <input type="text" style="width: 16px;" id="periodo" v-model="turma.periodo" v-on:blur="editTurma(turma)">
+                        <input v-if="isDelete" style="width: 16px;" type="checkbox" v-on:click="selectToDelete(turma)">
                     </td>
                     <td>
                         <template v-for="disciplina in Disciplinas">
@@ -288,9 +298,34 @@
                 })
             },
 
-            deleteTurma() {
-                turmaService.delete(this.turmaForm.id, this.turmaForm).then((response) => {
-                    this.cleanTurma()
+            unselectDelete(turma){
+               this.deleteTurmas =  _.pull(this.deleteTurmas, turma)
+                console.log(this.deleteTurmas)
+            },
+
+            selectDelete(turma) {
+                this.deleteTurmas = _.concat(this.deleteTurmas, turma);
+                console.log(this.deleteTurmas)
+            },
+
+            toggleDelete(){
+                this.isDelete = !this.isDelete;
+                this.deleteTurmas = []
+            },
+
+            selectToDelete(turma){
+                for(var i=0;i<this.deleteTurmas.length;i++) {
+                    if (this.deleteTurmas[i].id == turma.id) {
+                        this.unselectDelete(turma);
+                        return
+                    }
+                }
+                    this.selectDelete(turma)
+
+            },
+
+            deleteTurma(turma) {
+                turmaService.delete(turma.id, turma).then((response) => {
                     this.$notify({
                         group: 'general',
                         title: `Sucesso!`,
@@ -303,14 +338,20 @@
                 })
             },
 
+            deleteAllTurma(turmas){
+                for(var i=0;i<turmas.length;i++){
+                    this.deleteTurma(turmas[i]);
+                }
+            },
+
+            confirmDelete() {
+                this.deleteAllTurma(this.deleteTurmas)
+                this.toggleDelete()
+            },
+
             cleanTurma() {
                 this.turmaForm = _.clone(emptyTurma)
                 this.error = undefined
-            },
-
-            showTurma(turma) {
-                this.cleanTurma()
-                this.turmaForm = _.clone(turma);
             },
 
             toggleAdd() {

@@ -519,7 +519,8 @@
             },
 
             removeGradeCCN () {
-                this.rangeCCN--
+                if(this.rangeCCN>1)
+                    this.rangeCCN--
             },
 
             addGradeCCD () {
@@ -527,7 +528,8 @@
             },
 
             removeGradeCCD () {
-                this.rangeCCD--
+                if(this.rangeCCD>1)
+                    this.rangeCCD--
             },
 
             addGradeSI () {
@@ -535,7 +537,8 @@
             },
 
             removeGradeSI () {
-                this.rangeSI--
+                if(this.rangeSI>1)
+                    this.rangeSI--
             },
 
             addGradeEC () {
@@ -543,7 +546,8 @@
             },
 
             removeGradeEC () {
-                this.rangeEC--
+                if(this.rangeEC>1)
+                    this.rangeEC--
             },
 
             isEven (number) {
