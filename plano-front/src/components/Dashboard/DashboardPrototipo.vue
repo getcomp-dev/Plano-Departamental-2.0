@@ -10,7 +10,7 @@
                 <template v-else>
                     <div class="col-sm-9"></div>
 
-                    <template v-if="isDelete">
+                    <template v-if="Deleting">
                         <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="confirmDelete" style="">Confirmar </button>
                         <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleDelete" style="margin-left: 10px;">Cancelar</button>
                     </template>
@@ -125,7 +125,7 @@
                  'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
                     <td>
                         <input type="text" style="width: 16px;" id="periodo" v-model="turma.periodo" v-on:blur="editTurma(turma)">
-                        <input v-if="isDelete" style="width: 16px;" type="checkbox" v-on:click="selectToDelete(turma)">
+                        <input v-if="Deleting" style="width: 16px;" type="checkbox" v-on:click="selectToDelete(turma)">
                     </td>
                     <td>
                         <template v-for="disciplina in Disciplinas">
@@ -300,12 +300,10 @@
 
             unselectDelete(turma){
                this.deleteTurmas =  _.pull(this.deleteTurmas, turma)
-                console.log(this.deleteTurmas)
             },
 
             selectDelete(turma) {
                 this.deleteTurmas = _.concat(this.deleteTurmas, turma);
-                console.log(this.deleteTurmas)
             },
 
             toggleDelete(){
@@ -559,6 +557,10 @@
 
             Pedidos () {
                 return this.$store.state.pedido.Pedidos
+            },
+
+            Deleting () {
+                return this.isDelete
             }
 
         }
