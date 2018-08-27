@@ -125,7 +125,7 @@
                  'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
                     <td>
                         <input type="text" style="width: 16px;" id="periodo" v-model="turma.periodo" v-on:blur="editTurma(turma)">
-                        <input v-show="Deleting" style="width: 16px;" type="checkbox" v-on:click="selectToDelete(turma)">
+                        <!--<input v-show="Deleting" style="width: 16px;" type="checkbox" v-on:click="selectToDelete(turma)">-->
                     </td>
                     <td>
                         <template v-for="disciplina in Disciplinas">
