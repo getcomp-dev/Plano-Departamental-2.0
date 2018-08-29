@@ -9,16 +9,7 @@
                 </template>
                 <template v-else>
                     <div class="col-sm-9"></div>
-
-                    <template v-if="Deleting">
-                        <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="confirmDelete" style="">Confirmar </button>
-                        <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleDelete" style="margin-left: 10px;">Cancelar</button>
-                    </template>
-                    <template v-else>
-                        <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="">Adicionar </button>
-                        <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleDelete" style="margin-left: 10px;">Excluir </button>
-                    </template>
-
+                    <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="">Adicionar </button>
                 </template>
         </div>
     <div style="width: 100%;height: 80%; overflow: scroll;">
@@ -250,8 +241,6 @@
                 turmaForm: _.clone(emptyTurma),
                 error: undefined,
                 isAdd:false,
-                isDelete:false,
-                deleteTurmas:[]
             }
         },
 
@@ -298,31 +287,6 @@
                 })
             },
 
-            unselectDelete(turma){
-               this.deleteTurmas =  _.pull(this.deleteTurmas, turma)
-
-            },
-
-            selectDelete(turma) {
-                this.deleteTurmas = _.concat(this.deleteTurmas, turma);
-            },
-
-            toggleDelete(){
-                this.isDelete = !this.isDelete;
-                this.deleteTurmas = []
-            },
-
-            selectToDelete(turma){
-                for(var i=0;i<this.deleteTurmas.length;i++) {
-                    if (this.deleteTurmas[i].id == turma.id) {
-                        this.unselectDelete(turma);
-                        return
-                    }
-                }
-                    this.selectDelete(turma)
-
-            },
-
             deleteTurma(turma) {
                 turmaService.delete(turma.id, turma).then((response) => {
                     this.$notify({
@@ -337,18 +301,7 @@
                 })
             },
 
-            deleteAllTurma(turmas){
-                for(var i=0;i<turmas.length;i++){
-                    this.deleteTurma(turmas[i]);
-                }
-            },
-
-            confirmDelete() {
-                this.deleteAllTurma(this.deleteTurmas)
-                this.toggleDelete()
-            },
-
-            cleanTurma() {
+           cleanTurma() {
                 this.turmaForm = _.clone(emptyTurma)
                 this.error = undefined
             },
@@ -560,9 +513,6 @@
                 return this.$store.state.pedido.Pedidos
             },
 
-            Deleting () {
-                return this.isDelete
-            }
 
         }
     }
@@ -603,15 +553,6 @@
         width:auto;
         text-align: left;
     }
-
-    /*tr:nth-child(odd) {
-        background: white;
-    }
-
-
-    tr:nth-child(even) {
-        background: whitesmoke;
-    }*/
 
     thead th {
         position: sticky;
@@ -680,11 +621,5 @@
         background-color: #9d9ea7 !important;
     }
 
-    .sticky {
-        /*
-        position:absolute;
-        top:auto;
-        left: auto;*/
-    }
 
 </style>
