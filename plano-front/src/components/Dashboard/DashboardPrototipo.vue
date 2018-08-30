@@ -111,9 +111,10 @@
             </template>
             <template v-if="Turmas.length>0">
             <template v-for="perfil in Perfis">
-                <tr is="turmadata" v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" v-bind:turma="turma" :key="turma.id"  v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
+                <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" :key="turma.id"  v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
                  'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
                  'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
+                    <turmadata v-bind:turma="turma"></turmadata>
                 </tr>
             </template>
             </template>
@@ -424,7 +425,7 @@
             },
 
             Perfis () {
-                return _.orderBy(this.$store.state.perfil.Perfis,'nome')
+                return this.$store.state.perfil.Perfis
             },
 
             Turmas () {
@@ -440,58 +441,7 @@
         }
     }
 </script>
-
-
-<style scoped>
-
-    .DashboardPrototipo{
-        max-height: 90vh;
-        max-width: 90vw;
-        overflow: hidden;
-    }
-    table {
-        table-layout: fixed;
-        overflow: auto;
-        max-height: 100%;
-        max-width: 100%;
-    }
-
-    input {
-        height: 25px;
-    }
-
-    td {
-        text-align: center;
-    }
-
-    p {
-        text-align: center;
-    }
-
-    th {
-        text-align: center;
-    }
-
-    input {
-        width:auto;
-        text-align: left;
-    }
-
-    thead th {
-        position: sticky;
-        position: -webkit-sticky;
-        top: -1px;
-        background: white;
-        z-index: 10;
-    }
-
-    table.scrolling td:nth-child(-n+10),
-    table.scrolling th:nth-child(-n+10) {
-        position: -webkit-sticky;
-        position: sticky;
-        left:0;
-    }
-
+<style>
     .avancado {
         background-color: #7c997f !important;
     }
@@ -543,6 +493,37 @@
     .ice {
         background-color: #9d9ea7 !important;
     }
+</style>
+<style scoped>
 
+    .DashboardPrototipo{
+        max-height: 90vh;
+        max-width: 90vw;
+        overflow: hidden;
+    }
+    table {
+        table-layout: fixed;
+        overflow: auto;
+        max-height: 100%;
+        max-width: 100%;
+    }
 
+    th {
+        text-align: center;
+    }
+
+    thead th {
+        position: sticky;
+        position: -webkit-sticky;
+        top: -1px;
+        background: white;
+        z-index: 10;
+    }
+
+    /*table.scrolling td:nth-child(-n+10),
+    table.scrolling th:nth-child(-n+10) {
+        position: -webkit-sticky;
+        position: sticky;
+        left:0;
+    }*/
 </style>
