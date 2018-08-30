@@ -1,5 +1,5 @@
 <template>
-    <div class="turmarow">
+    <div class="turmarow" style="width: 776px;">
         <td style="width: 16px;">
             <input type="text" style="width: 16px;" id="periodo" v-model="turma.periodo" v-on:blur="editTurma(turma)">
             <b-button v-on:click="deleteTurma(turma)" variant="danger"
@@ -330,7 +330,7 @@
 <style scoped>
     td {
         text-align: center;
-        padding: 0;
+        padding: 0!important;
     }
 
     p {
