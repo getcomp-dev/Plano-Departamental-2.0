@@ -114,7 +114,7 @@
                 <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" :key="turma.id"  v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
                  'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
                  'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
-                    <turmadata v-bind:turma="turma"></turmadata>
+                    <turmadata v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
                 </tr>
             </template>
             </template>
