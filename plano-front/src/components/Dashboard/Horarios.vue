@@ -5,12 +5,45 @@
                 <h1 class="h2">Lista Horarios</h1>
             </div>
 
-            <template v-if="activeCCD">
+            <!--<template v-if="activeCCD">
                 <h4>Ciência da Computação Diurno</h4>
             </template>
             <template v-if="!horarioVazio(CCD[0])">
                 <h5>1 Período</h5>
-                <b-table responsive :items="CCD[0]"></b-table>
+                <table class="tg" v-model="ativos[0].CCD">
+                  <tr>
+                    <th class="tg-0lax">hora</th>
+                    <th class="tg-0lax">Seg</th>
+                    <th class="tg-0lax">Ter</th>
+                    <th class="tg-0lax">Qua</th>
+                    <th class="tg-0lax">Qui</th>
+                    <th class="tg-0lax">Sex</th>
+                  </tr>
+                  <tr>
+                    <td class="tg-0lax">10-12</td>
+                    <td class="tg-0lax"></td>
+                    <td class="tg-0lax"></td>
+                    <td class="tg-0lax"></td>
+                    <td class="tg-0lax"></td>
+                    <td class="tg-0lax"></td>
+                  </tr>
+                  <tr>
+                    <td class="tg-0lax">14-16</td>
+                    <td class="tg-0lax"></td>
+                    <td class="tg-0lax"></td>
+                    <td class="tg-0lax"></td>
+                    <td class="tg-0lax"></td>
+                    <td class="tg-0lax"></td>
+                  </tr>
+                  <tr>
+                    <td class="tg-0lax">16-18</td>
+                    <td class="tg-0lax"></td>
+                    <td class="tg-0lax"></td>
+                    <td class="tg-0lax"></td>
+                    <td class="tg-0lax"></td>
+                    <td class="tg-0lax"></td>
+                  </tr>
+                </table>
             </template>
             <template v-if="!horarioVazio(CCD[1])">
                 <h5>2 Período</h5>
@@ -44,48 +77,275 @@
                 <h5>9 Período</h5>
                 <b-table responsive :items="CCD[8]"></b-table>
             </template>
-
+        -->
 
             <template v-if="activeCCN">
                 <h4>Ciência da Computação Noturno</h4>
             </template>
-            <template v-if="!horarioVazio(CCN[0])">
+            <div v-model="ativos[1].CCN">
+            <template v-if="horarioVazio(ativos[1].CCN[0])">
                 <h5>1 Período</h5>
-                <b-table responsive :items="CCN[0]"></b-table>
+                <table class="tg" v-model="ativos[1].CCN[0]">
+                    <tr>
+                        <th class="tg-0lax">hora</th>
+                        <th class="tg-0lax">Seg</th>
+                        <th class="tg-0lax">Ter</th>
+                        <th class="tg-0lax">Qua</th>
+                        <th class="tg-0lax">Qui</th>
+                        <th class="tg-0lax">Sex</th>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">19-21</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[0]"><p v-if="checkTurmaHorario(turma, 5)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[0]"><p v-if="checkTurmaHorario(turma, 11)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[0]"><p v-if="checkTurmaHorario(turma, 17)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[0]"><p v-if="checkTurmaHorario(turma, 23)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[0]"><p v-if="checkTurmaHorario(turma, 29)">{{turma.Disciplina}}</p></template></td>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">21-23</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[0]"><p v-if="checkTurmaHorario(turma, 6)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[0]"><p v-if="checkTurmaHorario(turma, 12)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[0]"><p v-if="checkTurmaHorario(turma, 18)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[0]"><p v-if="checkTurmaHorario(turma, 24)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[0]"><p v-if="checkTurmaHorario(turma, 30)">{{turma.Disciplina}}</p></template></td>
+                    </tr>
+                </table>
             </template>
-            <template v-if="!horarioVazio(CCN[1])">
+            <template v-if="horarioVazio(ativos[1].CCN[1])">
                 <h5>2 Período</h5>
-                <b-table responsive :items="CCN[1]"></b-table>
+                <table class="tg" v-model="turmasCCN">
+                    <tr>
+                        <th class="tg-0lax">hora</th>
+                        <th class="tg-0lax">Seg</th>
+                        <th class="tg-0lax">Ter</th>
+                        <th class="tg-0lax">Qua</th>
+                        <th class="tg-0lax">Qui</th>
+                        <th class="tg-0lax">Sex</th>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">19-21</td>
+                        <td class="tg-0lax"><template v-for="turma in turmasCCN"><template v-if="checkPeriodo(turma.Disciplina, 2)"><p v-if="checkTurmaHorario(turma, 5)">{{turma.Disciplina}}</p></template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in turmasCCN"><template v-if="checkPeriodo(turma.Disciplina, 2)"><p v-if="checkTurmaHorario(turma, 11)">{{turma.Disciplina}}</p></template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in turmasCCN"><template v-if="checkPeriodo(turma.Disciplina, 2)"><p v-if="checkTurmaHorario(turma, 17)">{{turma.Disciplina}}</p></template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in turmasCCN"><template v-if="checkPeriodo(turma.Disciplina, 2)"><p v-if="checkTurmaHorario(turma, 23)">{{turma.Disciplina}}</p></template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in turmasCCN"><template v-if="checkPeriodo(turma.Disciplina, 2)"><p v-if="checkTurmaHorario(turma, 29)">{{turma.Disciplina}}</p></template></template></td>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">21-23</td>
+                        <td class="tg-0lax"><template v-for="turma in turmasCCN"><template v-if="checkPeriodo(turma.Disciplina, 2)"><p v-if="checkTurmaHorario(turma, 6)">{{turma.Disciplina}}</p></template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in turmasCCN"><template v-if="checkPeriodo(turma.Disciplina, 2)"><p v-if="checkTurmaHorario(turma, 12)">{{turma.Disciplina}}</p></template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in turmasCCN"><template v-if="checkPeriodo(turma.Disciplina, 2)"><p v-if="checkTurmaHorario(turma, 18)">{{turma.Disciplina}}</p></template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in turmasCCN"><template v-if="checkPeriodo(turma.Disciplina, 2)"><p v-if="checkTurmaHorario(turma, 24)">{{turma.Disciplina}}</p></template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in turmasCCN"><template v-if="checkPeriodo(turma.Disciplina, 2)"><p v-if="checkTurmaHorario(turma, 30)">{{turma.Disciplina}}</p></template></template></td>
+                    </tr>
+                </table>
             </template>
-            <template v-if="!horarioVazio(CCN[2])">
+            <template v-if="horarioVazio(ativos[1].CCN[2])">
                 <h5>3 Período</h5>
-                <b-table responsive :items="CCN[2]"></b-table>
+                <table class="tg" v-model="ativos[1].CCN[2]">
+                    <tr>
+                        <th class="tg-0lax">hora</th>
+                        <th class="tg-0lax">Seg</th>
+                        <th class="tg-0lax">Ter</th>
+                        <th class="tg-0lax">Qua</th>
+                        <th class="tg-0lax">Qui</th>
+                        <th class="tg-0lax">Sex</th>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">19-21</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[2]"><p v-if="checkTurmaHorario(turma, 5)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[2]"><p v-if="checkTurmaHorario(turma, 11)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[2]"><p v-if="checkTurmaHorario(turma, 17)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[2]"><p v-if="checkTurmaHorario(turma, 23)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[2]"><p v-if="checkTurmaHorario(turma, 29)">{{turma.Disciplina}}</p></template></td>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">21-23</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[2]"><p v-if="checkTurmaHorario(turma, 6)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[2]"><p v-if="checkTurmaHorario(turma, 12)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[2]"><p v-if="checkTurmaHorario(turma, 18)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[2]"><p v-if="checkTurmaHorario(turma, 24)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[2]"><p v-if="checkTurmaHorario(turma, 30)">{{turma.Disciplina}}</p></template></td>
+                    </tr>
+                </table>
             </template>
-            <template v-if="!horarioVazio(CCN[3])">
+            <template v-if="horarioVazio(ativos[1].CCN[3])">
                 <h5>4 Período</h5>
-                <b-table responsive :items="CCN[3]"></b-table>
+                <table class="tg" v-model="ativos[1].CCN[3]">
+                    <tr>
+                        <th class="tg-0lax">hora</th>
+                        <th class="tg-0lax">Seg</th>
+                        <th class="tg-0lax">Ter</th>
+                        <th class="tg-0lax">Qua</th>
+                        <th class="tg-0lax">Qui</th>
+                        <th class="tg-0lax">Sex</th>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">19-21</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[3]"><p v-if="checkTurmaHorario(turma, 5)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[3]"><p v-if="checkTurmaHorario(turma, 11)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[3]"><p v-if="checkTurmaHorario(turma, 17)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[3]"><p v-if="checkTurmaHorario(turma, 23)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[3]"><p v-if="checkTurmaHorario(turma, 29)">{{turma.Disciplina}}</p></template></td>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">21-23</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[3]"><p v-if="checkTurmaHorario(turma, 6)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[3]"><p v-if="checkTurmaHorario(turma, 12)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[3]"><p v-if="checkTurmaHorario(turma, 18)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[3]"><p v-if="checkTurmaHorario(turma, 24)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[3]"><p v-if="checkTurmaHorario(turma, 30)">{{turma.Disciplina}}</p></template></td>
+                    </tr>
+                </table>
             </template>
-            <template v-if="!horarioVazio(CCN[4])">
+            <template v-if="horarioVazio(ativos[1].CCN[4])">
                 <h5>5 Período</h5>
-                <b-table responsive :items="CCN[4]"></b-table>
+                <table class="tg" v-model="ativos[1].CCN[4]">
+                    <tr>
+                        <th class="tg-0lax">hora</th>
+                        <th class="tg-0lax">Seg</th>
+                        <th class="tg-0lax">Ter</th>
+                        <th class="tg-0lax">Qua</th>
+                        <th class="tg-0lax">Qui</th>
+                        <th class="tg-0lax">Sex</th>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">19-21</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[4]"><p v-if="checkTurmaHorario(turma, 5)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[4]"><p v-if="checkTurmaHorario(turma, 11)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[4]"><p v-if="checkTurmaHorario(turma, 17)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[4]"><p v-if="checkTurmaHorario(turma, 23)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[4]"><p v-if="checkTurmaHorario(turma, 29)">{{turma.Disciplina}}</p></template></td>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">21-23</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[4]"><p v-if="checkTurmaHorario(turma, 6)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[4]"><p v-if="checkTurmaHorario(turma, 12)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[4]"><p v-if="checkTurmaHorario(turma, 18)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[4]"><p v-if="checkTurmaHorario(turma, 24)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[4]"><p v-if="checkTurmaHorario(turma, 30)">{{turma.Disciplina}}</p></template></td>
+                    </tr>
+                </table>
             </template>
-            <template v-if="!horarioVazio(CCN[5])">
+            <template v-if="horarioVazio(ativos[1].CCN[5])">
                 <h5>6 Período</h5>
-                <b-table responsive :items="CCN[5]"></b-table>
+                <table class="tg" v-model="ativos[1].CCN[5]">
+                    <tr>
+                        <th class="tg-0lax">hora</th>
+                        <th class="tg-0lax">Seg</th>
+                        <th class="tg-0lax">Ter</th>
+                        <th class="tg-0lax">Qua</th>
+                        <th class="tg-0lax">Qui</th>
+                        <th class="tg-0lax">Sex</th>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">19-21</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[5]"><p v-if="checkTurmaHorario(turma, 5)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[5]"><p v-if="checkTurmaHorario(turma, 11)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[5]"><p v-if="checkTurmaHorario(turma, 17)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[5]"><p v-if="checkTurmaHorario(turma, 23)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[5]"><p v-if="checkTurmaHorario(turma, 29)">{{turma.Disciplina}}</p></template></td>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">21-23</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[5]"><p v-if="checkTurmaHorario(turma, 6)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[5]"><p v-if="checkTurmaHorario(turma, 12)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[5]"><p v-if="checkTurmaHorario(turma, 18)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[5]"><p v-if="checkTurmaHorario(turma, 24)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[5]"><p v-if="checkTurmaHorario(turma, 30)">{{turma.Disciplina}}</p></template></td>
+                    </tr>
+                </table>
             </template>
-            <template v-if="!horarioVazio(CCN[6])">
+            <template v-if="horarioVazio(ativos[1].CCN[6])">
                 <h5>7 Período</h5>
-                <b-table responsive :items="CCN[6]"></b-table>
+                <table class="tg" v-model="ativos[1].CCN[6]">
+                    <tr>
+                        <th class="tg-0lax">hora</th>
+                        <th class="tg-0lax">Seg</th>
+                        <th class="tg-0lax">Ter</th>
+                        <th class="tg-0lax">Qua</th>
+                        <th class="tg-0lax">Qui</th>
+                        <th class="tg-0lax">Sex</th>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">19-21</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[6]"><p v-if="checkTurmaHorario(turma, 5)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[6]"><p v-if="checkTurmaHorario(turma, 11)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[6]"><p v-if="checkTurmaHorario(turma, 17)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[6]"><p v-if="checkTurmaHorario(turma, 23)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[6]"><p v-if="checkTurmaHorario(turma, 29)">{{turma.Disciplina}}</p></template></td>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">21-23</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[6]"><p v-if="checkTurmaHorario(turma, 6)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[6]"><p v-if="checkTurmaHorario(turma, 12)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[6]"><p v-if="checkTurmaHorario(turma, 18)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[6]"><p v-if="checkTurmaHorario(turma, 24)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[6]"><p v-if="checkTurmaHorario(turma, 30)">{{turma.Disciplina}}</p></template></td>
+                    </tr>
+                </table>
             </template>
-            <template v-if="!horarioVazio(CCN[7])">
+            <template v-if="horarioVazio(ativos[1].CCN[7])">
                 <h5>8 Período</h5>
-                <b-table responsive :items="CCN[7]"></b-table>
+                <table class="tg" v-model="ativos[1].CCN[7]">
+                    <tr>
+                        <th class="tg-0lax">hora</th>
+                        <th class="tg-0lax">Seg</th>
+                        <th class="tg-0lax">Ter</th>
+                        <th class="tg-0lax">Qua</th>
+                        <th class="tg-0lax">Qui</th>
+                        <th class="tg-0lax">Sex</th>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">19-21</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[7]"><p v-if="checkTurmaHorario(turma, 5)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[7]"><p v-if="checkTurmaHorario(turma, 11)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[7]"><p v-if="checkTurmaHorario(turma, 17)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[7]"><p v-if="checkTurmaHorario(turma, 23)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[7]"><p v-if="checkTurmaHorario(turma, 29)">{{turma.Disciplina}}</p></template></td>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">21-23</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[7]"><p v-if="checkTurmaHorario(turma, 6)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[7]"><p v-if="checkTurmaHorario(turma, 12)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[7]"><p v-if="checkTurmaHorario(turma, 18)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[7]"><p v-if="checkTurmaHorario(turma, 24)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[7]"><p v-if="checkTurmaHorario(turma, 30)">{{turma.Disciplina}}</p></template></td>
+                    </tr>
+                </table>
             </template>
-            <template v-if="!horarioVazio(CCN[8])">
+            <template v-if="horarioVazio(ativos[1].CCN[8])">
                 <h5>9 Período</h5>
-                <b-table responsive :items="CCN[8]"></b-table>
+                <table class="tg" v-model="ativos[1].CCN[8]">
+                    <tr>
+                        <th class="tg-0lax">hora</th>
+                        <th class="tg-0lax">Seg</th>
+                        <th class="tg-0lax">Ter</th>
+                        <th class="tg-0lax">Qua</th>
+                        <th class="tg-0lax">Qui</th>
+                        <th class="tg-0lax">Sex</th>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">19-21</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[8]"><p v-if="checkTurmaHorario(turma, 5)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[8]"><p v-if="checkTurmaHorario(turma, 11)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[8]"><p v-if="checkTurmaHorario(turma, 17)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[8]"><p v-if="checkTurmaHorario(turma, 23)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[8]"><p v-if="checkTurmaHorario(turma, 29)">{{turma.Disciplina}}</p></template></td>
+                    </tr>
+                    <tr>
+                        <td class="tg-0lax">21-23</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[8]"><p v-if="checkTurmaHorario(turma, 6)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[8]"><p v-if="checkTurmaHorario(turma, 12)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[8]"><p v-if="checkTurmaHorario(turma, 18)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[8]"><p v-if="checkTurmaHorario(turma, 24)">{{turma.Disciplina}}</p></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos[1].CCN[8]"><p v-if="checkTurmaHorario(turma, 30)">{{turma.Disciplina}}</p></template></td>
+                    </tr>
+                </table>
             </template>
-
+            </div>
+    <!--
             <template v-if="activeSI">
                 <h4>Sistemas de Informação</h4>
             </template>
@@ -165,7 +425,7 @@
                 <h5>9 Período</h5>
                 <b-table responsive :items="EC[8]"></b-table>
             </template>
-
+-->
         </div>
         <div class="col">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -294,71 +554,6 @@
         {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
     ]
 
-    const emptyHorariosNoturnos = [[{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-        {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-    ],
-        [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-        ],
-        [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-        ],
-        [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-        ],
-        [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-        ],
-        [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-        ],
-        [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-        ],
-        [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-        ],
-        [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-        ]]
-
-    const emptyHorariosDiurnos = [[{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-        {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-        {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-    ],
-        [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-        ],
-        [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-        ],
-        [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-        ],
-        [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-        ],
-        [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-        ],
-        [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-        ],
-        [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-        ],
-        [{hora:"10-12",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"12-14",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
-            {hora:"14-16",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-        ]]
-
     export default {
         name: 'DashboardHorarios',
 
@@ -380,7 +575,7 @@
                 evenCCD:"false",
                 evenEC:"false",
                 evenSI:"false",
-                CCN:[[{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
+                /*CCN:[[{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
                                  {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
                                 ],
                     [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
@@ -508,7 +703,13 @@
                     ],
                     [{hora:"19-21",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined},
                         {hora:"21-23",seg: undefined, ter:undefined, qua:undefined, qui:undefined, sex:undefined, sab:undefined}
-                    ]]
+                    ]],*/
+                ativos: [
+                    {CCD:[[], [], [], [], [], [], [], [], [], []]},
+                    {CCN:[[], [], [], [], [], [], [], [], [], []]},
+                    {EC:[[], [], [], [], [], [], [], [], [], []]},
+                    {SI:[[], [], [], [], [], [], [], [], [], []]}
+                ]
 
             }
         },
@@ -557,14 +758,24 @@
                     return 'false'
             },
 
+            emptyTurmas () {
+                this.ativos = [
+                    {CCD:[[], [], [], [], [], [], [], [], [], []]},
+                    {CCN:[[], [], [], [], [], [], [], [], [], []]},
+                    {EC:[[], [], [], [], [], [], [], [], [], []]},
+                    {SI:[[], [], [], [], [], [], [], [], [], []]}
+                ]
+            },
+
             createHorarios () {
                 var grade
                 var inicio
                 var fim
                 var pedidos
-                var disciplinas = this.$store.state.disciplina.Disciplinas
                 var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades
                 var turmas = this.$store.state.turma.Turmas
+
+                this.emptyTurmas()
 
                 //CC Diurno está selecionado
                 if(_.indexOf(this.cursos, 1)>-1) {
@@ -582,156 +793,11 @@
                                     if(turmas[j].Disciplina==disciplinaGrades[k].Disciplina){
                                         for(var p = 0; p < pedidos.length; p++){
                                             if((pedidos[p].vagasPeriodizadas>0)&&(pedidos[p].Turma==turmas[j].id)){
-                                                switch(turmas[j].Horario1){
-                                                    case 2:this.CCD[disciplinaGrades[k].periodo-1][0].seg = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].seg)
-                                                        break;
-                                                    case 3:this.CCD[disciplinaGrades[k].periodo-1][1].seg = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].seg)
-                                                        break;
-                                                    case 4:this.CCD[disciplinaGrades[k].periodo-1][2].seg = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].seg)
-                                                        break;
-                                                    case 8:this.CCD[disciplinaGrades[k].periodo-1][0].ter = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].ter)
-                                                        break;
-                                                    case 9:this.CCD[disciplinaGrades[k].periodo-1][1].ter = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].ter)
-                                                        break;
-                                                    case 10:this.CCD[disciplinaGrades[k].periodo-1][2].ter = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].ter)
-                                                        break;
-                                                    case 14:this.CCD[disciplinaGrades[k].periodo-1][0].qua = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].qua)
-                                                        break;
-                                                    case 15:this.CCD[disciplinaGrades[k].periodo-1][1].qua = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].qua)
-                                                        break;
-                                                    case 16:this.CCD[disciplinaGrades[k].periodo-1][2].qua = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].qua)
-                                                        break;
-                                                    case 20:this.CCD[disciplinaGrades[k].periodo-1][0].qui = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].qui)
-                                                        break;
-                                                    case 21:this.CCD[disciplinaGrades[k].periodo-1][1].qui = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].qui)
-                                                        break;
-                                                    case 22:this.CCD[disciplinaGrades[k].periodo-1][2].qui = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].qui)
-                                                        break;
-                                                    case 26:this.CCD[disciplinaGrades[k].periodo-1][0].sex = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].sex)
-                                                        break;
-                                                    case 27:this.CCD[disciplinaGrades[k].periodo-1][1].sex = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].sex)
-                                                        break;
-                                                    case 28:this.CCD[disciplinaGrades[k].periodo-1][2].sex = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].sex)
-                                                        break;
-                                                    default: break;
-                                                }
-                                                switch(turmas[j].Horario2){
-                                                    case 2:this.CCD[disciplinaGrades[k].periodo-1][0].seg = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].seg)
-                                                        break;
-                                                    case 3:this.CCD[disciplinaGrades[k].periodo-1][1].seg = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].seg)
-                                                        break;
-                                                    case 4:this.CCD[disciplinaGrades[k].periodo-1][2].seg = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].seg)
-                                                        break;
-                                                    case 8:this.CCD[disciplinaGrades[k].periodo-1][0].ter = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].ter)
-                                                        break;
-                                                    case 9:this.CCD[disciplinaGrades[k].periodo-1][1].ter = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].ter)
-                                                        break;
-                                                    case 10:this.CCD[disciplinaGrades[k].periodo-1][2].ter = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].ter)
-                                                        break;
-                                                    case 14:this.CCD[disciplinaGrades[k].periodo-1][0].qua = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].qua)
-                                                        break;
-                                                    case 15:this.CCD[disciplinaGrades[k].periodo-1][1].qua = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].qua)
-                                                        break;
-                                                    case 16:this.CCD[disciplinaGrades[k].periodo-1][2].qua = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].qua)
-                                                        break;
-                                                    case 20:this.CCD[disciplinaGrades[k].periodo-1][0].qui = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].qui)
-                                                        break;
-                                                    case 21:this.CCD[disciplinaGrades[k].periodo-1][1].qui = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].qui)
-                                                        break;
-                                                    case 22:this.CCD[disciplinaGrades[k].periodo-1][2].qui = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].qui)
-                                                        break;
-                                                    case 26:this.CCD[disciplinaGrades[k].periodo-1][0].sex = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][0].sex)
-                                                        break;
-                                                    case 27:this.CCD[disciplinaGrades[k].periodo-1][1].sex = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][1].sex)
-                                                        break;
-                                                    case 28:this.CCD[disciplinaGrades[k].periodo-1][2].sex = turmas[j].Disciplina
-                                                        console.log(this.CCD[disciplinaGrades[k].periodo-1][2].sex)
-                                                        break;
-                                                    default: break;
-                                                }
-
+                                                this.ativos[0].CCD[disciplinaGrades[k].periodo-1].push(turmas[j])
                                             }
                                         }
                                     }
                                 }
-                            }
-                        }
-                    }
-                    for(var i=0; i<9;i++){
-                        for(var j=0; j<disciplinas.length;j++){
-                            if(this.CCD[i][0].seg == disciplinas[j].id){
-                                this.CCD[i][0].seg = disciplinas[j].codigo
-                            }
-                            if(this.CCD[i][1].seg == disciplinas[j].id){
-                                this.CCD[i][1].seg = disciplinas[j].codigo
-                            }
-                            if(this.CCD[i][2].seg == disciplinas[j].id){
-                                this.CCD[i][2].seg = disciplinas[j].codigo
-                            }
-                            if(this.CCD[i][0].ter == disciplinas[j].id){
-                                this.CCD[i][0].ter = disciplinas[j].codigo
-                            }
-                            if(this.CCD[i][1].ter == disciplinas[j].id){
-                                this.CCD[i][1].ter = disciplinas[j].codigo
-                            }
-                            if(this.CCD[i][2].ter == disciplinas[j].id){
-                                this.CCD[i][2].ter = disciplinas[j].codigo
-                            }
-                            if(this.CCD[i][0].qua == disciplinas[j].id){
-                                this.CCD[i][0].qua = disciplinas[j].codigo
-                            }
-                            if(this.CCD[i][1].qua == disciplinas[j].id){
-                                this.CCD[i][1].qua = disciplinas[j].codigo
-                            }
-                            if(this.CCD[i][2].qua == disciplinas[j].id){
-                                this.CCD[i][2].qua = disciplinas[j].codigo
-                            }
-                            if(this.CCD[i][0].qui == disciplinas[j].id){
-                                this.CCD[i][0].qui = disciplinas[j].codigo
-                            }
-                            if(this.CCD[i][1].qui == disciplinas[j].id){
-                                this.CCD[i][1].qui = disciplinas[j].codigo
-                            }
-                            if(this.CCD[i][2].qui == disciplinas[j].id){
-                                this.CCD[i][2].qui = disciplinas[j].codigo
-                            }
-                            if(this.CCD[i][0].sex == disciplinas[j].id){
-                                this.CCD[i][0].sex = disciplinas[j].codigo
-                            }
-                            if(this.CCD[i][1].sex == disciplinas[j].id){
-                                this.CCD[i][1].sex = disciplinas[j].codigo
-                            }
-                            if(this.CCD[i][2].sex == disciplinas[j].id){
-                                this.CCD[i][2].sex = disciplinas[j].codigo
                             }
                         }
                     }
@@ -753,111 +819,11 @@
                                     if(turmas[j].Disciplina==disciplinaGrades[k].Disciplina){
                                         for(var p = 0; p < pedidos.length; p++){
                                             if((pedidos[p].vagasPeriodizadas>0)&&(pedidos[p].Turma==turmas[j].id)){
-                                                switch(turmas[j].Horario1){
-                                                    case 5:this.CCN[disciplinaGrades[k].periodo-1][0].seg = turmas[j].Disciplina
-                                                            console.log(this.CCN[disciplinaGrades[k].periodo-1][0].seg)
-                                                           break;
-                                                    case 6:this.CCN[disciplinaGrades[k].periodo-1][1].seg = turmas[j].Disciplina
-                                                            console.log(this.CCN[disciplinaGrades[k].periodo-1][1].seg)
-                                                           break;
-                                                    case 11:this.CCN[disciplinaGrades[k].periodo-1][0].ter = turmas[j].Disciplina
-                                                            console.log(this.CCN[disciplinaGrades[k].periodo-1][0].ter)
-                                                            break;
-                                                    case 12:this.CCN[disciplinaGrades[k].periodo-1][1].ter = turmas[j].Disciplina
-                                                            console.log(this.CCN[disciplinaGrades[k].periodo-1][1].ter)
-                                                            break;
-                                                    case 17:this.CCN[disciplinaGrades[k].periodo-1][0].qua = turmas[j].Disciplina
-                                                            console.log(this.CCN[disciplinaGrades[k].periodo-1][0].qua)
-                                                            break;
-                                                    case 18:this.CCN[disciplinaGrades[k].periodo-1][1].qua = turmas[j].Disciplina
-                                                            console.log(this.CCN[disciplinaGrades[k].periodo-1][1].qua)
-                                                            break;
-                                                    case 23:this.CCN[disciplinaGrades[k].periodo-1][0].qui = turmas[j].Disciplina
-                                                            console.log(this.CCN[disciplinaGrades[k].periodo-1][0].qui)
-                                                            break;
-                                                    case 24:this.CCN[disciplinaGrades[k].periodo-1][1].qui = turmas[j].Disciplina
-                                                            console.log(this.CCN[disciplinaGrades[k].periodo-1][1].qui)
-                                                            break;
-                                                    case 29:this.CCN[disciplinaGrades[k].periodo-1][0].sex = turmas[j].Disciplina
-                                                            console.log(this.CCN[disciplinaGrades[k].periodo-1][0].sex)
-                                                            break;
-                                                    case 30:this.CCN[disciplinaGrades[k].periodo-1][1].sex = turmas[j].Disciplina
-                                                            console.log(this.CCN[disciplinaGrades[k].periodo-1][1].sex)
-                                                            break;
-                                                    default: break;
-                                                }
-                                                switch(turmas[j].Horario2){
-                                                    case 5:this.CCN[disciplinaGrades[k].periodo-1][0].seg = turmas[j].Disciplina
-                                                        console.log(this.CCN[disciplinaGrades[k].periodo-1][0].seg)
-                                                        break;
-                                                    case 6:this.CCN[disciplinaGrades[k].periodo-1][1].seg = turmas[j].Disciplina
-                                                        console.log(this.CCN[disciplinaGrades[k].periodo-1][1].seg)
-                                                        break;
-                                                    case 11:this.CCN[disciplinaGrades[k].periodo-1][0].ter = turmas[j].Disciplina
-                                                        console.log(this.CCN[disciplinaGrades[k].periodo-1][0].ter)
-                                                        break;
-                                                    case 12:this.CCN[disciplinaGrades[k].periodo-1][1].ter = turmas[j].Disciplina
-                                                        console.log(this.CCN[disciplinaGrades[k].periodo-1][1].ter)
-                                                        break;
-                                                    case 17:this.CCN[disciplinaGrades[k].periodo-1][0].qua = turmas[j].Disciplina
-                                                        console.log(this.CCN[disciplinaGrades[k].periodo-1][0].qua)
-                                                        break;
-                                                    case 18:this.CCN[disciplinaGrades[k].periodo-1][1].qua = turmas[j].Disciplina
-                                                        console.log(this.CCN[disciplinaGrades[k].periodo-1][1].qua)
-                                                        break;
-                                                    case 23:this.CCN[disciplinaGrades[k].periodo-1][0].qui = turmas[j].Disciplina
-                                                        console.log(this.CCN[disciplinaGrades[k].periodo-1][0].qui)
-                                                        break;
-                                                    case 24:this.CCN[disciplinaGrades[k].periodo-1][1].qui = turmas[j].Disciplina
-                                                        console.log(this.CCN[disciplinaGrades[k].periodo-1][1].qui)
-                                                        break;
-                                                    case 29:this.CCN[disciplinaGrades[k].periodo-1][0].sex = turmas[j].Disciplina
-                                                        console.log(this.CCN[disciplinaGrades[k].periodo-1][0].sex)
-                                                        break;
-                                                    case 30:this.CCN[disciplinaGrades[k].periodo-1][1].sex = turmas[j].Disciplina
-                                                        console.log(this.CCN[disciplinaGrades[k].periodo-1][1].sex)
-                                                        break;
-                                                    default: break;
-                                                }
-
+                                                this.ativos[1].CCN[disciplinaGrades[k].periodo-1].push(turmas[j])
                                             }
                                         }
                                     }
                                 }
-                            }
-                        }
-                    }
-                    for(var i=0; i<9;i++){
-                        for(var j=0; j<disciplinas.length;j++){
-                            if(this.CCN[i][0].seg == disciplinas[j].id){
-                                this.CCN[i][0].seg = disciplinas[j].codigo
-                            }
-                            if(this.CCN[i][1].seg == disciplinas[j].id){
-                                this.CCN[i][1].seg = disciplinas[j].codigo
-                            }
-                            if(this.CCN[i][0].ter == disciplinas[j].id){
-                                this.CCN[i][0].ter = disciplinas[j].codigo
-                            }
-                            if(this.CCN[i][1].ter == disciplinas[j].id){
-                                this.CCN[i][1].ter = disciplinas[j].codigo
-                            }
-                            if(this.CCN[i][0].qua == disciplinas[j].id){
-                                this.CCN[i][0].qua = disciplinas[j].codigo
-                            }
-                            if(this.CCN[i][1].qua == disciplinas[j].id){
-                                this.CCN[i][1].qua = disciplinas[j].codigo
-                            }
-                            if(this.CCN[i][0].qui == disciplinas[j].id){
-                                this.CCN[i][0].qui = disciplinas[j].codigo
-                            }
-                            if(this.CCN[i][1].qui == disciplinas[j].id){
-                                this.CCN[i][1].qui = disciplinas[j].codigo
-                            }
-                            if(this.CCN[i][0].sex == disciplinas[j].id){
-                                this.CCN[i][0].sex = disciplinas[j].codigo
-                            }
-                            if(this.CCN[i][1].sex == disciplinas[j].id){
-                                this.CCN[i][1].sex = disciplinas[j].codigo
                             }
                         }
                     }
@@ -879,111 +845,11 @@
                                     if(turmas[j].Disciplina==disciplinaGrades[k].Disciplina){
                                         for(var p = 0; p < pedidos.length; p++){
                                             if((pedidos[p].vagasPeriodizadas>0)&&(pedidos[p].Turma==turmas[j].id)){
-                                                switch(turmas[j].Horario1){
-                                                    case 5:this.SI[disciplinaGrades[k].periodo-1][0].seg = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].seg)
-                                                        break;
-                                                    case 6:this.SI[disciplinaGrades[k].periodo-1][1].seg = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].seg)
-                                                        break;
-                                                    case 11:this.SI[disciplinaGrades[k].periodo-1][0].ter = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].ter)
-                                                        break;
-                                                    case 12:this.SI[disciplinaGrades[k].periodo-1][1].ter = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].ter)
-                                                        break;
-                                                    case 17:this.SI[disciplinaGrades[k].periodo-1][0].qua = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].qua)
-                                                        break;
-                                                    case 18:this.SI[disciplinaGrades[k].periodo-1][1].qua = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].qua)
-                                                        break;
-                                                    case 23:this.SI[disciplinaGrades[k].periodo-1][0].qui = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].qui)
-                                                        break;
-                                                    case 24:this.SI[disciplinaGrades[k].periodo-1][1].qui = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].qui)
-                                                        break;
-                                                    case 29:this.SI[disciplinaGrades[k].periodo-1][0].sex = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].sex)
-                                                        break;
-                                                    case 30:this.SI[disciplinaGrades[k].periodo-1][1].sex = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].sex)
-                                                        break;
-                                                    default: break;
-                                                }
-                                                switch(turmas[j].Horario2){
-                                                    case 5:this.SI[disciplinaGrades[k].periodo-1][0].seg = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].seg)
-                                                        break;
-                                                    case 6:this.SI[disciplinaGrades[k].periodo-1][1].seg = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].seg)
-                                                        break;
-                                                    case 11:this.SI[disciplinaGrades[k].periodo-1][0].ter = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].ter)
-                                                        break;
-                                                    case 12:this.SI[disciplinaGrades[k].periodo-1][1].ter = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].ter)
-                                                        break;
-                                                    case 17:this.SI[disciplinaGrades[k].periodo-1][0].qua = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].qua)
-                                                        break;
-                                                    case 18:this.SI[disciplinaGrades[k].periodo-1][1].qua = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].qua)
-                                                        break;
-                                                    case 23:this.SI[disciplinaGrades[k].periodo-1][0].qui = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].qui)
-                                                        break;
-                                                    case 24:this.SI[disciplinaGrades[k].periodo-1][1].qui = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].qui)
-                                                        break;
-                                                    case 29:this.SI[disciplinaGrades[k].periodo-1][0].sex = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][0].sex)
-                                                        break;
-                                                    case 30:this.SI[disciplinaGrades[k].periodo-1][1].sex = turmas[j].Disciplina
-                                                        console.log(this.SI[disciplinaGrades[k].periodo-1][1].sex)
-                                                        break;
-                                                    default: break;
-                                                }
-
+                                                this.ativos[3].SI[disciplinaGrades[k].periodo-1].push(turmas[j])
                                             }
                                         }
                                     }
                                 }
-                            }
-                        }
-                    }
-                    for(var i=0; i<9;i++){
-                        for(var j=0; j<disciplinas.length;j++){
-                            if(this.SI[i][0].seg == disciplinas[j].id){
-                                this.SI[i][0].seg = disciplinas[j].codigo
-                            }
-                            if(this.SI[i][1].seg == disciplinas[j].id){
-                                this.SI[i][1].seg = disciplinas[j].codigo
-                            }
-                            if(this.SI[i][0].ter == disciplinas[j].id){
-                                this.SI[i][0].ter = disciplinas[j].codigo
-                            }
-                            if(this.SI[i][1].ter == disciplinas[j].id){
-                                this.SI[i][1].ter = disciplinas[j].codigo
-                            }
-                            if(this.SI[i][0].qua == disciplinas[j].id){
-                                this.SI[i][0].qua = disciplinas[j].codigo
-                            }
-                            if(this.SI[i][1].qua == disciplinas[j].id){
-                                this.SI[i][1].qua = disciplinas[j].codigo
-                            }
-                            if(this.SI[i][0].qui == disciplinas[j].id){
-                                this.SI[i][0].qui = disciplinas[j].codigo
-                            }
-                            if(this.SI[i][1].qui == disciplinas[j].id){
-                                this.SI[i][1].qui = disciplinas[j].codigo
-                            }
-                            if(this.SI[i][0].sex == disciplinas[j].id){
-                                this.SI[i][0].sex = disciplinas[j].codigo
-                            }
-                            if(this.SI[i][1].sex == disciplinas[j].id){
-                                this.SI[i][1].sex = disciplinas[j].codigo
                             }
                         }
                     }
@@ -1005,103 +871,7 @@
                                     if(turmas[j].Disciplina==disciplinaGrades[k].Disciplina){
                                         for(var p = 0; p < pedidos.length; p++){
                                             if((pedidos[p].vagasPeriodizadas>0)&&(pedidos[p].Turma==turmas[j].id)){
-                                                switch(turmas[j].Horario1){
-                                                    case 2:this.EC[disciplinaGrades[k].periodo-1][0].seg = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].seg)
-                                                        break;
-                                                    case 3:this.EC[disciplinaGrades[k].periodo-1][1].seg = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].seg)
-                                                        break;
-                                                    case 4:this.EC[disciplinaGrades[k].periodo-1][2].seg = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].seg)
-                                                        break;
-                                                    case 8:this.EC[disciplinaGrades[k].periodo-1][0].ter = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].ter)
-                                                        break;
-                                                    case 9:this.EC[disciplinaGrades[k].periodo-1][1].ter = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].ter)
-                                                        break;
-                                                    case 10:this.EC[disciplinaGrades[k].periodo-1][2].ter = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].ter)
-                                                        break;
-                                                    case 14:this.EC[disciplinaGrades[k].periodo-1][0].qua = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].qua)
-                                                        break;
-                                                    case 15:this.EC[disciplinaGrades[k].periodo-1][1].qua = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].qua)
-                                                        break;
-                                                    case 16:this.EC[disciplinaGrades[k].periodo-1][2].qua = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].qua)
-                                                        break;
-                                                    case 20:this.EC[disciplinaGrades[k].periodo-1][0].qui = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].qui)
-                                                        break;
-                                                    case 21:this.EC[disciplinaGrades[k].periodo-1][1].qui = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].qui)
-                                                        break;
-                                                    case 22:this.EC[disciplinaGrades[k].periodo-1][2].qui = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].qui)
-                                                        break;
-                                                    case 26:this.EC[disciplinaGrades[k].periodo-1][0].sex = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].sex)
-                                                        break;
-                                                    case 27:this.EC[disciplinaGrades[k].periodo-1][1].sex = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].sex)
-                                                        break;
-                                                    case 28:this.EC[disciplinaGrades[k].periodo-1][2].sex = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].sex)
-                                                        break;
-                                                    default: break;
-                                                }
-                                                switch(turmas[j].Horario2){
-                                                    case 2:this.EC[disciplinaGrades[k].periodo-1][0].seg = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].seg)
-                                                        break;
-                                                    case 3:this.EC[disciplinaGrades[k].periodo-1][1].seg = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].seg)
-                                                        break;
-                                                    case 4:this.EC[disciplinaGrades[k].periodo-1][2].seg = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].seg)
-                                                        break;
-                                                    case 8:this.EC[disciplinaGrades[k].periodo-1][0].ter = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].ter)
-                                                        break;
-                                                    case 9:this.EC[disciplinaGrades[k].periodo-1][1].ter = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].ter)
-                                                        break;
-                                                    case 10:this.EC[disciplinaGrades[k].periodo-1][2].ter = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].ter)
-                                                        break;
-                                                    case 14:this.EC[disciplinaGrades[k].periodo-1][0].qua = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].qua)
-                                                        break;
-                                                    case 15:this.EC[disciplinaGrades[k].periodo-1][1].qua = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].qua)
-                                                        break;
-                                                    case 16:this.EC[disciplinaGrades[k].periodo-1][2].qua = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].qua)
-                                                        break;
-                                                    case 20:this.EC[disciplinaGrades[k].periodo-1][0].qui = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].qui)
-                                                        break;
-                                                    case 21:this.EC[disciplinaGrades[k].periodo-1][1].qui = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].qui)
-                                                        break;
-                                                    case 22:this.EC[disciplinaGrades[k].periodo-1][2].qui = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].qui)
-                                                        break;
-                                                    case 26:this.EC[disciplinaGrades[k].periodo-1][0].sex = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][0].sex)
-                                                        break;
-                                                    case 27:this.EC[disciplinaGrades[k].periodo-1][1].sex = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][1].sex)
-                                                        break;
-                                                    case 28:this.EC[disciplinaGrades[k].periodo-1][2].sex = turmas[j].Disciplina
-                                                        console.log(this.EC[disciplinaGrades[k].periodo-1][2].sex)
-                                                        break;
-                                                    default: break;
-                                                }
-
+                                                this.ativos[2].EC[disciplinaGrades[k].periodo-1].push(turmas[j])
                                             }
                                         }
                                     }
@@ -1109,61 +879,32 @@
                             }
                         }
                     }
-                    for(var i=0; i<9;i++){
-                        for(var j=0; j<disciplinas.length;j++){
-                            if(this.EC[i][0].seg == disciplinas[j].id){
-                                this.EC[i][0].seg = disciplinas[j].codigo
-                            }
-                            if(this.EC[i][1].seg == disciplinas[j].id){
-                                this.EC[i][1].seg = disciplinas[j].codigo
-                            }
-                            if(this.EC[i][2].seg == disciplinas[j].id){
-                                this.EC[i][2].seg = disciplinas[j].codigo
-                            }
-                            if(this.EC[i][0].ter == disciplinas[j].id){
-                                this.EC[i][0].ter = disciplinas[j].codigo
-                            }
-                            if(this.EC[i][1].ter == disciplinas[j].id){
-                                this.EC[i][1].ter = disciplinas[j].codigo
-                            }
-                            if(this.EC[i][2].ter == disciplinas[j].id){
-                                this.EC[i][2].ter = disciplinas[j].codigo
-                            }
-                            if(this.EC[i][0].qua == disciplinas[j].id){
-                                this.EC[i][0].qua = disciplinas[j].codigo
-                            }
-                            if(this.EC[i][1].qua == disciplinas[j].id){
-                                this.EC[i][1].qua = disciplinas[j].codigo
-                            }
-                            if(this.EC[i][2].qua == disciplinas[j].id){
-                                this.EC[i][2].qua = disciplinas[j].codigo
-                            }
-                            if(this.EC[i][0].qui == disciplinas[j].id){
-                                this.EC[i][0].qui = disciplinas[j].codigo
-                            }
-                            if(this.EC[i][1].qui == disciplinas[j].id){
-                                this.EC[i][1].qui = disciplinas[j].codigo
-                            }
-                            if(this.EC[i][2].qui == disciplinas[j].id){
-                                this.EC[i][2].qui = disciplinas[j].codigo
-                            }
-                            if(this.EC[i][0].sex == disciplinas[j].id){
-                                this.EC[i][0].sex = disciplinas[j].codigo
-                            }
-                            if(this.EC[i][1].sex == disciplinas[j].id){
-                                this.EC[i][1].sex = disciplinas[j].codigo
-                            }
-                            if(this.EC[i][2].sex == disciplinas[j].id){
-                                this.EC[i][2].sex = disciplinas[j].codigo
-                            }
-                        }
-                    }
                 }
+                console.log(this.ativos)
             },
 
-            horarioVazio(horario){
-                return (_.isEqual(horario, emptyHorarioNoturno)||_.isEqual(horario, emptyHorarioDiurno))
+            horarioVazio(curso){
+                if(curso.length!=0)
+                    return true
+                else
+                    return false
+            },
+
+            checkTurmaHorario (turma, horario) {
+                if(turma.Horario1==horario || turma.Horario2==horario) {
+                    return true
+                }else
+                    return false
+            },
+
+            checkPeriodo(turma, periodo){
+                for (grade in this.$store.state.disciplinaGrade.DisciplinaGrades){
+                    if(grade.Disciplina==turma && grade.periodo==periodo) {
+                        return true
+                    }
+                }
             }
+
         },
 
         computed: {
@@ -1206,6 +947,16 @@
                 return _.indexOf(this.cursos, 4)>-1
             },
 
+            turmasCCN () {
+                var ativos = this.ativos[1].CCN
+                var grades = this.$store.state.grade.Grades
+                return this.$store.state.turma.Turmas.filter(function(value){
+                    if(ativos.findIndex(t => t.id===value.id)>=0)
+                            return true
+                        else
+                            return false
+                })
+            }
 
         }
     }
@@ -1224,7 +975,8 @@
         border-radius: 15px;
     }
 
-    .generate {
-
-    }
+    .tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
+    .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-top-width:1px;border-bottom-width:1px;border-color:#ccc;color:#333;background-color:#fff;}
+    .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-top-width:1px;border-bottom-width:1px;border-color:#ccc;color:#333;background-color:#f0f0f0;}
+    .tg .tg-0lax{text-align:left;vertical-align:top}
 </style>
