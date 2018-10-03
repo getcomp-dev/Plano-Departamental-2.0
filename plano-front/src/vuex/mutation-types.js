@@ -64,6 +64,7 @@ export const TURMA_FETCHED = 'TURMA_FETCHED'
 export const SOCKET_TURMA_UPDATED = 'SOCKET_TURMA_UPDATED'
 export const SOCKET_TURMA_CREATED = 'SOCKET_TURMA_CREATED'
 export const SOCKET_TURMA_DELETED = 'SOCKET_TURMA_DELETED'
+export const redefinirAtivas = 'redefinirAtivas'
 
 //sala.js
 export const SALA_FETCHED = 'SALA_FETCHED'

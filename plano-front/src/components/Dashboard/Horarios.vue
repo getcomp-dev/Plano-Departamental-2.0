@@ -1855,6 +1855,12 @@
             }
         },
 
+        created: function () {
+            if(typeof(this.$store.state.turma.Ativas.CCD) != 'undefined') {
+                this.ativos = _.clone(this.$store.state.turma.Ativas)
+            }
+        },
+
         methods: {
             addGradeCCN () {
                 this.rangeCCN++
@@ -1918,6 +1924,9 @@
             },
 
             createHorarios () {
+
+                console.log(this.$store.state.turma.Ativas)
+
                 var grade
                 var inicio
                 var fim
@@ -1979,10 +1988,6 @@
                     }
                 }
 
-                var turmas = this.$store.state.turma.Turmas
-                var turmasfilter = turmas.filter(this.filterTurmas)
-                console.log(turmasfilter)
-
                 //SI está selecionado
                 if(_.indexOf(this.cursos, 3)>-1) {
                     pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 3])
@@ -2034,7 +2039,7 @@
                         }
                     }
                 }
-                console.log(this.ativos)
+                this.$store.commit('redefinirAtivas', {Ativas: this.ativos})
             },
 
             horarioVazio(curso){
@@ -2086,6 +2091,8 @@
                             }
                         }
                 }
+
+                this.$store.commit('redefinirAtivas', {Ativas: this.ativos})
             }
 
         },

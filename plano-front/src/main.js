@@ -25,7 +25,7 @@ Vue.use(Notifications)
 import socketio from 'socket.io-client'
 import VueSocketio from 'vue-socket.io'
 
-Vue.use(VueSocketio, socketio('http://200.131.219.57:3000', {autoConnect: false}), store)
+Vue.use(VueSocketio, socketio('http://localhost:3000', {autoConnect: false}), store)
 
 Vue.config.productionTip = false
 
