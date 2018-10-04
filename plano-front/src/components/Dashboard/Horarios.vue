@@ -1856,8 +1856,10 @@
         },
 
         created: function () {
+            console.log(this.$store.state.turma.Ativas)
             if(typeof(this.$store.state.turma.Ativas.CCD) != 'undefined') {
                 this.ativos = _.clone(this.$store.state.turma.Ativas)
+                this.updateHorarios()
             }
         },
 

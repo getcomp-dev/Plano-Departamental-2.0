@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import createPersistedState from 'vuex-persistedstate'
 
 import auth from './module/auth'
 import perfil from './module/perfil'
@@ -77,5 +78,8 @@ export default new Vuex.Store({
     horario,
     vaga
   },
+  plugins:[
+      createPersistedState()
+  ],
   strict: process.env.NODE_ENV !== 'production'
 })
