@@ -61,8 +61,15 @@ app.use('/api/sala', salaRoute)
 app.use('/api/horario', horarioRoute)
 app.use('/api/vaga', vagaRoute)
 
+const staticFileMiddleware = express.static('assets');
+app.use(staticFileMiddleware);
+app.use(history({
+    disableDotRule: true,
+    verbose: true
+}));
+app.use(staticFileMiddleware);
 
-app.use(history())
+//app.use(history())
 // Error handlers
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
