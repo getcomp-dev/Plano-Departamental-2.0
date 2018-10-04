@@ -61,13 +61,18 @@ app.use('/api/sala', salaRoute)
 app.use('/api/horario', horarioRoute)
 app.use('/api/vaga', vagaRoute)
 
-const staticFileMiddleware = express.static('assets');
+const staticFileMiddleware = express.static(path.join(__dirname + '/dist'));
+
 app.use(staticFileMiddleware);
 app.use(history({
     disableDotRule: true,
     verbose: true
 }));
 app.use(staticFileMiddleware);
+
+app.get('/', function (req, res) {
+    res.render(path.join(__dirname + '/index.html'));
+});
 
 //app.use(history())
 // Error handlers
