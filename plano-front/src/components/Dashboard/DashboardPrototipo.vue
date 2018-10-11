@@ -10,6 +10,7 @@
                 <template v-else>
                     <div class="col-sm-9"></div>
                     <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="">Adicionar </button>
+                   <!-- <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="bddump" style="">BdDump </button>-->
                 </template>
         </div>
     <div style="width: 100%;height: 80%; overflow: scroll;">
@@ -128,6 +129,7 @@
     import _ from 'lodash'
     import turmaService from '../../common/services/turma'
     import pedidoService from '../../common/services/pedido'
+    import bddumpService from '../../common/services/bddump'
     import turmadata from './TurmaRow.vue'
 
     const emptyTurma = {
@@ -169,6 +171,19 @@
         },
 
         methods: {
+            bddump: function() {
+              bddumpService.createDump({filename: "teste"}).then((response)=> {
+                  this.$notify({
+                      group: 'general',
+                      title: `Sucesso!`,
+                      text: `O dump foi criado!`,
+                      type: 'success'
+                  })
+              }).catch(error => {
+                  this.error = '<b>Erro ao criar dump</b>'
+              })
+            },
+
             inPerfil: function (perfil, turmas, disciplinas) {
                 return turmas.filter(function (turma) {
                     var disciplina = _.find(disciplinas, function(disc) { return disc.id===turma.Disciplina})

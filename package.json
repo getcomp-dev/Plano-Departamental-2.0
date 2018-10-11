@@ -1,5 +1,7 @@
 {
   "dependencies": {
+    "mysqldump": "^2.2.1",
+    "node-mysql-importer": "^0.0.10",
     "vuex-persistedstate": "^2.5.4"
   }
 }

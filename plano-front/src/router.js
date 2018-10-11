@@ -6,7 +6,7 @@ import Login from './components/TheLogin'
 
 import Dashboard from './components/TheDashboard'
 import DashboardHome from './components/Dashboard/Home'
-import DashboardPedidos from './components/Dashboard/Pedidos'
+//import DashboardPedidos from './components/Dashboard/Pedidos'
 import DashboardTurmas from './components/Dashboard/Turmas'
 import DashboardRelatorios from './components/Dashboard/Relatorios'
 import DashboardHorarios from './components/Dashboard/Horarios'
@@ -15,7 +15,10 @@ import DashboardDocentes from './components/Dashboard/Docentes'
 import DashboardGrades from './components/Dashboard/Grades'
 import DashboardPerfis from './components/Dashboard/Perfis'
 import DashboardDisciplinas from './components/Dashboard/Disciplinas'
-import DashboardPrototipo from './components/Dashboard/DashboardPrototipo'
+import DashboardPedidos from './components/Dashboard/DashboardPrototipo'
+import DashboardCargaProfessores from './components/Dashboard/CargaProfessores'
+import DashboardHorariosResumo from './components/Dashboard/HorariosResumo'
+import DashboardLaboratoriosAlocacao from './components/Dashboard/LaboratoriosAlocacao'
 
 
 import {USER_LOGGED_OUT} from './vuex/mutation-types'
@@ -51,7 +54,10 @@ const routes = [
       {path: 'grades', name: 'grades', component: DashboardGrades},
       {path: 'disciplinas', name: 'disciplinas', component: DashboardDisciplinas},
       {path: 'perfis', name: 'perfis', component: DashboardPerfis},
-      {path: 'prototipo', name: 'prototipo', component: DashboardPrototipo}
+      //{path: 'prototipo', name: 'prototipo', component: DashboardPrototipo}
+      {path: 'cargaProfessores', name: 'cargaProfessores', component: DashboardCargaProfessores},
+      {path: 'horariosResumo', name: 'horariosResumo', component: DashboardHorariosResumo},
+      {path: 'laboratoriosAlocacao', name: 'laboratoriosAlocacao', component: DashboardLaboratoriosAlocacao}
     ]
   },
   {

@@ -20,7 +20,8 @@ const express = require('express'),
   turmaRoute = require('./routes/turma'),
   salaRoute = require('./routes/sala'),
   horarioRoute = require('./routes/horario'),
-  vagaRoute = require('./routes/vaga')
+  vagaRoute = require('./routes/vaga'),
+  bddumpRoute = require('./routes/bddump')
 
 
 const app = express()
@@ -60,6 +61,7 @@ app.use('/api/turma', turmaRoute)
 app.use('/api/sala', salaRoute)
 app.use('/api/horario', horarioRoute)
 app.use('/api/vaga', vagaRoute)
+app.use('/api/bddump', bddumpRoute)
 
 app.use(history())
 // Error handlers
