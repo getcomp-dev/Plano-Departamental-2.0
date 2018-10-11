@@ -28,6 +28,12 @@ router.post('/:filename(.+)', function(req, res, next){
         'database': 'plano_dev'
     })
 
+    importer.importSQL('drop_all.sql').then( () => {
+        console.log('all statements have been executed')
+    }).catch( err => {
+        console.log(`error: ${err}`)
+    })
+
     importer.importSQL(req.params.filename + '.sql').then( () => {
         console.log('all statements have been executed')
     }).catch( err => {

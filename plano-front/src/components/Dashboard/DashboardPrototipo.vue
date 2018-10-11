@@ -170,6 +170,10 @@
             turmadata
         },
 
+        created () {
+            this.$store.commit(COMPONENT_LOADED)
+        },
+
         methods: {
             bddump: function() {
               bddumpService.createDump({filename: "teste"}).then((response)=> {

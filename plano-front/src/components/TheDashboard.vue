@@ -25,7 +25,7 @@
             </h6>
             <ul class="nav flex-column mb-2">
               <li class="nav-item">
-                <router-link :to="{ name: 'pedidos' }" class="nav-link"><i class="fas fa-clipboard"></i> Tabela</router-link>
+                <router-link :to="{ name: 'pedidos' }" class="nav-link" v-on:click="loadPage"><i class="fas fa-clipboard"></i> Tabela</router-link>
               </li>
               <li class="nav-item">
                 <router-link :to="{ name: 'horarios' }" class="nav-link"><i class="fas fa-calendar-alt"></i> Horários</router-link>
@@ -38,6 +38,18 @@
                 <router-link :to="{ name: 'relatorios' }" class="nav-link"><i class="fas fa-chart-line"></i> Relatórios</router-link>
               </li>
              -->
+            </ul>
+            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">Relatórios</h6>
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <router-link :to="{ name: 'cargaProfessores' }" class="nav-link"><i class="fas fa-clipboard"></i> Carga Professores</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link :to="{ name: 'horariosResumo' }" class="nav-link"><i class="fas fa-clipboard"></i> Horários - Resumo</router-link>
+              </li>
+              <li class="nav-item">
+                <router-link :to="{ name: 'laboratoriosAlocacao' }" class="nav-link"><i class="fas fa-clipboard"></i> Laboratórios - Alocação</router-link>
+              </li>
             </ul>
             <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">Gerenciar</h6>
             <ul class="nav flex-column">
@@ -56,23 +68,11 @@
               <li class="nav-item">
                 <router-link :to="{ name: 'disciplinas' }" class="nav-link"><i class="fas fa-table"></i>Disciplina</router-link>
               </li>
-             <!--
-              <li class="nav-item">
-                <router-link :to="{ name: 'prototipo' }" class="nav-link"><i class="fas fa-clipboard"></i>Protótipo</router-link>
-              </li>
-             -->
-            </ul>
-            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">Relatórios</h6>
-            <ul class="nav flex-column">
-              <li class="nav-item">
-                <router-link :to="{ name: 'cargaProfessores' }" class="nav-link"><i class="fas fa-clipboard"></i> Carga Professores</router-link>
-              </li>
-              <li class="nav-item">
-                <router-link :to="{ name: 'horariosResumo' }" class="nav-link"><i class="fas fa-clipboard"></i> Horários - Resumo</router-link>
-              </li>
-              <li class="nav-item">
-                <router-link :to="{ name: 'laboratoriosAlocacao' }" class="nav-link"><i class="fas fa-clipboard"></i> Laboratórios - Alocação</router-link>
-              </li>
+              <!--
+               <li class="nav-item">
+                 <router-link :to="{ name: 'prototipo' }" class="nav-link"><i class="fas fa-clipboard"></i>Protótipo</router-link>
+               </li>
+              -->
             </ul>
           </div>
         </nav>
@@ -123,6 +123,12 @@ export default {
 
   beforeDestroy () {
     this.$socket.close()
+  },
+
+  methods:{
+      loadPage () {
+          this.$store.commit(COMPONENT_LOADING)
+      }
   }
 
 }
