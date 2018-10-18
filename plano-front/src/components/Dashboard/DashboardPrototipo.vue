@@ -10,10 +10,18 @@
                 <template v-else>
                     <div class="col-sm-9"></div>
                     <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="">Adicionar </button>
-                   <!-- <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="bddump" style="">BdDump </button>-->
+                    <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="deleteSelected" style="">Deletar </button>
+                    <!-- <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="bddump" style="">BdDump </button>
+                    <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="restorebd" style="">BdRestore </button>-->
                 </template>
         </div>
-    <div style="width: 100%;height: 80%; overflow: scroll;">
+
+    <div id="loading" v-if="isLoading">
+        <div class="cube1"></div>
+        <div class="cube2"></div>
+    </div>
+
+    <div style="width: 100%;height: 80%; overflow: scroll;" v-if="!isLoading">
         <table class="table table-hover table-sm">
             <thead class="thead-light">
             <tr>
@@ -170,7 +178,9 @@
             turmadata
         },
 
-        created () {
+        mounted () {
+            this.$store.commit('emptyDelete')
+            console.log(this.$store.state.turma.Deletar)
             this.$store.commit(COMPONENT_LOADED)
         },
 
@@ -186,6 +196,26 @@
               }).catch(error => {
                   this.error = '<b>Erro ao criar dump</b>'
               })
+            },
+
+            restorebd: function() {
+                bddumpService.restoredump("teste").then((response)=> {
+                    this.$notify({
+                        group: 'general',
+                        title: `Sucesso!`,
+                        text: `O dump foi restaurado!`,
+                        type: 'success'
+                    })
+                }).catch(error => {
+                    this.error = '<b>Erro ao carregar dump</b>'
+                })
+            },
+
+            deleteSelected: function() {
+                for (var i = 0; i < this.$store.state.turma.Deletar.length; i++){
+                    console.log(this.$store.state.turma.Deletar[i])
+                    this.deleteTurma(this.$store.state.turma.Deletar[i])
+                }
             },
 
             inPerfil: function (perfil, turmas, disciplinas) {
@@ -454,6 +484,10 @@
 
             Pedidos () {
                 return this.$store.state.pedido.Pedidos
+            },
+
+            isLoading () {
+                return this.$store.state.isLoading
             }
 
 
@@ -545,4 +579,59 @@
         position: sticky;
         left:0;
     }*/
+
+    .cube1, .cube2 {
+        background-color: #333;
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        -webkit-animation: cubemove 1.8s infinite ease-in-out;
+        animation: cubemove 1.8s infinite ease-in-out;
+    }
+
+    .cube2 {
+        -webkit-animation-delay: -0.9s;
+        animation-delay: -0.9s;
+    }
+
+    @-webkit-keyframes cubemove {
+        25% {
+            -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5)
+        }
+        50% {
+            -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg)
+        }
+        75% {
+            -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5)
+        }
+        100% {
+            -webkit-transform: rotate(-360deg)
+        }
+    }
+
+    @keyframes cubemove {
+        25% {
+            transform: translateX(42px) rotate(-90deg) scale(0.5);
+            -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
+        }
+        50% {
+            transform: translateX(42px) translateY(42px) rotate(-179deg);
+            -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
+        }
+        50.1% {
+            transform: translateX(42px) translateY(42px) rotate(-180deg);
+            -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
+        }
+        75% {
+            transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+            -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
+        }
+        100% {
+            transform: rotate(-360deg);
+            -webkit-transform: rotate(-360deg);
+        }
+    }
 </style>

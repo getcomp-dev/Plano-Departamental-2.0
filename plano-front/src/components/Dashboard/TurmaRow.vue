@@ -4,8 +4,7 @@
                  'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
         <td style="width: 16px;">
             <input type="text" style="width: 16px;" id="periodo" v-model="turma.periodo" v-on:blur="editTurma(turma)">
-            <b-button v-on:click="deleteTurma(turma)" variant="danger"
-                      style="width:16px;height: 16px;padding:0;"></b-button>
+            <input type="checkbox" name="ativa" value="true" v-on:click="checkDelete(turma)" v-model="ativo" style="width:16px;height: 16px;padding:0;">
         </td>
         <td style="width: 80px;">
             <template v-for="disciplina in Disciplinas">
@@ -107,6 +106,13 @@
             turma:Object,
             perfil:Object
         },
+
+        data () {
+            return {
+                ativo: false
+            }
+        },
+
         methods: {
             editTurma(turma) {
                 turmaService.update(turma.id, turma).then((response) => {
@@ -123,17 +129,9 @@
                     }
                 })
             },
-            deleteTurma(turma) {
-                turmaService.delete(turma.id, turma).then((response) => {
-                    this.$notify({
-                        group: 'general',
-                        title: `Sucesso!`,
-                        text: `A Turma ${response.Turma.letra} foi excluída!`,
-                        type: 'success'
-                    })
-                }).catch(() => {
-                    this.error = '<b>Erro ao excluir Turma</b>'
-                })
+            checkDelete(turma) {
+                this.$store.commit('checkDelete', {Turma:turma})
+                console.log(this.$store.state.turma.Deletar)
             },
 
             pedidoPeriodizado(turma, curso) {

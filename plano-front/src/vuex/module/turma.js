@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import _ from 'lodash'
 import turmaService from '../../common/services/turma'
-import { TURMA_FETCHED, SOCKET_TURMA_CREATED, SOCKET_TURMA_DELETED, SOCKET_TURMA_UPDATED, redefinirAtivas } from '../mutation-types'
+import { TURMA_FETCHED, SOCKET_TURMA_CREATED, SOCKET_TURMA_DELETED, SOCKET_TURMA_UPDATED} from '../mutation-types'
 
 const state = {
     Turmas: [],
-    Ativas: []
+    Ativas: [],
+    Deletar: []
 }
 
 const mutations = {
@@ -29,7 +30,21 @@ const mutations = {
 
     redefinirAtivas (state, data) {
         state.Ativas = data.Ativas
+    },
+
+    checkDelete (state, data) {
+        let index = _.findIndex(state.Deletar, turma => turma.id === data.Turma.id);
+        if(index>-1)
+            state.Deletar.splice(index, 1)
+        else
+            state.Deletar.push(data.Turma)
+    },
+
+    emptyDelete (state) {
+        state.Deletar = []
     }
+
+
 }
 
 const actions = {

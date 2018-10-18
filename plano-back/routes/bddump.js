@@ -20,7 +20,7 @@ router.post('/', function(req, res, next){
 
 })
 
-router.post('/:filename(.+)', function(req, res, next){
+router.post('/:filename([A-Za-z0-9_]+)', function(req, res, next){
     importer.config({
         'host': 'localhost',
         'user': 'root',
@@ -29,16 +29,17 @@ router.post('/:filename(.+)', function(req, res, next){
     })
 
     importer.importSQL('drop_all.sql').then( () => {
+        importer.importSQL(req.params.filename + '.sql').then( () => {
+            console.log('all statements have been executed')
+        }).catch( err => {
+            console.log(`error: ${err}`)
+        })
         console.log('all statements have been executed')
     }).catch( err => {
         console.log(`error: ${err}`)
     })
 
-    importer.importSQL(req.params.filename + '.sql').then( () => {
-        console.log('all statements have been executed')
-    }).catch( err => {
-        console.log(`error: ${err}`)
-    })
+
 })
 
 module.exports = router
