@@ -224,10 +224,12 @@
             },
 
             deleteSelected: function() {
-                for (var i = 0; i< this.$store.state.turma.Deletar.length;i++) {
-                    for (var j = 0; j < this.$store.state.pedido.Pedidos.length; j++) {
-                        if(this.$store.state.pedido.Pedidos[j].Turma ===  this.$store.state.turma.Deletar[i].id){
-                            pedidoService.delete(this.$store.state.pedido.Pedidos[j].Curso, this.$store.state.pedido.Pedidos[j].Turma).then((response) => {
+                var turmas = this.$store.state.turma.Deletar
+                var pedidos = this.$store.state.pedido.Pedidos
+                for (var i = 0; i< turmas.length;i++) {
+                    for (var j = 0; j < pedidos.length; j++) {
+                        if(pedidos[j].Turma ===  turmas[i].id){
+                            pedidoService.delete(pedidos[j].Curso, pedidos[j].Turma).then((response) => {
                                 this.$notify({
                                     group: 'general',
                                     title: `Sucesso!`,
@@ -243,6 +245,7 @@
                     console.log(this.$store.state.turma.Deletar[i])
                     this.deleteTurma(this.$store.state.turma.Deletar[i])
                 }
+                this.$store.commit('emptyDelete')
             },
 
             inPerfil: function (perfil, turmas, disciplinas) {
