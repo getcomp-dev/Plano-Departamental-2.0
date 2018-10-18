@@ -10,7 +10,19 @@
                 <template v-else>
                     <div class="col-sm-9"></div>
                     <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="">Adicionar </button>
-                    <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="deleteSelected" style="">Deletar </button>
+                    <button type="button" class="btn btn-success col-sm-1" style="" v-b-modal.modalConfirma>Deletar </button>
+
+                    <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
+                        <p class="my-4">Tem certeza que deseja deletar as turmas selecionadas?</p>
+                        <template v-for="turma in Deletar">
+                            <template v-for="disciplina in Disciplinas">
+                                <template v-if="disciplina.id===turma.Disciplina">
+                                    <p :key="disciplina.id" style="width:80px">Disciplina:{{disciplina.codigo}}<br>Turma:{{turma.letra}}</p>
+                                </template>
+                            </template>
+                        </template>
+
+                    </b-modal>
                     <!-- <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="bddump" style="">BdDump </button>
                     <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="restorebd" style="">BdRestore </button>-->
                 </template>
@@ -212,7 +224,22 @@
             },
 
             deleteSelected: function() {
-                for (var i = 0; i < this.$store.state.turma.Deletar.length; i++){
+                for (var i = 0; i< this.$store.state.turma.Deletar.length;i++) {
+                    for (var j = 0; j < this.$store.state.pedido.Pedidos.length; j++) {
+                        if(this.$store.state.pedido.Pedidos[j].Turma ===  this.$store.state.turma.Deletar[i].id){
+                            pedidoService.delete(this.$store.state.pedido.Pedidos[j].Curso, this.$store.state.pedido.Pedidos[j].Turma).then((response) => {
+                                this.$notify({
+                                    group: 'general',
+                                    title: `Sucesso!`,
+                                    text: `O pedido foi excluído!`,
+                                    type: 'success'
+                                })
+                            }).
+                            catch(() => {
+                                this.error = '<b>Erro ao excluir Pedido</b>'
+                            })
+                        }
+                    }
                     console.log(this.$store.state.turma.Deletar[i])
                     this.deleteTurma(this.$store.state.turma.Deletar[i])
                 }
@@ -480,6 +507,10 @@
             Turmas () {
 
                return _.orderBy(_.orderBy(this.$store.state.turma.Turmas, 'letra'), 'Disciplina')
+            },
+
+            Deletar () {
+                return this.$store.state.turma.Deletar
             },
 
             Pedidos () {
