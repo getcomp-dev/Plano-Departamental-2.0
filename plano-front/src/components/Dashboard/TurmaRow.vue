@@ -100,6 +100,14 @@
 <script>
     import turmaService from '../../common/services/turma'
     import pedidoService from '../../common/services/pedido'
+
+    const emptyPedido =  {
+        vagasPeriodizadas: undefined,
+        vagasNaoPeriodizadas: undefined,
+        Curso: undefined,
+        Turma: undefined,
+    }
+
     export default {
         name:'TurmaRow',
         props: {
