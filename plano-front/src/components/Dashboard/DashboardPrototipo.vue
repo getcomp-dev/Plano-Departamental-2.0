@@ -225,25 +225,8 @@
 
             deleteSelected: function() {
                 var turmas = this.$store.state.turma.Deletar
-                var pedidos = this.$store.state.pedido.Pedidos
                 for (var i = 0; i< turmas.length;i++) {
-                    for (var j = 0; j < pedidos.length; j++) {
-                        if(pedidos[j].Turma ===  turmas[i].id){
-                            pedidoService.delete(pedidos[j].Curso, pedidos[j].Turma).then((response) => {
-                                this.$notify({
-                                    group: 'general',
-                                    title: `Sucesso!`,
-                                    text: `O pedido foi excluído!`,
-                                    type: 'success'
-                                })
-                            }).
-                            catch(() => {
-                                this.error = '<b>Erro ao excluir Pedido</b>'
-                            })
-                        }
-                    }
-                    console.log(this.$store.state.turma.Deletar[i])
-                    this.deleteTurma(this.$store.state.turma.Deletar[i])
+                    this.deleteTurma(turmas[i])
                 }
                 this.$store.commit('emptyDelete')
             },
