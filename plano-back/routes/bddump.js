@@ -14,7 +14,7 @@ router.post('/', function(req, res, next){
                     host: 'localhost',
                     user: 'root',
                     password: '',
-                    database: 'plano',
+                    database: 'plano_dev',
                 },dumpToFile: './'+req.body.filename+'.sql',
             }
         )
