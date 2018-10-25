@@ -48,7 +48,7 @@ router.post('/:filename([A-Za-z0-9_]+)', function(req, res, next){
 })
 
 router.get('/', function(req, res, next){
-    var fileNames = fs.readdirSync('/users/Lucas/Documents/Github/Plano-Departamental-2.0/plano-back')
+    var fileNames = fs.readdirSync('/home/planodcc/Plano-Departamental-2.0/plano-back')
         res.send({
             success: true,
             message: "Arquivos Listados",
