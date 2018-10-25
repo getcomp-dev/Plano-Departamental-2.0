@@ -11,5 +11,11 @@ export default {
         return Vue.axios.post(`/bddump/${filename}`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
+    },
+
+    returnFiles(config = {}) {
+        return Vue.axios.get('/bddump/', config)
+            .then((response) => Promise.resolve(response.data))
+            .catch((error) => Promise.reject(error))
     }
 }

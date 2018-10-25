@@ -23,8 +23,9 @@
                         </template>
 
                     </b-modal>
-                    <!-- <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="bddump" style="">BdDump </button>
-                    <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="restorebd" style="">BdRestore </button>-->
+                    <!--<button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="bddump" style="">BdDump </button>
+                    <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="restorebd" style="">BdRestore </button>
+                    <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="returnFiles" style="">ShowFiles</button>-->
                 </template>
         </div>
 
@@ -149,7 +150,6 @@
     import _ from 'lodash'
     import turmaService from '../../common/services/turma'
     import pedidoService from '../../common/services/pedido'
-    import bddumpService from '../../common/services/bddump'
     import turmadata from './TurmaRow.vue'
 
     const emptyTurma = {
@@ -197,31 +197,6 @@
         },
 
         methods: {
-            bddump: function() {
-              bddumpService.createDump({filename: "teste"}).then((response)=> {
-                  this.$notify({
-                      group: 'general',
-                      title: `Sucesso!`,
-                      text: `O dump foi criado!`,
-                      type: 'success'
-                  })
-              }).catch(error => {
-                  this.error = '<b>Erro ao criar dump</b>'
-              })
-            },
-
-            restorebd: function() {
-                bddumpService.restoredump("teste").then((response)=> {
-                    this.$notify({
-                        group: 'general',
-                        title: `Sucesso!`,
-                        text: `O dump foi restaurado!`,
-                        type: 'success'
-                    })
-                }).catch(error => {
-                    this.error = '<b>Erro ao carregar dump</b>'
-                })
-            },
 
             deleteSelected: function() {
                 var turmas = this.$store.state.turma.Deletar
@@ -238,6 +213,7 @@
                 })
 
             },
+
             addTurma() {
                 turmaService.create(this.turmaForm).then((response) => {
                     this.cleanTurma()

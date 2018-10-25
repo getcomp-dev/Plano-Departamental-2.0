@@ -36,7 +36,7 @@ module.exports = function (sequelize, DataTypes) {
         name:'Turma',
         allowNull:false
       },
-      onDelete:'RESTRICT'
+      onDelete:'CASCADE'
     })
   }
 

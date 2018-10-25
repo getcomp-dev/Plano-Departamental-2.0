@@ -4,10 +4,26 @@
       <router-link :to="{ name: 'dashboard' }" class="navbar-brand col-sm-3 col-md-2 mr-0">Plano Departamental</router-link>
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
+          <p class="nav-link" v-on:click="showModalLoad"><i class="fas fa-folder-open"></i> Carregar</p>
+          <p class="nav-link" v-on:click="showModalSave"><i class="fas fa-save"></i> Salvar</p>
           <router-link :to="{ name: 'logout' }" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</router-link>
         </li>
       </ul>
     </nav>
+    <b-modal id="modal-load" ref="modalLoad" title="Selecione um Arquivo">
+      <p v-for="(value) in files" v-on:click="selectFile(value)">{{value}}</p>
+      <div slot="modal-footer">
+        <input type="text" v-model="filename" style="margin-right: 10px">
+        <b-button variant="success" v-on:click.prevent="restorebd(filename)">Carregar Arquivo</b-button>
+      </div>
+    </b-modal>
+    <b-modal id="modal-save" ref="modalSave" title="Escolha um nome para o arquivo">
+      <p v-for="(value) in files" v-on:click="selectFile(value)">{{value}}</p>
+      <div slot="modal-footer">
+        <input type="text" v-model="filename" style="margin-right: 10px">
+        <b-button variant="success" v-on:click.prevent="bddump(filename)">Salvar Arquivo</b-button>
+      </div>
+    </b-modal>
     <div class="container-fluid">
       <div class="row">
         <nav class="col-md-1 d-none d-md-block bg-light sidebar">
@@ -92,9 +108,18 @@
 
 <script>
 import {COMPONENT_LOADING, COMPONENT_LOADED} from '../vuex/mutation-types'
+import bddumpService from '../common/services/bddump'
+import _ from 'lodash'
 
 export default {
   name: 'TheDashboard',
+
+  data: function () {
+      return {
+          files:[],
+          filename:""
+      }
+  },
 
   computed: {
     year () {
@@ -108,6 +133,7 @@ export default {
     isLoading () {
       return this.$store.state.isLoading
     }
+
   },
 
   created () {
@@ -128,6 +154,58 @@ export default {
   methods:{
       loadPage () {
           this.$store.commit(COMPONENT_LOADING)
+      },
+
+      bddump: function(filename) {
+          bddumpService.createDump({filename: filename}).then((response)=> {
+              this.$notify({
+                  group: 'general',
+                  title: `Sucesso!`,
+                  text: `O dump foi criado!`,
+                  type: 'success'
+              })
+              this.returnFiles()
+          }).catch(error => {
+              this.error = '<b>Erro ao criar dump</b>'
+          })
+      },
+
+      restorebd: function(filename) {
+          bddumpService.restoredump(filename).then((response)=> {
+              this.$notify({
+                  group: 'general',
+                  title: `Sucesso!`,
+                  text: `O dump foi restaurado!`,
+                  type: 'success'
+              })
+              this.returnFiles()
+          }).catch(error => {
+              this.error = '<b>Erro ao carregar dump</b>'
+          })
+      },
+      returnFiles: function () {
+          bddumpService.returnFiles().then((response)=> {
+              this.files = response.Files.filter( function( elm ) {return elm.match(/.*\.(sql)/ig)})
+              _.pull(this.files, "drop_all.sql")
+              _.forEach(this.files, function(value, index, array) {array[index] = value.slice(0, -4)})
+              //console.log(this.files.filter( function( elm ) {return elm.match(/.*\.(sql)/ig)}))
+          })
+      },
+
+      showModalLoad () {
+          this.filename=""
+          this.returnFiles()
+          this.$refs.modalLoad.show()
+      },
+
+      showModalSave () {
+          this.filename=""
+          this.returnFiles()
+          this.$refs.modalSave.show()
+      },
+
+      selectFile(filename){
+          this.filename = filename
       }
   }
 
@@ -203,6 +281,15 @@ export default {
   padding: .75rem 1rem;
   border-width: 0;
   border-radius: 0;
+}
+
+.navbar-nav > .nav-item > .nav-link {
+  display: inline !important;
+  margin-left: 10px;
+}
+
+.navbar-nav > .nav-item > .nav-link:hover {
+  cursor: pointer;
 }
 
 /* Page Loading */
