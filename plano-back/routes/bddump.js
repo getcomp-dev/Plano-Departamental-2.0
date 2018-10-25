@@ -11,7 +11,7 @@ router.post('/', function(req, res, next){
     })
     mysqldump({
                 connection: {
-                    host: '200.131.219.57',
+                    host: 'localhost',
                     user: 'root',
                     password: '',
                     database: 'plano',
