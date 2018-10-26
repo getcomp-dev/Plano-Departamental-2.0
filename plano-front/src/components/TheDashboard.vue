@@ -165,6 +165,7 @@ export default {
                   type: 'success'
               })
               this.returnFiles()
+              this.hideModalSave()
           }).catch(error => {
               this.error = '<b>Erro ao criar dump</b>'
           })
@@ -179,6 +180,7 @@ export default {
                   type: 'success'
               })
               this.returnFiles()
+              this.hideModalLoad()
           }).catch(error => {
               this.error = '<b>Erro ao carregar dump</b>'
           })
@@ -202,6 +204,14 @@ export default {
           this.filename=""
           this.returnFiles()
           this.$refs.modalSave.show()
+      },
+
+      hideModalLoad () {
+          this.$refs.modalLoad.hide()
+      },
+
+      hideModalSave () {
+          this.$refs.modalSave.hide()
       },
 
       selectFile(filename){
