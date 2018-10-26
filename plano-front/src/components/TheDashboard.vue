@@ -14,14 +14,14 @@
       <p v-for="(value) in files" v-on:click="selectFile(value)">{{value}}</p>
       <div slot="modal-footer">
         <input type="text" v-model="filename" style="margin-right: 10px">
-        <b-button variant="success" v-on:click.prevent="restorebd(filename)">Carregar Arquivo</b-button>
+        <b-button variant="success" v-on:click="restorebd(filename)">Carregar Arquivo</b-button>
       </div>
     </b-modal>
     <b-modal id="modal-save" ref="modalSave" title="Escolha um nome para o arquivo">
       <p v-for="(value) in files" v-on:click="selectFile(value)">{{value}}</p>
       <div slot="modal-footer">
         <input type="text" v-model="filename" style="margin-right: 10px">
-        <b-button variant="success" v-on:click.prevent="bddump(filename)">Salvar Arquivo</b-button>
+        <b-button variant="success" v-on:click="bddump(filename)">Salvar Arquivo</b-button>
       </div>
     </b-modal>
     <div class="container-fluid">
