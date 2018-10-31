@@ -1,7 +1,7 @@
 const router = require('express').Router(),
       fs = require('fs'),
       mysqldump = require('mysqldump'),
-      mysql = require('mysql')
+      exec = require('child_process').exec
 
 router.post('/', function(req, res, next){
 
@@ -32,20 +32,9 @@ router.post('/', function(req, res, next){
 
 router.post('/:filename([A-Za-z0-9_]+)', function(req, res, next){
 
-    var myCon = mysql.createConnection({
-        host: 'localhost',
-        port: '3306',
-        database: 'plano_dev',
-        user: 'root',
-        password: '',
-        multipleStatements: true
-    });
-
-    var queries = fs.readFileSync('./' + req.params.filename + '.sql')
-    myCon.query(queries, function(err, sets, fields){
-        if(err) console.log(err);
-    });
-    myCon.end();
+   var child = exec('mysql -u root plano_dev < ' + req.params.filename + '.sql', function() {
+       console.log('Backup Carregado!')
+   })
 
 })
 
