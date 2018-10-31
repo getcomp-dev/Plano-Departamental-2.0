@@ -189,12 +189,13 @@
         components: {
             turmadata
         },
-
+        /*
         mounted () {
             this.$store.commit('emptyDelete')
             console.log(this.$store.state.turma.Deletar)
             this.$store.commit(COMPONENT_LOADED)
         },
+        */
 
         methods: {
 

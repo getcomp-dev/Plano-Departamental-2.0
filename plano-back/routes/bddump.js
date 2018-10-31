@@ -1,7 +1,7 @@
 const router = require('express').Router(),
       fs = require('fs'),
       mysqldump = require('mysqldump'),
-      importer = require('node-mysql-importer')
+      mysql = require('mysql')
 
 router.post('/', function(req, res, next){
 
@@ -31,24 +31,26 @@ router.post('/', function(req, res, next){
 })
 
 router.post('/:filename([A-Za-z0-9_]+)', function(req, res, next){
-    importer.config({
-        'host': 'localhost',
-        'user': 'root',
-        'password': '',
-        'database': 'plano_dev'
-    })
 
-    importer.importSQL(req.params.filename + '.sql').then( () => {
-        console.log('all statements have been executed')
-    }).catch( err => {
-        console.log(`error: ${err}`)
-    })
+    var myCon = mysql.createConnection({
+        host: 'localhost',
+        port: '3306',
+        database: 'plano_dev',
+        user: 'root',
+        password: '',
+        multipleStatements: true
+    });
 
+    var queries = fs.readFileSync('./' + req.params.filename + '.sql')
+    myCon.query(queries, function(err, sets, fields){
+        if(err) console.log(err);
+    });
+    myCon.end();
 
 })
 
 router.get('/', function(req, res, next){
-    var fileNames = fs.readdirSync('/home/planodcc/Plano-Departamental-2.0/plano-back')
+    var fileNames = fs.readdirSync('C:/Users/Lucas/Documents/GitHub/Plano-Departamental-2.0/plano-back')
         res.send({
             success: true,
             message: "Arquivos Listados",
