@@ -30,16 +30,22 @@ router.post('/', function(req, res, next){
 
 })
 
-router.post('/:filename([A-Za-z0-9_]+)', function(req, res, next){
+router.post('/:filename([.]+)', function(req, res, next){
 
    var child = exec('mysql -u root plano_dev < ' + req.params.filename + '.sql', function() {
        console.log('Backup Carregado!')
-   })
+   }).then( () => {
+       res.send({
+           success: true,
+           message: "Arquivo Carregado"
+       })
+       }
+   )
 
 })
 
 router.get('/', function(req, res, next){
-    var fileNames = fs.readdirSync('C:/Users/Lucas/Documents/GitHub/Plano-Departamental-2.0/plano-back')
+    var fileNames = fs.readdirSync('/home/planodcc/Plano-Departamental-2.0/plano-back')
         res.send({
             success: true,
             message: "Arquivos Listados",
