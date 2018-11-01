@@ -164,11 +164,11 @@ export default {
                   text: `O dump foi criado!`,
                   type: 'success'
               })
-              this.hideModalSave()
               this.returnFiles()
           }).catch(error => {
               this.error = '<b>Erro ao criar dump</b>'
           })
+          this.hideModalSave()
       },
 
       restorebd: function(filename) {

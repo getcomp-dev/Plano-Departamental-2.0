@@ -1,7 +1,7 @@
 const router = require('express').Router(),
       fs = require('fs'),
       mysqldump = require('mysqldump'),
-      exec = require('child_process').exec
+      execSync = require('child_process').execSync
 
 router.post('/', function(req, res, next){
 
@@ -30,18 +30,11 @@ router.post('/', function(req, res, next){
 
 })
 
-router.post('/:filename([.]+)', function(req, res, next){
+router.post('/:filename([A-Za-z0-9_-.]+)', function(req, res, next){
 
-   var child = exec('mysql -u root plano_dev < ' + req.params.filename + '.sql', function() {
+   var child = execSync('mysql -u root plano_dev < ' + req.params.filename + '.sql', function() {
        console.log('Backup Carregado!')
-   }).then( () => {
-       res.send({
-           success: true,
-           message: "Arquivo Carregado"
-       })
-       }
-   )
-
+   })
 })
 
 router.get('/', function(req, res, next){
