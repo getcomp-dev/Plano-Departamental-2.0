@@ -172,16 +172,9 @@ export default {
       },
 
       restorebd: function(filename) {
-          bddumpService.restoredump(filename).then((response)=> {
-              this.$notify({
-                  group: 'general',
-                  title: `Sucesso!`,
-                  text: `O dump foi restaurado!`,
-                  type: 'success'
-              })
-              this.$store.dispatch('fetchAll').then(()=> {
-                  this.hideModalLoad()
-              })
+          bddumpService.restoredump(filename).then(()=> {
+              this.$store.dispatch('fetchAll')
+              this.hideModalLoad()
               this.returnFiles()
           }).catch(error => {
               this.error = '<b>Erro ao carregar dump</b>'

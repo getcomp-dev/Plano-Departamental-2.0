@@ -30,7 +30,7 @@ router.post('/', function(req, res, next){
 
 })
 
-router.post('/:filename([A-Za-z0-9_-.]+)', function(req, res, next){
+router.post('/:filename([A-Za-z0-9_]+)', function(req, res, next){
 
    var child = execSync('mysql -u root plano_dev < ' + req.params.filename + '.sql', function() {
        console.log('Backup Carregado!')
