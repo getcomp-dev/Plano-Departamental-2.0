@@ -1710,12 +1710,23 @@
             </b-alert>
             <form>
                 <div class="form-group row">
-                    <b-form-checkbox-group v-model="cursos" buttons button-variant="primary" size="lg" name="cursosCheck" :options="options">
+                    <form name="formPeriodo" id="formPeriodo" ref="formPrioso">
+                        <div class="grade">
+                            <label for="ano">Ano:</label>
+                            <b-form-input id="ano" class="periodo"></b-form-input>
+                            <label for="periodo">Período:</label>
+                            <b-form-input id="periodo" class="periodo"></b-form-input>
+                            <br/>
+                        </div>
+                    </form>
+                    <b-form-checkbox-group v-model="cursos" name="cursosCheck" :options="options">
                     </b-form-checkbox-group>
                 </div>
-
-                <b-button v-if="cursos!=undefined" variant="success" v-on:click="createHorarios" class="generate">Gerar Horários</b-button>
-
+                <div>
+                <b-button variant="success" v-on:click="createHorarios" class="generate">Gerar Horários</b-button>
+                <br/>
+                <b-button variant="success" class="relatorio">Relatórios</b-button>
+                </div>
                 <div class="form-group row">
                     <div v-if="activeCCD">
                         <label for="formCCD">Ciência da Computação Diurno</label>
@@ -1930,24 +1941,30 @@
                 console.log(this.$store.state.turma.Ativas)
 
                 var grade
+                var grades
                 var inicio
                 var fim
                 var pedidos
                 var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades
                 var turmas = this.$store.state.turma.Turmas
+                var anoAtual = this.$refs.ano
+                var semestreAtual = this.$refs.periodo
 
                 this.emptyTurmas()
 
                 //CC Diurno está selecionado
                 if(_.indexOf(this.cursos, 1)>-1) {
+                    grades = _.orderBy(_.filter(this.$store.state.grade.Grades, ['Curso', 4]), 'periodoInicion', 'desc')
                     pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 4])
-                    for (var i = 0; i < this.rangeCCD; i++) {
+                    inicio = 1
+                    fim = 1
+                    for (var i = 0; inicio < 11; i++) {
                         //grade
-                        grade = this.$refs.formCCD[3*i].value
+                        grade = grades[i].id
                         //inicio
-                        inicio = this.$refs.formCCD[3*i+1].value
+                        inicio = fim
                         //fim
-                        fim = this.$refs.formCCD[3*i+2].value
+                        fim = (anoAtual - grades[i].periodoInicio)*2 + (semestreAtual-1)/2
                         for (var k = 0; k < disciplinaGrades.length; k++){
                             if((disciplinaGrades[k].Grade==grade) && (this.isEven(disciplinaGrades[k].periodo)==this.evenCCD) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo<=parseInt(fim, 10))){
                                 for(var j = 0; j < turmas.length; j++){
@@ -2168,6 +2185,18 @@
         height: 25px;
         width:25px;
         border-radius: 15px;
+    }
+
+    .periodo{
+        display: inline;
+        width: 48px;
+        height: 24px;
+        position:relative;
+    }
+
+    .relatorio {
+        position:relative;
+        margin-top: 10px;
     }
 
     .tg  {border-collapse:collapse;border-spacing:0;border-color:#ccc;}
