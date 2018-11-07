@@ -7,10 +7,10 @@
       </div>
       <label for="cursoAtual" class="col-sm-2 col-form-label">Curso</label>
       <select id="cursoAtual" v-model="currentCurso">
-        <option value="1">Ciência da Computação Diurno</option>
-        <option value="2">Ciência da Computação Noturno</option>
+        <option value="4">Ciência da Computação Diurno</option>
+        <option value="1">Ciência da Computação Noturno</option>
         <option value="3">Sistemas de Informação</option>
-        <option value="4">Engenharia Computacional</option>
+        <option value="2">Engenharia Computacional</option>
       </select>
       <label for="gradeAtual" class="col-sm-2 col-form-label">Grade</label>
       <select id="gradeAtual" v-model="currentGrade" v-on:change="findGrade()" style="width: 60px;">
@@ -27,10 +27,10 @@
             <template v-if="grade.id===currentGrade">
             <div class="data" style="width: 15%">{{grade.periodoInicio}}</div>
               <div class="data" style="width: 40%">
-                <template v-if="grade.Curso===1">Ciência da Computação Diurno</template>
-                <template v-else-if="grade.Curso===2">Ciência da Computação Noturno</template>
+                <template v-if="grade.Curso===4">Ciência da Computação Diurno</template>
+                <template v-else-if="grade.Curso===1">Ciência da Computação Noturno</template>
                 <template v-else-if="grade.Curso===3">Sistemas de Informação</template>
-                <template v-else-if="grade.Curso===4">Engenharia Computacional</template>
+                <template v-else-if="grade.Curso===2">Engenharia Computacional</template>
               </div>
                 <template v-for="disciplinaGrade in DisciplinaGrades">
                   <template v-if="disciplinaGrade.Grade===grade.id">
@@ -75,10 +75,10 @@
           <label for="curso" class="col-sm-2 col-form-label">Curso</label>
           <div class="col-sm-10">
             <select type="text" class="form-control" id="curso" v-model="gradeForm.Curso">
-              <option value="1">Ciência da Computação Diurno</option>
-              <option value="2">Ciência da Computação Noturno</option>
+              <option value="4">Ciência da Computação Diurno</option>
+              <option value="1">Ciência da Computação Noturno</option>
               <option value="3">Sistemas de Informação</option>
-              <option value="4">Engenharia Computacional</option>
+              <option value="2">Engenharia Computacional</option>
             </select>
           </div>
         </div>

@@ -60,9 +60,19 @@
           <label for="turno" class="col-sm-2 col-form-label">Turno</label>
           <div class="col-sm-10">
             <div id="turno">
-              <input type="radio" name="truno" value="Diurno" v-model="cursoForm.turno"> Diurno<br/>
-              <input type="radio" name="truno" value="Integral" v-model="cursoForm.turno"> Integral<br/>
-              <input type="radio" name="truno" value="Noturno" v-model="cursoForm.turno"> Noturno<br/>
+              <input type="radio" name="turno" value="Diurno" v-model="cursoForm.turno"> Diurno<br/>
+              <input type="radio" name="turno" value="Integral" v-model="cursoForm.turno"> Integral<br/>
+              <input type="radio" name="turno" value="Noturno" v-model="cursoForm.turno"> Noturno<br/>
+            </div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="semestreInicial" class="col-sm-2 col-form-label">Sem </label>
+          <div class="col-sm-10">
+            <div id="semestreInicial">
+              <input type="radio" name="semestreInicial" value="1" v-model="cursoForm.semestreInicial"> Primeiro<br/>
+              <input type="radio" name="semestreInicial" value="2" v-model="cursoForm.semestreInicial"> Segundo<br/>
+              <input type="radio" name="semestreInicial" value="3" v-model="cursoForm.semestreInicial"> Ambos<br/>
             </div>
           </div>
         </div>
@@ -96,7 +106,8 @@ const emptyCurso = {
     id:undefined,
     nome:undefined,
     codigo:undefined,
-    turno:undefined
+    turno:undefined,
+    semestreInicial: undefined
 }
 
 export default {

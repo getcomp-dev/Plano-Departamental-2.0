@@ -26,6 +26,12 @@ module.exports = function (sequelize, DataTypes) {
       validate: {
         notEmpty: {msg: 'O turno não deve estar vazio'}
       }
+    },
+
+    semestreInicial: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
     }
   }, {
     freezeTableName: true,

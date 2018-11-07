@@ -1713,13 +1713,14 @@
                     <form name="formPeriodo" id="formPeriodo" ref="formPrioso">
                         <div class="grade">
                             <label for="ano">Ano:</label>
-                            <b-form-input id="ano" class="periodo"></b-form-input>
+                            <b-form-input id="ano" ref="ano" class="periodo"></b-form-input>
                             <label for="periodo">Período:</label>
-                            <b-form-input id="periodo" class="periodo"></b-form-input>
+                            <b-form-input id="periodo" ref="periodo" class="periodo"></b-form-input>
                             <br/>
                         </div>
                     </form>
-                    <b-form-checkbox-group v-model="cursos" name="cursosCheck" :options="options">
+                    <br>
+                    <b-form-checkbox-group v-model="cursos" stacked name="cursosCheck" :options="options" style="">
                     </b-form-checkbox-group>
                 </div>
                 <div>
@@ -1727,105 +1728,7 @@
                 <br/>
                 <b-button variant="success" class="relatorio">Relatórios</b-button>
                 </div>
-                <div class="form-group row">
-                    <div v-if="activeCCD">
-                        <label for="formCCD">Ciência da Computação Diurno</label>
-                        <b-button variant="success" v-on:click="addGradeCCD" class="quant"><i class="fas fa-plus"></i></b-button>
-                        <b-button variant="success" v-on:click="removeGradeCCD" class="quant"><i class="fas fa-minus"></i></b-button>
-                        <form name="formCCD" id="formCCD" ref="formCCD">
-                            <div v-for="n in rangeCCD" :key="n" class="grade">
-                                <label for="selectGrade">Grade</label>
-                                <b-form-select id="selectGrade" class="sm-12">
-                                    <option v-for="grade in GradesCCD" :value="grade.id">{{grade.periodoInicio}}</option>
-                                </b-form-select>
-                                <label for="inicio">Período Início</label>
-                                <b-form-input id="inicio" class="inicio"></b-form-input>
-                                <label for="fim">Período Fim</label>
-                                <b-form-input id="fim" class="fim"></b-form-input>
-                                <br/>
-                            </div>
-                        </form>
-                        <b-form-radio-group id="radioCCD" v-model="evenCCD">
-                            <b-form-radio value="false">Períodos Ímpares</b-form-radio>
-                            <b-form-radio value="true">Períodos Pares</b-form-radio>
-                        </b-form-radio-group>
-                    </div>
-                </div>
 
-                <div class="form-group row">
-                    <div v-if="activeCCN">
-                        <label for="formCCN">Ciência da Computação Noturno</label>
-                        <b-button variant="success" v-on:click="addGradeCCN" class="quant"><i class="fas fa-plus"></i></b-button>
-                        <b-button variant="success" v-on:click="removeGradeCCN" class="quant"><i class="fas fa-minus"></i></b-button>
-                        <form name="formCCN" id="formCCN" ref="formCCN">
-                            <div v-for="n in rangeCCN" :key="n" class="grade">
-                                <label for="selectGrade">Grade</label>
-                                <b-form-select id="selectGrade" class="sm-12">
-                                    <option v-for="grade in GradesCCN" :value="grade.id">{{grade.periodoInicio}}</option>
-                                </b-form-select>
-                                <label for="inicio">Período Início</label>
-                                <b-form-input id="inicio" class="inicio"></b-form-input>
-                                <label for="fim">Período Fim</label>
-                                <b-form-input id="fim" class="fim"></b-form-input>
-                                <br/>
-                            </div>
-                        </form>
-                        <b-form-radio-group id="radioCCN" v-model="evenCCN">
-                            <b-form-radio value="false">Períodos Ímpares</b-form-radio>
-                            <b-form-radio value="true">Períodos Pares</b-form-radio>
-                        </b-form-radio-group>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div v-if="activeSI">
-                        <label for="formSI">Sistemas de Informação</label>
-                        <b-button variant="success" v-on:click="addGradeSI" class="quant"><i class="fas fa-plus"></i></b-button>
-                        <b-button variant="success" v-on:click="removeGradeSI" class="quant"><i class="fas fa-minus"></i></b-button>
-                        <form name="formSI" id="formSI" ref="formSI">
-                            <div v-for="n in rangeSI" :key="n" class="grade">
-                                <label for="selectGrade">Grade</label>
-                                <b-form-select id="selectGrade" class="sm-12">
-                                    <option v-for="grade in GradesSI" :value="grade.id">{{grade.periodoInicio}}</option>
-                                </b-form-select>
-                                <label for="inicio">Período Início</label>
-                                <b-form-input id="inicio" class="inicio"></b-form-input>
-                                <label for="fim">Período Fim</label>
-                                <b-form-input id="fim" class="fim"></b-form-input>
-                                <br/>
-                            </div>
-                        </form>
-                        <b-form-radio-group id="radioSI" v-model="evenSI">
-                            <b-form-radio value="false">Períodos Ímpares</b-form-radio>
-                            <b-form-radio value="true">Períodos Pares</b-form-radio>
-                        </b-form-radio-group>
-                    </div>
-                </div>
-
-                <div class="form-group row">
-                    <div v-if="activeEC">
-                        <label for="formEC">Engenharia Computacional</label>
-                        <b-button variant="success" v-on:click="addGradeEC" class="quant"><i class="fas fa-plus"></i></b-button>
-                        <b-button variant="success" v-on:click="removeGradeEC" class="quant"><i class="fas fa-minus"></i></b-button>
-                        <form name="formEC" id="formEC" ref="formEC">
-                            <div v-for="n in rangeEC" :key="n" class="grade">
-                                <label for="selectGrade">Grade</label>
-                                <b-form-select id="selectGrade" class="sm-12">
-                                    <option v-for="grade in GradesEC" :value="grade.id">{{grade.periodoInicio}}</option>
-                                </b-form-select>
-                                <label for="inicio">Período Início</label>
-                                <b-form-input id="inicio" class="inicio"></b-form-input>
-                                <label for="fim">Período Fim</label>
-                                <b-form-input id="fim" class="fim"></b-form-input>
-                                <br/>
-                            </div>
-                        </form>
-                        <b-form-radio-group id="radioEC" v-model="evenEC">
-                            <b-form-radio value="false">Períodos Ímpares</b-form-radio>
-                            <b-form-radio value="true">Períodos Pares</b-form-radio>
-                        </b-form-radio-group>
-                    </div>
-                </div>
             </form>
         </div>
     </div>
@@ -1936,13 +1839,13 @@
                 return check
             },
 
-            createHorarios () {
+            createHorarios: function () {
 
                 console.log(this.$store.state.turma.Ativas)
 
                 var grade
                 var grades
-                var inicio
+                var inicio = 1
                 var fim
                 var pedidos
                 var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades
@@ -1950,28 +1853,51 @@
                 var anoAtual = this.$refs.ano
                 var semestreAtual = this.$refs.periodo
 
+                if (parseInt(semestreAtual.$el.value, 10)===1){
+                    this.evenCCD = "false"
+                    this.evenCCN = "true"
+                    this.evenSI = "true"
+                    this.evenEC = "false"
+                }else{
+                    this.evenCCD = "true"
+                    this.evenCCN = "false"
+                    this.evenSI = "false"
+                    this.evenEC = "true"
+                }
+
                 this.emptyTurmas()
 
                 //CC Diurno está selecionado
-                if(_.indexOf(this.cursos, 1)>-1) {
-                    grades = _.orderBy(_.filter(this.$store.state.grade.Grades, ['Curso', 4]), 'periodoInicion', 'desc')
+                if (_.indexOf(this.cursos, 1) > -1) {
+
+                    grades = _.filter(this.$store.state.grade.Grades, ['Curso', 4])
+                    grades = _.orderBy(grades, 'periodoInicio', 'desc')
                     pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 4])
-                    inicio = 1
-                    fim = 1
-                    for (var i = 0; inicio < 11; i++) {
+                    console.log(grades.length)
+
+                    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
                         grade = grades[i].id
                         //inicio
-                        inicio = fim
+                        if(i===0)
+                            inicio = 1
+                        else
+                            inicio = fim+1
                         //fim
-                        fim = (anoAtual - grades[i].periodoInicio)*2 + (semestreAtual-1)/2
-                        for (var k = 0; k < disciplinaGrades.length; k++){
-                            if((disciplinaGrades[k].Grade==grade) && (this.isEven(disciplinaGrades[k].periodo)==this.evenCCD) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo<=parseInt(fim, 10))){
-                                for(var j = 0; j < turmas.length; j++){
-                                    if(turmas[j].Disciplina==disciplinaGrades[k].Disciplina){
-                                        for(var p = 0; p < pedidos.length; p++){
-                                            if((pedidos[p].vagasPeriodizadas>0)&&(pedidos[p].Turma==turmas[j].id)){
-                                                this.ativos.CCD[disciplinaGrades[k].periodo-1].push(turmas[j])
+                        if(i+1 === grades.length)
+                            fim = 10
+                        else
+                            if(i==0)
+                                fim = 1 + parseInt(anoAtual.$el.value, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10) + (parseInt(semestreAtual.$el.value, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+                            else
+                                fim = parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+                        for (var k = 0; k < disciplinaGrades.length; k++) {
+                            if ((disciplinaGrades[k].Grade == grade) && (this.isEven(disciplinaGrades[k].periodo) == this.evenCCD) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
+                                for (var j = 0; j < turmas.length; j++) {
+                                    if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                                        for (var p = 0; p < pedidos.length; p++) {
+                                            if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
+                                                this.ativos.CCD[disciplinaGrades[k].periodo - 1].push(turmas[j])
                                             }
                                         }
                                     }
@@ -1982,15 +1908,26 @@
                 }
 
                 //CC Noturno está selecionado
-                if(_.indexOf(this.cursos, 2)>-1) {
+                if (_.indexOf(this.cursos, 2) > -1) {
+                    grades = _.filter(this.$store.state.grade.Grades, ['Curso', 1])
+                    grades = _.orderBy(grades, 'periodoInicio', 'desc')
                     pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 1])
-                    for (var i = 0; i < this.rangeCCN; i++) {
+                    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
-                        grade = this.$refs.formCCN[3 * i].value
+                        grade = grades[i].id
                         //inicio
-                        inicio = this.$refs.formCCN[3 * i + 1].value
+                        if(i===0)
+                            inicio = 1
+                        else
+                            inicio = fim+1
                         //fim
-                        fim = this.$refs.formCCN[3 * i + 2].value
+                        if(i+1 === grades.length)
+                            fim = 10
+                        else
+                        if(i==0)
+                            fim = 1 + parseInt(anoAtual.$el.value, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10) + (parseInt(semestreAtual.$el.value, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+                        else
+                            fim = parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                         for (var k = 0; k < disciplinaGrades.length; k++) {
                             if ((disciplinaGrades[k].Grade == grade) && (this.isEven(disciplinaGrades[k].periodo) == this.evenCCN) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
                                 for (var j = 0; j < turmas.length; j++) {
@@ -2008,22 +1945,33 @@
                 }
 
                 //SI está selecionado
-                if(_.indexOf(this.cursos, 3)>-1) {
+                if (_.indexOf(this.cursos, 3) > -1) {
+                    grades = _.filter(this.$store.state.grade.Grades, ['Curso', 3])
+                    grades = _.orderBy(grades, 'periodoInicio', 'desc')
                     pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 3])
-                    for (var i = 0; i < this.rangeSI; i++) {
+                    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
-                        grade = this.$refs.formSI[3*i].value
+                        grade = grades[i].id
                         //inicio
-                        inicio = this.$refs.formSI[3*i+1].value
+                        if(i===0)
+                            inicio = 1
+                        else
+                            inicio = fim+1
                         //fim
-                        fim = this.$refs.formSI[3*i+2].value
-                        for (var k = 0; k < disciplinaGrades.length; k++){
-                            if((disciplinaGrades[k].Grade==grade) && (this.isEven(disciplinaGrades[k].periodo)==this.evenSI) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo<=parseInt(fim, 10))){
-                                for(var j = 0; j < turmas.length; j++){
-                                    if(turmas[j].Disciplina==disciplinaGrades[k].Disciplina){
-                                        for(var p = 0; p < pedidos.length; p++){
-                                            if((pedidos[p].vagasPeriodizadas>0)&&(pedidos[p].Turma==turmas[j].id)){
-                                                this.ativos.SI[disciplinaGrades[k].periodo-1].push(turmas[j])
+                        if(i+1 === grades.length)
+                            fim = 10
+                        else
+                        if(i==0)
+                            fim = 1 + parseInt(anoAtual.$el.value, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10) + (parseInt(semestreAtual.$el.value, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+                        else
+                            fim = parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+                        for (var k = 0; k < disciplinaGrades.length; k++) {
+                            if ((disciplinaGrades[k].Grade == grade) && (this.isEven(disciplinaGrades[k].periodo) == this.evenSI) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
+                                for (var j = 0; j < turmas.length; j++) {
+                                    if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                                        for (var p = 0; p < pedidos.length; p++) {
+                                            if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
+                                                this.ativos.SI[disciplinaGrades[k].periodo - 1].push(turmas[j])
                                             }
                                         }
                                     }
@@ -2034,22 +1982,33 @@
                 }
 
                 //Engenharia Computacional está selecionado
-                if(_.indexOf(this.cursos, 4)>-1) {
+                if (_.indexOf(this.cursos, 4) > -1) {
+                    grades = _.filter(this.$store.state.grade.Grades, ['Curso', 2])
+                    grades = _.orderBy(grades, 'periodoInicio', 'desc')
                     pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 2])
-                    for (var i = 0; i < this.rangeEC; i++) {
+                    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
-                        grade = this.$refs.formEC[3*i].value
+                        grade = grades[i].id
                         //inicio
-                        inicio = this.$refs.formEC[3*i+1].value
+                        if(i===0)
+                            inicio = 1
+                        else
+                            inicio = fim+1
                         //fim
-                        fim = this.$refs.formEC[3*i+2].value
-                        for (var k = 0; k < disciplinaGrades.length; k++){
-                            if((disciplinaGrades[k].Grade==grade) && (this.isEven(disciplinaGrades[k].periodo)==this.evenEC) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo<=parseInt(fim, 10))){
-                                for(var j = 0; j < turmas.length; j++){
-                                    if(turmas[j].Disciplina==disciplinaGrades[k].Disciplina){
-                                        for(var p = 0; p < pedidos.length; p++){
-                                            if((pedidos[p].vagasPeriodizadas>0)&&(pedidos[p].Turma==turmas[j].id)){
-                                                this.ativos.EC[disciplinaGrades[k].periodo-1].push(turmas[j])
+                        if(i+1 === grades.length)
+                            fim = 10
+                        else
+                        if(i==0)
+                            fim = 1 + parseInt(anoAtual.$el.value, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10) + (parseInt(semestreAtual.$el.value, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+                        else
+                            fim = parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+                        for (var k = 0; k < disciplinaGrades.length; k++) {
+                            if ((disciplinaGrades[k].Grade == grade) && (this.isEven(disciplinaGrades[k].periodo) == this.evenEC) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
+                                for (var j = 0; j < turmas.length; j++) {
+                                    if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                                        for (var p = 0; p < pedidos.length; p++) {
+                                            if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
+                                                this.ativos.EC[disciplinaGrades[k].periodo - 1].push(turmas[j])
                                             }
                                         }
                                     }
@@ -2189,7 +2148,7 @@
 
     .periodo{
         display: inline;
-        width: 48px;
+        width: 72px;
         height: 24px;
         position:relative;
     }
