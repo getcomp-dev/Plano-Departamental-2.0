@@ -32,6 +32,12 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: 0,
+    },
+
+    alunoEntrada: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
     }
   }, {
     freezeTableName: true,

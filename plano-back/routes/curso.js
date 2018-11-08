@@ -8,7 +8,8 @@ router.post('/', function (req, res, next) {
     codigo: req.body.codigo,
     nome: req.body.nome,
     turno: req.body.turno,
-    semestreInicial: req.body.semestreInicial
+    semestreInicial: req.body.semestreInicial,
+    alunoEntrada: req.body.alunoEntrada
   }).then(function (curso) {
     ioBroadcast(SM.CURSO_CREATED, {'msg': 'Curso criado!', 'Curso': curso})
 
@@ -47,7 +48,8 @@ router.post('/:id([0-9]+)', function (req, res, next) {
       codigo: req.body.codigo,
       nome: req.body.nome,
       turno: req.body.turno,
-      semestreInicial: req.body.semestreInicial
+      semestreInicial: req.body.semestreInicial,
+      alunoEntrada: req.body.alunoEntrada
     })
   }).then(function (curso) {
     ioBroadcast(SM.CURSO_UPDATED, {'msg': 'Curso atualizado!', 'Curso': curso})
