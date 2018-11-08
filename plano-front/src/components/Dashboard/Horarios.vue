@@ -1709,24 +1709,23 @@
             <b-alert :show="Boolean(error)" variant="danger" dismissible v-html="error">
             </b-alert>
             <form>
-                <div class="form-group row">
+                <div class="form-group row" style="display: block;">
                     <form name="formPeriodo" id="formPeriodo" ref="formPrioso">
                         <div class="grade">
-                            <label for="ano">Ano:</label>
-                            <b-form-input id="ano" ref="ano" class="periodo"></b-form-input>
-                            <label for="periodo">Período:</label>
-                            <b-form-input id="periodo" ref="periodo" class="periodo"></b-form-input>
+                            <label for="ano" style="margin-right:10px">Ano:</label>
+                            <b-form-input id="ano" ref="ano" class="periodo" style="margin-right: 10px"></b-form-input>
+                            <label for="periodo" style="margin-right: 10px">Período:</label>
+                            <b-form-input id="periodo" ref="periodo" class="periodo" ></b-form-input>
                             <br/>
                         </div>
                     </form>
-                    <br>
-                    <b-form-checkbox-group v-model="cursos" stacked name="cursosCheck" :options="options" style="">
+                    <b-form-checkbox-group v-model="cursos" stacked name="cursosCheck" :options="options" style="display: block;">
                     </b-form-checkbox-group>
                 </div>
                 <div>
-                <b-button variant="success" v-on:click="createHorarios" class="generate">Gerar Horários</b-button>
+                <b-button variant="success" v-on:click="createHorarios" class="generate" style="width: 100px">Visualizar</b-button>
                 <br/>
-                <b-button variant="success" class="relatorio">Relatórios</b-button>
+                <b-button variant="success" class="relatorio"style="width: 100px;">Relatórios</b-button>
                 </div>
 
             </form>
@@ -1853,18 +1852,58 @@
                 var anoAtual = this.$refs.ano
                 var semestreAtual = this.$refs.periodo
 
-                if (parseInt(semestreAtual.$el.value, 10)===1){
-                    this.evenCCD = "false"
-                    this.evenCCN = "true"
-                    this.evenSI = "true"
-                    this.evenEC = "false"
-                }else{
-                    this.evenCCD = "true"
-                    this.evenCCN = "false"
-                    this.evenSI = "false"
-                    this.evenEC = "true"
-                }
+                console.log(this.$store.state.curso.Cursos)
 
+                if (parseInt(semestreAtual.$el.value, 10)===1){
+                    if(this.$store.state.curso.Cursos[0].semestreInicial==1){
+                        this.evenCCN = "false"
+                    }else if (this.$store.state.curso.Cursos[0].semestreInicial==2){
+                        this.evenCCN = "true"
+                    }
+
+                    if(this.$store.state.curso.Cursos[1].semestreInicial==1){
+                        this.evenEC = "false"
+                    }else if(this.$store.state.curso.Cursos[1].semestreInicial==2){
+                        this.evenEC = "true"
+                    }
+
+                    if(this.$store.state.curso.Cursos[2].semestreInicial==1){
+                        this.evenSI = "false"
+                    }else if(this.$store.state.curso.Cursos[2].semestreInicial==2){
+                        this.evenSI = "true"
+                    }
+
+                    if(this.$store.state.curso.Cursos[3].semestreInicial==1){
+                        this.evenCCD = "false"
+                    }else if(this.$store.state.curso.Cursos[3].semestreInicial==2){
+                        this.evenCCD = "true"
+                    }
+                }else{
+                    if(this.$store.state.curso.Cursos[0].semestreInicial==1){
+                        this.evenCCN = "true"
+                    }else if (this.$store.state.curso.Cursos[1].semestreInicial==2){
+                        this.evenCCN = "false"
+                    }
+
+                    if(this.$store.state.curso.Cursos[1].semestreInicial==1){
+                        this.evenEC = "true"
+                    }else if(this.$store.state.curso.Cursos[1].semestreInicial==2){
+                        this.evenEC = "false"
+                    }
+
+                    if(this.$store.state.curso.Cursos[2].semestreInicial==1){
+                        this.evenSI = "true"
+                    }else if(this.$store.state.curso.Cursos[2].semestreInicial==2){
+                        this.evenSI = "false"
+                    }
+
+                    if(this.$store.state.curso.Cursos[3].semestreInicial==1){
+                        this.evenCCD = "true"
+                    }else if(this.$store.state.curso.Cursos[3].semestreInicial==2){
+                        this.evenCCD = "false"
+                    }
+                }
+                console.log([this.evenCCD, this.evenCCN, this.evenSI, this.evenEC])
                 this.emptyTurmas()
 
                 //CC Diurno está selecionado
@@ -2078,6 +2117,10 @@
         computed: {
             Grades () {
                 return this.$store.state.grade.Grades
+            },
+
+            Cursos () {
+                return this.$store.state.curso.Cursos
             },
 
             Turmas () {
