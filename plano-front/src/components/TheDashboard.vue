@@ -173,14 +173,22 @@ export default {
 
       restorebd: function(filename) {
           bddumpService.restoredump(filename).then((response)=> {
-              this.$notify({
-                  group:'general',
-                  type:'success',
-                  text: `Erro: ${response.error} Success: ${response.success}`
-              })
-              /*this.$store.dispatch('fetchAll')
-              this.hideModalLoad()
-              this.returnFiles()*/
+              if(response.success == true){
+                this.$notify({
+                    group:'general',
+                    type:'success',
+                    text: `O banco foi restaurado com sucesso`
+                })
+                this.$store.dispatch('fetchAll')
+                this.hideModalLoad()
+                this.returnFiles()
+              }else{
+                  this.$notify({
+                      group:'general',
+                      type:'danger',
+                      text:'Falha ao restaurar o banco'
+                  })
+              }
           }).catch(error => {
               this.error = '<b>Erro ao carregar dump</b>'
           })
