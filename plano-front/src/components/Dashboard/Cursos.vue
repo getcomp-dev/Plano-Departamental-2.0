@@ -57,9 +57,9 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="alunoEntrada" class="col-sm-2 col-form-label">Alunos por Entrada</label>
+          <label for="alunosEntrada" class="col-sm-2 col-form-label">Alunos por Entrada</label>
           <div class="col-sm-10">
-            <input type="text" class="form-control" id="alunoEnrada" v-model="cursoForm.alunoEntrada">
+            <input type="text" class="form-control" id="alunosEnrada" v-model="cursoForm.alunosEntrada">
           </div>
         </div>
 
@@ -115,7 +115,7 @@ const emptyCurso = {
     codigo:undefined,
     turno:undefined,
     semestreInicial: undefined,
-    alunoEntrada: undefined
+    alunosEntrada: undefined
 }
 
 export default {

@@ -34,7 +34,7 @@ module.exports = function (sequelize, DataTypes) {
       defaultValue: 0,
     },
 
-    alunoEntrada: {
+    alunosEntrada: {
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: 0,
