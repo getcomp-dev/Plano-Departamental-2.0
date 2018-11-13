@@ -11,6 +11,8 @@
           <th scope="col">Nome</th>
           <th scope="col">Código</th>
           <th scope="col">Turno</th>
+          <th scope="col">1º Sem.</th>
+          <th scope="col">2º Sem.</th>
         </tr>
         </thead>
         <tbody>
@@ -19,6 +21,12 @@
             <td>{{curso.nome}}</td>
             <td>{{curso.codigo}}</td>
             <td>{{curso.turno}}</td>
+            <!-- 1 = 1º semestre, 2 = 2º semestre, 3 = Ambos-->
+            <td v-if="curso.semestreInicial == 1 || curso.semestreInicial==3">{{curso.alunosEntrada}}</td>
+            <td v-else>0</td>
+            <td v-if="curso.semestreInicial == 2|| curso.semestreInicial==3">{{curso.alunosEntrada}}</td>
+            <td v-else>0</td>
+
 
           </tr>
         </template>
@@ -74,7 +82,7 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="semestreInicial" class="col-sm-2 col-form-label">Sem </label>
+          <label for="semestreInicial" class="col-sm-2 col-form-label">Semestre de Entrada </label>
           <div class="col-sm-10">
             <div id="semestreInicial">
               <input type="radio" name="semestreInicial" value="1" v-model="cursoForm.semestreInicial"> Primeiro<br/>

@@ -23,9 +23,6 @@
                         </template>
 
                     </b-modal>
-                    <!--<button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="bddump" style="">BdDump </button>
-                    <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="restorebd" style="">BdRestore </button>
-                    <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="returnFiles" style="">ShowFiles</button>-->
                 </template>
         </div>
 
@@ -48,7 +45,12 @@
                 <th scope="col" style="width:84px;">Turno</th>
                 <th scope="col" style="width:60px;">Sala</th>
                 <th scope="col" style="width:52px;">Total</th>
-                <th v-for="curso in Cursos" :key="curso.id" style="width: 64px">{{curso.codigo}}</th>
+                <template v-for="curso in Cursos">
+                    <th :key="curso.id" :id="'curso'+curso.id" style="width: 64px" v-on:mouseover="">{{curso.codigo}}</th>
+                    <b-popover :target="'curso'+curso.id" :placement="bottom" triggers="hover focus">
+                        {{curso.alunosEntrada}}
+                    </b-popover>
+                </template>
             </tr>
             </thead>
             <tbody>
@@ -167,13 +169,6 @@
         Sala2:undefined
     }
 
-    const emptyPedido =  {
-        vagasPeriodizadas: undefined,
-        vagasNaoPeriodizadas: undefined,
-        Curso: undefined,
-        Turma: undefined,
-    }
-
     export default {
 
         name: 'DashboardPrototipo',
@@ -183,6 +178,7 @@
                 turmaForm: _.clone(emptyTurma),
                 error: undefined,
                 isAdd:false,
+                atual:undefined
             }
         },
 
@@ -273,171 +269,6 @@
                 this.cleanTurma()
                 this.isAdd = !this.isAdd;
             },
-
-            pedidoPeriodizado(turma, curso) {
-                for(var i=0; i< this.$store.state.pedido.Pedidos.length; i++){
-                    if((this.$store.state.pedido.Pedidos[i].Curso===curso) && (this.$store.state.pedido.Pedidos[i].Turma===turma)){
-                        return this.$store.state.pedido.Pedidos[i].vagasPeriodizadas
-                    }
-                }
-                return 0
-            },
-
-            pedidoNaoPeriodizado(turma, curso) {
-                for(var i=0; i< this.$store.state.pedido.Pedidos.length; i++){
-                    if((this.$store.state.pedido.Pedidos[i].Curso===curso) && (this.$store.state.pedido.Pedidos[i].Turma===turma)){
-                        return this.$store.state.pedido.Pedidos[i].vagasNaoPeriodizadas
-                    }
-                }
-                return 0
-            },
-
-            focusPedido(turma, curso){
-                for(var i=0; i< this.$store.state.pedido.Pedidos.length; i++){
-                    if((this.$store.state.pedido.Pedidos[i].Curso===curso) && (this.$store.state.pedido.Pedidos[i].Turma===turma)){
-                        return
-                    }
-                }
-                var pedido = _.clone(emptyPedido)
-                pedido.Turma = turma
-                pedido.Curso = curso
-                pedido.vagasPeriodizadas = 0
-                pedido.vagasNaoPeriodizadas = 0
-                pedidoService.create(pedido).then((response) => {
-                    this.$notify({
-                        group: 'general',
-                        title: `Sucesso!`,
-                        text: `O Pedido foi criado!`,
-                        type: 'success'
-                    })
-                }).
-                catch(error => {
-                    this.error = '<b>Erro ao criar Pedido</b>'
-                    if (error.response.data.fullMessage) {
-                        this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
-                    }
-                })
-            },
-
-            blurPedidoPeriodizado(turma, curso, e){
-                for(var i=0; i< this.$store.state.pedido.Pedidos.length; i++){
-                    if((this.$store.state.pedido.Pedidos[i].Curso===curso) && (this.$store.state.pedido.Pedidos[i].Turma===turma)){
-                        if(e.target.value!=0){
-                            var pedido = _.clone(this.$store.state.pedido.Pedidos[i])
-                            pedido.vagasPeriodizadas = e.target.value
-                            pedidoService.update(curso, turma, pedido).then((response) => {
-                                this.$notify({
-                                    group: 'general',
-                                    title: `Sucesso!`,
-                                    text: `O Pedido foi editado!`,
-                                    type: 'success'
-                                })
-                            }).
-                            catch(error => {
-                                this.error = '<b>Erro ao editar Pedido</b>'
-                                if (error.response.data.fullMessage) {
-                                    this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
-                                }
-                            })
-                        }else{
-                            if (this.$store.state.pedido.Pedidos[i].vagasNaoPeriodizadas===0){
-                                pedidoService.delete(curso, turma).then((response) => {
-                                    this.$notify({
-                                        group: 'general',
-                                        title: `Sucesso!`,
-                                        text: `O pedido foi excluído!`,
-                                        type: 'success'
-                                    })
-                                }).
-                                catch(() => {
-                                    this.error = '<b>Erro ao excluir Pedido</b>'
-                                })
-                            }
-                            else{
-                                var pedido = _.clone(this.$store.state.pedido.Pedidos[i])
-                                pedido.vagasPeriodizadas = 0
-                                pedidoService.update(curso, turma, pedido).then((response) => {
-                                    this.$notify({
-                                        group: 'general',
-                                        title: `Sucesso!`,
-                                        text: `O Pedido foi editado!`,
-                                        type: 'success'
-                                    })
-                                }).
-                                catch(error => {
-                                    this.error = '<b>Erro ao editar Pedido</b>'
-                                    if (error.response.data.fullMessage) {
-                                        this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
-                                    }
-                                })
-                            }
-                        }
-                    }
-                }
-
-            },
-
-            blurPedidoNaoPeriodizado(turma, curso, e){
-                for(var i=0; i< this.$store.state.pedido.Pedidos.length; i++){
-                    if((this.$store.state.pedido.Pedidos[i].Curso===curso) && (this.$store.state.pedido.Pedidos[i].Turma===turma)){
-                        if(e.target.value!=0){
-                            var pedido = _.clone(this.$store.state.pedido.Pedidos[i])
-                            pedido.vagasNaoPeriodizadas = e.target.value
-                            pedidoService.update(curso, turma, pedido).then((response) => {
-                                this.$notify({
-                                    group: 'general',
-                                    title: `Sucesso!`,
-                                    text: `O Pedido foi editado!`,
-                                    type: 'success'
-                                })
-                            }).
-                            catch(error => {
-                                this.error = '<b>Erro ao editar Pedido</b>'
-                                if (error.response.data.fullMessage) {
-                                    this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
-                                }
-                            })
-                        }else{
-                            if (this.$store.state.pedido.Pedidos[i].vagasPeriodizadas===0){
-                                pedidoService.delete(curso, turma).then((response) => {
-                                    this.$notify({
-                                        group: 'general',
-                                        title: `Sucesso!`,
-                                        text: `O pedido foi excluído!`,
-                                        type: 'success'
-                                    })
-                                }).
-                                catch(() => {
-                                    this.error = '<b>Erro ao excluir Pedido</b>'
-                                })
-                            }
-                            else {
-                                var pedido = _.clone(this.$store.state.pedido.Pedidos[i])
-                                pedido.vagasNaoPeriodizadas = 0
-                                pedidoService.update(curso, turma, pedido).then((response) => {
-                                    this.$notify({
-                                        group: 'general',
-                                        title: `Sucesso!`,
-                                        text: `O Pedido foi editado!`,
-                                        type: 'success'
-                                    })
-                                }).
-                                catch(error => {
-                                    this.error = '<b>Erro ao editar Pedido</b>'
-                                    if (error.response.data.fullMessage) {
-                                        this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
-                                    }
-                                })
-                            }
-                        }
-                    }
-                }
-
-            },
-
-
-
-
 
         },
 
@@ -566,7 +397,7 @@
         background: white;
         z-index: 10;
     }
-
+        
     /*table.scrolling td:nth-child(-n+10),
     table.scrolling th:nth-child(-n+10) {
         position: -webkit-sticky;

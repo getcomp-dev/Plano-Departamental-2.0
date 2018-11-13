@@ -1714,7 +1714,7 @@
                         <div class="grade">
                             <label for="ano" style="margin-right:10px">Ano:</label>
                             <b-form-input id="ano" ref="ano" class="periodo" style="margin-right: 10px"></b-form-input>
-                            <label for="periodo" style="margin-right: 10px">Período:</label>
+                            <label for="periodo" style="margin-right: 10px">Semestre:</label>
                             <b-form-input id="periodo" ref="periodo" class="periodo" ></b-form-input>
                             <br/>
                         </div>
