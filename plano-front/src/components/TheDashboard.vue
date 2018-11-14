@@ -1,5 +1,5 @@
 <template>
-  <div class="TheDashboard">
+  <div class="TheDashboard" v-bind:class="{'loading' : isLoadingFile}">
     <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
       <router-link :to="{ name: 'dashboard' }" class="navbar-brand col-sm-3 col-md-2 mr-0">Plano Departamental</router-link>
       <ul class="navbar-nav px-3">
@@ -117,7 +117,8 @@ export default {
   data: function () {
       return {
           files:[],
-          filename:""
+          filename:"",
+          isLoadingFile: false
       }
   },
 
@@ -172,6 +173,7 @@ export default {
       },
 
       restorebd: function(filename) {
+          this.isLoadingFile = true
           bddumpService.restoredump(filename).then((response)=> {
               if(response.success == true){
                 this.$notify({
@@ -182,6 +184,7 @@ export default {
                 this.$store.dispatch('fetchAll')
                 this.hideModalLoad()
                 this.returnFiles()
+                this.isLoadingFile = false
               }else{
                   this.$notify({
                       group:'general',
@@ -192,6 +195,7 @@ export default {
           }).catch(error => {
               this.error = '<b>Erro ao carregar dump</b>'
           })
+
       },
       returnFiles: function () {
           bddumpService.returnFiles().then((response)=> {
@@ -231,6 +235,10 @@ export default {
 </script>
 
 <style scoped>
+  .loading {
+    cursor: progress;
+  }
+
 .sidebar {
   position: fixed;
   top: 0;

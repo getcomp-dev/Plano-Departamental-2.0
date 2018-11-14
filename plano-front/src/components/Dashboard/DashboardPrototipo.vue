@@ -48,7 +48,8 @@
                 <template v-for="curso in Cursos">
                     <th :key="curso.id" :id="'curso'+curso.id" style="width: 64px" v-on:mouseover="">{{curso.codigo}}</th>
                     <b-popover :target="'curso'+curso.id" :placement="bottom" triggers="hover focus">
-                        {{curso.alunosEntrada}}
+                        <div v-if="curso.semestreInicial==1 || curso.semestreInicial==3">1º - {{curso.alunosEntrada}}</div>
+                        <div v-if="curso.semestreInicial==2 || curso.semestreInicial==3">2º - {{curso.alunosEntrada}}</div>
                     </b-popover>
                 </template>
             </tr>
