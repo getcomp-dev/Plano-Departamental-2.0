@@ -168,8 +168,8 @@
             blurPedidoPeriodizado(turma, curso, e){
                 for(var i=0; i< this.$store.state.pedido.Pedidos.length; i++){
                     if((this.$store.state.pedido.Pedidos[i].Curso===curso) && (this.$store.state.pedido.Pedidos[i].Turma===turma)){
+                        var pedido = _.clone(this.$store.state.pedido.Pedidos[i])
                         if(e.target.value!=0){
-                            var pedido = _.clone(this.$store.state.pedido.Pedidos[i])
                             if(this.valorAtual==e.target.value)
                                 return
                             pedido.vagasPeriodizadas = e.target.value
@@ -189,7 +189,7 @@
                             })
                         }else{
                             if (this.$store.state.pedido.Pedidos[i].vagasNaoPeriodizadas===0){
-                                pedidoService.delete(pedido.id).then((response) => {
+                                pedidoService.delete(pedido.id, pedido).then((response) => {
                                     this.$notify({
                                         group: 'general',
                                         title: `Sucesso!`,
@@ -253,8 +253,8 @@
             blurPedidoNaoPeriodizado(turma, curso, e){
                 for(var i=0; i< this.$store.state.pedido.Pedidos.length; i++){
                     if((this.$store.state.pedido.Pedidos[i].Curso===curso) && (this.$store.state.pedido.Pedidos[i].Turma===turma)){
+                        var pedido = _.clone(this.$store.state.pedido.Pedidos[i])
                         if(e.target.value!=0){
-                            var pedido = _.clone(this.$store.state.pedido.Pedidos[i])
                             if(this.valorAtual==e.target.value)
                                 return
                             pedido.vagasNaoPeriodizadas = e.target.value
@@ -274,7 +274,7 @@
                             })
                         }else{
                             if (this.$store.state.pedido.Pedidos[i].vagasPeriodizadas===0){
-                                pedidoService.delete(pedido.id).then((response) => {
+                                pedidoService.delete(pedido.id, pedido).then((response) => {
                                     this.$notify({
                                         group: 'general',
                                         title: `Sucesso!`,

@@ -5,7 +5,6 @@ const models = require('../models/index'),
 
 router.post('/', function (req, res, next) {
     models.Pedido.create({
-        id: req.body.id,
         vagasPeriodizadas: req.body.vagasPeriodizadas,
         vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
         Curso: req.body.Curso,
@@ -45,7 +44,6 @@ router.post('/:id([0-9]+)', function (req, res, next) {
             throw new CustomError(400, 'Pedido inválido')
 
         return pedido.updateAttributes({
-            id: req.body.id,
             vagasPeriodizadas: req.body.vagasPeriodizadas,
             vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
             Curso: req.body.Curso,
@@ -67,7 +65,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
 router.delete('/:id([0-9]+)', function (req, res, next) {
     models.Pedido.findOne({
         where: {
-            id: req.body.id
+            id: req.params.id
         }
     }).then(function (pedido) {
         if (!pedido)
