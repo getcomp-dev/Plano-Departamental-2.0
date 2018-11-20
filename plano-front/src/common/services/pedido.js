@@ -7,8 +7,8 @@ export default {
             .catch((error) => Promise.reject(error))
     },
 
-    get (pedidoCurso, pedidoTurma, config = {}) {
-        return Vue.axios.get(`/pedido/${pedidoCurso}&&${pedidoTurma}`, config)
+    get (pedidoId, config = {}) {
+        return Vue.axios.get(`/pedido/${pedidoId}`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     },
@@ -19,14 +19,14 @@ export default {
             .catch((error) => Promise.reject(error))
     },
 
-    update (pedidoCurso, pedidoTurma, config = {}) {
-        return Vue.axios.post(`/pedido/${pedidoCurso}&&${pedidoTurma}`, config)
+    update (pedidoId, config = {}) {
+        return Vue.axios.post(`/pedido/${pedidoId}`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     },
 
-    delete (pedidoCurso, pedidoTurma, config = {}) {
-        return Vue.axios.delete(`/pedido/${pedidoCurso}&&${pedidoTurma}`, config)
+    delete (pedidoId, config = {}) {
+        return Vue.axios.delete(`/pedido/${pedidIdo}`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     }
