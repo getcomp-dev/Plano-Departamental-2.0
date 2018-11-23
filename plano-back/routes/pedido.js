@@ -1,8 +1,7 @@
 const models = require('../models/index'),
     router = require('express').Router(),
     ioBroadcast = require('../library/socketIO').broadcast,
-    SM = require('../library/SocketMessages'),
-    CustomError = require('../library/CustomError')
+    SM = require('../library/SocketMessages')
 
 router.post('/', function (req, res, next) {
     models.Pedido.create({
