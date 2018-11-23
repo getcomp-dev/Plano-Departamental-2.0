@@ -26,7 +26,7 @@ export default {
     },
 
     delete (pedidoId, config = {}) {
-        return Vue.axios.delete(`/pedido/${pedidoId}`, config)
+        return Vue.axios.delete(`/pedido/${pedidIdo}`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     }
