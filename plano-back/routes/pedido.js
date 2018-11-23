@@ -5,7 +5,6 @@ const models = require('../models/index'),
 
 router.post('/', function (req, res, next) {
     models.Pedido.create({
-        id: req.body.id,
         vagasPeriodizadas: req.body.vagasPeriodizadas,
         vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
         Curso: req.body.Curso,
@@ -35,17 +34,17 @@ router.get('/', function (req, res, next) {
     })
 })
 
-router.post('/:id([0-9]+)', function (req, res, next) {
+router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
     models.Pedido.findOne({
         where: {
-            id: req.params.id,
+            Curso: req.params.Curso,
+            Turma: req.params.Turma
         }
     }).then(function (pedido) {
         if (!pedido)
             throw new CustomError(400, 'Pedido inválido')
 
         return pedido.updateAttributes({
-            id: req.body.id,
             vagasPeriodizadas: req.body.vagasPeriodizadas,
             vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
             Curso: req.body.Curso,
@@ -64,10 +63,11 @@ router.post('/:id([0-9]+)', function (req, res, next) {
     })
 })
 
-router.delete('/:id([0-9]+)', function (req, res, next) {
+router.delete('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
     models.Pedido.findOne({
         where: {
-            id: req.body.id
+            Curso: req.params.Curso,
+            Turma: req.params.Turma
         }
     }).then(function (pedido) {
         if (!pedido)

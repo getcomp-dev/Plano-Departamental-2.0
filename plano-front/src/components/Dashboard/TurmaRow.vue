@@ -173,7 +173,7 @@
                             if(this.valorAtual==e.target.value)
                                 return
                             pedido.vagasPeriodizadas = e.target.value
-                            pedidoService.update(pedido.id, pedido).then((response) => {
+                            pedidoService.update(curso, turma, pedido).then((response) => {
                                 this.$notify({
                                     group: 'general',
                                     title: `Sucesso!`,
@@ -189,7 +189,7 @@
                             })
                         }else{
                             if (this.$store.state.pedido.Pedidos[i].vagasNaoPeriodizadas===0){
-                                pedidoService.delete(pedido.id).then((response) => {
+                                pedidoService.delete(curso, turma).then((response) => {
                                     this.$notify({
                                         group: 'general',
                                         title: `Sucesso!`,
@@ -206,7 +206,7 @@
                                 if(this.valorAtual==0)
                                     return
                                 pedido.vagasPeriodizadas = 0
-                                pedidoService.update(pedido.id, pedido).then((response) => {
+                                pedidoService.update(curso, turma, pedido).then((response) => {
                                     this.$notify({
                                         group: 'general',
                                         title: `Sucesso!`,
@@ -258,7 +258,7 @@
                             if(this.valorAtual==e.target.value)
                                 return
                             pedido.vagasNaoPeriodizadas = e.target.value
-                            pedidoService.update(pedido.id, pedido).then((response) => {
+                            pedidoService.update(curso, turma, pedido).then((response) => {
                                 this.$notify({
                                     group: 'general',
                                     title: `Sucesso!`,
@@ -274,7 +274,7 @@
                             })
                         }else{
                             if (this.$store.state.pedido.Pedidos[i].vagasPeriodizadas===0){
-                                pedidoService.delete(pedido.id).then((response) => {
+                                pedidoService.delete(curso, turma).then((response) => {
                                     this.$notify({
                                         group: 'general',
                                         title: `Sucesso!`,
@@ -291,7 +291,7 @@
                                 if(this.valorAtual==0)
                                     return
                                 pedido.vagasNaoPeriodizadas = 0
-                                pedidoService.update(pedido.id, pedido).then((response) => {
+                                pedidoService.update(curso, turma, pedido).then((response) => {
                                     this.$notify({
                                         group: 'general',
                                         title: `Sucesso!`,
