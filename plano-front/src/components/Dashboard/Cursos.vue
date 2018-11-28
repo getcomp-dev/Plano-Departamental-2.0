@@ -116,6 +116,7 @@
 <script>
 import _ from 'lodash'
 import cursoService from '../../common/services/curso'
+import pedidoService from '../../common/services/pedido'
 
 const emptyCurso = {
     id:undefined,
@@ -124,6 +125,13 @@ const emptyCurso = {
     turno:undefined,
     semestreInicial: undefined,
     alunosEntrada: undefined
+}
+
+const emptyPedido =  {
+    vagasPeriodizadas: 0,
+    vagasNaoPeriodizadas: 0,
+    Curso: undefined,
+    Turma: undefined,
 }
 
 export default {
@@ -139,6 +147,14 @@ export default {
     methods: {
         addCurso() {
             cursoService.create(this.cursoForm).then((response) => {
+            for (var i = 0; i< this.$store.state.turma.Turmas[i].length; i++){
+              var pedido = _.clone(emptyPedido)
+              pedido.Curso = response.Curso.id
+              pedido.Turma = this.$store.state.turma.Turmas[i].id
+              pedidoService.create(pedido).then((response) => {
+                  console.log("pedido criado")
+              }).catch(error => {console.log("erro ao criar pedido: "+error)})
+            }
                 this.cleanCurso()
             this.$notify({
                 group: 'general',
@@ -153,6 +169,7 @@ export default {
                 this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
             }
         })
+
         },
 
         editCurso() {

@@ -73,7 +73,7 @@ module.exports = function (sequelize, DataTypes) {
         name:'Curso',
         allowNull: false
       },
-      onDelete: 'RESTRICT'
+      onDelete: 'CASCADE'
     })
   }
 
