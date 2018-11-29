@@ -147,28 +147,28 @@ export default {
     methods: {
         addCurso() {
             cursoService.create(this.cursoForm).then((response) => {
-            for (var i = 0; i< this.$store.state.turma.Turmas[i].length; i++){
-              var pedido = _.clone(emptyPedido)
-              pedido.Curso = response.Curso.id
-              pedido.Turma = this.$store.state.turma.Turmas[i].id
-              pedidoService.create(pedido).then((response) => {
-                  console.log("pedido criado")
-              }).catch(error => {console.log("erro ao criar pedido: "+error)})
-            }
-                this.cleanCurso()
-            this.$notify({
-                group: 'general',
-                title: `Sucesso!`,
-                text: `O Curso ${response.Curso.nome} foi criado!`,
-                type: 'success'
-            })
-        }).
+              for (var i = 0; i< this.$store.state.turma.Turmas.length; i++){
+                var pedido = _.clone(emptyPedido)
+                pedido.Curso = response.Curso.id
+                pedido.Turma = this.$store.state.turma.Turmas[i].id
+                console.log(pedido)
+                pedidoService.create(pedido).then((response) => {
+                }).catch(error => {console.log("erro ao criar pedido: "+error)})
+              }
+                  this.cleanCurso()
+              this.$notify({
+                  group: 'general',
+                  title: `Sucesso!`,
+                  text: `O Curso ${response.Curso.nome} foi criado!`,
+                  type: 'success'
+              })
+            }).
             catch(error => {
-                this.error = '<b>Erro ao criar Curso</b>'
-            if (error.response.data.fullMessage) {
-                this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
-            }
-        })
+                  this.error = '<b>Erro ao criar Curso</b>'
+              if (error.response.data.fullMessage) {
+                  this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
+              }
+            })
 
         },
 

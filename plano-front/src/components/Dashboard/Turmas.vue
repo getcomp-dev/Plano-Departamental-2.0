@@ -194,6 +194,8 @@
 <script>
     import _ from 'lodash'
     import turmaService from '../../common/services/turma'
+    import pedidoService from '../../common/services/pedido'
+
 
     const emptyTurma = {
         id:undefined,
@@ -210,6 +212,13 @@
         Sala2:undefined
     }
 
+    const emptyPedido =  {
+        vagasPeriodizadas: 0,
+        vagasNaoPeriodizadas: 0,
+        Curso: undefined,
+        Turma: undefined,
+    }
+
     export default {
         name: 'DashboardTurmas',
 
@@ -223,6 +232,14 @@
         methods: {
             addTurma() {
                 turmaService.create(this.turmaForm).then((response) => {
+                    for (var i = 0; i< this.$store.state.curso.Cursos.length; i++){
+                        var pedido = _.clone(emptyPedido)
+                        pedido.Curso = this.$store.state.curso.Cursos[i].id
+                        pedido.Turma = response.Turma.id
+                        pedidoService.create(pedido).then((response) => {
+                            console.log(response.Pedido)
+                        }).catch(error => {console.log("erro ao criar pedido: "+error)})
+                    }
                     this.cleanTurma()
                     this.$notify({
                         group: 'general',
