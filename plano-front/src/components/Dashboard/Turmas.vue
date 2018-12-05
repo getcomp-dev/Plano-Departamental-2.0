@@ -23,7 +23,9 @@
         </thead>
         <tbody>
         <template v-if="Turmas.length > 0">
-          <tr v-for="turma in Turmas" :key="turma.id" v-on:click.prevent="showTurma(turma)">
+          <template v-for="perfil in Perfis">
+
+          <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" :key="turma.id" v-on:click.prevent="showTurma(turma)">
             <td>{{turma.periodo}}</td>
             <td>{{turma.letra}}</td>
             <td>{{turma.turno1}}</td>
@@ -51,6 +53,7 @@
             </template>
 
           </tr>
+          </template>
         </template>
         <template v-else>
           <tr>
@@ -256,6 +259,14 @@
                 })
             },
 
+            inPerfil: function (perfil, turmas, disciplinas) {
+                return turmas.filter(function (turma) {
+                    var disciplina = _.find(disciplinas, function(disc) { return disc.id===turma.Disciplina})
+                    return disciplina.Perfil===perfil.id
+                })
+
+            },
+
             editTurma() {
                 turmaService.update(this.turmaForm.id, this.turmaForm).then((response) => {
                     this.$notify({
@@ -308,7 +319,7 @@
 
         computed: {
             Turmas () {
-                return this.$store.state.turma.Turmas
+                return _.orderBy(_.orderBy(this.$store.state.turma.Turmas, 'letra'), 'Disciplina')
             },
 
             Disciplinas () {
@@ -321,6 +332,10 @@
 
             Horarios () {
                 return this.$store.state.horario.Horarios
+            },
+
+            Perfis () {
+                return this.$store.state.perfil.Perfis
             },
 
             Salas () {

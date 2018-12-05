@@ -87,12 +87,12 @@
                         <input type="text" style="width: 28px" id="turma" v-model="turmaForm.letra">
                     </td>
                     <td>
-                        <select type="text" style="width: 86px" id="horario1" v-model="turmaForm.Horario1">
+                        <select type="text" style="width: 86px" id="horario1" v-model="turmaForm.Horario1" v-on:change="adjustTurno1">
                             <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
                             <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
                         </select>
                     <br/>
-                        <select type="text" style="width: 86px" id="horario2" v-model="turmaForm.Horario2">
+                        <select type="text" style="width: 86px" id="horario2" v-model="turmaForm.Horario2" v-on:change="adjustTurno2">
                             <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
                             <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
                         </select>
@@ -186,7 +186,8 @@
                 turmaForm: _.clone(emptyTurma),
                 error: undefined,
                 isAdd:false,
-                atual:undefined
+                atual:undefined,
+                semestre: 1
             }
         },
 
@@ -202,6 +203,30 @@
         */
 
         methods: {
+
+            adjustTurno1: function() {
+                if(this.turmaForm.Horario1== 1 || this.turmaForm.Horario1== 2 || this.turmaForm.Horario1== 7 || this.turmaForm.Horario1== 8 || this.turmaForm.Horario1== 13 || this.turmaForm.Horario1== 14 || this.turmaForm.Horario1== 19 || this.turmaForm.Horario1== 20 || this.turmaForm.Horario1== 25 || this.turmaForm.Horario1== 26){
+                    this.turmaForm.turno1 = "Diurno"
+                }else if(this.turmaForm.Horario1== 3 || this.turmaForm.Horario1== 4 || this.turmaForm.Horario1== 9 || this.turmaForm.Horario1== 10 || this.turmaForm.Horario1== 15 || this.turmaForm.Horario1== 16 || this.turmaForm.Horario1== 21 || this.turmaForm.Horario1== 22 || this.turmaForm.Horario1== 27 || this.turmaForm.Horario1== 28){
+                    this.turmaForm.turno1 = "Integral"
+                }else if(this.turmaForm.Horario1==31){
+                    this.turmaForm.turno1 = "EAD"
+                }else {
+                    this.turmaForm.turno1 = "Noturno"
+                }
+            },
+
+            adjustTurno2: function() {
+              if(this.turmaForm.Horario2== 1 || this.turmaForm.Horario2== 2 || this.turmaForm.Horario2== 7 || this.turmaForm.Horario2== 8 || this.turmaForm.Horario2== 13 || this.turmaForm.Horario2== 14 || this.turmaForm.Horario2== 19 || this.turmaForm.Horario2== 20 || this.turmaForm.Horario2== 25 || this.turmaForm.Horario2== 26){
+                  this.turmaForm.turno2 = "Diurno"
+              }else if(this.turmaForm.Horario2== 3 || this.turmaForm.Horario2== 4 || this.turmaForm.Horario2== 9 || this.turmaForm.Horario2== 10 || this.turmaForm.Horario2== 15 || this.turmaForm.Horario2== 16 || this.turmaForm.Horario2== 21 || this.turmaForm.Horario2== 22 || this.turmaForm.Horario2== 27 || this.turmaForm.Horario2== 28){
+                  this.turmaForm.turno2 = "Integral"
+              }else if(this.turmaForm.Horario2==31){
+                  this.turmaForm.turno2 = "EAD"
+              }else {
+                  this.turmaForm.turno2 = "Noturno"
+              }
+            },
 
             deleteSelected: function() {
                 var turmas = this.$store.state.turma.Deletar
@@ -221,6 +246,7 @@
 
             addTurma() {
                 turmaService.create(this.turmaForm).then((response) => {
+                    this.semestre = response.Turma.periodo
                     for (var i = 0; i< this.$store.state.curso.Cursos.length; i++){
                         var pedido = _.clone(emptyPedido)
                         pedido.Curso = this.$store.state.curso.Cursos[i].id
@@ -278,6 +304,7 @@
 
            cleanTurma() {
                 this.turmaForm = _.clone(emptyTurma)
+                this.turmaForm.periodo = this.semestre
                 this.error = undefined
             },
 
