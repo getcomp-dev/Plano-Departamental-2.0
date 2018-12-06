@@ -51,27 +51,21 @@
             <select type="text" style="width:144px" id="docente1" v-model="turma.Docente1"
                     v-on:change="editTurma(turma)">
                 <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
-                <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.nome}}</option>
+                <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.apelido}}</option>
             </select>
             <br/>
             <select type="text" style="width:144px;" id="docente2" v-model="turma.Docente2"
                     v-on:change="editTurma(turma)">
                 <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
-                <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.nome}}</option>
+                <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.apelido}}</option>
             </select>
         </td>
         <td style="width: 84px;">
             <select type="text" style="width: 84px" id="turno1" v-model="turma.turno1" v-on:change="editTurma(turma)">
                 <option value="Diurno">Diurno</option>
-                <option value="Integral">Integral</option>
                 <option value="Noturno">Noturno</option>
             </select>
             <br/>
-            <select type="text" style="width: 84px" id="turno2" v-model="turma.turno2" v-on:change="editTurma(turma)">
-                <option value="Diurno">Diurno</option>
-                <option value="Integral">Integral</option>
-                <option value="Noturno">Noturno</option>
-            </select>
         </td>
         <td style="width: 60px">
             <select type="text" style="width:60px" id="sala1" v-model="turma.Sala1" v-on:change="editTurma(turma)">

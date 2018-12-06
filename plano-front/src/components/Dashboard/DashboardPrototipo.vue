@@ -115,15 +115,9 @@
                     <td>
                         <select type="text" style="width: 84px" id="turno1" v-model="turmaForm.turno1">
                             <option value="Diurno">Diurno</option>
-                            <option value="Integral">Integral</option>
                             <option value="Noturno">Noturno</option>
                         </select>
                     <br/>
-                        <select type="text" style="width: 84px" id="turno2" v-model="turmaForm.turno2">
-                            <option value="Diurno">Diurno</option>
-                            <option value="Integral">Integral</option>
-                            <option value="Noturno">Noturno</option>
-                        </select>
                     </td>
                     <td>
                             <select type="text" style="width:60px" id="sala1" v-model="turmaForm.Sala1">
@@ -217,10 +211,8 @@
         methods: {
 
             adjustTurno1: function() {
-                if(this.turmaForm.Horario1== 1 || this.turmaForm.Horario1== 2 || this.turmaForm.Horario1== 7 || this.turmaForm.Horario1== 8 || this.turmaForm.Horario1== 13 || this.turmaForm.Horario1== 14 || this.turmaForm.Horario1== 19 || this.turmaForm.Horario1== 20 || this.turmaForm.Horario1== 25 || this.turmaForm.Horario1== 26){
+                if(this.turmaForm.Horario1== 1 || this.turmaForm.Horario1== 2 || this.turmaForm.Horario1== 7 || this.turmaForm.Horario1== 8 || this.turmaForm.Horario1== 13 || this.turmaForm.Horario1== 14 || this.turmaForm.Horario1== 19 || this.turmaForm.Horario1== 20 || this.turmaForm.Horario1== 25 || this.turmaForm.Horario1== 26 || this.turmaForm.Horario1== 3 || this.turmaForm.Horario1== 4 || this.turmaForm.Horario1== 9 || this.turmaForm.Horario1== 10 || this.turmaForm.Horario1== 15 || this.turmaForm.Horario1== 16 || this.turmaForm.Horario1== 21 || this.turmaForm.Horario1== 22 || this.turmaForm.Horario1== 27 || this.turmaForm.Horario1== 28){
                     this.turmaForm.turno1 = "Diurno"
-                }else if(this.turmaForm.Horario1== 3 || this.turmaForm.Horario1== 4 || this.turmaForm.Horario1== 9 || this.turmaForm.Horario1== 10 || this.turmaForm.Horario1== 15 || this.turmaForm.Horario1== 16 || this.turmaForm.Horario1== 21 || this.turmaForm.Horario1== 22 || this.turmaForm.Horario1== 27 || this.turmaForm.Horario1== 28){
-                    this.turmaForm.turno1 = "Integral"
                 }else if(this.turmaForm.Horario1==31){
                     this.turmaForm.turno1 = "EAD"
                 }else {
@@ -229,14 +221,12 @@
             },
 
             adjustTurno2: function() {
-              if(this.turmaForm.Horario2== 1 || this.turmaForm.Horario2== 2 || this.turmaForm.Horario2== 7 || this.turmaForm.Horario2== 8 || this.turmaForm.Horario2== 13 || this.turmaForm.Horario2== 14 || this.turmaForm.Horario2== 19 || this.turmaForm.Horario2== 20 || this.turmaForm.Horario2== 25 || this.turmaForm.Horario2== 26){
-                  this.turmaForm.turno2 = "Diurno"
-              }else if(this.turmaForm.Horario2== 3 || this.turmaForm.Horario2== 4 || this.turmaForm.Horario2== 9 || this.turmaForm.Horario2== 10 || this.turmaForm.Horario2== 15 || this.turmaForm.Horario2== 16 || this.turmaForm.Horario2== 21 || this.turmaForm.Horario2== 22 || this.turmaForm.Horario2== 27 || this.turmaForm.Horario2== 28){
-                  this.turmaForm.turno2 = "Integral"
-              }else if(this.turmaForm.Horario2==31){
-                  this.turmaForm.turno2 = "EAD"
-              }else {
-                  this.turmaForm.turno2 = "Noturno"
+                if(this.turmaForm.Horario2== 1 || this.turmaForm.Horario2== 2 || this.turmaForm.Horario2== 7 || this.turmaForm.Horario2== 8 || this.turmaForm.Horario2== 13 || this.turmaForm.Horario2== 14 || this.turmaForm.Horario2== 19 || this.turmaForm.Horario2== 20 || this.turmaForm.Horario2== 25 || this.turmaForm.Horario2== 26 || this.turmaForm.Horario2== 3 || this.turmaForm.Horario2== 4 || this.turmaForm.Horario2== 9 || this.turmaForm.Horario2== 10 || this.turmaForm.Horario2== 15 || this.turmaForm.Horario2== 16 || this.turmaForm.Horario2== 21 || this.turmaForm.Horario2== 22 || this.turmaForm.Horario2== 27 || this.turmaForm.Horario2== 28){
+                   this.turmaForm.turno1 = "Diurno"
+                }else if(this.turmaForm.Horario2==31){
+                   this.turmaForm.turno1 = "EAD"
+                }else {
+                   this.turmaForm.turno1 = "Noturno"
               }
             },
 
