@@ -258,7 +258,7 @@
 
         computed: {
             Docentes () {
-                return this.$store.state.docente.Docentes
+                return _.orderBy(this.$store.state.docente.Docentes, 'nome')
             },
 
             Perfis () {
