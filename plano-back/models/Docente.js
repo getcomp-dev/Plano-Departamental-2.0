@@ -25,16 +25,13 @@ module.exports = function (sequelize, DataTypes) {
   })
 
   Docente.hook('beforeCreate', (docente, options) => {
-      docente.nome = docente.nome.toLowerCase();
+      docente.nome = docente.nome.toUpperCase();
+      /*docente.nome = docente.nome.toLowerCase();
       docente.nome = docente.nome.charAt(0).toUpperCase() + docente.nome.slice(1);
       docente.nome = docente.nome.replace(/\s./g, function(txt){
           return txt.toUpperCase();
-      })
-      docente.apelido = docente.apelido.toLowerCase();
-      docente.apelido = docente.apelido.charAt(0).toUpperCase() + docente.apelido.slice(1);
-      docente.apelido = docente.apelido.replace(/\s./g, function(txt){
-          return txt.toUpperCase();
-      })
+      })*/
+      docente.apelido = docente.apelido.toUpperCase();
   });
 
   Docente.associate = function (models) {
