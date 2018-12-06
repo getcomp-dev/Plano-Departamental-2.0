@@ -193,7 +193,7 @@
                 isAdd:false,
                 atual:undefined,
                 semestre: 1,
-                periodos: 3
+                periodos: 3,
             }
         },
 
@@ -307,6 +307,7 @@
            cleanTurma() {
                 this.turmaForm = _.clone(emptyTurma)
                 this.turmaForm.periodo = this.semestre
+                this.turmaForm.letra = "A"
                 this.error = undefined
             },
 

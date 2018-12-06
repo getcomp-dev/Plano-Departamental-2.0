@@ -12,7 +12,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     turno1: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     turno2: {
       type: DataTypes.STRING,

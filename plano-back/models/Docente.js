@@ -38,7 +38,7 @@ module.exports = function (sequelize, DataTypes) {
     Docente.hasMany(models.Turma, {
       foreignKey: {
         name: 'Docente1',
-        allowNull:false
+        allowNull:true
       },
       onDelete: 'RESTRICT'
     })
