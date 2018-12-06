@@ -228,7 +228,7 @@
         data () {
             return {
                 turmaForm: _.clone(emptyTurma),
-                error: undefined
+                error: undefined,
             }
         },
 

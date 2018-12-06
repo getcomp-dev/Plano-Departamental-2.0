@@ -2,13 +2,17 @@
     <div class="DashboardPrototipo" style="height: calc(100vh - 48px)">
         <div class="d-flex center-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" style="overflow: auto; width: 100%">
             <h1 class="h2">Plano</h1>
+            <div class="col-sm-8"></div>
+                <b-form-select v-model="periodos">
+                    <option value = "1">Primeiro</option>
+                    <option value = "2">Segundo</option>
+                    <option value = "3">Ambos</option>
+                </b-form-select>
                 <template v-if="isAdd">
-                    <div class="col-sm-9"></div>
                     <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="addTurma" style=""> Confirmar </button>
                     <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="margin-left: 10px;">Cancelar </button>
                 </template>
                 <template v-else>
-                    <div class="col-sm-9"></div>
                     <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="">Adicionar </button>
                     <button type="button" class="btn btn-success col-sm-1" style="" v-b-modal.modalConfirma>Deletar </button>
 
@@ -136,7 +140,14 @@
             </template>
             <template v-if="Turmas.length>0">
             <template v-for="perfil in Perfis">
-                <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" :key="turma.id"  v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
+                <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" v-if="turma.periodo==1 && (periodos == 1 || periodos==3)" :key="turma.id"  v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
+                 'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
+                 'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
+                    <turmadata v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
+                </tr>
+            </template>
+            <template v-for="perfil in Perfis">
+                <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" v-if="turma.periodo==3 && (periodos==2 || periodos==3)" :key="turma.id"  v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
                  'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
                  'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
                     <turmadata v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
@@ -187,7 +198,8 @@
                 error: undefined,
                 isAdd:false,
                 atual:undefined,
-                semestre: 1
+                semestre: 1,
+                periodos: 3
             }
         },
 
