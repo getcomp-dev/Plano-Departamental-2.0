@@ -57,6 +57,7 @@
             <select type="text" style="width:144px;" id="docente2" v-model="turma.Docente2"
                     v-on:change="editTurma(turma)">
                 <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
+                <option v-else type="text" value="">Vazio</option>
                 <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.apelido}}</option>
             </select>
         </td>
@@ -112,6 +113,8 @@
         methods: {
 
             editTurma(turma) {
+                if(turma.Docente2==="")
+                    turma.Docente2=null
                 turmaService.update(turma.id, turma).then((response) => {
                     this.$notify({
                         group: 'general',
