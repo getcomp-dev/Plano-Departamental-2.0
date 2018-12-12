@@ -14,9 +14,24 @@
                 <th scope="col"></th>
                 <th scope="col">T.</th>
                 <th scope="col">Horário</th>
-                <th scope="col">CS1</th>
-                <th scope="col">CS2</th>
-                <th scope="col">CTotal</th>
+                <th scope="col" id="creditos1">
+                    CS1
+                    <b-popover :target="'creditos1'" :placement="bottom" triggers="hover focus">
+                        <p>Somatório dos créditos no 1º período</p>
+                    </b-popover>
+                </th>
+                <th scope="col" id="creditos2">
+                    CS2
+                    <b-popover :target="'creditos2'" :placement="bottom" triggers="hover focus">
+                        <p>Somatório dos créditos no 2º período</p>
+                    </b-popover>
+                </th>
+                <th scope="col" id="creditostotal">
+                    CTotal
+                    <b-popover :target="'creditostotal'" :placement="bottom" triggers="hover focus">
+                        <p>Somatório total dos créditos</p>
+                    </b-popover>
+                </th>
             </tr>
             </thead>
             <tbody>
