@@ -4,7 +4,8 @@
                 class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">Carga Professores</h1>
         </div>
-        <table class="table table-hover table-sm">
+        <div style="width: 100%; height: 80vh; overflow: scroll" class="element">
+        <table class="table table-hover table-sm" ref="carga">
             <thead class="thead-light">
             <tr>
                 <th scope="col">Nome</th>
@@ -13,19 +14,23 @@
                 <th scope="col"></th>
                 <th scope="col">T.</th>
                 <th scope="col">Horário</th>
-                <th scope="col">C.</th>
+                <th scope="col">CS1</th>
+                <th scope="col">CS2</th>
+                <th scope="col">CTotal</th>
             </tr>
             </thead>
             <tbody>
             <template v-if="Professores.length > 0">
             <template v-for="professor in Professores">
                 <template v-if="turmas(professor).length > 0">
-                    <td>{{professor.nome}}</td>
+                    <td>{{professor.apelido}}</td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td>{{creditos1(professor)}}</td>
+                    <td>{{creditos2(professor)}}</td>
                     <td>{{creditos(professor)}}</td>
                 </template>
 
@@ -38,10 +43,13 @@
                         <td>{{turma.letra}}</td>
                         <td>
                             <template v-for="horario in Horarios" v-if="horario.id===turma.Horario1">{{horario.horario}}</template>
-                            <br/>
-                            <template v-for="horario in Horarios" v-if="horario.id===turma.Horario2">{{horario.horario}}</template>
+                            <template v-for="horario in Horarios" v-if="horario.id===turma.Horario2"> / {{horario.horario}}</template>
                         </td>
-                        <td>{{disciplina.cargaTeorica + disciplina.cargaPratica}}</td>
+                        <td v-if="turma.periodo===1">{{disciplina.cargaTeorica + disciplina.cargaPratica}}</td>
+                        <td v-else></td>
+                        <td v-if="turma.periodo===3">{{disciplina.cargaTeorica + disciplina.cargaPratica}}</td>
+                        <td v-else></td>
+                        <td></td>
                     </tr>
                 </template>
 
@@ -56,24 +64,67 @@
             </template>
             </tbody>
         </table>
+        </div>
     </div>
     </div>
 </template>
 
 <script>
     import _ from 'lodash'
+    import jsPDF from 'jspdf'
+    import html2canvas from 'html2canvas'
     export default {
         name: 'DashboardCargaProfessores',
 
         methods: {
-            isNaN(value){
-                return _.isNaN(value)
+            /*
+            pdf() {
+                html2canvas(this.$refs.carga).then(function(canvas) {
+                        var imgData = canvas.toDataURL('image/png');
+                        var doc = new jsPDF('p', 'mm');
+                        doc.addImage(imgData, 'PNG', 10, 10);
+                        doc.save('carga.pdf');
+                });
+
             },
+            */
 
             turmas(professor){
                 return _.filter(this.$store.state.turma.Turmas,(turma) => {
                     return (turma.Docente1===professor.id || turma.Docente2===professor.id)
                 })
+            },
+
+            creditos1(professor){
+                var c = 0
+                for (var t = 0; t < this.$store.state.turma.Turmas.length; t++){
+                    if(this.$store.state.turma.Turmas[t].periodo===1 && (this.$store.state.turma.Turmas[t].Docente1===professor.id || this.$store.state.turma.Turmas[t].Docente2===professor.id)){
+                        for (var d = 0; d < this.$store.state.disciplina.Disciplinas.length; d++){
+                            if(this.$store.state.disciplina.Disciplinas[d].id===this.$store.state.turma.Turmas[t].Disciplina){
+                                c+=this.$store.state.disciplina.Disciplinas[d].cargaPratica
+                                c+=this.$store.state.disciplina.Disciplinas[d].cargaTeorica
+                            }
+                        }
+                    }
+
+                }
+                return c
+            },
+
+            creditos2(professor){
+                var c = 0
+                for (var t = 0; t < this.$store.state.turma.Turmas.length; t++){
+                    if(this.$store.state.turma.Turmas[t].periodo===3 && (this.$store.state.turma.Turmas[t].Docente1===professor.id || this.$store.state.turma.Turmas[t].Docente2===professor.id)){
+                        for (var d = 0; d < this.$store.state.disciplina.Disciplinas.length; d++){
+                            if(this.$store.state.disciplina.Disciplinas[d].id===this.$store.state.turma.Turmas[t].Disciplina){
+                                c+=this.$store.state.disciplina.Disciplinas[d].cargaPratica
+                                c+=this.$store.state.disciplina.Disciplinas[d].cargaTeorica
+                            }
+                        }
+                    }
+
+                }
+                return c
             },
 
             creditos(professor){
@@ -108,4 +159,21 @@
 </script>
 
 <style scoped>
+
+    table {
+        overflow: auto;
+        max-height: 100%;
+        max-width: 100%;
+    }
+
+    thead th {
+        position: sticky;
+        position: -webkit-sticky;
+        top: -1px;
+        background: white;
+        z-index: 10;
+    }
+
+    .element::-webkit-scrollbar { width: 0 !important }
+
 </style>
