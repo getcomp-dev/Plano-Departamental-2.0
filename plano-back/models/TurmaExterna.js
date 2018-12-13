@@ -31,7 +31,7 @@ module.exports = function (sequelize, DataTypes) {
         })
 
         TurmaExterna.belongsToMany(models.Curso, {
-            through: models.Pedido,
+            through: models.PedidoExterno,
             foreignKey: {
                 name:'Turma',
                 allowNull:false

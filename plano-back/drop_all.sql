@@ -7,6 +7,7 @@ DELETE FROM `DocentePerfil`;
 DELETE FROM `Grade`;
 DELETE FROM `Horario`;
 DELETE FROM `Pedido`;
+DELETE FROM `PedidoExterno`;
 DELETE FROM `Perfil`;
 DELETE FROM `Sala`;
 DELETE FROM `Turma`;
