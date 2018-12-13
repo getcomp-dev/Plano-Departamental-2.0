@@ -23,14 +23,14 @@ module.exports = function (sequelize, DataTypes) {
         timestamps: false
     })
 
-    Turma.associate = function (models) {
-        Turma.belongsToMany(models.Curso, {
+    TurmaExterna.associate = function (models) {
+        TurmaExterna.belongsToMany(models.Curso, {
             through: models.Vaga,
             foreignKey: 'Turma',
             onDelete: 'RESTRICT'
         })
 
-        Turma.belongsToMany(models.Curso, {
+        TurmaExterna.belongsToMany(models.Curso, {
             through: models.Pedido,
             foreignKey: {
                 name:'Turma',
