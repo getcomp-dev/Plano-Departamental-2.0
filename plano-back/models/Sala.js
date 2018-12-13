@@ -32,6 +32,23 @@ module.exports = function (sequelize, DataTypes) {
       },
       onDelete: 'RESTRICT'
     })
+
+    Sala.hasMany(models.TurmaExterna, {
+      foreignKey: {
+          name: 'Sala1',
+          allowNull: true
+      },
+      onDelete: 'RESTRICT'
+    })
+
+    Sala.hasMany(models.TurmaExterna, {
+      foreignKey: {
+          name: 'Sala2',
+          allowNull: true
+      },
+      onDelete: 'RESTRICT'
+    })
+
   }
 
   return Sala

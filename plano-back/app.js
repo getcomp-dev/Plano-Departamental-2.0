@@ -18,6 +18,7 @@ const express = require('express'),
   gradeRoute = require('./routes/grade'),
   disciplinaGradeRoute = require('./routes/disciplinaGrade'),
   turmaRoute = require('./routes/turma'),
+  turmaExternaRoute = require('./routes/turmaExterna'),
   salaRoute = require('./routes/sala'),
   horarioRoute = require('./routes/horario'),
   vagaRoute = require('./routes/vaga'),
@@ -58,6 +59,7 @@ app.use('/api/docentePerfil', docentePerfilRoute)
 app.use('/api/disciplinaGrade', disciplinaGradeRoute)
 app.use('/api/grade', gradeRoute)
 app.use('/api/turma', turmaRoute)
+app.use('/api/turmaExterna', turmaExternaRoute)
 app.use('/api/sala', salaRoute)
 app.use('/api/horario', horarioRoute)
 app.use('/api/vaga', vagaRoute)

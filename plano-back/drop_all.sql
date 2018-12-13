@@ -10,6 +10,7 @@ DELETE FROM `Pedido`;
 DELETE FROM `Perfil`;
 DELETE FROM `Sala`;
 DELETE FROM `Turma`;
+DELETE FROM `TurmaExterna`
 DELETE FROM `Usuario`;
 DELETE FROM `Vaga`;
 SET FOREIGN_KEY_CHECKS = 1;

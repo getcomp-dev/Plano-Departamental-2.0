@@ -26,7 +26,24 @@ module.exports = function (sequelize, DataTypes) {
                 allowNull: true
             },
             onDelete: 'RESTRICT'
+        })
+
+        Horario.hasMany(models.TurmaExterna, {
+            foreignKey: {
+                name: 'Horario1',
+                allowNull: true
+            },
+            onDelete: 'RESTRICT'
+        })
+
+        Horario.hasMany(models.TurmaExterna, {
+            foreignKey: {
+                name: 'Horario2',
+                allowNull: true
+            },
+            onDelete: 'RESTRICT'
         })    }
+    }
 
     return Horario
 }
