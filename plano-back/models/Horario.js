@@ -42,7 +42,7 @@ module.exports = function (sequelize, DataTypes) {
                 allowNull: true
             },
             onDelete: 'RESTRICT'
-        })    }
+        })
     }
 
     return Horario
