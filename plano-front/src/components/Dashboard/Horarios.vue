@@ -1699,6 +1699,77 @@
 
                 </table>
             </template>
+            <template v-if="activeEletivas">
+                <h4>Eletivas</h4>
+            </template>
+
+            <template v-if="horarioVazio(ativos.Eletivas)">
+                <table class="tg">
+                    <tr>
+                        <th class="tg-0lax">hora</th>
+                        <th class="tg-0lax">Seg</th>
+                        <th class="tg-0lax">Ter</th>
+                        <th class="tg-0lax">Qua</th>
+                        <th class="tg-0lax">Qui</th>
+                        <th class="tg-0lax">Sex</th>
+                    </tr>
+
+                    <tr>
+                        <td class="tg-0lax">08-10</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 1)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 7)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 13)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 19)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 25)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                    </tr>
+
+                    <tr>
+                        <td class="tg-0lax">10-12</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 2)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 8)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 14)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 20)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 26)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                    </tr>
+
+                    <tr>
+                        <td class="tg-0lax">14-16</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 3)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 9)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 15)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 21)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 27)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                    </tr>
+
+                    <tr>
+                        <td class="tg-0lax">16-18</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 4)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 10)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 16)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 22)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 28)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                    </tr>
+
+                    <tr>
+                        <td class="tg-0lax">19-21</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 5)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 11)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 17)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 23)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 29)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                    </tr>
+
+                    <tr>
+                        <td class="tg-0lax">21-23</td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 6)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 12)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 18)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 24)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                        <td class="tg-0lax"><template v-for="turma in ativos.Eletivas" v-if="checkTurmaHorario(turma, 30)"><template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">{{disciplina.codigo}}   </template></template></td>
+                    </tr>
+
+                </table>
+            </template>
 
 
         </div>
@@ -1741,18 +1812,15 @@
 
         data () {
             return {
-                cursos: undefined,
+                cursos: [],
                 error: undefined,
                 options: [
                     {text: "CC Diurno", value:1},
                     {text: "CC Noturno", value:2},
                     {text: "SI", value:3},
                     {text: "Eng. Comp.", value:4},
+                    {text: "Eletivas", value:5}
                 ],
-                rangeCCN: 1,
-                rangeCCD: 1,
-                rangeSI: 1,
-                rangeEC: 1,
                 evenCCN:"false",
                 evenCCD:"false",
                 evenEC:"false",
@@ -1762,7 +1830,8 @@
                     CCD: [[], [], [], [], [], [], [], [], [], []],
                     CCN: [[], [], [], [], [], [], [], [], [], []],
                     EC: [[], [], [], [], [], [], [], [], [], []],
-                    SI: [[], [], [], [], [], [], [], [], [], []]
+                    SI: [[], [], [], [], [], [], [], [], [], []],
+                    Eletivas:[]
                 },
             }
         },
@@ -1771,47 +1840,32 @@
             console.log(this.$store.state.turma.Ativas)
             if(typeof(this.$store.state.turma.Ativas.CCD) != 'undefined') {
                 this.ativos = _.clone(this.$store.state.turma.Ativas)
+                this.cursos.push(1)
+                this.updateHorarios()
+            }
+            if(typeof(this.$store.state.turma.Ativas.CCN) != 'undefined') {
+                this.ativos = _.clone(this.$store.state.turma.Ativas)
+                this.cursos.push(2)
+                this.updateHorarios()
+            }
+            if(typeof(this.$store.state.turma.Ativas.SI) != 'undefined') {
+                this.ativos = _.clone(this.$store.state.turma.Ativas)
+                this.cursos.push(3)
+                this.updateHorarios()
+            }
+            if(typeof(this.$store.state.turma.Ativas.EC) != 'undefined') {
+                this.ativos = _.clone(this.$store.state.turma.Ativas)
+                this.cursos.push(4)
+                this.updateHorarios()
+            }
+            if(typeof(this.$store.state.turma.Ativas.Eletivas) != 'undefined') {
+                this.ativos = _.clone(this.$store.state.turma.Ativas)
+                this.cursos.push(5)
                 this.updateHorarios()
             }
         },
 
         methods: {
-            addGradeCCN () {
-                this.rangeCCN++
-            },
-
-            removeGradeCCN () {
-                if(this.rangeCCN>1)
-                    this.rangeCCN--
-            },
-
-            addGradeCCD () {
-                this.rangeCCD++
-            },
-
-            removeGradeCCD () {
-                if(this.rangeCCD>1)
-                    this.rangeCCD--
-            },
-
-            addGradeSI () {
-                this.rangeSI++
-            },
-
-            removeGradeSI () {
-                if(this.rangeSI>1)
-                    this.rangeSI--
-            },
-
-            addGradeEC () {
-                this.rangeEC++
-            },
-
-            removeGradeEC () {
-                if(this.rangeEC>1)
-                    this.rangeEC--
-            },
-
             isEven (number) {
                 if(number%2===0)
                     return 'true'
@@ -1824,7 +1878,8 @@
                     CCD:[[], [], [], [], [], [], [], [], [], []],
                     CCN:[[], [], [], [], [], [], [], [], [], []],
                     EC:[[], [], [], [], [], [], [], [], [], []],
-                    SI:[[], [], [], [], [], [], [], [], [], []]
+                    SI:[[], [], [], [], [], [], [], [], [], []],
+                    Eletivas:[]
                 }
             },
 
@@ -1838,16 +1893,15 @@
             },
 
             createHorarios: function () {
-
-                console.log(this.$store.state.turma.Ativas)
-
                 var grade
                 var grades
                 var inicio = 1
                 var fim
                 var pedidos
+                var pedidosExternos
                 var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades
                 var turmas = this.$store.state.turma.Turmas
+                var turmasExternas = this.$store.state.turmaExterna.Turmas
                 var anoAtual = this.$refs.ano
                 var semestreAtual = this.$refs.periodo
 
@@ -1911,6 +1965,7 @@
                     grades = _.filter(this.$store.state.grade.Grades, ['Curso', 4])
                     grades = _.orderBy(grades, 'periodoInicio', 'desc')
                     pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 4])
+                    pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 4])
                     console.log(grades.length)
 
                     for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
@@ -1940,6 +1995,15 @@
                                         }
                                     }
                                 }
+                                for (var j = 0; j < turmasExternas.length; j++) {
+                                    if (turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                                        for (var p = 0; p < pedidosExternos.length; p++) {
+                                            if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
+                                                this.ativos.CCD[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -1950,6 +2014,7 @@
                     grades = _.filter(this.$store.state.grade.Grades, ['Curso', 1])
                     grades = _.orderBy(grades, 'periodoInicio', 'desc')
                     pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 1])
+                    pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 1])
                     for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
                         grade = grades[i].id
@@ -1977,6 +2042,15 @@
                                         }
                                     }
                                 }
+                                for (var j = 0; j < turmasExternas.length; j++) {
+                                    if (turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                                        for (var p = 0; p < pedidosExternos.length; p++) {
+                                            if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
+                                                this.ativos.CCN[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -1987,6 +2061,7 @@
                     grades = _.filter(this.$store.state.grade.Grades, ['Curso', 3])
                     grades = _.orderBy(grades, 'periodoInicio', 'desc')
                     pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 3])
+                    pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 3])
                     for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
                         grade = grades[i].id
@@ -2014,6 +2089,15 @@
                                         }
                                     }
                                 }
+                                for (var j = 0; j < turmasExternas.length; j++) {
+                                    if (turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                                        for (var p = 0; p < pedidosExternos.length; p++) {
+                                            if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
+                                                this.ativos.SI[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -2024,6 +2108,7 @@
                     grades = _.filter(this.$store.state.grade.Grades, ['Curso', 2])
                     grades = _.orderBy(grades, 'periodoInicio', 'desc')
                     pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 2])
+                    pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 2])
                     for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
                         grade = grades[i].id
@@ -2051,10 +2136,36 @@
                                         }
                                     }
                                 }
+                                for (var j = 0; j < turmasExternas.length; j++) {
+                                    if (turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                                        for (var p = 0; p < pedidosExternos.length; p++) {
+                                            if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
+                                                this.ativos.EC[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                 }
+                //Eletivas está selecionado:
+                var eletiva = true
+                if(_.indexOf(this.cursos, 5) > -1){
+                    for(var t = 0; t<turmas.length;t++){
+                        for(var d = 0; d<disciplinaGrades.length; d++){
+                            if(turmas[t].Disciplina===disciplinaGrades[d].Disciplina){
+                                eletiva = false
+                            }
+                        }
+                        if(eletiva){
+                            this.ativos.Eletivas.push(turmas[t])
+                        }else{
+                            eletiva = true
+                        }
+                    }
+                }
+
                 this.$store.commit('redefinirAtivas', {Ativas: this.ativos})
             },
 
@@ -2164,6 +2275,10 @@
 
             activeEC () {
                 return _.indexOf(this.cursos, 4)>-1
+            },
+
+            activeEletivas () {
+                return _.indexOf(this.cursos, 5)>-1
             }
 
         },

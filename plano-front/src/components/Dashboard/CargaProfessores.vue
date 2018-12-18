@@ -17,13 +17,13 @@
                 <th scope="col" id="creditos1">
                     CS1
                     <b-popover :target="'creditos1'" :placement="bottom" triggers="hover focus">
-                        <p>Somatório dos créditos no 1º período</p>
+                        <p>Somatório dos créditos no 1º semestre</p>
                     </b-popover>
                 </th>
                 <th scope="col" id="creditos2">
                     CS2
                     <b-popover :target="'creditos2'" :placement="bottom" triggers="hover focus">
-                        <p>Somatório dos créditos no 2º período</p>
+                        <p>Somatório dos créditos no 2º semestre</p>
                     </b-popover>
                 </th>
                 <th scope="col" id="creditostotal">

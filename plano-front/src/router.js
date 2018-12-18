@@ -8,6 +8,7 @@ import Dashboard from './components/TheDashboard'
 import DashboardHome from './components/Dashboard/Home'
 //import DashboardPedidos from './components/Dashboard/Pedidos'
 import DashboardTurmas from './components/Dashboard/Turmas'
+import DashboardTurmasExternas from './components/Dashboard/TurmasExternas'
 import DashboardRelatorios from './components/Dashboard/Relatorios'
 import DashboardHorarios from './components/Dashboard/Horarios'
 import DashboardCursos from './components/Dashboard/Cursos'
@@ -47,6 +48,7 @@ const routes = [
       {path: '', name: 'dashboard', component: DashboardHome},
       {path: 'pedidos', name: 'pedidos', component: DashboardPedidos},
       {path: 'turmas', name: 'turmas', component: DashboardTurmas},
+      {path: 'turmasExternas', name: 'turmasExternas', component: DashboardTurmasExternas},
       {path: 'relatorios', name: 'relatorios', component: DashboardRelatorios},
       {path: 'horarios', name: 'horarios', component: DashboardHorarios} ,
       {path: 'cursos', name: 'cursos', component: DashboardCursos},

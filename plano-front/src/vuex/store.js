@@ -7,11 +7,13 @@ import perfil from './module/perfil'
 import curso from './module/curso'
 import disciplina from './module/disciplina'
 import pedido from './module/pedido'
+import pedidoExterno from './module/pedidoExterno'
 import grade from './module/grade'
 import disciplinaGrade from './module/disciplinaGrade'
 import docente from './module/docente'
 import docentePerfil from './module/docentePerfil'
 import turma from './module/turma'
+import turmaExterna from './module/turmaExterna'
 import sala from './module/sala'
 import horario from './module/horario'
 import vaga from './module/vaga'
@@ -69,11 +71,13 @@ export default new Vuex.Store({
     curso,
     disciplina,
     pedido,
+    pedidoExterno,
     grade,
     disciplinaGrade,
     docente,
     docentePerfil,
     turma,
+    turmaExterna,
     sala,
     horario,
     vaga
