@@ -1835,7 +1835,7 @@
                 },
             }
         },
-
+        /*
         created: function () {
             console.log(this.$store.state.turma.Ativas)
             if(typeof(this.$store.state.turma.Ativas.CCD) != 'undefined') {
@@ -1863,7 +1863,7 @@
                 this.cursos.push(5)
                 this.updateHorarios()
             }
-        },
+        },*/
 
         methods: {
             isEven (number) {
