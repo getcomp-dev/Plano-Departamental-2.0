@@ -24,6 +24,7 @@ const express = require('express'),
   horarioRoute = require('./routes/horario'),
   vagaRoute = require('./routes/vaga'),
   bddumpRoute = require('./routes/bddump')
+  cargaPosRoute = require('./routes/cargaPos')
 
 
 const app = express()
@@ -66,6 +67,7 @@ app.use('/api/sala', salaRoute)
 app.use('/api/horario', horarioRoute)
 app.use('/api/vaga', vagaRoute)
 app.use('/api/bddump', bddumpRoute)
+app.use('/api/cargaPos', cargaPosRoute)
 
 app.use(history())
 // Error handlers

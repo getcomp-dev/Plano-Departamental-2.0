@@ -1,4 +1,5 @@
 SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM `CargaPos`;
 DELETE FROM `Curso`;
 DELETE FROM `Disciplina`;
 DELETE FROM `DisciplinaGrade`;
