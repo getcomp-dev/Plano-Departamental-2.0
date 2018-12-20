@@ -4,6 +4,7 @@
       <router-link :to="{ name: 'dashboard' }" class="navbar-brand col-sm-3 col-md-2 mr-0">Plano Departamental</router-link>
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
+          <p class="nav-link" v-on:click="showModalUser"><i class="fas fa-user"></i> Usuário</p>
           <p class="nav-link" v-on:click="showModalLoad"><i class="fas fa-folder-open"></i> Carregar</p>
           <p class="nav-link" v-on:click="showModalSave"><i class="fas fa-save"></i> Salvar</p>
           <router-link :to="{ name: 'logout' }" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</router-link>
@@ -23,6 +24,44 @@
         <input type="text" v-model="filename" style="margin-right: 10px">
         <b-button variant="success" v-on:click="bddump(filename);">Salvar Arquivo</b-button>
       </div>
+    </b-modal>
+    <b-modal id="modal-user" ref="modalUser" title="Usuário" ok-only ok-title="Cancelar" ok-variant="secondary">
+      <template v-if="userModalMode === 0">
+        <b-button v-on:click="createMode()">Criar Usuário</b-button>
+        <br/><br/>
+        <b-button v-on:click="editMode()">Editar Usuário</b-button>
+      </template>
+      <template v-if="userModalMode === 1">
+        <label for="nome">Nome: </label>
+        <input type="text" id="nome" v-model="userForm.nome">
+        <br/>
+        <label for="login">Login: </label>
+        <input type="text" id="login" v-model="userForm.login">
+        <br/>
+        <label for="senha">Senha: </label>
+        <input type="text" id="senha" v-model="userForm.senha">
+        <div slot="modal-footer">
+          <b-button variant="success" v-on:click="createUser()">Criar</b-button>
+          <b-button v-on:click="cancelMode()">Cancelar</b-button>
+        </div>
+      </template>
+      <template v-if="userModalMode === 2">
+        <label for="nome">Nome: </label>
+        <input type="text" id="nome" v-model="userForm.nome">
+        <br/>
+        <label for="login">Login: </label>
+        <input type="text" id="login" v-model="userForm.login">
+        <br/>
+        <label for="senhaAtual">Senha Atual: </label>
+        <input type="text" id="senhaAtual" v-model="userForm.senhaAtual">
+        <br/>
+        <label for="senha">Senha: </label>
+        <input type="text" id="senha" v-model="userForm.senha">
+        <div slot="modal-footer">
+          <b-button variant="success" v-on:click="editUser()">Editar</b-button>
+          <b-button v-on:click="cancelMode()">Cancelar</b-button>
+        </div>
+      </template>
     </b-modal>
     <div class="container-fluid">
       <div class="row">
@@ -47,7 +86,7 @@
                 <router-link :to="{ name: 'turmasExternas' }" class="nav-link" v-on:click="loadPage"><i class="fas fa-clipboard"></i> Tabela Externa</router-link>
               </li>
               <li class="nav-item">
-                <router-link :to="{ name: 'cargaPos' }" class="nav-link" v-on:click="loadPage"><i class="fas fa-clipboard"></i> Carga Pós</router-link>
+                <router-link :to="{ name: 'cargaPos' }" class="nav-link" v-on:click="loadPage"><i class="fas fa-clipboard"></i> Tabela Pós</router-link>
               </li>
               <li class="nav-item">
                 <router-link :to="{ name: 'horarios' }" class="nav-link"><i class="fas fa-calendar-alt"></i> Horários</router-link>
@@ -115,7 +154,15 @@
 <script>
 import {COMPONENT_LOADING, COMPONENT_LOADED} from '../vuex/mutation-types'
 import bddumpService from '../common/services/bddump'
+import userService from '../common/services/usuario'
 import _ from 'lodash'
+
+const emptyUser = {
+    nome: undefined,
+    login: undefined,
+    senha: undefined,
+    senhaAtual: undefined
+}
 
 export default {
   name: 'TheDashboard',
@@ -124,7 +171,9 @@ export default {
       return {
           files:[],
           filename:"",
-          isLoadingFile: false
+          isLoadingFile: false,
+          userModalMode: 0,
+          userForm: _.clone(emptyUser)
       }
   },
 
@@ -212,6 +261,22 @@ export default {
           })
       },
 
+      createUser () {
+          userService.create(this.userForm).then((response) =>{
+              console.log("usuário criado")
+              this.hideModalUser()
+              this.userModalMode = 0
+          })
+      },
+
+      editUser () {
+          userService.update(this.$store.state.auth.Usuario.id, this.userForm).then((response) =>{
+              console.log("usuário editado")
+              this.hideModalUser()
+              this.userModalMode = 0
+          })
+      },
+
       showModalLoad () {
           this.filename=""
           this.returnFiles()
@@ -224,6 +289,10 @@ export default {
           this.$refs.modalSave.show()
       },
 
+      showModalUser () {
+          this.$refs.modalUser.show()
+      },
+
       hideModalLoad () {
           this.$refs.modalLoad.hide()
       },
@@ -232,8 +301,27 @@ export default {
           this.$refs.modalSave.hide()
       },
 
+      hideModalUser () {
+          this.$refs.modalUser.hide()
+      },
+
       selectFile(filename){
           this.filename = filename
+      },
+
+      createMode () {
+          this.userModalMode = 1
+      },
+
+      editMode () {
+          console.log(this.$store.state.auth.Usuario)
+          this.userForm.nome = this.$store.state.auth.Usuario.nome
+          this.userForm.login = this.$store.state.auth.Usuario.login
+          this.userModalMode = 2
+      },
+
+      cancelMode () {
+          this.userModalMode = 0
       }
   }
 
