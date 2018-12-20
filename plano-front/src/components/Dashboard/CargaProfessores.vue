@@ -67,6 +67,21 @@
                         <td></td>
                     </tr>
                 </template>
+                <template v-for="carga in CargasPos" v-if="carga.Docente===professor.id">
+                    <tr>
+                        <td></td>
+                        <td>{{carga.trimestre}}</td>
+                        <td></td>
+                        <td>Disciplina do {{carga.programa}}</td>
+                        <td></td>
+                        <td></td>
+                        <td v-if="carga.trimestre===1 || carga.trimestre===2">{{carga.creditos}}</td>
+                        <td v-else></td>
+                        <td v-if="carga.trimestre===3">{{carga.creditos}}</td>
+                        <td v-else></td>
+                        <td></td>
+                    </tr>
+                </template>
 
 
             </template>
@@ -160,6 +175,10 @@
         },
 
         computed: {
+            CargasPos () {
+                return this.$store.state.cargaPos.Cargas
+            },
+
             Disciplinas () {
                 return _.orderBy(this.$store.state.disciplina.Disciplinas, 'nome')
             },

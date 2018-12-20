@@ -89,6 +89,7 @@
         id:undefined,
         trimestre:undefined,
         Docente:undefined,
+        programa:undefined,
         creditos:undefined
     }
 

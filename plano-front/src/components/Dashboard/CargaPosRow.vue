@@ -57,8 +57,8 @@
                 })
             },
             checkDelete(carga) {
-                this.$store.commit('checkDelete', {CargaPos:carga})
-                console.log(this.$store.state.CargaPos.Deletar)
+                this.$store.commit('checkDeleteCarga', {CargaPos:carga})
+                console.log(this.$store.state.cargaPos.Deletar)
             }
         },
         computed: {

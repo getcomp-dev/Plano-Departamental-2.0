@@ -27,7 +27,7 @@ const mutations = {
         state.Cargas.splice(index, 1)
     },
 
-    checkDelete (state, data) {
+    checkDeleteCarga (state, data) {
         let index = _.findIndex(state.Deletar, carga => carga.id === data.CargaPos.id);
         if(index>-1)
             state.Deletar.splice(index, 1)
