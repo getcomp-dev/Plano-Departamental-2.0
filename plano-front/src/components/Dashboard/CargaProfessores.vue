@@ -75,9 +75,9 @@
                         <td>Disciplina do {{carga.programa}}</td>
                         <td></td>
                         <td></td>
-                        <td v-if="carga.trimestre===1 || carga.trimestre===2">{{carga.creditos}}</td>
+                        <td v-if="carga.trimestre==1 || carga.trimestre==2">{{carga.creditos}}</td>
                         <td v-else></td>
-                        <td v-if="carga.trimestre===3">{{carga.creditos}}</td>
+                        <td v-if="carga.trimestre==3">{{carga.creditos}}</td>
                         <td v-else></td>
                         <td></td>
                     </tr>
@@ -140,7 +140,7 @@
                 }
                 for(var t = 0; t < this.$store.state.cargaPos.Cargas.length; t++){
                     if(this.$store.state.cargaPos.Cargas[t].Docente===professor.id){
-                        if(this.$store.state.cargaPos.Cargas[t].trimestre===1 || this.$store.state.cargaPos.Cargas[t].trimestre===2){
+                        if(this.$store.state.cargaPos.Cargas[t].trimestre==1 || this.$store.state.cargaPos.Cargas[t].trimestre==2){
                             c+= parseInt(this.$store.state.cargaPos.Cargas[t].creditos, 10)
                         }
                     }
@@ -163,7 +163,7 @@
                 }
                 for(var t = 0; t < this.$store.state.cargaPos.Cargas.length; t++){
                     if(this.$store.state.cargaPos.Cargas[t].Docente===professor.id){
-                        if(this.$store.state.cargaPos.Cargas[t].trimestre===3){
+                        if(this.$store.state.cargaPos.Cargas[t].trimestre==3){
                             c+= parseInt(this.$store.state.cargaPos.Cargas[t].creditos, 10)
                         }
                     }

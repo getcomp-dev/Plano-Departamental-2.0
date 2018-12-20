@@ -145,6 +145,8 @@
 
             addCarga() {
                 cargaPosService.create(this.cargaPosForm).then((response) => {
+                    console.log(response.CargaPos)
+                    console.log(this.$store.state.cargaPos.Cargas)
                     this.trimestre = response.CargaPos.trimestre
                     this.programa = response.CargaPos.programa
                     this.cleanCarga()
