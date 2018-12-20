@@ -47,6 +47,9 @@
                 <router-link :to="{ name: 'turmasExternas' }" class="nav-link" v-on:click="loadPage"><i class="fas fa-clipboard"></i> Tabela Externa</router-link>
               </li>
               <li class="nav-item">
+                <router-link :to="{ name: 'cargaPos' }" class="nav-link" v-on:click="loadPage"><i class="fas fa-clipboard"></i> Carga Pós</router-link>
+              </li>
+              <li class="nav-item">
                 <router-link :to="{ name: 'horarios' }" class="nav-link"><i class="fas fa-calendar-alt"></i> Horários</router-link>
               </li>
               <li class="nav-item">

@@ -17,6 +17,7 @@ import turmaExterna from './module/turmaExterna'
 import sala from './module/sala'
 import horario from './module/horario'
 import vaga from './module/vaga'
+import cargaPos from './module/cargaPos'
 
 import {
   USER_LOGGED_OUT,
@@ -80,7 +81,8 @@ export default new Vuex.Store({
     turmaExterna,
     sala,
     horario,
-    vaga
+    vaga,
+    cargaPos
   },
   plugins:[
       createPersistedState()
