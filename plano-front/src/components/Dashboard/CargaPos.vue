@@ -145,6 +145,8 @@
 
             addCarga() {
                 cargaPosService.create(this.cargaPosForm).then((response) => {
+                    this.trimestre = response.CargaPos.trimestre
+                    this.programa = response.CargaPos.programa
                     this.cleanCarga()
                     this.$notify({
                         group: 'general',

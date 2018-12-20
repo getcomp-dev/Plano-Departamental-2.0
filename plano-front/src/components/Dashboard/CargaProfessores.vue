@@ -131,12 +131,19 @@
                     if(this.$store.state.turma.Turmas[t].periodo===1 && (this.$store.state.turma.Turmas[t].Docente1===professor.id || this.$store.state.turma.Turmas[t].Docente2===professor.id)){
                         for (var d = 0; d < this.$store.state.disciplina.Disciplinas.length; d++){
                             if(this.$store.state.disciplina.Disciplinas[d].id===this.$store.state.turma.Turmas[t].Disciplina){
-                                c+=this.$store.state.disciplina.Disciplinas[d].cargaPratica
-                                c+=this.$store.state.disciplina.Disciplinas[d].cargaTeorica
+                                c+=parseInt(this.$store.state.disciplina.Disciplinas[d].cargaPratica, 10)
+                                c+=parseInt(this.$store.state.disciplina.Disciplinas[d].cargaTeorica, 10)
                             }
                         }
                     }
 
+                }
+                for(var t = 0; t < this.$store.state.cargaPos.Cargas.length; t++){
+                    if(this.$store.state.cargaPos.Cargas[t].Docente===professor.id){
+                        if(this.$store.state.cargaPos.Cargas[t].trimestre===1 || this.$store.state.cargaPos.Cargas[t].trimestre===2){
+                            c+= parseInt(this.$store.state.cargaPos.Cargas[t].creditos, 10)
+                        }
+                    }
                 }
                 return c
             },
@@ -147,12 +154,19 @@
                     if(this.$store.state.turma.Turmas[t].periodo===3 && (this.$store.state.turma.Turmas[t].Docente1===professor.id || this.$store.state.turma.Turmas[t].Docente2===professor.id)){
                         for (var d = 0; d < this.$store.state.disciplina.Disciplinas.length; d++){
                             if(this.$store.state.disciplina.Disciplinas[d].id===this.$store.state.turma.Turmas[t].Disciplina){
-                                c+=this.$store.state.disciplina.Disciplinas[d].cargaPratica
-                                c+=this.$store.state.disciplina.Disciplinas[d].cargaTeorica
+                                c+=parseInt(this.$store.state.disciplina.Disciplinas[d].cargaPratica, 10)
+                                c+=parseInt(this.$store.state.disciplina.Disciplinas[d].cargaTeorica, 10)
                             }
                         }
                     }
 
+                }
+                for(var t = 0; t < this.$store.state.cargaPos.Cargas.length; t++){
+                    if(this.$store.state.cargaPos.Cargas[t].Docente===professor.id){
+                        if(this.$store.state.cargaPos.Cargas[t].trimestre===3){
+                            c+= parseInt(this.$store.state.cargaPos.Cargas[t].creditos, 10)
+                        }
+                    }
                 }
                 return c
             },
@@ -163,12 +177,18 @@
                     if(this.$store.state.turma.Turmas[t].Docente1===professor.id || this.$store.state.turma.Turmas[t].Docente2===professor.id){
                         for (var d = 0; d < this.$store.state.disciplina.Disciplinas.length; d++){
                             if(this.$store.state.disciplina.Disciplinas[d].id===this.$store.state.turma.Turmas[t].Disciplina){
-                                c+=this.$store.state.disciplina.Disciplinas[d].cargaPratica
-                                c+=this.$store.state.disciplina.Disciplinas[d].cargaTeorica
+                                c+=parseInt(this.$store.state.disciplina.Disciplinas[d].cargaPratica, 10)
+                                c+=parseInt(this.$store.state.disciplina.Disciplinas[d].cargaTeorica, 10)
                             }
                         }
                     }
 
+                }
+                for(var t = 0; t < this.$store.state.cargaPos.Cargas.length; t++){
+                    if(this.$store.state.cargaPos.Cargas[t].Docente===professor.id){
+                        c+= parseInt(this.$store.state.cargaPos.Cargas[t].creditos, 10)
+
+                    }
                 }
                 return c
             }
