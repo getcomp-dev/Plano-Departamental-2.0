@@ -18,6 +18,7 @@
 
                     <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
                         <p class="my-4">Tem certeza que deseja deletar as turmas selecionadas?</p>
+                        <template v-if="Deletar.length > 0">
                         <template v-for="turma in Deletar">
                             <template v-for="disciplina in Disciplinas">
                                 <template v-if="disciplina.id===turma.Disciplina">
@@ -25,7 +26,7 @@
                                 </template>
                             </template>
                         </template>
-
+                        </template>
                     </b-modal>
                 </template>
         </div>
@@ -200,13 +201,10 @@
         components: {
             turmadata
         },
-        /*
-        mounted () {
-            this.$store.commit('emptyDelete')
-            console.log(this.$store.state.turma.Deletar)
-            this.$store.commit(COMPONENT_LOADED)
+
+        created () {
+            this.turmaForm = _.clone(emptyTurma)
         },
-        */
 
         methods: {
 
