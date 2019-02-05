@@ -1,5 +1,5 @@
 <template>
-    <div class="TurmasExternas" style="height: calc(100vh - 48px)">
+    <div class="TurmasExternas" style="height: calc(100vh - 48px)" v-if="Admin">
         <div class="d-flex center-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" style="overflow: auto; width: 100%">
             <h1 class="h2">Plano</h1>
             <div class="col-sm-8"></div>
@@ -345,6 +345,14 @@
 
             isLoading () {
                 return this.$store.state.isLoading
+            },
+
+            Admin () {
+                if(this.$store.state.auth.Usuario.admin===1){
+                    return true
+                }else{
+                    return false
+                }
             }
 
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="DashboardHorarios row">
+    <div class="DashboardHorarios row" v-if="Admin">
         <div class="col-8">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Lista Horarios</h1>
@@ -2279,6 +2279,14 @@
 
             activeEletivas () {
                 return _.indexOf(this.cursos, 5)>-1
+            },
+
+            Admin () {
+                if(this.$store.state.auth.Usuario.admin===1){
+                    return true
+                }else{
+                    return false
+                }
             }
 
         },

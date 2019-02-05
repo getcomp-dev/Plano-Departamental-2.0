@@ -78,7 +78,7 @@
                 <i class="far fa-calendar-alt mr-1"></i> {{year}}
               </a>
             </h6>
-            <ul class="nav flex-column mb-2">
+            <ul class="nav flex-column mb-2" v-if="Admin">
               <li class="nav-item">
                 <router-link :to="{ name: 'pedidos' }" class="nav-link" v-on:click="loadPage"><i class="fas fa-clipboard"></i> Tabela</router-link>
               </li>
@@ -112,8 +112,8 @@
                 <router-link :to="{ name: 'laboratoriosAlocacao' }" class="nav-link"><i class="fas fa-clipboard"></i> Laboratórios - Alocação</router-link>
               </li>
             </ul>
-            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">Gerenciar</h6>
-            <ul class="nav flex-column">
+            <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted" v-if="Admin">Gerenciar</h6>
+            <ul class="nav flex-column" v-if="Admin">
               <li class="nav-item">
                 <router-link :to="{ name: 'cursos' }" class="nav-link"><i class="fas fa-graduation-cap"></i> Cursos</router-link>
               </li>
@@ -323,6 +323,16 @@ export default {
       cancelMode () {
           this.userModalMode = 0
       }
+  },
+
+  computed: {
+    Admin () {
+        if(this.$store.state.auth.Usuario.admin===1){
+            return true
+        }else{
+            return false
+        }
+    }
   }
 
 }
