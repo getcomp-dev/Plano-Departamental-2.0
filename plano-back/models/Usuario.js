@@ -16,6 +16,11 @@ module.exports = function (sequelize, DataTypes) {
     senha: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    admin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
     }
   }, {
     freezeTableName: true,
