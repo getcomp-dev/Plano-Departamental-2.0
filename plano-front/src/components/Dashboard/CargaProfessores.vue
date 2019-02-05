@@ -4,8 +4,8 @@
                 class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">Carga Professores</h1>
         </div>
-        <div style="width: 100%; height: 80vh; overflow: scroll" class="element">
-        <table class="table table-hover table-sm" ref="carga">
+        <div style="width: 100%; height: 80vh; overflow: scroll" class="element" ref="carga">
+        <table class="table table-hover table-sm">
             <thead class="thead-light">
             <tr>
                 <th scope="col">Nome</th>
@@ -96,7 +96,7 @@
         </table>
         </div>
     </div>
-    </div>
+
 </template>
 
 <script>
@@ -109,6 +109,11 @@
         methods: {
             /*
             pdf() {
+                console.log(this)
+                window.print()
+
+            },
+                /*
                 html2canvas(this.$refs.carga).then(function(canvas) {
                         var imgData = canvas.toDataURL('image/png');
                         var doc = new jsPDF('p', 'mm');
