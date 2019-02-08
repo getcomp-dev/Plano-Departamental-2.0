@@ -3,6 +3,8 @@
         <div
                 class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
             <h1 class="h2">Carga Professores</h1>
+            <p v-on:click="pdf1">teste 1</p>
+            <p v-on:click="pdf2">teste 2</p>
         </div>
         <div style="width: 100%; height: 80vh; overflow: scroll" class="element" ref="carga">
         <table class="table table-hover table-sm">
@@ -107,22 +109,163 @@
         name: 'DashboardCargaProfessores',
 
         methods: {
-            /*
-            pdf() {
-                console.log(this)
-                window.print()
 
-            },
-                /*
-                html2canvas(this.$refs.carga).then(function(canvas) {
-                        var imgData = canvas.toDataURL('image/png');
-                        var doc = new jsPDF('p', 'mm');
-                        doc.addImage(imgData, 'PNG', 10, 10);
-                        doc.save('carga.pdf');
-                });
+            pdf1() {
 
+                var pdfMake = require('pdfmake/build/pdfmake.js')
+                if (pdfMake.vfs == undefined){
+                    var pdfFonts = require('pdfmake/build/vfs_fonts.js')
+                    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+                }
+                var tables = [
+                    {text: 'Carga Professores', alignment:'center', bold:true, margin:[0,0,0,30]},
+                    {
+                        style: 'tableExample',
+                        table: {
+                            widths: [8, 68, '*', 18, 104, 16, 16],
+                            headerRows:1,
+                            color: '#426',
+                            body: [
+                                [{text:'S', bold:true}, {text:'Disciplina', colSpan:2, bold:true}, '', {text:'T', alignment:'center', bold:true}, {text:'Horário', alignment: 'center', bold:true}, {text:'C1', bold:true}, {text:'C2', bold:true}],
+                                /*[{text:'ALESSANDREIA', colSpan:5}, '', '', '', '', {text:'0', colSpan:2, alignment:'center'}, ''],
+                                ['1', 'DCC061', 'Engenharia de Software', 'A', '2a 14-16 / 4a 16-18', '4', '0'],*/
+                            ]
+                        }
+                    }]
+                var professores = _.orderBy(this.$store.state.docente.Docentes, 'nome')
+                for(var i = 0; i < professores.length; i++){
+                    var cargatotal = 0
+                    tables[1].table.body.push([{text:professores[i].apelido, colSpan:5, bold:true}, '', '', '', '', this.creditos1(professores[i]), this.creditos2(professores[i])])
+                    var turmasProf = this.turmas(professores[i])
+                    for(var j = 0; j < turmasProf.length; j++){
+                        var disciplina = undefined
+                        var horario1 = undefined
+                        var horario2 = undefined
+                        var c1 = 0
+                        var c2 = 0
+                        for (var k = 0; k < this.$store.state.disciplina.Disciplinas.length; k++){
+                            if(turmasProf[j].Disciplina === this.$store.state.disciplina.Disciplinas[k].id){
+                                disciplina = this.$store.state.disciplina.Disciplinas[k]
+                            }
+                        }
+                        for(var l = 0; l < this.$store.state.horario.Horarios.length; l++){
+                            if(turmasProf[j].Horario1 === this.$store.state.horario.Horarios[l].id){
+                                horario1 = this.$store.state.horario.Horarios[l]
+                            }
+                        }
+
+                        for(var m = 0; m < this.$store.state.horario.Horarios.length; m++){
+                            if(turmasProf[j].Horario2 === this.$store.state.horario.Horarios[m].id){
+                                horario2 = this.$store.state.horario.Horarios[m]
+                            }
+                        }
+                        if(horario2 === undefined){
+                            var horarioTotal = horario1.horario
+                        }else{
+                            var horarioTotal = horario1.horario + '/' + horario2.horario
+                        }
+                        if(turmasProf[j].periodo == 1){
+                            c1 = disciplina.cargaTeorica + disciplina.cargaPratica
+                        }else{
+                            c2 = disciplina.cargaTeorica + disciplina.cargaPratica
+                        }
+                        tables[1].table.body.push([turmasProf[j].periodo, {text:disciplina.codigo, alignment:'center'}, disciplina.nome, {text:turmasProf[j].letra, alignment:'center'}, {text:horarioTotal, alignment:'center'}, c1, c2])
+                    }
+                    for(var n = 0; n < this.$store.state.cargaPos.Cargas.length; n++){
+                        var c1 = 0
+                        var c2 = 0
+                        if(this.$store.state.cargaPos.Cargas[n].Docente===professores[i].id){
+                            if(this.$store.state.cargaPos.Cargas[n].trimestre === 1 || this.$store.state.cargaPos.Cargas[n].trimestre === 2){
+                                c1 = this.$store.state.cargaPos.Cargas[n].creditos
+                            }else{
+                                c2 = this.$store.state.cargaPos.Cargas[n].creditos
+                            }
+                            tables[1].table.body.push([this.$store.state.cargaPos.Cargas[n].trimestre, {text:'Disciplina do '+this.$store.state.cargaPos.Cargas[n].programa, colSpan: 2}, '', '', '', c1, c2])
+                        }
+                    }
+                }
+
+                var docDefinition = { content: tables }
+                pdfMake.createPdf(docDefinition).open()
             },
-            */
+
+            pdf2() {
+
+                var pdfMake = require('pdfmake/build/pdfmake.js')
+                if (pdfMake.vfs == undefined){
+                    var pdfFonts = require('pdfmake/build/vfs_fonts.js')
+                    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+                }
+                var tables = [
+                    {text: 'Carga Professores', alignment:'center', bold:true, margin:[0,0,0,20]},
+                ]
+                var professores = _.orderBy(this.$store.state.docente.Docentes, 'nome')
+                for(var i = 0; i < professores.length; i++){
+                    var cargatotal = 0
+                    tables.push({columns:[{text: professores[i].apelido, bold:true}, {text: 'C1: ' + this.creditos1(professores[i]) + '/C2: ' + this.creditos2(professores[i]), alignment:'right'}], margin:[0, 10, 0, 10]})
+                    tables.push({
+                        style: 'tableExample',
+                        table: {
+                            widths: [8, 68, '*', 18, 104, 16, 16],
+                            headerRows:1,
+                            color: '#426',
+                            body: [
+                                [{text:'S', bold:true}, {text:'Disciplina', colSpan:2, bold:true}, '', {text:'T', alignment:'center', bold:true}, {text:'Horário', alignment: 'center', bold:true}, {text:'C1', bold:true}, {text:'C2', bold:true}],
+                            ]
+                        }
+                    })
+                    var turmasProf = this.turmas(professores[i])
+                    for(var j = 0; j < turmasProf.length; j++){
+                        var disciplina = undefined
+                        var horario1 = undefined
+                        var horario2 = undefined
+                        var c1 = 0
+                        var c2 = 0
+                        for (var k = 0; k < this.$store.state.disciplina.Disciplinas.length; k++){
+                            if(turmasProf[j].Disciplina === this.$store.state.disciplina.Disciplinas[k].id){
+                                disciplina = this.$store.state.disciplina.Disciplinas[k]
+                            }
+                        }
+                        for(var l = 0; l < this.$store.state.horario.Horarios.length; l++){
+                            if(turmasProf[j].Horario1 === this.$store.state.horario.Horarios[l].id){
+                                horario1 = this.$store.state.horario.Horarios[l]
+                            }
+                        }
+
+                        for(var m = 0; m < this.$store.state.horario.Horarios.length; m++){
+                            if(turmasProf[j].Horario2 === this.$store.state.horario.Horarios[m].id){
+                                horario2 = this.$store.state.horario.Horarios[m]
+                            }
+                        }
+                        if(horario2 === undefined){
+                            var horarioTotal = horario1.horario
+                        }else{
+                            var horarioTotal = horario1.horario + '/' + horario2.horario
+                        }
+                        if(turmasProf[j].periodo == 1){
+                            c1 = disciplina.cargaTeorica + disciplina.cargaPratica
+                        }else{
+                            c2 = disciplina.cargaTeorica + disciplina.cargaPratica
+                        }
+                        tables[2+2*i].table.body.push([turmasProf[j].periodo, {text:disciplina.codigo, alignment:'center'}, disciplina.nome, {text:turmasProf[j].letra, alignment:'center'}, {text:horarioTotal, alignment:'center'}, c1, c2])
+                    }
+                    for(var n = 0; n < this.$store.state.cargaPos.Cargas.length; n++){
+                        var c1 = 0
+                        var c2 = 0
+                        if(this.$store.state.cargaPos.Cargas[n].Docente===professores[i].id){
+                            if(this.$store.state.cargaPos.Cargas[n].trimestre === 1 || this.$store.state.cargaPos.Cargas[n].trimestre === 2){
+                                c1 = this.$store.state.cargaPos.Cargas[n].creditos
+                            }else{
+                                c2 = this.$store.state.cargaPos.Cargas[n].creditos
+                            }
+                            tables[2+2*i].table.body.push([this.$store.state.cargaPos.Cargas[n].trimestre, {text:'Disciplina do '+this.$store.state.cargaPos.Cargas[n].programa, colSpan: 2}, '', '', '', c1, c2])
+                        }
+                    }
+                }
+
+                var docDefinition = { content: tables }
+                pdfMake.createPdf(docDefinition).open()
+            },
 
             turmas(professor){
                 return _.filter(this.$store.state.turma.Turmas,(turma) => {

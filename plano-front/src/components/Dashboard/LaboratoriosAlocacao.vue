@@ -4,6 +4,7 @@
             <div
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Laboratórios - Alocação</h1>
+                <p v-on:click="pdf">teste</p>
             </div>
             <div v-for="lab in Laboratorios">
                 <h5>{{lab.nome}}</h5>
@@ -98,7 +99,106 @@
                     return true
                 }else
                     return false
-            }
+            },
+
+            pdf() {
+
+                var pdfMake = require('pdfmake/build/pdfmake.js')
+                if (pdfMake.vfs == undefined){
+                    var pdfFonts = require('pdfmake/build/vfs_fonts.js')
+                    pdfMake.vfs = pdfFonts.pdfMake.vfs;
+                }
+                var tables = [
+                    {text: 'Alocação de Laboratórios', alignment:'center', bold:true},
+                   ]
+                var laboratorios = _.filter(this.$store.state.sala.Salas, ['laboratorio', true])
+                var disciplinas = this.$store.state.disciplina.Disciplinas
+                var turmas = this.$store.state.turma.Turmas
+                var seg = '', ter = '', qua = '', qui = '', sex = ''
+                for(var i = 0; i < laboratorios.length; i++){
+                    tables.push({text: laboratorios[i].nome, bold:true, margin:[0, 20, 0, 20]})
+                    tables.push({
+                        table: {
+                            widths: ['*', '*', '*', '*', '*', '*'],
+                            headerRows:1,
+                            color: '#426',
+                            body: [
+                                [{text:'Hora', alignment:'center', bold:true}, {text:'Segunda', alignment:'center', bold:true}, {text:'Terça', alignment:'center', bold:true}, {text:'Quarta', alignment: 'center', bold:true}, {text:'Quinta', alignment:'center', bold:true}, {text:'Sexta', alignment:'center', bold:true}],
+                            ]
+                        }
+                    })
+                    for(var d = 0; d< 6; d++) {
+                        for (var j = 0; j < turmas.length; j++) {
+                            if(turmas[j].Sala1===laboratorios[i].id || turmas[j].Sala2===laboratorios[i].id){
+                                if(this.checkTurmaHorario(turmas[j], 1 + d)){
+                                    for(var k = 0; k < disciplinas.length; k++){
+                                        if(turmas[j].Disciplina === disciplinas[k].id){
+                                            if(seg !== '')
+                                                seg = seg + ' '
+                                            seg = seg + disciplinas[k].codigo + ' ' + turmas[j].letra
+                                        }
+                                    }
+                                }
+                                if(this.checkTurmaHorario(turmas[j], 7 + d)){
+                                    for(k = 0; k < disciplinas.length; k++){
+                                        if(turmas[j].Disciplina === disciplinas[k].id){
+                                            if(ter != '')
+                                                ter = ter + ' '
+                                            ter = ter + disciplinas[k].codigo + ' ' + turmas[j].letra
+                                        }
+                                    }
+                                }
+                                if(this.checkTurmaHorario(turmas[j], 13 + d)){
+                                    for(k = 0; k < disciplinas.length; k++){
+                                        if(turmas[j].Disciplina === disciplinas[k].id){
+                                            if(qua != '')
+                                                qua = qua + ' '
+                                            qua = qua + disciplinas[k].codigo + ' ' + turmas[j].letra
+                                        }
+                                    }
+                                }
+                                if(this.checkTurmaHorario(turmas[j], 19 + d)){
+                                    for(k = 0; k < disciplinas.length; k++){
+                                        if(turmas[j].Disciplina === disciplinas[k].id){
+                                            if(qui != '')
+                                                qui = qui + ' '
+                                            qui = qui + disciplinas[k].codigo + ' ' + turmas[j].letra
+                                        }
+                                    }
+                                }
+                                if(this.checkTurmaHorario(turmas[j], 25 + d)){
+                                    for(k = 0; k < disciplinas.length; k++){
+                                        if(turmas[j].Disciplina === disciplinas[k].id){
+                                            if(sex != '')
+                                                sex = sex + ' '
+                                            sex = sex + disciplinas[k].codigo + ' ' + turmas[j].letra
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        switch(d){
+                            case 0: tables[2+2*i].table.body.push([{text:'08 - 10', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                                    break
+                            case 1: tables[2+2*i].table.body.push([{text:'10 - 12', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                                    break
+                            case 2: tables[2+2*i].table.body.push([{text:'14 - 16', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                                    break
+                            case 3: tables[2+2*i].table.body.push([{text:'16 - 18', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                                    break
+                            case 4: tables[2+2*i].table.body.push([{text:'19 - 21', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                                    break
+                            case 5: tables[2+2*i].table.body.push([{text:'21 - 23', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                                    break
+                        }
+                        seg = ter = qua = qui = sex = ''
+                    }
+                }
+                console.log(tables)
+                var docDefinition = { content: tables }
+                pdfMake.createPdf(docDefinition).open()
+            },
+
         },
         computed : {
             Laboratorios () {
