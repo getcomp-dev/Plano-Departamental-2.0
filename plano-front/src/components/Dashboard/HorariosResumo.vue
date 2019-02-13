@@ -3,7 +3,7 @@
         <div class="col-12">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Horarios - Resumo</h1>
-                <p v-on:click="pdf">teste</p>
+                <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="pdf" style=""> Relatório </button>
             </div>
             <!-- ----------------------------------------------------------------------------------------------- -->
             <h1>1º Período</h1>
@@ -3606,9 +3606,7 @@
                     var pdfFonts = require('pdfmake/build/vfs_fonts.js')
                     pdfMake.vfs = pdfFonts.pdfMake.vfs;
                 }
-                var tables = [
-                    {text: 'Horários', alignment:'center', bold:true},
-                ]
+                var tables = []
                 var disciplinas = this.$store.state.disciplina.Disciplinas
                 var periodosCCD1 = this.ativos1.CCD
                 var periodosCCN1 = this.ativos1.CCN
@@ -3617,13 +3615,13 @@
                 var eletivas1 = this.ativos1.Eletivas
                 var seg = '', ter = '', qua = '', qui = '', sex = ''
                 var vazio = 0
-                tables.push({text:'Ciência da Computação Diurno', bold:true, margin:[0, 10, 0, 10]})
+                tables.push({text:'Ciência da Computação Diurno', bold:true, margin:[0, 10, 0, 5], fontSize: 20})
 
                 for(var i = 0; i < 10; i++){
                     if(periodosCCD1[i].length===0){
                         vazio = vazio + 1
                     }else {
-                        tables.push({text: (i + 1) + 'º Período', bold: true, margin:[0, 10, 0, 10]})
+                        tables.push({text: (i + 1) + 'º Período', bold: true, margin:[0, 5, 0, 5]})
                         tables.push({
                             table: {
                                 widths: ['*', '*', '*', '*', '*', '*'],
@@ -3697,7 +3695,7 @@
 
                             switch (d) {
                                 case 0:
-                                    tables[3 + 2 * (i-vazio)].table.body.push([{
+                                    tables[2 + 2 * (i-vazio)].table.body.push([{
                                         text: '08 - 10',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3706,7 +3704,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 1:
-                                    tables[3 + 2 * (i-vazio)].table.body.push([{
+                                    tables[2 + 2 * (i-vazio)].table.body.push([{
                                         text: '10 - 12',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3715,7 +3713,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 2:
-                                    tables[3 + 2 * (i-vazio)].table.body.push([{
+                                    tables[2 + 2 * (i-vazio)].table.body.push([{
                                         text: '14 - 16',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3724,7 +3722,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 3:
-                                    tables[3 + 2 * (i-vazio)].table.body.push([{
+                                    tables[2 + 2 * (i-vazio)].table.body.push([{
                                         text: '16 - 18',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3733,7 +3731,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 4:
-                                    tables[3 + 2 * (i-vazio)].table.body.push([{
+                                    tables[2 + 2 * (i-vazio)].table.body.push([{
                                         text: '19 - 21',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3742,7 +3740,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 5:
-                                    tables[3 + 2 * (i-vazio)].table.body.push([{
+                                    tables[2 + 2 * (i-vazio)].table.body.push([{
                                         text: '21 - 23',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3756,13 +3754,13 @@
                     }
                 }
 
-                tables.push({text:'Ciência da Computação Noturno', bold:true, margin:[0, 20, 0, 10]})
+                tables.push({text:'Ciência da Computação Noturno', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
 
                 for(var i = 0; i < 10; i++){
                     if(periodosCCN1[i].length===0){
                         vazio = vazio + 1
                     }else {
-                        tables.push({text: (i + 1) + 'º Período', bold: true, margin:[0, 10, 0, 10]})
+                        tables.push({text: (i + 1) + 'º Período', bold: true, margin:[0, 5, 0, 5]})
                         tables.push({
                             table: {
                                 widths: ['*', '*', '*', '*', '*', '*'],
@@ -3836,7 +3834,7 @@
 
                             switch (d) {
                                 case 0:
-                                    tables[24 + 2 * (i-vazio)].table.body.push([{
+                                    tables[23 + 2 * (i-vazio)].table.body.push([{
                                         text: '08 - 10',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3845,7 +3843,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 1:
-                                    tables[24 + 2 * (i-vazio)].table.body.push([{
+                                    tables[23 + 2 * (i-vazio)].table.body.push([{
                                         text: '10 - 12',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3854,7 +3852,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 2:
-                                    tables[24 + 2 * (i-vazio)].table.body.push([{
+                                    tables[23 + 2 * (i-vazio)].table.body.push([{
                                         text: '14 - 16',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3863,7 +3861,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 3:
-                                    tables[24 + 2 * (i-vazio)].table.body.push([{
+                                    tables[23 + 2 * (i-vazio)].table.body.push([{
                                         text: '16 - 18',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3872,7 +3870,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 4:
-                                    tables[24 + 2 * (i-vazio)].table.body.push([{
+                                    tables[23 + 2 * (i-vazio)].table.body.push([{
                                         text: '19 - 21',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3881,7 +3879,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 5:
-                                    tables[24 + 2 * (i-vazio)].table.body.push([{
+                                    tables[23 + 2 * (i-vazio)].table.body.push([{
                                         text: '21 - 23',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3895,13 +3893,13 @@
                     }
                 }
 
-                tables.push({text:'Engenharia Computacional', bold:true, margin:[0, 20, 0, 10]})
+                tables.push({text:'Engenharia Computacional', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
 
                 for(var i = 0; i < 10; i++){
                     if(periodosEC1[i].length===0){
                         vazio = vazio + 1
                     }else {
-                        tables.push({text: (i + 1) + 'º Período', bold: true, margin:[0, 10, 0, 10]})
+                        tables.push({text: (i + 1) + 'º Período', bold: true, margin:[0, 5, 0, 5]})
                         tables.push({
                             table: {
                                 widths: ['*', '*', '*', '*', '*', '*'],
@@ -3975,7 +3973,7 @@
 
                             switch (d) {
                                 case 0:
-                                    tables[45 + 2 * (i-vazio)].table.body.push([{
+                                    tables[44 + 2 * (i-vazio)].table.body.push([{
                                         text: '08 - 10',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3984,7 +3982,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 1:
-                                    tables[45 + 2 * (i-vazio)].table.body.push([{
+                                    tables[44 + 2 * (i-vazio)].table.body.push([{
                                         text: '10 - 12',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3993,7 +3991,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 2:
-                                    tables[45 + 2 * (i-vazio)].table.body.push([{
+                                    tables[44 + 2 * (i-vazio)].table.body.push([{
                                         text: '14 - 16',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4002,7 +4000,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 3:
-                                    tables[45 + 2 * (i-vazio)].table.body.push([{
+                                    tables[44 + 2 * (i-vazio)].table.body.push([{
                                         text: '16 - 18',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4011,7 +4009,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 4:
-                                    tables[45 + 2 * (i-vazio)].table.body.push([{
+                                    tables[44 + 2 * (i-vazio)].table.body.push([{
                                         text: '19 - 21',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4020,7 +4018,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 5:
-                                    tables[45 + 2 * (i-vazio)].table.body.push([{
+                                    tables[44 + 2 * (i-vazio)].table.body.push([{
                                         text: '21 - 23',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4034,13 +4032,13 @@
                     }
                 }
 
-                tables.push({text:'Sistemas de Informação', bold:true, margin:[0, 20, 0, 10]})
+                tables.push({text:'Sistemas de Informação', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
 
                 for(var i = 0; i < 10; i++){
                     if(periodosSI1[i].length===0){
                         vazio = vazio + 1
                     }else {
-                        tables.push({text: (i + 1) + 'º Período', bold: true, margin:[0, 10, 0, 10]})
+                        tables.push({text: (i + 1) + 'º Período', bold: true, margin:[0, 5, 0, 5]})
                         tables.push({
                             table: {
                                 widths: ['*', '*', '*', '*', '*', '*'],
@@ -4114,7 +4112,7 @@
 
                             switch (d) {
                                 case 0:
-                                    tables[66 + 2 * (i-vazio)].table.body.push([{
+                                    tables[65 + 2 * (i-vazio)].table.body.push([{
                                         text: '08 - 10',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4123,7 +4121,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 1:
-                                    tables[66 + 2 * (i-vazio)].table.body.push([{
+                                    tables[65 + 2 * (i-vazio)].table.body.push([{
                                         text: '10 - 12',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4132,7 +4130,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 2:
-                                    tables[66 + 2 * (i-vazio)].table.body.push([{
+                                    tables[65 + 2 * (i-vazio)].table.body.push([{
                                         text: '14 - 16',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4141,7 +4139,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 3:
-                                    tables[66 + 2 * (i-vazio)].table.body.push([{
+                                    tables[65 + 2 * (i-vazio)].table.body.push([{
                                         text: '16 - 18',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4150,7 +4148,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 4:
-                                    tables[66 + 2 * (i-vazio)].table.body.push([{
+                                    tables[65 + 2 * (i-vazio)].table.body.push([{
                                         text: '19 - 21',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4159,7 +4157,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 5:
-                                    tables[66 + 2 * (i-vazio)].table.body.push([{
+                                    tables[65 + 2 * (i-vazio)].table.body.push([{
                                         text: '21 - 23',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4173,7 +4171,7 @@
                     }
                 }
 
-                tables.push({text:'Eletivas', bold:true, margin:[0, 20, 0, 10]})
+                tables.push({text:'Eletivas', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
 
                     if(eletivas1.length===0){
                         vazio = vazio + 1
@@ -4251,7 +4249,7 @@
                             console.log([seg, ter, qua, qui, sex])
                             switch (d) {
                                 case 0:
-                                    tables[86 - 2 * vazio].table.body.push([{
+                                    tables[85 - 2 * vazio].table.body.push([{
                                         text: '08 - 10',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4260,7 +4258,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 1:
-                                    tables[86 - 2 * vazio].table.body.push([{
+                                    tables[85 - 2 * vazio].table.body.push([{
                                         text: '10 - 12',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4269,7 +4267,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 2:
-                                    tables[86 - 2 * vazio].table.body.push([{
+                                    tables[85 - 2 * vazio].table.body.push([{
                                         text: '14 - 16',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4278,7 +4276,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 3:
-                                    tables[86 - 2 * vazio].table.body.push([{
+                                    tables[85 - 2 * vazio].table.body.push([{
                                         text: '16 - 18',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4287,7 +4285,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 4:
-                                    tables[86 - 2 * vazio].table.body.push([{
+                                    tables[85 - 2 * vazio].table.body.push([{
                                         text: '19 - 21',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4296,7 +4294,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 5:
-                                    tables[86 - 2 * vazio].table.body.push([{
+                                    tables[85 - 2 * vazio].table.body.push([{
                                         text: '21 - 23',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4310,7 +4308,10 @@
                     }
 
 
-                var docDefinition = { content: tables }
+                var docDefinition = {
+                    content: tables,
+                    header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
+                }
                 pdfMake.createPdf(docDefinition).open()
             },
 
