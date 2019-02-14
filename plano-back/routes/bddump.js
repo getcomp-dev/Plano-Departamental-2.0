@@ -58,4 +58,9 @@ router.get('/', function(req, res, next){
         })
 })
 
+router.get('/:filename([A-Za-z0-9_]+)', function(req, res, next)){
+    var file = __dirname + '/' + req.params.filename + '.sql'
+    res.download(file)
+}
+
 module.exports = router

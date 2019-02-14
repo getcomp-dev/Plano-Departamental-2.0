@@ -7,10 +7,18 @@
           <p class="nav-link" v-on:click="showModalUser"><i class="fas fa-user"></i> Usuário</p>
           <p class="nav-link" v-on:click="showModalLoad"><i class="fas fa-folder-open"></i> Carregar</p>
           <p class="nav-link" v-on:click="showModalSave"><i class="fas fa-save"></i> Salvar</p>
+          <p class="nav-link" v-on:click="showModalDownload"><i class="fas fa-save"></i> Download</p>
           <router-link :to="{ name: 'logout' }" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</router-link>
         </li>
       </ul>
     </nav>
+    <b-modal id="modal-download" ref="modalDownload" title="Selecione um Arquivo">
+      <p v-for="(value) in files" v-on:click="selectFile(value)">{{value}}</p>
+      <div slot="modal-footer">
+        <input type="text" v-model="filename" style="margin-right: 10px">
+        <b-button variant="success" v-on:click="download(filename);">Carregar Arquivo</b-button>
+      </div>
+    </b-modal>
     <b-modal id="modal-load" ref="modalLoad" title="Selecione um Arquivo">
       <p v-for="(value) in files" v-on:click="selectFile(value)">{{value}}</p>
       <div slot="modal-footer">
@@ -252,6 +260,30 @@ export default {
           })
 
       },
+
+      download: function(filename) {
+          bddumpService.download(filename).then((response)=> {
+              if(response.success == true){
+                  this.$notify({
+                      group:'general',
+                      type:'success',
+                      text: `O arquivo foi baixado com sucesso`
+                  })
+              }else{
+                  this.$notify({
+                      group:'general',
+                      type:'danger',
+                      text:'Falha ao baixar arquivo'
+                  })
+              }
+          }).catch(error => {
+              this.error = '<b>Erro ao baixar arquivo</b>'
+          })
+
+      },
+
+
+
       returnFiles: function () {
           bddumpService.returnFiles().then((response)=> {
               this.files = response.Files.filter( function( elm ) {return elm.match(/.*\.(sql)/ig)})
@@ -281,6 +313,12 @@ export default {
           this.filename=""
           this.returnFiles()
           this.$refs.modalLoad.show()
+      },
+
+      showModalDownload () {
+          this.filename=""
+          this.returnFiles()
+          this.$refs.modalDownload.show()
       },
 
       showModalSave () {
