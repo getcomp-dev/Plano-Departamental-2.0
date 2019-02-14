@@ -262,7 +262,7 @@ export default {
       },
 
       download: function(filename) {
-          bddumpService.download(filename).then((response)=> {
+          bddumpService.downloadFile(filename).then((response)=> {
               if(response.success == true){
                   this.$notify({
                       group:'general',
