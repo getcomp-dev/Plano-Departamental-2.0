@@ -8,6 +8,7 @@
                     <option value = "2">Segundo</option>
                     <option value = "3">Ambos</option>
                 </b-form-select>
+                <!--<button type="button" class="btn btn-success col-sm-1" v-on:click="xlsx">Relatório</button>-->
                 <template v-if="isAdd">
                     <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="addTurma" style=""> Confirmar </button>
                     <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="margin-left: 10px;">Cancelar </button>
@@ -160,6 +161,7 @@
     import turmaService from '../../common/services/turma'
     import pedidoService from '../../common/services/pedido'
     import turmadata from './TurmaRow.vue'
+    import XLSX from 'xlsx'
 
     const emptyTurma = {
         id:undefined,
@@ -207,6 +209,10 @@
         },
 
         methods: {
+            xlsx: function () {
+              var cursos = this.$store.state.curso.Cursos
+
+            },
 
             adjustTurno1: function() {
                 if(this.turmaForm.Horario1== 1 || this.turmaForm.Horario1== 2 || this.turmaForm.Horario1== 7 || this.turmaForm.Horario1== 8 || this.turmaForm.Horario1== 13 || this.turmaForm.Horario1== 14 || this.turmaForm.Horario1== 19 || this.turmaForm.Horario1== 20 || this.turmaForm.Horario1== 25 || this.turmaForm.Horario1== 26 || this.turmaForm.Horario1== 3 || this.turmaForm.Horario1== 4 || this.turmaForm.Horario1== 9 || this.turmaForm.Horario1== 10 || this.turmaForm.Horario1== 15 || this.turmaForm.Horario1== 16 || this.turmaForm.Horario1== 21 || this.turmaForm.Horario1== 22 || this.turmaForm.Horario1== 27 || this.turmaForm.Horario1== 28){

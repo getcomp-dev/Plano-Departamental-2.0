@@ -21,6 +21,7 @@ import DashboardCargaProfessores from './components/Dashboard/CargaProfessores'
 import DashboardHorariosResumo from './components/Dashboard/HorariosResumo'
 import DashboardLaboratoriosAlocacao from './components/Dashboard/LaboratoriosAlocacao'
 import DashboardCargaPos from './components/Dashboard/CargaPos'
+import DashboardSalas from './components/Dashboard/Salas'
 
 
 import {USER_LOGGED_OUT} from './vuex/mutation-types'
@@ -61,7 +62,8 @@ const routes = [
       {path: 'cargaProfessores', name: 'cargaProfessores', component: DashboardCargaProfessores},
       {path: 'horariosResumo', name: 'horariosResumo', component: DashboardHorariosResumo},
       {path: 'laboratoriosAlocacao', name: 'laboratoriosAlocacao', component: DashboardLaboratoriosAlocacao},
-      {path: 'cargaPos', name: 'cargaPos', component: DashboardCargaPos}
+      {path: 'cargaPos', name: 'cargaPos', component: DashboardCargaPos},
+      {path: 'salas', name: 'salas', component: DashboardSalas}
     ]
   },
   {

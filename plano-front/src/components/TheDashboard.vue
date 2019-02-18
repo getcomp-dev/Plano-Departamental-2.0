@@ -137,11 +137,10 @@
               <li class="nav-item">
                 <router-link :to="{ name: 'disciplinas' }" class="nav-link"><i class="fas fa-table"></i>Disciplina</router-link>
               </li>
-              <!--
                <li class="nav-item">
-                 <router-link :to="{ name: 'prototipo' }" class="nav-link"><i class="fas fa-clipboard"></i>Protótipo</router-link>
+                 <router-link :to="{ name: 'salas' }" class="nav-link"><i class="fas fa-clipboard"></i>Salas</router-link>
                </li>
-              -->
+
             </ul>
           </div>
         </nav>

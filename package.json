@@ -1,11 +1,11 @@
 {
   "dependencies": {
-    "exceljs": "^1.7.0",
     "html2canvas": "^1.0.0-alpha.12",
     "jspdf": "^1.4.1",
     "mysql": "^2.16.0",
     "mysqldump": "^2.2.1",
     "pdfmake": "^0.1.50",
-    "vuex-persistedstate": "^2.5.4"
+    "vuex-persistedstate": "^2.5.4",
+    "xlsx": "^0.14.1"
   }
 }

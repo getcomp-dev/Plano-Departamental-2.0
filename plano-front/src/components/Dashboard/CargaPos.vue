@@ -70,9 +70,11 @@
                     </tr>
                 </template>
                 <template v-if="CargasPos.length>0">
-                    <tr v-for="carga in CargasPos">
+                    <template v-for="docente in Docentes">
+                    <tr v-for="carga in CargasPos" v-if="(carga.Docente === docente.id)">
                         <cargadata v-bind:carga="carga"></cargadata>
                     </tr>
+                    </template>
                 </template>
                 </tbody>
             </table>
@@ -182,7 +184,7 @@
 
         computed: {
             Docentes () {
-                return _.orderBy(this.$store.state.docente.Docentes,'nome')
+                return _.orderBy(this.$store.state.docente.Docentes,'apelido')
             },
 
             Deletar () {
