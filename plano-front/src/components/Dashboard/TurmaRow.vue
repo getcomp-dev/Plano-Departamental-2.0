@@ -6,10 +6,10 @@
             <input type="text" style="width: 16px;" id="periodo" v-model="turma.periodo" v-on:blur="editTurma(turma)">
             <input type="checkbox" name="ativa" value="true" v-on:click="checkDelete(turma)" v-model="ativo" style="width:16px;height: 16px;padding:0;">
         </td>
-        <td style="width: 40px;">
+        <td style="width: 54px;">
             <template v-for="disciplina in Disciplinas">
                 <template v-if="disciplina.id===turma.Disciplina">
-                    <p :key="disciplina.id" style="width:40px">{{disciplina.codigo}}</p>
+                    <p :key="disciplina.id" style="width:56px">{{disciplina.codigo}}</p>
                 </template>
             </template>
         </td>
@@ -87,11 +87,11 @@
         </td>
         <td style="width:28px"><p style="width: 28px">{{totalPedidos()}}</p></td>
         <template v-for="curso in Cursos">
-            <td style="width: 42px">
+            <td style="width: 32px">
                 <template v-for="pedido in Pedidos" v-if="pedido.Curso===curso.id">
-                    <input type="text" v-model="pedido.vagasPeriodizadas" style="width: 42px"
+                    <input type="text" v-model="pedido.vagasPeriodizadas" style="width: 32px"
                            v-on:change="editPedido(pedido)">
-                    <input type="text" v-model="pedido.vagasNaoPeriodizadas" style="width: 42px"
+                    <input type="text" v-model="pedido.vagasNaoPeriodizadas" style="width: 32px"
                            v-on:change="editPedido(pedido)">
                 </template>
             </td>
@@ -184,6 +184,7 @@
                     }
                 })
             }
+
         },
         computed: {
             Cursos () {
@@ -234,4 +235,5 @@
         width:auto;
         text-align: center;
     }
+
 </style>

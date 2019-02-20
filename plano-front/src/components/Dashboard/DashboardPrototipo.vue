@@ -42,7 +42,7 @@
             <thead class="thead-light">
             <tr>
                 <th scope="col" style="width:16px">S.</th>
-                <th scope="col" style="width:40px;">Cod</th>
+                <th scope="col" style="width:56px;">Cod</th>
                 <th scope="col" style="width:120px;">Disciplina</th>
                 <th scope="col" style="width:20px;">C.</th>
                 <th scope="col" style="width:36px;">Turma</th>
@@ -52,7 +52,7 @@
                 <th scope="col" style="width:60px;">Sala</th>
                 <th scope="col" style="width:28px;">Total</th>
                 <template v-for="curso in Cursos">
-                    <th :key="curso.id" :id="'curso'+curso.id" style="width: 42px" v-on:mouseover="">{{curso.codigo}}</th>
+                    <th :key="curso.id" :id="'curso'+curso.id" v-bind:class="{'cursoGrande':big(curso.codigo)}" style="width: 32px" v-on:mouseover="">{{curso.codigo}}</th>
                     <b-popover :target="'curso'+curso.id" :placement="bottom" triggers="hover focus">
                         <div v-if="curso.semestreInicial==1 || curso.semestreInicial==3">1º - {{curso.alunosEntrada}}</div>
                         <div v-if="curso.semestreInicial==2 || curso.semestreInicial==3">2º - {{curso.alunosEntrada}}</div>
@@ -362,6 +362,14 @@
                 this.error = undefined
             },
 
+
+            big(nome){
+                if(nome.length > 4)
+                    return true
+                else
+                    return false
+            },
+
             toggleAdd() {
                 this.cleanTurma()
                 this.isAdd = !this.isAdd;
@@ -484,6 +492,11 @@
         max-width: 90vw;
         overflow: hidden;
     }
+
+    .cursoGrande {
+        font-size: 7px !important;
+    }
+
     table {
         table-layout: fixed;
         overflow: auto;
