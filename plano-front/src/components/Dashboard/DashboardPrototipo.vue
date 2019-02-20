@@ -42,7 +42,7 @@
             <thead class="thead-light">
             <tr>
                 <th scope="col" style="width:16px">S.</th>
-                <th scope="col" style="width:56px;">Cod</th>
+                <th scope="col" style="width:64px;">Cod</th>
                 <th scope="col" style="width:120px;">Disciplina</th>
                 <th scope="col" style="width:20px;">C.</th>
                 <th scope="col" style="width:36px;">Turma</th>
@@ -466,7 +466,7 @@
     }
 
     .redes {
-        background-color: #0f0da7 !important;
+        background-color: #ffb800 !important;
     }
 
     .teoria {

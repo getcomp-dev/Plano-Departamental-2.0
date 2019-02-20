@@ -199,7 +199,7 @@
 
         computed: {
             Disciplinas () {
-                return this.$store.state.disciplina.Disciplinas
+                return _.orderBy(this.$store.state.disciplina.Disciplinas, 'codigo')
             },
 
             Perfis () {

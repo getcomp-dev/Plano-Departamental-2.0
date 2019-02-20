@@ -6,10 +6,10 @@
             <input type="text" style="width: 16px;" id="periodo" v-model="turma.periodo" v-on:blur="editTurma(turma)">
             <input type="checkbox" name="ativa" value="true" v-on:click="checkDelete(turma)" v-model="ativo" style="width:16px;height: 16px;padding:0;">
         </td>
-        <td style="width: 54px;">
+        <td style="width: 64px;">
             <template v-for="disciplina in Disciplinas">
                 <template v-if="disciplina.id===turma.Disciplina">
-                    <p :key="disciplina.id" style="width:56px">{{disciplina.codigo}}</p>
+                    <p :key="disciplina.id" style="width:64px">{{disciplina.codigo}}</p>
                 </template>
             </template>
         </td>
