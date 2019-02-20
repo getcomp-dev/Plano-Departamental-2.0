@@ -194,7 +194,7 @@
                     pdfMake.vfs = pdfFonts.pdfMake.vfs;
                 }
                 var tables = []
-                var professores = _.orderBy(this.$store.state.docente.Docentes, 'nome')
+                var professores = _.orderBy(this.$store.state.docente.Docentes, 'apelido')
                 var turmasProf
                 var posProf
                 var vazio = 0
@@ -390,7 +390,7 @@
                 return this.$store.state.horario.Horarios
             },
             Professores () {
-                return _.orderBy(this.$store.state.docente.Docentes, 'nome')
+                return _.orderBy(this.$store.state.docente.Docentes, 'apelido')
             }
         }
     }

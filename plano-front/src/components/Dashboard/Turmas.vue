@@ -1,6 +1,6 @@
 <template>
   <div class="DashboardTurmas row" v-if="Admin">
-    <div class="col">
+    <div class="col-9">
       <div
               class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Lista Turmas</h1>
@@ -8,10 +8,9 @@
       <table class="table table-hover table-sm">
         <thead class="thead-light">
         <tr>
-          <th scope="col">Período</th>
-          <th scope="col">Turma</th>
-          <th scope="col">Turno 1</th>
-          <th scope="col">Turno 2</th>
+          <th scope="col">S.</th>
+          <th scope="col">T.</th>
+          <th scope="col">Turno</th>
           <th scope="col">Disciplina</th>
           <th scope="col">Docente 1</th>
           <th scope="col">Docente 2</th>
@@ -29,28 +28,30 @@
             <td>{{turma.periodo}}</td>
             <td>{{turma.letra}}</td>
             <td>{{turma.turno1}}</td>
-            <td>{{turma.turno2}}</td>
             <template v-for="disciplina in Disciplinas">
               <td v-if="disciplina.id===turma.Disciplina" :key="disciplina.id">{{disciplina.nome}}</td>
             </template>
             <template v-for="docente in Docentes">
-              <td v-if="docente.id===turma.Docente1" :key="docente.id">{{docente.nome}}</td>
+              <td v-if="docente.id===turma.Docente1" :key="docente.id">{{docente.apelido}}</td>
             </template>
-            <template v-for="docente in Docentes">
-              <td v-if="docente.id===turma.Docente2" :key="docente.id">{{docente.nome}}</td>
+            <template v-if="turma.Docente2 !== null">
+              <td v-for="docente in Docentes" v-if="docente.id===turma.Docente2" :key="docente.id">{{docente.apelido}}</td>
             </template>
+            <td v-else></td>
             <template v-for="horario in Horarios">
               <td v-if="horario.id===turma.Horario1" :key="horario.id">{{horario.horario}}</td>
             </template>
-            <template v-for="horario in Horarios">
-              <td v-if="horario.id===turma.Horario2" :key="horario.id">{{horario.horario}}</td>
+            <template v-if="turma.Horario2 !== null">
+              <td v-for="horario in Horarios" v-if="horario.id===turma.Horario2" :key="horario.id">{{horario.horario}}</td>
             </template>
+            <td v-else></td>
             <template v-for="sala in Salas">
               <td v-if="sala.id===turma.Sala1" :key="sala.id">{{sala.nome}}</td>
             </template>
-            <template v-for="sala in Salas">
-              <td v-if="sala.id===turma.Sala2" :key="sala.id">{{sala.nome}}</td>
+            <template v-if="turma.Sala2 !== null">
+              <td  v-for="sala in Salas" v-if="sala.id===turma.Sala2" :key="sala.id">{{sala.nome}}</td>
             </template>
+            <td v-else></td>
 
           </tr>
           </template>
@@ -78,20 +79,47 @@
       </b-alert>
       <form>
         <div class="form-group row">
-          <label for="periodo" class="col-sm-2 col-form-label">Período</label>
-          <div class="col-sm-10">
+          <label for="periodo" class="col-sm-4 col-form-label">Período</label>
+          <div class="col-sm-8">
             <input type="text" class="form-control" id="periodo" v-model="turmaForm.periodo">
           </div>
         </div>
         <div class="form-group row">
-          <label for="letra" class="col-sm-2 col-form-label">Turma</label>
-          <div class="col-sm-10">
+          <label for="letra" class="col-sm-4 col-form-label">Turma</label>
+          <div class="col-sm-8">
             <input type="text" class="form-control" id="letra" v-model="turmaForm.letra">
           </div>
         </div>
         <div class="form-group row">
-          <label for="turno1" class="col-sm-2 col-form-label">Turno 1</label>
-          <div class="col-sm-10">
+          <label for="disciplina" class="col-sm-4 col-form-label">Disciplina</label>
+          <div class="col-sm-8">
+            <select type="text" class="form-control" id="disciplina" v-model="turmaForm.Disciplina">
+              <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
+              <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">{{disciplina.nome}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+        <label for="docente1" class="col-sm-4 col-form-label">Docente 1</label>
+        <div class="col-sm-8">
+          <select type="text" class="form-control" id="docente1" v-model="turmaForm.Docente1">
+            <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
+            <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.apelido}}</option>
+          </select>
+        </div>
+        </div>
+        <div class="form-group row">
+        <label for="docente2" class="col-sm-4 col-form-label">Docente 2</label>
+        <div class="col-sm-8">
+          <select type="text" class="form-control" id="docente2" v-model="turmaForm.Docente2">
+            <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
+            <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.apelido}}</option>
+          </select>
+        </div>
+      </div>
+        <div class="form-group row">
+          <label for="turno1" class="col-sm-4 col-form-label">Turno</label>
+          <div class="col-sm-8">
             <div id="turno1">
               <input type="radio" name="turno1" value="Diurno" v-model="turmaForm.turno1"> Diurno<br/>
               <input type="radio" name="turno1" value="Integral" v-model="turmaForm.turno1"> Integral<br/>
@@ -100,45 +128,8 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="turno2" class="col-sm-2 col-form-label">Turno 2</label>
-          <div class="col-sm-10">
-            <div id="turno2">
-              <input type="radio" name="turno2" value="Diurno" v-model="turmaForm.turno2"> Diurno<br/>
-              <input type="radio" name="turno2" value="Integral" v-model="turmaForm.turno2"> Integral<br/>
-              <input type="radio" name="turno2" value="Noturno" v-model="turmaForm.turno2"> Noturno<br/>
-            </div>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="disciplina" class="col-sm-2 col-form-label">Disciplina</label>
-          <div class="col-sm-10">
-            <select type="text" class="form-control" id="disciplina" v-model="turmaForm.Disciplina">
-              <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
-              <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">{{disciplina.nome}}</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group row">
-        <label for="docente1" class="col-sm-2 col-form-label">Docente 1</label>
-        <div class="col-sm-10">
-          <select type="text" class="form-control" id="docente1" v-model="turmaForm.Docente1">
-            <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
-            <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.nome}}</option>
-          </select>
-        </div>
-        </div>
-        <div class="form-group row">
-        <label for="docente2" class="col-sm-2 col-form-label">Docente 2</label>
-        <div class="col-sm-10">
-          <select type="text" class="form-control" id="docente2" v-model="turmaForm.Docente2">
-            <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
-            <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.nome}}</option>
-          </select>
-        </div>
-      </div>
-        <div class="form-group row">
-          <label for="horario1" class="col-sm-2 col-form-label">Horário 1</label>
-          <div class="col-sm-10">
+          <label for="horario1" class="col-sm-4 col-form-label">Horário 1</label>
+          <div class="col-sm-8">
             <select type="text" class="form-control" id="horario1" v-model="turmaForm.Horario1">
               <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
               <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
@@ -146,8 +137,8 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="horario2" class="col-sm-2 col-form-label">Horário 2</label>
-          <div class="col-sm-10">
+          <label for="horario2" class="col-sm-4 col-form-label">Horário 2</label>
+          <div class="col-sm-8">
             <select type="text" class="form-control" id="horario2" v-model="turmaForm.Horario2">
               <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
               <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
@@ -155,8 +146,8 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="sala1" class="col-sm-2 col-form-label">Sala 1</label>
-          <div class="col-sm-10">
+          <label for="sala1" class="col-sm-4 col-form-label">Sala 1</label>
+          <div class="col-sm-8">
             <select type="text" class="form-control" id="sala1" v-model="turmaForm.Sala1">
               <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
               <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
@@ -164,8 +155,8 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="sala2" class="col-sm-2 col-form-label">Sala 2</label>
-          <div class="col-sm-10">
+          <label for="sala2" class="col-sm-4 col-form-label">Sala 2</label>
+          <div class="col-sm-8">
             <select type="text" class="form-control" id="sala2" v-model="turmaForm.Sala2">
               <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
               <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
@@ -234,6 +225,13 @@
 
         methods: {
             addTurma() {
+                var turmasLivres = _.orderBy(_.orderBy(_.filter(this.$store.state.turma.Turmas, function(t) { return t.Disciplina === null}), 'letra'), 'Disciplina')
+                console.log(turmasLivres)
+                this.turmaForm.id = turmasLivres[0].id
+                console.log(this.turmaForm)
+                this.editTurma(this.turmaForm)
+                this.cleanTurma()
+                /*
                 turmaService.create(this.turmaForm).then((response) => {
                     for (var i = 0; i< this.$store.state.curso.Cursos.length; i++){
                         var pedido = _.clone(emptyPedido)
@@ -256,7 +254,7 @@
                     if (error.response.data.fullMessage) {
                         this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
                     }
-                })
+                })*/
             },
 
             inPerfil: function (perfil, turmas, disciplinas) {
@@ -285,6 +283,43 @@
             },
 
             deleteTurma() {
+                turma.periodo = null
+                turma.letra = null
+                turma.turno1 = null
+                turma.turno2 = null
+                turma.Disciplina = null
+                turma.Docente1 = null
+                turma.Docente2 = null
+                turma.Horario1 = null
+                turma.Horario2 = null
+                turma.Sala1 = null
+                turma.Sala2 = null
+                console.log(turma)
+
+                this.editTurma(turma)
+
+                var t = turma.id
+                var pedidos = _.filter(this.$store.state.pedido.Pedidos, function(p) { return p.Turma==t })
+                for (var i = 0; i < pedidos.length; i++){
+                    if(!(pedidos[i].vagasPeriodizadas === 0 && pedidos[i].vagasNaoPeriodizadas === 0)) {
+                        pedidos[i].vagasPeriodizadas = 0
+                        pedidos[i].vagasNaoPeriodizadas = 0
+                        pedidoService.update(pedidos[i].Curso, pedidos[i].Turma, pedidos[i]).then((response) => {
+                            this.$notify({
+                                group: 'general',
+                                title: `Sucesso!`,
+                                text: `O pedido foi atualizado!`,
+                                type: 'success'
+                            })
+                        }).catch(error => {
+                            this.error = '<b>Erro ao atualizar Pedido</b>'
+                            if (error.response.data.fullMessage) {
+                                this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
+                            }
+                        })
+                    }
+                }
+                /*
                 turmaService.delete(this.turmaForm.id, this.turmaForm).then((response) => {
                     this.cleanTurma()
                     this.$notify({
@@ -296,7 +331,7 @@
                 }).
                 catch(() => {
                     this.error = '<b>Erro ao excluir Turma</b>'
-                })
+                })*/
             },
 
             cleanTurma() {
@@ -319,7 +354,7 @@
 
         computed: {
             Turmas () {
-                return _.orderBy(_.orderBy(this.$store.state.turma.Turmas, 'letra'), 'Disciplina')
+                return _.orderBy(_.orderBy(_.filter(this.$store.state.turma.Turmas, function(t) { return t.Disciplina !== null}), 'letra'), 'Disciplina')
             },
 
             Disciplinas () {

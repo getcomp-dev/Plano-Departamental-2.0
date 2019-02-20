@@ -4,7 +4,7 @@ import pedidoService from '../../common/services/pedido'
 import { PEDIDO_FETCHED, SOCKET_PEDIDO_CREATED, SOCKET_PEDIDO_DELETED, SOCKET_PEDIDO_UPDATED } from '../mutation-types'
 
 const state = {
-    Pedidos: []
+    Pedidos: [],
 }
 
 const mutations = {
@@ -24,7 +24,8 @@ const mutations = {
     [SOCKET_PEDIDO_DELETED] (state, data) {
         let index = _.findIndex(state.Pedidos, pedido => (pedido.Curso === data[0].Pedido.Curso & pedido.Turma === data[0].Pedido.Turma));
         state.Pedidos.splice(index, 1)
-    }
+    },
+
 }
 
 const actions = {
