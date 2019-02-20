@@ -35,7 +35,7 @@ module.exports = function (sequelize, DataTypes) {
     Disciplina.hasMany(models.Turma, {
       foreignKey: {
         name: 'Disciplina',
-        allowNull: false
+        allowNull: true
       },
       onDelete: 'RESTRICT'
     })
@@ -43,7 +43,7 @@ module.exports = function (sequelize, DataTypes) {
     Disciplina.hasMany(models.TurmaExterna, {
         foreignKey: {
             name: 'Disciplina',
-            allowNull: false
+            allowNull: true
         },
         onDelete: 'RESTRICT'
     })

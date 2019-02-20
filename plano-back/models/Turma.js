@@ -4,11 +4,11 @@ module.exports = function (sequelize, DataTypes) {
   const Turma = sequelize.define('Turma', {
     periodo: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: true
     },
     letra: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: true
     },
     turno1: {
       type: DataTypes.STRING,
@@ -26,7 +26,9 @@ module.exports = function (sequelize, DataTypes) {
   Turma.associate = function (models) {
     Turma.belongsToMany(models.Curso, {
       through: models.Vaga,
-      foreignKey: 'Turma',
+      foreignKey: {
+        name:'Turma',
+        allowNull:true},
       onDelete: 'RESTRICT'
     })
 
@@ -34,7 +36,7 @@ module.exports = function (sequelize, DataTypes) {
       through: models.Pedido,
       foreignKey: {
         name:'Turma',
-        allowNull:false
+        allowNull:true
       },
       onDelete:'CASCADE'
     })

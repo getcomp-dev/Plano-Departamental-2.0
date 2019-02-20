@@ -283,20 +283,20 @@
             },
 
             deleteTurma() {
-                turma.periodo = null
-                turma.letra = null
-                turma.turno1 = null
-                turma.turno2 = null
-                turma.Disciplina = null
-                turma.Docente1 = null
-                turma.Docente2 = null
-                turma.Horario1 = null
-                turma.Horario2 = null
-                turma.Sala1 = null
-                turma.Sala2 = null
-                console.log(turma)
+                this.turmaForm.periodo = null
+                this.turmaForm.letra = null
+                this.turmaForm.turno1 = null
+                this.turmaForm.turno2 = null
+                this.turmaForm.Disciplina = null
+                this.turmaForm.Docente1 = null
+                this.turmaForm.Docente2 = null
+                this.turmaForm.Horario1 = null
+                this.turmaForm.Horario2 = null
+                this.turmaForm.Sala1 = null
+                this.turmaForm.Sala2 = null
+                console.log(this.turmaForm)
 
-                this.editTurma(turma)
+                editTurma()
 
                 var t = turma.id
                 var pedidos = _.filter(this.$store.state.pedido.Pedidos, function(p) { return p.Turma==t })
