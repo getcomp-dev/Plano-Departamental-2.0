@@ -141,7 +141,9 @@
                 catch(error => {
                     this.error = '<b>Erro ao criar Disciplina</b>'
                     if (error.response.data.fullMessage) {
-                        this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
+                        for (var e = 0; e < error.response.data.errors.length; e++){
+                            this.error += '<br/>' + error.response.data.errors[e].field + ' não pode ser vazio'
+                        }
                     }
                 })
             },

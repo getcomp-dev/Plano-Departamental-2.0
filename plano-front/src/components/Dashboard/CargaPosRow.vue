@@ -26,6 +26,7 @@
 </template>
 <script>
     import cargaPosService from '../../common/services/cargaPos'
+    import _ from 'lodash'
 
     export default {
         name:'CargaPosRow',

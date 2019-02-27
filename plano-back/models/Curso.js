@@ -45,11 +45,8 @@ module.exports = function (sequelize, DataTypes) {
   })
 
     Curso.hook('beforeCreate', (curso, options) => {
-        curso.nome = curso.nome.toLowerCase();
-        curso.nome = curso.nome.charAt(0).toUpperCase() + curso.nome.slice(1);
-        curso.nome = curso.nome.replace(/\s./g, function(txt){
-          return txt.toUpperCase();
-        })
+        curso.nome = curso.nome.toUpperCase();
+        curso.codigo = curso.codigo.toUpperCase();
     });
 
   Curso.associate = function (models) {

@@ -5,7 +5,10 @@
     "mysql": "^2.16.0",
     "mysqldump": "^2.2.1",
     "pdfmake": "^0.1.50",
+    "promise-worker": "^2.0.0",
     "vuex-persistedstate": "^2.5.4",
+    "webpack-loader": "^0.0.1",
+    "worker-loader": "^2.0.0",
     "xlsx": "^0.14.1"
   }
 }

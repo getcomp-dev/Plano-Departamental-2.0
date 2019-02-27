@@ -1,35 +1,37 @@
 <template>
     <div class="DashboardPrototipo" style="height: calc(100vh - 48px)" v-if="Admin">
         <div class="d-flex center-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" style="overflow: auto; width: 100%">
-            <h1 class="h2">Plano</h1>
-            <div class="col-sm-8"></div>
-                <b-form-select v-model="periodos" style="width: 200px;">
-                    <option value = "1">Visualizar 1º Semestre</option>
-                    <option value = "2">Visualizar 2º Semestre</option>
-                    <option value = "3">Visualizar Ambos</option>
-                </b-form-select>
+            <h1 class="h2 col-6">Plano</h1>
+            <div class="col-6">
+
                 <!--<button type="button" class="btn btn-success col-sm-1" v-on:click="xlsx">Relatório</button>-->
                 <template v-if="isAdd">
-                    <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="addTurma" style=""> Confirmar </button>
-                    <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="margin-left: 10px;">Cancelar </button>
+                    <button type="button" class="btn btn-success" v-on:click.prevent="toggleAdd" style="margin-left: 10px;float:right;">Cancelar </button>
+                    <button type="button" class="btn btn-success" v-on:click.prevent="addTurma" style="margin-left: 10px;float:right;"> Confirmar </button>
                 </template>
                 <template v-else>
-                    <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="toggleAdd" style="">Adicionar </button>
-                    <button type="button" class="btn btn-success col-sm-1" style="" v-b-modal.modalConfirma>Deletar </button>
+                    <button type="button" class="btn btn-success" style="margin-left: 10px;float:right;" v-b-modal.modalConfirma>Deletar </button>
+                    <button type="button" class="btn btn-success" v-on:click.prevent="toggleAdd" style="margin-left: 10px;float:right;">Adicionar </button>
 
                     <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
                         <p class="my-4">Tem certeza que deseja deletar as turmas selecionadas?</p>
                         <template v-if="Deletar.length > 0">
-                        <template v-for="turma in Deletar">
-                            <template v-for="disciplina in Disciplinas">
-                                <template v-if="disciplina.id===turma.Disciplina">
-                                    <p :key="disciplina.id" style="width:80px">Disciplina:{{disciplina.codigo}}<br>Turma:{{turma.letra}}</p>
+                            <template v-for="turma in Deletar">
+                                <template v-for="disciplina in Disciplinas">
+                                    <template v-if="disciplina.id===turma.Disciplina">
+                                        <p :key="disciplina.id" style="width:80px">Disciplina:{{disciplina.codigo}}<br>Turma:{{turma.letra}}</p>
+                                    </template>
                                 </template>
                             </template>
                         </template>
-                        </template>
                     </b-modal>
                 </template>
+                <b-form-select v-model="periodos" style="width: 200px; float:right">
+                    <option value = "1">Visualizar 1º Semestre</option>
+                    <option value = "2">Visualizar 2º Semestre</option>
+                    <option value = "3">Visualizar Ambos</option>
+                </b-form-select>
+            </div>
         </div>
 
     <div id="loading" v-if="isLoading">
@@ -257,6 +259,7 @@
                 this.turmaForm.id = turmasLivres[0].id
                 console.log(this.turmaForm)
                 this.editTurma(this.turmaForm)
+                this.semestre = this.turmaForm.periodo
                 this.cleanTurma()
                 /*
                 turmaService.create(this.turmaForm).then((response) => {

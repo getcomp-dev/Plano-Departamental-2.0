@@ -23,6 +23,10 @@ module.exports = function (sequelize, DataTypes) {
     timestamps: false
   })
 
+  Turma.hook('beforeCreate', (turma, options) => {
+    turma.letra = turma.letra.toUpperCase();
+  });
+
   Turma.associate = function (models) {
     Turma.belongsToMany(models.Curso, {
       through: models.Vaga,
