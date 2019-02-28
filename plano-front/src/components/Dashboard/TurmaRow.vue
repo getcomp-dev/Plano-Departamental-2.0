@@ -170,6 +170,10 @@
             },
 
             editPedido(pedido) {
+                this.$worker.run((func, c, t, p) => func(c, t, p), [pedidoService.update, pedido.Curso, pedido.Turma, pedido])
+
+                console.log("Pedido Atualizado")
+                /*
                 pedidoService.update(pedido.Curso, pedido.Turma, pedido).then((response) => {
                     this.$notify({
                         group: 'general',
@@ -182,7 +186,7 @@
                     if (error.response.data.fullMessage) {
                         this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
                     }
-                })
+                })*/
             }
 
         },
