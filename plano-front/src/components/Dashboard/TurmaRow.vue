@@ -101,6 +101,7 @@
 <script>
     import turmaService from '../../common/services/turma'
     import pedidoService from '../../common/services/pedido'
+    import Worker from 'worker-loader!./pedido.worker.js'
 
     export default {
         name:'TurmaRow',
@@ -112,7 +113,7 @@
         data () {
             return {
                 ativo: false,
-                valorAtual:undefined
+                valorAtual:undefined,
             }
         },
 
@@ -170,9 +171,11 @@
             },
 
             editPedido(pedido) {
-                this.$worker.run((func, c, t, p) => func(c, t, p), [pedidoService.update, pedido.Curso, pedido.Turma, pedido])
-
-                console.log("Pedido Atualizado")
+               const worker = new Worker()
+               worker.postMessage({
+                   pedido: pedido,
+                   token: this.$store.state.auth.token
+               })
                 /*
                 pedidoService.update(pedido.Curso, pedido.Turma, pedido).then((response) => {
                     this.$notify({
