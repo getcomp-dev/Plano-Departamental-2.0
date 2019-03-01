@@ -172,10 +172,25 @@
 
             editPedido(pedido) {
                const worker = new Worker()
+                var self = this
                worker.postMessage({
                    pedido: pedido,
                    token: this.$store.state.auth.token
                })
+                worker.addEventListener('message', function(e) {
+                    if(e.data.Pedido) {
+                        self.$notify({
+                            group: 'general',
+                            title: `Sucesso!`,
+                            text: `O pedido foi atualizado!`,
+                            type: 'success'
+                        })
+                    }
+                    this.error = '<b>Erro ao atualizar Pedido</b>'
+                    if (e.data.fullMessage) {
+                        this.error += '<br/>' + e.data.fullMessage.replace('\n', '<br/>')
+                    }
+                })
                 /*
                 pedidoService.update(pedido.Curso, pedido.Turma, pedido).then((response) => {
                     this.$notify({

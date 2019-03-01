@@ -11,6 +11,7 @@ onmessage = function (e){
                 Curso: e.data.pedido.Curso,
                 Turma: e.data.pedido.Turma
             }
-        });
+        }).then((response) => {postMessage(response.data)})
     }
 }
+
