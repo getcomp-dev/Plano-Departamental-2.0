@@ -1,17 +1,20 @@
 const axios = require('axios')
-onmessage = function (e){
-    if(e.data){
+onmessage = function (d){
+    var e = JSON.parse(d.data)
+    if(e){
         axios({
             method: 'post',
-            url: 'http://200.131.219.57:3000/api/pedido/' + e.data.pedido.Curso + '&&' + e.data.pedido.Turma,
-            headers: {Authorization: 'Bearer '+ e.data.token},
+            url: 'http://200.131.219.57:3000/api/pedido/' + e.pedido.Curso + '&&' + e.pedido.Turma,
+            headers: {Authorization: 'Bearer '+ e.token},
             data: {
-                vagasPeriodizadas: e.data.pedido.vagasPeriodizadas,
-                vagasNaoPeriodizadas: e.data.pedido.vagasNaoPeriodizadas,
-                Curso: e.data.pedido.Curso,
-                Turma: e.data.pedido.Turma
+                vagasPeriodizadas: e.pedido.vagasPeriodizadas,
+                vagasNaoPeriodizadas: e.pedido.vagasNaoPeriodizadas,
+                Curso: e.pedido.Curso,
+                Turma: e.pedido.Turma
             }
-        }).then((response) => {postMessage(response.data)})
+        }).then((response) => {
+            var m = JSON.stringify(response.data)
+            postMessage(m)})
     }
 }
 

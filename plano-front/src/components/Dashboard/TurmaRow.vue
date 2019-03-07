@@ -173,12 +173,15 @@
             editPedido(pedido) {
                const worker = new Worker()
                 var self = this
-               worker.postMessage({
-                   pedido: pedido,
-                   token: this.$store.state.auth.token
-               })
-                worker.addEventListener('message', function(e) {
-                    if(e.data.Pedido) {
+                var msg = {
+                    pedido: pedido,
+                    token: this.$store.state.auth.token
+                }
+                msg = JSON.stringify(msg)
+               worker.postMessage(msg)
+                worker.addEventListener('message', function(d) {
+                    var e = JSON.parse(d.data)
+                    if(e.Pedido) {
                         self.$notify({
                             group: 'general',
                             title: `Sucesso!`,
@@ -187,8 +190,8 @@
                         })
                     }
                     this.error = '<b>Erro ao atualizar Pedido</b>'
-                    if (e.data.fullMessage) {
-                        this.error += '<br/>' + e.data.fullMessage.replace('\n', '<br/>')
+                    if (e.fullMessage) {
+                        this.error += '<br/>' + e.fullMessage.replace('\n', '<br/>')
                     }
                 })
                 /*
