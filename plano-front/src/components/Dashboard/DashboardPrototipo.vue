@@ -206,16 +206,7 @@
             turmadata
         },
 
-        created () {
-            this.turmaForm = _.clone(emptyTurma)
-            this.$store.commit('updatePedidosCarregados')
-        },
-
         methods: {
-            xlsx: function () {
-              var cursos = this.$store.state.curso.Cursos
-
-            },
 
             adjustTurno1: function() {
                 if(this.turmaForm.Horario1== 1 || this.turmaForm.Horario1== 2 || this.turmaForm.Horario1== 7 || this.turmaForm.Horario1== 8 || this.turmaForm.Horario1== 13 || this.turmaForm.Horario1== 14 || this.turmaForm.Horario1== 19 || this.turmaForm.Horario1== 20 || this.turmaForm.Horario1== 25 || this.turmaForm.Horario1== 26 || this.turmaForm.Horario1== 3 || this.turmaForm.Horario1== 4 || this.turmaForm.Horario1== 9 || this.turmaForm.Horario1== 10 || this.turmaForm.Horario1== 15 || this.turmaForm.Horario1== 16 || this.turmaForm.Horario1== 21 || this.turmaForm.Horario1== 22 || this.turmaForm.Horario1== 27 || this.turmaForm.Horario1== 28){
@@ -321,8 +312,7 @@
 
                 this.editTurma(turma)
 
-                var t = turma.id
-                var pedidos = _.filter(this.$store.state.pedido.Pedidos, function(p) { return p.Turma==t })
+                var pedidos = this.$store.state.pedido.Pedidos[turma.id]
                 for (var i = 0; i < pedidos.length; i++){
                     if(!(pedidos[i].vagasPeriodizadas === 0 && pedidos[i].vagasNaoPeriodizadas === 0)) {
                         pedidos[i].vagasPeriodizadas = 0

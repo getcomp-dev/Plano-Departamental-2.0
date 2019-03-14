@@ -23,7 +23,7 @@ const express = require('express'),
   salaRoute = require('./routes/sala'),
   horarioRoute = require('./routes/horario'),
   vagaRoute = require('./routes/vaga'),
-  bddumpRoute = require('./routes/bddump')
+  bddumpRoute = require('./routes/bddump'),
   cargaPosRoute = require('./routes/cargaPos')
 
 

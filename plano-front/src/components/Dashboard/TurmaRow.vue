@@ -1,5 +1,5 @@
 <template>
-    <div class="turmarow" style="width: 776px;" v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
+    <div class="turmarow" style="width: 100vw;" v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
                  'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
                  'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
         <td style="width: 16px;">
@@ -87,12 +87,9 @@
         </td>
         <td style="width:28px"><p style="width: 28px">{{totalPedidos()}}</p></td>
         <template v-for="curso in Cursos">
-            <td style="width: 32px">
-                <template v-for="pedido in Pedidos" v-if="pedido.Curso===curso.id">
-                    <input type="text" v-model="pedido.vagasPeriodizadas" style="width: 32px"
-                           v-on:change="editPedido(pedido)">
-                    <input type="text" v-model="pedido.vagasNaoPeriodizadas" style="width: 32px"
-                           v-on:change="editPedido(pedido)">
+            <td style="width: 32px;">
+                <template v-for="(pedido, index) in Pedidos" v-if="pedido.Curso===curso.id">
+                    <turmaPedido v-bind:index="index" v-bind:turma="turma"></turmaPedido>
                 </template>
             </td>
         </template>
@@ -101,7 +98,7 @@
 <script>
     import turmaService from '../../common/services/turma'
     import pedidoService from '../../common/services/pedido'
-    import Worker from 'worker-loader!./pedido.worker.js'
+    import turmaPedido from './TurmaPedido.vue'
 
     export default {
         name:'TurmaRow',
@@ -113,16 +110,19 @@
         data () {
             return {
                 ativo: false,
-                valorAtual:undefined,
+                valorAtual:undefined
             }
+        },
+
+        components: {
+            turmaPedido
         },
 
         methods: {
 
             totalPedidos(){
               var t = 0
-              var id = this.turma.id
-              var pedidos = _.filter(this.$store.state.pedido.Pedidos, function(p) { return p.Turma==id })
+              var pedidos = this.$store.state.pedido.Pedidos[this.turma.id]
               for(var p =0; p < pedidos.length; p++){
                       t+=parseInt(pedidos[p].vagasPeriodizadas, 10)
                       t+=parseInt(pedidos[p].vagasNaoPeriodizadas, 10)
@@ -170,46 +170,6 @@
                 console.log(this.$store.state.turma.Deletar)
             },
 
-            editPedido(pedido) {
-               const worker = new Worker()
-                var self = this
-                var msg = {
-                    pedido: pedido,
-                    token: this.$store.state.auth.token
-                }
-                msg = JSON.stringify(msg)
-               worker.postMessage(msg)
-                worker.addEventListener('message', function(d) {
-                    var e = JSON.parse(d.data)
-                    if(e.Pedido) {
-                        self.$notify({
-                            group: 'general',
-                            title: `Sucesso!`,
-                            text: `O pedido foi atualizado!`,
-                            type: 'success'
-                        })
-                    }
-                    this.error = '<b>Erro ao atualizar Pedido</b>'
-                    if (e.fullMessage) {
-                        this.error += '<br/>' + e.fullMessage.replace('\n', '<br/>')
-                    }
-                })
-                /*
-                pedidoService.update(pedido.Curso, pedido.Turma, pedido).then((response) => {
-                    this.$notify({
-                        group: 'general',
-                        title: `Sucesso!`,
-                        text: `O pedido foi atualizado!`,
-                        type: 'success'
-                    })
-                }).catch(error => {
-                    this.error = '<b>Erro ao atualizar Pedido</b>'
-                    if (error.response.data.fullMessage) {
-                        this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
-                    }
-                })*/
-            }
-
         },
         computed: {
             Cursos () {
@@ -237,8 +197,7 @@
             },
 
             Pedidos () {
-                var t = this.turma.id
-                return _.filter(this.$store.state.pedido.Pedidos, function(p) { return p.Turma==t })
+                return this.$store.state.pedido.Pedidos[this.turma.id]
             }
 
 
