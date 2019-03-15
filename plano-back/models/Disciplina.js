@@ -25,7 +25,7 @@ module.exports = function (sequelize, DataTypes) {
 
   Disciplina.hook('beforeCreate', (disciplina, options) => {
       disciplina.nome = disciplina.nome.toUpperCase();
-      disciplina.codigo = disciplina.codigo.toUpperCase;
+      disciplina.codigo = disciplina.codigo.toUpperCase();
   });
 
   Disciplina.associate = function (models) {
