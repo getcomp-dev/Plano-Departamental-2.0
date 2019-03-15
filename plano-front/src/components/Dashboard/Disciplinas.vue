@@ -140,9 +140,13 @@
                 }).
                 catch(error => {
                     this.error = '<b>Erro ao criar Disciplina</b>'
+                    console.log(error.response)
                     if (error.response.data.fullMessage) {
                         for (var e = 0; e < error.response.data.errors.length; e++){
-                            this.error += '<br/>' + error.response.data.errors[e].field + ' não pode ser vazio'
+                            if(error.response.data.errors[e].message.search("null") !== -1)
+                                this.error += '<br/>' + error.response.data.errors[e].field + ' não pode ser vazio'
+                            else if((error.response.data.errors[e].message.search("unique")!==-1) && (error.response.data.errors[e].field.search("codigo")!==-1))
+                                this.error += '<br/>Disciplina já existe'
                         }
                     }
                 })
