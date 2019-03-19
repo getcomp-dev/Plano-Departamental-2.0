@@ -24,7 +24,8 @@ const express = require('express'),
   horarioRoute = require('./routes/horario'),
   vagaRoute = require('./routes/vaga'),
   bddumpRoute = require('./routes/bddump'),
-  cargaPosRoute = require('./routes/cargaPos')
+  cargaPosRoute = require('./routes/cargaPos'),
+  xlsxDownload = require('./routes/xlsx')
 
 
 const app = express()
@@ -68,6 +69,7 @@ app.use('/api/horario', horarioRoute)
 app.use('/api/vaga', vagaRoute)
 app.use('/api/bddump', bddumpRoute)
 app.use('/api/cargaPos', cargaPosRoute)
+app.use('/api/xlsx', xlsxDownload)
 
 app.use(history())
 // Error handlers
