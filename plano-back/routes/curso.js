@@ -64,6 +64,10 @@ router.post('/:id([0-9]+)', function (req, res, next) {
   })
 })
 
+router.post('/toggle', function (req, res, next) {
+  ioBroadcast(SM.TOGGLE_CURSO, {id: req.body.id})
+})
+
 router.delete('/:id([0-9]+)', function (req, res, next) {
   models.Curso.findOne({
     where: {
