@@ -38,6 +38,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: 0,
+    },
+
+    posicao: {
+      type: DataTypes.INTEGER
     }
   }, {
     freezeTableName: true,
