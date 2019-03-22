@@ -6,7 +6,6 @@ import Login from './components/TheLogin'
 
 import Dashboard from './components/TheDashboard'
 import DashboardHome from './components/Dashboard/Home'
-//import DashboardPedidos from './components/Dashboard/Pedidos'
 import DashboardTurmas from './components/Dashboard/Turmas'
 import DashboardTurmasExternas from './components/Dashboard/TurmasExternas'
 import DashboardRelatorios from './components/Dashboard/Relatorios'
@@ -58,7 +57,6 @@ const routes = [
       {path: 'grades', name: 'grades', component: DashboardGrades},
       {path: 'disciplinas', name: 'disciplinas', component: DashboardDisciplinas},
       {path: 'perfis', name: 'perfis', component: DashboardPerfis},
-      //{path: 'prototipo', name: 'prototipo', component: DashboardPrototipo}
       {path: 'cargaProfessores', name: 'cargaProfessores', component: DashboardCargaProfessores},
       {path: 'horariosResumo', name: 'horariosResumo', component: DashboardHorariosResumo},
       {path: 'laboratoriosAlocacao', name: 'laboratoriosAlocacao', component: DashboardLaboratoriosAlocacao},

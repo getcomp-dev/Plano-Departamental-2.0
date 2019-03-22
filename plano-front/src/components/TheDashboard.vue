@@ -195,6 +195,14 @@ export default {
 
     isLoading () {
       return this.$store.state.isLoading
+    },
+
+    Admin () {
+      if(this.$store.state.auth.Usuario.admin===1){
+        return true
+      }else{
+        return false
+      }
     }
 
   },
@@ -208,6 +216,15 @@ export default {
       console.log("ERRORRR")
       console.log(response)
     })
+
+    this.$store.commit('setYear', 2019)
+
+      var cursos = {}
+      for (var c = 0; c < this.$store.state.curso.Cursos.length; c++){
+        cursos[this.$store.state.curso.Cursos[c].id] = true
+      }
+      this.localStorage.cursosAtivos = Object.assign({}, cursos)
+
   },
 
   beforeDestroy () {
@@ -361,16 +378,6 @@ export default {
           this.userModalMode = 0
       }
   },
-
-  computed: {
-    Admin () {
-        if(this.$store.state.auth.Usuario.admin===1){
-            return true
-        }else{
-            return false
-        }
-    }
-  }
 
 }
 </script>

@@ -13,6 +13,7 @@
           <th scope="col">Turno</th>
           <th scope="col">1º Sem.</th>
           <th scope="col">2º Sem.</th>
+          <!--<th scope="col">Visualizar?</th>-->
         </tr>
         </thead>
         <tbody>
@@ -26,6 +27,7 @@
             <td v-else>0</td>
             <td v-if="curso.semestreInicial == 2|| curso.semestreInicial==3">{{curso.alunosEntrada}}</td>
             <td v-else>0</td>
+           <!-- <td><input type="checkbox" v-model="CursosAtivos[curso.id]" v-on:click.prevent="toggleCurso(curso.id)"></td>-->
 
 
           </tr>
@@ -124,7 +126,8 @@ const emptyCurso = {
     codigo:undefined,
     turno:undefined,
     semestreInicial: undefined,
-    alunosEntrada: undefined
+    alunosEntrada: undefined,
+    posicao: undefined
 }
 
 const emptyPedido =  {
@@ -132,6 +135,7 @@ const emptyPedido =  {
     vagasNaoPeriodizadas: 0,
     Curso: undefined,
     Turma: undefined,
+    ultimo: undefined
 }
 
 export default {
@@ -144,8 +148,21 @@ export default {
         }
     },
 
+    created () {
+      console.log(this.localStorage.cursosAtivos)
+        console.log(this.$store.state.curso.Cursos[0])
+        this.ultimo = this.$store.state.curso.Cursos[this.$store.state.curso.Cursos.length -1].id + 1
+
+    },
+
     methods: {
+        toggleCurso(id){
+            this.localStorage.cursosAtivos[id] = !this.localStorage.cursosAtivos[id]
+        },
+
         addCurso() {
+            this.cursoForm.posicao = this.ultimo
+            this.ultimo = this.ultimo + 1
             cursoService.create(this.cursoForm).then((response) => {
               for (var i = 0; i< this.$store.state.turma.Turmas.length; i++){
                 var pedido = _.clone(emptyPedido)
@@ -227,6 +244,10 @@ export default {
             return this.$store.state.curso.Cursos
         },
 
+        CursosAtivos () {
+            return this.localStorage.cursosAtivos
+        },
+
         isEdit () {
             return this.cursoForm.id !== undefined
         },
@@ -238,7 +259,8 @@ export default {
                 return false
             }
         }
-    }
+    },
+
 }
 </script>
 

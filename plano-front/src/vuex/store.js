@@ -30,7 +30,7 @@ import {
 const state = {
   httpRequestCount: 0,
   isLoading: false,
-  year: localStorage.getItem('year') || 2018
+  year: 2019
 }
 
 const mutations = {
@@ -52,10 +52,15 @@ const mutations = {
 
   [COMPONENT_LOADED](state) {
     state.isLoading = false
+  },
+
+  setYear(year) {
+    state.year = year
   }
 }
 
 const actions = {}
+
 
 const getters = {}
 

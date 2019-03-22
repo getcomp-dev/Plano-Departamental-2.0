@@ -86,7 +86,7 @@
             </select>
         </td>
         <td style="width:28px"><p style="width: 28px">{{totalPedidos()}}</p></td>
-        <template v-for="curso in Cursos">
+        <template v-for="curso in Cursos" v-if="CursosAtivos[curso.id]">
             <td style="width: 32px;">
                 <template v-for="(pedido, index) in Pedidos" v-if="pedido.Curso===curso.id">
                     <turmaPedido v-bind:index="index" v-bind:turma="turma"></turmaPedido>
@@ -173,7 +173,11 @@
         },
         computed: {
             Cursos () {
-                return this.$store.state.curso.Cursos
+                return _.orderBy(this.$store.state.curso.Cursos, 'posicao')
+            },
+
+            CursosAtivos () {
+                return this.localStorage.cursosAtivos
             },
 
             Disciplinas () {

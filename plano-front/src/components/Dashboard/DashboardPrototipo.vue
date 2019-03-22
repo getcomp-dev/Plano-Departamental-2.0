@@ -12,6 +12,7 @@
                 <template v-else>
                     <button type="button" class="btn btn-success" style="margin-left: 10px;float:right;" v-b-modal.modalConfirma>Deletar </button>
                     <button type="button" class="btn btn-success" v-on:click.prevent="toggleAdd" style="margin-left: 10px;float:right;">Adicionar </button>
+                    <!--<button type="button" class="btn btn-success" v-on:click.prevent="xlsx" style="margin-left: 10px;float:right;">XLSX </button>-->
 
                     <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
                         <p class="my-4">Tem certeza que deseja deletar as turmas selecionadas?</p>
@@ -39,7 +40,7 @@
         <div class="cube2"></div>
     </div>
 
-    <div style="width: 100%;height: 80vh; overflow-y: scroll; overflow-x: scroll;" v-if="!isLoading">
+    <div style="width: 100%;height: 80vh; overflow-y: scroll; overflow-x: scroll;" v-if="!isLoading" ref = "mainTable">
         <table class="table table-hover table-sm">
             <thead class="thead-light">
             <tr>
@@ -53,8 +54,8 @@
                 <th scope="col" style="width:62px;">Turno</th>
                 <th scope="col" style="width:60px;">Sala</th>
                 <th scope="col" style="width:28px;">Total</th>
-                <template v-for="curso in Cursos">
-                    <th :key="curso.id" :id="'curso'+curso.id" v-bind:class="{'cursoGrande':big(curso.codigo)}" style="width: 32px" v-on:mouseover="">{{curso.codigo}}</th>
+                <template v-for="curso in Cursos" v-if="CursosAtivos[curso.id]">
+                    <th :key="curso.id" :id="'curso'+curso.id" v-bind:class="{'cursoGrande':big(curso.codigo)}" style="width: 32px" v-on:mouseover="" v-on:click="toggleCurso(curso.id)">{{curso.codigo}}</th>
                     <b-popover :target="'curso'+curso.id" :placement="bottom" triggers="hover focus">
                         <div v-if="curso.semestreInicial==1 || curso.semestreInicial==3">1º - {{curso.alunosEntrada}}</div>
                         <div v-if="curso.semestreInicial==2 || curso.semestreInicial==3">2º - {{curso.alunosEntrada}}</div>
@@ -163,7 +164,7 @@
     import turmaService from '../../common/services/turma'
     import pedidoService from '../../common/services/pedido'
     import turmadata from './TurmaRow.vue'
-    import XLSX from 'xlsx'
+    import xlsx from '../../common/services/xlsx'
 
     const emptyTurma = {
         id:undefined,
@@ -207,6 +208,14 @@
         },
 
         methods: {
+            toggleCurso(id){
+                this.$store.commit("toggleCurso", id)
+            },
+
+            xlsx: function () {
+                console.log((this.$refs))
+                xlsx.downloadTable({table:this.$refs.mainTable.innerHTML})
+            },
 
             adjustTurno1: function() {
                 if(this.turmaForm.Horario1== 1 || this.turmaForm.Horario1== 2 || this.turmaForm.Horario1== 7 || this.turmaForm.Horario1== 8 || this.turmaForm.Horario1== 13 || this.turmaForm.Horario1== 14 || this.turmaForm.Horario1== 19 || this.turmaForm.Horario1== 20 || this.turmaForm.Horario1== 25 || this.turmaForm.Horario1== 26 || this.turmaForm.Horario1== 3 || this.turmaForm.Horario1== 4 || this.turmaForm.Horario1== 9 || this.turmaForm.Horario1== 10 || this.turmaForm.Horario1== 15 || this.turmaForm.Horario1== 16 || this.turmaForm.Horario1== 21 || this.turmaForm.Horario1== 22 || this.turmaForm.Horario1== 27 || this.turmaForm.Horario1== 28){
@@ -373,7 +382,11 @@
 
         computed: {
             Cursos () {
-                return this.$store.state.curso.Cursos
+                return _.orderBy(this.$store.state.curso.Cursos, 'posicao')
+            },
+
+            CursosAtivos () {
+                return this.localStorage.cursosAtivos
             },
 
             Disciplinas () {

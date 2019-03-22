@@ -256,7 +256,9 @@
                                     horario2 = this.$store.state.horario.Horarios[m]
                                 }
                             }
-                            if (horario2 === undefined) {
+                            if(horario1===undefined && horario2===undefined){
+                                horarioTotal = ''
+                            }else if (horario2 === undefined) {
                                 var horarioTotal = horario1.horario
                             } else {
                                 var horarioTotal = horario1.horario + '/' + horario2.horario

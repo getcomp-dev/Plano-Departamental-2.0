@@ -25,6 +25,7 @@ export default {
     .catch((error) => Promise.reject(error))
     },
 
+
     delete (cursoId, config = {}) {
         return Vue.axios.delete(`/curso/${cursoId}`, config)
             .then((response) => Promise.resolve(response.data))

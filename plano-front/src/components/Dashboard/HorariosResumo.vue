@@ -4416,11 +4416,17 @@
                 console.log([this.evenCCD, this.evenCCN, this.evenSI, this.evenEC])
                 this.emptyTurmas1()
 
-                //CC Diurno está selecionado
-
+                //CC Diurno
                     grades = _.filter(this.$store.state.grade.Grades, ['Curso', 4])
                     grades = _.orderBy(grades, 'periodoInicio', 'desc')
-                    pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 4])
+                    pedidos = []
+                    for (var t in this.$store.state.pedido.Pedidos){
+                        for (var pedido in this.$store.state.pedido.Pedidos[t]){
+                            if(this.$store.state.pedido.Pedidos[t][pedido].Curso===4){
+                                pedidos.push(this.$store.state.pedido.Pedidos[t][pedido])
+                            }
+                        }
+                    }
                     pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 4])
                     console.log(grades.length)
 
@@ -4468,7 +4474,14 @@
                 //CC Noturno está selecionado
                     grades = _.filter(this.$store.state.grade.Grades, ['Curso', 1])
                     grades = _.orderBy(grades, 'periodoInicio', 'desc')
-                    pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 1])
+                    pedidos = []
+                    for (var t in this.$store.state.pedido.Pedidos){
+                        for (var pedido in this.$store.state.pedido.Pedidos[t]){
+                            if(this.$store.state.pedido.Pedidos[t][pedido].Curso===1){
+                                pedidos.push(this.$store.state.pedido.Pedidos[t][pedido])
+                            }
+                        }
+                    }
                     pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 1])
                     for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
@@ -4514,7 +4527,14 @@
                 //SI está selecionado
                     grades = _.filter(this.$store.state.grade.Grades, ['Curso', 3])
                     grades = _.orderBy(grades, 'periodoInicio', 'desc')
-                    pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 3])
+                    pedidos = []
+                    for (var t in this.$store.state.pedido.Pedidos){
+                        for (var pedido in this.$store.state.pedido.Pedidos[t]){
+                            if(this.$store.state.pedido.Pedidos[t][pedido].Curso===3){
+                                pedidos.push(this.$store.state.pedido.Pedidos[t][pedido])
+                            }
+                        }
+                    }
                     pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 3])
                     for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
@@ -4560,7 +4580,14 @@
                 //Engenharia Computacional está selecionado
                     grades = _.filter(this.$store.state.grade.Grades, ['Curso', 2])
                     grades = _.orderBy(grades, 'periodoInicio', 'desc')
-                    pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 2])
+                    pedidos = []
+                    for (var t in this.$store.state.pedido.Pedidos){
+                        for (var pedido in this.$store.state.pedido.Pedidos[t]){
+                            if(this.$store.state.pedido.Pedidos[t][pedido].Curso===2){
+                                pedidos.push(this.$store.state.pedido.Pedidos[t][pedido])
+                            }
+                        }
+                    }
                     pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 2])
                     for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
@@ -4689,7 +4716,13 @@
 
                 grades = _.filter(this.$store.state.grade.Grades, ['Curso', 4])
                 grades = _.orderBy(grades, 'periodoInicio', 'desc')
-                pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 4])
+                for (var t in this.$store.state.pedido.Pedidos){
+                    for (var pedido in this.$store.state.pedido.Pedidos[t]){
+                        if(this.$store.state.pedido.Pedidos[t][pedido].Curso===4){
+                            pedidos.push(this.$store.state.pedido.Pedidos[t][pedido])
+                        }
+                    }
+                }
                 pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 4])
                 console.log(grades.length)
 
@@ -4737,7 +4770,13 @@
                 //CC Noturno está selecionado
                 grades = _.filter(this.$store.state.grade.Grades, ['Curso', 1])
                 grades = _.orderBy(grades, 'periodoInicio', 'desc')
-                pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 1])
+                for (var t in this.$store.state.pedido.Pedidos){
+                    for (var pedido in this.$store.state.pedido.Pedidos[t]){
+                        if(this.$store.state.pedido.Pedidos[t][pedido].Curso===1){
+                            pedidos.push(this.$store.state.pedido.Pedidos[t][pedido])
+                        }
+                    }
+                }
                 pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 1])
                 for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                     //grade
@@ -4783,7 +4822,13 @@
                 //SI está selecionado
                 grades = _.filter(this.$store.state.grade.Grades, ['Curso', 3])
                 grades = _.orderBy(grades, 'periodoInicio', 'desc')
-                pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 3])
+                for (var t in this.$store.state.pedido.Pedidos){
+                    for (var pedido in this.$store.state.pedido.Pedidos[t]){
+                        if(this.$store.state.pedido.Pedidos[t][pedido].Curso===3){
+                            pedidos.push(this.$store.state.pedido.Pedidos[t][pedido])
+                        }
+                    }
+                }
                 pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 3])
                 for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                     //grade
@@ -4829,7 +4874,13 @@
                 //Engenharia Computacional está selecionado
                 grades = _.filter(this.$store.state.grade.Grades, ['Curso', 2])
                 grades = _.orderBy(grades, 'periodoInicio', 'desc')
-                pedidos = _.filter(this.$store.state.pedido.Pedidos, ['Curso', 2])
+                for (var t in this.$store.state.pedido.Pedidos){
+                    for (var pedido in this.$store.state.pedido.Pedidos[t]){
+                        if(this.$store.state.pedido.Pedidos[t][pedido].Curso===2){
+                            pedidos.push(this.$store.state.pedido.Pedidos[t][pedido])
+                        }
+                    }
+                }
                 pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 2])
                 for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                     //grade

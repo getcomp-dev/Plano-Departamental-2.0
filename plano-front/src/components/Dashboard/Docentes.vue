@@ -70,7 +70,6 @@
             <b-form-checkbox-group stacked v-model="perfisAssociados">
               <b-form-checkbox v-for="perfil in Perfis" :value="perfil.id" v-on:change="managePerfil(perfil.id)">{{perfil.nome}}</b-form-checkbox>
             </b-form-checkbox-group>
-            <p>{{perfisAssociados}}</p>
           </div>
           </template>
         </div>
