@@ -218,13 +218,6 @@ export default {
     })
 
     this.$store.commit('setYear', 2019)
-
-      var cursos = {}
-      for (var c = 0; c < this.$store.state.curso.Cursos.length; c++){
-        cursos[this.$store.state.curso.Cursos[c].id] = true
-      }
-      this.localStorage.cursosAtivos = Object.assign({}, cursos)
-
   },
 
   beforeDestroy () {

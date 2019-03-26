@@ -13,7 +13,7 @@
           <th scope="col">Turno</th>
           <th scope="col">1º Sem.</th>
           <th scope="col">2º Sem.</th>
-          <!--<th scope="col">Visualizar?</th>-->
+          <th scope="col"><input type="checkbox" v-model="selectAll" v-on:click.prevent="toggleAllCursos"></th>
         </tr>
         </thead>
         <tbody>
@@ -27,7 +27,7 @@
             <td v-else>0</td>
             <td v-if="curso.semestreInicial == 2|| curso.semestreInicial==3">{{curso.alunosEntrada}}</td>
             <td v-else>0</td>
-           <!-- <td><input type="checkbox" v-model="CursosAtivos[curso.id]" v-on:click.prevent="toggleCurso(curso.id)"></td>-->
+            <td><input type="checkbox" v-model="CursosAtivos[curso.id]" v-on:click.prevent="toggleCurso(curso.id)"></td>
 
 
           </tr>
@@ -119,6 +119,7 @@
 import _ from 'lodash'
 import cursoService from '../../common/services/curso'
 import pedidoService from '../../common/services/pedido'
+import ls from 'local-storage'
 
 const emptyCurso = {
     id:undefined,
@@ -135,7 +136,8 @@ const emptyPedido =  {
     vagasNaoPeriodizadas: 0,
     Curso: undefined,
     Turma: undefined,
-    ultimo: undefined
+    ultimo: undefined,
+    selectAll: undefined
 }
 
 export default {
@@ -149,15 +151,26 @@ export default {
     },
 
     created () {
-      console.log(this.localStorage.cursosAtivos)
-        console.log(this.$store.state.curso.Cursos[0])
         this.ultimo = this.$store.state.curso.Cursos[this.$store.state.curso.Cursos.length -1].id + 1
-
+        this.selectAll = true
     },
 
     methods: {
         toggleCurso(id){
-            this.localStorage.cursosAtivos[id] = !this.localStorage.cursosAtivos[id]
+           this.$store.dispatch('toggleCurso', id)
+            ls.set('toggle', id)
+        },
+
+        toggleAllCursos(){
+            if(this.selectAll === true) {
+                this.$store.dispatch('toggleAllCursosFalse')
+                this.selectAll = false
+                ls.set('toggle', false)
+            } else {
+                this.$store.dispatch('toggleAllCursosTrue')
+                this.selectAll = true
+                ls.set('toggle', true)
+            }
         },
 
         addCurso() {
@@ -245,7 +258,7 @@ export default {
         },
 
         CursosAtivos () {
-            return this.localStorage.cursosAtivos
+            return this.$store.state.curso.Ativos
         },
 
         isEdit () {

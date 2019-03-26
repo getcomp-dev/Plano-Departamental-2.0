@@ -1,5 +1,5 @@
 <template>
-    <div class="turmarow" style="width: 100vw;" v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
+    <div class="turmarow" style="width: 571px;" v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
                  'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
                  'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
         <td style="width: 16px;">
@@ -177,7 +177,7 @@
             },
 
             CursosAtivos () {
-                return this.localStorage.cursosAtivos
+                return this.$store.state.curso.Ativos
             },
 
             Disciplinas () {

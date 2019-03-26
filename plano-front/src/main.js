@@ -27,11 +27,6 @@ import VueSocketio from 'vue-socket.io'
 
 Vue.use(VueSocketio, socketio('http://200.131.219.57:3000', {autoConnect: false}), store)
 
-import reactiveStorage from "vue-reactive-storage"
-
-Vue.use(reactiveStorage, {
-    "cursosAtivos": {},
-});
 Vue.config.productionTip = false
 
 new Vue({

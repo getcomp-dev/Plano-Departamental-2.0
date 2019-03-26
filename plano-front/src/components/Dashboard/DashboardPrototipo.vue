@@ -40,7 +40,7 @@
         <div class="cube2"></div>
     </div>
 
-    <div style="width: 100%;height: 80vh; overflow-y: scroll; overflow-x: scroll;" v-if="!isLoading" ref = "mainTable">
+    <div style="height: 80vh; overflow-y: scroll; overflow-x: scroll;" v-if="!isLoading" ref = "mainTable">
         <table class="table table-hover table-sm">
             <thead class="thead-light">
             <tr>
@@ -55,7 +55,7 @@
                 <th scope="col" style="width:60px;">Sala</th>
                 <th scope="col" style="width:28px;">Total</th>
                 <template v-for="curso in Cursos" v-if="CursosAtivos[curso.id]">
-                    <th :key="curso.id" :id="'curso'+curso.id" v-bind:class="{'cursoGrande':big(curso.codigo)}" style="width: 32px" v-on:mouseover="" v-on:click="toggleCurso(curso.id)">{{curso.codigo}}</th>
+                    <th :key="curso.id" :id="'curso'+curso.id" v-bind:class="{'cursoGrande':big(curso.codigo)}" style="width: 32px" v-on:mouseover="">{{curso.codigo}}</th>
                     <b-popover :target="'curso'+curso.id" :placement="bottom" triggers="hover focus">
                         <div v-if="curso.semestreInicial==1 || curso.semestreInicial==3">1º - {{curso.alunosEntrada}}</div>
                         <div v-if="curso.semestreInicial==2 || curso.semestreInicial==3">2º - {{curso.alunosEntrada}}</div>
@@ -165,6 +165,7 @@
     import pedidoService from '../../common/services/pedido'
     import turmadata from './TurmaRow.vue'
     import xlsx from '../../common/services/xlsx'
+    import ls from 'local-storage'
 
     const emptyTurma = {
         id:undefined,
@@ -207,11 +208,23 @@
             turmadata
         },
 
-        methods: {
-            toggleCurso(id){
-                this.$store.commit("toggleCurso", id)
-            },
+        mounted: function () {
+            ls.set('toggle', -1)
+            ls.on('toggle', () => {
+                var val =  ls.get('toggle')
+                if(val === true){
+                    this.$store.dispatch('toggleAllCursosTrue')
+                } else if (val === false){
+                    this.$store.dispatch('toggleAllCursosFalse')
+                } else{
+                    this.$store.dispatch('toggleCurso', ls.get('toggle'))
+                    ls.set('toggle', -1)
+                }
 
+            })
+        },
+
+        methods: {
             xlsx: function () {
                 console.log((this.$refs))
                 xlsx.downloadTable({table:this.$refs.mainTable.innerHTML})
@@ -386,7 +399,7 @@
             },
 
             CursosAtivos () {
-                return this.localStorage.cursosAtivos
+                return this.$store.state.curso.Ativos
             },
 
             Disciplinas () {
