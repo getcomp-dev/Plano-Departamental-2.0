@@ -157,8 +157,9 @@ export default {
 
     methods: {
         toggleCurso(id){
+            var state = ls.get(`${id}`)
            this.$store.dispatch('toggleCurso', id)
-            ls.set('toggle', id)
+            ls.set(`${id}`, !state)
         },
 
         toggleAllCursos(){

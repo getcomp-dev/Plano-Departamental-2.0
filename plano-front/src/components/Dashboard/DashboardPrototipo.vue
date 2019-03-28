@@ -214,14 +214,18 @@
                 var val =  ls.get('toggle')
                 if(val === true){
                     this.$store.dispatch('toggleAllCursosTrue')
-                } else if (val === false){
-                    this.$store.dispatch('toggleAllCursosFalse')
                 } else{
-                    this.$store.dispatch('toggleCurso', ls.get('toggle'))
-                    ls.set('toggle', -1)
+                    this.$store.dispatch('toggleAllCursosFalse')
                 }
+                ls.set('toggle', -1)
 
             })
+            for (var c = 0; c < this.$store.state.curso.Cursos.length; c++){
+                let id = this.$store.state.curso.Cursos[c].id
+                ls.on(`${id}`, () => {
+                    this.$store.dispatch('toggleCurso', id)
+                })
+            }
         },
 
         methods: {

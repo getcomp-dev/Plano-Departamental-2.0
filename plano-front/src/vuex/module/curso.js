@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import _ from 'lodash'
 import cursoService from '../../common/services/curso'
+import ls from 'local-storage'
 import { CURSO_FETCHED, SOCKET_CURSO_CREATED, SOCKET_CURSO_DELETED, SOCKET_CURSO_UPDATED, TOGGLE_CURSO_ATIVO, TOGGLE_ALL_CURSO_ATIVO_TRUE, TOGGLE_ALL_CURSO_ATIVO_FALSE } from '../mutation-types'
 
 const state = {
@@ -13,6 +14,7 @@ const mutations = {
         state.Cursos = data.Cursos
         for(var c = 0; c < state.Cursos.length; c++){
             state.Ativos[state.Cursos[c].id] = true
+            ls.set(`${state.Cursos[c].id}`, true)
         }
         state.Ativos = Object.assign({}, state.Ativos)
     },
@@ -30,6 +32,7 @@ const mutations = {
     [SOCKET_CURSO_DELETED] (state, data) {
         let index = _.findIndex(state.Cursos, curso => curso.id === data[0].Curso.id);
         state.Cursos.splice(index, 1)
+        ls.remove(`${data[0].Curso.id}`)
         Vue.set(state.Ativos, data[0].Curso.id, undefined)
     },
 
