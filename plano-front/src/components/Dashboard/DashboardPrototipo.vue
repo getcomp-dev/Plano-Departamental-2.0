@@ -44,7 +44,7 @@
         <table class="table table-hover table-sm">
             <thead class="thead-light">
             <tr>
-                <th scope="col" style="width:16px">S.</th>
+                <th scope="col" style="width:16px !important">S.</th>
                 <th scope="col" style="width:64px;">Cod</th>
                 <th scope="col" style="width:120px;">Disciplina</th>
                 <th scope="col" style="width:20px;">C.</th>
@@ -225,6 +225,14 @@
                 ls.on(`${id}`, () => {
                     this.$store.dispatch('toggleCurso', id)
                 })
+            }
+        },
+
+        beforeDestroy: function () {
+            ls.off('toggle')
+            for (var c = 0; c < this.$store.state.curso.Cursos.length; c++){
+                let id = this.$store.state.curso.Cursos[c].id
+                ls.off(`${id}`)
             }
         },
 
@@ -524,7 +532,6 @@
         table-layout: fixed;
         overflow: auto;
         max-height: 100%;
-        max-width: 100%;
         font-size: 10px;
     }
 
@@ -538,6 +545,7 @@
         top: -1px;
         background: white;
         z-index: 10;
+
     }
         
     /*table.scrolling td:nth-child(-n+10),

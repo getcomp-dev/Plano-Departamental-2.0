@@ -21,6 +21,7 @@ const mutations = {
 
     [SOCKET_CURSO_CREATED] (state, data) {
         state.Cursos.push(data[0].Curso)
+        ls.set(`${data[0].Curso.id}`, true)
         Vue.set(state.Ativos, data[0].Curso.id, true)
     },
 
