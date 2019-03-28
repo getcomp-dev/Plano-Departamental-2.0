@@ -1783,14 +1783,16 @@
                 <div class="form-group row" style="display: block;">
                     <form name="formPeriodo" id="formPeriodo" ref="formPrioso">
                         <div class="grade">
-                            <label for="ano" style="margin-right:10px">Ano:</label>
-                            <b-form-input id="ano" ref="ano" class="periodo" style="margin-right: 10px"></b-form-input>
+                            <b-form-checkbox v-model="selectAll" v-on:change="toggleAll"></b-form-checkbox>
                             <label for="periodo" style="margin-right: 10px">Semestre:</label>
-                            <b-form-input id="periodo" ref="periodo" class="periodo" ></b-form-input>
+                            <b-form-select id="periodo" v-model="periodo" class="periodo" >
+                                <option :value="1">1</option>
+                                <option :value="2">2</option>
+                            </b-form-select>
                             <br/>
                         </div>
                     </form>
-                    <b-form-checkbox-group v-model="cursos" stacked name="cursosCheck" :options="options" style="display: block;">
+                    <b-form-checkbox-group v-model="cursos" stacked name="cursosCheck" :options="options" style="display: block;" v-on:change.capture="defineSelectAll">
                     </b-form-checkbox-group>
                 </div>
                 <div>
@@ -1833,6 +1835,8 @@
                     SI: [[], [], [], [], [], [], [], [], [], []],
                     Eletivas:[]
                 },
+                selectAll:false,
+                periodo: undefined
             }
         },
         /*
@@ -1866,6 +1870,23 @@
         },*/
 
         methods: {
+            defineSelectAll() {
+              if(this.cursos.length === 5){
+                  this.selectAll = true
+              }else{
+                  this.selectAll = false
+              }
+            },
+
+            toggleAll(){
+                console.log(this.cursos)
+              if(this.cursos.length===5){
+                  this.cursos = []
+              }  else {
+                  this.cursos = [1, 2, 3, 4, 5]
+              }
+            },
+
             isEven (number) {
                 if(number%2===0)
                     return 'true'
@@ -1902,12 +1923,12 @@
                 var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades
                 var turmas = this.$store.state.turma.Turmas
                 var turmasExternas = this.$store.state.turmaExterna.Turmas
-                var anoAtual = this.$refs.ano
-                var semestreAtual = this.$refs.periodo
+                var anoAtual = this.$store.state.year
+                var semestreAtual = this.periodo
 
                 console.log(this.$store.state.curso.Cursos)
 
-                if (parseInt(semestreAtual.$el.value, 10)===1){
+                if (parseInt(semestreAtual, 10)===1){
                     if(this.$store.state.curso.Cursos[0].semestreInicial==1){
                         this.evenCCN = "false"
                     }else if (this.$store.state.curso.Cursos[0].semestreInicial==2){
@@ -1988,7 +2009,7 @@
                             fim = 10
                         else
                             if(i==0)
-                                fim = 1 + 2*(parseInt(anoAtual.$el.value, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(semestreAtual.$el.value, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+                                fim = 1 + 2*(parseInt(anoAtual, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(semestreAtual, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                             else
                                 fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                         for (var k = 0; k < disciplinaGrades.length; k++) {
@@ -2042,7 +2063,7 @@
                             fim = 10
                         else
                             if(i==0)
-                                fim = 1 + 2*(parseInt(anoAtual.$el.value, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(semestreAtual.$el.value, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+                                fim = 1 + 2*(parseInt(anoAtual, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(semestreAtual, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                             else
                                 fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                         for (var k = 0; k < disciplinaGrades.length; k++) {
@@ -2096,7 +2117,7 @@
                             fim = 10
                         else
                             if(i==0)
-                                fim = 1 + 2*(parseInt(anoAtual.$el.value, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(semestreAtual.$el.value, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+                                fim = 1 + 2*(parseInt(anoAtual, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(semestreAtual, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                             else
                                 fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                         for (var k = 0; k < disciplinaGrades.length; k++) {
@@ -2150,7 +2171,7 @@
                             fim = 10
                         else
                             if(i==0)
-                                fim = 1 + 2*(parseInt(anoAtual.$el.value, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(semestreAtual.$el.value, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+                                fim = 1 + 2*(parseInt(anoAtual, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(semestreAtual, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                             else
                                 fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                         for (var k = 0; k < disciplinaGrades.length; k++) {
@@ -2315,13 +2336,25 @@
                 }else{
                     return false
                 }
-            }
+            },
 
+            CursosSelecionados () {
+                return this.cursos.length
+            }
         },
 
         watch: {
             Turmas (newTurmas, oldTurmas) {
                 this.updateHorarios()
+            },
+
+            CursosSelecionados: function(){
+                console.log(this.cursos.length)
+                if(this.cursos.length === 5){
+                    this.selectAll = true
+                }else{
+                    this.selectAll = false
+                }
             }
         }
     }
