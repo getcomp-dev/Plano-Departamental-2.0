@@ -1836,7 +1836,7 @@
                     Eletivas:[]
                 },
                 selectAll:false,
-                periodo: undefined
+                periodo: 1
             }
         },
         /*

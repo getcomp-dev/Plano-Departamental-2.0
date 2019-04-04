@@ -44,97 +44,14 @@
         <table class="table table-hover table-sm">
             <thead class="thead-light">
             <tr>
-                <th scope="col" style="width:16px !important">S.</th>
-                <th scope="col" style="width:64px;">Cod</th>
-                <th scope="col" style="width:120px;">Disciplina</th>
-                <th scope="col" style="width:20px;">C.</th>
-                <th scope="col" style="width:36px;">Turma</th>
-                <th scope="col" style="width:65px;">Horário</th>
-                <th scope="col" style="width:100px; ">Docente</th>
-                <th scope="col" style="width:62px;">Turno</th>
-                <th scope="col" style="width:60px;">Sala</th>
-                <th scope="col" style="width:28px;">Total</th>
-                <template v-for="curso in Cursos" v-if="CursosAtivos[curso.id]">
-                    <th :key="curso.id" :id="'curso'+curso.id" v-bind:class="{'cursoGrande':big(curso.codigo)}" style="width: 32px" v-on:mouseover="">{{curso.codigo}}</th>
-                    <b-popover :target="'curso'+curso.id" :placement="bottom" triggers="hover focus">
-                        <div v-if="curso.semestreInicial==1 || curso.semestreInicial==3">1º - {{curso.alunosEntrada}}</div>
-                        <div v-if="curso.semestreInicial==2 || curso.semestreInicial==3">2º - {{curso.alunosEntrada}}</div>
-                    </b-popover>
-                </template>
+                <turmaheader></turmaheader>
             </tr>
             </thead>
             <tbody>
 
             <template v-if="isAdd">
                 <tr>
-                    <td>
-                        <input type="text" style="width: 16px;" id="periodo" v-model="turmaForm.periodo">
-                    </td>
-                    <td>
-                        <template v-for="disciplina in Disciplinas">
-                            <template v-if="disciplina.id===turmaForm.Disciplina">
-                                <p :key="disciplina.id" style="width:40px">{{disciplina.codigo}}</p>
-                            </template>
-                        </template>
-                    </td>
-                    <td>
-                        <select type="text" style="width:120px;" id="disciplina" v-model="turmaForm.Disciplina">
-                            <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
-                            <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">{{disciplina.nome}}</option>
-                        </select>
-                    </td>
-                    <td>
-                        <p style="width:20px; min-width: 20px;">
-                            <template v-for="disciplina in Disciplinas">
-                                <template v-if="disciplina.id===turmaForm.Disciplina">
-                                    {{disciplina.cargaPratica + disciplina.cargaTeorica}}
-                                </template>
-                            </template>
-                        </p>
-                    </td>
-                    <td>
-                        <input type="text" style="width: 36px" id="turma" v-model="turmaForm.letra">
-                    </td>
-                    <td>
-                        <select type="text" style="width: 65px" id="horario1" v-model="turmaForm.Horario1" v-on:change="adjustTurno1">
-                            <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
-                            <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
-                        </select>
-                    <br/>
-                        <select type="text" style="width: 65px" id="horario2" v-model="turmaForm.Horario2" v-on:change="adjustTurno2">
-                            <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
-                            <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
-                        </select>
-                    </td>
-                    <td>
-                            <select type="text" style="width:100px" id="docente1" v-model="turmaForm.Docente1">
-                                <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
-                                <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.apelido}}</option>
-                            </select>
-                    <br/>
-                            <select type="text" style="width:100px;" id="docente2" v-model="turmaForm.Docente2">
-                                <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
-                                <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.apelido}}</option>
-                            </select>
-                    </td>
-                    <td>
-                        <select type="text" style="width: 62px" id="turno1" v-model="turmaForm.turno1">
-                            <option value="Diurno">Diurno</option>
-                            <option value="Noturno">Noturno</option>
-                        </select>
-                    <br/>
-                    </td>
-                    <td>
-                            <select type="text" style="width:60px" id="sala1" v-model="turmaForm.Sala1">
-                                <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
-                                <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
-                            </select>
-                        <br/>
-                            <select type="text" style="width: 60px" id="sala2" v-model="turmaForm.Sala2">
-                                <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
-                                <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
-                            </select>
-                    </td>
+                    <novaturma></novaturma>
                 </tr>
             </template>
             <template v-if="Turmas.length>0">
@@ -142,14 +59,14 @@
                 <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" v-if="turma.periodo==1 && (periodos == 1 || periodos==3)" :key="turma.id"  v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
                  'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
                  'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
-                    <turmadata v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
+                    <turmadata ref="turma" v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
                 </tr>
             </template>
             <template v-for="perfil in Perfis">
                 <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" v-if="turma.periodo==3 && (periodos==2 || periodos==3)" :key="turma.id"  v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
                  'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
                  'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
-                    <turmadata v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
+                    <turmadata ref="turma" v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
                 </tr>
             </template>
             </template>
@@ -164,6 +81,8 @@
     import turmaService from '../../common/services/turma'
     import pedidoService from '../../common/services/pedido'
     import turmadata from './TurmaRow.vue'
+    import turmaheader from './TurmaHeader.vue'
+    import novaturma from './NovaTurma.vue'
     import xlsx from '../../common/services/xlsx'
     import ls from 'local-storage'
 
@@ -205,7 +124,9 @@
         },
 
         components: {
-            turmadata
+            turmadata,
+            turmaheader,
+            novaturma
         },
 
         mounted: function () {
@@ -279,38 +200,7 @@
             },
 
             addTurma() {
-                var turmasLivres = _.orderBy(_.orderBy(_.filter(this.$store.state.turma.Turmas, function(t) { return t.Disciplina === null}), 'letra'), 'Disciplina')
-                console.log(turmasLivres)
-                this.turmaForm.id = turmasLivres[0].id
-                console.log(this.turmaForm)
-                this.editTurma(this.turmaForm)
-                this.semestre = this.turmaForm.periodo
-                this.cleanTurma()
-                /*
-                turmaService.create(this.turmaForm).then((response) => {
-                    this.semestre = response.Turma.periodo
-                    for (var i = 0; i< this.$store.state.curso.Cursos.length; i++){
-                        var pedido = _.clone(emptyPedido)
-                        pedido.Curso = this.$store.state.curso.Cursos[i].id
-                        pedido.Turma = response.Turma.id
-                        pedidoService.create(pedido).then((response) => {
-                            console.log(response.Pedido)
-                        }).catch(error => {console.log("erro ao criar pedido: "+error)})
-                    }
-                    this.cleanTurma()
-                    this.$notify({
-                        group: 'general',
-                        title: `Sucesso!`,
-                        text: `A Turma ${response.Turma.letra} foi criada!`,
-                        type: 'success'
-                    })
-                }).
-                catch(error => {
-                    this.error = '<b>Erro ao criar Turma</b>'
-                    if (error.response.data.fullMessage) {
-                        this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
-                    }
-                })*/
+                this.$emit('addTurma');
             },
 
             editTurma(turma) {
@@ -382,23 +272,7 @@
                 */
             },
 
-           cleanTurma() {
-                this.turmaForm = _.clone(emptyTurma)
-                this.turmaForm.periodo = this.semestre
-                this.turmaForm.letra = "A"
-                this.error = undefined
-            },
-
-
-            big(nome){
-                if(nome.length > 4)
-                    return true
-                else
-                    return false
-            },
-
             toggleAdd() {
-                this.cleanTurma()
                 this.isAdd = !this.isAdd;
             },
 
@@ -529,24 +403,21 @@
     }
 
     table {
-        table-layout: fixed;
-        overflow: auto;
-        max-height: 100%;
         font-size: 10px;
     }
 
-    th {
-        text-align: center;
+    tr thead {
+        display:block;
     }
 
-    thead th {
-        position: sticky;
-        position: -webkit-sticky;
-        top: -1px;
-        background: white;
-        z-index: 10;
-
+    tbody {
+        top: 23px;
+        display:block;
+        overflow:auto;
+        max-height: 100%;
+        width:100%;
     }
+
         
     /*table.scrolling td:nth-child(-n+10),
     table.scrolling th:nth-child(-n+10) {
