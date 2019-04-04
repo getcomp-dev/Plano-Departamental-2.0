@@ -85,6 +85,7 @@
     import novaturma from './NovaTurma.vue'
     import xlsx from '../../common/services/xlsx'
     import ls from 'local-storage'
+    import { EventBus } from '../../event-bus.js'
 
     const emptyTurma = {
         id:undefined,
@@ -200,7 +201,7 @@
             },
 
             addTurma() {
-                this.$emit('addTurma');
+                EventBus.$emit('addTurma');
             },
 
             editTurma(turma) {

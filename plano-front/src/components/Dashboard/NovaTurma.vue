@@ -1,5 +1,5 @@
 <template>
-    <div v-on:addTurma="addTurma">
+    <div>
         <td>
             <input type="text" style="width: 16px;" id="periodo" v-model="turmaForm.periodo">
         </td>
@@ -73,6 +73,8 @@
 <script>
     import _ from 'lodash'
     import turmaService from '../../common/services/turma'
+    import { EventBus } from '../../event-bus.js'
+
     const emptyTurma = {
         id:undefined,
         periodo:undefined,
@@ -100,8 +102,15 @@
         },
 
         mounted () {
+            EventBus.$on('addTurma', () => {
+                this.addTurma()
+            })
             this.turmaForm.periodo = this.semestre
             this.turmaForm.letra = 'A'
+        },
+
+        beforeDestroy () {
+            EventBus.$off('addTurma')
         },
 
         methods: {
