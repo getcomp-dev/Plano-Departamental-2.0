@@ -1344,7 +1344,8 @@
                 <table class="tg">
                     <tr>
                         <th class="tg-0lax">hora</th>
-                        <th class="tg-0lax">Seg</th>EC                      <th class="tg-0lax">Ter</th>
+                        <th class="tg-0lax">Seg</th>
+                        <th class="tg-0lax">Ter</th>
                         <th class="tg-0lax">Qua</th>
                         <th class="tg-0lax">Qui</th>
                         <th class="tg-0lax">Sex</th>
