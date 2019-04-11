@@ -186,7 +186,7 @@ export default {
 
   computed: {
     year () {
-      if(_.isEmpty(this.$store.state.plano.Plano))
+      if(!(_.isEmpty(this.$store.state.plano.Plano)))
         return this.$store.state.plano.Plano[0].ano
       else
         return 2019
