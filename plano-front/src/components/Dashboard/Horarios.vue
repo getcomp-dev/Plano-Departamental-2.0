@@ -851,7 +851,38 @@
                         }
                 }
 
-                this.$store.commit('redefinirAtivas', {Ativas: this.ativos1})
+                this.$store.commit('redefinirAtivas1', {Ativas: this.ativos1})
+
+                for (var i=0;i<10;i++) {
+                    for (var j = 0; j < this.ativos2.CCD[i].length; j++)
+                        for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+                            if (this.ativos2.CCD[i][j].id == this.$store.state.turma.Turmas[k].id) {
+                                this.ativos2.CCD[i].splice(j, 1, this.$store.state.turma.Turmas[k])
+                            }
+                        }
+                    for (var j = 0; j < this.ativos2.CCN[i].length; j++)
+                        for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+                            if (this.ativos2.CCN[i][j].id == this.$store.state.turma.Turmas[k].id) {
+                                this.ativos2.CCN[i].splice(j, 1, this.$store.state.turma.Turmas[k])
+                            }
+                        }
+                    for (var j = 0; j < this.ativos2.EC[i].length; j++)
+                        for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+                            if (this.ativos2.EC[i][j].id == this.$store.state.turma.Turmas[k].id) {
+                                this.ativos2.EC[i].splice(j, 1, this.$store.state.turma.Turmas[k])
+                            }
+                        }
+                    for (var j = 0; j < this.ativos2.SI[i].length; j++)
+                        for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+                            if (this.ativos2.SI[i][j].id == this.$store.state.turma.Turmas[k].id) {
+                                this.ativos2.SI[i].splice(j, 1, this.$store.state.turma.Turmas[k])
+                            }
+                        }
+                }
+
+                this.$store.commit('redefinirAtivas1', {Ativas2: this.ativos2})
+
+
             }
 
         },
