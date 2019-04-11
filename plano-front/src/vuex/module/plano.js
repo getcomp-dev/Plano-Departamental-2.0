@@ -3,7 +3,7 @@ import planoService from '../../common/services/plano'
 import { PLANO_FETCHED, SOCKET_PLANO_UPDATED } from '../mutation-types'
 
 const state = {
-    Plano: undefined
+    Plano: {}
 }
 
 const mutations = {

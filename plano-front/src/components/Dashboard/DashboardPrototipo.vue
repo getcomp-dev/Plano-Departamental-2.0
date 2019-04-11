@@ -4,7 +4,6 @@
             <h1 class="h2 col-6">Plano</h1>
             <div class="col-6">
 
-                <!--<button type="button" class="btn btn-success col-sm-1" v-on:click="xlsx">Relatório</button>-->
                 <template v-if="isAdd">
                     <button type="button" class="btn btn-success" v-on:click.prevent="toggleAdd" style="margin-left: 10px;float:right;">Cancelar </button>
                     <button type="button" class="btn btn-success" v-on:click.prevent="addTurma" style="margin-left: 10px;float:right;"> Confirmar </button>
@@ -12,7 +11,7 @@
                 <template v-else>
                     <button type="button" class="btn btn-success" style="margin-left: 10px;float:right;" v-b-modal.modalConfirma>Deletar </button>
                     <button type="button" class="btn btn-success" v-on:click.prevent="toggleAdd" style="margin-left: 10px;float:right;">Adicionar </button>
-                    <!--<button type="button" class="btn btn-success" v-on:click.prevent="xlsx" style="margin-left: 10px;float:right;">XLSX </button>-->
+                    <button type="button" class="btn btn-success" v-on:click.prevent="xlsx" style="margin-left: 10px;float:right;">XLSX </button>
 
                     <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
                         <p class="my-4">Tem certeza que deseja deletar as turmas selecionadas?</p>
@@ -160,7 +159,7 @@
 
         methods: {
             xlsx: function () {
-                console.log((this.$refs))
+                console.log((this.$refs.mainTable.innerHTML))
                 xlsx.downloadTable({table:this.$refs.mainTable.innerHTML})
             },
 
