@@ -37,8 +37,8 @@ app.use(express.static('public'));
 app.use(cors())
 
 //Form handlers
-app.use(bodyParser.urlencoded({extended: false}))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true, limit:'10mb'}))
+app.use(bodyParser.json({limit:'10mb'}))
 
 //Logger
 app.use(logger('dev'))
