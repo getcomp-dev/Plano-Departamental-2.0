@@ -5,7 +5,8 @@ import { TURMA_FETCHED, SOCKET_TURMA_CREATED, SOCKET_TURMA_DELETED, SOCKET_TURMA
 
 const state = {
     Turmas: [],
-    Ativas: [],
+    Ativas1: [],
+    Ativas2: [],
     Deletar: []
 }
 
@@ -28,8 +29,12 @@ const mutations = {
         state.Turmas.splice(index, 1)
     },
 
-    redefinirAtivas (state, data) {
-        state.Ativas = data.Ativas
+    redefinirAtivas1 (state, data) {
+        state.Ativas1 = data.Ativas
+    },
+
+    redefinirAtivas2 (state, data) {
+        state.Ativas2 = data.Ativas
     },
 
     checkDelete (state, data) {
