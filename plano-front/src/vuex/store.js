@@ -18,6 +18,7 @@ import sala from './module/sala'
 import horario from './module/horario'
 import vaga from './module/vaga'
 import cargaPos from './module/cargaPos'
+import plano from './module/plano'
 
 import {
   USER_LOGGED_OUT,
@@ -87,7 +88,8 @@ export default new Vuex.Store({
     sala,
     horario,
     vaga,
-    cargaPos
+    cargaPos,
+    plano
   },
   plugins:[
       createPersistedState()

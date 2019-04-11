@@ -186,7 +186,7 @@ export default {
 
   computed: {
     year () {
-      return this.$store.state.year
+      return this.$store.state.plano.Plano[0].ano
     },
 
     httpRequestCount () {

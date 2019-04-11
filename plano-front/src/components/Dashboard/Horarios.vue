@@ -249,10 +249,10 @@
                 if(periodoSelecionado === 1){
                     this.createHorarios1()
                 } else if (periodoSelecionado === 2){
-                    //this.createHorarios2()
+                    this.createHorarios2()
                 } else {
                     this.createHorarios1()
-                    this.createHorarios2
+                    this.createHorarios2()
                 }
             },
 
@@ -541,6 +541,7 @@
                 var pedidosExternos
                 var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades
                 var turmas = _.filter(this.$store.state.turma.Turmas, ['periodo', 3])
+                console.log(turmas)
                 var turmasExternas = this.$store.state.turmaExterna.Turmas
                 var anoAtual = this.$store.state.year
                 var semestreAtual = 1
