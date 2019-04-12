@@ -11,7 +11,7 @@
                 <template v-else>
                     <button type="button" class="btn btn-success" style="margin-left: 10px;float:right;" v-b-modal.modalConfirma>Deletar </button>
                     <button type="button" class="btn btn-success" v-on:click.prevent="toggleAdd" style="margin-left: 10px;float:right;">Adicionar </button>
-                    <button type="button" class="btn btn-success" v-on:click.prevent="xlsx" style="margin-left: 10px;float:right;">XLSX </button>
+                    <button type="button" class="btn btn-success" v-on:click.prevent="xlsx(Cursos, Turmas, Pedidos)" style="margin-left: 10px;float:right;">XLSX </button>
 
                     <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
                         <p class="my-4">Tem certeza que deseja deletar as turmas selecionadas?</p>
@@ -158,9 +158,9 @@
         },
 
         methods: {
-            xlsx: function () {
-                console.log((this.$refs.mainTable.innerHTML))
-                xlsx.downloadTable({table:this.$refs.mainTable.innerHTML})
+            xlsx: function (cursos, turmas, pedidos) {
+                console.log({curso: cursos, turma: turmas, pedidos:pedidos})
+                xlsx.downloadTable({curso: cursos, turma: turmas, pedidos:pedidos})
             },
 
             adjustTurno1: function() {
