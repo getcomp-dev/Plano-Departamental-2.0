@@ -16,11 +16,13 @@ router.post('/', function(req, res, next){
     let data = []
     var header = ["S.", "Cod", "Disciplina", "C.", "Turma", "Horário", "Docente", "Turno", "Sala", "Total"]
     if(cursos.length > 0){
-        cursos.forEach(function(curso) {header.push(curso.nome)})
+        cursos.forEach(function(curso) {header.push(curso.nome)
+                                        console.log(curso.nome)})
     }
     data.push(header)
     if(turmas.length > 0){
         turmas.forEach(function(turma) {
+            console.log(turma.letra)
             let line = []
             line.push(turma.periodo)
             let disciplina = disciplinas.find(function (disc, index, array) {
@@ -30,6 +32,7 @@ router.post('/', function(req, res, next){
                     return false
             })
             if(disciplina !== undefined){
+                console.log(disciplina.nome)
                 line.push(disciplina.codigo)
                 line.push(disciplina.nome)
                 let carga = (disciplina.cargaTeorica + disciplina.cargaPratica)
@@ -76,6 +79,7 @@ router.post('/', function(req, res, next){
             if(docente === undefined){
                 line.push('')
             }else{
+                console.log(docente.apelido)
                 line.push(docente.apelido)
             }
             line.push(turma.turno)
@@ -127,6 +131,7 @@ router.post('/', function(req, res, next){
             data.push(line)
         })
     }
+    console.log(data)
     let ws = XLSX.utils.aoa_to_sheet(data)
     XLSX.utils.book_append_sheet(wb, ws, "DCC")
     XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
