@@ -1,6 +1,6 @@
 const router = require('express').Router(),
       XLSX = require('xlsx'),
-      models = require(../models/index)
+      models = require('../models/index')
 
 router.post('/', function(req, res, next){
     let wb = XLSX.utils.book_new();
