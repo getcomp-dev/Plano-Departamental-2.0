@@ -131,12 +131,7 @@ router.post('/', function(req, res, next){
     XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
     res.download('tabelaPrincipal.xlsx')
 
-}.then(() => {
-    res.send({
-         success:true,
-         message:"tabela criada com sucesso"
-    })
-}).catch((err) => {return next(err, req, res)}))
+})
 
 
 module.exports = router
