@@ -1,5 +1,4 @@
 const router = require('express').Router(),
-    fs = require('fs'),
     XLSX = require('xlsx')
 
 router.post('/', function(req, res, next){
@@ -16,7 +15,7 @@ router.post('/', function(req, res, next){
     let data = []
     var header = ["S.", "Cod", "Disciplina", "C.", "Turma", "Horário", "Docente", "Turno", "Sala", "Total"]
     if(cursos.length > 0){
-        cursos.forEach(function(curso) {header.push(curso)})
+        cursos.forEach(function(curso) {header.push(curso.nome)})
     }
     data.push(header)
     if(turmas.length > 0){
