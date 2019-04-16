@@ -144,8 +144,6 @@ router.post('/', function(req, res, next){
         XLSX.utils.book_append_sheet(wb, ws, "DCC")
         XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
         res.download('tabelaPrincipal.xlsx')
-    }).catch(function (err) {
-        return next(err, req, res)
     })
 
 })
