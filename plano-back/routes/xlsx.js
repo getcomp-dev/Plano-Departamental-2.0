@@ -18,7 +18,7 @@ router.post('/', function(req, res, next){
             horarios = [],
             salas = []
         result[0].forEach((disciplina) => disciplinas.push(disciplina.dataValues))
-        result[1].forEach((docente) => docentess.push(docente.dataValues))
+        result[1].forEach((docente) => docentes.push(docente.dataValues))
         result[2].forEach((horario) => horarios.push(horario.dataValues))
         result[3].forEach((sala) => salas.push(sala.dataValues))
         let data = []
