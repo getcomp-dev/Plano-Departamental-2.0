@@ -17,7 +17,7 @@ router.post('/', function(req, res, next){
             docentes = result[1],
             horarios = result[2],
             salas = result[3]
-        console.log(disciplinas)
+        disciplinas.forEach((disciplina) => console.log(disciplina))
         let data = []
         var header = ["S.", "Cod", "Disciplina", "C.", "Turma", "Horário", "Docente", "Turno", "Sala", "Total"]
         if (cursos.length > 0) {
