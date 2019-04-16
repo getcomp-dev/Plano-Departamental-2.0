@@ -13,10 +13,10 @@ router.post('/', function(req, res, next){
         salas = models.Sala.findAll()
 
     Promise.all([disciplinas, docentes, horarios, salas]).then(function (result) {
-        let disciplinas = JSON.parse(result[0]),
-            docentes = JSON.parse(result[1]),
-            horarios = JSON.parse(result[2]),
-            salas = JSON.parse(result[3])
+        let disciplinas = result[0],
+            docentes = result[1],
+            horarios = result[2],
+            salas = result[3]
         disciplinas.forEach((disciplina) => console.log(disciplina))
         let data = []
         var header = ["S.", "Cod", "Disciplina", "C.", "Turma", "Horário", "Docente", "Turno", "Sala", "Total"]
