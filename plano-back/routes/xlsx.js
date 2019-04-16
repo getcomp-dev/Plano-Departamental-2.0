@@ -17,18 +17,17 @@ router.post('/', function(req, res, next){
             docentes = result[1],
             horarios = result[2],
             salas = result[3]
+        console.log(disciplinas)
         let data = []
         var header = ["S.", "Cod", "Disciplina", "C.", "Turma", "Horário", "Docente", "Turno", "Sala", "Total"]
         if (cursos.length > 0) {
             cursos.forEach(function (curso) {
-                header.push(curso.nome)
-                console.log(curso.nome)
+                header.push(curso.codigo)
             })
         }
         data.push(header)
         if (turmas.length > 0) {
             turmas.forEach(function (turma) {
-                console.log(turma.letra)
                 let line = []
                 line.push(turma.periodo)
                 let disciplina = disciplinas.find(function (disc, index, array) {
@@ -142,6 +141,8 @@ router.post('/', function(req, res, next){
         XLSX.utils.book_append_sheet(wb, ws, "DCC")
         XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
         res.download('tabelaPrincipal.xlsx')
+    }).catch(function (err) {
+        return next(err, req, res)
     })
 
 })
