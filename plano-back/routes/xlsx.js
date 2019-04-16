@@ -12,130 +12,132 @@ router.post('/', function(req, res, next){
         horarios = models.Horario.findAll(),
         salas = models.Sala.findAll()
 
+    Promise.all([disciplinas, docentes, horarios, salas]).then(
 
-    let data = []
-    var header = ["S.", "Cod", "Disciplina", "C.", "Turma", "Horário", "Docente", "Turno", "Sala", "Total"]
-    if(cursos.length > 0){
-        cursos.forEach(function(curso) {header.push(curso.nome)
-                                        console.log(curso.nome)})
-    }
-    data.push(header)
-    if(turmas.length > 0){
-        turmas.forEach(function(turma) {
-            console.log(turma.letra)
-            let line = []
-            line.push(turma.periodo)
-            let disciplina = disciplinas.find(function (disc, index, array) {
-                if(disc.id===turma.Disciplina)
-                    return true
-                else
-                    return false
-            })
-            if(disciplina !== undefined){
-                console.log(disciplina.nome)
-                line.push(disciplina.codigo)
-                line.push(disciplina.nome)
-                let carga = (disciplina.cargaTeorica + disciplina.cargaPratica)
-                line.push(carga)
-            }else{
-                line.push('')
-                line.push('')
-                line.push('')
-            }
-            line.push(turma.letra)
-            let horario1 = horarios.find(function (hora, index, array) {
-                if(hora.id===turma.Horario1)
-                    return true
-                else
-                    return false
-            })
-            let horario2 = horarios.find(function (hora, index, array) {
-                if(hora.id===turma.Horario2)
-                    return true
-                else
-                    return false
-            })
-            if(horario1===undefined){
-                if(horario2 !== undefined){
-                    line.push(horario2.horario)
-                }
-                else{
+        let data = []
+        var header = ["S.", "Cod", "Disciplina", "C.", "Turma", "Horário", "Docente", "Turno", "Sala", "Total"]
+        if(cursos.length > 0){
+            cursos.forEach(function(curso) {header.push(curso.nome)
+                                            console.log(curso.nome)})
+        }
+        data.push(header)
+        if(turmas.length > 0){
+            turmas.forEach(function(turma) {
+                console.log(turma.letra)
+                let line = []
+                line.push(turma.periodo)
+                let disciplina = disciplinas.find(function (disc, index, array) {
+                    if(disc.id===turma.Disciplina)
+                        return true
+                    else
+                        return false
+                })
+                if(disciplina !== undefined){
+                    console.log(disciplina.nome)
+                    line.push(disciplina.codigo)
+                    line.push(disciplina.nome)
+                    let carga = (disciplina.cargaTeorica + disciplina.cargaPratica)
+                    line.push(carga)
+                }else{
+                    line.push('')
+                    line.push('')
                     line.push('')
                 }
-            }else{
-                if(horario2===undefined){
-                    line.push(horario1.horario)
+                line.push(turma.letra)
+                let horario1 = horarios.find(function (hora, index, array) {
+                    if(hora.id===turma.Horario1)
+                        return true
+                    else
+                        return false
+                })
+                let horario2 = horarios.find(function (hora, index, array) {
+                    if(hora.id===turma.Horario2)
+                        return true
+                    else
+                        return false
+                })
+                if(horario1===undefined){
+                    if(horario2 !== undefined){
+                        line.push(horario2.horario)
+                    }
+                    else{
+                        line.push('')
+                    }
                 }else{
-                    line.push(horario1.horario + '/' + horario2.horario)
+                    if(horario2===undefined){
+                        line.push(horario1.horario)
+                    }else{
+                        line.push(horario1.horario + '/' + horario2.horario)
+                    }
                 }
-            }
 
-            let docente = docentes.find(function (dcnt, index, array) {
-                if(dcnt.id===turma.Docente)
-                    return true
-                else
-                    return false
-            })
-            if(docente === undefined){
-                line.push('')
-            }else{
-                console.log(docente.apelido)
-                line.push(docente.apelido)
-            }
-            line.push(turma.turno)
-
-            let sala1 = salas.find(function (sl, index, array) {
-                if(sl.id===turma.Sala1)
-                    return true
-                else
-                    return false
-            })
-            let sala2 = salas.find(function (sl, index, array) {
-                if(sl.id===turma.Sala2)
-                    return true
-                else
-                    return false
-            })
-            if(sala1===undefined){
-                if(sala2 !== undefined){
-                    line.push(sala2.nome)
-                }
-                else{
+                let docente = docentes.find(function (dcnt, index, array) {
+                    if(dcnt.id===turma.Docente)
+                        return true
+                    else
+                        return false
+                })
+                if(docente === undefined){
                     line.push('')
-                }
-            }else{
-                if(sala2===undefined){
-                    line.push(sala1.nome)
                 }else{
-                    line.push(sala1.nome + '/' + sala2.nome)
+                    console.log(docente.apelido)
+                    line.push(docente.apelido)
                 }
-            }
-            let total = 0
-            let pds = []
-            cursos.forEach(function (curso){
-                if(isArray(pedidos[turma.id])){
-                    let pedido = pedidos[turma.id].find(function(pd, index, array) {
-                        if(pd.Curso = curso.id)
-                            return true
-                        else
-                            return false
-                    })
-                    pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
-                    total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
+                line.push(turma.turno)
+
+                let sala1 = salas.find(function (sl, index, array) {
+                    if(sl.id===turma.Sala1)
+                        return true
+                    else
+                        return false
+                })
+                let sala2 = salas.find(function (sl, index, array) {
+                    if(sl.id===turma.Sala2)
+                        return true
+                    else
+                        return false
+                })
+                if(sala1===undefined){
+                    if(sala2 !== undefined){
+                        line.push(sala2.nome)
+                    }
+                    else{
+                        line.push('')
+                    }
                 }else{
-                    pd.push('')
+                    if(sala2===undefined){
+                        line.push(sala1.nome)
+                    }else{
+                        line.push(sala1.nome + '/' + sala2.nome)
+                    }
                 }
+                let total = 0
+                let pds = []
+                cursos.forEach(function (curso){
+                    if(isArray(pedidos[turma.id])){
+                        let pedido = pedidos[turma.id].find(function(pd, index, array) {
+                            if(pd.Curso = curso.id)
+                                return true
+                            else
+                                return false
+                        })
+                        pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
+                        total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
+                    }else{
+                        pd.push('')
+                    }
+                })
+                line.push(total)
+                line.push(...pds)
+                data.push(line)
             })
-            line.push(total)
-            line.push(...pds)
-            data.push(line)
-        })
-    }
-    console.log(data)
-    let ws = XLSX.utils.aoa_to_sheet(data)
-    XLSX.utils.book_append_sheet(wb, ws, "DCC")
-    XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
-    res.download('tabelaPrincipal.xlsx')
+        }
+        console.log(data)
+        let ws = XLSX.utils.aoa_to_sheet(data)
+        XLSX.utils.book_append_sheet(wb, ws, "DCC")
+        XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
+        res.download('tabelaPrincipal.xlsx')
+        )
 
 })
 
