@@ -1,26 +1,37 @@
 const router = require('express').Router(),
       XLSX = require('xlsx'),
-      models = require('../models/index')
+      models = require('../models/index'),
+      _ = require('lodash')
 
 router.post('/', function(req, res, next){
     let wb = XLSX.utils.book_new();
-    let cursos = req.body.curso,
-        turmas = req.body.turma,
-        pedidos = req.body.pedidos,
+    let cursos = models.Curso.findAll(),
+        turmas = models.Turma.findAll(),
+        pedidos = models.Pedido.findAll(),
         disciplinas = models.Disciplina.findAll(),
         docentes = models.Docente.findAll(),
         horarios = models.Horario.findAll(),
         salas = models.Sala.findAll()
 
-    Promise.all([disciplinas, docentes, horarios, salas]).then(function (result) {
-        let disciplinas = [],
+    Promise.all([cursos, turmas, pedidos, disciplinas, docentes, horarios, salas]).then(function (result) {
+        let cursos = [],
+            turmas = [],
+            pedidos = [],
+            disciplinas = [],
             docentes = [],
             horarios = [],
             salas = []
-        result[0].forEach((disciplina) => disciplinas.push(disciplina.dataValues))
-        result[1].forEach((docente) => docentes.push(docente.dataValues))
-        result[2].forEach((horario) => horarios.push(horario.dataValues))
-        result[3].forEach((sala) => salas.push(sala.dataValues))
+        result[0].forEach((curso) => cursos.push(curso.dataValues))
+        result[1].forEach((turma) => turmas.push(turma.dataValues))
+        result[2].forEach((pedido) => pedidos.push(pedido.dataValues))
+        result[3].forEach((disciplina) => disciplinas.push(disciplina.dataValues))
+        result[4].forEach((docente) => docentes.push(docente.dataValues))
+        result[5].forEach((horario) => horarios.push(horario.dataValues))
+        result[6].forEach((sala) => salas.push(sala.dataValues))
+
+        cursos = _.orderBy(cursos, 'posicao')
+        turmas = _.orderBy(_.orderBy(_.filter(turmas, function(t) { return t.Disciplina !== null}), 'letra'), 'Disciplina')
+
         let data = []
         var header = ["S.", "Cod", "Disciplina", "C.", "Turma", "Horário", "Docente", "Turno", "Sala", "Total"]
         if (cursos.length > 0) {
