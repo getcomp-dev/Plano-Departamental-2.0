@@ -30,7 +30,7 @@ router.post('/', function(req, res, next){
         result[6].forEach((sala) => salas.push(sala.dataValues))
 
         cursos = _.orderBy(cursos, 'posicao')
-        turmas = _.orderBy(_.orderBy(_.filter(turmas, function(t) { return t.Disciplina !== null}), 'letra'), 'Disciplina')
+        turmas = _.orderBy(_.orderBy(_.orderBy(_.orderBy(_.filter(turmas, function(t) { return t.Disciplina !== null}), 'letra'), 'Disciplina'), 'Perfil'), 'periodo')
 
         let data = []
         var header = ["S.", "Cod", "Disciplina", "C.", "Turma", "Horário", "Docente", "Turno", "Sala", "Total"]
