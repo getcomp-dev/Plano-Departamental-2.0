@@ -142,7 +142,7 @@ router.post('/', function(req, res, next){
                         pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
                         total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
                     } else {
-                        pd.push('')
+                        pds.push('')
                     }
                 })
                 line.push(total)
