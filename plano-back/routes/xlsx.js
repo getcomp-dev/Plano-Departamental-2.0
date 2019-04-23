@@ -30,14 +30,14 @@ router.post('/', function(req, res, next){
         result[6].forEach((sala) => salas.push(sala.dataValues))
 
         cursos = _.orderBy(cursos, 'posicao')
-        turmas = turmas.sort(function(t1, t2) {
-            let d1 = disciplinas.find(function (disc, index, array) {
+        turmas = turmas.sort((t1, t2) => {
+            let d1 = disciplinas.find((disc, index, array) => {
                 if (disc.id === t1.Disciplina)
                     return true
                 else
                     return false
             }),
-                d2 = disciplinas.find(function (disc, index, array) {
+                d2 = disciplinas.find((disc, index, array) => {
                     if (disc.id === t2.Disciplina)
                         return true
                     else
