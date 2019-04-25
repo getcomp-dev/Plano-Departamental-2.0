@@ -262,7 +262,7 @@ router.post('/', function(req, res, next){
                     cursos.forEach(function (curso) {
                         if (Array.isArray(pedidos[turma.id])) {
                             pedido = pedidos[turma.id].find(function (pd, index, array) {
-                                if (pd.Curso == curso.id)
+                                if (parseInt(pd.Curso) === parseInt(curso.id))
                                     return true
                                 else
                                     return false
@@ -284,11 +284,10 @@ router.post('/', function(req, res, next){
             })
 
         }
-        console.log(data)
         let ws = XLSX.utils.aoa_to_sheet(data)
         XLSX.utils.book_append_sheet(wb, ws, "DCC")
         XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
-        res.download('tabelaPrincipal.xlsx')
+        res.download('plano-back/tabelaPrincipal.xlsx')
     })
 
 })
