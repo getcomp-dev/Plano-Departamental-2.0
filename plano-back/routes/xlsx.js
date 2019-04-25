@@ -287,7 +287,7 @@ router.post('/', function(req, res, next){
         let ws = XLSX.utils.aoa_to_sheet(data)
         XLSX.utils.book_append_sheet(wb, ws, "DCC")
         XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
-        res.download('plano-back/tabelaPrincipal.xlsx')
+        res.download('tabelaPrincipal.xlsx')
     })
 
 })
