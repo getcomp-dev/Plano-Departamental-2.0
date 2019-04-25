@@ -1,4 +1,5 @@
-const router = require('express').Router(),
+const express = requirew('express'),
+      router = require('express').Router(),
       XLSX = require('xlsx'),
       models = require('../models/index'),
       _ = require('lodash')
@@ -300,7 +301,8 @@ router.post('/', function(req, res, next){
         let ws = XLSX.utils.aoa_to_sheet(data)
         XLSX.utils.book_append_sheet(wb, ws, "DCC")
         XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
-        res.download(__dirname + '/tabelaPrincipal.xlsx')
+        let file = __dirname + '/tabelaPrincipal.xlsx'
+        res.download(file)
     })
 
 })
