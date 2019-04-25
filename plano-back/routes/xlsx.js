@@ -11,16 +11,18 @@ router.post('/', function(req, res, next){
         disciplinas = models.Disciplina.findAll(),
         docentes = models.Docente.findAll(),
         horarios = models.Horario.findAll(),
-        salas = models.Sala.findAll()
+        salas = models.Sala.findAll(),
+        perfis = models.Perfil.findAll()
 
-    Promise.all([cursos, turmas, pedidos, disciplinas, docentes, horarios, salas]).then(function (result) {
+    Promise.all([cursos, turmas, pedidos, disciplinas, docentes, horarios, salas, perfis]).then(function (result) {
         let cursos = [],
             turmas = [],
             pedidos = [],
             disciplinas = [],
             docentes = [],
             horarios = [],
-            salas = []
+            salas = [],
+            perfis = []
         result[0].forEach((curso) => cursos.push(curso.dataValues))
         result[1].forEach((turma) => turmas.push(turma.dataValues))
         result[2].forEach((pedido) => pedidos.push(pedido.dataValues))
@@ -28,23 +30,9 @@ router.post('/', function(req, res, next){
         result[4].forEach((docente) => docentes.push(docente.dataValues))
         result[5].forEach((horario) => horarios.push(horario.dataValues))
         result[6].forEach((sala) => salas.push(sala.dataValues))
+        result[7].forEach((perfil) => perfis.push(perfil.dataValues))
 
         cursos = _.orderBy(cursos, 'posicao')
-        turmas = turmas.sort((t1, t2) => {
-            let d1 = disciplinas.find((disc, index, array) => {
-                if (disc.id === t1.Disciplina)
-                    return true
-                else
-                    return false
-            }),
-                d2 = disciplinas.find((disc, index, array) => {
-                    if (disc.id === t2.Disciplina)
-                        return true
-                    else
-                        return false
-                })
-            return d1.Perfil - d2.Perfil
-        })
         turmas = _.orderBy(_.orderBy(_.orderBy(_.orderBy(_.filter(turmas, function(t) { return t.Disciplina !== null}), 'letra'), 'Disciplina'), 'Perfil'), 'periodo')
 
         let data = []
@@ -56,15 +44,20 @@ router.post('/', function(req, res, next){
         }
         data.push(header)
         if (turmas.length > 0) {
+            perfis.forEach((perfil) => {
             turmas.forEach(function (turma) {
                 let line = []
-                line.push(turma.periodo)
                 let disciplina = disciplinas.find(function (disc, index, array) {
                     if (disc.id === turma.Disciplina)
                         return true
                     else
                         return false
                 })
+                if(disciplina.Perfil !== perfil.id)
+                    continue
+
+                line.push(turma.periodo)
+
                 if (disciplina !== undefined) {
                     console.log(disciplina.nome)
                     line.push(disciplina.codigo)
@@ -164,6 +157,8 @@ router.post('/', function(req, res, next){
                 line.push(...pds)
                 data.push(line)
             })
+            })
+
         }
         console.log(data)
         let ws = XLSX.utils.aoa_to_sheet(data)
