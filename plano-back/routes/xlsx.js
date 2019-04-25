@@ -305,7 +305,7 @@ router.post('/', function(req, res, next){
 
 })
 
-router.post('/download', function(req, res, next){
+router.get('/download', function(req, res, next){
     res.download('../tabelaPrincipal.xlsx', 'tabelas.xlsx')
 })
 
