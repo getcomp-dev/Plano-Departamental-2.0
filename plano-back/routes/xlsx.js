@@ -7,17 +7,16 @@ router.post('/', function(req, res, next){
     let wb = XLSX.utils.book_new();
     let cursos = models.Curso.findAll(),
         turmas = models.Turma.findAll(),
-        pedidos = models.Pedido.findAll(),
+        pedidos = req.body.pedidos,
         disciplinas = models.Disciplina.findAll(),
         docentes = models.Docente.findAll(),
         horarios = models.Horario.findAll(),
         salas = models.Sala.findAll(),
         perfis = models.Perfil.findAll()
 
-    Promise.all([cursos, turmas, pedidos, disciplinas, docentes, horarios, salas, perfis]).then(function (result) {
+    Promise.all([cursos, turmas, disciplinas, docentes, horarios, salas, perfis]).then(function (result) {
         let cursos = [],
             turmas = [],
-            pedidos = [],
             disciplinas = [],
             docentes = [],
             horarios = [],
@@ -25,12 +24,11 @@ router.post('/', function(req, res, next){
             perfis = []
         result[0].forEach((curso) => cursos.push(curso.dataValues))
         result[1].forEach((turma) => turmas.push(turma.dataValues))
-        result[2].forEach((pedido) => pedidos.push(pedido.dataValues))
-        result[3].forEach((disciplina) => disciplinas.push(disciplina.dataValues))
-        result[4].forEach((docente) => docentes.push(docente.dataValues))
-        result[5].forEach((horario) => horarios.push(horario.dataValues))
-        result[6].forEach((sala) => salas.push(sala.dataValues))
-        result[7].forEach((perfil) => perfis.push(perfil.dataValues))
+        result[2].forEach((disciplina) => disciplinas.push(disciplina.dataValues))
+        result[3].forEach((docente) => docentes.push(docente.dataValues))
+        result[4].forEach((horario) => horarios.push(horario.dataValues))
+        result[5].forEach((sala) => salas.push(sala.dataValues))
+        result[6].forEach((perfil) => perfis.push(perfil.dataValues))
 
         cursos = _.orderBy(cursos, 'posicao')
         turmas = _.orderBy(_.orderBy(_.orderBy(_.orderBy(_.filter(turmas, function(t) { return t.Disciplina !== null}), 'letra'), 'Disciplina'), 'Perfil'), 'periodo')
