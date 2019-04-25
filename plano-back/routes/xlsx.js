@@ -259,7 +259,8 @@ router.post('/', function(req, res, next){
                     let total = 0
                     let pds = []
                     let pedido = undefined
-                    cursos.forEach(function (curso) {
+                    for(let i = 0; i < cursos.length; i++){
+                        let curso = cursos[i]
                         if (Array.isArray(pedidos[turma.id])) {
                             pedido = pedidos[turma.id].find(function (pd, index, array) {
                                 if (parseInt(pd.Curso) === parseInt(curso.id))
@@ -276,7 +277,7 @@ router.post('/', function(req, res, next){
                         } else {
                             pds.push('')
                         }
-                    })
+                    }
                     line.push(total)
                     line.push(...pds)
                     data.push(line)
