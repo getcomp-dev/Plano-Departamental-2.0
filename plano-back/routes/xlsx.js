@@ -258,11 +258,11 @@ router.post('/', function(req, res, next){
                     }
                     let total = 0
                     let pds = []
-                    let pedido = undefined
+                    const pedidosTurma = pedidos[turma.id]
                     for(let i = 0; i < cursos.length; i++){
                         let curso = cursos[i]
-                        if (Array.isArray(pedidos[turma.id])) {
-                            pedido = pedidos[turma.id].find(function (pd, index, array) {
+                        if (Array.isArray(pedidosTurma)) {
+                            let pedido = pedidosTurma.find(function (pd, index, array) {
                                 if (parseInt(pd.Curso) === parseInt(curso.id))
                                     return true
                                 else
@@ -278,10 +278,11 @@ router.post('/', function(req, res, next){
                         } else {
                             pds.push('')
                         }
-                        pds = []
                     }
                     line.push(total)
-                    line.push(...pds)
+                    pds.forEach(function(pd){
+                        line.push(pd)
+                    })
                     data.push(line)
                 }
             })
