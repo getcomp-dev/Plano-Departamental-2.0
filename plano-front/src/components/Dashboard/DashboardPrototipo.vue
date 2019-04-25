@@ -11,7 +11,7 @@
                 <template v-else>
                     <button type="button" class="btn btn-success" style="margin-left: 10px;float:right;" v-b-modal.modalConfirma>Deletar </button>
                     <button type="button" class="btn btn-success" v-on:click.prevent="toggleAdd" style="margin-left: 10px;float:right;">Adicionar </button>
-                    <button type="button" class="btn btn-success" v-on:click.prevent="xlsx(Cursos, Turmas, Pedidos)" style="margin-left: 10px;float:right;">XLSX </button>
+                    <button type="button" class="btn btn-success" v-on:click.prevent="xlsx(Pedidos)" style="margin-left: 10px;float:right;">XLSX </button>
 
                     <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
                         <p class="my-4">Tem certeza que deseja deletar as turmas selecionadas?</p>
@@ -158,9 +158,16 @@
         },
 
         methods: {
-            xlsx: function (cursos, turmas, pedidos) {
-                console.log({curso: cursos, turma: turmas, pedidos:pedidos})
-                xlsx.downloadTable({curso: cursos, turma: turmas, pedidos:pedidos})
+            xlsx: function (pedidos) {
+                xlsx.downloadTable({pedidos:pedidos}).then(() => {
+                    console.log('done')
+                    fetch("http://200.131.219.57:3000/api/xlsx/download", {method:'GET', headers:{'Authorization': `Bearer ${this.$store.state.auth.token}`}}).then(r => r.blob())
+                        .then(blob => URL.createObjectURL(blob))
+                        .then(url => {
+                            window.open(url, '_blank');
+                            URL.revokeObjectURL(url);
+                        }).catch(e => console.log(e))
+                }).catch(error => console.log(error))
             },
 
             adjustTurno1: function() {
