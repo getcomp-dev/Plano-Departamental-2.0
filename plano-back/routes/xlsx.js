@@ -302,7 +302,8 @@ router.post('/', function(req, res, next){
         XLSX.utils.book_append_sheet(wb, ws, "DCC")
         XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
         let file = __dirname + '/tabelaPrincipal.xlsx'
-        res.download(file)
+        console.log(file)
+        res.download('tabelaPrincipal.xlsx')
     })
 
 })
