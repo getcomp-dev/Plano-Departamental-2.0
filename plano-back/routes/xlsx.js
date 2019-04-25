@@ -302,7 +302,7 @@ router.post('/', function(req, res, next){
         XLSX.utils.book_append_sheet(wb, ws, "DCC")
         XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
     })
-
+    res.send({success:true})
 })
 
 router.get('/download', function(req, res, next){
