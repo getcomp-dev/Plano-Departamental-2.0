@@ -261,7 +261,7 @@ router.post('/', function(req, res, next){
                     cursos.forEach(function (curso) {
                         if (Array.isArray(pedidos[turma.id])) {
                             let pedido = pedidos[turma.id].find(function (pd, index, array) {
-                                if (pd.Curso === curso.id)
+                                if (pd.Curso == curso.id)
                                     return true
                                 else
                                     return false
