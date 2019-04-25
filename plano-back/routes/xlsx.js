@@ -278,6 +278,7 @@ router.post('/', function(req, res, next){
                         } else {
                             pds.push('')
                         }
+                        pds = []
                     }
                     line.push(total)
                     line.push(...pds)
