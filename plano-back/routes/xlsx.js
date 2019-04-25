@@ -45,7 +45,8 @@ router.post('/', function(req, res, next){
         data.push(header)
         if (turmas.length > 0) {
             perfis.forEach((perfil) => {
-            turmas.forEach(function (turma) {
+            for(let i = 0; i < turmas.length; i++) {
+                let turma = turmas[i]
                 let line = []
                 let disciplina = disciplinas.find(function (disc, index, array) {
                     if (disc.id === turma.Disciplina)
@@ -156,7 +157,7 @@ router.post('/', function(req, res, next){
                 line.push(total)
                 line.push(...pds)
                 data.push(line)
-            })
+            }
             })
 
         }
