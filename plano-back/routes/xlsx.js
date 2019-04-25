@@ -306,7 +306,7 @@ router.post('/', function(req, res, next){
 })
 
 router.post('/download', function(req, res, next){
-    res.download('/home/planodcc/Plano-Departamental-2.0/plano-back/tabelaPrincipal.xlsx', 'tabelas.xlsx')
+    res.download('../tabelaPrincipal.xlsx', 'tabelas.xlsx')
 })
 
 
