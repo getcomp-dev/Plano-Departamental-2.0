@@ -140,22 +140,31 @@ router.post('/', function(req, res, next){
                 }
                 let total = 0
                 let pds = []
-                cursos.forEach(function (curso) {
-                    if (Array.isArray(pedidos[turma.id])) {
-                        let pedido = pedidos[turma.id].find(function (pd, index, array) {
-                            if (pd.Curso = curso.id)
+                const pedidosTurma = pedidos[turma.id]
+                for(let i = 0; i < cursos.length; i++){
+                    let curso = cursos[i]
+                    if (Array.isArray(pedidosTurma)) {
+                        let pedido = pedidosTurma.find(function (pd, index, array) {
+                            if (parseInt(pd.Curso) === parseInt(curso.id))
                                 return true
                             else
                                 return false
                         })
-                        pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
-                        total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
+                        if(pedido){
+                            pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
+                            total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
+                        }else{
+                            pds.push('')
+                        }
                     } else {
                         pds.push('')
                     }
-                })
+                }
                 line.push(total)
-                line.push(...pds)
+                console.log(pds)
+                pds.forEach(function(pd){
+                    line.push(pd)
+                })
                 data.push(line)
             }
             })
