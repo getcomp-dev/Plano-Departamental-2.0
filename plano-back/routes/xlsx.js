@@ -529,11 +529,12 @@ router.post('/', function(req, res, next){
             console.log(dataExterna)
             let wsExterno = XLSX.utils.aoa_to_sheet(dataExterna)
             XLSX.utils.book_append_sheet(wb, wsExterno, "Externas")
-
+            console.log("Sheet adicionado")
+            XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
+            res.send({success:true})
         })
     })
-    XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
-    res.send({success:true})
+
 })
 
 router.get('/download', function(req, res, next){
