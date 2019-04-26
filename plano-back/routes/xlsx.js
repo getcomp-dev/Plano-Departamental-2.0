@@ -420,7 +420,7 @@ router.post('/', function(req, res, next){
                 })
                 dataExterna.push(line)
             }
-
+            console.log("parte 2")
             for(let i=0; i < turmasExternas.length; i++) {
                 let turma = turmasExternas[i]
                 if (turma.periodo === 1)
@@ -435,6 +435,7 @@ router.post('/', function(req, res, next){
                 line.push(turma.periodo)
 
                 if (disciplina !== undefined) {
+                    console.log(disciplina.nome)
                     line.push(disciplina.codigo)
                     line.push(disciplina.nome)
                     let carga = (disciplina.cargaTeorica + disciplina.cargaPratica)
@@ -502,7 +503,7 @@ router.post('/', function(req, res, next){
                 }
                 let total = 0
                 let pds = []
-                for (let i = 0; i < 4; i++) {
+                for (let i = 1; i < 5; i++) {
                     let pedido = pedidosExternos.find(function (pd, index, array) {
                         if ((pd.Curso === i) && (pd.Turma === turma.id))
                             return true
@@ -510,6 +511,7 @@ router.post('/', function(req, res, next){
                             return false
                     })
                     if (pedido) {
+                        console.log(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
                         pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
                         total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
                     } else {
