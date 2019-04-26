@@ -329,6 +329,7 @@ router.post('/', function(req, res, next){
                 line.push(turma.periodo)
 
                 if (disciplina !== undefined) {
+                    console.log(disciplina.nome)
                     line.push(disciplina.codigo)
                     line.push(disciplina.nome)
                     let carga = (disciplina.cargaTeorica + disciplina.cargaPratica)
@@ -404,6 +405,7 @@ router.post('/', function(req, res, next){
                             return false
                     })
                     if (pedido) {
+                        console.log(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
                         pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
                         total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
                     } else {
