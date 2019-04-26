@@ -303,7 +303,8 @@ router.post('/', function(req, res, next){
 
         let turmasExternas = models.TurmaExterna.findAll(),
             pedidosExternos = models.PedidoExterno.findAll()
-        Promise.all(turmasExternas, pedidosExternos).then(function(result){
+
+        Promise.all([turmasExternas, pedidosExternos]).then(function(result){
             let turmasExternas = [],
                 pedidosExternos = []
             result[0].forEach(turma => turmasExternas.push(turma.dataValues))
