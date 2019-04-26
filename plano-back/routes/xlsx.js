@@ -99,18 +99,34 @@ router.post('/', function(req, res, next){
                     }
                 }
 
-                let docente = docentes.find(function (dcnt, index, array) {
-                    if (dcnt.id === turma.Docente)
+                let docente1 = docentes.find(function (dcnt, index, array) {
+                    if (dcnt.id === turma.Docente1)
                         return true
                     else
                         return false
                 })
-                if (docente === undefined) {
-                    line.push('')
+                let docente2 = docentes.find(function (dcnt, index, array) {
+                    if (dcnt.id === turma.Docente2)
+                        return true
+                    else
+                        return false
+                })
+
+                if (docente1 === undefined) {
+                    if (docente2 !== undefined) {
+                        line.push(docente2.apelido)
+                    }
+                    else {
+                        line.push('')
+                    }
                 } else {
-                    console.log(docente.apelido)
-                    line.push(docente.apelido)
+                    if (docente2 === undefined) {
+                        line.push(docente1.apelido)
+                    } else {
+                        line.push(docente1.apelido + '/' + docente2.apelido)
+                    }
                 }
+
                 line.push(turma.turno1)
 
                 let sala1 = salas.find(function (sl, index, array) {
@@ -226,17 +242,32 @@ router.post('/', function(req, res, next){
                         }
                     }
 
-                    let docente = docentes.find(function (dcnt, index, array) {
-                        if (dcnt.id === turma.Docente)
+                    let docente1 = docentes.find(function (dcnt, index, array) {
+                        if (dcnt.id === turma.Docente1)
                             return true
                         else
                             return false
                     })
-                    if (docente === undefined) {
-                        line.push('')
+                    let docente2 = docentes.find(function (dcnt, index, array) {
+                        if (dcnt.id === turma.Docente2)
+                            return true
+                        else
+                            return false
+                    })
+
+                    if (docente1 === undefined) {
+                        if (docente2 !== undefined) {
+                            line.push(docente2.apelido)
+                        }
+                        else {
+                            line.push('')
+                        }
                     } else {
-                        console.log(docente.apelido)
-                        line.push(docente.apelido)
+                        if (docente2 === undefined) {
+                            line.push(docente1.apelido)
+                        } else {
+                            line.push(docente1.apelido + '/' + docente2.apelido)
+                        }
                     }
                     line.push(turma.turno1)
 
