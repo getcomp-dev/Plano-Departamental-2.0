@@ -397,7 +397,7 @@ router.post('/', function(req, res, next){
                 }
                 let total = 0
                 let pds = []
-                for (let i = 0; i < 4; i++) {
+                for (let i = 1; i < 5; i++) {
                     let pedido = pedidosExternos.find(function (pd, index, array) {
                         if ((pd.Curso === i) && (pd.Turma === turma.id))
                             return true
@@ -418,7 +418,7 @@ router.post('/', function(req, res, next){
                 pds.forEach(function (pd) {
                     line.push(pd)
                 })
-                data.push(line)
+                dataExterna.push(line)
             }
 
             for(let i=0; i < turmasExternas.length; i++) {
@@ -522,7 +522,7 @@ router.post('/', function(req, res, next){
                 pds.forEach(function (pd) {
                     line.push(pd)
                 })
-                data.push(line)
+                dataExterna.push(line)
             }
             let wsExterno = XLSX.utils.aoa_to_sheet(dataExterna)
             XLSX.utils.book_append_sheet(wb, wsExterno, "Externas")
