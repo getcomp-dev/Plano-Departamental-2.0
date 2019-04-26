@@ -111,7 +111,7 @@ router.post('/', function(req, res, next){
                     console.log(docente.apelido)
                     line.push(docente.apelido)
                 }
-                line.push(turma.turno)
+                line.push(turma.turno1)
 
                 let sala1 = salas.find(function (sl, index, array) {
                     if (sl.id === turma.Sala1)
@@ -238,7 +238,7 @@ router.post('/', function(req, res, next){
                         console.log(docente.apelido)
                         line.push(docente.apelido)
                     }
-                    line.push(turma.turno)
+                    line.push(turma.turno1)
 
                     let sala1 = salas.find(function (sl, index, array) {
                         if (sl.id === turma.Sala1)
@@ -367,7 +367,7 @@ router.post('/', function(req, res, next){
                     }
                 }
 
-                line.push(turma.turno)
+                line.push(turma.turno1)
 
                 let sala1 = salas.find(function (sl, index, array) {
                     if (sl.id === turma.Sala1)
@@ -473,7 +473,7 @@ router.post('/', function(req, res, next){
                     }
                 }
 
-                line.push(turma.turno)
+                line.push(turma.turno1)
 
                 let sala1 = salas.find(function (sl, index, array) {
                     if (sl.id === turma.Sala1)
