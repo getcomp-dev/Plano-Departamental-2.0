@@ -561,8 +561,34 @@ router.post('/', function(req, res, next){
             let wsExterno = XLSX.utils.aoa_to_sheet(dataExterna)
             XLSX.utils.book_append_sheet(wb, wsExterno, "Externas")
             console.log("Sheet adicionado")
-            XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
-            res.send({success:true})
+
+            models.CargaPos.findAll().then(function(result){
+                let cargas = []
+                result[0].forEach(carga => cargas.push(carga.dataValues))
+
+                cargas = _.orderBy(_.orderBy(cargas, 'Docente'), 'trimestre')
+                let dataPos = []
+                const header = ["T.", "Docente", "Programa", "C."]
+                dataPos.push(header)
+                cargas.forEach(carga => {
+                    let line = []
+                    line.push(carga.trimestre)
+                    let docente = docentes.find((dcnt, index, array) => dcnt.id===carga.Docente)
+                    if(docente!==undefined){
+                        line.push(docente.apelido)
+                    }else{
+                        line.push('')
+                    }
+                    line.push(carga.programa)
+                    line.push(carga.creditos)
+                    dataPos.push(line)
+                })
+                let wp = XLSX.utils.aoa_to_sheet(dataPos)
+                XLSX.utils.book_append_sheet(wb, wp, "Pós")
+                
+                XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
+                res.send({success:true})
+            })
         })
     })
 
