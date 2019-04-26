@@ -564,7 +564,7 @@ router.post('/', function(req, res, next){
 
             models.CargaPos.findAll().then(function(result){
                 let cargas = []
-                result[0].forEach(carga => cargas.push(carga.dataValues))
+                result.forEach(carga => cargas.push(carga.dataValues))
 
                 cargas = _.orderBy(_.orderBy(cargas, 'Docente'), 'trimestre')
                 let dataPos = []
@@ -585,7 +585,7 @@ router.post('/', function(req, res, next){
                 })
                 let wp = XLSX.utils.aoa_to_sheet(dataPos)
                 XLSX.utils.book_append_sheet(wb, wp, "Pós")
-                
+
                 XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
                 res.send({success:true})
             })
