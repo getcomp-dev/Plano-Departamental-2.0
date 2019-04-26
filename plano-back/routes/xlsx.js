@@ -300,8 +300,233 @@ router.post('/', function(req, res, next){
         }
         let ws = XLSX.utils.aoa_to_sheet(data)
         XLSX.utils.book_append_sheet(wb, ws, "DCC")
-        XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
+
+        let turmasExternas = models.TurmaExterna.findAll(),
+            pedidosExternos = odels.PedidoExterno.findAll()
+        Promise.all(turmasExternas, pedidosExternos).then(function(result){
+            let turmasExternas = [],
+                pedidosExternos = []
+            result[0].forEach(turma => turmasExternas.push(turma.dataValues))
+            result[1].forEach(pedido => pedidosExternos.push(pedido.dataValues))
+
+            turmasExternas = _.orderBy(_.orderBy(_.filter(turmasExternas, function(t) { return t.Disciplina !== null}), 'letra'), 'Disciplina')
+
+            let dataExterna = []
+            const header = ["S.", "Cod", "Disciplina", "C.", "Turma", "Horário", "Turno", "Sala", "Total", "35A", "65B", "76A", "65C"]
+            dataExterna.push(header)
+            for(let i=0; i < turmasExternas.length; i++) {
+                let turma = turmasExternas[i]
+                if (turma.periodo === 3)
+                    continue
+                let line = []
+                let disciplina = disciplinas.find(function (disc, index, array) {
+                    if (disc.id === turma.Disciplina)
+                        return true
+                    else
+                        return false
+                })
+                line.push(turma.periodo)
+
+                if (disciplina !== undefined) {
+                    line.push(disciplina.codigo)
+                    line.push(disciplina.nome)
+                    let carga = (disciplina.cargaTeorica + disciplina.cargaPratica)
+                    line.push(carga)
+                } else {
+                    line.push('')
+                    line.push('')
+                    line.push('')
+                }
+                line.push(turma.letra)
+                let horario1 = horarios.find(function (hora, index, array) {
+                    if (hora.id === turma.Horario1)
+                        return true
+                    else
+                        return false
+                })
+                let horario2 = horarios.find(function (hora, index, array) {
+                    if (hora.id === turma.Horario2)
+                        return true
+                    else
+                        return false
+                })
+                if (horario1 === undefined) {
+                    if (horario2 !== undefined) {
+                        line.push(horario2.horario)
+                    }
+                    else {
+                        line.push('')
+                    }
+                } else {
+                    if (horario2 === undefined) {
+                        line.push(horario1.horario)
+                    } else {
+                        line.push(horario1.horario + '/' + horario2.horario)
+                    }
+                }
+
+                line.push(turma.turno)
+
+                let sala1 = salas.find(function (sl, index, array) {
+                    if (sl.id === turma.Sala1)
+                        return true
+                    else
+                        return false
+                })
+                let sala2 = salas.find(function (sl, index, array) {
+                    if (sl.id === turma.Sala2)
+                        return true
+                    else
+                        return false
+                })
+                if (sala1 === undefined) {
+                    if (sala2 !== undefined) {
+                        line.push(sala2.nome)
+                    }
+                    else {
+                        line.push('')
+                    }
+                } else {
+                    if (sala2 === undefined) {
+                        line.push(sala1.nome)
+                    } else {
+                        line.push(sala1.nome + '/' + sala2.nome)
+                    }
+                }
+                let total = 0
+                let pds = []
+                for (let i = 0; i < 4; i++) {
+                    let pedido = pedidosExternos.find(function (pd, index, array) {
+                        if ((pd.Curso === i) && (pd.Turma === turma.id))
+                            return true
+                        else
+                            return false
+                    })
+                    if (pedido) {
+                        pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
+                        total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
+                    } else {
+                        pds.push('')
+                    }
+
+                }
+
+                line.push(total)
+                pds.forEach(function (pd) {
+                    line.push(pd)
+                })
+                data.push(line)
+            }
+
+            for(let i=0; i < turmasExternas.length; i++) {
+                let turma = turmasExternas[i]
+                if (turma.periodo === 1)
+                    continue
+                let line = []
+                let disciplina = disciplinas.find(function (disc, index, array) {
+                    if (disc.id === turma.Disciplina)
+                        return true
+                    else
+                        return false
+                })
+                line.push(turma.periodo)
+
+                if (disciplina !== undefined) {
+                    line.push(disciplina.codigo)
+                    line.push(disciplina.nome)
+                    let carga = (disciplina.cargaTeorica + disciplina.cargaPratica)
+                    line.push(carga)
+                } else {
+                    line.push('')
+                    line.push('')
+                    line.push('')
+                }
+                line.push(turma.letra)
+                let horario1 = horarios.find(function (hora, index, array) {
+                    if (hora.id === turma.Horario1)
+                        return true
+                    else
+                        return false
+                })
+                let horario2 = horarios.find(function (hora, index, array) {
+                    if (hora.id === turma.Horario2)
+                        return true
+                    else
+                        return false
+                })
+                if (horario1 === undefined) {
+                    if (horario2 !== undefined) {
+                        line.push(horario2.horario)
+                    }
+                    else {
+                        line.push('')
+                    }
+                } else {
+                    if (horario2 === undefined) {
+                        line.push(horario1.horario)
+                    } else {
+                        line.push(horario1.horario + '/' + horario2.horario)
+                    }
+                }
+
+                line.push(turma.turno)
+
+                let sala1 = salas.find(function (sl, index, array) {
+                    if (sl.id === turma.Sala1)
+                        return true
+                    else
+                        return false
+                })
+                let sala2 = salas.find(function (sl, index, array) {
+                    if (sl.id === turma.Sala2)
+                        return true
+                    else
+                        return false
+                })
+                if (sala1 === undefined) {
+                    if (sala2 !== undefined) {
+                        line.push(sala2.nome)
+                    }
+                    else {
+                        line.push('')
+                    }
+                } else {
+                    if (sala2 === undefined) {
+                        line.push(sala1.nome)
+                    } else {
+                        line.push(sala1.nome + '/' + sala2.nome)
+                    }
+                }
+                let total = 0
+                let pds = []
+                for (let i = 0; i < 4; i++) {
+                    let pedido = pedidosExternos.find(function (pd, index, array) {
+                        if ((pd.Curso === i) && (pd.Turma === turma.id))
+                            return true
+                        else
+                            return false
+                    })
+                    if (pedido) {
+                        pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
+                        total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
+                    } else {
+                        pds.push('')
+                    }
+
+                }
+
+                line.push(total)
+                pds.forEach(function (pd) {
+                    line.push(pd)
+                })
+                data.push(line)
+            }
+            let wsExterno = XLSX.utils.aoa_to_sheet(dataExterna)
+            XLSX.utils.book_append_sheet(wb, wsExterno, "Externas")
+
+        })
     })
+    XLSX.writeFile(wb, 'tabelaPrincipal.xlsx')
     res.send({success:true})
 })
 
