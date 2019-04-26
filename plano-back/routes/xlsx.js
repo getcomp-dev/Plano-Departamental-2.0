@@ -524,6 +524,7 @@ router.post('/', function(req, res, next){
                 })
                 dataExterna.push(line)
             }
+            console.log(dataExterna)
             let wsExterno = XLSX.utils.aoa_to_sheet(dataExterna)
             XLSX.utils.book_append_sheet(wb, wsExterno, "Externas")
 
