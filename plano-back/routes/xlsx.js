@@ -302,7 +302,7 @@ router.post('/', function(req, res, next){
         XLSX.utils.book_append_sheet(wb, ws, "DCC")
 
         let turmasExternas = models.TurmaExterna.findAll(),
-            pedidosExternos = odels.PedidoExterno.findAll()
+            pedidosExternos = models.PedidoExterno.findAll()
         Promise.all(turmasExternas, pedidosExternos).then(function(result){
             let turmasExternas = [],
                 pedidosExternos = []
