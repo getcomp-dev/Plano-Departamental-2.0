@@ -34,6 +34,7 @@ router.get('/', function(req, res, next){
         .then(function (blob) {
             saveAs(blob, "data.zip");
         });
+    res.send({success:true})
 })
 
 module.exports = router
