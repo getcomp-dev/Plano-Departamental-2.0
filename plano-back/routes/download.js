@@ -16,6 +16,7 @@ router.get('/', function(req, res, next){
     console.log('Tabela adicionada ao zip')
     fs.writeFileSync('Cargas.pdf', req.body.pdfCarga)
     console.log('arquivo .pdf criado')
+    console.log(req.body.pdfCarga)
     let carga = fs.readFileSync('./Cargas.pdf', (err, data) => {
         if(err) throw err
         return data
