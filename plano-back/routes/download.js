@@ -44,7 +44,7 @@ router.get('/', function(req, res, next){
     res.send({success:true})
 })
 
-router.get('/download', function(req, res, next){
+router.get('/all', function(req, res, next){
     res.download('./data.zip', 'data.zip')
 })
 
