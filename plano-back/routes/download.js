@@ -24,24 +24,25 @@ router.get('/', function(req, res, next){
             connection: {
                 host: 'localhost',
                 user: 'root',
-                password: 'root',
+                password: '',
                 database: 'plano_dev',
             },dumpToFile: './backup.sql',
         }
-    )
-    console.log('dump criado')
-    let sql = fs.readFileSync('./backup.sql', (err, data) => {
-        if(err) throw err
-        return data
-    })
-    console.log('sql lido')
-    zip.file("backup.sql", sql)
-    console.log('sql adicionado')
-    zip.generateAsync({type:"uint8array"})
-        .then(function (r) {
+    ).then(() => {
+        console.log('dump criado')
+        let sql = fs.readFileSync('./backup.sql', (err, data) => {
+            if (err) throw err
+            return data
+        })
+        console.log('sql lido')
+        zip.file("backup.sql", sql)
+        console.log('sql adicionado')
+        zip.generateAsync({type: "uint8array"})
+            .then(function (r) {
                 fs.writeFileSync('data.zip', r);
-        });
-    res.send({success:true})
+            });
+        res.send({success: true})
+    }).catch((e)=>{res.send({success:false})})
 })
 
 router.get('/all', function(req, res, next){
