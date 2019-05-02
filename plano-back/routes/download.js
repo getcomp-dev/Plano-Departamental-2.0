@@ -37,14 +37,9 @@ router.get('/', function(req, res, next){
     console.log('sql lido')
     zip.file("backup.sql", sql)
     console.log('sql adicionado')
-    zip.generateAsync({type:"blob"})
-        .then(function (blob) {
-            let reader = new FileReader()
-            reader.onload = function () {
-                fs.writeFileSync('data.zip', Buffer(new Uint8Array(this.result)));
-            };
-            reader.readAsArrayBuffer(blob);
-            
+    zip.generateAsync({type:"base64"})
+        .then(function (base64) {
+                fs.writeFileSync('data.zip', base64);
         });
     res.send({success:true})
 })
