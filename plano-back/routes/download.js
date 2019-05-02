@@ -37,7 +37,7 @@ router.get('/', function(req, res, next){
     console.log('sql lido')
     zip.file("backup.sql", sql)
     console.log('sql adicionado')
-    zip.generateAsync({type:"binarystring"})
+    zip.generateAsync({type:"unit8array"})
         .then(function (r) {
                 fs.writeFileSync('data.zip', r);
         });
