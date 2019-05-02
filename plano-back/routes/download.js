@@ -24,7 +24,7 @@ router.get('/', function(req, res, next){
             connection: {
                 host: 'localhost',
                 user: 'root',
-                password: '',
+                password: 'root',
                 database: 'plano_dev',
             },dumpToFile: './backup.sql',
         }
