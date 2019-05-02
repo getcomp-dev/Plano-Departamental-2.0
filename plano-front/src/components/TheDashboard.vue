@@ -163,6 +163,8 @@ import {COMPONENT_LOADING, COMPONENT_LOADED} from '../vuex/mutation-types'
 import bddumpService from '../common/services/bddump'
 import userService from '../common/services/usuario'
 import _ from 'lodash'
+import downloadService from '../common/services/download'
+import {saveAs} from 'file-saver'
 
 const emptyUser = {
     nome: undefined,
@@ -274,6 +276,7 @@ export default {
       },
 
       download: function(filename) {
+
           bddumpService.downloadFile(filename).then((response)=> {
               if(response.success == true){
                   this.$notify({
@@ -328,9 +331,16 @@ export default {
       },
 
       showModalDownload () {
-          this.filename=""
+          downloadService.download().then(() => {
+              console.log('done')
+              fetch("http://200.131.219.57:3000/api/download/all", {method:'GET', headers:{'Authorization': `Bearer ${this.$store.state.auth.token}`}}).then(r => r.blob())
+                  .then(blob => {
+                      saveAs(blob, "data.zip")
+                  })
+          }).catch(error => console.log(error))
+          /*this.filename=""
           this.returnFiles()
-          this.$refs.modalDownload.show()
+          this.$refs.modalDownload.show()*/
       },
 
       showModalSave () {

@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap-vue": "^2.0.0-rc.8",
+    "file-saver": "^2.0.1",
     "jspdf": "^1.4.1",
     "local-storage": "^1.4.2",
     "lodash": "^4.17.5",

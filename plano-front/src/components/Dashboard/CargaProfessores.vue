@@ -102,6 +102,7 @@
 <script>
     import _ from 'lodash'
     import jsPDF from 'jspdf'
+    import pdfs from '../../common/services/pdfs'
     import html2canvas from 'html2canvas'
     export default {
         name: 'DashboardCargaProfessores',
@@ -187,116 +188,7 @@
             },*/
 
             pdf() {
-
-                var pdfMake = require('pdfmake/build/pdfmake.js')
-                if (pdfMake.vfs == undefined){
-                    var pdfFonts = require('pdfmake/build/vfs_fonts.js')
-                    pdfMake.vfs = pdfFonts.pdfMake.vfs;
-                }
-                var tables = []
-                var professores = _.orderBy(this.$store.state.docente.Docentes, 'apelido')
-                var turmasProf
-                var posProf
-                var vazio = 0
-                for(var i = 0; i < professores.length; i++){
-                    turmasProf = this.turmas(professores[i])
-                    posProf = this.pos(professores[i])
-                    if(turmasProf.length === 0 && posProf.length === 0){
-                        vazio = vazio + 1
-                    }else {
-                        var cargatotal = 0
-                        tables.push({
-                            columns: [{
-                                text: professores[i].apelido,
-                                bold: true
-                            }, {
-                                text: 'C1:' + this.creditos1(professores[i]) + '|C2:' + this.creditos2(professores[i]),
-                                alignment: 'right',
-                                bold:true
-                            }], margin: [0, 10, 0, 10]
-                        })
-                        tables.push({
-                            style: 'tableExample',
-                            table: {
-                                widths: [8, 68, '*', 18, 104, 16, 16],
-                                headerRows: 1,
-                                color: '#426',
-                                body: [
-                                    [{text: 'S', bold: true}, {
-                                        text: 'Disciplina',
-                                        colSpan: 2,
-                                        bold: true
-                                    }, '', {text: 'T', alignment: 'center', bold: true}, {
-                                        text: 'Horário',
-                                        alignment: 'center',
-                                        bold: true
-                                    }, {text: 'C1', bold: true}, {text: 'C2', bold: true}],
-                                ]
-                            }
-                        })
-                        for (var j = 0; j < turmasProf.length; j++) {
-                            var disciplina = undefined
-                            var horario1 = undefined
-                            var horario2 = undefined
-                            var c1 = 0
-                            var c2 = 0
-                            for (var k = 0; k < this.$store.state.disciplina.Disciplinas.length; k++) {
-                                if (turmasProf[j].Disciplina === this.$store.state.disciplina.Disciplinas[k].id) {
-                                    disciplina = this.$store.state.disciplina.Disciplinas[k]
-                                }
-                            }
-                            for (var l = 0; l < this.$store.state.horario.Horarios.length; l++) {
-                                if (turmasProf[j].Horario1 === this.$store.state.horario.Horarios[l].id) {
-                                    horario1 = this.$store.state.horario.Horarios[l]
-                                }
-                            }
-
-                            for (var m = 0; m < this.$store.state.horario.Horarios.length; m++) {
-                                if (turmasProf[j].Horario2 === this.$store.state.horario.Horarios[m].id) {
-                                    horario2 = this.$store.state.horario.Horarios[m]
-                                }
-                            }
-                            if(horario1===undefined && horario2===undefined){
-                                horarioTotal = ''
-                            }else if (horario2 === undefined) {
-                                var horarioTotal = horario1.horario
-                            } else {
-                                var horarioTotal = horario1.horario + '/' + horario2.horario
-                            }
-                            if (turmasProf[j].periodo == 1) {
-                                c1 = disciplina.cargaTeorica + disciplina.cargaPratica
-                            } else {
-                                c2 = disciplina.cargaTeorica + disciplina.cargaPratica
-                            }
-                            tables[1 + 2 * (i - vazio)].table.body.push([{text:turmasProf[j].periodo, alignment: 'center'}, {
-                                text: disciplina.codigo,
-                                alignment: 'center'
-                            }, disciplina.nome, {text: turmasProf[j].letra, alignment: 'center'}, {
-                                text: horarioTotal,
-                                alignment: 'center'
-                            }, {text:c1, alignment: 'center'}, {text:c2, alignment: 'center'}])
-                        }
-                        for (var n = 0; n < posProf.length; n++) {
-                            var c1 = 0
-                            var c2 = 0
-                            if (posProf[n].trimestre === 1 || posProf[n].trimestre === 2) {
-                                c1 = posProf[n].creditos
-                            } else {
-                                c2 = posProf[n].creditos
-                            }
-                            tables[1 + 2 * (i - vazio)].table.body.push([{text:posProf[n].trimestre, alignment: 'center'}, {
-                                text: 'Disciplina do ' + posProf[n].programa,
-                                colSpan: 2
-                            }, '', '', '', {text:c1, alignment: 'center'}, {text:c2, alignment: 'center'}])
-                        }
-                    }
-                }
-
-                var docDefinition = {
-                    content: tables,
-                    header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
-                }
-                pdfMake.createPdf(docDefinition).open()
+                pdfs.pdfCargaProfessores()
             },
 
             turmas(professor){

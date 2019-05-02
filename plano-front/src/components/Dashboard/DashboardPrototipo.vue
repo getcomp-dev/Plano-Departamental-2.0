@@ -85,6 +85,7 @@
     import xlsx from '../../common/services/xlsx'
     import ls from 'local-storage'
     import { EventBus } from '../../event-bus.js'
+    import {saveAs} from 'file-saver'
 
     const emptyTurma = {
         id:undefined,
@@ -162,11 +163,7 @@
                 xlsx.downloadTable({pedidos:pedidos}).then(() => {
                     console.log('done')
                     fetch("http://200.131.219.57:3000/api/xlsx/download", {method:'GET', headers:{'Authorization': `Bearer ${this.$store.state.auth.token}`}}).then(r => r.blob())
-                        .then(blob => URL.createObjectURL(blob))
-                        .then(url => {
-                            window.open(url, '_blank');
-                            URL.revokeObjectURL(url);
-                        }).catch(e => console.log(e))
+                        .then(blob => saveAs(blob, "tabela.xlsx"))
                 }).catch(error => console.log(error))
             },
 
