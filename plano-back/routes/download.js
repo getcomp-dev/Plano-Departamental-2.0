@@ -39,7 +39,7 @@ router.get('/', function(req, res, next){
     console.log('sql adicionado')
     zip.generateAsync({type:"blob"})
         .then(function (blob) {
-            fs.writeFile('data.zip', blob, function(err){
+            fs.writeFile('data.zip', [blob], function(err){
                 if (err) throw err
                 console.log('Saved!')
             })
