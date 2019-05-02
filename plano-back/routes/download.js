@@ -40,15 +40,11 @@ router.get('/', function(req, res, next){
     zip.generateAsync({type:"blob"})
         .then(function (blob) {
             let reader = new FileReader()
-            reader.readAsText(blob).then(() => {
-                console.log('blob lido')
-                console.log(reader.result)
-                fs.writeFile('data.zip', reader.result, function(err){
-                    if (err) throw err
-                    console.log('Saved!')
-                })
-            })
-
+            reader.onload = function () {
+                fs.writeFileSync('data.zip', Buffer(new Uint8Array(this.result)));
+            };
+            reader.readAsArrayBuffer(blob);
+            
         });
     res.send({success:true})
 })
