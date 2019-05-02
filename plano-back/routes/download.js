@@ -39,10 +39,14 @@ router.get('/', function(req, res, next){
     console.log('sql adicionado')
     zip.generateAsync({type:"blob"})
         .then(function (blob) {
-            fs.writeFile('data.zip', [blob], function(err){
-                if (err) throw err
-                console.log('Saved!')
+            let reader = new FileReader()
+            reader.readAsText(blob).then(() => {
+                fs.writeFile('data.zip', reader.result, function(err){
+                    if (err) throw err
+                    console.log('Saved!')
+                })
             })
+
         });
     res.send({success:true})
 })
