@@ -135,6 +135,15 @@
             },
 
             addTurma() {
+                if(this.turmaForm.periodo !=1 && this.turmaForm.periodo !=3) {
+                    this.$notify({
+                        group: 'general',
+                        title: `Erro`,
+                        text: `O semestre deve ser 1 ou 3`,
+                        type: 'error'
+                    })
+                    return
+                }
                 var turmasLivres = _.orderBy(_.orderBy(_.filter(this.$store.state.turma.Turmas, function(t) { return t.Disciplina === null}), 'letra'), 'Disciplina')
                 console.log(turmasLivres)
                 this.turmaForm.id = turmasLivres[0].id
