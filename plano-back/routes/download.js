@@ -6,16 +6,20 @@ const express = require('express'),
 
 router.get('/', function(req, res, next){
     const zip = new JSZip
+    console.log('Lendo Tabela')
     let tabela = fs.readFileSync('./tabelaPrincipal.xlsx', (err, data) => {
         if(err) throw err
         return data
     })
+    console.log('Tabela Lida')
     zip.file("Tabelas.xlsx", tabela)
-
+    console.log('Tabela adicionada ao zip')
+    console.log('criando sql')
     fs.open('backup.sql', 'w', function (err, file) {
         if (err) throw err;
         console.log('Saved!');
     })
+    console.log('arquivo criado')
     mysqldump({
             connection: {
                 host: 'localhost',
@@ -25,14 +29,19 @@ router.get('/', function(req, res, next){
             },dumpToFile: './backup.sql',
         }
     )
-    let sql = fs.readFileSync('../backup.sql', (err, data) => {
+    console.log('dump criado')
+    let sql = fs.readFileSync('./backup.sql', (err, data) => {
         if(err) throw err
         return data
     })
+    console.log('sql lido')
     zip.file("backup.sql", sql)
+    console.log('sql adicionado')
     zip.generateAsync({type:"blob"})
         .then(function (blob) {
+            console.log('blob criado')
             saveAs(blob, "data.zip");
+            console.log('arquivo criado')
         });
     res.send({success:true})
 })
