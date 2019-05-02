@@ -39,9 +39,11 @@ router.get('/', function(req, res, next){
     console.log('sql adicionado')
     zip.generateAsync({type:"blob"})
         .then(function (blob) {
-            console.log('blob criado')
-            saveAs(blob, "data.zip");
-            console.log('arquivo criado')
+            let zipFile = fs.openSync('data.zip', 'w+')
+            fs.writeSync(zipFile, blob, 0, blob.size, 0)
+            fs.close(zipFile, (err) => {
+                if (err) throw err;
+            });
         });
     res.send({success:true})
 })
