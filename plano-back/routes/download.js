@@ -14,7 +14,7 @@ router.get('/', function(req, res, next){
     console.log('Tabela Lida')
     zip.file("Tabelas.xlsx", tabela)
     console.log('Tabela adicionada ao zip')
-    req.body.pdfCarga.getBlob(blob => fs.writeFileSync('Cargas.pdf', blob))
+    fs.writeFileSync('Cargas.pdf', req.body.pdfCarga)
     console.log('arquivo .pdf criado')
     console.log(req.body.pdfCarga)
     let carga = fs.readFileSync('./Cargas.pdf', (err, data) => {
@@ -23,7 +23,7 @@ router.get('/', function(req, res, next){
     })
     zip.file("Cargas.pdf", carga)
     console.log('pdf adicionado ao .zip')
-    req.body.pdfLabs.getBlob(blob => fs.writeFileSync('Labs.pdf', blob))
+    fs.writeFileSync('Labs.pdf', req.body.pdfLabs)
     console.log('arquivo .pdf criado')
     let labs = fs.readFileSync('./Labs.pdf', (err, data) => {
         if(err) throw err
