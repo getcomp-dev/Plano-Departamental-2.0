@@ -2,9 +2,26 @@ const express = require('express'),
       router = require('express').Router(),
       JSZip = require('jszip'),
       fs = require('fs'),
-      mysqldump = require('mysqldump')
+      mysqldump = require('mysqldump'),
+      multer = require('multer')
 
-router.get('/', function(req, res, next){
+const storage = multer.diskStorage({
+    destination: function(req, file , cb){
+        cb(null, './')
+    },
+
+    filename: function(req, file, cb){
+        cb(null, file.originalname)
+    }
+})
+
+const upload = multer({storage})
+
+router.post('/upload-carga', upload.single('Carga'), (req, res) => res.send({sucess:true}))
+
+router.post('/upload-labs', upload.single('Labs'), (req, res) => res.send({sucess:true}))
+
+router.get('/',  function(req, res, next){
     const zip = new JSZip
     console.log('Lendo Tabela')
     let tabela = fs.readFileSync('./tabelaPrincipal.xlsx', (err, data) => {
