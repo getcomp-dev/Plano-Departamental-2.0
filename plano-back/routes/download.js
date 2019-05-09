@@ -17,7 +17,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-router.post('/upload-carga', upload.single('Carga.pdf'), (req, res, next) => res.send({sucess:true}))
+router.post('/upload-carga', upload.single('Carga'), (req, res, next) => res.send({sucess:true}))
 
 router.post('/upload-labs', upload.single('Labs.pdf'), (req, res, next) => res.send({sucess:true}))
 
