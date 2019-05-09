@@ -7,7 +7,7 @@ const express = require('express'),
 
 const storage = multer.diskStorage({
     destination: function(req, file , cb){
-        cb(null, 'pdfs/')
+        cb(null, '/pdfs')
     },
 
     filename: function(req, file, cb){
