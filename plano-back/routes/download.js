@@ -17,9 +17,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage})
 
-router.post('/upload-carga', upload.single('Carga'), (req, res) => res.send({sucess:true}))
+router.post('/upload-carga', upload.single('Carga.pdf'), (req, res) => res.send({sucess:true}))
 
-router.post('/upload-labs', upload.single('Labs'), (req, res) => res.send({sucess:true}))
+router.post('/upload-labs', upload.single('Labs.pdf'), (req, res) => res.send({sucess:true}))
 
 router.get('/',  function(req, res, next){
     const zip = new JSZip
