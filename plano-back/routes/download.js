@@ -15,7 +15,7 @@ const storage = multer.diskStorage({
     }
 })
 
-const upload = multer({storage})
+const upload = multer({ storage: storage })
 
 router.post('/upload-carga', upload.single('Carga.pdf'), (req, res, next) => res.send({sucess:true}))
 
