@@ -3,7 +3,7 @@
                  'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
                  'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
         <td style="width: 16px;">
-            <input type="text" style="width: 16px;" id="periodo" v-model="turma.periodo" v-on:blur="editTurma(turma)">
+            <input type="text" style="width: 16px;" id="periodo" v-model="turmaForm.periodo" v-on:blur="editTurma(turma)">
             <input type="checkbox" name="ativa" value="true" v-on:click="checkDelete(turma)" v-model="ativo" style="width:16px;height: 16px;padding:0;">
         </td>
         <td style="width: 64px;">
@@ -14,7 +14,7 @@
             </template>
         </td>
         <td style="width: 120px;">
-            <select type="text" style="width:120px;" id="disciplina" v-model="turma.Disciplina"
+            <select type="text" style="width:120px;" id="disciplina" v-model="turmaForm.Disciplina"
                     v-on:change="editTurma(turma)">
                 <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
                 <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">
@@ -32,17 +32,17 @@
             </p>
         </td>
         <td style="width: 36px;">
-            <input type="text" style="width: 20px; margin-left: 8px; margin-right: 8px" v-model="turma.letra" v-on:blur="editTurma(turma)">
+            <input type="text" style="width: 20px; margin-left: 8px; margin-right: 8px" v-model="turmaForm.letra" v-on:blur="editTurma(turma)">
         </td>
         <td style="width: 65px;">
-            <select type="text" style="width: 65px" id="horario1" v-model="turma.Horario1"
+            <select type="text" style="width: 65px" id="horario1" v-model="turmaForm.Horario1"
                     v-on:change="editTurma(turma)">
                 <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
                 <option v-else value=""></option>
                 <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
             </select>
             <br/>
-            <select type="text" style="width: 65px" id="horario2" v-model="turma.Horario2"
+            <select type="text" style="width: 65px" id="horario2" v-model="turmaForm.Horario2"
                     v-on:change="editTurma(turma)">
                 <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
                 <option v-else value=""></option>
@@ -50,14 +50,14 @@
             </select>
         </td>
         <td style="width: 100px;">
-            <select type="text" style="width:100px" id="docente1" v-model="turma.Docente1"
+            <select type="text" style="width:100px" id="docente1" v-model="turmaForm.Docente1"
                     v-on:change="editTurma(turma)">
                 <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
                 <option v-else type="text" value=""></option>
                 <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.apelido}}</option>
             </select>
             <br/>
-            <select type="text" style="width:100px;" id="docente2" v-model="turma.Docente2"
+            <select type="text" style="width:100px;" id="docente2" v-model="turmaForm.Docente2"
                     v-on:change="editTurma(turma)">
                 <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
                 <option v-else type="text" value=""></option>
@@ -65,7 +65,7 @@
             </select>
         </td>
         <td style="width: 62px;">
-            <select type="text" style="width: 62px" id="turno1" v-model="turma.turno1" v-on:change="editTurma(turma)">
+            <select type="text" style="width: 62px" id="turno1" v-model="turmaForm.turno1" v-on:change="editTurma(turma)">
                 <option value=""></option>
                 <option value="Diurno">Diurno</option>
                 <option value="Noturno">Noturno</option>
@@ -73,13 +73,13 @@
             <br/>
         </td>
         <td style="width: 60px">
-            <select type="text" style="width:60px" id="sala1" v-model="turma.Sala1" v-on:change="editTurma(turma)">
+            <select type="text" style="width:60px" id="sala1" v-model="turmaForm.Sala1" v-on:change="editTurma(turma)">
                 <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
                 <option v-else value=""></option>
                 <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
             </select>
             <br/>
-            <select type="text" style="width: 60px" id="sala2" v-model="turma.Sala2" v-on:change="editTurma(turma)">
+            <select type="text" style="width: 60px" id="sala2" v-model="turmaForm.Sala2" v-on:change="editTurma(turma)">
                 <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
                 <option v-else value=""></option>
                 <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
@@ -99,6 +99,22 @@
     import turmaService from '../../common/services/turma'
     import pedidoService from '../../common/services/pedido'
     import turmaPedido from './TurmaPedido.vue'
+    import _ from 'lodash'
+
+    const emptyTurma = {
+        id:undefined,
+        periodo:undefined,
+        letra:undefined,
+        turno1:undefined,
+        turno2:undefined,
+        Disciplina:undefined,
+        Docente1:undefined,
+        Docente2:undefined,
+        Horario1:undefined,
+        Horario2:undefined,
+        Sala1:undefined,
+        Sala2:undefined
+    }
 
     export default {
         name:'TurmaRow',
@@ -110,12 +126,17 @@
         data () {
             return {
                 ativo: false,
-                valorAtual:undefined
+                valorAtual:undefined,
+                turmaForm:_.clone(emptyTurma)
             }
         },
 
         components: {
             turmaPedido
+        },
+
+        mounted: function(){
+            this.turmaForm = _.clone(this.turma)
         },
 
         methods: {
@@ -130,28 +151,38 @@
               return t
             },
 
-            editTurma(turma) {
-                if(turma.Docente1==="")
-                    turma.Docente1=null
+            editTurma() {
+                if(this.turmaForm.periodo !=1 && this.turmaForm.periodo!=3){
+                    this.turmaForm.periodo = this.turma.periodo
+                    this.$notify({
+                        title: "Erro",
+                        text: "O semestre deve ser 1 ou 3",
+                        type: "error"
+                    })
+                    return
+                }
 
-                if(turma.Docente2==="")
-                    turma.Docente2=null
+                if(this.turmaForm.Docente1==="")
+                    this.turmaForm.Docente1=null
 
-                if(turma.Horario1==="")
-                    turma.Horario1=null
+                if(this.turmaForm.Docente2==="")
+                    this.turmaForm.Docente2=null
 
-                if(turma.Horario2==="")
-                    turma.Horario2=null
+                if(this.turmaForm.Horario1==="")
+                    this.turmaForm.Horario1=null
 
-                if(turma.Sala1==="")
-                    turma.Sala111=null
+                if(this.turmaForm.Horario2==="")
+                    this.turmaForm.Horario2=null
 
-                if(turma.Sala2==="")
-                    turma.Sala2=null
+                if(this.turmaForm.Sala1==="")
+                    this.turmaForm.Sala111=null
 
-                if(turma.Turno1==="")
-                    turma.Turno1=null
-                turmaService.update(turma.id, turma).then((response) => {
+                if(this.turmaForm.Sala2==="")
+                    this.turmaForm.Sala2=null
+
+                if(this.turmaForm.Turno1==="")
+                    this.turmaForm.Turno1=null
+                turmaService.update(this.turma.id, this.turmaForm).then((response) => {
                     this.$notify({
                         group: 'general',
                         title: `Sucesso!`,
