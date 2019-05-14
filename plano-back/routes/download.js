@@ -8,6 +8,7 @@ const express = require('express'),
 router.get('/',  function(req, res, next){
     const pdf = new pdfs
     const zip = new JSZip
+    console.log('Iniciando PDF')
     pdf.ready()
 
     console.log('Lendo Tabela')

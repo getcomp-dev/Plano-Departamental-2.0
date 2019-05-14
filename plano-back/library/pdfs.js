@@ -33,7 +33,6 @@ Pdfs.prototype.ready = function(){
         result[5].forEach(horario => this.Horarios.push(horario.dataValues))
     })
     this.Salas.forEach(console.log(sala))
-    return true
 }
 
 
