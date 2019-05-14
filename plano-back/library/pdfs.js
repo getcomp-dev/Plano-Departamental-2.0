@@ -2,13 +2,12 @@ const models = require('../models/index'),
       _ = require('lodash')
 
 function Pdfs(){
-    this.Salas = []
-    this.Disciplinas = []
-    this.Turmas = []
-    this.Cargas = []
-    this.Docentes = []
-    this.Horarios = []
-    this.initialized = []
+    this.Salas = undefined
+    this.Disciplinas = undefined
+    this.Turmas = undefined
+    this.Cargas = undefined
+    this.Docentes = undefined
+    this.Horarios = undefined
 }
 
 Pdfs.prototype.ready = function(){
