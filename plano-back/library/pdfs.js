@@ -12,12 +12,14 @@ function Pdfs(){
 }
 
 Pdfs.prototype.ready = function(){
+    console.log('Pedindo dados')
     this.Salas = models.Sala.findAll()
     this.Disciplinas = models.disciplina.fincAll()
     this.Turmas = models.turma.findAll()
     this.Cargas = models.cargaPos.findAll()
     this.Docentes = models.docente.findAll()
     this.Horarios = models.horario.findAll()
+    console.log('Resolvendo Promises')
     Promise.all([this.Salas, this.Disciplinas, this.Turmas, this.Cargas, this.Docentes, this.Horarios]).then(result => {
         this.Salas = []
         this.Disciplinas = []
@@ -32,6 +34,7 @@ Pdfs.prototype.ready = function(){
         result[4].forEach(docente => this.Docentes.push(docente.dataValues))
         result[5].forEach(horario => this.Horarios.push(horario.dataValues))
     })
+    console.log('Dados inicializados')
     this.Salas.forEach(console.log(sala))
 }
 
