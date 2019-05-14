@@ -5,7 +5,7 @@ const express = require('express'),
       mysqldump = require('mysqldump'),
       pdfs = require ('../library/pdfs')
 
-router.get('/',  function(req, res, next){
+router.get('/',  async function(req, res, next){
     const pdf = new pdfs
     const zip = new JSZip
     console.log('Iniciando PDF')
