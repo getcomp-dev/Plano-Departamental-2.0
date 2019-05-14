@@ -1,5 +1,5 @@
-import _ from 'lodash'
-const models = require('../models/index')
+const models = require('../models/index'),
+      _ = require('lodash')
 
 function Pdfs(){
     this.Salas = []
