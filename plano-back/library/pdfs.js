@@ -14,11 +14,11 @@ function Pdfs(){
 Pdfs.prototype.ready = function(){
     console.log('Pedindo dados')
     this.Salas = models.Sala.findAll()
-    this.Disciplinas = models.disciplina.fincAll()
-    this.Turmas = models.turma.findAll()
-    this.Cargas = models.cargaPos.findAll()
-    this.Docentes = models.docente.findAll()
-    this.Horarios = models.horario.findAll()
+    this.Disciplinas = models.Disciplina.fincAll()
+    this.Turmas = models.Turma.findAll()
+    this.Cargas = models.CargaPos.findAll()
+    this.Docentes = models.Docente.findAll()
+    this.Horarios = models.Horario.findAll()
     console.log('Resolvendo Promises')
     Promise.all([this.Salas, this.Disciplinas, this.Turmas, this.Cargas, this.Docentes, this.Horarios]).then(result => {
         this.Salas = []
