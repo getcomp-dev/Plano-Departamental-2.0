@@ -3,26 +3,13 @@ const express = require('express'),
       JSZip = require('jszip'),
       fs = require('fs'),
       mysqldump = require('mysqldump'),
-      multer = require('multer')
-
-const storage = multer.diskStorage({
-    destination: function(req, file , cb){
-        cb(null, '/pdfs')
-    },
-
-    filename: function(req, file, cb){
-        cb(null, file.originalname)
-    }
-})
-
-const upload = multer({ storage: storage })
-
-router.post('/upload-carga', upload.single('Carga'), (req, res, next) => res.send({sucess:true}))
-
-router.post('/upload-labs', upload.single('Labs.pdf'), (req, res, next) => res.send({sucess:true}))
+      pdfs = require ('../library/pdfs')
 
 router.get('/',  function(req, res, next){
+    const pdf = new pdfs
     const zip = new JSZip
+    await pdf.ready()
+
     console.log('Lendo Tabela')
     let tabela = fs.readFileSync('./tabelaPrincipal.xlsx', (err, data) => {
         if(err) throw err
