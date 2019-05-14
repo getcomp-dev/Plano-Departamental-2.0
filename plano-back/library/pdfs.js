@@ -13,7 +13,7 @@ function Pdfs(){
 Pdfs.prototype.ready = function(){
     console.log('Pedindo dados')
     this.Salas = models.Sala.findAll()
-    this.Disciplinas = models.Disciplina.fincAll()
+    this.Disciplinas = models.Disciplina.findAll()
     this.Turmas = models.Turma.findAll()
     this.Cargas = models.CargaPos.findAll()
     this.Docentes = models.Docente.findAll()
