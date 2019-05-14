@@ -9,7 +9,10 @@ router.get('/',  function(req, res, next){
     const pdf = new pdfs
     const zip = new JSZip
     console.log('Iniciando PDF')
-    pdf.ready()
+    let done = await pdf.ready()
+    if(done){
+        console.log('Dados carregados')
+    }
 
     console.log('Lendo Tabela')
     let tabela = fs.readFileSync('./tabelaPrincipal.xlsx', (err, data) => {

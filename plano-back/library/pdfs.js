@@ -10,7 +10,7 @@ function Pdfs(){
     this.Horarios = undefined
 }
 
-Pdfs.prototype.ready = function(){
+Pdfs.prototype.ready = async function(){
     console.log('Pedindo dados')
     this.Salas = models.Sala.findAll()
     this.Disciplinas = models.Disciplina.findAll()
@@ -34,6 +34,7 @@ Pdfs.prototype.ready = function(){
         result[5].forEach(horario => this.Horarios.push(horario.dataValues))
         console.log('Dados inicializados')
         this.Salas.forEach(sala => console.log(sala.nome))
+        return true
     })
 }
 
