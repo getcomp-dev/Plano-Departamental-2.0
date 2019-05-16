@@ -230,6 +230,7 @@ Pdfs.prototype.pdfCargaProfessores = function() {
     var posProf
     var vazio = 0
     for(var i = 0; i < professores.length; i++){
+        this.Turmas.forEach(turma => console.log(turma))
         turmasProf = turmas(professores[i], this.Turmas)
         posProf = pos(professores[i], this.Cargas)
         if(turmasProf.length === 0 && posProf.length === 0){
