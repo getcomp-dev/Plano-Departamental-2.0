@@ -146,11 +146,10 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
 
     var fonts = {
         Roboto: {
-            ///home/planodcc/Plano-Departamental-2.0/node_modules/pdfmake/src/printer.js
-            normal: '../../../../plano-back/library/fonts/Roboto-Regular.ttf',
-            bold: '../../../../plano-back/library//fonts/Roboto-Medium.ttf',
-            italics: '../../../../plano-back/library//fonts/Roboto-Italic.ttf',
-            bolditalics: '../../../../plano-back/library//fonts/Roboto-MediumItalic.ttf'
+            normal: 'home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Regular.ttf',
+            bold: 'home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Medium.ttf',
+            italics: 'home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Italic.ttf',
+            bolditalics: 'home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-MediumItalic.ttf'
         }
     };
 
@@ -331,10 +330,10 @@ Pdfs.prototype.pdfCargaProfessores = function() {
 
     var fonts = {
         Roboto: {
-            normal: '../../../../plano-back/library//fonts/Roboto-Regular.ttf',
-            bold: '../../../../plano-back/library//fonts/Roboto-Medium.ttf',
-            italics: '../../../../plano-back/library//fonts/Roboto-Italic.ttf',
-            bolditalics: '../../../../plano-back/library//fonts/Roboto-MediumItalic.ttf'
+            normal: 'home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Regular.ttf',
+            bold: 'home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Medium.ttf',
+            italics: 'home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Italic.ttf',
+            bolditalics: 'home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-MediumItalic.ttf'
         }
     };
 
