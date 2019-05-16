@@ -33,7 +33,6 @@ Pdfs.prototype.ready = async function(){
         result[4].forEach(docente => this.Docentes.push(docente.dataValues))
         result[5].forEach(horario => this.Horarios.push(horario.dataValues))
         console.log('Dados inicializados')
-        this.Turmas.forEach(turma => console.log(turma))
         this.pdfAlocacaoLabs()
         this.pdfCargaProfessores()
         return true
@@ -70,7 +69,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
         for(var d = 0; d< 6; d++) {
             for (var j = 0; j < turmas.length; j++) {
                 if(turmas[j].Sala1===laboratorios[i].id || turmas[j].Sala2===laboratorios[i].id){
-                    if(this.checkTurmaHorario(turmas[j], 1 + d)){
+                    if(checkTurmaHorario(turmas[j], 1 + d)){
                         for(var k = 0; k < disciplinas.length; k++){
                             if(turmas[j].Disciplina === disciplinas[k].id){
                                 if(seg !== '')
@@ -79,7 +78,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
                             }
                         }
                     }
-                    if(this.checkTurmaHorario(turmas[j], 7 + d)){
+                    if(checkTurmaHorario(turmas[j], 7 + d)){
                         for(k = 0; k < disciplinas.length; k++){
                             if(turmas[j].Disciplina === disciplinas[k].id){
                                 if(ter != '')
@@ -88,7 +87,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
                             }
                         }
                     }
-                    if(this.checkTurmaHorario(turmas[j], 13 + d)){
+                    if(checkTurmaHorario(turmas[j], 13 + d)){
                         for(k = 0; k < disciplinas.length; k++){
                             if(turmas[j].Disciplina === disciplinas[k].id){
                                 if(qua != '')
@@ -97,7 +96,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
                             }
                         }
                     }
-                    if(this.checkTurmaHorario(turmas[j], 19 + d)){
+                    if(checkTurmaHorario(turmas[j], 19 + d)){
                         for(k = 0; k < disciplinas.length; k++){
                             if(turmas[j].Disciplina === disciplinas[k].id){
                                 if(qui != '')
@@ -106,7 +105,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
                             }
                         }
                     }
-                    if(this.checkTurmaHorario(turmas[j], 25 + d)){
+                    if(checkTurmaHorario(turmas[j], 25 + d)){
                         for(k = 0; k < disciplinas.length; k++){
                             if(turmas[j].Disciplina === disciplinas[k].id){
                                 if(sex != '')
