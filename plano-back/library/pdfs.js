@@ -146,10 +146,10 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
 
     var fonts = {
         Roboto: {
-            normal: 'fonts/Roboto-Regular.ttf',
-            bold: 'fonts/Roboto-Medium.ttf',
-            italics: 'fonts/Roboto-Italic.ttf',
-            bolditalics: 'fonts/Roboto-MediumItalic.ttf'
+            normal: './fonts/Roboto-Regular.ttf',
+            bold: './fonts/Roboto-Medium.ttf',
+            italics: './fonts/Roboto-Italic.ttf',
+            bolditalics: './fonts/Roboto-MediumItalic.ttf'
         }
     };
 
