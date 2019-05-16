@@ -158,7 +158,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
     var fs = require('fs');
 
     var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
-    pdfDoc.pipe(fs.createWriteStream('document.pdf'));
+    pdfDoc.pipe(fs.createWriteStream('Labs.pdf'));
     pdfDoc.end();
 }
 
@@ -342,7 +342,7 @@ Pdfs.prototype.pdfCargaProfessores = function() {
     var fs = require('fs');
 
     var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
-    pdfDoc.pipe(fs.createWriteStream('document.pdf'));
+    pdfDoc.pipe(fs.createWriteStream('Cargas.pdf'));
     pdfDoc.end();
 }
 

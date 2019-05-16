@@ -9,7 +9,11 @@ router.get('/', function(req, res, next){
     const pdf = new pdfs
     const zip = new JSZip
     console.log('Iniciando PDF')
-    pdf.ready().then(() => console.log("Done"))
+    pdf.ready().then(() => {
+        pdf.pdfAlocacaoLabs()
+        pdf.pdfCargaProfessores()
+
+    })
 
     console.log('Lendo Tabela')
     let tabela = fs.readFileSync('./tabelaPrincipal.xlsx', (err, data) => {
@@ -19,17 +23,12 @@ router.get('/', function(req, res, next){
     console.log('Tabela Lida')
     zip.file("Tabelas.xlsx", tabela)
     console.log('Tabela adicionada ao zip')
-    fs.writeFileSync('Cargas.pdf', req.body.pdfCarga)
-    console.log('arquivo .pdf criado')
-    console.log(req.body.pdfCarga)
     let carga = fs.readFileSync('./Cargas.pdf', (err, data) => {
         if(err) throw err
         return data
     })
     zip.file("Cargas.pdf", carga)
     console.log('pdf adicionado ao .zip')
-    fs.writeFileSync('Labs.pdf', req.body.pdfLabs)
-    console.log('arquivo .pdf criado')
     let labs = fs.readFileSync('./Labs.pdf', (err, data) => {
         if(err) throw err
         return data
