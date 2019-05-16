@@ -174,7 +174,7 @@ function creditos1(professor, turmas, disciplinas, cargas){
     for (var t = 0; t < turmas.length; t++){
         if(turmas[t].periodo===1 && (turmas[t].Docente1===professor.id || turmas[t].Docente2===professor.id)){
             for (var d = 0; d < disciplinas.length; d++){
-                if(disciplinas[d].id===this.Turmas[t].Disciplina){
+                if(disciplinas[d].id===turmas[t].Disciplina){
                     c+=parseInt(disciplinas[d].cargaPratica, 10)
                     c+=parseInt(disciplinas[d].cargaTeorica, 10)
                 }
