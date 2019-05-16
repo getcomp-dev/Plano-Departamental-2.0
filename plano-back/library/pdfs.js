@@ -230,8 +230,8 @@ Pdfs.prototype.pdfCargaProfessores = function() {
     var posProf
     var vazio = 0
     for(var i = 0; i < professores.length; i++){
-        turmasProf = this.turmas(professores[i], this.Turmas)
-        posProf = this.pos(professores[i], this.Cargas)
+        turmasProf = turmas(professores[i], this.Turmas)
+        posProf = pos(professores[i], this.Cargas)
         if(turmasProf.length === 0 && posProf.length === 0){
             vazio = vazio + 1
         }else {
