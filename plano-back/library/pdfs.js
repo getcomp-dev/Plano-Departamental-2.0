@@ -34,6 +34,8 @@ Pdfs.prototype.ready = async function(){
         result[5].forEach(horario => this.Horarios.push(horario.dataValues))
         console.log('Dados inicializados')
         this.Turmas.forEach(turma => console.log(turma))
+        this.pdfAlocacaoLabs()
+        this.pdfCargaProfessores()
         return true
     })
 }
@@ -52,6 +54,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
         var pdfFonts = require('pdfmake/build/vfs_fonts.js')
         pdfMake.vfs = pdfFonts.pdfMake.vfs;
     }
+
     var tables = []
     var laboratorios = _.filter(this.Salas, ['laboratorio', true])
     var disciplinas = this.Disciplinas

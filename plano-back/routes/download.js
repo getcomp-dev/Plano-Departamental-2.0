@@ -2,16 +2,13 @@ const express = require('express'),
       router = require('express').Router(),
       JSZip = require('jszip'),
       fs = require('fs'),
-      mysqldump = require('mysqldump'),
-      pdfs = require ('../library/pdfs')
+      mysqldump = require('mysqldump')
+
 
 router.get('/', function(req, res, next){
-    const pdf = new pdfs
     const zip = new JSZip
     console.log('Iniciando PDF')
-    pdf.ready().then(() => {
-        pdf.pdfAlocacaoLabs()
-        pdf.pdfCargaProfessores()
+
 
         console.log('Lendo Tabela')
         let tabela = fs.readFileSync('./tabelaPrincipal.xlsx', (err, data) => {
@@ -62,7 +59,7 @@ router.get('/', function(req, res, next){
                 });
             res.send({success: true})
         }).catch((e)=>{res.send({success:false})})
-    })
+
 })
 
 router.get('/all', function(req, res, next){

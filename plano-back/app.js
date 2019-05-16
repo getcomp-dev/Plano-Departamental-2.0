@@ -27,6 +27,7 @@ const express = require('express'),
   cargaPosRoute = require('./routes/cargaPos'),
   planoRoute = require('./routes/plano'),
   xlsxDownload = require('./routes/xlsx'),
+  pdfsRoute = require('./routes/pdfs'),
   downloads = require('./routes/download')
 
 
@@ -73,6 +74,7 @@ app.use('/api/bddump', bddumpRoute)
 app.use('/api/cargaPos', cargaPosRoute)
 app.use('/api/plano', planoRoute)
 app.use('/api/xlsx', xlsxDownload)
+app.use('/api/pdf', pdfsRoute)
 app.use('/api/download', downloads)
 
 app.use(history())
