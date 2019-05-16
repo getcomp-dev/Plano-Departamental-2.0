@@ -33,7 +33,7 @@ Pdfs.prototype.ready = async function(){
         result[4].forEach(docente => this.Docentes.push(docente.dataValues))
         result[5].forEach(horario => this.Horarios.push(horario.dataValues))
         console.log('Dados inicializados')
-        this.Salas.forEach(sala => console.log(sala.nome))
+        this.Turmas.forEach(turma => console.log(turma))
         return true
     })
 }
