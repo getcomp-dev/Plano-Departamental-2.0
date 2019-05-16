@@ -49,7 +49,7 @@ function checkTurmaHorario (turma, horario) {
 }
 
 Pdfs.prototype.pdfAlocacaoLabs = function() {
-    
+
     var tables = []
     var laboratorios = _.filter(this.Salas, ['laboratorio', true])
     var disciplinas = this.Disciplinas
@@ -140,8 +140,6 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
         header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
     }
 
-    var options = {}
-
     var fonts = {
         Roboto: {
             normal: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Regular.ttf',
@@ -155,7 +153,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
     var printer = new PdfPrinter(fonts);
     var fs = require('fs');
 
-    var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
+    var pdfDoc = printer.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Labs.pdf'));
     pdfDoc.end();
 }
