@@ -162,14 +162,14 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
     pdfDoc.end();
 }
 
-function turmas(professor){
-    return _.filter(this.Turmas,(turma) => {
+function turmas(professor, turmas){
+    return _.filter(turmas,(turma) => {
         return (turma.Docente1===professor.id || turma.Docente2===professor.id)
     })
 }
 
-function pos(professor){
-    return _.filter(this.Cargas,(turma) => {
+function pos(professor, cargas){
+    return _.filter(cargas,(turma) => {
         return (turma.Docente===professor.id)
     })
 }
@@ -230,8 +230,8 @@ Pdfs.prototype.pdfCargaProfessores = function() {
     var posProf
     var vazio = 0
     for(var i = 0; i < professores.length; i++){
-        turmasProf = this.turmas(professores[i])
-        posProf = this.pos(professores[i])
+        turmasProf = this.turmas(professores[i], this.Turmas)
+        posProf = this.pos(professores[i], this.Cargas)
         if(turmasProf.length === 0 && posProf.length === 0){
             vazio = vazio + 1
         }else {
