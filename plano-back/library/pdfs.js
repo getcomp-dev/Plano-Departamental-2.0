@@ -49,12 +49,7 @@ function checkTurmaHorario (turma, horario) {
 }
 
 Pdfs.prototype.pdfAlocacaoLabs = function() {
-    var pdfMake = require('pdfmake/build/pdfmake.js')
-    if (pdfMake.vfs == undefined){
-        var pdfFonts = require('pdfmake/build/vfs_fonts.js')
-        pdfMake.vfs = pdfFonts.pdfMake.vfs;
-    }
-
+    
     var tables = []
     var laboratorios = _.filter(this.Salas, ['laboratorio', true])
     var disciplinas = this.Disciplinas
