@@ -169,44 +169,44 @@ function pos(professor, cargas){
     })
 }
 
-function creditos1(professor){
+function creditos1(professor, turmas, disciplinas, cargas){
     var c = 0
-    for (var t = 0; t < this.Turmas.length; t++){
-        if(this.Turmas[t].periodo===1 && (this.Turmas[t].Docente1===professor.id || this.Turmas[t].Docente2===professor.id)){
-            for (var d = 0; d < this.Disciplinas.length; d++){
-                if(this.Disciplinas[d].id===this.Turmas[t].Disciplina){
-                    c+=parseInt(this.Disciplinas[d].cargaPratica, 10)
-                    c+=parseInt(this.Disciplinas[d].cargaTeorica, 10)
+    for (var t = 0; t < turmas.length; t++){
+        if(turmas[t].periodo===1 && (turmas[t].Docente1===professor.id || turmas[t].Docente2===professor.id)){
+            for (var d = 0; d < disciplinas.length; d++){
+                if(disciplinas[d].id===this.Turmas[t].Disciplina){
+                    c+=parseInt(disciplinas[d].cargaPratica, 10)
+                    c+=parseInt(disciplinas[d].cargaTeorica, 10)
                 }
             }
         }
     }
-    for(var t = 0; t < this.Cargas.length; t++){
-        if(this.Cargas[t].Docente===professor.id){
-            if(this.Cargas[t].trimestre==1 || this.Cargas[t].trimestre==2){
-                c+= parseInt(this.Cargas[t].creditos, 10)
+    for(var t = 0; t < cargas.length; t++){
+        if(cargas[t].Docente===professor.id){
+            if(cargas[t].trimestre==1 || cargas[t].trimestre==2){
+                c+= parseInt(cargas[t].creditos, 10)
             }
         }
     }
     return c
 }
 
-function creditos2(professor){
+function creditos2(professor, turmas, disciplinas, cargas){
     var c = 0
-    for (var t = 0; t < this.Turmas.length; t++){
-        if(this.Turmas[t].periodo===3 && (this.Turmas[t].Docente1===professor.id || this.Turmas[t].Docente2===professor.id)){
-            for (var d = 0; d < this.Disciplinas.length; d++){
-                if(this.Disciplinas[d].id===this.Turmas[t].Disciplina){
-                    c+=parseInt(this.Disciplinas[d].cargaPratica, 10)
-                    c+=parseInt(this.Disciplinas[d].cargaTeorica, 10)
+    for (var t = 0; t < turmas.length; t++){
+        if(turmas[t].periodo===3 && (turmas[t].Docente1===professor.id || turmas[t].Docente2===professor.id)){
+            for (var d = 0; d < disciplinas.length; d++){
+                if(disciplinas[d].id===turmas[t].Disciplina){
+                    c+=parseInt(disciplinas[d].cargaPratica, 10)
+                    c+=parseInt(disciplinas[d].cargaTeorica, 10)
                 }
             }
         }
     }
-    for(var t = 0; t < this.Cargas.length; t++){
-        if(this.Cargas[t].Docente===professor.id){
-            if(this.Cargas[t].trimestre==3){
-                c+= parseInt(this.Cargas[t].creditos, 10)
+    for(var t = 0; t < cargas.length; t++){
+        if(cargas[t].Docente===professor.id){
+            if(cargas[t].trimestre==3){
+                c+= parseInt(cargas[t].creditos, 10)
             }
         }
     }
@@ -237,7 +237,7 @@ Pdfs.prototype.pdfCargaProfessores = function() {
                     text: professores[i].apelido,
                     bold: true
                 }, {
-                    text: 'C1:' + this.creditos1(professores[i]) + '|C2:' + this.creditos2(professores[i]),
+                    text: 'C1:' + creditos1(professores[i], this.Turmas, this.Disciplinas, this.Cargas) + '|C2:' + creditos2(professores[i], this.Turmas, this.Disciplinas, this.Cargas),
                     alignment: 'right',
                     bold:true
                 }], margin: [0, 10, 0, 10]
