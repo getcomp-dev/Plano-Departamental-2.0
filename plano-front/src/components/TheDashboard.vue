@@ -331,13 +331,15 @@ export default {
       },
 
       showModalDownload () {
-          downloadService.download().then(() => {
-              console.log('done')
-              fetch("http://200.131.219.57:3000/api/download/all", {method:'GET', headers:{'Authorization': `Bearer ${this.$store.state.auth.token}`}}).then(r => r.blob())
-                  .then(blob => {
-                      saveAs(blob, "data.zip")
-                  })
-          }).catch(error => console.log(error))
+          downloadService.generatePdf().then(() => {
+              downloadService.download().then(() => {
+                  console.log('done')
+                  fetch("http://200.131.219.57:3000/api/download/all", {method:'GET', headers:{'Authorization': `Bearer ${this.$store.state.auth.token}`}}).then(r => r.blob())
+                      .then(blob => {
+                          saveAs(blob, "data.zip")
+                      })
+              }).catch(error => console.log(error))
+          })
           /*this.filename=""
           this.returnFiles()
           this.$refs.modalDownload.show()*/

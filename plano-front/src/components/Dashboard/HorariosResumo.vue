@@ -3588,9 +3588,11 @@
         },
 
         beforeMount: function () {
-            this.createHorarios1(2019, 1)
+            let anoAtual = (_.isEmpty(this.$store.state.plano.Plano)?2019:this.$store.state.plano.Plano[0].ano)
+            console.log([anoAtual, _.isEmpty(this.$store.state.plano.Plano)])
+            this.createHorarios1(anoAtual, 1)
             console.log(this.ativos1)
-            this.createHorarios2(2019, 3)
+            this.createHorarios2(anoAtual, 3)
             console.log(this.ativos2)
             console.log(this.horarioVazio(this.ativos1.CCD[0]))
             console.log(this.ativos1.CCD[0])
@@ -4716,6 +4718,7 @@
 
                 grades = _.filter(this.$store.state.grade.Grades, ['Curso', 4])
                 grades = _.orderBy(grades, 'periodoInicio', 'desc')
+                pedidos = []
                 for (var t in this.$store.state.pedido.Pedidos){
                     for (var pedido in this.$store.state.pedido.Pedidos[t]){
                         if(this.$store.state.pedido.Pedidos[t][pedido].Curso===4){
@@ -4770,6 +4773,7 @@
                 //CC Noturno está selecionado
                 grades = _.filter(this.$store.state.grade.Grades, ['Curso', 1])
                 grades = _.orderBy(grades, 'periodoInicio', 'desc')
+                pedidos = []
                 for (var t in this.$store.state.pedido.Pedidos){
                     for (var pedido in this.$store.state.pedido.Pedidos[t]){
                         if(this.$store.state.pedido.Pedidos[t][pedido].Curso===1){
@@ -4822,6 +4826,7 @@
                 //SI está selecionado
                 grades = _.filter(this.$store.state.grade.Grades, ['Curso', 3])
                 grades = _.orderBy(grades, 'periodoInicio', 'desc')
+                pedidos = []
                 for (var t in this.$store.state.pedido.Pedidos){
                     for (var pedido in this.$store.state.pedido.Pedidos[t]){
                         if(this.$store.state.pedido.Pedidos[t][pedido].Curso===3){
@@ -4874,6 +4879,7 @@
                 //Engenharia Computacional está selecionado
                 grades = _.filter(this.$store.state.grade.Grades, ['Curso', 2])
                 grades = _.orderBy(grades, 'periodoInicio', 'desc')
+                pedidos = []
                 for (var t in this.$store.state.pedido.Pedidos){
                     for (var pedido in this.$store.state.pedido.Pedidos[t]){
                         if(this.$store.state.pedido.Pedidos[t][pedido].Curso===2){
