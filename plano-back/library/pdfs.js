@@ -1412,6 +1412,8 @@ Pdfs.prototype.pdfResumoHorarios = function () {
     var printer = new PdfPrinter(fonts);
     var fs = require('fs');
 
+    console.log("Criando Documento Horarios")
+
     var pdfDoc = printer.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Horarios.pdf'));
     pdfDoc.end();
