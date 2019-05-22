@@ -15,6 +15,7 @@ function Pdfs(){
     this.Pedidos = undefined
     this.PedidosExternos = undefined
     this.Plano = undefined
+    this.Cursos = undefined
 
     this.ativos1 = {
         CCD: [[], [], [], [], [], [], [], [], [], []],
@@ -46,8 +47,9 @@ Pdfs.prototype.ready = async function(){
     this.Pedidos = models.Pedido.findAll()
     this.PedidosExternos = models.PedidoExterno.findAll()
     this.Plano = models.Plano.findAll()
+    this.Cursos = models.Curso.findAll()
     console.log('Resolvendo Promises')
-    Promise.all([this.Salas, this.Disciplinas, this.Turmas, this.Cargas, this.Docentes, this.Horarios, this.Grades, this.DisciplinasGrade, this.TurmasExternas, this.Pedidos, this.PedidosExternos, this.Plano]).then(result => {
+    Promise.all([this.Salas, this.Disciplinas, this.Turmas, this.Cargas, this.Docentes, this.Horarios, this.Grades, this.DisciplinasGrade, this.TurmasExternas, this.Pedidos, this.PedidosExternos, this.Plano, this.Cursos]).then(result => {
         this.Salas = []
         this.Disciplinas = []
         this.Turmas = []
@@ -60,6 +62,7 @@ Pdfs.prototype.ready = async function(){
         this.Pedidos = []
         this.PedidosExternos = []
         this.Plano = []
+        this.Cursos = []
         result[0].forEach(sala => this.Salas.push(sala.dataValues))
         result[1].forEach(disciplina => this.Disciplinas.push(disciplina.dataValues))
         result[2].forEach(turma => this.Turmas.push(turma.dataValues))
@@ -72,6 +75,7 @@ Pdfs.prototype.ready = async function(){
         result[9].forEach(pedido => this.Pedidos.push(pedido.dataValues))
         result[10].forEach(pedidoExterno => this.PedidosExternos.push(pedidoExterno.dataValues))
         result[11].forEach(plano => this.Plano.push(plano.dataValues))
+        result[12].forEach(curso => this.Cursos.push(curso.dataValues))
         console.log('Dados inicializados')
         this.pdfAlocacaoLabs()
         this.pdfCargaProfessores()
