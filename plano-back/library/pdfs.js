@@ -390,7 +390,15 @@ function isEven (number) {
         return 'false'
 }
 
-function createHorarios1 (ano, semestre, ativos1, listaDisciplinasGrade, listaTurmas, listaTurmasExternas, listaCursos, listaGrades, listaPedidos, listaPedidosExternos) {
+function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, listaTurmasExternas, listaCursos, listaGrades, listaPedidos, listaPedidosExternos) {
+    let ativos1 = {
+        CCD: [[], [], [], [], [], [], [], [], [], []],
+        CCN: [[], [], [], [], [], [], [], [], [], []],
+        EC: [[], [], [], [], [], [], [], [], [], []],
+        SI: [[], [], [], [], [], [], [], [], [], []],
+        Eletivas:[]
+    }
+
     var grade
     var grades
     var inicio = 1
@@ -680,6 +688,7 @@ function createHorarios1 (ano, semestre, ativos1, listaDisciplinasGrade, listaTu
         }
     }
 
+    return ativos1
 
 }
 
@@ -687,7 +696,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
 
     let anoAtual = (_.isEmpty(this.Plano)?2019:this.Plano[0].ano)
 
-    createHorarios1(anoAtual, 1, this.ativos1, this.DisciplinasGrade, this.Turmas, this.TurmasExternas, this.Cursos, this.Grades, this.Pedidos, this.PedidosExternos)
+    this.ativos1 = createHorarios1(anoAtual, 1, this.DisciplinasGrade, this.Turmas, this.TurmasExternas, this.Cursos, this.Grades, this.Pedidos, this.PedidosExternos)
 
     var tables = []
     var disciplinas = this.Disciplinas
