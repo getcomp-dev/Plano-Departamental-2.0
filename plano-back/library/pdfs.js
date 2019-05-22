@@ -685,8 +685,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
 
     let anoAtual = (_.isEmpty(this.Plano)?2019:this.Plano[0].ano)
 
-    createHorarios1(anoAtual, 1)
-    createHorarios2(anoAtual, 3)
+    createHorarios1(anoAtual, 1, this.DisciplinasGrade, this.Turmas, this.TurmasExternas, this.Cursos, this.Grades, this.Pedidos, this.PedidosExternos)
     console.log(this.ativos1)
 
     var tables = []
