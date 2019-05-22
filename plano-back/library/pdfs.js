@@ -178,13 +178,12 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
             seg = ter = qua = qui = sex = ''
         }
     }
-    console.log(tables)
-    var docDefinition = {
+    let docDefinition = {
         content: tables,
         header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
     }
 
-    var fonts = {
+    let fonts = {
         Roboto: {
             normal: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Regular.ttf',
             bold: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Medium.ttf',
@@ -193,11 +192,11 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
         }
     };
 
-    var PdfPrinter = require('pdfmake');
-    var printer = new PdfPrinter(fonts);
-    var fs = require('fs');
+    let PdfPrinter = require('pdfmake');
+    let printer = new PdfPrinter(fonts);
+    let fs = require('fs');
 
-    var pdfDoc = printer.createPdfKitDocument(docDefinition);
+    let pdfDoc = printer.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Labs.pdf'));
     pdfDoc.end();
 }
@@ -358,14 +357,12 @@ Pdfs.prototype.pdfCargaProfessores = function() {
             }
         }
     }
-    var docDefinition = {
+    let docDefinition = {
         content: tables,
         header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
     }
 
-    var options = {}
-
-    var fonts = {
+    let fonts = {
         Roboto: {
             normal: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Regular.ttf',
             bold: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Medium.ttf',
@@ -374,11 +371,11 @@ Pdfs.prototype.pdfCargaProfessores = function() {
         }
     };
 
-    var PdfPrinter = require('pdfmake');
-    var printer = new PdfPrinter(fonts);
-    var fs = require('fs');
+    let PdfPrinter = require('pdfmake');
+    let printer = new PdfPrinter(fonts);
+    let fs = require('fs');
 
-    var pdfDoc = printer.createPdfKitDocument(docDefinition, options);
+    let pdfDoc = printer.createPdfKitDocument(docDefinition, options);
     pdfDoc.pipe(fs.createWriteStream('Cargas.pdf'));
     pdfDoc.end();
 }
@@ -1400,12 +1397,12 @@ Pdfs.prototype.pdfResumoHorarios = function () {
     }
 
 
-    var docDefinition = {
+    let docDefinition = {
         content: tables,
         header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
     }
 
-    var fonts = {
+    let fonts = {
         Roboto: {
             normal: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Regular.ttf',
             bold: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Medium.ttf',
@@ -1414,13 +1411,11 @@ Pdfs.prototype.pdfResumoHorarios = function () {
         }
     };
 
-    var PdfPrinter = require('pdfmake');
-    var printer = new PdfPrinter(fonts);
-    var fs = require('fs');
+    let PdfPrinter = require('pdfmake');
+    let printer = new PdfPrinter(fonts);
+    let fs = require('fs');
 
-    console.log("Criando Documento Horarios")
-
-    var pdfDoc = printer.createPdfKitDocument(docDefinition);
+    let pdfDoc = printer.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Horarios.pdf'));
     pdfDoc.end();
 }
