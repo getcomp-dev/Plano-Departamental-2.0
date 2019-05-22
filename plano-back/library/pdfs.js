@@ -390,7 +390,7 @@ function isEven (number) {
         return 'false'
 }
 
-function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, listaTurmasExternas, listaCursos, listaGrades, listaPedidos, listaPedidosExternos) {
+function createHorarios1 (ano, semestre, ativos1, listaDisciplinasGrade, listaTurmas, listaTurmasExternas, listaCursos, listaGrades, listaPedidos, listaPedidosExternos) {
     var grade
     var grades
     var inicio = 1
@@ -400,8 +400,6 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     var disciplinaGrades = listaDisciplinasGrade
     var turmas = listaTurmas
     var turmasExternas = listaTurmasExternas
-
-    console.log('----------------------------------\n' + listaCursos + '\n-------------------------------')
 
     if (semestre===1){
         if(listaCursos[0].semestreInicial==1){
@@ -490,7 +488,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
                     if (turmas[j].periodo===1 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                         for (var p = 0; p < pedidos.length; p++) {
                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
-                                this.ativos1.CCD[disciplinaGrades[k].periodo - 1].push(turmas[j])
+                                ativos1.CCD[disciplinaGrades[k].periodo - 1].push(turmas[j])
                             }
                         }
                     }
@@ -499,7 +497,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
                     if (turmasExternas[j].periodo===1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                         for (var p = 0; p < pedidosExternos.length; p++) {
                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
-                                this.ativos1.CCD[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
+                                ativos1.CCD[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                             }
                         }
                     }
@@ -543,7 +541,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
                     if (turmas[j].periodo===1 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                         for (var p = 0; p < pedidos.length; p++) {
                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
-                                this.ativos1.CCN[disciplinaGrades[k].periodo - 1].push(turmas[j])
+                                ativos1.CCN[disciplinaGrades[k].periodo - 1].push(turmas[j])
                             }
                         }
                     }
@@ -552,7 +550,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
                     if (turmasExternas[j].periodo===1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                         for (var p = 0; p < pedidosExternos.length; p++) {
                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
-                                this.ativos1.CCN[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
+                                ativos1.CCN[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                             }
                         }
                     }
@@ -596,7 +594,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
                     if (turmas[j].periodo===1 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                         for (var p = 0; p < pedidos.length; p++) {
                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
-                                this.ativos1.SI[disciplinaGrades[k].periodo - 1].push(turmas[j])
+                                ativos1.SI[disciplinaGrades[k].periodo - 1].push(turmas[j])
                             }
                         }
                     }
@@ -605,7 +603,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
                     if (turmasExternas[j].periodo===1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                         for (var p = 0; p < pedidosExternos.length; p++) {
                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
-                                this.ativos1.SI[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
+                                ativos1.SI[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                             }
                         }
                     }
@@ -649,7 +647,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
                     if (turmas[j].periodo===1 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                         for (var p = 0; p < pedidos.length; p++) {
                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
-                                this.ativos1.EC[disciplinaGrades[k].periodo - 1].push(turmas[j])
+                                ativos1.EC[disciplinaGrades[k].periodo - 1].push(turmas[j])
                             }
                         }
                     }
@@ -658,7 +656,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
                     if (turmasExternas[j].periodo===1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                         for (var p = 0; p < pedidosExternos.length; p++) {
                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
-                                this.ativos1.EC[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
+                                ativos1.EC[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                             }
                         }
                     }
@@ -676,7 +674,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
             }
         }
         if(eletiva){
-            this.ativos1.Eletivas.push(turmas[t])
+            ativos1.Eletivas.push(turmas[t])
         }else{
             eletiva = true
         }
@@ -689,8 +687,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
 
     let anoAtual = (_.isEmpty(this.Plano)?2019:this.Plano[0].ano)
 
-    createHorarios1(anoAtual, 1, this.DisciplinasGrade, this.Turmas, this.TurmasExternas, this.Cursos, this.Grades, this.Pedidos, this.PedidosExternos)
-    console.log(this.ativos1)
+    createHorarios1(anoAtual, 1, this.ativos1, this.DisciplinasGrade, this.Turmas, this.TurmasExternas, this.Cursos, this.Grades, this.Pedidos, this.PedidosExternos)
 
     var tables = []
     var disciplinas = this.Disciplinas
