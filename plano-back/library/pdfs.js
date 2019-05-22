@@ -729,7 +729,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
             })
             for (var d = 0; d < 4; d++) {
                 for (var j = 0; j < periodosCCD1[i].length; j++) {
-                    if (this.checkTurmaHorario(periodosCCD1[i][j], 1 + d)) {
+                    if (checkTurmaHorario(periodosCCD1[i][j], 1 + d)) {
                         for (var k = 0; k < disciplinas.length; k++) {
                             if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                                 if (seg !== '')
@@ -738,7 +738,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             }
                         }
                     }
-                    if (this.checkTurmaHorario(periodosCCD1[i][j], 7 + d)) {
+                    if (checkTurmaHorario(periodosCCD1[i][j], 7 + d)) {
                         for (k = 0; k < disciplinas.length; k++) {
                             if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                                 if (ter != '')
@@ -747,7 +747,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             }
                         }
                     }
-                    if (this.checkTurmaHorario(periodosCCD1[i][j], 13 + d)) {
+                    if (checkTurmaHorario(periodosCCD1[i][j], 13 + d)) {
                         for (k = 0; k < disciplinas.length; k++) {
                             if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qua != '')
@@ -756,7 +756,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             }
                         }
                     }
-                    if (this.checkTurmaHorario(periodosCCD1[i][j], 19 + d)) {
+                    if (checkTurmaHorario(periodosCCD1[i][j], 19 + d)) {
                         for (k = 0; k < disciplinas.length; k++) {
                             if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qui != '')
@@ -765,7 +765,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             }
                         }
                     }
-                    if (this.checkTurmaHorario(periodosCCD1[i][j], 25 + d)) {
+                    if (checkTurmaHorario(periodosCCD1[i][j], 25 + d)) {
                         for (k = 0; k < disciplinas.length; k++) {
                             if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                                 if (sex != '')
@@ -868,7 +868,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
             })
             for (var d = 4; d < 6; d++) {
                 for (var j = 0; j < periodosCCN1[i].length; j++) {
-                    if (this.checkTurmaHorario(periodosCCN1[i][j], 1 + d)) {
+                    if (checkTurmaHorario(periodosCCN1[i][j], 1 + d)) {
                         for (var k = 0; k < disciplinas.length; k++) {
                             if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                                 if (seg !== '')
@@ -877,7 +877,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             }
                         }
                     }
-                    if (this.checkTurmaHorario(periodosCCN1[i][j], 7 + d)) {
+                    if (checkTurmaHorario(periodosCCN1[i][j], 7 + d)) {
                         for (k = 0; k < disciplinas.length; k++) {
                             if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                                 if (ter != '')
@@ -886,7 +886,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             }
                         }
                     }
-                    if (this.checkTurmaHorario(periodosCCN1[i][j], 13 + d)) {
+                    if (checkTurmaHorario(periodosCCN1[i][j], 13 + d)) {
                         for (k = 0; k < disciplinas.length; k++) {
                             if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qua != '')
@@ -895,7 +895,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             }
                         }
                     }
-                    if (this.checkTurmaHorario(periodosCCN1[i][j], 19 + d)) {
+                    if (checkTurmaHorario(periodosCCN1[i][j], 19 + d)) {
                         for (k = 0; k < disciplinas.length; k++) {
                             if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qui != '')
@@ -904,7 +904,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             }
                         }
                     }
-                    if (this.checkTurmaHorario(periodosCCN1[i][j], 25 + d)) {
+                    if (checkTurmaHorario(periodosCCN1[i][j], 25 + d)) {
                         for (k = 0; k < disciplinas.length; k++) {
                             if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                                 if (sex != '')
@@ -1007,7 +1007,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
             })
             for (var d = 0; d < 4; d++) {
                 for (var j = 0; j < periodosEC1[i].length; j++) {
-                    if (this.checkTurmaHorario(periodosEC1[i][j], 1 + d)) {
+                    if (checkTurmaHorario(periodosEC1[i][j], 1 + d)) {
                         for (var k = 0; k < disciplinas.length; k++) {
                             if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                                 if (seg !== '')
@@ -1016,7 +1016,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             }
                         }
                     }
-                    if (this.checkTurmaHorario(periodosEC1[i][j], 7 + d)) {
+                    if (checkTurmaHorario(periodosEC1[i][j], 7 + d)) {
                         for (k = 0; k < disciplinas.length; k++) {
                             if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                                 if (ter != '')
@@ -1025,7 +1025,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             }
                         }
                     }
-                    if (this.checkTurmaHorario(periodosEC1[i][j], 13 + d)) {
+                    if (checkTurmaHorario(periodosEC1[i][j], 13 + d)) {
                         for (k = 0; k < disciplinas.length; k++) {
                             if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qua != '')
@@ -1034,7 +1034,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             }
                         }
                     }
-                    if (this.checkTurmaHorario(periodosEC1[i][j], 19 + d)) {
+                    if (checkTurmaHorario(periodosEC1[i][j], 19 + d)) {
                         for (k = 0; k < disciplinas.length; k++) {
                             if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qui != '')
@@ -1043,7 +1043,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             }
                         }
                     }
-                    if (this.checkTurmaHorario(periodosEC1[i][j], 25 + d)) {
+                    if (checkTurmaHorario(periodosEC1[i][j], 25 + d)) {
                         for (k = 0; k < disciplinas.length; k++) {
                             if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                                 if (sex != '')
@@ -1146,7 +1146,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
             })
             for (var d = 4; d < 6; d++) {
                 for (var j = 0; j < periodosSI1[i].length; j++) {
-                    if (this.checkTurmaHorario(periodosSI1[i][j], 1 + d)) {
+                    if (checkTurmaHorario(periodosSI1[i][j], 1 + d)) {
                         for (var k = 0; k < disciplinas.length; k++) {
                             if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                                 if (seg !== '')
@@ -1155,7 +1155,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             }
                         }
                     }
-                    if (this.checkTurmaHorario(periodosSI1[i][j], 7 + d)) {
+                    if (checkTurmaHorario(periodosSI1[i][j], 7 + d)) {
                         for (k = 0; k < disciplinas.length; k++) {
                             if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                                 if (ter != '')
@@ -1164,7 +1164,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             }
                         }
                     }
-                    if (this.checkTurmaHorario(periodosSI1[i][j], 13 + d)) {
+                    if (checkTurmaHorario(periodosSI1[i][j], 13 + d)) {
                         for (k = 0; k < disciplinas.length; k++) {
                             if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qua != '')
@@ -1173,7 +1173,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             }
                         }
                     }
-                    if (this.checkTurmaHorario(periodosSI1[i][j], 19 + d)) {
+                    if (checkTurmaHorario(periodosSI1[i][j], 19 + d)) {
                         for (k = 0; k < disciplinas.length; k++) {
                             if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qui != '')
@@ -1182,7 +1182,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             }
                         }
                     }
-                    if (this.checkTurmaHorario(periodosSI1[i][j], 25 + d)) {
+                    if (checkTurmaHorario(periodosSI1[i][j], 25 + d)) {
                         for (k = 0; k < disciplinas.length; k++) {
                             if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                                 if (sex != '')
@@ -1283,7 +1283,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
         })
         for (var d = 0; d < 6; d++) {
             for (var j = 0; j < eletivas1.length; j++) {
-                if (this.checkTurmaHorario(eletivas1[j], 1 + d)) {
+                if (checkTurmaHorario(eletivas1[j], 1 + d)) {
                     for (var k = 0; k < disciplinas.length; k++) {
                         if (eletivas1[j].Disciplina === disciplinas[k].id) {
                             if (seg !== '')
@@ -1292,7 +1292,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                         }
                     }
                 }
-                if (this.checkTurmaHorario(eletivas1[j], 7 + d)) {
+                if (checkTurmaHorario(eletivas1[j], 7 + d)) {
                     for (k = 0; k < disciplinas.length; k++) {
                         if (eletivas1[j].Disciplina === disciplinas[k].id) {
                             if (ter != '')
@@ -1301,7 +1301,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                         }
                     }
                 }
-                if (this.checkTurmaHorario(eletivas1[j], 13 + d)) {
+                if (checkTurmaHorario(eletivas1[j], 13 + d)) {
                     for (k = 0; k < disciplinas.length; k++) {
                         if (eletivas1[j].Disciplina === disciplinas[k].id) {
                             if (qua != '')
@@ -1310,7 +1310,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                         }
                     }
                 }
-                if (this.checkTurmaHorario(eletivas1[j], 19 + d)) {
+                if (checkTurmaHorario(eletivas1[j], 19 + d)) {
                     for (k = 0; k < disciplinas.length; k++) {
                         if (eletivas1[j].Disciplina === disciplinas[k].id) {
                             if (qui != '')
@@ -1319,7 +1319,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                         }
                     }
                 }
-                if (this.checkTurmaHorario(eletivas1[j], 25 + d)) {
+                if (checkTurmaHorario(eletivas1[j], 25 + d)) {
                     for (k = 0; k < disciplinas.length; k++) {
                         if (eletivas1[j].Disciplina === disciplinas[k].id) {
                             if (sex != '')
