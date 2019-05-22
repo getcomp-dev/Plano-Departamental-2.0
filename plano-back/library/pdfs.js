@@ -679,7 +679,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     }
 
 
-},
+}
 
 Pdfs.prototype.pdfResumoHorarios = function () {
 
