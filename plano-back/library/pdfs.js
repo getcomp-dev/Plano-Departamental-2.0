@@ -397,7 +397,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     var turmas = listaTurmas
     var turmasExternas = listaTurmasExternas
 
-    console.log(this.ativos1)
+    console.log('----------------------------------\n' + listaCursos + '\n-------------------------------')
 
     if (semestre===1){
         if(listaCursos[0].semestreInicial==1){
