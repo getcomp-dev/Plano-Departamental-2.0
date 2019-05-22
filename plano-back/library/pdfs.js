@@ -1410,7 +1410,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
     var fs = require('fs');
 
     var pdfDoc = printer.createPdfKitDocument(docDefinition);
-    pdfDoc.pipe(fs.createWriteStream('Labs.pdf'));
+    pdfDoc.pipe(fs.createWriteStream('Horarios.pdf'));
     pdfDoc.end();
 }
 
