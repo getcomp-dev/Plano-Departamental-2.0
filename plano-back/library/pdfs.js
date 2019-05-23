@@ -1,6 +1,8 @@
 
 const models = require('../models/index'),
-      _ = require('lodash')
+      _ = require('lodash'),
+      PdfPrinter = require('pdfmake'),
+      fs = require('fs')
 
 function Pdfs(){
     this.Salas = undefined
@@ -193,9 +195,9 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
         }
     };
 
-    let PdfPrinter = require('pdfmake');
+
     let printerLabs = new PdfPrinter(fonts);
-    let fs = require('fs');
+
 
     console.log("Criando PDF")
     let pdfDoc = printerLabs.createPdfKitDocument(docDefinition);
@@ -376,9 +378,9 @@ Pdfs.prototype.pdfCargaProfessores = function() {
         }
     };
 
-    let PdfPrinter = require('pdfmake');
+
     let printerCargas = new PdfPrinter(fonts);
-    let fs = require('fs');
+
 
     console.log("Criando PDF")
     let pdfDoc = printerCargas.createPdfKitDocument(docDefinition);
@@ -1389,9 +1391,9 @@ Pdfs.prototype.pdfResumoHorarios = function () {
         }
     };
 
-    let PdfPrinter = require('pdfmake');
+
     let printerHorario = new PdfPrinter(fonts);
-    let fs = require('fs');
+
 
     console.log("Criando PDF")
     let pdfDoc = printerHorario.createPdfKitDocument(docDefinition);
