@@ -22,14 +22,14 @@ function Pdfs(){
         CCN: [[], [], [], [], [], [], [], [], [], []],
         EC: [[], [], [], [], [], [], [], [], [], []],
         SI: [[], [], [], [], [], [], [], [], [], []],
-        Evarivas:[]
+        Eletivas:[]
     }
     this.ativos2 = {
         CCD: [[], [], [], [], [], [], [], [], [], []],
         CCN: [[], [], [], [], [], [], [], [], [], []],
         EC: [[], [], [], [], [], [], [], [], [], []],
         SI: [[], [], [], [], [], [], [], [], [], []],
-        Evarivas:[]
+        Eletivas:[]
     }
 }
 
@@ -118,7 +118,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
                             if(turmas[j].Disciplina === disciplinas[k].id){
                                 if(seg !== '')
                                     seg = seg + ' '
-                                seg = seg + disciplinas[k].codigo + ' ' + turmas[j].varra
+                                seg = seg + disciplinas[k].codigo + ' ' + turmas[j].letra
                             }
                         }
                     }
@@ -127,7 +127,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
                             if(turmas[j].Disciplina === disciplinas[k].id){
                                 if(ter != '')
                                     ter = ter + ' '
-                                ter = ter + disciplinas[k].codigo + ' ' + turmas[j].varra
+                                ter = ter + disciplinas[k].codigo + ' ' + turmas[j].letra
                             }
                         }
                     }
@@ -136,7 +136,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
                             if(turmas[j].Disciplina === disciplinas[k].id){
                                 if(qua != '')
                                     qua = qua + ' '
-                                qua = qua + disciplinas[k].codigo + ' ' + turmas[j].varra
+                                qua = qua + disciplinas[k].codigo + ' ' + turmas[j].letra
                             }
                         }
                     }
@@ -145,7 +145,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
                             if(turmas[j].Disciplina === disciplinas[k].id){
                                 if(qui != '')
                                     qui = qui + ' '
-                                qui = qui + disciplinas[k].codigo + ' ' + turmas[j].varra
+                                qui = qui + disciplinas[k].codigo + ' ' + turmas[j].letra
                             }
                         }
                     }
@@ -154,7 +154,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
                             if(turmas[j].Disciplina === disciplinas[k].id){
                                 if(sex != '')
                                     sex = sex + ' '
-                                sex = sex + disciplinas[k].codigo + ' ' + turmas[j].varra
+                                sex = sex + disciplinas[k].codigo + ' ' + turmas[j].letra
                             }
                         }
                     }
@@ -338,7 +338,7 @@ Pdfs.prototype.pdfCargaProfessores = function() {
                 tables[1 + 2 * (i - vazio)].table.body.push([{text:turmasProf[j].periodo, alignment: 'center'}, {
                     text: disciplina.codigo,
                     alignment: 'center'
-                }, disciplina.nome, {text: turmasProf[j].varra, alignment: 'center'}, {
+                }, disciplina.nome, {text: turmasProf[j].letra, alignment: 'center'}, {
                     text: horarioTotal,
                     alignment: 'center'
                 }, {text:c1, alignment: 'center'}, {text:c2, alignment: 'center'}])
@@ -395,7 +395,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
         CCN: [[], [], [], [], [], [], [], [], [], []],
         EC: [[], [], [], [], [], [], [], [], [], []],
         SI: [[], [], [], [], [], [], [], [], [], []],
-        Evarivas:[]
+        Eletivas:[]
     }
 
     var grade
@@ -644,18 +644,18 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
         }
     }
 
-    //Evarivas está selecionado:
-    var evariva = true
+    //Eletivas está selecionado:
+    var eletiva = true
     for(var t = 0; t<turmas.length;t++){
         for(var d = 0; d<disciplinaGrades.length; d++){
             if(turmas[t].periodo!=1 || turmas[t].Disciplina===disciplinaGrades[d].Disciplina){
-                evariva = false
+                eletiva = false
             }
         }
-        if(evariva){
-            ativos1.Evarivas.push(turmas[t])
+        if(eletiva){
+            ativos1.Eletivas.push(turmas[t])
         }else{
-            evariva = true
+            eletiva = true
         }
     }
 
@@ -675,7 +675,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
     var periodosCCN1 = this.ativos1.CCN
     var periodosEC1 = this.ativos1.EC
     var periodosSI1 = this.ativos1.SI
-    var evarivas1 = this.ativos1.Evarivas
+    var eletivas1 = this.ativos1.Eletivas
     var seg = '', ter = '', qua = '', qui = '', sex = ''
     var vazio = 0
     tables.push({text:'Ciência da Computação Diurno', bold:true, margin:[0, 10, 0, 5], fontSize: 20})
@@ -714,7 +714,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                                 if (seg !== '')
                                     seg = seg + ' '
-                                seg = seg + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].varra
+                                seg = seg + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].letra
                             }
                         }
                     }
@@ -723,7 +723,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                                 if (ter != '')
                                     ter = ter + ' '
-                                ter = ter + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].varra
+                                ter = ter + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].letra
                             }
                         }
                     }
@@ -732,7 +732,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qua != '')
                                     qua = qua + ' '
-                                qua = qua + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].varra
+                                qua = qua + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].letra
                             }
                         }
                     }
@@ -741,7 +741,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qui != '')
                                     qui = qui + ' '
-                                qui = qui + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].varra
+                                qui = qui + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].letra
                             }
                         }
                     }
@@ -750,7 +750,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                                 if (sex != '')
                                     sex = sex + ' '
-                                sex = sex + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].varra
+                                sex = sex + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].letra
                             }
                         }
                     }
@@ -853,7 +853,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                                 if (seg !== '')
                                     seg = seg + ' '
-                                seg = seg + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].varra
+                                seg = seg + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].letra
                             }
                         }
                     }
@@ -862,7 +862,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                                 if (ter != '')
                                     ter = ter + ' '
-                                ter = ter + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].varra
+                                ter = ter + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].letra
                             }
                         }
                     }
@@ -871,7 +871,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qua != '')
                                     qua = qua + ' '
-                                qua = qua + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].varra
+                                qua = qua + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].letra
                             }
                         }
                     }
@@ -880,7 +880,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qui != '')
                                     qui = qui + ' '
-                                qui = qui + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].varra
+                                qui = qui + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].letra
                             }
                         }
                     }
@@ -889,7 +889,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                                 if (sex != '')
                                     sex = sex + ' '
-                                sex = sex + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].varra
+                                sex = sex + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].letra
                             }
                         }
                     }
@@ -992,7 +992,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                                 if (seg !== '')
                                     seg = seg + ' '
-                                seg = seg + disciplinas[k].codigo + ' ' + periodosEC1[i][j].varra
+                                seg = seg + disciplinas[k].codigo + ' ' + periodosEC1[i][j].letra
                             }
                         }
                     }
@@ -1001,7 +1001,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                                 if (ter != '')
                                     ter = ter + ' '
-                                ter = ter + disciplinas[k].codigo + ' ' + periodosEC1[i][j].varra
+                                ter = ter + disciplinas[k].codigo + ' ' + periodosEC1[i][j].letra
                             }
                         }
                     }
@@ -1010,7 +1010,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qua != '')
                                     qua = qua + ' '
-                                qua = qua + disciplinas[k].codigo + ' ' + periodosEC1[i][j].varra
+                                qua = qua + disciplinas[k].codigo + ' ' + periodosEC1[i][j].letra
                             }
                         }
                     }
@@ -1019,7 +1019,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qui != '')
                                     qui = qui + ' '
-                                qui = qui + disciplinas[k].codigo + ' ' + periodosEC1[i][j].varra
+                                qui = qui + disciplinas[k].codigo + ' ' + periodosEC1[i][j].letra
                             }
                         }
                     }
@@ -1028,7 +1028,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                                 if (sex != '')
                                     sex = sex + ' '
-                                sex = sex + disciplinas[k].codigo + ' ' + periodosEC1[i][j].varra
+                                sex = sex + disciplinas[k].codigo + ' ' + periodosEC1[i][j].letra
                             }
                         }
                     }
@@ -1131,7 +1131,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                                 if (seg !== '')
                                     seg = seg + ' '
-                                seg = seg + disciplinas[k].codigo + ' ' + periodosSI1[i][j].varra
+                                seg = seg + disciplinas[k].codigo + ' ' + periodosSI1[i][j].letra
                             }
                         }
                     }
@@ -1140,7 +1140,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                                 if (ter != '')
                                     ter = ter + ' '
-                                ter = ter + disciplinas[k].codigo + ' ' + periodosSI1[i][j].varra
+                                ter = ter + disciplinas[k].codigo + ' ' + periodosSI1[i][j].letra
                             }
                         }
                     }
@@ -1149,7 +1149,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qua != '')
                                     qua = qua + ' '
-                                qua = qua + disciplinas[k].codigo + ' ' + periodosSI1[i][j].varra
+                                qua = qua + disciplinas[k].codigo + ' ' + periodosSI1[i][j].letra
                             }
                         }
                     }
@@ -1158,7 +1158,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qui != '')
                                     qui = qui + ' '
-                                qui = qui + disciplinas[k].codigo + ' ' + periodosSI1[i][j].varra
+                                qui = qui + disciplinas[k].codigo + ' ' + periodosSI1[i][j].letra
                             }
                         }
                     }
@@ -1167,7 +1167,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                                 if (sex != '')
                                     sex = sex + ' '
-                                sex = sex + disciplinas[k].codigo + ' ' + periodosSI1[i][j].varra
+                                sex = sex + disciplinas[k].codigo + ' ' + periodosSI1[i][j].letra
                             }
                         }
                     }
@@ -1234,9 +1234,9 @@ Pdfs.prototype.pdfResumoHorarios = function () {
         }
     }
 
-    tables.push({text:'Evarivas', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
+    tables.push({text:'Eletivas', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
 
-    if(evarivas1.length===0){
+    if(eletivas1.length===0){
         vazio = vazio + 1
     }else {
         tables.push({
@@ -1262,49 +1262,49 @@ Pdfs.prototype.pdfResumoHorarios = function () {
             }
         })
         for (var d = 0; d < 6; d++) {
-            for (var j = 0; j < evarivas1.length; j++) {
-                if (checkTurmaHorario(evarivas1[j], 1 + d)) {
+            for (var j = 0; j < eletivas1.length; j++) {
+                if (checkTurmaHorario(eletivas1[j], 1 + d)) {
                     for (var k = 0; k < disciplinas.length; k++) {
-                        if (evarivas1[j].Disciplina === disciplinas[k].id) {
+                        if (eletivas1[j].Disciplina === disciplinas[k].id) {
                             if (seg !== '')
                                 seg = seg + ' '
-                            seg = seg + disciplinas[k].codigo + ' ' + evarivas1[j].varra
+                            seg = seg + disciplinas[k].codigo + ' ' + eletivas1[j].letra
                         }
                     }
                 }
-                if (checkTurmaHorario(evarivas1[j], 7 + d)) {
+                if (checkTurmaHorario(eletivas1[j], 7 + d)) {
                     for (k = 0; k < disciplinas.length; k++) {
-                        if (evarivas1[j].Disciplina === disciplinas[k].id) {
+                        if (eletivas1[j].Disciplina === disciplinas[k].id) {
                             if (ter != '')
                                 ter = ter + ' '
-                            ter = ter + disciplinas[k].codigo + ' ' + evarivas1[j].varra
+                            ter = ter + disciplinas[k].codigo + ' ' + eletivas1[j].letra
                         }
                     }
                 }
-                if (checkTurmaHorario(evarivas1[j], 13 + d)) {
+                if (checkTurmaHorario(eletivas1[j], 13 + d)) {
                     for (k = 0; k < disciplinas.length; k++) {
-                        if (evarivas1[j].Disciplina === disciplinas[k].id) {
+                        if (eletivas1[j].Disciplina === disciplinas[k].id) {
                             if (qua != '')
                                 qua = qua + ' '
-                            qua = qua + disciplinas[k].codigo + ' ' + evarivas1[j].varra
+                            qua = qua + disciplinas[k].codigo + ' ' + eletivas1[j].letra
                         }
                     }
                 }
-                if (checkTurmaHorario(evarivas1[j], 19 + d)) {
+                if (checkTurmaHorario(eletivas1[j], 19 + d)) {
                     for (k = 0; k < disciplinas.length; k++) {
-                        if (evarivas1[j].Disciplina === disciplinas[k].id) {
+                        if (eletivas1[j].Disciplina === disciplinas[k].id) {
                             if (qui != '')
                                 qui = qui + ' '
-                            qui = qui + disciplinas[k].codigo + ' ' + evarivas1[j].varra
+                            qui = qui + disciplinas[k].codigo + ' ' + eletivas1[j].letra
                         }
                     }
                 }
-                if (checkTurmaHorario(evarivas1[j], 25 + d)) {
+                if (checkTurmaHorario(eletivas1[j], 25 + d)) {
                     for (k = 0; k < disciplinas.length; k++) {
-                        if (evarivas1[j].Disciplina === disciplinas[k].id) {
+                        if (eletivas1[j].Disciplina === disciplinas[k].id) {
                             if (sex != '')
                                 sex = sex + ' '
-                            sex = sex + disciplinas[k].codigo + ' ' + evarivas1[j].varra
+                            sex = sex + disciplinas[k].codigo + ' ' + eletivas1[j].letra
                         }
                     }
                 }
