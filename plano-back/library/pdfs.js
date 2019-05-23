@@ -80,7 +80,7 @@ Pdfs.prototype.ready = async function(){
         let labs = this.pdfAlocacaoLabs()
         let carga = this.pdfCargaProfessores()
         let horarios = this.pdfResumoHorarios()
-        Promise.all([labs, carga, horarios]).then(() => return true)
+        Promise.all([labs, carga, horarios]).then(() => true)
     })
 }
 
