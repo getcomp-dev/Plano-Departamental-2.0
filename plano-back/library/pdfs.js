@@ -2,7 +2,16 @@
 const models = require('../models/index'),
       _ = require('lodash'),
       PdfPrinter = require('pdfmake'),
-      fs = require('fs')
+      fs = require('fs'),
+      fonts = {
+         Roboto: {
+             normal: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Regular.ttf',
+             bold: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Medium.ttf',
+             italics: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Italic.ttf',
+             bolditalics: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-MediumItalic.ttf'
+         }
+      },
+      printer = new PdfPrinter(fonts)
 
 function Pdfs(){
     this.Salas = undefined
@@ -186,24 +195,10 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
         header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
     }
 
-    let fonts = {
-        Roboto: {
-            normal: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Regular.ttf',
-            bold: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Medium.ttf',
-            italics: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Italic.ttf',
-            bolditalics: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-MediumItalic.ttf'
-        }
-    };
-
-
-    let printerLabs = new PdfPrinter(fonts);
-
-
     console.log("Criando PDF")
-    let pdfDocLabs = printerLabs.createPdfKitDocument(docDefinitionLabs);
+    let pdfDocLabs = printer.createPdfKitDocument(docDefinitionLabs);
     pdfDocLabs.pipe(fs.createWriteStream('Labs.pdf'));
     pdfDocLabs.end();
-    return true
 }
 
 function turmas(professor, turmas){
@@ -369,24 +364,12 @@ Pdfs.prototype.pdfCargaProfessores = function() {
         header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
     }
 
-    let fonts = {
-        Roboto: {
-            normal: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Regular.ttf',
-            bold: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Medium.ttf',
-            italics: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Italic.ttf',
-            bolditalics: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-MediumItalic.ttf'
-        }
-    };
-
-
-    let printerCargas = new PdfPrinter(fonts);
-
+    let printer = new PdfPrinter(fonts);
 
     console.log("Criando PDF")
-    let pdfDocCargas = printerCargas.createPdfKitDocument(docDefinitionCargas);
+    let pdfDocCargas = printer.createPdfKitDocument(docDefinitionCargas);
     pdfDocCargas.pipe(fs.createWriteStream('Cargas.pdf'));
     pdfDocCargas.end();
-    return true
 }
 
 function isEven (number) {
@@ -1382,24 +1365,12 @@ Pdfs.prototype.pdfResumoHorarios = function () {
         header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
     }
 
-    let fonts = {
-        Roboto: {
-            normal: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Regular.ttf',
-            bold: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Medium.ttf',
-            italics: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Italic.ttf',
-            bolditalics: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-MediumItalic.ttf'
-        }
-    };
-
-
-    let printerHorario = new PdfPrinter(fonts);
-
+    let printer = new PdfPrinter(fonts);
 
     console.log("Criando PDF")
-    let pdfDocHorario = printerHorario.createPdfKitDocument(docDefinitionHorario);
+    let pdfDocHorario = printer.createPdfKitDocument(docDefinitionHorario);
     pdfDocHorario.pipe(fs.createWriteStream('Horarios.pdf'));
     pdfDocHorario.end();
-    return true
 }
 
 module.exports = Pdfs;
