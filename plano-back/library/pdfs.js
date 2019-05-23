@@ -269,7 +269,6 @@ Pdfs.prototype.pdfCargaProfessores = function() {
     var vazio = 0
     var horarioTotal = ''
     for(var i = 0; i < professores.length; i++){
-        this.Turmas.forEach(turma => console.log(turma))
         turmasProf = turmas(professores[i], this.Turmas)
         posProf = pos(professores[i], this.Cargas)
         if(turmasProf.length === 0 && posProf.length === 0){
@@ -470,7 +469,6 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
     pedidos = _.filter(listaPedidos, ['Curso', 4])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 4])
-    console.log(grades.length)
 
     for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
@@ -1315,7 +1313,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                     }
                 }
             }
-            console.log([seg, ter, qua, qui, sex])
+
             switch (d) {
                 case 0:
                     tables[85 - 2 * vazio].table.body.push([{
