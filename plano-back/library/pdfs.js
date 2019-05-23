@@ -77,13 +77,12 @@ Pdfs.prototype.ready = async function(){
         result[11].forEach(plano => this.Plano.push(plano.dataValues))
         result[12].forEach(curso => this.Cursos.push(curso.dataValues))
         console.log('Dados inicializados')
-        this.pdfAlocacaoLabs()
-        this.pdfCargaProfessores()
-        this.pdfResumoHorarios()
-        return true
+        let labs = this.pdfAlocacaoLabs()
+        let carga = this.pdfCargaProfessores()
+        let horarios = this.pdfResumoHorarios()
+        Promise.all([labs, carga, horarios]).then(() => return true)
     })
 }
-
 
 function checkTurmaHorario (turma, horario) {
     if(turma.Horario1==horario || turma.Horario2==horario) {
