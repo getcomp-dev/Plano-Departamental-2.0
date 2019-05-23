@@ -1,17 +1,18 @@
 
 const models = require('../models/index'),
-      _ = require('lodash'),
-      PdfPrinter = require('pdfmake'),
-      fs = require('fs'),
-      fonts = {
-         Roboto: {
-             normal: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Regular.ttf',
-             bold: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Medium.ttf',
-             italics: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Italic.ttf',
-             bolditalics: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-MediumItalic.ttf'
-         }
-      },
-      printer = new PdfPrinter(fonts)
+      _ = require('lodash')
+
+var PdfPrinter = require('pdfmake'),
+    fs = require('fs'),
+    fonts = {
+       Roboto: {
+           normal: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Regular.ttf',
+           bold: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Medium.ttf',
+           italics: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Italic.ttf',
+           bolditalics: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-MediumItalic.ttf'
+       }
+    },
+    printer = new PdfPrinter(fonts)
 
 function Pdfs(){
     this.Salas = undefined
