@@ -194,11 +194,11 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
     };
 
     let PdfPrinter = require('pdfmake');
-    let printer = new PdfPrinter(fonts);
+    let printerLabs = new PdfPrinter(fonts);
     let fs = require('fs');
 
     console.log("Criando PDF")
-    let pdfDoc = printer.createPdfKitDocument(docDefinition);
+    let pdfDoc = printerLabs.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Labs.pdf'));
     pdfDoc.end();
     return true
@@ -377,11 +377,11 @@ Pdfs.prototype.pdfCargaProfessores = function() {
     };
 
     let PdfPrinter = require('pdfmake');
-    let printer = new PdfPrinter(fonts);
+    let printerCargas = new PdfPrinter(fonts);
     let fs = require('fs');
 
     console.log("Criando PDF")
-    let pdfDoc = printer.createPdfKitDocument(docDefinition);
+    let pdfDoc = printerCargas.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Cargas.pdf'));
     pdfDoc.end();
     return true
@@ -1390,11 +1390,11 @@ Pdfs.prototype.pdfResumoHorarios = function () {
     };
 
     let PdfPrinter = require('pdfmake');
-    let printer = new PdfPrinter(fonts);
+    let printerHorario = new PdfPrinter(fonts);
     let fs = require('fs');
 
     console.log("Criando PDF")
-    let pdfDoc = printer.createPdfKitDocument(docDefinition);
+    let pdfDoc = printerHorario.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Horarios.pdf'));
     pdfDoc.end();
     return true
