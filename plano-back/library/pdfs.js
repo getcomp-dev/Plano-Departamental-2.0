@@ -200,9 +200,9 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
 
 
     console.log("Criando PDF")
-    let pdfDoc = printerLabs.createPdfKitDocument(docDefinition);
-    pdfDoc.pipe(fs.createWriteStream('Labs.pdf'));
-    pdfDoc.end();
+    let pdfDocLabs = printerLabs.createPdfKitDocument(docDefinition);
+    pdfDocLabs.pipe(fs.createWriteStream('Labs.pdf'));
+    pdfDocLabs.end();
     return true
 }
 
@@ -383,9 +383,9 @@ Pdfs.prototype.pdfCargaProfessores = function() {
 
 
     console.log("Criando PDF")
-    let pdfDoc = printerCargas.createPdfKitDocument(docDefinition);
-    pdfDoc.pipe(fs.createWriteStream('Cargas.pdf'));
-    pdfDoc.end();
+    let pdfDocCargas = printerCargas.createPdfKitDocument(docDefinition);
+    pdfDocCargas.pipe(fs.createWriteStream('Cargas.pdf'));
+    pdfDocCargas.end();
     return true
 }
 
@@ -1396,9 +1396,9 @@ Pdfs.prototype.pdfResumoHorarios = function () {
 
 
     console.log("Criando PDF")
-    let pdfDoc = printerHorario.createPdfKitDocument(docDefinition);
-    pdfDoc.pipe(fs.createWriteStream('Horarios.pdf'));
-    pdfDoc.end();
+    let pdfDocHorario = printerHorario.createPdfKitDocument(docDefinition);
+    pdfDocHorario.pipe(fs.createWriteStream('Horarios.pdf'));
+    pdfDocHorario.end();
     return true
 }
 
