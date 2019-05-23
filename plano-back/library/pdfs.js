@@ -455,19 +455,12 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
             this.evenCCD = "false"
         }
     }
-    console.log([this.evenCCD, this.evenCCN, this.evenSI, this.evenEC])
+
 
     //CC Diurno
     grades = _.filter(listaGrades, ['Curso', 4])
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
-    pedidos = []
-    for (var t in listaPedidos){
-        for (var pedido in listaPedidos[t]){
-            if(listaPedidos[t][pedido].Curso===4){
-                pedidos.push(listaPedidos[t][pedido])
-            }
-        }
-    }
+    pedidos = _.filter(listaPedidos, ['Curso', 4])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 4])
     console.log(grades.length)
 
@@ -515,14 +508,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     //CC Noturno está selecionado
     grades = _.filter(listaGrades, ['Curso', 1])
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
-    pedidos = []
-    for (var t in listaPedidos){
-        for (var pedido in listaPedidos[t]){
-            if(listaPedidos[t][pedido].Curso===1){
-                pedidos.push(listaPedidos[t][pedido])
-            }
-        }
-    }
+    pedidos = _.filter(listaPedidos, ['Curso', 1])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 1])
     for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
@@ -568,14 +554,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     //SI está selecionado
     grades = _.filter(listaGrades, ['Curso', 3])
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
-    pedidos = []
-    for (var t in listaPedidos){
-        for (var pedido in listaPedidos[t]){
-            if(listaPedidos[t][pedido].Curso===3){
-                pedidos.push(listaPedidos[t][pedido])
-            }
-        }
-    }
+    pedidos = _.filter(listaPedidos, ['Curso', 3])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 3])
     for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
@@ -621,14 +600,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     //Engenharia Computacional está selecionado
     grades = _.filter(listaGrades, ['Curso', 2])
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
-    pedidos = []
-    for (var t in listaPedidos){
-        for (var pedido in listaPedidos[t]){
-            if(listaPedidos[t][pedido].Curso===2){
-                pedidos.push(listaPedidos[t][pedido])
-            }
-        }
-    }
+    pedidos = _.filter(listaPedidos, ['Curso', 2])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 2])
     for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
