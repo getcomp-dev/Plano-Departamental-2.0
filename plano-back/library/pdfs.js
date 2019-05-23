@@ -77,7 +77,9 @@ Pdfs.prototype.ready = async function(){
         result[11].forEach(plano => this.Plano.push(plano.dataValues))
         result[12].forEach(curso => this.Cursos.push(curso.dataValues))
         console.log('Dados inicializados')
-        this.pdfAlocacaoLabs().then(() => {this.pdfCargaProfessores().then(() => {this.pdfResumoHorarios()})})
+        this.pdfAlocacaoLabs()
+        this.pdfCargaProfessores()
+        this.pdfResumoHorarios()
         return true
     })
 }
