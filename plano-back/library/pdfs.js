@@ -375,7 +375,7 @@ Pdfs.prototype.pdfCargaProfessores = function() {
     let printer = new PdfPrinter(fonts);
     let fs = require('fs');
 
-    let pdfDoc = printer.createPdfKitDocument(docDefinition, options);
+    let pdfDoc = printer.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Cargas.pdf'));
     pdfDoc.end();
 }
