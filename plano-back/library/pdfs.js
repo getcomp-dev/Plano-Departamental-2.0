@@ -94,12 +94,12 @@ function checkTurmaHorario (turma, horario) {
 
 Pdfs.prototype.pdfAlocacaoLabs = function() {
 
-    var tables = []
-    var laboratorios = _.filter(this.Salas, ['laboratorio', true])
-    var disciplinas = this.Disciplinas
-    var turmas = this.Turmas
-    var seg = '', ter = '', qua = '', qui = '', sex = ''
-    for(var i = 0; i < laboratorios.length; i++){
+    let tables = []
+    let laboratorios = _.filter(this.Salas, ['laboratorio', true])
+    let disciplinas = this.Disciplinas
+    let turmas = this.Turmas
+    let seg = '', ter = '', qua = '', qui = '', sex = ''
+    for(let i = 0; i < laboratorios.length; i++){
         tables.push({text: laboratorios[i].nome, bold:true, margin:[0, 10, 0, 10], fontSize:20})
         tables.push({
             table: {
@@ -111,11 +111,11 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
                 ]
             }
         })
-        for(var d = 0; d< 6; d++) {
-            for (var j = 0; j < turmas.length; j++) {
+        for(let d = 0; d< 6; d++) {
+            for (let j = 0; j < turmas.length; j++) {
                 if(turmas[j].Sala1===laboratorios[i].id || turmas[j].Sala2===laboratorios[i].id){
                     if(checkTurmaHorario(turmas[j], 1 + d)){
-                        for(var k = 0; k < disciplinas.length; k++){
+                        for(let k = 0; k < disciplinas.length; k++){
                             if(turmas[j].Disciplina === disciplinas[k].id){
                                 if(seg !== '')
                                     seg = seg + ' '
@@ -214,10 +214,10 @@ function pos(professor, cargas){
 }
 
 function creditos1(professor, turmas, disciplinas, cargas){
-    var c = 0
-    for (var t = 0; t < turmas.length; t++){
+    let c = 0
+    for (let t = 0; t < turmas.length; t++){
         if(turmas[t].periodo===1 && (turmas[t].Docente1===professor.id || turmas[t].Docente2===professor.id)){
-            for (var d = 0; d < disciplinas.length; d++){
+            for (let d = 0; d < disciplinas.length; d++){
                 if(disciplinas[d].id===turmas[t].Disciplina){
                     c+=parseInt(disciplinas[d].cargaPratica, 10)
                     c+=parseInt(disciplinas[d].cargaTeorica, 10)
@@ -225,7 +225,7 @@ function creditos1(professor, turmas, disciplinas, cargas){
             }
         }
     }
-    for(var t = 0; t < cargas.length; t++){
+    for(let t = 0; t < cargas.length; t++){
         if(cargas[t].Docente===professor.id){
             if(cargas[t].trimestre==1 || cargas[t].trimestre==2){
                 c+= parseInt(cargas[t].creditos, 10)
@@ -236,10 +236,10 @@ function creditos1(professor, turmas, disciplinas, cargas){
 }
 
 function creditos2(professor, turmas, disciplinas, cargas){
-    var c = 0
-    for (var t = 0; t < turmas.length; t++){
+    let c = 0
+    for (let t = 0; t < turmas.length; t++){
         if(turmas[t].periodo===3 && (turmas[t].Docente1===professor.id || turmas[t].Docente2===professor.id)){
-            for (var d = 0; d < disciplinas.length; d++){
+            for (let d = 0; d < disciplinas.length; d++){
                 if(disciplinas[d].id===turmas[t].Disciplina){
                     c+=parseInt(disciplinas[d].cargaPratica, 10)
                     c+=parseInt(disciplinas[d].cargaTeorica, 10)
@@ -247,7 +247,7 @@ function creditos2(professor, turmas, disciplinas, cargas){
             }
         }
     }
-    for(var t = 0; t < cargas.length; t++){
+    for(let t = 0; t < cargas.length; t++){
         if(cargas[t].Docente===professor.id){
             if(cargas[t].trimestre==3){
                 c+= parseInt(cargas[t].creditos, 10)
@@ -259,19 +259,19 @@ function creditos2(professor, turmas, disciplinas, cargas){
 
 Pdfs.prototype.pdfCargaProfessores = function() {
 
-    var tables = []
-    var professores = _.orderBy(this.Docentes, 'apelido')
-    var turmasProf
-    var posProf
-    var vazio = 0
-    for(var i = 0; i < professores.length; i++){
+    let tables = []
+    let professores = _.orderBy(this.Docentes, 'apelido')
+    let turmasProf
+    let posProf
+    let vazio = 0
+    for(let i = 0; i < professores.length; i++){
         this.Turmas.forEach(turma => console.log(turma))
         turmasProf = turmas(professores[i], this.Turmas)
         posProf = pos(professores[i], this.Cargas)
         if(turmasProf.length === 0 && posProf.length === 0){
             vazio = vazio + 1
         }else {
-            var cargatotal = 0
+            let cargatotal = 0
             tables.push({
                 columns: [{
                     text: professores[i].apelido,
@@ -301,23 +301,23 @@ Pdfs.prototype.pdfCargaProfessores = function() {
                     ]
                 }
             })
-            for (var j = 0; j < turmasProf.length; j++) {
-                var disciplina = undefined
-                var horario1 = undefined
-                var horario2 = undefined
-                var c1 = 0
-                var c2 = 0
-                for (var k = 0; k < this.Disciplinas.length; k++) {
+            for (let j = 0; j < turmasProf.length; j++) {
+                let disciplina = undefined
+                let horario1 = undefined
+                let horario2 = undefined
+                let c1 = 0
+                let c2 = 0
+                for (let k = 0; k < this.Disciplinas.length; k++) {
                     if (turmasProf[j].Disciplina === this.Disciplinas[k].id) {
                         disciplina = this.Disciplinas[k]
                     }
                 }
-                for (var l = 0; l < this.Horarios.length; l++) {
+                for (let l = 0; l < this.Horarios.length; l++) {
                     if (turmasProf[j].Horario1 === this.Horarios[l].id) {
                         horario1 = this.Horarios[l]
                     }
                 }
-                for (var m = 0; m < this.Horarios.length; m++) {
+                for (let m = 0; m < this.Horarios.length; m++) {
                     if (turmasProf[j].Horario2 === this.Horarios[m].id) {
                         horario2 = this.Horarios[m]
                     }
@@ -325,9 +325,9 @@ Pdfs.prototype.pdfCargaProfessores = function() {
                 if(horario1===undefined && horario2===undefined){
                     horarioTotal = ''
                 }else if (horario2 === undefined) {
-                    var horarioTotal = horario1.horario
+                    let horarioTotal = horario1.horario
                 } else {
-                    var horarioTotal = horario1.horario + '/' + horario2.horario
+                    let horarioTotal = horario1.horario + '/' + horario2.horario
                 }
                 if (turmasProf[j].periodo == 1) {
                     c1 = disciplina.cargaTeorica + disciplina.cargaPratica
@@ -342,9 +342,9 @@ Pdfs.prototype.pdfCargaProfessores = function() {
                     alignment: 'center'
                 }, {text:c1, alignment: 'center'}, {text:c2, alignment: 'center'}])
             }
-            for (var n = 0; n < posProf.length; n++) {
-                var c1 = 0
-                var c2 = 0
+            for (let n = 0; n < posProf.length; n++) {
+                let c1 = 0
+                let c2 = 0
                 if (posProf[n].trimestre === 1 || posProf[n].trimestre === 2) {
                     c1 = posProf[n].creditos
                 } else {
@@ -396,15 +396,15 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
         Eletivas:[]
     }
 
-    var grade
-    var grades
-    var inicio = 1
-    var fim
-    var pedidos
-    var pedidosExternos
-    var disciplinaGrades = listaDisciplinasGrade
-    var turmas = listaTurmas
-    var turmasExternas = listaTurmasExternas
+    let grade
+    let grades
+    let inicio = 1
+    let fim
+    let pedidos
+    let pedidosExternos
+    let disciplinaGrades = listaDisciplinasGrade
+    let turmas = listaTurmas
+    let turmasExternas = listaTurmasExternas
 
     if (semestre===1){
         if(listaCursos[0].semestreInicial==1){
@@ -464,7 +464,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 4])
     console.log(grades.length)
 
-    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
         grade = grades[i].id
         //inicio
@@ -480,20 +480,20 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
             fim = 1 + 2*(ano - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (semestre - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
         else
             fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
-        for (var k = 0; k < disciplinaGrades.length; k++) {
+        for (let k = 0; k < disciplinaGrades.length; k++) {
             if ((disciplinaGrades[k].Grade == grade) && (isEven(disciplinaGrades[k].periodo) == this.evenCCD) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
-                for (var j = 0; j < turmas.length; j++) {
+                for (let j = 0; j < turmas.length; j++) {
                     if (turmas[j].periodo===1 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                        for (var p = 0; p < pedidos.length; p++) {
+                        for (let p = 0; p < pedidos.length; p++) {
                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
                                 ativos1.CCD[disciplinaGrades[k].periodo - 1].push(turmas[j])
                             }
                         }
                     }
                 }
-                for (var j = 0; j < turmasExternas.length; j++) {
+                for (let j = 0; j < turmasExternas.length; j++) {
                     if (turmasExternas[j].periodo===1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                        for (var p = 0; p < pedidosExternos.length; p++) {
+                        for (let p = 0; p < pedidosExternos.length; p++) {
                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                 ativos1.CCD[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                             }
@@ -510,7 +510,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
     pedidos = _.filter(listaPedidos, ['Curso', 1])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 1])
-    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
         grade = grades[i].id
         //inicio
@@ -526,20 +526,20 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
             fim = 1 + 2*(ano - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (semestre - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
         else
             fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
-        for (var k = 0; k < disciplinaGrades.length; k++) {
+        for (let k = 0; k < disciplinaGrades.length; k++) {
             if ((disciplinaGrades[k].Grade == grade) && (isEven(disciplinaGrades[k].periodo) == this.evenCCN) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
-                for (var j = 0; j < turmas.length; j++) {
+                for (let j = 0; j < turmas.length; j++) {
                     if (turmas[j].periodo===1 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                        for (var p = 0; p < pedidos.length; p++) {
+                        for (let p = 0; p < pedidos.length; p++) {
                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
                                 ativos1.CCN[disciplinaGrades[k].periodo - 1].push(turmas[j])
                             }
                         }
                     }
                 }
-                for (var j = 0; j < turmasExternas.length; j++) {
+                for (let j = 0; j < turmasExternas.length; j++) {
                     if (turmasExternas[j].periodo===1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                        for (var p = 0; p < pedidosExternos.length; p++) {
+                        for (let p = 0; p < pedidosExternos.length; p++) {
                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                 ativos1.CCN[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                             }
@@ -556,7 +556,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
     pedidos = _.filter(listaPedidos, ['Curso', 3])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 3])
-    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
         grade = grades[i].id
         //inicio
@@ -572,20 +572,20 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
             fim = 1 + 2*(ano - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (semestre - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
         else
             fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
-        for (var k = 0; k < disciplinaGrades.length; k++) {
+        for (let k = 0; k < disciplinaGrades.length; k++) {
             if ((disciplinaGrades[k].Grade == grade) && (isEven(disciplinaGrades[k].periodo) == this.evenSI) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
-                for (var j = 0; j < turmas.length; j++) {
+                for (let j = 0; j < turmas.length; j++) {
                     if (turmas[j].periodo===1 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                        for (var p = 0; p < pedidos.length; p++) {
+                        for (let p = 0; p < pedidos.length; p++) {
                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
                                 ativos1.SI[disciplinaGrades[k].periodo - 1].push(turmas[j])
                             }
                         }
                     }
                 }
-                for (var j = 0; j < turmasExternas.length; j++) {
+                for (let j = 0; j < turmasExternas.length; j++) {
                     if (turmasExternas[j].periodo===1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                        for (var p = 0; p < pedidosExternos.length; p++) {
+                        for (let p = 0; p < pedidosExternos.length; p++) {
                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                 ativos1.SI[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                             }
@@ -602,7 +602,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
     pedidos = _.filter(listaPedidos, ['Curso', 2])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 2])
-    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
         grade = grades[i].id
         //inicio
@@ -618,20 +618,20 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
             fim = 1 + 2*(ano - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (semestre - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
         else
             fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
-        for (var k = 0; k < disciplinaGrades.length; k++) {
+        for (let k = 0; k < disciplinaGrades.length; k++) {
             if ((disciplinaGrades[k].Grade == grade) && (isEven(disciplinaGrades[k].periodo) == this.evenEC) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
-                for (var j = 0; j < turmas.length; j++) {
+                for (let j = 0; j < turmas.length; j++) {
                     if (turmas[j].periodo===1 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                        for (var p = 0; p < pedidos.length; p++) {
+                        for (let p = 0; p < pedidos.length; p++) {
                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
                                 ativos1.EC[disciplinaGrades[k].periodo - 1].push(turmas[j])
                             }
                         }
                     }
                 }
-                for (var j = 0; j < turmasExternas.length; j++) {
+                for (let j = 0; j < turmasExternas.length; j++) {
                     if (turmasExternas[j].periodo===1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                        for (var p = 0; p < pedidosExternos.length; p++) {
+                        for (let p = 0; p < pedidosExternos.length; p++) {
                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                 ativos1.EC[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                             }
@@ -643,9 +643,9 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     }
 
     //Eletivas está selecionado:
-    var eletiva = true
-    for(var t = 0; t<turmas.length;t++){
-        for(var d = 0; d<disciplinaGrades.length; d++){
+    let eletiva = true
+    for(let t = 0; t<turmas.length;t++){
+        for(let d = 0; d<disciplinaGrades.length; d++){
             if(turmas[t].periodo!=1 || turmas[t].Disciplina===disciplinaGrades[d].Disciplina){
                 eletiva = false
             }
@@ -667,18 +667,18 @@ Pdfs.prototype.pdfResumoHorarios = function () {
 
     this.ativos1 = createHorarios1(anoAtual, 1, this.DisciplinasGrade, this.Turmas, this.TurmasExternas, this.Cursos, this.Grades, this.Pedidos, this.PedidosExternos)
 
-    var tables = []
-    var disciplinas = this.Disciplinas
-    var periodosCCD1 = this.ativos1.CCD
-    var periodosCCN1 = this.ativos1.CCN
-    var periodosEC1 = this.ativos1.EC
-    var periodosSI1 = this.ativos1.SI
-    var eletivas1 = this.ativos1.Eletivas
-    var seg = '', ter = '', qua = '', qui = '', sex = ''
-    var vazio = 0
+    let tables = []
+    let disciplinas = this.Disciplinas
+    let periodosCCD1 = this.ativos1.CCD
+    let periodosCCN1 = this.ativos1.CCN
+    let periodosEC1 = this.ativos1.EC
+    let periodosSI1 = this.ativos1.SI
+    let eletivas1 = this.ativos1.Eletivas
+    let seg = '', ter = '', qua = '', qui = '', sex = ''
+    let vazio = 0
     tables.push({text:'Ciência da Computação Diurno', bold:true, margin:[0, 10, 0, 5], fontSize: 20})
 
-    for(var i = 0; i < 10; i++){
+    for(let i = 0; i < 10; i++){
         if(periodosCCD1[i].length===0){
             vazio = vazio + 1
         }else {
@@ -705,10 +705,10 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                     ]
                 }
             })
-            for (var d = 0; d < 4; d++) {
-                for (var j = 0; j < periodosCCD1[i].length; j++) {
+            for (let d = 0; d < 4; d++) {
+                for (let j = 0; j < periodosCCD1[i].length; j++) {
                     if (checkTurmaHorario(periodosCCD1[i][j], 1 + d)) {
-                        for (var k = 0; k < disciplinas.length; k++) {
+                        for (let k = 0; k < disciplinas.length; k++) {
                             if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                                 if (seg !== '')
                                     seg = seg + ' '
@@ -817,7 +817,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
 
     tables.push({text:'Ciência da Computação Noturno', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
 
-    for(var i = 0; i < 10; i++){
+    for(let i = 0; i < 10; i++){
         if(periodosCCN1[i].length===0){
             vazio = vazio + 1
         }else {
@@ -844,10 +844,10 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                     ]
                 }
             })
-            for (var d = 4; d < 6; d++) {
-                for (var j = 0; j < periodosCCN1[i].length; j++) {
+            for (let d = 4; d < 6; d++) {
+                for (let j = 0; j < periodosCCN1[i].length; j++) {
                     if (checkTurmaHorario(periodosCCN1[i][j], 1 + d)) {
-                        for (var k = 0; k < disciplinas.length; k++) {
+                        for (let k = 0; k < disciplinas.length; k++) {
                             if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                                 if (seg !== '')
                                     seg = seg + ' '
@@ -956,7 +956,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
 
     tables.push({text:'Engenharia Computacional', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
 
-    for(var i = 0; i < 10; i++){
+    for(let i = 0; i < 10; i++){
         if(periodosEC1[i].length===0){
             vazio = vazio + 1
         }else {
@@ -983,10 +983,10 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                     ]
                 }
             })
-            for (var d = 0; d < 4; d++) {
-                for (var j = 0; j < periodosEC1[i].length; j++) {
+            for (let d = 0; d < 4; d++) {
+                for (let j = 0; j < periodosEC1[i].length; j++) {
                     if (checkTurmaHorario(periodosEC1[i][j], 1 + d)) {
-                        for (var k = 0; k < disciplinas.length; k++) {
+                        for (let k = 0; k < disciplinas.length; k++) {
                             if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                                 if (seg !== '')
                                     seg = seg + ' '
@@ -1095,7 +1095,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
 
     tables.push({text:'Sistemas de Informação', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
 
-    for(var i = 0; i < 10; i++){
+    for(let i = 0; i < 10; i++){
         if(periodosSI1[i].length===0){
             vazio = vazio + 1
         }else {
@@ -1122,10 +1122,10 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                     ]
                 }
             })
-            for (var d = 4; d < 6; d++) {
-                for (var j = 0; j < periodosSI1[i].length; j++) {
+            for (let d = 4; d < 6; d++) {
+                for (let j = 0; j < periodosSI1[i].length; j++) {
                     if (checkTurmaHorario(periodosSI1[i][j], 1 + d)) {
-                        for (var k = 0; k < disciplinas.length; k++) {
+                        for (let k = 0; k < disciplinas.length; k++) {
                             if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                                 if (seg !== '')
                                     seg = seg + ' '
@@ -1259,10 +1259,10 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                 ]
             }
         })
-        for (var d = 0; d < 6; d++) {
-            for (var j = 0; j < eletivas1.length; j++) {
+        for (let d = 0; d < 6; d++) {
+            for (let j = 0; j < eletivas1.length; j++) {
                 if (checkTurmaHorario(eletivas1[j], 1 + d)) {
-                    for (var k = 0; k < disciplinas.length; k++) {
+                    for (let k = 0; k < disciplinas.length; k++) {
                         if (eletivas1[j].Disciplina === disciplinas[k].id) {
                             if (seg !== '')
                                 seg = seg + ' '
