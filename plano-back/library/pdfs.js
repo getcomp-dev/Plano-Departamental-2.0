@@ -22,14 +22,14 @@ function Pdfs(){
         CCN: [[], [], [], [], [], [], [], [], [], []],
         EC: [[], [], [], [], [], [], [], [], [], []],
         SI: [[], [], [], [], [], [], [], [], [], []],
-        Eletivas:[]
+        Evarivas:[]
     }
     this.ativos2 = {
         CCD: [[], [], [], [], [], [], [], [], [], []],
         CCN: [[], [], [], [], [], [], [], [], [], []],
         EC: [[], [], [], [], [], [], [], [], [], []],
         SI: [[], [], [], [], [], [], [], [], [], []],
-        Eletivas:[]
+        Evarivas:[]
     }
 }
 
@@ -77,9 +77,9 @@ Pdfs.prototype.ready = async function(){
         result[11].forEach(plano => this.Plano.push(plano.dataValues))
         result[12].forEach(curso => this.Cursos.push(curso.dataValues))
         console.log('Dados inicializados')
-        let labs = this.pdfAlocacaoLabs()
-        let carga = this.pdfCargaProfessores()
-        let horarios = this.pdfResumoHorarios()
+        var labs = this.pdfAlocacaoLabs()
+        var carga = this.pdfCargaProfessores()
+        var horarios = this.pdfResumoHorarios()
         Promise.all([labs, carga, horarios]).then(() => true)
     })
 }
@@ -93,11 +93,11 @@ function checkTurmaHorario (turma, horario) {
 
 Pdfs.prototype.pdfAlocacaoLabs = function() {
 
-    let tables = []
-    let laboratorios = _.filter(this.Salas, ['laboratorio', true])
-    let disciplinas = this.Disciplinas
-    let turmas = this.Turmas
-    let seg = '', ter = '', qua = '', qui = '', sex = ''
+    var tables = []
+    var laboratorios = _.filter(this.Salas, ['laboratorio', true])
+    var disciplinas = this.Disciplinas
+    var turmas = this.Turmas
+    var seg = '', ter = '', qua = '', qui = '', sex = ''
     for(var i = 0; i < laboratorios.length; i++){
         tables.push({text: laboratorios[i].nome, bold:true, margin:[0, 10, 0, 10], fontSize:20})
         tables.push({
@@ -118,7 +118,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
                             if(turmas[j].Disciplina === disciplinas[k].id){
                                 if(seg !== '')
                                     seg = seg + ' '
-                                seg = seg + disciplinas[k].codigo + ' ' + turmas[j].letra
+                                seg = seg + disciplinas[k].codigo + ' ' + turmas[j].varra
                             }
                         }
                     }
@@ -127,7 +127,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
                             if(turmas[j].Disciplina === disciplinas[k].id){
                                 if(ter != '')
                                     ter = ter + ' '
-                                ter = ter + disciplinas[k].codigo + ' ' + turmas[j].letra
+                                ter = ter + disciplinas[k].codigo + ' ' + turmas[j].varra
                             }
                         }
                     }
@@ -136,7 +136,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
                             if(turmas[j].Disciplina === disciplinas[k].id){
                                 if(qua != '')
                                     qua = qua + ' '
-                                qua = qua + disciplinas[k].codigo + ' ' + turmas[j].letra
+                                qua = qua + disciplinas[k].codigo + ' ' + turmas[j].varra
                             }
                         }
                     }
@@ -145,7 +145,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
                             if(turmas[j].Disciplina === disciplinas[k].id){
                                 if(qui != '')
                                     qui = qui + ' '
-                                qui = qui + disciplinas[k].codigo + ' ' + turmas[j].letra
+                                qui = qui + disciplinas[k].codigo + ' ' + turmas[j].varra
                             }
                         }
                     }
@@ -154,7 +154,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
                             if(turmas[j].Disciplina === disciplinas[k].id){
                                 if(sex != '')
                                     sex = sex + ' '
-                                sex = sex + disciplinas[k].codigo + ' ' + turmas[j].letra
+                                sex = sex + disciplinas[k].codigo + ' ' + turmas[j].varra
                             }
                         }
                     }
@@ -177,12 +177,12 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
             seg = ter = qua = qui = sex = ''
         }
     }
-    let docDefinition = {
+    var docDefinition = {
         content: tables,
         header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
     }
 
-    let fonts = {
+    var fonts = {
         Roboto: {
             normal: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Regular.ttf',
             bold: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Medium.ttf',
@@ -191,11 +191,11 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
         }
     };
 
-    let PdfPrinter = require('pdfmake');
-    let printer = new PdfPrinter(fonts);
-    let fs = require('fs');
+    var PdfPrinter = require('pdfmake');
+    var printer = new PdfPrinter(fonts);
+    var fs = require('fs');
 
-    let pdfDoc = printer.createPdfKitDocument(docDefinition);
+    var pdfDoc = printer.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Labs.pdf'));
     pdfDoc.end();
     return true
@@ -214,7 +214,7 @@ function pos(professor, cargas){
 }
 
 function creditos1(professor, turmas, disciplinas, cargas){
-    let c = 0
+    var c = 0
     for (var t = 0; t < turmas.length; t++){
         if(turmas[t].periodo===1 && (turmas[t].Docente1===professor.id || turmas[t].Docente2===professor.id)){
             for (var d = 0; d < disciplinas.length; d++){
@@ -259,12 +259,12 @@ function creditos2(professor, turmas, disciplinas, cargas){
 
 Pdfs.prototype.pdfCargaProfessores = function() {
 
-    let tables = []
-    let professores = _.orderBy(this.Docentes, 'apelido')
-    let turmasProf
-    let posProf
-    let vazio = 0
-    let horarioTotal = ''
+    var tables = []
+    var professores = _.orderBy(this.Docentes, 'apelido')
+    var turmasProf
+    var posProf
+    var vazio = 0
+    var horarioTotal = ''
     for(var i = 0; i < professores.length; i++){
         this.Turmas.forEach(turma => console.log(turma))
         turmasProf = turmas(professores[i], this.Turmas)
@@ -272,7 +272,7 @@ Pdfs.prototype.pdfCargaProfessores = function() {
         if(turmasProf.length === 0 && posProf.length === 0){
             vazio = vazio + 1
         }else {
-            let cargatotal = 0
+            var cargatotal = 0
             tables.push({
                 columns: [{
                     text: professores[i].apelido,
@@ -303,11 +303,11 @@ Pdfs.prototype.pdfCargaProfessores = function() {
                 }
             })
             for (var j = 0; j < turmasProf.length; j++) {
-                let disciplina = undefined
-                let horario1 = undefined
-                let horario2 = undefined
-                let c1 = 0
-                let c2 = 0
+                var disciplina = undefined
+                var horario1 = undefined
+                var horario2 = undefined
+                var c1 = 0
+                var c2 = 0
                 for (var k = 0; k < this.Disciplinas.length; k++) {
                     if (turmasProf[j].Disciplina === this.Disciplinas[k].id) {
                         disciplina = this.Disciplinas[k]
@@ -338,14 +338,14 @@ Pdfs.prototype.pdfCargaProfessores = function() {
                 tables[1 + 2 * (i - vazio)].table.body.push([{text:turmasProf[j].periodo, alignment: 'center'}, {
                     text: disciplina.codigo,
                     alignment: 'center'
-                }, disciplina.nome, {text: turmasProf[j].letra, alignment: 'center'}, {
+                }, disciplina.nome, {text: turmasProf[j].varra, alignment: 'center'}, {
                     text: horarioTotal,
                     alignment: 'center'
                 }, {text:c1, alignment: 'center'}, {text:c2, alignment: 'center'}])
             }
             for (var n = 0; n < posProf.length; n++) {
-                let c1 = 0
-                let c2 = 0
+                var c1 = 0
+                var c2 = 0
                 if (posProf[n].trimestre === 1 || posProf[n].trimestre === 2) {
                     c1 = posProf[n].creditos
                 } else {
@@ -358,12 +358,12 @@ Pdfs.prototype.pdfCargaProfessores = function() {
             }
         }
     }
-    let docDefinition = {
+    var docDefinition = {
         content: tables,
         header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
     }
 
-    let fonts = {
+    var fonts = {
         Roboto: {
             normal: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Regular.ttf',
             bold: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Medium.ttf',
@@ -372,11 +372,11 @@ Pdfs.prototype.pdfCargaProfessores = function() {
         }
     };
 
-    let PdfPrinter = require('pdfmake');
-    let printer = new PdfPrinter(fonts);
-    let fs = require('fs');
+    var PdfPrinter = require('pdfmake');
+    var printer = new PdfPrinter(fonts);
+    var fs = require('fs');
 
-    let pdfDoc = printer.createPdfKitDocument(docDefinition);
+    var pdfDoc = printer.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Cargas.pdf'));
     pdfDoc.end();
     return true
@@ -390,23 +390,23 @@ function isEven (number) {
 }
 
 function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, listaTurmasExternas, listaCursos, listaGrades, listaPedidos, listaPedidosExternos) {
-    let ativos1 = {
+    var ativos1 = {
         CCD: [[], [], [], [], [], [], [], [], [], []],
         CCN: [[], [], [], [], [], [], [], [], [], []],
         EC: [[], [], [], [], [], [], [], [], [], []],
         SI: [[], [], [], [], [], [], [], [], [], []],
-        Eletivas:[]
+        Evarivas:[]
     }
 
-    let grade
-    let grades
-    let inicio = 1
-    let fim
-    let pedidos
-    let pedidosExternos
-    let disciplinaGrades = listaDisciplinasGrade
-    let turmas = listaTurmas
-    let turmasExternas = listaTurmasExternas
+    var grade
+    var grades
+    var inicio = 1
+    var fim
+    var pedidos
+    var pedidosExternos
+    var disciplinaGrades = listaDisciplinasGrade
+    var turmas = listaTurmas
+    var turmasExternas = listaTurmasExternas
 
     if (semestre===1){
         if(listaCursos[0].semestreInicial==1){
@@ -644,18 +644,18 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
         }
     }
 
-    //Eletivas está selecionado:
-    let eletiva = true
+    //Evarivas está selecionado:
+    var evariva = true
     for(var t = 0; t<turmas.length;t++){
         for(var d = 0; d<disciplinaGrades.length; d++){
             if(turmas[t].periodo!=1 || turmas[t].Disciplina===disciplinaGrades[d].Disciplina){
-                eletiva = false
+                evariva = false
             }
         }
-        if(eletiva){
-            ativos1.Eletivas.push(turmas[t])
+        if(evariva){
+            ativos1.Evarivas.push(turmas[t])
         }else{
-            eletiva = true
+            evariva = true
         }
     }
 
@@ -665,19 +665,19 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
 
 Pdfs.prototype.pdfResumoHorarios = function () {
 
-    let anoAtual = (_.isEmpty(this.Plano)?2019:this.Plano[0].ano)
+    var anoAtual = (_.isEmpty(this.Plano)?2019:this.Plano[0].ano)
 
     this.ativos1 = createHorarios1(anoAtual, 1, this.DisciplinasGrade, this.Turmas, this.TurmasExternas, this.Cursos, this.Grades, this.Pedidos, this.PedidosExternos)
 
-    let tables = []
-    let disciplinas = this.Disciplinas
-    let periodosCCD1 = this.ativos1.CCD
-    let periodosCCN1 = this.ativos1.CCN
-    let periodosEC1 = this.ativos1.EC
-    let periodosSI1 = this.ativos1.SI
-    let eletivas1 = this.ativos1.Eletivas
-    let seg = '', ter = '', qua = '', qui = '', sex = ''
-    let vazio = 0
+    var tables = []
+    var disciplinas = this.Disciplinas
+    var periodosCCD1 = this.ativos1.CCD
+    var periodosCCN1 = this.ativos1.CCN
+    var periodosEC1 = this.ativos1.EC
+    var periodosSI1 = this.ativos1.SI
+    var evarivas1 = this.ativos1.Evarivas
+    var seg = '', ter = '', qua = '', qui = '', sex = ''
+    var vazio = 0
     tables.push({text:'Ciência da Computação Diurno', bold:true, margin:[0, 10, 0, 5], fontSize: 20})
 
     for(var i = 0; i < 10; i++){
@@ -714,7 +714,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                                 if (seg !== '')
                                     seg = seg + ' '
-                                seg = seg + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].letra
+                                seg = seg + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].varra
                             }
                         }
                     }
@@ -723,7 +723,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                                 if (ter != '')
                                     ter = ter + ' '
-                                ter = ter + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].letra
+                                ter = ter + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].varra
                             }
                         }
                     }
@@ -732,7 +732,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qua != '')
                                     qua = qua + ' '
-                                qua = qua + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].letra
+                                qua = qua + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].varra
                             }
                         }
                     }
@@ -741,7 +741,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qui != '')
                                     qui = qui + ' '
-                                qui = qui + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].letra
+                                qui = qui + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].varra
                             }
                         }
                     }
@@ -750,7 +750,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                                 if (sex != '')
                                     sex = sex + ' '
-                                sex = sex + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].letra
+                                sex = sex + disciplinas[k].codigo + ' ' + periodosCCD1[i][j].varra
                             }
                         }
                     }
@@ -846,14 +846,14 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                     ]
                 }
             })
-            for (let d = 4; d < 6; d++) {
+            for (var d = 4; d < 6; d++) {
                 for (var j = 0; j < periodosCCN1[i].length; j++) {
                     if (checkTurmaHorario(periodosCCN1[i][j], 1 + d)) {
                         for (var k = 0; k < disciplinas.length; k++) {
                             if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                                 if (seg !== '')
                                     seg = seg + ' '
-                                seg = seg + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].letra
+                                seg = seg + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].varra
                             }
                         }
                     }
@@ -862,7 +862,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                                 if (ter != '')
                                     ter = ter + ' '
-                                ter = ter + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].letra
+                                ter = ter + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].varra
                             }
                         }
                     }
@@ -871,7 +871,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qua != '')
                                     qua = qua + ' '
-                                qua = qua + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].letra
+                                qua = qua + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].varra
                             }
                         }
                     }
@@ -880,7 +880,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qui != '')
                                     qui = qui + ' '
-                                qui = qui + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].letra
+                                qui = qui + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].varra
                             }
                         }
                     }
@@ -889,7 +889,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                                 if (sex != '')
                                     sex = sex + ' '
-                                sex = sex + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].letra
+                                sex = sex + disciplinas[k].codigo + ' ' + periodosCCN1[i][j].varra
                             }
                         }
                     }
@@ -992,7 +992,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                                 if (seg !== '')
                                     seg = seg + ' '
-                                seg = seg + disciplinas[k].codigo + ' ' + periodosEC1[i][j].letra
+                                seg = seg + disciplinas[k].codigo + ' ' + periodosEC1[i][j].varra
                             }
                         }
                     }
@@ -1001,7 +1001,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                                 if (ter != '')
                                     ter = ter + ' '
-                                ter = ter + disciplinas[k].codigo + ' ' + periodosEC1[i][j].letra
+                                ter = ter + disciplinas[k].codigo + ' ' + periodosEC1[i][j].varra
                             }
                         }
                     }
@@ -1010,7 +1010,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qua != '')
                                     qua = qua + ' '
-                                qua = qua + disciplinas[k].codigo + ' ' + periodosEC1[i][j].letra
+                                qua = qua + disciplinas[k].codigo + ' ' + periodosEC1[i][j].varra
                             }
                         }
                     }
@@ -1019,7 +1019,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qui != '')
                                     qui = qui + ' '
-                                qui = qui + disciplinas[k].codigo + ' ' + periodosEC1[i][j].letra
+                                qui = qui + disciplinas[k].codigo + ' ' + periodosEC1[i][j].varra
                             }
                         }
                     }
@@ -1028,7 +1028,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                                 if (sex != '')
                                     sex = sex + ' '
-                                sex = sex + disciplinas[k].codigo + ' ' + periodosEC1[i][j].letra
+                                sex = sex + disciplinas[k].codigo + ' ' + periodosEC1[i][j].varra
                             }
                         }
                     }
@@ -1124,14 +1124,14 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                     ]
                 }
             })
-            for (let d = 4; d < 6; d++) {
+            for (var d = 4; d < 6; d++) {
                 for (var j = 0; j < periodosSI1[i].length; j++) {
                     if (checkTurmaHorario(periodosSI1[i][j], 1 + d)) {
                         for (var k = 0; k < disciplinas.length; k++) {
                             if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                                 if (seg !== '')
                                     seg = seg + ' '
-                                seg = seg + disciplinas[k].codigo + ' ' + periodosSI1[i][j].letra
+                                seg = seg + disciplinas[k].codigo + ' ' + periodosSI1[i][j].varra
                             }
                         }
                     }
@@ -1140,7 +1140,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                                 if (ter != '')
                                     ter = ter + ' '
-                                ter = ter + disciplinas[k].codigo + ' ' + periodosSI1[i][j].letra
+                                ter = ter + disciplinas[k].codigo + ' ' + periodosSI1[i][j].varra
                             }
                         }
                     }
@@ -1149,7 +1149,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qua != '')
                                     qua = qua + ' '
-                                qua = qua + disciplinas[k].codigo + ' ' + periodosSI1[i][j].letra
+                                qua = qua + disciplinas[k].codigo + ' ' + periodosSI1[i][j].varra
                             }
                         }
                     }
@@ -1158,7 +1158,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                                 if (qui != '')
                                     qui = qui + ' '
-                                qui = qui + disciplinas[k].codigo + ' ' + periodosSI1[i][j].letra
+                                qui = qui + disciplinas[k].codigo + ' ' + periodosSI1[i][j].varra
                             }
                         }
                     }
@@ -1167,7 +1167,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
                             if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                                 if (sex != '')
                                     sex = sex + ' '
-                                sex = sex + disciplinas[k].codigo + ' ' + periodosSI1[i][j].letra
+                                sex = sex + disciplinas[k].codigo + ' ' + periodosSI1[i][j].varra
                             }
                         }
                     }
@@ -1234,9 +1234,9 @@ Pdfs.prototype.pdfResumoHorarios = function () {
         }
     }
 
-    tables.push({text:'Eletivas', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
+    tables.push({text:'Evarivas', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
 
-    if(eletivas1.length===0){
+    if(evarivas1.length===0){
         vazio = vazio + 1
     }else {
         tables.push({
@@ -1262,49 +1262,49 @@ Pdfs.prototype.pdfResumoHorarios = function () {
             }
         })
         for (var d = 0; d < 6; d++) {
-            for (var j = 0; j < eletivas1.length; j++) {
-                if (checkTurmaHorario(eletivas1[j], 1 + d)) {
+            for (var j = 0; j < evarivas1.length; j++) {
+                if (checkTurmaHorario(evarivas1[j], 1 + d)) {
                     for (var k = 0; k < disciplinas.length; k++) {
-                        if (eletivas1[j].Disciplina === disciplinas[k].id) {
+                        if (evarivas1[j].Disciplina === disciplinas[k].id) {
                             if (seg !== '')
                                 seg = seg + ' '
-                            seg = seg + disciplinas[k].codigo + ' ' + eletivas1[j].letra
+                            seg = seg + disciplinas[k].codigo + ' ' + evarivas1[j].varra
                         }
                     }
                 }
-                if (checkTurmaHorario(eletivas1[j], 7 + d)) {
+                if (checkTurmaHorario(evarivas1[j], 7 + d)) {
                     for (k = 0; k < disciplinas.length; k++) {
-                        if (eletivas1[j].Disciplina === disciplinas[k].id) {
+                        if (evarivas1[j].Disciplina === disciplinas[k].id) {
                             if (ter != '')
                                 ter = ter + ' '
-                            ter = ter + disciplinas[k].codigo + ' ' + eletivas1[j].letra
+                            ter = ter + disciplinas[k].codigo + ' ' + evarivas1[j].varra
                         }
                     }
                 }
-                if (checkTurmaHorario(eletivas1[j], 13 + d)) {
+                if (checkTurmaHorario(evarivas1[j], 13 + d)) {
                     for (k = 0; k < disciplinas.length; k++) {
-                        if (eletivas1[j].Disciplina === disciplinas[k].id) {
+                        if (evarivas1[j].Disciplina === disciplinas[k].id) {
                             if (qua != '')
                                 qua = qua + ' '
-                            qua = qua + disciplinas[k].codigo + ' ' + eletivas1[j].letra
+                            qua = qua + disciplinas[k].codigo + ' ' + evarivas1[j].varra
                         }
                     }
                 }
-                if (checkTurmaHorario(eletivas1[j], 19 + d)) {
+                if (checkTurmaHorario(evarivas1[j], 19 + d)) {
                     for (k = 0; k < disciplinas.length; k++) {
-                        if (eletivas1[j].Disciplina === disciplinas[k].id) {
+                        if (evarivas1[j].Disciplina === disciplinas[k].id) {
                             if (qui != '')
                                 qui = qui + ' '
-                            qui = qui + disciplinas[k].codigo + ' ' + eletivas1[j].letra
+                            qui = qui + disciplinas[k].codigo + ' ' + evarivas1[j].varra
                         }
                     }
                 }
-                if (checkTurmaHorario(eletivas1[j], 25 + d)) {
+                if (checkTurmaHorario(evarivas1[j], 25 + d)) {
                     for (k = 0; k < disciplinas.length; k++) {
-                        if (eletivas1[j].Disciplina === disciplinas[k].id) {
+                        if (evarivas1[j].Disciplina === disciplinas[k].id) {
                             if (sex != '')
                                 sex = sex + ' '
-                            sex = sex + disciplinas[k].codigo + ' ' + eletivas1[j].letra
+                            sex = sex + disciplinas[k].codigo + ' ' + evarivas1[j].varra
                         }
                     }
                 }
@@ -1371,12 +1371,12 @@ Pdfs.prototype.pdfResumoHorarios = function () {
     }
 
 
-    let docDefinition = {
+    var docDefinition = {
         content: tables,
         header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
     }
 
-    let fonts = {
+    var fonts = {
         Roboto: {
             normal: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Regular.ttf',
             bold: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Medium.ttf',
@@ -1385,11 +1385,11 @@ Pdfs.prototype.pdfResumoHorarios = function () {
         }
     };
 
-    let PdfPrinter = require('pdfmake');
-    let printer = new PdfPrinter(fonts);
-    let fs = require('fs');
+    var PdfPrinter = require('pdfmake');
+    var printer = new PdfPrinter(fonts);
+    var fs = require('fs');
 
-    let pdfDoc = printer.createPdfKitDocument(docDefinition);
+    var pdfDoc = printer.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Horarios.pdf'));
     pdfDoc.end();
     return true
