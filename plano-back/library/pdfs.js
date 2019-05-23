@@ -92,7 +92,13 @@ Pdfs.prototype.ready = async function(){
         var labs = this.pdfAlocacaoLabs()
         var carga = this.pdfCargaProfessores()
         var horarios = this.pdfResumoHorarios()
-        Promise.all([labs, carga, horarios]).then(() => true)
+        labs.on('finish', () => {
+            carga.on('finish', () => {
+                horarios.on('finish', () => {
+                    return true
+                })
+            })
+        })
     })
 }
 
@@ -198,8 +204,9 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
 
     console.log("Criando PDF")
     let pdfDocLabs = printer.createPdfKitDocument(docDefinitionLabs);
-    pdfDocLabs.pipe(fs.createWriteStream('Labs.pdf'));
+    let pdfLabs = pdfDocLabs.pipe(fs.createWriteStream('Labs.pdf'));
     pdfDocLabs.end();
+    return pdfLabs
 }
 
 function turmas(professor, turmas){
@@ -369,8 +376,9 @@ Pdfs.prototype.pdfCargaProfessores = function() {
 
     console.log("Criando PDF")
     let pdfDocCargas = printer.createPdfKitDocument(docDefinitionCargas);
-    pdfDocCargas.pipe(fs.createWriteStream('Cargas.pdf'));
+    let pdfCarga = pdfDocCargas.pipe(fs.createWriteStream('Cargas.pdf'));
     pdfDocCargas.end();
+    return pdfCarga
 }
 
 function isEven (number) {
@@ -1370,8 +1378,9 @@ Pdfs.prototype.pdfResumoHorarios = function () {
 
     console.log("Criando PDF")
     let pdfDocHorario = printer.createPdfKitDocument(docDefinitionHorario);
-    pdfDocHorario.pipe(fs.createWriteStream('Horarios.pdf'));
+    let pdfHorario = pdfDocHorario.pipe(fs.createWriteStream('Horarios.pdf'));
     pdfDocHorario.end();
+    return pdfHorario
 }
 
 module.exports = Pdfs;
