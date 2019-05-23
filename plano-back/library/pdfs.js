@@ -264,6 +264,7 @@ Pdfs.prototype.pdfCargaProfessores = function() {
     let turmasProf
     let posProf
     let vazio = 0
+    let horarioTotal = ''
     for(let i = 0; i < professores.length; i++){
         this.Turmas.forEach(turma => console.log(turma))
         turmasProf = turmas(professores[i], this.Turmas)
@@ -323,11 +324,11 @@ Pdfs.prototype.pdfCargaProfessores = function() {
                     }
                 }
                 if(horario1===undefined && horario2===undefined){
-                    let horarioTotal = ''
+                    horarioTotal = ''
                 }else if (horario2 === undefined) {
-                    let horarioTotal = horario1.horario
+                    horarioTotal = horario1.horario
                 } else {
-                    let horarioTotal = horario1.horario + '/' + horario2.horario
+                    horarioTotal = horario1.horario + '/' + horario2.horario
                 }
                 if (turmasProf[j].periodo == 1) {
                     c1 = disciplina.cargaTeorica + disciplina.cargaPratica
