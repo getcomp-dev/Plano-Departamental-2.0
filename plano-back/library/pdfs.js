@@ -77,10 +77,7 @@ Pdfs.prototype.ready = async function(){
         result[11].forEach(plano => this.Plano.push(plano.dataValues))
         result[12].forEach(curso => this.Cursos.push(curso.dataValues))
         console.log('Dados inicializados')
-        this.pdfAlocacaoLabs()
-            .then(() => {this.pdfCargaProfessores()})
-            .then(() => {this.pdfResumoHorarios()})
-
+        this.pdfAlocacaoLabs().then(() => {this.pdfCargaProfessores().then(() => {this.pdfResumoHorarios()})})
         return true
     })
 }
@@ -200,6 +197,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
     let pdfDoc = printer.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Labs.pdf'));
     pdfDoc.end();
+    return true
 }
 
 function turmas(professor, turmas){
@@ -380,6 +378,7 @@ Pdfs.prototype.pdfCargaProfessores = function() {
     let pdfDoc = printer.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Cargas.pdf'));
     pdfDoc.end();
+    return true
 }
 
 function isEven (number) {
@@ -1392,6 +1391,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
     let pdfDoc = printer.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Horarios.pdf'));
     pdfDoc.end();
+    return true
 }
 
 module.exports = Pdfs;
