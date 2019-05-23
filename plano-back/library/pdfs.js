@@ -181,7 +181,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
     }
 
     console.log("Criando Documento")
-    let docDefinition = {
+    let docDefinitionLabs = {
         content: tables,
         header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
     }
@@ -200,7 +200,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
 
 
     console.log("Criando PDF")
-    let pdfDocLabs = printerLabs.createPdfKitDocument(docDefinition);
+    let pdfDocLabs = printerLabs.createPdfKitDocument(docDefinitionLabs);
     pdfDocLabs.pipe(fs.createWriteStream('Labs.pdf'));
     pdfDocLabs.end();
     return true
@@ -364,7 +364,7 @@ Pdfs.prototype.pdfCargaProfessores = function() {
     }
 
     console.log("Criando Documento")
-    let docDefinition = {
+    let docDefinitionCargas = {
         content: tables,
         header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
     }
@@ -383,7 +383,7 @@ Pdfs.prototype.pdfCargaProfessores = function() {
 
 
     console.log("Criando PDF")
-    let pdfDocCargas = printerCargas.createPdfKitDocument(docDefinition);
+    let pdfDocCargas = printerCargas.createPdfKitDocument(docDefinitionCargas);
     pdfDocCargas.pipe(fs.createWriteStream('Cargas.pdf'));
     pdfDocCargas.end();
     return true
@@ -1377,7 +1377,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
     }
 
     console.log("Criando Documento")
-    let docDefinition = {
+    let docDefinitionHorario = {
         content: tables,
         header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
     }
@@ -1396,7 +1396,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
 
 
     console.log("Criando PDF")
-    let pdfDocHorario = printerHorario.createPdfKitDocument(docDefinition);
+    let pdfDocHorario = printerHorario.createPdfKitDocument(docDefinitionHorario);
     pdfDocHorario.pipe(fs.createWriteStream('Horarios.pdf'));
     pdfDocHorario.end();
     return true
