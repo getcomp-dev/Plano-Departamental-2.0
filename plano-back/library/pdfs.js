@@ -177,6 +177,8 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
             seg = ter = qua = qui = sex = ''
         }
     }
+
+    console.log("Criando Documento")
     let docDefinition = {
         content: tables,
         header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
@@ -195,6 +197,7 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
     let printer = new PdfPrinter(fonts);
     let fs = require('fs');
 
+    console.log("Criando PDF")
     let pdfDoc = printer.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Labs.pdf'));
     pdfDoc.end();
@@ -358,6 +361,8 @@ Pdfs.prototype.pdfCargaProfessores = function() {
             }
         }
     }
+
+    console.log("Criando Documento")
     let docDefinition = {
         content: tables,
         header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
@@ -376,6 +381,7 @@ Pdfs.prototype.pdfCargaProfessores = function() {
     let printer = new PdfPrinter(fonts);
     let fs = require('fs');
 
+    console.log("Criando PDF")
     let pdfDoc = printer.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Cargas.pdf'));
     pdfDoc.end();
@@ -1370,7 +1376,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
         }
     }
 
-
+    console.log("Criando Documento")
     let docDefinition = {
         content: tables,
         header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
@@ -1389,6 +1395,7 @@ Pdfs.prototype.pdfResumoHorarios = function () {
     let printer = new PdfPrinter(fonts);
     let fs = require('fs');
 
+    console.log("Criando PDF")
     let pdfDoc = printer.createPdfKitDocument(docDefinition);
     pdfDoc.pipe(fs.createWriteStream('Horarios.pdf'));
     pdfDoc.end();
