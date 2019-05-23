@@ -323,7 +323,7 @@ Pdfs.prototype.pdfCargaProfessores = function() {
                     }
                 }
                 if(horario1===undefined && horario2===undefined){
-                    horarioTotal = ''
+                    let horarioTotal = ''
                 }else if (horario2 === undefined) {
                     let horarioTotal = horario1.horario
                 } else {
