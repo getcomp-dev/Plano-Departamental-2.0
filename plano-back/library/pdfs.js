@@ -92,13 +92,7 @@ Pdfs.prototype.ready = async function(){
         var labs = this.pdfAlocacaoLabs()
         var carga = this.pdfCargaProfessores()
         var horarios = this.pdfResumoHorarios()
-        labs.on('finish', () => {
-            carga.on('finish', () => {
-                horarios.on('finish', () => {
-                    return true
-                })
-            })
-        })
+        return [labs, carga, horarios]
     })
 }
 
