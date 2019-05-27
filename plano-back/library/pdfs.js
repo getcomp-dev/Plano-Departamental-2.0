@@ -61,7 +61,7 @@ Pdfs.prototype.ready = async () => {
     this.Plano = models.Plano.findAll()
     this.Cursos = models.Curso.findAll()
     console.log('Resolvendo Promises')
-    Promise.all([this.Salas, this.Disciplinas, this.Turmas, this.Cargas, this.Docentes, this.Horarios, this.Grades, this.DisciplinasGrade, this.TurmasExternas, this.Pedidos, this.PedidosExternos, this.Plano, this.Cursos]).then(result => {
+    Promise.all([this.Salas, this.Disciplinas, this.Turmas, this.Cargas, this.Docentes, this.Horarios, this.Grades, this.DisciplinasGrade, this.TurmasExternas, this.Pedidos, this.PedidosExternos, this.Plano, this.Cursos]).then(async (result) => {
         this.Salas = []
         this.Disciplinas = []
         this.Turmas = []
