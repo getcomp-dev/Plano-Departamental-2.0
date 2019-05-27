@@ -45,7 +45,7 @@ function Pdfs(){
     }
 }
 
-Pdfs.prototype.ready = async function(){
+Pdfs.prototype.ready = async () => {
     console.log('Pedindo dados')
     this.Salas = models.Sala.findAll()
     this.Disciplinas = models.Disciplina.findAll()
@@ -89,10 +89,10 @@ Pdfs.prototype.ready = async function(){
         result[11].forEach(plano => this.Plano.push(plano.dataValues))
         result[12].forEach(curso => this.Cursos.push(curso.dataValues))
         console.log('Dados inicializados')
-        var labs = this.pdfAlocacaoLabs()
-        var carga = this.pdfCargaProfessores()
-        var horarios = this.pdfResumoHorarios()
-        return [labs, carga, horarios]
+        await pdfAlocacaoLabs()
+        await pdfCargaProfessores()
+        await pdfResumoHorarios()
+        return true
     })
 }
 
@@ -103,7 +103,7 @@ function checkTurmaHorario (turma, horario) {
         return false
 }
 
-Pdfs.prototype.pdfAlocacaoLabs = function() {
+const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
 
     var tables = []
     var laboratorios = _.filter(this.Salas, ['laboratorio', true])
@@ -198,10 +198,12 @@ Pdfs.prototype.pdfAlocacaoLabs = function() {
 
     console.log("Criando PDF")
     let pdfDocLabs = printer.createPdfKitDocument(docDefinitionLabs);
-    let pdfLabs = pdfDocLabs.pipe(fs.createWriteStream('Labs.pdf'));
+    let labsStream = fs.createWriteStream('Labs.pdf')
+    labsStream.on("finish", resolve)
+    pdfDocLabs.pipe(labsStream);
     pdfDocLabs.end();
-    return pdfLabs
-}
+
+})
 
 function turmas(professor, turmas){
     return _.filter(turmas,(turma) => {
@@ -259,7 +261,7 @@ function creditos2(professor, turmas, disciplinas, cargas){
     return c
 }
 
-Pdfs.prototype.pdfCargaProfessores = function() {
+const pdfCargaProfessores = () => new Promise((resolve, reject) => {
 
     var tables = []
     var professores = _.orderBy(this.Docentes, 'apelido')
@@ -370,10 +372,11 @@ Pdfs.prototype.pdfCargaProfessores = function() {
 
     console.log("Criando PDF")
     let pdfDocCargas = printer.createPdfKitDocument(docDefinitionCargas);
-    let pdfCarga = pdfDocCargas.pipe(fs.createWriteStream('Cargas.pdf'));
+    let cargasStream = fs.createWriteStream('Cargas.pdf')
+    cargasStream.on("finish", resolve)
+    pdfDocCargas.pipe(cargasStream);
     pdfDocCargas.end();
-    return pdfCarga
-}
+})
 
 function isEven (number) {
     if(number%2===0)
@@ -655,7 +658,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
 
 }
 
-Pdfs.prototype.pdfResumoHorarios = function () {
+const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
 
     var anoAtual = (_.isEmpty(this.Plano)?2019:this.Plano[0].ano)
 
@@ -1372,9 +1375,11 @@ Pdfs.prototype.pdfResumoHorarios = function () {
 
     console.log("Criando PDF")
     let pdfDocHorario = printer.createPdfKitDocument(docDefinitionHorario);
-    let pdfHorario = pdfDocHorario.pipe(fs.createWriteStream('Horarios.pdf'));
-    pdfDocHorario.end();
-    return pdfHorario
-}
+    let horariosStream = fs.createWriteStream('Horarios.pdf')
+    horariosStream.on("finish", resolve)
+    pdfDocHorario.pipe(horariosStream);
+    pdfDocHorario.end()
+
+})
 
 module.exports = Pdfs;

@@ -4,15 +4,7 @@ const express = require('express'),
 
 router.post('/criarPDFs', function(req, res, next){
     const pdf = new pdfs
-    pdf.ready().then((pdfs) => {
-        pdfs[0].on('finish', () => {
-            pdfs[1].on('finish', () => {
-                pdfs[2].on('finish', () => {
-                    res.send({success:true})
-                })
-            })
-        })
-    })
+    pdf.ready().then(() => res.send({success:true}))
 })
 
 module.exports = router
