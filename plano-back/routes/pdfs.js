@@ -2,9 +2,10 @@ const express = require('express'),
       router = require('express').Router(),
       pdfs = require ('../library/pdfs')
 
-router.post('/criarPDFs', function(req, res, next){
+router.post('/criarPDFs', async function(req, res, next){
     const pdf = new pdfs
-    pdf.ready().then(() => res.send({success:true}))
+    await pdf.ready()
+    res.send({success:true})
 })
 
 module.exports = router
