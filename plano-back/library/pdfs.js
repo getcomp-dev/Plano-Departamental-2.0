@@ -90,8 +90,11 @@ Pdfs.prototype.ready = () => new Promise((resolve, reject) => {
         result[12].forEach(curso => this.Cursos.push(curso.dataValues))
         console.log('Dados inicializados')
         await pdfAlocacaoLabs()
+        console.log("Pdf Labs Criado")
         await pdfCargaProfessores()
+        console.log("Pdf Cargas Criado")
         await pdfResumoHorarios()
+        console.log("Pdf Horarios Criado")
         return resolve
     })
 })
