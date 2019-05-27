@@ -95,8 +95,8 @@ Pdfs.prototype.ready = () => new Promise((resolve, reject) => {
         console.log("Pdf Cargas Criado")
         await pdfResumoHorarios()
         console.log("Pdf Horarios Criado")
+        resolve()
     })
-    return resolve
 })
 
 function checkTurmaHorario (turma, horario) {
