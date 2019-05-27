@@ -45,7 +45,7 @@ function Pdfs(){
     }
 }
 
-Pdfs.prototype.ready = async () => {
+Pdfs.prototype.ready = () => new Promise((resolve, reject) => {
     console.log('Pedindo dados')
     this.Salas = models.Sala.findAll()
     this.Disciplinas = models.Disciplina.findAll()
@@ -92,9 +92,9 @@ Pdfs.prototype.ready = async () => {
         await pdfAlocacaoLabs()
         await pdfCargaProfessores()
         await pdfResumoHorarios()
-        return true
+        return resolve
     })
-}
+})
 
 function checkTurmaHorario (turma, horario) {
     if(turma.Horario1==horario || turma.Horario2==horario) {
