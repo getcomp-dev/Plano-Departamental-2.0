@@ -164,6 +164,7 @@ import bddumpService from '../common/services/bddump'
 import userService from '../common/services/usuario'
 import _ from 'lodash'
 import downloadService from '../common/services/download'
+import xlsxService from '../common/services/xlsx'
 import {saveAs} from 'file-saver'
 
 const emptyUser = {
@@ -331,18 +332,21 @@ export default {
       },
 
       showModalDownload () {
-          downloadService.generatePdf().then(() => {
-              downloadService.download().then(() => {
-                  console.log('done')
-                  fetch("http://200.131.219.57:3000/api/download/all", {method:'GET', headers:{'Authorization': `Bearer ${this.$store.state.auth.token}`}}).then(r => r.blob())
-                      .then(blob => {
-                          saveAs(blob, "data.zip")
-                      })
-              }).catch(error => console.log(error))
-          })
-          /*this.filename=""
-          this.returnFiles()
-          this.$refs.modalDownload.show()*/
+              let pedidos = this.$store.state.pedido.Pedidos
+              xlsxService.downloadTable({pedidos:pedidos}).then(() => {
+                  console.log('Tabela Gerada')
+                  downloadService.generatePdf().then(() => {
+                      console.log('PDFs Gerados')
+                          downloadService.download().then(() => {
+                              console.log('done')
+                              fetch("http://200.131.219.57:3000/api/download/all", {method:'GET', headers:{'Authorization': `Bearer ${this.$store.state.auth.token}`}}).then(r => r.blob())
+                                  .then(blob => {
+                                      saveAs(blob, "data.zip")
+                                  }).catch(e => console.log(e))
+                          }).catch(e => console.log(e))
+                  }).catch(e => console.log(e))
+              }).catch(e => console.log(e))
+
       },
 
       showModalSave () {
