@@ -18,16 +18,7 @@ router.post('/', function(req, res, next){
                 },dumpToFile: './'+req.body.filename+'.sql',
             }
         )
-    const drop = fs.readFileSync('drop_all.sql')
-    const data = fs.readFileSync(req.body.filename + '.sql')
-    const fd = fs.openSync(req.body.filename + '.sql', 'w+')
-    fs.writeSync(fd, drop, 0, drop.length, 0)
-    fs.writeSync(fd, data, 0, data.length, drop.length)
-    fs.close(fd, (err) => {
-        if (err) throw err;
-    });
-
-
+    res.send({success:true})
 })
 
 router.post('/:filename([A-Za-z0-9_]+)', function(req, res, next){
