@@ -28,7 +28,8 @@ const express = require('express'),
   planoRoute = require('./routes/plano'),
   xlsxDownload = require('./routes/xlsx'),
   pdfsRoute = require('./routes/pdfs'),
-  downloads = require('./routes/download')
+  downloads = require('./routes/download'),
+  novoPlanoRoute = require('./routes/novoPlano')
 
 
 const app = express()
@@ -76,6 +77,7 @@ app.use('/api/plano', planoRoute)
 app.use('/api/xlsx', xlsxDownload)
 app.use('/api/pdf', pdfsRoute)
 app.use('/api/download', downloads)
+app.use('/api/novoPlano', novoPlanoRoute)
 
 app.use(history())
 // Error handlers

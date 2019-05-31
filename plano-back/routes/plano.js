@@ -22,7 +22,7 @@ router.post('/:ano([0-9]+)', function (req, res, next) {
             ano: req.params.ano
         }
     }).then(function (plano) {
-        if (plano)
+        if (!plano)
             throw new CustomError(400, 'Turma inválida')
 
         return plano.updateAttributes({
