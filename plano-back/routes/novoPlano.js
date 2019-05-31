@@ -1,7 +1,5 @@
 const express = require('express'),
     router = require('express').Router(),
-    fs = require('fs'),
-    models = require('../models/index'),
     exec = require('child_process').exec
 
 router.post('/', function(req, res, next){
@@ -21,3 +19,5 @@ router.post('/', function(req, res, next){
         }
     })
 })
+
+module.exports = router
