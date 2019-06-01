@@ -28,7 +28,7 @@ router.post('/:ano([0-9]+)', function (req, res, next) {
         return plano.updateAttributes({
             ano: req.body.ano
         })
-    }).then(function (cargaPos) {
+    }).then(function (plano) {
         ioBroadcast(SM.PLANO_UPDATED, {'msg': 'Plano atualizado!', 'Plano': plano})
 
         res.send({
