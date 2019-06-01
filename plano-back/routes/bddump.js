@@ -22,20 +22,30 @@ router.post('/', function(req, res, next){
 })
 
 router.post('/:filename([A-Za-z0-9_]+)', function(req, res, next){
-
-   var child = exec('mysql -u root plano_dev < ' + req.params.filename + '.sql', (error, stdout, stderr) => {
-       if(error==null){
-           res.send({
-               success:true,
-               message: "Backup Finalizado"
+   exec('mysql -u root plano_dev < dump_all.sql', (error, stdout, stderr) => {
+       if(error == null){
+           exec('mysql -u root plano_dev < ' + req.params.filename + '.sql', (error, stdout, stderr) => {
+               if(error==null){
+                   res.send({
+                       success:true,
+                       message: "Backup Finalizado"
+                   })
+               }else{
+                   res.send({
+                       success: false,
+                       error:error,
+                       stdout: stdout,
+                       stderr: stderr
+                   })
+               }
            })
-       }else{
-        res.send({
-           success: false,
-           error:error,
-           stdout: stdout,
-           stderr: stderr
-        })
+       } else {
+           res.send({
+               success: false,
+               error:error,
+               stdout: stdout,
+               stderr: stderr
+           })
        }
    })
 })
