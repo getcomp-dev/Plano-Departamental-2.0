@@ -1,7 +1,7 @@
 'use strict'
 
 module.exports = function (sequelize, DataTypes) {
-    return sequelize.define('Plano', {
+    const Plano =  sequelize.define('Plano', {
         ano: {
             type: DataTypes.INTEGER,
             primaryKey: true
@@ -10,5 +10,5 @@ module.exports = function (sequelize, DataTypes) {
         freezeTableName: true,
         timestamps: false
     })
-
+    return Plano
 }
