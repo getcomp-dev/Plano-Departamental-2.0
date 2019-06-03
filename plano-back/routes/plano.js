@@ -17,10 +17,9 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/:ano([0-9]+)', function (req, res, next) {
-    console.log([req.params.ano, req.body.ano])
     models.Plano.findOne({
         where: {
-            ano: req.params.ano
+            ano: parseInt(req.params.ano)
         }
     }).then(function (plano) {
         if (!plano)
