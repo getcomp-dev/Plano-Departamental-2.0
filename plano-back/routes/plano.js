@@ -19,13 +19,13 @@ router.get('/', function (req, res, next) {
 router.post('/:ano([0-9]+)', function (req, res, next) {
     models.Plano.findOne({
         where: {
-            ano: parseInt(req.params.ano)
+            ano: req.params.ano
         }
     }).then(function (plano) {
         if (!plano)
             throw new CustomError(400, 'Ano inválido')
 
-        return plano.updateAttributes({
+        return plano.update({
             ano: req.body.ano
         })
     }).then(function (plano) {
