@@ -23,8 +23,8 @@ router.post('/:ano([0-9]+)', function (req, res, next) {
         where: {
             ano:req.params.ano
         }
-    }).then(function (plano) {
-        ioBroadcast(SM.PLANO_UPDATED, {'msg': 'Plano atualizado!', 'Plano': plano})
+    }).then(function () {
+        ioBroadcast(SM.PLANO_UPDATED, {'msg': 'Plano atualizado!', 'Plano': {ano:req.body.ano}})
 
         res.send({
             success: true,
