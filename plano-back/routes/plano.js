@@ -17,14 +17,14 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/:ano([0-9]+)', function (req, res, next) {
-    models.Plano.update({
+    return models.Plano.update({
         ano:req.body.ano
     }, {
         where: {
             ano:req.params.ano
         }
-    }).then(function () {
-        ioBroadcast(SM.PLANO_UPDATED, {'msg': 'Plano atualizado!', 'Plano': [{Plano:[{ano:req.body.ano}]}]})
+    }).then(function (plano) {
+        ioBroadcast(SM.PLANO_UPDATED, {'msg': 'Plano atualizado!', 'Plano': plano})
 
         res.send({
             success: true,
