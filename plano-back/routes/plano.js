@@ -17,17 +17,12 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/:ano([0-9]+)', function (req, res, next) {
-    models.Plano.findOne({
+    models.Plano.update({
+        ano:req.body.ano
+    }, {
         where: {
-            ano: req.params.ano
+            ano:req.params.ano
         }
-    }).then(function (plano) {
-        if (!plano)
-            throw new CustomError(400, 'Ano inválido')
-
-        return plano.update({
-            ano: req.body.ano
-        })
     }).then(function (plano) {
         ioBroadcast(SM.PLANO_UPDATED, {'msg': 'Plano atualizado!', 'Plano': plano})
 
