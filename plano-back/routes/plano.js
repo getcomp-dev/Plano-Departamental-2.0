@@ -24,7 +24,7 @@ router.post('/:ano([0-9]+)', function (req, res, next) {
             ano:req.params.ano
         }
     }).then(function () {
-        ioBroadcast(SM.PLANO_UPDATED, {'msg': 'Plano atualizado!', 'Plano': {ano:req.body.ano}})
+        ioBroadcast(SM.PLANO_UPDATED, {'msg': 'Plano atualizado!', 'Plano': [{ano:req.body.ano}]})
 
         res.send({
             success: true,
