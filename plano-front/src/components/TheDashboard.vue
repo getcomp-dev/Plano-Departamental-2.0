@@ -5,6 +5,7 @@
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
           <p class="nav-link" v-on:click="showModalUser"><i class="fas fa-user"></i> Usuário</p>
+          <p class="nav-link" v-on:click="showModalNovoPlano"><i class="fas fa-folder-open"></i> Novo </p>
           <p class="nav-link" v-on:click="showModalLoad"><i class="fas fa-folder-open"></i> Carregar</p>
           <p class="nav-link" v-on:click="showModalSave"><i class="fas fa-save"></i> Salvar</p>
           <p class="nav-link" v-on:click="showModalDownload"><i class="fas fa-save"></i> Download</p>
@@ -17,6 +18,25 @@
       <div slot="modal-footer">
         <input type="text" v-model="filename" style="margin-right: 10px">
         <b-button variant="success" v-on:click="download(filename);">Carregar Arquivo</b-button>
+      </div>
+    </b-modal>
+
+    <b-modal id="modal-novo-plano" ref="modalNovoPlano" title="Informe o ano do novo plano">
+        <input type="text" v-model="novoAno" style="margin-right: 10px; width: 40px;">
+        <div slot="modal-footer">
+
+            <b-button variant="success" v-on:click="novoPlano()">Criar Plano</b-button>
+        </div>
+    </b-modal>
+
+
+      <b-modal id="modal-download-all" ref="modalDownloadAll" title="Donwload Iniciado">
+      <p v-if="downloadState >= 0">Preparando Arquivos</p>
+      <p v-if="downloadState >= 1">Tabelas Criadas</p>
+      <p v-if="downloadState >= 2">Relatórios Criados</p>
+      <p v-if="downloadState >= 3">Arquivo .zip criado</p>
+      <p v-if="downloadState >= 4">Download Concluído</p>
+      <div slot="modal-footer">
       </div>
     </b-modal>
     <b-modal id="modal-load" ref="modalLoad" title="Selecione um Arquivo">
@@ -165,6 +185,8 @@ import userService from '../common/services/usuario'
 import _ from 'lodash'
 import downloadService from '../common/services/download'
 import xlsxService from '../common/services/xlsx'
+import novoPlanoService from '../common/services/novoPlano'
+import planoService from '../common/services/plano'
 import {saveAs} from 'file-saver'
 
 const emptyUser = {
@@ -172,6 +194,10 @@ const emptyUser = {
     login: undefined,
     senha: undefined,
     senhaAtual: undefined
+}
+
+const emptyPlano = {
+    ano:undefined
 }
 
 export default {
@@ -183,15 +209,22 @@ export default {
           filename:"",
           isLoadingFile: false,
           userModalMode: 0,
-          userForm: _.clone(emptyUser)
+          userForm: _.clone(emptyUser),
+          downloadState : 0,
+          novoAno: 0,
+          planoForm : _.clone(emptyPlano)
       }
   },
 
   computed: {
     year () {
-      if(!(_.isEmpty(this.$store.state.plano.Plano)))
-        return this.$store.state.plano.Plano[0].ano
-      else
+      if(!(_.isEmpty(this.$store.state.plano.Plano))) {
+          if(typeof this.$store.state.plano.Plano[0].ano === 'string')
+              this.novoAno = parseInt(this.$store.state.plano.Plano[0].ano) + 1
+          else
+              this.novoAno = this.$store.state.plano.Plano[0].ano + 1
+          return this.$store.state.plano.Plano[0].ano
+      }else
         return 2019
     },
 
@@ -250,6 +283,26 @@ export default {
           this.hideModalSave()
       },
 
+      novoPlano: async function() {
+          await this.download()
+          let ano
+          if(!(_.isEmpty(this.$store.state.plano.Plano))) {
+              ano = this.$store.state.plano.Plano[0].ano
+          }else
+              ano = 2019
+          if(typeof this.novoAno === 'string')
+            this.planoForm.ano = parseInt(this.novoAno)
+          else
+            this.planoForm.ano = this.novoAno
+          planoService.update(ano, this.planoForm).then(() => {
+              novoPlanoService.criarNovoPlano().then(() => {
+                  this.$store.dispatch('fetchAll')
+                  this.$refs.modalNovoPlano.hide()
+              })
+             console.log('novo ano: ' + this.novoAno)
+          })
+      },
+
       restorebd: function(filename) {
           this.isLoadingFile = true
           bddumpService.restoredump(filename).then((response)=> {
@@ -276,29 +329,34 @@ export default {
 
       },
 
-      download: function(filename) {
-
-          bddumpService.downloadFile(filename).then((response)=> {
-              if(response.success == true){
-                  this.$notify({
-                      group:'general',
-                      type:'success',
-                      text: `O arquivo foi baixado com sucesso`
-                  })
-              }else{
-                  this.$notify({
-                      group:'general',
-                      type:'danger',
-                      text:'Falha ao baixar arquivo'
-                  })
-              }
-          }).catch(error => {
-              this.error = '<b>Erro ao baixar arquivo</b>'
-          })
-
+      download: async function() {
+          return new Promise((resolve, reject) => {
+          this.downloadState = 0
+          let pedidos = this.$store.state.pedido.Pedidos
+          xlsxService.downloadTable({pedidos:pedidos}).then(() => {
+              console.log('Tabela Gerada')
+              this.downloadState++
+              downloadService.generatePdf().then(() => {
+                  console.log('PDFs Gerados')
+                  this.downloadState++
+                  downloadService.download().then(() => {
+                      console.log('done')
+                      this.downloadState++
+                      fetch("http://200.131.219.57:3000/api/download/all", {method:'GET', headers:{'Authorization': `Bearer ${this.$store.state.auth.token}`}}).then(r => r.blob())
+                          .then(blob => {
+                              saveAs(blob, "data.zip")
+                              this.downloadState++
+                              resolve()
+                          }).catch(e => console.log(e))
+                  }).catch(e => console.log(e))
+              }).catch(e => console.log(e))
+          }).catch(e => console.log(e))
+      })
       },
 
-
+      startDownload: async function () {
+          await this.download()
+      },
 
       returnFiles: function () {
           bddumpService.returnFiles().then((response)=> {
@@ -325,6 +383,10 @@ export default {
           })
       },
 
+      showModalNovoPlano () {
+          this.$refs.modalNovoPlano.show()
+      },
+
       showModalLoad () {
           this.filename=""
           this.returnFiles()
@@ -332,21 +394,8 @@ export default {
       },
 
       showModalDownload () {
-              let pedidos = this.$store.state.pedido.Pedidos
-              xlsxService.downloadTable({pedidos:pedidos}).then(() => {
-                  console.log('Tabela Gerada')
-                  downloadService.generatePdf().then(() => {
-                      console.log('PDFs Gerados')
-                          downloadService.download().then(() => {
-                              console.log('done')
-                              fetch("http://200.131.219.57:3000/api/download/all", {method:'GET', headers:{'Authorization': `Bearer ${this.$store.state.auth.token}`}}).then(r => r.blob())
-                                  .then(blob => {
-                                      saveAs(blob, "data.zip")
-                                  }).catch(e => console.log(e))
-                          }).catch(e => console.log(e))
-                  }).catch(e => console.log(e))
-              }).catch(e => console.log(e))
-
+          this.$refs.modalDownloadAll.show()
+          this.startDownload()
       },
 
       showModalSave () {
