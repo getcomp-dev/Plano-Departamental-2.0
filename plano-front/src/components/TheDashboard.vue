@@ -5,9 +5,9 @@
       <ul class="navbar-nav px-3">
         <li class="nav-item text-nowrap">
           <p class="nav-link" v-on:click="showModalUser"><i class="fas fa-user"></i> Usuário</p>
-          <p class="nav-link" v-on:click="showModalNovoPlano"><i class="fas fa-folder-open"></i> Novo </p>
+          <p class="nav-link" v-on:click="showModalNovoPlano"><i class="fas fa-plus-square"></i> Novo </p>
           <p class="nav-link" v-on:click="showModalLoad"><i class="fas fa-folder-open"></i> Carregar</p>
-          <p class="nav-link" v-on:click="showModalSave"><i class="fas fa-save"></i> Salvar</p>
+          <p class="nav-link" v-on:click="showModalSave"><i class="fas fa-file"></i> Salvar</p>
           <p class="nav-link" v-on:click="showModalDownload"><i class="fas fa-save"></i> Download</p>
           <router-link :to="{ name: 'logout' }" class="nav-link"><i class="fas fa-sign-out-alt"></i> Logout</router-link>
         </li>
