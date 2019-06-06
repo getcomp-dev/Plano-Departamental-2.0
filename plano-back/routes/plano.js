@@ -22,13 +22,11 @@ router.post('/:ano([0-9]+)', function (req, res, next) {
             ano: req.params.ano
         }
     }).then(function (plano) {
-        console.log(plano)
         if (!plano)
             throw new CustomError(400, 'Ano inválido')
 
-        return plano.updateAttributes({ano: req.body.ano}, {raw:true})
+        return plano.updateAttributes({ano: req.body.ano})
     }).then(function (plano) {
-        console.log(plano)
         ioBroadcast(SM.PLANO_UPDATED, {'msg': 'Plano atualizado!', 'Plano': plano})
 
         res.send({

@@ -3,8 +3,7 @@
 module.exports = function (sequelize, DataTypes) {
     const Plano =  sequelize.define('Plano', {
         ano: {
-            type: DataTypes.INTEGER,
-            primaryKey: true
+            type: DataTypes.INTEGER
         }
     }, {
         freezeTableName: true,
