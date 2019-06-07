@@ -22,8 +22,13 @@
     </b-modal>
 
     <b-modal id="modal-novo-plano" ref="modalNovoPlano" title="Informe o ano do novo plano">
-        <input type="text" v-model="novoAno" style="margin-right: 10px; width: 40px;">
-        <div slot="modal-footer">
+      <b-form-group label="Ano" label-for="NovoAno" label-cols-sm="4" label-cols-lg="3">
+        <b-form-input id="NovoAno" type="text" v-model="planoForm.ano" style="margin-right: 10px; width: 60px;"></b-form-input>
+      </b-form-group>
+      <b-form-group label="Observações" label-for="ObsNovoPlano" label-cols-sm="4" label-cols-lg="3">
+        <b-form-textarea id="ObsNovoPlano" type="text" v-model="planoForm.obs" style="margin-right: 10px;"></b-form-textarea>
+      </b-form-group>
+      <div slot="modal-footer">
 
             <b-button variant="success" v-on:click="novoPlano()">Criar Plano</b-button>
         </div>
@@ -31,10 +36,10 @@
 
 
       <b-modal id="modal-download-all" ref="modalDownloadAll" title="Donwload Iniciado">
-      <p v-if="downloadState >= 0">Preparando Arquivos</p>
-      <p v-if="downloadState >= 1">Tabelas Criadas</p>
-      <p v-if="downloadState >= 2">Relatórios Criados</p>
-      <p v-if="downloadState >= 3">Arquivo .zip criado</p>
+      <p v-if="downloadState >= 0" v-bind:class="{loadingEllipsis : downloadState===0}">Preparando Arquivos</p>
+      <p v-if="downloadState >= 1" v-bind:class="{loadingEllipsis : downloadState===1}">Tabelas Criadas</p>
+      <p v-if="downloadState >= 2" v-bind:class="{loadingEllipsis : downloadState===2}">Relatórios Criados</p>
+      <p v-if="downloadState >= 3" v-bind:class="{loadingEllipsis : downloadState===3}">Arquivo .zip criado</p>
       <p v-if="downloadState >= 4">Download Concluído</p>
       <div slot="modal-footer">
       </div>
@@ -197,7 +202,8 @@ const emptyUser = {
 }
 
 const emptyPlano = {
-    ano:undefined
+    ano:undefined,
+    obs:undefined
 }
 
 export default {
@@ -211,7 +217,6 @@ export default {
           userModalMode: 0,
           userForm: _.clone(emptyUser),
           downloadState : 0,
-          novoAno: 0,
           planoForm : _.clone(emptyPlano)
       }
   },
@@ -220,9 +225,9 @@ export default {
     year () {
       if(!(_.isEmpty(this.$store.state.plano.Plano))) {
           if(typeof this.$store.state.plano.Plano[0].ano === 'string')
-              this.novoAno = parseInt(this.$store.state.plano.Plano[0].ano) + 1
+              this.planoForm.ano = parseInt(this.$store.state.plano.Plano[0].ano) + 1
           else
-              this.novoAno = this.$store.state.plano.Plano[0].ano + 1
+              this.planoForm.ano = this.$store.state.plano.Plano[0].ano + 1
           return this.$store.state.plano.Plano[0].ano
       }else
         return 2019
@@ -290,16 +295,13 @@ export default {
               ano = this.$store.state.plano.Plano[0].ano
           }else
               ano = 2019
-          if(typeof this.novoAno === 'string')
-            this.planoForm.ano = parseInt(this.novoAno)
-          else
-            this.planoForm.ano = this.novoAno
+
           planoService.update(ano, this.planoForm).then(() => {
               novoPlanoService.criarNovoPlano().then(() => {
                   this.$store.dispatch('fetchAll')
                   this.$refs.modalNovoPlano.hide()
               })
-             console.log('novo ano: ' + this.novoAno)
+             console.log('novo ano: ' + this.planoForm.ano)
           })
       },
 
@@ -526,6 +528,30 @@ export default {
 .navbar-nav > .nav-item > .nav-link:hover {
   cursor: pointer;
 }
+
+/*Download Files Loading*/
+  .loadingEllipsis:after {
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: bottom;
+    -webkit-animation: ellipsis steps(4,end) 900ms infinite;
+    animation: ellipsis steps(4,end) 900ms infinite;
+    content: "\2026"; /* ascii code for the ellipsis character */
+    width: 0px;
+  }
+
+  @keyframes ellipsis {
+    to {
+      width: 1.25em;
+    }
+  }
+
+  @-webkit-keyframes ellipsis {
+    to {
+      width: 1.25em;
+    }
+  }
+
 
 /* Page Loading */
 #loading {
