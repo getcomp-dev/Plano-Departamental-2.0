@@ -22,7 +22,7 @@ router.post('/', function (req, res, next) {
     res.send({
       success: true,
       message: 'Token criado',
-      token: jwt.sign(_.omit(usuario, 'senha'), config.jwt.secret, {expiresIn: 60 * 60 * 5}),
+      token: jwt.sign(_.omit(usuario, 'senha'), config.jwt.secret),
       Usuario: _.omit(usuario, 'senha')
     })
 
