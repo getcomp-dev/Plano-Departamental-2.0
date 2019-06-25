@@ -30,17 +30,17 @@
       </b-form-group>
       <div slot="modal-footer">
 
-            <b-button variant="success" v-on:click="novoPlano()">Criar Plano</b-button>
+            <b-button disabled v-on:click="novoPlano()">Criar Plano</b-button><!-- variant "success"-->
         </div>
     </b-modal>
 
 
-      <b-modal id="modal-download-all" ref="modalDownloadAll" title="Donwload Iniciado">
-      <p v-if="downloadState >= 0" v-bind:class="{loadingEllipsis : downloadState===0}">Preparando Arquivos</p>
-      <p v-if="downloadState >= 1" v-bind:class="{loadingEllipsis : downloadState===1}">Tabelas Criadas</p>
-      <p v-if="downloadState >= 2" v-bind:class="{loadingEllipsis : downloadState===2}">Relatórios Criados</p>
+      <b-modal id="modal-download-all" ref="modalDownloadAll" title="Download iniciado">
+      <p v-if="downloadState >= 0" v-bind:class="{loadingEllipsis : downloadState===0}">Preparando arquivos</p>
+      <p v-if="downloadState >= 1" v-bind:class="{loadingEllipsis : downloadState===1}">Tabelas criadas</p>
+      <p v-if="downloadState >= 2" v-bind:class="{loadingEllipsis : downloadState===2}">Relatórios criados</p>
       <p v-if="downloadState >= 3" v-bind:class="{loadingEllipsis : downloadState===3}">Arquivo .zip criado</p>
-      <p v-if="downloadState >= 4">Download Concluído</p>
+      <p v-if="downloadState >= 4">Download concluído</p>
       <div slot="modal-footer">
       </div>
     </b-modal>
