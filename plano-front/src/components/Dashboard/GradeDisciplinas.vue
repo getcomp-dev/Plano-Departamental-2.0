@@ -3,7 +3,7 @@
         <div class="d-flex center-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" style="overflow: auto; width: 100%">
             <h1 class="h2 col-11">Grades Disciplinas</h1>
             <div class="col-1">
-                <b-form-input v-model="novoAno" v-on:blur="runNovoAno" style="width:60px !important; height: 30px; float: right; position:relative; text-align: center"></b-form-input>
+                <b-form-input v-model="novoAno" v-on:keyup.native.enter="runNovoAno" style="width:60px !important; height: 30px; float: right; position:relative; text-align: center"></b-form-input>
             </div>
         </div>
 
@@ -28,32 +28,28 @@
                             <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;"><p style="text-align: center">{{disciplina.codigo}}<p/></td>
                             <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;"><p>{{disciplina.nome}}</p></td>
                             <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;"><p style=" text-align: center">
-                                <template v-if="disciplinasGrades[disciplina.id][2][0] != 0 && disciplinasGrades[disciplina.id][2][1] != 0"> 1º Semestre: {{disciplinasGrades[disciplina.id][2][0]}}º Período / 2º Semestre: {{disciplinasGrades[disciplina.id][2][1]}}º Período </template>
-                                <template v-else>
-                                    <template v-if="disciplinasGrades[disciplina.id][2][0] != 0"> 1º Semestre: {{disciplinasGrades[disciplina.id][2][0]}}º Período </template>
-                                    <template v-if="disciplinasGrades[disciplina.id][2][1] != 0"> 2º Semestre: {{disciplinasGrades[disciplina.id][2][1]}}º Período </template>
-                                </template>
+
+                                <template v-if="disciplinasGrades[disciplina.id][2][0].length !== 0"> <template v-for="d in disciplinasGrades[disciplina.id][2][0]">1º Semestre: {{d}}º Período </template> </template>
+                                <template v-if="disciplinasGrades[disciplina.id][2][1].length !== 0"> <template v-for="d in disciplinasGrades[disciplina.id][2][1]">2º Semestre: {{d}}º Período </template> </template>
+
                             </p></td>
                             <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;"><p style=" text-align: center">
-                                <template v-if="disciplinasGrades[disciplina.id][0][0] != 0 && disciplinasGrades[disciplina.id][0][1] != 0"> 1º Semestre: {{disciplinasGrades[disciplina.id][0][0]}}º Período / 2º Semestre: {{disciplinasGrades[disciplina.id][0][1]}}º Período </template>
-                                <template v-else>
-                                    <template v-if="disciplinasGrades[disciplina.id][0][0] != 0"> 1º Semestre: {{disciplinasGrades[disciplina.id][0][0]}}º Período </template>
-                                    <template v-if="disciplinasGrades[disciplina.id][0][1] != 0"> 2º Semestre: {{disciplinasGrades[disciplina.id][0][1]}}º Período </template>
-                                </template>
+
+                                <template v-if="disciplinasGrades[disciplina.id][0][0].length !== 0"> <template v-for="d in disciplinasGrades[disciplina.id][0][0]">1º Semestre: {{d}}º Período </template> </template>
+                                <template v-if="disciplinasGrades[disciplina.id][0][1].length !== 0"> <template v-for="d in disciplinasGrades[disciplina.id][0][1]">2º Semestre: {{d}}º Período </template> </template>
+
                             </p></td>
                             <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;"><p style=" text-align: center">
-                                <template v-if="disciplinasGrades[disciplina.id][3][0] != 0 && disciplinasGrades[disciplina.id][3][1] != 0"> 1º Semestre: {{disciplinasGrades[disciplina.id][3][0]}}º Período / 2º Semestre: {{disciplinasGrades[disciplina.id][3][1]}}º Período </template>
-                                <template v-else>
-                                    <template v-if="disciplinasGrades[disciplina.id][3][0] != 0"> 1º Semestre: {{disciplinasGrades[disciplina.id][3][0]}}º Período </template>
-                                    <template v-if="disciplinasGrades[disciplina.id][3][1] != 0"> 2º Semestre: {{disciplinasGrades[disciplina.id][3][1]}}º Período </template>
-                                </template>
+
+                                <template v-if="disciplinasGrades[disciplina.id][3][0].length !== 0"> <template v-for="d in disciplinasGrades[disciplina.id][3][0]">1º Semestre: {{d}}º Período </template> </template>
+                                <template v-if="disciplinasGrades[disciplina.id][3][1].length !== 0"> <template v-for="d in disciplinasGrades[disciplina.id][3][1]">2º Semestre: {{d}}º Período </template> </template>
+
                             </p></td>
                             <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;"><p style=" text-align: center">
-                                <template v-if="disciplinasGrades[disciplina.id][1][0] != 0 && disciplinasGrades[disciplina.id][1][1] != 0"> 1º Semestre: {{disciplinasGrades[disciplina.id][1][0]}}º Período / 2º Semestre: {{disciplinasGrades[disciplina.id][1][1]}}º Período </template>
-                                <template v-else>
-                                    <template v-if="disciplinasGrades[disciplina.id][1][0] != 0"> 1º Semestre: {{disciplinasGrades[disciplina.id][1][0]}}º Período </template>
-                                    <template v-if="disciplinasGrades[disciplina.id][1][1] != 0"> 2º Semestre: {{disciplinasGrades[disciplina.id][1][1]}}º Período </template>
-                                </template>
+
+                                <template v-if="disciplinasGrades[disciplina.id][1][0].length !== 0"> <template v-for="d in disciplinasGrades[disciplina.id][1][0]">1º Semestre: {{d}}º Período </template> </template>
+                                <template v-if="disciplinasGrades[disciplina.id][1][1].length !== 0"> <template v-for="d in disciplinasGrades[disciplina.id][1][1]">2º Semestre: {{d}}º Período </template> </template>
+
                             </p></td>
 
 
@@ -110,6 +106,7 @@
             },
 
             runNovoAno: function () {//executa runAll, modificando o ano
+                console.log("novo Ano")
               if(this.ano != this.novoAno){
                   this.ano = this.novoAno
                   this.runAll()
@@ -118,7 +115,7 @@
 
             runAll: function () {//cria objeto para armazenar os períodos das disciplinas e chama as funções que a populam
                 this.$store.state.disciplina.Disciplinas.forEach( d => {
-                    this.disciplinasGrades[d.id] = [[0, 0], [0, 0], [0, 0], [0, 0]]//inisializa os períodos em 0 [Primeiro Semestre, Segundo Semestre]
+                    this.disciplinasGrades[d.id] = [[[], []], [[], []], [[], []], [[], []]]//inisializa os períodos em 0 [Primeiro Semestre, Segundo Semestre]
                 })
                 this.getGrades()
                 this.get1Periodo()
@@ -164,9 +161,9 @@
                             }
                         }if(gradedisciplina !== undefined){
                             if((curso.semestreInicial === 1 || curso.semestreInicial === 3) &&(gradedisciplina.periodo % 2 === 1))//tem entrada de alunos no 1º semestre ou no 3º semestre -> terá períodos ímpares no primeiro semestre
-                                this.disciplinasGrades[parseInt(d, 10)][i - 1][0] = gradedisciplina.periodo
+                                this.disciplinasGrades[parseInt(d, 10)][i - 1][0].push(gradedisciplina.periodo)
                             if((curso.semestreInicial === 2 || curso.semestreInicial === 3) &&(gradedisciplina.periodo % 2 === 0))//tem entrada de alunos no 2º semestre ou no 3º semestre -> terá períodos pares no primeiro semestre
-                                this.disciplinasGrades[parseInt(d, 10)][i - 1][0] = gradedisciplina.periodo
+                                this.disciplinasGrades[parseInt(d, 10)][i - 1][0].push(gradedisciplina.periodo)
                         }
                     }
                 })
@@ -205,9 +202,9 @@
                             }
                         }if(gradedisciplina !== undefined){
                             if((curso.semestreInicial === 1 || curso.semestreInicial === 3) &&(gradedisciplina.periodo % 2 === 0))//tem entrada de alunos no 1º semestre ou no 3º semestre -> terá períodos pares no segundo semestre
-                                this.disciplinasGrades[parseInt(d, 10)][i - 1][1] = gradedisciplina.periodo
+                                this.disciplinasGrades[parseInt(d, 10)][i - 1][1].push(gradedisciplina.periodo)
                             if((curso.semestreInicial === 2 || curso.semestreInicial === 3) &&(gradedisciplina.periodo % 2 === 1))//tem entrada de alunos no 2º semestre ou no 3º semestre -> terá períodos ímpares no segundo semestre
-                                this.disciplinasGrades[parseInt(d, 10)][i - 1][1] = gradedisciplina.periodo
+                                this.disciplinasGrades[parseInt(d, 10)][i - 1][1].push(gradedisciplina.periodo)
                         }
                     }
                 })
