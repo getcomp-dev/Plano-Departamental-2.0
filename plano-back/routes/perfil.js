@@ -7,7 +7,8 @@ const models = require('../models/index'),
 router.post('/', function (req, res, next) {
   models.Perfil.create({
     nome: req.body.nome,
-    abreviacao: req.body.abreviacao
+    abreviacao: req.body.abreviacao,
+    cor: req.body.cor
   }).then(function (perfil) {
     ioBroadcast(SM.PERFIL_CREATED, {'msg': 'Perfil criado!', 'Perfil': perfil})
 
@@ -44,7 +45,8 @@ router.post('/:id([0-9]+)', function (req, res, next) {
 
     return perfil.updateAttributes({
       nome: req.body.nome,
-      abreviacao: req.body.abreviacao
+      abreviacao: req.body.abreviacao,
+      cor: req.body.cor
     })
   }).then(function (perfil) {
     ioBroadcast(SM.PERFIL_UPDATED, {'msg': 'Perfil atualizado!', 'Perfil': perfil})

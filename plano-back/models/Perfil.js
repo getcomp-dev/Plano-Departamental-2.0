@@ -17,6 +17,10 @@ module.exports = function (sequelize, DataTypes) {
       validate: {
         notEmpty: {msg: 'A abreviação não deve estar vazia'}
       }
+    },
+    cor: {
+      type: DataTypes.STRING,
+       allowNull: false
     }
   }, {
     freezeTableName: true,
