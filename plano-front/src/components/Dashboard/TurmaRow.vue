@@ -1,7 +1,5 @@
 <template>
-    <div class="turmarow" style="width: 571px;" v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
-                 'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
-                 'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
+    <div class="turmarow" style="width: 571px;"v-bind:style="{backgroundColor: perfil.cor}">
         <td style="width: 16px;">
             <input type="text" style="width: 16px;" id="periodo" v-model="turmaForm.periodo" v-on:blur="editTurma(turma)">
             <input type="checkbox" name="ativa" value="true" v-on:click="checkDelete(turma)" v-model="ativo" style="width:16px;height: 16px;padding:0;">
