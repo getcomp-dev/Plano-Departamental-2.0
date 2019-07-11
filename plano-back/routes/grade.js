@@ -44,7 +44,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
 
         return grade.updateAttributes({
             periodoInicio: req.body.periodoInicio,
-            grade: req.body.grade,
+            nome: req.body.nome,
             Curso: req.body.Curso,
         })
     }).then(function (grade) {
