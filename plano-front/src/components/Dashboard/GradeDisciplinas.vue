@@ -11,7 +11,7 @@
             <table class="table table-hover table-sm">
                 <thead class="thead-light">
                 <tr>
-                    <th scope="col" ><p style="text-align: center">Cod</p></th>
+                    <th scope="col" style="width: 64px;"><p style="text-align: center">Cod</p></th>
                     <th scope="col" style="width: 400px"><p style="text-align: center">Disciplina</p></th>
                     <th scope="col" style="width: 135px"><p style="text-align:center">76A</p></th>
                     <th scope="col" style="width: 135px"><p style="text-align:center">35A</p></th>
@@ -22,9 +22,7 @@
                 <tbody>
 
                     <template v-for="perfil in Perfis">
-                        <tr v-for="disciplina in inPerfil(perfil, Disciplinas)" :key="disciplina.id"  v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
-                 'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
-                 'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
+                        <tr v-for="disciplina in inPerfil(perfil, Disciplinas)" :key="disciplina.id"  v-bind:style="{backgroundColor: perfil.cor}">
                             <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;"><p style="text-align: center">{{disciplina.codigo}}<p/></td>
                             <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;"><p>{{disciplina.nome}}</p></td>
                             <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;"><p style=" text-align: center">
@@ -272,59 +270,6 @@
         }
     }
 </script>
-<style>
-    .avancado {
-        background-color: #7c997f !important;
-    }
-
-    .basico {
-        background-color: #a76663 !important;
-    }
-
-    .arqso {
-        background-color: #a4a75a !important;
-    }
-
-    .bancosdedados {
-        background-color: #60a75a !important;
-    }
-
-    .computacaografica {
-        background-color: #a75877 !important;
-    }
-
-    .engenhariasoftware {
-        background-color: #34a9f6 !important;
-    }
-
-    .iaic {
-        background-color: #a449f6 !important;
-    }
-
-    .numoc {
-        background-color: #a7000c !important;
-    }
-
-    .redes {
-        background-color: #ffb800 !important;
-    }
-
-    .teoria {
-        background-color: #0aa702 !important;
-    }
-
-    .humempre {
-        background-color: #0e6ba7 !important;
-    }
-
-    .multi {
-        background-color: #9100a7 !important;
-    }
-
-    .ice {
-        background-color: #9d9ea7 !important;
-    }
-</style>
 <style scoped>
 
     .DashboardPrototipo{
@@ -335,6 +280,8 @@
 
     table {
         font-size: 10px;
+        table-layout: fixed;
+        width: 1008px;
     }
 
     p {

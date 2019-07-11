@@ -55,16 +55,12 @@
             </template>
             <template v-if="Turmas.length>0">
             <template v-for="perfil in Perfis">
-                <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" v-if="turma.periodo==1 && (periodos == 1 || periodos==3)" :key="turma.id"  v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
-                 'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
-                 'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
+                <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" v-if="turma.periodo==1 && (periodos == 1 || periodos==3)" :key="turma.id" v-bind:style="{backgroundColor: perfil.cor}">
                     <turmadata ref="turma" v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
                 </tr>
             </template>
             <template v-for="perfil in Perfis">
-                <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" v-if="turma.periodo==3 && (periodos==2 || periodos==3)" :key="turma.id"  v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
-                 'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
-                 'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}">
+                <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" v-if="turma.periodo==3 && (periodos==2 || periodos==3)" :key="turma.id"  v-bind:style="{backgroundColor: perfil.cor}">
                     <turmadata ref="turma" v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
                 </tr>
             </template>
@@ -341,59 +337,6 @@
         }
     }
 </script>
-<style>
-    .avancado {
-        background-color: #7c997f !important;
-    }
-
-    .basico {
-        background-color: #a76663 !important;
-    }
-
-    .arqso {
-        background-color: #a4a75a !important;
-    }
-
-    .bancosdedados {
-        background-color: #60a75a !important;
-    }
-
-    .computacaografica {
-        background-color: #a75877 !important;
-    }
-
-    .engenhariasoftware {
-        background-color: #34a9f6 !important;
-    }
-
-    .iaic {
-        background-color: #a449f6 !important;
-    }
-
-    .numoc {
-        background-color: #a7000c !important;
-    }
-
-    .redes {
-        background-color: #ffb800 !important;
-    }
-
-    .teoria {
-        background-color: #0aa702 !important;
-    }
-
-    .humempre {
-        background-color: #0e6ba7 !important;
-    }
-
-    .multi {
-        background-color: #9100a7 !important;
-    }
-
-    .ice {
-        background-color: #9d9ea7 !important;
-    }
-</style>
 <style scoped>
 
     .DashboardPrototipo{

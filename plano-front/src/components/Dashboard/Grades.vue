@@ -14,7 +14,7 @@
       </select>
       <label for="gradeAtual" class="col-sm-2 col-form-label">Grade</label>
       <select id="gradeAtual" v-model="currentGrade" v-on:change="findGrade()" style="width: 60px;">
-        <option v-for="grade in Grades" v-if="grade.Curso == currentCurso" :value="grade.id">{{grade.periodoInicio}}</option>
+        <option v-for="grade in Grades" v-if="grade.Curso == currentCurso" :value="grade.id">{{grade.nome}}</option>
       </select>
       <div class="col sm6 dataContainer">
         <div class="header" style="width: 15%;">Início</div>
@@ -65,6 +65,12 @@
       <b-alert :show="Boolean(error)" variant="danger" dismissible v-html="error">
       </b-alert>
       <form>
+        <div class="form-group row">
+          <label for="nome" class="col-sm-2 col-form-label">Nome</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="nome" v-model="gradeForm.nome">
+          </div>
+        </div>
         <div class="form-group row">
           <label for="periodoInicio" class="col-sm-2 col-form-label">Período de Início</label>
           <div class="col-sm-10">
@@ -131,7 +137,8 @@
     const emptyGrade = {
         id:undefined,
         periodoInicio:undefined,
-        Curso:undefined
+        Curso:undefined,
+        nome: undefined
     }
 
     const emptyDisciplinaGrade = {
@@ -161,7 +168,7 @@
                     this.$notify({
                         group: 'general',
                         title: `Sucesso!`,
-                        text: `A Grade ${response.Grade.periodoInicio} foi criada!`,
+                        text: `A Grade ${response.Grade.nome} foi criada!`,
                         type: 'success'
                     })
                 }).
@@ -178,7 +185,7 @@
                     this.$notify({
                         group: 'general',
                         title: `Sucesso!`,
-                        text: `A Grade ${response.Grade.periodoInicio} foi atualizada!`,
+                        text: `A Grade ${response.Grade.nome} foi atualizada!`,
                         type: 'success'
                     })
                 }).
@@ -196,7 +203,7 @@
                     this.$notify({
                         group: 'general',
                         title: `Sucesso!`,
-                        text: `A Grade ${response.Grade.periodoInicio} foi excluída!`,
+                        text: `A Grade ${response.Grade.nome} foi excluída!`,
                         type: 'success'
                     })
                 }).

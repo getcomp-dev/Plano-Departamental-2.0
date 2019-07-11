@@ -10,6 +10,7 @@
         <tr>
           <th scope="col">Nome</th>
           <th scope="col">Abreviação</th>
+          <th scope="col">Cor</th>
         </tr>
         </thead>
         <tbody>
@@ -17,6 +18,7 @@
           <tr v-for="perfil in Perfis" :key="perfil.id" v-on:click.prevent="showPerfil(perfil)">
             <td>{{perfil.nome}}</td>
             <td>{{perfil.abreviacao}}</td>
+            <input type="color" v-model="perfil.cor">
           </tr>
         </template>
         <template v-else>
@@ -54,6 +56,12 @@
           </div>
         </div>
         <div class="form-group row">
+          <label for="cor" class="col-sm-2 col-form-label">Cor</label>
+          <div class="col-sm-10">
+            <input type="color" class="form-control" id="cor" v-model="perfilForm.cor">
+          </div>
+        </div>
+        <div class="form-group row">
           <div class="col-sm-10">
             <template v-if="isEdit">
               <button type="button" class="btn btn-success m-2" v-on:click.prevent="editPerfil" :key="1">Editar</button>
@@ -82,7 +90,8 @@ import perfilService from '../../common/services/perfil'
 const emptyPerfil = {
   id: undefined,
   nome: undefined,
-  abreviacao: undefined
+  abreviacao: undefined,
+  cor: '#ff0000'
 }
 
 export default {
@@ -144,6 +153,7 @@ export default {
     },
 
     cleanPerfil () {
+      console.log(this.perfilForm.cor)
       this.perfilForm = _.clone(emptyPerfil)
       this.error = undefined
     },
