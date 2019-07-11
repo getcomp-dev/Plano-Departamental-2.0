@@ -6,6 +6,7 @@ const models = require('../models/index'),
 router.post('/', function (req, res, next) {
     models.Grade.create({
         periodoInicio: req.body.periodoInicio,
+        nome: req.body.nome,
         Curso: req.body.Curso
     }).then(function (grade) {
         ioBroadcast(SM.GRADE_CREATED, {'msg': 'Grade criada!', 'Grade': grade})
@@ -43,6 +44,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
 
         return grade.updateAttributes({
             periodoInicio: req.body.periodoInicio,
+            grade: req.body.grade,
             Curso: req.body.Curso,
         })
     }).then(function (grade) {

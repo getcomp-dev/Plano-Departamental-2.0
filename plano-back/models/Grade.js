@@ -3,7 +3,12 @@
 module.exports = function (sequelize, DataTypes) {
   const Grade = sequelize.define('Grade', {
     periodoInicio: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+
+    nome: {
+      type: DataTypes.STRING,
       allowNull: false
     }
   }, {
