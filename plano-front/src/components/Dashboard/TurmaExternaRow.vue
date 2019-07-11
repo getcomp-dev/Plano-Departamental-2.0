@@ -79,6 +79,7 @@
     </div>
 </template>
 <script>
+    import _ from 'lodash'
     import turmaExternaService from '../../common/services/turmaExterna'
     import pedidoExternoService from '../../common/services/pedidoExterno'
 
