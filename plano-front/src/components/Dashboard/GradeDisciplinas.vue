@@ -11,7 +11,7 @@
             <table class="table table-hover table-sm">
                 <thead class="thead-light">
                 <tr>
-                    <th scope="col" style="width: 64px;"><p style="text-align: center">Cod</p></th>
+                    <th scope="col" style="width: 72px;"><p style="text-align: center">Cod</p></th>
                     <th scope="col" style="width: 400px"><p style="text-align: center">Disciplina</p></th>
                     <th scope="col" style="width: 135px"><p style="text-align:center">76A</p></th>
                     <th scope="col" style="width: 135px"><p style="text-align:center">35A</p></th>
