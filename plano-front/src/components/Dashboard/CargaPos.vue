@@ -72,7 +72,12 @@
                 <template v-if="CargasPos.length>0">
                     <template v-for="docente in Docentes">
                     <tr v-for="carga in CargasPos" v-if="(carga.Docente === docente.id)">
-                        <cargadata v-bind:carga="carga"></cargadata>
+                        <template v-if="(carga.trimestre == 1 && (periodos == 1 || periodos == 3))">
+                            <cargadata v-bind:carga="carga"></cargadata>
+                        </template>
+                        <template v-if="(carga.trimestre == 3 && (periodos == 2 || periodos == 3))">
+                            <cargadata v-bind:carga="carga"></cargadata>
+                        </template>
                     </tr>
                     </template>
                 </template>
@@ -192,7 +197,7 @@
             },
 
             CargasPos () {
-                return this.$store.state.cargaPos.Cargas
+                return _.orderBy(this.$store.state.cargaPos.Cargas, 'trimestre')
             },
 
             isLoading () {

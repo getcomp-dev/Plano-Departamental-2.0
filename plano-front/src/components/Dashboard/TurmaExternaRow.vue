@@ -152,7 +152,7 @@
             },
 
             Disciplinas () {
-                return _.orderBy(this.$store.state.disciplina.Disciplinas,'nome')
+                return _.orderBy(_.filter(this.$store.state.disciplina.Disciplinas, function(d) {return d.Perfil==13}),'nome')
             },
 
             Horarios () {
