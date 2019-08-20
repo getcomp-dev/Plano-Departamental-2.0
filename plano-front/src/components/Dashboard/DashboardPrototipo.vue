@@ -39,9 +39,9 @@
         <div class="cube2"></div>
     </div>
 
-    <div style="height: 80vh; overflow-y: scroll; overflow-x: scroll;" v-if="!isLoading" ref = "mainTable">
+    <div style="height: 75vh; overflow-y: scroll; overflow-x: scroll;" v-if="!isLoading" ref = "mainTable">
         <table class="table table-hover table-sm">
-            <thead class="thead-light">
+            <thead class="thead-light sticky">
             <tr>
                 <turmaheader></turmaheader>
             </tr>
@@ -343,6 +343,12 @@
         max-height: 90vh;
         max-width: 90vw;
         overflow: hidden;
+    }
+
+    .sticky {
+        position: sticky;
+        position: -webkit-sticky;
+        top: -1px;
     }
 
     .cursoGrande {

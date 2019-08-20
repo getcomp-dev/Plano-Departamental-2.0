@@ -1,5 +1,5 @@
 <template>
-    <div  style="display:block; position: sticky; top:-1px; overflow: hidden">
+    <div  style="display:block; overflow: hidden">
         <th scope="col"><p style="width:16px !important;">S.</p></th>
         <th scope="col"><p style="width:64px !important;">Cod</p></th>
         <th scope="col"><p style="width:120px !important;">Disciplina</p></th>
@@ -21,8 +21,17 @@
 </template>
 <script>
     import _ from 'lodash'
+
     export default {
         name:'TurmaHeader',
+
+        mounted: function () {
+            let scrollRef = this.$el
+
+            console.log(scrollRef)
+            stickybits('scrollRef')
+
+        },
 
         methods: {
             big(nome){
@@ -45,6 +54,7 @@
     }
 </script>
 <style scoped>
+
     .cursoGrande {
         font-size: 7px !important;
     }
