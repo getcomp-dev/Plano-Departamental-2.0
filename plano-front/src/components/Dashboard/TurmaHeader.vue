@@ -1,5 +1,5 @@
 <template>
-    <div  style="display:block; overflow: hidden">
+    <div  style="display:block; overflow: hidden" class="sticky">
         <th scope="col"><p style="width:16px !important;">S.</p></th>
         <th scope="col"><p style="width:64px !important;">Cod</p></th>
         <th scope="col"><p style="width:120px !important;">Disciplina</p></th>
@@ -57,6 +57,12 @@
 
     .cursoGrande {
         font-size: 7px !important;
+    }
+
+    .sticky {
+        position: sticky;
+        position: -webkit-sticky;
+        top: 0;
     }
 
     p{
