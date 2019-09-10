@@ -18,10 +18,12 @@ export default {
         var tables = []
         var laboratorios = _.filter(store.state.sala.Salas, ['laboratorio', true])
         var disciplinas = store.state.disciplina.Disciplinas
-        var turmas = store.state.turma.Turmas
+        var turmas1 = _.filter(store.state.turma.Turmas, ['periodo', 1])
+        var turmas2 = _.filter(store.state.turma.Turmas, ['periodo', 3])
         var seg = '', ter = '', qua = '', qui = '', sex = ''
         for(var i = 0; i < laboratorios.length; i++){
             tables.push({text: laboratorios[i].nome, bold:true, margin:[0, 10, 0, 10], fontSize:20})
+            tables.push({text: "1º Semestre", bold:true, margin:[0, 10, 0, 10], fontSize:18})
             tables.push({
                 table: {
                     widths: ['*', '*', '*', '*', '*', '*'],
@@ -33,71 +35,149 @@ export default {
                 }
             })
             for(var d = 0; d< 6; d++) {
-                for (var j = 0; j < turmas.length; j++) {
-                    if(turmas[j].Sala1===laboratorios[i].id || turmas[j].Sala2===laboratorios[i].id){
-                        if(this.checkTurmaHorario(turmas[j], 1 + d)){
+                for (var j = 0; j < turmas1.length; j++) {
+                    if(turmas1[j].Sala1===laboratorios[i].id || turmas1[j].Sala2===laboratorios[i].id){
+                        if(this.checkTurmaHorario(turmas1[j], 1 + d)){
                             for(var k = 0; k < disciplinas.length; k++){
-                                if(turmas[j].Disciplina === disciplinas[k].id){
+                                if(turmas1[j].Disciplina === disciplinas[k].id){
                                     if(seg !== '')
                                         seg = seg + ' '
-                                    seg = seg + disciplinas[k].codigo + ' ' + turmas[j].letra
+                                    seg = seg + disciplinas[k].codigo + ' ' + turmas1[j].letra
                                 }
                             }
                         }
-                        if(this.checkTurmaHorario(turmas[j], 7 + d)){
+                        if(this.checkTurmaHorario(turmas1[j], 7 + d)){
                             for(k = 0; k < disciplinas.length; k++){
-                                if(turmas[j].Disciplina === disciplinas[k].id){
+                                if(turmas1[j].Disciplina === disciplinas[k].id){
                                     if(ter != '')
                                         ter = ter + ' '
-                                    ter = ter + disciplinas[k].codigo + ' ' + turmas[j].letra
+                                    ter = ter + disciplinas[k].codigo + ' ' + turmas1[j].letra
                                 }
                             }
                         }
-                        if(this.checkTurmaHorario(turmas[j], 13 + d)){
+                        if(this.checkTurmaHorario(turmas1[j], 13 + d)){
                             for(k = 0; k < disciplinas.length; k++){
-                                if(turmas[j].Disciplina === disciplinas[k].id){
+                                if(turmas1[j].Disciplina === disciplinas[k].id){
                                     if(qua != '')
                                         qua = qua + ' '
-                                    qua = qua + disciplinas[k].codigo + ' ' + turmas[j].letra
+                                    qua = qua + disciplinas[k].codigo + ' ' + turmas1[j].letra
                                 }
                             }
                         }
-                        if(this.checkTurmaHorario(turmas[j], 19 + d)){
+                        if(this.checkTurmaHorario(turmas1[j], 19 + d)){
                             for(k = 0; k < disciplinas.length; k++){
-                                if(turmas[j].Disciplina === disciplinas[k].id){
+                                if(turmas1[j].Disciplina === disciplinas[k].id){
                                     if(qui != '')
                                         qui = qui + ' '
-                                    qui = qui + disciplinas[k].codigo + ' ' + turmas[j].letra
+                                    qui = qui + disciplinas[k].codigo + ' ' + turmas1[j].letra
                                 }
                             }
                         }
-                        if(this.checkTurmaHorario(turmas[j], 25 + d)){
+                        if(this.checkTurmaHorario(turmas1[j], 25 + d)){
                             for(k = 0; k < disciplinas.length; k++){
-                                if(turmas[j].Disciplina === disciplinas[k].id){
+                                if(turmas1[j].Disciplina === disciplinas[k].id){
                                     if(sex != '')
                                         sex = sex + ' '
-                                    sex = sex + disciplinas[k].codigo + ' ' + turmas[j].letra
+                                    sex = sex + disciplinas[k].codigo + ' ' + turmas1[j].letra
                                 }
                             }
                         }
                     }
                 }
                 switch(d){
-                    case 0: tables[1+2*i].table.body.push([{text:'08 - 10', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                    case 0: tables[2+5*i].table.body.push([{text:'08 - 10', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                         break
-                    case 1: tables[1+2*i].table.body.push([{text:'10 - 12', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                    case 1: tables[2+5*i].table.body.push([{text:'10 - 12', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                         break
-                    case 2: tables[1+2*i].table.body.push([{text:'14 - 16', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                    case 2: tables[2+5*i].table.body.push([{text:'14 - 16', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                         break
-                    case 3: tables[1+2*i].table.body.push([{text:'16 - 18', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                    case 3: tables[2+5*i].table.body.push([{text:'16 - 18', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                         break
-                    case 4: tables[1+2*i].table.body.push([{text:'19 - 21', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                    case 4: tables[2+5*i].table.body.push([{text:'19 - 21', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                         break
-                    case 5: tables[1+2*i].table.body.push([{text:'21 - 23', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                    case 5: tables[2+5*i].table.body.push([{text:'21 - 23', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                         break
                 }
                 seg = ter = qua = qui = sex = ''
             }
+            tables.push({text: "2º Semestre", bold:true, margin:[0, 10, 0, 10], fontSize:18})
+            tables.push({
+                table: {
+                    widths: ['*', '*', '*', '*', '*', '*'],
+                    headerRows:1,
+                    color: '#426',
+                    body: [
+                        [{text:'Hora', alignment:'center', bold:true}, {text:'Segunda', alignment:'center', bold:true}, {text:'Terça', alignment:'center', bold:true}, {text:'Quarta', alignment: 'center', bold:true}, {text:'Quinta', alignment:'center', bold:true}, {text:'Sexta', alignment:'center', bold:true}],
+                    ]
+                }
+            })
+            for(var d = 0; d< 6; d++) {
+                for (var j = 0; j < turmas2.length; j++) {
+                    if(turmas2[j].Sala1===laboratorios[i].id || turmas2[j].Sala2===laboratorios[i].id){
+                        if(this.checkTurmaHorario(turmas2[j], 1 + d)){
+                            for(var k = 0; k < disciplinas.length; k++){
+                                if(turmas2[j].Disciplina === disciplinas[k].id){
+                                    if(seg !== '')
+                                        seg = seg + ' '
+                                    seg = seg + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
+                            }
+                        }
+                        if(this.checkTurmaHorario(turmas2[j], 7 + d)){
+                            for(k = 0; k < disciplinas.length; k++){
+                                if(turmas2[j].Disciplina === disciplinas[k].id){
+                                    if(ter != '')
+                                        ter = ter + ' '
+                                    ter = ter + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
+                            }
+                        }
+                        if(this.checkTurmaHorario(turmas2[j], 13 + d)){
+                            for(k = 0; k < disciplinas.length; k++){
+                                if(turmas2[j].Disciplina === disciplinas[k].id){
+                                    if(qua != '')
+                                        qua = qua + ' '
+                                    qua = qua + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
+                            }
+                        }
+                        if(this.checkTurmaHorario(turmas2[j], 19 + d)){
+                            for(k = 0; k < disciplinas.length; k++){
+                                if(turmas2[j].Disciplina === disciplinas[k].id){
+                                    if(qui != '')
+                                        qui = qui + ' '
+                                    qui = qui + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
+                            }
+                        }
+                        if(this.checkTurmaHorario(turmas2[j], 25 + d)){
+                            for(k = 0; k < disciplinas.length; k++){
+                                if(turmas2[j].Disciplina === disciplinas[k].id){
+                                    if(sex != '')
+                                        sex = sex + ' '
+                                    sex = sex + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
+                            }
+                        }
+                    }
+                }
+                switch(d){
+                    case 0: tables[4+5*i].table.body.push([{text:'08 - 10', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                        break
+                    case 1: tables[4+5*i].table.body.push([{text:'10 - 12', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                        break
+                    case 2: tables[4+5*i].table.body.push([{text:'14 - 16', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                        break
+                    case 3: tables[4+5*i].table.body.push([{text:'16 - 18', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                        break
+                    case 4: tables[4+5*i].table.body.push([{text:'19 - 21', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                        break
+                    case 5: tables[4+5*i].table.body.push([{text:'21 - 23', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                        break
+                }
+                seg = ter = qua = qui = sex = ''
+            }
+
         }
         console.log(tables)
         var docDefinition = {

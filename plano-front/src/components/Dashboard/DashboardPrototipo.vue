@@ -193,6 +193,8 @@
 
             inPerfil: function (perfil, turmas, disciplinas) {
                 return turmas.filter(function (turma) {
+                    if(_.isNull(turma.Disciplina))
+                        return false
                     var disciplina = _.find(disciplinas, function(disc) { return disc.id===turma.Disciplina})
                     return disciplina.Perfil===perfil.id
                 })
@@ -310,7 +312,7 @@
 
             Turmas () {
 
-               return _.orderBy(_.orderBy(_.filter(this.$store.state.turma.Turmas, function(t) { return t.Disciplina !== null}), 'letra'), 'Disciplina')
+               return _.orderBy(_.orderBy(this.$store.state.turma.Turmas, 'letra'), 'Disciplina')
             },
 
             Deletar () {

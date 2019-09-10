@@ -144,7 +144,7 @@
                     })
                     return
                 }
-                var turmasLivres = _.orderBy(_.orderBy(_.filter(this.$store.state.turma.Turmas, function(t) { return t.Disciplina === null}), 'letra'), 'Disciplina')
+                var turmasLivres = _.filter(this.$store.state.turma.Turmas, function(t) { return t.Disciplina === null})
                 console.log(turmasLivres)
                 this.turmaForm.id = turmasLivres[0].id
                 console.log(this.turmaForm)
