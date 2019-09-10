@@ -337,7 +337,7 @@
                                     }
                                 }
                                 for (var j = 0; j < turmasExternas.length; j++) {
-                                    if (turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                                    if (turmasExternas[j].periodo == 1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                                         for (var p = 0; p < pedidosExternos.length; p++) {
                                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                                 this.ativos1.CCD[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
@@ -391,7 +391,7 @@
                                     }
                                 }
                                 for (var j = 0; j < turmasExternas.length; j++) {
-                                    if (turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                                    if (turmasExternas[j].periodo == 1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                                         for (var p = 0; p < pedidosExternos.length; p++) {
                                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                                 this.ativos1.CCN[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
@@ -445,7 +445,7 @@
                                     }
                                 }
                                 for (var j = 0; j < turmasExternas.length; j++) {
-                                    if (turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                                    if (turmasExternas[j].periodo == 1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                                         for (var p = 0; p < pedidosExternos.length; p++) {
                                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                                 this.ativos1.SI[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
@@ -499,7 +499,7 @@
                                     }
                                 }
                                 for (var j = 0; j < turmasExternas.length; j++) {
-                                    if (turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                                    if (turmasExternas[j].periodo == 1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                                         for (var p = 0; p < pedidosExternos.length; p++) {
                                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                                 this.ativos1.EC[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
@@ -614,7 +614,7 @@
                                     }
                                 }
                                 for (var j = 0; j < turmasExternas.length; j++) {
-                                    if (turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                                    if (turmasExternas[j].periodo == 3 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                                         for (var p = 0; p < pedidosExternos.length; p++) {
                                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                                 this.ativos2.CCD[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
@@ -668,7 +668,7 @@
                                     }
                                 }
                                 for (var j = 0; j < turmasExternas.length; j++) {
-                                    if (turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                                    if (turmasExternas[j].periodo == 3 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                                         for (var p = 0; p < pedidosExternos.length; p++) {
                                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                                 this.ativos2.CCN[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
@@ -722,7 +722,7 @@
                                     }
                                 }
                                 for (var j = 0; j < turmasExternas.length; j++) {
-                                    if (turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                                    if (turmasExternas[j].periodo == 3 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                                         for (var p = 0; p < pedidosExternos.length; p++) {
                                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                                 this.ativos2.SI[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
@@ -776,7 +776,7 @@
                                     }
                                 }
                                 for (var j = 0; j < turmasExternas.length; j++) {
-                                    if (turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                                    if (turmasExternas[j].periodo == 3 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                                         for (var p = 0; p < pedidosExternos.length; p++) {
                                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                                 this.ativos2.EC[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
