@@ -295,9 +295,9 @@ function turmas(professor, turmas){
 }
 
 function pos(professor, cargas){
-    return _.filter(cargas,(turma) => {
+    return _.orderBy(_.filter(cargas,(turma) => {
         return (turma.Docente===professor.id)
-    })
+    }), 'trimestre')
 }
 
 function creditos1(professor, turmas, disciplinas, cargas){

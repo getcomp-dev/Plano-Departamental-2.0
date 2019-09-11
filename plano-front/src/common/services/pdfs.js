@@ -194,9 +194,9 @@ export default {
     },
 
     pos(professor){
-        return _.filter(store.state.cargaPos.Cargas,(turma) => {
+        return _.orderBy(_.filter(store.state.cargaPos.Cargas,(turma) => {
             return (turma.Docente===professor.id)
-        })
+        }), 'trimestre')
     },
 
     creditos1(professor){
