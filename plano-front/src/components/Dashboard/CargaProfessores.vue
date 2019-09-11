@@ -49,8 +49,8 @@
                     <td>{{creditos(professor)}}</td>
                 </template>
 
-                <template v-for="disciplina in Disciplinas">
-                    <tr v-for="turma in turmas(professor)" v-if="turma.Disciplina===disciplina.id && (turma.Docente1===professor.id || turma.Docente2===professor.id)" :key="turma.id">
+                <template v-for="turma in turmas(professor)">
+                    <tr v-for="disciplina in Disciplinas" v-if="turma.Disciplina===disciplina.id && (turma.Docente1===professor.id || turma.Docente2===professor.id)" :key="turma.id">
                         <td></td>
                         <td>{{turma.periodo}}</td>
                         <td>{{disciplina.codigo}}</td>
@@ -77,7 +77,7 @@
                         <td></td>
                         <td v-if="carga.trimestre==1 || carga.trimestre==2">{{carga.creditos}}</td>
                         <td v-else></td>
-                        <td v-if="carga.trimestre==3">{{carga.creditos}}</td>
+                        <td v-if="carga.trimestre==3 || carga.trimestre==4">{{carga.creditos}}</td>
                         <td v-else></td>
                         <td></td>
                     </tr>
@@ -192,9 +192,9 @@
             },
 
             turmas(professor){
-                return _.filter(this.$store.state.turma.Turmas,(turma) => {
+                return _.orderBy(_.filter(this.$store.state.turma.Turmas,(turma) => {
                     return (turma.Docente1===professor.id || turma.Docente2===professor.id)
-                })
+                }), 'periodo')
             },
 
             pos(professor){
@@ -274,7 +274,7 @@
 
         computed: {
             CargasPos () {
-                return this.$store.state.cargaPos.Cargas
+                return _.orderBy(this.$store.state.cargaPos.Cargas, 'trimestre')
             },
 
             Disciplinas () {

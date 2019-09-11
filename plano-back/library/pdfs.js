@@ -289,9 +289,9 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
 })
 
 function turmas(professor, turmas){
-    return _.filter(turmas,(turma) => {
+    return _.orderBy(_.filter(turmas,(turma) => {
         return (turma.Docente1===professor.id || turma.Docente2===professor.id)
-    })
+    }),'periodo')
 }
 
 function pos(professor, cargas){

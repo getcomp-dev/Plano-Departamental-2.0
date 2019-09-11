@@ -17,7 +17,7 @@ export default {
         }
         var tables = []
         var laboratorios = _.filter(store.state.sala.Salas, ['laboratorio', true])
-        var disciplinas = store.state.disciplina.Disciplinas
+        var disciplinas = _.orderBy(store.state.disciplina.Disciplinas, ['nome'])
         var turmas1 = _.filter(store.state.turma.Turmas, ['periodo', 1])
         var turmas2 = _.filter(store.state.turma.Turmas, ['periodo', 3])
         var seg = '', ter = '', qua = '', qui = '', sex = ''
@@ -188,9 +188,9 @@ export default {
     },
 
     turmas(professor){
-        return _.filter(store.state.turma.Turmas,(turma) => {
+        return _.orderBy(_.filter(store.state.turma.Turmas,(turma) => {
             return (turma.Docente1===professor.id || turma.Docente2===professor.id)
-        })
+        }), 'periodo')
     },
 
     pos(professor){
