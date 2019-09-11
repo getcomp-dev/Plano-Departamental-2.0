@@ -1,9 +1,13 @@
 <template>
     <div>
-                <input type="text" v-model="pedidoForm.vagasPeriodizadas" style="width: 32px"
+                <input v-if="pedidoForm.vagasPeriodizadas == 0" type="text" v-model="pedidoForm.vagasPeriodizadas" style="width: 32px; background-color: #DCDCDC"
                        v-on:change="editPedido(pedido)">
-                <input type="text" v-model="pedidoForm.vagasNaoPeriodizadas" style="width: 32px"
-                       v-on:change="editPedido(pedido)">
+                <input v-else type="text" v-model="pedidoForm.vagasPeriodizadas" style="width: 32px; font-weight: bold"
+                        v-on:change="editPedido(pedido)">
+                <input v-if="pedidoForm.vagasNaoPeriodizadas == 0" type="text" v-model="pedidoForm.vagasNaoPeriodizadas" style="width: 32px; background-color: #DCDCDC"
+                        v-on:change="editPedido(pedido)">
+                <input v-else type="text" v-model="pedidoForm.vagasNaoPeriodizadas" style="width: 32px; font-weight: bold"
+                        v-on:change="editPedido(pedido)">
     </div>
 </template>
 <script>
