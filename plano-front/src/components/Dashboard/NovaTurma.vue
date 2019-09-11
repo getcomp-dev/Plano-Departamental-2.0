@@ -209,7 +209,7 @@
             },
 
             Docentes () {
-                return _.orderBy(this.$store.state.docente.Docentes,'nome')
+                return _.orderBy(this.$store.state.docente.Docentes,'apelido')
             },
 
             Horarios () {

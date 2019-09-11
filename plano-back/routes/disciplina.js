@@ -9,7 +9,8 @@ router.post('/', function (req, res, next) {
         codigo: req.body.codigo,
         cargaTeorica: req.body.cargaTeorica,
         cargaPratica: req.body.cargaPratica,
-        Perfil: req.body.Perfil
+        Perfil: req.body.Perfil,
+        ead: req.body.ead
     }).then(function (disciplina) {
         ioBroadcast(SM.DISCIPLINA_CREATED, {'msg': 'Disciplina criada!', 'Disciplina': disciplina})
 
@@ -49,7 +50,8 @@ router.post('/:id([0-9]+)', function (req, res, next) {
             codigo: req.body.codigo,
             cargaTeorica: req.body.cargaTeorica,
             cargaPratica: req.body.cargaPratica,
-            Perfil: req.body.Perfil
+            Perfil: req.body.Perfil,
+            ead: req.body.ead
         })
     }).then(function (disciplina) {
         ioBroadcast(SM.DISCIPLINA_UPDATED, {'msg': 'Disciplina atualizada!', 'Disciplina': disciplina})

@@ -17,6 +17,10 @@ module.exports = function (sequelize, DataTypes) {
     cargaPratica: {
       type: DataTypes.FLOAT,
       allowNull: false
+    },
+    ead: {
+      type: DataTypes.BOOLEAN
+      allowNull:false
     }
   }, {
     freezeTableName: true,

@@ -13,6 +13,7 @@
                     <th scope="col">Carga Teórica</th>
                     <th scope="col">Carga Prática</th>
                     <th scope="col">Perfil</th>
+                    <th scope="col">EAD</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -25,6 +26,7 @@
                         <template v-for="perfil in Perfis">
                             <td v-if="perfil.id===disciplina.Perfil" :key="perfil.id">{{perfil.nome}}</td>
                         </template>
+                        <td>{{disciplina.ead}}</td>
                     </tr>
                 </template>
                 <template v-else>
@@ -83,6 +85,13 @@
                     </div>
                 </div>
                 <div class="form-group row">
+                    <div class="col-sm-12">
+                        <label for="ead" class="col-sm-2 col-form-label">
+                            <input type="checkbox" id="ead" value="1" v-model="disciplinaForm.ead">
+                            EAD</label>
+                    </div>
+                </div>
+                <div class="form-group row">
                     <div class="col-sm-10">
                         <template v-if="isEdit">
                             <button type="button" class="btn btn-success m-2" v-on:click.prevent="editDisciplina" :key="1">Editar</button>
@@ -114,7 +123,8 @@
         codigo:undefined,
         cargaTeorica:undefined,
         cargaPratica:undefined,
-        Perfil:undefined
+        Perfil:undefined,
+        ead:undefined
     }
 
     export default {

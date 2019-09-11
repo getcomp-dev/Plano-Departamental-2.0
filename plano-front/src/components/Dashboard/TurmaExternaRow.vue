@@ -38,12 +38,14 @@
             <select type="text" style="width: 90px" id="horario1" v-model="turma.Horario1"
                     v-on:change="editTurma(turma)">
                 <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
+                <option v-else value = ""></option>
                 <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
             </select>
             <br/>
             <select type="text" style="width: 90px" id="horario2" v-model="turma.Horario2"
                     v-on:change="editTurma(turma)">
                 <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
+                <option v-else value=""></option>
                 <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
             </select>
         </td>
@@ -57,11 +59,13 @@
         <td style="width: 60px">
             <select type="text" style="width:60px" id="sala1" v-model="turma.Sala1" v-on:change="editTurma(turma)">
                 <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
+                <option v-else value=""></option>
                 <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
             </select>
             <br/>
             <select type="text" style="width: 60px" id="sala2" v-model="turma.Sala2" v-on:change="editTurma(turma)">
                 <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
+                <option v-else value = ""></option>
                 <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
             </select>
         </td>
@@ -111,6 +115,20 @@
             },
 
             editTurma(turma) {
+
+                if(turma.Horario1==="")
+                    turma.Horario1=null
+
+                if(turma.Horario2==="")
+                    turma.Horario2=null
+
+                if(turma.Sala1==="")
+                    turma.Sala111=null
+
+                if(turma.Sala2==="")
+                    turma.Sala2=null
+                console.log(turma)
+
                 turmaExternaService.update(turma.id, turma).then((response) => {
                     this.$notify({
                         group: 'general',

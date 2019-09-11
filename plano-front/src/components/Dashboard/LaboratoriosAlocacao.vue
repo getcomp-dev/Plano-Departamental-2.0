@@ -161,8 +161,47 @@
         },
 
         methods : {
+
+            checkTurmaLab (turma){
+                let labs = _.filter(this.$store.state.sala.Salas, ['laboratorio', true])
+                let result = 0
+                labs.forEach(lab => {
+                    if (lab.id === turma.Sala1)
+                        result += 1
+                    if (lab.id === turma.Sala2)
+                        result += 2
+                })
+
+                if(result === 1) {
+                    if (_.isNull(turma.Sala2)) {
+                        return 4
+                    }
+                }
+                return result
+
+            },
+
             checkTurmaHorario (turma, horario) {
                 if(turma.Horario1==horario || turma.Horario2==horario) {
+                    let sala = this.checkTurmaLab
+                    switch(sala){
+                        case 0: return false
+                                break
+                        case 1: if(turma.Horario1==horario)
+                                    return true
+                                else
+                                    return false
+                                break
+                        case 2: if(turma.Horario2==horario)
+                                    return true
+                                else
+                                    return false
+                                break
+                        case 3:
+                        case 4: return true
+                                break
+
+                    }
                     return true
                 }else
                     return false
