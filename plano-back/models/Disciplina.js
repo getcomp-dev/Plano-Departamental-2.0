@@ -20,7 +20,7 @@ module.exports = function (sequelize, DataTypes) {
     },
     ead: {
       type: DataTypes.BOOLEAN,
-      allowNull:false
+      allowNull:true
     }
   }, {
     freezeTableName: true,
