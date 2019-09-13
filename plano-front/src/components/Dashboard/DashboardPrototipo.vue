@@ -1,8 +1,8 @@
 <template>
     <div class="DashboardPrototipo" style="height: calc(100vh - 48px)" v-if="Admin">
         <div class="d-flex center-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" style="overflow: auto; width: 100%">
-            <h1 class="h2 col-6">Plano</h1>
-            <div class="col-6">
+            <h1 class="h2 col-2">Plano</h1>
+            <div class="col-10">
 
                 <template v-if="isAdd">
                     <button type="button" class="btn btn-success" v-on:click.prevent="toggleAdd" style="margin-left: 10px;float:right;">Cancelar </button>
@@ -31,6 +31,12 @@
                     <option value = "2">Visualizar 2º Semestre</option>
                     <option value = "3">Visualizar Ambos</option>
                 </b-form-select>
+                <div>
+                    <b-form-select :multiple="true" v-model="PerfisAtivos">
+                        <option v-for="perfil in Perfis" :value="perfil">{{perfil.nome}}</option>
+                    </b-form-select>
+                </div>
+
             </div>
         </div>
 
@@ -39,7 +45,7 @@
         <div class="cube2"></div>
     </div>
 
-    <div style="height: 75vh; overflow-y: scroll; overflow-x: scroll;" v-if="!isLoading" ref = "mainTable">
+    <div style="height: 67.5vh; overflow-y: scroll; overflow-x: scroll;" v-if="!isLoading" ref = "mainTable">
         <table class="table table-hover table-sm">
             <thead class="thead-light sticky">
             <tr>
@@ -54,12 +60,12 @@
                 </tr>
             </template>
             <template v-if="Turmas.length>0">
-            <template v-for="perfil in Perfis">
+            <template v-for="perfil in PerfisAtivos">
                 <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" v-if="turma.periodo==1 && (periodos == 1 || periodos==3)" :key="turma.id" v-bind:style="{backgroundColor: perfil.cor}">
                     <turmadata ref="turma" v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
                 </tr>
             </template>
-            <template v-for="perfil in Perfis">
+            <template v-for="perfil in PerfisAtivos">
                 <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" v-if="turma.periodo==3 && (periodos==2 || periodos==3)" :key="turma.id"  v-bind:style="{backgroundColor: perfil.cor}">
                     <turmadata ref="turma" v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
                 </tr>
@@ -117,6 +123,7 @@
                 atual:undefined,
                 semestre: 1,
                 periodos: 3,
+                PerfisAtivos: []
             }
         },
 
@@ -144,6 +151,10 @@
                     this.$store.dispatch('toggleCurso', id)
                 })
             }
+
+            for (var i = 0; i < this.$store.state.perfil.Perfis.length; i++){
+                this.options.push({nome:this.$store.state.perfil.Perfis[i].nome, value: this.$store.state.perfil.Perfis[i]})
+            }
         },
 
         beforeDestroy: function () {
@@ -152,9 +163,14 @@
                 let id = this.$store.state.curso.Cursos[c].id
                 ls.off(`${id}`)
             }
+            this.PerfisAtivos = []
         },
 
         methods: {
+            printChange(){
+              console.log(PerfisAtivos)
+            },
+
             xlsx: function (pedidos) {
                 xlsx.downloadTable({pedidos:pedidos}).then(() => {
                     console.log('done')

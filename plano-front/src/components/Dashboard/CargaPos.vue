@@ -35,7 +35,7 @@
             <div class="cube2"></div>
         </div>
 
-        <div style="width: 324px;height: 80vh; overflow-y: scroll; overflow-x: hidden;" v-if="!isLoading">
+        <div style="width: 324px;height: 75vh; overflow-y: scroll; overflow-x: hidden;" v-if="!isLoading">
             <table style="width:100%" class="table table-hover table-sm">
                 <thead class="thead-light">
                 <tr>
