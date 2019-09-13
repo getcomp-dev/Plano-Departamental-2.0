@@ -26,7 +26,7 @@
                         <template v-for="perfil in Perfis">
                             <td v-if="perfil.id===disciplina.Perfil" :key="perfil.id">{{perfil.nome}}</td>
                         </template>
-                        <td>{{disciplina.ead}}</td>
+                        <td><b-form-checkbox disabled v-model="disciplina.ead"></b-form-checkbox></td>
                     </tr>
                 </template>
                 <template v-else>

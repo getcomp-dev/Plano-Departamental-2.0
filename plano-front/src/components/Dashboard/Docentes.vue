@@ -20,7 +20,7 @@
             <td>{{docente.nome}}</td>
             <td>{{docente.apelido}}</td>
             <td>{{docente.creditos}}</td>
-            <td>{{docente.ativo}}</td>
+            <td><b-form-checkbox disabled v-model="docente.ativo"></b-form-checkbox></td>
           </tr>
         </template>
         <template v-else>

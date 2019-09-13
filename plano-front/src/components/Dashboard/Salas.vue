@@ -16,7 +16,7 @@
                 <template v-if="Salas.length > 0">
                     <tr v-for="sala in Salas" :key="sala.id" v-on:click.prevent="showSala(sala)">
                         <td>{{sala.nome}}</td>
-                        <td>{{sala.laboratorio}}</td>
+                        <td><b-form-checkbox disabled v-model="sala.laboratorio"></b-form-checkbox></td>
                     </tr>
                 </template>
                 <template v-else>
