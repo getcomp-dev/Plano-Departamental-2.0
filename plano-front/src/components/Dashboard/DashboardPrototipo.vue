@@ -31,11 +31,23 @@
                     <option value = "2">Visualizar 2º Semestre</option>
                     <option value = "3">Visualizar Ambos</option>
                 </b-form-select>
-                <div>
-                    <b-form-select :multiple="true" v-model="PerfisAtivos">
-                        <option v-for="perfil in Perfis" :value="perfil">{{perfil.nome}}</option>
-                    </b-form-select>
-                </div>
+                <b-button v-b-modal.modalPerfis style="float: right; margin-right:20px">Perfis</b-button>
+
+                <b-modal id="modalPerfis" scrollable title="Selecione os perfis">
+                    <b-form-checkbox-group id="checkboxGroupPerfis" v-model="PerfisAtivos">
+                        <b-form-checkbox v-for="perfil in Perfis" :value="perfil">{{perfil.nome}}</b-form-checkbox>
+                    </b-form-checkbox-group>
+
+                    <div slot="modal-footer">
+                        <b-button size="sm" variant="success" @click="selectAll()" style="margin-right: 20px">
+                            Selecionar Todos
+                        </b-button>
+                        <b-button size="sm" variant="success" @click="selectNone()">
+                            Desmarcar Todos
+                        </b-button>
+                    </div>
+                </b-modal>
+
 
             </div>
         </div>
@@ -163,12 +175,21 @@
                 let id = this.$store.state.curso.Cursos[c].id
                 ls.off(`${id}`)
             }
+            console.log(PerfisAtivos)
+            console.log(this.PerfisAtivos)
             this.PerfisAtivos = []
         },
 
         methods: {
-            printChange(){
-              console.log(PerfisAtivos)
+            selectAll(){
+              if(this.PerfisAtivos != [])
+                  this.PerfisAtivos = []
+              for(var i = 0; i < this.$store.state.perfil.Perfis.length; i++)
+                  this.PerfisAtivos.push(this.$store.state.perfil.Perfis[i])
+            },
+
+            selectNone(){
+                this.PerfisAtivos = []
             },
 
             xlsx: function (pedidos) {
