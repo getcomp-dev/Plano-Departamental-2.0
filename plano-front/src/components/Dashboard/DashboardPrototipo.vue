@@ -57,7 +57,7 @@
         <div class="cube2"></div>
     </div>
 
-    <div style="height: 67.5vh; overflow-y: scroll; overflow-x: scroll;" v-if="!isLoading" ref = "mainTable">
+    <div style="height: 75vh; overflow-y: scroll; overflow-x: scroll;" v-if="!isLoading" ref = "mainTable">
         <table class="table table-hover table-sm">
             <thead class="thead-light sticky">
             <tr>
@@ -170,14 +170,13 @@
         },
 
         beforeDestroy: function () {
+            this.PerfisAtivos = []
+
             ls.off('toggle')
             for (var c = 0; c < this.$store.state.curso.Cursos.length; c++){
                 let id = this.$store.state.curso.Cursos[c].id
                 ls.off(`${id}`)
             }
-            console.log(PerfisAtivos)
-            console.log(this.PerfisAtivos)
-            this.PerfisAtivos = []
         },
 
         methods: {
