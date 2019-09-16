@@ -19,8 +19,14 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true
     }
   }, {
-    freezeTableName: true,
-    timestamps: false
+      freezeTableName: true,
+      timestamps: false,
+      indexes:[
+          {
+            unique:true,
+            fields:['letra', 'periodo', 'Disciplina']
+          }
+      ]
   })
 
   Turma.hook('beforeCreate', (turma, options) => {
