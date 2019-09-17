@@ -81,8 +81,7 @@ app.use('/api/novoPlano', novoPlanoRoute)
 app.use(staticFileMiddleware);
 app.use(history({
     disableDotRule: true,
-    verbose: true,
-    index:'/'
+    verbose: true
 }));
 app.use(staticFileMiddleware);
 // Error handlers
