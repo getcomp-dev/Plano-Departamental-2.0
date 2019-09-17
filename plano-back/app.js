@@ -3,6 +3,7 @@ const express = require('express'),
   logger = require('morgan'),
   bodyParser = require('body-parser'),
   jwt = require('express-jwt'),
+  staticFileMiddleware = express.static('assets');
   history = require('connect-history-api-fallback'),
   config = require('./config/index'),
   ValidationErrors = require('./library/ValidationError'),
@@ -79,7 +80,12 @@ app.use('/api/pdf', pdfsRoute)
 app.use('/api/download', downloads)
 app.use('/api/novoPlano', novoPlanoRoute)
 
-app.use(history())
+app.use(staticFileMiddleware);
+app.use(history({
+    disableDotRule: true,
+    verbose: true
+}));
+app.use(staticFileMiddleware);
 // Error handlers
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
