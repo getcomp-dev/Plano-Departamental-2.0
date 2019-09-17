@@ -29,8 +29,10 @@ Vue.use(VueSocketio, socketio('http://200.131.219.57:3000', {autoConnect: false}
 
 Vue.config.productionTip = false
 
-new Vue({
+var vm = new Vue({
   router,
   store,
   render: h => h(App)
 }).$mount('#app')
+
+global.vm = vm

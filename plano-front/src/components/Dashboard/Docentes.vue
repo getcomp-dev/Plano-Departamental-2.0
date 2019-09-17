@@ -10,7 +10,6 @@
         <tr>
           <th scope="col">Nome</th>
           <th scope="col">Apelido</th>
-          <th scope="col">Créditos</th>
           <th scope="col">Ativo</th>
         </tr>
         </thead>
@@ -19,7 +18,6 @@
           <tr v-for="docente in Docentes" :key="docente.id" v-on:click.prevent="showDocentes(docente, DocentePerfis)">
             <td>{{docente.nome}}</td>
             <td>{{docente.apelido}}</td>
-            <td>{{docente.creditos}}</td>
             <td><b-form-checkbox disabled v-model="docente.ativo"></b-form-checkbox></td>
           </tr>
         </template>
@@ -55,12 +53,6 @@
           <label for="apelido" class="col-sm-2 col-form-label">Apelido</label>
           <div class="col-sm-10">
             <input type="text" class="form-control" id="apelido" v-model="docenteForm.apelido">
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="creditos" class="col-sm-2 col-form-label">Créditos</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="creditos" v-model="docenteForm.creditos">
           </div>
         </div>
         <div class="form-group row">
@@ -111,7 +103,7 @@
         id:undefined,
         nome:undefined,
         apelido:undefined,
-        creditos:undefined,
+        creditos:0,
         ativo:1
     }
 

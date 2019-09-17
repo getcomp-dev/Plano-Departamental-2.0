@@ -74,12 +74,12 @@
             <template v-if="Turmas.length>0">
             <template v-for="perfil in PerfisAtivos">
                 <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" v-if="turma.periodo==1 && (periodos == 1 || periodos==3)" :key="turma.id" v-bind:style="{backgroundColor: perfil.cor}">
-                    <turmadata ref="turma" v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
+                    <turmadata v-if="exists" ref="turma" v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
                 </tr>
             </template>
             <template v-for="perfil in PerfisAtivos">
                 <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" v-if="turma.periodo==3 && (periodos==2 || periodos==3)" :key="turma.id"  v-bind:style="{backgroundColor: perfil.cor}">
-                    <turmadata ref="turma" v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
+                    <turmadata v-if="exists" ref="turma" v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
                 </tr>
             </template>
             </template>
@@ -135,7 +135,8 @@
                 atual:undefined,
                 semestre: 1,
                 periodos: 3,
-                PerfisAtivos: []
+                PerfisAtivos: [],
+                exists: true
             }
         },
 
@@ -163,15 +164,11 @@
                     this.$store.dispatch('toggleCurso', id)
                 })
             }
-
-            for (var i = 0; i < this.$store.state.perfil.Perfis.length; i++){
-                this.options.push({nome:this.$store.state.perfil.Perfis[i].nome, value: this.$store.state.perfil.Perfis[i]})
-            }
         },
 
         beforeDestroy: function () {
-            this.PerfisAtivos = []
-
+            this.exists = false
+            vm.$forceUpdate()
             ls.off('toggle')
             for (var c = 0; c < this.$store.state.curso.Cursos.length; c++){
                 let id = this.$store.state.curso.Cursos[c].id
