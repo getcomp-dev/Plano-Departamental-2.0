@@ -35,8 +35,6 @@ const express = require('express'),
 
 const app = express()
 
-app.use(express.static('public'));
-
 //Allow cors
 app.use(cors())
 
