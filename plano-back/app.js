@@ -79,9 +79,7 @@ app.use('/api/pdf', pdfsRoute)
 app.use('/api/download', downloads)
 app.use('/api/novoPlano', novoPlanoRoute)
 
-app.use(history({
-    index: '200.131.219.57:3000/'
-}))
+app.use(history())
 // Error handlers
 // Catch 404 and forward to error handler
 app.use(function (req, res, next) {
