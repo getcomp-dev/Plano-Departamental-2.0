@@ -80,7 +80,7 @@ app.use('/api/download', downloads)
 app.use('/api/novoPlano', novoPlanoRoute)
 
 app.use(history({
-    index: '/dashboard'
+    index: '/'
 }))
 // Error handlers
 // Catch 404 and forward to error handler
