@@ -19,7 +19,7 @@
                             <template v-for="turma in Deletar">
                                 <template v-for="disciplina in Disciplinas">
                                     <template v-if="disciplina.id===turma.Disciplina">
-                                        <p :key="disciplina.id" style="width:80px">Disciplina:{{disciplina.codigo}}<br>Turma:{{turma.letra}}</p>
+                                        <p :key="'disciplina'+disciplina.id+'turma'+turma.id" style="width:80px">Disciplina:{{disciplina.codigo}}<br>Turma:{{turma.letra}}</p>
                                     </template>
                                 </template>
                             </template>
@@ -35,7 +35,7 @@
 
                 <b-modal id="modalPerfis" scrollable title="Selecione os perfis">
                     <b-form-checkbox-group id="checkboxGroupPerfis" v-model="PerfisAtivos">
-                        <b-form-checkbox v-for="perfil in Perfis" :value="perfil">{{perfil.nome}}</b-form-checkbox>
+                        <b-form-checkbox v-for="perfil in Perfis" :key="'perfil'+perfil.id" :value="perfil">{{perfil.nome}}</b-form-checkbox>
                     </b-form-checkbox-group>
 
                     <div slot="modal-footer">
@@ -74,12 +74,12 @@
             <template v-if="Turmas.length>0">
             <template v-for="perfil in PerfisAtivos">
                 <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" v-if="turma.periodo==1 && (periodos == 1 || periodos==3)" :key="turma.id" v-bind:style="{backgroundColor: perfil.cor}">
-                    <turmadata v-if="exists" ref="turma" v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
+                    <turmadata ref="turma" v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
                 </tr>
             </template>
             <template v-for="perfil in PerfisAtivos">
                 <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" v-if="turma.periodo==3 && (periodos==2 || periodos==3)" :key="turma.id"  v-bind:style="{backgroundColor: perfil.cor}">
-                    <turmadata v-if="exists" ref="turma" v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
+                    <turmadata ref="turma" v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
                 </tr>
             </template>
             </template>
@@ -116,13 +116,6 @@
         Sala2:undefined
     }
 
-    const emptyPedido =  {
-        vagasPeriodizadas: 0,
-        vagasNaoPeriodizadas: 0,
-        Curso: undefined,
-        Turma: undefined,
-    }
-
     export default {
 
         name: 'DashboardPrototipo',
@@ -135,8 +128,7 @@
                 atual:undefined,
                 semestre: 1,
                 periodos: 3,
-                PerfisAtivos: [],
-                exists: true
+                PerfisAtivos: []
             }
         },
 
@@ -167,8 +159,6 @@
         },
 
         beforeDestroy: function () {
-            this.exists = false
-            vm.$forceUpdate()
             ls.off('toggle')
             for (var c = 0; c < this.$store.state.curso.Cursos.length; c++){
                 let id = this.$store.state.curso.Cursos[c].id
@@ -276,7 +266,7 @@
                     if(!(pedidos[i].vagasPeriodizadas === 0 && pedidos[i].vagasNaoPeriodizadas === 0)) {
                         pedidos[i].vagasPeriodizadas = 0
                         pedidos[i].vagasNaoPeriodizadas = 0
-                        pedidoService.update(pedidos[i].Curso, pedidos[i].Turma, pedidos[i]).then((response) => {
+                        pedidoService.update(pedidos[i].Curso, pedidos[i].Turma, pedidos[i]).then(() => {
                             this.$notify({
                                 group: 'general',
                                 title: `Sucesso!`,
@@ -291,20 +281,7 @@
                         })
                     }
                 }
-                /*
-                turmaService.delete(turma.id, turma).then((response) => {
 
-                    this.$notify({
-                        group: 'general',
-                        title: `Sucesso!`,
-                        text: `A Turma ${response.Turma.letra} foi excluída!`,
-                        type: 'success'
-                    })
-                }).
-                catch(() => {
-                    this.error = '<b>Erro ao excluir Turma</b>'
-                })
-                */
             },
 
             toggleAdd() {

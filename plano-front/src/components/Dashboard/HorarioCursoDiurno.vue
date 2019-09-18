@@ -59,12 +59,11 @@
         props: {
             Curso: Array
         },
+
         components: {
             horarioDiurno
         },
-        mounted () {
-            console.log(this.Curso)
-        },
+
         methods: {
             horarioVazio(c){
                 if(c.length!=0)

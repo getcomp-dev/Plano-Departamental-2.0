@@ -8,7 +8,7 @@
             </div>
             <div v-for="lab in Laboratorios">
                 <h5>{{lab.nome}}</h5>
-                <h7>1º Semestre</h7>
+                <h6>1º Semestre</h6>
                     <table class="tg">
                         <tr>
                             <th class="tg-0lax">hora</th>
@@ -74,7 +74,7 @@
                         </tr>
 
                     </table>
-                <h7>2º Semestre</h7>
+                <h6>2º Semestre</h6>
                 <table class="tg">
                     <tr>
                         <th class="tg-0lax">hora</th>

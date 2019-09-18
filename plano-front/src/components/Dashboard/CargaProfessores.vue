@@ -16,19 +16,19 @@
                 <th scope="col">Horário</th>
                 <th scope="col" id="creditos1">
                     CS1
-                    <b-popover :target="'creditos1'" :placement="bottom" triggers="hover focus">
+                    <b-popover :target="'creditos1'" placement="bottom" triggers="hover focus">
                         <p>Somatório dos créditos no 1º semestre</p>
                     </b-popover>
                 </th>
                 <th scope="col" id="creditos2">
                     CS2
-                    <b-popover :target="'creditos2'" :placement="bottom" triggers="hover focus">
+                    <b-popover :target="'creditos2'" placement="bottom" triggers="hover focus">
                         <p>Somatório dos créditos no 2º semestre</p>
                     </b-popover>
                 </th>
                 <th scope="col" id="creditostotal">
                     CTotal
-                    <b-popover :target="'creditostotal'" :placement="bottom" triggers="hover focus">
+                    <b-popover :target="'creditostotal'" placement="bottom" triggers="hover focus">
                         <p>Somatório total dos créditos</p>
                     </b-popover>
                 </th>
@@ -50,7 +50,7 @@
                 </template>
 
                 <template v-for="turma in turmas(professor)">
-                    <tr v-for="disciplina in Disciplinas" v-if="turma.Disciplina===disciplina.id && (turma.Docente1===professor.id || turma.Docente2===professor.id)" :key="turma.id">
+                    <tr v-for="disciplina in Disciplinas" v-if="turma.Disciplina===disciplina.id && (turma.Docente1===professor.id || turma.Docente2===professor.id)" :key="'turma'+turma.id+'disciplina'+disciplina.id+'professor'+professor.id">
                         <td></td>
                         <td>{{turma.periodo}}</td>
                         <td>{{disciplina.codigo}}</td>

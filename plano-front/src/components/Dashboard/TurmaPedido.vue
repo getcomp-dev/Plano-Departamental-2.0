@@ -40,6 +40,7 @@
             this.pedidoForm = _.clone(this.$store.state.pedido.Pedidos[this.turma.id][this.index])
 
         },
+
         methods: {
 
             editPedido() {

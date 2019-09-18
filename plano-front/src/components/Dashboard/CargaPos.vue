@@ -21,7 +21,7 @@
                     <template v-for="carga in Deletar">
                         <template v-for="docente in Docentes">
                             <template v-if="docente.id===carga.Docente">
-                                <p :key="carga.id" style="width:80px">Docente:{{docente.apelido}}<br>Programa:{{carga.programa}}</p>
+                                <p :key="'carga'+carga.id+'docente'+docente.id" style="width:80px">Docente:{{docente.apelido}}<br>Programa:{{carga.programa}}</p>
                             </template>
                         </template>
                     </template>
@@ -71,12 +71,12 @@
                 </template>
                 <template v-if="CargasPos.length>0">
                     <template v-for="docente in Docentes">
-                    <tr v-for="carga in CargasPos" v-if="(carga.Docente === docente.id)">
+                    <tr v-for="carga in CargasPos" :key="'docente'+docente.id+'carga'+carga.id" v-if="(carga.Docente === docente.id)">
                         <template v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))">
-                            <cargadata v-bind:carga="carga"></cargadata>
+                            <cargadata :key="'1docente'+docente.id+'carga'+carga.id" v-bind:carga="carga"></cargadata>
                         </template>
                         <template v-if="((carga.trimestre == 3 || carga.trimestre == 4) && (periodos == 2 || periodos == 3))">
-                            <cargadata v-bind:carga="carga"></cargadata>
+                            <cargadata :key="'2docente'+docente.id+'carga'+carga.id" v-bind:carga="carga"></cargadata>
                         </template>
                     </tr>
                     </template>

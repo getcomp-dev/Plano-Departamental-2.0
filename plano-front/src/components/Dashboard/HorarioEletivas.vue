@@ -78,9 +78,6 @@
             Eletivas: Array
         },
 
-        mounted () {
-            console.log(this.Curso)
-        },
         methods: {
             horarioVazio(c){
                 if(c.length!=0)

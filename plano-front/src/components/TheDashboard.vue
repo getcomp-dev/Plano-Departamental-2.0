@@ -14,7 +14,7 @@
       </ul>
     </nav>
     <b-modal id="modal-download" ref="modalDownload" title="Selecione um Arquivo">
-      <p v-for="(value) in files" v-on:click="selectFile(value)">{{value}}</p>
+      <p v-for="(value) in files" :key="'1'+value" v-on:click="selectFile(value)">{{value}}</p>
       <div slot="modal-footer">
         <input type="text" v-model="filename" style="margin-right: 10px">
         <b-button variant="success" v-on:click="download(filename);">Carregar Arquivo</b-button>
@@ -45,14 +45,14 @@
       </div>
     </b-modal>
     <b-modal id="modal-load" ref="modalLoad" title="Selecione um Arquivo">
-      <p v-for="(value) in files" v-on:click="selectFile(value)">{{value}}</p>
+      <p v-for="(value) in files" :key="'2'+value" v-on:click="selectFile(value)">{{value}}</p>
       <div slot="modal-footer">
         <input type="text" v-model="filename" style="margin-right: 10px">
         <b-button variant="success" v-on:click="restorebd(filename);">Carregar Arquivo</b-button>
       </div>
     </b-modal>
     <b-modal id="modal-save" ref="modalSave" title="Escolha um nome para o arquivo">
-      <p v-for="(value) in files" v-on:click="selectFile(value)">{{value}}</p>
+      <p v-for="(value) in files" :key="'3'+value" v-on:click="selectFile(value)">{{value}}</p>
       <div slot="modal-footer">
         <input type="text" v-model="filename" style="margin-right: 10px">
         <b-button variant="success" v-on:click="bddump(filename);">Salvar Arquivo</b-button>
@@ -277,7 +277,7 @@ export default {
       },
 
       bddump: function(filename) {
-          bddumpService.createDump({filename: filename}).then((response)=> {
+          bddumpService.createDump({filename: filename}).then(()=> {
               this.$notify({
                   group: 'general',
                   title: `Sucesso!`,
@@ -285,7 +285,7 @@ export default {
                   type: 'success'
               })
               this.returnFiles()
-          }).catch(error => {
+          }).catch(() => {
               this.error = '<b>Erro ao criar dump</b>'
           })
           this.hideModalSave()
@@ -328,14 +328,14 @@ export default {
                       text:'Falha ao restaurar o banco'
                   })
               }
-          }).catch(error => {
+          }).catch(() => {
               this.error = '<b>Erro ao carregar dump</b>'
           })
 
       },
 
       download: async function() {
-          return new Promise((resolve, reject) => {
+          return new Promise((resolve) => {
           this.downloadState = 0
           let pedidos = this.$store.state.pedido.Pedidos
           xlsxService.downloadTable({pedidos:pedidos}).then(() => {
@@ -373,7 +373,7 @@ export default {
       },
 
       createUser () {
-          userService.create(this.userForm).then((response) =>{
+          userService.create(this.userForm).then(() =>{
               console.log("usuário criado")
               this.hideModalUser()
               this.userModalMode = 0
@@ -381,7 +381,7 @@ export default {
       },
 
       editUser () {
-          userService.update(this.$store.state.auth.Usuario.id, this.userForm).then((response) =>{
+          userService.update(this.$store.state.auth.Usuario.id, this.userForm).then(() =>{
               console.log("usuário editado")
               this.hideModalUser()
               this.userModalMode = 0

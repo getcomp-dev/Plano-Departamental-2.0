@@ -155,35 +155,6 @@
             cursoNoturno,
             horarioEletivas
         },
-        /*
-        created: function () {
-            console.log(this.$store.state.turma.Ativas)
-            if(typeof(this.$store.state.turma.Ativas.CCD) != 'undefined') {
-                this.ativos1 = _.clone(this.$store.state.turma.Ativas)
-                this.cursos.push(1)
-                this.updateHorarios()
-            }
-            if(typeof(this.$store.state.turma.Ativas.CCN) != 'undefined') {
-                this.ativos1 = _.clone(this.$store.state.turma.Ativas)
-                this.cursos.push(2)
-                this.updateHorarios()
-            }
-            if(typeof(this.$store.state.turma.Ativas.SI) != 'undefined') {
-                this.ativos1 = _.clone(this.$store.state.turma.Ativas)
-                this.cursos.push(3)
-                this.updateHorarios()
-            }
-            if(typeof(this.$store.state.turma.Ativas.EC) != 'undefined') {
-                this.ativos1 = _.clone(this.$store.state.turma.Ativas)
-                this.cursos.push(4)
-                this.updateHorarios()
-            }
-            if(typeof(this.$store.state.turma.Ativas.Eletivas) != 'undefined') {
-                this.ativos1 = _.clone(this.$store.state.turma.Ativas)
-                this.cursos.push(5)
-                this.updateHorarios()
-            }
-        },*/
 
         methods: {
             defineSelectAll() {
@@ -195,7 +166,6 @@
             },
 
             toggleAll(){
-                console.log(this.cursos)
               if(this.cursos.length===5){
                   this.cursos = []
               }  else {
@@ -307,7 +277,6 @@
                         }
                     }
                     pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 4])
-                    console.log(grades.length)
 
                     for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
@@ -529,7 +498,6 @@
                 }
 
                 this.$store.commit('redefinirAtivas1', {Ativas: this.ativos1})
-                console.log(this.ativos1.CCN)
             },
 
             createHorarios2: function () {
@@ -541,7 +509,6 @@
                 var pedidosExternos
                 var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades
                 var turmas = _.filter(this.$store.state.turma.Turmas, ['periodo', 3])
-                console.log(turmas)
                 var turmasExternas = this.$store.state.turmaExterna.Turmas
                 var anoAtual = this.$store.state.year
                 var semestreAtual = 1
@@ -584,7 +551,6 @@
                         }
                     }
                     pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 4])
-                    console.log(grades.length)
 
                     for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
@@ -963,7 +929,6 @@
             },
 
             CursosSelecionados: function(){
-                console.log(this.cursos.length)
                 if(this.cursos.length === 5){
                     this.selectAll = true
                 }else{

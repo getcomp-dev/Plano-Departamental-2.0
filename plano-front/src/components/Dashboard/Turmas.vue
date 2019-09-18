@@ -24,32 +24,32 @@
         <template v-if="Turmas.length > 0">
           <template v-for="perfil in Perfis">
 
-          <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" :key="turma.id" v-on:click.prevent="showTurma(turma)">
+          <tr v-for="turma in inPerfil(perfil, Turmas, Disciplinas)" :key="'turma'+turma.id" v-on:click.prevent="showTurma(turma)">
             <td>{{turma.periodo}}</td>
             <td>{{turma.letra}}</td>
             <td>{{turma.turno1}}</td>
             <template v-for="disciplina in Disciplinas">
-              <td v-if="disciplina.id===turma.Disciplina" :key="disciplina.id">{{disciplina.nome}}</td>
+              <td v-if="disciplina.id===turma.Disciplina" :key="'disciplina'+disciplina.id">{{disciplina.nome}}</td>
             </template>
             <template v-for="docente in Docentes">
-              <td v-if="docente.id===turma.Docente1" :key="docente.id">{{docente.apelido}}</td>
+              <td v-if="docente.id===turma.Docente1" :key="'1docente'+docente.id">{{docente.apelido}}</td>
             </template>
             <template v-if="turma.Docente2 !== null">
-              <td v-for="docente in Docentes" v-if="docente.id===turma.Docente2" :key="docente.id">{{docente.apelido}}</td>
+              <td v-for="docente in Docentes" v-if="docente.id===turma.Docente2" :key="'2docente'+docente.id">{{docente.apelido}}</td>
             </template>
             <td v-else></td>
             <template v-for="horario in Horarios">
-              <td v-if="horario.id===turma.Horario1" :key="horario.id">{{horario.horario}}</td>
+              <td v-if="horario.id===turma.Horario1" :key="'1horario'+horario.id">{{horario.horario}}</td>
             </template>
             <template v-if="turma.Horario2 !== null">
-              <td v-for="horario in Horarios" v-if="horario.id===turma.Horario2" :key="horario.id">{{horario.horario}}</td>
+              <td v-for="horario in Horarios" v-if="horario.id===turma.Horario2" :key="'2horario'+horario.id">{{horario.horario}}</td>
             </template>
             <td v-else></td>
             <template v-for="sala in Salas">
-              <td v-if="sala.id===turma.Sala1" :key="sala.id">{{sala.nome}}</td>
+              <td v-if="sala.id===turma.Sala1" :key="'1sala'+sala.id">{{sala.nome}}</td>
             </template>
             <template v-if="turma.Sala2 !== null">
-              <td  v-for="sala in Salas" v-if="sala.id===turma.Sala2" :key="sala.id">{{sala.nome}}</td>
+              <td  v-for="sala in Salas" v-if="sala.id===turma.Sala2" :key="'2sala'+sala.id">{{sala.nome}}</td>
             </template>
             <td v-else></td>
 
@@ -95,7 +95,7 @@
           <div class="col-sm-8">
             <select type="text" class="form-control" id="disciplina" v-model="turmaForm.Disciplina">
               <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
-              <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">{{disciplina.nome}}</option>
+              <option v-for="disciplina in Disciplinas" :key="'disciplinaOption'+disciplina.id" :value="disciplina.id">{{disciplina.nome}}</option>
             </select>
           </div>
         </div>
@@ -104,7 +104,7 @@
         <div class="col-sm-8">
           <select type="text" class="form-control" id="docente1" v-model="turmaForm.Docente1">
             <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
-            <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.apelido}}</option>
+            <option v-for="docente in Docentes" :key="'1docenteOption'+docente.id" :value="docente.id">{{docente.apelido}}</option>
           </select>
         </div>
         </div>
@@ -113,7 +113,7 @@
         <div class="col-sm-8">
           <select type="text" class="form-control" id="docente2" v-model="turmaForm.Docente2">
             <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
-            <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.apelido}}</option>
+            <option v-for="docente in Docentes" :key="'2docenteOption'+docente.id" :value="docente.id">{{docente.apelido}}</option>
           </select>
         </div>
       </div>
@@ -132,7 +132,7 @@
           <div class="col-sm-8">
             <select type="text" class="form-control" id="horario1" v-model="turmaForm.Horario1">
               <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
-              <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
+              <option v-for="horario in Horarios" :key="'1horarioOption'+horario.id" :value="horario.id">{{horario.horario}}</option>
             </select>
           </div>
         </div>
@@ -141,7 +141,7 @@
           <div class="col-sm-8">
             <select type="text" class="form-control" id="horario2" v-model="turmaForm.Horario2">
               <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
-              <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
+              <option v-for="horario in Horarios" :key="'2horarioOption'+horario.id" :value="horario.id">{{horario.horario}}</option>
             </select>
           </div>
         </div>
@@ -150,7 +150,7 @@
           <div class="col-sm-8">
             <select type="text" class="form-control" id="sala1" v-model="turmaForm.Sala1">
               <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
-              <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
+              <option v-for="sala in Salas" :key="'1salaOption'+sala.id" :value="sala.id">{{sala.nome}}</option>
             </select>
           </div>
         </div>
@@ -159,23 +159,23 @@
           <div class="col-sm-8">
             <select type="text" class="form-control" id="sala2" v-model="turmaForm.Sala2">
               <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
-              <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
+              <option v-for="sala in Salas" :key="'2salaOption'+sala.id" :value="sala.id">{{sala.nome}}</option>
             </select>
           </div>
         </div>
         <div class="form-group row">
           <div class="col-sm-10">
             <template v-if="isEdit">
-              <button type="button" class="btn btn-success m-2" v-on:click.prevent="editTurma" :key="1">Editar</button>
-              <button type="button" class="btn btn-danger m-2" v-on:click.prevent="deleteTurma" :key="3">Excluir
+              <button type="button" class="btn btn-success m-2" v-on:click.prevent="editTurma" :key="'1edit'">Editar</button>
+              <button type="button" class="btn btn-danger m-2" v-on:click.prevent="deleteTurma" :key="'3edit'">Excluir
               </button>
-              <button type="button" class="btn btn-secondary m-2" v-on:click.prevent="cleanTurma" :key="2">Cancelar
+              <button type="button" class="btn btn-secondary m-2" v-on:click.prevent="cleanTurma" :key="'2edit'">Cancelar
               </button>
             </template>
             <template v-else>
-              <button type="button" class="btn btn-success m-2" v-on:click.prevent="addTurma" :key="1">Adicionar
+              <button type="button" class="btn btn-success m-2" v-on:click.prevent="addTurma" :key="'1add'">Adicionar
               </button>
-              <button type="button" class="btn btn-secondary m-2" v-on:click.prevent="cleanTurma" :key="2">Resetar
+              <button type="button" class="btn btn-secondary m-2" v-on:click.prevent="cleanTurma" :key="'2add'">Resetar
               </button>
             </template>
           </div>

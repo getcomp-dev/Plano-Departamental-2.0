@@ -21,7 +21,7 @@
                     <template v-for="turma in Deletar">
                         <template v-for="disciplina in Disciplinas">
                             <template v-if="disciplina.id===turma.Disciplina">
-                                <p :key="disciplina.id" style="width:80px">Disciplina:{{disciplina.codigo}}<br>Turma:{{turma.letra}}</p>
+                                <p :key="'disciplina'+disciplina.id+'tirma'+turma.id" style="width:80px">Disciplina:{{disciplina.codigo}}<br>Turma:{{turma.letra}}</p>
                             </template>
                         </template>
                     </template>
@@ -49,8 +49,8 @@
                     <th scope="col" style="width:60px;">Sala</th>
                     <th scope="col" style="width:52px;">Total</th>
                     <template v-for="curso in Cursos">
-                        <th :key="curso.id" :id="'curso'+curso.id" style="width: 64px" v-on:mouseover="">{{curso.codigo}}</th>
-                        <b-popover :target="'curso'+curso.id" :placement="bottom" triggers="hover focus">
+                        <th :key="'curso'+curso.id" :id="'curso'+curso.id" style="width: 64px">{{curso.codigo}}</th>
+                        <b-popover :key="curso.id" :target="'curso'+curso.id" placement="bottom" triggers="hover focus">
                             <div v-if="curso.semestreInicial==1 || curso.semestreInicial==3">1º - {{curso.alunosEntrada}}</div>
                             <div v-if="curso.semestreInicial==2 || curso.semestreInicial==3">2º - {{curso.alunosEntrada}}</div>
                         </b-popover>

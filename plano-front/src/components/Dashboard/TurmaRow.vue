@@ -1,5 +1,5 @@
 <template>
-    <div class="turmarow" style="width: 571px;"v-bind:style="{backgroundColor: perfil.cor}">
+    <div class="turmarow" style="width: 571px;" v-bind:style="{backgroundColor: perfil.cor}">
         <td style="width: 16px;">
             <input type="text" style="width: 16px;" id="periodo" v-model="turmaForm.periodo" v-on:blur="editTurma(turma)">
             <input type="checkbox" name="ativa" value="true" v-on:click="checkDelete(turma)" v-model="ativo" style="width:16px;height: 16px;padding:0;">
@@ -85,9 +85,9 @@
         </td>
         <td style="width:28px"><p style="width: 28px">{{totalPedidos()}}</p></td>
         <template v-for="curso in Cursos" v-if="CursosAtivos[curso.id]">
-            <td style="width: 32px;">
+            <td style="width: 32px;" :key="curso.id">
                 <template v-for="(pedido, index) in Pedidos" v-if="pedido.Curso===curso.id">
-                    <turmaPedido v-bind:index="index" v-bind:turma="turma"></turmaPedido>
+                    <turmaPedido :key="index" v-bind:index="index" v-bind:turma="turma"></turmaPedido>
                 </template>
             </td>
         </template>
@@ -95,7 +95,6 @@
 </template>
 <script>
     import turmaService from '../../common/services/turma'
-    import pedidoService from '../../common/services/pedido'
     import turmaPedido from './TurmaPedido.vue'
     import _ from 'lodash'
 

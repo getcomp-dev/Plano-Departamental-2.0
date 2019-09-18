@@ -12,7 +12,7 @@
         <th scope="col"><p style="width:28px !important;">Total</p></th>
         <template v-for="curso in Cursos" v-if="CursosAtivos[curso.id]">
             <th :key="curso.id" :id="'curso'+curso.id"><p v-bind:class="{'cursoGrande':big(curso.codigo)}" style="width: 32px !important;" v-on:mouseover="">{{curso.codigo}}</p></th>
-            <b-popover :target="'curso'+curso.id" :placement="bottom" triggers="hover focus">
+            <b-popover :target="'curso'+curso.id" placement="bottom" triggers="hover focus">
                 <div v-if="curso.semestreInicial==1 || curso.semestreInicial==3">1º - {{curso.alunosEntrada}}</div>
                 <div v-if="curso.semestreInicial==2 || curso.semestreInicial==3">2º - {{curso.alunosEntrada}}</div>
             </b-popover>
@@ -24,14 +24,6 @@
 
     export default {
         name:'TurmaHeader',
-
-        mounted: function () {
-            let scrollRef = this.$el
-
-            console.log(scrollRef)
-            stickybits('scrollRef')
-
-        },
 
         methods: {
             big(nome){
