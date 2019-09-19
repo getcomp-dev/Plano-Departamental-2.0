@@ -301,7 +301,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                 ]
             }
         })
-        for(var d = 0; d< 6; d++) {
+        for(var d = 0; d< 7; d++) {
             for (var j = 0; j < turmas2.length; j++) {
                 if(turmas2[j].Sala1===laboratorios[i].id || turmas2[j].Sala2===laboratorios[i].id){
                     if(d < 4) {
