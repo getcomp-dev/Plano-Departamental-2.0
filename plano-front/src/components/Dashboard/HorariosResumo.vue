@@ -4316,7 +4316,7 @@
                 var periodosSI2 = this.ativos2.SI
                 var eletivas2 = this.ativos2.Eletivas
 
-                tables.push({text:'2º Semestre', bold:true, margin:[0, 10, 0, 5], fontSize: 20})
+                tables.push({text:'2º Semestre', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
                 tables.push({text:'Ciência da Computação Diurno', bold:true, margin:[0, 10, 0, 5], fontSize: 20})
 
                 for(var i = 0; i < 10; i++){
