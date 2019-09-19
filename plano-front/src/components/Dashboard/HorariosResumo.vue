@@ -3603,7 +3603,6 @@
         methods: {
 
             pdf () {
-                console.log(this.ativos1)
                 var pdfMake = require('pdfmake/build/pdfmake.js')
                 if (pdfMake.vfs == undefined){
                     var pdfFonts = require('pdfmake/build/vfs_fonts.js')
@@ -3618,6 +3617,7 @@
                 var eletivas1 = this.ativos1.Eletivas
                 var seg = '', ter = '', qua = '', qui = '', sex = ''
                 var vazio = 0
+                tables.push({text:'1º Semestre', bold:true, margin:[0, 10, 0, 5], fontSize: 20})
                 tables.push({text:'Ciência da Computação Diurno', bold:true, margin:[0, 10, 0, 5], fontSize: 20})
 
                 for(var i = 0; i < 10; i++){
@@ -3698,7 +3698,7 @@
 
                             switch (d) {
                                 case 0:
-                                    tables[2 + 2 * (i-vazio)].table.body.push([{
+                                    tables[3 + 2 * (i-vazio)].table.body.push([{
                                         text: '08 - 10',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3707,7 +3707,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 1:
-                                    tables[2 + 2 * (i-vazio)].table.body.push([{
+                                    tables[3 + 2 * (i-vazio)].table.body.push([{
                                         text: '10 - 12',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3716,7 +3716,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 2:
-                                    tables[2 + 2 * (i-vazio)].table.body.push([{
+                                    tables[3 + 2 * (i-vazio)].table.body.push([{
                                         text: '14 - 16',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3725,7 +3725,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 3:
-                                    tables[2 + 2 * (i-vazio)].table.body.push([{
+                                    tables[3 + 2 * (i-vazio)].table.body.push([{
                                         text: '16 - 18',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3734,7 +3734,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 4:
-                                    tables[2 + 2 * (i-vazio)].table.body.push([{
+                                    tables[3 + 2 * (i-vazio)].table.body.push([{
                                         text: '19 - 21',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3743,7 +3743,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 5:
-                                    tables[2 + 2 * (i-vazio)].table.body.push([{
+                                    tables[3 + 2 * (i-vazio)].table.body.push([{
                                         text: '21 - 23',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3837,7 +3837,7 @@
 
                             switch (d) {
                                 case 0:
-                                    tables[23 + 2 * (i-vazio)].table.body.push([{
+                                    tables[24 + 2 * (i-vazio)].table.body.push([{
                                         text: '08 - 10',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3846,7 +3846,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 1:
-                                    tables[23 + 2 * (i-vazio)].table.body.push([{
+                                    tables[24 + 2 * (i-vazio)].table.body.push([{
                                         text: '10 - 12',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3855,7 +3855,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 2:
-                                    tables[23 + 2 * (i-vazio)].table.body.push([{
+                                    tables[24 + 2 * (i-vazio)].table.body.push([{
                                         text: '14 - 16',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3864,7 +3864,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 3:
-                                    tables[23 + 2 * (i-vazio)].table.body.push([{
+                                    tables[24 + 2 * (i-vazio)].table.body.push([{
                                         text: '16 - 18',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3873,7 +3873,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 4:
-                                    tables[23 + 2 * (i-vazio)].table.body.push([{
+                                    tables[24 + 2 * (i-vazio)].table.body.push([{
                                         text: '19 - 21',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3882,7 +3882,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 5:
-                                    tables[23 + 2 * (i-vazio)].table.body.push([{
+                                    tables[24 + 2 * (i-vazio)].table.body.push([{
                                         text: '21 - 23',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3976,7 +3976,7 @@
 
                             switch (d) {
                                 case 0:
-                                    tables[44 + 2 * (i-vazio)].table.body.push([{
+                                    tables[45 + 2 * (i-vazio)].table.body.push([{
                                         text: '08 - 10',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3985,7 +3985,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 1:
-                                    tables[44 + 2 * (i-vazio)].table.body.push([{
+                                    tables[45 + 2 * (i-vazio)].table.body.push([{
                                         text: '10 - 12',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -3994,7 +3994,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 2:
-                                    tables[44 + 2 * (i-vazio)].table.body.push([{
+                                    tables[45 + 2 * (i-vazio)].table.body.push([{
                                         text: '14 - 16',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4003,7 +4003,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 3:
-                                    tables[44 + 2 * (i-vazio)].table.body.push([{
+                                    tables[45 + 2 * (i-vazio)].table.body.push([{
                                         text: '16 - 18',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4012,7 +4012,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 4:
-                                    tables[44 + 2 * (i-vazio)].table.body.push([{
+                                    tables[45 + 2 * (i-vazio)].table.body.push([{
                                         text: '19 - 21',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4021,7 +4021,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 5:
-                                    tables[44 + 2 * (i-vazio)].table.body.push([{
+                                    tables[45 + 2 * (i-vazio)].table.body.push([{
                                         text: '21 - 23',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4115,7 +4115,7 @@
 
                             switch (d) {
                                 case 0:
-                                    tables[65 + 2 * (i-vazio)].table.body.push([{
+                                    tables[66 + 2 * (i-vazio)].table.body.push([{
                                         text: '08 - 10',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4124,7 +4124,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 1:
-                                    tables[65 + 2 * (i-vazio)].table.body.push([{
+                                    tables[66 + 2 * (i-vazio)].table.body.push([{
                                         text: '10 - 12',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4133,7 +4133,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 2:
-                                    tables[65 + 2 * (i-vazio)].table.body.push([{
+                                    tables[66 + 2 * (i-vazio)].table.body.push([{
                                         text: '14 - 16',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4142,7 +4142,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 3:
-                                    tables[65 + 2 * (i-vazio)].table.body.push([{
+                                    tables[66 + 2 * (i-vazio)].table.body.push([{
                                         text: '16 - 18',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4151,7 +4151,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 4:
-                                    tables[65 + 2 * (i-vazio)].table.body.push([{
+                                    tables[66 + 2 * (i-vazio)].table.body.push([{
                                         text: '19 - 21',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4160,7 +4160,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 5:
-                                    tables[65 + 2 * (i-vazio)].table.body.push([{
+                                    tables[66 + 2 * (i-vazio)].table.body.push([{
                                         text: '21 - 23',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4252,7 +4252,7 @@
                             console.log([seg, ter, qua, qui, sex])
                             switch (d) {
                                 case 0:
-                                    tables[85 - 2 * vazio].table.body.push([{
+                                    tables[86 - 2 * vazio].table.body.push([{
                                         text: '08 - 10',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4261,7 +4261,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 1:
-                                    tables[85 - 2 * vazio].table.body.push([{
+                                    tables[86 - 2 * vazio].table.body.push([{
                                         text: '10 - 12',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4270,7 +4270,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 2:
-                                    tables[85 - 2 * vazio].table.body.push([{
+                                    tables[86 - 2 * vazio].table.body.push([{
                                         text: '14 - 16',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4279,7 +4279,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 3:
-                                    tables[85 - 2 * vazio].table.body.push([{
+                                    tables[86 - 2 * vazio].table.body.push([{
                                         text: '16 - 18',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4288,7 +4288,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 4:
-                                    tables[85 - 2 * vazio].table.body.push([{
+                                    tables[86 - 2 * vazio].table.body.push([{
                                         text: '19 - 21',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4297,7 +4297,7 @@
                                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                                     break
                                 case 5:
-                                    tables[85 - 2 * vazio].table.body.push([{
+                                    tables[86 - 2 * vazio].table.body.push([{
                                         text: '21 - 23',
                                         alignment: 'center'
                                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -4309,6 +4309,706 @@
                             seg = ter = qua = qui = sex = ''
                         }
                     }
+
+                var periodosCCD2 = this.ativos2.CCD
+                var periodosCCN2 = this.ativos2.CCN
+                var periodosEC2 = this.ativos2.EC
+                var periodosSI2 = this.ativos2.SI
+                var eletivas2 = this.ativos2.Eletivas
+
+                tables.push({text:'2º Semestre', bold:true, margin:[0, 10, 0, 5], fontSize: 20})
+                tables.push({text:'Ciência da Computação Diurno', bold:true, margin:[0, 10, 0, 5], fontSize: 20})
+
+                for(var i = 0; i < 10; i++){
+                    if(periodosCCD2[i].length===0){
+                        vazio = vazio + 1
+                    }else {
+                        tables.push({text: (i + 1) + 'º Período', bold: true, margin:[0, 5, 0, 5]})
+                        tables.push({
+                            table: {
+                                widths: ['*', '*', '*', '*', '*', '*'],
+                                headerRows: 1,
+                                color: '#426',
+                                body: [
+                                    [{text: 'Hora', alignment: 'center', bold: true}, {
+                                        text: 'Segunda',
+                                        alignment: 'center',
+                                        bold: true
+                                    }, {text: 'Terça', alignment: 'center', bold: true}, {
+                                        text: 'Quarta',
+                                        alignment: 'center',
+                                        bold: true
+                                    }, {text: 'Quinta', alignment: 'center', bold: true}, {
+                                        text: 'Sexta',
+                                        alignment: 'center',
+                                        bold: true
+                                    }],
+                                ]
+                            }
+                        })
+                        for (var d = 0; d < 4; d++) {
+                            for (var j = 0; j < periodosCCD2[i].length; j++) {
+                                if (this.checkTurmaHorario(periodosCCD2[i][j], 1 + d)) {
+                                    for (var k = 0; k < disciplinas.length; k++) {
+                                        if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (seg !== '')
+                                                seg = seg + ' '
+                                            seg = seg + disciplinas[k].codigo + ' ' + periodosCCD2[i][j].letra
+                                        }
+                                    }
+                                }
+                                if (this.checkTurmaHorario(periodosCCD2[i][j], 7 + d)) {
+                                    for (k = 0; k < disciplinas.length; k++) {
+                                        if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (ter != '')
+                                                ter = ter + ' '
+                                            ter = ter + disciplinas[k].codigo + ' ' + periodosCCD2[i][j].letra
+                                        }
+                                    }
+                                }
+                                if (this.checkTurmaHorario(periodosCCD2[i][j], 13 + d)) {
+                                    for (k = 0; k < disciplinas.length; k++) {
+                                        if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (qua != '')
+                                                qua = qua + ' '
+                                            qua = qua + disciplinas[k].codigo + ' ' + periodosCCD2[i][j].letra
+                                        }
+                                    }
+                                }
+                                if (this.checkTurmaHorario(periodosCCD2[i][j], 19 + d)) {
+                                    for (k = 0; k < disciplinas.length; k++) {
+                                        if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (qui != '')
+                                                qui = qui + ' '
+                                            qui = qui + disciplinas[k].codigo + ' ' + periodosCCD2[i][j].letra
+                                        }
+                                    }
+                                }
+                                if (this.checkTurmaHorario(periodosCCD2[i][j], 25 + d)) {
+                                    for (k = 0; k < disciplinas.length; k++) {
+                                        if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (sex != '')
+                                                sex = sex + ' '
+                                            sex = sex + disciplinas[k].codigo + ' ' + periodosCCD2[i][j].letra
+                                        }
+                                    }
+                                }
+                            }
+
+                            switch (d) {
+                                case 0:
+                                    tables[90 + 2 * (i-vazio)].table.body.push([{
+                                        text: '08 - 10',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 1:
+                                    tables[90 + 2 * (i-vazio)].table.body.push([{
+                                        text: '10 - 12',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 2:
+                                    tables[90 + 2 * (i-vazio)].table.body.push([{
+                                        text: '14 - 16',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 3:
+                                    tables[90 + 2 * (i-vazio)].table.body.push([{
+                                        text: '16 - 18',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 4:
+                                    tables[90 + 2 * (i-vazio)].table.body.push([{
+                                        text: '19 - 21',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 5:
+                                    tables[90 + 2 * (i-vazio)].table.body.push([{
+                                        text: '21 - 23',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                            }
+                            seg = ter = qua = qui = sex = ''
+                        }
+                    }
+                }
+
+                tables.push({text:'Ciência da Computação Noturno', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
+
+                for(var i = 0; i < 10; i++){
+                    if(periodosCCN2[i].length===0){
+                        vazio = vazio + 1
+                    }else {
+                        tables.push({text: (i + 1) + 'º Período', bold: true, margin:[0, 5, 0, 5]})
+                        tables.push({
+                            table: {
+                                widths: ['*', '*', '*', '*', '*', '*'],
+                                headerRows: 1,
+                                color: '#426',
+                                body: [
+                                    [{text: 'Hora', alignment: 'center', bold: true}, {
+                                        text: 'Segunda',
+                                        alignment: 'center',
+                                        bold: true
+                                    }, {text: 'Terça', alignment: 'center', bold: true}, {
+                                        text: 'Quarta',
+                                        alignment: 'center',
+                                        bold: true
+                                    }, {text: 'Quinta', alignment: 'center', bold: true}, {
+                                        text: 'Sexta',
+                                        alignment: 'center',
+                                        bold: true
+                                    }],
+                                ]
+                            }
+                        })
+                        for (var d = 4; d < 6; d++) {
+                            for (var j = 0; j < periodosCCN2[i].length; j++) {
+                                if (this.checkTurmaHorario(periodosCCN2[i][j], 1 + d)) {
+                                    for (var k = 0; k < disciplinas.length; k++) {
+                                        if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (seg !== '')
+                                                seg = seg + ' '
+                                            seg = seg + disciplinas[k].codigo + ' ' + periodosCCN2[i][j].letra
+                                        }
+                                    }
+                                }
+                                if (this.checkTurmaHorario(periodosCCN2[i][j], 7 + d)) {
+                                    for (k = 0; k < disciplinas.length; k++) {
+                                        if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (ter != '')
+                                                ter = ter + ' '
+                                            ter = ter + disciplinas[k].codigo + ' ' + periodosCCN2[i][j].letra
+                                        }
+                                    }
+                                }
+                                if (this.checkTurmaHorario(periodosCCN2[i][j], 13 + d)) {
+                                    for (k = 0; k < disciplinas.length; k++) {
+                                        if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (qua != '')
+                                                qua = qua + ' '
+                                            qua = qua + disciplinas[k].codigo + ' ' + periodosCCN2[i][j].letra
+                                        }
+                                    }
+                                }
+                                if (this.checkTurmaHorario(periodosCCN2[i][j], 19 + d)) {
+                                    for (k = 0; k < disciplinas.length; k++) {
+                                        if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (qui != '')
+                                                qui = qui + ' '
+                                            qui = qui + disciplinas[k].codigo + ' ' + periodosCCN2[i][j].letra
+                                        }
+                                    }
+                                }
+                                if (this.checkTurmaHorario(periodosCCN2[i][j], 25 + d)) {
+                                    for (k = 0; k < disciplinas.length; k++) {
+                                        if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (sex != '')
+                                                sex = sex + ' '
+                                            sex = sex + disciplinas[k].codigo + ' ' + periodosCCN2[i][j].letra
+                                        }
+                                    }
+                                }
+                            }
+
+                            switch (d) {
+                                case 0:
+                                    tables[111 + 2 * (i-vazio)].table.body.push([{
+                                        text: '08 - 10',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 1:
+                                    tables[111 + 2 * (i-vazio)].table.body.push([{
+                                        text: '10 - 12',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 2:
+                                    tables[111 + 2 * (i-vazio)].table.body.push([{
+                                        text: '14 - 16',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 3:
+                                    tables[111 + 2 * (i-vazio)].table.body.push([{
+                                        text: '16 - 18',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 4:
+                                    tables[111 + 2 * (i-vazio)].table.body.push([{
+                                        text: '19 - 21',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 5:
+                                    tables[111 + 2 * (i-vazio)].table.body.push([{
+                                        text: '21 - 23',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                            }
+                            seg = ter = qua = qui = sex = ''
+                        }
+                    }
+                }
+
+                tables.push({text:'Engenharia Computacional', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
+
+                for(var i = 0; i < 10; i++){
+                    if(periodosEC2[i].length===0){
+                        vazio = vazio + 1
+                    }else {
+                        tables.push({text: (i + 1) + 'º Período', bold: true, margin:[0, 5, 0, 5]})
+                        tables.push({
+                            table: {
+                                widths: ['*', '*', '*', '*', '*', '*'],
+                                headerRows: 1,
+                                color: '#426',
+                                body: [
+                                    [{text: 'Hora', alignment: 'center', bold: true}, {
+                                        text: 'Segunda',
+                                        alignment: 'center',
+                                        bold: true
+                                    }, {text: 'Terça', alignment: 'center', bold: true}, {
+                                        text: 'Quarta',
+                                        alignment: 'center',
+                                        bold: true
+                                    }, {text: 'Quinta', alignment: 'center', bold: true}, {
+                                        text: 'Sexta',
+                                        alignment: 'center',
+                                        bold: true
+                                    }],
+                                ]
+                            }
+                        })
+                        for (var d = 0; d < 4; d++) {
+                            for (var j = 0; j < periodosEC2[i].length; j++) {
+                                if (this.checkTurmaHorario(periodosEC2[i][j], 1 + d)) {
+                                    for (var k = 0; k < disciplinas.length; k++) {
+                                        if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (seg !== '')
+                                                seg = seg + ' '
+                                            seg = seg + disciplinas[k].codigo + ' ' + periodosEC2[i][j].letra
+                                        }
+                                    }
+                                }
+                                if (this.checkTurmaHorario(periodosEC2[i][j], 7 + d)) {
+                                    for (k = 0; k < disciplinas.length; k++) {
+                                        if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (ter != '')
+                                                ter = ter + ' '
+                                            ter = ter + disciplinas[k].codigo + ' ' + periodosEC2[i][j].letra
+                                        }
+                                    }
+                                }
+                                if (this.checkTurmaHorario(periodosEC2[i][j], 13 + d)) {
+                                    for (k = 0; k < disciplinas.length; k++) {
+                                        if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (qua != '')
+                                                qua = qua + ' '
+                                            qua = qua + disciplinas[k].codigo + ' ' + periodosEC2[i][j].letra
+                                        }
+                                    }
+                                }
+                                if (this.checkTurmaHorario(periodosEC2[i][j], 19 + d)) {
+                                    for (k = 0; k < disciplinas.length; k++) {
+                                        if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (qui != '')
+                                                qui = qui + ' '
+                                            qui = qui + disciplinas[k].codigo + ' ' + periodosEC2[i][j].letra
+                                        }
+                                    }
+                                }
+                                if (this.checkTurmaHorario(periodosEC2[i][j], 25 + d)) {
+                                    for (k = 0; k < disciplinas.length; k++) {
+                                        if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (sex != '')
+                                                sex = sex + ' '
+                                            sex = sex + disciplinas[k].codigo + ' ' + periodosEC2[i][j].letra
+                                        }
+                                    }
+                                }
+                            }
+
+                            switch (d) {
+                                case 0:
+                                    tables[132 + 2 * (i-vazio)].table.body.push([{
+                                        text: '08 - 10',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 1:
+                                    tables[132 + 2 * (i-vazio)].table.body.push([{
+                                        text: '10 - 12',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 2:
+                                    tables[132 + 2 * (i-vazio)].table.body.push([{
+                                        text: '14 - 16',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 3:
+                                    tables[132 + 2 * (i-vazio)].table.body.push([{
+                                        text: '16 - 18',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 4:
+                                    tables[132 + 2 * (i-vazio)].table.body.push([{
+                                        text: '19 - 21',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 5:
+                                    tables[132 + 2 * (i-vazio)].table.body.push([{
+                                        text: '21 - 23',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                            }
+                            seg = ter = qua = qui = sex = ''
+                        }
+                    }
+                }
+
+                tables.push({text:'Sistemas de Informação', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
+
+                for(var i = 0; i < 10; i++){
+                    if(periodosSI2[i].length===0){
+                        vazio = vazio + 1
+                    }else {
+                        tables.push({text: (i + 1) + 'º Período', bold: true, margin:[0, 5, 0, 5]})
+                        tables.push({
+                            table: {
+                                widths: ['*', '*', '*', '*', '*', '*'],
+                                headerRows: 1,
+                                color: '#426',
+                                body: [
+                                    [{text: 'Hora', alignment: 'center', bold: true}, {
+                                        text: 'Segunda',
+                                        alignment: 'center',
+                                        bold: true
+                                    }, {text: 'Terça', alignment: 'center', bold: true}, {
+                                        text: 'Quarta',
+                                        alignment: 'center',
+                                        bold: true
+                                    }, {text: 'Quinta', alignment: 'center', bold: true}, {
+                                        text: 'Sexta',
+                                        alignment: 'center',
+                                        bold: true
+                                    }],
+                                ]
+                            }
+                        })
+                        for (var d = 4; d < 6; d++) {
+                            for (var j = 0; j < periodosSI2[i].length; j++) {
+                                if (this.checkTurmaHorario(periodosSI2[i][j], 1 + d)) {
+                                    for (var k = 0; k < disciplinas.length; k++) {
+                                        if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (seg !== '')
+                                                seg = seg + ' '
+                                            seg = seg + disciplinas[k].codigo + ' ' + periodosSI2[i][j].letra
+                                        }
+                                    }
+                                }
+                                if (this.checkTurmaHorario(periodosSI2[i][j], 7 + d)) {
+                                    for (k = 0; k < disciplinas.length; k++) {
+                                        if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (ter != '')
+                                                ter = ter + ' '
+                                            ter = ter + disciplinas[k].codigo + ' ' + periodosSI2[i][j].letra
+                                        }
+                                    }
+                                }
+                                if (this.checkTurmaHorario(periodosSI2[i][j], 13 + d)) {
+                                    for (k = 0; k < disciplinas.length; k++) {
+                                        if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (qua != '')
+                                                qua = qua + ' '
+                                            qua = qua + disciplinas[k].codigo + ' ' + periodosSI2[i][j].letra
+                                        }
+                                    }
+                                }
+                                if (this.checkTurmaHorario(periodosSI2[i][j], 19 + d)) {
+                                    for (k = 0; k < disciplinas.length; k++) {
+                                        if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (qui != '')
+                                                qui = qui + ' '
+                                            qui = qui + disciplinas[k].codigo + ' ' + periodosSI2[i][j].letra
+                                        }
+                                    }
+                                }
+                                if (this.checkTurmaHorario(periodosSI2[i][j], 25 + d)) {
+                                    for (k = 0; k < disciplinas.length; k++) {
+                                        if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
+                                            if (sex != '')
+                                                sex = sex + ' '
+                                            sex = sex + disciplinas[k].codigo + ' ' + periodosSI2[i][j].letra
+                                        }
+                                    }
+                                }
+                            }
+
+                            switch (d) {
+                                case 0:
+                                    tables[153 + 2 * (i-vazio)].table.body.push([{
+                                        text: '08 - 10',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 1:
+                                    tables[153 + 2 * (i-vazio)].table.body.push([{
+                                        text: '10 - 12',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 2:
+                                    tables[153 + 2 * (i-vazio)].table.body.push([{
+                                        text: '14 - 16',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 3:
+                                    tables[153 + 2 * (i-vazio)].table.body.push([{
+                                        text: '16 - 18',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 4:
+                                    tables[153 + 2 * (i-vazio)].table.body.push([{
+                                        text: '19 - 21',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                                case 5:
+                                    tables[153 + 2 * (i-vazio)].table.body.push([{
+                                        text: '21 - 23',
+                                        alignment: 'center'
+                                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                        text: qua,
+                                        alignment: 'center'
+                                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                    break
+                            }
+                            seg = ter = qua = qui = sex = ''
+                        }
+                    }
+                }
+
+                tables.push({text:'Eletivas', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
+
+                if(eletivas2.length===0){
+                    vazio = vazio + 1
+                }else {
+                    tables.push({
+                        table: {
+                            widths: ['*', '*', '*', '*', '*', '*'],
+                            headerRows: 1,
+                            color: '#426',
+                            body: [
+                                [{text: 'Hora', alignment: 'center', bold: true}, {
+                                    text: 'Segunda',
+                                    alignment: 'center',
+                                    bold: true
+                                }, {text: 'Terça', alignment: 'center', bold: true}, {
+                                    text: 'Quarta',
+                                    alignment: 'center',
+                                    bold: true
+                                }, {text: 'Quinta', alignment: 'center', bold: true}, {
+                                    text: 'Sexta',
+                                    alignment: 'center',
+                                    bold: true
+                                }],
+                            ]
+                        }
+                    })
+                    for (var d = 0; d < 6; d++) {
+                        for (var j = 0; j < eletivas2.length; j++) {
+                            if (this.checkTurmaHorario(eletivas2[j], 1 + d)) {
+                                for (var k = 0; k < disciplinas.length; k++) {
+                                    if (eletivas2[j].Disciplina === disciplinas[k].id) {
+                                        if (seg !== '')
+                                            seg = seg + ' '
+                                        seg = seg + disciplinas[k].codigo + ' ' + eletivas2[j].letra
+                                    }
+                                }
+                            }
+                            if (this.checkTurmaHorario(eletivas2[j], 7 + d)) {
+                                for (k = 0; k < disciplinas.length; k++) {
+                                    if (eletivas2[j].Disciplina === disciplinas[k].id) {
+                                        if (ter != '')
+                                            ter = ter + ' '
+                                        ter = ter + disciplinas[k].codigo + ' ' + eletivas2[j].letra
+                                    }
+                                }
+                            }
+                            if (this.checkTurmaHorario(eletivas2[j], 13 + d)) {
+                                for (k = 0; k < disciplinas.length; k++) {
+                                    if (eletivas2[j].Disciplina === disciplinas[k].id) {
+                                        if (qua != '')
+                                            qua = qua + ' '
+                                        qua = qua + disciplinas[k].codigo + ' ' + eletivas2[j].letra
+                                    }
+                                }
+                            }
+                            if (this.checkTurmaHorario(eletivas2[j], 19 + d)) {
+                                for (k = 0; k < disciplinas.length; k++) {
+                                    if (eletivas2[j].Disciplina === disciplinas[k].id) {
+                                        if (qui != '')
+                                            qui = qui + ' '
+                                        qui = qui + disciplinas[k].codigo + ' ' + eletivas2[j].letra
+                                    }
+                                }
+                            }
+                            if (this.checkTurmaHorario(eletivas2[j], 25 + d)) {
+                                for (k = 0; k < disciplinas.length; k++) {
+                                    if (eletivas2[j].Disciplina === disciplinas[k].id) {
+                                        if (sex != '')
+                                            sex = sex + ' '
+                                        sex = sex + disciplinas[k].codigo + ' ' + eletivas2[j].letra
+                                    }
+                                }
+                            }
+                        }
+                        console.log([seg, ter, qua, qui, sex])
+                        switch (d) {
+                            case 0:
+                                tables[173 - 2 * vazio].table.body.push([{
+                                    text: '08 - 10',
+                                    alignment: 'center'
+                                }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                    text: qua,
+                                    alignment: 'center'
+                                }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                break
+                            case 1:
+                                tables[173 - 2 * vazio].table.body.push([{
+                                    text: '10 - 12',
+                                    alignment: 'center'
+                                }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                    text: qua,
+                                    alignment: 'center'
+                                }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                break
+                            case 2:
+                                tables[173 - 2 * vazio].table.body.push([{
+                                    text: '14 - 16',
+                                    alignment: 'center'
+                                }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                    text: qua,
+                                    alignment: 'center'
+                                }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                break
+                            case 3:
+                                tables[173 - 2 * vazio].table.body.push([{
+                                    text: '16 - 18',
+                                    alignment: 'center'
+                                }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                    text: qua,
+                                    alignment: 'center'
+                                }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                break
+                            case 4:
+                                tables[173 - 2 * vazio].table.body.push([{
+                                    text: '19 - 21',
+                                    alignment: 'center'
+                                }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                    text: qua,
+                                    alignment: 'center'
+                                }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                break
+                            case 5:
+                                tables[173 - 2 * vazio].table.body.push([{
+                                    text: '21 - 23',
+                                    alignment: 'center'
+                                }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                                    text: qua,
+                                    alignment: 'center'
+                                }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                                break
+                        }
+                        seg = ter = qua = qui = sex = ''
+                    }
+                }
+
 
 
                 var docDefinition = {

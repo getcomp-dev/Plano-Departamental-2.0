@@ -469,7 +469,7 @@ function isEven (number) {
 }
 
 function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, listaTurmasExternas, listaCursos, listaGrades, listaPedidos, listaPedidosExternos) {
-    var ativos1 = {
+    let ativos1 = {
         CCD: [[], [], [], [], [], [], [], [], [], []],
         CCN: [[], [], [], [], [], [], [], [], [], []],
         EC: [[], [], [], [], [], [], [], [], [], []],
@@ -477,15 +477,15 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
         Eletivas:[]
     }
 
-    var grade
-    var grades
-    var inicio = 1
-    var fim
-    var pedidos
-    var pedidosExternos
-    var disciplinaGrades = listaDisciplinasGrade
-    var turmas = listaTurmas
-    var turmasExternas = listaTurmasExternas
+    let grade
+    let grades
+    let inicio = 1
+    let fim
+    let pedidos
+    let pedidosExternos
+    let disciplinaGrades = listaDisciplinasGrade
+    let turmas = listaTurmas
+    let turmasExternas = listaTurmasExternas
 
     if (semestre===1){
         if(listaCursos[0].semestreInicial==1){
@@ -544,7 +544,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     pedidos = _.filter(listaPedidos, ['Curso', 4])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 4])
 
-    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
         grade = grades[i].id
         //inicio
@@ -560,20 +560,20 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
             fim = 1 + 2*(ano - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (semestre - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
         else
             fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
-        for (var k = 0; k < disciplinaGrades.length; k++) {
+        for (let k = 0; k < disciplinaGrades.length; k++) {
             if ((disciplinaGrades[k].Grade == grade) && (isEven(disciplinaGrades[k].periodo) == this.evenCCD) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
-                for (var j = 0; j < turmas.length; j++) {
+                for (let j = 0; j < turmas.length; j++) {
                     if (turmas[j].periodo===1 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                        for (var p = 0; p < pedidos.length; p++) {
+                        for (let p = 0; p < pedidos.length; p++) {
                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
                                 ativos1.CCD[disciplinaGrades[k].periodo - 1].push(turmas[j])
                             }
                         }
                     }
                 }
-                for (var j = 0; j < turmasExternas.length; j++) {
+                for (let j = 0; j < turmasExternas.length; j++) {
                     if (turmasExternas[j].periodo===1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                        for (var p = 0; p < pedidosExternos.length; p++) {
+                        for (let p = 0; p < pedidosExternos.length; p++) {
                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                 ativos1.CCD[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                             }
@@ -590,7 +590,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
     pedidos = _.filter(listaPedidos, ['Curso', 1])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 1])
-    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
         grade = grades[i].id
         //inicio
@@ -606,20 +606,20 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
             fim = 1 + 2*(ano - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (semestre - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
         else
             fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
-        for (var k = 0; k < disciplinaGrades.length; k++) {
+        for (let k = 0; k < disciplinaGrades.length; k++) {
             if ((disciplinaGrades[k].Grade == grade) && (isEven(disciplinaGrades[k].periodo) == this.evenCCN) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
-                for (var j = 0; j < turmas.length; j++) {
+                for (let j = 0; j < turmas.length; j++) {
                     if (turmas[j].periodo===1 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                        for (var p = 0; p < pedidos.length; p++) {
+                        for (let p = 0; p < pedidos.length; p++) {
                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
                                 ativos1.CCN[disciplinaGrades[k].periodo - 1].push(turmas[j])
                             }
                         }
                     }
                 }
-                for (var j = 0; j < turmasExternas.length; j++) {
+                for (let j = 0; j < turmasExternas.length; j++) {
                     if (turmasExternas[j].periodo===1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                        for (var p = 0; p < pedidosExternos.length; p++) {
+                        for (let p = 0; p < pedidosExternos.length; p++) {
                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                 ativos1.CCN[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                             }
@@ -636,7 +636,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
     pedidos = _.filter(listaPedidos, ['Curso', 3])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 3])
-    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
         grade = grades[i].id
         //inicio
@@ -652,20 +652,20 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
             fim = 1 + 2*(ano - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (semestre - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
         else
             fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
-        for (var k = 0; k < disciplinaGrades.length; k++) {
+        for (let k = 0; k < disciplinaGrades.length; k++) {
             if ((disciplinaGrades[k].Grade == grade) && (isEven(disciplinaGrades[k].periodo) == this.evenSI) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
-                for (var j = 0; j < turmas.length; j++) {
+                for (let j = 0; j < turmas.length; j++) {
                     if (turmas[j].periodo===1 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                        for (var p = 0; p < pedidos.length; p++) {
+                        for (let p = 0; p < pedidos.length; p++) {
                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
                                 ativos1.SI[disciplinaGrades[k].periodo - 1].push(turmas[j])
                             }
                         }
                     }
                 }
-                for (var j = 0; j < turmasExternas.length; j++) {
+                for (let j = 0; j < turmasExternas.length; j++) {
                     if (turmasExternas[j].periodo===1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                        for (var p = 0; p < pedidosExternos.length; p++) {
+                        for (let p = 0; p < pedidosExternos.length; p++) {
                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                 ativos1.SI[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                             }
@@ -682,7 +682,7 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
     pedidos = _.filter(listaPedidos, ['Curso', 2])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 2])
-    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
         grade = grades[i].id
         //inicio
@@ -698,20 +698,20 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
             fim = 1 + 2*(ano - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (semestre - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
         else
             fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
-        for (var k = 0; k < disciplinaGrades.length; k++) {
+        for (let k = 0; k < disciplinaGrades.length; k++) {
             if ((disciplinaGrades[k].Grade == grade) && (isEven(disciplinaGrades[k].periodo) == this.evenEC) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
-                for (var j = 0; j < turmas.length; j++) {
+                for (let j = 0; j < turmas.length; j++) {
                     if (turmas[j].periodo===1 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                        for (var p = 0; p < pedidos.length; p++) {
+                        for (let p = 0; p < pedidos.length; p++) {
                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
                                 ativos1.EC[disciplinaGrades[k].periodo - 1].push(turmas[j])
                             }
                         }
                     }
                 }
-                for (var j = 0; j < turmasExternas.length; j++) {
+                for (let j = 0; j < turmasExternas.length; j++) {
                     if (turmasExternas[j].periodo===1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                        for (var p = 0; p < pedidosExternos.length; p++) {
+                        for (let p = 0; p < pedidosExternos.length; p++) {
                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                 ativos1.EC[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                             }
@@ -723,9 +723,9 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     }
 
     //Eletivas está selecionado:
-    var eletiva = true
-    for(var t = 0; t<turmas.length;t++){
-        for(var d = 0; d<disciplinaGrades.length; d++){
+    let eletiva = true
+    for(let t = 0; t<turmas.length;t++){
+        for(let d = 0; d<disciplinaGrades.length; d++){
             if(turmas[t].periodo!=1 || turmas[t].Disciplina===disciplinaGrades[d].Disciplina){
                 eletiva = false
             }
@@ -741,11 +741,286 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
 
 }
 
+function createHorarios2 (ano, semestre, listaDisciplinasGrade, listaTurmas, listaTurmasExternas, listaCursos, listaGrades, listaPedidos, listaPedidosExternos) {
+    let ativos2 = {
+        CCD: [[], [], [], [], [], [], [], [], [], []],
+        CCN: [[], [], [], [], [], [], [], [], [], []],
+        EC: [[], [], [], [], [], [], [], [], [], []],
+        SI: [[], [], [], [], [], [], [], [], [], []],
+        Eletivas:[]
+    }
+
+    let grade
+    let grades
+    let inicio = 1
+    let fim
+    let pedidos
+    let pedidosExternos
+    let disciplinaGrades = listaDisciplinasGrade
+    let turmas = listaTurmas
+    let turmasExternas = listaTurmasExternas
+
+    if (semestre===1){
+        if(listaCursos[0].semestreInicial==1){
+            this.evenCCN = "false"
+        }else if (listaCursos[0].semestreInicial==2){
+            this.evenCCN = "true"
+        }
+
+        if(listaCursos[1].semestreInicial==1){
+            this.evenEC = "false"
+        }else if(listaCursos[1].semestreInicial==2){
+            this.evenEC = "true"
+        }
+
+        if(listaCursos[2].semestreInicial==1){
+            this.evenSI = "false"
+        }else if(listaCursos[2].semestreInicial==2){
+            this.evenSI = "true"
+        }
+
+        if(listaCursos[3].semestreInicial==1){
+            this.evenCCD = "false"
+        }else if(listaCursos[3].semestreInicial==2){
+            this.evenCCD = "true"
+        }
+    }else{
+        if(listaCursos[0].semestreInicial==1){
+            this.evenCCN = "true"
+        }else if (listaCursos[0].semestreInicial==2){
+            this.evenCCN = "false"
+        }
+
+        if(listaCursos[1].semestreInicial==1){
+            this.evenEC = "true"
+        }else if(listaCursos[1].semestreInicial==2){
+            this.evenEC = "false"
+        }
+
+        if(listaCursos[2].semestreInicial==1){
+            this.evenSI = "true"
+        }else if(listaCursos[2].semestreInicial==2){
+            this.evenSI = "false"
+        }
+
+        if(listaCursos[3].semestreInicial==1){
+            this.evenCCD = "true"
+        }else if(listaCursos[3].semestreInicial==2){
+            this.evenCCD = "false"
+        }
+    }
+
+
+    //CC Diurno
+    grades = _.filter(listaGrades, ['Curso', 4])
+    grades = _.orderBy(grades, 'periodoInicio', 'desc')
+    pedidos = _.filter(listaPedidos, ['Curso', 4])
+    pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 4])
+
+    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+        //grade
+        grade = grades[i].id
+        //inicio
+        if(i===0)
+            inicio = 1
+        else
+            inicio = fim+1
+        //fim
+        if(i+1 === grades.length)
+            fim = 10
+        else
+        if(i==0)
+            fim = 1 + 2*(ano - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (semestre - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+        else
+            fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+        for (let k = 0; k < disciplinaGrades.length; k++) {
+            if ((disciplinaGrades[k].Grade == grade) && (isEven(disciplinaGrades[k].periodo) == this.evenCCD) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
+                for (let j = 0; j < turmas.length; j++) {
+                    if (turmas[j].periodo===3 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                        for (let p = 0; p < pedidos.length; p++) {
+                            if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
+                                ativos1.CCD[disciplinaGrades[k].periodo - 1].push(turmas[j])
+                            }
+                        }
+                    }
+                }
+                for (let j = 0; j < turmasExternas.length; j++) {
+                    if (turmasExternas[j].periodo===3 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                        for (let p = 0; p < pedidosExternos.length; p++) {
+                            if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
+                                ativos1.CCD[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    //CC Noturno está selecionado
+    grades = _.filter(listaGrades, ['Curso', 1])
+    grades = _.orderBy(grades, 'periodoInicio', 'desc')
+    pedidos = _.filter(listaPedidos, ['Curso', 1])
+    pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 1])
+    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+        //grade
+        grade = grades[i].id
+        //inicio
+        if(i===0)
+            inicio = 1
+        else
+            inicio = fim+1
+        //fim
+        if(i+1 === grades.length)
+            fim = 10
+        else
+        if(i==0)
+            fim = 1 + 2*(ano - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (semestre - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+        else
+            fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+        for (let k = 0; k < disciplinaGrades.length; k++) {
+            if ((disciplinaGrades[k].Grade == grade) && (isEven(disciplinaGrades[k].periodo) == this.evenCCN) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
+                for (let j = 0; j < turmas.length; j++) {
+                    if (turmas[j].periodo===3 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                        for (let p = 0; p < pedidos.length; p++) {
+                            if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
+                                ativos1.CCN[disciplinaGrades[k].periodo - 1].push(turmas[j])
+                            }
+                        }
+                    }
+                }
+                for (let j = 0; j < turmasExternas.length; j++) {
+                    if (turmasExternas[j].periodo===3 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                        for (let p = 0; p < pedidosExternos.length; p++) {
+                            if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
+                                ativos1.CCN[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    //SI está selecionado
+    grades = _.filter(listaGrades, ['Curso', 3])
+    grades = _.orderBy(grades, 'periodoInicio', 'desc')
+    pedidos = _.filter(listaPedidos, ['Curso', 3])
+    pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 3])
+    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+        //grade
+        grade = grades[i].id
+        //inicio
+        if(i===0)
+            inicio = 1
+        else
+            inicio = fim+1
+        //fim
+        if(i+1 === grades.length)
+            fim = 10
+        else
+        if(i==0)
+            fim = 1 + 2*(ano - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (semestre - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+        else
+            fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+        for (let k = 0; k < disciplinaGrades.length; k++) {
+            if ((disciplinaGrades[k].Grade == grade) && (isEven(disciplinaGrades[k].periodo) == this.evenSI) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
+                for (let j = 0; j < turmas.length; j++) {
+                    if (turmas[j].periodo===3 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                        for (let p = 0; p < pedidos.length; p++) {
+                            if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
+                                ativos1.SI[disciplinaGrades[k].periodo - 1].push(turmas[j])
+                            }
+                        }
+                    }
+                }
+                for (let j = 0; j < turmasExternas.length; j++) {
+                    if (turmasExternas[j].periodo===3 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                        for (let p = 0; p < pedidosExternos.length; p++) {
+                            if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
+                                ativos1.SI[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+    //Engenharia Computacional está selecionado
+    grades = _.filter(listaGrades, ['Curso', 2])
+    grades = _.orderBy(grades, 'periodoInicio', 'desc')
+    pedidos = _.filter(listaPedidos, ['Curso', 2])
+    pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 2])
+    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+        //grade
+        grade = grades[i].id
+        //inicio
+        if(i===0)
+            inicio = 1
+        else
+            inicio = fim+1
+        //fim
+        if(i+1 === grades.length)
+            fim = 10
+        else
+        if(i==0)
+            fim = 1 + 2*(ano - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (semestre - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+        else
+            fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
+        for (let k = 0; k < disciplinaGrades.length; k++) {
+            if ((disciplinaGrades[k].Grade == grade) && (isEven(disciplinaGrades[k].periodo) == this.evenEC) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
+                for (let j = 0; j < turmas.length; j++) {
+                    if (turmas[j].periodo===3 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                        for (let p = 0; p < pedidos.length; p++) {
+                            if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
+                                ativos1.EC[disciplinaGrades[k].periodo - 1].push(turmas[j])
+                            }
+                        }
+                    }
+                }
+                for (let j = 0; j < turmasExternas.length; j++) {
+                    if (turmasExternas[j].periodo===3 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                        for (let p = 0; p < pedidosExternos.length; p++) {
+                            if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
+                                ativos1.EC[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //Eletivas está selecionado:
+    let eletiva = true
+    for(let t = 0; t<turmas.length;t++){
+        for(let d = 0; d<disciplinaGrades.length; d++){
+            if(turmas[t].periodo!=3 || turmas[t].Disciplina===disciplinaGrades[d].Disciplina){
+                eletiva = false
+            }
+        }
+        if(eletiva){
+            ativos1.Eletivas.push(turmas[t])
+        }else{
+            eletiva = true
+        }
+    }
+
+    return ativos2
+
+}
+
+
 const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
 
     var anoAtual = (_.isEmpty(this.Plano)?2019:this.Plano[0].ano)
 
     this.ativos1 = createHorarios1(anoAtual, 1, this.DisciplinasGrade, this.Turmas, this.TurmasExternas, this.Cursos, this.Grades, this.Pedidos, this.PedidosExternos)
+    this.ativos2 = createHorarios2(anoAtual, 3, this.DisciplinasGrade, this.Turmas, this.TurmasExternas, this.Cursos, this.Grades, this.Pedidos, this.PedidosExternos)
 
     var tables = []
     var disciplinas = this.Disciplinas
@@ -756,6 +1031,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
     var eletivas1 = this.ativos1.Eletivas
     var seg = '', ter = '', qua = '', qui = '', sex = ''
     var vazio = 0
+    tables.push({text:'1º Semestre', bold:true, margin:[0, 10, 0, 5], fontSize: 20})
     tables.push({text:'Ciência da Computação Diurno', bold:true, margin:[0, 10, 0, 5], fontSize: 20})
 
     for(var i = 0; i < 10; i++){
@@ -836,7 +1112,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
 
                 switch (d) {
                     case 0:
-                        tables[2 + 2 * (i-vazio)].table.body.push([{
+                        tables[3 + 2 * (i-vazio)].table.body.push([{
                             text: '08 - 10',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -845,7 +1121,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 1:
-                        tables[2 + 2 * (i-vazio)].table.body.push([{
+                        tables[3 + 2 * (i-vazio)].table.body.push([{
                             text: '10 - 12',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -854,7 +1130,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 2:
-                        tables[2 + 2 * (i-vazio)].table.body.push([{
+                        tables[3 + 2 * (i-vazio)].table.body.push([{
                             text: '14 - 16',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -863,7 +1139,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 3:
-                        tables[2 + 2 * (i-vazio)].table.body.push([{
+                        tables[3 + 2 * (i-vazio)].table.body.push([{
                             text: '16 - 18',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -872,7 +1148,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 4:
-                        tables[2 + 2 * (i-vazio)].table.body.push([{
+                        tables[3 + 2 * (i-vazio)].table.body.push([{
                             text: '19 - 21',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -881,7 +1157,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 5:
-                        tables[2 + 2 * (i-vazio)].table.body.push([{
+                        tables[3 + 2 * (i-vazio)].table.body.push([{
                             text: '21 - 23',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -975,7 +1251,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
 
                 switch (d) {
                     case 0:
-                        tables[23 + 2 * (i-vazio)].table.body.push([{
+                        tables[24 + 2 * (i-vazio)].table.body.push([{
                             text: '08 - 10',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -984,7 +1260,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 1:
-                        tables[23 + 2 * (i-vazio)].table.body.push([{
+                        tables[24 + 2 * (i-vazio)].table.body.push([{
                             text: '10 - 12',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -993,7 +1269,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 2:
-                        tables[23 + 2 * (i-vazio)].table.body.push([{
+                        tables[24 + 2 * (i-vazio)].table.body.push([{
                             text: '14 - 16',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1002,7 +1278,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 3:
-                        tables[23 + 2 * (i-vazio)].table.body.push([{
+                        tables[24 + 2 * (i-vazio)].table.body.push([{
                             text: '16 - 18',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1011,7 +1287,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 4:
-                        tables[23 + 2 * (i-vazio)].table.body.push([{
+                        tables[24 + 2 * (i-vazio)].table.body.push([{
                             text: '19 - 21',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1020,7 +1296,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 5:
-                        tables[23 + 2 * (i-vazio)].table.body.push([{
+                        tables[24 + 2 * (i-vazio)].table.body.push([{
                             text: '21 - 23',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1114,7 +1390,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
 
                 switch (d) {
                     case 0:
-                        tables[44 + 2 * (i-vazio)].table.body.push([{
+                        tables[45 + 2 * (i-vazio)].table.body.push([{
                             text: '08 - 10',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1123,7 +1399,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 1:
-                        tables[44 + 2 * (i-vazio)].table.body.push([{
+                        tables[45 + 2 * (i-vazio)].table.body.push([{
                             text: '10 - 12',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1132,7 +1408,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 2:
-                        tables[44 + 2 * (i-vazio)].table.body.push([{
+                        tables[45 + 2 * (i-vazio)].table.body.push([{
                             text: '14 - 16',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1141,7 +1417,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 3:
-                        tables[44 + 2 * (i-vazio)].table.body.push([{
+                        tables[45 + 2 * (i-vazio)].table.body.push([{
                             text: '16 - 18',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1150,7 +1426,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 4:
-                        tables[44 + 2 * (i-vazio)].table.body.push([{
+                        tables[45 + 2 * (i-vazio)].table.body.push([{
                             text: '19 - 21',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1159,7 +1435,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 5:
-                        tables[44 + 2 * (i-vazio)].table.body.push([{
+                        tables[45 + 2 * (i-vazio)].table.body.push([{
                             text: '21 - 23',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1253,7 +1529,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
 
                 switch (d) {
                     case 0:
-                        tables[65 + 2 * (i-vazio)].table.body.push([{
+                        tables[66 + 2 * (i-vazio)].table.body.push([{
                             text: '08 - 10',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1262,7 +1538,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 1:
-                        tables[65 + 2 * (i-vazio)].table.body.push([{
+                        tables[66 + 2 * (i-vazio)].table.body.push([{
                             text: '10 - 12',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1271,7 +1547,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 2:
-                        tables[65 + 2 * (i-vazio)].table.body.push([{
+                        tables[66 + 2 * (i-vazio)].table.body.push([{
                             text: '14 - 16',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1280,7 +1556,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 3:
-                        tables[65 + 2 * (i-vazio)].table.body.push([{
+                        tables[66 + 2 * (i-vazio)].table.body.push([{
                             text: '16 - 18',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1289,7 +1565,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 4:
-                        tables[65 + 2 * (i-vazio)].table.body.push([{
+                        tables[66 + 2 * (i-vazio)].table.body.push([{
                             text: '19 - 21',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1298,7 +1574,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                         break
                     case 5:
-                        tables[65 + 2 * (i-vazio)].table.body.push([{
+                        tables[66 + 2 * (i-vazio)].table.body.push([{
                             text: '21 - 23',
                             alignment: 'center'
                         }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1390,7 +1666,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
 
             switch (d) {
                 case 0:
-                    tables[85 - 2 * vazio].table.body.push([{
+                    tables[86 - 2 * vazio].table.body.push([{
                         text: '08 - 10',
                         alignment: 'center'
                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1399,7 +1675,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                     break
                 case 1:
-                    tables[85 - 2 * vazio].table.body.push([{
+                    tables[86 - 2 * vazio].table.body.push([{
                         text: '10 - 12',
                         alignment: 'center'
                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1408,7 +1684,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                     break
                 case 2:
-                    tables[85 - 2 * vazio].table.body.push([{
+                    tables[86 - 2 * vazio].table.body.push([{
                         text: '14 - 16',
                         alignment: 'center'
                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1417,7 +1693,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                     break
                 case 3:
-                    tables[85 - 2 * vazio].table.body.push([{
+                    tables[86 - 2 * vazio].table.body.push([{
                         text: '16 - 18',
                         alignment: 'center'
                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1426,7 +1702,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                     break
                 case 4:
-                    tables[85 - 2 * vazio].table.body.push([{
+                    tables[86 - 2 * vazio].table.body.push([{
                         text: '19 - 21',
                         alignment: 'center'
                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1435,7 +1711,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                     break
                 case 5:
-                    tables[85 - 2 * vazio].table.body.push([{
+                    tables[86 - 2 * vazio].table.body.push([{
                         text: '21 - 23',
                         alignment: 'center'
                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
@@ -1447,6 +1723,707 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
             seg = ter = qua = qui = sex = ''
         }
     }
+
+    var periodosCCD2 = this.ativos2.CCD
+    var periodosCCN2 = this.ativos2.CCN
+    var periodosEC2 = this.ativos2.EC
+    var periodosSI2 = this.ativos2.SI
+    var eletivas2 = this.ativos2.Eletivas
+
+
+    tables.push({text:'2º Semestre', bold:true, margin:[0, 10, 0, 5], fontSize: 20})
+    tables.push({text:'Ciência da Computação Diurno', bold:true, margin:[0, 10, 0, 5], fontSize: 20})
+
+    for(var i = 0; i < 10; i++){
+        if(periodosCCD2[i].length===0){
+            vazio = vazio + 1
+        }else {
+            tables.push({text: (i + 1) + 'º Período', bold: true, margin:[0, 5, 0, 5]})
+            tables.push({
+                table: {
+                    widths: ['*', '*', '*', '*', '*', '*'],
+                    headerRows: 1,
+                    color: '#426',
+                    body: [
+                        [{text: 'Hora', alignment: 'center', bold: true}, {
+                            text: 'Segunda',
+                            alignment: 'center',
+                            bold: true
+                        }, {text: 'Terça', alignment: 'center', bold: true}, {
+                            text: 'Quarta',
+                            alignment: 'center',
+                            bold: true
+                        }, {text: 'Quinta', alignment: 'center', bold: true}, {
+                            text: 'Sexta',
+                            alignment: 'center',
+                            bold: true
+                        }],
+                    ]
+                }
+            })
+            for (var d = 0; d < 4; d++) {
+                for (var j = 0; j < periodosCCD2[i].length; j++) {
+                    if (checkTurmaHorario(periodosCCD2[i][j], 1 + d)) {
+                        for (var k = 0; k < disciplinas.length; k++) {
+                            if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
+                                if (seg !== '')
+                                    seg = seg + ' '
+                                seg = seg + disciplinas[k].codigo + ' ' + periodosCCD2[i][j].letra
+                            }
+                        }
+                    }
+                    if (checkTurmaHorario(periodosCCD2[i][j], 7 + d)) {
+                        for (k = 0; k < disciplinas.length; k++) {
+                            if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
+                                if (ter != '')
+                                    ter = ter + ' '
+                                ter = ter + disciplinas[k].codigo + ' ' + periodosCCD2[i][j].letra
+                            }
+                        }
+                    }
+                    if (checkTurmaHorario(periodosCCD2[i][j], 13 + d)) {
+                        for (k = 0; k < disciplinas.length; k++) {
+                            if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
+                                if (qua != '')
+                                    qua = qua + ' '
+                                qua = qua + disciplinas[k].codigo + ' ' + periodosCCD2[i][j].letra
+                            }
+                        }
+                    }
+                    if (checkTurmaHorario(periodosCCD2[i][j], 19 + d)) {
+                        for (k = 0; k < disciplinas.length; k++) {
+                            if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
+                                if (qui != '')
+                                    qui = qui + ' '
+                                qui = qui + disciplinas[k].codigo + ' ' + periodosCCD2[i][j].letra
+                            }
+                        }
+                    }
+                    if (checkTurmaHorario(periodosCCD2[i][j], 25 + d)) {
+                        for (k = 0; k < disciplinas.length; k++) {
+                            if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
+                                if (sex != '')
+                                    sex = sex + ' '
+                                sex = sex + disciplinas[k].codigo + ' ' + periodosCCD2[i][j].letra
+                            }
+                        }
+                    }
+                }
+
+                switch (d) {
+                    case 0:
+                        tables[90 + 2 * (i-vazio)].table.body.push([{
+                            text: '08 - 10',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 1:
+                        tables[90 + 2 * (i-vazio)].table.body.push([{
+                            text: '10 - 12',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 2:
+                        tables[90 + 2 * (i-vazio)].table.body.push([{
+                            text: '14 - 16',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 3:
+                        tables[90 + 2 * (i-vazio)].table.body.push([{
+                            text: '16 - 18',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 4:
+                        tables[90 + 2 * (i-vazio)].table.body.push([{
+                            text: '19 - 21',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 5:
+                        tables[90 + 2 * (i-vazio)].table.body.push([{
+                            text: '21 - 23',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                }
+                seg = ter = qua = qui = sex = ''
+            }
+        }
+    }
+
+    tables.push({text:'Ciência da Computação Noturno', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
+
+    for(var i = 0; i < 10; i++){
+        if(periodosCCN2[i].length===0){
+            vazio = vazio + 1
+        }else {
+            tables.push({text: (i + 1) + 'º Período', bold: true, margin:[0, 5, 0, 5]})
+            tables.push({
+                table: {
+                    widths: ['*', '*', '*', '*', '*', '*'],
+                    headerRows: 1,
+                    color: '#426',
+                    body: [
+                        [{text: 'Hora', alignment: 'center', bold: true}, {
+                            text: 'Segunda',
+                            alignment: 'center',
+                            bold: true
+                        }, {text: 'Terça', alignment: 'center', bold: true}, {
+                            text: 'Quarta',
+                            alignment: 'center',
+                            bold: true
+                        }, {text: 'Quinta', alignment: 'center', bold: true}, {
+                            text: 'Sexta',
+                            alignment: 'center',
+                            bold: true
+                        }],
+                    ]
+                }
+            })
+            for (var d = 4; d < 6; d++) {
+                for (var j = 0; j < periodosCCN2[i].length; j++) {
+                    if (checkTurmaHorario(periodosCCN2[i][j], 1 + d)) {
+                        for (var k = 0; k < disciplinas.length; k++) {
+                            if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
+                                if (seg !== '')
+                                    seg = seg + ' '
+                                seg = seg + disciplinas[k].codigo + ' ' + periodosCCN2[i][j].letra
+                            }
+                        }
+                    }
+                    if (checkTurmaHorario(periodosCCN2[i][j], 7 + d)) {
+                        for (k = 0; k < disciplinas.length; k++) {
+                            if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
+                                if (ter != '')
+                                    ter = ter + ' '
+                                ter = ter + disciplinas[k].codigo + ' ' + periodosCCN2[i][j].letra
+                            }
+                        }
+                    }
+                    if (checkTurmaHorario(periodosCCN2[i][j], 13 + d)) {
+                        for (k = 0; k < disciplinas.length; k++) {
+                            if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
+                                if (qua != '')
+                                    qua = qua + ' '
+                                qua = qua + disciplinas[k].codigo + ' ' + periodosCCN2[i][j].letra
+                            }
+                        }
+                    }
+                    if (checkTurmaHorario(periodosCCN2[i][j], 19 + d)) {
+                        for (k = 0; k < disciplinas.length; k++) {
+                            if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
+                                if (qui != '')
+                                    qui = qui + ' '
+                                qui = qui + disciplinas[k].codigo + ' ' + periodosCCN2[i][j].letra
+                            }
+                        }
+                    }
+                    if (checkTurmaHorario(periodosCCN2[i][j], 25 + d)) {
+                        for (k = 0; k < disciplinas.length; k++) {
+                            if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
+                                if (sex != '')
+                                    sex = sex + ' '
+                                sex = sex + disciplinas[k].codigo + ' ' + periodosCCN2[i][j].letra
+                            }
+                        }
+                    }
+                }
+
+                switch (d) {
+                    case 0:
+                        tables[111 + 2 * (i-vazio)].table.body.push([{
+                            text: '08 - 10',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 1:
+                        tables[111 + 2 * (i-vazio)].table.body.push([{
+                            text: '10 - 12',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 2:
+                        tables[111 + 2 * (i-vazio)].table.body.push([{
+                            text: '14 - 16',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 3:
+                        tables[111 + 2 * (i-vazio)].table.body.push([{
+                            text: '16 - 18',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 4:
+                        tables[111 + 2 * (i-vazio)].table.body.push([{
+                            text: '19 - 21',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 5:
+                        tables[111 + 2 * (i-vazio)].table.body.push([{
+                            text: '21 - 23',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                }
+                seg = ter = qua = qui = sex = ''
+            }
+        }
+    }
+
+    tables.push({text:'Engenharia Computacional', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
+
+    for(var i = 0; i < 10; i++){
+        if(periodosEC2[i].length===0){
+            vazio = vazio + 1
+        }else {
+            tables.push({text: (i + 1) + 'º Período', bold: true, margin:[0, 5, 0, 5]})
+            tables.push({
+                table: {
+                    widths: ['*', '*', '*', '*', '*', '*'],
+                    headerRows: 1,
+                    color: '#426',
+                    body: [
+                        [{text: 'Hora', alignment: 'center', bold: true}, {
+                            text: 'Segunda',
+                            alignment: 'center',
+                            bold: true
+                        }, {text: 'Terça', alignment: 'center', bold: true}, {
+                            text: 'Quarta',
+                            alignment: 'center',
+                            bold: true
+                        }, {text: 'Quinta', alignment: 'center', bold: true}, {
+                            text: 'Sexta',
+                            alignment: 'center',
+                            bold: true
+                        }],
+                    ]
+                }
+            })
+            for (var d = 0; d < 4; d++) {
+                for (var j = 0; j < periodosEC2[i].length; j++) {
+                    if (checkTurmaHorario(periodosEC2[i][j], 1 + d)) {
+                        for (var k = 0; k < disciplinas.length; k++) {
+                            if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
+                                if (seg !== '')
+                                    seg = seg + ' '
+                                seg = seg + disciplinas[k].codigo + ' ' + periodosEC2[i][j].letra
+                            }
+                        }
+                    }
+                    if (checkTurmaHorario(periodosEC2[i][j], 7 + d)) {
+                        for (k = 0; k < disciplinas.length; k++) {
+                            if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
+                                if (ter != '')
+                                    ter = ter + ' '
+                                ter = ter + disciplinas[k].codigo + ' ' + periodosEC2[i][j].letra
+                            }
+                        }
+                    }
+                    if (checkTurmaHorario(periodosEC2[i][j], 13 + d)) {
+                        for (k = 0; k < disciplinas.length; k++) {
+                            if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
+                                if (qua != '')
+                                    qua = qua + ' '
+                                qua = qua + disciplinas[k].codigo + ' ' + periodosEC2[i][j].letra
+                            }
+                        }
+                    }
+                    if (checkTurmaHorario(periodosEC2[i][j], 19 + d)) {
+                        for (k = 0; k < disciplinas.length; k++) {
+                            if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
+                                if (qui != '')
+                                    qui = qui + ' '
+                                qui = qui + disciplinas[k].codigo + ' ' + periodosEC2[i][j].letra
+                            }
+                        }
+                    }
+                    if (checkTurmaHorario(periodosEC2[i][j], 25 + d)) {
+                        for (k = 0; k < disciplinas.length; k++) {
+                            if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
+                                if (sex != '')
+                                    sex = sex + ' '
+                                sex = sex + disciplinas[k].codigo + ' ' + periodosEC2[i][j].letra
+                            }
+                        }
+                    }
+                }
+
+                switch (d) {
+                    case 0:
+                        tables[132 + 2 * (i-vazio)].table.body.push([{
+                            text: '08 - 10',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 1:
+                        tables[132 + 2 * (i-vazio)].table.body.push([{
+                            text: '10 - 12',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 2:
+                        tables[132 + 2 * (i-vazio)].table.body.push([{
+                            text: '14 - 16',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 3:
+                        tables[132 + 2 * (i-vazio)].table.body.push([{
+                            text: '16 - 18',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 4:
+                        tables[132 + 2 * (i-vazio)].table.body.push([{
+                            text: '19 - 21',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 5:
+                        tables[132 + 2 * (i-vazio)].table.body.push([{
+                            text: '21 - 23',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                }
+                seg = ter = qua = qui = sex = ''
+            }
+        }
+    }
+
+    tables.push({text:'Sistemas de Informação', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
+
+    for(var i = 0; i < 10; i++){
+        if(periodosSI2[i].length===0){
+            vazio = vazio + 1
+        }else {
+            tables.push({text: (i + 1) + 'º Período', bold: true, margin:[0, 5, 0, 5]})
+            tables.push({
+                table: {
+                    widths: ['*', '*', '*', '*', '*', '*'],
+                    headerRows: 1,
+                    color: '#426',
+                    body: [
+                        [{text: 'Hora', alignment: 'center', bold: true}, {
+                            text: 'Segunda',
+                            alignment: 'center',
+                            bold: true
+                        }, {text: 'Terça', alignment: 'center', bold: true}, {
+                            text: 'Quarta',
+                            alignment: 'center',
+                            bold: true
+                        }, {text: 'Quinta', alignment: 'center', bold: true}, {
+                            text: 'Sexta',
+                            alignment: 'center',
+                            bold: true
+                        }],
+                    ]
+                }
+            })
+            for (var d = 4; d < 6; d++) {
+                for (var j = 0; j < periodosSI2[i].length; j++) {
+                    if (checkTurmaHorario(periodosSI2[i][j], 1 + d)) {
+                        for (var k = 0; k < disciplinas.length; k++) {
+                            if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
+                                if (seg !== '')
+                                    seg = seg + ' '
+                                seg = seg + disciplinas[k].codigo + ' ' + periodosSI2[i][j].letra
+                            }
+                        }
+                    }
+                    if (checkTurmaHorario(periodosSI2[i][j], 7 + d)) {
+                        for (k = 0; k < disciplinas.length; k++) {
+                            if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
+                                if (ter != '')
+                                    ter = ter + ' '
+                                ter = ter + disciplinas[k].codigo + ' ' + periodosSI2[i][j].letra
+                            }
+                        }
+                    }
+                    if (checkTurmaHorario(periodosSI2[i][j], 13 + d)) {
+                        for (k = 0; k < disciplinas.length; k++) {
+                            if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
+                                if (qua != '')
+                                    qua = qua + ' '
+                                qua = qua + disciplinas[k].codigo + ' ' + periodosSI2[i][j].letra
+                            }
+                        }
+                    }
+                    if (checkTurmaHorario(periodosSI2[i][j], 19 + d)) {
+                        for (k = 0; k < disciplinas.length; k++) {
+                            if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
+                                if (qui != '')
+                                    qui = qui + ' '
+                                qui = qui + disciplinas[k].codigo + ' ' + periodosSI2[i][j].letra
+                            }
+                        }
+                    }
+                    if (checkTurmaHorario(periodosSI2[i][j], 25 + d)) {
+                        for (k = 0; k < disciplinas.length; k++) {
+                            if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
+                                if (sex != '')
+                                    sex = sex + ' '
+                                sex = sex + disciplinas[k].codigo + ' ' + periodosSI2[i][j].letra
+                            }
+                        }
+                    }
+                }
+
+                switch (d) {
+                    case 0:
+                        tables[153 + 2 * (i-vazio)].table.body.push([{
+                            text: '08 - 10',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 1:
+                        tables[153 + 2 * (i-vazio)].table.body.push([{
+                            text: '10 - 12',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 2:
+                        tables[153 + 2 * (i-vazio)].table.body.push([{
+                            text: '14 - 16',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 3:
+                        tables[153 + 2 * (i-vazio)].table.body.push([{
+                            text: '16 - 18',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 4:
+                        tables[153 + 2 * (i-vazio)].table.body.push([{
+                            text: '19 - 21',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                    case 5:
+                        tables[153 + 2 * (i-vazio)].table.body.push([{
+                            text: '21 - 23',
+                            alignment: 'center'
+                        }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                            text: qua,
+                            alignment: 'center'
+                        }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                        break
+                }
+                seg = ter = qua = qui = sex = ''
+            }
+        }
+    }
+
+    tables.push({text:'Eletivas', bold:true, margin:[0, 10, 0, 5], fontSize: 20, pageBreak:'before'})
+
+    if(eletivas2.length===0){
+        vazio = vazio + 1
+    }else {
+        tables.push({
+            table: {
+                widths: ['*', '*', '*', '*', '*', '*'],
+                headerRows: 1,
+                color: '#426',
+                body: [
+                    [{text: 'Hora', alignment: 'center', bold: true}, {
+                        text: 'Segunda',
+                        alignment: 'center',
+                        bold: true
+                    }, {text: 'Terça', alignment: 'center', bold: true}, {
+                        text: 'Quarta',
+                        alignment: 'center',
+                        bold: true
+                    }, {text: 'Quinta', alignment: 'center', bold: true}, {
+                        text: 'Sexta',
+                        alignment: 'center',
+                        bold: true
+                    }],
+                ]
+            }
+        })
+        for (var d = 0; d < 6; d++) {
+            for (var j = 0; j < eletivas2.length; j++) {
+                if (checkTurmaHorario(eletivas2[j], 1 + d)) {
+                    for (var k = 0; k < disciplinas.length; k++) {
+                        if (eletivas2[j].Disciplina === disciplinas[k].id) {
+                            if (seg !== '')
+                                seg = seg + ' '
+                            seg = seg + disciplinas[k].codigo + ' ' + eletivas2[j].letra
+                        }
+                    }
+                }
+                if (checkTurmaHorario(eletivas2[j], 7 + d)) {
+                    for (k = 0; k < disciplinas.length; k++) {
+                        if (eletivas2[j].Disciplina === disciplinas[k].id) {
+                            if (ter != '')
+                                ter = ter + ' '
+                            ter = ter + disciplinas[k].codigo + ' ' + eletivas2[j].letra
+                        }
+                    }
+                }
+                if (checkTurmaHorario(eletivas2[j], 13 + d)) {
+                    for (k = 0; k < disciplinas.length; k++) {
+                        if (eletivas2[j].Disciplina === disciplinas[k].id) {
+                            if (qua != '')
+                                qua = qua + ' '
+                            qua = qua + disciplinas[k].codigo + ' ' + eletivas2[j].letra
+                        }
+                    }
+                }
+                if (checkTurmaHorario(eletivas2[j], 19 + d)) {
+                    for (k = 0; k < disciplinas.length; k++) {
+                        if (eletivas2[j].Disciplina === disciplinas[k].id) {
+                            if (qui != '')
+                                qui = qui + ' '
+                            qui = qui + disciplinas[k].codigo + ' ' + eletivas2[j].letra
+                        }
+                    }
+                }
+                if (checkTurmaHorario(eletivas2[j], 25 + d)) {
+                    for (k = 0; k < disciplinas.length; k++) {
+                        if (eletivas2[j].Disciplina === disciplinas[k].id) {
+                            if (sex != '')
+                                sex = sex + ' '
+                            sex = sex + disciplinas[k].codigo + ' ' + eletivas2[j].letra
+                        }
+                    }
+                }
+            }
+
+            switch (d) {
+                case 0:
+                    tables[173 - 2 * vazio].table.body.push([{
+                        text: '08 - 10',
+                        alignment: 'center'
+                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                        text: qua,
+                        alignment: 'center'
+                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                    break
+                case 1:
+                    tables[173 - 2 * vazio].table.body.push([{
+                        text: '10 - 12',
+                        alignment: 'center'
+                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                        text: qua,
+                        alignment: 'center'
+                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                    break
+                case 2:
+                    tables[173 - 2 * vazio].table.body.push([{
+                        text: '14 - 16',
+                        alignment: 'center'
+                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                        text: qua,
+                        alignment: 'center'
+                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                    break
+                case 3:
+                    tables[173 - 2 * vazio].table.body.push([{
+                        text: '16 - 18',
+                        alignment: 'center'
+                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                        text: qua,
+                        alignment: 'center'
+                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                    break
+                case 4:
+                    tables[173 - 2 * vazio].table.body.push([{
+                        text: '19 - 21',
+                        alignment: 'center'
+                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                        text: qua,
+                        alignment: 'center'
+                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                    break
+                case 5:
+                    tables[173 - 2 * vazio].table.body.push([{
+                        text: '21 - 23',
+                        alignment: 'center'
+                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                        text: qua,
+                        alignment: 'center'
+                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                    break
+            }
+            seg = ter = qua = qui = sex = ''
+        }
+    }
+
 
     console.log("Criando Documento")
     let docDefinitionHorario = {
