@@ -127,51 +127,145 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                 ]
             }
         })
-        for(var d = 0; d< 6; d++) {
+        for(var d = 0; d< 7; d++) {
             for (var j = 0; j < turmas1.length; j++) {
                 if(turmas1[j].Sala1===laboratorios[i].id || turmas1[j].Sala2===laboratorios[i].id){
-                    if(checkTurmaHorario(turmas1[j], 1 + d)){
-                        for(var k = 0; k < disciplinas.length; k++){
-                            if(turmas1[j].Disciplina === disciplinas[k].id){
-                                if(seg !== '')
-                                    seg = seg + ' '
-                                seg = seg + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                    if(d < 4) {
+                        if (checkTurmaHorario(turmas1[j], 1 + d)) {
+                            for (var k = 0; k < disciplinas.length; k++) {
+                                if (turmas1[j].Disciplina === disciplinas[k].id) {
+                                    if (seg !== '')
+                                        seg = seg + ' '
+                                    seg = seg + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                                }
                             }
                         }
-                    }
-                    if(checkTurmaHorario(turmas1[j], 7 + d)){
-                        for(k = 0; k < disciplinas.length; k++){
-                            if(turmas1[j].Disciplina === disciplinas[k].id){
-                                if(ter != '')
-                                    ter = ter + ' '
-                                ter = ter + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                        if (checkTurmaHorario(turmas1[j], 7 + d)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas1[j].Disciplina === disciplinas[k].id) {
+                                    if (ter != '')
+                                        ter = ter + ' '
+                                    ter = ter + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                                }
                             }
                         }
-                    }
-                    if(checkTurmaHorario(turmas1[j], 13 + d)){
-                        for(k = 0; k < disciplinas.length; k++){
-                            if(turmas1[j].Disciplina === disciplinas[k].id){
-                                if(qua != '')
-                                    qua = qua + ' '
-                                qua = qua + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                        if (checkTurmaHorario(turmas1[j], 13 + d)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas1[j].Disciplina === disciplinas[k].id) {
+                                    if (qua != '')
+                                        qua = qua + ' '
+                                    qua = qua + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                                }
                             }
                         }
-                    }
-                    if(checkTurmaHorario(turmas1[j], 19 + d)){
-                        for(k = 0; k < disciplinas.length; k++){
-                            if(turmas1[j].Disciplina === disciplinas[k].id){
-                                if(qui != '')
-                                    qui = qui + ' '
-                                qui = qui + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                        if (checkTurmaHorario(turmas1[j], 19 + d)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas1[j].Disciplina === disciplinas[k].id) {
+                                    if (qui != '')
+                                        qui = qui + ' '
+                                    qui = qui + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                                }
                             }
                         }
-                    }
-                    if(checkTurmaHorario(turmas1[j], 25 + d)){
-                        for(k = 0; k < disciplinas.length; k++){
-                            if(turmas1[j].Disciplina === disciplinas[k].id){
-                                if(sex != '')
-                                    sex = sex + ' '
-                                sex = sex + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                        if (checkTurmaHorario(turmas1[j], 25 + d)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas1[j].Disciplina === disciplinas[k].id) {
+                                    if (sex != '')
+                                        sex = sex + ' '
+                                    sex = sex + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                                }
+                            }
+                        }
+                    } else if(d == 4) {
+                        if (checkTurmaHorario(turmas1[j], 32)) {
+                            for (var k = 0; k < disciplinas.length; k++) {
+                                if (turmas1[j].Disciplina === disciplinas[k].id) {
+                                    if (seg !== '')
+                                        seg = seg + ' '
+                                    seg = seg + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                                }
+                            }
+                        }
+                        if (checkTurmaHorario(turmas1[j], 34)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas1[j].Disciplina === disciplinas[k].id) {
+                                    if (ter != '')
+                                        ter = ter + ' '
+                                    ter = ter + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                                }
+                            }
+                        }
+                        if (checkTurmaHorario(turmas1[j], 36)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas1[j].Disciplina === disciplinas[k].id) {
+                                    if (qua != '')
+                                        qua = qua + ' '
+                                    qua = qua + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                                }
+                            }
+                        }
+                        if (checkTurmaHorario(turmas1[j], 38)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas1[j].Disciplina === disciplinas[k].id) {
+                                    if (qui != '')
+                                        qui = qui + ' '
+                                    qui = qui + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                                }
+                            }
+                        }
+                        if (checkTurmaHorario(turmas1[j], 40)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas1[j].Disciplina === disciplinas[k].id) {
+                                    if (sex != '')
+                                        sex = sex + ' '
+                                    sex = sex + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                                }
+                            }
+                        }
+                    } else if(d > 4) {
+                        if (checkTurmaHorario(turmas1[j],  d)) {
+                            for (var k = 0; k < disciplinas.length; k++) {
+                                if (turmas1[j].Disciplina === disciplinas[k].id) {
+                                    if (seg !== '')
+                                        seg = seg + ' '
+                                    seg = seg + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                                }
+                            }
+                        }
+                        if (checkTurmaHorario(turmas1[j], 6 + d)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas1[j].Disciplina === disciplinas[k].id) {
+                                    if (ter != '')
+                                        ter = ter + ' '
+                                    ter = ter + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                                }
+                            }
+                        }
+                        if (checkTurmaHorario(turmas1[j], 12 + d)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas1[j].Disciplina === disciplinas[k].id) {
+                                    if (qua != '')
+                                        qua = qua + ' '
+                                    qua = qua + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                                }
+                            }
+                        }
+                        if (checkTurmaHorario(turmas1[j], 18 + d)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas1[j].Disciplina === disciplinas[k].id) {
+                                    if (qui != '')
+                                        qui = qui + ' '
+                                    qui = qui + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                                }
+                            }
+                        }
+                        if (checkTurmaHorario(turmas1[j], 24 + d)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas1[j].Disciplina === disciplinas[k].id) {
+                                    if (sex != '')
+                                        sex = sex + ' '
+                                    sex = sex + disciplinas[k].codigo + ' ' + turmas1[j].letra
+                                }
                             }
                         }
                     }
@@ -186,9 +280,11 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                     break
                 case 3: tables[2+5*i].table.body.push([{text:'16 - 18', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                     break
-                case 4: tables[2+5*i].table.body.push([{text:'19 - 21', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 4: tables[2+5*i].table.body.push([{text:'17 - 19', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                     break
-                case 5: tables[2+5*i].table.body.push([{text:'21 - 23', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 5: tables[2+5*i].table.body.push([{text:'19 - 21', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                    break
+                case 6: tables[2+5*i].table.body.push([{text:'21 - 23', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                     break
             }
             seg = ter = qua = qui = sex = ''
@@ -208,48 +304,142 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
         for(var d = 0; d< 6; d++) {
             for (var j = 0; j < turmas2.length; j++) {
                 if(turmas2[j].Sala1===laboratorios[i].id || turmas2[j].Sala2===laboratorios[i].id){
-                    if(checkTurmaHorario(turmas2[j], 1 + d)){
-                        for(var k = 0; k < disciplinas.length; k++){
-                            if(turmas2[j].Disciplina === disciplinas[k].id){
-                                if(seg !== '')
-                                    seg = seg + ' '
-                                seg = seg + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                    if(d < 4) {
+                        if (checkTurmaHorario(turmas2[j], 1 + d)) {
+                            for (var k = 0; k < disciplinas.length; k++) {
+                                if (turmas2[j].Disciplina === disciplinas[k].id) {
+                                    if (seg !== '')
+                                        seg = seg + ' '
+                                    seg = seg + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
                             }
                         }
-                    }
-                    if(checkTurmaHorario(turmas2[j], 7 + d)){
-                        for(k = 0; k < disciplinas.length; k++){
-                            if(turmas2[j].Disciplina === disciplinas[k].id){
-                                if(ter != '')
-                                    ter = ter + ' '
-                                ter = ter + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                        if (checkTurmaHorario(turmas2[j], 7 + d)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas2[j].Disciplina === disciplinas[k].id) {
+                                    if (ter != '')
+                                        ter = ter + ' '
+                                    ter = ter + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
                             }
                         }
-                    }
-                    if(checkTurmaHorario(turmas2[j], 13 + d)){
-                        for(k = 0; k < disciplinas.length; k++){
-                            if(turmas2[j].Disciplina === disciplinas[k].id){
-                                if(qua != '')
-                                    qua = qua + ' '
-                                qua = qua + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                        if (checkTurmaHorario(turmas2[j], 13 + d)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas2[j].Disciplina === disciplinas[k].id) {
+                                    if (qua != '')
+                                        qua = qua + ' '
+                                    qua = qua + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
                             }
                         }
-                    }
-                    if(checkTurmaHorario(turmas2[j], 19 + d)){
-                        for(k = 0; k < disciplinas.length; k++){
-                            if(turmas2[j].Disciplina === disciplinas[k].id){
-                                if(qui != '')
-                                    qui = qui + ' '
-                                qui = qui + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                        if (checkTurmaHorario(turmas2[j], 19 + d)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas2[j].Disciplina === disciplinas[k].id) {
+                                    if (qui != '')
+                                        qui = qui + ' '
+                                    qui = qui + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
                             }
                         }
-                    }
-                    if(checkTurmaHorario(turmas2[j], 25 + d)){
-                        for(k = 0; k < disciplinas.length; k++){
-                            if(turmas2[j].Disciplina === disciplinas[k].id){
-                                if(sex != '')
-                                    sex = sex + ' '
-                                sex = sex + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                        if (checkTurmaHorario(turmas2[j], 25 + d)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas2[j].Disciplina === disciplinas[k].id) {
+                                    if (sex != '')
+                                        sex = sex + ' '
+                                    sex = sex + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
+                            }
+                        }
+                    } else if(d == 4) {
+                        if (checkTurmaHorario(turmas2[j], 32)) {
+                            for (var k = 0; k < disciplinas.length; k++) {
+                                if (turmas2[j].Disciplina === disciplinas[k].id) {
+                                    if (seg !== '')
+                                        seg = seg + ' '
+                                    seg = seg + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
+                            }
+                        }
+                        if (checkTurmaHorario(turmas2[j], 34)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas2[j].Disciplina === disciplinas[k].id) {
+                                    if (ter != '')
+                                        ter = ter + ' '
+                                    ter = ter + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
+                            }
+                        }
+                        if (checkTurmaHorario(turmas2[j], 36)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas2[j].Disciplina === disciplinas[k].id) {
+                                    if (qua != '')
+                                        qua = qua + ' '
+                                    qua = qua + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
+                            }
+                        }
+                        if (checkTurmaHorario(turmas2[j], 38)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas2[j].Disciplina === disciplinas[k].id) {
+                                    if (qui != '')
+                                        qui = qui + ' '
+                                    qui = qui + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
+                            }
+                        }
+                        if (checkTurmaHorario(turmas2[j], 40)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas2[j].Disciplina === disciplinas[k].id) {
+                                    if (sex != '')
+                                        sex = sex + ' '
+                                    sex = sex + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
+                            }
+                        }
+                    } else if(d > 4) {
+                        if (checkTurmaHorario(turmas2[j], d)) {
+                            for (var k = 0; k < disciplinas.length; k++) {
+                                if (turmas2[j].Disciplina === disciplinas[k].id) {
+                                    if (seg !== '')
+                                        seg = seg + ' '
+                                    seg = seg + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
+                            }
+                        }
+                        if (checkTurmaHorario(turmas2[j], 6 + d)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas2[j].Disciplina === disciplinas[k].id) {
+                                    if (ter != '')
+                                        ter = ter + ' '
+                                    ter = ter + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
+                            }
+                        }
+                        if (checkTurmaHorario(turmas2[j], 12 + d)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas2[j].Disciplina === disciplinas[k].id) {
+                                    if (qua != '')
+                                        qua = qua + ' '
+                                    qua = qua + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
+                            }
+                        }
+                        if (checkTurmaHorario(turmas2[j], 18 + d)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas2[j].Disciplina === disciplinas[k].id) {
+                                    if (qui != '')
+                                        qui = qui + ' '
+                                    qui = qui + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
+                            }
+                        }
+                        if (checkTurmaHorario(turmas2[j], 24 + d)) {
+                            for (k = 0; k < disciplinas.length; k++) {
+                                if (turmas2[j].Disciplina === disciplinas[k].id) {
+                                    if (sex != '')
+                                        sex = sex + ' '
+                                    sex = sex + disciplinas[k].codigo + ' ' + turmas2[j].letra
+                                }
                             }
                         }
                     }
@@ -264,9 +454,11 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                     break
                 case 3: tables[4+5*i].table.body.push([{text:'16 - 18', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                     break
-                case 4: tables[4+5*i].table.body.push([{text:'19 - 21', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 4: tables[4+5*i].table.body.push([{text:'17 - 19', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                     break
-                case 5: tables[4+5*i].table.body.push([{text:'21 - 23', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 5: tables[4+5*i].table.body.push([{text:'19 - 21', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                    break
+                case 6: tables[4+5*i].table.body.push([{text:'21 - 23', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                     break
             }
             seg = ter = qua = qui = sex = ''
@@ -1013,7 +1205,6 @@ function createHorarios2 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     return ativos2
 
 }
-
 
 const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
 
