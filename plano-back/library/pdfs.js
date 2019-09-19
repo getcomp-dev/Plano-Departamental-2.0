@@ -839,7 +839,7 @@ function createHorarios2 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
                     if (turmas[j].periodo===3 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                         for (let p = 0; p < pedidos.length; p++) {
                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
-                                ativos1.CCD[disciplinaGrades[k].periodo - 1].push(turmas[j])
+                                ativos2.CCD[disciplinaGrades[k].periodo - 1].push(turmas[j])
                             }
                         }
                     }
@@ -848,7 +848,7 @@ function createHorarios2 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
                     if (turmasExternas[j].periodo===3 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                         for (let p = 0; p < pedidosExternos.length; p++) {
                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
-                                ativos1.CCD[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
+                                ativos2.CCD[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                             }
                         }
                     }
@@ -885,7 +885,7 @@ function createHorarios2 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
                     if (turmas[j].periodo===3 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                         for (let p = 0; p < pedidos.length; p++) {
                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
-                                ativos1.CCN[disciplinaGrades[k].periodo - 1].push(turmas[j])
+                                ativos2.CCN[disciplinaGrades[k].periodo - 1].push(turmas[j])
                             }
                         }
                     }
@@ -894,7 +894,7 @@ function createHorarios2 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
                     if (turmasExternas[j].periodo===3 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                         for (let p = 0; p < pedidosExternos.length; p++) {
                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
-                                ativos1.CCN[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
+                                ativos2.CCN[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                             }
                         }
                     }
@@ -931,7 +931,7 @@ function createHorarios2 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
                     if (turmas[j].periodo===3 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                         for (let p = 0; p < pedidos.length; p++) {
                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
-                                ativos1.SI[disciplinaGrades[k].periodo - 1].push(turmas[j])
+                                ativos2.SI[disciplinaGrades[k].periodo - 1].push(turmas[j])
                             }
                         }
                     }
@@ -940,7 +940,7 @@ function createHorarios2 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
                     if (turmasExternas[j].periodo===3 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                         for (let p = 0; p < pedidosExternos.length; p++) {
                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
-                                ativos1.SI[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
+                                ativos2.SI[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                             }
                         }
                     }
@@ -977,7 +977,7 @@ function createHorarios2 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
                     if (turmas[j].periodo===3 && turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                         for (let p = 0; p < pedidos.length; p++) {
                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
-                                ativos1.EC[disciplinaGrades[k].periodo - 1].push(turmas[j])
+                                ativos2.EC[disciplinaGrades[k].periodo - 1].push(turmas[j])
                             }
                         }
                     }
@@ -986,7 +986,7 @@ function createHorarios2 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
                     if (turmasExternas[j].periodo===3 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
                         for (let p = 0; p < pedidosExternos.length; p++) {
                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
-                                ativos1.EC[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
+                                ativos2.EC[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                             }
                         }
                     }
@@ -1004,7 +1004,7 @@ function createHorarios2 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
             }
         }
         if(eletiva){
-            ativos1.Eletivas.push(turmas[t])
+            ativos2.Eletivas.push(turmas[t])
         }else{
             eletiva = true
         }
