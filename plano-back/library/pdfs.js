@@ -114,7 +114,7 @@ function checkTurmaLab (turma, labs){
     }
     return result
 
-},
+}
 
 function checkTurmaHorarioLabs (turma, horario, labs) {
     if(turma.Horario1==horario || turma.Horario2==horario) {
@@ -140,7 +140,7 @@ function checkTurmaHorarioLabs (turma, horario, labs) {
         return true
     }else
         return false
-},
+}
 
 function checkTurmaHorario (turma, horario) {
     if(turma.Horario1==horario || turma.Horario2==horario) {
