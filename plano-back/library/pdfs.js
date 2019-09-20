@@ -118,7 +118,7 @@ function checkTurmaLab (turma, labs){
 
 function checkTurmaHorarioLabs (turma, horario, labs) {
     if(turma.Horario1==horario || turma.Horario2==horario) {
-        let sala = this.checkTurmaLab(turma, labs)
+        let sala = checkTurmaLab(turma, labs)
         switch(sala){
             case 0: return false
                 break
