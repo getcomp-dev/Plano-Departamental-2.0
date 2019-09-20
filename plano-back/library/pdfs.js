@@ -98,8 +98,7 @@ Pdfs.prototype.ready = () => new Promise((resolve, reject) => {
     })
 })
 
-function checkTurmaLab (turma){
-    let labs = _.filter(this.Salas, ['laboratorio', true])
+function checkTurmaLab (turma, labs){
     let result = 0
     labs.forEach(lab => {
         if (lab.id === turma.Sala1)
@@ -115,11 +114,11 @@ function checkTurmaLab (turma){
     }
     return result
 
-}
+},
 
-function checkTurmaHorario (turma, horario) {
+function checkTurmaHorarioLabs (turma, horario, labs) {
     if(turma.Horario1==horario || turma.Horario2==horario) {
-        let sala = checkTurmaLab(turma)
+        let sala = this.checkTurmaLab(turma, labs)
         switch(sala){
             case 0: return false
                 break
@@ -141,9 +140,16 @@ function checkTurmaHorario (turma, horario) {
         return true
     }else
         return false
+},
+
+function checkTurmaHorario (turma, horario) {
+    if(turma.Horario1==horario || turma.Horario2==horario) {
+        return true
+    }else
+        return false
 }
 
-const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
+const pdfAlocacaoLabs = () => new Promise((resolve) => {
 
     var tables = []
     var laboratorios = _.filter(this.Salas, ['laboratorio', true])
@@ -168,7 +174,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
             for (var j = 0; j < turmas1.length; j++) {
                 if(turmas1[j].Sala1===laboratorios[i].id || turmas1[j].Sala2===laboratorios[i].id){
                     if(d < 4) {
-                        if (checkTurmaHorario(turmas1[j], 1 + d)) {
+                        if (checkTurmaHorarioLabs(turmas1[j], 1 + d, laboratorios)) {
                             for (var k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
                                     if (seg !== '')
@@ -177,7 +183,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas1[j], 7 + d)) {
+                        if (checkTurmaHorarioLabs(turmas1[j], 7 + d, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
                                     if (ter != '')
@@ -186,7 +192,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas1[j], 13 + d)) {
+                        if (checkTurmaHorarioLabs(turmas1[j], 13 + d, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
                                     if (qua != '')
@@ -195,7 +201,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas1[j], 19 + d)) {
+                        if (checkTurmaHorarioLabs(turmas1[j], 19 + d, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
                                     if (qui != '')
@@ -204,7 +210,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas1[j], 25 + d)) {
+                        if (checkTurmaHorarioLabs(turmas1[j], 25 + d, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
                                     if (sex != '')
@@ -214,7 +220,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                             }
                         }
                     } else if(d == 4) {
-                        if (checkTurmaHorario(turmas1[j], 32)) {
+                        if (checkTurmaHorarioLabs(turmas1[j], 32, laboratorios)) {
                             for (var k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
                                     if (seg !== '')
@@ -223,7 +229,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas1[j], 34)) {
+                        if (checkTurmaHorarioLabs(turmas1[j], 34, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
                                     if (ter != '')
@@ -232,7 +238,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas1[j], 36)) {
+                        if (checkTurmaHorarioLabs(turmas1[j], 36, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
                                     if (qua != '')
@@ -241,7 +247,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas1[j], 38)) {
+                        if (checkTurmaHorarioLabs(turmas1[j], 38, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
                                     if (qui != '')
@@ -250,7 +256,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas1[j], 40)) {
+                        if (checkTurmaHorarioLabs(turmas1[j], 40, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
                                     if (sex != '')
@@ -260,7 +266,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                             }
                         }
                     } else if(d > 4) {
-                        if (checkTurmaHorario(turmas1[j],  d)) {
+                        if (checkTurmaHorarioLabs(turmas1[j],  d, laboratorios)) {
                             for (var k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
                                     if (seg !== '')
@@ -269,7 +275,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas1[j], 6 + d)) {
+                        if (checkTurmaHorarioLabs(turmas1[j], 6 + d, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
                                     if (ter != '')
@@ -278,7 +284,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas1[j], 12 + d)) {
+                        if (checkTurmaHorarioLabs(turmas1[j], 12 + d, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
                                     if (qua != '')
@@ -287,7 +293,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas1[j], 18 + d)) {
+                        if (checkTurmaHorarioLabs(turmas1[j], 18 + d, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
                                     if (qui != '')
@@ -296,7 +302,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas1[j], 24 + d)) {
+                        if (checkTurmaHorarioLabs(turmas1[j], 24 + d, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
                                     if (sex != '')
@@ -342,7 +348,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
             for (var j = 0; j < turmas2.length; j++) {
                 if(turmas2[j].Sala1===laboratorios[i].id || turmas2[j].Sala2===laboratorios[i].id){
                     if(d < 4) {
-                        if (checkTurmaHorario(turmas2[j], 1 + d)) {
+                        if (checkTurmaHorarioLabs(turmas2[j], 1 + d, laboratorios)) {
                             for (var k = 0; k < disciplinas.length; k++) {
                                 if (turmas2[j].Disciplina === disciplinas[k].id) {
                                     if (seg !== '')
@@ -351,7 +357,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas2[j], 7 + d)) {
+                        if (checkTurmaHorarioLabs(turmas2[j], 7 + d, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas2[j].Disciplina === disciplinas[k].id) {
                                     if (ter != '')
@@ -360,7 +366,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas2[j], 13 + d)) {
+                        if (checkTurmaHorarioLabs(turmas2[j], 13 + d, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas2[j].Disciplina === disciplinas[k].id) {
                                     if (qua != '')
@@ -369,7 +375,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas2[j], 19 + d)) {
+                        if (checkTurmaHorarioLabs(turmas2[j], 19 + d, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas2[j].Disciplina === disciplinas[k].id) {
                                     if (qui != '')
@@ -378,7 +384,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas2[j], 25 + d)) {
+                        if (checkTurmaHorarioLabs(turmas2[j], 25 + d, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas2[j].Disciplina === disciplinas[k].id) {
                                     if (sex != '')
@@ -388,7 +394,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                             }
                         }
                     } else if(d == 4) {
-                        if (checkTurmaHorario(turmas2[j], 32)) {
+                        if (checkTurmaHorarioLabs(turmas2[j], 32, laboratorios)) {
                             for (var k = 0; k < disciplinas.length; k++) {
                                 if (turmas2[j].Disciplina === disciplinas[k].id) {
                                     if (seg !== '')
@@ -397,7 +403,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas2[j], 34)) {
+                        if (checkTurmaHorarioLabs(turmas2[j], 34, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas2[j].Disciplina === disciplinas[k].id) {
                                     if (ter != '')
@@ -406,7 +412,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas2[j], 36)) {
+                        if (checkTurmaHorarioLabs(turmas2[j], 36, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas2[j].Disciplina === disciplinas[k].id) {
                                     if (qua != '')
@@ -415,7 +421,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas2[j], 38)) {
+                        if (checkTurmaHorarioLabs(turmas2[j], 38, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas2[j].Disciplina === disciplinas[k].id) {
                                     if (qui != '')
@@ -424,7 +430,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas2[j], 40)) {
+                        if (checkTurmaHorarioLabs(turmas2[j], 40, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas2[j].Disciplina === disciplinas[k].id) {
                                     if (sex != '')
@@ -434,7 +440,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                             }
                         }
                     } else if(d > 4) {
-                        if (checkTurmaHorario(turmas2[j], d)) {
+                        if (checkTurmaHorarioLabs(turmas2[j], d, laboratorios)) {
                             for (var k = 0; k < disciplinas.length; k++) {
                                 if (turmas2[j].Disciplina === disciplinas[k].id) {
                                     if (seg !== '')
@@ -443,7 +449,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas2[j], 6 + d)) {
+                        if (checkTurmaHorarioLabs(turmas2[j], 6 + d, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas2[j].Disciplina === disciplinas[k].id) {
                                     if (ter != '')
@@ -452,7 +458,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas2[j], 12 + d)) {
+                        if (checkTurmaHorarioLabs(turmas2[j], 12 + d, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas2[j].Disciplina === disciplinas[k].id) {
                                     if (qua != '')
@@ -461,7 +467,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas2[j], 18 + d)) {
+                        if (checkTurmaHorarioLabs(turmas2[j], 18 + d, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas2[j].Disciplina === disciplinas[k].id) {
                                     if (qui != '')
@@ -470,7 +476,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve, reject) => {
                                 }
                             }
                         }
-                        if (checkTurmaHorario(turmas2[j], 24 + d)) {
+                        if (checkTurmaHorarioLabs(turmas2[j], 24 + d, laboratorios)) {
                             for (k = 0; k < disciplinas.length; k++) {
                                 if (turmas2[j].Disciplina === disciplinas[k].id) {
                                     if (sex != '')
