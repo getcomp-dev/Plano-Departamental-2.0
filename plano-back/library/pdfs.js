@@ -1,5 +1,3 @@
-import store from "../../plano-front/src/vuex/store";
-
 const models = require('../models/index'),
       _ = require('lodash')
 
