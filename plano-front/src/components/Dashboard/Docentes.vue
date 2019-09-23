@@ -225,7 +225,7 @@
                     this.$notify({
                         group: 'general',
                         title: `Sucesso!`,
-                        text: `O Perfil ${response.Perfil} foi exluído do Docente ${response.Docente}!`,
+                        text: `O Perfil ${response.Perfil} foi exluído do Docente ${this.docenteForm.apelido}!`,
                         type: 'success'
                     })
                 }).
