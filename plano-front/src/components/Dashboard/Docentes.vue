@@ -208,7 +208,7 @@
                     this.$notify({
                         group: 'general',
                         title: `Sucesso!`,
-                        text: `O Perfil ${response.Perfil} foi associado ao Docente ${response.Docente}!`,
+                        text: `O Perfil ${response.Perfil} foi associado ao Docente ${this.docenteForm.apelido}!`,
                         type: 'success'
                     })
                 }).

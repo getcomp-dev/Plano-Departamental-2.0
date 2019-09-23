@@ -284,8 +284,8 @@
                 return this.$store.state.horario.Horarios
             },
             Professores () {
-                return _.orderBy(this.$store.state.docente.Docentes, 'apelido')
-            }
+                return _.orderBy(_.filter(this.$store.state.docente.Docentes, ['ativo', true]),'apelido')
+            },
         }
     }
 </script>

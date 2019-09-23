@@ -315,7 +315,7 @@
             },
 
             Docentes () {
-                return _.orderBy(this.$store.state.docente.Docentes,'nome')
+                return _.orderBy(_.filter(this.$store.state.docente.Docentes, ['ativo', true]),'apelido')
             },
 
             Horarios () {

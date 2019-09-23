@@ -189,7 +189,7 @@
 
         computed: {
             Docentes () {
-                return _.orderBy(this.$store.state.docente.Docentes,'apelido')
+                return _.orderBy(_.filter(this.$store.state.docente.Docentes, ['ativo', true]),'apelido')
             },
 
             Deletar () {
