@@ -204,3 +204,8 @@ data-backup/curso.csv
 .idea/modules.xml
 .idea/misc.xml
 data-backup/turmas.csv
+plano-back/Horarios.pdf
+plano-back/Labs.pdf
+plano-back/Cargas.pdf
+plano-back/backup.sql
+plano-back/data.zip

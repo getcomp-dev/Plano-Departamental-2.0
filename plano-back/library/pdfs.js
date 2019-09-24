@@ -5,10 +5,10 @@ var PdfPrinter = require('pdfmake'),
     fs = require('fs'),
     fonts = {
        Roboto: {
-           normal: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Regular.ttf',
-           bold: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Medium.ttf',
-           italics: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-Italic.ttf',
-           bolditalics: '/home/planodcc/Plano-Departamental-2.0/plano-back/library/fonts/Roboto-MediumItalic.ttf'
+           normal: __dirname + '/fonts/Roboto-Regular.ttf',
+           bold: __dirname + '/fonts/Roboto-Medium.ttf',
+           italics: __dirname + '/fonts/Roboto-Italic.ttf',
+           bolditalics: __dirname + '/fonts/Roboto-MediumItalic.ttf'
        }
     },
     printer = new PdfPrinter(fonts)
@@ -582,7 +582,7 @@ function creditos2(professor, turmas, disciplinas, cargas){
 const pdfCargaProfessores = () => new Promise((resolve, reject) => {
 
     var tables = []
-    var professores = _.orderBy(this.Docentes, 'apelido')
+    var professores = _.orderBy(_.filter(this.Docentes, ['ativo', true]), 'apelido')
     var turmasProf
     var posProf
     var vazio = 0

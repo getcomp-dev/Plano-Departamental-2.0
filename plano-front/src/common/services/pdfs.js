@@ -484,7 +484,7 @@ export default {
             pdfMake.vfs = pdfFonts.pdfMake.vfs;
         }
         var tables = []
-        var professores = _.orderBy(store.state.docente.Docentes, 'apelido')
+        var professores = _.orderBy(_.filter(store.state.docente.Docentes, ['ativo', true]), 'apelido')
         var turmasProf
         var posProf
         var vazio = 0
