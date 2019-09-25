@@ -29,17 +29,6 @@
             <input type="text" style="width: 36px" id="turma" v-model="turmaForm.letra">
         </td>
         <td>
-            <select type="text" style="width: 65px" id="horario1" v-model="turmaForm.Horario1" v-on:change="adjustTurno1">
-                <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
-                <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
-            </select>
-            <br/>
-            <select type="text" style="width: 65px" id="horario2" v-model="turmaForm.Horario2" v-on:change="adjustTurno2">
-                <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
-                <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
-            </select>
-        </td>
-        <td>
             <select type="text" style="width:100px" id="docente1" v-model="turmaForm.Docente1">
                 <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
                 <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.apelido}}</option>
@@ -56,6 +45,17 @@
                 <option value="Noturno">Noturno</option>
             </select>
             <br/>
+        </td>
+        <td>
+            <select type="text" style="width: 65px" id="horario1" v-model="turmaForm.Horario1" v-on:change="adjustTurno1">
+                <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
+                <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
+            </select>
+            <br/>
+            <select type="text" style="width: 65px" id="horario2" v-model="turmaForm.Horario2" v-on:change="adjustTurno2">
+                <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
+                <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
+            </select>
         </td>
         <td>
             <select type="text" style="width:60px" id="sala1" v-model="turmaForm.Sala1">
@@ -151,31 +151,7 @@
                 this.editTurma(this.turmaForm)
                 this.semestre = this.turmaForm.periodo
                 this.cleanTurma()
-                /*
-                turmaService.create(this.turmaForm).then((response) => {
-                    this.semestre = response.Turma.periodo
-                    for (var i = 0; i< this.$store.state.curso.Cursos.length; i++){
-                        var pedido = _.clone(emptyPedido)
-                        pedido.Curso = this.$store.state.curso.Cursos[i].id
-                        pedido.Turma = response.Turma.id
-                        pedidoService.create(pedido).then((response) => {
-                            console.log(response.Pedido)
-                        }).catch(error => {console.log("erro ao criar pedido: "+error)})
-                    }
-                    this.cleanTurma()
-                    this.$notify({
-                        group: 'general',
-                        title: `Sucesso!`,
-                        text: `A Turma ${response.Turma.letra} foi criada!`,
-                        type: 'success'
-                    })
-                }).
-                catch(error => {
-                    this.error = '<b>Erro ao criar Turma</b>'
-                    if (error.response.data.fullMessage) {
-                        this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
-                    }
-                })*/
+
             },
 
             editTurma(turma) {

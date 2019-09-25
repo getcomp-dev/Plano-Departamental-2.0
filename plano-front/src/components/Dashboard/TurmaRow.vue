@@ -32,21 +32,6 @@
         <td style="width: 36px;">
             <input type="text" style="width: 20px; margin-left: 8px; margin-right: 8px" v-model="turmaForm.letra" v-on:blur="editTurma(turma)">
         </td>
-        <td style="width: 65px;">
-            <select type="text" style="width: 65px" id="horario1" v-model="turmaForm.Horario1"
-                    v-on:change="editTurma(turma)">
-                <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
-                <option v-else value=""></option>
-                <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
-            </select>
-            <br/>
-            <select type="text" style="width: 65px" id="horario2" v-model="turmaForm.Horario2"
-                    v-on:change="editTurma(turma)">
-                <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
-                <option v-else value=""></option>
-                <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
-            </select>
-        </td>
         <td style="width: 100px;">
             <select type="text" style="width:100px" id="docente1" v-model="turmaForm.Docente1"
                     v-on:change="editTurma(turma)">
@@ -69,6 +54,21 @@
                 <option value="Noturno">Noturno</option>
             </select>
             <br/>
+        </td>
+        <td style="width: 65px;">
+            <select type="text" style="width: 65px" id="horario1" v-model="turmaForm.Horario1"
+                    v-on:change="editTurma(turma)">
+                <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
+                <option v-else value=""></option>
+                <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
+            </select>
+            <br/>
+            <select type="text" style="width: 65px" id="horario2" v-model="turmaForm.Horario2"
+                    v-on:change="editTurma(turma)">
+                <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
+                <option v-else value=""></option>
+                <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
+            </select>
         </td>
         <td style="width: 60px">
             <select type="text" style="width:60px" id="sala1" v-model="turmaForm.Sala1" v-on:change="editTurma(turma)">

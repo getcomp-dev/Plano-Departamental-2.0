@@ -3225,7 +3225,8 @@
                         <th class="tg-0lax">Ter</th>
                         <th class="tg-0lax">Qua</th>
                         <th class="tg-0lax">Qui</th>
-                        <th class="tg-0lax">Sex</th>EC                  </tr>
+                        <th class="tg-0lax">Sex</th>
+                    </tr>
 
 
                     <tr>

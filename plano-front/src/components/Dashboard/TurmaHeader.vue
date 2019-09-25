@@ -5,9 +5,9 @@
         <th scope="col"><p style="width:120px !important;">Disciplina</p></th>
         <th scope="col"><p style="width:20px !important;">C.</p></th>
         <th scope="col"><p style="width:36px !important;">Turma</p></th>
-        <th scope="col"><p style="width:65px !important;">Horário</p></th>
         <th scope="col"><p style="width:100px !important;">Docente</p></th>
         <th scope="col"><p style="width:62px !important;">Turno</p></th>
+        <th scope="col"><p style="width:65px !important;">Horário</p></th>
         <th scope="col"><p style="width:60px !important;">Sala</p></th>
         <th scope="col"><p style="width:28px !important;">Total</p></th>
         <template v-for="curso in Cursos" v-if="CursosAtivos[curso.id]">

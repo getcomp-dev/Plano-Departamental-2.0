@@ -30,7 +30,7 @@
       </b-form-group>
       <div slot="modal-footer">
 
-            <b-button disabled v-on:click="novoPlano()">Criar Plano</b-button><!-- variant "success"-->
+            <b-button v-on:click="novoPlano()" variant= "success">Criar Plano</b-button>
         </div>
     </b-modal>
 
