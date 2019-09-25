@@ -34,6 +34,13 @@
         <td style="width: 52px;">
             <input type="text" style="width: 28px; margin-left: 12px; margin-right: 12px" v-model="turma.letra" v-on:blur="editTurma(turma)">
         </td>
+        <td style="width: 84px;">
+            <select type="text" style="width: 84px" id="turno1" v-model="turma.turno1" v-on:change="editTurma(turma)">
+                <option value="Diurno">Diurno</option>
+                <option value="Noturno">Noturno</option>
+            </select>
+            <br/>
+        </td>
         <td style="width: 90px;">
             <select type="text" style="width: 90px" id="horario1" v-model="turma.Horario1"
                     v-on:change="editTurma(turma)">
@@ -48,13 +55,6 @@
                 <option v-else value=""></option>
                 <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
             </select>
-        </td>
-        <td style="width: 84px;">
-            <select type="text" style="width: 84px" id="turno1" v-model="turma.turno1" v-on:change="editTurma(turma)">
-                <option value="Diurno">Diurno</option>
-                <option value="Noturno">Noturno</option>
-            </select>
-            <br/>
         </td>
         <td style="width: 60px">
             <select type="text" style="width:60px" id="sala1" v-model="turma.Sala1" v-on:change="editTurma(turma)">
