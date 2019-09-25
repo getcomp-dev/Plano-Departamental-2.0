@@ -1,12 +1,12 @@
 <template>
-    <div class="CargaPos" style="height: calc(100vh - 48px)">
-        <b-container fluid class="d-flex center-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" style="overflow: auto; width: 100%;">
+    <div class="CargaPos" style="height: calc(100vh - 48px);">
+        <b-container fluid class="d-flex center-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" style="overflow: auto; width: 100%; padding:0;">
             <b-row style="width:100%">
             <b-col cols="4" md="auto">
-            <h1 class="h2 col sm-4">Cargas Pós</h1>
+            <h1 class="h2 col sm-4" style="padding:0">Cargas Pós</h1>
             </b-col>
-            <b-col cols="6"></b-col>
-            <b-col cols="2">
+            <b-col cols="6" style="margin-right:30px"></b-col>
+            <b-col cols="2" style="padding:0;">
             <b-form-select v-model="periodos" class="col sm-2" style="float:right">
                 <option value = "1">Primeiro</option>
                 <option value = "2">Segundo</option>
