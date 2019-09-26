@@ -1,14 +1,14 @@
 <template>
     <div class="DashboardLaboratoriosAlocacao row">
-        <div class="col-12">
+        <div class="col-12" style="margin: 0 0 20px 0;">
             <div
                     class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Laboratórios - Alocação</h1>
                 <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="pdf" style=""> Relatório </button>
             </div>
             <div v-for="lab in Laboratorios">
-                <h5>{{lab.nome}}</h5>
-                <h6>1º Semestre</h6>
+                <h3 style="margin: 10px 0 0 0;">{{lab.nome}}</h3>
+                <h4 style="margin: 10px 0 10px 0;">1º Semestre</h4 style=margin: 10px 0 10px 0;>
                     <table class="tg">
                         <tr>
                             <th class="tg-0lax">hora</th>
@@ -83,7 +83,7 @@
                         </tr>
 
                     </table>
-                <h6>2º Semestre</h6>
+                <h4 style="margin: 10px 0 10px 0;">2º Semestre</h4 style=margin: 10px 0 10px 0;>
                 <table class="tg">
                     <tr>
                         <th class="tg-0lax">hora</th>

@@ -38,15 +38,17 @@
             <template v-if="Professores.length > 0">
             <template v-for="professor in Professores">
                 <template v-if="turmas(professor).length > 0">
-                    <td>{{professor.apelido}}</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>{{creditos1(professor)}}</td>
-                    <td>{{creditos2(professor)}}</td>
-                    <td>{{creditos(professor)}}</td>
+                    <tr style="background-color: #E9E9E9">
+                        <td>{{professor.apelido}}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>{{creditos1(professor)}}</td>
+                        <td>{{creditos2(professor)}}</td>
+                        <td>{{creditos(professor)}}</td>
+                    </tr>
                 </template>
 
                 <template v-for="turma in turmas(professor)">

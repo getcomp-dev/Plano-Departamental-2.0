@@ -383,14 +383,6 @@
         width:100%;
     }
 
-        
-    /*table.scrolling td:nth-child(-n+10),
-    table.scrolling th:nth-child(-n+10) {
-        position: -webkit-sticky;
-        position: sticky;
-        left:0;
-    }*/
-
     .cube1, .cube2 {
         background-color: #333;
         width: 20px;

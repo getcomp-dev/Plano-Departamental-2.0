@@ -1,5 +1,5 @@
 <template>
-    <div class="DashboardHorarios row" v-if="Admin">
+    <div class="DashboardHorarios row" v-if="Admin" style="margin: 0 0 20px 0;">
         <div class="col-8">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">Lista Horarios</h1>
