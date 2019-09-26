@@ -53,6 +53,7 @@
       </div>
     </div>
     <div class="col">
+      <div class="sticky">
       <div
               class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <template v-if="isEdit">
@@ -125,6 +126,7 @@
           </div>
         </div>
       </form>
+      </div>
     </div>
   </div>
 </template>
@@ -350,5 +352,11 @@
 
   .even {
     background-color: #a5a7a4;
+  }
+
+  .sticky {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 48px;
   }
 </style>
