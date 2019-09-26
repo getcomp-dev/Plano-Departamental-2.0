@@ -31,6 +31,7 @@
       </table>
     </div>
     <div class="col">
+      <div class="sticky">
       <div
           class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <template v-if="isEdit">
@@ -79,6 +80,7 @@
           </div>
         </div>
       </form>
+      </div>
     </div>
   </div>
 </template>
@@ -161,13 +163,6 @@ export default {
     showPerfil (perfil) {
       this.cleanPerfil()
       this.perfilForm = _.clone(perfil);
-      (function smoothscroll(){
-          var currentScroll = document.documentElement.scrollTop || document.body.scrollTop;
-          if (currentScroll > 0) {
-              window.requestAnimationFrame(smoothscroll);
-              window.scrollTo (0,currentScroll - (currentScroll/5));
-          }
-      })();
     }
   },
 
@@ -192,4 +187,9 @@ export default {
 </script>
 
 <style scoped>
+  .sticky {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 48px;
+  }
 </style>

@@ -5,77 +5,78 @@
                 <h1 class="h2">Lista Horarios</h1>
             </div>
 <!-- -------------------------------------------- 1º periodo ----------------------------------------- -->
-            <template v-if="periodo===1 || periodo===3">
-                <h4>1º Semestre</h4>
+            <template v-if="(periodo===1 || periodo===3) && (visualizar == true)">
+                <h1 style="margin:0 0 20px 0;">1º Semestre</h1>
 <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
                 <template v-if="activeCCD">
-                    <h4>Ciência da Computação Diurno</h4>
+                    <h1 class="h3" style="margin: 0 0 20px 0">Ciência da Computação Diurno</h1>
                 </template>
 
                 <curso-diurno :Curso="ativos1.CCD"></curso-diurno>
 <!-- -------------------------------------------- CC Noturno ----------------------------------------- -->
                 <template v-if="activeCCN">
-                    <h4>Ciência da Computação Noturno</h4>
+                    <h1 class="h3" style="margin: 20px 0 20px 0">Ciência da Computação Noturno</h1>
                 </template>
 
                 <curso-noturno :Curso="ativos1.CCN"></curso-noturno>
 <!-- -------------------------------------------- SI ----------------------------------------- -->
                 <template v-if="activeSI">
-                    <h4>Sistemas de Informação</h4>
+                    <h1 class="h3" style="margin: 20px 0 20px 0">Sistemas de Informação</h1>
                 </template>
 
                 <curso-noturno :Curso="ativos1.SI"></curso-noturno>
 <!-- -------------------------------------------- EC ----------------------------------------- -->
                 <template v-if="activeEC">
-                    <h4>Engenharia Computacional</h4>
+                    <h1 class="h3" style="margin: 20px 0 20px 0">Engenharia Computacional</h1>
                 </template>
 
                 <curso-diurno :Curso="ativos1.EC"></curso-diurno>
 <!-- -------------------------------------------- Eletivas ----------------------------------------- -->
                 <template v-if="activeEletivas">
-                    <h4>Eletivas</h4>
+                    <h1 class="h3" style="margin: 20px 0 20px 0">Eletivas</h1>
                 </template>
                 <horario-eletivas :Eletivas="ativos1.Eletivas"></horario-eletivas>
             </template>
 
 <!-- -------------------------------------------- 2º periodo ----------------------------------------- -->
-            <template v-if="periodo===2 || periodo===3">
-                <h4>2º Semestre</h4>
+            <template v-if="(periodo===2 || periodo===3) && (visualizar == true)">
+                <h1 style="margin:20px 0 0 0;">2º Semestre</h1>
 <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
                 <template v-if="activeCCD">
-                    <h4>Ciência da Computação Diurno</h4>
+                    <h1 class="h3" style="margin: 20px 0 20px 0">Ciência da Computação Diurno</h1>
                 </template>
 
                 <curso-diurno :Curso="ativos2.CCD"></curso-diurno>
 <!-- -------------------------------------------- CC Noturno ----------------------------------------- -->
                 <template v-if="activeCCN">
-                    <h4>Ciência da Computação Noturno</h4>
+                    <h1 class="h3" style="margin: 20px 0 20px 0">Ciência da Computação Noturno</h1>
                 </template>
 
                 <curso-noturno :Curso="ativos2.CCN"></curso-noturno>
 <!-- -------------------------------------------- SI ----------------------------------------- -->
                 <template v-if="activeSI">
-                    <h4>Sistemas de Informação</h4>
+                    <h1 class="h3" style="margin: 20px 0 20px 0">Sistemas de Informação</h1>
                 </template>
 
                 <curso-noturno :Curso="ativos2.SI"></curso-noturno>
 <!-- -------------------------------------------- EC ----------------------------------------- -->
                 <template v-if="activeEC">
-                    <h4>Engenharia Computacional</h4>
+                    <h1 class="h3" style="margin: 20px 0 20px 0">Engenharia Computacional</h1>
                 </template>
 
                 <curso-diurno :Curso="ativos2.EC"></curso-diurno>
 <!-- -------------------------------------------- Eletivas ----------------------------------------- -->
                 <template v-if="activeEletivas">
-                    <h4>Eletivas</h4>
+                    <h1 class="h3" style="margin: 20px 0 20px 0">Eletivas</h1>
                 </template>
                 <horario-eletivas :Eletivas="ativos2.Eletivas"></horario-eletivas>
             </template>
 <!-- ----------------------------------------------------------------------------------------------- -->
         </div>
         <div class="col">
+            <div class="sticky">
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1>Definir Grades</h1>
+                <h1 class="h2">Definir Grades</h1>
             </div>
             <b-alert :show="Boolean(error)" variant="danger" dismissible v-html="error">
             </b-alert>
@@ -101,6 +102,7 @@
                 </div>
 
             </form>
+            </div>
         </div>
     </div>
 </template>
@@ -146,7 +148,8 @@
                     Eletivas:[]
                 },
                 selectAll:false,
-                periodo: 1
+                periodo: 1,
+                visualizar: false
             }
         },
 
@@ -224,6 +227,7 @@
                     this.createHorarios1()
                     this.createHorarios2()
                 }
+                this.visualizar = true
             },
 
             createHorarios1: function () {
@@ -957,6 +961,12 @@
         width: 72px;
         height: 24px;
         position:relative;
+    }
+
+    .sticky {
+        position: sticky;
+        position: -webkit-sticky;
+        top: 48px;
     }
 
     .relatorio {
