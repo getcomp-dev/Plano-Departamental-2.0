@@ -73,9 +73,13 @@
         <template v-for="curso in Cursos">
             <td style="width: 64px">
                 <template v-for="pedido in Pedidos" v-if="pedido.Curso===curso.id">
-                    <input type="text" v-model="pedido.vagasPeriodizadas" style="width: 64px"
+                    <input v-if="pedido.vagasPeriodizadas == 0" type="text" v-model="pedido.vagasPeriodizadas" style="width: 64px; color:#DADADA; text-align:center"
                            v-on:change="editPedido(pedido)">
-                    <input type="text" v-model="pedido.vagasNaoPeriodizadas" style="width: 64px"
+                    <input v-else type="text" v-model="pedido.vagasPeriodizadas" style="width: 64px; font-weight: bold;  background-color: #DCDCDC; text-align:center"
+                           v-on:change="editPedido(pedido)">
+                    <input v-if="pedido.vagasNaoPeriodizadas == 0" type="text" v-model="pedido.vagasNaoPeriodizadas" style="width: 64px; color:#DADADA; text-align:center"
+                           v-on:change="editPedido(pedido)">
+                    <input v-else type="text" v-model="pedido.vagasNaoPeriodizadas" style="width: 64px; font-weight: bold; background-color: #DCDCDC; text-align:center"
                            v-on:change="editPedido(pedido)">
                 </template>
             </td>

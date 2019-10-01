@@ -1,13 +1,13 @@
 <template>
     <div>
                 <input v-if="pedidoForm.vagasPeriodizadas == 0" type="text" v-model="pedidoForm.vagasPeriodizadas" style="width: 32px; color:#DADADA; text-align:center"
-                       v-on:change="editPedido(pedido)">
+                       v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
                 <input v-else type="text" v-model="pedidoForm.vagasPeriodizadas" style="width: 32px; font-weight: bold;  background-color: #DCDCDC; text-align:center"
-                        v-on:change="editPedido(pedido)">
+                        v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
                 <input v-if="pedidoForm.vagasNaoPeriodizadas == 0" type="text" v-model="pedidoForm.vagasNaoPeriodizadas" style="width: 32px; color:#DADADA; text-align:center"
-                        v-on:change="editPedido(pedido)">
+                        v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
                 <input v-else type="text" v-model="pedidoForm.vagasNaoPeriodizadas" style="width: 32px; font-weight: bold; background-color: #DCDCDC; text-align:center"
-                        v-on:change="editPedido(pedido)">
+                        v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
     </div>
 </template>
 <script>
@@ -38,13 +38,16 @@
         },
         mounted:function (){
             this.pedidoForm = _.clone(this.$store.state.pedido.Pedidos[this.turma.id][this.index])
-
         },
 
         methods: {
 
             editPedido() {
                 console.log(this.$store.state.pedido.Pedidos[this.turma.id][this.index])
+                if(this.pedidoForm.vagasPeriodizadas=='')
+                    this.pedidoForm.vagasPeriodizadas = 0
+                if(this.pedidoForm.vagasNaoPeriodizadas=='')
+                    this.pedidoForm.vagasNaoPeriodizadas = 0
                 pedidoService.update(this.pedidoForm.Curso, this.pedidoForm.Turma, this.pedidoForm).then((response) => {
                     this.$notify({
                         group: 'general',
@@ -59,7 +62,23 @@
                         this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
                     }
                 })
-            }
+            },
+
+            focusPedido() {
+                if(this.pedidoForm.vagasPeriodizadas == 0)
+                    this.pedidoForm.vagasPeriodizadas = ''
+
+                if(this.pedidoForm.vagasNaoPeriodizadas == 0)
+                    this.pedidoForm.vagasNaoPeriodizadas = ''
+            },
+
+            blurPedido() {
+                if(this.pedidoForm.vagasPeriodizadas == '')
+                    this.pedidoForm.vagasPeriodizadas = 0
+
+                if(this.pedidoForm.vagasNaoPeriodizadas == '')
+                    this.pedidoForm.vagasNaoPeriodizadas = 0
+            },
 
         },
 
