@@ -4,14 +4,16 @@
             <input type="text" style="width: 16px;" id="periodo" v-model="turmaForm.periodo">
         </td>
         <td>
-            <template v-for="disciplina in Disciplinas">
-                <template v-if="disciplina.id===turmaForm.Disciplina">
-                    <p :key="disciplina.id" style="width:64px">{{disciplina.codigo}}</p>
+            <p style="width: 64px">
+                <template v-for="disciplina in Disciplinas">
+                    <template v-if="disciplina.id===turmaForm.Disciplina">
+                        {{disciplina.codigo}}
+                    </template>
                 </template>
-            </template>
+            </p>
         </td>
         <td>
-            <select type="text" style="width:120px;" id="disciplina" v-model="turmaForm.Disciplina">
+            <select type="text" style="width:240px;" id="disciplina" v-model="turmaForm.Disciplina">
                 <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
                 <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">{{disciplina.nome}}</option>
             </select>
@@ -25,8 +27,8 @@
                 </template>
             </p>
         </td>
-        <td>
-            <input type="text" style="width: 36px" id="turma" v-model="turmaForm.letra">
+        <td style="width:36px">
+            <input type="text" style="width: 20px; text-align:center" id="turma" v-model="turmaForm.letra">
         </td>
         <td>
             <select type="text" style="width:100px" id="docente1" v-model="turmaForm.Docente1">

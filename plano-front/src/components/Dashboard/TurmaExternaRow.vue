@@ -13,8 +13,8 @@
                 </template>
             </template>
         </td>
-        <td style="width: 178px;">
-            <select type="text" style="width:178px;" id="disciplina" v-model="turma.Disciplina"
+        <td style="width: 240px;">
+            <select type="text" style="width:240px;" id="disciplina" v-model="turma.Disciplina"
                     v-on:change="editTurma(turma)">
                 <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
                 <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">
@@ -72,15 +72,8 @@
         <td style="width:52px"><p style="width: 52px">{{totalPedidos()}}</p></td>
         <template v-for="curso in Cursos">
             <td style="width: 64px">
-                <template v-for="pedido in Pedidos" v-if="pedido.Curso===curso.id">
-                    <input v-if="pedido.vagasPeriodizadas == 0" type="text" v-model="pedido.vagasPeriodizadas" style="width: 64px; color:#DADADA; text-align:center"
-                           v-on:change="editPedido(pedido)">
-                    <input v-else type="text" v-model="pedido.vagasPeriodizadas" style="width: 64px; font-weight: bold;  background-color: #DCDCDC; text-align:center"
-                           v-on:change="editPedido(pedido)">
-                    <input v-if="pedido.vagasNaoPeriodizadas == 0" type="text" v-model="pedido.vagasNaoPeriodizadas" style="width: 64px; color:#DADADA; text-align:center"
-                           v-on:change="editPedido(pedido)">
-                    <input v-else type="text" v-model="pedido.vagasNaoPeriodizadas" style="width: 64px; font-weight: bold; background-color: #DCDCDC; text-align:center"
-                           v-on:change="editPedido(pedido)">
+                <template v-for="(pedido, index) in Pedidos" v-if="pedido.Curso===curso.id">
+                    <turmaExternaPedido :key="index" v-bind:index="index" v-bind:turma="turma"></turmaExternaPedido>
                 </template>
             </td>
         </template>
@@ -88,7 +81,7 @@
 </template>
 <script>
     import _ from 'lodash'
-    import turmaExternaService from '../../common/services/turmaExterna'
+    import turmaExternaPedido from './TurmaExternaPedido.vue'
     import pedidoExternoService from '../../common/services/pedidoExterno'
 
     export default {
@@ -103,6 +96,10 @@
                 ativo: false,
                 valorAtual:undefined
             }
+        },
+
+        components: {
+            turmaExternaPedido
         },
 
         methods: {
@@ -190,8 +187,7 @@
             },
 
             Pedidos () {
-                var t = this.turma.id
-                return _.filter(this.$store.state.pedidoExterno.Pedidos, function(p) { return p.Turma==t })
+                return this.$store.state.pedidoExterno.Pedidos[this.turma.id]
             }
 
 
@@ -202,6 +198,7 @@
     td {
         text-align: center;
         padding: 0!important;
+        border: 0;
     }
 
     p {

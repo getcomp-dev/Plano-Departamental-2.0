@@ -4,26 +4,38 @@ import pedidoExternoService from '../../common/services/pedidoExterno'
 import { PEDIDO_EXTERNO_FETCHED, SOCKET_PEDIDO_EXTERNO_CREATED, SOCKET_PEDIDO_EXTERNO_DELETED, SOCKET_PEDIDO_EXTERNO_UPDATED } from '../mutation-types'
 
 const state = {
-    Pedidos: []
+    Pedidos: {}
 }
 
 const mutations = {
     [PEDIDO_EXTERNO_FETCHED] (state, data) {
-        state.Pedidos = data.Pedidos
+        state.Pedidos = {}
+        for (var p = 0; p < data.Pedidos.length; p++){
+            if(data.Pedidos[p].hasOwnProperty('Turma')) {
+                var t =  data.Pedidos[p].Turma
+                if (state.Pedidos[t] === undefined) {
+                    state.Pedidos[t] = []
+                }
+                state.Pedidos[data.Pedidos[p].Turma].push(data.Pedidos[p])
+            }
+        }
+        state.Pedidos = Object.assign({}, state.Pedidos)
     },
 
     [SOCKET_PEDIDO_EXTERNO_CREATED] (state, data) {
-        state.Pedidos.push(data[0].Pedido)
+        if(state.Pedidos[data[0].Pedido.Turma] === undefined)
+            state.Pedidos[data[0].Pedido.Turma] = []
+        state.Pedidos[data[0].Pedido.Turma].push(data[0].Pedido)
     },
 
     [SOCKET_PEDIDO_EXTERNO_UPDATED] (state, data) {
-        let index = _.findIndex(state.Pedidos, pedido => (pedido.Curso === data[0].Pedido.Curso & pedido.Turma === data[0].Pedido.Turma));
-        Vue.set(state.Pedidos, index, data[0].Pedido)
+        let index = _.findIndex(state.Pedidos[data[0].Pedido.Turma], pedido => (pedido.Curso === data[0].Pedido.Curso));
+        Vue.set(state.Pedidos[data[0].Pedido.Turma], index, data[0].Pedido)
     },
 
     [SOCKET_PEDIDO_EXTERNO_DELETED] (state, data) {
-        let index = _.findIndex(state.Pedidos, pedido => (pedido.Curso === data[0].Pedido.Curso & pedido.Turma === data[0].Pedido.Turma));
-        state.Pedidos.splice(index, 1)
+        let index = _.findIndex(state.Pedidos[data[0].Pedido.Turma], pedido => (pedido.Curso === data[0].Pedido.Curso));
+        state.Pedidos[data[0].Pedido.Turma].splice(index, 1)
     }
 }
 

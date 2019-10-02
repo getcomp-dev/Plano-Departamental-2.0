@@ -1,5 +1,5 @@
 <template>
-    <div class="turmarow" style="width: 571px;" v-bind:style="{backgroundColor: perfil.cor}">
+    <div class="turmarow" style="width: 709px;" v-bind:style="{backgroundColor: perfil.cor}">
         <td style="width: 16px;">
             <input type="text" style="width: 16px;" id="periodo" v-model="turmaForm.periodo" v-on:blur="editTurma(turma)">
             <input type="checkbox" name="ativa" value="true" v-on:click="checkDelete(turma)" v-model="ativo" style="width:16px;height: 16px;padding:0;">
@@ -83,7 +83,10 @@
                 <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
             </select>
         </td>
-        <td style="width:28px"><p style="width: 28px">{{totalPedidos()}}</p></td>
+        <td style="width:46px">
+            <p style="width: 46px; margin:0;">{{totalPedidos()}}</p>
+            <p style="width: 46px; margin:0;">{{totalPedidosPeriodizados()}}+{{totalPedidosNaoPeriodizados()}}</p>
+        </td>
         <template v-for="curso in Cursos" v-if="CursosAtivos[curso.id]">
             <td style="width: 32px;" :key="curso.id">
                 <template v-for="(pedido, index) in Pedidos" v-if="pedido.Curso===curso.id">
@@ -146,6 +149,24 @@
                       t+=parseInt(pedidos[p].vagasNaoPeriodizadas, 10)
               }
               return t
+            },
+
+            totalPedidosPeriodizados(){
+                var t = 0
+                var pedidos = this.$store.state.pedido.Pedidos[this.turma.id]
+                for(var p =0; p < pedidos.length; p++){
+                    t+=parseInt(pedidos[p].vagasPeriodizadas, 10)
+                }
+                return t
+            },
+
+            totalPedidosNaoPeriodizados(){
+                var t = 0
+                var pedidos = this.$store.state.pedido.Pedidos[this.turma.id]
+                for(var p =0; p < pedidos.length; p++){
+                    t+=parseInt(pedidos[p].vagasNaoPeriodizadas, 10)
+                }
+                return t
             },
 
             editTurma() {

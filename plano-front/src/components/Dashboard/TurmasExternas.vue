@@ -35,13 +35,13 @@
             <div class="cube2"></div>
         </div>
 
-        <div style="width: 908px;height: 80vh; overflow-y: scroll; overflow-x: hidden;" v-if="!isLoading">
-            <table class="table table-hover table-sm">
+        <div style="width: 970px;height: 80vh; overflow-y: scroll; overflow-x: hidden;" v-if="!isLoading">
+            <table class="table table-hover table-sm" style="width:951px">
                 <thead class="thead-light">
                 <tr>
                     <th scope="col" style="width:16px;">S.</th>
                     <th scope="col" style="width:80px;">Cod</th>
-                    <th scope="col" style="width:178px;">Disciplina</th>
+                    <th scope="col" style="width:240px;">Disciplina</th>
                     <th scope="col" style="width:20px;">C.</th>
                     <th scope="col" style="width:52px;">Turma</th>
                     <th scope="col" style="width:84px;">Turno</th>
@@ -72,7 +72,7 @@
                             </template>
                         </td>
                         <td>
-                            <select type="text" style="width:170px;" id="disciplina" v-model="turmaForm.Disciplina">
+                            <select type="text" style="width:240px;" id="disciplina" v-model="turmaForm.Disciplina">
                                 <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
                                 <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">{{disciplina.nome}}</option>
                             </select>
@@ -97,12 +97,12 @@
                             <br/>
                         </td>
                         <td>
-                            <select type="text" style="width: 86px" id="horario1" v-model="turmaForm.Horario1" v-on:change="adjustTurno1">
+                            <select type="text" style="width: 90px" id="horario1" v-model="turmaForm.Horario1" v-on:change="adjustTurno1">
                                 <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
                                 <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
                             </select>
                             <br/>
-                            <select type="text" style="width: 86px" id="horario2" v-model="turmaForm.Horario2" v-on:change="adjustTurno2">
+                            <select type="text" style="width: 90px" id="horario2" v-model="turmaForm.Horario2" v-on:change="adjustTurno2">
                                 <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
                                 <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
                             </select>
@@ -414,6 +414,12 @@
 </style>
 <style scoped>
 
+    td {
+        padding:0;
+        border:0;
+        text-align: center;
+    }
+
     .DashboardPrototipo{
         max-height: 90vh;
         max-width: 90vw;
@@ -428,6 +434,8 @@
 
     th {
         text-align: center;
+        padding:0;
+        border:0;
     }
 
     thead th {

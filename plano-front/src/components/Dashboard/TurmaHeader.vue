@@ -9,7 +9,7 @@
         <th scope="col"><p style="width:62px !important;">Turno</p></th>
         <th scope="col"><p style="width:65px !important;">Horário</p></th>
         <th scope="col"><p style="width:60px !important;">Sala</p></th>
-        <th scope="col"><p style="width:28px !important;">Total</p></th>
+        <th scope="col"><p style="width:46px !important;">Total</p></th>
         <template v-for="curso in Cursos" v-if="CursosAtivos[curso.id]">
             <th :key="curso.id" :id="'curso'+curso.id"><p v-bind:class="{'cursoGrande':big(curso.codigo)}" style="width: 32px !important;" v-on:mouseover="">{{curso.codigo}}</p></th>
             <b-popover :target="'curso'+curso.id" placement="bottom" triggers="hover focus">

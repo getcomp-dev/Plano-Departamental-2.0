@@ -130,6 +130,12 @@
                 //retorna lista com os ids das disciplinas
                 let disciplinas = Object.keys(this.disciplinasGrades)
                 //marca o último período em que uma grade é válida
+                this.gradesAtivas = {
+                    1: [], //CCN
+                    2: [], //EC
+                    3: [], //SI
+                    4: []  //CCD
+                }
                 for(let i = 1; i <= 4; i++){
                     this.grades[i].forEach(g => {
                         let fim = 1 + 2*(this.ano - parseInt(g.periodoInicio.slice(0,4), 10)) + ((1 - parseInt(g.periodoInicio.slice(5,6), 10))/2)
@@ -142,6 +148,8 @@
                         this.gradesAtivas[i][this.gradesAtivas[i].length - 1].fim = 10
                     }
                 }
+                console.log(this.grades)
+                console.log(this.gradesAtivas)
 
                 disciplinas.forEach(d => {
                     for(let i = 1; i <= 4; i++){//ids dos cursos de computação
@@ -150,8 +158,8 @@
                         for(let j = 0; j < this.gradesAtivas[i].length; j++){//itera pelas grades de um curso, começando da mais recente (lista ordenada)
                             gradedisciplina = _.find(this.$store.state.disciplinaGrade.DisciplinaGrades, { 'Disciplina': parseInt(d, 10), 'Grade':this.gradesAtivas[i][j].grade.id})//Encontra a disciplina nas grades da computação, começando pela mais recente. Caso não encontre, retorna undefined
                             if(gradedisciplina !== undefined){//verifica se a disciplina está na grade procurada
-                                if(gradedisciplina.periodo < this.gradesAtivas[i][j].grade.fim){//verifica se essa grade está sendo usada para essa disciplina(limite superior)
-                                    if((j > 0) && (this.gradesAtivas[i][j].grade.fim < gradedisciplina.periodo) || j===0)//verifica se a disciplina não deveria estar incluída na grade anterior, ou se essa é a grade mais recente(limite inferior)
+                                if(gradedisciplina.periodo <= this.gradesAtivas[i][j].fim){//verifica se essa grade está sendo usada para essa disciplina(limite superior)
+                                    if((j > 0) && (this.gradesAtivas[i][j-1].fim < gradedisciplina.periodo) || j===0)//verifica se a disciplina não deveria estar incluída na grade anterior, ou se essa é a grade mais recente(limite inferior)
                                         break;//caso essa seja a grade correta, encerra o loop nas grades
                                     else
                                         gradedisciplina = undefined//necessário caso seja a última iteração do loop
@@ -171,6 +179,12 @@
                 //retorna lista com os ids das disciplinas
                 let disciplinas = Object.keys(this.disciplinasGrades)
                 //marca o último período em que uma grade é válida
+                this.gradesAtivas = {
+                    1: [], //CCN
+                    2: [], //EC
+                    3: [], //SI
+                    4: []  //CCD
+                }
                 for(let i = 1; i <= 4; i++){
                     this.grades[i].forEach(g => {
                         let fim = 1 + 2*(this.ano - parseInt(g.periodoInicio.slice(0,4), 10)) + ((3 - parseInt(g.periodoInicio.slice(5,6), 10))/2)
@@ -183,6 +197,7 @@
                         this.gradesAtivas[i][this.gradesAtivas[i].length - 1].fim = 10
                     }
                 }
+                console.log(this.gradesAtivas)
 
                 disciplinas.forEach(d => {
                     for(let i = 1; i <= 4; i++){//ids dos cursos de computação
@@ -191,8 +206,8 @@
                         for(let j = 0; j < this.gradesAtivas[i].length; j++){//itera pelas grades de um curso, começando da mais recente (lista ordenada)
                             gradedisciplina = _.find(this.$store.state.disciplinaGrade.DisciplinaGrades, { 'Disciplina': parseInt(d, 10), 'Grade':this.gradesAtivas[i][j].grade.id})//Encontra a disciplina nas grades da computação, começando pela mais recente. Caso não encontre, retorna undefined
                             if(gradedisciplina !== undefined){//verifica se a disciplina está na grade procurada
-                                if(gradedisciplina.periodo < this.gradesAtivas[i][j].grade.fim){//verifica se essa grade está sendo usada para essa disciplina(limite superior)
-                                    if((j > 0) && (this.gradesAtivas[i][j].grade.fim < gradedisciplina.periodo) || j===0)//verifica se a disciplina não deveria estar incluída na grade anterior, ou se essa é a grade mais recente(limite inferior)
+                                if(gradedisciplina.periodo <= this.gradesAtivas[i][j].fim){//verifica se essa grade está sendo usada para essa disciplina(limite superior)
+                                    if((j > 0) && (this.gradesAtivas[i][j-1].fim < gradedisciplina.periodo) || j===0)//verifica se a disciplina não deveria estar incluída na grade anterior, ou se essa é a grade mais recente(limite inferior)
                                         break;//caso essa seja a grade correta, encerra o loop nas grades
                                     else
                                         gradedisciplina = undefined//necessário caso seja a última iteração do loop
