@@ -206,7 +206,7 @@
 </script>
 <style scoped>
     td {
-        padding:0;
+        padding:0 !important;
         text-align: center;
     }
 </style>
