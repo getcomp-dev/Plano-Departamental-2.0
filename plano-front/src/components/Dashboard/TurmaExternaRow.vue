@@ -85,6 +85,7 @@
 <script>
     import _ from 'lodash'
     import turmaExternaPedido from './TurmaExternaPedido.vue'
+    import turmaExternaService from '../../common/services/turmaExterna'
     import pedidoExternoService from '../../common/services/pedidoExterno'
 
     export default {
