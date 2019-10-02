@@ -69,7 +69,10 @@
                 <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
             </select>
         </td>
-        <td style="width:52px"><p style="width: 52px">{{totalPedidos()}}</p></td>
+        <td style="width:52px">
+            <p style="width: 52px; padding:0; border:0; margin:0;">{{totalPedidos()}}</p>
+            <p style="width: 52px; padding:0; border:0; margin:0;">{{totalPedidosPeriodizados()}}+{{totalPedidosNaoPeriodizados()}}</p>
+        </td>
         <template v-for="curso in Cursos">
             <td style="width: 64px">
                 <template v-for="(pedido, index) in Pedidos" v-if="pedido.Curso===curso.id">
@@ -106,10 +109,27 @@
 
             totalPedidos(){
                 var t = 0
-                var id = this.turma.id
-                var pedidos = _.filter(this.$store.state.pedidoExterno.Pedidos, function(p) { return p.Turma==id })
+                var pedidos = this.$store.state.pedidoExterno.Pedidos[this.turma.id]
                 for(var p =0; p < pedidos.length; p++){
                     t+=parseInt(pedidos[p].vagasPeriodizadas, 10)
+                    t+=parseInt(pedidos[p].vagasNaoPeriodizadas, 10)
+                }
+                return t
+            },
+
+            totalPedidosPeriodizados(){
+                var t = 0
+                var pedidos = this.$store.state.pedidoExterno.Pedidos[this.turma.id]
+                for(var p =0; p < pedidos.length; p++){
+                    t+=parseInt(pedidos[p].vagasPeriodizadas, 10)
+                }
+                return t
+            },
+
+            totalPedidosNaoPeriodizados(){
+                var t = 0
+                var pedidos = this.$store.state.pedidoExterno.Pedidos[this.turma.id]
+                for(var p =0; p < pedidos.length; p++){
                     t+=parseInt(pedidos[p].vagasNaoPeriodizadas, 10)
                 }
                 return t
