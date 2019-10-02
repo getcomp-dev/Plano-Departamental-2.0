@@ -2,7 +2,7 @@
     <div  style="display:block; overflow: hidden" class="sticky">
         <th scope="col"><p style="width:16px !important;">S.</p></th>
         <th scope="col"><p style="width:64px !important;">Cod</p></th>
-        <th scope="col"><p style="width:120px !important;">Disciplina</p></th>
+        <th scope="col"><p style="width:240px !important;">Disciplina</p></th>
         <th scope="col"><p style="width:20px !important;">C.</p></th>
         <th scope="col"><p style="width:36px !important;">Turma</p></th>
         <th scope="col"><p style="width:100px !important;">Docente</p></th>

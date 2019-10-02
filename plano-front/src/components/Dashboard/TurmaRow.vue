@@ -11,8 +11,8 @@
                 </template>
             </template>
         </td>
-        <td style="width: 120px;">
-            <select type="text" style="width:120px;" id="disciplina" v-model="turmaForm.Disciplina"
+        <td style="width: 240px;">
+            <select type="text" style="width:240px;" id="disciplina" v-model="turmaForm.Disciplina"
                     v-on:change="editTurma(turma)">
                 <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
                 <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">
