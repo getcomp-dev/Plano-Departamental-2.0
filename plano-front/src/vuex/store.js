@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
 
 import auth from './module/auth'
 import perfil from './module/perfil'
@@ -91,8 +90,6 @@ export default new Vuex.Store({
     cargaPos,
     plano
   },
-  plugins:[
-      createPersistedState()
-  ],
+
   strict: process.env.NODE_ENV !== 'production'
 })

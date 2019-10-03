@@ -4,6 +4,7 @@ const models = require('../models/index'),
     SM = require('../library/SocketMessages')
 
 router.post('/', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.PedidoExterno.create({
         vagasPeriodizadas: req.body.vagasPeriodizadas,
         vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
@@ -12,6 +13,7 @@ router.post('/', function (req, res, next) {
     }).then(function (pedido) {
         ioBroadcast(SM.PEDIDO_EXTERNO_CREATED, {'msg': 'Pedido criado!', 'Pedido': pedido})
 
+        console.log('\nRequest de '+req.usuario.nome+'\n')
         res.send({
             success: true,
             message: 'Pedido criado!',
@@ -35,6 +37,7 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.PedidoExterno.findOne({
         where: {
             Curso: req.params.Curso,
@@ -53,6 +56,7 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
     }).then(function (pedido) {
         ioBroadcast(SM.PEDIDO_EXTERNO_UPDATED, {'msg': 'Pedido atualizado!', 'Pedido': pedido})
 
+        console.log('\nRequest de '+req.usuario.nome+'\n')
         res.send({
             success: true,
             message: 'Pedido atualizado',
@@ -64,6 +68,7 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
 })
 
 router.delete('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.PedidoExterno.findOne({
         where: {
             Curso: req.params.Curso,
@@ -77,6 +82,7 @@ router.delete('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
     }).then(function (pedido) {
         ioBroadcast(SM.PEDIDO_EXTERNO_DELETED, {'msg': 'Pedido excluído!', 'Pedido': pedido})
 
+        console.log('\nRequest de '+req.usuario.nome+'\n')
         res.send({
             success: true,
             message: 'Pedido excluído',

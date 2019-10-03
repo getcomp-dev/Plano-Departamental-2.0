@@ -26,6 +26,7 @@ const mutations = {
         if(state.Pedidos[data[0].Pedido.Turma] === undefined)
             state.Pedidos[data[0].Pedido.Turma] = []
         state.Pedidos[data[0].Pedido.Turma].push(data[0].Pedido)
+        state.Pedidos = Object.assign({}, state.Pedidos)
     },
 
     [SOCKET_PEDIDO_EXTERNO_UPDATED] (state, data) {

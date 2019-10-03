@@ -4,7 +4,8 @@ const models = require('../models/index'),
   SM = require('../library/SocketMessages')
 
 router.post('/', function (req, res, next) {
-  models.Curso.create({
+    console.log('\nRequest de '+req.usuario.nome+'\n')
+    models.Curso.create({
     codigo: req.body.codigo,
     nome: req.body.nome,
     turno: req.body.turno,
@@ -13,6 +14,7 @@ router.post('/', function (req, res, next) {
     posicao: req.body.posicao
   }).then(function (curso) {
     ioBroadcast(SM.CURSO_CREATED, {'msg': 'Curso criado!', 'Curso': curso})
+    console.log('\nRequest de '+req.usuario.nome+'\n')
 
     res.send({
       success: true,
@@ -37,6 +39,7 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/:id([0-9]+)', function (req, res, next) {
+  console.log('\nRequest de '+req.usuario.nome+'\n')
   models.Curso.findOne({
     where: {
       id: req.params.id
@@ -55,6 +58,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
     })
   }).then(function (curso) {
     ioBroadcast(SM.CURSO_UPDATED, {'msg': 'Curso atualizado!', 'Curso': curso})
+    console.log('\nRequest de '+req.usuario.nome+'\n')
 
     res.send({
       success: true,
@@ -67,6 +71,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
 })
 
 router.delete('/:id([0-9]+)', function (req, res, next) {
+  console.log('\nRequest de '+req.usuario.nome+'\n')
   models.Curso.findOne({
     where: {
       id: req.params.id
@@ -78,6 +83,7 @@ router.delete('/:id([0-9]+)', function (req, res, next) {
     return curso.destroy()
   }).then(function (curso) {
     ioBroadcast(SM.CURSO_DELETED, {'msg': 'Curso excluído!', 'Curso': curso})
+    console.log('\nRequest de '+req.usuario.nome+'\n')
 
     res.send({
       success: true,

@@ -4,12 +4,14 @@ const models = require('../models/index'),
     SM = require('../library/SocketMessages')
 
 router.post('/', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.DisciplinaGrade.create({
         periodo: req.body.periodo,
         Disciplina: req.body.Disciplina,
         Grade: req.body.Grade
     }).then(function (disciplinaGrade) {
         ioBroadcast(SM.DISCIPLINA_GRADE_CREATED, {'msg': 'Disciplina adicionada à Grade!', 'DisciplinaGrade': disciplinaGrade})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
@@ -34,6 +36,7 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/:Disciplina([0-9]+)&&:Grade([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.DisciplinaGrade.findOne({
         where: {
             Disciplina: req.params.Disciplina,
@@ -50,6 +53,7 @@ router.post('/:Disciplina([0-9]+)&&:Grade([0-9]+)', function (req, res, next) {
         })
     }).then(function (disciplinaGrade) {
         ioBroadcast(SM.DISCIPLINA_GRADE_UPDATED, {'msg': 'Disciplina da grade atualizada!', 'DisciplinaGrade': disciplinaGrade})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
@@ -62,6 +66,7 @@ router.post('/:Disciplina([0-9]+)&&:Grade([0-9]+)', function (req, res, next) {
 })
 
 router.delete('/:Disciplina([0-9]+)&&:Grade([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.DisciplinaGrade.findOne({
         where: {
             Disciplina: req.params.Disciplina,
@@ -74,6 +79,7 @@ router.delete('/:Disciplina([0-9]+)&&:Grade([0-9]+)', function (req, res, next) 
         return disciplinaGrade.destroy()
     }).then(function (disciplinaGrade) {
         ioBroadcast(SM.DISCIPLINA_GRADE_DELETED, {'msg': 'Disciplina excluída da grade!', 'DisciplinaGrade': disciplinaGrade})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,

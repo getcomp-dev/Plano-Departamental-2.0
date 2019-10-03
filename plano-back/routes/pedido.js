@@ -4,6 +4,8 @@ const models = require('../models/index'),
     SM = require('../library/SocketMessages')
 
 router.post('/', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
+
     models.Pedido.create({
         vagasPeriodizadas: req.body.vagasPeriodizadas,
         vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
@@ -11,7 +13,7 @@ router.post('/', function (req, res, next) {
         Turma: req.body.Turma
     }).then(function (pedido) {
         ioBroadcast(SM.PEDIDO_CREATED, {'msg': 'Pedido criado!', 'Pedido': pedido})
-
+        console.log('\nRequest de '+req.usuario.nome+'\n')
         res.send({
             success: true,
             message: 'Pedido criado!',
@@ -24,6 +26,7 @@ router.post('/', function (req, res, next) {
 
 router.get('/', function (req, res, next) {
     models.Pedido.findAll().then(function (pedidos) {
+
         res.send({
             success: true,
             message: 'Pedidos listados',
@@ -35,6 +38,8 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
+
     models.Pedido.findOne({
         where: {
             Curso: req.params.Curso,
@@ -43,7 +48,7 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
     }).then(function (pedido) {
         if (!pedido)
             throw new CustomError(400, 'Pedido inválido')
-
+        console.log('\nRequest de '+req.usuario.nome+'\n')
         return pedido.updateAttributes({
             vagasPeriodizadas: req.body.vagasPeriodizadas,
             vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
@@ -64,6 +69,8 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
 })
 
 router.delete('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
+
     models.Pedido.findOne({
         where: {
             Curso: req.params.Curso,
@@ -76,7 +83,7 @@ router.delete('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
         return pedido.destroy()
     }).then(function (pedido) {
         ioBroadcast(SM.PEDIDO_DELETED, {'msg': 'Pedido excluído!', 'Pedido': pedido})
-
+        console.log('\nRequest de '+req.usuario.nome+'\n')
         res.send({
             success: true,
             message: 'Pedido excluído',

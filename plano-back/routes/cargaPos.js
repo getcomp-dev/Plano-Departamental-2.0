@@ -5,6 +5,7 @@ const models = require('../models/index'),
     CustomError = require('../library/CustomError')
 
 router.post('/', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.CargaPos.create({
         trimestre: req.body.trimestre,
         programa: req.body.programa,
@@ -13,6 +14,7 @@ router.post('/', function (req, res, next) {
 
     }).then(function (cargaPos) {
         ioBroadcast(SM.CARGA_POS_CREATED, {'msg': 'Carga registrada!', 'CargaPos': cargaPos})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
@@ -37,6 +39,7 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/:id([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.CargaPos.findOne({
         where: {
             id: req.params.id
@@ -53,6 +56,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
         })
     }).then(function (cargaPos) {
         ioBroadcast(SM.CARGA_POS_UPDATED, {'msg': 'Carga atualizada!', 'CargaPos': cargaPos})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
@@ -65,6 +69,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
 })
 
 router.delete('/:id([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.CargaPos.findOne({
         where: {
             id: req.params.id
@@ -76,6 +81,7 @@ router.delete('/:id([0-9]+)', function (req, res, next) {
         return cargaPos.destroy()
     }).then(function (cargaPos) {
         ioBroadcast(SM.CARGA_POS_DELETED, {'msg': 'Carga excluída!', 'CargaPos': cargaPos})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,

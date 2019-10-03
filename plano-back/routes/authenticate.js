@@ -19,6 +19,7 @@ router.post('/', function (req, res, next) {
     if (!passwordHash.verify(req.body.senha, usuario.senha))
       throw new CustomError(400, 'Credencial inválida')
 
+    console.log('\nLogin de ' + usuario.nome + ' iniciado\n')
     res.send({
       success: true,
       message: 'Token criado',
@@ -41,7 +42,9 @@ router.get('/', function (req, res, next) {
   }).then(function (usuario) {
     if (!usuario)
       throw new CustomError(400, 'Credencial não encontrada')
-
+    console.log('\n')
+    console.log('Login de ' + usuario.nome + ' iniciado')
+    console.log('\n')
     res.send({
       success: true,
       message: 'Usuario encontrado',

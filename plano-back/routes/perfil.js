@@ -5,6 +5,7 @@ const models = require('../models/index'),
   CustomError = require('../library/CustomError')
 
 router.post('/', function (req, res, next) {
+  console.log('\nRequest de '+req.usuario.nome+'\n')
   models.Perfil.create({
     nome: req.body.nome,
     abreviacao: req.body.abreviacao,
@@ -12,6 +13,7 @@ router.post('/', function (req, res, next) {
   }).then(function (perfil) {
     ioBroadcast(SM.PERFIL_CREATED, {'msg': 'Perfil criado!', 'Perfil': perfil})
 
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     res.send({
       success: true,
       message: 'Perfil criado!',
@@ -35,6 +37,7 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/:id([0-9]+)', function (req, res, next) {
+  console.log('\nRequest de '+req.usuario.nome+'\n')
   models.Perfil.findOne({
     where: {
       id: req.params.id
@@ -51,6 +54,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
   }).then(function (perfil) {
     ioBroadcast(SM.PERFIL_UPDATED, {'msg': 'Perfil atualizado!', 'Perfil': perfil})
 
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     res.send({
       success: true,
       message: 'Perfil atualizado',
@@ -62,7 +66,8 @@ router.post('/:id([0-9]+)', function (req, res, next) {
 })
 
 router.delete('/:id([0-9]+)', function (req, res, next) {
-  models.Perfil.findOne({
+    console.log('\nRequest de '+req.usuario.nome+'\n')
+    models.Perfil.findOne({
     where: {
       id: req.params.id
     }
@@ -74,6 +79,7 @@ router.delete('/:id([0-9]+)', function (req, res, next) {
   }).then(function (perfil) {
     ioBroadcast(SM.PERFIL_DELETED, {'msg': 'Perfil excluído!', 'Perfil': perfil})
 
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     res.send({
       success: true,
       message: 'Perfil excluído',

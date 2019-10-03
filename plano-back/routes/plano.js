@@ -17,6 +17,7 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/:ano([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Plano.findOne({
         where: {
             ano: req.params.ano
@@ -31,6 +32,7 @@ router.post('/:ano([0-9]+)', function (req, res, next) {
         })
     }).then(function (plano) {
         ioBroadcast(SM.PLANO_UPDATED, {'msg': 'Plano atualizado!', 'Plano': plano})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,

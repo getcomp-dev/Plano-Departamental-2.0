@@ -5,11 +5,13 @@ const models = require('../models/index'),
     CustomError = require('../library/CustomError')
 
 router.post('/', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Sala.create({
         nome: req.body.nome,
         laboratorio: req.body.laboratorio
     }).then(function (sala) {
         ioBroadcast(SM.SALA_CREATED, {'msg': 'Sala criada!', 'Sala': sala})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
@@ -34,6 +36,7 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/:id([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Sala.findOne({
         where: {
             id: req.params.id
@@ -48,6 +51,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
         })
     }).then(function (sala) {
         ioBroadcast(SM.SALA_UPDATED, {'msg': 'Sala atualizada!', 'Sala': sala})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
@@ -60,6 +64,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
 })
 
 router.delete('/:id([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Sala.findOne({
         where: {
             id: req.params.id
@@ -71,6 +76,7 @@ router.delete('/:id([0-9]+)', function (req, res, next) {
         return sala.destroy()
     }).then(function (sala) {
         ioBroadcast(SM.SALA_DELETED, {'msg': 'Sala excluído!', 'Sala': sala})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,

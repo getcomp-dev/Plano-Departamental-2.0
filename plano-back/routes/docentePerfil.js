@@ -4,11 +4,13 @@ const models = require('../models/index'),
     SM = require('../library/SocketMessages')
 
 router.post('/', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.DocentePerfil.create({
         Perfil: req.body.Perfil,
         DocenteId: req.body.Docente
     }).then(function (docentePerfil) {
         ioBroadcast(SM.DOCENTE_PERFIL_CREATED, {'msg': 'Relação Docente Perfil criada!', 'DocentePerfil': docentePerfil})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
@@ -33,6 +35,7 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/:Docente([0-9]+)&&:Perfil([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.DocentePerfil.findOne({
         where: {
             Perfil: req.params.Perfil,
@@ -48,6 +51,7 @@ router.post('/:Docente([0-9]+)&&:Perfil([0-9]+)', function (req, res, next) {
         })
     }).then(function (docentePerfil) {
         ioBroadcast(SM.DOCENTE_PERFIL_UPDATED, {'msg': 'Relação Docente Perfil atualizada!', 'DocentePerfil': docentePerfil})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
@@ -60,6 +64,7 @@ router.post('/:Docente([0-9]+)&&:Perfil([0-9]+)', function (req, res, next) {
 })
 
 router.delete('/:Docente([0-9]+)&&:Perfil([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.DocentePerfil.findOne({
         where: {
             Perfil: req.params.Perfil,
@@ -72,6 +77,7 @@ router.delete('/:Docente([0-9]+)&&:Perfil([0-9]+)', function (req, res, next) {
         return docentePerfil.destroy()
     }).then(function (docentePerfil) {
         ioBroadcast(SM.DOCENTE_PERFIL_DELETED, {'msg': 'Relação Docente Perfil excluída!', 'DocentePerfil': docentePerfil})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,

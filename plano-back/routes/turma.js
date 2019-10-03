@@ -5,6 +5,7 @@ const models = require('../models/index'),
     CustomError = require('../library/CustomError')
 
 router.post('/', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Turma.create({
         periodo: req.body.periodo,
         letra: req.body.letra,
@@ -20,6 +21,7 @@ router.post('/', function (req, res, next) {
 
     }).then(function (turma) {
         ioBroadcast(SM.TURMA_CREATED, {'msg': 'Turma criada!', 'Turma': turma})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
@@ -44,6 +46,7 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/:id([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Turma.findOne({
         where: {
             id: req.params.id
@@ -68,6 +71,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
         })
     }).then(function (turma) {
         ioBroadcast(SM.TURMA_UPDATED, {'msg': 'Turma atualizada!', 'Turma': turma})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
@@ -80,6 +84,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
 })
 
 router.post('/clear', function(req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Turma.findAll().then(function (turmas) {
             for(let turma in turmas){
                 if(req.body.periodo===1)
@@ -109,6 +114,7 @@ router.post('/clear', function(req, res, next) {
 })
 
 router.delete('/:id([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Turma.findOne({
         where: {
             id: req.params.id
@@ -120,6 +126,7 @@ router.delete('/:id([0-9]+)', function (req, res, next) {
         return turma.destroy()
     }).then(function (turma) {
         ioBroadcast(SM.TURMA_DELETED, {'msg': 'Turma excluída!', 'Turma': turma})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,

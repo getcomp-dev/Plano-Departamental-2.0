@@ -4,12 +4,14 @@ const models = require('../models/index'),
     SM = require('../library/SocketMessages')
 
 router.post('/', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Grade.create({
         periodoInicio: req.body.periodoInicio,
         nome: req.body.nome,
         Curso: req.body.Curso
     }).then(function (grade) {
         ioBroadcast(SM.GRADE_CREATED, {'msg': 'Grade criada!', 'Grade': grade})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
@@ -34,6 +36,7 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/:id([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Grade.findOne({
         where: {
             id: req.params.id
@@ -49,6 +52,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
         })
     }).then(function (grade) {
         ioBroadcast(SM.GRADE_UPDATED, {'msg': 'Grade atualizada!', 'Grade': grade})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
@@ -61,6 +65,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
 })
 
 router.delete('/:id([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Grade.findOne({
         where: {
             id: req.params.id
@@ -72,6 +77,7 @@ router.delete('/:id([0-9]+)', function (req, res, next) {
         return grade.destroy()
     }).then(function (grade) {
         ioBroadcast(SM.GRADE_DELETED, {'msg': 'Grade excluída!', 'Grade': grade})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,

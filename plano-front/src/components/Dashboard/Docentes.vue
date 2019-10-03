@@ -61,7 +61,7 @@
           <template v-if="docenteForm.id!=undefined">
           <div class="col-sm-10" id="perfis">
             <b-form-checkbox-group stacked v-model="perfisAssociados">
-              <b-form-checkbox v-for="perfil in Perfis" :value="perfil.id" v-on:change="managePerfil(perfil.id)">{{perfil.nome}}</b-form-checkbox>
+              <b-form-checkbox v-for="perfil in Perfis" :value="perfil.id" v-on:change="managePerfil(perfil)">{{perfil.nome}}</b-form-checkbox>
             </b-form-checkbox-group>
           </div>
           </template>
@@ -198,12 +198,12 @@
 
             addPerfil(perfil) {
                 this.docentePerfil.Docente = this.docenteForm.id
-                this.docentePerfil.Perfil = perfil
+                this.docentePerfil.Perfil = perfil.id
                 docentePerfilService.create(this.docentePerfil).then((response) => {
                     this.$notify({
                         group: 'general',
                         title: `Sucesso!`,
-                        text: `O Perfil ${response.Perfil} foi associado ao Docente ${this.docenteForm.apelido}!`,
+                        text: `O Perfil ${perfil.abreviacao} foi associado ao Docente ${this.docenteForm.apelido}!`,
                         type: 'success'
                     })
                 }).
@@ -216,11 +216,11 @@
             },
 
             deletePerfil(perfil) {
-                docentePerfilService.delete(this.docenteForm.id, perfil).then((response) => {
+                docentePerfilService.delete(this.docenteForm.id, perfil.id).then(() => {
                     this.$notify({
                         group: 'general',
                         title: `Sucesso!`,
-                        text: `O Perfil ${response.Perfil} foi exluído do Docente ${this.docenteForm.apelido}!`,
+                        text: `O Perfil ${perfil.abreviacao} foi exluído do Docente ${this.docenteForm.apelido}!`,
                         type: 'success'
                     })
                 }).
@@ -231,7 +231,8 @@
             },
 
             managePerfil(perfil) {
-                if (_.indexOf(this.perfisAssociados, perfil) === -1){
+                console.log(perfil)
+                if (_.indexOf(this.perfisAssociados, perfil.id) === -1){
                     this.addPerfil(perfil)
                 }else{
                     this.deletePerfil(perfil)

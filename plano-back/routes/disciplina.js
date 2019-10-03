@@ -4,6 +4,7 @@ const models = require('../models/index'),
     SM = require('../library/SocketMessages')
 
 router.post('/', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Disciplina.create({
         nome: req.body.nome,
         codigo: req.body.codigo,
@@ -13,6 +14,7 @@ router.post('/', function (req, res, next) {
         ead: req.body.ead
     }).then(function (disciplina) {
         ioBroadcast(SM.DISCIPLINA_CREATED, {'msg': 'Disciplina criada!', 'Disciplina': disciplina})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
@@ -37,6 +39,7 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/:id([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Disciplina.findOne({
         where: {
             id: req.params.id
@@ -55,6 +58,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
         })
     }).then(function (disciplina) {
         ioBroadcast(SM.DISCIPLINA_UPDATED, {'msg': 'Disciplina atualizada!', 'Disciplina': disciplina})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
@@ -67,6 +71,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
 })
 
 router.delete('/:id([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Disciplina.findOne({
         where: {
             id: req.params.id
@@ -78,6 +83,7 @@ router.delete('/:id([0-9]+)', function (req, res, next) {
         return disciplina.destroy()
     }).then(function (disciplina) {
         ioBroadcast(SM.DISCIPLINA_DELETED, {'msg': 'Disciplina excluída!', 'Disciplina': disciplina})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,

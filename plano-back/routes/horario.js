@@ -5,10 +5,12 @@ const models = require('../models/index'),
     CustomError = require('../library/CustomError')
 
 router.post('/', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Horario.create({
         horario: req.body.horario
     }).then(function (horario) {
         ioBroadcast(SM.HORARIO_CREATED, {'msg': 'Horário criado!', 'Horario': horario})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
@@ -33,6 +35,7 @@ router.get('/', function (req, res, next) {
 })
 
 router.post('/:id([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Horario.findOne({
         where: {
             id: req.params.id
@@ -46,6 +49,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
         })
     }).then(function (horario) {
         ioBroadcast(SM.HORARIO_UPDATED, {'msg': 'Horário atualizado!', 'Horario': horario})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
@@ -58,6 +62,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
 })
 
 router.delete('/:id([0-9]+)', function (req, res, next) {
+    console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Horario.findOne({
         where: {
             id: req.params.id
@@ -69,6 +74,7 @@ router.delete('/:id([0-9]+)', function (req, res, next) {
         return horario.destroy()
     }).then(function (horario) {
         ioBroadcast(SM.HORARIO_DELETED, {'msg': 'Horário excluído!', 'Horario': horario})
+        console.log('\nRequest de '+req.usuario.nome+'\n')
 
         res.send({
             success: true,
