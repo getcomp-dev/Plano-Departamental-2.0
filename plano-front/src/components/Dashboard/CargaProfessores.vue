@@ -37,7 +37,7 @@
             <tbody>
             <template v-if="Professores.length > 0">
             <template v-for="professor in Professores">
-                <template v-if="turmas(professor).length > 0">
+                <template v-if="(turmas(professor).length > 0 || pos(professor).length > 0)">
                     <tr style="background-color: #E9E9E9">
                         <td>{{professor.apelido}}</td>
                         <td></td>
