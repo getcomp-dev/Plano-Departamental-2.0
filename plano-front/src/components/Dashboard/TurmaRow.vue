@@ -5,11 +5,13 @@
             <input type="checkbox" name="ativa" value="true" v-on:click="checkDelete(turma)" v-model="ativo" style="width:16px;height: 16px;padding:0;">
         </td>
         <td style="width: 64px;">
-            <template v-for="disciplina in Disciplinas">
-                <template v-if="disciplina.id===turma.Disciplina">
-                    <p :key="disciplina.id" style="width:64px">{{disciplina.codigo}}</p>
-                </template>
-            </template>
+            <select type="text" style="width:64px;" id="disciplinaCod" v-model="turmaForm.Disciplina"
+                    v-on:change="editTurma(turma)">
+                <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
+                <option v-for="disciplina in DisciplinasCod" :key="disciplina.id" :value="disciplina.id">
+                    {{disciplina.codigo}}
+                </option>
+            </select>
         </td>
         <td style="width: 240px;">
             <select type="text" style="width:240px;" id="disciplina" v-model="turmaForm.Disciplina"
@@ -52,6 +54,7 @@
                 <option value=""></option>
                 <option value="Diurno">Diurno</option>
                 <option value="Noturno">Noturno</option>
+                <option value="EAD">EAD</option>
             </select>
             <br/>
         </td>
@@ -200,6 +203,12 @@
 
                 if(this.turmaForm.Turno1==="")
                     this.turmaForm.Turno1=null
+
+                if(this.turmaForm.Turno1="EAD"){
+                    this.turmaForm.Horario1 = 31
+                    if(this.turmaForm.Horario2 > 0)
+                        this.turmaForm.Horario2 = null
+                }
                 turmaService.update(this.turma.id, this.turmaForm).then((response) => {
                     this.$notify({
                         group: 'general',
@@ -231,6 +240,10 @@
 
             Disciplinas () {
                 return _.orderBy(this.$store.state.disciplina.Disciplinas,'nome')
+            },
+
+            DisciplinasCod () {
+                return _.orderBy(this.$store.state.disciplina.Disciplinas,'codigo')
             },
 
             Docentes () {

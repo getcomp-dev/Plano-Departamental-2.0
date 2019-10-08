@@ -4,13 +4,10 @@
             <input type="text" style="width: 16px;" id="periodo" v-model="turmaForm.periodo">
         </td>
         <td>
-            <p style="width: 64px">
-                <template v-for="disciplina in Disciplinas">
-                    <template v-if="disciplina.id===turmaForm.Disciplina">
-                        {{disciplina.codigo}}
-                    </template>
-                </template>
-            </p>
+            <select type="text" style="width:64px;" id="disciplinaCod" v-model="turmaForm.Disciplina">
+                <option v-if="DisciplinasCod.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
+                <option v-for="disciplina in DisciplinasCod" :key="disciplina.id" :value="disciplina.id">{{disciplina.codigo}}</option>
+            </select>
         </td>
         <td>
             <select type="text" style="width:240px;" id="disciplina" v-model="turmaForm.Disciplina">
@@ -42,9 +39,10 @@
             </select>
         </td>
         <td>
-            <select type="text" style="width: 62px" id="turno1" v-model="turmaForm.turno1">
+            <select type="text" style="width: 62px" id="turno1" v-model="turmaForm.turno1" v-on:change="setEad">
                 <option value="Diurno">Diurno</option>
                 <option value="Noturno">Noturno</option>
+                <option value="EAD">EAD</option>
             </select>
             <br/>
         </td>
@@ -136,6 +134,14 @@
                 }
             },
 
+            setEad: function() {
+               if(this.turmaForm.turno1 === "EAD"){
+                   this.turmaForm.Horario1 = 31
+                   if(this.turmaForm.Horario2 > 0)
+                       this.turmaForm.Horario2 = null
+               }
+            } ,
+
             addTurma() {
                 if(this.turmaForm.periodo !=1 && this.turmaForm.periodo !=3) {
                     this.$notify({
@@ -184,6 +190,10 @@
         computed: {
             Disciplinas () {
                 return _.orderBy(this.$store.state.disciplina.Disciplinas,'nome')
+            },
+
+            DisciplinasCod () {
+                return _.orderBy(this.$store.state.disciplina.Disciplinas,'codigo')
             },
 
             Docentes () {
