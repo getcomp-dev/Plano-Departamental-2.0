@@ -140,7 +140,7 @@
                    if(this.turmaForm.Horario2 > 0)
                        this.turmaForm.Horario2 = null
                }
-            } ,
+            },
 
             addTurma() {
                 if(this.turmaForm.periodo !=1 && this.turmaForm.periodo !=3) {

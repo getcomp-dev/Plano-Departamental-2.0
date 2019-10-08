@@ -201,10 +201,10 @@
                 if(this.turmaForm.Sala2==="")
                     this.turmaForm.Sala2=null
 
-                if(this.turmaForm.Turno1==="")
-                    this.turmaForm.Turno1=null
+                if(this.turmaForm.turno1==="")
+                    this.turmaForm.turno1=null
 
-                if(this.turmaForm.Turno1="EAD"){
+                if(this.turmaForm.turno1==="EAD"){
                     this.turmaForm.Horario1 = 31
                     if(this.turmaForm.Horario2 > 0)
                         this.turmaForm.Horario2 = null

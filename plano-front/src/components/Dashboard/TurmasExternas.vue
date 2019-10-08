@@ -65,11 +65,10 @@
                             <input type="text" style="width: 16px;" id="periodo" v-model="turmaForm.periodo">
                         </td>
                         <td>
-                            <template v-for="disciplina in Disciplinas">
-                                <template v-if="disciplina.id===turmaForm.Disciplina">
-                                    <p :key="disciplina.id" style="width:80px">{{disciplina.codigo}}</p>
-                                </template>
-                            </template>
+                            <select type="text" style="width:80px;" id="disciplina" v-model="turmaForm.Disciplina">
+                                <option v-if="DisciplinasCod.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
+                                <option v-for="disciplina in DisciplinasCod" :key="disciplina.id" :value="disciplina.id">{{disciplina.codigo}}</option>
+                            </select>
                         </td>
                         <td>
                             <select type="text" style="width:240px;" id="disciplina" v-model="turmaForm.Disciplina">
@@ -90,9 +89,10 @@
                             <input type="text" style="width: 28px" id="turma" v-model="turmaForm.letra">
                         </td>
                         <td>
-                            <select type="text" style="width: 84px" id="turno1" v-model="turmaForm.turno1">
+                            <select type="text" style="width: 84px" id="turno1" v-model="turmaForm.turno1" v-on:change="setEad">
                                 <option value="Diurno">Diurno</option>
                                 <option value="Noturno">Noturno</option>
+                                <option value="EAD">EAD</option>
                             </select>
                             <br/>
                         </td>
@@ -216,6 +216,14 @@
                 }
             },
 
+            setEad: function() {
+                if(this.turmaForm.turno1 === "EAD"){
+                    this.turmaForm.Horario1 = 31
+                    if(this.turmaForm.Horario2 > 0)
+                        this.turmaForm.Horario2 = null
+                }
+            },
+
             deleteSelected: function() {
                 var turmas = this.$store.state.turmaExterna.Deletar
                 for (var i = 0; i< turmas.length;i++) {
@@ -312,6 +320,10 @@
 
             Disciplinas () {
                 return _.orderBy(_.filter(this.$store.state.disciplina.Disciplinas, function(d) {return d.Perfil==13}),'nome')
+            },
+
+            DisciplinasCod () {
+                return _.orderBy(_.filter(this.$store.state.disciplina.Disciplinas, function(d) {return d.Perfil==13}),'codigo')
             },
 
             Docentes () {

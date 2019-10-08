@@ -7,11 +7,13 @@
             <input type="checkbox" name="ativa" value="true" v-on:click="checkDelete(turma)" v-model="ativo" style="width:16px;height: 16px;padding:0;">
         </td>
         <td style="width: 80px;">
-            <template v-for="disciplina in Disciplinas">
-                <template v-if="disciplina.id===turma.Disciplina">
-                    <p :key="disciplina.id" style="width:80px">{{disciplina.codigo}}</p>
-                </template>
-            </template>
+            <select type="text" style="width:80px;" id="disciplina" v-model="turma.Disciplina"
+                    v-on:change="editTurma(turma)">
+                <option v-if="DisciplinasCod.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
+                <option v-for="disciplina in DisciplinasCod" :key="disciplina.id" :value="disciplina.id">
+                    {{disciplina.codigo}}
+                </option>
+            </select>
         </td>
         <td style="width: 240px;">
             <select type="text" style="width:240px;" id="disciplina" v-model="turma.Disciplina"
@@ -36,8 +38,10 @@
         </td>
         <td style="width: 84px;">
             <select type="text" style="width: 84px" id="turno1" v-model="turma.turno1" v-on:change="editTurma(turma)">
+                <option value=""></option>
                 <option value="Diurno">Diurno</option>
                 <option value="Noturno">Noturno</option>
+                <option value="EAD">EAD</option>
             </select>
             <br/>
         </td>
@@ -149,6 +153,15 @@
 
                 if(turma.Sala2==="")
                     turma.Sala2=null
+
+                if(turma.turno1==="")
+                    turma.turno1 = null
+
+                if(turma.turno1==="EAD"){
+                    turma.Horario1 = 31
+                    if(turma.Horario2 > 0)
+                        turma.Horario2 = null
+                }
                 console.log(turma)
 
                 turmaExternaService.update(turma.id, turma).then((response) => {
@@ -193,6 +206,10 @@
 
             Disciplinas () {
                 return _.orderBy(_.filter(this.$store.state.disciplina.Disciplinas, function(d) {return d.Perfil==13}),'nome')
+            },
+
+            DisciplinasCod () {
+                return _.orderBy(_.filter(this.$store.state.disciplina.Disciplinas, function(d) {return d.Perfil==13}),'codigo')
             },
 
             Horarios () {
