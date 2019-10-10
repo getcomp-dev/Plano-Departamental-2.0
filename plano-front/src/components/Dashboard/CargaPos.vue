@@ -51,8 +51,8 @@
                     <th scope="col" style="width:16px">T.</th>
                     <th scope="col" style="width:144px;">Docente</th>
                     <th scope="col" style="width:108px;">Programa</th>
-                    <th scope="col" style="width:20px;">C.</th>
-                    <th scope="col" style="width:20px;"></th>
+                    <th scope="col" style="width:28px;">C.</th>
+                    <th scope="col" style="width:20px"></th>
                 </tr>
                 </thead>
                 <tbody>

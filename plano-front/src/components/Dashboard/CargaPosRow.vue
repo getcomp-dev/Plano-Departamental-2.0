@@ -16,8 +16,8 @@
         <td style="width: 108px;">
             <input type="text" style="width: 108px" v-model="carga.programa" v-on:blur="editCarga(carga)">
         </td>
-        <td style="width: 20px">
-            <input type="text" style="width: 20px" id="creditos" v-model="carga.creditos" v-on:blur="editCarga(carga)">
+        <td style="width: 28px">
+            <input type="text" style="width: 28px" id="creditos" v-model="carga.creditos" v-on:blur="editCarga(carga)">
         </td>
         <td style="width: 20px;">
 
@@ -43,6 +43,8 @@
         methods: {
 
             editCarga(carga) {
+                let comma = ','
+                carga.creditos = carga.creditos.replace(comma, '.')
                 cargaPosService.update(carga.id, carga).then((response) => {
                     this.$notify({
                         group: 'general',
