@@ -436,8 +436,8 @@ export default {
             if(store.state.turma.Turmas[t].periodo===1 && (store.state.turma.Turmas[t].Docente1===professor.id || store.state.turma.Turmas[t].Docente2===professor.id)){
                 for (var d = 0; d < store.state.disciplina.Disciplinas.length; d++){
                     if(store.state.disciplina.Disciplinas[d].id===store.state.turma.Turmas[t].Disciplina){
-                        c+=parseInt(store.state.disciplina.Disciplinas[d].cargaPratica, 10)
-                        c+=parseInt(store.state.disciplina.Disciplinas[d].cargaTeorica, 10)
+                        c+=parseFloat(store.state.disciplina.Disciplinas[d].cargaPratica)
+                        c+=parseFloat(store.state.disciplina.Disciplinas[d].cargaTeorica)
                     }
                 }
             }
@@ -446,7 +446,7 @@ export default {
         for(var t = 0; t < store.state.cargaPos.Cargas.length; t++){
             if(store.state.cargaPos.Cargas[t].Docente===professor.id){
                 if(store.state.cargaPos.Cargas[t].trimestre==1 || store.state.cargaPos.Cargas[t].trimestre==2){
-                    c+= parseInt(store.state.cargaPos.Cargas[t].creditos, 10)
+                    c+= parseFloat(store.state.cargaPos.Cargas[t].creditos)
                 }
             }
         }
@@ -459,8 +459,8 @@ export default {
             if(store.state.turma.Turmas[t].periodo===3 && (store.state.turma.Turmas[t].Docente1===professor.id || store.state.turma.Turmas[t].Docente2===professor.id)){
                 for (var d = 0; d < store.state.disciplina.Disciplinas.length; d++){
                     if(store.state.disciplina.Disciplinas[d].id===store.state.turma.Turmas[t].Disciplina){
-                        c+=parseInt(store.state.disciplina.Disciplinas[d].cargaPratica, 10)
-                        c+=parseInt(store.state.disciplina.Disciplinas[d].cargaTeorica, 10)
+                        c+=parseFloat(store.state.disciplina.Disciplinas[d].cargaPratica)
+                        c+=parseFloat(store.state.disciplina.Disciplinas[d].cargaTeorica)
                     }
                 }
             }
@@ -469,7 +469,7 @@ export default {
         for(var t = 0; t < store.state.cargaPos.Cargas.length; t++){
             if(store.state.cargaPos.Cargas[t].Docente===professor.id){
                 if(store.state.cargaPos.Cargas[t].trimestre==3){
-                    c+= parseInt(store.state.cargaPos.Cargas[t].creditos, 10)
+                    c+= parseFloat(store.state.cargaPos.Cargas[t].creditos)
                 }
             }
         }
@@ -508,7 +508,7 @@ export default {
                 tables.push({
                     style: 'tableExample',
                     table: {
-                        widths: [8, 68, '*', 18, 104, 16, 16],
+                        widths: [8, 68, '*', 18, 104, 24, 24],
                         headerRows: 1,
                         color: '#426',
                         body: [

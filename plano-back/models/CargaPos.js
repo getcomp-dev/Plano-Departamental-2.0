@@ -11,7 +11,7 @@ module.exports = function (sequelize, DataTypes) {
             allowNull: false
         },
         creditos: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.FLOAT,
             allowNull: true
         }
     }, {

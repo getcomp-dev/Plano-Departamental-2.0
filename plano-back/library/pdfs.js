@@ -541,8 +541,8 @@ function creditos1(professor, turmas, disciplinas, cargas){
         if(turmas[t].periodo===1 && (turmas[t].Docente1===professor.id || turmas[t].Docente2===professor.id)){
             for (var d = 0; d < disciplinas.length; d++){
                 if(disciplinas[d].id===turmas[t].Disciplina){
-                    c+=parseInt(disciplinas[d].cargaPratica, 10)
-                    c+=parseInt(disciplinas[d].cargaTeorica, 10)
+                    c+=parseFloat(disciplinas[d].cargaPratica)
+                    c+=parseFloat(disciplinas[d].cargaTeorica)
                 }
             }
         }
@@ -550,7 +550,7 @@ function creditos1(professor, turmas, disciplinas, cargas){
     for(var t = 0; t < cargas.length; t++){
         if(cargas[t].Docente===professor.id){
             if(cargas[t].trimestre==1 || cargas[t].trimestre==2){
-                c+= parseInt(cargas[t].creditos, 10)
+                c+= parseFloat(cargas[t].creditos)
             }
         }
     }
@@ -563,8 +563,8 @@ function creditos2(professor, turmas, disciplinas, cargas){
         if(turmas[t].periodo===3 && (turmas[t].Docente1===professor.id || turmas[t].Docente2===professor.id)){
             for (var d = 0; d < disciplinas.length; d++){
                 if(disciplinas[d].id===turmas[t].Disciplina){
-                    c+=parseInt(disciplinas[d].cargaPratica, 10)
-                    c+=parseInt(disciplinas[d].cargaTeorica, 10)
+                    c+=parseFloat(disciplinas[d].cargaPratica)
+                    c+=parseFloat(disciplinas[d].cargaTeorica)
                 }
             }
         }
@@ -572,7 +572,7 @@ function creditos2(professor, turmas, disciplinas, cargas){
     for(var t = 0; t < cargas.length; t++){
         if(cargas[t].Docente===professor.id){
             if(cargas[t].trimestre==3){
-                c+= parseInt(cargas[t].creditos, 10)
+                c+= parseFloat(cargas[t].creditos)
             }
         }
     }
@@ -607,7 +607,7 @@ const pdfCargaProfessores = () => new Promise((resolve, reject) => {
             tables.push({
                 style: 'tableExample',
                 table: {
-                    widths: [8, 68, '*', 18, 104, 16, 16],
+                    widths: [8, 68, '*', 18, 104, 24, 24],
                     headerRows: 1,
                     color: '#426',
                     body: [
