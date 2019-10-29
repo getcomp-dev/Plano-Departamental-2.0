@@ -15,7 +15,7 @@
     "mysql2": "^1.5.3",
     "password-hash": "^1.2.2",
     "pdfmake": "^0.1.56",
-    "sequelize": "^4.37.6",
+    "sequelize": "^5.15.1",
     "socket.io": "^2.1.0",
     "xlsx": "^0.14.1"
   }
