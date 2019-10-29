@@ -3596,8 +3596,6 @@
             console.log(this.ativos1)
             this.createHorarios2(anoAtual, 3)
             console.log(this.ativos2)
-            console.log(this.horarioVazio(this.ativos1.CCD[0]))
-            console.log(this.ativos1.CCD[0])
 
         },
 

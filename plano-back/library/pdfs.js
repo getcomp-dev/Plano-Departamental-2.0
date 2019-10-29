@@ -545,8 +545,13 @@ function creditos1(professor, turmas, disciplinas, cargas){
         if(turmas[t].periodo===1 && (turmas[t].Docente1===professor.id || turmas[t].Docente2===professor.id)){
             for (var d = 0; d < disciplinas.length; d++){
                 if(disciplinas[d].id===turmas[t].Disciplina){
-                    c+=parseFloat(disciplinas[d].cargaPratica)
-                    c+=parseFloat(disciplinas[d].cargaTeorica)
+                    if((turmas[t].Docente1 > 0) && (turmas[t].Docente2 > 0)){
+                        c+=(parseFloat(disciplinas[d].cargaPratica)/2)
+                        c+=(parseFloat(disciplinas[d].cargaTeorica)/2)
+                    }else {
+                        c += parseFloat(disciplinas[d].cargaPratica)
+                        c += parseFloat(disciplinas[d].cargaTeorica)
+                    }
                 }
             }
         }
@@ -567,8 +572,13 @@ function creditos2(professor, turmas, disciplinas, cargas){
         if(turmas[t].periodo===3 && (turmas[t].Docente1===professor.id || turmas[t].Docente2===professor.id)){
             for (var d = 0; d < disciplinas.length; d++){
                 if(disciplinas[d].id===turmas[t].Disciplina){
-                    c+=parseFloat(disciplinas[d].cargaPratica)
-                    c+=parseFloat(disciplinas[d].cargaTeorica)
+                    if((turmas[t].Docente1 > 0) && (turmas[t].Docente2 > 0)){
+                        c+=(parseFloat(disciplinas[d].cargaPratica)/2)
+                        c+=(parseFloat(disciplinas[d].cargaTeorica)/2)
+                    }else {
+                        c += parseFloat(disciplinas[d].cargaPratica)
+                        c += parseFloat(disciplinas[d].cargaTeorica)
+                    }
                 }
             }
         }
@@ -652,13 +662,22 @@ const pdfCargaProfessores = () => new Promise((resolve, reject) => {
                     horarioTotal = ''
                 }else if (horario2 === undefined) {
                     horarioTotal = horario1.horario
-                } else {
+                } else if (horario1 === undefined) {
+                    horarioTotal = horario2.horario
+                }
+                else{
                     horarioTotal = horario1.horario + '/' + horario2.horario
                 }
                 if (turmasProf[j].periodo == 1) {
-                    c1 = disciplina.cargaTeorica + disciplina.cargaPratica
+                    if((turmasProf[j].Docente1 > 0) && (turmasProf[j].Docente2 > 0))
+                        c1 = (disciplina.cargaTeorica + disciplina.cargaPratica)/2
+                    else
+                        c1 = disciplina.cargaTeorica + disciplina.cargaPratica
                 } else {
-                    c2 = disciplina.cargaTeorica + disciplina.cargaPratica
+                    if((turmasProf[j].Docente1 > 0) && (turmasProf[j].Docente2 > 0))
+                        c2 = (disciplina.cargaTeorica + disciplina.cargaPratica)/2
+                    else
+                        c2 = disciplina.cargaTeorica + disciplina.cargaPratica
                 }
                 tables[1 + 2 * (i - vazio)].table.body.push([{text:turmasProf[j].periodo, alignment: 'center'}, {
                     text: disciplina.codigo,

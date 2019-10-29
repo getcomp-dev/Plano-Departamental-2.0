@@ -62,9 +62,15 @@
                             <template v-for="horario in Horarios" v-if="horario.id===turma.Horario1">{{horario.horario}}</template>
                             <template v-for="horario in Horarios" v-if="horario.id===turma.Horario2"> / {{horario.horario}}</template>
                         </td>
-                        <td v-if="turma.periodo===1">{{disciplina.cargaTeorica + disciplina.cargaPratica}}</td>
+                        <td v-if="turma.periodo===1">
+                            <template v-if="(turma.Docente1 > 0) && (turma.Docente2 > 0)">{{(disciplina.cargaTeorica + disciplina.cargaPratica)/2}}</template>
+                            <template v-else>{{disciplina.cargaTeorica + disciplina.cargaPratica}}</template>
+                        </td>
                         <td v-else></td>
-                        <td v-if="turma.periodo===3">{{disciplina.cargaTeorica + disciplina.cargaPratica}}</td>
+                        <td v-if="turma.periodo===3">
+                            <template v-if="(turma.Docente1 > 0) && (turma.Docente2 > 0)">{{(disciplina.cargaTeorica + disciplina.cargaPratica)/2}}</template>
+                            <template v-else>{{disciplina.cargaTeorica + disciplina.cargaPratica}}</template>
+                        </td>
                         <td v-else></td>
                         <td></td>
                     </tr>
@@ -133,8 +139,13 @@
                     if(this.$store.state.turma.Turmas[t].periodo===1 && (this.$store.state.turma.Turmas[t].Docente1===professor.id || this.$store.state.turma.Turmas[t].Docente2===professor.id)){
                         for (var d = 0; d < this.$store.state.disciplina.Disciplinas.length; d++){
                             if(this.$store.state.disciplina.Disciplinas[d].id===this.$store.state.turma.Turmas[t].Disciplina){
-                                c+=parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaPratica)
-                                c+=parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaTeorica)
+                                if((this.$store.state.turma.Turmas[t].Docente1 > 0) && (this.$store.state.turma.Turmas[t].Docente2 > 0)) {
+                                    c += (parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaPratica) / 2)
+                                    c += (parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaTeorica) / 2)
+                                }else{
+                                    c += parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaPratica)
+                                    c += parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaTeorica)
+                                }
                             }
                         }
                     }
@@ -156,8 +167,13 @@
                     if(this.$store.state.turma.Turmas[t].periodo===3 && (this.$store.state.turma.Turmas[t].Docente1===professor.id || this.$store.state.turma.Turmas[t].Docente2===professor.id)){
                         for (var d = 0; d < this.$store.state.disciplina.Disciplinas.length; d++){
                             if(this.$store.state.disciplina.Disciplinas[d].id===this.$store.state.turma.Turmas[t].Disciplina){
-                                c+=parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaPratica)
-                                c+=parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaTeorica)
+                                if((this.$store.state.turma.Turmas[t].Docente1 > 0) && (this.$store.state.turma.Turmas[t].Docente2 > 0)) {
+                                    c += (parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaPratica) / 2)
+                                    c += (parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaTeorica) / 2)
+                                }else{
+                                    c += parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaPratica)
+                                    c += parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaTeorica)
+                                }
                             }
                         }
                     }
@@ -179,8 +195,13 @@
                     if(this.$store.state.turma.Turmas[t].Docente1===professor.id || this.$store.state.turma.Turmas[t].Docente2===professor.id){
                         for (var d = 0; d < this.$store.state.disciplina.Disciplinas.length; d++){
                             if(this.$store.state.disciplina.Disciplinas[d].id===this.$store.state.turma.Turmas[t].Disciplina){
-                                c+=parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaPratica)
-                                c+=parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaTeorica)
+                                if((this.$store.state.turma.Turmas[t].Docente1 > 0) && (this.$store.state.turma.Turmas[t].Docente2 > 0)) {
+                                    c += (parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaPratica) / 2)
+                                    c += (parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaTeorica) / 2)
+                                }else{
+                                    c += parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaPratica)
+                                    c += parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaTeorica)
+                                }
                             }
                         }
                     }
