@@ -211,3 +211,4 @@ plano-back/backup.sql
 plano-back/data.zip
 plano-back/tabelaPrincipal.xlsx
 plano-back/tabelaPrincipal.xlsx
+*.xlsx

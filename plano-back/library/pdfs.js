@@ -157,23 +157,35 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
     var turmas1 = _.filter(this.Turmas, ['periodo', 1])
     var turmas2 = _.filter(this.Turmas, ['periodo', 3])
     var seg = '', ter = '', qua = '', qui = '', sex = ''
-    for(var i = 0; i < laboratorios.length; i++){
-        tables.push({text: laboratorios[i].nome, bold:true, margin:[0, 10, 0, 10], fontSize:20})
-        tables.push({text: "1º Semestre", bold:true, margin:[0, 10, 0, 10], fontSize:18})
+    tables.push({text: "1º Semestre", bold:true, margin:[0, 10, 0, 10], fontSize:20})
+    for(var i = 0; i < laboratorios.length; i++) {
+        tables.push({text: laboratorios[i].nome, bold: true, margin: [0, 10, 0, 10], fontSize: 18})
         tables.push({
             table: {
                 widths: ['*', '*', '*', '*', '*', '*'],
-                headerRows:1,
+                headerRows: 1,
                 color: '#426',
                 body: [
-                    [{text:'Hora', alignment:'center', bold:true}, {text:'Segunda', alignment:'center', bold:true}, {text:'Terça', alignment:'center', bold:true}, {text:'Quarta', alignment: 'center', bold:true}, {text:'Quinta', alignment:'center', bold:true}, {text:'Sexta', alignment:'center', bold:true}],
+                    [{text: 'Hora', alignment: 'center', bold: true}, {
+                        text: 'Segunda',
+                        alignment: 'center',
+                        bold: true
+                    }, {text: 'Terça', alignment: 'center', bold: true}, {
+                        text: 'Quarta',
+                        alignment: 'center',
+                        bold: true
+                    }, {text: 'Quinta', alignment: 'center', bold: true}, {
+                        text: 'Sexta',
+                        alignment: 'center',
+                        bold: true
+                    }],
                 ]
             }
         })
-        for(var d = 0; d< 8; d++) {
+        for (var d = 0; d < 8; d++) {
             for (var j = 0; j < turmas1.length; j++) {
-                if(turmas1[j].Sala1===laboratorios[i].id || turmas1[j].Sala2===laboratorios[i].id){
-                    if(d < 4) {
+                if (turmas1[j].Sala1 === laboratorios[i].id || turmas1[j].Sala2 === laboratorios[i].id) {
+                    if (d < 4) {
                         if (checkTurmaHorarioLabs(turmas1[j], 1 + d, laboratorios)) {
                             for (var k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
@@ -219,7 +231,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
                                 }
                             }
                         }
-                    } else if(d === 4 || d === 5) {
+                    } else if (d === 4 || d === 5) {
                         if (checkTurmaHorarioLabs(turmas1[j], 28 + d, laboratorios)) {
                             for (var k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
@@ -265,8 +277,8 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
                                 }
                             }
                         }
-                    } else if(d > 5) {
-                        if (checkTurmaHorarioLabs(turmas1[j],  d - 1, laboratorios)) {
+                    } else if (d > 5) {
+                        if (checkTurmaHorarioLabs(turmas1[j], d - 1, laboratorios)) {
                             for (var k = 0; k < disciplinas.length; k++) {
                                 if (turmas1[j].Disciplina === disciplinas[k].id) {
                                     if (seg !== '')
@@ -314,28 +326,87 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
                     }
                 }
             }
-            switch(d){
-                case 0: tables[2+5*i].table.body.push([{text:'08 - 10', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+            switch (d) {
+                case 0:
+                    tables[2 + 2 * i].table.body.push([{text: '08 - 10', alignment: 'center'}, {
+                        text: seg,
+                        alignment: 'center'
+                    }, {text: ter, alignment: 'center'}, {text: qua, alignment: 'center'}, {
+                        text: qui,
+                        alignment: 'center'
+                    }, {text: sex, alignment: 'center'}])
                     break
-                case 1: tables[2+5*i].table.body.push([{text:'10 - 12', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 1:
+                    tables[2 + 2 * i].table.body.push([{text: '10 - 12', alignment: 'center'}, {
+                        text: seg,
+                        alignment: 'center'
+                    }, {text: ter, alignment: 'center'}, {text: qua, alignment: 'center'}, {
+                        text: qui,
+                        alignment: 'center'
+                    }, {text: sex, alignment: 'center'}])
                     break
-                case 2: tables[2+5*i].table.body.push([{text:'14 - 16', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 2:
+                    tables[2 + 2 * i].table.body.push([{text: '14 - 16', alignment: 'center'}, {
+                        text: seg,
+                        alignment: 'center'
+                    }, {text: ter, alignment: 'center'}, {text: qua, alignment: 'center'}, {
+                        text: qui,
+                        alignment: 'center'
+                    }, {text: sex, alignment: 'center'}])
                     break
-                case 3: tables[2+5*i].table.body.push([{text:'16 - 18', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 3:
+                    tables[2 + 2 * i].table.body.push([{text: '16 - 18', alignment: 'center'}, {
+                        text: seg,
+                        alignment: 'center'
+                    }, {text: ter, alignment: 'center'}, {text: qua, alignment: 'center'}, {
+                        text: qui,
+                        alignment: 'center'
+                    }, {text: sex, alignment: 'center'}])
                     break
-                case 4: tables[2+5*i].table.body.push([{text:'17 - 19', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 4:
+                    tables[2 + 2 * i].table.body.push([{text: '17 - 19', alignment: 'center'}, {
+                        text: seg,
+                        alignment: 'center'
+                    }, {text: ter, alignment: 'center'}, {text: qua, alignment: 'center'}, {
+                        text: qui,
+                        alignment: 'center'
+                    }, {text: sex, alignment: 'center'}])
                     break
-                case 5: tables[2+5*i].table.body.push([{text:'18 - 20', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 5:
+                    tables[2 + 2 * i].table.body.push([{text: '18 - 20', alignment: 'center'}, {
+                        text: seg,
+                        alignment: 'center'
+                    }, {text: ter, alignment: 'center'}, {text: qua, alignment: 'center'}, {
+                        text: qui,
+                        alignment: 'center'
+                    }, {text: sex, alignment: 'center'}])
                     break
-                case 6: tables[2+5*i].table.body.push([{text:'19 - 21', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 6:
+                    tables[2 + 2 * i].table.body.push([{text: '19 - 21', alignment: 'center'}, {
+                        text: seg,
+                        alignment: 'center'
+                    }, {text: ter, alignment: 'center'}, {text: qua, alignment: 'center'}, {
+                        text: qui,
+                        alignment: 'center'
+                    }, {text: sex, alignment: 'center'}])
                     break
-                case 7: tables[2+5*i].table.body.push([{text:'21 - 23', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 7:
+                    tables[2 + 2 * i].table.body.push([{text: '21 - 23', alignment: 'center'}, {
+                        text: seg,
+                        alignment: 'center'
+                    }, {text: ter, alignment: 'center'}, {text: qua, alignment: 'center'}, {
+                        text: qui,
+                        alignment: 'center'
+                    }, {text: sex, alignment: 'center'}])
                     break
             }
             seg = ter = qua = qui = sex = ''
         }
+    }
 
-        tables.push({text: "2º Semestre", bold:true, margin:[0, 10, 0, 10], fontSize:18})
+    tables.push({text: "2º Semestre", bold:true, margin:[0, 10, 0, 10], fontSize:20})
+    for(var i = 0; i < laboratorios.length; i++) {
+        tables.push({text: laboratorios[i].nome, bold: true, margin: [0, 10, 0, 10], fontSize: 18})
         tables.push({
             table: {
                 widths: ['*', '*', '*', '*', '*', '*'],
@@ -491,21 +562,21 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
                 }
             }
             switch(d){
-                case 0: tables[4+5*i].table.body.push([{text:'08 - 10', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 0: tables[3 + (2 * laboratorios.length)+ 2 * i].table.body.push([{text:'08 - 10', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                     break
-                case 1: tables[4+5*i].table.body.push([{text:'10 - 12', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 1: tables[3 + (2 * laboratorios.length)+ 2 * i].table.body.push([{text:'10 - 12', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                     break
-                case 2: tables[4+5*i].table.body.push([{text:'14 - 16', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 2: tables[3 + (2 * laboratorios.length)+ 2 * i].table.body.push([{text:'14 - 16', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                     break
-                case 3: tables[4+5*i].table.body.push([{text:'16 - 18', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 3: tables[3 + (2 * laboratorios.length)+ 2 * i].table.body.push([{text:'16 - 18', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                     break
-                case 4: tables[4+5*i].table.body.push([{text:'17 - 19', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 4: tables[3 + (2 * laboratorios.length)+ 2 * i].table.body.push([{text:'17 - 19', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                     break
-                case 5: tables[4+5*i].table.body.push([{text:'18 - 20', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 5: tables[3 + (2 * laboratorios.length)+ 2 * i].table.body.push([{text:'18 - 20', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                     break
-                case 6: tables[4+5*i].table.body.push([{text:'19 - 21', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 6: tables[3 + (2 * laboratorios.length)+ 2 * i].table.body.push([{text:'19 - 21', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                     break
-                case 7: tables[4+5*i].table.body.push([{text:'21 - 23', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
+                case 7: tables[3 + (2 * laboratorios.length)+ 2 * i].table.body.push([{text:'21 - 23', alignment:'center'}, {text: seg, alignment:'center'}, {text: ter, alignment:'center'}, {text: qua, alignment:'center'}, {text: qui, alignment:'center'}, {text: sex, alignment:'center'}])
                     break
             }
             seg = ter = qua = qui = sex = ''
