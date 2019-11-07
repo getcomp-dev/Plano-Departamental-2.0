@@ -6,10 +6,10 @@
                 <h1 class="h2">Laboratórios - Alocação</h1>
                 <button type="button" class="btn btn-success col-sm-1" v-on:click.prevent="pdf" style=""> Relatório </button>
             </div>
+            <h3 style="margin: 10px 0 10px 0;">1º Semestre</h3>
             <div v-for="lab in Laboratorios">
-                <h3 style="margin: 10px 0 0 0;">{{lab.nome}}</h3>
-                <h4 style="margin: 10px 0 10px 0;">1º Semestre</h4 style=margin: 10px 0 10px 0;>
-                    <table class="tg">
+                <h4 style="margin: 10px 0 0 0;">{{lab.nome}}</h4>
+                <table class="tg">
                         <tr>
                             <th class="tg-0lax">hora</th>
                             <th class="tg-0lax">Seg</th>
@@ -92,7 +92,11 @@
                         </tr>
 
                     </table>
-                <h4 style="margin: 10px 0 10px 0;">2º Semestre</h4 style=margin: 10px 0 10px 0;>
+            </div>
+
+            <h3 style="margin: 10px 0 10px 0;">2º Semestre</h3>
+            <div v-for="lab in Laboratorios">
+                <h4 style="margin: 10px 0 0 0;">{{lab.nome}}</h4>
                 <table class="tg">
                     <tr>
                         <th class="tg-0lax">hora</th>

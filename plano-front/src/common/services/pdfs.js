@@ -55,7 +55,7 @@ export default {
             return false
     },
 
-pdfAlocacaoLabs() {
+    pdfAlocacaoLabs() {
         var pdfMake = require('pdfmake/build/pdfmake.js')
         if (pdfMake.vfs == undefined){
             var pdfFonts = require('pdfmake/build/vfs_fonts.js')
