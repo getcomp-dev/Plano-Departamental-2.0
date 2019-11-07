@@ -251,6 +251,4 @@
         z-index: 10;
     }
 
-    .element::-webkit-scrollbar { width: 0 !important }
-
 </style>
