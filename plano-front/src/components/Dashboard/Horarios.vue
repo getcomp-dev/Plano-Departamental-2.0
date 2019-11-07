@@ -216,6 +216,7 @@
                 }else
                     return false
             },
+
             createHorarios: function () {
                 var periodoSelecionado = parseInt(this.periodo, 10)
                 this.emptyTurmas()
@@ -228,6 +229,7 @@
                     this.createHorarios2()
                 }
                 this.visualizar = true
+                console.log(this.ativos1)
             },
 
             createHorarios1: function () {
@@ -240,7 +242,7 @@
                 var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades
                 var turmas = _.filter(this.$store.state.turma.Turmas, ['periodo', 1])
                 var turmasExternas = this.$store.state.turmaExterna.Turmas
-                var anoAtual = this.$store.state.year
+                var anoAtual = this.$store.state.plano.Plano[0].ano
                 var semestreAtual = 1
 
                     if(this.$store.state.curso.Cursos[0].semestreInicial==1){
@@ -273,16 +275,23 @@
                     grades = _.filter(this.$store.state.grade.Grades, ['Curso', 4])
                     grades = _.orderBy(grades, 'periodoInicio', 'desc')
                     pedidos = []
-                    for (var t in this.$store.state.pedido.Pedidos){
+                    for (let t in this.$store.state.pedido.Pedidos){
                         for (var pedido in this.$store.state.pedido.Pedidos[t]){
                             if(this.$store.state.pedido.Pedidos[t][pedido].Curso===4){
                                 pedidos.push(this.$store.state.pedido.Pedidos[t][pedido])
                             }
                         }
                     }
-                    pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 4])
+                    pedidosExternos = []
+                    for (let t in this.$store.state.pedidoExterno.Pedidos){
+                        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
+                            if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===4){
+                                pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido])
+                            }
+                        }
+                    }
 
-                    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+                    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
                         grade = grades[i].id
                         //inicio
@@ -298,20 +307,20 @@
                                 fim = 1 + 2*(parseInt(anoAtual, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(semestreAtual, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                             else
                                 fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
-                        for (var k = 0; k < disciplinaGrades.length; k++) {
+                        for (let k = 0; k < disciplinaGrades.length; k++) {
                             if ((disciplinaGrades[k].Grade == grade) && (this.isEven(disciplinaGrades[k].periodo) == this.evenCCD) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
-                                for (var j = 0; j < turmas.length; j++) {
+                                for (let j = 0; j < turmas.length; j++) {
                                     if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                                        for (var p = 0; p < pedidos.length; p++) {
+                                        for (let p = 0; p < pedidos.length; p++) {
                                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
                                                 this.ativos1.CCD[disciplinaGrades[k].periodo - 1].push(turmas[j])
                                             }
                                         }
                                     }
                                 }
-                                for (var j = 0; j < turmasExternas.length; j++) {
+                                for (let j = 0; j < turmasExternas.length; j++) {
                                     if (turmasExternas[j].periodo == 1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                                        for (var p = 0; p < pedidosExternos.length; p++) {
+                                        for (let p = 0; p < pedidosExternos.length; p++) {
                                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                                 this.ativos1.CCD[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                                             }
@@ -328,15 +337,22 @@
                     grades = _.filter(this.$store.state.grade.Grades, ['Curso', 1])
                     grades = _.orderBy(grades, 'periodoInicio', 'desc')
                     pedidos = []
-                    for (var t in this.$store.state.pedido.Pedidos){
+                    for (let t in this.$store.state.pedido.Pedidos){
                         for (var pedido in this.$store.state.pedido.Pedidos[t]){
                             if(this.$store.state.pedido.Pedidos[t][pedido].Curso===1){
                                 pedidos.push(this.$store.state.pedido.Pedidos[t][pedido])
                             }
                         }
                     }
-                    pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 1])
-                    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+                    pedidosExternos = []
+                    for (let t in this.$store.state.pedidoExterno.Pedidos){
+                        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
+                            if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===1){
+                                pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido])
+                            }
+                        }
+                    }
+                    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
                         grade = grades[i].id
                         //inicio
@@ -352,20 +368,20 @@
                                 fim = 1 + 2*(parseInt(anoAtual, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(semestreAtual, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                             else
                                 fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
-                        for (var k = 0; k < disciplinaGrades.length; k++) {
+                        for (let k = 0; k < disciplinaGrades.length; k++) {
                             if ((disciplinaGrades[k].Grade == grade) && (this.isEven(disciplinaGrades[k].periodo) == this.evenCCN) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
-                                for (var j = 0; j < turmas.length; j++) {
+                                for (let j = 0; j < turmas.length; j++) {
                                     if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                                        for (var p = 0; p < pedidos.length; p++) {
+                                        for (let p = 0; p < pedidos.length; p++) {
                                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
                                                 this.ativos1.CCN[disciplinaGrades[k].periodo - 1].push(turmas[j])
                                             }
                                         }
                                     }
                                 }
-                                for (var j = 0; j < turmasExternas.length; j++) {
+                                for (let j = 0; j < turmasExternas.length; j++) {
                                     if (turmasExternas[j].periodo == 1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                                        for (var p = 0; p < pedidosExternos.length; p++) {
+                                        for (let p = 0; p < pedidosExternos.length; p++) {
                                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                                 this.ativos1.CCN[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                                             }
@@ -382,15 +398,22 @@
                     grades = _.filter(this.$store.state.grade.Grades, ['Curso', 3])
                     grades = _.orderBy(grades, 'periodoInicio', 'desc')
                     pedidos = []
-                    for (var t in this.$store.state.pedido.Pedidos){
+                    for (let t in this.$store.state.pedido.Pedidos){
                         for (var pedido in this.$store.state.pedido.Pedidos[t]){
                             if(this.$store.state.pedido.Pedidos[t][pedido].Curso===3){
                                 pedidos.push(this.$store.state.pedido.Pedidos[t][pedido])
                             }
                         }
                     }
-                    pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 3])
-                    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+                    pedidosExternos = []
+                    for (let t in this.$store.state.pedidoExterno.Pedidos){
+                        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
+                            if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===3){
+                                pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido])
+                            }
+                        }
+                    }
+                    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
                         grade = grades[i].id
                         //inicio
@@ -406,20 +429,20 @@
                                 fim = 1 + 2*(parseInt(anoAtual, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(semestreAtual, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                             else
                                 fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
-                        for (var k = 0; k < disciplinaGrades.length; k++) {
+                        for (let k = 0; k < disciplinaGrades.length; k++) {
                             if ((disciplinaGrades[k].Grade == grade) && (this.isEven(disciplinaGrades[k].periodo) == this.evenSI) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
-                                for (var j = 0; j < turmas.length; j++) {
+                                for (let j = 0; j < turmas.length; j++) {
                                     if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                                        for (var p = 0; p < pedidos.length; p++) {
+                                        for (let p = 0; p < pedidos.length; p++) {
                                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
                                                 this.ativos1.SI[disciplinaGrades[k].periodo - 1].push(turmas[j])
                                             }
                                         }
                                     }
                                 }
-                                for (var j = 0; j < turmasExternas.length; j++) {
+                                for (let j = 0; j < turmasExternas.length; j++) {
                                     if (turmasExternas[j].periodo == 1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                                        for (var p = 0; p < pedidosExternos.length; p++) {
+                                        for (let p = 0; p < pedidosExternos.length; p++) {
                                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                                 this.ativos1.SI[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                                             }
@@ -436,15 +459,22 @@
                     grades = _.filter(this.$store.state.grade.Grades, ['Curso', 2])
                     grades = _.orderBy(grades, 'periodoInicio', 'desc')
                     pedidos = []
-                    for (var t in this.$store.state.pedido.Pedidos){
+                    for (let t in this.$store.state.pedido.Pedidos){
                         for (var pedido in this.$store.state.pedido.Pedidos[t]){
                             if(this.$store.state.pedido.Pedidos[t][pedido].Curso===2){
                                 pedidos.push(this.$store.state.pedido.Pedidos[t][pedido])
                             }
                         }
                     }
-                    pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 2])
-                    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+                    pedidosExternos = []
+                    for (let t in this.$store.state.pedidoExterno.Pedidos){
+                        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
+                            if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===2){
+                                pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido])
+                            }
+                        }
+                    }
+                    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
                         grade = grades[i].id
                         //inicio
@@ -460,20 +490,20 @@
                                 fim = 1 + 2*(parseInt(anoAtual, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(semestreAtual, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                             else
                                 fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
-                        for (var k = 0; k < disciplinaGrades.length; k++) {
+                        for (let k = 0; k < disciplinaGrades.length; k++) {
                             if ((disciplinaGrades[k].Grade == grade) && (this.isEven(disciplinaGrades[k].periodo) == this.evenEC) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
-                                for (var j = 0; j < turmas.length; j++) {
+                                for (let j = 0; j < turmas.length; j++) {
                                     if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                                        for (var p = 0; p < pedidos.length; p++) {
+                                        for (let p = 0; p < pedidos.length; p++) {
                                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
                                                 this.ativos1.EC[disciplinaGrades[k].periodo - 1].push(turmas[j])
                                             }
                                         }
                                     }
                                 }
-                                for (var j = 0; j < turmasExternas.length; j++) {
+                                for (let j = 0; j < turmasExternas.length; j++) {
                                     if (turmasExternas[j].periodo == 1 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                                        for (var p = 0; p < pedidosExternos.length; p++) {
+                                        for (let p = 0; p < pedidosExternos.length; p++) {
                                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                                 this.ativos1.EC[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                                             }
@@ -487,8 +517,8 @@
                 //Eletivas está selecionado:
                 var eletiva = true
                 if(_.indexOf(this.cursos, 5) > -1){
-                    for(var t = 0; t<turmas.length;t++){
-                        for(var d = 0; d<disciplinaGrades.length; d++){
+                    for(let t = 0; t<turmas.length;t++){
+                        for(let d = 0; d<disciplinaGrades.length; d++){
                             if(turmas[t].Disciplina===disciplinaGrades[d].Disciplina){
                                 eletiva = false
                             }
@@ -514,7 +544,7 @@
                 var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades
                 var turmas = _.filter(this.$store.state.turma.Turmas, ['periodo', 3])
                 var turmasExternas = this.$store.state.turmaExterna.Turmas
-                var anoAtual = this.$store.state.year
+                var anoAtual = this.$store.plano.Plano[0].ano
                 var semestreAtual = 1
 
                 if(this.$store.state.curso.Cursos[0].semestreInicial==1){
@@ -547,16 +577,23 @@
                     grades = _.filter(this.$store.state.grade.Grades, ['Curso', 4])
                     grades = _.orderBy(grades, 'periodoInicio', 'desc')
                     pedidos = []
-                    for (var t in this.$store.state.pedido.Pedidos){
+                    for (let t in this.$store.state.pedido.Pedidos){
                         for (var pedido in this.$store.state.pedido.Pedidos[t]){
                             if(this.$store.state.pedido.Pedidos[t][pedido].Curso===4){
                                 pedidos.push(this.$store.state.pedido.Pedidos[t][pedido])
                             }
                         }
                     }
-                    pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 4])
+                    pedidosExternos = []
+                    for (let t in this.$store.state.pedidoExterno.Pedidos){
+                        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
+                            if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===4){
+                                pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido])
+                            }
+                        }
+                    }
 
-                    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+                    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
                         grade = grades[i].id
                         //inicio
@@ -572,20 +609,20 @@
                             fim = 1 + 2*(parseInt(anoAtual, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(semestreAtual, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                         else
                             fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
-                        for (var k = 0; k < disciplinaGrades.length; k++) {
+                        for (let k = 0; k < disciplinaGrades.length; k++) {
                             if ((disciplinaGrades[k].Grade == grade) && (this.isEven(disciplinaGrades[k].periodo) == this.evenCCD) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
-                                for (var j = 0; j < turmas.length; j++) {
+                                for (let j = 0; j < turmas.length; j++) {
                                     if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                                        for (var p = 0; p < pedidos.length; p++) {
+                                        for (let p = 0; p < pedidos.length; p++) {
                                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
                                                 this.ativos2.CCD[disciplinaGrades[k].periodo - 1].push(turmas[j])
                                             }
                                         }
                                     }
                                 }
-                                for (var j = 0; j < turmasExternas.length; j++) {
+                                for (let j = 0; j < turmasExternas.length; j++) {
                                     if (turmasExternas[j].periodo == 3 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                                        for (var p = 0; p < pedidosExternos.length; p++) {
+                                        for (let p = 0; p < pedidosExternos.length; p++) {
                                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                                 this.ativos2.CCD[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                                             }
@@ -602,15 +639,22 @@
                     grades = _.filter(this.$store.state.grade.Grades, ['Curso', 1])
                     grades = _.orderBy(grades, 'periodoInicio', 'desc')
                     pedidos = []
-                    for (var t in this.$store.state.pedido.Pedidos){
+                    for (let t in this.$store.state.pedido.Pedidos){
                         for (var pedido in this.$store.state.pedido.Pedidos[t]){
                             if(this.$store.state.pedido.Pedidos[t][pedido].Curso===1){
                                 pedidos.push(this.$store.state.pedido.Pedidos[t][pedido])
                             }
                         }
                     }
-                    pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 1])
-                    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+                    pedidosExternos = []
+                    for (let t in this.$store.state.pedidoExterno.Pedidos){
+                        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
+                            if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===1){
+                                pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido])
+                            }
+                        }
+                    }
+                    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
                         grade = grades[i].id
                         //inicio
@@ -626,20 +670,20 @@
                             fim = 1 + 2*(parseInt(anoAtual, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(semestreAtual, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                         else
                             fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
-                        for (var k = 0; k < disciplinaGrades.length; k++) {
+                        for (let k = 0; k < disciplinaGrades.length; k++) {
                             if ((disciplinaGrades[k].Grade == grade) && (this.isEven(disciplinaGrades[k].periodo) == this.evenCCN) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
-                                for (var j = 0; j < turmas.length; j++) {
+                                for (let j = 0; j < turmas.length; j++) {
                                     if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                                        for (var p = 0; p < pedidos.length; p++) {
+                                        for (let p = 0; p < pedidos.length; p++) {
                                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
                                                 this.ativos2.CCN[disciplinaGrades[k].periodo - 1].push(turmas[j])
                                             }
                                         }
                                     }
                                 }
-                                for (var j = 0; j < turmasExternas.length; j++) {
+                                for (let j = 0; j < turmasExternas.length; j++) {
                                     if (turmasExternas[j].periodo == 3 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                                        for (var p = 0; p < pedidosExternos.length; p++) {
+                                        for (let p = 0; p < pedidosExternos.length; p++) {
                                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                                 this.ativos2.CCN[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                                             }
@@ -656,15 +700,22 @@
                     grades = _.filter(this.$store.state.grade.Grades, ['Curso', 3])
                     grades = _.orderBy(grades, 'periodoInicio', 'desc')
                     pedidos = []
-                    for (var t in this.$store.state.pedido.Pedidos){
+                    for (let t in this.$store.state.pedido.Pedidos){
                         for (var pedido in this.$store.state.pedido.Pedidos[t]){
                             if(this.$store.state.pedido.Pedidos[t][pedido].Curso===3){
                                 pedidos.push(this.$store.state.pedido.Pedidos[t][pedido])
                             }
                         }
                     }
-                    pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 3])
-                    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+                    pedidosExternos = []
+                    for (let t in this.$store.state.pedidoExterno.Pedidos){
+                        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
+                            if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===3){
+                                pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido])
+                            }
+                        }
+                    }
+                    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
                         grade = grades[i].id
                         //inicio
@@ -680,20 +731,20 @@
                             fim = 1 + 2*(parseInt(anoAtual, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(semestreAtual, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                         else
                             fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
-                        for (var k = 0; k < disciplinaGrades.length; k++) {
+                        for (let k = 0; k < disciplinaGrades.length; k++) {
                             if ((disciplinaGrades[k].Grade == grade) && (this.isEven(disciplinaGrades[k].periodo) == this.evenSI) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
-                                for (var j = 0; j < turmas.length; j++) {
+                                for (let j = 0; j < turmas.length; j++) {
                                     if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                                        for (var p = 0; p < pedidos.length; p++) {
+                                        for (let p = 0; p < pedidos.length; p++) {
                                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
                                                 this.ativos2.SI[disciplinaGrades[k].periodo - 1].push(turmas[j])
                                             }
                                         }
                                     }
                                 }
-                                for (var j = 0; j < turmasExternas.length; j++) {
+                                for (let j = 0; j < turmasExternas.length; j++) {
                                     if (turmasExternas[j].periodo == 3 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                                        for (var p = 0; p < pedidosExternos.length; p++) {
+                                        for (let p = 0; p < pedidosExternos.length; p++) {
                                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                                 this.ativos2.SI[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                                             }
@@ -710,15 +761,22 @@
                     grades = _.filter(this.$store.state.grade.Grades, ['Curso', 2])
                     grades = _.orderBy(grades, 'periodoInicio', 'desc')
                     pedidos = []
-                    for (var t in this.$store.state.pedido.Pedidos){
+                    for (let t in this.$store.state.pedido.Pedidos){
                         for (var pedido in this.$store.state.pedido.Pedidos[t]){
                             if(this.$store.state.pedido.Pedidos[t][pedido].Curso===2){
                                 pedidos.push(this.$store.state.pedido.Pedidos[t][pedido])
                             }
                         }
                     }
-                    pedidosExternos = _.filter(this.$store.state.pedidoExterno.Pedidos, ['Curso', 2])
-                    for (var i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
+                    pedidosExternos = []
+                    for (let t in this.$store.state.pedidoExterno.Pedidos){
+                        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
+                            if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===2){
+                                pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido])
+                            }
+                        }
+                    }
+                    for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
                         //grade
                         grade = grades[i].id
                         //inicio
@@ -734,20 +792,20 @@
                             fim = 1 + 2*(parseInt(anoAtual, 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(semestreAtual, 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
                         else
                             fim = inicio - 1 + 2*(parseInt(grades[i-1].periodoInicio.slice(0,4), 10) - parseInt(grades[i].periodoInicio.slice(0,4), 10)) + (parseInt(grades[i-1].periodoInicio.slice(5,6), 10) - parseInt(grades[i].periodoInicio.slice(5,6), 10))/2
-                        for (var k = 0; k < disciplinaGrades.length; k++) {
+                        for (let k = 0; k < disciplinaGrades.length; k++) {
                             if ((disciplinaGrades[k].Grade == grade) && (this.isEven(disciplinaGrades[k].periodo) == this.evenEC) && (disciplinaGrades[k].periodo >= parseInt(inicio, 10)) && (disciplinaGrades[k].periodo <= parseInt(fim, 10))) {
-                                for (var j = 0; j < turmas.length; j++) {
+                                for (let j = 0; j < turmas.length; j++) {
                                     if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                                        for (var p = 0; p < pedidos.length; p++) {
+                                        for (let p = 0; p < pedidos.length; p++) {
                                             if ((pedidos[p].vagasPeriodizadas > 0) && (pedidos[p].Turma == turmas[j].id)) {
                                                 this.ativos2.EC[disciplinaGrades[k].periodo - 1].push(turmas[j])
                                             }
                                         }
                                     }
                                 }
-                                for (var j = 0; j < turmasExternas.length; j++) {
+                                for (let j = 0; j < turmasExternas.length; j++) {
                                     if (turmasExternas[j].periodo == 3 && turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                                        for (var p = 0; p < pedidosExternos.length; p++) {
+                                        for (let p = 0; p < pedidosExternos.length; p++) {
                                             if ((pedidosExternos[p].vagasPeriodizadas > 0) && (pedidosExternos[p].Turma == turmasExternas[j].id)) {
                                                 this.ativos2.EC[disciplinaGrades[k].periodo - 1].push(turmasExternas[j])
                                             }
@@ -761,8 +819,8 @@
                 //Eletivas está selecionado:
                 var eletiva = true
                 if(_.indexOf(this.cursos, 5) > -1){
-                    for(var t = 0; t<turmas.length;t++){
-                        for(var d = 0; d<disciplinaGrades.length; d++){
+                    for(let t = 0; t<turmas.length;t++){
+                        for(let d = 0; d<disciplinaGrades.length; d++){
                             if(turmas[t].Disciplina===disciplinaGrades[d].Disciplina){
                                 eletiva = false
                             }
@@ -786,7 +844,7 @@
             },
 
             checkPeriodo(turma, periodo){
-                for (var g=0;g<this.$store.state.disciplinaGrade.DisciplinaGrades.length;g++){
+                for (let g=0;g<this.$store.state.disciplinaGrade.DisciplinaGrades.length;g++){
                     if(this.$store.state.disciplinaGrade.DisciplinaGrades[g].Disciplina==turma && this.$store.state.disciplinaGrade.DisciplinaGrades[g].periodo==periodo) {
                         return true
                     }
@@ -794,27 +852,27 @@
             },
 
             updateHorarios(){
-                for (var i=0;i<10;i++) {
-                    for (var j = 0; j < this.ativos1.CCD[i].length; j++)
-                        for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+                for (let i=0;i<10;i++) {
+                    for (let j = 0; j < this.ativos1.CCD[i].length; j++)
+                        for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
                             if (this.ativos1.CCD[i][j].id == this.$store.state.turma.Turmas[k].id) {
                                 this.ativos1.CCD[i].splice(j, 1, this.$store.state.turma.Turmas[k])
                             }
                         }
-                    for (var j = 0; j < this.ativos1.CCN[i].length; j++)
-                        for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+                    for (let j = 0; j < this.ativos1.CCN[i].length; j++)
+                        for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
                             if (this.ativos1.CCN[i][j].id == this.$store.state.turma.Turmas[k].id) {
                                 this.ativos1.CCN[i].splice(j, 1, this.$store.state.turma.Turmas[k])
                             }
                         }
-                    for (var j = 0; j < this.ativos1.EC[i].length; j++)
-                        for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+                    for (let j = 0; j < this.ativos1.EC[i].length; j++)
+                        for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
                             if (this.ativos1.EC[i][j].id == this.$store.state.turma.Turmas[k].id) {
                                 this.ativos1.EC[i].splice(j, 1, this.$store.state.turma.Turmas[k])
                             }
                         }
-                    for (var j = 0; j < this.ativos1.SI[i].length; j++)
-                        for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+                    for (let j = 0; j < this.ativos1.SI[i].length; j++)
+                        for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
                             if (this.ativos1.SI[i][j].id == this.$store.state.turma.Turmas[k].id) {
                                 this.ativos1.SI[i].splice(j, 1, this.$store.state.turma.Turmas[k])
                             }
@@ -823,27 +881,27 @@
 
                 this.$store.commit('redefinirAtivas1', {Ativas: this.ativos1})
 
-                for (var i=0;i<10;i++) {
-                    for (var j = 0; j < this.ativos2.CCD[i].length; j++)
-                        for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+                for (let i=0;i<10;i++) {
+                    for (let j = 0; j < this.ativos2.CCD[i].length; j++)
+                        for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
                             if (this.ativos2.CCD[i][j].id == this.$store.state.turma.Turmas[k].id) {
                                 this.ativos2.CCD[i].splice(j, 1, this.$store.state.turma.Turmas[k])
                             }
                         }
-                    for (var j = 0; j < this.ativos2.CCN[i].length; j++)
-                        for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+                    for (let j = 0; j < this.ativos2.CCN[i].length; j++)
+                        for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
                             if (this.ativos2.CCN[i][j].id == this.$store.state.turma.Turmas[k].id) {
                                 this.ativos2.CCN[i].splice(j, 1, this.$store.state.turma.Turmas[k])
                             }
                         }
-                    for (var j = 0; j < this.ativos2.EC[i].length; j++)
-                        for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+                    for (let j = 0; j < this.ativos2.EC[i].length; j++)
+                        for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
                             if (this.ativos2.EC[i][j].id == this.$store.state.turma.Turmas[k].id) {
                                 this.ativos2.EC[i].splice(j, 1, this.$store.state.turma.Turmas[k])
                             }
                         }
-                    for (var j = 0; j < this.ativos2.SI[i].length; j++)
-                        for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+                    for (let j = 0; j < this.ativos2.SI[i].length; j++)
+                        for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
                             if (this.ativos2.SI[i][j].id == this.$store.state.turma.Turmas[k].id) {
                                 this.ativos2.SI[i].splice(j, 1, this.$store.state.turma.Turmas[k])
                             }
