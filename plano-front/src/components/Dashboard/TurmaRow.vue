@@ -1,8 +1,8 @@
 <template>
     <div class="turmarow" style="width: 709px;" v-bind:style="{backgroundColor: perfil.cor}">
         <td style="width: 16px;">
-            <input type="text" style="width: 16px;" id="periodo" v-model="turmaForm.periodo" v-on:blur="editTurma(turma)">
-            <input type="checkbox" name="ativa" value="true" v-on:click="checkDelete(turma)" v-model="ativo" style="width:16px;height: 16px;padding:0;">
+            <input :disabled="Admin ? false : true" type="text" style="width: 16px;" id="periodo" v-model="turmaForm.periodo" v-on:blur="editTurma(turma)">
+            <input :disabled="Admin ? false : true" type="checkbox" name="ativa" value="true" v-on:click="checkDelete(turma)" v-model="ativo" style="width:16px;height: 16px;padding:0;">
         </td>
         <td style="width: 64px;">
             <p style="width:64px; min-width: 64px;">
@@ -14,7 +14,7 @@
             </p>
         </td>
         <td style="width: 240px;">
-            <select type="text" style="width:240px;" id="disciplina" v-model="turmaForm.Disciplina"
+            <select :disabled="Admin ? false : true" type="text" style="width:240px;" id="disciplina" v-model="turmaForm.Disciplina"
                     v-on:change="editTurma(turma)">
                 <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
                 <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">
@@ -32,17 +32,17 @@
             </p>
         </td>
         <td style="width: 36px;">
-            <input type="text" style="width: 20px; margin-left: 8px; margin-right: 8px" v-model="turmaForm.letra" v-on:blur="editTurma(turma)">
+            <input :disabled="Admin ? false : true" type="text" style="width: 20px; margin-left: 8px; margin-right: 8px" v-model="turmaForm.letra" v-on:blur="editTurma(turma)">
         </td>
         <td style="width: 100px;">
-            <select type="text" style="width:100px" id="docente1" v-model="turmaForm.Docente1"
+            <select :disabled="Admin ? false : true" type="text" style="width:100px" id="docente1" v-model="turmaForm.Docente1"
                     v-on:change="editTurma(turma)">
                 <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
                 <option v-else type="text" value=""></option>
                 <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.apelido}}</option>
             </select>
             <br/>
-            <select type="text" style="width:100px;" id="docente2" v-model="turmaForm.Docente2"
+            <select :disabled="Admin ? false : true" type="text" style="width:100px;" id="docente2" v-model="turmaForm.Docente2"
                     v-on:change="editTurma(turma)">
                 <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
                 <option v-else type="text" value=""></option>
@@ -50,7 +50,7 @@
             </select>
         </td>
         <td style="width: 62px;">
-            <select type="text" style="width: 62px" id="turno1" v-model="turmaForm.turno1" v-on:change="editTurma(turma)">
+            <select :disabled="Admin ? false : true" type="text" style="width: 62px" id="turno1" v-model="turmaForm.turno1" v-on:change="editTurma(turma)">
                 <option value=""></option>
                 <option value="Diurno">Diurno</option>
                 <option value="Noturno">Noturno</option>
@@ -59,14 +59,14 @@
             <br/>
         </td>
         <td style="width: 65px;">
-            <select type="text" style="width: 65px" id="horario1" v-model="turmaForm.Horario1"
+            <select :disabled="Admin ? false : true" type="text" style="width: 65px" id="horario1" v-model="turmaForm.Horario1"
                     v-on:change="editTurma(turma)">
                 <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
                 <option v-else value=""></option>
                 <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
             </select>
             <br/>
-            <select type="text" style="width: 65px" id="horario2" v-model="turmaForm.Horario2"
+            <select :disabled="Admin ? false : true" type="text" style="width: 65px" id="horario2" v-model="turmaForm.Horario2"
                     v-on:change="editTurma(turma)">
                 <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
                 <option v-else value=""></option>
@@ -74,13 +74,13 @@
             </select>
         </td>
         <td style="width: 60px">
-            <select type="text" style="width:60px" id="sala1" v-model="turmaForm.Sala1" v-on:change="editTurma(turma)">
+            <select :disabled="Admin ? false : true" type="text" style="width:60px" id="sala1" v-model="turmaForm.Sala1" v-on:change="editTurma(turma)">
                 <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
                 <option v-else value=""></option>
                 <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
             </select>
             <br/>
-            <select type="text" style="width: 60px" id="sala2" v-model="turmaForm.Sala2" v-on:change="editTurma(turma)">
+            <select :disabled="Admin ? false : true" type="text" style="width: 60px" id="sala2" v-model="turmaForm.Sala2" v-on:change="editTurma(turma)">
                 <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
                 <option v-else value=""></option>
                 <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
@@ -264,6 +264,14 @@
 
             Pedidos () {
                 return this.$store.state.pedido.Pedidos[this.turma.id]
+            },
+
+            Admin () {
+                if(this.$store.state.auth.Usuario.admin===1){
+                    return true
+                }else{
+                    return false
+                }
             }
 
 

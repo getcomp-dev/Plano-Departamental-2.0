@@ -1,12 +1,12 @@
 <template>
     <div>
-                <input v-if="pedidoForm.vagasPeriodizadas == 0" type="text" v-model="pedidoForm.vagasPeriodizadas" style="width: 32px; color:#DADADA; text-align:center"
+                <input :disabled="Admin ? false : true" v-if="pedidoForm.vagasPeriodizadas == 0" type="text" v-model="pedidoForm.vagasPeriodizadas" style="width: 32px; color:#DADADA; text-align:center"
                        v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
-                <input v-else type="text" v-model="pedidoForm.vagasPeriodizadas" style="width: 32px; font-weight: bold;  background-color: #DCDCDC; text-align:center"
+                <input :disabled="Admin ? false : true" v-else type="text" v-model="pedidoForm.vagasPeriodizadas" style="width: 32px; font-weight: bold;  background-color: #DCDCDC; text-align:center"
                         v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
-                <input v-if="pedidoForm.vagasNaoPeriodizadas == 0" type="text" v-model="pedidoForm.vagasNaoPeriodizadas" style="width: 32px; color:#DADADA; text-align:center"
+                <input :disabled="Admin ? false : true" v-if="pedidoForm.vagasNaoPeriodizadas == 0" type="text" v-model="pedidoForm.vagasNaoPeriodizadas" style="width: 32px; color:#DADADA; text-align:center"
                         v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
-                <input v-else type="text" v-model="pedidoForm.vagasNaoPeriodizadas" style="width: 32px; font-weight: bold; background-color: #DCDCDC; text-align:center"
+                <input :disabled="Admin ? false : true" v-else type="text" v-model="pedidoForm.vagasNaoPeriodizadas" style="width: 32px; font-weight: bold; background-color: #DCDCDC; text-align:center"
                         v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
     </div>
 </template>
@@ -85,6 +85,14 @@
         computed: {
             pedido () {
                 return this.$store.state.pedido.Pedidos[this.turma.id][this.index]
+            },
+
+            Admin () {
+                if(this.$store.state.auth.Usuario.admin===1){
+                    return true
+                }else{
+                    return false
+                }
             }
         },
 

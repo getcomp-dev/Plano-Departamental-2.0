@@ -111,17 +111,17 @@
                 <i class="far fa-calendar-alt mr-1"></i> {{year}}
               </a>
             </h6>
-            <ul class="nav flex-column mb-2" v-if="Admin">
+            <ul class="nav flex-column mb-2">
               <li class="nav-item">
                 <router-link :to="{ name: 'pedidos' }" class="nav-link" v-on:click="loadPage"><i class="fas fa-clipboard"></i> Tabela</router-link>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" v-if="Admin">
                 <router-link :to="{ name: 'turmasExternas' }" class="nav-link" v-on:click="loadPage"><i class="fas fa-clipboard"></i> Tabela Externa</router-link>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" v-if="Admin">
                 <router-link :to="{ name: 'cargaPos' }" class="nav-link" v-on:click="loadPage"><i class="fas fa-clipboard"></i> Tabela Pós</router-link>
               </li>
-              <li class="nav-item">
+              <li class="nav-item" v-if="Admin">
                 <router-link :to="{ name: 'horarios' }" class="nav-link"><i class="fas fa-calendar-alt"></i> Horários</router-link>
               </li>
 
