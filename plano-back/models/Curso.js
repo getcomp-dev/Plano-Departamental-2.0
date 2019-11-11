@@ -40,6 +40,12 @@ module.exports = function (sequelize, DataTypes) {
       defaultValue: 0,
     },
 
+    alunosEntrada2: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+    },
+
     posicao: {
       type: DataTypes.INTEGER
     }
