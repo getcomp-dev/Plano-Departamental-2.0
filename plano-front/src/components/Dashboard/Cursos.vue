@@ -23,10 +23,8 @@
             <td>{{curso.codigo}}</td>
             <td>{{curso.turno}}</td>
             <!-- 1 = 1º semestre, 2 = 2º semestre, 3 = Ambos-->
-            <td v-if="curso.semestreInicial == 1 || curso.semestreInicial==3">{{curso.alunosEntrada}}</td>
-            <td v-else>0</td>
-            <td v-if="curso.semestreInicial == 2|| curso.semestreInicial==3">{{curso.alunosEntrada}}</td>
-            <td v-else>0</td>
+            <td>{{curso.alunosEntrada}}</td>
+            <td>{{curso.alunosEntrada2}}</td>
             <td><input type="checkbox" v-model="CursosAtivos[curso.id]" v-on:click.prevent="toggleCurso(curso.id)"></td>
 
 
@@ -68,9 +66,15 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="alunosEntrada" class="col-sm-2 col-form-label">Alunos por Entrada</label>
+          <label for="alunosEntrada" class="col-sm-2 col-form-label">Alunos 1º semestre</label>
           <div class="col-sm-10">
             <input type="text" class="form-control" id="alunosEnrada" v-model="cursoForm.alunosEntrada">
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="alunosEntrada" class="col-sm-2 col-form-label">Alunos 2º semestre</label>
+          <div class="col-sm-10">
+            <input type="text" class="form-control" id="alunosEnrada" v-model="cursoForm.alunosEntrada2">
           </div>
         </div>
 
@@ -130,6 +134,7 @@ const emptyCurso = {
     turno:undefined,
     semestreInicial: undefined,
     alunosEntrada: undefined,
+    alunosEntrada2: undefined,
     posicao: undefined
 }
 
