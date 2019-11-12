@@ -544,7 +544,7 @@
                 var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades
                 var turmas = _.filter(this.$store.state.turma.Turmas, ['periodo', 3])
                 var turmasExternas = this.$store.state.turmaExterna.Turmas
-                var anoAtual = this.$store.plano.Plano[0].ano
+                var anoAtual = this.$store.state.plano.Plano[0].ano
                 var semestreAtual = 1
 
                 if(this.$store.state.curso.Cursos[0].semestreInicial==1){
