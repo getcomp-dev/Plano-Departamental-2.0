@@ -80,7 +80,7 @@
                 <template v-if="CargasPos.length>0">
                     <template v-for="t in [1,  2, 3, 4]">
                     <template v-for="docente in Docentes">
-                    <tr v-for="carga in CargasPos" :key="'docente'+docente.id+'carga'+carga.id" v-if="(carga.Docente === docente.id) && (carga.trimestre == (t))">
+                    <tr v-for="carga in CargasPos" :key="'docente'+docente.id+'carga'+carga.id+'t'+t" v-if="(carga.Docente === docente.id) && (carga.trimestre == (t))">
                         <template v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))">
                             <cargadata :key="'1docente'+docente.id+'carga'+carga.id" v-bind:carga="carga"></cargadata>
                         </template>

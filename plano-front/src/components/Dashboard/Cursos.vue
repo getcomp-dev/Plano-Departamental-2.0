@@ -89,16 +89,6 @@
           </div>
         </div>
         <div class="form-group row">
-          <label for="semestreInicial" class="col-sm-2 col-form-label">Semestre de Entrada </label>
-          <div class="col-sm-10">
-            <div id="semestreInicial">
-              <input type="radio" name="semestreInicial" value="1" v-model="cursoForm.semestreInicial"> Primeiro<br/>
-              <input type="radio" name="semestreInicial" value="2" v-model="cursoForm.semestreInicial"> Segundo<br/>
-              <input type="radio" name="semestreInicial" value="3" v-model="cursoForm.semestreInicial"> Ambos<br/>
-            </div>
-          </div>
-        </div>
-        <div class="form-group row">
           <div class="col-sm-10">
             <template v-if="isEdit">
               <button type="button" class="btn btn-success m-2" v-on:click.prevent="editCurso" :key="1">Editar</button>
@@ -184,6 +174,16 @@ export default {
         addCurso() {
             this.cursoForm.posicao = this.ultimo
             this.ultimo = this.ultimo + 1
+            if((this.cursoForm.alunosEntrada==0) || (this.cursoForm.alunosEntrada===undefined))
+                if((this.cursoForm.alunosEntrada2==0) || (this.cursoForm.alunosEntrada2===undefined))
+                    this.cursoForm.semestreInicial = 3
+                else
+                    this.cursoForm.semestreInicial = 2
+            else
+                if((this.cursoForm.alunosEntrada2==0) || (this.cursoForm.alunosEntrada2===undefined))
+                    this.cursoForm.semestreInicial = 1
+                else
+                    this.cursoForm.semestreInicial = 3
             cursoService.create(this.cursoForm).then((response) => {
               for (var i = 0; i< this.$store.state.turma.Turmas.length; i++){
                 var pedido = _.clone(emptyPedido)
@@ -211,6 +211,16 @@ export default {
         },
 
         editCurso() {
+            if((this.cursoForm.alunosEntrada==0) || (this.cursoForm.alunosEntrada===undefined))
+                if((this.cursoForm.alunosEntrada2==0) || (this.cursoForm.alunosEntrada2===undefined))
+                    this.cursoForm.semestreInicial = 3
+                else
+                    this.cursoForm.semestreInicial = 2
+            else
+                if((this.cursoForm.alunosEntrada2==0) || (this.cursoForm.alunosEntrada2===undefined))
+                    this.cursoForm.semestreInicial = 1
+                else
+                    this.cursoForm.semestreInicial = 3
             cursoService.update(this.cursoForm.id, this.cursoForm).then((response) => {
                 this.$notify({
                 group: 'general',
