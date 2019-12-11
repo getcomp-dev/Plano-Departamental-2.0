@@ -1,355 +1,865 @@
 <template>
-  <div class="DashboardGrades row" v-if="Admin">
-    <div class="col">
-      <div
-              class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Lista Disciplinas</h1>
-      </div>
-      <label for="cursoAtual" class="col-sm-2 col-form-label">Curso</label>
-      <select id="cursoAtual" v-model="currentCurso">
-        <option value="4">Ciência da Computação Diurno</option>
-        <option value="1">Ciência da Computação Noturno</option>
-        <option value="3">Sistemas de Informação</option>
-        <option value="2">Engenharia Computacional</option>
-      </select>
-      <label for="gradeAtual" class="col-sm-2 col-form-label">Grade</label>
-      <select id="gradeAtual" v-model="currentGrade" v-on:change="findGrade()" style="width: 60px;">
-        <option v-for="grade in Grades" v-if="grade.Curso == currentCurso" :value="grade.id">{{grade.nome}}</option>
-      </select>
-      <div class="col sm6 dataContainer">
-        <div class="header" style="width: 15%;">Início</div>
-        <div class="header" style="width: 40%;">Curso</div>
-        <div class="header" style="width: 5%;">P.</div>
-        <div class="header" style="width: 40%;">Disciplina</div>
-        <br/>
-        <template v-if="currentGrade!=undefined">
-          <div v-for="grade in Grades" :key="grade.id" v-on:click.prevent="showGrade(grade)">
-            <template v-if="grade.id===currentGrade">
-            <div class="data" style="width: 15%">{{grade.periodoInicio}}</div>
-              <div class="data" style="width: 40%">
-                <template v-if="grade.Curso===4">Ciência da Computação Diurno</template>
-                <template v-else-if="grade.Curso===1">Ciência da Computação Noturno</template>
-                <template v-else-if="grade.Curso===3">Sistemas de Informação</template>
-                <template v-else-if="grade.Curso===2">Engenharia Computacional</template>
-              </div>
-                <template v-for="disciplinaGrade in DisciplinaGrades">
-                  <template v-if="disciplinaGrade.Grade===grade.id">
-                    <div class="data" style="width: 45%;" v-bind:class="{'even':isEven(disciplinaGrade.periodo)}">
-                    <div class="data" style="width: 11.1111%">{{disciplinaGrade.periodo}}</div>
-                    <template v-for="disciplina in Disciplinas">
-                      <template v-if="andConnector(grade, disciplina, disciplinaGrade)">
-                        <div class="data" style="width: 88.8889%" v-on:click.prevent="showDisciplina(disciplinaGrade)">{{disciplina.nome}}</div>
-                      </template>
-                    </template>
-                    </div>
-                    <div class="header" style="width: 55%;"></div>
-                  </template>
-                </template>
-
-          <br/>
-          </template>
-          </div>
-        </template>
+  <div class="DashboardGrades row pr-2" v-if="Admin">
+    <!-- Titulo -->
+    <div class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0">
+      <div class="form-inline col-12 pl-0 mb-2 pr-1">
+        <h1 class="col-12 titulo">Grades</h1>
       </div>
     </div>
-    <div class="col">
-      <div class="sticky">
-      <div
-              class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <template v-if="isEdit">
-          <h1 class="h2">Editar Grade</h1>
-        </template>
-        <template v-else>
-          <h1 class="h2">Adicionar Grade</h1>
-        </template>
-      </div>
-      <b-alert :show="Boolean(error)" variant="danger" dismissible v-html="error">
-      </b-alert>
-      <form>
-        <div class="form-group row">
-          <label for="nome" class="col-sm-2 col-form-label">Nome</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="nome" v-model="gradeForm.nome">
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="periodoInicio" class="col-sm-2 col-form-label">Período de Início</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="periodoInicio" v-model="gradeForm.periodoInicio">
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="curso" class="col-sm-2 col-form-label">Curso</label>
-          <div class="col-sm-10">
-            <select type="text" class="form-control" id="curso" v-model="gradeForm.Curso">
+
+    <div class="w-100 mb-2 border-bottom"></div>
+
+    <div class="row w-100 m-0" style="font-size:11px">
+      <div class="col-12 mr-2 px-0">
+        <div class="form-row mx-0">
+          <div class="mr-2">
+            <label for="cursoAtual" class="col-form-label py-0">Curso</label>
+            <select
+              id="cursoAtual"
+              v-model="currentCurso"
+              v-on:change="clearClick(), cleanGrade(), currentGrade=undefined"
+              class="form-control form-control-sm selectMaior"
+            >
               <option value="4">Ciência da Computação Diurno</option>
               <option value="1">Ciência da Computação Noturno</option>
               <option value="3">Sistemas de Informação</option>
               <option value="2">Engenharia Computacional</option>
             </select>
           </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-sm-10">
-            <template v-if="isEdit">
-              <div class="form-group row">
-                <label for="periodoDisciplina" class="col-sm-2 col-form-label">Período da Disciplina</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control" id="periodoDisciplina" v-model="disciplinaGradeForm.periodo">
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="disciplina" class="col-sm-2 col-form-label">Disciplina</label>
-                <div class="col-sm-10">
-                  <select type="text" class="form-control" id="disciplina" v-model="disciplinaGradeForm.Disciplina">
-                    <option v-if="Disciplinas.length===0" type="text" value="">Nenhuma Disciplina Encontrada</option>
-                    <option v-for="disciplina in Disciplinas" :key="disciplina.id" :value="disciplina.id">{{disciplina.nome}}</option>
-                  </select>
-                </div>
-              </div>
-              <button type="button" class="btn btn-success m-2" v-on:click.prevent="addDisciplinaGrade" :key="4">Adicionar à Grade</button>
-              <button type="button" class="btn btn-success m-2" v-on:click.prevent="editDisciplinaGrade" :key="4">Editar Período</button>
-              <button type="button" class="btn btn-danger m-2" v-on:click.prevent="deleteDisciplinaGrade" :key="4">Excluir Disciplina</button>
-            <br/>
-              <button type="button" class="btn btn-success m-2" v-on:click.prevent="editGrade" :key="1">Editar</button>
-              <button type="button" class="btn btn-danger m-2" v-on:click.prevent="deleteGrade" :key="3">Excluir
-              </button>
-              <button type="button" class="btn btn-secondary m-2" v-on:click.prevent="cleanGrade" :key="2">Cancelar
-              </button>
-            </template>
-            <template v-else>
-              <button type="button" class="btn btn-success m-2" v-on:click.prevent="addGrade" :key="1">Adicionar
-              </button>
-              <button type="button" class="btn btn-secondary m-2" v-on:click.prevent="cleanGrade" :key="2">Resetar
-              </button>
-            </template>
+
+          <div class="col-lg-1 col-md-2 col-sm-2 col-3">
+            <label for="gradeAtual" class="col-form-label py-0">Grade</label>
+            <select
+              id="gradeAtual"
+              v-model="currentGrade"
+              v-on:change="findGrade(), clearClick(), cleanDisciplina()"
+              class="form-control form-control-sm selectMenor"
+            >
+              <template v-for="grade in Grades">
+                <option
+                  v-if="grade.Curso == currentCurso"
+                  :key="grade.nome"
+                  :value="grade.id"
+                >{{grade.nome}}</option>
+              </template>
+            </select>
           </div>
+
+          <div class="col-3">
+            <button
+              type="button"
+              title="Nova Grade"
+              class="addbtn mt-3"
+              v-b-modal.modalNovaGrade
+              v-on:click.prevent="cleanNewGrade()"
+            >
+              <i class="fas fa-plus"></i>
+            </button>
+          </div>
+
+          <b-modal
+            id="modalNovaGrade"
+            ref="modalGrade"
+            scrollable
+            title="Nova Grade"
+            style="font-size:12px!important;"
+            size="sm"
+          >
+            <div class="row mb-2 mx-0">
+              <div class="form-group col m-0 px-0">
+                <label for="nome" class="col-form-label">Nome</label>
+                <input
+                  type="text"
+                  class="inputMenor form-control form-control-sm"
+                  id="nome"
+                  v-model="gradeNewForm.nome"
+                />
+              </div>
+
+              <div class="form-group col m-0 px-0">
+                <label for="periodoInicio" class="col-form-label">Período de Início</label>
+                <input
+                  type="text"
+                  class="inputMenor form-control form-control-sm col"
+                  id="periodoInicio"
+                  v-model="gradeNewForm.periodoInicio"
+                />
+              </div>
+            </div>
+
+            <div class="row mb-2 mx-0">
+              <div class="form-group col m-0 px-0">
+                <label for="curso" class="col-form-label">Curso</label>
+                <select
+                  type="text"
+                  class="form-control form-control-sm selectMaior"
+                  id="curso"
+                  v-model="gradeNewForm.Curso"
+                >
+                  <option value="4">Ciência da Computação Diurno</option>
+                  <option value="1">Ciência da Computação Noturno</option>
+                  <option value="3">Sistemas de Informação</option>
+                  <option value="2">Engenharia Computacional</option>
+                </select>
+              </div>
+            </div>
+
+            <div slot="modal-footer">
+              <button
+                type="button"
+                title="Adicionar Grade"
+                class="addbtn"
+                v-on:click.prevent=" addGrade(), btnOkModal()"
+              >
+                <i class="fas fa-plus"></i>
+              </button>
+              <button
+                type="button"
+                title="Cancelar"
+                class="cancelbtn"
+                v-on:click.prevent="cleanNewGrade()"
+              >
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </b-modal>
         </div>
-      </form>
+        <!-- Final Forms Curso e Grande -->
+      </div>
+    </div>
+
+    <div class="row w-100"></div>
+
+    <div class="row w-100 m-0" style="font-size:11px">
+      <!-- Grind esquerdo -->
+      <div class="col mr-2 px-0">
+        <!-- Inicio da tabela -->
+        <div class="divTable ml-0 mt-3 pl-0 pr-0 border">
+          <table class="table table-sm table-hover">
+            <thead class="thead-light">
+              <tr>
+                <div
+                  style="display: block; overflow: hidden; width: 435px; height:20px !important"
+                  class="sticky"
+                >
+                  <th scope="col">
+                    <p class="p-header" style="width: 32px">P.</p>
+                  </th>
+                  <th scope="col">
+                    <p class="p-header" style="width: 403px">Disciplina</p>
+                  </th>
+                </div>
+              </tr>
+            </thead>
+
+            <tbody>
+              <template v-if="currentGrade!=undefined">
+                <template v-for="grade in Grades">
+                  <template v-for="disciplinaGrade in DisciplinaGrades">
+                    <tr
+                      v-if="grade.id===currentGrade"
+                      :key="grade.id+'grade'+disciplinaGrade.periodo+'periodo'"
+                    >
+                      <div
+                        :class="[isEven(disciplinaGrade.periodo)? 'even':'notEven']"
+                        :key="disciplinaGrade.periodo"
+                        style="width: 435px; font-size:11px;"
+                      >
+                        <template v-if="disciplinaGrade.Grade===grade.id">
+                          <td>
+                            <p style="width:32px;">{{disciplinaGrade.periodo}}</p>
+                          </td>
+
+                          <template v-for="disciplina in Disciplinas">
+                            <template v-if="andConnector(grade, disciplina, disciplinaGrade)">
+                              <td
+                                :key="disciplina.nome"
+                                :class="{ 'bg-custom': disciplinaClickada===disciplina.nome}"
+                                style="cursor:pointer;"
+                                v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.nome), showGrade(grade)"
+                              >
+                                <p style="width: 400px; text-align: start;">{{disciplina.nome}}</p>
+                              </td>
+                            </template>
+                          </template>
+                        </template>
+                      </div>
+                    </tr>
+                  </template>
+                </template>
+              </template>
+            </tbody>
+          </table>
+          <!-- Final da tabela -->
+        </div>
+      </div>
+      <!-- Fim Grind esquerdo  -->
+
+      <!-- Grind direito -->
+      <div class="div-card p-0 mt-3 mb-2 ml-auto col-lg-5 col-md-6 col-sm-12 col-12">
+        <!-- Inicio card -->
+        <template v-if="isEdit">
+          <div class="card ml-auto mr-4">
+            <div class="card-header">
+              <h1 class="card-title">Editar Grade e Disciplinas</h1>
+            </div>
+
+            <div class="card-body">
+              <b-alert :show="Boolean(error)" variant="danger" dismissible v-html="error"></b-alert>
+
+              <form>
+                <div class="row mb-2 mx-0">
+                  <div class="form-group col m-0 mr-4 px-0">
+                    <label for="nome" class="col-form-label">Nome</label>
+                    <input
+                      type="text"
+                      class="inputMenor form-control form-control-sm"
+                      id="nome"
+                      v-model="gradeForm.nome"
+                    />
+                  </div>
+
+                  <div class="form-group col m-0 px-0">
+                    <label for="periodoInicio" class="col-form-label">Período de Início</label>
+                    <input
+                      type="text"
+                      class="inputMenor form-control form-control-sm col"
+                      id="periodoInicio"
+                      v-model="gradeForm.periodoInicio"
+                    />
+                  </div>
+                </div>
+
+                <div class="row mb-2 mx-0">
+                  <div class="form-group col m-0 px-0">
+                    <label for="curso" class="col-form-label">Curso</label>
+                    <select
+                      type="text"
+                      style="text-align:center;"
+                      class="form-control form-control-sm selectMaior"
+                      id="curso"
+                      v-model="gradeForm.Curso"
+                    >
+                      <option value="4">Ciência da Computação Diurno</option>
+                      <option value="1">Ciência da Computação Noturno</option>
+                      <option value="3">Sistemas de Informação</option>
+                      <option value="2">Engenharia Computacional</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row mb-0 mt-3 mx-0">
+                  <div class="d-flex mr-0 ml-auto">
+                    <button
+                      type="button"
+                      title="Salvar Grade"
+                      class="addbtn"
+                      v-on:click.prevent="editGrade"
+                      :key="1"
+                    >
+                      <i class="fas fa-check"></i>
+                    </button>
+                    <button
+                      type="button"
+                      title="Excluir Grade"
+                      class="delbtn"
+                      v-on:click.prevent="deleteGrade"
+                      :key="3"
+                    >
+                      <i class="far fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="w-100 border-bottom mb-2 mt-2"></div>
+                <!-- Edição de disciplina -->
+                <div class="row mb-2 mx-0">
+                  <div class="form-group m-0 col px-0">
+                    <label for="disciplina" class="mr-2 col-form-label">Disciplina</label>
+                    <select
+                      type="text"
+                      class="selectMaior2 form-control form-control-sm"
+                      id="disciplina"
+                      v-model="disciplinaGradeForm.Disciplina"
+                    >
+                      <option
+                        v-if="Disciplinas.length===0"
+                        type="text"
+                        value
+                      >Nenhuma Disciplina Encontrada</option>
+                      <option
+                        v-else
+                        v-for="disciplina in Disciplinas"
+                        :key="disciplina.id"
+                        :value="disciplina.id"
+                      >{{disciplina.nome}}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="row mb-2 mx-0">
+                  <div class="form-group m-0 col px-0">
+                    <label for="periodoDisciplina" class="col-form-label">Período</label>
+
+                    <div style="display: flex">
+                      <input
+                        type="text"
+                        class="form-control form-control-sm inputMenor2"
+                        aria-describedby="button-edit-periodo"
+                        id="periodoDisciplina"
+                        v-model="disciplinaGradeForm.periodo"
+                      />
+
+                      <button
+                        type="button"
+                        title="Salvar"
+                        class="addbtn"
+                        style="margin-top: -1px"
+                        v-on:click.prevent="editDisciplinaGrade"
+                        :key="4"
+                      >
+                        <i class="fas fa-check"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mb-0 mt-3 mx-0">
+                  <div class="d-flex mr-0 ml-auto">
+                    <button
+                      type="button"
+                      title="Adicionar à Grade"
+                      class="addbtn"
+                      v-on:click.prevent="addDisciplinaGrade"
+                      :key="4"
+                    >
+                      <i class="fas fa-plus"></i>
+                    </button>
+
+                    <button
+                      type="button"
+                      title="Deletar Disciplina"
+                      class="delbtn"
+                      v-on:click.prevent="deleteDisciplinaGrade"
+                      v-on:click="clearClick()"
+                      :key="4"
+                    >
+                      <i class="far fa-trash-alt"></i>
+                    </button>
+
+                    <button
+                      type="button"
+                      title="Cancelar"
+                      class="cancelbtn"
+                      v-on:click.prevent="cleanDisciplina"
+                      v-on:click="clearClick()"
+                      :key="2"
+                    >
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </template>
+        <!-- Final card -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
-    import _ from 'lodash'
-    import gradeService from '../../common/services/grade'
-    import disciplinaGradeService from '../../common/services/disciplinaGrade'
+import _ from "lodash";
+import gradeService from "../../common/services/grade";
+import disciplinaGradeService from "../../common/services/disciplinaGrade";
+const emptyGrade = {
+  id: undefined,
+  periodoInicio: undefined,
+  Curso: undefined,
+  nome: undefined
+};
+const emptyDisciplinaGrade = {
+  periodo: undefined,
+  Disciplina: undefined,
+  Grade: undefined
+};
+export default {
+  name: "DashboardGrade",
+  data() {
+    return {
+      gradeForm: _.clone(emptyGrade),
+      gradeNewForm: _.clone(emptyGrade),
+      disciplinaGradeForm: _.clone(emptyDisciplinaGrade),
+      error: undefined,
+      currentGrade: undefined,
+      currentCurso: undefined,
+      grades: [],
+      disciplinaClickada: "",
+      showCard: false
+    };
+  },
+  methods: {
+    btnOkModal() {
+      //Somente atualiza o vetor de perfis ativados quando o botão OK for clickado
+      this.$refs.modalGrade.hide();
+    },
+    clickada(discip) {
+      this.disciplinaClickada = discip;
+    },
+    clearClick() {
+      this.disciplinaClickada = "";
+    },
+    addGrade() {
+      this.gradeForm = this.gradeNewForm;
+      gradeService
+        .create(this.gradeForm)
+        .then(response => {
+          this.cleanGrade();
+          this.$notify({
+            group: "general",
+            title: `Sucesso!`,
+            text: `A Grade ${response.Grade.nome} foi criada!`,
+            type: "success"
+          });
+        })
+        .catch(error => {
+          this.error = "<b>Erro ao criar Grade</b>";
+          if (error.response.data.fullMessage) {
+            this.error +=
+              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+          }
+        });
+    },
+    editGrade() {
+      gradeService
+        .update(this.gradeForm.id, this.gradeForm)
+        .then(response => {
+          this.$notify({
+            group: "general",
+            title: `Sucesso!`,
+            text: `A Grade ${response.Grade.nome} foi atualizada!`,
+            type: "success"
+          });
+        })
+        .catch(error => {
+          this.error = "<b>Erro ao atualizar Grade</b>";
+          if (error.response.data.fullMessage) {
+            this.error +=
+              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+          }
+        });
+    },
+    deleteGrade() {
+      gradeService
+        .delete(this.gradeForm.id, this.gradeForm)
+        .then(response => {
+          this.cleanGrade();
+          this.$notify({
+            group: "general",
+            title: `Sucesso!`,
+            text: `A Grade ${response.Grade.nome} foi excluída!`,
+            type: "success"
+          });
+        })
+        .catch(() => {
+          this.error = "<b>Erro ao excluir Grade</b>";
+        });
+    },
+    cleanGrade() {
+      this.gradeForm = _.clone(emptyGrade);
+      this.error = undefined;
+    },
+    cleanNewGrade() {
+      this.gradeNewForm = _.clone(emptyGrade);
+    },
+    cleanDisciplina() {
+      this.disciplinaGradeForm.periodo = undefined;
+      this.disciplinaGradeForm.Disciplina = undefined;
+    },
+    showGrade(grade) {
+      this.cleanGrade();
+      this.gradeForm = _.clone(grade);
+      this.disciplinaGradeForm.Grade = this.gradeForm.id;
+    },
+    findGrade() {
+      var grade = _.find(this.$store.state.grade.Grades, [
+        "id",
+        this.currentGrade
+      ]);
 
-    const emptyGrade = {
-        id:undefined,
-        periodoInicio:undefined,
-        Curso:undefined,
-        nome: undefined
+      this.showGrade(grade);
+    },
+    addDisciplinaGrade() {
+      console.log(this.disciplinaGradeForm);
+      disciplinaGradeService
+        .create(this.disciplinaGradeForm)
+        .then(response => {
+          this.disciplinaGradeForm.Disciplina = undefined;
+          this.$notify({
+            group: "general",
+            title: `Sucesso!`,
+            text: `A Disciplina ${response.Disciplina} foi adicionada à Grade ${response.Grade}!`,
+            type: "success"
+          });
+        })
+        .catch(error => {
+          this.error = "<b>Erro ao incluir Disciplina</b>";
+          if (error.response.data.fullMessage) {
+            this.error +=
+              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+          }
+        });
+    },
+    editDisciplinaGrade() {
+      disciplinaGradeService
+        .update(
+          this.disciplinaGradeForm.Disciplina,
+          this.disciplinaGradeForm.Grade,
+          this.disciplinaGradeForm
+        )
+        .then(response => {
+          this.$notify({
+            group: "general",
+            title: `Sucesso!`,
+            text: `A Disciplina ${response.Disciplina} foi atualizada!`,
+            type: "success"
+          });
+        })
+        .catch(error => {
+          this.error = "<b>Erro ao atualizar Disciplina</b>";
+          if (error.response.data.fullMessage) {
+            this.error +=
+              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+          }
+        });
+    },
+    deleteDisciplinaGrade() {
+      disciplinaGradeService
+        .delete(
+          this.disciplinaGradeForm.Disciplina,
+          this.disciplinaGradeForm.Grade,
+          this.disciplinaGradeForm
+        )
+        .then(response => {
+          this.cleanGrade();
+          this.$notify({
+            group: "general",
+            title: `Sucesso!`,
+            text: `A Disciplina ${response.Disciplina} foi excluída!`,
+            type: "success"
+          });
+        })
+        .catch(() => {
+          this.error = "<b>Erro ao excluir Disciplina</b>";
+        });
+    },
+    showDisciplina: function(disciplinaGrade) {
+      this.cleanDisciplina;
+      this.disciplinaGradeForm = _.clone(disciplinaGrade);
+    },
+    andConnector: function(grade, disciplina, disciplinaGrade) {
+      return (
+        grade.id === disciplinaGrade.Grade &&
+        disciplina.id === disciplinaGrade.Disciplina
+      );
+    },
+    isEven(number) {
+      return number % 2 === 0;
     }
-
-    const emptyDisciplinaGrade = {
-        periodo: undefined,
-        Disciplina: undefined,
-        Grade: undefined
+  },
+  watch: {},
+  computed: {
+    Grades() {
+      return this.$store.state.grade.Grades;
+    },
+    Cursos() {
+      return this.$store.state.curso.Cursos;
+    },
+    Disciplinas() {
+      return _.sortBy(this.$store.state.disciplina.Disciplinas, "nome");
+    },
+    DisciplinaGrades() {
+      return _.sortBy(
+        this.$store.state.disciplinaGrade.DisciplinaGrades,
+        "periodo"
+      );
+    },
+    isEdit() {
+      return this.gradeForm.id !== undefined;
+    },
+    Admin() {
+      if (this.$store.state.auth.Usuario.admin === 1) {
+        return true;
+      } else {
+        return false;
+      }
     }
-
-    export default {
-        name: 'DashboardGrade',
-
-        data () {
-            return {
-                gradeForm: _.clone(emptyGrade),
-                disciplinaGradeForm: _.clone(emptyDisciplinaGrade),
-                error: undefined,
-                currentGrade: undefined,
-                currentCurso: undefined,
-                grades: []
-            }
-        },
-
-        methods: {
-            addGrade() {
-                gradeService.create(this.gradeForm).then((response) => {
-                    this.cleanGrade()
-                    this.$notify({
-                        group: 'general',
-                        title: `Sucesso!`,
-                        text: `A Grade ${response.Grade.nome} foi criada!`,
-                        type: 'success'
-                    })
-                }).
-                catch(error => {
-                    this.error = '<b>Erro ao criar Grade</b>'
-                    if (error.response.data.fullMessage) {
-                        this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
-                    }
-                })
-            },
-
-            editGrade() {
-                gradeService.update(this.gradeForm.id, this.gradeForm).then((response) => {
-                    this.$notify({
-                        group: 'general',
-                        title: `Sucesso!`,
-                        text: `A Grade ${response.Grade.nome} foi atualizada!`,
-                        type: 'success'
-                    })
-                }).
-                catch(error => {
-                    this.error = '<b>Erro ao atualizar Grade</b>'
-                    if (error.response.data.fullMessage) {
-                        this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
-                    }
-                })
-            },
-
-            deleteGrade() {
-                gradeService.delete(this.gradeForm.id, this.gradeForm).then((response) => {
-                    this.cleanGrade()
-                    this.$notify({
-                        group: 'general',
-                        title: `Sucesso!`,
-                        text: `A Grade ${response.Grade.nome} foi excluída!`,
-                        type: 'success'
-                    })
-                }).
-                catch(() => {
-                    this.error = '<b>Erro ao excluir Grade</b>'
-                })
-            },
-
-            cleanGrade() {
-                this.gradeForm = _.clone(emptyGrade)
-                this.error = undefined
-            },
-
-            cleanDisciplina() {
-                this.disciplinaGradeForm = _.clone(emptyDisciplinaGrade)
-
-            },
-
-            showGrade(grade) {
-                this.cleanGrade()
-                this.gradeForm = _.clone(grade);
-                this.disciplinaGradeForm.Grade = this.gradeForm.id;
-            },
-
-            findGrade() {
-                var grade = _.find(this.$store.state.grade.Grades,['id',this.currentGrade])
-                this.showGrade(grade)
-            },
-
-            addDisciplinaGrade(){
-              disciplinaGradeService.create(this.disciplinaGradeForm).then((response) => {
-                this.disciplinaGradeForm.Disciplina = undefined;
-                this.$notify({
-                    group: 'general',
-                    title: `Sucesso!`,
-                    text: `A Disciplina ${response.Disciplina} foi adicionada à Grade ${response.Grade}!`,
-                    type: 'success'
-                })
-              }).
-              catch(error => {
-                this.error = '<b>Erro ao incluir Disciplina</b>'
-                if (error.response.data.fullMessage) {
-                    this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
-                }
-              })
-            },
-
-            editDisciplinaGrade(){
-                disciplinaGradeService.update(this.disciplinaGradeForm.Disciplina, this.disciplinaGradeForm.Grade, this.disciplinaGradeForm).then((response) => {
-                    this.$notify({
-                        group: 'general',
-                        title: `Sucesso!`,
-                        text: `A Disciplina ${response.Disciplina} foi atualizada!`,
-                        type: 'success'
-                    })
-                }).
-                catch(error => {
-                    this.error = '<b>Erro ao atualizar Disciplina</b>'
-                    if (error.response.data.fullMessage) {
-                        this.error += '<br/>' + error.response.data.fullMessage.replace('\n', '<br/>')
-                    }
-                })
-            },
-
-            deleteDisciplinaGrade() {
-                disciplinaGradeService.delete(this.disciplinaGradeForm.Disciplina, this.disciplinaGradeForm.Grade, this.disciplinaGradeForm).then((response) => {
-                    this.cleanGrade()
-                    this.$notify({
-                        group: 'general',
-                        title: `Sucesso!`,
-                        text: `A Disciplina ${response.Disciplina} foi excluída!`,
-                        type: 'success'
-                    })
-                }).
-                catch(() => {
-                    this.error = '<b>Erro ao excluir Disciplina</b>'
-                })
-            },
-
-            showDisciplina: function(disciplinaGrade) {
-                this.cleanDisciplina
-                this.disciplinaGradeForm = _.clone(disciplinaGrade)
-            },
-
-            andConnector: function(grade, disciplina, disciplinaGrade) {
-                return (grade.id===disciplinaGrade.Grade && disciplina.id===disciplinaGrade.Disciplina)
-            },
-
-            isEven(number) {
-                return (number % 2 === 0)
-            }
-
-        },
-
-        computed: {
-            Grades () {
-                return this.$store.state.grade.Grades
-            },
-
-            Cursos () {
-                return this.$store.state.curso.Cursos
-            },
-
-            Disciplinas () {
-                return _.sortBy(this.$store.state.disciplina.Disciplinas, 'nome')
-            },
-
-            DisciplinaGrades () {
-                return _.sortBy(this.$store.state.disciplinaGrade.DisciplinaGrades, 'periodo')
-            },
-
-            isEdit () {
-                return this.gradeForm.id !== undefined
-            },
-
-            Admin () {
-                if(this.$store.state.auth.Usuario.admin===1){
-                    return true
-                }else{
-                    return false
-                }
-            }
-
-        },
-
-    }
+  }
+};
 </script>
 
 <style scoped>
-  .header {
-    display: inline-block;
-  }
+/* prefixed by https://autoprefixer.github.io (PostCSS: v7.0.23, autoprefixer: v9.7.3) */
 
-  .data {
-    display: inline-block;
+.DashboardGrades {
+  max-width: 100%;
+  overflow: hidden;
+  margin: 0;
+}
+.btn {
+  height: 25px;
+  min-width: -webkit-max-content;
+  min-width: -moz-max-content;
+  min-width: max-content;
+  max-width: -webkit-max-content;
+  max-width: -moz-max-content;
+  max-width: max-content;
+  font-size: 12px;
+  padding: 0 5px 0 5px;
+}
+.titulo {
+  font-size: 25px;
+  font-weight: normal;
+  padding-left: 0;
+  margin: 0 !important;
+}
+/* ====== CARD ====== */
+.card-title {
+  font-size: 16px;
+  font-weight: normal;
+  padding-left: 0;
+  margin: 0;
+  text-align: center;
+}
+.card {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+}
+.card-body {
+  font-size: 12px;
+  padding-top: 15px;
+}
+.card label {
+  line-height: 1.2;
+  font-size: 12px;
+  text-align: start;
+  padding-top: 0 !important;
+}
+select {
+  height: 25px !important;
+  font-size: 11px !important;
+  padding: 0px 5px 0px 5px !important;
+  min-width: 100px;
+  max-width: 100px;
+  text-align: center;
+}
+.selectMenor {
+  min-width: 80px;
+  max-width: 80px;
+  text-align: start !important;
+}
+.selectMaior {
+  min-width: 200px;
+  max-width: 200px;
+  text-align: start !important;
+}
+input {
+  height: 25px !important;
+  padding: 0px 5px 0px 5px !important;
+  font-size: 11px !important;
+  text-align: start;
+}
+.inputMenor {
+  max-width: 60px;
+  min-width: 60px;
+  text-align: center;
+}
+.inputMenor2 {
+  max-width: 40px;
+  min-width: 40px;
+  margin-right: 10px;
+  text-align: center;
+}
+.selectMaior2 {
+  max-width: 300px;
+  min-width: 300px;
+  text-align: start;
+}
+/* =================== */
+.p-header {
+  padding: 0px 0 0px 0;
+  margin: 0;
+  font-size: 11px;
+  text-align: center;
+  height: 18px;
+}
+.divTable {
+  overflow: hidden !important;
+  height: -webkit-max-content !important;
+  height: -moz-max-content !important;
+  height: max-content !important;
+  width: -webkit-max-content !important;
+  width: -moz-max-content !important;
+  width: max-content !important;
+}
+table {
+  display: block !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  font-size: 11px !important;
+  font-weight: normal !important;
+  background-color: white;
+  margin: 0 !important;
+  height: -webkit-calc(100vh - 150px);
+  height: -moz-calc(100vh - 150px);
+  height: calc(100vh - 150px);
+}
+tbody {
+  max-height: 100%;
+  width: 100%;
+}
+table td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 0 !important;
+}
+table p {
+  margin-bottom: 0;
+  text-align: center;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+tr thead {
+  display: block;
+}
+thead th {
+  padding: 0 !important;
+  font-size: 14px;
+  text-align: center;
+  height: 18px !important;
+}
+.sticky {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+}
+/* APENAS NO FIREFOX */
+@-moz-document url-prefix() {
+  /*select {
+    height: 25px !important;
+    text-align: left;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    line-height: 8px;
+    border: 0.5px solid rgb(133, 133, 133);
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background-color: rgb(245, 245, 245);
   }
+  input {
+    height: 25px !important;
+    text-align: start;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    line-height: 8px;
+    border: 0.5px solid rgb(92, 92, 92);
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background-color: rgb(245, 245, 245);
+  }
+	*/
+}
+.bg-custom {
+  background-color: #c8c8c8;
+}
+.bg-custom:hover {
+  background-color: #c8c8c8;
+}
+.even {
+  background-color: rgba(0, 85, 175, 0.2);
+}
+.notEven {
+  background-color: rgba(237, 240, 211, 0.8);
+}
 
-  .even {
-    background-color: #a5a7a4;
-  }
+/* Botoes */
+button {
+  padding: 0;
+  border: none;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  margin-right: 15px;
+  transition: all 0.3s ease 0s;
+}
+i.fas,
+i.far {
+  font-size: 25px;
+}
+.addbtn {
+  background-color: white;
+  color: #a0e7a0;
+}
+.addbtn:hover {
+  background-color: white;
+  cursor: pointer;
+  color: #77dd77;
+}
+.addbtn:focus {
+  color: #77dd77;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #2fbf53;
+}
+.cancelbtn {
+  background-color: white;
+  color: #cfcfc4;
+}
+.cancelbtn:hover {
+  cursor: pointer;
+  color: #b8b4a8;
+}
+.cancelbtn:focus {
+  color: #b8b8a8;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #ada89a;
+}
 
-  .sticky {
-    position: sticky;
-    position: -webkit-sticky;
-    top: 48px;
+.delbtn {
+  background-color: white;
+  color: #ff817b;
+}
+.delbtn:hover {
+  cursor: pointer;
+  color: #ff5f48;
+}
+.delbtn:focus {
+  color: #ff5f48;
+  -webkit-text-stroke-width: 2px;
+  -webkit-text-stroke-color: #ff4e34;
+}
+@media screen and (max-width: 943px) {
+  .div-card {
+    margin-left: 0px !important;
   }
+  .card {
+    margin-left: 0px !important;
+  }
+}
+.modal-header {
+  background-color: rgba(0, 0, 0, 0.03);
+  text-align: center;
+}
+header {
+  text-align: center;
+}
+.modal-title {
+  font-size: 16px;
+  font-weight: normal;
+  padding-left: 0;
+  margin: 0;
+  text-align: center;
+}
 </style>

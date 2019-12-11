@@ -1,13 +1,13 @@
 <template>
-    <div>
-                <input :disabled="Admin ? false : true" v-if="pedidoForm.vagasPeriodizadas == 0" type="text" v-model="pedidoForm.vagasPeriodizadas" style="width: 32px; color:#DADADA; text-align:center"
-                       v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
-                <input :disabled="Admin ? false : true" v-else type="text" v-model="pedidoForm.vagasPeriodizadas" style="width: 32px; font-weight: bold;  background-color: #DCDCDC; text-align:center"
-                        v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
-                <input :disabled="Admin ? false : true" v-if="pedidoForm.vagasNaoPeriodizadas == 0" type="text" v-model="pedidoForm.vagasNaoPeriodizadas" style="width: 32px; color:#DADADA; text-align:center"
-                        v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
-                <input :disabled="Admin ? false : true" v-else type="text" v-model="pedidoForm.vagasNaoPeriodizadas" style="width: 32px; font-weight: bold; background-color: #DCDCDC; text-align:center"
-                        v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
+    <div style="width:32px;">
+        <input :disabled="Admin ? false : true" v-if="pedidoForm.vagasPeriodizadas == 0" type="text" v-model="pedidoForm.vagasPeriodizadas" style="margin-top:1px; margin-bottom:1px; color:#DADADA;"
+               v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
+        <input :disabled="Admin ? false : true" v-else type="text" v-model="pedidoForm.vagasPeriodizadas" style="margin-top:1px; margin-bottom:1px;  background-color: #DCDCDC;"
+                v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
+        <input :disabled="Admin ? false : true" v-if="pedidoForm.vagasNaoPeriodizadas == 0" type="text" v-model="pedidoForm.vagasNaoPeriodizadas" style=" color:#DADADA;"
+                v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
+        <input :disabled="Admin ? false : true" v-else type="text" v-model="pedidoForm.vagasNaoPeriodizadas" style="background-color: #DCDCDC;"
+                v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
     </div>
 </template>
 <script>
@@ -38,6 +38,7 @@
         },
         mounted:function (){
             this.pedidoForm = _.clone(this.$store.state.pedido.Pedidos[this.turma.id][this.index])
+
         },
 
         methods: {
@@ -104,9 +105,29 @@
 
     }
 </script>
-<style scoped>
+<style scoped>  
     td {
         text-align: center;
-        padding: 0!important;
+        vertical-align:middle;
+        padding: 0;
+        height:40px;
     }
+    input {
+        width: 25px;
+        height:15px;
+        text-align: center!important;
+    }
+    @-moz-document url-prefix() {
+        input{
+            height: 18px!important;
+            text-align:center;
+            box-sizing: border-box;
+            
+            line-height: 8px;
+            border: 0.5px solid rgb(160, 160, 160);
+            border-radius: 2px;
+            background-color:rgb(245, 245, 245);
+        }
+    }
+    
 </style>

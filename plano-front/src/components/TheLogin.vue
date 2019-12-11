@@ -1,64 +1,103 @@
 <template>
   <div id="loginForm" class="text-center">
-    <form class="form-signin" v-on:submit.prevent="doLogin">
-      <h1 class="h3 mb-3 font-weight-normal">Login</h1>
-      <b-alert :show="Boolean(error)" variant="danger" dismissible>
-        {{error}}
-      </b-alert>
-      <label for="login" class="sr-only">Usuário</label>
-      <input type="text" id="login" class="form-control" placeholder="Usuário" v-model.trim="form.login">
-      <label for="senha" class="sr-only">Senha</label>
-      <input type="password" id="senha" class="form-control" placeholder="Senha" v-model.trim="form.senha">
-      <button class="btn btn-lg btn-primary btn-block mt-3" type="submit">Entrar</button>
-    </form>
+    <div class="card ml-auto mr-auto"> 
+        <div class="card-header">
+          <h1 class="card-title">Login</h1>
+        </div>
+      <div class="card-body">
+        <form class="form-signin" v-on:submit.prevent="doLogin">
+          <b-alert :show="Boolean(error)" variant="danger" dismissible>{{error}}</b-alert>
+          <label for="login" class="sr-only">Usuário</label>
+          <input
+            v-focus
+            type="text"
+            id="login"
+            class="form-control"
+            placeholder="Usuário"
+            v-model.trim="form.login"
+          />
+          <label for="senha" class="sr-only">Senha</label>
+          <input
+            type="password"
+            id="senha"
+            class="form-control"
+            placeholder="Senha"
+            v-model.trim="form.senha"
+          />
+          <button class="btn btn-sm btn-block mt-3" type="submit">Entrar</button>
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'TheLogin',
+  name: "TheLogin",
 
-  data () {
+  data() {
     return {
       form: {
         login: undefined,
         senha: undefined
       },
       error: undefined
+    };
+  },
+
+  directives: {
+    focus: {
+      inserted: function(el) {
+        el.focus();
+      }
     }
   },
 
   methods: {
-    doLogin () {
-      this.$store.dispatch('authenticate', this.form).then(() => {
-        if (this.$store.state.route.query.redirect) {
-          this.$router.replace(this.$store.state.route.query.redirect)
-        } else {
-          this.$router.replace('/dashboard')
-        }
-      }).catch((error) => {
-        if (error.response) {
-          this.error = error.response.data.message
-        } else {
-          this.error = 'Erro na requisição! Tente novamente.'
-        }
-      })
+    doLogin() {
+      this.$store
+        .dispatch("authenticate", this.form)
+        .then(() => {
+          if (this.$store.state.route.query.redirect) {
+            this.$router.replace(this.$store.state.route.query.redirect);
+          } else {
+            this.$router.replace("/dashboard");
+          }
+        })
+        .catch(error => {
+          if (error.response) {
+            this.error = error.response.data.message;
+          } else {
+            this.error = "Erro na requisição! Tente novamente.";
+          }
+        });
     }
   },
 
-  beforeCreate () {
-    this.$store.dispatch('fetchUsuario').then(() => {
-      this.$router.replace('/dashboard')
-    }).catch(() => {})
+  beforeCreate() {
+    this.$store
+      .dispatch("fetchUsuario")
+      .then(() => {
+        this.$router.replace("/dashboard");
+      })
+      .catch(() => {});
   }
-}
+};
 </script>
 
 <style scoped>
+/* prefixed by https://autoprefixer.github.io (PostCSS: v7.0.23, autoprefixer: v9.7.3) */
+
 #loginForm {
   display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
   display: flex;
   -ms-flex-align: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -moz-box-align: center;
   align-items: center;
   padding-top: 40px;
   padding-bottom: 40px;
@@ -75,10 +114,12 @@ export default {
 
 .form-signin .form-control {
   position: relative;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
   box-sizing: border-box;
   height: auto;
   padding: 10px;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .form-signin .form-control:focus {
@@ -86,14 +127,48 @@ export default {
 }
 
 .form-signin input[type="text"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
+  margin-bottom: 10px;
 }
 
 .form-signin input[type="password"] {
   margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+}
+input{
+  height: 28px !important;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.07);
+}
+.card{
+  border: none;
+  box-shadow: 0 10px 20px rgba(49, 68, 177, 0.19), 0 6px 6px rgba(0,0,0,0.23);
+  border-radius: 5px;
+}
+.card-header{
+  min-height: 50px;
+  max-height: 50px;
+  background-color:#DCDCDC;
+  border-color: rgb(209, 209, 209);
+}
+.card-title{
+  font-size: 22px;
+  font-weight: 300;
+  text-transform: uppercase;
+}
+.card-body{
+  background-color:#faf8f8;
+}
+.btn{
+  background-color:#C0C0C0;
+  border-radius: 15px;
+  color: #262626;
+  box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+  outline: none;
+} 
+.btn:hover{
+  background-color:#808080;
+  border-color:#808080;
+  box-shadow: 0px 15px 20px rgba(68, 83, 102, 0.4);
+  transform: translateY(-3px);
 }
 </style>

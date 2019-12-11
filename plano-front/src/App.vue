@@ -36,7 +36,7 @@ body {
   color: #ffffff;
   background: #44A4FC;
   border-left: 5px solid #187FE7;
-
+  
 }
 
 .vue-notification .warn {

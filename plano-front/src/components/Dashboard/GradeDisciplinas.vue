@@ -1,63 +1,119 @@
 <template>
-    <div class="Grades Disciplinas" style="height: calc(100vh - 48px)">
-        <div class="d-flex center-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom" style="overflow: auto; width: 100%">
-            <h1 class="h2 col-11">Grades Disciplinas</h1>
-            <div class="col-1">
-                <b-form-input v-model="novoAno" v-on:keyup.native.enter="runNovoAno" style="width:60px !important; height: 30px; float: right; position:relative; text-align: center"></b-form-input>
-            </div>
+  <div class="Grades Disciplinas" style="height: calc(100vh - 48px)" v-if="Admin">
+    <!-- Titulo -->
+    <div class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0">
+      <div class="form-inline col-12 pl-0 mb-2 pr-1">
+        <h1 class="col-11 titulo">Grades Disciplinas</h1>
+        <div class="col-1">
+          <b-form-input
+            v-model="novoAno"
+            v-on:keyup.native.enter="runNovoAno"
+            style="width:60px !important; height: 30px; float: right; position:relative; text-align: center"
+          ></b-form-input>
         </div>
-
-        <div style="height: 80vh; overflow-y: scroll; overflow-x: scroll;" ref = "mainTable">
-            <table class="table table-hover table-sm">
-                <thead class="thead-light">
-                <tr>
-                    <th scope="col" style="width: 72px;"><p style="text-align: center">Cod</p></th>
-                    <th scope="col" style="width: 400px"><p style="text-align: center">Disciplina</p></th>
-                    <th scope="col" style="width: 135px"><p style="text-align:center">76A</p></th>
-                    <th scope="col" style="width: 135px"><p style="text-align:center">35A</p></th>
-                    <th scope="col" style="width: 135px"><p style="text-align:center">65C</p></th>
-                    <th scope="col" style="width: 135px"><p style="text-align:center">65B</p></th>
-                </tr>
-                </thead>
-                <tbody>
-
-                    <template v-for="perfil in Perfis">
-                        <tr v-for="disciplina in inPerfil(perfil, Disciplinas)" :key="disciplina.id"  v-bind:style="{backgroundColor: perfil.cor}">
-                            <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;"><p style="text-align: center">{{disciplina.codigo}}<p/></td>
-                            <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;"><p>{{disciplina.nome}}</p></td>
-                            <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;"><p style=" text-align: center">
-
-                                <template v-if="disciplinasGrades[disciplina.id][2][0].length !== 0"> <template v-for="d in disciplinasGrades[disciplina.id][2][0]">1º Semestre: {{d}}º Período </template> </template>
-                                <template v-if="disciplinasGrades[disciplina.id][2][1].length !== 0"> <template v-for="d in disciplinasGrades[disciplina.id][2][1]">2º Semestre: {{d}}º Período </template> </template>
-
-                            </p></td>
-                            <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;"><p style=" text-align: center">
-
-                                <template v-if="disciplinasGrades[disciplina.id][0][0].length !== 0"> <template v-for="d in disciplinasGrades[disciplina.id][0][0]">1º Semestre: {{d}}º Período </template> </template>
-                                <template v-if="disciplinasGrades[disciplina.id][0][1].length !== 0"> <template v-for="d in disciplinasGrades[disciplina.id][0][1]">2º Semestre: {{d}}º Período </template> </template>
-
-                            </p></td>
-                            <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;"><p style=" text-align: center">
-
-                                <template v-if="disciplinasGrades[disciplina.id][3][0].length !== 0"> <template v-for="d in disciplinasGrades[disciplina.id][3][0]">1º Semestre: {{d}}º Período </template> </template>
-                                <template v-if="disciplinasGrades[disciplina.id][3][1].length !== 0"> <template v-for="d in disciplinasGrades[disciplina.id][3][1]">2º Semestre: {{d}}º Período </template> </template>
-
-                            </p></td>
-                            <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;"><p style=" text-align: center">
-
-                                <template v-if="disciplinasGrades[disciplina.id][1][0].length !== 0"> <template v-for="d in disciplinasGrades[disciplina.id][1][0]">1º Semestre: {{d}}º Período </template> </template>
-                                <template v-if="disciplinasGrades[disciplina.id][1][1].length !== 0"> <template v-for="d in disciplinasGrades[disciplina.id][1][1]">2º Semestre: {{d}}º Período </template> </template>
-
-                            </p></td>
-
-
-                        </tr>
-                    </template>
-
-                </tbody>
-            </table>
-        </div>
+      </div>
     </div>
+    <div class="w-100 mb-2 border-bottom"></div>
+    <div style="height: 80vh; overflow-y: scroll; overflow-x: auto;" ref="mainTable">
+      <table class="table table-hover table-sm">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col" style="width: 72px;">
+              <p style="text-align: center">Cod</p>
+            </th>
+            <th scope="col" style="width: 400px">
+              <p style="text-align: center">Disciplina</p>
+            </th>
+            <th scope="col" style="width: 135px">
+              <p style="text-align:center">76A</p>
+            </th>
+            <th scope="col" style="width: 135px">
+              <p style="text-align:center">35A</p>
+            </th>
+            <th scope="col" style="width: 135px">
+              <p style="text-align:center">65C</p>
+            </th>
+            <th scope="col" style="width: 135px">
+              <p style="text-align:center">65B</p>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-for="perfil in Perfis">
+            <tr
+              v-for="disciplina in inPerfil(perfil, Disciplinas)"
+              :key="disciplina.id"
+              v-bind:style="{backgroundColor: perfil.cor}"
+            >
+              <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;">
+                <p style="text-align: center">{{disciplina.codigo}}</p>
+                <p />
+              </td>
+              <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;">
+                <p>{{disciplina.nome}}</p>
+              </td>
+              <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;">
+                <p style=" text-align: center">
+                  <template v-if="disciplinasGrades[disciplina.id][2][0].length !== 0">
+                    <template
+                      v-for="d in disciplinasGrades[disciplina.id][2][0]"
+                    >1º Semestre: {{d}}º Período</template>
+                  </template>
+                  <template v-if="disciplinasGrades[disciplina.id][2][1].length !== 0">
+                    <template
+                      v-for="d in disciplinasGrades[disciplina.id][2][1]"
+                    >2º Semestre: {{d}}º Período</template>
+                  </template>
+                </p>
+              </td>
+              <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;">
+                <p style=" text-align: center">
+                  <template v-if="disciplinasGrades[disciplina.id][0][0].length !== 0">
+                    <template
+                      v-for="d in disciplinasGrades[disciplina.id][0][0]"
+                    >1º Semestre: {{d}}º Período</template>
+                  </template>
+                  <template v-if="disciplinasGrades[disciplina.id][0][1].length !== 0">
+                    <template
+                      v-for="d in disciplinasGrades[disciplina.id][0][1]"
+                    >2º Semestre: {{d}}º Período</template>
+                  </template>
+                </p>
+              </td>
+              <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;">
+                <p style=" text-align: center">
+                  <template v-if="disciplinasGrades[disciplina.id][3][0].length !== 0">
+                    <template
+                      v-for="d in disciplinasGrades[disciplina.id][3][0]"
+                    >1º Semestre: {{d}}º Período</template>
+                  </template>
+                  <template v-if="disciplinasGrades[disciplina.id][3][1].length !== 0">
+                    <template
+                      v-for="d in disciplinasGrades[disciplina.id][3][1]"
+                    >2º Semestre: {{d}}º Período</template>
+                  </template>
+                </p>
+              </td>
+              <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;">
+                <p style=" text-align: center">
+                  <template v-if="disciplinasGrades[disciplina.id][1][0].length !== 0">
+                    <template
+                      v-for="d in disciplinasGrades[disciplina.id][1][0]"
+                    >1º Semestre: {{d}}º Período</template>
+                  </template>
+                  <template v-if="disciplinasGrades[disciplina.id][1][1].length !== 0">
+                    <template
+                      v-for="d in disciplinasGrades[disciplina.id][1][1]"
+                    >2º Semestre: {{d}}º Período</template>
+                  </template>
+                </p>
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -148,8 +204,6 @@
                         this.gradesAtivas[i][this.gradesAtivas[i].length - 1].fim = 10
                     }
                 }
-                console.log(this.grades)
-                console.log(this.gradesAtivas)
 
                 disciplinas.forEach(d => {
                     for(let i = 1; i <= 4; i++){//ids dos cursos de computação
@@ -197,7 +251,6 @@
                         this.gradesAtivas[i][this.gradesAtivas[i].length - 1].fim = 10
                     }
                 }
-                console.log(this.gradesAtivas)
 
                 disciplinas.forEach(d => {
                     for(let i = 1; i <= 4; i++){//ids dos cursos de computação
@@ -282,30 +335,36 @@
             }
 
 
-        }
     }
+  
+}
 </script>
 <style scoped>
+.DashboardPrototipo {
+  max-height: 90vh;
+  max-width: 90vw;
+  overflow: auto;
+}
 
-    .DashboardPrototipo{
-        max-height: 90vh;
-        max-width: 90vw;
-        overflow: hidden;
-    }
+table {
+  font-size: 10px;
+  table-layout: fixed;
+  width: 100%;
+}
 
-    table {
-        font-size: 10px;
-        table-layout: fixed;
-        width: 1008px;
-    }
+p {
+  margin: 0px;
+}
 
-    p {
-        margin: 0px;
-    }
+th {
+  position: sticky;
+  top: -1px;
+}
 
-    th {
-        position: sticky;
-        top: -1px;
-    }
-
+.titulo {
+  font-size: 25px;
+  font-weight: normal;
+  padding-left: 0;
+  margin: 0 !important;
+}
 </style>
