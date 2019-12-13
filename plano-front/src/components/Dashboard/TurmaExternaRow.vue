@@ -332,11 +332,11 @@ p {
   text-align: center;
 }
 input {
-  height: 18px;
+  height: 18px !important;
   text-align: center !important;
 }
 select {
-  height: 18px;
+  height: 18px !important;
 }
 
 @-moz-document url-prefix() {

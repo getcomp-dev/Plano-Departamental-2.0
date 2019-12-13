@@ -1,7 +1,9 @@
 <template>
   <div class="DashboardCursos row pr-2" v-if="Admin">
     <!-- Titulo -->
-    <div class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0">
+    <div
+      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+    >
       <div class="form-inline col-12 pl-0 mb-2 pr-1">
         <h1 class="col-12 titulo">Cursos</h1>
       </div>
@@ -16,29 +18,45 @@
       <table class="table table-hover table-sm">
         <thead class="thead-light">
           <tr>
-            <div
-              style="display: block; overflow: hidden; width: 520px; height:20px !important"
-              class="sticky"
-            >
+            <div style="width: 516px;" class="sticky">
               <th scope="col">
-                <p class="p-header" @click="toggleOrderNome()" style="width:300px!important;">Nome<i v-if="ordenacao=='nome'" style="font-size:0.6rem" class="fas fa-arrow-down fa-sm"></i></p>
+                <p
+                  @click="toggleOrderNome()"
+                  title="Clique para ordenar por nome"
+                  class="p-header clickable-header"
+                  style="width:300px!important; text-align: start !important;"
+                >
+                  Nome
+                  <i
+                    v-if="ordenacao=='nome'"
+                    style="font-size:0.6rem"
+                    class="fas fa-arrow-down fa-sm"
+                  ></i>
+                </p>
               </th>
               <th scope="col">
-                <p class="p-header" @click="toggleOrderCod()" style="width:50px!important;">Código<i v-if="ordenacao=='codigo'" style="font-size:0.6rem" class="fas fa-arrow-down fa-sm"></i></p>
+                <p
+                  @click="toggleOrderCod()"
+                  title="Clique para ordenar por nome"
+                  class="p-header clickable-header"
+                  style="width:60px!important;"
+                >
+                  Código
+                  <i
+                    v-if="ordenacao=='codigo'"
+                    style="font-size:0.6rem"
+                    class="fas fa-arrow-down fa-sm"
+                  ></i>
+                </p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width:50px!important;">Turno</p>
+                <p class="p-header" style="width:52px!important;">Turno</p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width:44px!important;">1º Sem.</p>
+                <p class="p-header" style="width:52px!important;">1º Sem.</p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width:44px!important;">2º Sem.</p>
-              </th>
-              <th scope="col">
-                <div style="width: 32px">
-                  <input type="checkbox" v-model="selectAll" v-on:click.prevent="toggleAllCursos" />
-                </div>
+                <p class="p-header" style="width:52px!important;">2º Sem.</p>
               </th>
             </div>
           </tr>
@@ -48,42 +66,32 @@
           <template v-if="Cursos.length > 0">
             <tr
               v-for="curso in Cursos"
-              :key="curso.id"
+              :key="curso"
               v-on:click.prevent="showCurso(curso), clickada(curso.codigo)"
               :class="{'bg-custom':cursoClickado === curso.codigo}"
             >
-              <div style="width: 520px">
+              <div style="width: 516px">
                 <td>
                   <p style="width: 300px; text-align: start">{{ curso.nome }}</p>
                 </td>
                 <td>
-                  <p style="width: 50px">{{ curso.codigo}}</p>
+                  <p style="width: 60px">{{ curso.codigo}}</p>
                 </td>
                 <td>
-                  <p style="width: 50px;">{{ curso.turno }}</p>
+                  <p style="width: 52px;">{{ curso.turno }}</p>
                 </td>
                 <!-- 1 = 1º semestre, 2 = 2º semestre, 3 = Ambos-->
                 <td v-if="curso.semestreInicial == 1 || curso.semestreInicial == 3">
-                  <p style="width: 44px">{{ curso.alunosEntrada }}</p>
+                  <p style="width: 52px">{{ curso.alunosEntrada }}</p>
                 </td>
                 <td v-else>
-                  <p style="width: 44px">0</p>
+                  <p style="width: 52px">0</p>
                 </td>
                 <td v-if="curso.semestreInicial == 2 || curso.semestreInicial == 3">
-                  <p style="width: 44px">{{ curso.alunosEntrada }}</p>
+                  <p style="width: 52px">{{ curso.alunosEntrada }}</p>
                 </td>
                 <td v-else>
-                  <p style="width: 44px">0</p>
-                </td>
-                <td>
-                  <div style="width:32px">
-                    <input
-                      style="width: 15px"
-                      type="checkbox"
-                      v-model="CursosAtivos[curso.id]"
-                      v-on:click.prevent="toggleCurso(curso.id)"
-                    />
-                  </div>
+                  <p style="width: 52px">0</p>
                 </td>
               </div>
             </tr>
@@ -104,82 +112,68 @@
     <!-- Fim do Grid Esquerdo -->
 
     <!-- Grid Direito -->
-    <div class="div-card p-0 mt-3 mb-2 ml-auto col-lg-5 col-md-12 col-sm-12 col-12">
-      <div class="col card cartao ml-auto" style="max-width: 350px;">
-        <!-- <div
-            class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-2 pb-2 mb-3 border-bottom"
-        >-->
+    <div class="div-card p-0 mt-3 mb-2 col-lg-4 col-md-12 col-sm-12 col-12">
+      <div class="card mr-3 ml-auto">
         <div class="card-header">
-          <template v-if="isEdit">
-            <h1 class="card-title">Curso</h1>
-          </template>
-          <template v-else>
-            <h1 class="card-title">Curso</h1>
-          </template>
+          <h1 class="card-title">Curso</h1>
         </div>
 
-        <div class="card-body" style="padding:20px; overflow-y:auto; overflow-x:hidden;">
-          <b-alert :show="Boolean(error)" variant="danger" dismissible v-html="error"></b-alert>
+        <div class="card-body">
           <form>
-            <div class="form-group row">
-              <label
-                for="nome"
-                class="col-form-label col-sm-3 col-3"
-                style="text-align: end; padding: 0"
-              >Nome</label>
-              <div class="col-9" style="padding-left: 10px;">
-                <input type="text" class="form-control" id="nome" v-model="cursoForm.nome" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label
-                for="codigo"
-                class="col-form-label col-sm-3 col-3"
-                style="text-align: end; padding: 0"
-              >Código</label>
-              <div class="col-9" style="padding-left: 10px;">
-                <input type="text" class="form-control" id="codigo" v-model="cursoForm.codigo" />
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <label
-                for="alunosEntrada"
-                class="col-form-label col-sm-3 col-3"
-                style="text-align: end; padding: 0"
-              >Alunos 1º semestre</label>
-              <div class="col-9" style="padding-left: 10px;">
+            <div class="row mb-2 mx-0">
+              <div class="form-group col m-0 mr-4 px-0">
+                <label for="nome" class="col-form-label">Nome</label>
                 <input
                   type="text"
-                  class="form-control"
-                  id="alunosEnrada"
-                  v-model="cursoForm.alunosEntrada"
+                  class="inputMaior form-control form-control-sm"
+                  id="nome"
+                  v-model="cursoForm.nome"
                 />
               </div>
             </div>
-            <div class="form-group row">
-              <label
-                for="alunosEntrada"
-                class="col-form-label col-sm-3 col-3"
-                style="text-align: end; padding: 0"
-              >Alunos 2º semestre</label>
-              <div class="col-9" style="padding-left: 10px;">
+
+            <div class="row mb-2 mx-0">
+              <div class="form-group col m-0 mr-4 px-0">
+                <label for="codigo" class="col-form-label">Código</label>
                 <input
                   type="text"
-                  class="form-control"
+                  class="inputMenor form-control form-control-sm"
+                  id="codigo"
+                  v-model="cursoForm.codigo"
+                />
+              </div>
+            </div>
+
+            <div class="row mb-2 mx-0">
+              <div class="form-group col-6 m-0 px-0">
+                <label for="alunosEntrada" class="col-form-label">Alunos 1º Sem.</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
                   id="alunosEnrada"
+                  style="width: 70px;"
+                  v-model="cursoForm.alunosEntrada"
+                />
+              </div>
+            <!-- </div> -->
+
+            <!-- <div class="row mb-2 mx-0"> -->
+              <div class="form-group col-6 m-0 px-0">
+                <label for="alunosEntrada" class="col-form-label">Alunos 2º Sem.</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  id="alunosEnrada"
+                  style="width: 70px;"
                   v-model="cursoForm.alunosEntrada2"
                 />
               </div>
             </div>
 
-            <div class="form-group row">
-              <label
-                for="turno"
-                class="col-lg-3 col-md-3 col-sm-3 col-3 col-form-label"
-                style="text-align:end; padding: 0"
-              >Turno</label>
-              <div class="col-sm-6 col-6">
+            <div class="row mb-2 mx-0">
+              <div class="form-group col m-0 mr-4 px-0">
+                <label for="turno" class="col-form-label">Turno</label>
+
                 <div class="radio" id="turno">
                   <input type="radio" name="turno" value="Diurno" v-model="cursoForm.turno" />
                   Diurno
@@ -194,10 +188,9 @@
               </div>
             </div>
 
-            <div class="form-group row">
-              <!-- <div class="col-sm-10"> -->
-              <template v-if="isEdit">
-                <div style="display: flex; margin-right: 0; margin-left: auto">
+            <div class="row mb-0 mt-3 mx-0">
+              <div class="d-flex mr-0 ml-auto">
+                <template v-if="isEdit">
                   <!-- Editar -->
                   <button
                     type="button"
@@ -228,10 +221,9 @@
                   >
                     <i class="fas fa-times"></i>
                   </button>
-                </div>
-              </template>
-              <template v-else>
-                <div style="display: flex; margin-right: 0; margin-left: auto">
+                </template>
+
+                <template v-else>
                   <!-- Adicionar -->
                   <button
                     type="button"
@@ -252,9 +244,8 @@
                   >
                     <i class="fas fa-times"></i>
                   </button>
-                </div>
-              </template>
-              <!-- </div> -->
+                </template>
+              </div>
             </div>
           </form>
         </div>
@@ -294,7 +285,7 @@ export default {
       cursoForm: _.clone(emptyCurso),
       error: undefined,
       cursoClickado: "",
-      ordenacao: 'posicao'
+      ordenacao: "posicao"
     };
   },
   created() {
@@ -304,17 +295,13 @@ export default {
     this.selectAll = true;
   },
   methods: {
-    toggleOrderCod () {
-        if(this.ordenacao == 'codigo')
-            this.ordenacao = 'posicao'
-        else
-            this.ordenacao = 'codigo'
+    toggleOrderCod() {
+      if (this.ordenacao == "codigo") this.ordenacao = "posicao";
+      else this.ordenacao = "codigo";
     },
-    toggleOrderNome () {
-        if(this.ordenacao == 'nome')
-            this.ordenacao = 'posicao'
-        else
-            this.ordenacao = 'nome'
+    toggleOrderNome() {
+      if (this.ordenacao == "nome") this.ordenacao = "posicao";
+      else this.ordenacao = "nome";
     },
     clickada(f_curso) {
       this.cursoClickado = f_curso;
@@ -386,6 +373,12 @@ export default {
             this.error +=
               "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
           }
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
     },
     editCurso() {
@@ -417,10 +410,12 @@ export default {
         })
         .catch(error => {
           this.error = "<b>Erro ao atualizar Curso</b>";
-          if (error.response.data.fullMessage) {
-            this.error +=
-              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-          }
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
     },
     deleteCurso() {
@@ -437,6 +432,12 @@ export default {
         })
         .catch(() => {
           this.error = "<b>Erro ao excluir Curso</b>";
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
     },
     cleanCurso() {
@@ -478,7 +479,6 @@ export default {
   overflow: auto;
   margin: 0;
 }
-
 .titulo {
   font-size: 25px;
   font-weight: normal;
@@ -486,29 +486,7 @@ export default {
   margin: 0 !important;
 }
 
-.card-title {
-  font-size: 16px;
-  font-weight: normal;
-  padding-left: 0;
-  margin: 0;
-  text-align: center;
-}
-.custom-select {
-  height: 26px !important;
-  font-size: 12px !important;
-  padding: 0px 0px 0px 10px !important;
-  min-width: 85px;
-  max-width: 85px;
-  text-align: center;
-}
-.input-group-text {
-  max-width: 70px;
-  min-width: 70px;
-  height: 26px !important;
-  margin-left: -5px;
-  padding-left: 15px;
-  font-size: 12px !important;
-}
+/* Tabela Lucas */
 .p-header {
   padding: 0px 0 0px 0;
   margin: 0;
@@ -517,8 +495,8 @@ export default {
   height: 18px;
 }
 .divTable {
-  overflow: auto;
-  border: 1px solid rgba(0, 0, 0, 0.125);
+  overflow: hidden;
+  border: rgba(0, 0, 0, 0.125) solid 1px;
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
@@ -529,6 +507,7 @@ export default {
 table {
   display: block !important;
   overflow-y: scroll !important;
+  overflow-x: auto !important;
   font-size: 11px !important;
   font-weight: normal !important;
   background-color: white;
@@ -549,8 +528,8 @@ table td {
 table p {
   margin-bottom: 0;
   text-align: center;
-  padding-left: 5px;
   padding-right: 5px;
+  padding-left: 5px;
 }
 tr thead {
   display: block;
@@ -561,91 +540,107 @@ thead th {
   text-align: center;
   height: 18px !important;
 }
-table select {
-  height: 15px !important;
-  text-align: left;
-}
-
 table input {
-  height: 12px !important;
+  height: 18px !important;
   text-align: center !important;
-  margin: 0px;
-  margin-top: 4px;
+  margin: 0;
 }
-
-/* APENAS NO FIREFOX */
-@-moz-document url-prefix() {
-  select {
-    height: 15px !important;
-    text-align: left;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-
-    line-height: 8px;
-    border: 0.5px solid rgb(133, 133, 133);
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    background-color: rgb(245, 245, 245);
-  }
-  input {
-    text-align: center;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    line-height: 8px;
-    border: 0.5px solid rgb(92, 92, 92);
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    background-color: rgb(245, 245, 245);
-  }
+table tbody tr div {
+  height: 22px !important;
 }
 .sticky {
-  position: sticky;
-  position: -webkit-sticky;
-  top: 0px;
-  z-index: 10;
+  display: block !important;
+  overflow: hidden !important;
+  height: 20px !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 0 !important;
 }
+.bg-custom {
+  background-color: #c8c8c8;
+}
+.bg-custom:hover {
+  background-color: #c8c8c8;
+}
+
+/* ====== CARD ====== */
+.div-card{
+  margin-left: auto !important;
+}
+.card-title {
+  font-size: 16px !important;
+  font-weight: normal;
+  padding-left: 0;
+  margin: 0;
+  text-align: center;
+}
+.card {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+  margin-left: auto;
+}
+.card-body {
+  font-size: 12px;
+  padding-top: 15px;
+}
+.card label {
+  line-height: 1.2;
+  font-size: 12px;
+  text-align: start;
+}
+input {
+  height: 25px !important;
+  padding: 0px 5px 0px 5px !important;
+  font-size: 11px !important;
+  text-align: start;
+}
+.inputMaior {
+  width: 280px;
+}
+.inputMenor {
+  max-width: 70px;
+  min-width: 70px;
+  text-align: center;
+}
+.inputMenor2 {
+  max-width: 40px;
+  min-width: 40px;
+  margin-right: 10px;
+  text-align: center;
+}
+.selectMaior2 {
+  max-width: 300px;
+  min-width: 300px;
+  text-align: start;
+}
+/* =================== */
+
 .radio {
   font-size: 11px;
 }
-
-.form-group {
-  margin-bottom: 8px !important;
-}
-.col-form-label {
-  font-size: 11px;
-  padding-top: 0;
-  padding-bottom: 0;
-}
-
 input[type="text"] {
   height: 25px !important;
   font-size: 11px;
 }
-
 input[type="radio"] {
   height: 13px !important;
 }
-.card {
-  width: 330px !important;
-  height: auto !important;
-  padding: 0;
-  margin-right: 20px !important;
-  margin-left: auto;
-  top: -20px !important;
-  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
-}
-
 input[type="checkbox"] {
-  height: 13px !important;
-  width: 13px !important;
+  width: 16px !important;
+  height: 14px !important;
   text-align: center !important;
 }
 table input[type="checkbox"] {
   margin-left: 0 !important;
+  margin-top: 4px !important;
 }
-table th {
-  vertical-align: middle;
+.clickable-header {
+  cursor: pointer;
+  padding-left: 5px;
 }
+
 /* Botoes */
 button {
   padding: 0;
@@ -656,7 +651,6 @@ button {
   height: max-content;
   margin-right: 15px;
   transition: all 0.3s ease 0s;
-
 }
 i.fas,
 i.far {
@@ -700,17 +694,16 @@ i.far {
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #ff4e34;
 }
-.bg-custom {
-  background-color: #c8c8c8;
-}
-.bg-custom:hover {
-  background-color: #c8c8c8;
-}
 
 @media screen and (max-width: 992px) {
-  .cartao {
+  .div-card {
+    margin-left: 0 !important;
     margin-right: auto !important;
     top: 0 !important;
+  }
+  .card{
+    margin-left: 0 !important;
+    margin-right: auto !important;
   }
 }
 </style>

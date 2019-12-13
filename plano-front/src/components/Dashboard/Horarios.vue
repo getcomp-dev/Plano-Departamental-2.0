@@ -1,8 +1,11 @@
 <template>
   <div class="DashboardHorarios row pr-2" v-if="Admin">
     <!-- Titulo -->
-    <div class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0">
-      <div class="form-inline col-12 pl-0 mb-2 pr-1">
+    <div
+      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      style="height:38px;"
+    >
+      <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="col-12 titulo">Lista Horários</h1>
       </div>
     </div>
@@ -160,9 +163,10 @@
 					 error: undefined,
 					 options: [
 						  {text: "CC Diurno", value:1},
-						  {text: "CC Noturno", value:2},
-						  {text: "SI", value:3},
 						  {text: "Eng. Comp.", value:4},
+						  {text: "CC Noturno", value:2},
+						  {text: "Sis. Informação", value:3},
+						  
 						  {text: "Eletivas", value:5}
 					 ],
 					 evenCCN:"false",

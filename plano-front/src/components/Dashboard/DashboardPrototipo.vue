@@ -1,28 +1,33 @@
 <template>
   <div class="DashboardPrototipo row pr-2">
     <!-- Titulo -->
-    <div class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0">
-      <div class="form-inline col-12 pl-0 mb-2 pr-1">
+    <div
+      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      style="height:38px;"
+    >
+      <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="titulo col-md-2 col-sm-2 col-xl-2 col-3">Tabela</h1>
 
         <div
           class="form-group col-9 col-sm-10 col-md-10 col-xl-10 mb-0 pr-0"
           style="justify-content: flex-end;"
         >
-          <div class="input-group mr-0 ml-auto mb-0 mt-0">
-            <select class="form-control form-control-sm mt-1" v-model="periodos">
-              <option value="1">Primeiro</option>
-              <option value="2">Segundo</option>
-              <option value="3">Ambos</option>
-            </select>
-            <div class="input-group-append mt-1 mr-2">
-              <div class="input-group-append">
-                <label class="input-group-text">Semestre</label>
-              </div>
-            </div>
+            <div class="input-group mr-0 ml-auto mb-0 mt-0">
+              <div style="display: flex;">
+                <div class="input-group-append mt-1">
+                  <div class="input-group-append">
+                    <label class="input-group-text">Semestre:</label>
+                  </div>
+                </div>
+                <select class="form-control form-control-sm mt-1 mr-3 ml-0" v-model="periodos">
+                  <option value="1">Primeiro</option>
+                  <option value="2">Segundo</option>
+                  <option value="3">Ambos</option>
+                </select>
 
-            <b-button v-b-modal.modalPerfis title="Perfis" class="cancelbtn"><i class="fas fa-list-ul"></i></b-button>
-            <b-button v-b-modal.modalCursos title="Cursos" class="cancelbtn"><i class="fas fa-filter"></i></b-button>
+                <b-button v-b-modal.modalPerfis title="Perfis" class="cancelbtn"><i class="fas fa-list-ul"></i></b-button>
+                <b-button v-b-modal.modalCursos title="Cursos" class="cancelbtn"><i class="fas fa-graduation-cap"></i></b-button>
+              </div>
 
             <template v-if="isAdd">
               <div style="display: flex">
@@ -50,33 +55,35 @@
 
             <template v-else>
               <div style="display: flex">
-                <button
-                  type="button"
-                  title="Adicionar"
-                  class="addbtn"
-                  style="max-width:80px;"
-                  v-on:click.prevent="toggleAdd"
-                >
-                  <i class="fas fa-plus"></i>
-                </button>
-                <button
-                  type="button"
-                  title="Deletar"
-                  class="delbtn"
-                  style="max-width:80px;"
-                  v-b-modal.modalConfirma
-                >
-                  <i class="far fa-trash-alt"></i>
-                </button>
-                <button
-                  type="button"
-                  title="XLSX"
-                  class="relatbtn"
-                  style="max-width: 65px;"
-                  v-on:click.prevent="xlsx(Pedidos)"
-                >
-                  <i class="far fa-file-alt"></i>
-                </button>
+                <div class="ml-4">
+                  <button
+                    type="button"
+                    title="Adicionar"
+                    class="addbtn"
+                    style="max-width:80px;"
+                    v-on:click.prevent="toggleAdd"
+                  >
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button
+                    type="button"
+                    title="Deletar"
+                    class="delbtn"
+                    style="max-width:80px;"
+                    v-b-modal.modalConfirma
+                  >
+                    <i class="far fa-trash-alt"></i>
+                  </button>
+                </div>
+                  <button
+                    type="button"
+                    title="XLSX"
+                    class="relatbtn"
+                    style="max-width: 65px;"
+                    v-on:click.prevent="xlsx(Pedidos)"
+                  >
+                    <i class="far fa-file-alt"></i>
+                  </button>
               </div>
               <!-- Modals do deletar-->
               <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
@@ -99,12 +106,13 @@
 
             <!-- Modals do botão perfis slot="modal-footer" -->
             <b-modal id="modalPerfis" ref="PerfisModal" scrollable title="Selecione os perfis">
-              <b-form-group style="margin-top:-10px; font-size:14px;">
+              <b-form-group style="margin-top:-10px; font-size:12px;">
                 <b-form-checkbox-group
                   id="checkboxGroupPerfis"
                   v-model="PerfisSelecionados"
                 >
                   <b-form-checkbox
+                    size="sm"
                     v-for="perfil in Perfis"
                     :key="'perfil'+perfil.id"
                     :value="perfil"
@@ -112,31 +120,30 @@
                 </b-form-checkbox-group>
               </b-form-group>
 
-              <div slot="modal-footer">
+              <div slot="modal-footer" style="display: flex; margin-right: 25px !important;">
                 <b-button
-                  class="btn-azul mr-2"
+                  class="btn-azul btn-df mr-2"
                   variant="success"
                   @click="selectAll()"
                 >Selecionar Todos</b-button>
                 <b-button
-                  class="btn-cinza mr-2"
+                  class="btn-cinza btn-df mr-2"
                   variant="secondary"
                   @click="selectNone()"
                 >Desmarcar Todos</b-button>
-
                 <b-button
                   variant="success"
                   @click="btnOK()"
-                  class="btn-verde mr-2"
-                  style="padding-right:15px!important; padding-left:15px!important"
+                  class="btn-verde btn-df mr-2"
+                  style="padding-right:15px!important; padding-left:15px!important;"
                 >OK</b-button>
               </div>
             </b-modal>
 
             <!-- Modals do botão cursos slot="modal-footer" -->
-            <b-modal id="modalCursos" style="max-height:80vh;" ref="CursosModal" scrollable title="Selecione os Cursos">
+            <b-modal id="modalCursos" style="max-height:75vh;" ref="CursosModal" scrollable title="Selecione os Cursos">
               <b-form-group class style="margin-top:-10px; font-size:14px;">
-                  <table style="max-height:50%; overflow:auto">
+                  <table style="max-height:70vh !important; width: 465px; overflow:auto;">
                     <tr>
                       <th></th>
                       <th style="text-align:center" @click="ToggleCodigoOrdering()">Código<i v-if="ordenacaoCurso=='codigo'" style="font-size:0.6rem" class="fas fa-arrow-down fa-sm"></i></b-button></th>
@@ -150,23 +157,23 @@
                         >
                       </td>
                       <td>{{curso.codigo}}</td>
-                      <td>{{curso.nome}}</td>
+                      <td style="padding-left: 15px !important; text-align: start;">{{curso.nome}}</td>
                     </tr>
                   </table>
               </b-form-group>
 
-              <div slot="modal-footer">
+              <div slot="modal-footer" style="display: flex; margin-right: 25px !important;">
                 <b-button
-                        class="btn-azul mr-2"
+                        class="btn-azul btn-df mr-2"
                         variant="success"
                         @click="selectAllCursos()"
                 >Selecionar Todos</b-button>
-                <b-button class="btn-cinza mr-2" variant="secondary" @click="selectNoneCursos()">Desmarcar Todos</b-button>
+                <b-button class="btn-cinza btn-df mr-2" variant="secondary" @click="selectNoneCursos()">Desmarcar Todos</b-button>
 
                 <b-button
                         variant="success"
                         @click="btnOKCursos()"
-                        class="btn-verde mr-2"
+                        class="btn-verde btn-df mr-2"
                         style="padding-right:15px!important; padding-left:15px!important"
                 >OK</b-button>
               </div>
@@ -658,6 +665,8 @@ export default {
   margin-left: -5px;
   padding-left: 15px;
   font-size: 12px !important;
+  background-color: white; 
+  border: none;
 }
 .form-control {
   height: 25px !important;
@@ -666,6 +675,7 @@ export default {
   min-width: 80px;
   max-width: 80px;
   text-align: start;
+  border-radius: 3px !important;
 }
 .sticky {
   position: sticky;

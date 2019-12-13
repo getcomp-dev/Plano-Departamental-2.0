@@ -1,9 +1,12 @@
 <template>
   <div class="DashboardPerfis row pr-2" v-if="Admin">
     <!-- Titulo -->
-    <div class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0">
-      <div class="form-inline col-12 pl-0 mb-2 pr-1">
-        <h1 class="col-12 titulo">Lista Perfis</h1>
+    <div
+      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      style="height:38px;"
+    >
+      <div class="form-inline col-12 pl-0 mb-1 pr-1">
+        <h1 class="col-12 titulo">Perfis</h1>
       </div>
     </div>
     <div class="w-100 mb-2 border-bottom"></div>
@@ -14,9 +17,14 @@
       <table class="table table-hover border table-sm">
         <thead class="thead-light">
           <tr>
-            <div style="display: block; overflow: hidden; width: 485px;" class="sticky">
+            <div style="display: block; overflow: hidden; width: 482px;" class="sticky">
               <th scope="col">
-                <p style="width: 350px" @click="toggleOrderNome" class="p-header">
+                <p
+                  style="width: 350px; text-align:start"
+                  title="Clique para ordenar por nome"
+                  @click="toggleOrderNome"
+                  class="p-header clickable-header"
+                >
                   Nome
                   <i
                     v-if="ordenacao=='nome'"
@@ -26,7 +34,12 @@
                 </p>
               </th>
               <th scope="col">
-                <p style="width: 90px" @click="toggleOrderAbreviacao" class="p-header">
+                <p
+                  style="width: 90px;"
+                  title="Clique para ordenar por abreviação"
+                  @click="toggleOrderAbreviacao"
+                  class="p-header clickable-header"
+                >
                   Abreviação
                   <i
                     v-if="ordenacao=='abreviacao'"
@@ -49,7 +62,7 @@
               v-on:click.prevent="showPerfil(perfil), clickada(perfil.nome)"
               :class="{'bg-custom' : perfilClickado === perfil.nome}"
             >
-              <div style="width: 485px">
+              <div style="width: 482px">
                 <td>
                   <p style="width: 350px; text-align: start">{{perfil.nome}}</p>
                 </td>
@@ -82,7 +95,7 @@
     <!-- Fim do Grid Esquerdo -->
 
     <!-- Grid Direito -->
-    <div class="div-card p-0 mt-0 mb-2 ml-auto col-lg-5 col-md-12 col-sm-12 col-12">
+    <div class="div-card p-0 mt-0 mb-2 ml-auto col-lg-5 col-md-5 col-sm-12 col-12">
       <div class="card ml-auto mr-4">
         <div class="card-header">
           <h2 class="card-title">Perfil</h2>
@@ -93,7 +106,7 @@
 
           <form>
             <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 mr-4 px-0">
+              <div class="form-group col m-0 px-0">
                 <label for="nome" class="col-form-label">Nome</label>
                 <input
                   type="text"
@@ -339,10 +352,6 @@ export default {
   padding-left: 0;
   margin: 0 !important;
 }
-input[type="text"] {
-  height: 25px !important;
-  font-size: 11px;
-}
 
 /* Tabela Lucas */
 .p-header {
@@ -363,13 +372,14 @@ input[type="text"] {
   width: max-content;
 }
 table {
-  display: block;
-  overflow-y: hidden;
-  overflow-x: auto;
-  height: auto;
-  font-size: 11px;
+  display: block !important;
+  overflow-y: hidden !important;
+  overflow-x: auto !important;
+  font-size: 11px !important;
+  font-weight: normal !important;
   background-color: white;
-  margin: 0;
+  margin: 0 !important;
+  height: auto!important;
 }
 tbody {
   max-height: 100%;
@@ -403,6 +413,12 @@ table input {
 table tbody tr div {
   height: 22px !important;
 }
+input[type="color"] {
+  background-color: rgb(243, 243, 243);
+}
+table input[type="color"] {
+  padding: 0px 1px 0px 1px !important;
+}
 .sticky {
   display: block !important;
   overflow: hidden !important;
@@ -419,6 +435,9 @@ table tbody tr div {
 }
 
 /* ====== CARD ====== */
+.div-card{
+  margin-left: auto;
+}
 .card-title {
   font-size: 16px;
   font-weight: normal;
@@ -431,6 +450,7 @@ table tbody tr div {
   width: -moz-max-content;
   width: max-content;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+  margin-left: auto;
 }
 .card-body {
   font-size: 12px;
@@ -442,11 +462,16 @@ table tbody tr div {
   text-align: start;
   padding-top: 0 !important;
 }
-input {
+input[type="text"] {
   height: 25px !important;
   padding: 0px 5px 0px 5px !important;
-  font-size: 12px !important;
+  font-size: 11px !important;
   text-align: start;
+}
+.card input[type="color"] {
+  padding: 0px 2px 0px 2px !important;
+  font-size: 11px !important;
+  height: 25px !important;
 }
 .inputMenor {
   width: 60px;
@@ -458,8 +483,12 @@ input {
   text-align: center;
 }
 .inputMaior {
-  width: 220px;
+  width: 240px;
   text-align: start;
+}
+.clickable-header {
+  cursor: pointer;
+  padding-left: 5px;
 }
 /* =================== */
 
@@ -517,5 +546,15 @@ i.far {
   color: #ff5f48;
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #ff4e34;
+}
+@media screen and (max-width: 849px){
+  .div-card{
+    margin-left: 0 !important;
+    top: 10px !important;
+    margin-bottom: 10px !important;
+  }
+  .card{
+    margin-left: 0 !important;
+  }
 }
 </style>

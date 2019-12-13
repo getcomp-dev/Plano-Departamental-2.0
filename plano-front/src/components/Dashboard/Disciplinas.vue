@@ -1,8 +1,11 @@
 <template>
   <div class="DashboardDisciplinas row pr-2" v-if="Admin">
     <!-- Titulo -->
-    <div class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0">
-      <div class="form-inline col-12 pl-0 mb-2 pr-1">
+    <div
+      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      style="height:38px;"
+    >
+      <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="col-12 titulo">Disciplinas</h1>
       </div>
     </div>
@@ -14,12 +17,13 @@
       <table class="table table-hover border table-sm">
         <thead class="thead-light">
           <tr>
-            <div style="display: block; overflow: hidden; width: 704px;" class="sticky">
+            <div style="width: 700px;" class="sticky">
               <th scope="col">
                 <p
                   @click="toggleOrderNome()"
-                  style="width: 300px; cursor: pointer; text-algin: start!important"
-                  class="p-header"
+                  style="width: 300px;"
+                  class="p-header clickable-header"
+                  title="Clique para ordenar por nome"
                 >
                   Nome
                   <i
@@ -33,7 +37,8 @@
                 <p
                   style="width: 82px; cursor: pointer;"
                   @click="toggleOrderCodigo()"
-                  class="p-header"
+                  class="p-header clickable-header"
+                  title="Clique para ordenar por código"
                 >
                   Código
                   <i
@@ -53,7 +58,7 @@
                 <p style="width: 230px;" class="p-header">Perfil</p>
               </th>
               <th scope="col">
-                <p style="width: 25px" class="p-header">EAD</p>
+                <p style="width: 28px" class="p-header">EAD</p>
               </th>
             </div>
           </tr>
@@ -66,7 +71,7 @@
               v-on:click.prevent="showDisciplina(disciplina), clickada(disciplina.codigo)"
               :class="{'bg-custom' : disciplinaClickada === disciplina.codigo}"
             >
-              <div style="width: 704px">
+              <div style="width:700px">
                 <td>
                   <p style="width: 300px; text-align: start">{{disciplina.nome}}</p>
                 </td>
@@ -85,7 +90,7 @@
                   </td>
                 </template>
                 <td>
-                  <div style="width: 25px;">
+                  <div style="width: 28px;">
                     <input
                       class="noHover"
                       type="checkbox"
@@ -122,7 +127,7 @@
           <b-alert :show="Boolean(error)" variant="danger" dismissible v-html="error"></b-alert>
 
           <form>
-            <div class="row mb-1 mx-0">
+            <div class="row mb-2 mx-0">
               <div class="form-group m-0 col px-0">
                 <label for="nome" class="col-form-label">Nome</label>
                 <input
@@ -135,49 +140,49 @@
               </div>
             </div>
 
-            <div class="row mb-1 mx-0">
-              <div class="form-group m-0 col px-0 text-center">
+            <div class="row mb-2 mx-0">
+              <div class="form-group m-0 col px-0">
                 <label for="codigo" class="col-form-label">Código</label>
                 <input
                   type="text"
                   id="codigo"
-                  class="form-control form-control-sm m-auto"
+                  class="form-control form-control-sm"
                   style="width: 85px!important; text-align:center!important"
                   v-model="disciplinaForm.codigo"
                 />
               </div>
-
-              <div class="form-group m-0 col px-0 text-center">
+            </div>
+            <div class="row mb-2 mx-0">
+              <div class="form-group m-0 col px-0">
                 <label for="cargaTeorica" class="col-form-label">Carga Teórica</label>
                 <input
                   type="text"
                   id="cargaTeorica"
-                  class="form-control form-control-sm m-auto"
-                  style="width: 40px!important; text-align:center!important"
+                  class="form-control form-control-sm"
+                  style="width: 70px!important; text-align:center!important"
                   v-model="disciplinaForm.cargaTeorica"
                 />
               </div>
 
-              <div class="form-group m-0 col px-0 text-center">
+              <div class="form-group m-0 col px-0">
                 <label for="cargaPratica" class="col-form-label">Carga Prática</label>
                 <input
                   type="text"
                   id="cargaPratica"
-                  class="form-control form-control m-auto"
-                  style="width: 40px!important; text-align:center!important"
+                  class="form-control form-control-sm"
+                  style="width: 70px!important; text-align:center!important"
                   v-model="disciplinaForm.cargaPratica"
                 />
               </div>
             </div>
-
-            <div class="row mb-1 mx-0">
+            <div class="row mb-2 mx-0">
               <div class="form-group m-0 col px-0">
                 <label for="perfil" class="col-form-label">Perfil</label>
                 <select
                   type="text"
                   id="perfil"
-                  class="form-control form-control"
-                  style="width: 288px"
+                  class="form-control form-control-sm"
+                  style="width: 288px!important"
                   v-model="disciplinaForm.Perfil"
                 >
                   <option v-if="Perfis.length===0" type="text" value>Nenhum Perfil Encontrado</option>
@@ -429,35 +434,72 @@ export default {
   padding-left: 0;
   margin: 0 !important;
 }
+
+/* ====== CARD ====== */
 .card-title {
-  font-size: 16px !important;
+  font-size: 16px;
   font-weight: normal;
   padding-left: 0;
   margin: 0;
   text-align: center;
 }
+.div-card {
+  top: -15px;
+}
 .card {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
+  width: 342px;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
 .card-body {
   font-size: 12px;
   padding-top: 15px;
 }
-
-.form-group {
-  margin-bottom: 15px !important;
-}
 .card label {
   line-height: 1.2;
   font-size: 12px;
   text-align: start;
+  padding-top: 0 !important;
 }
-.col-form-label {
-  padding-top: 0;
+select {
+  height: 25px !important;
+  font-size: 11px !important;
+  padding: 0px 5px 0px 5px !important;
+  text-align: center;
 }
+.selectMenor {
+  min-width: 80px;
+  max-width: 80px;
+  text-align: start !important;
+}
+.selectMaior {
+  min-width: 200px;
+  max-width: 200px;
+  text-align: start !important;
+}
+input {
+  height: 25px !important;
+  padding: 0px 5px 0px 5px !important;
+  font-size: 11px !important;
+  text-align: start;
+}
+.inputMenor {
+  max-width: 60px;
+  min-width: 60px;
+  text-align: center;
+}
+.inputMenor2 {
+  max-width: 40px;
+  min-width: 40px;
+  margin-right: 10px;
+  text-align: center;
+}
+.selectMaior2 {
+  max-width: 300px;
+  min-width: 300px;
+  text-align: start;
+}
+/* =================== */
+
 /* Tabela Lucas */
 .p-header {
   padding: 0px 0 0px 0;
@@ -468,9 +510,7 @@ export default {
 }
 .divTable {
   overflow: hidden;
-  <<<<<<<HEAD
   border: rgba(0, 0, 0, 0.125) solid 1px;
-  =======>>>>>>> 49f9fd144823836b7abf1595417b04e7935c598f
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
@@ -514,11 +554,11 @@ thead th {
   text-align: center;
   height: 18px !important;
 }
-
 input[type="text"] {
   height: 25px !important;
+  padding: 0px 5px 0px 5px !important;
   font-size: 11px !important;
-  padding: 4px 8px 4px 8px !important;
+  text-align: start;
 }
 input[type="checkbox"] {
   width: 16px !important;
@@ -532,7 +572,8 @@ table input[type="checkbox"] {
 select {
   height: 25px !important;
   font-size: 11px !important;
-  padding: 4px 8px 4px 8px !important;
+  padding: 0px 5px 0px 5px !important;
+  text-align: center;
 }
 table tbody tr div {
   height: 22px !important;
@@ -572,7 +613,6 @@ table tbody tr div {
     background-color: rgb(245, 245, 245);
   }
 }
-
 .bg-custom {
   background-color: #c8c8c8;
 }
@@ -582,6 +622,7 @@ table tbody tr div {
 .noHover {
   pointer-events: none;
 }
+
 /* Botoes */
 button {
   padding: 0;
@@ -641,9 +682,15 @@ i.far {
 @media screen and (max-width: 1095px) {
   .div-card {
     margin-left: 0px !important;
+    top: 0 !important;
   }
   .card {
     margin-left: 0px !important;
   }
+}
+.clickable-header {
+  cursor: pointer;
+  text-align: start !important;
+  padding-left: 5px;
 }
 </style>

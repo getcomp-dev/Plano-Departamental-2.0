@@ -14,27 +14,27 @@
       </div>
     </div>
     <div class="w-100 mb-2 border-bottom"></div>
-    <div style="height: 80vh; overflow-y: scroll; overflow-x: auto;" ref="mainTable">
-      <table class="table table-hover table-sm">
+    <div class="divTable" style="height: 80vh;" ref="mainTable">
+      <table class="table table-hover border table-sm">
         <thead class="thead-light">
           <tr>
-            <th scope="col" style="width: 72px;">
-              <p style="text-align: center">Cod</p>
+            <th scope="col" style="width: 90px;">
+              <p class="p-header" style="text-align: center">Cod</p>
             </th>
-            <th scope="col" style="width: 400px">
-              <p style="text-align: center">Disciplina</p>
+            <th scope="col" style="width: 500px">
+              <p class="p-header" style="text-align: center">Disciplina</p>
             </th>
-            <th scope="col" style="width: 135px">
-              <p style="text-align:center">76A</p>
+            <th scope="col" style="width: 165px">
+              <p class="p-header" style="text-align:center">76A</p>
             </th>
-            <th scope="col" style="width: 135px">
-              <p style="text-align:center">35A</p>
+            <th scope="col" style="width: 165px">
+              <p class="p-header" style="text-align:center">35A</p>
             </th>
-            <th scope="col" style="width: 135px">
-              <p style="text-align:center">65C</p>
+            <th scope="col" style="width: 165px">
+              <p class="p-header" style="text-align:center">65C</p>
             </th>
-            <th scope="col" style="width: 135px">
-              <p style="text-align:center">65B</p>
+            <th scope="col" style="width: 165px">
+              <p class="p-header" style="text-align:center">65B</p>
             </th>
           </tr>
         </thead>
@@ -49,8 +49,8 @@
                 <p style="text-align: center">{{disciplina.codigo}}</p>
                 <p />
               </td>
-              <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;">
-                <p>{{disciplina.nome}}</p>
+              <td style="border-style: solid; border-width: 1px; border-color: whitesmoke; "> 
+                <p style="text-align: start !important; padding-left: 10px;">{{disciplina.nome}}</p>
               </td>
               <td style="border-style: solid; border-width: 1px; border-color: whitesmoke;">
                 <p style=" text-align: center">
@@ -345,11 +345,68 @@
   max-width: 90vw;
   overflow: auto;
 }
-
+.p-header {
+  padding: 0px 0 0px 0;
+  margin: 0;
+  font-size: 11px;
+  text-align: center;
+  height: 18px;
+}
+.divTable {
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+}
 table {
-  font-size: 10px;
+  display: block !important;
+  overflow-y: auto !important;
+  overflow-x: auto !important;
+  font-size: 11px !important;
+  font-weight: normal !important;
+  background-color: white;
+  margin: 0 !important;
   table-layout: fixed;
   width: 100%;
+  height: -webkit-calc(100vh - 95px);
+  height: -moz-calc(100vh - 95px);
+  height: calc(100vh - 95px);
+}
+
+tbody {
+  max-height: 100%;
+  width: 100%;
+}
+table td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 0 !important;
+}
+table p {
+  margin-bottom: 0;
+  text-align: center;
+  padding-right: 5px;
+  padding-left: 5px;
+}
+tr thead {
+  display: block;
+}
+thead th {
+  padding: 0 !important;
+  font-size: 14px;
+  text-align: center;
+  height: 18px !important;
+}
+table tbody tr div {
+  height: 22px !important;
+}
+table input {
+  height: 11px !important;
+  text-align: center !important;
 }
 
 p {

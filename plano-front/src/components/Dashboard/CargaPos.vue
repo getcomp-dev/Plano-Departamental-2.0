@@ -10,8 +10,13 @@
           style="justify-content: flex-end;"
         >
           <div class="input-group mr-0 ml-auto mb-0 mt-0">
+             <div class="input-group-append mt-1">
+              <div class="input-group-append">
+                <label class="input-group-text">Trimestre:</label>
+              </div>
+            </div>
             <select
-              class="form-control form-control-sm mt-1"
+              class="form-control form-control-sm mt-1 mr-5"
               v-model="periodos"
               v-on:change="CreditoTotal_PGMC, CreditoTotal_PGCC, CreditoTotal_PGEM"
             >
@@ -19,11 +24,7 @@
               <option value="2">Segundo</option>
               <option value="3">Ambos</option>
             </select>
-            <div class="input-group-append mt-1 mr-4">
-              <div class="input-group-append">
-                <label class="input-group-text">Trimestre</label>
-              </div>
-            </div>
+           
 
             <template v-if="isAdd">
               <div style="display: flex">
@@ -88,10 +89,11 @@
         <div class="alert alert-dark p-0 m-0 text-center rounded-0" role="alert">
           <div class="row m-0">
             <p class="col p-0 alert-p m-0 border" style="font-weight: bold">PGMC</p>
-            <p class="p-0 m-0 border" style="width:58px" id="credsPGMC">{{CreditoTotal_PGMC}}</p>
-            <b-popover target="credsPGMC" placement="bottom" triggers="hover focus">
-              <p style="font-size: 11px" class="p-1 m-0">Total de creditos</p>
-            </b-popover>
+            <p
+              class="p-0 m-0 border"
+              style="width:58px; cursor: default!important"
+              title="Total de creditos"
+            >{{CreditoTotal_PGMC}}</p>
           </div>
         </div>
 
@@ -218,11 +220,11 @@
         <div class="alert p-0 alert-dark m-0 text-center rounded-0" role="alert">
           <div class="row m-0">
             <p class="col p-0 alert-p m-0 border" style="font-weight: bold">PGCC</p>
-            <p class="p-0 m-0 border" style="width:58px" id="credsPGCC">{{CreditoTotal_PGCC}}</p>
-
-            <b-popover target="credsPGCC" placement="bottom" triggers="hover focus">
-              <p style="font-size: 11px" class="p-1 m-0">Total de creditos</p>
-            </b-popover>
+            <p
+              class="p-0 m-0 border"
+              style="width:58px; cursor: default!important"
+              title="Total de creditos"
+            >{{CreditoTotal_PGCC}}</p>
           </div>
         </div>
 
@@ -284,11 +286,12 @@
       <div class="p-0 divTable mr-2 mb-2" v-if="!isLoading">
         <div class="alert alert-dark p-0 m-0 text-center rounded-0" role="alert">
           <div class="row m-0">
-            <p class="col p-0 alert-p m-0 border" style="font-weight: bold">PGEM</p>
-            <p class="p-0 m-0 border" style="width:58px" id="credsPGEM">{{CreditoTotal_PGEM}}</p>
-            <b-popover target="credsPGEM" placement="bottom" triggers="hover focus">
-              <p style="font-size: 11px" class="p-1 m-0">Total de creditos</p>
-            </b-popover>
+            <p class="col p-0 alert-p m-0 border" style="font-weight: bold;">PGEM</p>
+            <p
+              class="p-0 m-0 border"
+              style="width:58px; cursor: default!important"
+              title="Total de creditos"
+            >{{CreditoTotal_PGEM}}</p>
           </div>
         </div>
 
@@ -646,6 +649,7 @@ export default {
   min-width: 80px;
   max-width: 80px;
   text-align: start;
+  border-radius: 3px !important;
 }
 .input-group-text {
   max-width: 70px;
@@ -654,6 +658,8 @@ export default {
   margin-left: -5px;
   padding-left: 15px;
   font-size: 12px !important;
+  background-color: white;
+  border: none;
 }
 .divTable {
   overflow: hidden;

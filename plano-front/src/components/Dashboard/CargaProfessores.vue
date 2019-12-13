@@ -18,7 +18,7 @@
     <div class="w-100 mb-2 border-bottom"></div>
 
     <div class="divTable p-0" ref="carga">
-      <table class="table table-hover table-sm">
+      <table class="table table-hover border table-sm">
         <thead class="thead-light sticky">
           <tr>
             <div
@@ -26,7 +26,7 @@
               class="sticky"
             >
               <th scope="col">
-                <p class="p-header" style="width: 130px">Nome</p>
+                <p class="p-header" style="width: 130px; text-align: start !important; padding-left: 5px;">Nome</p>
               </th>
               <th scope="col">
                 <p class="p-header" style="width: 24px">S.</p>
@@ -68,7 +68,7 @@
           <template v-if="Professores.length > 0">
             <template v-for="professor in Professores">
               <template v-if="turmas(professor).length > 0">
-                <div style="width: ‭845‬px;" :key="professor.apelido">
+                <div class="linhas" style="width: ‭845‬px;" :key="professor.apelido">
                   <td class="prof-td">
                     <div style="width: 130px">{{professor.apelido}}</div>
                   </td>
@@ -107,7 +107,7 @@
                   <template
                     v-if="turma.Disciplina===disciplina.id && (turma.Docente1===professor.id || turma.Docente2===professor.id)"
                   >
-                    <div style="width: ‭845‬px;">
+                    <div class="linhas" style="width: ‭845‬px;">
                       <td>
                         <p style="width: 130px"></p>
                       </td>
@@ -176,7 +176,7 @@
               <template v-for="carga in CargasPos">
                 <template v-if="carga.Docente===professor.id">
                   <tr :key="'cargaPos'+carga.id+'professor'+professor.id">
-                    <div style="width: ‭845‬px;">
+                    <div class="linhas" style="width: ‭845‬px;">
                       <td>
                         <p style="width: 130px"></p>
                       </td>
@@ -380,7 +380,6 @@ export default {
 }
 .divTable {
   overflow: hidden;
-  border: #808080 solid 2px;
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
@@ -395,7 +394,7 @@ table {
   height: -moz-calc(100vh - 100px);
   height: calc(100vh - 100px);
   font-size: 11px;
-  background-color: #f5f5f5;
+  background-color: white;
   margin: 0;
 }
 tbody {
@@ -406,6 +405,10 @@ table td {
   text-align: center;
   vertical-align: middle;
   padding: 0 !important;
+  border: none;
+}
+.linhas{
+  border-top: 1px solid #dee2e6;
 }
 table p {
   margin-bottom: 0;
@@ -509,7 +512,7 @@ i.far {
   }
 }
 .prof-td {
-  background-color: rgba(0, 85, 175, 0.2);
+  background-color: rgba(0, 0, 0, 0.089);
   color: black;
 }
 </style>

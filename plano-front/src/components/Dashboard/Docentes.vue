@@ -1,8 +1,11 @@
 <template>
   <div class="DashboardDocentes row pr-2" v-if="Admin">
     <!-- Titulo -->
-    <div class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0">
-      <div class="form-inline col-12 pl-0 mb-2 pr-1">
+    <div
+      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      style="height:38px;"
+    >
+      <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="col-12 titulo">Lista Docentes</h1>
       </div>
     </div>
@@ -16,9 +19,14 @@
       <table class="table table-hover table-sm">
         <thead class="thead-light">
           <tr>
-            <div style="width: 416px " class="sticky">
+            <div style="width: 415px " class="sticky">
               <th scope="col">
-                <p class="p-header" @click="toggleOrdenacaoNome()" style="width: 240px">
+                <p
+                  @click="toggleOrdenacaoNome()"
+                  title="Clique para ordenar por nome"
+                  class="p-header clickable-header"
+                  style="width: 240px; text-align: start;"
+                >
                   Nome
                   <i
                     v-if="ordenacao=='nome'"
@@ -28,7 +36,12 @@
                 </p>
               </th>
               <th scope="col">
-                <p class="p-header" @click="toggleOrdenacaoApelido()" style="width: 130px">
+                <p
+                  @click="toggleOrdenacaoApelido()"
+                  title="Clique para ordenar por apelido"
+                  class="p-header clickable-header"
+                  style="width: 130px"
+                >
                   Apelido
                   <i
                     v-if="ordenacao=='apelido'"
@@ -52,7 +65,7 @@
               :class="{'bg-custom':docenteClickado == docente.nome}"
               style="cursor: pointer"
             >
-              <div style="width: 416px">
+              <div style="width: 415px">
                 <td>
                   <p style="width: 240px; text-align: start!important">{{docente.nome}}</p>
                 </td>
@@ -86,8 +99,8 @@
     <!-- Fim do Grid Esquerdo -->
 
     <!-- Grid Direito -->
-    <div class="div-card p-0 mt-0 mb-2 ml-auto col-lg-5 col-md-5 col-sm-12 col-12">
-      <div class="card ml-auto mr-4">
+    <div class="div-card p-0 mt-0 mb-2 col-lg-6 col-md-6 col-sm-12 col-12">
+      <div class="card mr-4 ml-auto">
         <div class="card-header">
           <template v-if="isEdit">
             <h1 class="card-title">Docente</h1>
@@ -513,10 +526,6 @@ table input {
   height: 11px !important;
   text-align: center !important;
 }
-input[type="text"] {
-  height: 25px !important;
-  font-size: 11px;
-}
 input[type="checkbox"] {
   width: 16px !important;
   height: 14px !important;
@@ -528,7 +537,7 @@ table input[type="checkbox"] {
 }
 input[type="text"] {
   height: 25px !important;
-  font-size: 12px;
+  font-size: 11px!important;
 }
 .sticky {
   display: block !important;
@@ -542,6 +551,9 @@ input[type="text"] {
 /* Fim Tabela Lucas */
 
 /* ====== CARD ====== */
+.div-card{
+  margin-left: auto;
+}
 .card-title {
   font-size: 16px;
   font-weight: normal;
@@ -554,6 +566,7 @@ input[type="text"] {
   width: -moz-max-content;
   width: max-content;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+  margin-left: auto;
 }
 .card-body {
   font-size: 12px;
@@ -572,7 +585,7 @@ input[type="text"] {
 input {
   height: 25px !important;
   padding: 0px 5px 0px 5px !important;
-  font-size: 12px !important;
+  font-size: 11px !important;
   text-align: start;
 }
 .inputMenor {
@@ -588,6 +601,11 @@ input {
   width: 220px;
   text-align: start;
 }
+.clickable-header {
+  cursor: pointer;
+  padding-left: 5px;
+}
+
 /* =================== */
 .bg-custom {
   background-color: #c8c8c8;
@@ -655,9 +673,14 @@ i.far {
   -webkit-text-stroke-color: #ff4e34;
 }
 
-@media screen and (max-width: 767px) {
-  .cartao {
-    margin-right: auto !important;
+@media screen and (max-width: 849px) {
+.div-card {
+    margin-left: 0px !important;
+    margin-top: 20px!important;
+    top: 0 !important;
+  }
+  .card {
+    margin-left: 0px !important;
   }
 }
 </style>

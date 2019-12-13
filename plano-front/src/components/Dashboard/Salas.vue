@@ -1,8 +1,11 @@
 <template>
   <div class="DashboardSalas row pr-2" v-if="Admin">
     <!-- Titulo -->
-    <div class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0">
-      <div class="form-inline col-12 pl-0 mb-2 pr-1">
+    <div
+      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      style="height:38px;"
+    >
+      <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="col-12 titulo">Lista Salas</h1>
       </div>
     </div>
@@ -19,7 +22,7 @@
                 <p class="p-header" style="width: 82px">Nome</p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width: 72px">Laboratório</p>
+                <p class="p-header" style="width: 75px">Laboratório</p>
               </th>
             </div>
           </tr>
@@ -39,7 +42,7 @@
                 </td>
 
                 <td>
-                  <div style="width: 72px">
+                  <div style="width: 75px">
                     <input
                       type="checkbox"
                       class="noHover"
@@ -66,10 +69,10 @@
     </div>
 
     <!-- Grid Direito -->
-    <div class="div-card p-0 mt-0 mb-2 ml-auto col-lg-5 col-md-5 col-sm-5 col-6">
-      <div class="card ml-auto mr-4">
+    <div class="div-card p-0 mt-0 mb-2 col-lg-5 col-md-5 col-sm-5 col-6">
+      <div class="card mr-4">
         <div class="card-header">
-          <h1 class="card-title">Editar Sala</h1>
+          <h1 class="card-title">Sala</h1>
         </div>
 
         <div class="card-body">
@@ -308,6 +311,9 @@ export default {
   padding-left: 0;
   margin: 0 !important;
 }
+.div-card{
+  margin-left: auto;
+}
 .card-title {
   font-size: 16px;
   font-weight: normal;
@@ -321,6 +327,7 @@ export default {
   width: max-content;
   min-width: 164px;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15); /*sugestão sombra*/
+  margin-left: auto;
 }
 .card-body {
   font-size: 12px;
@@ -514,10 +521,13 @@ i.far {
   }
 }
 
-@media screen and (max-width: 991px) {
-  .card {
-    margin-left: auto !important;
-    margin-right: auto !important;
+@media screen and (max-width: 337px) {
+  .div-card{
+    margin-left: 0 !important;
+    top: 10px !important;
+  }
+  .card{
+    margin-left: 0 !important;
   }
 }
 </style>

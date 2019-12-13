@@ -667,7 +667,7 @@ export default {
   height: calc(100vh - 30px);
   padding-bottom: 1rem;
   overflow-x: hidden;
-  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+  overflow-y: auto !important; /* Scrollable contents if viewport is shorter than content. */
 }
 @supports ((position: -webkit-sticky) or (position: sticky)) {
   .sidebar-sticky {

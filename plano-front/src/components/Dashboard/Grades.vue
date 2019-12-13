@@ -1,8 +1,11 @@
 <template>
   <div class="DashboardGrades row pr-2" v-if="Admin">
     <!-- Titulo -->
-    <div class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0">
-      <div class="form-inline col-12 pl-0 mb-2 pr-1">
+    <div
+      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      style="height:38px;"
+    >
+      <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="col-12 titulo">Grades</h1>
       </div>
     </div>
@@ -10,9 +13,9 @@
     <div class="w-100 mb-2 border-bottom"></div>
 
     <div class="row w-100 m-0" style="font-size:11px">
-      <div class="col-12 mr-2 px-0">
+      <div class="col-lg-7 col-md-6 col-sm-12 col-12 m-0 px-0">
         <div class="form-row mx-0">
-          <div class="mr-2">
+          <div class="mr-3">
             <label for="cursoAtual" class="col-form-label py-0">Curso</label>
             <select
               id="cursoAtual"
@@ -27,7 +30,7 @@
             </select>
           </div>
 
-          <div class="col-lg-1 col-md-2 col-sm-2 col-3">
+          <div class="mr-3">
             <label for="gradeAtual" class="col-form-label py-0">Grade</label>
             <select
               id="gradeAtual"
@@ -38,20 +41,20 @@
               <template v-for="grade in Grades">
                 <option
                   v-if="grade.Curso == currentCurso"
-                  :key="grade.nome"
+                  :key="grade.Curso"
                   :value="grade.id"
                 >{{grade.nome}}</option>
               </template>
             </select>
           </div>
 
-          <div class="col-3">
+          <div class="mr-3">
             <button
               type="button"
               title="Nova Grade"
               class="addbtn mt-3"
-              v-b-modal.modalNovaGrade
               v-on:click.prevent="cleanNewGrade()"
+              v-b-modal.modalNovaGrade
             >
               <i class="fas fa-plus"></i>
             </button>
@@ -125,88 +128,82 @@
           </b-modal>
         </div>
         <!-- Final Forms Curso e Grande -->
-      </div>
-    </div>
 
-    <div class="row w-100"></div>
+        <div class="row w-100"></div>
 
-    <div class="row w-100 m-0" style="font-size:11px">
-      <!-- Grind esquerdo -->
-      <div class="col mr-2 px-0">
-        <!-- Inicio da tabela -->
-        <div class="divTable ml-0 mt-3 pl-0 pr-0 border">
-          <table class="table table-sm table-hover">
-            <thead class="thead-light">
-              <tr>
-                <div
-                  style="display: block; overflow: hidden; width: 435px; height:20px !important"
-                  class="sticky"
-                >
-                  <th scope="col">
-                    <p class="p-header" style="width: 32px">P.</p>
-                  </th>
-                  <th scope="col">
-                    <p class="p-header" style="width: 403px">Disciplina</p>
-                  </th>
-                </div>
-              </tr>
-            </thead>
-
-            <tbody>
-              <template v-if="currentGrade!=undefined">
-                <template v-for="grade in Grades">
-                  <template v-for="disciplinaGrade in DisciplinaGrades">
-                    <tr
-                      v-if="grade.id===currentGrade"
-                      :key="grade.id+'grade'+disciplinaGrade.periodo+'periodo'"
+        <div class="row w-100 m-0" style="font-size:11px">
+          <!-- Grind esquerdo -->
+          <div class="col mr-2 px-0">
+            <!-- Inicio da tabela -->
+            <div class="divTable ml-0 mt-3 pl-0 pr-0 border">
+              <table class="table table-sm table-hover">
+                <thead class="thead-light">
+                  <tr>
+                    <div
+                      style="display: block; overflow: hidden; width: 432px; height:20px !important"
+                      class="sticky"
                     >
-                      <div
-                        :class="[isEven(disciplinaGrade.periodo)? 'even':'notEven']"
-                        :key="disciplinaGrade.periodo"
-                        style="width: 435px; font-size:11px;"
-                      >
-                        <template v-if="disciplinaGrade.Grade===grade.id">
-                          <td>
-                            <p style="width:32px;">{{disciplinaGrade.periodo}}</p>
-                          </td>
+                      <th scope="col">
+                        <p class="p-header" style="width: 32px">P.</p>
+                      </th>
+                      <th scope="col">
+                        <p class="p-header" style="width: 403px">Disciplina</p>
+                      </th>
+                    </div>
+                  </tr>
+                </thead>
 
-                          <template v-for="disciplina in Disciplinas">
-                            <template v-if="andConnector(grade, disciplina, disciplinaGrade)">
-                              <td
-                                :key="disciplina.nome"
-                                :class="{ 'bg-custom': disciplinaClickada===disciplina.nome}"
-                                style="cursor:pointer;"
-                                v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.nome), showGrade(grade)"
-                              >
-                                <p style="width: 400px; text-align: start;">{{disciplina.nome}}</p>
+                <tbody>
+                  <template v-if="currentGrade!=undefined">
+                    <template v-for="grade in Grades">
+                      <template v-for="disciplinaGrade in DisciplinaGrades">
+                        <tr :key="disciplinaGrade+grade.periodo" :class="[isEven(disciplinaGrade.periodo)? 'even':'notEven']" v-if="grade.id===currentGrade">
+                          <div style="width: 432px; font-size:11px;">
+                            <template v-if="disciplinaGrade.Grade===grade.id">
+                              <td>
+                                <p style="width:32px;">{{disciplinaGrade.periodo}}</p>
                               </td>
+
+                              <template v-for="disciplina in Disciplinas">
+                                <template v-if="andConnector(grade, disciplina, disciplinaGrade)">
+                                  <td
+                                    :key="disciplina.nome"
+                                    :class="{ 'bg-custom': disciplinaClickada===disciplina.nome}"
+                                    style="cursor:pointer;"
+                                    v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.nome), showGrade(grade)"
+                                  >
+                                    <p style="width: 400px; text-align: start;">{{disciplina.nome}}</p>
+                                  </td>
+                                </template>
+                              </template>
                             </template>
-                          </template>
-                        </template>
-                      </div>
-                    </tr>
+                          </div>
+                        </tr>
+                      </template>
+                    </template>
                   </template>
-                </template>
-              </template>
-            </tbody>
-          </table>
-          <!-- Final da tabela -->
+                </tbody>
+              </table>
+              <!-- Final da tabela -->
+            </div>
+          </div>
         </div>
       </div>
       <!-- Fim Grind esquerdo  -->
 
       <!-- Grind direito -->
-      <div class="div-card p-0 mt-3 mb-2 ml-auto col-lg-5 col-md-6 col-sm-12 col-12">
+      <div class="div-card p-0 mt-0 mb-2 col-lg-5 col-md-6 col-sm-12 col-12">
         <!-- Inicio card -->
         <template v-if="isEdit">
-          <div class="card ml-auto mr-4">
+          <div
+            class="card mr-3 ml-auto"
+            style="border-bottom-left-radius: 0; border-bottom-right-radius: 0"
+          >
             <div class="card-header">
-              <h1 class="card-title">Editar Grade e Disciplinas</h1>
+              <h1 class="card-title">Grade</h1>
             </div>
 
             <div class="card-body">
-              <b-alert :show="Boolean(error)" variant="danger" dismissible v-html="error"></b-alert>
-
               <form>
                 <div class="row mb-2 mx-0">
                   <div class="form-group col m-0 mr-4 px-0">
@@ -270,8 +267,25 @@
                     </button>
                   </div>
                 </div>
+              </form>
+            </div>
+          </div>
 
-                <div class="w-100 border-bottom mb-2 mt-2"></div>
+          <!-- Final card -->
+
+          <!-- DISCIPLINAS -->
+
+          <!-- Inicio card -->
+          <div
+            class="card mr-3 ml-auto"
+            style="border-top-left-radius: 0; border-top-right-radius: 0; margin-top: -1px;"
+          >
+            <div class="card-header">
+              <h1 class="card-title">Disciplinas</h1>
+            </div>
+
+            <div class="card-body">
+              <form>
                 <!-- Edição de disciplina -->
                 <div class="row mb-2 mx-0">
                   <div class="form-group m-0 col px-0">
@@ -290,7 +304,7 @@
                       <option
                         v-else
                         v-for="disciplina in Disciplinas"
-                        :key="disciplina.id"
+                        :key="disciplina.nome"
                         :value="disciplina.id"
                       >{{disciplina.nome}}</option>
                     </select>
@@ -301,7 +315,7 @@
                   <div class="form-group m-0 col px-0">
                     <label for="periodoDisciplina" class="col-form-label">Período</label>
 
-                    <div style="display: flex">
+                    <div class="d-flex">
                       <input
                         type="text"
                         class="form-control form-control-sm inputMenor2"
@@ -340,8 +354,7 @@
                       type="button"
                       title="Deletar Disciplina"
                       class="delbtn"
-                      v-on:click.prevent="deleteDisciplinaGrade"
-                      v-on:click="clearClick()"
+                      v-on:click.prevent="deleteDisciplinaGrade(), clearClick()"
                       :key="4"
                     >
                       <i class="far fa-trash-alt"></i>
@@ -351,8 +364,7 @@
                       type="button"
                       title="Cancelar"
                       class="cancelbtn"
-                      v-on:click.prevent="cleanDisciplina"
-                      v-on:click="clearClick()"
+                      v-on:click.prevent="cleanDisciplina(),clearClick()"
                       :key="2"
                     >
                       <i class="fas fa-times"></i>
@@ -365,6 +377,7 @@
         </template>
         <!-- Final card -->
       </div>
+      <!-- FIM DA REPETIÇÃO -->
     </div>
   </div>
 </template>
@@ -425,10 +438,12 @@ export default {
         })
         .catch(error => {
           this.error = "<b>Erro ao criar Grade</b>";
-          if (error.response.data.fullMessage) {
-            this.error +=
-              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-          }
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
     },
     editGrade() {
@@ -444,10 +459,12 @@ export default {
         })
         .catch(error => {
           this.error = "<b>Erro ao atualizar Grade</b>";
-          if (error.response.data.fullMessage) {
-            this.error +=
-              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-          }
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
     },
     deleteGrade() {
@@ -459,11 +476,17 @@ export default {
             group: "general",
             title: `Sucesso!`,
             text: `A Grade ${response.Grade.nome} foi excluída!`,
-            type: "success"
+            type: "warn"
           });
         })
         .catch(() => {
           this.error = "<b>Erro ao excluir Grade</b>";
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
     },
     cleanGrade() {
@@ -491,7 +514,6 @@ export default {
       this.showGrade(grade);
     },
     addDisciplinaGrade() {
-      console.log(this.disciplinaGradeForm);
       disciplinaGradeService
         .create(this.disciplinaGradeForm)
         .then(response => {
@@ -505,10 +527,12 @@ export default {
         })
         .catch(error => {
           this.error = "<b>Erro ao incluir Disciplina</b>";
-          if (error.response.data.fullMessage) {
-            this.error +=
-              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-          }
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
     },
     editDisciplinaGrade() {
@@ -528,10 +552,12 @@ export default {
         })
         .catch(error => {
           this.error = "<b>Erro ao atualizar Disciplina</b>";
-          if (error.response.data.fullMessage) {
-            this.error +=
-              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-          }
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
     },
     deleteDisciplinaGrade() {
@@ -542,17 +568,23 @@ export default {
           this.disciplinaGradeForm
         )
         .then(response => {
-          this.cleanGrade();
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Disciplina ${response.Disciplina} foi excluída!`,
-            type: "success"
+            type: "warn"
           });
         })
         .catch(() => {
           this.error = "<b>Erro ao excluir Disciplina</b>";
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
+      //this.cleanDisciplina();
     },
     showDisciplina: function(disciplinaGrade) {
       this.cleanDisciplina;
@@ -586,7 +618,7 @@ export default {
       );
     },
     isEdit() {
-      return this.gradeForm.id !== undefined;
+      return this.currentGrade !== undefined;
     },
     Admin() {
       if (this.$store.state.auth.Usuario.admin === 1) {
@@ -625,6 +657,9 @@ export default {
   margin: 0 !important;
 }
 /* ====== CARD ====== */
+.div-card {
+  margin-left: auto;
+}
 .card-title {
   font-size: 16px;
   font-weight: normal;
@@ -633,10 +668,9 @@ export default {
   text-align: center;
 }
 .card {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
+  width: 342px;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+  margin-left: auto;
 }
 .card-body {
   font-size: 12px;
@@ -779,10 +813,10 @@ thead th {
   background-color: #c8c8c8;
 }
 .even {
-  background-color: rgba(0, 85, 175, 0.2);
+  background-color: rgba(0, 0, 0, 0.08);
 }
 .notEven {
-  background-color: rgba(237, 240, 211, 0.8);
+  background-color: white;
 }
 
 /* Botoes */
@@ -840,9 +874,12 @@ i.far {
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #ff4e34;
 }
-@media screen and (max-width: 943px) {
+@media screen and (max-width: 818px) {
   .div-card {
     margin-left: 0px !important;
+    margin-right: 50px !important;
+    margin-top: 20px !important;
+    top: 0 !important;
   }
   .card {
     margin-left: 0px !important;

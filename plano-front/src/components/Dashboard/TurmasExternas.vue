@@ -1,8 +1,11 @@
 <template>
   <div class="TurmasExternas row pr-2" v-if="Admin">
     <!-- Titulo -->
-    <div class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0">
-      <div class="form-inline col-12 pl-0 mb-2 pr-1">
+    <div
+      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      style="height:38px;"
+    >
+      <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="titulo col-xl-2 col-md-3 col-sm-4 col-4">Tabela Externa</h1>
 
         <div
@@ -10,16 +13,17 @@
           style="justify-content: flex-end;"
         >
           <div class="input-group mr-0 ml-auto mb-0 mt-0">
-            <select class="form-control form-control-sm mt-1" v-model="periodos">
+            <div class="input-group-append mt-1 ">
+              <div class="input-group-append">
+                <label class="input-group-text">Semestre:</label>
+              </div>
+            </div>
+            <select class="form-control form-control-sm mt-1 mr-5" v-model="periodos">
               <option value="1">Primeiro</option>
               <option value="2">Segundo</option>
               <option value="3">Ambos</option>
             </select>
-            <div class="input-group-append mt-1 mr-4">
-              <div class="input-group-append">
-                <label class="input-group-text">Semestre</label>
-              </div>
-            </div>
+            
 
             <template v-if="isAdd">
               <div style="display: flex">
@@ -646,7 +650,7 @@ export default {
   font-size: 25px;
   font-weight: normal;
   padding-left: 0;
-  margin: 0;
+ margin: 0 !important;
 }
 .form-control {
   height: 25px !important;
@@ -655,6 +659,7 @@ export default {
   min-width: 80px;
   max-width: 80px;
   text-align: start;
+  border-radius: 3px !important;
 }
 .input-group-text {
   max-width: 70px;
@@ -663,6 +668,8 @@ export default {
   margin-left: -5px;
   padding-left: 15px;
   font-size: 12px !important;
+  background-color: white;
+  border: none;
 }
 
 .p-header {
@@ -717,7 +724,7 @@ table p {
   text-align: center;
 }
 table input {
-  height: 18px;
+  height: 18px !important;
   text-align: center !important;
 }
 table select {
@@ -831,7 +838,7 @@ i.far {
 } */
 /* APENAS NO FIREFOX */
 @-moz-document url-prefix() {
-  select {
+  table select {
     height: 18px !important;
     text-align: left;
     -moz-box-sizing: border-box;
@@ -842,7 +849,7 @@ i.far {
     border-radius: 2px;
     background-color: rgb(245, 245, 245);
   }
-  input {
+  table input {
     height: 18px !important;
     text-align: center;
     -moz-box-sizing: border-box;
