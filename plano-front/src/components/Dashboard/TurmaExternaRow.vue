@@ -322,14 +322,14 @@ export default {
 /* prefixed by https://autoprefixer.github.io (PostCSS: v7.0.23, autoprefixer: v9.7.3) */
 
 td {
-  text-align: center;
-  vertical-align: middle;
-  padding: 0;
-  height: 40px;
+  text-align: center!important;
+  vertical-align: middle!important;
+  padding: 0!important;
+  height: 40px!important;
 }
 p {
-  margin-bottom: 0;
-  text-align: center;
+  margin-bottom: 0!important;
+  text-align: center!important;
 }
 input {
   height: 18px !important;
