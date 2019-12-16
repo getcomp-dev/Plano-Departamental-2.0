@@ -1,8 +1,11 @@
 <template>
   <div class="DashboardCargaProfessores row pr-2">
     <!-- Titulo -->
-    <div class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0">
-      <div class="form-inline col-12 pl-0 mb-2 pr-1">
+    <div
+      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      style="height:38px;"
+    >
+      <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="titulo col-7 col-sm-5 col-md-4 col-xl-2">Carga Professores</h1>
 
         <div
@@ -26,7 +29,10 @@
               class="sticky"
             >
               <th scope="col">
-                <p class="p-header" style="width: 130px; text-align: start !important; padding-left: 5px;">Nome</p>
+                <p
+                  class="p-header"
+                  style="width: 130px; text-align: start !important; padding-left: 5px;"
+                >Nome</p>
               </th>
               <th scope="col">
                 <p class="p-header" style="width: 24px">S.</p>
@@ -263,44 +269,94 @@ export default {
     creditos1(professor) {
       var c = 0;
       for (var t = 0; t < this.$store.state.turma.Turmas.length; t++) {
-              if(this.$store.state.turma.Turmas[t].periodo===1 && (this.$store.state.turma.Turmas[t].Docente1===professor.id || this.$store.state.turma.Turmas[t].Docente2===professor.id)){
-                  for (var d = 0; d < this.$store.state.disciplina.Disciplinas.length; d++){
-                      if(this.$store.state.disciplina.Disciplinas[d].id===this.$store.state.turma.Turmas[t].Disciplina){
-                          if((this.$store.state.turma.Turmas[t].Docente1 > 0) && (this.$store.state.turma.Turmas[t].Docente2 > 0)) {
-                              c += (parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaPratica) / 2)
-                              c += (parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaTeorica) / 2)
-                          }else{
-                              c += parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaPratica)
-                              c += parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaTeorica)
-                          }
+        if (
+          this.$store.state.turma.Turmas[t].periodo === 1 &&
+          (this.$store.state.turma.Turmas[t].Docente1 === professor.id ||
+            this.$store.state.turma.Turmas[t].Docente2 === professor.id)
+        ) {
+          for (
+            var d = 0;
+            d < this.$store.state.disciplina.Disciplinas.length;
+            d++
+          ) {
+            if (
+              this.$store.state.disciplina.Disciplinas[d].id ===
+              this.$store.state.turma.Turmas[t].Disciplina
+            ) {
+              if (
+                this.$store.state.turma.Turmas[t].Docente1 > 0 &&
+                this.$store.state.turma.Turmas[t].Docente2 > 0
+              ) {
+                c +=
+                  parseFloat(
+                    this.$store.state.disciplina.Disciplinas[d].cargaPratica
+                  ) / 2;
+                c +=
+                  parseFloat(
+                    this.$store.state.disciplina.Disciplinas[d].cargaTeorica
+                  ) / 2;
+              } else {
+                c += parseFloat(
+                  this.$store.state.disciplina.Disciplinas[d].cargaPratica
+                );
+                c += parseFloat(
+                  this.$store.state.disciplina.Disciplinas[d].cargaTeorica
+                );
+              }
             }
           }
         }
-
       }
       for (var t = 0; t < this.$store.state.cargaPos.Cargas.length; t++) {
         if (this.$store.state.cargaPos.Cargas[t].Docente === professor.id) {
-                  if(this.$store.state.cargaPos.Cargas[t].trimestre==1 || this.$store.state.cargaPos.Cargas[t].trimestre==2){
-                      c+= parseFloat(this.$store.state.cargaPos.Cargas[t].creditos)
-                  }
-              }
+          if (
+            this.$store.state.cargaPos.Cargas[t].trimestre == 1 ||
+            this.$store.state.cargaPos.Cargas[t].trimestre == 2
+          ) {
+            c += parseFloat(this.$store.state.cargaPos.Cargas[t].creditos);
           }
+        }
+      }
       return c;
     },
 
     creditos2(professor) {
       var c = 0;
       for (var t = 0; t < this.$store.state.turma.Turmas.length; t++) {
-              if(this.$store.state.turma.Turmas[t].periodo===3 && (this.$store.state.turma.Turmas[t].Docente1===professor.id || this.$store.state.turma.Turmas[t].Docente2===professor.id)){
-                  for (var d = 0; d < this.$store.state.disciplina.Disciplinas.length; d++){
-                      if(this.$store.state.disciplina.Disciplinas[d].id===this.$store.state.turma.Turmas[t].Disciplina){
-                          if((this.$store.state.turma.Turmas[t].Docente1 > 0) && (this.$store.state.turma.Turmas[t].Docente2 > 0)) {
-                              c += (parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaPratica) / 2)
-                              c += (parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaTeorica) / 2)
-                          }else{
-                              c += parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaPratica)
-                              c += parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaTeorica)
-                          }
+        if (
+          this.$store.state.turma.Turmas[t].periodo === 3 &&
+          (this.$store.state.turma.Turmas[t].Docente1 === professor.id ||
+            this.$store.state.turma.Turmas[t].Docente2 === professor.id)
+        ) {
+          for (
+            var d = 0;
+            d < this.$store.state.disciplina.Disciplinas.length;
+            d++
+          ) {
+            if (
+              this.$store.state.disciplina.Disciplinas[d].id ===
+              this.$store.state.turma.Turmas[t].Disciplina
+            ) {
+              if (
+                this.$store.state.turma.Turmas[t].Docente1 > 0 &&
+                this.$store.state.turma.Turmas[t].Docente2 > 0
+              ) {
+                c +=
+                  parseFloat(
+                    this.$store.state.disciplina.Disciplinas[d].cargaPratica
+                  ) / 2;
+                c +=
+                  parseFloat(
+                    this.$store.state.disciplina.Disciplinas[d].cargaTeorica
+                  ) / 2;
+              } else {
+                c += parseFloat(
+                  this.$store.state.disciplina.Disciplinas[d].cargaPratica
+                );
+                c += parseFloat(
+                  this.$store.state.disciplina.Disciplinas[d].cargaTeorica
+                );
+              }
             }
           }
         }
@@ -308,7 +364,7 @@ export default {
       for (var t = 0; t < this.$store.state.cargaPos.Cargas.length; t++) {
         if (this.$store.state.cargaPos.Cargas[t].Docente === professor.id) {
           if (this.$store.state.cargaPos.Cargas[t].trimestre == 3) {
-                      c+= parseFloat(this.$store.state.cargaPos.Cargas[t].creditos)
+            c += parseFloat(this.$store.state.cargaPos.Cargas[t].creditos);
           }
         }
       }
@@ -318,24 +374,46 @@ export default {
     creditos(professor) {
       var c = 0;
       for (var t = 0; t < this.$store.state.turma.Turmas.length; t++) {
-              if(this.$store.state.turma.Turmas[t].Docente1===professor.id || this.$store.state.turma.Turmas[t].Docente2===professor.id){
-                  for (var d = 0; d < this.$store.state.disciplina.Disciplinas.length; d++){
-                      if(this.$store.state.disciplina.Disciplinas[d].id===this.$store.state.turma.Turmas[t].Disciplina){
-                          if((this.$store.state.turma.Turmas[t].Docente1 > 0) && (this.$store.state.turma.Turmas[t].Docente2 > 0)) {
-                              c += (parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaPratica) / 2)
-                              c += (parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaTeorica) / 2)
-                          }else{
-                              c += parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaPratica)
-                              c += parseFloat(this.$store.state.disciplina.Disciplinas[d].cargaTeorica)
-                          }
+        if (
+          this.$store.state.turma.Turmas[t].Docente1 === professor.id ||
+          this.$store.state.turma.Turmas[t].Docente2 === professor.id
+        ) {
+          for (
+            var d = 0;
+            d < this.$store.state.disciplina.Disciplinas.length;
+            d++
+          ) {
+            if (
+              this.$store.state.disciplina.Disciplinas[d].id ===
+              this.$store.state.turma.Turmas[t].Disciplina
+            ) {
+              if (
+                this.$store.state.turma.Turmas[t].Docente1 > 0 &&
+                this.$store.state.turma.Turmas[t].Docente2 > 0
+              ) {
+                c +=
+                  parseFloat(
+                    this.$store.state.disciplina.Disciplinas[d].cargaPratica
+                  ) / 2;
+                c +=
+                  parseFloat(
+                    this.$store.state.disciplina.Disciplinas[d].cargaTeorica
+                  ) / 2;
+              } else {
+                c += parseFloat(
+                  this.$store.state.disciplina.Disciplinas[d].cargaPratica
+                );
+                c += parseFloat(
+                  this.$store.state.disciplina.Disciplinas[d].cargaTeorica
+                );
+              }
             }
           }
         }
       }
       for (var t = 0; t < this.$store.state.cargaPos.Cargas.length; t++) {
         if (this.$store.state.cargaPos.Cargas[t].Docente === professor.id) {
-                  c+= parseFloat(this.$store.state.cargaPos.Cargas[t].creditos)
-
+          c += parseFloat(this.$store.state.cargaPos.Cargas[t].creditos);
         }
       }
       return c;
@@ -407,7 +485,7 @@ table td {
   padding: 0 !important;
   border: none;
 }
-.linhas{
+.linhas {
   border-top: 1px solid #dee2e6;
 }
 table p {
@@ -460,7 +538,6 @@ button {
   margin-top: 5px;
   margin-bottom: 0px;
   transition: all 0.3s ease 0s;
-
 }
 i.fas,
 i.far {
@@ -482,7 +559,6 @@ i.far {
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #698dff;
 }
-
 
 /* APENAS NO FIREFOX */
 @-moz-document url-prefix() {

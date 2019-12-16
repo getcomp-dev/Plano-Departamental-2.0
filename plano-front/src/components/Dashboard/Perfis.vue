@@ -379,7 +379,7 @@ table {
   font-weight: normal !important;
   background-color: white;
   margin: 0 !important;
-  height: auto!important;
+  height: auto !important;
 }
 tbody {
   max-height: 100%;
@@ -435,7 +435,7 @@ table input[type="color"] {
 }
 
 /* ====== CARD ====== */
-.div-card{
+.div-card {
   margin-left: auto;
 }
 .card-title {
@@ -547,13 +547,13 @@ i.far {
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #ff4e34;
 }
-@media screen and (max-width: 849px){
-  .div-card{
+@media screen and (max-width: 849px) {
+  .div-card {
     margin-left: 0 !important;
     top: 10px !important;
     margin-bottom: 10px !important;
   }
-  .card{
+  .card {
     margin-left: 0 !important;
   }
 }

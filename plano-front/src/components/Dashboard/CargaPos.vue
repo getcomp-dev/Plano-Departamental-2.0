@@ -2,8 +2,8 @@
   <div class="CargaPos row pr-2" style="font-size:11px;">
     <!-- Titulo -->
     <div class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0">
-      <div class="form-inline col-12 pl-0 mb-2 pr-1">
-        <h1 class="titulo col-xl-2 col-md-3 col-sm-4 col-4">Creditação Pós</h1>
+      <div class="form-inline col-12 pl-0 mb-1 pr-1">
+        <h1 class="titulo col-xl-2 col-md-3 col-sm-4 col-4" style="height:34px;">Creditação Pós</h1>
 
         <div
           class="form-group col-xl-10 col-md-9 col-sm-8 col-8 mb-0 pr-0"
@@ -76,7 +76,7 @@
       </div>
     </div>
 
-    <div class="w-100 mb-2 border-bottom" style="margin-top: -1px"></div>
+    <div class="w-100 mb-2 border-bottom"></div>
 
     <div id="loading" v-if="isLoading">
       <div class="cube1"></div>
@@ -105,7 +105,15 @@
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:24px!important;">T.</p>
+                  <p class="p-header" style="width:24px!important;"
+                    @click="toggleOrdenacaoPGMC">
+                    T.
+                    <i
+                          v-if="ordenacaoAtualPGMC==='periodo'"
+                          style="font-size:0.6rem"
+                          class="fas fa-arrow-down fa-sm"
+                    ></i>
+                  </p>
                 </th>
                 <th scope="col">
                   <p class="p-header" style="width:135px!important;">Docente</p>
@@ -187,10 +195,10 @@
             </template>
             <!-- LINHAS -->
             <template v-if="CargasPGMC.length>0">
-              <template v-for="t in [1,  2, 3, 4]">
+              <template v-for="t in vetorPeriodosPGMC">
                 <template v-for="docente in Docentes">
                   <tr v-for="carga in CargasPGMC" :key="'docente'+docente.id+'carga'+carga.id+t">
-                    <template v-if="(carga.Docente === docente.id) && (carga.trimestre == (t))">
+                    <template v-if="checkPGMC(carga, docente, t)">
                       <template
                         v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))"
                       >
@@ -236,7 +244,15 @@
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:24px!important;">T.</p>
+                  <p class="p-header" style="width:24px!important;"
+                     @click="toggleOrdenacaoPGCC">
+                    T.
+                    <i
+                            v-if="ordenacaoAtualPGCC==='periodo'"
+                            style="font-size:0.6rem"
+                            class="fas fa-arrow-down fa-sm"
+                    ></i>
+                  </p>
                 </th>
                 <th scope="col">
                   <p class="p-header" style="width:135px!important;">Docente</p>
@@ -254,10 +270,10 @@
           <tbody>
             <!-- LINHAS -->
             <template v-if="CargasPGCC.length>0">
-              <template v-for="t in [1,  2, 3, 4]">
+              <template v-for="t in vetorPeriodosPGCC">
                 <template v-for="docente in Docentes">
                   <tr v-for="carga in CargasPGCC" :key="'docente'+docente.id+'carga'+carga.id+t">
-                    <template v-if="(carga.Docente === docente.id) && (carga.trimestre == (t))">
+                    <template v-if="checkPGCC(carga, docente, t)">
                       <template
                         v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))"
                       >
@@ -303,7 +319,15 @@
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:24px!important;">T.</p>
+                  <p class="p-header" style="width:24px!important;"
+                     @click="toggleOrdenacaoPGEM">
+                    T.
+                    <i
+                            v-if="ordenacaoAtualPGEM==='periodo'"
+                            style="font-size:0.6rem"
+                            class="fas fa-arrow-down fa-sm"
+                    ></i>
+                  </p>
                 </th>
                 <th scope="col">
                   <p class="p-header" style="width:135px!important;">Docente</p>
@@ -321,10 +345,10 @@
           <tbody>
             <!-- LINHAS -->
             <template v-if="CargasPGEM.length>0">
-              <template v-for="t in [1,  2, 3, 4]">
+              <template v-for="t in vetorPeriodosPGEM">
                 <template v-for="docente in Docentes">
                   <tr v-for="carga in CargasPGEM" :key="'docente'+docente.id+'carga'+carga.id+t">
-                    <template v-if="(carga.Docente === docente.id) && (carga.trimestre == (t))">
+                    <template v-if="checkPGEM(carga, docente, t)">
                       <template
                         v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))"
                       >
@@ -377,7 +401,13 @@ export default {
       atual: undefined,
       trimestre: 1,
       programa: "PGCC",
-      periodos: 3
+      periodos: 3,
+      vetorPeriodosPGMC: [1, 2, 3, 4],
+      vetorPeriodosPGCC: [1, 2, 3, 4],
+      vetorPeriodosPGEM: [1, 2, 3, 4],
+      ordenacaoAtualPGMC:'periodo',
+      ordenacaoAtualPGCC:'periodo',
+      ordenacaoAtualPGEM:'periodo'
     };
   },
 
@@ -393,7 +423,58 @@ export default {
         */
 
   methods: {
-    deleteCarga(carga) {
+    toggleOrdenacaoPGMC(){
+        if(this.ordenacaoAtualPGMC==='periodo'){
+            this.ordenacaoAtualPGMC = 'nome'
+            this.vetorPeriodosPGMC = [1]
+        }else{
+            this.ordenacaoAtualPGMC = 'periodo'
+            this.vetorPeriodosPGMC = [1, 2, 3, 4]
+        }
+    },
+
+    toggleOrdenacaoPGCC(){
+        if(this.ordenacaoAtualPGCC==='periodo'){
+            this.ordenacaoAtualPGCC = 'nome'
+            this.vetorPeriodosPGCC = [1]
+        }else{
+            this.ordenacaoAtualPGCC = 'periodo'
+            this.vetorPeriodosPGCC = [1, 2, 3, 4]
+        }
+    },
+
+    toggleOrdenacaoPGEM(){
+        if(this.ordenacaoAtualPGEM==='periodo'){
+            this.ordenacaoAtualPGEM = 'nome'
+            this.vetorPeriodosPGEM = [1]
+        }else{
+            this.ordenacaoAtualPGEM = 'periodo'
+            this.vetorPeriodosPGEM = [1, 2, 3, 4]
+        }
+    },
+
+    checkPGMC(carga, docente, t){
+        if(this.ordenacaoAtualPGMC === 'periodo')
+            return (carga.Docente === docente.id) && (carga.trimestre == (t))
+        else
+            return (carga.Docente === docente.id)
+    },
+
+    checkPGCC(carga, docente, t){
+        if(this.ordenacaoAtualPGCC === 'periodo')
+            return (carga.Docente === docente.id) && (carga.trimestre == (t))
+        else
+            return (carga.Docente === docente.id)
+    },
+
+    checkPGEM(carga, docente, t){
+        if(this.ordenacaoAtualPGEM === 'periodo')
+            return (carga.Docente === docente.id) && (carga.trimestre == (t))
+        else
+            return (carga.Docente === docente.id)
+    },
+
+      deleteCarga(carga) {
       cargaPosService
         .delete(carga.id)
         .then(response => {

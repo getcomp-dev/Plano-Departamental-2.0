@@ -45,14 +45,14 @@
     <td>
         <div style="width: 130px;">
             <select :disabled="Admin ? false : true" type="text" style="width:125px" id="docente1" v-model="turmaForm.Docente1"
-                    v-on:change="checkHorario()">
+                    v-on:change="checkDocente()">
                 <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
                 <option v-else type="text" value=""></option>
                 <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.apelido}}</option>
             </select>
 
             <select :disabled="Admin ? false : true" type="text" style="width:125px;" id="docente2" v-model="turmaForm.Docente2"
-                    v-on:change="checkHorario()">
+                    v-on:change="checkDocente()">
                 <option v-if="Docentes.length===0" type="text" value="">Nenhum Docente Encontrado</option>
                 <option v-else type="text" value=""></option>
                 <option v-for="docente in Docentes" :key="docente.id" :value="docente.id">{{docente.apelido}}</option>
@@ -74,14 +74,14 @@
     <td>
         <div style="width:72px">
             <select :disabled="Admin ? false : true" type="text" style="width: 67px; margin-bottom:1px" id="horario1" v-model="turmaForm.Horario1"
-                    v-on:change="checkHorario()">
+                    v-on:change="checkHorario(1)">
                 <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
                 <option v-else value=""></option>
                 <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
             </select>
 
             <select :disabled="Admin ? false : true" type="text" style="width: 67px" id="horario2" v-model="turmaForm.Horario2"
-                    v-on:change="checkHorario()">
+                    v-on:change="checkHorario(2)">
                 <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
                 <option v-else value=""></option>
                 <option v-for="horario in Horarios" :key="horario.id" :value="horario.id">{{horario.horario}}</option>
@@ -90,12 +90,14 @@
     </td>
     <td>
         <div style="width: 98px">
-            <select :disabled="Admin ? false : true" type="text" style="width:92px; margin-bottom:1px;" id="sala1" v-model="turmaForm.Sala1" v-on:change="editTurma(turma)">
+            <select :disabled="Admin ? false : true" type="text" style="width:92px; margin-bottom:1px;" id="sala1" v-model="turmaForm.Sala1"
+                    v-on:change="checkSala()">
                 <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
                 <option v-else value=""></option>
                 <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
             </select>
-            <select :disabled="Admin ? false : true" type="text" style="width: 92px" id="sala2" v-model="turmaForm.Sala2" v-on:change="editTurma(turma)">
+            <select :disabled="Admin ? false : true" type="text" style="width: 92px" id="sala2" v-model="turmaForm.Sala2"
+                    v-on:change="checkSala()">
                 <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
                 <option v-else value=""></option>
                 <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
@@ -196,7 +198,22 @@ export default {
         return t
     },
 
-    checkHorario() {
+    checkHorario(horario){
+      if((!this.checkHorarioDocente(horario)) && (!this.checkHorarioSala(horario)))
+          this.editTurma()
+    },
+
+    checkDocente(){
+        if((!this.checkHorarioDocente(1)) && (!this.checkHorarioDocente(2)))
+            this.editTurma()
+    },
+
+    checkSala(){
+        if((!this.checkHorarioSala(1)) && (!this.checkHorarioSala(2)))
+            this.editTurma()
+    },
+
+    checkHorarioDocente(horario) {
         console.log("CHECANDO")
       let horarios1618 = [4,10,16,22,28]
       let horarios1719 = [32,34,36,38,40]
@@ -211,42 +228,45 @@ export default {
       if((!(_.isNull(this.turmaForm.Horario1)) || !(_.isNull(this.turmaForm.Horario2)))&&(!(_.isNull(this.turmaForm.Docente1)) || !(_.isNull(this.turmaForm.Docente2)))){
           console.log(this.turmaForm)
           if(this.turmaForm.Horario1 === 31){
-              this.editTurma()
-              return
-          }else if(_.includes(horarios1618, this.turmaForm.Horario1)) {
-              if(this.checkHorario1618(1, 1)) return
-              if(this.checkHorario1618(1, 2)) return
-          }else if(_.includes(horarios1618, this.turmaForm.Horario2)) {
-              if(this.checkHorario1618(2, 1)) return
-              if(this.checkHorario1618(2, 2)) return
-          }else if(_.includes(horarios1719, this.turmaForm.Horario1)) {
-              if(this.checkHorario1719(1, 1)) return
-              if(this.checkHorario1719(1, 2)) return
-          }else if(_.includes(horarios1719, this.turmaForm.Horario2)) {
-              if(this.checkHorario1719(2, 1)) return
-              if(this.checkHorario1719(2, 2)) return
-          }else if(_.includes(horarios1820, this.turmaForm.Horario1)) {
-              if(this.checkHorario1820(1, 1)) return
-              if(this.checkHorario1820(1, 2)) return
-          }else if(_.includes(horarios1820, this.turmaForm.Horario2)) {
-              if(this.checkHorario1820(2, 1)) return
-              if(this.checkHorario1820(2, 2)) return
-          }else if(_.includes(horarios1921, this.turmaForm.Horario1)) {
-              if(this.checkHorario1921(1, 1)) return
-              if(this.checkHorario1921(1, 2)) return
-          }else if(_.includes(horarios1921, this.turmaForm.Horario2)) {
-              if(this.checkHorario1921(2, 1)) return
-              if(this.checkHorario1921(2, 2)) return
+              return false
+          }else if(horario === 1 &&(_.includes(horarios1618, this.turmaForm.Horario1))) {
+              if(this.checkHorarioDocente1618(1, 1)) return true
+              if(this.checkHorarioDocente1618(1, 2)) return true
+          }else if(horario === 2 &&(_.includes(horarios1618, this.turmaForm.Horario2))) {
+              if(this.checkHorarioDocente1618(2, 1)) return true
+              if(this.checkHorarioDocente1618(2, 2)) return true
+          }else if(horario === 1 &&(_.includes(horarios1719, this.turmaForm.Horario1))) {
+              if(this.checkHorarioDocente1719(1, 1)) return true
+              if(this.checkHorarioDocente1719(1, 2)) return true
+          }else if(horario === 2 &&(_.includes(horarios1719, this.turmaForm.Horario2))) {
+              if(this.checkHorarioDocente1719(2, 1)) return true
+              if(this.checkHorarioDocente1719(2, 2)) return true
+          }else if(horario === 1 &&(_.includes(horarios1820, this.turmaForm.Horario1))) {
+              if(this.checkHorarioDocente1820(1, 1)) return true
+              if(this.checkHorarioDocente1820(1, 2)) return true
+          }else if(horario === 2 &&(_.includes(horarios1820, this.turmaForm.Horario2))) {
+              if(this.checkHorarioDocente1820(2, 1)) return true
+              if(this.checkHorarioDocente1820(2, 2)) return true
+          }else if(horario === 1 &&(_.includes(horarios1921, this.turmaForm.Horario1))) {
+              if(this.checkHorarioDocente1921(1, 1)) return true
+              if(this.checkHorarioDocente1921(1, 2)) return true
+          }else if(horario === 2 &&(_.includes(horarios1921, this.turmaForm.Horario2))) {
+              if(this.checkHorarioDocente1921(2, 1)) return true
+              if(this.checkHorarioDocente1921(2, 2)) return true
           }else{
-              if(this.checkHorarioGeral(1, 1)) return
-              if(this.checkHorarioGeral(1, 2)) return
-              if(this.checkHorarioGeral(2, 1)) return
-              if(this.checkHorarioGeral(2, 2)) return
+              if(horario === 1){
+                  if(this.checkHorarioDocenteGeral(1, 1)) return true
+                  if(this.checkHorarioDocenteGeral(1, 2)) return true
+              }else{
+                  if(this.checkHorarioDocenteGeral(2, 1)) return true
+                  if(this.checkHorarioDocenteGeral(2, 2)) return true
+              }
           }
       }
-        this.editTurma()
+        return false
     },
-    notifyHorario(horario, docente){
+
+    notifyHorarioDocente(horario, docente){
         let text =  `Conflito no horário ${horario} com o docente ${docente}`
         this.$notify({
             group: "general",
@@ -255,7 +275,8 @@ export default {
             type: "error"
         });
     },
-    checkHorario1618(horario, docente) {
+
+    checkHorarioDocente1618(horario, docente) {
         let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
             let h1, h2
             if(horario === 1) {
@@ -283,7 +304,7 @@ export default {
                 }
             }
 
-            this.notifyHorario(horario, docente)
+            this.notifyHorarioDocente(horario, docente)
 
             return true
 
@@ -291,7 +312,7 @@ export default {
         return false
     },
 
-    checkHorario1719(horario, docente) {
+    checkHorarioDocente1719(horario, docente) {
         let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
             let h1, h2
             if(horario === 1) {
@@ -319,7 +340,7 @@ export default {
                 }
             }
 
-            this.notifyHorario(horario, docente)
+            this.notifyHorarioDocente(horario, docente)
 
             return true
 
@@ -327,7 +348,7 @@ export default {
         return false
     },
 
-    checkHorario1820(horario, docente) {
+    checkHorarioDocente1820(horario, docente) {
         let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
             let h1, h2
             if(horario === 1) {
@@ -355,7 +376,7 @@ export default {
                 }
             }
 
-            this.notifyHorario(horario, docente)
+            this.notifyHorarioDocente(horario, docente)
 
             return true
 
@@ -363,7 +384,7 @@ export default {
         return false
     },
 
-    checkHorario1921(horario, docente) {
+    checkHorarioDocente1921(horario, docente) {
         let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
             let h1, h2
             if(horario === 1) {
@@ -391,7 +412,7 @@ export default {
                 }
             }
 
-            this.notifyHorario(horario, docente)
+            this.notifyHorarioDocente(horario, docente)
 
             return true
 
@@ -399,7 +420,7 @@ export default {
         return false
     },
 
-    checkHorarioGeral(horario, docente) {
+    checkHorarioDocenteGeral(horario, docente) {
         let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
             let h1, h2
             if(horario === 1) {
@@ -427,13 +448,256 @@ export default {
                 }
             }
 
-            this.notifyHorario(horario, docente)
+            this.notifyHorarioDocente(horario, docente)
 
             return true
 
         }
         return false
     },
+
+    checkHorarioSala(horario) {
+          console.log("CHECANDO")
+          let horarios1618 = [4,10,16,22,28]
+          let horarios1719 = [32,34,36,38,40]
+          let horarios1820 = [33,35,37,39,41]
+          let horarios1921 = [5,11,17,23,29]
+          if(this.turmaForm.Horario1 === "") this.turmaForm.Horario1 = null
+          if(this.turmaForm.Horario2 === "") this.turmaForm.Horario2 = null
+          if(this.turmaForm.Sala1 === "") this.turmaForm.Sala1 = null
+          if(this.turmaForm.Sala2 === "") this.turmaForm.Sala2 = null
+          console.log(this.turmaForm)
+          console.log(_.isNull(this.turmaForm.Horario1))
+          if((!(_.isNull(this.turmaForm.Horario1)) || !(_.isNull(this.turmaForm.Horario2)))&&(!(_.isNull(this.turmaForm.Sala1)) || !(_.isNull(this.turmaForm.Sala2)))){
+              console.log(this.turmaForm)
+              if(this.turmaForm.Horario1 === 31){
+                  return false
+              }else if(horario === 1 && (_.includes(horarios1618, this.turmaForm.Horario1))) {
+                  if(this.checkHorarioSala1618(1, 1)) return true
+                  if(this.checkHorarioSala1618(1, 2)) return true
+              }else if(horario === 2 && (_.includes(horarios1618, this.turmaForm.Horario2))) {
+                  if(this.checkHorarioSala1618(2, 1)) return true
+                  if(this.checkHorarioSala1618(2, 2)) return true
+              }else if(horario === 1 && (_.includes(horarios1719, this.turmaForm.Horario1))) {
+                  if(this.checkHorarioSala1719(1, 1)) return true
+                  if(this.checkHorarioSala1719(1, 2)) return true
+              }else if(horario === 2 && (_.includes(horarios1719, this.turmaForm.Horario2))) {
+                  if(this.checkHorarioSala1719(2, 1)) return true
+                  if(this.checkHorarioSala1719(2, 2)) return true
+              }else if(horario === 1 && (_.includes(horarios1820, this.turmaForm.Horario1))) {
+                  if(this.checkHorarioSala1820(1, 1)) return true
+                  if(this.checkHorarioSala1820(1, 2)) return true
+              }else if(horario === 2 && (_.includes(horarios1820, this.turmaForm.Horario2))) {
+                  if(this.checkHorarioSala1820(2, 1)) return true
+                  if(this.checkHorarioSala1820(2, 2)) return true
+              }else if(horario === 1 && (_.includes(horarios1921, this.turmaForm.Horario1))) {
+                  if(this.checkHorarioSala1921(1, 1)) return true
+                  if(this.checkHorarioSala1921(1, 2)) return true
+              }else if(horario === 2 && (_.includes(horarios1921, this.turmaForm.Horario2))) {
+                  if(this.checkHorarioSala1921(2, 1)) return true
+                  if(this.checkHorarioSala1921(2, 2)) return true
+              }else{
+                  if(horario == 1){
+                      if(this.checkHorarioSalaGeral(1, 1)) return true
+                      if(this.checkHorarioSalaGeral(1, 2)) return true
+                  }else{
+                      if(this.checkHorarioSalaGeral(2, 1)) return true
+                      if(this.checkHorarioSalaGeral(2, 2)) return true
+                  }
+              }
+          }
+          return false
+      },
+
+    notifyHorarioSala(horario, sala){
+          let text =  `Conflito no horário ${horario} com a sala ${sala}`
+          this.$notify({
+              group: "general",
+              title: "Erro",
+              text: text,
+              type: "error"
+          });
+      },
+
+    checkHorarioSala1618(horario, sala) {
+          let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+              let h1, h2
+              if(horario === 1) {
+                  h1 = ((this.turmaForm.Horario1 === t.Horario1) || ((32 + (this.turmaForm.Horario1 - 4) * 3) === t.Horario1))
+                  h2 = ((this.turmaForm.Horario1 === t.Horario2) || ((32 + (this.turmaForm.Horario1 - 4) * 3) === t.Horario2))
+              } else {
+                  h1 = ((this.turmaForm.Horario2 === t.Horario1) || ((32 + (this.turmaForm.Horario2 - 4) * 3) === t.Horario1))
+                  h2 = ((this.turmaForm.Horario2 === t.Horario2) || ((32 + (this.turmaForm.Horario2 - 4) * 3) === t.Horario2))
+              }
+              let d1, d2
+              if (sala === 1) {
+                  d1 = (!(_.isNull(this.turmaForm.Sala1)) && (this.turmaForm.Sala1 === t.Sala1))
+                  d2 = (!(_.isNull(this.turmaForm.Sala1)) && (this.turmaForm.Sala1 === t.Sala2))
+              } else {
+                  d1 = (!(_.isNull(this.turmaForm.Sala2)) && (this.turmaForm.Sala2 === t.Sala1))
+                  d2 = (!(_.isNull(this.turmaForm.Sala2)) && (this.turmaForm.Sala2 === t.Sala2))
+              }
+
+              return(((h1||h2) && d1)||((h1||h2) && d2))
+          })
+          if(conflitos.length > 0){
+              if(conflitos.length === 1){
+                  if(conflitos[0].id === this.turmaForm.id){
+                      return false
+                  }
+              }
+
+              this.notifyHorarioSala(horario, sala)
+
+              return true
+
+          }
+          return false
+      },
+
+    checkHorarioSala1719(horario, sala) {
+          let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+              let h1, h2
+              if(horario === 1) {
+                  h1 = ((this.turmaForm.Horario1 === t.Horario1) || ((4 + (this.turmaForm.Horario1 - 32) * 3) === t.Horario1) || ((this.turmaForm.Horario1 + 1) === t.Horario1))
+                  h2 = ((this.turmaForm.Horario1 === t.Horario2) || ((4 + (this.turmaForm.Horario1 - 32) * 3) === t.Horario2) || ((this.turmaForm.Horario1 + 1) === t.Horario2))
+              } else {
+                  h1 = ((this.turmaForm.Horario2 === t.Horario1) || ((4 + (this.turmaForm.Horario2 - 32) * 3) === t.Horario1) || ((this.turmaForm.Horario2 + 1) === t.Horario1))
+                  h2 = ((this.turmaForm.Horario2 === t.Horario2) || ((4 + (this.turmaForm.Horario2 - 32) * 3) === t.Horario2) || ((this.turmaForm.Horario2 + 1) === t.Horario2))
+              }
+              let d1, d2
+              if (sala === 1) {
+                  d1 = (!(_.isNull(this.turmaForm.Sala1)) && (this.turmaForm.Sala1 === t.Sala1))
+                  d2 = (!(_.isNull(this.turmaForm.Sala1)) && (this.turmaForm.Sala1 === t.Sala2))
+              } else {
+                  d1 = (!(_.isNull(this.turmaForm.Sala2)) && (this.turmaForm.Sala2 === t.Sala1))
+                  d2 = (!(_.isNull(this.turmaForm.Sala2)) && (this.turmaForm.Sala2 === t.Sala2))
+              }
+
+              return(((h1||h2) && d1)||((h1||h2) && d2))
+          })
+          if(conflitos.length > 0){
+              if(conflitos.length === 1){
+                  if(conflitos[0].id === this.turmaForm.id){
+                      return false
+                  }
+              }
+
+              this.notifyHorarioSala(horario, sala)
+
+              return true
+
+          }
+          return false
+      },
+
+    checkHorarioSala1820(horario, sala) {
+          let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+              let h1, h2
+              if(horario === 1) {
+                  h1 = ((this.turmaForm.Horario1 === t.Horario1) || ((5 + (this.turmaForm.Horario1 - 33) * 3) === t.Horario1) || ((this.turmaForm.Horario1 - 1) === t.Horario1))
+                  h2 = ((this.turmaForm.Horario1 === t.Horario2) || ((5 + (this.turmaForm.Horario1 - 33) * 3) === t.Horario2) || ((this.turmaForm.Horario1 - 1) === t.Horario2))
+              } else {
+                  h1 = ((this.turmaForm.Horario2 === t.Horario1) || ((5 + (this.turmaForm.Horario2 - 33) * 3) === t.Horario1) || ((this.turmaForm.Horario2 - 1) === t.Horario1))
+                  h2 = ((this.turmaForm.Horario2 === t.Horario2) || ((5 + (this.turmaForm.Horario2 - 33) * 3) === t.Horario2) || ((this.turmaForm.Horario2 - 1) === t.Horario2))
+              }
+              let d1, d2
+              if (sala === 1) {
+                  d1 = (!(_.isNull(this.turmaForm.Sala1)) && (this.turmaForm.Sala1 === t.Sala1))
+                  d2 = (!(_.isNull(this.turmaForm.Sala1)) && (this.turmaForm.Sala1 === t.Sala2))
+              } else {
+                  d1 = (!(_.isNull(this.turmaForm.Sala2)) && (this.turmaForm.Sala2 === t.Sala1))
+                  d2 = (!(_.isNull(this.turmaForm.Sala2)) && (this.turmaForm.Sala2 === t.Sala2))
+              }
+
+              return(((h1||h2) && d1)||((h1||h2) && d2))
+          })
+          if(conflitos.length > 0){
+              if(conflitos.length === 1){
+                  if(conflitos[0].id === this.turmaForm.id){
+                      return false
+                  }
+              }
+
+              this.notifyHorarioSala(horario, sala)
+
+              return true
+
+          }
+          return false
+      },
+
+    checkHorarioSala1921(horario, sala) {
+          let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+              let h1, h2
+              if(horario === 1) {
+                  h1 = ((this.turmaForm.Horario1 === t.Horario1) || ((33 + (this.turmaForm.Horario1 - 5) / 3) === t.Horario1))
+                  h2 = ((this.turmaForm.Horario1 === t.Horario2) || ((33 + (this.turmaForm.Horario1 - 5) / 3) === t.Horario2))
+              } else {
+                  h1 = ((this.turmaForm.Horario2 === t.Horario1) || ((33 + (this.turmaForm.Horario2 - 5) / 3) === t.Horario1))
+                  h2 = ((this.turmaForm.Horario2 === t.Horario2) || ((33 + (this.turmaForm.Horario2 - 5) / 3) === t.Horario2))
+              }
+              let d1, d2
+              if (sala === 1) {
+                  d1 = (!(_.isNull(this.turmaForm.Sala1)) && (this.turmaForm.Sala1 === t.Sala1))
+                  d2 = (!(_.isNull(this.turmaForm.Sala1)) && (this.turmaForm.Sala1 === t.Sala2))
+              } else {
+                  d1 = (!(_.isNull(this.turmaForm.Sala2)) && (this.turmaForm.Sala2 === t.Sala1))
+                  d2 = (!(_.isNull(this.turmaForm.Sala2)) && (this.turmaForm.Sala2 === t.Sala2))
+              }
+
+              return(((h1||h2) && d1)||((h1||h2) && d2))
+          })
+          if(conflitos.length > 0){
+              if(conflitos.length === 1){
+                  if(conflitos[0].id === this.turmaForm.id){
+                      return false
+                  }
+              }
+
+              this.notifyHorarioSala(horario, sala)
+
+              return true
+
+          }
+          return false
+      },
+
+    checkHorarioSalaGeral(horario,sala) {
+          let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+              let h1, h2
+              if(horario === 1) {
+                  h1 = (!(_.isNull(this.turmaForm.Horario1)) && (this.turmaForm.Horario1 === t.Horario1))
+                  h2 = (!(_.isNull(this.turmaForm.Horario2)) && (this.turmaForm.Horario1 === t.Horario2))
+              } else {
+                  h1 = (!(_.isNull(this.turmaForm.Horario1)) && (this.turmaForm.Horario2 === t.Horario1))
+                  h2 = (!(_.isNull(this.turmaForm.Horario2)) && (this.turmaForm.Horario2 === t.Horario2))
+              }
+              let d1, d2
+              if (sala === 1) {
+                  d1 = (!(_.isNull(this.turmaForm.Sala1)) && (this.turmaForm.Sala1 === t.Sala1))
+                  d2 = (!(_.isNull(this.turmaForm.Sala1)) && (this.turmaForm.Sala1 === t.Sala2))
+              } else {
+                  d1 = (!(_.isNull(this.turmaForm.Sala2)) && (this.turmaForm.Sala2 === t.Sala1))
+                  d2 = (!(_.isNull(this.turmaForm.Sala2)) && (this.turmaForm.Sala2 === t.Sala2))
+              }
+
+              return(((h1||h2) && d1)||((h1||h2) && d2))
+          })
+          if(conflitos.length > 0){
+              if(conflitos.length === 1){
+                  if(conflitos[0].id === this.turmaForm.id){
+                      return false
+                  }
+              }
+
+              this.notifyHorarioSala(horario, sala)
+
+              return true
+
+          }
+          return false
+      },
 
 
     editTurma() {

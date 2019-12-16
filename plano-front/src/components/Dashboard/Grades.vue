@@ -157,7 +157,11 @@
                   <template v-if="currentGrade!=undefined">
                     <template v-for="grade in Grades">
                       <template v-for="disciplinaGrade in DisciplinaGrades">
-                        <tr :key="disciplinaGrade+grade.periodo" :class="[isEven(disciplinaGrade.periodo)? 'even':'notEven']" v-if="grade.id===currentGrade">
+                        <tr
+                          :key="disciplinaGrade+grade.periodo"
+                          v-if="grade.id===currentGrade"
+                          :class="[isEven(disciplinaGrade.periodo)? 'even':'notEven']"
+                        >
                           <div style="width: 432px; font-size:11px;">
                             <template v-if="disciplinaGrade.Grade===grade.id">
                               <td>
@@ -817,6 +821,9 @@ thead th {
 }
 .notEven {
   background-color: white;
+}
+table tbody tr:hover{
+  background-color: #c8c8c8;;
 }
 
 /* Botoes */

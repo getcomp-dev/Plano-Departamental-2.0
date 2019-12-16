@@ -109,7 +109,7 @@
             </li>
           </ul>
         </div>
-      </div> 
+      </div>
     </div>
   </div>
 </template>
@@ -157,7 +157,7 @@ export default {
   line-height: inherit;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
-.list-group-item{
+.list-group-item {
   padding: 9px 15px;
 }
 

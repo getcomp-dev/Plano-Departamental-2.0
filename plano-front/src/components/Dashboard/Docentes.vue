@@ -152,33 +152,33 @@
                 </div>
               </div>
             </div>
-
-            <div class="border-bottom my-2"></div>
-            <div class="row mb-3 mx-0">
-              <div
-                class="form-group col m-0 px-0 border"
-                style="height: 250px; border-color: rgba(0,0,0,0.125);"
-              >
+            <template v-if="isEdit">
+              <div class="border-bottom my-2"></div>
+              <div class="row mb-3 mx-0">
                 <div
-                  class="alert p-1 alert-secondary m-0 text-center rounded-0 w-100"
-                  role="alert"
-                >Perfis:</div>
-                <div class="px-2 py-1" style="height: 218px!important; overflow-y: scroll">
-                  <template v-for="perfil in Perfis">
-                    <div :key="perfil.nome+perfil.id" class="form-check w-100 mb-1 p-0">
-                      <input
-                        id="checkPerfis"
-                        type="checkbox"
-                        :value="perfil.id"
-                        v-model="perfisAssociados"
-                        v-on:change="managePerfil(perfil.id)"
-                        class="form-check-input position-static m-0"
-                      />
-                      <label for="checkPerfis" class="col-form-label p-0">{{perfil.nome}}</label>
-                    </div>
-                  </template>
-                </div>
-                <!--
+                  class="form-group col m-0 px-0 border"
+                  style="height: 250px; border-color: rgba(0,0,0,0.125);"
+                >
+                  <div
+                    class="alert p-1 alert-secondary m-0 text-center rounded-0 w-100"
+                    role="alert"
+                  >Perfis:</div>
+                  <div class="px-2 py-1" style="height: 218px!important; overflow-y: scroll">
+                    <template v-for="perfil in Perfis">
+                      <div :key="perfil.nome+perfil.id" class="form-check w-100 mb-1 p-0">
+                        <input
+                          id="checkPerfis"
+                          type="checkbox"
+                          :value="perfil.id"
+                          v-model="perfisAssociados"
+                          v-on:change="managePerfil(perfil.id)"
+                          class="form-check-input position-static m-0"
+                        />
+                        <label for="checkPerfis" class="col-form-label p-0">{{perfil.nome}}</label>
+                      </div>
+                    </template>
+                  </div>
+                  <!--
                 <b-form-checkbox-group
                   stacked
                   v-model="perfisAssociados"
@@ -191,9 +191,10 @@
                     v-on:change="managePerfil(perfil.id)"
                   >{{perfil.nome}}</b-form-checkbox>
                 </b-form-checkbox-group>
-                -->
+                  -->
+                </div>
               </div>
-            </div>
+            </template>
 
             <div class="form-group row">
               <template v-if="isEdit">
@@ -220,7 +221,7 @@
                     type="button"
                     title="Cancelar"
                     class="cancelbtn"
-                    v-on:click.prevent="cleanDocente"
+                    v-on:click="clearClick(), cleanDocente()"
                     :key="2"
                   >
                     <i class="fas fa-times"></i>
@@ -291,6 +292,9 @@ export default {
   },
 
   methods: {
+    clearClick() {
+      this.docenteClickado = "";
+    },
     toggleOrdenacaoNome() {
       this.ordenacao = "nome";
     },
@@ -366,11 +370,8 @@ export default {
       this.cleanDocente();
       this.docenteForm = _.clone(docente);
       this.perfisAssociados = [];
-      console.log(docentes);
       for (var i = 0; i < docentes.length; i++) {
-        console.log(docentes[i]);
         if (docentes[i].DocenteId === docente.id) {
-          console.log("ack");
           this.perfisAssociados.push(docentes[i].Perfil);
         }
       }
@@ -537,7 +538,7 @@ table input[type="checkbox"] {
 }
 input[type="text"] {
   height: 25px !important;
-  font-size: 11px!important;
+  font-size: 11px !important;
 }
 .sticky {
   display: block !important;
@@ -551,7 +552,7 @@ input[type="text"] {
 /* Fim Tabela Lucas */
 
 /* ====== CARD ====== */
-.div-card{
+.div-card {
   margin-left: auto;
 }
 .card-title {
@@ -674,9 +675,9 @@ i.far {
 }
 
 @media screen and (max-width: 849px) {
-.div-card {
+  .div-card {
     margin-left: 0px !important;
-    margin-top: 20px!important;
+    margin-top: 20px !important;
     top: 0 !important;
   }
   .card {

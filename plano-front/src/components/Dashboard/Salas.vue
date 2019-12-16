@@ -311,7 +311,7 @@ export default {
   padding-left: 0;
   margin: 0 !important;
 }
-.div-card{
+.div-card {
   margin-left: auto;
 }
 .card-title {
@@ -522,11 +522,11 @@ i.far {
 }
 
 @media screen and (max-width: 337px) {
-  .div-card{
+  .div-card {
     margin-left: 0 !important;
     top: 10px !important;
   }
-  .card{
+  .card {
     margin-left: 0 !important;
   }
 }

@@ -3,9 +3,8 @@
     <!-- Titulo -->
     <div
       class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
-      style="height:38px;"
     >
-      <div class="form-inline col-12 pl-0 mb-1 pr-1">
+      <div class="form-inline col-12 pl-0 mb-1 pr-1" style="height:34px;">
         <h1 class="titulo col-md-2 col-sm-2 col-xl-2 col-3">Tabela</h1>
 
         <div
@@ -184,7 +183,7 @@
       </div>
     </div>
 
-    <div class="w-100 mb-2 border-bottom" style="margin-top: -3px"></div>
+    <div class="w-100 mb-2 border-bottom"></div>
 
     <div id="loading" v-if="isLoading">
       <div class="cube1"></div>
@@ -696,7 +695,7 @@ export default {
 }
 table {
   display: block !important;
-  overflow-y: scroll !important;
+  overflow-y: auto !important;
   overflow-x: auto !important;
   font-size: 11px !important;
   font-weight: normal !important;
