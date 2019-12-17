@@ -19,9 +19,7 @@
       >
         <!-- -------------------------------------------- 1º periodo ----------------------------------------- -->
         <template v-if="periodo==1 || periodo==3">
-          <div class="col-12">
-            <h3 style="font-weight: bold; font-size: 18px; text-align: center;">1º SEMESTRE</h3>
-          </div>
+          <h3 class="title" style="font-weight: bold; font-size: 18px; text-align: center;">1º SEMESTRE</h3>
           <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
           <template v-if="activeCCD">
             <h4>Ciência da Computação Diurno</h4>
@@ -55,8 +53,7 @@
 
         <!-- -------------------------------------------- 2º periodo ----------------------------------------- -->
         <template v-if="periodo==2 || periodo==3">
-          <br v-if="periodo==3"/>
-          <h3 style="font-weight: bold; font-size: 18px; text-align: center;">2º SEMESTRE</h3>
+          <h3 class="title" style="font-weight: bold; font-size: 18px; text-align: center;">2º SEMESTRE</h3>
           <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
           <template v-if="activeCCD">
             <h4>Ciência da Computação Diurno</h4>
@@ -1099,6 +1096,13 @@ h4 {
   text-align: start !important;
   font-size: 12px !important;
   font-weight: bold !important;
+}
+
+.title {
+  clear: both;
+  display: block;
+  padding-top: 0px;
+  text-align: start !important;
 }
 
 /* ====== CARD ====== */
