@@ -61,6 +61,7 @@
               :key="perfil.id"
               v-on:click.prevent="showPerfil(perfil), clickada(perfil.nome)"
               :class="{'bg-custom' : perfilClickado === perfil.nome}"
+              style="cursor: pointer"
             >
               <div style="width: 482px">
                 <td>
@@ -96,14 +97,12 @@
 
     <!-- Grid Direito -->
     <div class="div-card p-0 mt-0 mb-2 ml-auto col-lg-5 col-md-5 col-sm-12 col-12">
-      <div class="card ml-auto mr-4">
+      <div class="card mr-3 ml-auto">
         <div class="card-header">
           <h2 class="card-title">Perfil</h2>
         </div>
 
         <div class="card-body">
-          <b-alert :show="Boolean(error)" variant="danger" dismissible v-html="error"></b-alert>
-
           <form>
             <div class="row mb-2 mx-0">
               <div class="form-group col m-0 px-0">
@@ -257,6 +256,12 @@ export default {
             this.error +=
               "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
           }
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
     },
 
@@ -277,6 +282,12 @@ export default {
             this.error +=
               "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
           }
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
     },
 
@@ -289,11 +300,17 @@ export default {
             group: "general",
             title: `Sucesso!`,
             text: `O Perfil ${response.Perfil.nome} foi excluído!`,
-            type: "success"
+            type: "warn"
           });
         })
         .catch(() => {
           this.error = "<b>Erro ao excluir Perfil</b>";
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
     },
 
@@ -502,6 +519,7 @@ button {
   height: max-content;
   margin-right: 15px;
   transition: all 0.3s ease 0s;
+  cursor: pointer;
 }
 i.fas,
 i.far {
@@ -513,7 +531,6 @@ i.far {
 }
 .addbtn:hover {
   background-color: white;
-  cursor: pointer;
   color: #77dd77;
 }
 .addbtn:focus {
@@ -525,7 +542,6 @@ i.far {
   color: #cfcfc4;
 }
 .cancelbtn:hover {
-  cursor: pointer;
   color: #b8b4a8;
 }
 .cancelbtn:focus {
@@ -539,7 +555,6 @@ i.far {
   color: #ff817b;
 }
 .delbtn:hover {
-  cursor: pointer;
   color: #ff5f48;
 }
 .delbtn:focus {

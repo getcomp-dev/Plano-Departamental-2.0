@@ -1136,7 +1136,7 @@ button {
   height: max-content;
   margin-right: 15px;
   transition: all 0.3s ease 0s;
-
+	cursor: pointer;
 }
 i.fas,
 i.far {
@@ -1148,7 +1148,6 @@ i.far {
 }
 .addbtn:hover {
   background-color: white;
-  cursor: pointer;
   color: #77dd77;
 }
 .addbtn:focus {

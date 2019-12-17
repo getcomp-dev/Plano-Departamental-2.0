@@ -123,14 +123,14 @@ export default {
 /* prefixed */
 
 td {
-  text-align: center;
-  vertical-align: middle;
-  padding: 0;
-  height: 25px;
+  text-align: center!important;
+  vertical-align: middle!important;
+  padding: 0!important;
+  height: 25px!important;
 }
 p {
-  margin-bottom: 0;
-  text-align: center;
+  margin-bottom: 0!important;
+  text-align: center!important;
 }
 input {
   height: 18px;

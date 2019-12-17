@@ -1,12 +1,12 @@
 <template>
     <div style="width:32px;">
-        <input :disabled="Admin ? false : true" v-if="pedidoForm.vagasPeriodizadas == 0" type="text" v-model="pedidoForm.vagasPeriodizadas" style="margin-top:1px; margin-bottom:1px; color:#DADADA;"
+        <input :disabled="Admin ? false : true" v-if="pedidoForm.vagasPeriodizadas == 0" type="text" v-model="pedidoForm.vagasPeriodizadas" style="margin-top:1px; color:#DADADA;"
                v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
-        <input :disabled="Admin ? false : true" v-else type="text" v-model="pedidoForm.vagasPeriodizadas" style="margin-top:1px; margin-bottom:1px;  background-color: #DCDCDC;"
+        <input :disabled="Admin ? false : true" v-else type="text" v-model="pedidoForm.vagasPeriodizadas" style="margin-top:1px; background-color: #e7e7e7;"
                 v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
         <input :disabled="Admin ? false : true" v-if="pedidoForm.vagasNaoPeriodizadas == 0" type="text" v-model="pedidoForm.vagasNaoPeriodizadas" style=" color:#DADADA;"
                 v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
-        <input :disabled="Admin ? false : true" v-else type="text" v-model="pedidoForm.vagasNaoPeriodizadas" style="background-color: #DCDCDC;"
+        <input :disabled="Admin ? false : true" v-else type="text" v-model="pedidoForm.vagasNaoPeriodizadas" style="background-color: #e7e7e7;"
                 v-on:change="editPedido(pedido)" v-on:focus="focusPedido" v-on:blur="blurPedido">
     </div>
 </template>
@@ -106,20 +106,17 @@
     }
 </script>
 <style scoped>  
-    td {
-        text-align: center;
-        vertical-align:middle;
-        padding: 0;
-        height:40px;
-    }
-    input {
-        width: 25px;
-        height:15px;
+    input{
+        width: 28px!important;
+        height: 20px!important;
         text-align: center!important;
+        margin-bottom: 1px;
     }
+    /*
     @-moz-document url-prefix() {
         input{
-            height: 18px!important;
+            width: 28px!important;
+            height: 20px!important;
             text-align:center;
             box-sizing: border-box;
             
@@ -128,6 +125,6 @@
             border-radius: 2px;
             background-color:rgb(245, 245, 245);
         }
-    }
+    }*/
     
 </style>

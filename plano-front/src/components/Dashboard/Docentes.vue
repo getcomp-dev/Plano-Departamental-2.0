@@ -100,7 +100,7 @@
 
     <!-- Grid Direito -->
     <div class="div-card p-0 mt-0 mb-2 col-lg-6 col-md-6 col-sm-12 col-12">
-      <div class="card mr-4 ml-auto">
+      <div class="card mr-3 ml-auto">
         <div class="card-header">
           <template v-if="isEdit">
             <h1 class="card-title">Docente</h1>
@@ -111,18 +111,27 @@
         </div>
 
         <div class="card-body">
-          <b-alert :show="Boolean(error)" variant="danger" dismissible v-html="error"></b-alert>
-
           <form>
             <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 mr-4 px-0">
+              <div class="form-group col m-0 px-0">
                 <label for="nome" class="col-form-label">Nome</label>
-                <input
-                  type="text"
-                  class="inputMaior form-control form-control-sm"
-                  id="nome"
-                  v-model="docenteForm.nome"
-                />
+                <template v-if="!isEdit">
+                  <input
+                    type="text"
+                    :class="{'inputMaior': isEdit}"
+                    class="form-control form-control-sm"
+                    id="nome"
+                    v-model="docenteForm.nome"
+                  />
+                </template>
+                <template v-else>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm"
+                    id="nome"
+                    v-model="docenteForm.nome"
+                  />
+                </template>
               </div>
             </div>
 
@@ -178,20 +187,6 @@
                       </div>
                     </template>
                   </div>
-                  <!--
-                <b-form-checkbox-group
-                  stacked
-                  v-model="perfisAssociados"
-                  style="overflow-y: scroll; height: 185px; font-size:11px;"
-                >
-                  <b-form-checkbox
-                    v-for="perfil in Perfis"
-                    :key="perfil.id+'ID'+perfil.nome+'nome'"
-                    :value="perfil.id"
-                    v-on:change="managePerfil(perfil.id)"
-                  >{{perfil.nome}}</b-form-checkbox>
-                </b-form-checkbox-group>
-                  -->
                 </div>
               </div>
             </template>
@@ -273,7 +268,7 @@ const emptyDocente = {
 };
 
 const emptyPerfil = {
-  Doncente: undefined,
+  Docente: undefined,
   Perfil: undefined
 };
 
@@ -310,7 +305,7 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Docente ${response.Docente.nome} foi criada!`,
+            text: `O Docente ${response.Docente.nome} foi criada!`,
             type: "success"
           });
         })
@@ -320,6 +315,12 @@ export default {
             this.error +=
               "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
           }
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
     },
 
@@ -340,6 +341,12 @@ export default {
             this.error +=
               "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
           }
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
     },
 
@@ -352,11 +359,17 @@ export default {
             group: "general",
             title: `Sucesso!`,
             text: `A Docente ${response.Docente.nome} foi excluída!`,
-            type: "success"
+            type: "warn"
           });
         })
         .catch(() => {
           this.error = "<b>Erro ao excluir Docente</b>";
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
     },
 
@@ -380,13 +393,14 @@ export default {
     addPerfil(perfil) {
       this.docentePerfil.Docente = this.docenteForm.id;
       this.docentePerfil.Perfil = perfil;
+      let perfilData = _.find(this.$store.state.perfil.Perfis, ['id', perfil])
       docentePerfilService
         .create(this.docentePerfil)
         .then(response => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `O Perfil ${response.Perfil} foi associado ao Docente ${this.docenteForm.apelido}!`,
+            text: `O Perfil ${perfilData.nome} foi associado ao Docente ${this.docenteForm.apelido}!`,
             type: "success"
           });
         })
@@ -396,30 +410,43 @@ export default {
             this.error +=
               "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
           }
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
     },
 
     deletePerfil(perfil) {
+      let perfilData = _.find(this.$store.state.perfil.Perfis, ['id', perfil])
       docentePerfilService
         .delete(this.docenteForm.id, perfil)
         .then(response => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `O Perfil ${response.Perfil} foi exluído do Docente ${this.docenteForm.apelido}!`,
+            text: `O Perfil ${perfilData.nome} foi exluído do Docente ${this.docenteForm.apelido}!`,
             type: "success"
           });
         })
         .catch(() => {
           this.error = "<b>Erro ao excluir Perfil</b>";
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error"
+          });
         });
     },
 
     managePerfil(perfil) {
       if (_.indexOf(this.perfisAssociados, perfil) === -1) {
-        this.addPerfil(perfil);
-      } else {
         this.deletePerfil(perfil);
+      } else {
+        this.addPerfil(perfil);
       }
     }
   },
@@ -468,7 +495,7 @@ export default {
 }
 /* Tabela Lucas */
 .p-header {
-  padding: 0px 0 0px 0;
+  padding: 0 5px 0 5px;
   margin: 0;
   font-size: 11px;
   text-align: center;
@@ -504,12 +531,14 @@ table td {
   text-align: center;
   vertical-align: middle;
   padding: 0 !important;
+  height: 23px !important;
 }
 table p {
   margin-bottom: 0;
   text-align: center;
   padding-right: 5px;
   padding-left: 5px;
+  font-size: 11px !important;
 }
 tr thead {
   display: block;
@@ -519,9 +548,6 @@ thead th {
   font-size: 14px;
   text-align: center;
   height: 18px !important;
-}
-table tbody tr div {
-  height: 22px !important;
 }
 table input {
   height: 11px !important;
@@ -599,7 +625,7 @@ input {
   text-align: center;
 }
 .inputMaior {
-  width: 220px;
+  width: 250px;
   text-align: start;
 }
 .clickable-header {
@@ -628,6 +654,7 @@ button {
   height: max-content;
   margin-right: 15px;
   transition: all 0.3s ease 0s;
+  cursor: pointer;
 }
 i.fas,
 i.far {
@@ -639,7 +666,6 @@ i.far {
 }
 .addbtn:hover {
   background-color: white;
-  cursor: pointer;
   color: #77dd77;
 }
 .addbtn:focus {
@@ -651,7 +677,6 @@ i.far {
   color: #cfcfc4;
 }
 .cancelbtn:hover {
-  cursor: pointer;
   color: #b8b4a8;
 }
 .cancelbtn:focus {
@@ -665,7 +690,6 @@ i.far {
   color: #ff817b;
 }
 .delbtn:hover {
-  cursor: pointer;
   color: #ff5f48;
 }
 .delbtn:focus {

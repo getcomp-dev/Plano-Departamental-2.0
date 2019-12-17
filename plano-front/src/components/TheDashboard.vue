@@ -634,8 +634,8 @@ export default {
   padding-left: 0.3em;
 }
 .nav li {
-  border-top: white solid 0.1px;
-  border-bottom: white solid 0.1px;
+  border-top: rgb(248, 249, 250) solid 0.1px;
+  border-bottom: rgb(248, 249, 250) solid 0.1px;
 }
 .nav li:hover {
   background-color: #0079fa;

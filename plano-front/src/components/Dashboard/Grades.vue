@@ -133,63 +133,69 @@
 
         <div class="row w-100 m-0" style="font-size:11px">
           <!-- Grind esquerdo -->
-          <div class="col mr-2 px-0">
-            <!-- Inicio da tabela -->
-            <div class="divTable ml-0 mt-3 pl-0 pr-0 border">
-              <table class="table table-sm table-hover">
-                <thead class="thead-light">
-                  <tr>
-                    <div
-                      style="display: block; overflow: hidden; width: 432px; height:20px !important"
-                      class="sticky"
-                    >
-                      <th scope="col">
-                        <p class="p-header" style="width: 32px">P.</p>
-                      </th>
-                      <th scope="col">
-                        <p class="p-header" style="width: 403px">Disciplina</p>
-                      </th>
-                    </div>
-                  </tr>
-                </thead>
+          <!-- Inicio da tabela -->
+          <div class="divTable ml-0 mt-3 pl-0 pr-0 border">
+            <table class="table table-sm table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <div style="width: 505px;" class="sticky">
+                    <th scope="col">
+                      <p class="p-header" style="width: 32px">P.</p>
+                    </th>
+                    <th scope="col">
+                      <p class="p-header" style="width:70px">Cod</p>
+                    </th>
+                    <th scope="col">
+                      <p class="p-header" style="width: 403px; text-align:start">Disciplina</p>
+                    </th>
+                  </div>
+                </tr>
+              </thead>
 
-                <tbody>
-                  <template v-if="currentGrade!=undefined">
-                    <template v-for="grade in Grades">
-                      <template v-for="disciplinaGrade in DisciplinaGrades">
-                        <tr
-                          :key="disciplinaGrade+grade.periodo"
-                          v-if="grade.id===currentGrade"
-                          :class="[isEven(disciplinaGrade.periodo)? 'even':'notEven']"
-                        >
-                          <div style="width: 432px; font-size:11px;">
-                            <template v-if="disciplinaGrade.Grade===grade.id">
-                              <td>
-                                <p style="width:32px;">{{disciplinaGrade.periodo}}</p>
-                              </td>
+              <tbody>
+                <template v-if="currentGrade!=undefined">
+                  <template v-for="grade in Grades">
+                    <template v-for="disciplinaGrade in DisciplinaGrades">
+                      <tr
+                        :key="disciplinaGrade+grade.periodo"
+                        v-if="grade.id===currentGrade"
+                        :class="[isEven(disciplinaGrade.periodo)? 'even':'notEven']"
+                      >
+                        <div style="width: 505px; font-size:11px;">
+                          <template v-if="disciplinaGrade.Grade===grade.id">
+                            <td>
+                              <p style="width:32px;">{{disciplinaGrade.periodo}}</p>
+                            </td>
 
-                              <template v-for="disciplina in Disciplinas">
-                                <template v-if="andConnector(grade, disciplina, disciplinaGrade)">
-                                  <td
-                                    :key="disciplina.nome"
-                                    :class="{ 'bg-custom': disciplinaClickada===disciplina.nome}"
-                                    style="cursor:pointer;"
-                                    v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.nome), showGrade(grade)"
-                                  >
-                                    <p style="width: 400px; text-align: start;">{{disciplina.nome}}</p>
-                                  </td>
-                                </template>
+                            <template v-for="disciplina in Disciplinas">
+                              <template v-if="andConnector(grade, disciplina, disciplinaGrade)">
+                                <td
+                                  :key="disciplina.codigo"
+                                  v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.nome), showGrade(grade)"
+                                  :class="{ 'bg-custom': disciplinaClickada===disciplina.nome}"
+                                  style="cursor:pointer;"
+                                >
+                                  <p style="width: 70px">{{disciplina.codigo}}</p>
+                                </td>
+                                <td
+                                  :key="disciplina.nome"
+                                  :class="{ 'bg-custom': disciplinaClickada===disciplina.nome}"
+                                  style="cursor:pointer;"
+                                  v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.nome), showGrade(grade)"
+                                >
+                                  <p style="width: 400px; text-align: start;">{{disciplina.nome}}</p>
+                                </td>
                               </template>
                             </template>
-                          </div>
-                        </tr>
-                      </template>
+                          </template>
+                        </div>
+                      </tr>
                     </template>
                   </template>
-                </tbody>
-              </table>
-              <!-- Final da tabela -->
-            </div>
+                </template>
+              </tbody>
+            </table>
+            <!-- Final da tabela -->
           </div>
         </div>
       </div>
@@ -197,7 +203,7 @@
 
       <!-- Grind direito -->
       <div class="div-card p-0 mt-0 mb-2 col-lg-5 col-md-6 col-sm-12 col-12">
-        <!-- Inicio card -->
+        <!-- Inicio card Grade -->
         <template v-if="isEdit">
           <div
             class="card mr-3 ml-auto"
@@ -274,12 +280,9 @@
               </form>
             </div>
           </div>
+          <!-- Final card Grade -->
 
-          <!-- Final card -->
-
-          <!-- DISCIPLINAS -->
-
-          <!-- Inicio card -->
+          <!-- Inicio card Disciplina -->
           <div
             class="card mr-3 ml-auto"
             style="border-top-left-radius: 0; border-top-right-radius: 0; margin-top: -1px;"
@@ -417,10 +420,6 @@ export default {
     };
   },
   methods: {
-    btnOkModal() {
-      //Somente atualiza o vetor de perfis ativados quando o botão OK for clickado
-      this.$refs.modalGrade.hide();
-    },
     clickada(discip) {
       this.disciplinaClickada = discip;
     },
@@ -439,9 +438,14 @@ export default {
             text: `A Grade ${response.Grade.nome} foi criada!`,
             type: "success"
           });
+          this.$refs.modalGrade.hide();//esconde o modal
         })
         .catch(error => {
           this.error = "<b>Erro ao criar Grade</b>";
+          if (error.response.data.fullMessage) {
+            this.error +=
+              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+          }
           this.$notify({
             group: "general",
             title: `Erro!`,
@@ -728,7 +732,7 @@ input {
 }
 /* =================== */
 .p-header {
-  padding: 0px 0 0px 0;
+  padding: 0 5px 0 5px;
   margin: 0;
   font-size: 11px;
   text-align: center;
@@ -780,9 +784,12 @@ thead th {
   height: 18px !important;
 }
 .sticky {
-  position: sticky;
-  position: -webkit-sticky;
-  top: 0;
+  display: block !important;
+  overflow: hidden !important;
+  height: 20px !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 0 !important;
 }
 /* APENAS NO FIREFOX */
 @-moz-document url-prefix() {
@@ -822,8 +829,8 @@ thead th {
 .notEven {
   background-color: white;
 }
-table tbody tr:hover{
-  background-color: #c8c8c8;;
+table tbody tr:hover {
+  background-color: #c8c8c8;
 }
 
 /* Botoes */
@@ -835,6 +842,7 @@ button {
   height: max-content;
   margin-right: 15px;
   transition: all 0.3s ease 0s;
+  cursor: pointer;
 }
 i.fas,
 i.far {
@@ -846,7 +854,6 @@ i.far {
 }
 .addbtn:hover {
   background-color: white;
-  cursor: pointer;
   color: #77dd77;
 }
 .addbtn:focus {
@@ -859,7 +866,6 @@ i.far {
   color: #cfcfc4;
 }
 .cancelbtn:hover {
-  cursor: pointer;
   color: #b8b4a8;
 }
 .cancelbtn:focus {
@@ -873,7 +879,6 @@ i.far {
   color: #ff817b;
 }
 .delbtn:hover {
-  cursor: pointer;
   color: #ff5f48;
 }
 .delbtn:focus {
@@ -881,7 +886,7 @@ i.far {
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #ff4e34;
 }
-@media screen and (max-width: 818px) {
+@media screen and (max-width: 900px) {
   .div-card {
     margin-left: 0px !important;
     margin-right: 50px !important;

@@ -538,11 +538,11 @@ button {
   margin-top: 5px;
   margin-bottom: 0px;
   transition: all 0.3s ease 0s;
+  cursor: pointer;
 }
 i.fas,
 i.far {
   font-size: 25px;
-  cursor: pointer;
 }
 .relatbtn {
   background-color: white;
@@ -550,7 +550,6 @@ i.far {
 }
 
 .relatbtn:hover {
-  cursor: pointer;
   color: #82a0ff !important;
 }
 

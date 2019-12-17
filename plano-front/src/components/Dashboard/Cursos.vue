@@ -70,6 +70,7 @@
               :key="curso"
               v-on:click.prevent="showCurso(curso), clickada(curso.codigo)"
               :class="{'bg-custom':cursoClickado === curso.codigo}"
+              style="cursor: pointer;"
             >
               <div style="width: 516px">
                 <td>
@@ -113,7 +114,7 @@
     <!-- Fim do Grid Esquerdo -->
 
     <!-- Grid Direito -->
-    <div class="div-card p-0 mt-3 mb-2 col-lg-4 col-md-12 col-sm-12 col-12">
+    <div class="div-card p-0 mt-0 mb-2 col-lg-4 col-md-12 col-sm-12 col-12">
       <div class="card mr-3 ml-auto">
         <div class="card-header">
           <h1 class="card-title">Curso</h1>
@@ -138,7 +139,7 @@
                 <label for="codigo" class="col-form-label">Código</label>
                 <input
                   type="text"
-                  class="inputMenor form-control form-control-sm"
+                  class="form-control form-control-sm inputMenor"
                   id="codigo"
                   v-model="cursoForm.codigo"
                 />
@@ -146,45 +147,62 @@
             </div>
 
             <div class="row mb-2 mx-0">
-              <div class="form-group col-6 m-0 px-0">
+              <div class="form-group col m-0 px-0">
                 <label for="alunosEntrada" class="col-form-label">Alunos 1º Sem.</label>
                 <input
                   type="text"
-                  class="form-control form-control-sm"
+                  class="form-control form-control-sm inputMenor"
                   id="alunosEnrada"
-                  style="width: 70px;"
                   v-model="cursoForm.alunosEntrada"
                 />
               </div>
-            <!-- </div> -->
-
-            <!-- <div class="row mb-2 mx-0"> -->
-              <div class="form-group col-6 m-0 px-0">
+              <!-- </div> -->
+              <div class="form-group col m-0 px-0">
                 <label for="alunosEntrada" class="col-form-label">Alunos 2º Sem.</label>
                 <input
                   type="text"
-                  class="form-control form-control-sm"
+                  class="form-control form-control-sm inputMenor"
                   id="alunosEnrada"
-                  style="width: 70px;"
                   v-model="cursoForm.alunosEntrada2"
                 />
               </div>
             </div>
 
-            <div class="row mb-2 mx-0">
+            <div class="row mb-2 mt-1 mx-0">
               <div class="form-group col m-0 mr-4 px-0">
-                <label for="turno" class="col-form-label">Turno</label>
-
-                <div class="radio" id="turno">
-                  <input type="radio" name="turno" value="Diurno" v-model="cursoForm.turno" />
-                  Diurno
-                  <br />
-                  <input type="radio" name="turno" value="Integral" v-model="cursoForm.turno" />
-                  Integral
-                  <br />
-                  <input type="radio" name="turno" value="Noturno" v-model="cursoForm.turno" />
-                  Noturno
-                  <br />
+                <h5 style="font-size:14px" class="mt-1">Turno:</h5>
+                <div class="form-check form-check-inline">
+                  <input
+                    type="radio"
+                    name="turno"
+                    id="diurno"
+                    value="Diurno"
+                    class="form-check-input"
+                    v-model="cursoForm.turno"
+                  />
+                  <label class="form-check-label" for="diurno">Diurno</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    type="radio"
+                    name="turno"
+                    id="integral"
+                    value="Integral"
+                    class="form-check-input"
+                    v-model="cursoForm.turno"        
+                  />
+                  <label class="form-check-label" for="integral">Integral</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    type="radio"
+                    name="turno"
+                    id="noturno"
+                    value="Noturno"
+                    v-model="cursoForm.turno"   
+                    class="form-check-input"
+                  />
+                  <label class="form-check-label" for="noturno">Noturno</label>
                 </div>
               </div>
             </div>
@@ -525,6 +543,7 @@ table td {
   text-align: center;
   vertical-align: middle;
   padding: 0 !important;
+  height: 18px !important;
 }
 table p {
   margin-bottom: 0;
@@ -546,9 +565,10 @@ table input {
   text-align: center !important;
   margin: 0;
 }
+/*
 table tbody tr div {
   height: 22px !important;
-}
+}*/
 .sticky {
   display: block !important;
   overflow: hidden !important;
@@ -565,7 +585,7 @@ table tbody tr div {
 }
 
 /* ====== CARD ====== */
-.div-card{
+.div-card {
   margin-left: auto !important;
 }
 .card-title {
@@ -601,9 +621,8 @@ input {
   width: 280px;
 }
 .inputMenor {
-  max-width: 70px;
-  min-width: 70px;
-  text-align: center;
+  width: 70px !important;
+  text-align: center !important;
 }
 .inputMenor2 {
   max-width: 40px;
@@ -652,6 +671,7 @@ button {
   height: max-content;
   margin-right: 15px;
   transition: all 0.3s ease 0s;
+  cursor: pointer;
 }
 i.fas,
 i.far {
@@ -702,7 +722,7 @@ i.far {
     margin-right: auto !important;
     top: 0 !important;
   }
-  .card{
+  .card {
     margin-left: 0 !important;
     margin-right: auto !important;
   }

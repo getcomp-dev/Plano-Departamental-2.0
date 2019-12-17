@@ -159,7 +159,7 @@
     </td>
         
     <template v-for="curso in Cursos">
-      <td>
+      <td :key="curso.id">
         <template v-for="(pedido, index) in Pedidos">
           <template v-if="pedido.Curso===curso.id">
             <turmaExternaPedido :key="index" v-bind:index="index" v-bind:turma="turma"></turmaExternaPedido>
