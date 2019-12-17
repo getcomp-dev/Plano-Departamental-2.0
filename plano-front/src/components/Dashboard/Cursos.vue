@@ -83,17 +83,11 @@
                   <p style="width: 52px;">{{ curso.turno }}</p>
                 </td>
                 <!-- 1 = 1º semestre, 2 = 2º semestre, 3 = Ambos-->
-                <td v-if="curso.semestreInicial == 1 || curso.semestreInicial == 3">
+                <td>
                   <p style="width: 52px">{{ curso.alunosEntrada }}</p>
                 </td>
-                <td v-else>
-                  <p style="width: 52px">0</p>
-                </td>
-                <td v-if="curso.semestreInicial == 2 || curso.semestreInicial == 3">
-                  <p style="width: 52px">{{ curso.alunosEntrada }}</p>
-                </td>
-                <td v-else>
-                  <p style="width: 52px">0</p>
+                <td>
+                  <p style="width: 52px">{{ curso.alunosEntrada2 }}</p>
                 </td>
               </div>
             </tr>
