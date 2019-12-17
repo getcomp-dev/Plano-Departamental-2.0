@@ -18,7 +18,7 @@
         style="overflow-y: auto; overflow-x: hidden; height: calc(100vh - 100px);"
       >
         <!-- -------------------------------------------- 1º periodo ----------------------------------------- -->
-        <template v-if="periodo===1 || periodo===3">
+        <template v-if="periodo==1 || periodo==3">
           <div class="col-12">
             <h3 style="font-weight: bold; font-size: 18px; text-align: center;">1º SEMESTRE</h3>
           </div>
@@ -54,7 +54,8 @@
         </template>
 
         <!-- -------------------------------------------- 2º periodo ----------------------------------------- -->
-        <template v-if="periodo===2 || periodo===3">
+        <template v-if="periodo==2 || periodo==3">
+          <br v-if="periodo==3"/>
           <h3 style="font-weight: bold; font-size: 18px; text-align: center;">2º SEMESTRE</h3>
           <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
           <template v-if="activeCCD">
@@ -91,36 +92,32 @@
       </div>
     </div>
     <!-- Grid Direito -->
-    <div class="col-lg-3 col-md-12 col-sm-12 col-12 mt-3 ml-auto pl-0">
-      <div
-        class="card ml-auto mr-3"
-       
-      >
-        
-          <div class="card-header">
-            <h2 class="card-title">Definir Grades</h2>
+    <div class="div-card p-0 mt-0 mb-2 col-lg-6 col-md-6 col-sm-12 col-12">
+      <div class="card mr-3 ml-auto">
+        <div class="card-header">
+            <h1 class="card-title">Definir Grades</h1>
           </div>
           <div class="card-body">
-          <b-alert :show="Boolean(error)" variant="danger" dismissible v-html="error"></b-alert>
           <form>
-            <div class="form-group row ml-auto mr-auto" style="display: block; padding-left: 30px;">
-              <form name="formPeriodo" id="formPeriodo" ref="formPrioso">
-                <div class="grade">
-                  <label for="periodo" style="margin-right: 10px; font-size: 11px">Semestre:</label>
-                  <b-form-select
-                    id="periodo"
-                    v-model="periodo"
-                    class="periodo"
-                    style="font-size: 75%; width: 80px; height:25px !important; position: relative; padding-top: 0.175rem"
-                  >
-                    <option :value="1">1</option>
-                    <option :value="2">2</option>
-                    <option :value="3">Ambos</option>
-                  </b-form-select>
-                  <br />
-                </div>
-              </form>
-              <div class="texto">
+            <div class="row mb-2 mx-0">
+              <div class="input-group col m-0 px-0">
+
+             	 <div class="input-group-append mt-1">
+              <div class="input-group-append">
+                <label class="input-group-text">Semestre:</label>
+              </div>
+            </div>
+            <select class="form-control form-control-sm mt-1 mr-5" v-model="periodo">
+              <option value="1">Primeiro</option>
+              <option value="2">Segundo</option>
+              <option value="3">Ambos</option>
+            </select>
+              
+							</div>
+            </div>
+
+              <div class="row mb-2 mx-0">
+              <div class="form-group col m-0 px-0">
                 <b-form-checkbox v-model="selectAll" v-on:change="toggleAll">Selecionar Tudo</b-form-checkbox>
                 <b-form-checkbox-group
                   v-model="cursos"
@@ -133,15 +130,17 @@
               </div>
             </div>
            
-          </form>
-           <div style="float: right">
+           <div class="form-group row">
+						  <div style="display: flex; margin-right: 0; margin-left: auto">
               <button
                 v-on:click="createHorarios"
                 title="Confirmar"
                 type="button"
                 class="addbtn"
               ><i class="fas fa-check"></i></button>
+						  </div>
             </div>
+          </form>
         </div>
       </div>
     </div>
@@ -1050,44 +1049,19 @@
   overflow: hidden;
   margin: 0;
 }
-.card-title {
-  font-size: 16px;
-  font-weight: normal;
-  padding-left: 0;
-  margin: 0;
-  text-align: center;
-}
-.card{
-  width: 250px;
-  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
-}
-.card-body {
-  font-size: 12px;
-  padding-top: 10px;
-}
 .titulo {
   font-size: 25px;
   font-weight: normal;
   padding-left: 0;
   margin: 0 !important;
 }
-
-.periodo {
-  display: inline;
-  width: 72px;
-  height: 24px;
-  position: relative;
-}
-
 td {
   width: 91px !important;
   text-align: start !important;
 }
-
 th {
   text-align: center !important;
 }
-
 .tg {
   border-collapse: collapse;
   border-spacing: 0;
@@ -1121,12 +1095,84 @@ th {
 .tg .tg-0lax {
   vertical-align: center;
 }
-
 h4 {
   text-align: start !important;
   font-size: 12px !important;
   font-weight: bold !important;
 }
+
+/* ====== CARD ====== */
+.div-card {
+  margin-left: auto;
+}
+.card-title {
+  font-size: 16px;
+  font-weight: normal;
+  padding-left: 0;
+  margin: 0;
+  text-align: center;
+}
+.card {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+  margin-left: auto;
+}
+.card-body {
+  font-size: 12px;
+  padding-top: 15px;
+}
+.card label {
+  line-height: 1.2;
+  font-size: 12px;
+  text-align: start;
+  padding-top: 0 !important;
+}
+.selectMaior2 {
+  width: 300px;
+  text-align: start;
+}
+input {
+  height: 25px !important;
+  padding: 0px 5px 0px 5px !important;
+  font-size: 11px !important;
+  text-align: start;
+}
+.inputMenor {
+  width: 60px;
+  text-align: center;
+}
+.inputMenor2 {
+  width: 40px;
+  margin-right: 10px;
+  text-align: center;
+}
+.inputMaior {
+  width: 250px;
+  text-align: start;
+}
+.form-control {
+  height: 25px !important;
+  font-size: 12px !important;
+  padding: 0px 0px 0px 5px !important;
+  min-width: 80px;
+  max-width: 80px;
+  text-align: start;
+  border-radius: 3px !important;
+}
+.input-group-text {
+  max-width: 70px;
+  min-width: 70px;
+  height: 25px !important;
+  margin-left: -5px;
+  padding-left: 15px;
+  font-size: 12px !important;
+  background-color: white;
+  border: none;
+}
+
+
 button {
   padding: 0;
   border: none;
@@ -1158,7 +1204,6 @@ i.far {
 .texto {
   font-size: 12px;
 }
-
 option {
   font-size: 11px;
   -webkit-box-sizing: border-box;

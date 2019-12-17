@@ -102,12 +102,7 @@
     <div class="div-card p-0 mt-0 mb-2 col-lg-6 col-md-6 col-sm-12 col-12">
       <div class="card mr-3 ml-auto">
         <div class="card-header">
-          <template v-if="isEdit">
             <h1 class="card-title">Docente</h1>
-          </template>
-          <template v-else>
-            <h1 class="card-title">Docente</h1>
-          </template>
         </div>
 
         <div class="card-body">

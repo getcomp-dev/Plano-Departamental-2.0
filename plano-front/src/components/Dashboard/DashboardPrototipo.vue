@@ -2,34 +2,37 @@
   <div class="DashboardPrototipo row pr-2">
     <!-- Titulo -->
     <div
-      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      style="height:38px;"
     >
-      <div class="form-inline col-12 pl-0 mb-1 pr-1" style="height:34px;">
-        <h1 class="titulo col-md-2 col-sm-2 col-xl-2 col-3">Tabela</h1>
+      <div class="form-inline col-12 pl-0 mb-1 pr-1">
+        <h1 class="titulo col-xl-2 col-md-2 col-sm-2 col-3 px-0 pr-1">Tabela</h1>
 
         <div
-          class="form-group col-9 col-sm-10 col-md-10 col-xl-10 mb-0 pr-0"
-          style="justify-content: flex-end;"
+          class="form-group col-xl-10 col-md-10 col-sm-10 col-9 mb-0 p-0"
+          style="justify-content: flex-end!important;"
         >
-            <div class="input-group mr-0 ml-auto mb-0 mt-0">
-              <div style="display: flex;">
-                <div class="input-group-append mt-1">
-                  <div class="input-group-append">
-                    <label class="input-group-text">Semestre:</label>
-                  </div>
-                </div>
-                <select class="form-control form-control-sm mt-1 mr-3 ml-0" v-model="periodos">
-                  <option value="1">Primeiro</option>
-                  <option value="2">Segundo</option>
-                  <option value="3">Ambos</option>
-                </select>
-
-                <b-button v-b-modal.modalPerfis title="Perfis" class="cancelbtn"><i class="fas fa-list-ul"></i></b-button>
-                <b-button v-b-modal.modalCursos title="Cursos" class="cancelbtn"><i class="fas fa-graduation-cap"></i></b-button>
+          <div class="input-group ml-auto mr-0 mb-0 mt-0">
+            <select class="form-control form-control-sm mt-1" v-model="periodos">
+              <option value="1">Primeiro</option>
+              <option value="2">Segundo</option>
+              <option value="3">Ambos</option>
+            </select>
+            <div class="input-group-append mt-1 mr-3">
+              <div class="input-group-append">
+                <label class="input-group-text">Semestre</label>
               </div>
+            </div>
 
-            <template v-if="isAdd">
-              <div style="display: flex">
+            <b-button v-b-modal.modalPerfis title="Perfis" class="cancelbtn">
+              <i class="fas fa-list-ul"></i>
+            </b-button>
+            <b-button v-b-modal.modalCursos title="Cursos" class="cancelbtn">
+              <i class="fas fa-graduation-cap"></i>
+            </b-button>
+
+            <div class="d-flex p-0 m-0">
+              <template v-if="isAdd">
                 <button
                   type="button"
                   title="Salvar"
@@ -48,136 +51,38 @@
                 >
                   <i class="fas fa-times"></i>
                 </button>
-              
-              </div>
-            </template>
-
-            <template v-else>
-              <div style="display: flex">
-                <div class="ml-4">
-                  <button
-                    type="button"
-                    title="Adicionar"
-                    class="addbtn"
-                    style="max-width:80px;"
-                    v-on:click.prevent="toggleAdd"
-                  >
-                    <i class="fas fa-plus"></i>
-                  </button>
-                  <button
-                    type="button"
-                    title="Deletar"
-                    class="delbtn"
-                    style="max-width:80px;"
-                    v-b-modal.modalConfirma
-                  >
-                    <i class="far fa-trash-alt"></i>
-                  </button>
-                </div>
-                  <button
-                    type="button"
-                    title="XLSX"
-                    class="relatbtn"
-                    style="max-width: 65px;"
-                    v-on:click.prevent="xlsx(Pedidos)"
-                  >
-                    <i class="far fa-file-alt"></i>
-                  </button>
-              </div>
-              <!-- Modals do deletar-->
-              <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
-                <p class="my-4">Tem certeza que deseja deletar as turmas selecionadas?</p>
-                <template v-if="Deletar.length > 0">
-                  <template v-for="turma in Deletar">
-                    <template v-for="disciplina in Disciplinas">
-                      <template v-if="disciplina.id===turma.Disciplina">
-                        <p :key="'disciplina'+disciplina.id+'turma'+turma.id" style="width:80px">
-                          Disciplina:{{disciplina.codigo}}
-                          <br />
-                          Turma:{{turma.letra}}
-                        </p>
-                      </template>
-                    </template>
-                  </template>
-                </template>
-              </b-modal>
-            </template>
-
-            <!-- Modals do botão perfis slot="modal-footer" -->
-            <b-modal id="modalPerfis" ref="PerfisModal" scrollable title="Selecione os perfis">
-              <b-form-group style="margin-top:-10px; font-size:12px;">
-                <b-form-checkbox-group
-                  id="checkboxGroupPerfis"
-                  v-model="PerfisSelecionados"
+              </template>
+              <template v-else>
+                <button
+                  type="button"
+                  title="Adicionar"
+                  class="addbtn"
+                  style="max-width:80px;"
+                  v-on:click.prevent="toggleAdd"
                 >
-                  <b-form-checkbox
-                    size="sm"
-                    v-for="perfil in Perfis"
-                    :key="'perfil'+perfil.id"
-                    :value="perfil"
-                  >{{perfil.nome}}</b-form-checkbox>
-                </b-form-checkbox-group>
-              </b-form-group>
+                  <i class="fas fa-plus"></i>
+                </button>
+                <button
+                  type="button"
+                  title="Deletar"
+                  class="delbtn"
+                  style="max-width:80px;"
+                  v-b-modal.modalConfirma
+                >
+                  <i class="far fa-trash-alt"></i>
+                </button>
 
-              <div slot="modal-footer" style="display: flex; margin-right: 25px !important;">
-                <b-button
-                  class="btn-azul btn-df mr-2"
-                  variant="success"
-                  @click="selectAll()"
-                >Selecionar Todos</b-button>
-                <b-button
-                  class="btn-cinza btn-df mr-2"
-                  variant="secondary"
-                  @click="selectNone()"
-                >Desmarcar Todos</b-button>
-                <b-button
-                  variant="success"
-                  @click="btnOK()"
-                  class="btn-verde btn-df mr-2"
-                  style="padding-right:15px!important; padding-left:15px!important;"
-                >OK</b-button>
-              </div>
-            </b-modal>
-
-            <!-- Modals do botão cursos slot="modal-footer" -->
-            <b-modal id="modalCursos" style="max-height:75vh;" ref="CursosModal" scrollable title="Selecione os Cursos">
-              <b-form-group class style="margin-top:-10px; font-size:14px;">
-                  <table style="max-height:70vh !important; width: 465px; overflow:auto;">
-                    <tr>
-                      <th></th>
-                      <th style="text-align:center" @click="ToggleCodigoOrdering()">Código<i v-if="ordenacaoCurso=='codigo'" style="font-size:0.6rem" class="fas fa-arrow-down fa-sm"></i></b-button></th>
-                      <th style="text-align:center" @click="ToggleNomeOrdering()">Nome<i v-if="ordenacaoCurso=='nome'" style="font-size:0.6rem" class="fas fa-arrow-down fa-sm"></i></b-button></th>
-                    </tr>
-                    <tr v-for="curso in Cursos" :key="'cursoMd'+curso.id">
-                      <td style="padding:0;broder:0;margin:0">
-                        <input type="checkbox"
-                               v-model="CursosSelecionados"
-                               :value="curso"
-                        >
-                      </td>
-                      <td>{{curso.codigo}}</td>
-                      <td style="padding-left: 15px !important; text-align: start;">{{curso.nome}}</td>
-                    </tr>
-                  </table>
-              </b-form-group>
-
-              <div slot="modal-footer" style="display: flex; margin-right: 25px !important;">
-                <b-button
-                        class="btn-azul btn-df mr-2"
-                        variant="success"
-                        @click="selectAllCursos()"
-                >Selecionar Todos</b-button>
-                <b-button class="btn-cinza btn-df mr-2" variant="secondary" @click="selectNoneCursos()">Desmarcar Todos</b-button>
-
-                <b-button
-                        variant="success"
-                        @click="btnOKCursos()"
-                        class="btn-verde btn-df mr-2"
-                        style="padding-right:15px!important; padding-left:15px!important"
-                >OK</b-button>
-              </div>
-            </b-modal>
-
+                <button
+                  type="button"
+                  title="XLSX"
+                  class="relatbtn"
+                  style="max-width: 65px;"
+                  v-on:click.prevent="xlsx(Pedidos)"
+                >
+                  <i class="far fa-file-alt"></i>
+                </button>
+              </template>
+            </div>
           </div>
         </div>
       </div>
@@ -212,7 +117,12 @@
                 v-bind:style="{backgroundColor: perfil.cor}"
               >
                 <template v-if="turma.periodo==1 && (periodos == 1 || periodos==3)">
-                  <turmadata ref="turma" v-bind:turma="turma" v-bind:perfil="perfil" v-bind:cursos="CursosAtivados"></turmadata>
+                  <turmadata
+                    ref="turma"
+                    v-bind:turma="turma"
+                    v-bind:perfil="perfil"
+                    v-bind:cursos="CursosAtivados"
+                  ></turmadata>
                 </template>
               </tr>
             </template>
@@ -223,7 +133,12 @@
                 v-bind:style="{backgroundColor: perfil.cor}"
               >
                 <template v-if="turma.periodo==3 && (periodos==2 || periodos==3)">
-                  <turmadata ref="turma" v-bind:turma="turma" v-bind:perfil="perfil" v-bind:cursos="CursosAtivados"></turmadata>
+                  <turmadata
+                    ref="turma"
+                    v-bind:turma="turma"
+                    v-bind:perfil="perfil"
+                    v-bind:cursos="CursosAtivados"
+                  ></turmadata>
                 </template>
               </tr>
             </template>
@@ -231,6 +146,117 @@
         </tbody>
       </table>
     </div>
+
+    <!--============ Modals ==============-->
+    <!-- Modals do deletar-->
+    <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
+      <p class="my-4">Tem certeza que deseja deletar as turmas selecionadas?</p>
+      <template v-if="Deletar.length > 0">
+        <template v-for="turma in Deletar">
+          <template v-for="disciplina in Disciplinas">
+            <template v-if="disciplina.id===turma.Disciplina">
+              <p :key="'disciplina'+disciplina.id+'turma'+turma.id" style="width:80px">
+                Disciplina:{{disciplina.codigo}}
+                <br />
+                Turma:{{turma.letra}}
+              </p>
+            </template>
+          </template>
+        </template>
+      </template>
+    </b-modal>
+    <!-- Modals do botão perfis slot="modal-footer" -->
+    <b-modal id="modalPerfis" ref="PerfisModal" scrollable title="Selecione os perfis">
+      <b-form-group style="margin-top:-10px; font-size:12px;">
+        <b-form-checkbox-group id="checkboxGroupPerfis" v-model="PerfisSelecionados">
+          <b-form-checkbox
+            size="sm"
+            v-for="perfil in Perfis"
+            :key="'perfil'+perfil.id"
+            :value="perfil"
+          >{{perfil.nome}}</b-form-checkbox>
+        </b-form-checkbox-group>
+      </b-form-group>
+
+      <div slot="modal-footer" style="display: flex; margin-right: 25px !important;">
+        <b-button
+          class="btn-azul btn-df mr-2"
+          variant="success"
+          @click="selectAll()"
+        >Selecionar Todos</b-button>
+        <b-button
+          class="btn-cinza btn-df mr-2"
+          variant="secondary"
+          @click="selectNone()"
+        >Desmarcar Todos</b-button>
+        <b-button
+          variant="success"
+          @click="btnOK()"
+          class="btn-verde btn-df mr-2"
+          style="padding-right:15px!important; padding-left:15px!important;"
+        >OK</b-button>
+      </div>
+    </b-modal>
+
+    <!-- Modals do botão cursos slot="modal-footer" -->
+    <b-modal
+      id="modalCursos"
+      style="max-height:75vh;"
+      ref="CursosModal"
+      scrollable
+      title="Selecione os Cursos"
+    >
+      <b-form-group class style="margin-top:-10px; font-size:14px;">
+        <table style="max-height:70vh !important; width: 465px; overflow:auto;">
+          <tr>
+            <th></th>
+            <th style="text-align:center" @click="ToggleCodigoOrdering()">
+              Código
+              <i
+                v-if="ordenacaoCurso=='codigo'"
+                style="font-size:0.6rem"
+                class="fas fa-arrow-down fa-sm"
+              ></i>
+            </th>
+            <th style="text-align:center" @click="ToggleNomeOrdering()">
+              Nome
+              <i
+                v-if="ordenacaoCurso=='nome'"
+                style="font-size:0.6rem"
+                class="fas fa-arrow-down fa-sm"
+              ></i>
+            </th>
+          </tr>
+          <tr v-for="curso in Cursos" :key="'cursoMd'+curso.id">
+            <td style="padding:0;broder:0;margin:0">
+              <input type="checkbox" v-model="CursosSelecionados" :value="curso" />
+            </td>
+            <td>{{curso.codigo}}</td>
+            <td style="padding-left: 15px !important; text-align: start;">{{curso.nome}}</td>
+          </tr>
+        </table>
+      </b-form-group>
+
+      <div slot="modal-footer" style="display: flex; margin-right: 25px !important;">
+        <b-button
+          class="btn-azul btn-df mr-2"
+          variant="success"
+          @click="selectAllCursos()"
+        >Selecionar Todos</b-button>
+        <b-button
+          class="btn-cinza btn-df mr-2"
+          variant="secondary"
+          @click="selectNoneCursos()"
+        >Desmarcar Todos</b-button>
+
+        <b-button
+          variant="success"
+          @click="btnOKCursos()"
+          class="btn-verde btn-df mr-2"
+          style="padding-right:15px!important; padding-left:15px!important"
+        >OK</b-button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -276,7 +302,7 @@ export default {
       CursosSelecionados: [],
       PerfisAtivados: [],
       CursosAtivados: [],
-      ordenacaoCurso: 'posicao',
+      ordenacaoCurso: "posicao"
     };
   },
 
@@ -314,18 +340,14 @@ export default {
   },
 
   methods: {
-    ToggleCodigoOrdering () {
-      if(this.ordenacaoCurso === 'codigo')
-        this.ordenacaoCurso = 'posicao'
-      else
-        this.ordenacaoCurso = 'codigo'
+    ToggleCodigoOrdering() {
+      if (this.ordenacaoCurso === "codigo") this.ordenacaoCurso = "posicao";
+      else this.ordenacaoCurso = "codigo";
     },
 
-    ToggleNomeOrdering () {
-      if(this.ordenacaoCurso === 'nome')
-        this.ordenacaoCurso = 'posicao'
-      else
-        this.ordenacaoCurso = 'nome'
+    ToggleNomeOrdering() {
+      if (this.ordenacaoCurso === "nome") this.ordenacaoCurso = "posicao";
+      else this.ordenacaoCurso = "nome";
     },
 
     btnOK() {
@@ -346,7 +368,7 @@ export default {
     btnOKCursos() {
       //Somente atualiza o vetor de perfis ativados quando o botão OK for clickado
       this.CursosAtivados = [...this.CursosSelecionados];
-      this.CursosAtivados = _.orderBy(this.CursosAtivados, this.ordenacaoCurso)
+      this.CursosAtivados = _.orderBy(this.CursosAtivados, this.ordenacaoCurso);
       this.$refs.CursosModal.hide();
     },
     selectAllCursos() {
@@ -601,7 +623,7 @@ export default {
   overflow: hidden;
   margin: 0;
 }
-.btn-df{
+.btn-df {
   font-size: 12px;
   height: 25px;
   min-width: -webkit-max-content;
@@ -657,31 +679,12 @@ export default {
   padding-left: 0;
   margin: 0 !important;
 }
-.input-group-text {
-  max-width: 70px;
-  min-width: 70px;
-  height: 25px !important;
-  margin-left: -5px;
-  padding-left: 15px;
-  font-size: 12px !important;
-  background-color: white; 
-  border: none;
-}
-.form-control {
-  height: 25px !important;
-  font-size: 12px !important;
-  padding: 0px 0px 0px 5px !important;
-  min-width: 80px;
-  max-width: 80px;
-  text-align: start;
-  border-radius: 3px !important;
-}
 .sticky {
   position: sticky;
   position: -webkit-sticky;
   top: 0;
 }
-.table-bordered thead th{
+.table-bordered thead th {
   border: none;
 }
 .divTable {
@@ -942,5 +945,49 @@ i.far {
   -moz-box-pack: justify !important;
   -ms-flex-pack: justify !important;
   justify-content: space-between !important;
+}
+@media screen and (max-width: 490px) {
+  .div-titulo {
+    height: 70px !important;
+  }
+}
+.input-group-text {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin-bottom: 0;
+  /*===*/
+  max-width: 70px;
+  min-width: 70px;
+  height: 25px !important;
+  margin-left: -5px;
+  padding-left: 15px;
+  font-size: 12px !important;
+}
+.form-control {
+  height: 25px !important;
+  font-size: 12px !important;
+  padding: 0px 0px 0px 5px !important;
+  min-width: 80px;
+  max-width: 80px;
+  text-align: start;
+}
+.form-group {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 0;
+}
+.form-inline .input-group,
+.form-inline {
+  width: auto;
 }
 </style>

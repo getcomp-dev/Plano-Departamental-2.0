@@ -2,78 +2,57 @@
   <div class="TurmasExternas row pr-2" v-if="Admin">
     <!-- Titulo -->
     <div
-      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="titulo col-xl-2 col-md-3 col-sm-4 col-4">Tabela Externa</h1>
+        <h1 class="titulo col-xl-2 col-md-3 col-sm-4 col-5 px-0 pr-1">Tabela Externa</h1>
 
         <div
-          class="form-group col-xl-10 col-md-9 col-sm-8 col-8 mb-0 pr-0"
+          class="form-group col-xl-10 col-md-9 col-sm-8 col-7 mb-0 p-0"
           style="justify-content: flex-end;"
         >
-          <div class="input-group mr-0 ml-auto mb-0 mt-0">
-            <div class="input-group-append mt-1 ">
-              <div class="input-group-append">
-                <label class="input-group-text">Semestre:</label>
-              </div>
-            </div>
-            <select class="form-control form-control-sm mt-1 mr-5" v-model="periodos">
+          <div class="input-group mr-0 ml-auto mb-0 mt-0 p-0">
+            <select class="form-control form-control-sm mt-1" v-model="periodos">
               <option value="1">Primeiro</option>
               <option value="2">Segundo</option>
               <option value="3">Ambos</option>
             </select>
-            
+            <div class="input-group-append mt-1 mr-3">
+              <div class="input-group-append">
+                <label class="input-group-text">Semestre</label>
+              </div>
+            </div>
 
-            <template v-if="isAdd">
-              <div style="display: flex">
-                <button
-                  type="button"
-                  title="Salvar"
-                  class="addbtn"
-                  v-on:click.prevent="addTurma"
-                ><i class="fas fa-check"></i></button>
+            <div class="d-flex p-0 m-0">
+              <template v-if="isAdd">
+                <button type="button" title="Salvar" class="addbtn" v-on:click.prevent="addTurma">
+                  <i class="fas fa-check"></i>
+                </button>
                 <button
                   type="button"
                   title="Cancelar"
                   class="cancelbtn"
                   v-on:click.prevent="toggleAdd"
-                ><i class="fas fa-times"></i>
+                >
+                  <i class="fas fa-times"></i>
                 </button>
-              </div>
-            </template>
-            <template v-else>
-              <div style="display: flex">
+              </template>
+
+              <template v-else>
                 <button
                   type="button"
                   title="Adicionar"
                   class="addbtn"
                   v-on:click.prevent="toggleAdd"
-                ><i class="fas fa-plus"></i></button>
-                <button
-                  type="button"
-                  title="Deletar"
-                  class="delbtn"
-                  style
-                  v-b-modal.modalConfirma
-                ><i class="far fa-trash-alt"></i></button>
-              </div>
-
-              <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
-                <p class="my-4">Tem certeza que deseja deletar as turmas selecionadas?</p>
-                <template v-for="turma in Deletar">
-                  <template v-for="disciplina in Disciplinas">
-                    <template v-if="disciplina.id===turma.Disciplina">
-                      <p :key="'disciplina'+disciplina.id+'tirma'+turma.id" style="width:80px">
-                        Disciplina:{{disciplina.codigo}}
-                        <br />
-                        Turma:{{turma.letra}}
-                      </p>
-                    </template>
-                  </template>
-                </template>
-              </b-modal>
-            </template>
+                >
+                  <i class="fas fa-plus"></i>
+                </button>
+                <button type="button" title="Deletar" class="delbtn" style v-b-modal.modalConfirma>
+                  <i class="far fa-trash-alt"></i>
+                </button>
+              </template>
+            </div>
           </div>
         </div>
       </div>
@@ -300,40 +279,55 @@
           <template v-if="Turmas.length>0">
             <template v-for="perfil in Perfis">
               <template v-for="disciplina in DisciplinasCod">
-              <tr
-                v-for="turma in inPerfil(perfil, Turmas, Disciplinas)"
-                v-if="turma.Disciplina === disciplina.id"
-                :key="turma.id"
-                v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
+                <tr
+                  v-for="turma in inPerfil(perfil, Turmas, Disciplinas)"
+                  v-if="turma.Disciplina === disciplina.id"
+                  :key="turma.id"
+                  v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
                     'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
                     'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}"
-              >
-                <template v-if="turma.periodo==1 && (periodos == 1 || periodos==3)">
-                  <turmadata v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
-                </template>
-              </tr>
+                >
+                  <template v-if="turma.periodo==1 && (periodos == 1 || periodos==3)">
+                    <turmadata v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
+                  </template>
+                </tr>
               </template>
             </template>
             <template v-for="perfil in Perfis">
               <template v-for="disciplina in DisciplinasCod">
-              <tr
-                v-for="turma in inPerfil(perfil, Turmas, Disciplinas)"
-                v-if="turma.Disciplina === disciplina.id"
-                :key="turma.id"
-                v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
+                <tr
+                  v-for="turma in inPerfil(perfil, Turmas, Disciplinas)"
+                  v-if="turma.Disciplina === disciplina.id"
+                  :key="turma.id"
+                  v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
                     'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
                     'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}"
-              >
-                <template v-if="turma.periodo==3 && (periodos==2 || periodos==3)">
-                  <turmadata v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
-                </template>
-              </tr>
+                >
+                  <template v-if="turma.periodo==3 && (periodos==2 || periodos==3)">
+                    <turmadata v-bind:turma="turma" v-bind:perfil="perfil"></turmadata>
+                  </template>
+                </tr>
               </template>
             </template>
           </template>
         </tbody>
       </table>
     </div>
+
+    <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
+      <p class="my-4">Tem certeza que deseja deletar as turmas selecionadas?</p>
+      <template v-for="turma in Deletar">
+        <template v-for="disciplina in Disciplinas">
+          <template v-if="disciplina.id===turma.Disciplina">
+            <p :key="'disciplina'+disciplina.id+'tirma'+turma.id" style="width:80px">
+              Disciplina:{{disciplina.codigo}}
+              <br />
+              Turma:{{turma.letra}}
+            </p>
+          </template>
+        </template>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -550,7 +544,7 @@ export default {
     Disciplinas() {
       return _.orderBy(
         _.filter(this.$store.state.disciplina.Disciplinas, function(d) {
-          return (d.Perfil == 13 || d.Perfil == 15);
+          return d.Perfil == 13 || d.Perfil == 15;
         }),
         "nome"
       );
@@ -558,7 +552,7 @@ export default {
     DisciplinasCod() {
       return _.orderBy(
         _.filter(this.$store.state.disciplina.Disciplinas, function(d) {
-          return (d.Perfil == 13 || d.Perfil == 15);
+          return d.Perfil == 13 || d.Perfil == 15;
         }),
         "codigo"
       );
@@ -656,26 +650,7 @@ export default {
   font-size: 25px;
   font-weight: normal;
   padding-left: 0;
- margin: 0 !important;
-}
-.form-control {
-  height: 25px !important;
-  font-size: 12px !important;
-  padding: 0px 0px 0px 5px !important;
-  min-width: 80px;
-  max-width: 80px;
-  text-align: start;
-  border-radius: 3px !important;
-}
-.input-group-text {
-  max-width: 70px;
-  min-width: 70px;
-  height: 25px !important;
-  margin-left: -5px;
-  padding-left: 15px;
-  font-size: 12px !important;
-  background-color: white;
-  border: none;
+  margin: 0 !important;
 }
 
 .p-header {
@@ -802,7 +777,6 @@ i.far {
   -webkit-text-stroke-color: #ff4e34;
 }
 
-
 /* .example {
   display: -ms-grid;
   display: grid;
@@ -863,6 +837,51 @@ i.far {
     -moz-border-radius: 2px;
     border-radius: 2px;
     background-color: rgb(245, 245, 245);
+  }
+}
+
+.input-group-text {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin-bottom: 0;
+  /*===*/
+  max-width: 70px;
+  min-width: 70px;
+  height: 25px !important;
+  margin-left: -5px;
+  padding-left: 15px;
+  font-size: 12px !important;
+}
+.form-control {
+  height: 25px !important;
+  font-size: 12px !important;
+  padding: 0px 0px 0px 5px !important;
+  min-width: 80px;
+  max-width: 80px;
+  text-align: start;
+}
+.form-group {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 0;
+}
+.form-inline .input-group,
+.form-inline {
+  width: auto;
+}
+@media screen and (max-width: 429px) {
+  .div-titulo {
+    height: 70px !important;
   }
 }
 </style>
