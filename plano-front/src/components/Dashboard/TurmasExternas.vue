@@ -10,49 +10,41 @@
 
         <div
           class="form-group col-xl-10 col-md-9 col-sm-8 col-7 mb-0 p-0"
-          style="justify-content: flex-end;"
+          style="justify-content: flex-end!important;"
         >
-          <div class="input-group mr-0 ml-auto mb-0 mt-0 p-0">
-            <select class="form-control form-control-sm mt-1" v-model="periodos">
+          <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Semestre</label>
+            </div>
+            <select class="form-control form-control-sm" v-model="periodos">
               <option value="1">Primeiro</option>
               <option value="2">Segundo</option>
               <option value="3">Ambos</option>
             </select>
-            <div class="input-group-append mt-1 mr-3">
-              <div class="input-group-append">
-                <label class="input-group-text">Semestre</label>
-              </div>
-            </div>
+          </div>
+          <div class="d-flex p-0 m-0 mt-1">
+            <template v-if="isAdd">
+              <button type="button" title="Salvar" class="addbtn" v-on:click.prevent="addTurma">
+                <i class="fas fa-check"></i>
+              </button>
+              <button
+                type="button"
+                title="Cancelar"
+                class="cancelbtn"
+                v-on:click.prevent="toggleAdd"
+              >
+                <i class="fas fa-times"></i>
+              </button>
+            </template>
 
-            <div class="d-flex p-0 m-0">
-              <template v-if="isAdd">
-                <button type="button" title="Salvar" class="addbtn" v-on:click.prevent="addTurma">
-                  <i class="fas fa-check"></i>
-                </button>
-                <button
-                  type="button"
-                  title="Cancelar"
-                  class="cancelbtn"
-                  v-on:click.prevent="toggleAdd"
-                >
-                  <i class="fas fa-times"></i>
-                </button>
-              </template>
-
-              <template v-else>
-                <button
-                  type="button"
-                  title="Adicionar"
-                  class="addbtn"
-                  v-on:click.prevent="toggleAdd"
-                >
-                  <i class="fas fa-plus"></i>
-                </button>
-                <button type="button" title="Deletar" class="delbtn" style v-b-modal.modalConfirma>
-                  <i class="far fa-trash-alt"></i>
-                </button>
-              </template>
-            </div>
+            <template v-else>
+              <button type="button" title="Adicionar" class="addbtn" v-on:click.prevent="toggleAdd">
+                <i class="fas fa-plus"></i>
+              </button>
+              <button type="button" title="Deletar" class="delbtn" style v-b-modal.modalConfirma>
+                <i class="far fa-trash-alt"></i>
+              </button>
+            </template>
           </div>
         </div>
       </div>
@@ -647,9 +639,9 @@ export default {
   margin: 0;
 }
 .titulo {
-  font-size: 25px;
-  font-weight: normal;
-  padding-left: 0;
+  font-size: 25px !important;
+  font-weight: normal !important;
+  padding-left: 0 !important;
   margin: 0 !important;
 }
 
@@ -731,7 +723,7 @@ button {
   height: -moz-max-content;
   height: max-content;
   margin-right: 15px;
-  margin-top: 5px;
+  margin-top: 0px;
   transition: all 0.3s ease 0s;
   cursor: pointer;
 }

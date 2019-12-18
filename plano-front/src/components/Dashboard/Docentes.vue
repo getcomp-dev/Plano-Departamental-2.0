@@ -160,14 +160,14 @@
               <div class="border-bottom my-2"></div>
               <div class="row mb-3 mx-0">
                 <div
-                  class="form-group col m-0 px-0 border"
+                  class="form-group col m-0 px-0 border rounded-top"
                   style="height: 250px; border-color: rgba(0,0,0,0.125);"
                 >
                   <div
-                    class="alert p-1 alert-secondary m-0 text-center rounded-0 w-100"
+                    class="alert p-1 alert-secondary m-0 text-center w-100 rounded-0 rounded-top"
                     role="alert"
                   >Perfis:</div>
-                  <div class="px-2 py-1" style="height: 218px!important; overflow-y: scroll">
+                  <div class="px-2 py-1" style="height: 220px!important; overflow-y: scroll">
                     <template v-for="perfil in Perfis">
                       <div :key="perfil.nome+perfil.id" class="form-check w-100 mb-1 p-0">
                         <input

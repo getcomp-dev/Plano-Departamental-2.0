@@ -1,22 +1,23 @@
 <template>
-  <div class="CargaPos row pr-2" style="font-size:11px;">
+  <div class="CargaPos row pr-2">
     <!-- Titulo -->
-    <div class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0">
+    <div
+      class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      style="height:38px;"
+    >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="titulo col-xl-2 col-md-3 col-sm-4 col-4" style="height:34px;">Creditação Pós</h1>
+        <h1 class="titulo col-xl-2 col-md-3 col-sm-4 col-4 px-0 pr-1">Creditação Pós</h1>
 
         <div
-          class="form-group col-xl-10 col-md-9 col-sm-8 col-8 mb-0 pr-0"
-          style="justify-content: flex-end;"
+          class="form-group col-xl-10 col-md-9 col-sm-8 col-7 mb-0 p-0"
+          style="justify-content: flex-end!important;"
         >
-          <div class="input-group mr-0 ml-auto mb-0 mt-0">
-             <div class="input-group-append mt-1">
-              <div class="input-group-append">
-                <label class="input-group-text">Trimestre:</label>
-              </div>
+          <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Semestre</label>
             </div>
             <select
-              class="form-control form-control-sm mt-1 mr-5"
+              class="form-control form-control-sm"
               v-model="periodos"
               v-on:change="CreditoTotal_PGMC, CreditoTotal_PGCC, CreditoTotal_PGEM"
             >
@@ -24,52 +25,49 @@
               <option value="2">Segundo</option>
               <option value="3">Ambos</option>
             </select>
-           
+          </div>
 
+          <div class="d-flex p-0 m-0 mt-1">
             <template v-if="isAdd">
-              <div style="display: flex">
-                <button type="button" title="Salvar" class="addbtn" v-on:click.prevent="addCarga">
-                  <i class="fas fa-check"></i>
-                </button>
-                <button
-                  type="button"
-                  title="Cancelar"
-                  class="cancelbtn"
-                  v-on:click.prevent="toggleAdd"
-                >
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
+              <button
+                type="button"
+                title="Salvar"
+                class="addbtn"
+                v-on:click.prevent="addCarga"
+                style="max-width:80px;"
+              >
+                <i class="fas fa-check"></i>
+              </button>
+              <button
+                type="button"
+                title="Cancelar"
+                class="cancelbtn"
+                v-on:click.prevent="toggleAdd"
+                style="max-width:80px;"
+              >
+                <i class="fas fa-times"></i>
+              </button>
             </template>
 
             <template v-else>
-              <div style="display: flex">
-                <button
-                  type="button"
-                  title="Adicionar"
-                  class="addbtn"
-                  v-on:click.prevent="toggleAdd"
-                >
-                  <i class="fas fa-plus"></i>
-                </button>
-                <button type="button" title="Deletar" class="delbtn" v-b-modal.modalConfirma>
-                  <i class="far fa-trash-alt"></i>
-                </button>
-              </div>
-              <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
-                <p class="my-4">Tem certeza que deseja deletar as cargas selecionadas?</p>
-                <template v-for="carga in Deletar">
-                  <template v-for="docente in Docentes">
-                    <template v-if="docente.id===carga.Docente">
-                      <p :key="'carga'+carga.id+'docente'+docente.id" style="width:80px">
-                        Docente:{{docente.apelido}}
-                        <br />
-                        Programa:{{carga.programa}}
-                      </p>
-                    </template>
-                  </template>
-                </template>
-              </b-modal>
+              <button
+                type="button"
+                title="Adicionar"
+                class="addbtn"
+                v-on:click.prevent="toggleAdd"
+                style="max-width:80px;"
+              >
+                <i class="fas fa-plus"></i>
+              </button>
+              <button
+                type="button"
+                title="Deletar"
+                class="delbtn"
+                v-b-modal.modalConfirma
+                style="max-width:80px;"
+              >
+                <i class="far fa-trash-alt"></i>
+              </button>
             </template>
           </div>
         </div>
@@ -88,30 +86,30 @@
       <div class="p-0 divTable mr-2 mb-2" v-if="!isLoading">
         <div class="alert alert-dark p-0 m-0 text-center rounded-0" role="alert">
           <div class="row m-0">
-            <p class="col p-0 alert-p m-0 border" style="font-weight: bold">PGMC</p>
+            <p class="col p-0 alert-p m-0 border border-right-0" style="font-weight: bold">PGMC</p>
             <p
-              class="p-0 m-0 border"
-              style="width:58px; cursor: default!important"
+              class="m-0 border"
+              style="width:42px; cursor: default!important"
               title="Total de creditos"
             >{{CreditoTotal_PGMC}}</p>
+            <div v-bind:style="scrollsize" class="border border-left-0"></div>
           </div>
         </div>
 
-        <table class="table table-hover table-bordered table-sm">
+        <table class="table table-hover table-bordered table-sm" ref="tablePGMC">
           <thead class="thead-light sticky">
             <tr>
-              <div style="display: block; width: 330px;" class="sticky">
+              <div style="display: block; width: 328px;" class="sticky">
                 <th scope="col">
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:24px!important;"
-                    @click="toggleOrdenacaoPGMC">
+                  <p class="p-header" style="width:24px!important;" @click="toggleOrdenacaoPGMC">
                     T.
                     <i
-                          v-if="ordenacaoAtualPGMC==='periodo'"
-                          style="font-size:0.6rem"
-                          class="fas fa-arrow-down fa-sm"
+                      v-if="ordenacaoAtualPGMC==='periodo'"
+                      style="font-size:0.6rem"
+                      class="fas fa-arrow-down fa-sm"
                     ></i>
                   </p>
                 </th>
@@ -130,10 +128,10 @@
 
           <tbody>
             <template v-if="isAdd">
-              <tr class="isAdd">
-                <div style="width: 330px;">
+              <tr>
+                <div style="width: 328px;" class="isAdd">
                   <td>
-                    <div style="width:24px; height:25px"></div>
+                    <div style="width:24px"></div>
                   </td>
 
                   <td>
@@ -197,8 +195,8 @@
             <template v-if="CargasPGMC.length>0">
               <template v-for="t in vetorPeriodosPGMC">
                 <template v-for="docente in Docentes">
-                  <tr v-for="carga in CargasPGMC" :key="'docente'+docente.id+'carga'+carga.id+t">
-                    <template v-if="checkPGMC(carga, docente, t)">
+                  <template v-for="carga in CargasPGMC">
+                    <tr v-if="checkPGMC(carga, docente, t)" :key="'docente'+docente.id+'carga'+carga.id+t">
                       <template
                         v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))"
                       >
@@ -215,8 +213,8 @@
                           v-bind:carga="carga"
                         ></cargadata>
                       </template>
-                    </template>
-                  </tr>
+                    </tr>
+                  </template>
                 </template>
               </template>
             </template>
@@ -227,30 +225,30 @@
       <div class="p-0 divTable mr-2 mb-2" v-if="!isLoading">
         <div class="alert p-0 alert-dark m-0 text-center rounded-0" role="alert">
           <div class="row m-0">
-            <p class="col p-0 alert-p m-0 border" style="font-weight: bold">PGCC</p>
+            <p class="col p-0 alert-p m-0 border border-right-0" style="font-weight: bold">PGCC</p>
             <p
               class="p-0 m-0 border"
-              style="width:58px; cursor: default!important"
+              style="width:42px; cursor: default!important"
               title="Total de creditos"
             >{{CreditoTotal_PGCC}}</p>
+            <div v-bind:style="scrollsize" class="border border-left-0"></div>
           </div>
         </div>
 
         <table class="table table-hover table-bordered table-sm">
           <thead class="thead-light sticky">
             <tr>
-              <div style="display: block; width: 330px;" class="sticky">
+              <div style="display: block; width: 328px;" class="sticky">
                 <th scope="col">
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:24px!important;"
-                     @click="toggleOrdenacaoPGCC">
+                  <p class="p-header" style="width:24px!important;" @click="toggleOrdenacaoPGCC">
                     T.
                     <i
-                            v-if="ordenacaoAtualPGCC==='periodo'"
-                            style="font-size:0.6rem"
-                            class="fas fa-arrow-down fa-sm"
+                      v-if="ordenacaoAtualPGCC==='periodo'"
+                      style="font-size:0.6rem"
+                      class="fas fa-arrow-down fa-sm"
                     ></i>
                   </p>
                 </th>
@@ -272,8 +270,8 @@
             <template v-if="CargasPGCC.length>0">
               <template v-for="t in vetorPeriodosPGCC">
                 <template v-for="docente in Docentes">
-                  <tr v-for="carga in CargasPGCC" :key="'docente'+docente.id+'carga'+carga.id+t">
-                    <template v-if="checkPGCC(carga, docente, t)">
+                  <template v-for="carga in CargasPGCC">
+                    <tr v-if="checkPGCC(carga, docente, t)" :key="'docente'+docente.id+'carga'+carga.id+t">
                       <template
                         v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))"
                       >
@@ -290,8 +288,8 @@
                           v-bind:carga="carga"
                         ></cargadata>
                       </template>
-                    </template>
-                  </tr>
+                    </tr>
+                  </template>
                 </template>
               </template>
             </template>
@@ -302,30 +300,30 @@
       <div class="p-0 divTable mr-2 mb-2" v-if="!isLoading">
         <div class="alert alert-dark p-0 m-0 text-center rounded-0" role="alert">
           <div class="row m-0">
-            <p class="col p-0 alert-p m-0 border" style="font-weight: bold;">PGEM</p>
+            <p class="col p-0 alert-p m-0 border border-right-0" style="font-weight: bold;">PGEM</p>
             <p
               class="p-0 m-0 border"
-              style="width:58px; cursor: default!important"
+              style="width:42px; cursor: default!important"
               title="Total de creditos"
             >{{CreditoTotal_PGEM}}</p>
+            <div v-bind:style="scrollsize" class="border border-left-0"></div>
           </div>
         </div>
 
         <table class="table table-hover table-bordered table-sm">
           <thead class="thead-light sticky">
             <tr>
-              <div style="display: block; width: 330px;" class="sticky">
+              <div style="display: block; width: 328px;" class="sticky">
                 <th scope="col">
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:24px!important;"
-                     @click="toggleOrdenacaoPGEM">
+                  <p class="p-header" style="width:24px!important;" @click="toggleOrdenacaoPGEM">
                     T.
                     <i
-                            v-if="ordenacaoAtualPGEM==='periodo'"
-                            style="font-size:0.6rem"
-                            class="fas fa-arrow-down fa-sm"
+                      v-if="ordenacaoAtualPGEM==='periodo'"
+                      style="font-size:0.6rem"
+                      class="fas fa-arrow-down fa-sm"
                     ></i>
                   </p>
                 </th>
@@ -347,8 +345,8 @@
             <template v-if="CargasPGEM.length>0">
               <template v-for="t in vetorPeriodosPGEM">
                 <template v-for="docente in Docentes">
-                  <tr v-for="carga in CargasPGEM" :key="'docente'+docente.id+'carga'+carga.id+t">
-                    <template v-if="checkPGEM(carga, docente, t)">
+                  <template v-for="carga in CargasPGEM">
+                    <tr v-if="checkPGEM(carga, docente, t)" :key="'docente'+docente.id+'carga'+carga.id+t">
                       <template
                         v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))"
                       >
@@ -365,8 +363,8 @@
                           v-bind:carga="carga"
                         ></cargadata>
                       </template>
-                    </template>
-                  </tr>
+                    </tr>
+                  </template>
                 </template>
               </template>
             </template>
@@ -374,6 +372,21 @@
         </table>
       </div>
     </div>
+    <!-- modal -->
+    <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
+      <p class="my-4">Tem certeza que deseja deletar as cargas selecionadas?</p>
+      <template v-for="carga in Deletar">
+        <template v-for="docente in Docentes">
+          <template v-if="docente.id===carga.Docente">
+            <p :key="'carga'+carga.id+'docente'+docente.id" style="width:80px">
+              Docente:{{docente.apelido}}
+              <br />
+              Programa:{{carga.programa}}
+            </p>
+          </template>
+        </template>
+      </template>
+    </b-modal>
   </div>
 </template>
 
@@ -405,76 +418,75 @@ export default {
       vetorPeriodosPGMC: [1, 2, 3, 4],
       vetorPeriodosPGCC: [1, 2, 3, 4],
       vetorPeriodosPGEM: [1, 2, 3, 4],
-      ordenacaoAtualPGMC:'periodo',
-      ordenacaoAtualPGCC:'periodo',
-      ordenacaoAtualPGEM:'periodo'
+      ordenacaoAtualPGMC:"periodo",
+      ordenacaoAtualPGCC:"periodo",
+      ordenacaoAtualPGEM:"periodo",
+      scrollsize: undefined
     };
   },
 
   components: {
     cargadata
   },
-  /*
-        mounted () {
-            this.$store.commit('emptyDelete')
-            console.log(this.$store.state.turma.Deletar)
-            this.$store.commit(COMPONENT_LOADED)
-        },
-        */
+
+  mounted () {
+    this.scrollsize = {
+        width: (this.$refs.tablePGMC.offsetWidth - this.$refs.tablePGMC.clientWidth) + 'px'
+    }
+    console.log(this.scrollsize)
+  },
+
 
   methods: {
-    toggleOrdenacaoPGMC(){
-        if(this.ordenacaoAtualPGMC==='periodo'){
-            this.ordenacaoAtualPGMC = 'nome'
-            this.vetorPeriodosPGMC = [1]
-        }else{
-            this.ordenacaoAtualPGMC = 'periodo'
-            this.vetorPeriodosPGMC = [1, 2, 3, 4]
-        }
+    toggleOrdenacaoPGMC() {
+      if (this.ordenacaoAtualPGMC === "periodo") {
+        this.ordenacaoAtualPGMC = "nome";
+        this.vetorPeriodosPGMC = [1];
+      } else {
+        this.ordenacaoAtualPGMC = "periodo";
+        this.vetorPeriodosPGMC = [1, 2, 3, 4];
+      }
     },
 
-    toggleOrdenacaoPGCC(){
-        if(this.ordenacaoAtualPGCC==='periodo'){
-            this.ordenacaoAtualPGCC = 'nome'
-            this.vetorPeriodosPGCC = [1]
-        }else{
-            this.ordenacaoAtualPGCC = 'periodo'
-            this.vetorPeriodosPGCC = [1, 2, 3, 4]
-        }
+    toggleOrdenacaoPGCC() {
+      if (this.ordenacaoAtualPGCC === "periodo") {
+        this.ordenacaoAtualPGCC = "nome";
+        this.vetorPeriodosPGCC = [1];
+      } else {
+        this.ordenacaoAtualPGCC = "periodo";
+        this.vetorPeriodosPGCC = [1, 2, 3, 4];
+      }
     },
 
-    toggleOrdenacaoPGEM(){
-        if(this.ordenacaoAtualPGEM==='periodo'){
-            this.ordenacaoAtualPGEM = 'nome'
-            this.vetorPeriodosPGEM = [1]
-        }else{
-            this.ordenacaoAtualPGEM = 'periodo'
-            this.vetorPeriodosPGEM = [1, 2, 3, 4]
-        }
+    toggleOrdenacaoPGEM() {
+      if (this.ordenacaoAtualPGEM === "periodo") {
+        this.ordenacaoAtualPGEM = "nome";
+        this.vetorPeriodosPGEM = [1];
+      } else {
+        this.ordenacaoAtualPGEM = "periodo";
+        this.vetorPeriodosPGEM = [1, 2, 3, 4];
+      }
     },
 
-    checkPGMC(carga, docente, t){
-        if(this.ordenacaoAtualPGMC === 'periodo')
-            return (carga.Docente === docente.id) && (carga.trimestre == (t))
-        else
-            return (carga.Docente === docente.id)
+    checkPGMC(carga, docente, t) {
+      if (this.ordenacaoAtualPGMC === "periodo")
+        return carga.Docente === docente.id && carga.trimestre == t;
+      else return carga.Docente === docente.id;
     },
 
-    checkPGCC(carga, docente, t){
-        if(this.ordenacaoAtualPGCC === 'periodo')
-            return (carga.Docente === docente.id) && (carga.trimestre == (t))
-        else
-            return (carga.Docente === docente.id)
+    checkPGCC(carga, docente, t) {
+      if (this.ordenacaoAtualPGCC === "periodo")
+        return carga.Docente === docente.id && carga.trimestre == t;
+      else return carga.Docente === docente.id;
     },
 
-    checkPGEM(carga, docente, t){
-        if(this.ordenacaoAtualPGEM === 'periodo')
-            return (carga.Docente === docente.id) && (carga.trimestre == (t))
-        else
-            return (carga.Docente === docente.id)
+    checkPGEM(carga, docente, t) {
+      if (this.ordenacaoAtualPGEM === "periodo")
+        return carga.Docente === docente.id && carga.trimestre == t;
+      else return carga.Docente === docente.id;
     },
 
-      deleteCarga(carga) {
+    deleteCarga(carga) {
       cargaPosService
         .delete(carga.id)
         .then(response => {
@@ -704,9 +716,9 @@ export default {
 
 .titulo {
   font-size: 25px;
-  font-weight: normal;
-  padding-left: 0;
-  margin: 0;
+  font-weight: normal !important;
+  padding-left: 0 !important;
+  margin: 0 !important;
 }
 .p-header {
   padding: 0px 0 0px 0;
@@ -714,33 +726,6 @@ export default {
   font-size: 11px;
   text-align: center;
   height: 18px;
-}
-.custom-select {
-  height: 25px !important;
-  padding: 0px 0px 0px 5px !important;
-  min-width: 85px;
-  max-width: 85px;
-  text-align: start;
-  font-size: 100% !important;
-}
-.form-control {
-  height: 25px !important;
-  font-size: 12px !important;
-  padding: 0px 0px 0px 5px !important;
-  min-width: 80px;
-  max-width: 80px;
-  text-align: start;
-  border-radius: 3px !important;
-}
-.input-group-text {
-  max-width: 70px;
-  min-width: 70px;
-  height: 25px !important;
-  margin-left: -5px;
-  padding-left: 15px;
-  font-size: 12px !important;
-  background-color: white;
-  border: none;
 }
 .divTable {
   overflow: hidden;
@@ -751,6 +736,7 @@ export default {
   width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
+  font-size: 11px;
 }
 table {
   display: block !important;
@@ -843,7 +829,7 @@ button {
   height: -moz-max-content;
   height: max-content;
   margin-right: 15px;
-  margin-top: 5px;
+  margin-top: 0px!important;
   transition: all 0.3s ease 0s;
   cursor: pointer;
 }
@@ -1015,11 +1001,49 @@ i.far {
     -webkit-transform: rotate(-360deg);
   }
 }
-.alert-p {
-  padding: 0;
-}
+
 .alert {
   background-color: #e9ecef !important;
   border: none;
+}
+
+.input-group-text {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-align: center;
+  align-items: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  margin-bottom: 0;
+  /*===*/
+  max-width: 70px;
+  min-width: 70px;
+  height: 25px !important;
+  margin-left: -5px;
+  padding-left: 15px;
+  font-size: 12px !important;
+}
+.form-control {
+  height: 25px !important;
+  font-size: 12px !important;
+  padding: 0px 0px 0px 5px !important;
+  min-width: 80px;
+  max-width: 80px;
+  text-align: start;
+}
+.form-group {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 0;
+}
+.form-inline .input-group,
+.form-inline {
+  width: auto;
 }
 </style>

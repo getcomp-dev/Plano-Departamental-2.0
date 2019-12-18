@@ -12,77 +12,75 @@
           class="form-group col-xl-10 col-md-10 col-sm-10 col-9 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
-          <div class="input-group ml-auto mr-0 mb-0 mt-0">
-            <select class="form-control form-control-sm mt-1" v-model="periodos">
+          <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
+            <div class="input-group-prepend">
+              <label class="input-group-text">Semestre</label>
+            </div>
+            <select class="form-control form-control-sm" v-model="periodos">
               <option value="1">Primeiro</option>
               <option value="2">Segundo</option>
               <option value="3">Ambos</option>
             </select>
-            <div class="input-group-append mt-1 mr-3">
-              <div class="input-group-append">
-                <label class="input-group-text">Semestre</label>
-              </div>
-            </div>
+          </div>
 
-            <b-button v-b-modal.modalPerfis title="Perfis" class="cancelbtn">
-              <i class="fas fa-list-ul"></i>
-            </b-button>
-            <b-button v-b-modal.modalCursos title="Cursos" class="cancelbtn">
-              <i class="fas fa-graduation-cap"></i>
-            </b-button>
+          <b-button v-b-modal.modalPerfis title="Perfis" class="cancelbtn">
+            <i class="fas fa-list-ul"></i>
+          </b-button>
+          <b-button v-b-modal.modalCursos title="Cursos" class="cancelbtn">
+            <i class="fas fa-graduation-cap"></i>
+          </b-button>
 
-            <div class="d-flex p-0 m-0">
-              <template v-if="isAdd">
-                <button
-                  type="button"
-                  title="Salvar"
-                  class="addbtn"
-                  style="max-width:80px;"
-                  v-on:click.prevent="addTurma"
-                >
-                  <i class="fas fa-check"></i>
-                </button>
-                <button
-                  type="button"
-                  title="Cancelar"
-                  class="cancelbtn"
-                  style="max-width:80px;"
-                  v-on:click.prevent="toggleAdd"
-                >
-                  <i class="fas fa-times"></i>
-                </button>
-              </template>
-              <template v-else>
-                <button
-                  type="button"
-                  title="Adicionar"
-                  class="addbtn"
-                  style="max-width:80px;"
-                  v-on:click.prevent="toggleAdd"
-                >
-                  <i class="fas fa-plus"></i>
-                </button>
-                <button
-                  type="button"
-                  title="Deletar"
-                  class="delbtn"
-                  style="max-width:80px;"
-                  v-b-modal.modalConfirma
-                >
-                  <i class="far fa-trash-alt"></i>
-                </button>
+           <div class="d-flex p-0 m-0 mt-1">
+            <template v-if="isAdd">
+              <button
+                type="button"
+                title="Salvar"
+                class="addbtn"
+                style="max-width:80px;"
+                v-on:click.prevent="addTurma"
+              >
+                <i class="fas fa-check"></i>
+              </button>
+              <button
+                type="button"
+                title="Cancelar"
+                class="cancelbtn"
+                style="max-width:80px;"
+                v-on:click.prevent="toggleAdd"
+              >
+                <i class="fas fa-times"></i>
+              </button>
+            </template>
+            <template v-else>
+              <button
+                type="button"
+                title="Adicionar"
+                class="addbtn"
+                style="max-width:80px;"
+                v-on:click.prevent="toggleAdd"
+              >
+                <i class="fas fa-plus"></i>
+              </button>
+              <button
+                type="button"
+                title="Deletar"
+                class="delbtn"
+                style="max-width:80px;"
+                v-b-modal.modalConfirma
+              >
+                <i class="far fa-trash-alt"></i>
+              </button>
 
-                <button
-                  type="button"
-                  title="XLSX"
-                  class="relatbtn"
-                  style="max-width: 65px;"
-                  v-on:click.prevent="xlsx(Pedidos)"
-                >
-                  <i class="far fa-file-alt"></i>
-                </button>
-              </template>
-            </div>
+              <button
+                type="button"
+                title="XLSX"
+                class="relatbtn"
+                style="max-width: 65px;"
+                v-on:click.prevent="xlsx(Pedidos)"
+              >
+                <i class="far fa-file-alt"></i>
+              </button>
+            </template>
           </div>
         </div>
       </div>
@@ -735,7 +733,7 @@ button {
   height: -moz-max-content;
   height: max-content;
   margin-right: 15px;
-  margin-top: 5px;
+  margin-top: 0px!important;
   transition: all 0.3s ease 0s;
   cursor: pointer;
 }
