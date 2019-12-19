@@ -13,16 +13,16 @@ const mutations = {
   },
 
   [SOCKET_PERFIL_CREATED] (state, data) {
-    state.Perfis.push(data[0].Perfil)
+    state.Perfis.push(data.Perfil)
   },
 
   [SOCKET_PERFIL_UPDATED] (state, data) {
-    let index = _.findIndex(state.Perfis, perfil => perfil.id === data[0].Perfil.id);
-    Vue.set(state.Perfis, index, data[0].Perfil)
+    let index = _.findIndex(state.Perfis, perfil => perfil.id === data.Perfil.id);
+    Vue.set(state.Perfis, index, data.Perfil)
   },
 
   [SOCKET_PERFIL_DELETED] (state, data) {
-    let index = _.findIndex(state.Perfis, perfil => perfil.id === data[0].Perfil.id);
+    let index = _.findIndex(state.Perfis, perfil => perfil.id === data.Perfil.id);
     state.Perfis.splice(index, 1)
   }
 }

@@ -13,16 +13,16 @@ const mutations = {
     },
 
     [SOCKET_DOCENTE_CREATED] (state, data) {
-        state.Docentes.push(data[0].Docente)
+        state.Docentes.push(data.Docente)
     },
 
     [SOCKET_DOCENTE_UPDATED] (state, data) {
-        let index = _.findIndex(state.Docentes, docente => docente.id === data[0].Docente.id);
-        Vue.set(state.Docentes, index, data[0].Docente)
+        let index = _.findIndex(state.Docentes, docente => docente.id === data.Docente.id);
+        Vue.set(state.Docentes, index, data.Docente)
     },
 
     [SOCKET_DOCENTE_DELETED] (state, data) {
-        let index = _.findIndex(state.Docentes, docente => docente.id === data[0].Docente.id);
+        let index = _.findIndex(state.Docentes, docente => docente.id === data.Docente.id);
         state.Docentes.splice(index, 1)
     }
 }

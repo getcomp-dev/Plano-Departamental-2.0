@@ -23,20 +23,20 @@ const mutations = {
     },
 
     [SOCKET_PEDIDO_EXTERNO_CREATED] (state, data) {
-        if(state.Pedidos[data[0].Pedido.Turma] === undefined)
-            state.Pedidos[data[0].Pedido.Turma] = []
-        state.Pedidos[data[0].Pedido.Turma].push(data[0].Pedido)
+        if(state.Pedidos[data.Pedido.Turma] === undefined)
+            state.Pedidos[data.Pedido.Turma] = []
+        state.Pedidos[data.Pedido.Turma].push(data.Pedido)
         state.Pedidos = Object.assign({}, state.Pedidos)
     },
 
     [SOCKET_PEDIDO_EXTERNO_UPDATED] (state, data) {
-        let index = _.findIndex(state.Pedidos[data[0].Pedido.Turma], pedido => (pedido.Curso === data[0].Pedido.Curso));
-        Vue.set(state.Pedidos[data[0].Pedido.Turma], index, data[0].Pedido)
+        let index = _.findIndex(state.Pedidos[data.Pedido.Turma], pedido => (pedido.Curso === data.Pedido.Curso));
+        Vue.set(state.Pedidos[data.Pedido.Turma], index, data.Pedido)
     },
 
     [SOCKET_PEDIDO_EXTERNO_DELETED] (state, data) {
-        let index = _.findIndex(state.Pedidos[data[0].Pedido.Turma], pedido => (pedido.Curso === data[0].Pedido.Curso));
-        state.Pedidos[data[0].Pedido.Turma].splice(index, 1)
+        let index = _.findIndex(state.Pedidos[data.Pedido.Turma], pedido => (pedido.Curso === data.Pedido.Curso));
+        state.Pedidos[data.Pedido.Turma].splice(index, 1)
     }
 }
 

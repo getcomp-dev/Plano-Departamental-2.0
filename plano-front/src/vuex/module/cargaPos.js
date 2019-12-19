@@ -14,16 +14,16 @@ const mutations = {
     },
 
     [SOCKET_CARGA_POS_CREATED] (state, data) {
-        state.Cargas.push(data[0].CargaPos)
+        state.Cargas.push(data.CargaPos)
     },
 
     [SOCKET_CARGA_POS_UPDATED] (state, data) {
-        let index = _.findIndex(state.Cargas, carga => carga.id === data[0].CargaPos.id);
-        Vue.set(state.Cargas, index, data[0].CargaPos)
+        let index = _.findIndex(state.Cargas, carga => carga.id === data.CargaPos.id);
+        Vue.set(state.Cargas, index, data.CargaPos)
     },
 
     [SOCKET_CARGA_POS_DELETED] (state, data) {
-        let index = _.findIndex(state.Cargas, carga => carga.id === data[0].CargaPos.id);
+        let index = _.findIndex(state.Cargas, carga => carga.id === data.CargaPos.id);
         state.Cargas.splice(index, 1)
     },
 

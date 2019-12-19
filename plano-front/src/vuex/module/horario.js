@@ -13,16 +13,16 @@ const mutations = {
     },
 
     [SOCKET_HORARIO_CREATED] (state, data) {
-        state.Horarios.push(data[0].Horario)
+        state.Horarios.push(data.Horario)
     },
 
     [SOCKET_HORARIO_UPDATED] (state, data) {
-        let index = _.findIndex(state.Horarios, horario => horario.id === data[0].Horario.id);
-        Vue.set(state.Horarios, index, data[0].Horario)
+        let index = _.findIndex(state.Horarios, horario => horario.id === data.Horario.id);
+        Vue.set(state.Horarios, index, data.Horario)
     },
 
     [SOCKET_HORARIO_DELETED] (state, data) {
-        let index = _.findIndex(state.Horarios, horario => horario.id === data[0].Horario.id);
+        let index = _.findIndex(state.Horarios, horario => horario.id === data.Horario.id);
         state.Horarios.splice(index, 1)
     }
 }

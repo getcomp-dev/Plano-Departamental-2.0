@@ -12,7 +12,7 @@
       <div class="flex-container">
         <div v-for="lab in Laboratorios" :key="lab.nome">
           <h5 class="lab-num">{{lab.nome}}</h5>
-          <div class="row">
+          <div class="row m-0">
             <table class="tg">
                   <tr>
                       <th class="tg-0lax">Horário</th>
@@ -105,7 +105,7 @@
       <div class="flex-container">
         <div v-for="lab in Laboratorios">
           <h5 class="lab-num">{{lab.nome}}</h5>
-          <div class="row">
+          <div class="row m-0">
               <table class="tg">
                   <tr>
                       <th class="tg-0lax">Horário</th>

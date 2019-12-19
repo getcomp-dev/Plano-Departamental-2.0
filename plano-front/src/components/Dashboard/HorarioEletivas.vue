@@ -18,7 +18,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -26,7 +26,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -34,7 +34,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -42,7 +42,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -50,7 +50,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
         </tr>
@@ -62,7 +62,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -70,7 +70,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -78,7 +78,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -86,7 +86,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -94,7 +94,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
         </tr>
@@ -106,7 +106,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -114,7 +114,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -122,7 +122,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -130,7 +130,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -138,7 +138,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
         </tr>
@@ -150,7 +150,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -158,7 +158,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -166,7 +166,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -174,7 +174,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -182,7 +182,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
         </tr>
@@ -194,7 +194,7 @@
               <template
                       v-for="disciplina in Disciplinas"
                       v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -202,7 +202,7 @@
               <template
                       v-for="disciplina in Disciplinas"
                       v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -210,7 +210,7 @@
               <template
                       v-for="disciplina in Disciplinas"
                       v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -218,7 +218,7 @@
               <template
                       v-for="disciplina in Disciplinas"
                       v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -226,7 +226,7 @@
               <template
                       v-for="disciplina in Disciplinas"
                       v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
         </tr>
@@ -238,7 +238,7 @@
               <template
                       v-for="disciplina in Disciplinas"
                       v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -246,7 +246,7 @@
               <template
                       v-for="disciplina in Disciplinas"
                       v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -254,7 +254,7 @@
               <template
                       v-for="disciplina in Disciplinas"
                       v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -262,7 +262,7 @@
               <template
                       v-for="disciplina in Disciplinas"
                       v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -270,7 +270,7 @@
               <template
                       v-for="disciplina in Disciplinas"
                       v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
         </tr>
@@ -282,7 +282,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -290,7 +290,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -298,7 +298,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -306,7 +306,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -314,7 +314,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
         </tr>
@@ -326,7 +326,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -334,7 +334,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -342,7 +342,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -350,7 +350,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
           <td class="tg-0lax">
@@ -358,7 +358,7 @@
               <template
                 v-for="disciplina in Disciplinas"
                 v-if="turma.Disciplina === disciplina.id"
-              ><div v-b-popover.hover.top="disciplina.nome + '\n' + professor(turma)">{{disciplina.codigo}}</div></template>
+              ><div v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }">{{disciplina.codigo}}</div></template>
             </template>
           </td>
         </tr>
@@ -434,8 +434,8 @@ export default {
     border-collapse: collapse;
     border-spacing: 0;
     border-color: #ccc;
-    margin-bottom: 20px;
-    margin-right: 20px;
+    margin-bottom: 20px !important;
+    margin-right: 20px !important;
   }
   .tg td {
     font-family: Arial, sans-serif;
@@ -468,5 +468,10 @@ export default {
     text-align: center;
     height: 22px;
     width: 49px !important;
+  }
+
+  .popoverText {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
   }
 </style>

@@ -53,7 +53,7 @@
               type="button"
               title="Nova Grade"
               class="addbtn mt-3"
-              v-on:click.prevent="cleanNewGrade()"
+              v-on:click.capture="cleanNewGrade()"
               v-b-modal.modalNovaGrade
             >
               <i class="fas fa-plus"></i>

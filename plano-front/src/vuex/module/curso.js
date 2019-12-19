@@ -20,21 +20,21 @@ const mutations = {
     },
 
     [SOCKET_CURSO_CREATED] (state, data) {
-        state.Cursos.push(data[0].Curso)
-        ls.set(`${data[0].Curso.id}`, true)
-        Vue.set(state.Ativos, data[0].Curso.id, true)
+        state.Cursos.push(data.Curso)
+        ls.set(`${data.Curso.id}`, true)
+        Vue.set(state.Ativos, data.Curso.id, true)
     },
 
     [SOCKET_CURSO_UPDATED] (state, data) {
-        let index = _.findIndex(state.Cursos, curso => curso.id === data[0].Curso.id);
-        Vue.set(state.Cursos, index, data[0].Curso)
+        let index = _.findIndex(state.Cursos, curso => curso.id === data.Curso.id);
+        Vue.set(state.Cursos, index, data.Curso)
     },
 
     [SOCKET_CURSO_DELETED] (state, data) {
-        let index = _.findIndex(state.Cursos, curso => curso.id === data[0].Curso.id);
+        let index = _.findIndex(state.Cursos, curso => curso.id === data.Curso.id);
         state.Cursos.splice(index, 1)
-        ls.remove(`${data[0].Curso.id}`)
-        Vue.set(state.Ativos, data[0].Curso.id, undefined)
+        ls.remove(`${data.Curso.id}`)
+        Vue.set(state.Ativos, data.Curso.id, undefined)
     },
 
     [TOGGLE_CURSO_ATIVO] (state, id) {

@@ -12,7 +12,7 @@ const mutations = {
     },
 
     [SOCKET_PLANO_UPDATED] (state, data) {
-        Vue.set(state.Plano, 0, data[0].Plano)
+        Vue.set(state.Plano, 0, data.Plano)
     },
 }
 

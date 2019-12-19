@@ -23,17 +23,17 @@ const mutations = {
     },
 
     [SOCKET_PEDIDO_CREATED] (state, data) {
-        state.Pedidos[data[0].Pedido].push(data[0].Pedido)
+        state.Pedidos[data.Pedido].push(data.Pedido)
     },
 
     [SOCKET_PEDIDO_UPDATED] (state, data) {
-        let index = _.findIndex(state.Pedidos[data[0].Pedido.Turma], pedido => (pedido.Curso === data[0].Pedido.Curso));
-        Vue.set(state.Pedidos[data[0].Pedido.Turma], index, data[0].Pedido)
+        let index = _.findIndex(state.Pedidos[data.Pedido.Turma], pedido => (pedido.Curso === data.Pedido.Curso));
+        Vue.set(state.Pedidos[data.Pedido.Turma], index, data.Pedido)
     },
 
     [SOCKET_PEDIDO_DELETED] (state, data) {
-        let index = _.findIndex(state.Pedidos[data[0].Pedido.Turma], pedido => (pedido.Curso === data[0].Pedido.Curso));
-        state.Pedidos[data[0].Pedido.Turma].splice(index, 1)
+        let index = _.findIndex(state.Pedidos[data.Pedido.Turma], pedido => (pedido.Curso === data.Pedido.Curso));
+        state.Pedidos[data.Pedido.Turma].splice(index, 1)
     },
 
 }
