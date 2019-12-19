@@ -183,7 +183,7 @@
                     id="integral"
                     value="Integral"
                     class="form-check-input"
-                    v-model="cursoForm.turno"        
+                    v-model="cursoForm.turno"
                   />
                   <label class="form-check-label" for="integral">Integral</label>
                 </div>
@@ -193,7 +193,7 @@
                     name="turno"
                     id="noturno"
                     value="Noturno"
-                    v-model="cursoForm.turno"   
+                    v-model="cursoForm.turno"
                     class="form-check-input"
                   />
                   <label class="form-check-label" for="noturno">Noturno</label>
@@ -710,15 +710,16 @@ i.far {
   -webkit-text-stroke-color: #ff4e34;
 }
 
-@media screen and (max-width: 992px) {
+@media screen and (max-width: 900px) {
   .div-card {
-    margin-left: 0 !important;
-    margin-right: auto !important;
+    margin-left: 0px !important;
+    margin-right: 50px !important;
+    margin-top: 20px !important;
+    margin-bottom: 20px !important;
     top: 0 !important;
   }
   .card {
-    margin-left: 0 !important;
-    margin-right: auto !important;
+    margin-left: 0px !important;
   }
 }
 </style>

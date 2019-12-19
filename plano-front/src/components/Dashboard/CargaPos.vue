@@ -13,9 +13,6 @@
           style="justify-content: flex-end!important;"
         >
           <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
-            <div class="input-group-prepend">
-              <label class="input-group-text">Semestre</label>
-            </div>
             <select
               class="form-control form-control-sm"
               v-model="periodos"
@@ -25,6 +22,9 @@
               <option value="2">Segundo</option>
               <option value="3">Ambos</option>
             </select>
+            <div class="input-group-append">
+              <label class="input-group-text">Semestre</label>
+            </div>
           </div>
 
           <div class="d-flex p-0 m-0 mt-1">
@@ -196,7 +196,10 @@
               <template v-for="t in vetorPeriodosPGMC">
                 <template v-for="docente in Docentes">
                   <template v-for="carga in CargasPGMC">
-                    <tr v-if="checkPGMC(carga, docente, t)" :key="'docente'+docente.id+'carga'+carga.id+t">
+                    <tr
+                      v-if="checkPGMC(carga, docente, t)"
+                      :key="'docente'+docente.id+'carga'+carga.id+t"
+                    >
                       <template
                         v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))"
                       >
@@ -223,11 +226,11 @@
       </div>
 
       <div class="p-0 divTable mr-2 mb-2" v-if="!isLoading">
-        <div class="alert p-0 alert-dark m-0 text-center rounded-0" role="alert">
+        <div class="alert alert-dark p-0 m-0 text-center rounded-0" role="alert">
           <div class="row m-0">
             <p class="col p-0 alert-p m-0 border border-right-0" style="font-weight: bold">PGCC</p>
             <p
-              class="p-0 m-0 border"
+              class="m-0 border"
               style="width:42px; cursor: default!important"
               title="Total de creditos"
             >{{CreditoTotal_PGCC}}</p>
@@ -271,7 +274,10 @@
               <template v-for="t in vetorPeriodosPGCC">
                 <template v-for="docente in Docentes">
                   <template v-for="carga in CargasPGCC">
-                    <tr v-if="checkPGCC(carga, docente, t)" :key="'docente'+docente.id+'carga'+carga.id+t">
+                    <tr
+                      v-if="checkPGCC(carga, docente, t)"
+                      :key="'docente'+docente.id+'carga'+carga.id+t"
+                    >
                       <template
                         v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))"
                       >
@@ -302,7 +308,7 @@
           <div class="row m-0">
             <p class="col p-0 alert-p m-0 border border-right-0" style="font-weight: bold;">PGEM</p>
             <p
-              class="p-0 m-0 border"
+              class="m-0 border"
               style="width:42px; cursor: default!important"
               title="Total de creditos"
             >{{CreditoTotal_PGEM}}</p>
@@ -346,7 +352,10 @@
               <template v-for="t in vetorPeriodosPGEM">
                 <template v-for="docente in Docentes">
                   <template v-for="carga in CargasPGEM">
-                    <tr v-if="checkPGEM(carga, docente, t)" :key="'docente'+docente.id+'carga'+carga.id+t">
+                    <tr
+                      v-if="checkPGEM(carga, docente, t)"
+                      :key="'docente'+docente.id+'carga'+carga.id+t"
+                    >
                       <template
                         v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))"
                       >
@@ -418,9 +427,9 @@ export default {
       vetorPeriodosPGMC: [1, 2, 3, 4],
       vetorPeriodosPGCC: [1, 2, 3, 4],
       vetorPeriodosPGEM: [1, 2, 3, 4],
-      ordenacaoAtualPGMC:"periodo",
-      ordenacaoAtualPGCC:"periodo",
-      ordenacaoAtualPGEM:"periodo",
+      ordenacaoAtualPGMC: "periodo",
+      ordenacaoAtualPGCC: "periodo",
+      ordenacaoAtualPGEM: "periodo",
       scrollsize: undefined
     };
   },
@@ -429,13 +438,15 @@ export default {
     cargadata
   },
 
-  mounted () {
+  mounted() {
     this.scrollsize = {
-        width: (this.$refs.tablePGMC.offsetWidth - this.$refs.tablePGMC.clientWidth) + 'px'
-    }
-    console.log(this.scrollsize)
+      width:
+        this.$refs.tablePGMC.offsetWidth -
+        this.$refs.tablePGMC.clientWidth +
+        "px"
+    };
+    console.log(this.scrollsize);
   },
-
 
   methods: {
     toggleOrdenacaoPGMC() {
@@ -829,7 +840,7 @@ button {
   height: -moz-max-content;
   height: max-content;
   margin-right: 15px;
-  margin-top: 0px!important;
+  margin-top: 0px !important;
   transition: all 0.3s ease 0s;
   cursor: pointer;
 }
@@ -1045,5 +1056,10 @@ i.far {
 .form-inline .input-group,
 .form-inline {
   width: auto;
+}
+@media screen and (max-width: 521px) {
+  .div-titulo {
+    height: 70px !important;
+  }
 }
 </style>

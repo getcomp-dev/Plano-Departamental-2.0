@@ -102,7 +102,7 @@
     <div class="div-card p-0 mt-0 mb-2 col-lg-6 col-md-6 col-sm-12 col-12">
       <div class="card mr-3 ml-auto">
         <div class="card-header">
-            <h1 class="card-title">Docente</h1>
+          <h1 class="card-title">Docente</h1>
         </div>
 
         <div class="card-body">
@@ -161,8 +161,44 @@
               <div class="row mb-3 mx-0">
                 <div
                   class="form-group col m-0 px-0 border rounded-top"
-                  style="height: 250px; border-color: rgba(0,0,0,0.125);"
+                  style="height: 302px; border-color: rgba(0,0,0,0.125);"
                 >
+                  <table class="table table-sm" style=" max-height:300px!important; overflow:auto;">
+                    <tr class="thead-light">
+                      <div class="sticky2 border" style="width:300px;">
+                        <th scope="col" class="border-top-0">
+                          <p class="p-header" style="width: 25px;"></p>
+                        </th>
+                        <th scope="col" class="border-top-0">
+                          <p class="p-header" style="width: 275px; text-align: start">Perfis</p>
+                        </th>
+                      </div>
+                    </tr>
+                    <tbody>
+                      <tr v-for="perfil in Perfis" :key="perfil">
+                        <div style="width: 300px">
+                          <td style="padding:0;broder:0;margin:0!important">
+                            <div style="width:25px;">
+                              <input
+                                id="checkPerfis"
+                                type="checkbox"
+                                :value="perfil.id"
+                                v-model="perfisAssociados"
+                                v-on:change="managePerfil(perfil.id)"
+                                class="form-check-input position-static m-0"
+                              />
+                            </div>
+                          </td>
+                          <td>
+                            <p style="width:275px; text-align:start">{{perfil.nome}}</p>
+                          </td>
+                        </div>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <!-- 
+                  
                   <div
                     class="alert p-1 alert-secondary m-0 text-center w-100 rounded-0 rounded-top"
                     role="alert"
@@ -182,6 +218,7 @@
                       </div>
                     </template>
                   </div>
+                  -->
                 </div>
               </div>
             </template>
@@ -388,7 +425,7 @@ export default {
     addPerfil(perfil) {
       this.docentePerfil.Docente = this.docenteForm.id;
       this.docentePerfil.Perfil = perfil;
-      let perfilData = _.find(this.$store.state.perfil.Perfis, ['id', perfil])
+      let perfilData = _.find(this.$store.state.perfil.Perfis, ["id", perfil]);
       docentePerfilService
         .create(this.docentePerfil)
         .then(response => {
@@ -415,7 +452,7 @@ export default {
     },
 
     deletePerfil(perfil) {
-      let perfilData = _.find(this.$store.state.perfil.Perfis, ['id', perfil])
+      let perfilData = _.find(this.$store.state.perfil.Perfis, ["id", perfil]);
       docentePerfilService
         .delete(this.docenteForm.id, perfil)
         .then(response => {
@@ -524,24 +561,24 @@ tbody {
 }
 table td {
   text-align: center;
-  vertical-align: middle;
+  vertical-align: middle !important;
   padding: 0 !important;
   height: 23px !important;
 }
 table p {
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
   text-align: center;
-  padding-right: 5px;
-  padding-left: 5px;
+  padding-right: 5px !important;
+  padding-left: 5px !important;
   font-size: 11px !important;
 }
 tr thead {
-  display: block;
+  display: block !important;
 }
-thead th {
+th {
   padding: 0 !important;
-  font-size: 14px;
-  text-align: center;
+  font-size: 14px !important;
+  text-align: center !important;
   height: 18px !important;
 }
 table input {
@@ -565,6 +602,14 @@ input[type="text"] {
   display: block !important;
   overflow: hidden !important;
   height: 20px !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 0 !important;
+  z-index: 3 !important;
+}
+.sticky2 {
+  display: block !important;
+  overflow: hidden !important;
   position: sticky !important;
   position: -webkit-sticky !important;
   top: 0 !important;

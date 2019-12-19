@@ -157,7 +157,8 @@ export default {
     return {
       ativo: false,
       valorAtual: undefined,
-      turmaForm: _.clone(emptyTurma)
+      turmaForm: _.clone(emptyTurma),
+      currentData: undefined
     };
   },
 
@@ -167,6 +168,7 @@ export default {
 
   mounted: function() {
     this.turmaForm = _.clone(this.turma);
+    this.currentData = _.clone(this.turmaForm)
   },
 
   methods: {
@@ -199,18 +201,39 @@ export default {
     },
 
     checkHorario(horario){
-      if((!this.checkHorarioDocente(horario)) && (!this.checkHorarioSala(horario)))
+      if((!this.checkHorarioDocente(horario)) && (!this.checkHorarioSala(horario))) {
           this.editTurma()
+      }else{
+          if(horario === 1)
+              this.turmaForm.Horario1 = this.currentData.Horario1
+          else
+              this.turmaForm.Horario2 = this.currentData.Horario2
+      }
+
     },
 
     checkDocente(){
-        if((!this.checkHorarioDocente(1)) && (!this.checkHorarioDocente(2)))
+        let d1 = !this.checkHorarioDocente(1), d2 = !this.checkHorarioDocente(2)
+        if(d1 && d2){
             this.editTurma()
+        }else{
+            if(!d1)
+                this.turmaForm.Docente1 = this.currentData.Docente1
+            if(!d2)
+                this.turmaForm.Docente2 = this.currentData.Docente2
+        }
     },
 
     checkSala(){
-        if((!this.checkHorarioSala(1)) && (!this.checkHorarioSala(2)))
+        let s1 = !this.checkHorarioSala(1), s2 = !this.checkHorarioSala(2)
+        if(s1 && s2) {
             this.editTurma()
+        }else{
+            if(!s1)
+                this.turmaForm.Sala1 = this.currentData.Sala1
+            if(!s2)
+                this.turmaForm.Sala2 = this.currentData.Sala2
+        }
     },
 
     checkHorarioDocente(horario) {
@@ -267,7 +290,9 @@ export default {
     },
 
     notifyHorarioDocente(horario, docente){
-        let text =  `Conflito no horário ${horario} com o docente ${docente}`
+        let h = (horario === 1 ? _.find(this.$store.state.horario.Horarios, ['id', this.turmaForm.Horario1]) : _.find(this.$store.state.horario.Horarios, ['id', this.turmaForm.Horario2]))
+        let d = (docente === 1 ? _.find(this.$store.state.docente.Docentes, ['id', this.turmaForm.Docente1]) : _.find(this.$store.state.docente.Docentes, ['id', this.turmaForm.Docente2]))
+        let text =  `Conflito no horário ${h.horario} com o docente ${d.apelido}`
         this.$notify({
             group: "general",
             title: "Erro",
@@ -425,9 +450,9 @@ export default {
             let h1, h2
             if(horario === 1) {
                 h1 = (!(_.isNull(this.turmaForm.Horario1)) && (this.turmaForm.Horario1 === t.Horario1))
-                h2 = (!(_.isNull(this.turmaForm.Horario2)) && (this.turmaForm.Horario1 === t.Horario2))
+                h2 = (!(_.isNull(this.turmaForm.Horario1)) && (this.turmaForm.Horario1 === t.Horario2))
             } else {
-                h1 = (!(_.isNull(this.turmaForm.Horario1)) && (this.turmaForm.Horario2 === t.Horario1))
+                h1 = (!(_.isNull(this.turmaForm.Horario2)) && (this.turmaForm.Horario2 === t.Horario1))
                 h2 = (!(_.isNull(this.turmaForm.Horario2)) && (this.turmaForm.Horario2 === t.Horario2))
             }
             let d1, d2
@@ -510,8 +535,11 @@ export default {
       },
 
     notifyHorarioSala(horario, sala){
-          let text =  `Conflito no horário ${horario} com a sala ${sala}`
-          this.$notify({
+        let h = (horario === 1 ? _.find(this.$store.state.horario.Horarios, ['id', this.turmaForm.Horario1]) : _.find(this.$store.state.horario.Horarios, ['id', this.turmaForm.Horario2]))
+        let s = (sala === 1 ? _.find(this.$store.state.sala.Salas, ['id', this.turmaForm.Sala1]) : _.find(this.$store.state.sala.Salas, ['id', this.turmaForm.Sala2]))
+
+        let text =  `Conflito no horário ${h.horario} com a sala ${s.nome}`
+        this.$notify({
               group: "general",
               title: "Erro",
               text: text,
@@ -668,9 +696,9 @@ export default {
               let h1, h2
               if(horario === 1) {
                   h1 = (!(_.isNull(this.turmaForm.Horario1)) && (this.turmaForm.Horario1 === t.Horario1))
-                  h2 = (!(_.isNull(this.turmaForm.Horario2)) && (this.turmaForm.Horario1 === t.Horario2))
+                  h2 = (!(_.isNull(this.turmaForm.Horario1)) && (this.turmaForm.Horario1 === t.Horario2))
               } else {
-                  h1 = (!(_.isNull(this.turmaForm.Horario1)) && (this.turmaForm.Horario2 === t.Horario1))
+                  h1 = (!(_.isNull(this.turmaForm.Horario2)) && (this.turmaForm.Horario2 === t.Horario1))
                   h2 = (!(_.isNull(this.turmaForm.Horario2)) && (this.turmaForm.Horario2 === t.Horario2))
               }
               let d1, d2
@@ -740,6 +768,7 @@ export default {
             text: `A Turma ${response.Turma.letra} foi atualizada!`,
             type: "success"
           });
+          this.currentData = _.clone(this.turmaForm)
         })
         .catch(error => {
           this.error = "<b>Erro ao atualizar Turma</b>";

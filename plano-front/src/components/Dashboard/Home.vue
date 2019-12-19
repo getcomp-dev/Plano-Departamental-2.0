@@ -18,7 +18,7 @@
         <br />Abaixo segue um resumo das funcionalidade de cada tela:
       </p>
       <div class="row">
-        <div class="col-4">
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3">
           <!-- lista-1 -->
           <h3 class="lista-titulo">PLANO</h3>
           <ul class="listas list-group">
@@ -46,7 +46,7 @@
             </li>
           </ul>
         </div>
-        <div class="col-4">
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3">
           <!-- lista-2 -->
           <h3 class="lista-titulo">RELATÓRIOS</h3>
           <ul class="listas list-group">
@@ -72,7 +72,7 @@
             </li>
           </ul>
         </div>
-        <div class="col-4">
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3">
           <!-- lista-3 -->
           <h3 class="lista-titulo">GERENCIAR</h3>
           <ul class="listas list-group">
@@ -143,7 +143,7 @@ export default {
   word-break: normal;
   text-align: justify;
   margin-left: 0;
-  padding: 0;
+  padding: 0 !important;
   margin-right: 1%;
   font-weight: normal;
   color: black;
@@ -166,5 +166,7 @@ export default {
   font-size: 14px;
   font-weight: 600;
   color: #3f3f3f;
+}
+@media screen and (max-width: 900px) {
 }
 </style>

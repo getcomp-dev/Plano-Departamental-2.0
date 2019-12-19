@@ -13,14 +13,14 @@
           style="justify-content: flex-end!important;"
         >
           <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
-            <div class="input-group-prepend">
-              <label class="input-group-text">Semestre</label>
-            </div>
             <select class="form-control form-control-sm" v-model="periodos">
               <option value="1">Primeiro</option>
               <option value="2">Segundo</option>
               <option value="3">Ambos</option>
             </select>
+            <div class="input-group-append">
+              <label class="input-group-text">Semestre</label>
+            </div>
           </div>
 
           <b-button v-b-modal.modalPerfis title="Perfis" class="cancelbtn">
@@ -30,7 +30,7 @@
             <i class="fas fa-graduation-cap"></i>
           </b-button>
 
-           <div class="d-flex p-0 m-0 mt-1">
+          <div class="d-flex p-0 m-0 mt-1">
             <template v-if="isAdd">
               <button
                 type="button"
@@ -733,7 +733,7 @@ button {
   height: -moz-max-content;
   height: max-content;
   margin-right: 15px;
-  margin-top: 0px!important;
+  margin-top: 0px !important;
   transition: all 0.3s ease 0s;
   cursor: pointer;
 }

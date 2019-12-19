@@ -13,14 +13,14 @@
           style="justify-content: flex-end!important;"
         >
           <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
-            <div class="input-group-prepend">
-              <label class="input-group-text">Semestre</label>
-            </div>
             <select class="form-control form-control-sm" v-model="periodos">
               <option value="1">Primeiro</option>
               <option value="2">Segundo</option>
               <option value="3">Ambos</option>
             </select>
+            <div class="input-group-append">
+              <label class="input-group-text">Semestre</label>
+            </div>
           </div>
           <div class="d-flex p-0 m-0 mt-1">
             <template v-if="isAdd">
