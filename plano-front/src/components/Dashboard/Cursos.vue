@@ -54,10 +54,10 @@
                 <p class="p-header" style="width:52px!important;">Turno</p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width:52px!important;">1º Sem.</p>
+                <p class="p-header" style="width:52px!important;" title="Entrada de alunos 1º Semestre">1º Sem.</p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width:52px!important;">2º Sem.</p>
+                <p class="p-header" style="width:52px!important;" title="Entrada de alunos 2º Semestre">2º Sem.</p>
               </th>
             </div>
           </tr>
@@ -519,8 +519,7 @@ export default {
 }
 table {
   display: block !important;
-  overflow-y: scroll !important;
-  overflow-x: auto !important;
+  overflow: hidden !important;
   font-size: 11px !important;
   font-weight: normal !important;
   background-color: white;

@@ -1037,7 +1037,7 @@ i.far {
 .form-control {
   height: 25px !important;
   font-size: 12px !important;
-  padding: 0px 0px 0px 5px !important;
+  padding: 2px 5px 0px 5px !important;
   min-width: 80px;
   max-width: 80px;
   text-align: start;

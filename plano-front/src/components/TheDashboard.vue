@@ -656,7 +656,7 @@ export default {
 .nav-link {
   font-size: 12px;
   height: 30px;
-  padding: 5px;
+  padding: 5px!important;
 }
 .sidebar-sticky {
   position: relative;
@@ -1006,4 +1006,5 @@ export default {
     margin-right: 10px !important;
   }
 }
+/* #ffe1c6 COR ENGENHARIA DE SOFTWARE */
 </style>

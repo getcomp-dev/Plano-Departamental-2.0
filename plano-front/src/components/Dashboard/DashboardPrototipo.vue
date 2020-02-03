@@ -94,7 +94,7 @@
     </div>
 
     <div class="pl-0 divTable" v-if="!isLoading" ref="mainTable">
-      <table class="table table-bordered table-hover table-sm">
+      <table class="table table-bordered table-hover table-sm main-table">
         <thead class="thead-light sticky">
           <tr>
             <turmaheader v-bind:cursos="CursosAtivados"></turmaheader>
@@ -165,6 +165,44 @@
     </b-modal>
     <!-- Modals do botão perfis slot="modal-footer" -->
     <b-modal id="modalPerfis" ref="PerfisModal" scrollable title="Selecione os perfis">
+      <div
+        class="form-group col m-0 p-0 border"
+        style="height: 395px; width:max-content; border-color: rgba(0,0,0,0.125);"
+      >
+        <table class="table table-sm modal-table" style="max-height: 392px !important;">
+          <tr>
+            <div style="width: max-content; font-size: 11px!important">
+              <th class="border-0">
+                <p style="width:25px" class="p-header"></p>
+              </th>
+              <th class="border-0">
+                <p class="p-header" style="width: 424px; text-align:start">Nome</p>
+              </th>
+            </div>
+          </tr>
+          <tbody>
+            <tr v-for="perfil in Perfis" :key="perfil">
+              <div style="width: max-content">
+                <td style="padding:0;broder:0;margin:0!important;">
+                  <div style="width:25px;">
+                    <input
+                      type="checkbox"
+                      v-model="PerfisSelecionados"
+                      :value="perfil"
+                      v-on:change="managePerfil(perfil.id)"
+                      class="form-check-input position-static m-0"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <p style="width:424px; text-align:start">{{perfil.nome}}</p>
+                </td>
+              </div>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!--
       <b-form-group style="margin-top:-10px; font-size:12px;">
         <b-form-checkbox-group id="checkboxGroupPerfis" v-model="PerfisSelecionados">
           <b-form-checkbox
@@ -175,8 +213,9 @@
           >{{perfil.nome}}</b-form-checkbox>
         </b-form-checkbox-group>
       </b-form-group>
+      -->
 
-      <div slot="modal-footer" style="display: flex; margin-right: 25px !important;">
+      <div slot="modal-footer" style="display: flex; margin-right: 10px !important;">
         <b-button
           class="btn-azul btn-df mr-2"
           variant="success"
@@ -204,38 +243,67 @@
       scrollable
       title="Selecione os Cursos"
     >
-      <b-form-group class style="margin-top:-10px; font-size:14px;">
-        <table style="max-height:70vh !important; width: 465px; overflow:auto;">
+      <div
+        class="form-group m-0 p-0 border"
+        style="height: 452px; width:max-content; border-color: rgba(0,0,0,0.125);"
+      >
+        <table class="modal-table table table-sm" style="max-height: 450px !important;">
           <tr>
-            <th></th>
-            <th style="text-align:center" @click="ToggleCodigoOrdering()">
-              Código
-              <i
-                v-if="ordenacaoCurso=='codigo'"
-                style="font-size:0.6rem"
-                class="fas fa-arrow-down fa-sm"
-              ></i>
-            </th>
-            <th style="text-align:center" @click="ToggleNomeOrdering()">
-              Nome
-              <i
-                v-if="ordenacaoCurso=='nome'"
-                style="font-size:0.6rem"
-                class="fas fa-arrow-down fa-sm"
-              ></i>
-            </th>
+            <div style="width: max-content;">
+              <th class="border-0">
+                <p style="width:25px" class="p-header"></p>
+              </th>
+              <th
+                class="border-0 clickable-header"
+                style="text-align:center; font-size:11px;"
+                @click="ToggleCodigoOrdering()"
+              >
+                <p style="width:70px" class="p-header">
+                  Código
+                  <i
+                    v-if="ordenacaoCurso=='codigo'"
+                    style="font-size:0.6rem"
+                    class="fas fa-arrow-down fa-sm"
+                  ></i>
+                </p>
+              </th>
+              <th
+                class="border-0 clickable-header"
+                style="font-size:11px;"
+                @click="ToggleNomeOrdering()"
+              >
+                <p style="width:340px; text-align: start" class="p-header">
+                  Nome
+                  <i
+                    v-if="ordenacaoCurso=='nome'"
+                    style="font-size:0.6rem"
+                    class="fas fa-arrow-down fa-sm"
+                  ></i>
+                </p>
+              </th>
+            </div>
           </tr>
-          <tr v-for="curso in Cursos" :key="'cursoMd'+curso.id">
-            <td style="padding:0;broder:0;margin:0">
-              <input type="checkbox" v-model="CursosSelecionados" :value="curso" />
-            </td>
-            <td>{{curso.codigo}}</td>
-            <td style="padding-left: 15px !important; text-align: start;">{{curso.nome}}</td>
-          </tr>
+          <tbody>
+            <tr v-for="curso in Cursos" :key="'cursoMd'+curso.id">
+              <div style="width: max-content">
+                <td style="padding:0;broder:0;margin:0">
+                  <div style="width: 25px; margin: 0 auto!important">
+                    <b-form-checkbox type="checkbox" v-model="CursosSelecionados" :value="curso"></b-form-checkbox>
+                  </div>
+                </td>
+                <td>
+                  <p style="width: 70px">{{curso.codigo}}</p>
+                </td>
+                <td>
+                  <p style="width:340px; text-align: start;">{{curso.nome}}</p>
+                </td>
+              </div>
+            </tr>
+          </tbody>
         </table>
-      </b-form-group>
+      </div>
 
-      <div slot="modal-footer" style="display: flex; margin-right: 25px !important;">
+      <div slot="modal-footer" style="display: flex; margin-right: 10px !important;">
         <b-button
           class="btn-azul btn-df mr-2"
           variant="success"
@@ -633,44 +701,49 @@ export default {
   padding: 0 5px 0 5px;
 }
 .btn-azul {
-  background-color: #9ab3ff !important;
+  background-color: #718de0 !important;
   border-color: #9ab3ff !important;
 }
 .btn-azul:hover {
-  background-color: #82a0ff !important;
+  background-color: rgb(74, 101, 190) !important;
   border-color: #82a0ff !important;
 }
+
 .btn-azul:focus {
   -webkit-box-shadow: 0 0 0 0.2rem rgba(122, 128, 124, 0.5) !important;
   -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
   box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
 }
+
 .btn-cinza {
-  background-color: #c3c3c3 !important;
+  background-color: #999999 !important;
   border-color: #c3c3c3 !important;
 }
 .btn-cinza:hover {
-  background-color: #aaaaaa !important;
+  background-color: #747474 !important;
   border-color: #aaaaaa !important;
 }
+
 .btn-cinza:focus {
   -webkit-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
   -moz-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
   box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
 }
 .btn-verde {
-  background-color: #a0e7a0 !important;
+  background-color: #70b670 !important;
   border-color: #a0e7a0 !important;
 }
 .btn-verde:hover {
-  background-color: #77dd77 !important;
+  background-color: #4c8a4c !important;
   border-color: #77dd77 !important;
 }
+
 .btn-verde:focus {
   -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
   -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
   box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
 }
+
 .titulo {
   font-size: 25px;
   font-weight: normal;
@@ -694,7 +767,7 @@ export default {
   width: -moz-max-content;
   width: max-content;
 }
-table {
+.main-table {
   display: block !important;
   overflow-y: auto !important;
   overflow-x: auto !important;
@@ -706,23 +779,39 @@ table {
   height: -moz-calc(100vh - 95px);
   height: calc(100vh - 95px);
 }
+.modal-table {
+  display: block !important;
+  overflow: auto !important;
+  font-size: 11px !important;
+  font-weight: normal !important;
+  background-color: white;
+  margin: 0 !important;
+}
 tbody {
   max-height: 100%;
   width: 100%;
 }
 table td {
   text-align: center;
-  vertical-align: middle;
+  vertical-align: middle !important;
   padding: 0 !important;
+  font-size: 10px !important;
 }
 tr thead {
   display: block;
 }
-thead th {
+th {
   padding: 0 !important;
   font-size: 14px;
-  text-align: center;
+  text-align: center !important;
   height: 18px !important;
+}
+.p-header {
+  padding: 0 5px 0 5px !important;
+  margin: 0 !important;
+  font-size: 11px !important;
+  text-align: center;
+  height: 18px;
 }
 /* Botoes */
 button {
@@ -737,6 +826,7 @@ button {
   transition: all 0.3s ease 0s;
   cursor: pointer;
 }
+
 i.fas,
 i.far {
   font-size: 25px;
@@ -749,11 +839,13 @@ i.far {
   background-color: white;
   color: #77dd77;
 }
+
 .addbtn:focus {
   color: #77dd77;
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #2fbf53;
 }
+
 .cancelbtn {
   background-color: white;
   color: #cfcfc4;
@@ -761,6 +853,7 @@ i.far {
 .cancelbtn:hover {
   color: #b8b4a8;
 }
+
 .cancelbtn:focus {
   color: #b8b8a8;
   -webkit-text-stroke-width: 1px;
@@ -774,11 +867,13 @@ i.far {
 .delbtn:hover {
   color: #ff5f48;
 }
+
 .delbtn:focus {
   color: #ff5f48;
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #ff4e34;
 }
+
 .relatbtn {
   background-color: white;
   color: #9ab3ff !important;
@@ -790,9 +885,10 @@ i.far {
 
 .relatbtn:focus {
   color: #82a0ff;
-  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-width: 0.5px;
   -webkit-text-stroke-color: #698dff;
 }
+
 .cube1,
 .cube2 {
   background-color: #333;
@@ -968,7 +1064,7 @@ i.far {
 .form-control {
   height: 25px !important;
   font-size: 12px !important;
-  padding: 0px 0px 0px 5px !important;
+  padding: 2px 5px 0px 5px !important;
   min-width: 80px;
   max-width: 80px;
   text-align: start;
@@ -987,5 +1083,20 @@ i.far {
 .form-inline .input-group,
 .form-inline {
   width: auto;
+}
+table p {
+  margin-bottom: 0 !important;
+  text-align: center;
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+  font-size: 10px !important;
+}
+table input[type="checkbox"] {
+  margin-left: 0 !important;
+  margin-top: 4px !important;
+}
+.clickable-header {
+  cursor: pointer;
+  padding-left: 5px;
 }
 </style>

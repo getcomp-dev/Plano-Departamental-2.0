@@ -118,25 +118,46 @@
               <div class="form-group col m-0 px-0">
                 <div
                   class="form-group col m-0 px-0 border rounded-top"
-                  style="width: 170px!important"
+                  style="border-color: rgba(0,0,0,0.125);"
                 >
-                  <div
-                    role="alert"
-                    class="alert p-1 alert-secondary m-0 text-center w-100 rounded-0"
-                  >Turnos</div>
-                  <div class="px-2 py-1 w-100">
-                    <b-form-checkbox v-model="selectAll" v-on:change="toggleAll">Selecionar Tudo</b-form-checkbox>
-                    <b-form-checkbox-group
-                      stacked
-                      v-model="cursos"
-                      name="cursosCheck"
-                      :options="options"
-                      v-on:change.capture="defineSelectAll"
-                      style="display: block;"
-                    ></b-form-checkbox-group>
-                  </div>
+                  <table class="table table-sm">
+                    <tr class="thead-light">
+                      <div class="sticky border" style="width:max-contet;">
+                        <th scope="col" class="border-0 p-header" style="width:25px">
+                          <input
+                            type="checkbox"
+                            v-model="selectAll"
+                            v-on:change="toggleAll"
+                          />
+                        </th>
+                        <th scope="col" class="border-0 p-header" style="width:140px; text-align:start!important">Cursos</th>
+                      </div>
+                    </tr>
 
-                  <!--
+                    <tbody>
+                      <tr v-for="curso in options" :key="curso">
+                        <div style="width: max-contet">
+                          <td style="padding:0;broder:0;margin:0!important">
+                            <div style="width:25px;">
+                              <input
+                                type="checkbox"
+                                :value="curso.value"
+                                v-on:change.capture="defineSelectAll"
+                                v-model="cursos"
+                                class="form-check-input position-static m-0"
+                              />
+                            </div>
+                          </td>
+                          <td>
+                            <p style="width:140px; text-align:start">{{curso.text}}</p>
+                          </td>
+                        </div>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!--
                 <b-form-checkbox v-model="selectAll" v-on:change="toggleAll">Selecionar Tudo</b-form-checkbox>
                 <b-form-checkbox-group
                   stacked
@@ -146,8 +167,7 @@
                   v-on:change.capture="defineSelectAll"
                   style="display: block;"
                 ></b-form-checkbox-group>
-                  -->
-                </div>
+                -->
               </div>
             </div>
 
@@ -1380,52 +1400,11 @@ export default {
   padding-left: 0;
   margin: 0 !important;
 }
-td {
-  width: 91px !important;
-  text-align: start !important;
-}
-th {
-  text-align: center !important;
-}
-.tg {
-  border-collapse: collapse;
-  border-spacing: 0;
-  border-color: #ccc;
-}
-.tg td {
-  font-family: Arial, sans-serif;
-  font-size: 10px;
-  padding: 10px 5px;
-  border-style: solid;
-  border-width: 1px;
-  overflow: hidden;
-  word-break: normal;
-  border-color: #ccc;
-  color: #333;
-  background-color: #fff;
-}
-.tg th {
-  font-family: Arial, sans-serif;
-  font-size: 10px;
-  font-weight: normal;
-  padding: 10px 5px;
-  border-style: solid;
-  border-width: 1px;
-  overflow: hidden;
-  word-break: normal;
-  border-color: #ccc;
-  color: #333;
-  background-color: #f0f0f0;
-}
-.tg .tg-0lax {
-  vertical-align: center;
-}
 h4 {
   text-align: start !important;
   font-size: 12px !important;
   font-weight: bold !important;
 }
-
 .title {
   clear: both;
   display: block;
@@ -1594,5 +1573,59 @@ i.far {
   height: -webkit-calc(100vh - 95px);
   height: -moz-calc(100vh - 95px);
   height: calc(100vh - 95px);
+}
+table {
+  display: block !important;
+  overflow: auto !important;
+  font-size: 11px !important;
+  font-weight: normal !important;
+  background-color: white;
+  margin: 0 !important;
+}
+tbody {
+  max-height: 100%;
+  width: 100%;
+}
+table td {
+  text-align: center;
+  vertical-align: middle !important;
+  padding: 0 !important;
+  font-size: 10px !important;
+  height: 20px;
+}
+tr thead {
+  display: block;
+}
+th {
+  padding: 0 !important;
+  font-size: 14px;
+  text-align: center !important;
+  height: 20px !important;
+  vertical-align: middle !important;
+}
+.p-header {
+  padding: 0 5px 0 5px !important;
+  margin: 0 !important;
+  font-size: 11px !important;
+  text-align: center;
+}
+table p {
+  margin-bottom: 0 !important;
+  text-align: center;
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+  font-size: 10px !important;
+}
+table input[type="checkbox"] {
+  height: 13px !important;
+  margin-left: 0 !important;
+  margin-top: 3.5px !important;
+}
+.sticky {
+  display: block !important;
+  overflow: hidden !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 0 !important;
 }
 </style>

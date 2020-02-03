@@ -143,7 +143,7 @@
                       <p class="p-header" style="width: 32px">P.</p>
                     </th>
                     <th scope="col">
-                      <p class="p-header" style="width:70px">Cod</p>
+                      <p class="p-header" style="width:70px">Código</p>
                     </th>
                     <th scope="col">
                       <p class="p-header" style="width: 403px; text-align:start">Disciplina</p>

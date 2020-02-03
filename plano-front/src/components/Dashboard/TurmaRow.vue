@@ -2,7 +2,7 @@
 <div class="turmarow" style="width: 850px;  font-size:11px;" v-bind:style="{backgroundColor: perfil.cor}">
     <td>
         <div style="width:24px !important;">
-            <input :disabled="Admin ? false : true" type="text" style="width: 18px; height:15px; margin-top:3px" id="periodo" v-model="turmaForm.periodo" v-on:blur="editTurma(turma)">
+            <input :disabled="Admin ? false : true" type="text" style="width: 18px; height:15px; margin-top:3px" id="periodo" v-model="turmaForm.periodo" v-on:blur="checkHorariosPeriodo()">
             <input :disabled="Admin ? false : true" type="checkbox" style="margin-top:2px; width:16px; height:14px" name="ativa" value="true" v-on:click="checkDelete(turma)" v-model="ativo">
         </div>
     </td>
@@ -200,6 +200,20 @@ export default {
         return t
     },
 
+    checkHorariosPeriodo(){
+      if((!this.checkHorarioDocente(1)) && (!this.checkHorarioSala(1))) {
+          if((!this.checkHorarioDocente(2)) && (!this.checkHorarioSala(2))){
+              this.editTurma()
+          }else{
+              this.turmaForm.Horario2 = this.currentData.Horario2
+              this.turmaForm.periodo = this.currentData.periodo
+          }
+      }else{
+          this.turmaForm.Horario1 = this.currentData.Horario1
+          this.turmaForm.periodo = this.currentData.periodo
+      }
+    },
+
     checkHorario(horario){
       if((!this.checkHorarioDocente(horario)) && (!this.checkHorarioSala(horario))) {
           this.editTurma()
@@ -303,6 +317,9 @@ export default {
 
     checkHorarioDocente1618(horario, docente) {
         let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+            if(this.turmaForm.periodo != t.periodo){
+                return false
+            }
             let h1, h2
             if(horario === 1) {
                 h1 = ((this.turmaForm.Horario1 === t.Horario1) || ((32 + (this.turmaForm.Horario1 - 4) * 3) === t.Horario1))
@@ -339,6 +356,9 @@ export default {
 
     checkHorarioDocente1719(horario, docente) {
         let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+            if(this.turmaForm.periodo != t.periodo){
+                return false
+            }
             let h1, h2
             if(horario === 1) {
                 h1 = ((this.turmaForm.Horario1 === t.Horario1) || ((4 + (this.turmaForm.Horario1 - 32) * 3) === t.Horario1) || ((this.turmaForm.Horario1 + 1) === t.Horario1))
@@ -375,6 +395,9 @@ export default {
 
     checkHorarioDocente1820(horario, docente) {
         let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+            if(this.turmaForm.periodo != t.periodo){
+                return false
+            }
             let h1, h2
             if(horario === 1) {
                 h1 = ((this.turmaForm.Horario1 === t.Horario1) || ((5 + (this.turmaForm.Horario1 - 33) * 3) === t.Horario1) || ((this.turmaForm.Horario1 - 1) === t.Horario1))
@@ -411,6 +434,9 @@ export default {
 
     checkHorarioDocente1921(horario, docente) {
         let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+            if(this.turmaForm.periodo != t.periodo){
+                return false
+            }
             let h1, h2
             if(horario === 1) {
                 h1 = ((this.turmaForm.Horario1 === t.Horario1) || ((33 + (this.turmaForm.Horario1 - 5) / 3) === t.Horario1))
@@ -447,6 +473,9 @@ export default {
 
     checkHorarioDocenteGeral(horario, docente) {
         let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+            if(this.turmaForm.periodo != t.periodo){
+                return false
+            }
             let h1, h2
             if(horario === 1) {
                 h1 = (!(_.isNull(this.turmaForm.Horario1)) && (this.turmaForm.Horario1 === t.Horario1))
@@ -549,6 +578,9 @@ export default {
 
     checkHorarioSala1618(horario, sala) {
           let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+              if(this.turmaForm.periodo != t.periodo){
+                return false
+              }
               let h1, h2
               if(horario === 1) {
                   h1 = ((this.turmaForm.Horario1 === t.Horario1) || ((32 + (this.turmaForm.Horario1 - 4) * 3) === t.Horario1))
@@ -585,6 +617,9 @@ export default {
 
     checkHorarioSala1719(horario, sala) {
           let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+              if(this.turmaForm.periodo != t.periodo){
+                return false
+              }
               let h1, h2
               if(horario === 1) {
                   h1 = ((this.turmaForm.Horario1 === t.Horario1) || ((4 + (this.turmaForm.Horario1 - 32) * 3) === t.Horario1) || ((this.turmaForm.Horario1 + 1) === t.Horario1))
@@ -621,6 +656,9 @@ export default {
 
     checkHorarioSala1820(horario, sala) {
           let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+              if(this.turmaForm.periodo != t.periodo){
+                return false
+              }
               let h1, h2
               if(horario === 1) {
                   h1 = ((this.turmaForm.Horario1 === t.Horario1) || ((5 + (this.turmaForm.Horario1 - 33) * 3) === t.Horario1) || ((this.turmaForm.Horario1 - 1) === t.Horario1))
@@ -657,6 +695,9 @@ export default {
 
     checkHorarioSala1921(horario, sala) {
           let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+              if(this.turmaForm.periodo != t.periodo){
+                return false
+              }
               let h1, h2
               if(horario === 1) {
                   h1 = ((this.turmaForm.Horario1 === t.Horario1) || ((33 + (this.turmaForm.Horario1 - 5) / 3) === t.Horario1))
@@ -693,6 +734,9 @@ export default {
 
     checkHorarioSalaGeral(horario,sala) {
           let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+              if(this.turmaForm.periodo != t.periodo){
+                return false
+              }
               let h1, h2
               if(horario === 1) {
                   h1 = (!(_.isNull(this.turmaForm.Horario1)) && (this.turmaForm.Horario1 === t.Horario1))
