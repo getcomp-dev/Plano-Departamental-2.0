@@ -1,6 +1,6 @@
 <template>
-  <div class="row">
-    <div>
+  <div class="row marg">
+    <div class="tabcur">
       <template v-if="horarioVazio(Curso[0])">
         <div class="periodo">
           <h5>1º Período</h5>
@@ -8,7 +8,7 @@
         </div>
       </template>
     </div>
-    <div>
+    <div class="tabcur">
       <template v-if="horarioVazio(Curso[1])">
         <div class="periodo">
           <h5>2º Período</h5>
@@ -16,7 +16,7 @@
         </div>
       </template>
     </div>
-    <div>
+    <div class="tabcur">
       <template v-if="horarioVazio(Curso[2])">
         <div class="periodo">
           <h5>3º Período</h5>
@@ -24,7 +24,7 @@
         </div>
       </template>
     </div>
-    <div>
+    <div class="tabcur">
       <template v-if="horarioVazio(Curso[3])">
         <div class="periodo">
           <h5>4º Período</h5>
@@ -32,7 +32,7 @@
         </div>
       </template>
     </div>
-    <div>
+    <div class="tabcur">
       <template v-if="horarioVazio(Curso[4])">
         <div class="periodo">
           <h5>5º Período</h5>
@@ -40,7 +40,7 @@
         </div>
       </template>
     </div>
-    <div>
+    <div class="tabcur">
       <template v-if="horarioVazio(Curso[5])">
         <div class="periodo">
           <h5>6º Período</h5>
@@ -48,7 +48,7 @@
         </div>
       </template>
     </div>
-    <div>
+    <div class="tabcur">
       <template v-if="horarioVazio(Curso[6])">
         <div class="periodo">
           <h5>7º Período</h5>
@@ -56,7 +56,7 @@
         </div>
       </template>
     </div>
-    <div>
+    <div class="tabcur">
       <template v-if="horarioVazio(Curso[7])">
         <div class="periodo">
           <h5>8º Período</h5>
@@ -64,7 +64,7 @@
         </div>
       </template>
     </div>
-    <div>
+    <div class="tabcur">
       <template v-if="horarioVazio(Curso[8])">
         <div class="periodo">
           <h5>9º Período</h5>
@@ -72,7 +72,7 @@
         </div>
       </template>
     </div>
-    <div>
+    <div class="tabcur">
       <template v-if="horarioVazio(Curso[9])">
         <div class="periodo">
           <h5>10º Período</h5>
@@ -116,12 +116,17 @@ export default {
     margin-left: auto;
     margin-right: auto;
   }
-
+  
+  
   .periodo {
     display: inline;
     width: 72px;
     height: 24px;
     position: relative;
   }
-
+  @media screen and (max-width: 1290px) and (min-width: 975px){
+  .marg{
+    margin-right: 315px !important;
+  }
+}
 </style>

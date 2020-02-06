@@ -49,10 +49,10 @@
                 </p>
               </th>
               <th scope="col">
-                <p style="width: 30px;" class="p-header" title="Carga Teórica">C. T.</p>
+                <p style="width: 30px;" class="p-header" title="Carga Teórica">C.T.</p>
               </th>
               <th scope="col">
-                <p style="width: 30px;" class="p-header" title="Carga Prática">C. P.</p>
+                <p style="width: 30px;" class="p-header" title="Carga Prática">C.P.</p>
               </th>
               <th scope="col">
                 <p style="width: 230px;text-align: start" class="p-header">Perfil</p>

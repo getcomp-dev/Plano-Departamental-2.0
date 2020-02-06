@@ -130,7 +130,6 @@
         <!-- Final Forms Curso e Grande -->
 
         <div class="row w-100"></div>
-
         <div class="row w-100 m-0" style="font-size:11px">
           <!-- Grind esquerdo -->
           <!-- Inicio da tabela -->
@@ -171,7 +170,7 @@
                               <template v-if="andConnector(grade, disciplina, disciplinaGrade)">
                                 <td
                                   :key="disciplina.codigo"
-                                  v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.nome), showGrade(grade)"
+                                  v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.id), showGrade(grade)"
                                   :class="{ 'bg-custom': disciplinaClickada===disciplina.nome}"
                                   style="cursor:pointer;"
                                 >
@@ -181,7 +180,7 @@
                                   :key="disciplina.nome"
                                   :class="{ 'bg-custom': disciplinaClickada===disciplina.nome}"
                                   style="cursor:pointer;"
-                                  v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.nome), showGrade(grade)"
+                                  v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.id), showGrade(grade)"
                                 >
                                   <p style="width: 400px; text-align: start;">{{disciplina.nome}}</p>
                                 </td>
@@ -204,17 +203,18 @@
       <!-- Grind direito -->
       <div class="div-card p-0 mt-0 mb-2 col-lg-5 col-md-6 col-sm-12 col-12">
         <!-- Inicio card Grade -->
-        <template v-if="isEdit">
-          <div
-            class="card mr-3 ml-auto"
-            style="border-bottom-left-radius: 0; border-bottom-right-radius: 0"
-          >
-            <div class="card-header">
-              <h1 class="card-title">Grade</h1>
-            </div>
 
-            <div class="card-body">
-              <form>
+        <div
+          class="card mr-3 ml-auto"
+          style="border-bottom-left-radius: 0; border-bottom-right-radius: 0"
+        >
+          <div class="card-header">
+            <h1 class="card-title">Grade</h1>
+          </div>
+
+          <div class="card-body">
+            <form>
+              <template v-if="isEdit">
                 <div class="row mb-2 mx-0">
                   <div class="form-group col m-0 mr-4 px-0">
                     <label for="nome" class="col-form-label">Nome</label>
@@ -271,29 +271,90 @@
                       title="Excluir Grade"
                       class="delbtn"
                       v-on:click.prevent="deleteGrade"
-                      :key="3"
+                      :key="2"
                     >
                       <i class="far fa-trash-alt"></i>
                     </button>
                   </div>
                 </div>
-              </form>
-            </div>
+              </template>
+              <template v-else>
+                <div class="row mb-2 mx-0">
+                  <div class="form-group col m-0 mr-4 px-0">
+                    <label for="nome" class="col-form-label">Nome</label>
+                    <input
+                      type="text"
+                      class="inputMenor form-control form-control-sm"
+                      id="nome"
+                      disabled
+                    />
+                  </div>
+
+                  <div class="form-group col m-0 px-0">
+                    <label for="periodoInicio" class="col-form-label">Período de Início</label>
+                    <input
+                      type="text"
+                      class="inputMenor form-control form-control-sm col"
+                      id="periodoInicio"
+                      disabled
+                    />
+                  </div>
+                </div>
+
+                <div class="row mb-2 mx-0">
+                  <div class="form-group col m-0 px-0">
+                    <label for="curso" class="col-form-label">Curso</label>
+                    <select
+                      type="text"
+                      style="text-align:center;"
+                      class="form-control form-control-sm selectMaior"
+                      id="curso"
+                      disabled
+                    ></select>
+                  </div>
+                </div>
+
+                <div class="row mb-0 mt-3 mx-0">
+                  <div class="d-flex mr-0 ml-auto">
+                    <button
+                      type="button"
+                      title="Salvar Grade"
+                      class="addbtn"
+                      v-on:click.prevent="AvisoDisabled()"
+                      :key="3999"
+                    >
+                      <i class="fas fa-check"></i>
+                    </button>
+                    <button
+                      type="button"
+                      title="Excluir Grade"
+                      class="delbtn"
+                      v-on:click.prevent="AvisoDisabled()"
+                      :key="4"
+                    >
+                      <i class="far fa-trash-alt"></i>
+                    </button>
+                  </div>
+                </div>
+              </template>
+            </form>
           </div>
-          <!-- Final card Grade -->
+        </div>
+        <!-- Final card Grade -->
 
-          <!-- Inicio card Disciplina -->
-          <div
-            class="card mr-3 ml-auto"
-            style="border-top-left-radius: 0; border-top-right-radius: 0; margin-top: -1px;"
-          >
-            <div class="card-header">
-              <h1 class="card-title">Disciplinas</h1>
-            </div>
+        <!-- Inicio card Disciplina -->
+        <div
+          class="card mr-3 ml-auto"
+          style="border-top-left-radius: 0; border-top-right-radius: 0; margin-top: -1px;"
+        >
+          <div class="card-header">
+            <h1 class="card-title">Disciplinas</h1>
+          </div>
 
-            <div class="card-body">
-              <form>
-                <!-- Edição de disciplina -->
+          <div class="card-body">
+            <form>
+              <!-- Edição de disciplina -->
+              <template v-if="isEdit">
                 <div class="row mb-2 mx-0">
                   <div class="form-group m-0 col px-0">
                     <label for="disciplina" class="mr-2 col-form-label">Disciplina</label>
@@ -337,7 +398,85 @@
                         class="addbtn"
                         style="margin-top: -1px"
                         v-on:click.prevent="editDisciplinaGrade"
-                        :key="4"
+                        :key="5"
+                      >
+                        <i class="fas fa-check"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mb-0 mt-3 mx-0">
+                  <div class="d-flex mr-0 ml-auto">
+                    <template v-if="disciplinaClickada !== disciplinaGradeForm.Disciplina">
+                      <button
+                        type="button"
+                        title="Adicionar à Grade"
+                        class="addbtn"
+                        v-on:click.prevent="addDisciplinaGrade"
+                        :key="6"
+                      >
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    </template>
+
+                    <button
+                      type="button"
+                      title="Deletar Disciplina"
+                      class="delbtn"
+                      v-on:click.prevent="deleteDisciplinaGrade(), clearClick()"
+                      :key="7"
+                    >
+                      <i class="far fa-trash-alt"></i>
+                    </button>
+
+                    <button
+                      type="button"
+                      title="Cancelar"
+                      class="cancelbtn"
+                      v-on:click.prevent="cleanDisciplina(),clearClick()"
+                      :key="8"
+                    >
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+              </template>
+
+              <!-- botões desabilitados -->
+              <template v-else>
+                <div class="row mb-2 mx-0">
+                  <div class="form-group m-0 col px-0">
+                    <label for="disciplina" class="mr-2 col-form-label">Disciplina</label>
+                    <select
+                      type="text"
+                      class="selectMaior2 form-control form-control-sm"
+                      id="disciplina"
+                      disabled
+                    ></select>
+                  </div>
+                </div>
+
+                <div class="row mb-2 mx-0">
+                  <div class="form-group m-0 col px-0">
+                    <label for="periodoDisciplina" class="col-form-label">Período</label>
+
+                    <div class="d-flex">
+                      <input
+                        type="text"
+                        class="form-control form-control-sm inputMenor2"
+                        aria-describedby="button-edit-periodo"
+                        id="periodoDisciplina"
+                        disabled
+                      />
+
+                      <button
+                        type="button"
+                        title="Salvar"
+                        class="addbtn"
+                        style="margin-top: -1px"
+                        v-on:click.prevent="AvisoDisabled()"
+                        :key="9"
                       >
                         <i class="fas fa-check"></i>
                       </button>
@@ -351,8 +490,8 @@
                       type="button"
                       title="Adicionar à Grade"
                       class="addbtn"
-                      v-on:click.prevent="addDisciplinaGrade"
-                      :key="4"
+                      v-on:click.prevent="AvisoDisabled()"
+                      :key="10"
                     >
                       <i class="fas fa-plus"></i>
                     </button>
@@ -361,8 +500,8 @@
                       type="button"
                       title="Deletar Disciplina"
                       class="delbtn"
-                      v-on:click.prevent="deleteDisciplinaGrade(), clearClick()"
-                      :key="4"
+                      v-on:click.prevent="AvisoDisabled()"
+                      :key="11"
                     >
                       <i class="far fa-trash-alt"></i>
                     </button>
@@ -371,17 +510,18 @@
                       type="button"
                       title="Cancelar"
                       class="cancelbtn"
-                      v-on:click.prevent="cleanDisciplina(),clearClick()"
-                      :key="2"
+                      v-on:click.prevent="AvisoDisabled()"
+                      :key="12"
                     >
                       <i class="fas fa-times"></i>
                     </button>
                   </div>
                 </div>
-              </form>
-            </div>
+              </template>
+            </form>
           </div>
-        </template>
+        </div>
+
         <!-- Final card -->
       </div>
       <!-- FIM DA REPETIÇÃO -->
@@ -438,7 +578,7 @@ export default {
             text: `A Grade ${response.Grade.nome} foi criada!`,
             type: "success"
           });
-          this.$refs.modalGrade.hide();//esconde o modal
+          this.$refs.modalGrade.hide(); //esconde o modal
         })
         .catch(error => {
           this.error = "<b>Erro ao criar Grade</b>";
@@ -453,6 +593,14 @@ export default {
             type: "error"
           });
         });
+    },
+    AvisoDisabled() {
+      this.$notify({
+        group: "general",
+        title: `Erro!`,
+        text: "Selecione uma grade!",
+        type: "error"
+      });
     },
     editGrade() {
       gradeService

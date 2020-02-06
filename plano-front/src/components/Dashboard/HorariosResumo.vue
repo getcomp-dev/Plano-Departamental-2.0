@@ -5,17 +5,23 @@
       class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
       style="height:38px;"
     >
-      <div class="form-inline col-12 pl-0 mb-1 pr-1">
+      <div class="form-inline col-11 pl-0 mb-1 pr-1">
           <h1 class="col-12 titulo">Horários - Resumo</h1>
+      </div>
+      <div class="col-1">
+        <button type="button" class="relatbtn" title="Relatório" v-on:click.prevent="pdf">
+          <i class="far fa-file-alt"></i>
+        </button>
       </div>
     </div>
 
       <div class="w-100 mb-2 border-bottom"></div>
-		<div class="col-12 p-0" style="padding-left: 15px !important;">
+		<div class="col-12 p-0 marg" style="padding-left: 15px !important;">
       <!-- ----------------------------------------------------------------------------------------------- -->
       <div class="title" style="text-align:center !important;">
         <h3>1º SEMESTRE</h3>
       </div>
+      
       <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
 
       <div class="title">
@@ -23,9 +29,8 @@
           <span style=" border-bottom: 1px solid #cccccc">Ciência da Computação Diurno</span>
         </h4>
       </div>
-
+    
       <curso-diurno :Curso="ativos1.CCD"></curso-diurno>
-
       <!------------------------------------------------- EC ------------------------------------------------->
       <div class="title">
         <h4>
@@ -1092,9 +1097,10 @@ export default {
             ]
           }
         });
-        for (var d = 0; d < 6; d++) {
+        for (var d = 0; d < 8; d++) {
+
           for (var j = 0; j < eletivas1.length; j++) {
-            if (this.checkTurmaHorario(eletivas1[j], 1 + d)) {
+            if (this.checkTurmaHorario(eletivas1[j], ((d === 4 || d === 5) ? 28 : 1) + ((d > 5) ? d - 2 : d))) {
               for (var k = 0; k < disciplinas.length; k++) {
                 if (eletivas1[j].Disciplina === disciplinas[k].id) {
                   if (seg !== "") seg = seg + " ";
@@ -1102,7 +1108,7 @@ export default {
                 }
               }
             }
-            if (this.checkTurmaHorario(eletivas1[j], 7 + d)) {
+            if (this.checkTurmaHorario(eletivas1[j], ((d === 4 || d === 5) ? 30 : 7) + ((d > 5) ? d - 2 : d))) {
               for (k = 0; k < disciplinas.length; k++) {
                 if (eletivas1[j].Disciplina === disciplinas[k].id) {
                   if (ter != "") ter = ter + " ";
@@ -1110,7 +1116,7 @@ export default {
                 }
               }
             }
-            if (this.checkTurmaHorario(eletivas1[j], 13 + d)) {
+            if (this.checkTurmaHorario(eletivas1[j], ((d === 4 || d === 5) ? 32 : 13) + ((d > 5) ? d - 2 : d))) {
               for (k = 0; k < disciplinas.length; k++) {
                 if (eletivas1[j].Disciplina === disciplinas[k].id) {
                   if (qua != "") qua = qua + " ";
@@ -1118,7 +1124,7 @@ export default {
                 }
               }
             }
-            if (this.checkTurmaHorario(eletivas1[j], 19 + d)) {
+            if (this.checkTurmaHorario(eletivas1[j], ((d === 4 || d === 5) ? 34 : 19) + ((d > 5) ? d - 2 : d))) {
               for (k = 0; k < disciplinas.length; k++) {
                 if (eletivas1[j].Disciplina === disciplinas[k].id) {
                   if (qui != "") qui = qui + " ";
@@ -1126,7 +1132,7 @@ export default {
                 }
               }
             }
-            if (this.checkTurmaHorario(eletivas1[j], 25 + d)) {
+            if (this.checkTurmaHorario(eletivas1[j], ((d === 4 || d === 5) ? 36 : 25) + ((d > 5) ? d - 2 : d))) {
               for (k = 0; k < disciplinas.length; k++) {
                 if (eletivas1[j].Disciplina === disciplinas[k].id) {
                   if (sex != "") sex = sex + " ";
@@ -1202,6 +1208,38 @@ export default {
               ]);
               break;
             case 4:
+                tables[86 - 2 * vazio].table.body.push([
+                {
+                  text: "17 - 19",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+                ]);
+                break;
+            case 5:
+                tables[86 - 2 * vazio].table.body.push([
+                {
+                  text: "18 - 20",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+                ]);
+                break;
+            case 6:
               tables[86 - 2 * vazio].table.body.push([
                 {
                   text: "19 - 21",
@@ -1217,7 +1255,7 @@ export default {
                 { text: sex, alignment: "center" }
               ]);
               break;
-            case 5:
+            case 7:
               tables[86 - 2 * vazio].table.body.push([
                 {
                   text: "21 - 23",
@@ -2142,9 +2180,9 @@ export default {
             ]
           }
         });
-        for (var d = 0; d < 6; d++) {
+        for (var d = 0; d < 8; d++) {
           for (var j = 0; j < eletivas2.length; j++) {
-            if (this.checkTurmaHorario(eletivas2[j], 1 + d)) {
+            if (this.checkTurmaHorario(eletivas2[j], ((d === 4 || d === 5) ? 28 : 1) + ((d > 5) ? d - 2 : d))) {
               for (var k = 0; k < disciplinas.length; k++) {
                 if (eletivas2[j].Disciplina === disciplinas[k].id) {
                   if (seg !== "") seg = seg + " ";
@@ -2152,7 +2190,7 @@ export default {
                 }
               }
             }
-            if (this.checkTurmaHorario(eletivas2[j], 7 + d)) {
+            if (this.checkTurmaHorario(eletivas2[j], ((d === 4 || d === 5) ? 30 : 7) + ((d > 5) ? d - 2 : d))) {
               for (k = 0; k < disciplinas.length; k++) {
                 if (eletivas2[j].Disciplina === disciplinas[k].id) {
                   if (ter != "") ter = ter + " ";
@@ -2160,7 +2198,7 @@ export default {
                 }
               }
             }
-            if (this.checkTurmaHorario(eletivas2[j], 13 + d)) {
+            if (this.checkTurmaHorario(eletivas2[j], ((d === 4 || d === 5) ? 32 : 13) + ((d > 5) ? d - 2 : d))) {
               for (k = 0; k < disciplinas.length; k++) {
                 if (eletivas2[j].Disciplina === disciplinas[k].id) {
                   if (qua != "") qua = qua + " ";
@@ -2168,7 +2206,7 @@ export default {
                 }
               }
             }
-            if (this.checkTurmaHorario(eletivas2[j], 19 + d)) {
+            if (this.checkTurmaHorario(eletivas2[j], ((d === 4 || d === 5) ? 34 : 19) + ((d > 5) ? d - 2 : d))) {
               for (k = 0; k < disciplinas.length; k++) {
                 if (eletivas2[j].Disciplina === disciplinas[k].id) {
                   if (qui != "") qui = qui + " ";
@@ -2176,7 +2214,7 @@ export default {
                 }
               }
             }
-            if (this.checkTurmaHorario(eletivas2[j], 25 + d)) {
+            if (this.checkTurmaHorario(eletivas2[j],  ((d === 4 || d === 5) ? 36 : 25) + ((d > 5) ? d - 2 : d))) {
               for (k = 0; k < disciplinas.length; k++) {
                 if (eletivas2[j].Disciplina === disciplinas[k].id) {
                   if (sex != "") sex = sex + " ";
@@ -2252,6 +2290,38 @@ export default {
               ]);
               break;
             case 4:
+                tables[173 - 2 * vazio].table.body.push([
+                {
+                  text: "17 - 19",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+                ]);
+                break;
+            case 5:
+                tables[173 - 2 * vazio].table.body.push([
+                {
+                  text: "18 - 20",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+                ]);
+                break;
+            case 6:
               tables[173 - 2 * vazio].table.body.push([
                 {
                   text: "19 - 21",
@@ -2267,7 +2337,7 @@ export default {
                 { text: sex, alignment: "center" }
               ]);
               break;
-            case 5:
+            case 7:
               tables[173 - 2 * vazio].table.body.push([
                 {
                   text: "21 - 23",
@@ -3345,6 +3415,36 @@ export default {
   text-align: start !important;
 }
 
+.relatbtn {
+  background-color: white;
+  color: #9ab3ff !important;
+  float: right;
+}
+
+.relatbtn:hover {
+  color: #82a0ff !important;
+}
+
+.relatbtn:focus {
+  color: #82a0ff;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #698dff;
+}
+
+button {
+  padding: 0;
+  border: none;
+  background: none;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  margin-right: 15px;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+}
+
 h3 {
   font-weight: bold;
   font-size: 20px;
@@ -3370,4 +3470,5 @@ h5 {
     text-align: center !important;
   }
 }
+
 </style>

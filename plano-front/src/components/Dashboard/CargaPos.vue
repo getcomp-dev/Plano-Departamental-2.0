@@ -28,47 +28,15 @@
           </div>
 
           <div class="d-flex p-0 m-0 mt-1">
-            <template v-if="isAdd">
-              <button
-                type="button"
-                title="Salvar"
-                class="addbtn"
-                v-on:click.prevent="addCarga"
-                style="max-width:80px;"
-              >
-                <i class="fas fa-check"></i>
-              </button>
-              <button
-                type="button"
-                title="Cancelar"
-                class="cancelbtn"
-                v-on:click.prevent="toggleAdd"
-                style="max-width:80px;"
-              >
-                <i class="fas fa-times"></i>
-              </button>
-            </template>
-
-            <template v-else>
-              <button
-                type="button"
-                title="Adicionar"
-                class="addbtn"
-                v-on:click.prevent="toggleAdd"
-                style="max-width:80px;"
-              >
-                <i class="fas fa-plus"></i>
-              </button>
-              <button
-                type="button"
-                title="Deletar"
-                class="delbtn"
-                v-b-modal.modalConfirma
-                style="max-width:80px;"
-              >
-                <i class="far fa-trash-alt"></i>
-              </button>
-            </template>
+            <button
+              type="button"
+              title="Deletar selecionados"
+              class="delbtn"
+              v-b-modal.modalConfirma
+              style="max-width:80px;"
+            >
+              <i class="far fa-trash-alt"></i>
+            </button>
           </div>
         </div>
       </div>
@@ -80,16 +48,19 @@
       <div class="cube1"></div>
       <div class="cube2"></div>
     </div>
-    <!-- Inicio Tabela 1 -->
 
     <div class="row p-0 m-0">
+      <!-- Inicio Tabela 1 -->
       <div class="p-0 divTable mr-2 mb-2" v-if="!isLoading">
         <div class="alert alert-dark p-0 m-0 text-center rounded-0" role="alert">
           <div class="row m-0">
-            <p class="col p-0 alert-p m-0 border border-right-0" style="font-weight: bold">PGMC</p>
+            <p
+              class="p-0 alert-p m-0 border border-right-0"
+              style="font-weight: bold; width: 187px;"
+            >PGMC</p>
             <p
               class="m-0 border"
-              style="width:42px; cursor: default!important"
+              style="width:32px; cursor: default!important"
               title="Total de creditos"
             >{{CreditoTotal_PGMC}}</p>
             <div v-bind:style="scrollsize" class="border border-left-0"></div>
@@ -99,7 +70,7 @@
         <table class="table table-hover table-bordered table-sm" ref="tablePGMC">
           <thead class="thead-light sticky">
             <tr>
-              <div style="display: block; width: 328px;" class="sticky">
+              <div style="display: block; width: 198px;" class="sticky">
                 <th scope="col">
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
@@ -117,80 +88,13 @@
                   <p class="p-header" style="width:135px!important;">Docente</p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:100px!important;">Programa</p>
-                </th>
-                <th scope="col">
-                  <p class="p-header" style="width:40px!important;">C.</p>
+                  <p class="p-header" style="width:30px!important;">C.</p>
                 </th>
               </div>
             </tr>
           </thead>
 
           <tbody>
-            <template v-if="isAdd">
-              <tr>
-                <div style="width: 328px;" class="isAdd">
-                  <td>
-                    <div style="width:24px"></div>
-                  </td>
-
-                  <td>
-                    <div style="width:24px;">
-                      <input
-                        type="text"
-                        style="width: 20px; height:16px;"
-                        id="trimestre"
-                        v-model="cargaPosForm.trimestre"
-                      />
-                    </div>
-                  </td>
-
-                  <td>
-                    <div style="width: 135px">
-                      <select
-                        type="text"
-                        style="width:130px"
-                        id="docente1"
-                        v-model="cargaPosForm.Docente"
-                      >
-                        <option
-                          v-if="Docentes.length===0"
-                          type="text"
-                          value
-                        >Nenhum Docente Encontrado</option>
-                        <option
-                          v-for="docente in Docentes"
-                          :key="docente.id"
-                          :value="docente.id"
-                        >{{docente.apelido}}</option>
-                      </select>
-                    </div>
-                  </td>
-
-                  <td>
-                    <div style="width: 100px">
-                      <input
-                        type="text"
-                        style="width: 80px"
-                        id="programa"
-                        v-model="cargaPosForm.programa"
-                      />
-                    </div>
-                  </td>
-
-                  <td>
-                    <div style="width: 40px">
-                      <input
-                        type="text"
-                        style="width: 25px"
-                        id="creditos"
-                        v-model="cargaPosForm.creditos"
-                      />
-                    </div>
-                  </td>
-                </div>
-              </tr>
-            </template>
             <!-- LINHAS -->
             <template v-if="CargasPGMC.length>0">
               <template v-for="t in vetorPeriodosPGMC">
@@ -199,6 +103,8 @@
                     <tr
                       v-if="checkPGMC(carga, docente, t)"
                       :key="'docente'+docente.id+'carga'+carga.id+t"
+                      v-on:click="fun_clickado(carga, docente.apelido)"
+                      :class="{'bg-custom':linhaClickada == carga.id}"
                     >
                       <template
                         v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))"
@@ -225,13 +131,17 @@
         </table>
       </div>
 
+      <!-- Inicio Tabela 2 -->
       <div class="p-0 divTable mr-2 mb-2" v-if="!isLoading">
         <div class="alert alert-dark p-0 m-0 text-center rounded-0" role="alert">
           <div class="row m-0">
-            <p class="col p-0 alert-p m-0 border border-right-0" style="font-weight: bold">PGCC</p>
+            <p
+              class="col p-0 alert-p m-0 border border-right-0"
+              style="font-weight: bold; width: 187px;"
+            >PGCC</p>
             <p
               class="m-0 border"
-              style="width:42px; cursor: default!important"
+              style="width:32px; cursor: default!important"
               title="Total de creditos"
             >{{CreditoTotal_PGCC}}</p>
             <div v-bind:style="scrollsize" class="border border-left-0"></div>
@@ -241,7 +151,7 @@
         <table class="table table-hover table-bordered table-sm">
           <thead class="thead-light sticky">
             <tr>
-              <div style="display: block; width: 328px;" class="sticky">
+              <div style="display: block; width: 198px;" class="sticky">
                 <th scope="col">
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
@@ -259,10 +169,7 @@
                   <p class="p-header" style="width:135px!important;">Docente</p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:100px!important;">Programa</p>
-                </th>
-                <th scope="col">
-                  <p class="p-header" style="width:40px!important;">C.</p>
+                  <p class="p-header" style="width:30px!important;">C.</p>
                 </th>
               </div>
             </tr>
@@ -277,6 +184,8 @@
                     <tr
                       v-if="checkPGCC(carga, docente, t)"
                       :key="'docente'+docente.id+'carga'+carga.id+t"
+                      v-on:click="fun_clickado(carga, docente.apelido)"
+                      :class="{'bg-custom':linhaClickada == carga.id}"
                     >
                       <template
                         v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))"
@@ -302,14 +211,14 @@
           </tbody>
         </table>
       </div>
-
+      <!-- Inicio Tabela 3 -->
       <div class="p-0 divTable mr-2 mb-2" v-if="!isLoading">
         <div class="alert alert-dark p-0 m-0 text-center rounded-0" role="alert">
           <div class="row m-0">
             <p class="col p-0 alert-p m-0 border border-right-0" style="font-weight: bold;">PGEM</p>
             <p
               class="m-0 border"
-              style="width:42px; cursor: default!important"
+              style="width:32px; cursor: default!important"
               title="Total de creditos"
             >{{CreditoTotal_PGEM}}</p>
             <div v-bind:style="scrollsize" class="border border-left-0"></div>
@@ -319,7 +228,7 @@
         <table class="table table-hover table-bordered table-sm">
           <thead class="thead-light sticky">
             <tr>
-              <div style="display: block; width: 328px;" class="sticky">
+              <div style="display: block; width: 198px;" class="sticky">
                 <th scope="col">
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
@@ -337,10 +246,7 @@
                   <p class="p-header" style="width:135px!important;">Docente</p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:100px!important;">Programa</p>
-                </th>
-                <th scope="col">
-                  <p class="p-header" style="width:40px!important;">C.</p>
+                  <p class="p-header" style="width:30px!important;">C.</p>
                 </th>
               </div>
             </tr>
@@ -355,6 +261,8 @@
                     <tr
                       v-if="checkPGEM(carga, docente, t)"
                       :key="'docente'+docente.id+'carga'+carga.id+t"
+                      v-on:click="fun_clickado(carga, docente.apelido)"
+                      :class="{'bg-custom':linhaClickada == carga.id}"
                     >
                       <template
                         v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))"
@@ -381,23 +289,185 @@
         </table>
       </div>
     </div>
+    <!-- Card de Adição -->
+    <div class="div-card p-0 mt-3 mb-2 ml-auto col-lg-4 col-md-12 col-sm-12 col-12">
+      <div class="card ml-auto mr-3">
+        <div class="card-header">
+          <h2 class="card-title">Adição</h2>
+        </div>
+        <div class="card-body">
+          <form>
+            <div class="row">
+              <div class="col-4">
+                <div class="row mb-2 mx-0">
+                  <div class="m-0 col px-0">
+                    <label for="trimestre" class="col-form-label">Trimestre</label>
+                    <div style="width:24px;">
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        style="width: 24px; height:16px; text-align:center"
+                        id="trimestre"
+                        v-model="cargaPosForm.trimestre"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-8">
+                <div class="row mb-2 mx-0">
+                  <div class="m-0 col px-0">
+                    <label for="docente" class="col-form-label">Docente</label>
+                    <select
+                      type="text"
+                      class="form-control form-control-sm"
+                      style="width:140px !important"
+                      id="docente1"
+                      v-model="cargaPosForm.Docente"
+                    >
+                      <option v-if="Docentes.length===0" type="text" value>Nenhum Docente Encontrado</option>
+                      <option
+                        v-for="docente in Docentes"
+                        :key="docente.id"
+                        :value="docente.id"
+                      >{{docente.apelido}}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-4">
+                <div class="row mb-2 mx-0">
+                  <div class="m-0 col px-0">
+                    <label for="programa" class="col-form-label">Programa</label>
+                    <select
+                      type="text"
+                      class="form-control form-control-sm"
+                      style="width:80px !important"
+                      id="programa"
+                      v-model="cargaPosForm.programa"
+                    >
+                      <option type="text" value="PGMC">PGMC</option>
+                      <option type="text" value="PGCC">PGCC</option>
+                      <option type="text" value="PGEM">PGEM</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6">
+                <div class="row mb-2 mx-0">
+                  <div class="m-0 col px-0">
+                    <label for="creditos" class="col-form-label">Créditos</label>
+                    <div style="width:30px;">
+                      <input
+                        type="text"
+                        class="form-control form-control-sm"
+                        style="width: 28px; text-align:center"
+                        id="creditos"
+                        v-model="cargaPosForm.creditos"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mb-0 mt-3 mx-0">
+              <div class="d-flex mr-0 ml-auto">
+                <template v-if="isEdit">
+                  <button
+                    type="button"
+                    title="Salvar"
+                    class="addbtn"
+                    v-on:click.prevent="editCarga(cargaPosForm)"
+                    style="max-width:80px;"
+                  >
+                    <i class="fas fa-check"></i>
+                  </button>
+                  <button
+                    type="button"
+                    title="Deletar"
+                    class="delbtn"
+                    v-b-modal.modalConfirma2
+                    style="max-width:80px;"
+                  >
+                    <i class="far fa-trash-alt"></i>
+                  </button>
+                  <button
+                    type="button"
+                    title="Cancelar"
+                    class="cancelbtn"
+                    v-on:click.prevent="cleanCarga"
+                    style="max-width:80px;"
+                  >
+                    <i class="fas fa-times"></i>
+                  </button>
+                </template>
+
+                <template v-else>
+                  <button
+                    type="button"
+                    title="Adicionar"
+                    class="addbtn"
+                    v-on:click.prevent="addCarga"
+                    style="max-width:80px;"
+                  >
+                    <i class="fas fa-plus"></i>
+                  </button>
+                  <button
+                    type="button"
+                    title="Cancelar"
+                    class="cancelbtn"
+                    v-on:click.prevent="cleanCarga"
+                    style="max-width:80px;"
+                  >
+                    <i class="fas fa-times"></i>
+                  </button>
+                </template>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
     <!-- modal -->
     <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
-      <p class="my-4">Tem certeza que deseja deletar as cargas selecionadas?</p>
-      <template v-for="carga in Deletar">
-        <template v-for="docente in Docentes">
-          <template v-if="docente.id===carga.Docente">
-            <p :key="'carga'+carga.id+'docente'+docente.id" style="width:80px">
-              Docente:{{docente.apelido}}
-              <br />
-              Programa:{{carga.programa}}
-            </p>
+      <template v-if="Deletar.length === 0">
+        <p class="my-4">Nenhuma carga selecionada!</p>
+      </template>
+      <template v-else>
+        <p class="my-4">Tem certeza que deseja deletar as cargas selecionadas?</p>
+        <template v-for="carga in Deletar">
+          <template v-for="docente in Docentes">
+            <template v-if="docente.id===carga.Docente">
+              <p :key="'carga'+carga.id+'docente'+docente.id">
+                Docente:{{docente.apelido}}
+                <br />
+                Programa:{{carga.programa}}
+                <br />
+                Trimestre:{{carga.trimestre}}
+              </p>
+            </template>
           </template>
         </template>
       </template>
     </b-modal>
+
+    <b-modal id="modalConfirma2" title="Confirmar Seleção" @ok="deleteCarga(cargaPosForm)">
+      <p class="my-4">Tem certeza que deseja deletar esta carga ?</p>
+      <p>
+        Docente:{{apelidoClikado}}
+        <br />
+        Programa:{{cargaPosForm.programa}}
+        <br />
+        Trimestre:{{cargaPosForm.trimestre}}
+      </p>
+    </b-modal>
   </div>
 </template>
+
 
 <script>
 import _ from "lodash";
@@ -419,10 +489,10 @@ export default {
     return {
       cargaPosForm: _.clone(emptyCarga),
       error: undefined,
-      isAdd: false,
       atual: undefined,
       trimestre: 1,
       programa: "PGCC",
+      programas: ["", "PGCC", "PGMC", "PGEM"],
       periodos: 3,
       vetorPeriodosPGMC: [1, 2, 3, 4],
       vetorPeriodosPGCC: [1, 2, 3, 4],
@@ -430,7 +500,10 @@ export default {
       ordenacaoAtualPGMC: "periodo",
       ordenacaoAtualPGCC: "periodo",
       ordenacaoAtualPGEM: "periodo",
-      scrollsize: undefined
+      scrollsize: undefined,
+      isEdit: false,
+      linhaClickada: null,
+      apelidoClikado: null
     };
   },
 
@@ -449,6 +522,19 @@ export default {
   },
 
   methods: {
+    clearClick() {
+      this.isEdit = false;
+      this.linhaClickada = null;
+    },
+    fun_clickado(carga, apelido) {
+      this.cleanCarga();
+
+      this.isEdit = true;
+      this.linhaClickada = carga.id;
+      this.apelidoClikado = apelido;
+      this.cargaPosForm = _.clone(carga);
+    },
+
     toggleOrdenacaoPGMC() {
       if (this.ordenacaoAtualPGMC === "periodo") {
         this.ordenacaoAtualPGMC = "nome";
@@ -458,7 +544,6 @@ export default {
         this.vetorPeriodosPGMC = [1, 2, 3, 4];
       }
     },
-
     toggleOrdenacaoPGCC() {
       if (this.ordenacaoAtualPGCC === "periodo") {
         this.ordenacaoAtualPGCC = "nome";
@@ -468,7 +553,6 @@ export default {
         this.vetorPeriodosPGCC = [1, 2, 3, 4];
       }
     },
-
     toggleOrdenacaoPGEM() {
       if (this.ordenacaoAtualPGEM === "periodo") {
         this.ordenacaoAtualPGEM = "nome";
@@ -497,6 +581,26 @@ export default {
       else return carga.Docente === docente.id;
     },
 
+    editCarga(carga) {
+      cargaPosService
+        .update(carga.id, this.cargaPosForm)
+        .then(response => {
+          this.$notify({
+            group: "general",
+            title: `Sucesso!`,
+            text: `A Carga ${response.CargaPos.programa} foi atualizada!`,
+            type: "success"
+          });
+        })
+        .catch(error => {
+          this.error = "<b>Erro ao atualizar Carga</b>";
+          if (error.response.data.fullMessage) {
+            this.error +=
+              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+          }
+        });
+    },
+
     deleteCarga(carga) {
       cargaPosService
         .delete(carga.id)
@@ -507,6 +611,7 @@ export default {
             text: `A Carga ${response.CargaPos.programa} foi excluída!`,
             type: "success"
           });
+          this.cleanCarga();
         })
         .catch(() => {
           this.error = "<b>Erro ao excluir Carga</b>";
@@ -545,17 +650,13 @@ export default {
           }
         });
     },
-
     cleanCarga() {
+      this.clearClick();
       this.cargaPosForm = _.clone(emptyCarga);
-      this.cargaPosForm.trimestre = this.trimestre;
-      this.cargaPosForm.programa = this.programa;
+      this.cargaPosForm.trimestre = "";
+      this.cargaPosForm.id = "";
+      this.cargaPosForm.programa = "";
       this.error = undefined;
-    },
-
-    toggleAdd() {
-      this.cleanCarga();
-      this.isAdd = !this.isAdd;
     }
   },
 
@@ -724,7 +825,6 @@ export default {
   overflow: hidden;
   margin: 0;
 }
-
 .titulo {
   font-size: 25px;
   font-weight: normal !important;
@@ -800,7 +900,43 @@ table input {
 .isAdd:hover {
   background-color: rgba(0, 0, 0, 0.2);
 }
-
+/* CARD */
+.card-title {
+  font-size: 16px;
+  font-weight: normal;
+  padding-left: 0;
+  margin: 0;
+  text-align: center;
+}
+.div-card {
+  top: -15px;
+}
+.card {
+  width: 320px;
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+}
+.card-body {
+  font-size: 12px;
+  padding-top: 15px;
+}
+.card label {
+  line-height: 1.2;
+  font-size: 12px;
+  text-align: center !important;
+  padding-top: 0 !important;
+}
+select {
+  height: 25px !important;
+  font-size: 11px !important;
+  padding: 0px 5px 0px 5px !important;
+  text-align: center;
+}
+input {
+  height: 25px !important;
+  padding: 0px 5px 0px 5px !important;
+  font-size: 11px !important;
+  text-align: start;
+}
 /* APENAS NO FIREFOX */
 @-moz-document url-prefix() {
   table select {
@@ -812,13 +948,11 @@ table input {
     border-radius: 2px;
     background-color: rgb(245, 245, 245);
   }
-
   table input {
     height: 18px !important;
     text-align: center;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-
     line-height: 8px;
     border: 0.5px solid rgb(92, 92, 92);
     -moz-border-radius: 2px;
@@ -872,7 +1006,6 @@ i.far {
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #ada89a;
 }
-
 .delbtn {
   background-color: white;
   color: #ff817b;
@@ -904,7 +1037,6 @@ i.far {
   -o-animation-delay: -0.9s;
   animation-delay: -0.9s;
 }
-
 @-webkit-keyframes cubemove {
   25% {
     -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
@@ -920,7 +1052,6 @@ i.far {
     -webkit-transform: rotate(-360deg);
   }
 }
-
 @-moz-keyframes cubemove {
   25% {
     -moz-transform: translateX(42px) rotate(-90deg) scale(0.5);
@@ -949,7 +1080,6 @@ i.far {
     -webkit-transform: rotate(-360deg);
   }
 }
-
 @-o-keyframes cubemove {
   25% {
     -o-transform: translateX(42px) rotate(-90deg) scale(0.5);
@@ -978,7 +1108,6 @@ i.far {
     -webkit-transform: rotate(-360deg);
   }
 }
-
 @keyframes cubemove {
   25% {
     -moz-transform: translateX(42px) rotate(-90deg) scale(0.5);
@@ -1012,12 +1141,10 @@ i.far {
     -webkit-transform: rotate(-360deg);
   }
 }
-
 .alert {
   background-color: #e9ecef !important;
   border: none;
 }
-
 .input-group-text {
   display: -ms-flexbox;
   display: flex;
@@ -1038,8 +1165,7 @@ i.far {
   height: 25px !important;
   font-size: 12px !important;
   padding: 2px 5px 0px 5px !important;
-  min-width: 80px;
-  max-width: 80px;
+  min-width: 30px;
   text-align: start;
 }
 .form-group {
@@ -1061,5 +1187,11 @@ i.far {
   .div-titulo {
     height: 70px !important;
   }
+}
+.bg-custom {
+  background-color: #c8c8c8;
+}
+.bg-custom:hover {
+  background-color: #c8c8c8;
 }
 </style>

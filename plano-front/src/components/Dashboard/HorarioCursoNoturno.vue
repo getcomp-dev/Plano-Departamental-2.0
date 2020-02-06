@@ -1,5 +1,5 @@
 <template>
-    <div class="row">
+    <div class="row marg">
         <div>    
             <template v-if="horarioVazio(Curso[0])">
                 <div class="periodo">
@@ -125,4 +125,9 @@
         height: 24px;
         position: relative;
     }
+    @media screen and (max-width: 1290px) and (min-width: 975px){
+    .marg{
+        margin-right: 315px !important;
+  }
+}
 </style>

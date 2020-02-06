@@ -222,6 +222,112 @@
                 </template>
               </template>
             </template>
+            <template v-if="turmasSemAlocacao().length > 0">
+              <template v-if="turmasSemAlocacao().length > 0">
+                <div class="linhas" style="width: ‭845‬px;" :key="semAlocacao">
+                  <td class="prof-td">
+                    <div style="width: 130px">SEM ALOCAÇÃO</div>
+                  </td>
+                  <td class="prof-td">
+                    <div style="width: 24px"></div>
+                  </td>
+                  <td class="prof-td">
+                    <div style="width: 80px"></div>
+                  </td>
+                  <td class="prof-td">
+                    <div style="width: 300px; height: 20px;"></div>
+                  </td>
+                  <td class="prof-td">
+                    <div style="width: 24px"></div>
+                  </td>
+                  <td class="prof-td">
+                    <div style="width: 180px"></div>
+                  </td>
+                  <td class="prof-td">
+                    <div style="width: 32px"></div>
+                  </td>
+                  <td class="prof-td">
+                    <div style="width: 32px"></div>
+                  </td>
+                  <td class="prof-td">
+                    <div style="width: 42px; "></div>
+                  </td>
+                </div>
+              </template>
+              <template v-for="turma in turmasSemAlocacao()">
+                <tr
+                        v-for="disciplina in Disciplinas"
+                        :key="'turma'+turma.id+'disciplina'+disciplina.id+'semAlocacao'"
+                >
+                  <template
+                          v-if="turma.Disciplina===disciplina.id && (turma.Docente1==null && turma.Docente2==null)"
+                  >
+                    <div class="linhas" style="width: ‭845‬px;">
+                      <td>
+                        <p style="width: 130px"></p>
+                      </td>
+                      <td>
+                        <p style="width: 24px">{{turma.periodo}}</p>
+                      </td>
+                      <td>
+                        <p style="width: 80px">{{disciplina.codigo}}</p>
+                      </td>
+                      <td>
+                        <p style="width: 300px;">{{disciplina.nome}}</p>
+                      </td>
+                      <td>
+                        <p style="width: 24px">{{turma.letra}}</p>
+                      </td>
+                      <td>
+                        <div style="width: 180px">
+                          <template v-for="horario in Horarios">
+                            <p :key="horario.id" v-if="horario.id===turma.Horario1">
+                              {{horario.horario}}
+                              <template v-for="horario in Horarios">
+                                <span
+                                        :key="horario.id"
+                                        v-if="horario.id===turma.Horario2"
+                                >/ {{horario.horario}}</span>
+                              </template>
+                            </p>
+                          </template>
+                        </div>
+                      </td>
+
+                      <td v-if="turma.periodo===1">
+                        <div style="width: 32px">
+                          <p
+                                  v-if="(turma.Docente1 > 0) && (turma.Docente2 > 0)"
+                          >{{(disciplina.cargaTeorica + disciplina.cargaPratica)/2}}</p>
+
+                          <p v-else>{{disciplina.cargaTeorica + disciplina.cargaPratica}}</p>
+                        </div>
+                      </td>
+
+                      <td v-else>
+                        <div style="width: 32px"></div>
+                      </td>
+
+                      <td v-if="turma.periodo===3">
+                        <div style="width: 32px">
+                          <p
+                                  v-if="(turma.Docente1 > 0) && (turma.Docente2 > 0)"
+                          >{{(disciplina.cargaTeorica + disciplina.cargaPratica)/2}}</p>
+                          <p v-else>{{disciplina.cargaTeorica + disciplina.cargaPratica}}</p>
+                        </div>
+                      </td>
+                      <td v-else>
+                        <div style="width: 32px"></div>
+                      </td>
+
+                      <td>
+                        <div style="width: 42px"></div>
+                      </td>
+                    </div>
+                  </template>
+                </tr>
+              </template>
+            </template>
           </template>
           <template v-else>
             <tr>
@@ -247,6 +353,7 @@ export default {
   methods: {
     pdf() {
       pdfs.pdfCargaProfessores();
+      console.log(this.turmasSemAlocacao())
     },
 
     turmas(professor) {
@@ -256,8 +363,19 @@ export default {
             turma.Docente1 === professor.id || turma.Docente2 === professor.id
           );
         }),
-        "periodo"
+        ['periodo', 'Disciplina', 'letra']
       );
+    },
+
+    turmasSemAlocacao() {
+        return _.orderBy(
+            _.filter(this.$store.state.turma.Turmas, turma => {
+                return (
+                    turma.Docente1 == null && turma.Docente2 == null && turma.Disciplina != null
+                );
+            }),
+            ['periodo', 'Disciplina', 'letra']
+        );
     },
 
     pos(professor) {

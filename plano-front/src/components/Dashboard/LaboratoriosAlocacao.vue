@@ -2,15 +2,20 @@
   <div class="DashboardLaboratoriosAlocacao row pr-2">
     <!-- Titulo -->
     <div class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0">
-      <div class="form-inline col-12 pl-0 mb-2 pr-1">
+      <div class="form-inline col-11 pl-0 mb-2 pr-1">
         <h1 class="col-12 titulo">Laboratórios - Alocação</h1>
       </div>
+        <div class="col-1">
+            <button type="button" class="relatbtn" title="Relatório" v-on:click.prevent="pdf">
+                <i class="far fa-file-alt"></i>
+            </button>
+        </div>
     </div>
     <div class="w-100 mb-2 border-bottom"></div>
     <div class="col-12">
       <h6>1º SEMESTRE</h6>
       <div class="flex-container">
-        <div v-for="lab in Laboratorios" :key="lab.nome">
+        <div class="tablab"v-for="lab in Laboratorios" :key="lab.nome">
           <h5 class="lab-num">{{lab.nome}}</h5>
           <div class="row m-0">
             <table class="tg">
@@ -103,7 +108,7 @@
       <h6>2º SEMESTRE</h6>
 
       <div class="flex-container">
-        <div v-for="lab in Laboratorios">
+        <div class="tablab" v-for="lab in Laboratorios">
           <h5 class="lab-num">{{lab.nome}}</h5>
           <div class="row m-0">
               <table class="tg">
@@ -291,11 +296,47 @@ export default {
   margin: 0 !important;
 }
 
+.relatbtn {
+    background-color: white;
+    color: #9ab3ff !important;
+    float: right;
+}
+
+.relatbtn:hover {
+    color: #82a0ff !important;
+}
+
+.relatbtn:focus {
+    color: #82a0ff;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: #698dff;
+}
+
+button {
+    padding: 0;
+    border: none;
+    background: none;
+    height: -webkit-max-content;
+    height: -moz-max-content;
+    height: max-content;
+    margin-right: 15px;
+    margin-top: 5px;
+    margin-bottom: 0px;
+    transition: all 0.3s ease 0s;
+    cursor: pointer;
+}
+
 h5 {
   font-size: 14px;
   font-weight: 600;
   text-align: center;
   margin-top: 15px;
+}
+@media screen and (min-width: 1378px){
+  table{
+    margin-left: auto; 
+    margin-right: auto;
+  }  
 }
 h6 {
   font-weight: bold;
@@ -334,6 +375,9 @@ th {
   flex-wrap: wrap;
 }
 
+.tablab{
+  flex-basis: 30%;
+}
 .tg {
   border-collapse: collapse;
   border-spacing: 0;
