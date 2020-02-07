@@ -100,7 +100,7 @@
                     <div style="width: 32px">{{creditos2(professor)}}</div>
                   </td>
                   <td class="prof-td">
-                    <div style="width: 42px; ">{{creditos(professor)}}</div>
+                    <div style="width: 42px;">{{creditos(professor)}}</div>
                   </td>
                 </div>
               </template>

@@ -296,6 +296,11 @@ export default {
   margin: 0 !important;
 }
 
+i.fas,
+i.far {
+    font-size: 25px;
+}
+
 .relatbtn {
     background-color: white;
     color: #9ab3ff !important;

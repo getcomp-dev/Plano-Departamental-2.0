@@ -515,9 +515,7 @@ export default {
         }), ['periodo', 'Disciplina', 'letra'])
     },
 
-    turmasSemAlocacao(){
-
-    },turmasSemAlocacao() {
+    turmasSemAlocacao() {
         return _.orderBy(
             _.filter(store.state.turma.Turmas, turma => {
                 return (

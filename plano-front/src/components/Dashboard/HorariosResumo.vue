@@ -18,7 +18,7 @@
       <div class="w-100 mb-2 border-bottom"></div>
 		<div class="col-12 p-0 marg" style="padding-left: 15px !important;">
       <!-- ----------------------------------------------------------------------------------------------- -->
-      <div class="title" style="text-align:center !important;">
+      <div class="title" style="text-align:center !important;max-width: 1278px !important;">
         <h3>1º SEMESTRE</h3>
       </div>
       
@@ -171,13 +171,8 @@ export default {
     let anoAtual = _.isEmpty(this.$store.state.plano.Plano)
       ? 2019
       : this.$store.state.plano.Plano[0].ano;
-    console.log([anoAtual, _.isEmpty(this.$store.state.plano.Plano)]);
     this.createHorarios1(anoAtual, 1);
-    console.log(this.ativos1);
     this.createHorarios2(anoAtual, 3);
-    console.log(this.ativos2);
-    console.log(this.horarioVazio(this.ativos1.CCD[0]));
-    console.log(this.ativos1.CCD[0]);
   },
 
   methods: {
@@ -1141,7 +1136,6 @@ export default {
               }
             }
           }
-          console.log([seg, ter, qua, qui, sex]);
           switch (d) {
             case 0:
               tables[86 - 2 * vazio].table.body.push([
@@ -2223,7 +2217,6 @@ export default {
               }
             }
           }
-          console.log([seg, ter, qua, qui, sex]);
           switch (d) {
             case 0:
               tables[173 - 2 * vazio].table.body.push([
@@ -2394,14 +2387,6 @@ export default {
       };
     },
 
-    filterTurmas: function(t) {
-      var check = false;
-      for (var turma in this.ativos1.CCN) {
-        if (turma.id === t.id) check = true;
-      }
-      return check;
-    },
-
     createHorarios1: function(ano, semestre) {
       var grade;
       var grades;
@@ -2412,8 +2397,6 @@ export default {
       var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades;
       var turmas = this.$store.state.turma.Turmas;
       var turmasExternas = this.$store.state.turmaExterna.Turmas;
-
-      console.log(this.$store.state.curso.Cursos);
 
       if (semestre === 1) {
         if (this.$store.state.curso.Cursos[0].semestreInicial == 1) {
@@ -2464,7 +2447,6 @@ export default {
           this.evenCCD = "false";
         }
       }
-      console.log([this.evenCCD, this.evenCCN, this.evenSI, this.evenEC]);
       this.emptyTurmas1();
 
       //CC Diurno
@@ -2478,7 +2460,7 @@ export default {
           }
         }
       }
-      pedidosExternos = pedidosExternos = []
+      pedidosExternos = []
       for (let t in this.$store.state.pedidoExterno.Pedidos){
         for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
           if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===4){
@@ -2486,14 +2468,12 @@ export default {
           }
         }
       }
-      console.log(grades.length);
-
+      inicio = 1
       for (var i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
         //inicio
-        if (i === 0) inicio = 1;
-        else inicio = fim + 1;
+        if (i !== 0) inicio = fim + 1;
         //fim
         if (i + 1 === grades.length) fim = 10;
         else if (i == 0)
@@ -2567,7 +2547,7 @@ export default {
           }
         }
       }
-      pedidosExternos = pedidosExternos = []
+      pedidosExternos = []
       for (let t in this.$store.state.pedidoExterno.Pedidos){
         for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
           if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===1){
@@ -2575,12 +2555,12 @@ export default {
           }
         }
       }
+      inicio = 1
       for (var i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
         //inicio
-        if (i === 0) inicio = 1;
-        else inicio = fim + 1;
+        if (i !== 0) inicio = fim + 1;
         //fim
         if (i + 1 === grades.length) fim = 10;
         else if (i == 0)
@@ -2654,7 +2634,7 @@ export default {
           }
         }
       }
-      pedidosExternos = pedidosExternos = []
+      pedidosExternos = []
       for (let t in this.$store.state.pedidoExterno.Pedidos){
         for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
           if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===3){
@@ -2662,12 +2642,12 @@ export default {
           }
         }
       }
+      inicio = 1
       for (var i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
         //inicio
-        if (i === 0) inicio = 1;
-        else inicio = fim + 1;
+        if (i !== 0) inicio = fim + 1;
         //fim
         if (i + 1 === grades.length) fim = 10;
         else if (i == 0)
@@ -2741,7 +2721,7 @@ export default {
           }
         }
       }
-      pedidosExternos = pedidosExternos = []
+      pedidosExternos = []
       for (let t in this.$store.state.pedidoExterno.Pedidos){
         for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
           if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===2){
@@ -2749,12 +2729,12 @@ export default {
           }
         }
       }
+      inicio = 1
       for (var i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
         //inicio
-        if (i === 0) inicio = 1;
-        else inicio = fim + 1;
+        if (i !== 0) inicio = fim + 1;
         //fim
         if (i + 1 === grades.length) fim = 10;
         else if (i == 0)
@@ -2847,8 +2827,6 @@ export default {
       var turmas = this.$store.state.turma.Turmas;
       var turmasExternas = this.$store.state.turmaExterna.Turmas;
 
-      console.log(this.$store.state.curso.Cursos);
-
       if (semestre === 1) {
         if (this.$store.state.curso.Cursos[0].semestreInicial == 1) {
           this.evenCCN = "false";
@@ -2898,7 +2876,6 @@ export default {
           this.evenCCD = "false";
         }
       }
-      console.log([this.evenCCD, this.evenCCN, this.evenSI, this.evenEC]);
       this.emptyTurmas2();
 
       //CC Diurno está selecionado
@@ -2913,7 +2890,7 @@ export default {
           }
         }
       }
-      pedidosExternos = pedidosExternos = []
+      pedidosExternos = []
       for (let t in this.$store.state.pedidoExterno.Pedidos){
         for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
           if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===4){
@@ -2921,14 +2898,12 @@ export default {
           }
         }
       }
-      console.log(grades.length);
-
+      inicio = 1
       for (var i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
         //inicio
-        if (i === 0) inicio = 1;
-        else inicio = fim + 1;
+        if (i !== 0) inicio = fim + 1;
         //fim
         if (i + 1 === grades.length) fim = 10;
         else if (i == 0)
@@ -3002,7 +2977,7 @@ export default {
           }
         }
       }
-      pedidosExternos = pedidosExternos = []
+      pedidosExternos = []
       for (let t in this.$store.state.pedidoExterno.Pedidos){
         for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
           if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===1){
@@ -3010,12 +2985,12 @@ export default {
           }
         }
       }
+      inicio = 1
       for (var i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
         //inicio
-        if (i === 0) inicio = 1;
-        else inicio = fim + 1;
+        if (i !== 0) inicio = fim + 1;
         //fim
         if (i + 1 === grades.length) fim = 10;
         else if (i == 0)
@@ -3089,7 +3064,7 @@ export default {
           }
         }
       }
-      pedidosExternos = pedidosExternos = []
+      pedidosExternos = []
       for (let t in this.$store.state.pedidoExterno.Pedidos){
         for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
           if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===3){
@@ -3097,12 +3072,12 @@ export default {
           }
         }
       }
+      inicio = 1
       for (var i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
         //inicio
-        if (i === 0) inicio = 1;
-        else inicio = fim + 1;
+        if (i !== 0) inicio = fim + 1;
         //fim
         if (i + 1 === grades.length) fim = 10;
         else if (i == 0)
@@ -3176,7 +3151,7 @@ export default {
           }
         }
       }
-      pedidosExternos = pedidosExternos = []
+      pedidosExternos = []
       for (let t in this.$store.state.pedidoExterno.Pedidos){
         for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
           if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===2){
@@ -3184,12 +3159,12 @@ export default {
           }
         }
       }
+      inicio = 1
       for (var i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
         //inicio
-        if (i === 0) inicio = 1;
-        else inicio = fim + 1;
+        if (i !== 0) inicio = fim + 1;
         //fim
         if (i + 1 === grades.length) fim = 10;
         else if (i == 0)
@@ -3413,6 +3388,11 @@ export default {
   display: block;
   padding-top: 0px;
   text-align: start !important;
+}
+
+i.fas,
+i.far {
+  font-size: 25px;
 }
 
 .relatbtn {

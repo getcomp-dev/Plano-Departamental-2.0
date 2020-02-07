@@ -158,8 +158,12 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
     var turmas2 = _.filter(this.Turmas, ['periodo', 3])
     var seg = '', ter = '', qua = '', qui = '', sex = ''
     tables.push({text: "1º Semestre", bold:true, margin:[0, 10, 0, 10], fontSize:20})
-    for(var i = 0; i < laboratorios.length; i++) {
-        tables.push({text: laboratorios[i].nome, bold: true, margin: [0, 10, 0, 10], fontSize: 18})
+    for(let i = 0; i < laboratorios.length; i++) {
+        if(i % 3 === 0 && i !== 0){
+            tables.push({text: laboratorios[i].nome, bold: true, margin: [0, 10, 0, 10], fontSize: 18, pageBreak:'before'})
+        }else{
+            tables.push({text: laboratorios[i].nome, bold: true, margin: [0, 10, 0, 10], fontSize: 18})
+        }
         tables.push({
             table: {
                 widths: ['*', '*', '*', '*', '*', '*'],
@@ -404,9 +408,13 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
         }
     }
 
-    tables.push({text: "2º Semestre", bold:true, margin:[0, 10, 0, 10], fontSize:20})
-    for(var i = 0; i < laboratorios.length; i++) {
-        tables.push({text: laboratorios[i].nome, bold: true, margin: [0, 10, 0, 10], fontSize: 18})
+    tables.push({text: "2º Semestre", bold:true, margin:[0, 10, 0, 10], fontSize:20, pageBreak:'before'})
+    for(let i = 0; i < laboratorios.length; i++){
+        if(i % 3 === 0 && i !== 0){
+            tables.push({text: laboratorios[i].nome, bold: true, margin: [0, 10, 0, 10], fontSize: 18, pageBreak:'before'})
+        }else{
+            tables.push({text: laboratorios[i].nome, bold: true, margin: [0, 10, 0, 10], fontSize: 18})
+        }
         tables.push({
             table: {
                 widths: ['*', '*', '*', '*', '*', '*'],
@@ -581,8 +589,8 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
             }
             seg = ter = qua = qui = sex = ''
         }
-    }
 
+    }
     console.log("Criando Documento")
     let docDefinitionLabs = {
         content: tables,
@@ -601,7 +609,15 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
 function turmas(professor, turmas){
     return _.orderBy(_.filter(turmas,(turma) => {
         return (turma.Docente1===professor.id || turma.Docente2===professor.id)
-    }),'periodo')
+    }),['periodo', 'Disciplina', 'letra'])
+}
+
+function turmasSemAlocacao(turmas){
+    return _.orderBy(_.filter(turmas, turma => {
+            return (turma.Docente1 == null && turma.Docente2 == null && turma.Disciplina != null);
+        }),
+        ['periodo', 'Disciplina', 'letra']
+    );
 }
 
 function pos(professor, cargas){
@@ -616,10 +632,10 @@ function creditos1(professor, turmas, disciplinas, cargas){
         if(turmas[t].periodo===1 && (turmas[t].Docente1===professor.id || turmas[t].Docente2===professor.id)){
             for (var d = 0; d < disciplinas.length; d++){
                 if(disciplinas[d].id===turmas[t].Disciplina){
-                    if((turmas[t].Docente1 > 0) && (turmas[t].Docente2 > 0)){
-                        c+=(parseFloat(disciplinas[d].cargaPratica)/2)
-                        c+=(parseFloat(disciplinas[d].cargaTeorica)/2)
-                    }else {
+                    if((turmas[t].Docente1 > 0) && (turmas[t].Docente2 > 0)) {
+                        c += (parseFloat(disciplinas[d].cargaPratica) / 2)
+                        c += (parseFloat(disciplinas[d].cargaTeorica) / 2)
+                    }else{
                         c += parseFloat(disciplinas[d].cargaPratica)
                         c += parseFloat(disciplinas[d].cargaTeorica)
                     }
@@ -630,7 +646,7 @@ function creditos1(professor, turmas, disciplinas, cargas){
     for(var t = 0; t < cargas.length; t++){
         if(cargas[t].Docente===professor.id){
             if(cargas[t].trimestre==1 || cargas[t].trimestre==2){
-                c+= parseFloat(cargas[t].creditos)
+                c+= parseFloat(cargas[t].creditos, 10)
             }
         }
     }
@@ -643,10 +659,10 @@ function creditos2(professor, turmas, disciplinas, cargas){
         if(turmas[t].periodo===3 && (turmas[t].Docente1===professor.id || turmas[t].Docente2===professor.id)){
             for (var d = 0; d < disciplinas.length; d++){
                 if(disciplinas[d].id===turmas[t].Disciplina){
-                    if((turmas[t].Docente1 > 0) && (turmas[t].Docente2 > 0)){
-                        c+=(parseFloat(disciplinas[d].cargaPratica)/2)
-                        c+=(parseFloat(disciplinas[d].cargaTeorica)/2)
-                    }else {
+                    if((turmas[t].Docente1 > 0) && (turmas[t].Docente2 > 0)) {
+                        c += (parseFloat(disciplinas[d].cargaPratica) / 2)
+                        c += (parseFloat(disciplinas[d].cargaTeorica) / 2)
+                    }else{
                         c += parseFloat(disciplinas[d].cargaPratica)
                         c += parseFloat(disciplinas[d].cargaTeorica)
                     }
@@ -657,7 +673,7 @@ function creditos2(professor, turmas, disciplinas, cargas){
     for(var t = 0; t < cargas.length; t++){
         if(cargas[t].Docente===professor.id){
             if(cargas[t].trimestre==3){
-                c+= parseFloat(cargas[t].creditos)
+                c+= parseFloat(cargas[t].creditos, 10)
             }
         }
     }
@@ -692,7 +708,7 @@ const pdfCargaProfessores = () => new Promise((resolve, reject) => {
             tables.push({
                 style: 'tableExample',
                 table: {
-                    widths: [8, 68, '*', 18, 104, 24, 24],
+                    widths: [8, 68, '*', 18, 104, 16, 16],
                     headerRows: 1,
                     color: '#426',
                     body: [
@@ -733,22 +749,13 @@ const pdfCargaProfessores = () => new Promise((resolve, reject) => {
                     horarioTotal = ''
                 }else if (horario2 === undefined) {
                     horarioTotal = horario1.horario
-                } else if (horario1 === undefined) {
-                    horarioTotal = horario2.horario
-                }
-                else{
+                } else {
                     horarioTotal = horario1.horario + '/' + horario2.horario
                 }
                 if (turmasProf[j].periodo == 1) {
-                    if((turmasProf[j].Docente1 > 0) && (turmasProf[j].Docente2 > 0))
-                        c1 = (disciplina.cargaTeorica + disciplina.cargaPratica)/2
-                    else
-                        c1 = disciplina.cargaTeorica + disciplina.cargaPratica
+                    c1 = disciplina.cargaTeorica + disciplina.cargaPratica
                 } else {
-                    if((turmasProf[j].Docente1 > 0) && (turmasProf[j].Docente2 > 0))
-                        c2 = (disciplina.cargaTeorica + disciplina.cargaPratica)/2
-                    else
-                        c2 = disciplina.cargaTeorica + disciplina.cargaPratica
+                    c2 = disciplina.cargaTeorica + disciplina.cargaPratica
                 }
                 tables[1 + 2 * (i - vazio)].table.body.push([{text:turmasProf[j].periodo, alignment: 'center'}, {
                     text: disciplina.codigo,
@@ -771,6 +778,84 @@ const pdfCargaProfessores = () => new Promise((resolve, reject) => {
                     colSpan: 2
                 }, '', '', '', {text:c1, alignment: 'center'}, {text:c2, alignment: 'center'}])
             }
+        }
+    }
+    let turmasSemAloc = turmasSemAlocacao(this.Turmas)
+    if(turmasSemAloc.length > 0){
+        tables.push({
+            columns: [{
+                text: "SEM ALOCAÇÃO",
+                bold: true
+            }], margin: [0, 10, 0, 10]
+        })
+        tables.push({
+            style: 'tableExample',
+            table: {
+                widths: [8, 68, '*', 18, 104, 24, 24],
+                headerRows: 1,
+                color: '#426',
+                body: [
+                    [{text: 'S', bold: true}, {
+                        text: 'Disciplina',
+                        colSpan: 2,
+                        bold: true
+                    }, '', {text: 'T', alignment: 'center', bold: true}, {
+                        text: 'Horário',
+                        alignment: 'center',
+                        bold: true
+                    }, {text: 'C1', bold: true}, {text: 'C2', bold: true}],
+                ]
+            }
+        })
+        for (var j = 0; j < turmasSemAloc.length; j++) {
+            var disciplina = undefined
+            var horario1 = undefined
+            var horario2 = undefined
+            var c1 = 0
+            var c2 = 0
+            for (var k = 0; k < this.Disciplinas.length; k++) {
+                if (turmasSemAloc[j].Disciplina === this.Disciplinas[k].id) {
+                    disciplina = this.Disciplinas[k]
+                }
+            }
+            for (var l = 0; l < this.Horarios.length; l++) {
+                if (turmasSemAloc[j].Horario1 === this.Horarios[l].id) {
+                    horario1 = this.Horarios[l]
+                }
+            }
+
+            for (var m = 0; m < this.Horarios.length; m++) {
+                if (turmasSemAloc[j].Horario2 === this.Horarios[m].id) {
+                    horario2 = this.Horarios[m]
+                }
+            }
+            if(horario1===undefined && horario2===undefined){
+                horarioTotal = ''
+            }else if (horario2 === undefined) {
+                var horarioTotal = horario1.horario
+            } else if (horario1 === undefined) {
+                var horarioTotal = horario2.horario
+            }else{
+                var horarioTotal = horario1.horario + '/' + horario2.horario
+            }
+            if (turmasSemAloc[j].periodo == 1) {
+                if((turmasSemAloc[j].Docente1 > 0) && (turmasSemAloc[j].Docente2 > 0))
+                    c1 = (disciplina.cargaTeorica + disciplina.cargaPratica)/2
+                else
+                    c1 = disciplina.cargaTeorica + disciplina.cargaPratica
+            } else {
+                if((turmasSemAloc[j].Docente1 > 0) && (turmasSemAloc[j].Docente2 > 0))
+                    c2 = (disciplina.cargaTeorica + disciplina.cargaPratica)/2
+                else
+                    c2 = disciplina.cargaTeorica + disciplina.cargaPratica
+            }
+            tables[1 + 2 * (i - vazio)].table.body.push([{text:turmasSemAloc[j].periodo, alignment: 'center'}, {
+                text: disciplina.codigo,
+                alignment: 'center'
+            }, disciplina.nome, {text: turmasSemAloc[j].letra, alignment: 'center'}, {
+                text: horarioTotal,
+                alignment: 'center'
+            }, {text:c1, alignment: 'center'}, {text:c2, alignment: 'center'}])
         }
     }
 
@@ -873,13 +958,12 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     pedidos = _.filter(listaPedidos, ['Curso', 4])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 4])
 
+    inicio = 1
     for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
         grade = grades[i].id
         //inicio
-        if(i===0)
-            inicio = 1
-        else
+        if(i!==0)
             inicio = fim+1
         //fim
         if(i+1 === grades.length)
@@ -919,13 +1003,12 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
     pedidos = _.filter(listaPedidos, ['Curso', 1])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 1])
+    inicio = 1
     for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
         grade = grades[i].id
         //inicio
-        if(i===0)
-            inicio = 1
-        else
+        if(i!==0)
             inicio = fim+1
         //fim
         if(i+1 === grades.length)
@@ -965,13 +1048,12 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
     pedidos = _.filter(listaPedidos, ['Curso', 3])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 3])
+    inicio = 1
     for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
         grade = grades[i].id
         //inicio
-        if(i===0)
-            inicio = 1
-        else
+        if(i!==0)
             inicio = fim+1
         //fim
         if(i+1 === grades.length)
@@ -1011,13 +1093,12 @@ function createHorarios1 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
     pedidos = _.filter(listaPedidos, ['Curso', 2])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 2])
+    inicio = 1
     for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
         grade = grades[i].id
         //inicio
-        if(i===0)
-            inicio = 1
-        else
+        if(i!==0)
             inicio = fim+1
         //fim
         if(i+1 === grades.length)
@@ -1146,13 +1227,12 @@ function createHorarios2 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     pedidos = _.filter(listaPedidos, ['Curso', 4])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 4])
 
+    inicio = 1
     for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
         grade = grades[i].id
         //inicio
-        if(i===0)
-            inicio = 1
-        else
+        if(i!==0)
             inicio = fim+1
         //fim
         if(i+1 === grades.length)
@@ -1192,13 +1272,12 @@ function createHorarios2 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
     pedidos = _.filter(listaPedidos, ['Curso', 1])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 1])
+    inicio = 1
     for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
         grade = grades[i].id
         //inicio
-        if(i===0)
-            inicio = 1
-        else
+        if(i!==0)
             inicio = fim+1
         //fim
         if(i+1 === grades.length)
@@ -1238,13 +1317,12 @@ function createHorarios2 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
     pedidos = _.filter(listaPedidos, ['Curso', 3])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 3])
+    inicio = 1
     for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
         grade = grades[i].id
         //inicio
-        if(i===0)
-            inicio = 1
-        else
+        if(i!==0)
             inicio = fim+1
         //fim
         if(i+1 === grades.length)
@@ -1284,13 +1362,12 @@ function createHorarios2 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
     grades = _.orderBy(grades, 'periodoInicio', 'desc')
     pedidos = _.filter(listaPedidos, ['Curso', 2])
     pedidosExternos = _.filter(listaPedidosExternos, ['Curso', 2])
+    inicio = 1
     for (let i = 0; ((i < grades.length) && (inicio <= 10)); i++) {
         //grade
         grade = grades[i].id
         //inicio
-        if(i===0)
-            inicio = 1
-        else
+        if(i!==0)
             inicio = fim+1
         //fim
         if(i+1 === grades.length)
@@ -1943,9 +2020,9 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                 ]
             }
         })
-        for (var d = 0; d < 6; d++) {
+        for (var d = 0; d < 8; d++) {
             for (var j = 0; j < eletivas1.length; j++) {
-                if (checkTurmaHorario(eletivas1[j], 1 + d)) {
+                if (checkTurmaHorario(eletivas1[j], ((d === 4 || d === 5) ? 28 : 1) + ((d > 5) ? d - 2 : d))) {
                     for (var k = 0; k < disciplinas.length; k++) {
                         if (eletivas1[j].Disciplina === disciplinas[k].id) {
                             if (seg !== '')
@@ -1954,7 +2031,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }
                     }
                 }
-                if (checkTurmaHorario(eletivas1[j], 7 + d)) {
+                if (checkTurmaHorario(eletivas1[j], ((d === 4 || d === 5) ? 30 : 7) + ((d > 5) ? d - 2 : d))) {
                     for (k = 0; k < disciplinas.length; k++) {
                         if (eletivas1[j].Disciplina === disciplinas[k].id) {
                             if (ter != '')
@@ -1963,7 +2040,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }
                     }
                 }
-                if (checkTurmaHorario(eletivas1[j], 13 + d)) {
+                if (checkTurmaHorario(eletivas1[j], ((d === 4 || d === 5) ? 32 : 13) + ((d > 5) ? d - 2 : d))) {
                     for (k = 0; k < disciplinas.length; k++) {
                         if (eletivas1[j].Disciplina === disciplinas[k].id) {
                             if (qua != '')
@@ -1972,7 +2049,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }
                     }
                 }
-                if (checkTurmaHorario(eletivas1[j], 19 + d)) {
+                if (checkTurmaHorario(eletivas1[j], ((d === 4 || d === 5) ? 34 : 19) + ((d > 5) ? d - 2 : d))) {
                     for (k = 0; k < disciplinas.length; k++) {
                         if (eletivas1[j].Disciplina === disciplinas[k].id) {
                             if (qui != '')
@@ -1981,7 +2058,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }
                     }
                 }
-                if (checkTurmaHorario(eletivas1[j], 25 + d)) {
+                if (checkTurmaHorario(eletivas1[j], ((d === 4 || d === 5) ? 36 : 25) + ((d > 5) ? d - 2 : d))) {
                     for (k = 0; k < disciplinas.length; k++) {
                         if (eletivas1[j].Disciplina === disciplinas[k].id) {
                             if (sex != '')
@@ -2031,7 +2108,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     break
                 case 4:
                     tables[86 - 2 * vazio].table.body.push([{
-                        text: '19 - 21',
+                        text: '17 - 19',
                         alignment: 'center'
                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
                         text: qua,
@@ -2039,6 +2116,24 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                     break
                 case 5:
+                    tables[86 - 2 * vazio].table.body.push([{
+                        text: '18 - 20',
+                        alignment: 'center'
+                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                        text: qua,
+                        alignment: 'center'
+                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                    break
+                case 6:
+                    tables[86 - 2 * vazio].table.body.push([{
+                        text: '19 - 21',
+                        alignment: 'center'
+                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                        text: qua,
+                        alignment: 'center'
+                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                    break
+                case 7:
                     tables[86 - 2 * vazio].table.body.push([{
                         text: '21 - 23',
                         alignment: 'center'
@@ -2643,9 +2738,9 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                 ]
             }
         })
-        for (var d = 0; d < 6; d++) {
+        for (var d = 0; d < 8; d++) {
             for (var j = 0; j < eletivas2.length; j++) {
-                if (checkTurmaHorario(eletivas2[j], 1 + d)) {
+                if (checkTurmaHorario(eletivas2[j], ((d === 4 || d === 5) ? 28 : 1) + ((d > 5) ? d - 2 : d))) {
                     for (var k = 0; k < disciplinas.length; k++) {
                         if (eletivas2[j].Disciplina === disciplinas[k].id) {
                             if (seg !== '')
@@ -2654,7 +2749,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }
                     }
                 }
-                if (checkTurmaHorario(eletivas2[j], 7 + d)) {
+                if (checkTurmaHorario(eletivas2[j], ((d === 4 || d === 5) ? 30 : 7) + ((d > 5) ? d - 2 : d))) {
                     for (k = 0; k < disciplinas.length; k++) {
                         if (eletivas2[j].Disciplina === disciplinas[k].id) {
                             if (ter != '')
@@ -2663,7 +2758,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }
                     }
                 }
-                if (checkTurmaHorario(eletivas2[j], 13 + d)) {
+                if (checkTurmaHorario(eletivas2[j], ((d === 4 || d === 5) ? 32 : 13) + ((d > 5) ? d - 2 : d))) {
                     for (k = 0; k < disciplinas.length; k++) {
                         if (eletivas2[j].Disciplina === disciplinas[k].id) {
                             if (qua != '')
@@ -2672,7 +2767,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }
                     }
                 }
-                if (checkTurmaHorario(eletivas2[j], 19 + d)) {
+                if (checkTurmaHorario(eletivas2[j], ((d === 4 || d === 5) ? 34 : 19) + ((d > 5) ? d - 2 : d))) {
                     for (k = 0; k < disciplinas.length; k++) {
                         if (eletivas2[j].Disciplina === disciplinas[k].id) {
                             if (qui != '')
@@ -2681,7 +2776,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                         }
                     }
                 }
-                if (checkTurmaHorario(eletivas2[j], 25 + d)) {
+                if (checkTurmaHorario(eletivas2[j], ((d === 4 || d === 5) ? 36 : 25) + ((d > 5) ? d - 2 : d))) {
                     for (k = 0; k < disciplinas.length; k++) {
                         if (eletivas2[j].Disciplina === disciplinas[k].id) {
                             if (sex != '')
@@ -2731,7 +2826,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     break
                 case 4:
                     tables[173 - 2 * vazio].table.body.push([{
-                        text: '19 - 21',
+                        text: '17 - 19',
                         alignment: 'center'
                     }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
                         text: qua,
@@ -2739,6 +2834,24 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
                     break
                 case 5:
+                    tables[173 - 2 * vazio].table.body.push([{
+                        text: '18 - 20',
+                        alignment: 'center'
+                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                        text: qua,
+                        alignment: 'center'
+                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                    break
+                case 6:
+                    tables[173 - 2 * vazio].table.body.push([{
+                        text: '19 - 21',
+                        alignment: 'center'
+                    }, {text: seg, alignment: 'center'}, {text: ter, alignment: 'center'}, {
+                        text: qua,
+                        alignment: 'center'
+                    }, {text: qui, alignment: 'center'}, {text: sex, alignment: 'center'}])
+                    break
+                case 7:
                     tables[173 - 2 * vazio].table.body.push([{
                         text: '21 - 23',
                         alignment: 'center'
