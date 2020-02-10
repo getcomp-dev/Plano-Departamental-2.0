@@ -353,7 +353,6 @@ export default {
   methods: {
     pdf() {
       pdfs.pdfCargaProfessores();
-      console.log(this.turmasSemAlocacao())
     },
 
     turmas(professor) {

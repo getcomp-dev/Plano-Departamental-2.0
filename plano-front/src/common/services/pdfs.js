@@ -787,4 +787,102 @@ export default {
         pdfMake.createPdf(docDefinition).open()
     },
 
+    turmasRelatorioDisciplinas(disciplina) {
+        return _.orderBy(
+            _.filter(store.state.turma.Turmas, turma => {
+                return (
+                    turma.Disciplina === disciplina.id
+                );
+            }),
+            ['periodo', 'letra']
+        );
+    },
+
+    docentesRelatorioDisciplina(turma) {
+        let d1 = _.find(store.state.docente.Docentes, {'id':turma.Docente1})
+        let d2 = _.find(store.state.docente.Docentes, {'id':turma.Docente2})
+        if(d1 === undefined && d2 === undefined){
+            return ''
+        }else if(d2 === undefined){
+            return `${d1.apelido}`
+        }else if(d1 === undefined){
+            return `${d2.apelido}`
+        }else {
+            return `${d1.apelido} / ${d2.apelido}`
+        }
+    },
+
+    pdfRelatorioDisciplinas() {
+        var pdfMake = require('pdfmake/build/pdfmake.js')
+        if (pdfMake.vfs == undefined){
+            var pdfFonts = require('pdfmake/build/vfs_fonts.js')
+            pdfMake.vfs = pdfFonts.pdfMake.vfs;
+        }
+        let tables = []
+        let disciplinas = _.orderBy(store.state.disciplina.Disciplinas, 'codigo')
+        let turmasDisc = undefined
+        let vazio = 0
+        for(let i = 0; i < disciplinas.length; i++){
+            turmasDisc = this.turmasRelatorioDisciplinas(disciplinas[i])
+            if(turmasDisc.length === 0){
+                vazio = vazio + 1
+            }else {
+                tables.push({
+                    columns: [{
+                        text: disciplinas[i].codigo,
+                        bold: true,
+                        width: 60
+                    }, {
+                        text: disciplinas[i].nome,
+                        bold: true,
+                        alignment: 'left'
+                    }], margin: [0, 10, 0, 10]
+                })
+
+                tables.push({
+                    style: 'tableExample',
+                    table: {
+                        widths: [8, 8, '*', 120],
+                        headerRows: 1,
+                        color: '#426',
+                        body: [
+                            [{text: 'S', alignment: 'center', bold: true},
+                                {text: 'T', alignment: 'center', bold: true},
+                                {text: 'Docentes', alignment: 'center', bold: true},
+                                {text: 'Horário', alignment: 'center',}]
+                        ]
+                    }
+                })
+                for(let j = 0; j < turmasDisc.length; j++){
+                    let docentes = this.docentesRelatorioDisciplina(turmasDisc[j])
+                    let horario1 = _.find(store.state.horario.Horarios, {'id': turmasDisc[j].Horario1})
+                    let horario2 = _.find(store.state.horario.Horarios, {'id': turmasDisc[j].Horario2})
+                    let horarioTotal = undefined
+                    if(horario1===undefined && horario2===undefined){
+                        horarioTotal = ''
+                    }else if (horario2 === undefined) {
+                        horarioTotal = horario1.horario
+                    } else if (horario1 === undefined) {
+                        horarioTotal = horario2.horario
+                    }else{
+                        horarioTotal = horario1.horario + '/' + horario2.horario
+                    }
+                    tables[1 + 2 * (i - vazio)].table.body.push([
+                        {text:turmasDisc[j].periodo, alignment: 'center'},
+                        {text: turmasDisc[j].letra, alignment: 'center'},
+                        {text: docentes, alignment: 'center'},
+                        {text: horarioTotal, alignment: 'center'}
+                    ])
+
+                }
+            }
+        }
+
+        var docDefinition = {
+            content: tables,
+            header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
+        }
+        pdfMake.createPdf(docDefinition).open()
+    }
+
 }
