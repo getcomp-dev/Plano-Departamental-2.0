@@ -22,6 +22,7 @@ import DashboardLaboratoriosAlocacao from './components/Dashboard/LaboratoriosAl
 import DashboardCargaPos from './components/Dashboard/CargaPos'
 import DashboardSalas from './components/Dashboard/Salas'
 import DashboardGradeDisciplinas from './components/Dashboard/GradeDisciplinas'
+import DashboardRelatorioDisciplinas from './components/Dashboard/RelatorioDisciplinas'
 
 
 import {USER_LOGGED_OUT} from './vuex/mutation-types'
@@ -63,7 +64,8 @@ const routes = [
       {path: 'laboratoriosAlocacao', name: 'laboratoriosAlocacao', component: DashboardLaboratoriosAlocacao},
       {path: 'cargaPos', name: 'cargaPos', component: DashboardCargaPos},
       {path: 'salas', name: 'salas', component: DashboardSalas},
-      {path: 'gradeDisciplinas', name: 'gradeDisciplinas', component: DashboardGradeDisciplinas}
+      {path: 'gradeDisciplinas', name: 'gradeDisciplinas', component: DashboardGradeDisciplinas},
+      {path: 'relatorioDisciplinas', name: 'relatorioDisciplinas', component: DashboardRelatorioDisciplinas}
     ]
   },
   {

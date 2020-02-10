@@ -41,7 +41,7 @@
               <template v-for="grade in Grades">
                 <option
                   v-if="grade.Curso == currentCurso"
-                  :key="grade.Curso"
+                  :key="grade.id+'-'+grade.Curso"
                   :value="grade.id"
                 >{{grade.nome}}</option>
               </template>
@@ -156,7 +156,7 @@
                   <template v-for="grade in Grades">
                     <template v-for="disciplinaGrade in DisciplinaGrades">
                       <tr
-                        :key="disciplinaGrade+grade.periodo"
+                        :key="disciplinaGrade+'-'+grade.periodo"
                         v-if="grade.id===currentGrade"
                         :class="[isEven(disciplinaGrade.periodo)? 'even':'notEven']"
                       >
@@ -169,18 +169,18 @@
                             <template v-for="disciplina in Disciplinas">
                               <template v-if="andConnector(grade, disciplina, disciplinaGrade)">
                                 <td
-                                  :key="disciplina.codigo"
-                                  v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.id), showGrade(grade)"
-                                  :class="{ 'bg-custom': disciplinaClickada===disciplina.nome}"
+                                  :key="disciplina.codigo+'-'+disciplina.nome"
+                                  v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.id, disciplina.nome), showGrade(grade)"
+                                  :class="{ 'bg-custom': disciplinaClickada===disciplina.id}"
                                   style="cursor:pointer;"
                                 >
                                   <p style="width: 70px">{{disciplina.codigo}}</p>
                                 </td>
                                 <td
-                                  :key="disciplina.nome"
-                                  :class="{ 'bg-custom': disciplinaClickada===disciplina.nome}"
+                                  :key="disciplina.nome+'-'+disciplina.codigo"
+                                  v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.id, disciplina.nome), showGrade(grade)"
+                                  :class="{ 'bg-custom': disciplinaClickada===disciplina.id}"
                                   style="cursor:pointer;"
-                                  v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.id), showGrade(grade)"
                                 >
                                   <p style="width: 400px; text-align: start;">{{disciplina.nome}}</p>
                                 </td>
@@ -194,6 +194,7 @@
                 </template>
               </tbody>
             </table>
+
             <!-- Final da tabela -->
           </div>
         </div>
@@ -262,7 +263,6 @@
                       title="Salvar Grade"
                       class="addbtn"
                       v-on:click.prevent="editGrade"
-                      :key="1"
                     >
                       <i class="fas fa-check"></i>
                     </button>
@@ -271,7 +271,6 @@
                       title="Excluir Grade"
                       class="delbtn"
                       v-on:click.prevent="deleteGrade"
-                      :key="2"
                     >
                       <i class="far fa-trash-alt"></i>
                     </button>
@@ -321,7 +320,6 @@
                       title="Salvar Grade"
                       class="addbtn"
                       v-on:click.prevent="AvisoDisabled()"
-                      :key="3999"
                     >
                       <i class="fas fa-check"></i>
                     </button>
@@ -330,7 +328,6 @@
                       title="Excluir Grade"
                       class="delbtn"
                       v-on:click.prevent="AvisoDisabled()"
-                      :key="4"
                     >
                       <i class="far fa-trash-alt"></i>
                     </button>
@@ -363,6 +360,7 @@
                       class="selectMaior2 form-control form-control-sm"
                       id="disciplina"
                       v-model="disciplinaGradeForm.Disciplina"
+                      v-on:change="clearClick()"
                     >
                       <option
                         v-if="Disciplinas.length===0"
@@ -372,7 +370,7 @@
                       <option
                         v-else
                         v-for="disciplina in Disciplinas"
-                        :key="disciplina.nome"
+                        :key="disciplina.id+'-'+disciplina.nome+'-'+disciplina.codigo"
                         :value="disciplina.id"
                       >{{disciplina.nome}}</option>
                     </select>
@@ -398,7 +396,6 @@
                         class="addbtn"
                         style="margin-top: -1px"
                         v-on:click.prevent="editDisciplinaGrade"
-                        :key="5"
                       >
                         <i class="fas fa-check"></i>
                       </button>
@@ -414,7 +411,6 @@
                         title="Adicionar à Grade"
                         class="addbtn"
                         v-on:click.prevent="addDisciplinaGrade"
-                        :key="6"
                       >
                         <i class="fas fa-plus"></i>
                       </button>
@@ -425,7 +421,6 @@
                       title="Deletar Disciplina"
                       class="delbtn"
                       v-on:click.prevent="deleteDisciplinaGrade(), clearClick()"
-                      :key="7"
                     >
                       <i class="far fa-trash-alt"></i>
                     </button>
@@ -435,7 +430,6 @@
                       title="Cancelar"
                       class="cancelbtn"
                       v-on:click.prevent="cleanDisciplina(),clearClick()"
-                      :key="8"
                     >
                       <i class="fas fa-times"></i>
                     </button>
@@ -476,7 +470,6 @@
                         class="addbtn"
                         style="margin-top: -1px"
                         v-on:click.prevent="AvisoDisabled()"
-                        :key="9"
                       >
                         <i class="fas fa-check"></i>
                       </button>
@@ -491,7 +484,6 @@
                       title="Adicionar à Grade"
                       class="addbtn"
                       v-on:click.prevent="AvisoDisabled()"
-                      :key="10"
                     >
                       <i class="fas fa-plus"></i>
                     </button>
@@ -501,7 +493,6 @@
                       title="Deletar Disciplina"
                       class="delbtn"
                       v-on:click.prevent="AvisoDisabled()"
-                      :key="11"
                     >
                       <i class="far fa-trash-alt"></i>
                     </button>
@@ -511,7 +502,6 @@
                       title="Cancelar"
                       class="cancelbtn"
                       v-on:click.prevent="AvisoDisabled()"
-                      :key="12"
                     >
                       <i class="fas fa-times"></i>
                     </button>
@@ -556,12 +546,14 @@ export default {
       currentCurso: undefined,
       grades: [],
       disciplinaClickada: "",
-      showCard: false
+      showCard: false,
+      nomeAtual: undefined
     };
   },
   methods: {
-    clickada(discip) {
-      this.disciplinaClickada = discip;
+    clickada(ID, nome) {
+      this.disciplinaClickada = ID;
+      this.nomeAtual = nome;
     },
     clearClick() {
       this.disciplinaClickada = "";
@@ -624,6 +616,7 @@ export default {
         });
     },
     deleteGrade() {
+      let grade_nome = this.gradeForm.nome;
       gradeService
         .delete(this.gradeForm.id, this.gradeForm)
         .then(response => {
@@ -631,7 +624,7 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Grade ${response.Grade.nome} foi excluída!`,
+            text: `A Grade ${grade_nome} foi excluída!`,
             type: "warn"
           });
         })
@@ -670,16 +663,23 @@ export default {
       this.showGrade(grade);
     },
     addDisciplinaGrade() {
+      let nome_disciplina = null;
+      for (const key in this.Disciplinas) {
+        if (this.Disciplinas[key].id == this.disciplinaGradeForm.Disciplina) {
+          nome_disciplina = this.Disciplinas[key].nome;
+          break;
+        }
+      }
       disciplinaGradeService
         .create(this.disciplinaGradeForm)
         .then(response => {
-          this.disciplinaGradeForm.Disciplina = undefined;
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Disciplina ${response.Disciplina} foi adicionada à Grade ${response.Grade}!`,
+            text: `A Disciplina <b>${nome_disciplina}</b> foi adicionada à Grade <b>${this.gradeForm.nome}</b>!`,
             type: "success"
           });
+          // this.disciplinaGradeForm.Disciplina = undefined; //Limpa campo de disciplina apos adicionar
         })
         .catch(error => {
           this.error = "<b>Erro ao incluir Disciplina</b>";
@@ -702,7 +702,7 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Disciplina ${response.Disciplina} foi atualizada!`,
+            text: `A Disciplina <b>${this.nomeAtual}</b> foi atualizada!`,
             type: "success"
           });
         })
@@ -727,7 +727,7 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Disciplina ${response.Disciplina} foi excluída!`,
+            text: `A Disciplina <b>${this.nomeAtual}</b> foi excluída!`,
             type: "warn"
           });
         })

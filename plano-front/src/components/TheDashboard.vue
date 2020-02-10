@@ -129,6 +129,11 @@
                   </router-link>
                 </li>
                 <li @click="show=false" class="nav-item">
+                  <router-link :to="{ name: 'relatorioDisciplinas' }" class="nav-link">
+                    <i class="fas fa-clipboard"></i> Relatório Disciplinas
+                  </router-link>
+                </li>
+                <li @click="show=false" class="nav-item">
                   <router-link :to="{ name: 'horariosResumo' }" class="nav-link">
                     <i class="fas fa-clipboard"></i> Horários - Resumo
                   </router-link>
