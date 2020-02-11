@@ -6,7 +6,7 @@
                 style="height:38px;"
         >
             <div class="form-inline col-12 pl-0 mb-1 pr-1">
-                <h1 class="titulo col-7 col-sm-5 col-md-4 col-xl-2">Relatório Disciplinas</h1>
+                <h1 class="titulo col-7 col-sm-5 col-md-4 col-xl-2">Plano Departamental</h1>
 
                 <div
                         class="form-group col-5 col-sm-7 col-md-8 col-xl-10 mb-0 pr-0"

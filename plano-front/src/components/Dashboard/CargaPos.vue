@@ -1,5 +1,5 @@
 <template>
-  <div class="CargaPos row pr-2">
+  <div class="CargaPos row pr-2" v-if="Admin">
     <!-- Titulo -->
     <div
       class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
@@ -813,6 +813,14 @@ export default {
 
     isLoading() {
       return this.$store.state.isLoading;
+    },
+
+    Admin() {
+      if (this.$store.state.auth.Usuario.admin === 1) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 };
