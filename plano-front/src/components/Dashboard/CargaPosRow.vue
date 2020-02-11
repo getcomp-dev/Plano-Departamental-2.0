@@ -14,67 +14,17 @@
 
     <td>
       <p style="width: 24px">{{carga.trimestre}}</p>
-      <!--
-      <div >
-        <input
-          type="text"
-          style="width: 20px; height:16px;"
-          id="trimestre"
-          v-model="carga.trimestre"
-          v-on:blur="editCarga(carga)"
-        />
-      </div>
-      -->
     </td>
 
     <td>
       <div style="width: 135px">
         <template v-for="docente in Docentes">
-          <p :key="docente.id" v-if="carga.Docente == docente.id">{{docente.apelido}}</p>
+          <p :key="docente.id+'row id'" v-if="carga.Docente == docente.id">{{docente.apelido}}</p>
         </template>
       </div>
-      <!--
-      <div style="width: 135px">
-        <select
-          type="text"
-          style="width:130px; padding-left:2px;"
-          id="docente"
-          v-model="carga.Docente"
-          v-on:change="editCarga(carga)"
-        >
-          <option v-if="Docentes.length===0" type="text" value>Nenhum Docente Encontrado</option>
-          <option
-            v-for="docente in Docentes"
-            :key="docente.id"
-            :value="docente.id"
-          >{{docente.apelido}}</option>
-        </select>
-      </div>
-      -->
     </td>
-
-    <!-- <td>
-      <p style="width: 80px">{{carga.programa}}</p>
-      <div style="width: 100px;">
-        <input
-          type="text"
-          style="width: 80px"
-          v-model="carga.programa"
-          v-on:blur="editCarga(carga)"
-        />
-      </div> 
-    </td>-->
     <td>
       <p style="width: 30px">{{carga.creditos}}</p>
-      <!-- <div style="width: 40px">
-        <input
-          type="text"
-          style="width: 25px"
-          id="creditos"
-          v-model="carga.creditos"
-          v-on:blur="editCarga(carga)"
-        />
-      </div>-->
     </td>
   </div>
 </template>

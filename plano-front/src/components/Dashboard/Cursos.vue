@@ -6,10 +6,19 @@
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-12 titulo">Cursos</h1>
-      </div>
+        <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Cursos</h1>
+      
+      <div
+          class="form-group col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
+          style="justify-content: flex-end!important;"
+        >
+          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
+            <i class="fas fa-question"></i>
+          </b-button>
+          </div>
+          
+        </div>
     </div>
-
     <div class="w-100 mb-2 border-bottom"></div>
 
     <!-- Grid Esquerdo -->
@@ -54,10 +63,18 @@
                 <p class="p-header" style="width:52px!important;">Turno</p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width:52px!important;" title="Entrada de alunos 1º Semestre">1º Sem.</p>
+                <p
+                  class="p-header"
+                  style="width:52px!important;"
+                  title="Entrada de alunos 1º Semestre"
+                >1º Sem.</p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width:52px!important;" title="Entrada de alunos 2º Semestre">2º Sem.</p>
+                <p
+                  class="p-header"
+                  style="width:52px!important;"
+                  title="Entrada de alunos 2º Semestre"
+                >2º Sem.</p>
               </th>
             </div>
           </tr>
@@ -67,7 +84,7 @@
           <template v-if="Cursos.length > 0">
             <tr
               v-for="curso in Cursos"
-              :key="curso"
+              :key="'curso codigo'+curso.codigo"
               v-on:click.prevent="showCurso(curso), clickada(curso.codigo)"
               :class="{'bg-custom':cursoClickado === curso.codigo}"
               style="cursor: pointer;"
@@ -220,7 +237,7 @@
                     title="Deletar"
                     class="delbtn"
                     v-on:click.prevent="deleteCurso"
-                    :key="3"
+                    :key="2"
                   >
                     <i class="far fa-trash-alt"></i>
                   </button>
@@ -230,7 +247,7 @@
                     title="Cancelar"
                     class="cancelbtn"
                     v-on:click.prevent="cleanCurso"
-                    :key="2"
+                    :key="3"
                   >
                     <i class="fas fa-times"></i>
                   </button>
@@ -265,7 +282,31 @@
       </div>
     </div>
     <!-- Fim do Grid Direito -->
+    <!-- MODAL DE AJUDA -->
+    <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+      
+      <div class="modal-body">
+        <ul class="listas list-group"> 
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong>lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+        </ul>
+      </div>
+
+      <div slot="modal-footer" style="display: none">
+      </div>
+    </b-modal>
   </div>
+  
 </template>
 
 <script>
@@ -654,6 +695,15 @@ table input[type="checkbox"] {
   padding-left: 5px;
 }
 
+.listas {
+  line-height: 30px;
+  font-size: 12px;
+  text-align: justify;
+  line-height: inherit;
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+}
+strong{color:#007bff}
+
 /* Botoes */
 button {
   padding: 0;
@@ -707,6 +757,22 @@ i.far {
   color: #ff5f48;
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #ff4e34;
+}
+.relatbtn {
+  background-color: white;
+  color: #9ab3ff !important;
+}
+
+.relatbtn:hover {
+  color: #82a0ff !important;
+  background-color: white;
+}
+
+.relatbtn:focus {
+  color: #82a0ff;
+  background-color: white;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: #698dff;
 }
 
 @media screen and (max-width: 900px) {

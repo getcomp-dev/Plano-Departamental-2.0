@@ -45,6 +45,9 @@
                 <i class="far fa-trash-alt"></i>
               </button>
             </template>
+            <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
+                <i class="fas fa-question"></i>
+            </b-button>
           </div>
         </div>
       </div>
@@ -319,6 +322,31 @@
           </template>
         </template>
       </template>
+    </b-modal>
+    <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+      
+      <div class="modal-body">
+        <ul class="listas list-group"> 
+          <li class="list-group-item">
+            <strong>Para adicionar disciplinas à Tabela:</strong> Clique em Adicionar (+), em seguida, preencha a nova linha que surgirá na tabela. Após concluido, clique em Salvar (&#10003;)
+            ou em Cancelar (X).
+          </li>
+          <li class="list-group-item">
+            <strong>Para deletar disciplinas da Tabela:</strong> Marque a(s) disciplina(s) que deseja deletar através da caixa de seleção à esquerda e em seguida clique em Deletar (&#128465;) e confirme no botão OK.
+          </li>
+          <li class="list-group-item">
+            <strong>Para editar disciplinas da Tabela:</strong> Faça as alterações necessárias diretamente na tabela e o sistema irá salvar automaticamente.
+          </li>
+          <li class="list-group-item">
+            <strong>Observações:</strong> Em cada coluna de cursos a disciplina adicionada permite a inclusão em dois espaços, sendo acima
+            destinado para vagas declaradas, e abaixo para pedidos de vagas. Para que uma disciplina externa apareça em Horários de um determinado
+             curso é preciso que pelo menos uma vaga declarada seja destinada ao mesmo.
+          </li>
+        </ul>
+      </div>
+
+      <div slot="modal-footer" style="display: none">
+      </div>
     </b-modal>
   </div>
 </template>
@@ -731,6 +759,14 @@ i.fas,
 i.far {
   font-size: 25px;
 }
+.listas {
+  line-height: 30px;
+  font-size: 12px;
+  text-align: justify;
+  line-height: inherit;
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+}
+strong{color:#007bff}
 .addbtn {
   background-color: white;
   color: #a0e7a0;
@@ -768,6 +804,23 @@ i.far {
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #ff4e34;
 }
+.relatbtn {
+  background-color: white;
+  color: #9ab3ff !important;
+}
+
+.relatbtn:hover {
+  color: #82a0ff !important;
+  background-color: white;
+}
+
+.relatbtn:focus {
+  color: #82a0ff;
+  background-color: white;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: #698dff;
+}
+
 
 /* .example {
   display: -ms-grid;

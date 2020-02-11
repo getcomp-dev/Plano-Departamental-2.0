@@ -37,6 +37,10 @@
             >
               <i class="far fa-trash-alt"></i>
             </button>
+
+            <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
+                <i class="fas fa-question"></i>
+              </b-button>
           </div>
         </div>
       </div>
@@ -75,7 +79,7 @@
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:24px!important;" @click="toggleOrdenacaoPGMC">
+                  <p class="p-header" style="width:24px!important; cursor: pointer;" @click="toggleOrdenacaoPGMC">
                     T.
                     <i
                       v-if="ordenacaoAtualPGMC==='periodo'"
@@ -102,25 +106,19 @@
                   <template v-for="carga in CargasPGMC">
                     <tr
                       v-if="checkPGMC(carga, docente, t)"
-                      :key="'docente'+docente.id+'carga'+carga.id+t"
+                      :key="'MC-docente'+docente.id+'carga'+carga.id+t"
                       v-on:click="fun_clickado(carga, docente.apelido)"
                       :class="{'bg-custom':linhaClickada == carga.id}"
                     >
                       <template
                         v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))"
                       >
-                        <cargadata
-                          :key="'1docente'+docente.id+'carga'+carga.id"
-                          v-bind:carga="carga"
-                        ></cargadata>
+                        <cargadata :key="'1-MC'+docente.id+'carga'+carga.id" v-bind:carga="carga"></cargadata>
                       </template>
                       <template
                         v-if="((carga.trimestre == 3 || carga.trimestre == 4) && (periodos == 2 || periodos == 3))"
                       >
-                        <cargadata
-                          :key="'2docente'+docente.id+'carga'+carga.id"
-                          v-bind:carga="carga"
-                        ></cargadata>
+                        <cargadata :key="'2-MC'+docente.id+'carga'+carga.id" v-bind:carga="carga"></cargadata>
                       </template>
                     </tr>
                   </template>
@@ -156,7 +154,7 @@
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:24px!important;" @click="toggleOrdenacaoPGCC">
+                  <p class="p-header" style="width:24px!important; cursor: pointer" @click="toggleOrdenacaoPGCC">
                     T.
                     <i
                       v-if="ordenacaoAtualPGCC==='periodo'"
@@ -183,7 +181,7 @@
                   <template v-for="carga in CargasPGCC">
                     <tr
                       v-if="checkPGCC(carga, docente, t)"
-                      :key="'docente'+docente.id+'carga'+carga.id+t"
+                      :key="'CC-docente'+docente.id+'carga'+carga.id+t"
                       v-on:click="fun_clickado(carga, docente.apelido)"
                       :class="{'bg-custom':linhaClickada == carga.id}"
                     >
@@ -191,7 +189,7 @@
                         v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))"
                       >
                         <cargadata
-                          :key="'1docente'+docente.id+'carga'+carga.id"
+                          :key="'CC-docente'+docente.id+'carga'+carga.id"
                           v-bind:carga="carga"
                         ></cargadata>
                       </template>
@@ -199,7 +197,7 @@
                         v-if="((carga.trimestre == 3 || carga.trimestre == 4) && (periodos == 2 || periodos == 3))"
                       >
                         <cargadata
-                          :key="'2docente'+docente.id+'carga'+carga.id"
+                          :key="'CC-docente'+docente.id+'carga'+carga.id"
                           v-bind:carga="carga"
                         ></cargadata>
                       </template>
@@ -211,6 +209,7 @@
           </tbody>
         </table>
       </div>
+
       <!-- Inicio Tabela 3 -->
       <div class="p-0 divTable mr-2 mb-2" v-if="!isLoading">
         <div class="alert alert-dark p-0 m-0 text-center rounded-0" role="alert">
@@ -233,7 +232,7 @@
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:24px!important;" @click="toggleOrdenacaoPGEM">
+                  <p class="p-header" style="width:24px!important; cursor: pointer" @click="toggleOrdenacaoPGEM">
                     T.
                     <i
                       v-if="ordenacaoAtualPGEM==='periodo'"
@@ -260,7 +259,7 @@
                   <template v-for="carga in CargasPGEM">
                     <tr
                       v-if="checkPGEM(carga, docente, t)"
-                      :key="'docente'+docente.id+'carga'+carga.id+t"
+                      :key="'EM-docente'+docente.id+'carga'+carga.id+t"
                       v-on:click="fun_clickado(carga, docente.apelido)"
                       :class="{'bg-custom':linhaClickada == carga.id}"
                     >
@@ -268,7 +267,7 @@
                         v-if="((carga.trimestre == 1 || carga.trimestre == 2) && (periodos == 1 || periodos == 3))"
                       >
                         <cargadata
-                          :key="'1docente'+docente.id+'carga'+carga.id"
+                          :key="'EM-docente'+docente.id+'carga'+carga.id"
                           v-bind:carga="carga"
                         ></cargadata>
                       </template>
@@ -276,7 +275,7 @@
                         v-if="((carga.trimestre == 3 || carga.trimestre == 4) && (periodos == 2 || periodos == 3))"
                       >
                         <cargadata
-                          :key="'2docente'+docente.id+'carga'+carga.id"
+                          :key="'EM-docente'+docente.id+'carga'+carga.id"
                           v-bind:carga="carga"
                         ></cargadata>
                       </template>
@@ -289,11 +288,12 @@
         </table>
       </div>
     </div>
+
     <!-- Card de Adição -->
     <div class="div-card p-0 mt-3 mb-2 ml-auto col-lg-4 col-md-12 col-sm-12 col-12">
       <div class="card ml-auto mr-3">
         <div class="card-header">
-          <h2 class="card-title">Adição</h2>
+          <h2 class="card-title">Creditação Pós</h2>
         </div>
         <div class="card-body">
           <form>
@@ -329,7 +329,7 @@
                       <option v-if="Docentes.length===0" type="text" value>Nenhum Docente Encontrado</option>
                       <option
                         v-for="docente in Docentes"
-                        :key="docente.id"
+                        :key="'id docente'+docente.id"
                         :value="docente.id"
                       >{{docente.apelido}}</option>
                     </select>
@@ -442,7 +442,7 @@
         <template v-for="carga in Deletar">
           <template v-for="docente in Docentes">
             <template v-if="docente.id===carga.Docente">
-              <p :key="'carga'+carga.id+'docente'+docente.id">
+              <p :key="'carga id'+carga.id+'docente'+docente.id">
                 Docente:{{docente.apelido}}
                 <br />
                 Programa:{{carga.programa}}
@@ -464,6 +464,30 @@
         <br />
         Trimestre:{{cargaPosForm.trimestre}}
       </p>
+    </b-modal>
+
+    <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+      
+      <div class="modal-body">
+        <ul class="listas list-group"> 
+          <li class="list-group-item">
+            <strong>Para adicionar docentes à Tabela:</strong> Preencha o cartão à direita. Após concluído, clique em Adicionar (+) ou em Cancelar (X).
+          </li>
+          <li class="list-group-item">
+            <strong>Para editar docentes da Tabela:</strong> Na tabela, clique no docente que deseja alterar. No cartão à direita faça as mudanças desejadas e, 
+            em seguida, clique em Salvar (&#10003;) ou em Cancelar (X).
+          </li>
+          <li class="list-group-item">
+            <strong>Para deletar docentes da Tabela:</strong> Marque o(s) docente(s) que deseja deletar através da caixa de seleção à esquerda e em seguida clique em Deletar Selecionados(&#128465;) e confirme no botão OK.
+          </li>
+          <li class="list-group-item">
+            <strong>Para alterar ordenação:</strong> Clique em T. no cabeçalho de cada tabela para alternar a ordenação entre alfabética e por trimestre.
+          </li>
+        </ul>
+      </div>
+
+      <div slot="modal-footer" style="display: none">
+      </div>
     </b-modal>
   </div>
 </template>
@@ -518,7 +542,6 @@ export default {
         this.$refs.tablePGMC.clientWidth +
         "px"
     };
-    console.log(this.scrollsize);
   },
 
   methods: {
@@ -630,8 +653,6 @@ export default {
       cargaPosService
         .create(this.cargaPosForm)
         .then(response => {
-          console.log(response.CargaPos);
-          console.log(this.$store.state.cargaPos.Cargas);
           this.trimestre = response.CargaPos.trimestre;
           this.programa = response.CargaPos.programa;
           this.cleanCarga();
@@ -974,6 +995,14 @@ input {
   top: 0px;
   z-index: 10;
 }
+.listas {
+  line-height: 30px;
+  font-size: 12px;
+  text-align: justify;
+  line-height: inherit;
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+}
+strong{color:#007bff}
 button {
   padding: 0;
   border: none;
@@ -1025,6 +1054,21 @@ i.far {
   color: #ff5f48;
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #ff4e34;
+}
+.relatbtn {
+  background-color: white;
+  color: #9ab3ff !important;
+}
+.relatbtn:hover {
+  color: #82a0ff !important;
+  background-color: white;
+}
+
+.relatbtn:focus {
+  color: #82a0ff;
+  background-color: white;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: #698dff;
 }
 .cube1,
 .cube2 {

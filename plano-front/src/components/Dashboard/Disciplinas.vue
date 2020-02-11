@@ -1,15 +1,24 @@
 <template>
   <div class="DashboardDisciplinas row pr-2" v-if="Admin">
     <!-- Titulo -->
-    <div
+     <div
       class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-12 titulo">Disciplinas</h1>
-      </div>
+        <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Disciplinas</h1>
+      
+      <div
+          class="form-group col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
+          style="justify-content: flex-end!important;"
+        >
+          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
+            <i class="fas fa-question"></i>
+          </b-button>
+          </div>
+          
+        </div>
     </div>
-
     <div class="w-100 mb-2 border-bottom"></div>
     <!-- Grid Esquerdo -->
     <div class="divTable">
@@ -226,7 +235,7 @@
                     type="button"
                     class="delbtn"
                     v-on:click.prevent="deleteDisciplina"
-                    :key="3"
+                    :key="2"
                   >
                     <i class="far fa-trash-alt"></i>
                   </button>
@@ -268,6 +277,29 @@
       </div>
     </div>
     <!-- Fim do Grid Direito -->
+    <!-- MODAL DE AJUDA -->
+    <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+      
+      <div class="modal-body">
+        <ul class="listas list-group"> 
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong>lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+        </ul>
+      </div>
+
+      <div slot="modal-footer" style="display: none">
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -640,6 +672,15 @@ table tbody tr div {
   pointer-events: none;
 }
 
+.listas {
+  line-height: 30px;
+  font-size: 12px;
+  text-align: justify;
+  line-height: inherit;
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+}
+strong{color:#007bff}
+
 /* Botoes */
 button {
   padding: 0;
@@ -652,6 +693,7 @@ button {
   transition: all 0.3s ease 0s;
   cursor: pointer;
 }
+
 i.fas,
 i.far {
   font-size: 25px;
@@ -666,6 +708,7 @@ i.far {
 }
 .addbtn:focus {
   color: #77dd77;
+  background-color: white;
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #2fbf53;
 }
@@ -693,7 +736,22 @@ i.far {
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #ff4e34;
 }
+.relatbtn {
+  background-color: white;
+  color: #9ab3ff !important;
+}
 
+.relatbtn:hover {
+  color: #82a0ff !important;
+  background-color: white;
+}
+
+.relatbtn:focus {
+  color: #82a0ff;
+  background-color: white;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: #698dff;
+}
 @media screen and (max-width: 1095px) {
   .div-card {
     margin-left: 0px !important;

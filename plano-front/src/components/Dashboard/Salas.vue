@@ -1,15 +1,24 @@
 <template>
   <div class="DashboardSalas row pr-2" v-if="Admin">
     <!-- Titulo -->
-    <div
+     <div
       class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-12 titulo">Lista Salas</h1>
-      </div>
+        <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Salas</h1>
+      
+      <div
+          class="form-group col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
+          style="justify-content: flex-end!important;"
+        >
+          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
+            <i class="fas fa-question"></i>
+          </b-button>
+          </div>
+          
+        </div>
     </div>
-
     <div class="w-100 mb-2 border-bottom"></div>
 
     <div class="divTable">
@@ -66,6 +75,29 @@
         </tbody>
       </table>
       <!-- Fim da Tabela -->
+      <!-- modal de ajuda -->
+      <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+      
+      <div class="modal-body">
+        <ul class="listas list-group"> 
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong>lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+        </ul>
+      </div>
+
+      <div slot="modal-footer" style="display: none">
+      </div>
+    </b-modal>
     </div>
 
     <!-- Grid Direito -->
@@ -465,6 +497,16 @@ input[type="text"] {
 .bg-custom:hover {
   background-color: #c8c8c8;
 }
+
+.listas {
+  line-height: 30px;
+  font-size: 12px;
+  text-align: justify;
+  line-height: inherit;
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+}
+strong{color:#007bff}
+
 /* Botoes */
 button {
   padding: 0;
@@ -517,6 +559,22 @@ i.far {
   color: #ff5f48;
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #ff4e34;
+}
+.relatbtn {
+  background-color: white;
+  color: #9ab3ff !important;
+}
+
+.relatbtn:hover {
+  color: #82a0ff !important;
+  background-color: white;
+}
+
+.relatbtn:focus {
+  color: #82a0ff;
+  background-color: white;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: #698dff;
 }
 
 /* APENAS NO FIREFOX */

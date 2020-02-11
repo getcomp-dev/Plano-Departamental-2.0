@@ -6,8 +6,18 @@
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-12 titulo">Lista Docentes</h1>
-      </div>
+        <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Lista Docentes</h1>
+      
+      <div
+          class="form-group col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
+          style="justify-content: flex-end!important;"
+        >
+          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
+            <i class="fas fa-question"></i>
+          </b-button>
+          </div>
+          
+        </div>
     </div>
     <div class="w-100 mb-2 border-bottom"></div>
     <!-- Fim do Titulo -->
@@ -60,7 +70,7 @@
           <template v-if="Docentes.length > 0">
             <tr
               v-for="docente in Docentes"
-              :key="docente.id"
+              :key="'docente-id'+docente.id"
               v-on:click.prevent="showDocentes(docente, DocentePerfis)"
               :class="{'bg-custom':docenteClickado == docente.nome}"
               style="cursor: pointer"
@@ -175,12 +185,11 @@
                       </div>
                     </tr>
                     <tbody>
-                      <tr v-for="perfil in Perfis" :key="perfil">
+                      <tr v-for="perfil in Perfis" :key="'perfil-id'+perfil.id">
                         <div style="width: 300px">
                           <td style="padding:0;broder:0;margin:0!important">
                             <div style="width:25px;">
                               <input
-                                id="checkPerfis"
                                 type="checkbox"
                                 :value="perfil.id"
                                 v-model="perfisAssociados"
@@ -196,36 +205,13 @@
                       </tr>
                     </tbody>
                   </table>
-
-                  <!-- 
-                  
-                  <div
-                    class="alert p-1 alert-secondary m-0 text-center w-100 rounded-0 rounded-top"
-                    role="alert"
-                  >Perfis:</div>
-                  <div class="px-2 py-1" style="height: 220px!important; overflow-y: scroll">
-                    <template v-for="perfil in Perfis">
-                      <div :key="perfil.nome+perfil.id" class="form-check w-100 mb-1 p-0">
-                        <input
-                          id="checkPerfis"
-                          type="checkbox"
-                          :value="perfil.id"
-                          v-model="perfisAssociados"
-                          v-on:change="managePerfil(perfil.id)"
-                          class="form-check-input position-static m-0"
-                        />
-                        <label for="checkPerfis" class="col-form-label p-0">{{perfil.nome}}</label>
-                      </div>
-                    </template>
-                  </div>
-                  -->
                 </div>
               </div>
             </template>
 
             <div class="form-group row">
               <template v-if="isEdit">
-                <div style="display: flex; margin-right: 0; margin-left: auto">
+                <div class="d-flex mr-0 ml-auto">
                   <button
                     type="button"
                     title="Salvar"
@@ -240,7 +226,7 @@
                     title="Deletar"
                     class="delbtn"
                     v-on:click.prevent="deleteDocente"
-                    :key="3"
+                    :key="2"
                   >
                     <i class="far fa-trash-alt"></i>
                   </button>
@@ -249,7 +235,7 @@
                     title="Cancelar"
                     class="cancelbtn"
                     v-on:click="clearClick(), cleanDocente()"
-                    :key="2"
+                    :key="3"
                   >
                     <i class="fas fa-times"></i>
                   </button>
@@ -271,7 +257,7 @@
                     title="Cancelar"
                     class="cancelbtn"
                     v-on:click.prevent="cleanDocente"
-                    :key="2"
+                    :key="3"
                   >
                     <i class="fas fa-times"></i>
                   </button>
@@ -283,6 +269,29 @@
       </div>
     </div>
     <!-- Fim do Grid Direito -->
+    <!-- MODAL DE AJUDA -->
+    <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+      
+      <div class="modal-body">
+        <ul class="listas list-group"> 
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong>lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+        </ul>
+      </div>
+
+      <div slot="modal-footer" style="display: none">
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -337,7 +346,7 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `O Docente ${response.Docente.nome} foi criada!`,
+            text: `Docente ${response.Docente.nome} foi criada!`,
             type: "success"
           });
         })
@@ -363,7 +372,7 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Docente ${response.Docente.nome} foi atualizada!`,
+            text: `Docente ${response.Docente.nome} foi atualizada!`,
             type: "success"
           });
         })
@@ -390,7 +399,7 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Docente ${response.Docente.nome} foi excluída!`,
+            text: `Docente ${response.Docente.nome} foi excluída!`,
             type: "warn"
           });
         })
@@ -672,8 +681,8 @@ input {
   cursor: pointer;
   padding-left: 5px;
 }
-
 /* =================== */
+
 .bg-custom {
   background-color: #c8c8c8;
 }
@@ -683,6 +692,15 @@ input {
 .noHover {
   pointer-events: none;
 }
+
+.listas {
+  line-height: 30px;
+  font-size: 12px;
+  text-align: justify;
+  line-height: inherit;
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+}
+strong{color:#007bff}
 
 /* Botoes */
 button {
@@ -736,6 +754,23 @@ i.far {
   color: #ff5f48;
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #ff4e34;
+}
+
+.relatbtn {
+  background-color: white;
+  color: #9ab3ff !important;
+}
+
+.relatbtn:hover {
+  color: #82a0ff !important;
+  background-color: white;
+}
+
+.relatbtn:focus {
+  color: #82a0ff;
+  background-color: white;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: #698dff;
 }
 
 @media screen and (max-width: 849px) {

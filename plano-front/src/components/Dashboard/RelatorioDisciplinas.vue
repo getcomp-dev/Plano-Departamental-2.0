@@ -2,24 +2,36 @@
     <div class="DashboardRelatorioDisciplinas row pr-2">
         <!-- Titulo -->
         <div
-                class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
-                style="height:38px;"
-        >
-            <div class="form-inline col-12 pl-0 mb-1 pr-1">
-                <h1 class="titulo col-7 col-sm-5 col-md-4 col-xl-2">Plano Departamental</h1>
+      class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      style="height:38px;"
+    >
+      <div class="form-inline col-12 pl-0 mb-1 pr-1">
+        <h1 class="titulo col-9 col-sm-6 col-md-4 col-lg-4 px-0 pr-1">Plano Departamental</h1>
 
-                <div
-                        class="form-group col-5 col-sm-7 col-md-8 col-xl-10 mb-0 pr-0"
-                        style="justify-content: flex-end;"
-                >
-                    <button type="button" class="relatbtn" title="Relatório" v-on:click.prevent="pdf">
-                        <i class="far fa-file-alt"></i>
-                    </button>
-                </div>
+        <div
+          class="form-group col-3 col-sm-6 col-md-8 col-lg-8 mb-0 p-0"
+          style="justify-content: flex-end!important;"
+        >
+        
+            <div class="input-group ml-auto mb-0 mt-0 p-0">
+                <b-button v-b-modal.modalDisciplinas title="Disciplinas" class="cancelbtn">
+                    <i class="fas fa-list-ul"></i>
+                </b-button>
+                <button type="button" class="relatbtn" title="Relatório" v-on:click.prevent="pdf">
+                    <i class="far fa-file-alt"></i>
+                </button>
+
+                <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
+                    <i class="fas fa-question"></i>
+                </b-button>
+              </div>
             </div>
         </div>
-        <div class="w-100 mb-2 border-bottom"></div>
+      </div>
+    
 
+    <div class="w-100 mb-2 border-bottom"></div>
+        
         <div class="divTable p-0" ref="carga">
             <table class="table table-hover border table-sm">
                 <thead class="thead-light sticky">
@@ -67,7 +79,7 @@
                 </thead>
                 <tbody>
                 <template v-if="Disciplinas.length > 0">
-                    <template v-for="disciplina in Disciplinas">
+                    <template v-for="disciplina in DisciplinasAtivados">
                         <template v-if="turmas(disciplina).length > 0">
                             <div class="linhas" style="width: ‭845‬px;" :key="disciplina.codigo">
                                 <td class="disc-td">
@@ -135,6 +147,94 @@
                 </tbody>
             </table>
         </div>
+        
+        <!-- MODAL DE AJUDA -->
+    <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+      
+      <div class="modal-body">
+        <ul class="listas list-group"> 
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong>lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+        </ul>
+      </div>
+
+      <div slot="modal-footer" style="display: none">
+      </div>
+    </b-modal>
+        <!-- Modals do botão para escolher disciplinas -->
+        <b-modal id="modalDisciplinas" ref="DisciplinasModal" scrollable title="Selecione as disciplinas">
+            <div
+                    class="form-group col m-0 p-0 border"
+                    style="height: 395px; width:max-content; border-color: rgba(0,0,0,0.125);"
+            >
+                <table class="table table-sm modal-table" style="max-height: 392px !important;">
+                    <tr>
+                        <div style="width: max-content; font-size: 11px!important">
+                            <th class="border-0">
+                                <p style="width:25px" class="p-header"></p>
+                            </th>
+                            <th class="border-0">
+                                <p class="p-header" style="width: 80px; text-align:start">Cod.</p>
+                            </th>
+                            <th class="border-0">
+                                <p class="p-header" style="width: 424px; text-align:start">Nome</p>
+                            </th>
+                        </div>
+                    </tr>
+                    <tbody>
+                    <tr v-for="disciplina in Disciplinas" :key="`disciplina${disciplina.id}`">
+                        <div style="width: max-content">
+                            <td style="padding:0;broder:0;margin:0!important;">
+                                <div style="width:25px;">
+                                    <input
+                                            type="checkbox"
+                                            v-model="DisciplinasSelecionados"
+                                            :value="disciplina"
+                                            class="form-check-input position-static m-0"
+                                    />
+                                </div>
+                            </td>
+                            <td>
+                                <p style="width:80px; text-align:start">{{disciplina.codigo}}</p>
+                            </td>
+                            <td>
+                                <p style="width:424px; text-align:start">{{disciplina.nome}}</p>
+                            </td>
+                        </div>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div slot="modal-footer" style="display: flex; margin-right: 10px !important;">
+                <b-button
+                        class="btn-azul btn-df mr-2"
+                        variant="success"
+                        @click="selectAll()"
+                >Selecionar Todos</b-button>
+                <b-button
+                        class="btn-cinza btn-df mr-2"
+                        variant="secondary"
+                        @click="selectNone()"
+                >Desmarcar Todos</b-button>
+                <b-button
+                        variant="success"
+                        @click="btnOK()"
+                        class="btn-verde btn-df mr-2"
+                        style="padding-right:15px!important; padding-left:15px!important;"
+                >OK</b-button>
+            </div>
+        </b-modal>
     </div>
 </template>
 
@@ -146,7 +246,9 @@
 
         data() {
             return {
-                ordenacao:"codigo"
+                ordenacao:"codigo",
+                DisciplinasSelecionados: [],
+                DisciplinasAtivados: []
             }
         },
 
@@ -155,10 +257,28 @@
                 pdfs.pdfRelatorioDisciplinas()
             },
 
+            btnOK() {
+                //Somente atualiza o vetor de perfis ativados quando o botão OK for clickado
+                this.DisciplinasAtivados = [..._.orderBy(this.DisciplinasSelecionados, 'codigo')];
+                this.$refs.DisciplinasModal.hide();
+            },
+
+            selectAll() {
+                if (this.DisciplinasSelecionados != []) this.DisciplinasSelecionados = [];
+                for (var i = 0; i < this.$store.state.disciplina.Disciplinas.length; i++)
+                    this.DisciplinasSelecionados.push(this.$store.state.disciplina.Disciplinas[i]);
+            },
+
+            selectNone() {
+                this.DisciplinasSelecionados = [];
+            },
+
             toggleOrderNome() {
+                this.DisciplinasAtivados = _.orderBy(this.DisciplinasAtivados, 'nome')
                 this.ordenacao = "nome";
             },
             toggleOrderCodigo() {
+                this.DisciplinasAtivados = _.orderBy(this.DisciplinasAtivados, 'codigo')
                 this.ordenacao = "codigo";
             },
 
@@ -285,6 +405,14 @@
         padding-left: 0;
         margin: 0 !important;
     }
+    .listas {
+        line-height: 30px;
+        font-size: 12px;
+        text-align: justify;
+        line-height: inherit;
+        box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+    }
+    strong{color:#007bff}
     /* Botoes */
     button {
         padding: 0;
@@ -304,18 +432,20 @@
         font-size: 25px;
     }
     .relatbtn {
-        background-color: white;
-        color: #9ab3ff !important;
+    background-color: white;
+    color: #9ab3ff !important;
     }
 
     .relatbtn:hover {
-        color: #82a0ff !important;
+    color: #82a0ff !important;
+    background-color: white;
     }
 
     .relatbtn:focus {
-        color: #82a0ff;
-        -webkit-text-stroke-width: 1px;
-        -webkit-text-stroke-color: #698dff;
+    color: #82a0ff;
+    background-color: white;
+    -webkit-text-stroke-width: 0.5px;
+    -webkit-text-stroke-color: #698dff;
     }
 
     /* APENAS NO FIREFOX */
@@ -352,4 +482,79 @@
     .clickable-header:hover {
         cursor: pointer;
      }
+
+    .btn-df {
+        font-size: 12px;
+        height: 25px;
+        min-width: -webkit-max-content;
+        min-width: -moz-max-content;
+        min-width: max-content;
+        max-width: -webkit-max-content;
+        max-width: -moz-max-content;
+        max-width: max-content;
+        padding: 0 5px 0 5px;
+    }
+
+    .btn-azul {
+        background-color: #718de0 !important;
+        border-color: #9ab3ff !important;
+    }
+    .btn-azul:hover {
+        background-color: rgb(74, 101, 190) !important;
+        border-color: #82a0ff !important;
+    }
+
+    .btn-azul:focus {
+        -webkit-box-shadow: 0 0 0 0.2rem rgba(122, 128, 124, 0.5) !important;
+        -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
+        box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
+    }
+
+    .btn-cinza {
+        background-color: #999999 !important;
+        border-color: #c3c3c3 !important;
+    }
+    .btn-cinza:hover {
+        background-color: #747474 !important;
+        border-color: #aaaaaa !important;
+    }
+
+    .btn-cinza:focus {
+        -webkit-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
+        -moz-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
+        box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
+    }
+    .btn-verde {
+        background-color: #70b670 !important;
+        border-color: #a0e7a0 !important;
+    }
+    .btn-verde:hover {
+        background-color: #4c8a4c !important;
+        border-color: #77dd77 !important;
+    }
+
+    .btn-verde:focus {
+        -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
+        -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
+        box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
+    }
+
+    i.fas,
+    i.far {
+        font-size: 25px;
+    }
+
+    .cancelbtn {
+        background-color: white;
+        color: #cfcfc4;
+    }
+    .cancelbtn:hover {
+        color: #b8b4a8;
+    }
+
+    .cancelbtn:focus {
+        color: #b8b8a8;
+        -webkit-text-stroke-width: 1px;
+        -webkit-text-stroke-color: #ada89a;
+    }
 </style>

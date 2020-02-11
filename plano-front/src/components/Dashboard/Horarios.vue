@@ -18,7 +18,7 @@
         <template v-if="periodo==1 || periodo==3">
           <h3
             class="title"
-            style="font-weight: bold; font-size: 18px; text-align: center;"
+            style="font-weight: bold; font-size: 18px; text-align: center !important;"
           >1º SEMESTRE</h3>
           <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
           <template v-if="activeCCD">

@@ -17,6 +17,9 @@
               <label class="input-group-text">Ano</label>
             </div>
           </div>
+          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
+            <i class="fas fa-question"></i>
+          </b-button>
         </div>
       </div>
     </div>
@@ -125,6 +128,29 @@
         </tbody>
       </table>
     </div>
+    <!-- modal de ajuda -->
+    <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+      
+      <div class="modal-body">
+        <ul class="listas list-group"> 
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong>lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+        </ul>
+      </div>
+
+      <div slot="modal-footer" style="display: none">
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -556,6 +582,45 @@ input[type="text"] {
 .form-inline .input-group,
 .form-inline {
   width: auto;
+}
+.listas {
+  line-height: 30px;
+  font-size: 12px;
+  text-align: justify;
+  line-height: inherit;
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+}
+strong{color:#007bff}
+button {
+  padding: 0;
+  border: none;
+  background: none;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  margin-right: 15px;
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+}
+i.fas,
+i.far {
+  font-size: 25px;
+}
+.relatbtn {
+  background-color: white;
+  color: #9ab3ff !important;
+}
+
+.relatbtn:hover {
+  color: #82a0ff !important;
+  background-color: white;
+}
+
+.relatbtn:focus {
+  color: #82a0ff;
+  background-color: white;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: #698dff;
 }
 @media screen and (max-width: 384px) {
   .div-titulo {

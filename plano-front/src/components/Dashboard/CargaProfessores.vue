@@ -12,9 +12,16 @@
           class="form-group col-5 col-sm-7 col-md-8 col-xl-10 mb-0 pr-0"
           style="justify-content: flex-end;"
         >
+          <b-button v-b-modal.modalDocentes title="Docentes" class="cancelbtn">
+            <i class="fas fa-list-ul"></i>
+          </b-button>
           <button type="button" class="relatbtn" title="Relatório" v-on:click.prevent="pdf">
             <i class="far fa-file-alt"></i>
           </button>
+
+          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
+                <i class="fas fa-question"></i>
+          </b-button>
         </div>
       </div>
     </div>
@@ -72,7 +79,7 @@
         </thead>
         <tbody>
           <template v-if="Professores.length > 0">
-            <template v-for="professor in Professores">
+            <template v-for="professor in DocentesAtivados">
               <template v-if="turmas(professor).length > 0">
                 <div class="linhas" style="width: ‭845‬px;" :key="professor.apelido">
                   <td class="prof-td">
@@ -224,7 +231,7 @@
             </template>
             <template v-if="turmasSemAlocacao().length > 0">
               <template v-if="turmasSemAlocacao().length > 0">
-                <div class="linhas" style="width: ‭845‬px;" :key="semAlocacao">
+                <div class="linhas" style="width: ‭845‬px;" :key="'semAlocacao'">
                   <td class="prof-td">
                     <div style="width: 130px">SEM ALOCAÇÃO</div>
                   </td>
@@ -256,11 +263,11 @@
               </template>
               <template v-for="turma in turmasSemAlocacao()">
                 <tr
-                        v-for="disciplina in Disciplinas"
-                        :key="'turma'+turma.id+'disciplina'+disciplina.id+'semAlocacao'"
+                  v-for="disciplina in Disciplinas"
+                  :key="'turma'+turma.id+'disciplina'+disciplina.id+'semAlocacao'"
                 >
                   <template
-                          v-if="turma.Disciplina===disciplina.id && (turma.Docente1==null && turma.Docente2==null)"
+                    v-if="turma.Disciplina===disciplina.id && (turma.Docente1==null && turma.Docente2==null)"
                   >
                     <div class="linhas" style="width: ‭845‬px;">
                       <td>
@@ -285,8 +292,8 @@
                               {{horario.horario}}
                               <template v-for="horario in Horarios">
                                 <span
-                                        :key="horario.id"
-                                        v-if="horario.id===turma.Horario2"
+                                  :key="horario.id"
+                                  v-if="horario.id===turma.Horario2"
                                 >/ {{horario.horario}}</span>
                               </template>
                             </p>
@@ -297,7 +304,7 @@
                       <td v-if="turma.periodo===1">
                         <div style="width: 32px">
                           <p
-                                  v-if="(turma.Docente1 > 0) && (turma.Docente2 > 0)"
+                            v-if="(turma.Docente1 > 0) && (turma.Docente2 > 0)"
                           >{{(disciplina.cargaTeorica + disciplina.cargaPratica)/2}}</p>
 
                           <p v-else>{{disciplina.cargaTeorica + disciplina.cargaPratica}}</p>
@@ -311,7 +318,7 @@
                       <td v-if="turma.periodo===3">
                         <div style="width: 32px">
                           <p
-                                  v-if="(turma.Docente1 > 0) && (turma.Docente2 > 0)"
+                            v-if="(turma.Docente1 > 0) && (turma.Docente2 > 0)"
                           >{{(disciplina.cargaTeorica + disciplina.cargaPratica)/2}}</p>
                           <p v-else>{{disciplina.cargaTeorica + disciplina.cargaPratica}}</p>
                         </div>
@@ -339,6 +346,88 @@
         </tbody>
       </table>
     </div>
+
+  <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+      
+      <div class="modal-body">
+        <ul class="listas list-group"> 
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong>lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+          <li class="list-group-item">
+            <strong>lelele</strong> lalala
+          </li>
+        </ul>
+      </div>
+
+      <div slot="modal-footer" style="display: none">
+      </div>
+    </b-modal>
+
+    <!-- Modals do botão para escolher docentes -->
+    <b-modal id="modalDocentes" ref="DocentesModal" scrollable title="Selecione os docentes">
+      <div
+              class="form-group col m-0 p-0 border"
+              style="height: 395px; width:max-content; border-color: rgba(0,0,0,0.125);"
+      >
+        <table class="table table-sm modal-table" style="max-height: 392px !important;">
+          <tr>
+            <div style="width: max-content; font-size: 11px!important">
+              <th class="border-0">
+                <p style="width:25px" class="p-header"></p>
+              </th>
+              <th class="border-0">
+                <p class="p-header" style="width: 424px; text-align:start">Nome</p>
+              </th>
+            </div>
+          </tr>
+          <tbody>
+          <tr v-for="docente in Professores" :key="`docente${docente.id}`">
+            <div style="width: max-content">
+              <td style="padding:0;broder:0;margin:0!important;">
+                <div style="width:25px;">
+                  <input
+                          type="checkbox"
+                          v-model="DocentesSelecionados"
+                          :value="docente"
+                          class="form-check-input position-static m-0"
+                  />
+                </div>
+              </td>
+              <td>
+                <p style="width:424px; text-align:start">{{docente.apelido}}</p>
+              </td>
+            </div>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div slot="modal-footer" style="display: flex; margin-right: 10px !important;">
+        <b-button
+                class="btn-azul btn-df mr-2"
+                variant="success"
+                @click="selectAll()"
+        >Selecionar Todos</b-button>
+        <b-button
+                class="btn-cinza btn-df mr-2"
+                variant="secondary"
+                @click="selectNone()"
+        >Desmarcar Todos</b-button>
+        <b-button
+                variant="success"
+                @click="btnOK()"
+                class="btn-verde btn-df mr-2"
+                style="padding-right:15px!important; padding-left:15px!important;"
+        >OK</b-button>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -350,9 +439,32 @@ import html2canvas from "html2canvas";
 export default {
   name: "DashboardCargaProfessores",
 
+  data () {
+      return {
+          DocentesSelecionados: [],
+          DocentesAtivados: []
+      }
+  },
+
   methods: {
     pdf() {
       pdfs.pdfCargaProfessores();
+    },
+
+    btnOK() {
+      //Somente atualiza o vetor de perfis ativados quando o botão OK for clickado
+      this.DocentesAtivados = [..._.orderBy(this.DocentesSelecionados, 'apelido')];
+      this.$refs.DocentesModal.hide();
+    },
+
+    selectAll() {
+      if (this.DocentesSelecionados != []) this.DocentesSelecionados = [];
+      for (var i = 0; i < this.$store.state.docente.Docentes.length; i++)
+        this.DocentesSelecionados.push(this.$store.state.docente.Docentes[i]);
+    },
+
+    selectNone() {
+      this.DocentesSelecionados = [];
     },
 
     turmas(professor) {
@@ -362,19 +474,21 @@ export default {
             turma.Docente1 === professor.id || turma.Docente2 === professor.id
           );
         }),
-        ['periodo', 'Disciplina', 'letra']
+        ["periodo", "Disciplina", "letra"]
       );
     },
 
     turmasSemAlocacao() {
-        return _.orderBy(
-            _.filter(this.$store.state.turma.Turmas, turma => {
-                return (
-                    turma.Docente1 == null && turma.Docente2 == null && turma.Disciplina != null
-                );
-            }),
-            ['periodo', 'Disciplina', 'letra']
-        );
+      return _.orderBy(
+        _.filter(this.$store.state.turma.Turmas, turma => {
+          return (
+            turma.Docente1 == null &&
+            turma.Docente2 == null &&
+            turma.Disciplina != null
+          );
+        }),
+        ["periodo", "Disciplina", "letra"]
+      );
     },
 
     pos(professor) {
@@ -643,6 +757,14 @@ table input {
   padding-left: 0;
   margin: 0 !important;
 }
+.listas {
+  line-height: 30px;
+  font-size: 12px;
+  text-align: justify;
+  line-height: inherit;
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+}
+strong{color:#007bff}
 /* Botoes */
 button {
   padding: 0;
@@ -668,10 +790,12 @@ i.far {
 
 .relatbtn:hover {
   color: #82a0ff !important;
+  background-color: white;
 }
 
 .relatbtn:focus {
   color: #82a0ff;
+  background-color: white;
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #698dff;
 }
@@ -707,4 +831,80 @@ i.far {
   background-color: rgba(0, 0, 0, 0.089);
   color: black;
 }
+
+.btn-df {
+  font-size: 12px;
+  height: 25px;
+  min-width: -webkit-max-content;
+  min-width: -moz-max-content;
+  min-width: max-content;
+  max-width: -webkit-max-content;
+  max-width: -moz-max-content;
+  max-width: max-content;
+  padding: 0 5px 0 5px;
+}
+
+.btn-azul {
+  background-color: #718de0 !important;
+  border-color: #9ab3ff !important;
+}
+.btn-azul:hover {
+  background-color: rgb(74, 101, 190) !important;
+  border-color: #82a0ff !important;
+}
+
+.btn-azul:focus {
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(122, 128, 124, 0.5) !important;
+  -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
+  box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
+}
+
+.btn-cinza {
+  background-color: #999999 !important;
+  border-color: #c3c3c3 !important;
+}
+.btn-cinza:hover {
+  background-color: #747474 !important;
+  border-color: #aaaaaa !important;
+}
+
+.btn-cinza:focus {
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
+  -moz-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
+  box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
+}
+.btn-verde {
+  background-color: #70b670 !important;
+  border-color: #a0e7a0 !important;
+}
+.btn-verde:hover {
+  background-color: #4c8a4c !important;
+  border-color: #77dd77 !important;
+}
+
+.btn-verde:focus {
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
+  -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
+  box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
+}
+
+i.fas,
+i.far {
+  font-size: 25px;
+}
+
+.cancelbtn {
+  background-color: white;
+  color: #cfcfc4;
+}
+.cancelbtn:hover {
+  color: #b8b4a8;
+}
+
+.cancelbtn:focus {
+  color: #b8b8a8;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #ada89a;
+}
+
 </style>
