@@ -46,7 +46,7 @@
               </button>
             </template>
             <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
-                <i class="fas fa-question"></i>
+              <i class="fas fa-question"></i>
             </b-button>
           </div>
         </div>
@@ -97,11 +97,11 @@
                 <p class="p-header" style="width:32px !important;">Total</p>
               </th>
               <template v-for="curso in Cursos">
-                <th scope="col" :key="'curso'+curso.id" :id="'curso'+curso.id">
+                <th scope="col" :key="'1-curso-id'+curso.id" :id="'curso'+curso.id">
                   <p class="p-header" style="width:32px !important;">{{curso.codigo}}</p>
 
                   <b-popover
-                    :key="curso.id"
+                    :key="'2-curso-id'+curso.id"
                     :target="'curso'+curso.id"
                     placement="bottom"
                     triggers="hover focus"
@@ -154,7 +154,7 @@
                       >Nenhuma Disciplina Encontrada</option>
                       <option
                         v-for="disciplina in DisciplinasCod"
-                        :key="disciplina.id"
+                        :key="'1-disciplina-id'+disciplina.id"
                         :value="disciplina.id"
                       >{{disciplina.codigo}}</option>
                     </select>
@@ -175,7 +175,7 @@
                       >Nenhuma Disciplina Encontrada</option>
                       <option
                         v-for="disciplina in Disciplinas"
-                        :key="disciplina.id"
+                        :key="'2-disciplina-id'+disciplina.id"
                         :value="disciplina.id"
                       >{{disciplina.nome}}</option>
                     </select>
@@ -224,7 +224,7 @@
                       <option v-if="Horarios.length===0" type="text" value>Nenhum Horário Encontrado</option>
                       <option
                         v-for="horario in Horarios"
-                        :key="horario.id"
+                        :key="'1-horario-id'+horario.id"
                         :value="horario.id"
                       >{{horario.horario}}</option>
                     </select>
@@ -238,7 +238,7 @@
                       <option v-if="Horarios.length===0" type="text" value>Nenhum Horário Encontrado</option>
                       <option
                         v-for="horario in Horarios"
-                        :key="horario.id"
+                        :key="'2-horario-id'+horario.id"
                         :value="horario.id"
                       >{{horario.horario}}</option>
                     </select>
@@ -253,11 +253,19 @@
                       v-model="turmaForm.Sala1"
                     >
                       <option v-if="Salas.length===0" type="text" value>Nenhuma Sala Encontrada</option>
-                      <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
+                      <option
+                        v-for="sala in Salas"
+                        :key="'1-sala-id'+sala.id"
+                        :value="sala.id"
+                      >{{sala.nome}}</option>
                     </select>
                     <select type="text" style="width:93px;" id="sala2" v-model="turmaForm.Sala2">
                       <option v-if="Salas.length===0" type="text" value>Nenhuma Sala Encontrada</option>
-                      <option v-for="sala in Salas" :key="sala.id" :value="sala.id">{{sala.nome}}</option>
+                      <option
+                        v-for="sala in Salas"
+                        :key="'2-sala-id'+sala.id"
+                        :value="sala.id"
+                      >{{sala.nome}}</option>
                     </select>
                   </div>
                 </td>
@@ -277,7 +285,7 @@
                 <tr
                   v-for="turma in inPerfil(perfil, Turmas, Disciplinas)"
                   v-if="turma.Disciplina === disciplina.id"
-                  :key="turma.id"
+                  :key="'1-tr-'+perfil+turma.id+disciplina"
                   v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
                     'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
                     'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}"
@@ -293,7 +301,7 @@
                 <tr
                   v-for="turma in inPerfil(perfil, Turmas, Disciplinas)"
                   v-if="turma.Disciplina === disciplina.id"
-                  :key="turma.id"
+                  :key="'2-tr-'+perfil+turma.id+disciplina"
                   v-bind:class="{'basico':perfil.id==1,'avancado':perfil.id==2, 'arqso':perfil.id==3,
                     'bancosdedados':perfil.id==4, 'computacaografica':perfil.id==5, 'engenhariasoftware':perfil.id==6, 'iaic':perfil.id==7, 'numoc':perfil.id==8, 'redes':perfil.id==9, 'teoria':perfil.id==10,
                     'humempre':perfil.id==11, 'multi': perfil.id==12, 'ice':perfil.id==13}"
@@ -314,7 +322,7 @@
       <template v-for="turma in Deletar">
         <template v-for="disciplina in Disciplinas">
           <template v-if="disciplina.id===turma.Disciplina">
-            <p :key="'disciplina'+disciplina.id+'tirma'+turma.id" style="width:80px">
+            <p :key="'disciplina'+disciplina.id+'turma'+turma.id" style="width:80px">
               Disciplina:{{disciplina.codigo}}
               <br />
               Turma:{{turma.letra}}
@@ -324,11 +332,10 @@
       </template>
     </b-modal>
     <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
-      
       <div class="modal-body">
-        <ul class="listas list-group"> 
+        <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para adicionar disciplinas à Tabela:</strong> Clique em Adicionar (+), em seguida, preencha a nova linha que surgirá na tabela. Após concluido, clique em Salvar (&#10003;)
+            <strong>Para adicionar disciplinas à Tabela:</strong> Clique em Adicionar (+), em seguida, preencha a nova linha que surgirá na tabela. Após concluído, clique em Salvar (&#10003;)
             ou em Cancelar (X).
           </li>
           <li class="list-group-item">
@@ -340,13 +347,12 @@
           <li class="list-group-item">
             <strong>Observações:</strong> Em cada coluna de cursos a disciplina adicionada permite a inclusão em dois espaços, sendo acima
             destinado para vagas declaradas, e abaixo para pedidos de vagas. Para que uma disciplina externa apareça em Horários de um determinado
-             curso é preciso que pelo menos uma vaga declarada seja destinada ao mesmo.
+            curso é preciso que pelo menos uma vaga declarada seja destinada ao mesmo.
           </li>
         </ul>
       </div>
 
-      <div slot="modal-footer" style="display: none">
-      </div>
+      <div slot="modal-footer" style="display: none"></div>
     </b-modal>
   </div>
 </template>
@@ -766,7 +772,9 @@ i.far {
   line-height: inherit;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
-strong{color:#007bff}
+strong {
+  color: #007bff;
+}
 .addbtn {
   background-color: white;
   color: #a0e7a0;
@@ -820,7 +828,6 @@ strong{color:#007bff}
   -webkit-text-stroke-width: 0.5px;
   -webkit-text-stroke-color: #698dff;
 }
-
 
 /* .example {
   display: -ms-grid;

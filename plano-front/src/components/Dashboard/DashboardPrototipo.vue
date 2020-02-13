@@ -82,10 +82,9 @@
               </button>
             </template>
             <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
-                <i class="fas fa-question"></i>
-              </b-button>
+              <i class="fas fa-question"></i>
+            </b-button>
           </div>
-          
         </div>
       </div>
     </div>
@@ -145,7 +144,6 @@
               </tr>
             </template>
           </template>
-          
         </tbody>
       </table>
     </div>
@@ -153,28 +151,30 @@
     <!-- ============ Modals ============== -->
     <!-- Modal de Ajuda -->
     <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
-      
       <div class="modal-body">
-        <ul class="listas list-group"> 
+        <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para exibir conteúdo na Tabela:</strong> Comece selecionando o(s) semestre(s) desejado(s). Em seguida, clique em Perfil e marque quais deseja mostrar, depois clique em OK. 
-            Logo após, escolha os cursos que quer ver, confirmando novamente a seleção em OK. 
+            <strong>Para exibir conteúdo na Tabela:</strong> Comece selecionando o(s) semestre(s) desejado(s). Em seguida, clique em Perfil e marque quais deseja mostrar, depois clique em OK.
+            Logo após, escolha os cursos que quer ver, confirmando a seleção em OK.
           </li>
           <li class="list-group-item">
-            <strong>Para adicionar disciplinas à Tabela:</strong> Clique em Adicionar (+), em seguida, preencha a nova linha que surgirá na tabela. Após concluido, clique em Salvar (&#10003;)
+            <strong>Para adicionar disciplinas à Tabela:</strong> Clique em Adicionar (+), em seguida, preencha a nova linha que surgirá na tabela. Após concluído, clique em Salvar (&#10003;)
+  
             ou em Cancelar (X).
+          </li>
+          <li class="list-group-item">
+            <strong>Para editar disciplinas da Tabela: </strong>Faça as alterações necessárias diretamente na tabela e o sistema irá salvar automaticamente. 
           </li>
           <li class="list-group-item">
             <strong>Para deletar disciplinas da Tabela:</strong> Marque a(s) disciplina(s) que deseja deletar através da caixa de seleção à esquerda e em seguida clique em Deletar (&#128465;) e confirme no botão OK.
           </li>
           <li class="list-group-item">
-            <strong>Para gerar relatório:</strong> Clique no botão XLSX e aguarde para fazer download do relatório.
+            <strong>Para gerar relatório:</strong> Clique no botão XLSX e aguarde para fazer <font style='font-style:italic;'>download</font> do relatório.
           </li>
         </ul>
       </div>
 
-      <div slot="modal-footer" style="display: none; margin-right: 10px !important;">
-      </div>
+      <div slot="modal-footer" style="display: none; margin-right: 10px !important;"></div>
     </b-modal>
     <!-- Modals do deletar-->
     <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
@@ -211,7 +211,7 @@
             </div>
           </tr>
           <tbody>
-            <tr v-for="perfil in Perfis" :key="'perfil id'+perfil.id">
+            <tr v-for="perfil in Perfis" :key="'perfil-id'+perfil.id">
               <div style="width: max-content">
                 <td style="padding:0;broder:0;margin:0!important;">
                   <div style="width:25px;">
@@ -219,7 +219,6 @@
                       type="checkbox"
                       v-model="PerfisSelecionados"
                       :value="perfil"
-                      v-on:change="managePerfil(perfil.id)"
                       class="form-check-input position-static m-0"
                     />
                   </div>
@@ -720,7 +719,9 @@ export default {
   line-height: inherit;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
-strong{color:#007bff}
+strong {
+  color: #007bff;
+}
 .DashboardPrototipo {
   max-width: 100%;
   overflow: hidden;

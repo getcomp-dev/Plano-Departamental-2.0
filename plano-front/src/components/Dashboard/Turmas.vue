@@ -54,7 +54,7 @@
             <template v-for="perfil in Perfis">
               <tr
                 v-for="turma in inPerfil(perfil, Turmas, Disciplinas)"
-                :key="'turma'+turma.id"
+                :key="'1-turma-'+turma.id"
                 v-on:click.prevent="showTurma(turma)"
               >
                 <div style="width: 790px; font-size:11px">
@@ -69,13 +69,13 @@
                   </td>
 
                   <template v-for="disciplina in Disciplinas">
-                    <td v-if="disciplina.id===turma.Disciplina" :key="'disciplina'+disciplina.id">
+                    <td v-if="disciplina.id===turma.Disciplina" :key="'disciplina--'+disciplina.id">
                       <div style="width:300px">{{disciplina.nome}}</div>
                     </td>
                   </template>
 
                   <template v-for="docente in Docentes">
-                    <td v-if="docente.id===turma.Docente1" :key="'1docente'+docente.id">
+                    <td v-if="docente.id===turma.Docente1" :key="'1docente--'+docente.id">
                       <div style="width:130px">{{docente.apelido}}</div>
                     </td>
                   </template>
@@ -154,9 +154,9 @@
       <b-alert :show="Boolean(error)" variant="danger" dismissible v-html="error"></b-alert>
       <form>
         <div class="form-group row">
-          <label for="periodo" class="col-sm-4 col-form-label">Período</label>
+          <label for="1periodo" class="col-sm-4 col-form-label">Período</label>
           <div class="col-sm-8">
-            <input type="text" class="form-control" id="periodo" v-model="turmaForm.periodo" />
+            <input type="text" class="form-control" id="1periodo" v-model="turmaForm.periodo" />
           </div>
         </div>
         <div class="form-group row">

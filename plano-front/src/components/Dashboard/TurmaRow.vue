@@ -2,7 +2,7 @@
 <div class="turmarow" style="width: 850px;  font-size:11px;" v-bind:style="{backgroundColor: perfil.cor}">
     <td>
         <div style="width:24px !important;">
-            <input :disabled="Admin ? false : true" type="text" style="width: 18px; height:15px; margin-top:3px" id="periodo" v-model="turmaForm.periodo" v-on:blur="checkHorariosPeriodo()">
+            <input :disabled="Admin ? false : true" type="text" style="width: 18px; height:15px; margin-top:3px" id="2periodo" v-model="turmaForm.periodo" v-on:blur="checkHorariosPeriodo()">
             <input :disabled="Admin ? false : true" type="checkbox" style="margin-top:2px; width:16px; height:14px" name="ativa" value="true" v-on:click="checkDelete(turma)" v-model="ativo">
         </div>
     </td>
@@ -10,7 +10,7 @@
         <div style="width:70px;">
             <template v-for="disciplina in Disciplinas">
                 <template v-if="disciplina.id===turma.Disciplina">
-                    <p :key="'disciplina-id'+disciplina.id" style="width:70px">{{disciplina.codigo}}</p>
+                    <p :key="'1-disciplina-id'+disciplina.id" style="width:70px">{{disciplina.codigo}}</p>
                 </template>
             </template>
         </div>
@@ -117,10 +117,10 @@
     </td>
 
     <template v-for="curso in cursos">
-        <td :key="'id-curso'+curso.id">
+        <td :key="'1-id-curso'+curso.id">
           <template v-for="(pedido, index) in Pedidos">
                 <template v-if="pedido.Curso===curso.id">
-                    <turmaPedido :key="index" v-bind:index="index" v-bind:turma="turma"></turmaPedido>
+                    <turmaPedido :key="'index'+index" v-bind:index="index" v-bind:turma="turma"></turmaPedido>
                 </template>
           </template>
         </td>

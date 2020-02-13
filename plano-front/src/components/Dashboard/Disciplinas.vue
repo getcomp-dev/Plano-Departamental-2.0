@@ -283,16 +283,18 @@
       <div class="modal-body">
         <ul class="listas list-group"> 
           <li class="list-group-item">
-            <strong>lelele</strong> lalala
+            <strong>Para adicionar disciplinas: </strong> Com o cartão à direita em branco, preencha-o. Em seguida, clique em Adicionar (+).
           </li>
           <li class="list-group-item">
-            <strong>lelele</strong>lalala
+              <strong>Para editar ou deletar uma disciplina: </strong>Na tabela, clique na disciplina que deseja alterar. Logo após, no cartão à direita, 
+              altere as informações que desejar e clique em Salvar (&#10003;) ou, para excluí-lo, clique em Deletar (&#128465;). 
           </li>
           <li class="list-group-item">
-            <strong>lelele</strong> lalala
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar (X).
+          </li>
           </li>
           <li class="list-group-item">
-            <strong>lelele</strong> lalala
+            <strong>Para alterar a ordenação:</strong>  Clique em Nome ou Código no cabeçalho da tabela para ordenação alfabética do mesmo. 
           </li>
         </ul>
       </div>

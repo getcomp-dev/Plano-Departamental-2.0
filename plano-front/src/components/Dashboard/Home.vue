@@ -57,6 +57,11 @@
             </li>
             <li class="list-group-item">
               <strong>
+                <router-link :to="{ name: 'relatorioDisciplinas'}">Plano Departamental:</router-link>
+              </strong> Lista as turmas, horários e professores alocados por disciplina.
+            </li>
+            <li class="list-group-item">
+              <strong>
                 <router-link :to="{ name: 'horariosResumo' }">Horários - Resumo:</router-link>
               </strong> Listagem resumida dos horários de todos os cursos do DCC.
             </li>

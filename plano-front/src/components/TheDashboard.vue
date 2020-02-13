@@ -167,6 +167,11 @@
                   </router-link>
                 </li>
                 <li @click="show=false" class="nav-item">
+                  <router-link :to="{ name: 'gradeEdit' }" class="nav-link">
+                    <i class="fas fa-sitemap"></i> Editar Grades
+                  </router-link>
+                </li>
+                <li @click="show=false" class="nav-item">
                   <router-link :to="{ name: 'perfis' }" class="nav-link">
                     <i class="fas fa-th"></i> Perfis
                   </router-link>
@@ -661,7 +666,7 @@ export default {
 .nav-link {
   font-size: 12px;
   height: 30px;
-  padding: 5px!important;
+  padding: 5px !important;
 }
 .sidebar-sticky {
   position: relative;

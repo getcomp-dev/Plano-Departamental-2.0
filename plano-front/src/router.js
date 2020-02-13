@@ -23,9 +23,11 @@ import DashboardCargaPos from './components/Dashboard/CargaPos'
 import DashboardSalas from './components/Dashboard/Salas'
 import DashboardGradeDisciplinas from './components/Dashboard/GradeDisciplinas'
 import DashboardRelatorioDisciplinas from './components/Dashboard/RelatorioDisciplinas'
+import DashboardGradesEdit from './components/Dashboard/GradesEdit'
 
 
-import {USER_LOGGED_OUT} from './vuex/mutation-types'
+
+import { USER_LOGGED_OUT } from './vuex/mutation-types'
 
 Vue.use(VueRouter)
 
@@ -35,37 +37,38 @@ function requireAuth(to, from, next) {
   }).catch(() => {
     next({
       path: '/login',
-      query: {redirect: to.fullPath}
+      query: { redirect: to.fullPath }
     })
   })
 }
 
 const routes = [
-  {path: '/', name: 'home', redirect: '/dashboard', beforeEnter: requireAuth},
-  {path: '/login', name: 'login', component: Login},
+  { path: '/', name: 'home', redirect: '/dashboard', beforeEnter: requireAuth },
+  { path: '/login', name: 'login', component: Login },
   {
     path: '/dashboard',
     component: Dashboard,
     beforeEnter: requireAuth,
     children: [
-      {path: '', name: 'dashboard', component: DashboardHome},
-      {path: 'pedidos', name: 'pedidos', component: DashboardPedidos},
-      {path: 'turmas', name: 'turmas', component: DashboardTurmas},
-      {path: 'turmasExternas', name: 'turmasExternas', component: DashboardTurmasExternas},
-      {path: 'relatorios', name: 'relatorios', component: DashboardRelatorios},
-      {path: 'horarios', name: 'horarios', component: DashboardHorarios} ,
-      {path: 'cursos', name: 'cursos', component: DashboardCursos},
-      {path: 'docentes', name: 'docentes', component: DashboardDocentes},
-      {path: 'grades', name: 'grades', component: DashboardGrades},
-      {path: 'disciplinas', name: 'disciplinas', component: DashboardDisciplinas},
-      {path: 'perfis', name: 'perfis', component: DashboardPerfis},
-      {path: 'cargaProfessores', name: 'cargaProfessores', component: DashboardCargaProfessores},
-      {path: 'horariosResumo', name: 'horariosResumo', component: DashboardHorariosResumo},
-      {path: 'laboratoriosAlocacao', name: 'laboratoriosAlocacao', component: DashboardLaboratoriosAlocacao},
-      {path: 'cargaPos', name: 'cargaPos', component: DashboardCargaPos},
-      {path: 'salas', name: 'salas', component: DashboardSalas},
-      {path: 'gradeDisciplinas', name: 'gradeDisciplinas', component: DashboardGradeDisciplinas},
-      {path: 'relatorioDisciplinas', name: 'relatorioDisciplinas', component: DashboardRelatorioDisciplinas}
+      { path: '', name: 'dashboard', component: DashboardHome },
+      { path: 'pedidos', name: 'pedidos', component: DashboardPedidos },
+      { path: 'turmas', name: 'turmas', component: DashboardTurmas },
+      { path: 'turmasExternas', name: 'turmasExternas', component: DashboardTurmasExternas },
+      { path: 'relatorios', name: 'relatorios', component: DashboardRelatorios },
+      { path: 'horarios', name: 'horarios', component: DashboardHorarios },
+      { path: 'cursos', name: 'cursos', component: DashboardCursos },
+      { path: 'docentes', name: 'docentes', component: DashboardDocentes },
+      { path: 'grades', name: 'grades', component: DashboardGrades },
+      { path: 'disciplinas', name: 'disciplinas', component: DashboardDisciplinas },
+      { path: 'perfis', name: 'perfis', component: DashboardPerfis },
+      { path: 'cargaProfessores', name: 'cargaProfessores', component: DashboardCargaProfessores },
+      { path: 'horariosResumo', name: 'horariosResumo', component: DashboardHorariosResumo },
+      { path: 'laboratoriosAlocacao', name: 'laboratoriosAlocacao', component: DashboardLaboratoriosAlocacao },
+      { path: 'cargaPos', name: 'cargaPos', component: DashboardCargaPos },
+      { path: 'salas', name: 'salas', component: DashboardSalas },
+      { path: 'gradeDisciplinas', name: 'gradeDisciplinas', component: DashboardGradeDisciplinas },
+      { path: 'relatorioDisciplinas', name: 'relatorioDisciplinas', component: DashboardRelatorioDisciplinas },
+      { path: 'gradeEdit', name: 'gradeEdit', component: DashboardGradesEdit }
     ]
   },
   {
@@ -76,7 +79,7 @@ const routes = [
       next('/login')
     }
   },
-  {path: '/*', redirect: '/'}
+  { path: '/*', redirect: '/' }
 ]
 export default new VueRouter({
   routes,

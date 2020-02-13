@@ -135,7 +135,7 @@
                     </tr>
 
                     <tbody>
-                      <tr v-for="curso in options" :key="curso">
+                      <tr v-for="curso in options" :key="'curso-id-'+curso.id+curso.nome+'-'+curso.value">
                         <div style="width: max-contet">
                           <td style="padding:0;broder:0;margin:0!important">
                             <div style="width:25px;">

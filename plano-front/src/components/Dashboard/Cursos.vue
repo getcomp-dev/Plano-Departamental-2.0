@@ -28,7 +28,7 @@
       <table class="table table-hover table-sm">
         <thead class="thead-light">
           <tr>
-            <div style="width: 516px;" class="sticky">
+            <div style="width: 525px;" class="sticky">
               <th scope="col">
                 <p
                   @click="toggleOrderNome()"
@@ -76,6 +76,9 @@
                   title="Entrada de alunos 2º Semestre"
                 >2º Sem.</p>
               </th>
+              <th scope="col">
+                <p style="width: 9px"></p>
+              </th>
             </div>
           </tr>
         </thead>
@@ -89,7 +92,7 @@
               :class="{'bg-custom':cursoClickado === curso.codigo}"
               style="cursor: pointer;"
             >
-              <div style="width: 516px">
+              <div style="width: 525px">
                 <td>
                   <p style="width: 300px; text-align: start">{{ curso.nome }}</p>
                 </td>
@@ -105,6 +108,9 @@
                 </td>
                 <td>
                   <p style="width: 52px">{{ curso.alunosEntrada2 }}</p>
+                </td>
+                <td>
+                  <p style="width: 9px"></p>
                 </td>
               </div>
             </tr>
@@ -288,16 +294,17 @@
       <div class="modal-body">
         <ul class="listas list-group"> 
           <li class="list-group-item">
-            <strong>lelele</strong> lalala
+            <strong>Para adicionar cursos: </strong> Com o cartão à direita em branco, preencha-o. Em seguida, clique em Adicionar (+).
           </li>
           <li class="list-group-item">
-            <strong>lelele</strong>lalala
+            <strong>Para editar ou deletar um curso: </strong>Na tabela, clique no curso que deseja alterar. Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar (&#10003;) ou, para excluí-lo, clique em Deletar (&#128465;). 
           </li>
           <li class="list-group-item">
-            <strong>lelele</strong> lalala
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar (X).
           </li>
-          <li class="list-group-item">
-            <strong>lelele</strong> lalala
+           <li class="list-group-item">
+            <strong>Para alterar a ordenação:</strong> Clique em Nome no cabeçalho da tabela para ordenar por ordem alfabética
+            ou em Código para ordem numérica do código do curso.
           </li>
         </ul>
       </div>
@@ -549,7 +556,8 @@ export default {
   height: 18px;
 }
 .divTable {
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto !important;
   border: rgba(0, 0, 0, 0.125) solid 1px;
   height: -webkit-max-content;
   height: -moz-max-content;
@@ -560,7 +568,8 @@ export default {
 }
 table {
   display: block !important;
-  overflow: hidden !important;
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
   font-size: 11px !important;
   font-weight: normal !important;
   background-color: white;

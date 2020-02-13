@@ -1,5 +1,4 @@
 <template>
-
   <div style="display:block; overflow: hidden" class="sticky">
     <th scope="col">
       <p style="width:24px !important;" title="Semestre">S.</p>
@@ -32,30 +31,30 @@
       <p style="width:32px !important;" title="Total de vagas">Total</p>
     </th>
     <template v-for="curso in cursos">
-        <th :key="curso.id" :id="'curso'+curso.id">
-          <p
-            v-bind:class="{'cursoGrande':big(curso.codigo)}"
-            style="width: 32px !important;"
-            v-on.prevent:mouseover
-          >{{curso.codigo}}</p>
-        </th>
+      <th :key="'1-'+curso.id" :id="'curso'+curso.id">
+        <p
+          v-bind:class="{'cursoGrande':big(curso.codigo)}"
+          style="width: 32px !important;"
+          v-on.prevent:mouseover
+        >{{curso.codigo}}</p>
+      </th>
 
-        <b-popover
-          :key="curso.alunosEntrada"
-          :target="'curso'+curso.id"
-          placement="bottom"
-          triggers="hover focus"
-        >
-          <p
-            style="font-size: 11px"
-            v-if="curso.semestreInicial==1 || curso.semestreInicial==3"
-          >1º - {{curso.alunosEntrada}}</p>
-          <p
-            style="font-size: 11px"
-            v-if="curso.semestreInicial==2 || curso.semestreInicial==3"
-          >2º - {{curso.alunosEntrada2}}</p>
-          <p style="font-size: 11px">{{curso.nome}}</p>
-        </b-popover>
+      <b-popover
+        :key="'alunos-entrada'+curso.alunosEntrada+curso.id+curso.semestreInicial"
+        :target="'curso'+curso.id"
+        placement="bottom"
+        triggers="hover focus"
+      >
+        <p
+          style="font-size: 11px"
+          v-if="curso.semestreInicial==1 || curso.semestreInicial==3"
+        >1º - {{curso.alunosEntrada}}</p>
+        <p
+          style="font-size: 11px"
+          v-if="curso.semestreInicial==2 || curso.semestreInicial==3"
+        >2º - {{curso.alunosEntrada2}}</p>
+        <p style="font-size: 11px">{{curso.nome}}</p>
+      </b-popover>
     </template>
   </div>
 </template>
@@ -74,8 +73,7 @@ export default {
       if (nome.length > 4) return true;
       else return false;
     }
-  },
-
+  }
 };
 </script>
 
