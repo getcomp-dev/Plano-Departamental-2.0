@@ -3,6 +3,18 @@ const models = require('../models/index'),
     ioBroadcast = require('../library/socketIO').broadcast,
     SM = require('../library/SocketMessages')
 
+const history = function(params){
+    models.History.create({
+        tabelaModificada: 'Docente',
+        campoModificado: params.fieldName,
+        linhaModificada: params.lineId,
+        valorAnterior: params.oldValue,
+        valorNovo: params.newValue,
+        tipoOperacao: params.operationType,
+        usuario: params.user
+    })
+}
+
 router.post('/', function (req, res, next) {
     console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Docente.create({
@@ -13,6 +25,8 @@ router.post('/', function (req, res, next) {
     }).then(function (docente) {
         ioBroadcast(SM.DOCENTE_CREATED, {'msg': 'Docente criado!', 'Docente': docente})
         console.log('\nRequest de '+req.usuario.nome+'\n')
+
+        history({operationType: "Create", user: req.usuario.nome, lineId: `${req.body.nome}`})
 
         res.send({
             success: true,
@@ -45,6 +59,18 @@ router.post('/:id([0-9]+)', function (req, res, next) {
     }).then(function (docente) {
         if (!docente)
             throw new CustomError(400, 'Docente inválido')
+
+        if(docente.nome != req.body.nome)
+            history({fieldName:'Nome', lineId:docente.nome, oldValue: docente.nome, newValue: req.body.nome, operationType:'Edit', user: req.usuario.nome})
+
+        if(docente.apelido != req.body.apelido)
+            history({fieldName:'Apelido', lineId:docente.nome, oldValue: docente.apelido, newValue: req.body.apelido, operationType:'Edit', user: req.usuario.nome})
+
+        if(docente.creditos != req.body.creditos)
+            history({fieldName:'Creditos', lineId:docente.nome, oldValue: docente.creditos, newValue: req.body.creditos, operationType:'Edit', user: req.usuario.nome})
+
+        if(docente.ativo != req.body.ativo)
+            history({fieldName:'Ativo', lineId:docente.nome, oldValue: docente.ativo, newValue: req.body.ativo, operationType:'Edit', user: req.usuario.nome})
 
         return docente.updateAttributes({
             nome: req.body.nome,
@@ -80,6 +106,8 @@ router.delete('/:id([0-9]+)', function (req, res, next) {
     }).then(function (docente) {
         ioBroadcast(SM.DOCENTE_DELETED, {'msg': 'Docente excluído!', 'Docente': docente})
         console.log('\nRequest de '+req.usuario.nome+'\n')
+
+        history({operationType: "Delete", user: req.usuario.nome, lineId: `${docente.nome}`})
 
         res.send({
             success: true,

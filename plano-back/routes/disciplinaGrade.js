@@ -3,6 +3,18 @@ const models = require('../models/index'),
     ioBroadcast = require('../library/socketIO').broadcast,
     SM = require('../library/SocketMessages')
 
+const history = function(params){
+    models.History.create({
+        tabelaModificada: 'DisciplinaGrade',
+        campoModificado: params.fieldName,
+        linhaModificada: params.lineId,
+        valorAnterior: params.oldValue,
+        valorNovo: params.newValue,
+        tipoOperacao: params.operationType,
+        usuario: params.user
+    })
+}
+
 router.post('/', function (req, res, next) {
     console.log('\nRequest de '+req.usuario.nome+'\n')
     models.DisciplinaGrade.create({
@@ -12,6 +24,8 @@ router.post('/', function (req, res, next) {
     }).then(function (disciplinaGrade) {
         ioBroadcast(SM.DISCIPLINA_GRADE_CREATED, {'msg': 'Disciplina adicionada à Grade!', 'DisciplinaGrade': disciplinaGrade})
         console.log('\nRequest de '+req.usuario.nome+'\n')
+
+        history({operationType: "Create", user: req.usuario.nome, lineId: `${disciplinaGrade.periodo}/${disciplinaGrade.Disciplina}/${disciplinaGrade.Grade}`})
 
         res.send({
             success: true,
@@ -45,6 +59,16 @@ router.post('/:Disciplina([0-9]+)&&:Grade([0-9]+)', function (req, res, next) {
     }).then(function (disciplinaGrade) {
         if (!disciplinaGrade)
             throw new CustomError(400, 'Disciplina ou Grade inválida')
+
+        if(disciplinaGrade.periodo != req.body.periodo)
+            history({fieldName:'Periodo', lineId:`${disciplinaGrade.periodo}/${disciplinaGrade.Disciplina}/${disciplinaGrade.Grade}`, oldValue: disciplinaGrade.periodo, newValue: req.body.periodo, operationType:'Edit', user: req.usuario.nome})
+
+        if(disciplinaGrade.Disciplina != req.body.Disciplina)
+            history({fieldName:'Disciplina', lineId:`${disciplinaGrade.periodo}/${disciplinaGrade.Disciplina}/${disciplinaGrade.Grade}`, oldValue: disciplinaGrade.Disciplina, newValue: req.body.Disciplina, operationType:'Edit', user: req.usuario.nome})
+
+        if(disciplinaGrade.Grade != req.body.Grade)
+            history({fieldName:'Grade', lineId:`${disciplinaGrade.periodo}/${disciplinaGrade.Disciplina}/${disciplinaGrade.Grade}`, oldValue: disciplinaGrade.Grade, newValue: req.body.Grade, operationType:'Edit', user: req.usuario.nome})
+
 
         return disciplinaGrade.updateAttributes({
             periodo: req.body.periodo,
@@ -80,6 +104,8 @@ router.delete('/:Disciplina([0-9]+)&&:Grade([0-9]+)', function (req, res, next) 
     }).then(function (disciplinaGrade) {
         ioBroadcast(SM.DISCIPLINA_GRADE_DELETED, {'msg': 'Disciplina excluída da grade!', 'DisciplinaGrade': disciplinaGrade})
         console.log('\nRequest de '+req.usuario.nome+'\n')
+
+        history({operationType: "Delete", user: req.usuario.nome, lineId: `${disciplinaGrade.periodo}/${disciplinaGrade.Disciplina}/${disciplinaGrade.Grade}`})
 
         res.send({
             success: true,
