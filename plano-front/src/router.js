@@ -24,6 +24,7 @@ import DashboardSalas from './components/Dashboard/Salas'
 import DashboardGradeDisciplinas from './components/Dashboard/GradeDisciplinas'
 import DashboardRelatorioDisciplinas from './components/Dashboard/RelatorioDisciplinas'
 import DashboardGradesEdit from './components/Dashboard/GradesEdit'
+import DashboardHistory from './components/Dashboard/History'
 
 
 
@@ -68,7 +69,8 @@ const routes = [
       { path: 'salas', name: 'salas', component: DashboardSalas },
       { path: 'gradeDisciplinas', name: 'gradeDisciplinas', component: DashboardGradeDisciplinas },
       { path: 'relatorioDisciplinas', name: 'relatorioDisciplinas', component: DashboardRelatorioDisciplinas },
-      { path: 'gradeEdit', name: 'gradeEdit', component: DashboardGradesEdit }
+      { path: 'gradeEdit', name: 'gradeEdit', component: DashboardGradesEdit },
+      { path: 'history', name: 'history', component: DashboardHistory }
     ]
   },
   {

@@ -12,6 +12,8 @@ const history = function(params){
         valorNovo: params.newValue,
         tipoOperacao: params.operationType,
         usuario: params.user
+    }).then(function (history) {
+        ioBroadcast(SM.HISTORY_CREATED, {'msg': 'Log atualizado', 'History': history})
     })
 }
 

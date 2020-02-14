@@ -98,6 +98,10 @@
             </li>
             <li class="list-group-item">
               <strong>
+                <router-link :to="{ name: 'gradeEdit' }">Disciplinas na Grade:</router-link>
+              </strong> Onde encontram-se as disciplinas de cada grade do DCC atuais e antigas que ainda estão em atividade, e permite a alteração ou adição de novas disciplinas.        </li>
+            <li class="list-group-item">
+              <strong>
                 <router-link :to="{ name: 'perfis' }">Perfis:</router-link>
               </strong> Onde encontram-se os perfis definidos para cada disciplina nas tabelas, permitindo também a adição e alteração de perfis, seus nomes e as cores destinadas a eles.
             </li>
@@ -124,6 +128,9 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "DashboardHome",
+  created() {
+      console.log(this.$store)
+  },
 
   computed: {
     Admin() {

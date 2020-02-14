@@ -168,7 +168,7 @@
                 </li>
                 <li @click="show=false" class="nav-item">
                   <router-link :to="{ name: 'gradeEdit' }" class="nav-link">
-                    <i class="fas fa-sitemap"></i> Editar Grades
+                    <i class="fas fa-sitemap"></i> Disciplinas na Grade
                   </router-link>
                 </li>
                 <li @click="show=false" class="nav-item">
@@ -184,6 +184,11 @@
                 <li @click="show=false" class="nav-item">
                   <router-link :to="{ name: 'salas' }" class="nav-link">
                     <i class="fas fa-clipboard"></i>Salas
+                  </router-link>
+                </li>
+                <li @click="show=false" class="nav-item">
+                  <router-link :to="{ name: 'history' }" class="nav-link">
+                    <i class="fas fa-clipboard"></i>Logs
                   </router-link>
                 </li>
               </ul>

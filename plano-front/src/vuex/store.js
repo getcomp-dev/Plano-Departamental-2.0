@@ -18,6 +18,7 @@ import horario from './module/horario'
 import vaga from './module/vaga'
 import cargaPos from './module/cargaPos'
 import plano from './module/plano'
+import history from './module/history'
 
 import {
   USER_LOGGED_OUT,
@@ -88,7 +89,8 @@ export default new Vuex.Store({
     horario,
     vaga,
     cargaPos,
-    plano
+    plano,
+    history
   },
 
   strict: process.env.NODE_ENV !== 'production'

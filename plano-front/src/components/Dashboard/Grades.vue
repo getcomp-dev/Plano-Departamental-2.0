@@ -214,7 +214,7 @@
                     </button>
                     <button
                       type="button"
-                      title="Excluir Grade"
+                      title="Deletar Grade"
                       class="delbtn"
                       v-on:click.prevent="deleteGrade()"
                     >
@@ -266,16 +266,15 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>lelele</strong> lalala
+             <strong>Para adicionar grades: </strong> Com o cartão a direita em branco, preencha-o. Em seguida, clique em Adicionar (+).
           </li>
           <li class="list-group-item">
-            <strong>lelele</strong>lalala
+             <strong>Para editar ou deletar uma grade: </strong>Na tabela, clique na grade que deseja alterar. Logo após, 
+             no cartão à direita, altere as informações que desejar e clique em Salvar (&#10003;) ou, para excluí-la, 
+             clique em Deletar (&#128465;).
           </li>
           <li class="list-group-item">
-            <strong>lelele</strong> lalala
-          </li>
-          <li class="list-group-item">
-            <strong>lelele</strong> lalala
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar (X).
           </li>
         </ul>
       </div>

@@ -6,10 +6,10 @@
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Editar Grades</h1>
+        <h1 class="col-xl-3 col-md-4 col-sm-5 col px-0 pr-1 titulo">Disciplinas na Grade</h1>
 
         <div
-          class="form-group col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
+          class="form-group col-xl-9 col-md-8 col-sm-7 col-1 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
           <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn p-0">
@@ -308,16 +308,16 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>lelele</strong> lalala
+            <strong>Para exibir conteúdo na tabela:</strong> Comece selecionando o curso desejado. Em seguida, selecione a grade que quer visualizar. 
           </li>
           <li class="list-group-item">
-            <strong>lelele</strong>lalala
+            <strong>Para adicionar disciplinas à Grade </strong> Com o cartão a direita em branco, preencha-o. Em seguida, clique em Adicionar (+).
           </li>
           <li class="list-group-item">
-            <strong>lelele</strong> lalala
+            <strong>Para editar ou deletar uma disciplina: </strong>Na tabela, clique na disciplina que deseja modificar. Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar (&#10003;) ou, para excluí-la, clique em Deletar (&#128465;). 
           </li>
-          <li class="list-group-item">
-            <strong>lelele</strong> lalala
+           <li class="list-group-item">
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar (X).
           </li>
         </ul>
       </div>
