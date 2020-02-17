@@ -352,11 +352,14 @@
       <div class="modal-body">
         <ul class="listas list-group"> 
           <li class="list-group-item">
-            <strong>Para exibir conteúdo na Tabela: </strong> Clique em Docentes e selecione o(s) professor(es) que deseja 
-            ver, em seguida confirme em OK. Caso queira ver todos basta clicar em Selecionar Todos.
+            <strong>Para exibir conteúdo na Tabela: </strong> Clique em Docentes
+            <i class="fas fa-list-ul cancelbtn px-1" style="font-size: 12px"></i>
+             e selecione o(s) professor(es) que deseja ver, em seguida confirme em OK. Caso queira ver todos basta clicar em Selecionar Todos.
           </li>
           <li class="list-group-item">
-             <strong>Para gerar relatório:</strong> Clique no botão Relatório e aguarde para fazer <font style='font-style:italic;'>download</font> do mesmo.
+             <strong>Para gerar relatório:</strong> Clique no botão Relatório 
+             <i class="far fa-file-alt relatbtn px-1" style="font-size: 12px"></i>
+             e aguarde para fazer <font style='font-style:italic;'>download</font> do mesmo.
           </li>
         </ul>
       </div>

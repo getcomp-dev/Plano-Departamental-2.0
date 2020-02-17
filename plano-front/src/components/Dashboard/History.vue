@@ -34,13 +34,13 @@
                             <p class="p-header" style="width: 100px">Campo Modificado</p>
                         </th>
                         <th scope="col">
-                            <p class="p-header" style="width: 160px">Linha Modificada</p>
+                            <p class="p-header" style="width: 200px">Linha Modificada</p>
                         </th>
                         <th scope="col">
-                            <p class="p-header" style="width: 50px">Valor Anterior</p>
+                            <p class="p-header" style="width: 150px">Valor Anterior</p>
                         </th>
                         <th scope="col">
-                            <p class="p-header" style="width: 50px">Novo Valor</p>
+                            <p class="p-header" style="width: 150px">Novo Valor</p>
                         </th>
                         <th scope="col">
                             <p class="p-header" style="width: 50px">Operação</p>
@@ -65,13 +65,13 @@
                                     <div style="width: 100px;">{{h.campoModificado}}</div>
                                 </td>
                                 <td class="disc-td">
-                                    <div style="width: 160px;">{{linhaModificada(h)}}</div>
+                                    <div style="width: 200px;">{{linhaModificada(h)}}</div>
                                 </td>
                                 <td class="disc-td">
-                                    <div style="width: 50px;">{{h.valorAnterior}}</div>
+                                    <div style="width: 150px;">{{valorAnterior(h)}}</div>
                                 </td>
                                 <td class="disc-td">
-                                    <div style="width: 50px;">{{h.valorNovo}}</div>
+                                    <div style="width: 150px;">{{valorNovo(h)}}</div>
                                 </td>
                                 <td class="disc-td">
                                     <div style="width: 50px;">{{h.tipoOperacao}}</div>
@@ -150,7 +150,7 @@
                                             let turmaExterna = _.find(this.$store.state.turmaExterna.Turmas, {'id': parseInt(aux[0])})
                                             let disciplinaPedidoExterno = (turmaExterna === undefined ? undefined : _.find(this.$store.state.disciplina.Disciplinas, {'id': turmaExterna.Disciplina}))
                                             let cursoPedidoExterno = _.find(this.$store.state.curso.Cursos, {'id': parseInt(aux[1])})
-                                            linha = `${(turma === undefined ? aux[0] : disciplinaPedidoExterno.codigo + ' ' + turmaExterna.letra)}/${(cursoPedidoExterno === undefined ? aux[1] : cursoPedidoExterno.codigo)}`
+                                            linha = `${(turmaExterna === undefined ? aux[0] : disciplinaPedidoExterno.codigo + ' ' + turmaExterna.letra)}/${(cursoPedidoExterno === undefined ? aux[1] : cursoPedidoExterno.codigo)}`
                                             break;
 
                     case 'Turma':           aux = linha.split('/')
@@ -166,6 +166,133 @@
 
                 }
                 return linha
+            },
+            valorAnterior(h) {
+                let v = h.valorAnterior
+                switch(h.campoModificado){
+                    case 'Curso':       v = _.find(this.$store.state.curso.Cursos, {'id': parseInt(h.valorAnterior)})
+                                        if(v === undefined)
+                                            v = h.valorAnterior
+                                        else
+                                            v = v.codigo
+                                        break;
+
+                    case 'Disciplina':  v = _.find(this.$store.state.disciplina.Disciplinas, {'id': parseInt(h.valorAnterior)})
+                                        if(v === undefined)
+                                            v = h.valorAnterior
+                                        else
+                                            v = v.codigo
+                                        break;
+
+                    case 'Docente':
+                    case 'Docente1':
+                    case 'Docente2':    v = _.find(this.$store.state.docente.Docentes, {'id': parseInt(h.valorAnterior)})
+                                        if(v === undefined)
+                                           v = h.valorAnterior
+                                        else
+                                           v = v.apelido
+                                        break;
+
+                    case 'Grade':       v = _.find(this.$store.state.grade.Grades, {'id': parseInt(h.valorAnterior)})
+                                        if(v === undefined)
+                                            v = h.valorAnterior
+                                        else {
+                                            let c = _.find(this.$store.state.curso.Cursos, {'id': parseInt(v.Curso)})
+                                            v = `${(c === undefined ? v.Curso : c.codigo)}/${v.nome}`
+                                        }
+                                        break;
+
+                    case 'Horario':
+                    case 'Horario1':
+                    case 'Horario2':    v = _.find(this.$store.state.horario.Horarios, {'id': parseInt(h.valorAnterior)})
+                                        if(v === undefined)
+                                            v = h.valorAnterior
+                                        else
+                                            v = v.horario
+                                        break;
+
+                    case 'Perfil':      v = _.find(this.$store.state.perfil.Perfis, {'id': parseInt(h.valorAnterior)})
+                                        if(v === undefined)
+                                            v = h.valorAnterior
+                                        else
+                                            v = v.nome
+                                        break;
+
+                    case 'Sala':
+                    case 'Sala1':
+                    case 'Sala2':       v = _.find(this.$store.state.sala.Salas, {'id': parseInt(h.valorAnterior)})
+                                        if(v === undefined)
+                                            v = h.valorAnterior
+                                        else
+                                            v = v.nome
+                                        break;
+                }
+
+                return v
+            },
+
+            valorNovo(h) {
+                let v = h.valorNovo
+                switch(h.campoModificado){
+                    case 'Curso':       v = _.find(this.$store.state.curso.Cursos, {'id': parseInt(h.valorNovo)})
+                        if(v === undefined)
+                            v = h.valorNovo
+                        else
+                            v = v.codigo
+                        break;
+
+                    case 'Disciplina':  v = _.find(this.$store.state.disciplina.Disciplinas, {'id': parseInt(h.valorNovo)})
+                        if(v === undefined)
+                            v = h.valorNovo
+                        else
+                            v = v.codigo
+                        break;
+
+                    case 'Docente':
+                    case 'Docente1':
+                    case 'Docente2':    v = _.find(this.$store.state.docente.Docentes, {'id': parseInt(h.valorNovo)})
+                        if(v === undefined)
+                            v = h.valorNovo
+                        else
+                            v = v.apelido
+                        break;
+
+                    case 'Grade':       v = _.find(this.$store.state.grade.Grades, {'id': parseInt(h.valorNovo)})
+                        if(v === undefined)
+                            v = h.valorNovo
+                        else {
+                            let c = _.find(this.$store.state.curso.Cursos, {'id': parseInt(v.Curso)})
+                            v = `${(c === undefined ? v.Curso : c.codigo)}/${v.nome}`
+                        }
+                        break;
+
+                    case 'Horario':
+                    case 'Horario1':
+                    case 'Horario2':    v = _.find(this.$store.state.horario.Horarios, {'id': parseInt(h.valorNovo)})
+                        if(v === undefined)
+                            v = h.valorNovo
+                        else
+                            v = v.horario
+                        break;
+
+                    case 'Perfil':      v = _.find(this.$store.state.perfil.Perfis, {'id': parseInt(h.valorNovo)})
+                        if(v === undefined)
+                            v = h.valorNovo
+                        else
+                            v = v.nome
+                        break;
+
+                    case 'Sala':
+                    case 'Sala1':
+                    case 'Sala2':       v = _.find(this.$store.state.sala.Salas, {'id': parseInt(h.valorNovo)})
+                        if(v === undefined)
+                            v = h.valorNovo
+                        else
+                            v = v.nome
+                        break;
+                }
+
+                return v
             }
         },
 

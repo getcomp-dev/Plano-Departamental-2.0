@@ -14,7 +14,7 @@
         >
           <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
             <select
-              class="form-control form-control-sm"
+              class="form-control form-control-sm form-control-top"
               v-model="periodos"
               v-on:change="CreditoTotal_PGMC, CreditoTotal_PGCC, CreditoTotal_PGEM"
             >
@@ -39,8 +39,8 @@
             </button>
 
             <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
-                <i class="fas fa-question"></i>
-              </b-button>
+              <i class="fas fa-question"></i>
+            </b-button>
           </div>
         </div>
       </div>
@@ -79,7 +79,11 @@
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:24px!important; cursor: pointer;" @click="toggleOrdenacaoPGMC">
+                  <p
+                    class="p-header"
+                    style="width:24px!important; cursor: pointer;"
+                    @click="toggleOrdenacaoPGMC"
+                  >
                     T.
                     <i
                       v-if="ordenacaoAtualPGMC==='periodo'"
@@ -154,7 +158,11 @@
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:24px!important; cursor: pointer" @click="toggleOrdenacaoPGCC">
+                  <p
+                    class="p-header"
+                    style="width:24px!important; cursor: pointer"
+                    @click="toggleOrdenacaoPGCC"
+                  >
                     T.
                     <i
                       v-if="ordenacaoAtualPGCC==='periodo'"
@@ -232,7 +240,11 @@
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:24px!important; cursor: pointer" @click="toggleOrdenacaoPGEM">
+                  <p
+                    class="p-header"
+                    style="width:24px!important; cursor: pointer"
+                    @click="toggleOrdenacaoPGEM"
+                  >
                     T.
                     <i
                       v-if="ordenacaoAtualPGEM==='periodo'"
@@ -290,90 +302,72 @@
     </div>
 
     <!-- Card de Adição -->
-    <div class="div-card p-0 mt-3 mb-2 ml-auto col-lg-4 col-md-12 col-sm-12 col-12">
-      <div class="card ml-auto mr-3">
+    <div class="div-card p-0 mt-0 mb-2 col-lg-4 col-md-12 col-sm-12 col-12">
+      <!-- Inicio card -->
+      <div class="card mr-3 ml-auto">
         <div class="card-header">
           <h2 class="card-title">Creditação Pós</h2>
         </div>
         <div class="card-body">
           <form>
-            <div class="row">
-              <div class="col-4">
-                <div class="row mb-2 mx-0">
-                  <div class="m-0 col px-0">
-                    <label for="trimestre" class="col-form-label">Trimestre</label>
-                    <div style="width:24px;">
-                      <input
-                        type="text"
-                        class="form-control form-control-sm"
-                        style="width: 24px; height:16px; text-align:center"
-                        id="trimestre"
-                        v-model="cargaPosForm.trimestre"
-                      />
-                    </div>
-                  </div>
-                </div>
+            <div class="row mb-2 mx-0">
+              <div class="form-group col-4 m-0 px-0">
+                <label for="trimestre" class="col-form-label">Trimestre</label>
+                <input
+                  type="text"
+                  class="inputMenor form-control form-control-sm"
+                  id="trimestre"
+                  v-model="cargaPosForm.trimestre"
+                  @keypress="onlyNumber"
+                />
               </div>
 
-              <div class="col-8">
-                <div class="row mb-2 mx-0">
-                  <div class="m-0 col px-0">
-                    <label for="docente" class="col-form-label">Docente</label>
-                    <select
-                      type="text"
-                      class="form-control form-control-sm"
-                      style="width:140px !important"
-                      id="docente1"
-                      v-model="cargaPosForm.Docente"
-                    >
-                      <option v-if="Docentes.length===0" type="text" value>Nenhum Docente Encontrado</option>
-                      <option
-                        v-for="docente in Docentes"
-                        :key="'id docente'+docente.id"
-                        :value="docente.id"
-                      >{{docente.apelido}}</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-4">
-                <div class="row mb-2 mx-0">
-                  <div class="m-0 col px-0">
-                    <label for="programa" class="col-form-label">Programa</label>
-                    <select
-                      type="text"
-                      class="form-control form-control-sm"
-                      style="width:80px !important"
-                      id="programa"
-                      v-model="cargaPosForm.programa"
-                    >
-                      <option type="text" value="PGMC">PGMC</option>
-                      <option type="text" value="PGCC">PGCC</option>
-                      <option type="text" value="PGEM">PGEM</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-6">
-                <div class="row mb-2 mx-0">
-                  <div class="m-0 col px-0">
-                    <label for="creditos" class="col-form-label">Créditos</label>
-                    <div style="width:30px;">
-                      <input
-                        type="text"
-                        class="form-control form-control-sm"
-                        style="width: 28px; text-align:center"
-                        id="creditos"
-                        v-model="cargaPosForm.creditos"
-                      />
-                    </div>
-                  </div>
-                </div>
+              <div class="form-group col-8 m-0 px-0">
+                <label for="docente" class="col-form-label">Docente</label>
+                <select
+                  type="text"
+                  class="form-control form-control-sm selectMenor"
+                  id="docente1"
+                  v-model="cargaPosForm.Docente"
+                >
+                  <option v-if="Docentes.length===0" type="text" value>Nenhum Docente Encontrado</option>
+                  <option
+                    v-for="docente in Docentes"
+                    :key="'id docente'+docente.id"
+                    :value="docente.id"
+                  >{{docente.apelido}}</option>
+                </select>
               </div>
             </div>
 
+            <div class="row mb-2 mx-0">
+              <div class="form-group col-4 m-0 px-0">
+                <label for="creditos" class="col-form-label">Créditos</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm inputMenor"
+                  id="creditos"
+                  v-model="cargaPosForm.creditos"
+                  @keypress="onlyNumber"
+                />
+              </div>
+
+              <div class="form-group col-8 m-0 px-0">
+                <label for="programa" class="col-form-label">Programa</label>
+                <select
+                  type="text"
+                  class="form-control form-control-sm"
+                  id="programa"
+                  v-model="cargaPosForm.programa"
+                >
+                  <option type="text" value="PGMC">PGMC</option>
+                  <option type="text" value="PGCC">PGCC</option>
+                  <option type="text" value="PGEM">PGEM</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Botões -->
             <div class="row mb-0 mt-3 mx-0">
               <div class="d-flex mr-0 ml-auto">
                 <template v-if="isEdit">
@@ -467,18 +461,29 @@
     </b-modal>
 
     <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
-      
       <div class="modal-body">
-        <ul class="listas list-group"> 
+        <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para adicionar docentes à Tabela:</strong> Preencha o cartão à direita. Após concluído, clique em Adicionar (+) ou em Cancelar (X).
+            <strong>Para adicionar docentes à Tabela:</strong> Preencha o cartão à direita. Após concluído, 
+            clique em Adicionar 
+            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
+             ou em Cancelar 
+             <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+             .
           </li>
           <li class="list-group-item">
-            <strong>Para editar docentes da Tabela:</strong> Na tabela, clique no docente que deseja alterar. No cartão à direita faça as mudanças desejadas e, 
-            em seguida, clique em Salvar (&#10003;) ou em Cancelar (X).
+            <strong>Para editar docentes da Tabela:</strong> Na tabela, clique no docente que deseja alterar. 
+            No cartão à direita faça as mudanças desejadas e, em seguida, clique em Salvar 
+            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+             ou em Cancelar 
+            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>             
+             .
           </li>
           <li class="list-group-item">
-            <strong>Para deletar docentes da Tabela:</strong> Marque o(s) docente(s) que deseja deletar através da caixa de seleção à esquerda e em seguida clique em Deletar Selecionados(&#128465;) e confirme no botão OK.
+            <strong>Para deletar docentes da Tabela:</strong> Marque o(s) docente(s) que deseja deletar através 
+            da caixa de seleção à esquerda e em seguida clique em Deletar Selecionados
+            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
+             e confirme no botão OK.
           </li>
           <li class="list-group-item">
             <strong>Para alterar ordenação:</strong> Clique em T. no cabeçalho de cada tabela para alternar a ordenação entre alfabética e por trimestre.
@@ -486,8 +491,7 @@
         </ul>
       </div>
 
-      <div slot="modal-footer" style="display: none">
-      </div>
+      <div slot="modal-footer" style="display: none"></div>
     </b-modal>
   </div>
 </template>
@@ -545,6 +549,12 @@ export default {
   },
 
   methods: {
+    onlyNumber($event) {
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+        $event.preventDefault();
+      }
+    },
     clearClick() {
       this.isEdit = false;
       this.linhaClickada = null;
@@ -929,7 +939,11 @@ table input {
 .isAdd:hover {
   background-color: rgba(0, 0, 0, 0.2);
 }
-/* CARD */
+
+/* ====== CARD ====== */
+.div-card {
+  margin-left: auto;
+}
 .card-title {
   font-size: 16px;
   font-weight: normal;
@@ -937,28 +951,33 @@ table input {
   margin: 0;
   text-align: center;
 }
-.div-card {
-  top: -15px;
-}
 .card {
-  width: 320px;
+  width: 260px;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+  margin-left: auto;
 }
 .card-body {
-  font-size: 12px;
+  font-size: 12px !important;
   padding-top: 15px;
 }
 .card label {
   line-height: 1.2;
   font-size: 12px;
-  text-align: center !important;
+  text-align: start;
   padding-top: 0 !important;
 }
 select {
   height: 25px !important;
   font-size: 11px !important;
   padding: 0px 5px 0px 5px !important;
+  min-width: 100px;
+  max-width: 100px;
   text-align: center;
+}
+.selectMenor {
+  min-width: 140px;
+  max-width: 140px;
+  text-align: start !important;
 }
 input {
   height: 25px !important;
@@ -966,6 +985,12 @@ input {
   font-size: 11px !important;
   text-align: start;
 }
+.inputMenor {
+  max-width: 50px;
+  min-width: 50px;
+  text-align: center;
+}
+
 /* APENAS NO FIREFOX */
 @-moz-document url-prefix() {
   table select {
@@ -1002,7 +1027,9 @@ input {
   line-height: inherit;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
-strong{color:#007bff}
+strong {
+  color: #007bff;
+}
 button {
   padding: 0;
   border: none;
@@ -1213,27 +1240,12 @@ i.far {
   padding-left: 15px;
   font-size: 12px !important;
 }
-.form-control {
+.form-control-top {
   height: 25px !important;
   font-size: 12px !important;
   padding: 2px 5px 0px 5px !important;
   min-width: 30px;
   text-align: start;
-}
-.form-group {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex: 0 0 auto;
-  flex: 0 0 auto;
-  -ms-flex-flow: row wrap;
-  flex-flow: row wrap;
-  -ms-flex-align: center;
-  align-items: center;
-  margin-bottom: 0;
-}
-.form-inline .input-group,
-.form-inline {
-  width: auto;
 }
 @media screen and (max-width: 521px) {
   .div-titulo {

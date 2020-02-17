@@ -17,9 +17,9 @@
               <label class="input-group-text">Ano</label>
             </div>
           </div>
-          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
+          <!-- <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
             <i class="fas fa-question"></i>
-          </b-button>
+          </b-button> -->
         </div>
       </div>
     </div>

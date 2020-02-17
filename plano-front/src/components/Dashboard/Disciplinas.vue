@@ -1,23 +1,22 @@
 <template>
   <div class="DashboardDisciplinas row pr-2" v-if="Admin">
     <!-- Titulo -->
-     <div
+    <div
       class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Disciplinas</h1>
-      
-      <div
+
+        <div
           class="form-group col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
           <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
             <i class="fas fa-question"></i>
           </b-button>
-          </div>
-          
         </div>
+      </div>
     </div>
     <div class="w-100 mb-2 border-bottom"></div>
     <!-- Grid Esquerdo -->
@@ -167,6 +166,7 @@
                   id="cargaTeorica"
                   class="form-control form-control-sm"
                   style="width: 70px!important; text-align:center!important"
+                  @keypress="onlyNumber"
                   v-model="disciplinaForm.cargaTeorica"
                 />
               </div>
@@ -178,6 +178,7 @@
                   id="cargaPratica"
                   class="form-control form-control-sm"
                   style="width: 70px!important; text-align:center!important"
+                  @keypress="onlyNumber"
                   v-model="disciplinaForm.cargaPratica"
                 />
               </div>
@@ -279,28 +280,34 @@
     <!-- Fim do Grid Direito -->
     <!-- MODAL DE AJUDA -->
     <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
-      
       <div class="modal-body">
-        <ul class="listas list-group"> 
+        <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para adicionar disciplinas: </strong> Com o cartão à direita em branco, preencha-o. Em seguida, clique em Adicionar (+).
+            <strong>Para adicionar disciplinas:</strong> Com o cartão à direita em branco, preencha-o. 
+            Em seguida, clique em Adicionar
+            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
+            .
           </li>
           <li class="list-group-item">
-              <strong>Para editar ou deletar uma disciplina: </strong>Na tabela, clique na disciplina que deseja alterar. Logo após, no cartão à direita, 
-              altere as informações que desejar e clique em Salvar (&#10003;) ou, para excluí-lo, clique em Deletar (&#128465;). 
+            <strong>Para editar ou deletar uma disciplina:</strong>Na tabela, clique na disciplina que deseja alterar.
+            Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar 
+            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+             ou, para excluí-lo, clique em Deletar 
+            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
+             .
           </li>
           <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar (X).
-          </li>
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar 
+            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+            .
           </li>
           <li class="list-group-item">
-            <strong>Para alterar a ordenação:</strong>  Clique em Nome ou Código no cabeçalho da tabela para ordenação alfabética do mesmo. 
+            <strong>Para alterar a ordenação:</strong> Clique em Nome ou Código no cabeçalho da tabela para ordenação alfabética do mesmo.
           </li>
         </ul>
       </div>
 
-      <div slot="modal-footer" style="display: none">
-      </div>
+      <div slot="modal-footer" style="display: none"></div>
     </b-modal>
   </div>
 </template>
@@ -332,6 +339,12 @@ export default {
   },
 
   methods: {
+    onlyNumber($event) {
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      if (keyCode < 48 || keyCode > 57) {
+        $event.preventDefault();
+      }
+    },
     toggleOrderNome() {
       this.ordenacao = "nome";
     },
@@ -681,7 +694,9 @@ table tbody tr div {
   line-height: inherit;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
-strong{color:#007bff}
+strong {
+  color: #007bff;
+}
 
 /* Botoes */
 button {

@@ -154,11 +154,15 @@
       <div class="modal-body">
         <ul class="listas list-group"> 
           <li class="list-group-item">
-            <strong>Para exibir conteúdo na Tabela: </strong> Clique em Disciplinas e selecione a(s) disciplina(s) que deseja 
+            <strong>Para exibir conteúdo na Tabela: </strong> Clique em Disciplinas
+            <i class="fas fa-list-ul cancelbtn px-1" style="font-size: 12px"></i>
+             e selecione a(s) disciplina(s) que deseja 
             ver, em seguida confirme em OK. Caso queira ver todas basta clicar em Selecionar Todos.
           </li>
           <li class="list-group-item">
-            <strong>Para gerar relatório:</strong> Clique no botão Relatório e aguarde para fazer <font style='font-style:italic;'>download</font> do mesmo.
+            <strong>Para gerar relatório:</strong> Clique no botão Relatório 
+            <i class="far fa-file-alt relatbtn px-1" style="font-size: 12px"></i>
+            e aguarde para fazer <font style='font-style:italic;'>download</font> do mesmo.
           </li>
           <li class="list-group-item">
             <strong>Para alterar ordenação:</strong> Clique em Cod. no cabeçalho da tabela para ordenar por código, ou em Nome para ordenar por ordem alfabética. 

@@ -22,66 +22,10 @@
 
     <div class="row w-100 m-0" style="font-size:11px">
       <div class="col-lg-7 col-md-6 col-sm-12 col-12 m-0 px-0">
-        <div class="form-row mx-0">
-          <div class="mr-3">
-            <label for="cursoAtual" class="col-form-label py-0">Curso</label>
-            <select
-              id="cursoAtual"
-              v-model="currentCurso"
-              v-on:change="clearClick(), cleanGrade(), selectingGrade()"
-              class="form-control form-control-sm selectMaior"
-            >
-              <option value="4">Ciência da Computação Diurno</option>
-              <option value="1">Ciência da Computação Noturno</option>
-              <option value="3">Sistemas de Informação</option>
-              <option value="2">Engenharia Computacional</option>
-            </select>
-          </div>
-
-          <div class="mr-3">
-            <template v-if="curso_selected">
-              <label for="gradeAtual" class="col-form-label py-0">Grade</label>
-              <select
-                id="gradeAtual"
-                v-model="currentGrade"
-                v-on:change="findGrade(), cleanDisciplina(), grade_selected=true"
-                class="form-control form-control-sm selectMenor"
-              >
-                <template v-for="grade in Grades">
-                  <option
-                    v-if="grade.Curso == currentCurso"
-                    :key="'grade-id'+grade.id"
-                    :value="grade.id"
-                  >{{grade.nome}}</option>
-                </template>
-              </select>
-            </template>
-
-            <template v-else>
-              <label for="gradeAtual" class="col-form-label py-0">Grade</label>
-              <select id="gradeAtual" disabled class="form-control form-control-sm selectMenor"></select>
-            </template>
-          </div>
-
-          <!-- <div class="mr-3">
-            <button
-              type="button"
-              title="Cancelar"
-              class="cancelbtn mt-3"
-              v-on:click.capture="cleanSelections()"
-              v-b-modal.modalNovaGrade
-            >
-              <i class="fas fa-times"></i>
-            </button>
-          </div>-->
-        </div>
-        <!-- Final Forms Curso e Grande -->
-
-        <div class="row w-100"></div>
         <div class="row w-100 m-0" style="font-size:11px">
           <!-- Grind esquerdo -->
           <!-- Inicio da tabela -->
-          <div class="divTable ml-0 mt-3 pl-0 pr-0 border">
+          <div class="divTable ml-0 mt-0 pl-0 pr-0 border">
             <table class="table table-sm table-hover">
               <thead class="thead-light">
                 <tr>
@@ -159,14 +103,62 @@
 
           <div class="card-body">
             <form>
+              <div class="row mb-2 mx-0">
+                <div class="form-group col m-0 px-0" style="margin-right: 18px!important">
+                  <label for="cursoAtual" class="col-form-label">Curso</label>
+                  <select
+                    id="cursoAtual"
+                    v-model="currentCurso"
+                    v-on:change="clearClick(), cleanGrade(), selectingGrade()"
+                    class="form-control form-control-sm selectMaior"
+                  >
+                    <option value="4">Ciência da Computação Diurno</option>
+                    <option value="1">Ciência da Computação Noturno</option>
+                    <option value="3">Sistemas de Informação</option>
+                    <option value="2">Engenharia Computacional</option>
+                  </select>
+                </div>
+
+                <div class="form-group m-0 col px-0">
+                  <template v-if="curso_selected">
+                    <label for="gradeAtual" class="col-form-label">Grade</label>
+                    <select
+                      id="gradeAtual"
+                      v-model="currentGrade"
+                      v-on:change="findGrade(), cleanDisciplina(), grade_selected=true"
+                      class="form-control form-control-sm selectMenor"
+                    >
+                      <template v-for="grade in Grades">
+                        <option
+                          v-if="grade.Curso == currentCurso"
+                          :key="'grade-id'+grade.id"
+                          :value="grade.id"
+                        >{{grade.nome}}</option>
+                      </template>
+                    </select>
+                  </template>
+
+                  <template v-else>
+                    <label for="gradeAtual" class="col-form-label">Grade</label>
+                    <select
+                      id="gradeAtual"
+                      disabled
+                      class="form-control form-control-sm selectMenor"
+                    ></select>
+                  </template>
+                </div>
+              </div>
+
+              <div class="w-100 border mt-3 mb-2"></div>
+
               <!-- Edição de disciplina -->
               <template v-if="grade_selected">
                 <div class="row mb-2 mx-0">
                   <div class="form-group m-0 col px-0">
-                    <label for="disciplina" class="mr-2 col-form-label">Disciplina</label>
+                    <label for="disciplina" class="col-form-label">Disciplina</label>
                     <select
                       type="text"
-                      class="selectMaior2 form-control form-control-sm"
+                      class="form-control form-control-sm selectMaior2"
                       id="disciplina"
                       v-model="disciplinaGradeForm.Disciplina"
                       v-on:change="clearClick()"
@@ -189,13 +181,13 @@
                 <div class="row mb-2 mx-0">
                   <div class="form-group m-0 col px-0">
                     <label for="periodoDisciplina" class="col-form-label">Período</label>
-
                     <div class="d-flex">
                       <input
                         type="text"
                         class="form-control form-control-sm inputMenor2"
                         aria-describedby="button-edit-periodo"
                         id="periodoDisciplina"
+                        @keypress="onlyNumber"
                         v-model="disciplinaGradeForm.periodo"
                       />
 
@@ -308,16 +300,25 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para exibir conteúdo na tabela:</strong> Comece selecionando o curso desejado. Em seguida, selecione a grade que quer visualizar. 
+            <strong>Para exibir conteúdo na tabela:</strong> Comece selecionando o curso desejado. Em seguida, selecione 
+            a grade que quer visualizar.
           </li>
           <li class="list-group-item">
-            <strong>Para adicionar disciplinas à Grade </strong> Com o cartão a direita em branco, preencha-o. Em seguida, clique em Adicionar (+).
+            <strong>Para adicionar disciplinas à Grade:</strong> Com o cartão a direita em branco, preencha-o. Em seguida, 
+            clique em Adicionar <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>.
           </li>
           <li class="list-group-item">
-            <strong>Para editar ou deletar uma disciplina: </strong>Na tabela, clique na disciplina que deseja modificar. Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar (&#10003;) ou, para excluí-la, clique em Deletar (&#128465;). 
+            <strong>Para editar ou deletar uma disciplina:</strong> Na tabela, clique na disciplina que deseja modificar. 
+            Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar 
+            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+             ou, para excluí-la, clique em Deletar 
+             <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
+             .
           </li>
-           <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar (X).
+          <li class="list-group-item">
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar 
+            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+            .
           </li>
         </ul>
       </div>
@@ -360,6 +361,12 @@ export default {
     };
   },
   methods: {
+    onlyNumber($event) {
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      if (keyCode < 48 || keyCode > 57) {
+        $event.preventDefault();
+      }
+    },
     clickada(ID, nome) {
       this.disciplinaClickada = ID;
       this.nomeAtual = nome;
@@ -641,7 +648,7 @@ export default {
   margin-left: auto;
 }
 .card-body {
-  font-size: 12px;
+  font-size: 12px !important;
   padding-top: 15px;
 }
 .card label {
@@ -691,13 +698,6 @@ input {
   text-align: start;
 }
 /* =================== */
-.p-header {
-  padding: 0 5px 0 5px;
-  margin: 0;
-  font-size: 11px;
-  text-align: center;
-  height: 18px;
-}
 .divTable {
   overflow: hidden !important;
   height: -webkit-max-content !important;
@@ -715,9 +715,16 @@ table {
   font-weight: normal !important;
   background-color: white;
   margin: 0 !important;
-  height: -webkit-calc(100vh - 150px);
-  height: -moz-calc(100vh - 150px);
-  height: calc(100vh - 150px);
+  height: -webkit-calc(100vh - 95px);
+  height: -moz-calc(100vh - 95px);
+  height: calc(100vh - 95px);
+}
+.p-header {
+  padding: 0 5px 0 5px;
+  margin: 0;
+  font-size: 11px;
+  text-align: center;
+  height: 18px;
 }
 tbody {
   max-height: 100%;
@@ -750,34 +757,14 @@ thead th {
   position: sticky !important;
   position: -webkit-sticky !important;
   top: 0 !important;
+  z-index: 5 !important;
 }
-/* APENAS NO FIREFOX */
-@-moz-document url-prefix() {
-  /*select {
-    height: 25px !important;
-    text-align: left;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    line-height: 8px;
-    border: 0.5px solid rgb(133, 133, 133);
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    background-color: rgb(245, 245, 245);
-  }
-  input {
-    height: 25px !important;
-    text-align: start;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    line-height: 8px;
-    border: 0.5px solid rgb(92, 92, 92);
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    background-color: rgb(245, 245, 245);
-  }
-	*/
+.bg-custom {
+  background-color: #c8c8c8;
 }
-
+.bg-custom:hover {
+  background-color: #c8c8c8;
+}
 .even {
   background-color: rgba(0, 0, 0, 0.08);
 }
@@ -825,6 +812,7 @@ i.far {
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #2fbf53;
 }
+
 .cancelbtn {
   background-color: white;
   color: #cfcfc4;
@@ -850,21 +838,30 @@ i.far {
   -webkit-text-stroke-width: 2px;
   -webkit-text-stroke-color: #ff4e34;
 }
+
 .relatbtn {
   background-color: white;
   color: #9ab3ff !important;
 }
-
 .relatbtn:hover {
   color: #82a0ff !important;
   background-color: white;
 }
-
 .relatbtn:focus {
   color: #82a0ff;
   background-color: white;
   -webkit-text-stroke-width: 0.5px;
   -webkit-text-stroke-color: #698dff;
+}
+
+.btn-disable {
+  background-color: white;
+  color: #cfcfc4;
+  cursor: default !important;
+  outline: none !important;
+}
+.btn-disable::-moz-focus-inner {
+  border: 0;
 }
 
 @media screen and (max-width: 900px) {
@@ -891,21 +888,5 @@ header {
   padding-left: 0;
   margin: 0;
   text-align: center;
-}
-.bg-custom {
-  background-color: #c8c8c8;
-}
-.bg-custom:hover {
-  background-color: #c8c8c8;
-}
-
-.btn-disable {
-  background-color: white;
-  color: #cfcfc4;
-  cursor: default !important;
-  outline: none !important;
-}
-.btn-disable::-moz-focus-inner {
-  border: 0;
 }
 </style>

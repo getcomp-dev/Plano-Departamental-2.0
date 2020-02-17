@@ -151,10 +151,7 @@
       <!-- Grid direito -->
       <div class="div-card p-0 mt-0 mb-2 col-lg-5 col-md-6 col-sm-12 col-12">
         <!-- Inicio card -->
-        <div
-          class="card mr-3 ml-auto"
-          style="border-bottom-left-radius: 0; border-bottom-right-radius: 0"
-        >
+        <div class="card mr-3 ml-auto">
           <div class="card-header">
             <h1 class="card-title">Grade</h1>
           </div>
@@ -162,7 +159,7 @@
           <div class="card-body">
             <form>
               <div class="row mb-2 mx-0">
-                <div class="form-group col m-0 mr-4 px-0">
+                <div class="form-group col-5 m-0 px-0">
                   <label for="nome" class="col-form-label">Nome</label>
                   <input
                     type="text"
@@ -172,13 +169,14 @@
                   />
                 </div>
 
-                <div class="form-group col m-0 px-0">
+                <div class="form-group col-7 m-0 px-0">
                   <label for="periodoInicio" class="col-form-label">Período de Início</label>
                   <input
                     type="text"
                     class="inputMenor form-control form-control-sm col"
                     id="periodoInicio"
                     v-model="gradeForm.periodoInicio"
+                    @keypress="onlyNumber"
                   />
                 </div>
               </div>
@@ -266,15 +264,20 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-             <strong>Para adicionar grades: </strong> Com o cartão a direita em branco, preencha-o. Em seguida, clique em Adicionar (+).
+            <strong>Para adicionar grades:</strong> Com o cartão a direita em branco, preencha-o. Em seguida, 
+            clique em Adicionar <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>.
           </li>
           <li class="list-group-item">
-             <strong>Para editar ou deletar uma grade: </strong>Na tabela, clique na grade que deseja alterar. Logo após, 
-             no cartão à direita, altere as informações que desejar e clique em Salvar (&#10003;) ou, para excluí-la, 
-             clique em Deletar (&#128465;).
+            <strong>Para editar ou deletar uma grade:</strong> Na tabela, clique na grade que deseja alterar.
+             Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar
+            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+            ou, para excluí-la,
+            clique em Deletar 
+            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
+            .
           </li>
           <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar (X).
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>.
           </li>
         </ul>
       </div>
@@ -376,7 +379,8 @@ export default {
           });
         })
         .catch(() => {
-          this.error = "<b>Erro ao excluir Grade</b>";
+          this.error =
+            "<b>Erro ao excluir Grade, não pode haver disciplinas cadastradas na Grade.</b>";
           this.$notify({
             group: "general",
             title: `Erro!`,
@@ -402,6 +406,12 @@ export default {
       ]);
 
       this.showGrade(grade);
+    },
+    onlyNumber($event) {
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
+        $event.preventDefault();
+      }
     },
     isEven(number) {
       return number % 2 === 0;
@@ -476,12 +486,12 @@ export default {
   text-align: center;
 }
 .card {
-  width: 342px;
+  width: 260px;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
   margin-left: auto;
 }
 .card-body {
-  font-size: 12px;
+  font-size: 12px !important;
   padding-top: 15px;
 }
 .card label {
@@ -499,8 +509,8 @@ select {
   text-align: center;
 }
 .selectMaior {
-  min-width: 200px;
-  max-width: 200px;
+  min-width: 220px;
+  max-width: 220px;
   text-align: start !important;
 }
 input {

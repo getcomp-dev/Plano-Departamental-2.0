@@ -7,17 +7,16 @@
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Cursos</h1>
-      
-      <div
+
+        <div
           class="form-group col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
           <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
             <i class="fas fa-question"></i>
           </b-button>
-          </div>
-          
         </div>
+      </div>
     </div>
     <div class="w-100 mb-2 border-bottom"></div>
 
@@ -140,7 +139,7 @@
         <div class="card-body">
           <form>
             <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 mr-4 px-0">
+              <div class="form-group col m-0 px-0">
                 <label for="nome" class="col-form-label">Nome</label>
                 <input
                   type="text"
@@ -152,7 +151,7 @@
             </div>
 
             <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 mr-4 px-0">
+              <div class="form-group col m-0 px-0">
                 <label for="codigo" class="col-form-label">Código</label>
                 <input
                   type="text"
@@ -160,6 +159,19 @@
                   id="codigo"
                   v-model="cursoForm.codigo"
                 />
+              </div>
+              <div class="form-group col m-0 px-0">
+                <label for="turno" class="col-form-label">Turno</label>
+                <select
+                  type="text"
+                  class="form-control form-control-sm selectMenor"
+                  id="turno"
+                  v-model="cursoForm.turno"
+                >
+                  <option value="Diurno">Diurno</option>
+                  <option value="Noturno">Noturno</option>
+                  <option value="Integral">Integral</option>
+                </select>
               </div>
             </div>
 
@@ -170,6 +182,7 @@
                   type="text"
                   class="form-control form-control-sm inputMenor"
                   id="alunosEnrada"
+                  @keypress="onlyNumber"
                   v-model="cursoForm.alunosEntrada"
                 />
               </div>
@@ -180,13 +193,14 @@
                   type="text"
                   class="form-control form-control-sm inputMenor"
                   id="alunosEnrada"
+                  @keypress="onlyNumber"
                   v-model="cursoForm.alunosEntrada2"
                 />
               </div>
             </div>
 
-            <div class="row mb-2 mt-1 mx-0">
-              <div class="form-group col m-0 mr-4 px-0">
+            <!-- <div class="row mb-2 mt-1 mx-0">
+              <div class="form-group col m-0 px-0">
                 <h5 style="font-size:14px" class="mt-1">Turno:</h5>
                 <div class="form-check form-check-inline">
                   <input
@@ -222,7 +236,7 @@
                   <label class="form-check-label" for="noturno">Noturno</label>
                 </div>
               </div>
-            </div>
+            </div>-->
 
             <div class="row mb-0 mt-3 mx-0">
               <div class="d-flex mr-0 ml-auto">
@@ -290,30 +304,37 @@
     <!-- Fim do Grid Direito -->
     <!-- MODAL DE AJUDA -->
     <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
-      
       <div class="modal-body">
-        <ul class="listas list-group"> 
+        <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para adicionar cursos: </strong> Com o cartão à direita em branco, preencha-o. Em seguida, clique em Adicionar (+).
+            <strong>Para adicionar cursos:</strong> Com o cartão à direita em branco, preencha-o. Em seguida, 
+            clique em Adicionar 
+            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
+            .
           </li>
           <li class="list-group-item">
-            <strong>Para editar ou deletar um curso: </strong>Na tabela, clique no curso que deseja alterar. Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar (&#10003;) ou, para excluí-lo, clique em Deletar (&#128465;). 
+            <strong>Para editar ou deletar um curso:</strong> Na tabela, clique no curso que deseja alterar.
+             Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar 
+            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+            ou, para excluí-lo, clique em Deletar 
+            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
+            .
           </li>
           <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar (X).
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar 
+            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+            .
           </li>
-           <li class="list-group-item">
+          <li class="list-group-item">
             <strong>Para alterar a ordenação:</strong> Clique em Nome no cabeçalho da tabela para ordenar por ordem alfabética
             ou em Código para ordem numérica do código do curso.
           </li>
         </ul>
       </div>
 
-      <div slot="modal-footer" style="display: none">
-      </div>
+      <div slot="modal-footer" style="display: none"></div>
     </b-modal>
   </div>
-  
 </template>
 
 <script>
@@ -356,6 +377,12 @@ export default {
     this.selectAll = true;
   },
   methods: {
+    onlyNumber($event) {
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      if (keyCode < 48 || keyCode > 57) {
+        $event.preventDefault();
+      }
+    },
     toggleOrderCod() {
       if (this.ordenacao == "codigo") this.ordenacao = "posicao";
       else this.ordenacao = "codigo";
@@ -628,31 +655,39 @@ table tbody tr div {
 }
 
 /* ====== CARD ====== */
+
 .div-card {
-  margin-left: auto !important;
+  margin-left: auto;
 }
 .card-title {
-  font-size: 16px !important;
+  font-size: 16px;
   font-weight: normal;
   padding-left: 0;
   margin: 0;
   text-align: center;
 }
 .card {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
+  width: 300px;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
   margin-left: auto;
 }
 .card-body {
-  font-size: 12px;
+  font-size: 12px !important;
   padding-top: 15px;
 }
 .card label {
   line-height: 1.2;
   font-size: 12px;
   text-align: start;
+  padding-top: 0 !important;
+}
+select {
+  height: 25px !important;
+  font-size: 11px !important;
+  padding: 0px 5px 0px 5px !important;
+  min-width: 100px;
+  max-width: 100px;
+  text-align: center;
 }
 input {
   height: 25px !important;
@@ -661,22 +696,19 @@ input {
   text-align: start;
 }
 .inputMaior {
-  width: 280px;
+  min-width: 250px;
+  max-width: 250px;
+  text-align: start !important;
 }
 .inputMenor {
-  width: 70px !important;
-  text-align: center !important;
-}
-.inputMenor2 {
-  max-width: 40px;
-  min-width: 40px;
-  margin-right: 10px;
+  max-width: 60px;
+  min-width: 60px;
   text-align: center;
 }
-.selectMaior2 {
-  max-width: 300px;
-  min-width: 300px;
-  text-align: start;
+.selectMenor {
+  min-width: 80px;
+  max-width: 80px;
+  text-align: start !important;
 }
 /* =================== */
 
@@ -711,7 +743,9 @@ table input[type="checkbox"] {
   line-height: inherit;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
-strong{color:#007bff}
+strong {
+  color: #007bff;
+}
 
 /* Botoes */
 button {

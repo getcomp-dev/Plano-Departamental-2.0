@@ -6,8 +6,18 @@
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-12 titulo">Lista Horários</h1>
-      </div>
+        <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Horários</h1>
+      
+      <div
+          class="form-group col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
+          style="justify-content: flex-end!important;"
+        >
+          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
+            <i class="fas fa-question"></i>
+          </b-button>
+          </div>
+          
+        </div>
     </div>
 
     <div class="w-100 mb-2 border-bottom"></div>
@@ -182,6 +192,22 @@
         </div>
       </div>
     </div>
+    <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+      
+      <div class="modal-body">
+        <ul class="listas list-group"> 
+          <li class="list-group-item">
+            <strong>Para exibir conteúdo na tela:</strong> No cartão à direita, selecione o(s) semestre(s), em 
+            seguida o(s) curso(s) que deseja ver e clique em Confirmar 
+            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+            .
+          </li>
+        </ul>
+      </div>
+
+      <div slot="modal-footer" style="display: none">
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -1471,6 +1497,15 @@ input {
   text-align: start;
 }
 
+.listas {
+  line-height: 30px;
+  font-size: 12px;
+  text-align: justify;
+  line-height: inherit;
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+}
+strong{color:#007bff}
+
 button {
   padding: 0;
   border: none;
@@ -1501,6 +1536,22 @@ i.far {
   color: #77dd77;
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #2fbf53;
+}
+.relatbtn {
+  background-color: white;
+  color: #9ab3ff !important;
+}
+
+.relatbtn:hover {
+  color: #82a0ff !important;
+  background-color: white;
+}
+
+.relatbtn:focus {
+  color: #82a0ff;
+  background-color: white;
+  -webkit-text-stroke-width: 0.5px;
+  -webkit-text-stroke-color: #698dff;
 }
 .texto {
   font-size: 12px;

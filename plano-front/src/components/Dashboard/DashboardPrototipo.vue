@@ -154,22 +154,36 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para exibir conteúdo na Tabela:</strong> Comece selecionando o(s) semestre(s) desejado(s). Em seguida, clique em Perfil e marque quais deseja mostrar, depois clique em OK.
-            Logo após, escolha os cursos que quer ver, confirmando a seleção em OK.
+            <strong>Para exibir conteúdo na Tabela:</strong> Comece selecionando o(s) semestre(s) desejado(s). Em seguida,
+             clique em Perfil 
+             <i class="fas fa-list-ul cancelbtn px-1" style="font-size: 12px"></i>
+             e marque quais deseja mostrar, depois clique em OK.
+            Logo após, escolha os Cursos 
+            <i class="fas fa-graduation-cap cancelbtn px-1" style="font-size: 12px"></i>
+            que quer ver, confirmando a seleção em OK.
           </li>
           <li class="list-group-item">
-            <strong>Para adicionar disciplinas à Tabela:</strong> Clique em Adicionar (+), em seguida, preencha a nova linha que surgirá na tabela. Após concluído, clique em Salvar (&#10003;)
-  
-            ou em Cancelar (X).
+            <strong>Para adicionar disciplinas à Tabela:</strong> Clique em Adicionar 
+            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
+            , em seguida, preencha a nova linha que surgirá na tabela. Após concluído, clique em Salvar
+            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+             ou em Cancelar 
+            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+             .
           </li>
           <li class="list-group-item">
             <strong>Para editar disciplinas da Tabela: </strong>Faça as alterações necessárias diretamente na tabela e o sistema irá salvar automaticamente. 
           </li>
           <li class="list-group-item">
-            <strong>Para deletar disciplinas da Tabela:</strong> Marque a(s) disciplina(s) que deseja deletar através da caixa de seleção à esquerda e em seguida clique em Deletar (&#128465;) e confirme no botão OK.
+            <strong>Para deletar disciplinas da Tabela:</strong> Marque a(s) disciplina(s) que deseja deletar 
+            através da caixa de seleção à esquerda e em seguida clique em Deletar 
+            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
+             e confirme no botão OK.
           </li>
           <li class="list-group-item">
-            <strong>Para gerar relatório:</strong> Clique no botão XLSX e aguarde para fazer <font style='font-style:italic;'>download</font> do relatório.
+            <strong>Para gerar relatório:</strong> Clique no botão XLSX 
+            <i class="far fa-file-alt relatbtn px-1" style="font-size: 12px"></i>
+            e aguarde para fazer <font style='font-style:italic;'>download</font> do relatório.
           </li>
         </ul>
       </div>

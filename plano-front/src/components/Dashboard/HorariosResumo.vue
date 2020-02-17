@@ -9,11 +9,11 @@
           <h1 class="col-12 titulo">Horários - Resumo</h1>
       </div>
       <div class="col-1 p-0">
-         <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
+         <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn" style="float: right">
           <i class="fas fa-question"></i>
         </b-button>
 
-        <button type="button" class="relatbtn" title="Relatório" v-on:click.prevent="pdf">
+        <button type="button" class="relatbtn" style="float: right" title="Relatório" v-on:click.prevent="pdf">
           <i class="far fa-file-alt"></i>
         </button>
 
@@ -128,17 +128,15 @@
       <div class="modal-body">
         <ul class="listas list-group"> 
           <li class="list-group-item">
-            <strong>lelele</strong> lalala
+           <strong>Para gerar relatório:</strong> Clique no botão Relatório 
+           <i class="far fa-file-alt relatbtn px-1" style="font-size: 12px"></i>
+            e aguarde para fazer download do mesmo.
           </li>
           <li class="list-group-item">
-            <strong>lelele</strong>lalala
+            <strong>Observação:</strong> Ao passar o mouse por cima do código de uma matéria em qualquer tabela 
+            será mostrado o nome da mesma e, se aplicável, o professor alocado para tal.
           </li>
-          <li class="list-group-item">
-            <strong>lelele</strong> lalala
-          </li>
-          <li class="list-group-item">
-            <strong>lelele</strong> lalala
-          </li>
+          
         </ul>
       </div>
 
@@ -3436,7 +3434,6 @@ i.far {
 .relatbtn {
   background-color: white;
   color: #9ab3ff !important;
-  float: right;
 }
 
 .relatbtn:hover {
