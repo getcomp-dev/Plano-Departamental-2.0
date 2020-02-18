@@ -116,6 +116,10 @@
                 <router-link :to="{ name: 'salas' }">Salas:</router-link>
               </strong> Listagem de todas as salas registradas no sistema. Permite a adição de novas salas e laboratórios.
             </li>
+            <li class="list-group-item">
+              <strong>
+                <router-link :to="{ name: 'history' }">Logs:</router-link>
+              </strong> Listagem de todas as modificações feitas pelos usuários no sistema.</li>
           </ul>
         </div>
       </div>

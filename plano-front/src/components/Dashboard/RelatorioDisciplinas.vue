@@ -218,17 +218,19 @@
                 </table>
             </div>
 
-            <div slot="modal-footer" style="display: flex; margin-right: 10px !important;">
-                <b-button
-                        class="btn-azul btn-df mr-2"
-                        variant="success"
-                        @click="selectAll()"
-                >Selecionar Todos</b-button>
-                <b-button
-                        class="btn-cinza btn-df mr-2"
-                        variant="secondary"
-                        @click="selectNone()"
-                >Desmarcar Todos</b-button>
+            <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
+                <div class="w-100 ml-2">
+                    <b-button
+                            class="btn-azul btn-df mr-2"
+                            variant="success"
+                            @click="selectAll()"
+                    >Selecionar Todos</b-button>
+                    <b-button
+                            class="btn-cinza btn-df mr-2"
+                            variant="secondary"
+                            @click="selectNone()"
+                    >Desmarcar Todos</b-button>
+                </div>
                 <b-button
                         variant="success"
                         @click="btnOK()"

@@ -10,8 +10,33 @@
 
                 <div
                         class="form-group col-3 col-sm-6 col-md-8 col-lg-8 mb-0 p-0"
-                        style="justify-content: flex-end!important;"
+                        style="display:flex;"
                 >
+                    <div class="input-group ml-auto mb-0 mt-0 p-0">
+
+
+                        <div class="input-group-append mt-auto mb-auto">
+                            <label class="input-group-text">Operação</label>
+                        </div>
+                        <select class="form-control form-control-sm mt-auto mb-auto" v-model="operacoes">
+                            <option value="Todos">Todas</option>
+                            <option value="Create">Create</option>
+                            <option value="Delete">Delete</option>
+                            <option value="Edit">Edit</option>
+                        </select>
+
+                        <b-button v-b-modal.modalTabelas title="Tabelas" class="cancelbtn ml-2">
+                            <i class="fas fa-list-ul"></i>
+                        </b-button>
+
+                        <!--<button type="button" class="relatbtn" title="Relatório" v-on:click.prevent="pdf">
+                            <i class="far fa-file-alt"></i>
+                        </button>-->
+
+                        <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
+                            <i class="fas fa-question"></i>
+                        </b-button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -87,15 +112,74 @@
                     </template>
                 </template>
                 <template v-else>
-                    <tr>
+                    <!--<tr>
                         <td colspan="2" class="text-center">
-                            <i class="fas fa-exclamation-triangle"></i> Nenhuma alteração salva!
+                            <i class="fas fa-exclamation-triangle"></i> Nenhuma tabela selecionada!
                         </td>
-                    </tr>
+                    </tr>-->
                 </template>
                 </tbody>
             </table>
         </div>
+
+        <!-- Modals do botão para escolher tabelas -->
+        <b-modal id="modalTabelas" ref="TabelasModal" scrollable title="Selecione as tabelas" :size="'sm'">
+            <div
+                    class="form-group col m-0 p-0 border"
+                    style="height: 395px; width:max-content; border-color: rgba(0,0,0,0.125);"
+            >
+                <table class="table table-sm modal-table" style="max-height: 392px !important;">
+                    <tr>
+                        <div style="width: max-content; font-size: 11px!important">
+                            <th class="border-0">
+                                <p style="width:25px" class="p-header"></p>
+                            </th>
+                            <th class="border-0">
+                                <p class="p-header" style="width: 200px; text-align:start">Nome</p>
+                            </th>
+                        </div>
+                    </tr>
+                    <tbody>
+                    <tr v-for="o in options" :key="`tabeka${o.value}`">
+                        <div style="width: max-content">
+                            <td style="padding:0;broder:0;margin:0!important;">
+                                <div style="width:25px;">
+                                    <input
+                                            type="checkbox"
+                                            v-model="TabelasSelecionadas"
+                                            :value="o.value"
+                                            class="form-check-input position-static m-0"
+                                    />
+                                </div>
+                            </td>
+                            <td>
+                                <p style="width:200px; text-align:start">{{o.text}}</p>
+                            </td>
+                        </div>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div slot="modal-footer" style="display: flex; margin-right: 10px !important;">
+                <b-button
+                        class="btn-azul btn-df mr-2"
+                        variant="success"
+                        @click="selectAll()"
+                >Selecionar Todos</b-button>
+                <b-button
+                        class="btn-cinza btn-df mr-2"
+                        variant="secondary"
+                        @click="selectNone()"
+                >Desmarcar Todos</b-button>
+                <b-button
+                        variant="success"
+                        @click="btnOK()"
+                        class="btn-verde btn-df mr-2"
+                        style="padding-right:15px!important; padding-left:15px!important;"
+                >OK</b-button>
+            </div>
+        </b-modal>
 
     </div>
 </template>
@@ -105,7 +189,47 @@
     export default {
         name: "DashboardHistory",
 
+        data () {
+          return {
+              options: [
+                  {text: 'CargaPos', value:'CargaPos'},
+                  {text: 'Curso', value:'Curso'},
+                  {text: 'Disciplina', value:'Disciplina'},
+                  {text: 'DisciplinaGrade', value:'DisciplinaGrade'},
+                  {text: 'Docente', value:'Docente'},
+                  {text: 'DocentePerfil', value:'DocentePerfil'},
+                  {text: 'Grade', value:'Grade'},
+                  {text: 'Pedido', value:'Pedido'},
+                  {text: 'PedidoExterno', value:'PedidoExterno'},
+                  {text: 'Perfil', value:'Perfil'},
+                  {text: 'Sala', value:'Sala'},
+                  {text: 'Turma', value:'Turma'},
+                  {text: 'TurmaExterna', value:'TurmaExterna'},
+              ],
+              TabelasSelecionadas:[],
+              TabelasAtivadas: [],
+              operacoes: 'Todos'
+          }
+        },
+
         methods: {
+
+            btnOK() {
+                //Somente atualiza o vetor de perfis ativados quando o botão OK for clickado
+                this.TabelasAtivadas = [...this.TabelasSelecionadas];
+                this.$refs.TabelasModal.hide();
+            },
+
+            selectAll() {
+                if (this.TabelasSelecionadas != []) this.TabelasSelecionadas = [];
+                for (var i = 0; i < this.options.length; i++)
+                    this.TabelasSelecionadas.push(this.options[i].value);
+            },
+
+            selectNone() {
+                this.TabelasSelecionadas = [];
+            },
+
             linhaModificada(h) {
                 let linha = h.linhaModificada
                 let aux = undefined
@@ -167,6 +291,7 @@
                 }
                 return linha
             },
+
             valorAnterior(h) {
                 let v = h.valorAnterior
                 switch(h.campoModificado){
@@ -298,7 +423,19 @@
 
         computed: {
             History() {
-                return _.orderBy(this.$store.state.history.History, ['id'], ['desc']);
+                let TabelasAtivadas = this.TabelasAtivadas
+                return _.orderBy(_.filter(_.filter(this.$store.state.history.History, function(h, i, a,  t=TabelasAtivadas) {
+                    let v = false
+                    t.forEach((o) => {
+                        if(h.tabelaModificada === o){
+                            v = true
+                        }
+
+                    })
+                    if(v){
+                        return true
+                    }
+                }), (this.operacoes === 'Todos' ? {}: {'tipoOperacao' : this.operacoes})), ['id'], ['desc']);
             },
 
             Admin() {
@@ -550,5 +687,31 @@
         color: #b8b8a8;
         -webkit-text-stroke-width: 1px;
         -webkit-text-stroke-color: #ada89a;
+    }
+
+    .form-control {
+        height: 25px !important;
+        font-size: 12px !important;
+        padding: 2px 5px 0px 5px !important;
+        min-width: 80px;
+        max-width: 80px;
+        text-align: start;
+    }
+
+    .input-group-text {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        margin-bottom: 0;
+        /*===*/
+        max-width: 70px;
+        min-width: 70px;
+        height: 25px !important;
+        margin-left: -5px;
+        padding-left: 15px;
+        font-size: 12px !important;
     }
 </style>

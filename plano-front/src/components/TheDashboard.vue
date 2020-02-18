@@ -133,11 +133,11 @@
                     <i class="fas fa-clipboard"></i> Plano Departamental
                   </router-link>
                 </li>
-                <li @click="show=false" class="nav-item">
+                <!-- <li @click="show=false" class="nav-item">
                   <router-link :to="{ name: 'horariosResumo' }" class="nav-link">
                     <i class="fas fa-clipboard"></i> Horários - Resumo
                   </router-link>
-                </li>
+                </li>-->
                 <li @click="show=false" class="nav-item">
                   <router-link :to="{ name: 'laboratoriosAlocacao' }" class="nav-link">
                     <i class="fas fa-clipboard"></i> Alocação - Laboratórios

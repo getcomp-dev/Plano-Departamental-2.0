@@ -5,152 +5,289 @@
       class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
       style="height:38px;"
     >
-      <div class="form-inline col-11 pl-0 mb-1 pr-1">
-          <h1 class="col-12 titulo">Horários - Resumo</h1>
-      </div>
-      <div class="col-1 p-0">
-         <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn" style="float: right">
-          <i class="fas fa-question"></i>
-        </b-button>
+      <div class="form-inline col-12 pl-0 mb-1 pr-1">
+        <h1 class="titulo col-xl-2 col-md-2 col-sm-2 col-3 px-0 pr-1">Horários</h1>
 
-        <button type="button" class="relatbtn" style="float: right" title="Relatório" v-on:click.prevent="pdf">
-          <i class="far fa-file-alt"></i>
-        </button>
+        <div
+          class="form-group col-xl-10 col-md-10 col-sm-10 col-9 mb-0 p-0"
+          style="justify-content: flex-end!important;"
+        >
+          <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
+            <select class="form-control form-control-sm" v-model="periodo">
+              <option value="1">Primeiro</option>
+              <option value="2">Segundo</option>
+              <option value="3">Ambos</option>
+            </select>
+            <div class="input-group-append">
+              <label class="input-group-text">Semestre</label>
+            </div>
+          </div>
 
-       
-      </div>
-    </div>
+          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
+            <i class="fas fa-question"></i>
+          </b-button>
 
-      <div class="w-100 mb-2 border-bottom"></div>
-		<div class="col-12 p-0 marg" style="padding-left: 15px !important;">
-      <!-- ----------------------------------------------------------------------------------------------- -->
-      <div class="title" style="text-align:center !important;max-width: 1278px !important;">
-        <h3>1º SEMESTRE</h3>
-      </div>
-      
-      <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
-
-      <div class="title">
-        <h4 style="font-weight: bold; font-size: 12px;">
-          <span style=" border-bottom: 1px solid #cccccc">Ciência da Computação Diurno</span>
-        </h4>
-      </div>
-    
-      <curso-diurno :Curso="ativos1.CCD"></curso-diurno>
-      <!------------------------------------------------- EC ------------------------------------------------->
-      <div class="title">
-        <h4>
-          <span style=" border-bottom: 1px solid #cccccc">Engenharia Computacional</span>
-        </h4>
-      </div>
-
-      <curso-diurno :Curso="ativos1.EC"></curso-diurno>
-
-      <!-- -------------------------------------------- CC Noturno ----------------------------------------- -->
-      <div class="title">
-        <h4>
-          <span style=" border-bottom: 1px solid #cccccc">Ciência da Computação Noturno</span>
-        </h4>
-      </div>
-
-      <curso-noturno :Curso="ativos1.CCN"></curso-noturno>
-
-      <!-- -------------------------------------------- SI ----------------------------------------- -->
-
-      <div class="title">
-        <h4>
-          <span style=" border-bottom: 1px solid #cccccc">Sistemas de Informação</span>
-        </h4>
-      </div>
-
-      <curso-noturno :Curso="ativos1.SI"></curso-noturno>
-
-      <div class="title">
-        <h4>
-          <span style=" border-bottom: 1px solid #cccccc">Eletivas</span>
-        </h4>
-      </div>
-
-      <horario-eletivas style="padding-left: 15px !important" :Eletivas="ativos1.Eletivas"></horario-eletivas>
-      <!-- ----------------------------------------------------------------------------------------------- -->
-      <div class="title" style="text-align:center;">
-        <h3>2º SEMESTRE</h3>
-      </div>
-      <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
-      <div class="title">
-        <h4>
-          <span style=" border-bottom: 1px solid #cccccc">Ciência da Computação Diurno</span>
-        </h4>
-      </div>
-
-      <curso-diurno :Curso="ativos2.CCD"></curso-diurno>
-        
-        <!---------------------------------------- EC ---------------------------------------->
-        
-      <div class="title title-hide">
-        <h4>
-          <span style=" border-bottom: 1px solid #cccccc">Engenharia Computacional</span>
-        </h4>
-      </div>
-
-      <curso-diurno :Curso="ativos2.EC"></curso-diurno>
-     
-      <!-- -------------------------------------------- CC Noturno ----------------------------------------- -->
-      <div class="title title-hide">
-        <h4>
-          <span style=" border-bottom: 1px solid #cccccc">Ciência da Computação Noturno</span>
-        </h4>
-      </div>
-
-      <curso-noturno :Curso="ativos2.CCN"></curso-noturno>
-
-      <!-- -------------------------------------------- SI ----------------------------------------- -->
-
-      <div class="title">
-        <h4>
-          <span style=" border-bottom: 1px solid #cccccc">Sistemas de Informação</span>
-        </h4>
-      </div>
-
-      <curso-noturno :Curso="ativos2.SI"></curso-noturno>
-
-      <div class="title title-hide">
-          <h4>
-            <span style=" border-bottom: 1px solid #cccccc">Eletivas</span>
-          </h4>
+          <button type="button" class="relatbtn" title="Relatório" v-on:click.prevent="pdf">
+            <i class="far fa-file-alt"></i>
+          </button>
         </div>
+      </div>
 
-      <horario-eletivas style="padding-left: 15px !important" :Eletivas="ativos2.Eletivas"></horario-eletivas>
+      <!-- <div class="form-inline col-12 pl-0 mb-1 pr-1">
+        <h1 class="titulo col-xl-4 col-md-4 col-sm-5 col-6 px-0 pr-1">Horários - Resumo</h1>
+
+        <div
+          class="form-group col-xl-8 col-md-8 col-sm-7 col-6 mb-0 p-0"
+          style="justify-content: flex-end!important;"
+        >
+          <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
+            <select class="form-control form-control-sm" v-model="periodo">
+              <option value="1">Primeiro</option>
+              <option value="2">Segundo</option>
+              <option value="3">Ambos</option>
+            </select>
+            <div class="input-group-append">
+              <label class="input-group-text">Semestre</label>
+            </div>
+          </div>
+          <div class="d-flex p-0 m-0 mt-1">
+            <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
+              <i class="fas fa-question"></i>
+            </b-button>
+
+            <button type="button" class="relatbtn" title="Relatório" v-on:click.prevent="pdf">
+              <i class="far fa-file-alt"></i>
+            </button>
+          </div>
+        </div>
+      </div>-->
     </div>
+
+    <div class="w-100 mb-2 border-bottom"></div>
+    <!-- GRID -->
+    <div class="row m-0 w-100">
+      <div
+        class="col p-0 pl-1 marg mr-2 scroll-bar-custom"
+        style="overflow-y:auto;  height: -webkit-calc(100vh - 85px); height: -moz-calc(100vh - 85px); height: calc(100vh - 85px);"
+      >
+        <template v-if="false">
+          <!-- ----------------------------------------------------------------------------------------------- -->
+          <div class="title" style="text-align:center !important;max-width: 1278px !important;">
+            <h3>1º SEMESTRE</h3>
+          </div>
+
+          <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
+
+          <div class="title">
+            <h4 style="font-weight: bold; font-size: 12px;">
+              <span style=" border-bottom: 1px solid #cccccc">Ciência da Computação Diurno</span>
+            </h4>
+          </div>
+
+          <curso-diurno :Curso="ativos1.CCD"></curso-diurno>
+          <!------------------------------------------------- EC ------------------------------------------------->
+          <div class="title">
+            <h4>
+              <span style=" border-bottom: 1px solid #cccccc">Engenharia Computacional</span>
+            </h4>
+          </div>
+
+          <curso-diurno :Curso="ativos1.EC"></curso-diurno>
+
+          <!-- -------------------------------------------- CC Noturno ----------------------------------------- -->
+          <div class="title">
+            <h4>
+              <span style=" border-bottom: 1px solid #cccccc">Ciência da Computação Noturno</span>
+            </h4>
+          </div>
+
+          <curso-noturno :Curso="ativos1.CCN"></curso-noturno>
+
+          <!-- -------------------------------------------- SI ----------------------------------------- -->
+
+          <div class="title">
+            <h4>
+              <span style=" border-bottom: 1px solid #cccccc">Sistemas de Informação</span>
+            </h4>
+          </div>
+
+          <curso-noturno :Curso="ativos1.SI"></curso-noturno>
+
+          <div class="title">
+            <h4>
+              <span style=" border-bottom: 1px solid #cccccc">Eletivas</span>
+            </h4>
+          </div>
+
+          <horario-eletivas style="padding-left: 15px !important" :Eletivas="ativos1.Eletivas"></horario-eletivas>
+          <!-- ----------------------------------------------------------------------------------------------- -->
+          <div class="title" style="text-align:center;">
+            <h3>2º SEMESTRE</h3>
+          </div>
+          <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
+          <div class="title">
+            <h4>
+              <span style=" border-bottom: 1px solid #cccccc">Ciência da Computação Diurno</span>
+            </h4>
+          </div>
+
+          <curso-diurno :Curso="ativos2.CCD"></curso-diurno>
+
+          <!---------------------------------------- EC ---------------------------------------->
+
+          <div class="title title-hide">
+            <h4>
+              <span style=" border-bottom: 1px solid #cccccc">Engenharia Computacional</span>
+            </h4>
+          </div>
+
+          <curso-diurno :Curso="ativos2.EC"></curso-diurno>
+
+          <!-- -------------------------------------------- CC Noturno ----------------------------------------- -->
+          <div class="title title-hide">
+            <h4>
+              <span style=" border-bottom: 1px solid #cccccc">Ciência da Computação Noturno</span>
+            </h4>
+          </div>
+
+          <curso-noturno :Curso="ativos2.CCN"></curso-noturno>
+
+          <!-- -------------------------------------------- SI ----------------------------------------- -->
+
+          <div class="title">
+            <h4>
+              <span style=" border-bottom: 1px solid #cccccc">Sistemas de Informação</span>
+            </h4>
+          </div>
+
+          <curso-noturno :Curso="ativos2.SI"></curso-noturno>
+
+          <div class="title title-hide">
+            <h4>
+              <span style=" border-bottom: 1px solid #cccccc">Eletivas</span>
+            </h4>
+          </div>
+
+          <horario-eletivas style="padding-left: 15px !important" :Eletivas="ativos2.Eletivas"></horario-eletivas>
+        </template>
+      </div>
+
+      <div class="col-5 col-sm-4 col-md-4 col-lg-2 col-xl-2 p-0 mt-0 mb-2">
+        <div class="card col p-0 ml-auto mr-3">
+          <!-- <div class="div-card p-0 mt-0 mb-2 col-lg-6 col-md-6 col-sm-12 col-12">
+          <div class="card ml-auto mr-3">-->
+          <div class="card-header">
+            <h1 class="card-title">Definir Grades</h1>
+          </div>
+          <div class="card-body">
+            <form>
+              <div class="row mb-2 mx-0">
+                <div class="form-group col m-0 px-0">
+                  <div
+                    class="form-group col m-0 px-0 border rounded-top"
+                    style="border-color: rgba(0,0,0,0.125);"
+                  >
+                    <table class="table table-sm">
+                      <tr class="thead-light">
+                        <div class="sticky border" style="width:max-contet;">
+                          <th scope="col" class="border-0 p-header" style="width:25px">
+                            <input type="checkbox" v-model="selectAll" v-on:change="toggleAll" />
+                          </th>
+                          <th
+                            scope="col"
+                            class="border-0 p-header"
+                            style="width:140px; text-align:start!important"
+                          >Cursos</th>
+                        </div>
+                      </tr>
+
+                      <tbody>
+                        <tr
+                          v-for="curso in options"
+                          :key="'curso-id-'+curso.id+curso.nome+'-'+curso.value"
+                        >
+                          <div style="width: max-contet">
+                            <td style="padding:0;broder:0;margin:0!important">
+                              <div style="width:25px;">
+                                <input
+                                  type="checkbox"
+                                  :value="curso.value"
+                                  v-on:change.capture="defineSelectAll"
+                                  v-model="cursos"
+                                  class="form-check-input position-static m-0"
+                                />
+                              </div>
+                            </td>
+                            <td>
+                              <p style="width:140px; text-align:start">{{curso.text}}</p>
+                            </td>
+                          </div>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <!--
+                <b-form-checkbox v-model="selectAll" v-on:change="toggleAll">Selecionar Tudo</b-form-checkbox>
+                <b-form-checkbox-group
+                  stacked
+                  v-model="cursos"
+                  name="cursosCheck"
+                  :options="options"
+                  v-on:change.capture="defineSelectAll"
+                  style="display: block;"
+                ></b-form-checkbox-group>
+                  -->
+                </div>
+              </div>
+
+              <div class="form-group row">
+                <div style="display: flex; margin-right: 0; margin-left: auto">
+                  <button
+                    v-on:click="createHorarios"
+                    title="Confirmar"
+                    type="button"
+                    class="addbtn"
+                  >
+                    <i class="fas fa-check"></i>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Modal de Ajuda -->
     <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
-      
       <div class="modal-body">
-        <ul class="listas list-group"> 
+        <ul class="listas list-group">
           <li class="list-group-item">
-           <strong>Para gerar relatório:</strong> Clique no botão Relatório 
-           <i class="far fa-file-alt relatbtn px-1" style="font-size: 12px"></i>
+            <strong>Para gerar relatório:</strong> Clique no botão Relatório
+            <i
+              class="far fa-file-alt relatbtn px-1"
+              style="font-size: 12px"
+            ></i>
             e aguarde para fazer download do mesmo.
           </li>
           <li class="list-group-item">
-            <strong>Observação:</strong> Ao passar o mouse por cima do código de uma matéria em qualquer tabela 
+            <strong>Observação:</strong> Ao passar o mouse por cima do código de uma matéria em qualquer tabela
             será mostrado o nome da mesma e, se aplicável, o professor alocado para tal.
           </li>
-          
         </ul>
       </div>
 
-      <div slot="modal-footer" style="display: none">
-      </div>
+      <div slot="modal-footer" style="display: none"></div>
     </b-modal>
   </div>
 </template>
 
 <script>
 import _ from "lodash";
-import cursoDiurno from './HorarioCursoDiurno.vue'
-import cursoNoturno from './HorarioCursoNoturno.vue'
-import horarioEletivas from './HorarioEletivas.vue'
+import cursoDiurno from "./HorarioCursoDiurno.vue";
+import cursoNoturno from "./HorarioCursoNoturno.vue";
+import horarioEletivas from "./HorarioEletivas.vue";
 
 export default {
   name: "DashboardHorariosResumo",
@@ -1120,9 +1257,13 @@ export default {
           }
         });
         for (var d = 0; d < 8; d++) {
-
           for (var j = 0; j < eletivas1.length; j++) {
-            if (this.checkTurmaHorario(eletivas1[j], ((d === 4 || d === 5) ? 28 : 1) + ((d > 5) ? d - 2 : d))) {
+            if (
+              this.checkTurmaHorario(
+                eletivas1[j],
+                (d === 4 || d === 5 ? 28 : 1) + (d > 5 ? d - 2 : d)
+              )
+            ) {
               for (var k = 0; k < disciplinas.length; k++) {
                 if (eletivas1[j].Disciplina === disciplinas[k].id) {
                   if (seg !== "") seg = seg + " ";
@@ -1130,7 +1271,12 @@ export default {
                 }
               }
             }
-            if (this.checkTurmaHorario(eletivas1[j], ((d === 4 || d === 5) ? 30 : 7) + ((d > 5) ? d - 2 : d))) {
+            if (
+              this.checkTurmaHorario(
+                eletivas1[j],
+                (d === 4 || d === 5 ? 30 : 7) + (d > 5 ? d - 2 : d)
+              )
+            ) {
               for (k = 0; k < disciplinas.length; k++) {
                 if (eletivas1[j].Disciplina === disciplinas[k].id) {
                   if (ter != "") ter = ter + " ";
@@ -1138,7 +1284,12 @@ export default {
                 }
               }
             }
-            if (this.checkTurmaHorario(eletivas1[j], ((d === 4 || d === 5) ? 32 : 13) + ((d > 5) ? d - 2 : d))) {
+            if (
+              this.checkTurmaHorario(
+                eletivas1[j],
+                (d === 4 || d === 5 ? 32 : 13) + (d > 5 ? d - 2 : d)
+              )
+            ) {
               for (k = 0; k < disciplinas.length; k++) {
                 if (eletivas1[j].Disciplina === disciplinas[k].id) {
                   if (qua != "") qua = qua + " ";
@@ -1146,7 +1297,12 @@ export default {
                 }
               }
             }
-            if (this.checkTurmaHorario(eletivas1[j], ((d === 4 || d === 5) ? 34 : 19) + ((d > 5) ? d - 2 : d))) {
+            if (
+              this.checkTurmaHorario(
+                eletivas1[j],
+                (d === 4 || d === 5 ? 34 : 19) + (d > 5 ? d - 2 : d)
+              )
+            ) {
               for (k = 0; k < disciplinas.length; k++) {
                 if (eletivas1[j].Disciplina === disciplinas[k].id) {
                   if (qui != "") qui = qui + " ";
@@ -1154,7 +1310,12 @@ export default {
                 }
               }
             }
-            if (this.checkTurmaHorario(eletivas1[j], ((d === 4 || d === 5) ? 36 : 25) + ((d > 5) ? d - 2 : d))) {
+            if (
+              this.checkTurmaHorario(
+                eletivas1[j],
+                (d === 4 || d === 5 ? 36 : 25) + (d > 5 ? d - 2 : d)
+              )
+            ) {
               for (k = 0; k < disciplinas.length; k++) {
                 if (eletivas1[j].Disciplina === disciplinas[k].id) {
                   if (sex != "") sex = sex + " ";
@@ -1229,7 +1390,7 @@ export default {
               ]);
               break;
             case 4:
-                tables[86 - 2 * vazio].table.body.push([
+              tables[86 - 2 * vazio].table.body.push([
                 {
                   text: "17 - 19",
                   alignment: "center"
@@ -1242,10 +1403,10 @@ export default {
                 },
                 { text: qui, alignment: "center" },
                 { text: sex, alignment: "center" }
-                ]);
-                break;
+              ]);
+              break;
             case 5:
-                tables[86 - 2 * vazio].table.body.push([
+              tables[86 - 2 * vazio].table.body.push([
                 {
                   text: "18 - 20",
                   alignment: "center"
@@ -1258,8 +1419,8 @@ export default {
                 },
                 { text: qui, alignment: "center" },
                 { text: sex, alignment: "center" }
-                ]);
-                break;
+              ]);
+              break;
             case 6:
               tables[86 - 2 * vazio].table.body.push([
                 {
@@ -2203,7 +2364,12 @@ export default {
         });
         for (var d = 0; d < 8; d++) {
           for (var j = 0; j < eletivas2.length; j++) {
-            if (this.checkTurmaHorario(eletivas2[j], ((d === 4 || d === 5) ? 28 : 1) + ((d > 5) ? d - 2 : d))) {
+            if (
+              this.checkTurmaHorario(
+                eletivas2[j],
+                (d === 4 || d === 5 ? 28 : 1) + (d > 5 ? d - 2 : d)
+              )
+            ) {
               for (var k = 0; k < disciplinas.length; k++) {
                 if (eletivas2[j].Disciplina === disciplinas[k].id) {
                   if (seg !== "") seg = seg + " ";
@@ -2211,7 +2377,12 @@ export default {
                 }
               }
             }
-            if (this.checkTurmaHorario(eletivas2[j], ((d === 4 || d === 5) ? 30 : 7) + ((d > 5) ? d - 2 : d))) {
+            if (
+              this.checkTurmaHorario(
+                eletivas2[j],
+                (d === 4 || d === 5 ? 30 : 7) + (d > 5 ? d - 2 : d)
+              )
+            ) {
               for (k = 0; k < disciplinas.length; k++) {
                 if (eletivas2[j].Disciplina === disciplinas[k].id) {
                   if (ter != "") ter = ter + " ";
@@ -2219,7 +2390,12 @@ export default {
                 }
               }
             }
-            if (this.checkTurmaHorario(eletivas2[j], ((d === 4 || d === 5) ? 32 : 13) + ((d > 5) ? d - 2 : d))) {
+            if (
+              this.checkTurmaHorario(
+                eletivas2[j],
+                (d === 4 || d === 5 ? 32 : 13) + (d > 5 ? d - 2 : d)
+              )
+            ) {
               for (k = 0; k < disciplinas.length; k++) {
                 if (eletivas2[j].Disciplina === disciplinas[k].id) {
                   if (qua != "") qua = qua + " ";
@@ -2227,7 +2403,12 @@ export default {
                 }
               }
             }
-            if (this.checkTurmaHorario(eletivas2[j], ((d === 4 || d === 5) ? 34 : 19) + ((d > 5) ? d - 2 : d))) {
+            if (
+              this.checkTurmaHorario(
+                eletivas2[j],
+                (d === 4 || d === 5 ? 34 : 19) + (d > 5 ? d - 2 : d)
+              )
+            ) {
               for (k = 0; k < disciplinas.length; k++) {
                 if (eletivas2[j].Disciplina === disciplinas[k].id) {
                   if (qui != "") qui = qui + " ";
@@ -2235,7 +2416,12 @@ export default {
                 }
               }
             }
-            if (this.checkTurmaHorario(eletivas2[j],  ((d === 4 || d === 5) ? 36 : 25) + ((d > 5) ? d - 2 : d))) {
+            if (
+              this.checkTurmaHorario(
+                eletivas2[j],
+                (d === 4 || d === 5 ? 36 : 25) + (d > 5 ? d - 2 : d)
+              )
+            ) {
               for (k = 0; k < disciplinas.length; k++) {
                 if (eletivas2[j].Disciplina === disciplinas[k].id) {
                   if (sex != "") sex = sex + " ";
@@ -2310,7 +2496,7 @@ export default {
               ]);
               break;
             case 4:
-                tables[173 - 2 * vazio].table.body.push([
+              tables[173 - 2 * vazio].table.body.push([
                 {
                   text: "17 - 19",
                   alignment: "center"
@@ -2323,10 +2509,10 @@ export default {
                 },
                 { text: qui, alignment: "center" },
                 { text: sex, alignment: "center" }
-                ]);
-                break;
+              ]);
+              break;
             case 5:
-                tables[173 - 2 * vazio].table.body.push([
+              tables[173 - 2 * vazio].table.body.push([
                 {
                   text: "18 - 20",
                   alignment: "center"
@@ -2339,8 +2525,8 @@ export default {
                 },
                 { text: qui, alignment: "center" },
                 { text: sex, alignment: "center" }
-                ]);
-                break;
+              ]);
+              break;
             case 6:
               tables[173 - 2 * vazio].table.body.push([
                 {
@@ -2487,15 +2673,17 @@ export default {
           }
         }
       }
-      pedidosExternos = []
-      for (let t in this.$store.state.pedidoExterno.Pedidos){
-        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
-          if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===4){
-            pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido])
+      pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 4) {
+            pedidosExternos.push(
+              this.$store.state.pedidoExterno.Pedidos[t][pedido]
+            );
           }
         }
       }
-      inicio = 1
+      inicio = 1;
       for (var i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
@@ -2574,15 +2762,17 @@ export default {
           }
         }
       }
-      pedidosExternos = []
-      for (let t in this.$store.state.pedidoExterno.Pedidos){
-        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
-          if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===1){
-            pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido])
+      pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 1) {
+            pedidosExternos.push(
+              this.$store.state.pedidoExterno.Pedidos[t][pedido]
+            );
           }
         }
       }
-      inicio = 1
+      inicio = 1;
       for (var i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
@@ -2661,15 +2851,17 @@ export default {
           }
         }
       }
-      pedidosExternos = []
-      for (let t in this.$store.state.pedidoExterno.Pedidos){
-        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
-          if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===3){
-            pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido])
+      pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 3) {
+            pedidosExternos.push(
+              this.$store.state.pedidoExterno.Pedidos[t][pedido]
+            );
           }
         }
       }
-      inicio = 1
+      inicio = 1;
       for (var i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
@@ -2748,15 +2940,17 @@ export default {
           }
         }
       }
-      pedidosExternos = []
-      for (let t in this.$store.state.pedidoExterno.Pedidos){
-        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
-          if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===2){
-            pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido])
+      pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 2) {
+            pedidosExternos.push(
+              this.$store.state.pedidoExterno.Pedidos[t][pedido]
+            );
           }
         }
       }
-      inicio = 1
+      inicio = 1;
       for (var i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
@@ -2917,15 +3111,17 @@ export default {
           }
         }
       }
-      pedidosExternos = []
-      for (let t in this.$store.state.pedidoExterno.Pedidos){
-        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
-          if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===4){
-            pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido])
+      pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 4) {
+            pedidosExternos.push(
+              this.$store.state.pedidoExterno.Pedidos[t][pedido]
+            );
           }
         }
       }
-      inicio = 1
+      inicio = 1;
       for (var i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
@@ -3004,15 +3200,17 @@ export default {
           }
         }
       }
-      pedidosExternos = []
-      for (let t in this.$store.state.pedidoExterno.Pedidos){
-        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
-          if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===1){
-            pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido])
+      pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 1) {
+            pedidosExternos.push(
+              this.$store.state.pedidoExterno.Pedidos[t][pedido]
+            );
           }
         }
       }
-      inicio = 1
+      inicio = 1;
       for (var i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
@@ -3091,15 +3289,17 @@ export default {
           }
         }
       }
-      pedidosExternos = []
-      for (let t in this.$store.state.pedidoExterno.Pedidos){
-        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
-          if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===3){
-            pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido])
+      pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 3) {
+            pedidosExternos.push(
+              this.$store.state.pedidoExterno.Pedidos[t][pedido]
+            );
           }
         }
       }
-      inicio = 1
+      inicio = 1;
       for (var i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
@@ -3178,15 +3378,17 @@ export default {
           }
         }
       }
-      pedidosExternos = []
-      for (let t in this.$store.state.pedidoExterno.Pedidos){
-        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]){
-          if(this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso===2){
-            pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido])
+      pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 2) {
+            pedidosExternos.push(
+              this.$store.state.pedidoExterno.Pedidos[t][pedido]
+            );
           }
         }
       }
-      inicio = 1
+      inicio = 1;
       for (var i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
@@ -3424,8 +3626,9 @@ export default {
   line-height: inherit;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
-strong{color:#007bff}
-
+strong {
+  color: #007bff;
+}
 i.fas,
 i.far {
   font-size: 25px;
@@ -3435,12 +3638,10 @@ i.far {
   background-color: white;
   color: #9ab3ff !important;
 }
-
 .relatbtn:hover {
   color: #82a0ff !important;
   background-color: white;
 }
-
 .relatbtn:focus {
   color: #82a0ff;
   background-color: white;
@@ -3448,6 +3649,19 @@ i.far {
   -webkit-text-stroke-color: #698dff;
 }
 
+.addbtn {
+  background-color: white;
+  color: #a0e7a0;
+}
+.addbtn:hover {
+  background-color: white;
+  color: #77dd77;
+}
+.addbtn:focus {
+  color: #77dd77;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #2fbf53;
+}
 button {
   padding: 0;
   border: none;
@@ -3479,7 +3693,6 @@ h5 {
 @media screen and (min-width: 576px) {
   .title {
     text-align: start !important;
-    
   }
 }
 @media screen and (max-width: 575px) {
@@ -3487,5 +3700,193 @@ h5 {
     text-align: center !important;
   }
 }
+/* CARD */
 
+.div-card {
+  margin-left: auto;
+}
+.card-title {
+  font-size: 16px;
+  font-weight: normal;
+  padding-left: 0;
+  margin: 0;
+  text-align: center;
+}
+.card {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  -webkit-box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+  margin-left: auto;
+}
+.card-body {
+  font-size: 12px;
+  padding-top: 15px;
+}
+
+.card label {
+  margin: 0;
+}
+.selectMaior2 {
+  width: 300px;
+  text-align: start;
+}
+input {
+  height: 25px !important;
+  padding: 0px 5px 0px 5px !important;
+  font-size: 11px !important;
+  text-align: start;
+}
+.inputMenor {
+  width: 60px;
+  text-align: center;
+}
+.inputMenor2 {
+  width: 40px;
+  margin-right: 10px;
+  text-align: center;
+}
+.inputMaior {
+  width: 250px;
+  text-align: start;
+}
+
+.input-group-text {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  -ms-flex-align: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  align-items: center;
+  -ms-flex-pack: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -moz-box-pack: center;
+  justify-content: center;
+  margin-bottom: 0;
+  /*===*/
+  max-width: 70px;
+  min-width: 70px;
+  height: 25px !important;
+  margin-left: -5px;
+  padding-left: 15px;
+  font-size: 12px !important;
+}
+.form-control {
+  height: 25px !important;
+  font-size: 12px !important;
+  padding: 0px 0px 0px 5px !important;
+  min-width: 100px;
+  max-width: 100px;
+  text-align: start;
+}
+.form-group {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  -ms-flex: 0 0 auto;
+  -webkit-box-flex: 0;
+  -webkit-flex: 0 0 auto;
+  -moz-box-flex: 0;
+  flex: 0 0 auto;
+  -ms-flex-flow: row wrap;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-flow: row wrap;
+  -moz-box-orient: horizontal;
+  -moz-box-direction: normal;
+  flex-flow: row wrap;
+  -ms-flex-align: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  align-items: center;
+  margin-bottom: 0;
+}
+.form-inline .input-group,
+.form-inline {
+  width: auto;
+}
+
+.tabelas {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: -webkit-calc(100vh - 95px);
+  height: -moz-calc(100vh - 95px);
+  height: calc(100vh - 95px);
+}
+table {
+  display: block !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  font-size: 11px !important;
+  font-weight: normal !important;
+  background-color: white;
+  margin: 0 !important;
+}
+tbody {
+  max-height: 100%;
+  width: 100%;
+}
+table td {
+  text-align: center;
+  vertical-align: middle !important;
+  padding: 0 !important;
+  font-size: 10px !important;
+  height: 20px;
+}
+tr thead {
+  display: block;
+}
+th {
+  padding: 0 !important;
+  font-size: 14px;
+  text-align: center !important;
+  height: 20px !important;
+  vertical-align: middle !important;
+}
+.p-header {
+  padding: 0 5px 0 5px !important;
+  margin: 0 !important;
+  font-size: 11px !important;
+  text-align: center;
+}
+table p {
+  margin-bottom: 0 !important;
+  text-align: center;
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+  font-size: 10px !important;
+}
+table input[type="checkbox"] {
+  height: 13px !important;
+  margin-left: 0 !important;
+  margin-top: 3.5px !important;
+}
+.sticky {
+  display: block !important;
+  overflow: hidden !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 0 !important;
+}
+
+.scroll-bar-custom ::-webkit-scrollbar-track {
+  background-color: #f4f4f4;
+}
+.scroll-bar-custom::-webkit-scrollbar {
+  width: 6px;
+  background: #f4f4f4;
+}
+.scroll-bar-custom::-webkit-scrollbar-thumb {
+  background: #666;
+}
 </style>

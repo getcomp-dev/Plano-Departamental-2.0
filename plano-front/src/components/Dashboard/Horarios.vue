@@ -2,211 +2,220 @@
   <div class="DashboardHorarios row pr-2" v-if="Admin">
     <!-- Titulo -->
     <div
-      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Horários</h1>
-      
-      <div
-          class="form-group col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
+        <h1 class="titulo col-xl-2 col-md-2 col-sm-2 col-4 px-0 pr-1">Horários</h1>
+
+        <div
+          class="form-group col-xl-10 col-md-10 col-sm-10 col-8 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
-          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
-            <i class="fas fa-question"></i>
-          </b-button>
+          <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
+            <select
+              class="form-control form-control-sm"
+              v-model="periodo"
+            >
+              <option value="1">Primeiro</option>
+              <option value="2">Segundo</option>
+              <option value="3">Ambos</option>
+            </select>
+            <div class="input-group-append">
+              <label class="input-group-text">Semestre</label>
+            </div>
           </div>
-          
+          <div class="d-flex">
+            <b-button v-b-modal.modalCursos title="Cursos" class="cancelbtn">
+              <i class="fas fa-graduation-cap"></i>
+            </b-button>
+
+            <!--  -->
+            <button type="button" class="relatbtn" v-on:click.prevent="pdf" title="Relatório">
+              <i class="far fa-file-alt"></i>
+            </button>
+
+            <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
+              <i class="fas fa-question"></i>
+            </b-button>
+          </div>
         </div>
+      </div>
     </div>
 
     <div class="w-100 mb-2 border-bottom"></div>
 
-    <div class="col p-0 pl-1 m-0">
-      <div class="tabelas">
+    <div class="p-0 m-0 w-100">
+      <div class="tabelas p-0" style="margin-right: -8px!important;">
         <!-- -------------------------------------------- 1º periodo ----------------------------------------- -->
-        <template v-if="periodo==1 || periodo==3">
+        <template v-if="this.cursos.length != 0 && (periodo==1 || periodo==3)">
           <h3
             class="title"
             style="font-weight: bold; font-size: 18px; text-align: center !important;"
           >1º SEMESTRE</h3>
           <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
           <template v-if="activeCCD">
+            <!-- passar o nome do curso pra dentro da tabela -->
             <h4>Ciência da Computação Diurno</h4>
-          </template>
+
           <curso-diurno :Curso="ativos1.CCD"></curso-diurno>
+          </template>
           <!-- -------------------------------------------- EC ----------------------------------------- -->
           <template v-if="activeEC">
             <h4>Engenharia Computacional</h4>
-          </template>
 
           <curso-diurno :Curso="ativos1.EC"></curso-diurno>
+          </template>
           <!-- -------------------------------------------- CC Noturno ----------------------------------------- -->
           <template v-if="activeCCN">
             <h4>Ciência da Computação Noturno</h4>
-          </template>
 
           <curso-noturno :Curso="ativos1.CCN"></curso-noturno>
+          </template>
           <!-- -------------------------------------------- SI ----------------------------------------- -->
           <template v-if="activeSI">
             <h4>Sistemas de Informação</h4>
-          </template>
 
           <curso-noturno :Curso="ativos1.SI"></curso-noturno>
-
+          </template>
           <!-- -------------------------------------------- Eletivas ----------------------------------------- -->
           <template v-if="activeEletivas">
             <h4>Eletivas</h4>
-          </template>
           <horario-eletivas :Eletivas="ativos1.Eletivas"></horario-eletivas>
+          </template>
+
         </template>
 
         <!-- -------------------------------------------- 2º periodo ----------------------------------------- -->
-        <template v-if="periodo==2 || periodo==3">
+        <template v-if="this.cursos.length != 0 && (periodo==2 || periodo==3)">
           <h3
             class="title"
-            style="font-weight: bold; font-size: 18px; text-align: center;"
+            style="font-weight: bold; font-size: 18px; text-align: center !important;"
           >2º SEMESTRE</h3>
           <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
           <template v-if="activeCCD">
             <h4>Ciência da Computação Diurno</h4>
-          </template>
 
           <curso-diurno :Curso="ativos2.CCD"></curso-diurno>
+          </template>
           <!-- -------------------------------------------- EC ----------------------------------------- -->
           <template v-if="activeEC">
             <h4>Engenharia Computacional</h4>
-          </template>
 
           <curso-diurno :Curso="ativos2.EC"></curso-diurno>
+          </template>
           <!-- -------------------------------------------- CC Noturno ----------------------------------------- -->
           <template v-if="activeCCN">
             <h4>Ciência da Computação Noturno</h4>
-          </template>
 
           <curso-noturno :Curso="ativos2.CCN"></curso-noturno>
+          </template>
           <!-- -------------------------------------------- SI ----------------------------------------- -->
           <template v-if="activeSI">
             <h4>Sistemas de Informação</h4>
-          </template>
 
           <curso-noturno :Curso="ativos2.SI"></curso-noturno>
-
+          </template>
           <!-- -------------------------------------------- Eletivas ----------------------------------------- -->
           <template v-if="activeEletivas">
             <h4>Eletivas</h4>
-          </template>
           <horario-eletivas :Eletivas="ativos2.Eletivas"></horario-eletivas>
+          </template>
+
         </template>
         <!-- ----------------------------------------------------------------------------------------------- -->
       </div>
     </div>
-    <!-- Grid Direito -->
-    <div class="div-card p-0 mt-0 mb-2 col-lg-6 col-md-6 col-sm-12 col-12">
-      <div class="card ml-auto mr-3">
-        <div class="card-header">
-          <h1 class="card-title">Definir Grades</h1>
-        </div>
-        <div class="card-body">
-          <form>
-            <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 px-0">
-                <div class="input-group mr-0 ml-auto mb-0 mt-0 p-0">
-                  <select class="form-control form-control-sm" v-model="periodo">
-                    <option value="1">Primeiro</option>
-                    <option value="2">Segundo</option>
-                    <option value="3">Ambos</option>
-                  </select>
-                  <div class="input-group-append">
-                    <label class="input-group-text">Semestre</label>
+
+    <b-modal
+      id="modalCursos"
+      class="mw-100"
+      style="width: max-content"
+      ref="modalCursos"
+      scrollable
+      title="Selecione os Cursos"
+      :size="'sm'"
+    >
+      <div class="col m-0 p-0 border" style="width:max-content; border-color: rgba(0,0,0,0.125);">
+        <table class="table table-sm modal-table">
+          <tr>
+            <div style="font-size: 11px!important">
+              <th class="border-0">
+                <p style="width:20px" class="p-header"></p>
+              </th>
+              <th class="border-0">
+                <p style="width:40px" class="p-header">Cód.</p>
+              </th>
+              <th class="border-0">
+                <p class="p-header" style="width: 200px; text-align:start">Nome</p>
+              </th>
+            </div>
+          </tr>
+          <tbody>
+            <!-- v-for em tr -->
+            <tr v-for="curso in options_Cursos" :key="'curso-id-'+curso.value">
+              <div style="width: max-content">
+                <td>
+                  <div style="width:20px;">
+                    <input
+                      type="checkbox"
+                      :value="curso.value"
+                      v-on:change.capture="defineSelectAll"
+                      v-model="cursosSelecionados"
+                      class="form-check-input position-static m-0"
+                    />
                   </div>
-                </div>
+                </td>
+                <td>
+                  <p style="width:40px; text-align:center">{{curso.codigo.toUpperCase()}}</p>
+                </td>
+                <td>
+                  <p style="width:200px; text-align:start">{{curso.nome}}</p>
+                </td>
               </div>
-            </div>
-
-            <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 px-0">
-                <div
-                  class="form-group col m-0 px-0 border rounded-top"
-                  style="border-color: rgba(0,0,0,0.125);"
-                >
-                  <table class="table table-sm">
-                    <tr class="thead-light">
-                      <div class="sticky border" style="width:max-contet;">
-                        <th scope="col" class="border-0 p-header" style="width:25px">
-                          <input
-                            type="checkbox"
-                            v-model="selectAll"
-                            v-on:change="toggleAll"
-                          />
-                        </th>
-                        <th scope="col" class="border-0 p-header" style="width:140px; text-align:start!important">Cursos</th>
-                      </div>
-                    </tr>
-
-                    <tbody>
-                      <tr v-for="curso in options" :key="'curso-id-'+curso.id+curso.nome+'-'+curso.value">
-                        <div style="width: max-contet">
-                          <td style="padding:0;broder:0;margin:0!important">
-                            <div style="width:25px;">
-                              <input
-                                type="checkbox"
-                                :value="curso.value"
-                                v-on:change.capture="defineSelectAll"
-                                v-model="cursos"
-                                class="form-check-input position-static m-0"
-                              />
-                            </div>
-                          </td>
-                          <td>
-                            <p style="width:140px; text-align:start">{{curso.text}}</p>
-                          </td>
-                        </div>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-
-                <!--
-                <b-form-checkbox v-model="selectAll" v-on:change="toggleAll">Selecionar Tudo</b-form-checkbox>
-                <b-form-checkbox-group
-                  stacked
-                  v-model="cursos"
-                  name="cursosCheck"
-                  :options="options"
-                  v-on:change.capture="defineSelectAll"
-                  style="display: block;"
-                ></b-form-checkbox-group>
-                -->
-              </div>
-            </div>
-
-            <div class="form-group row">
-              <div style="display: flex; margin-right: 0; margin-left: auto">
-                <button v-on:click="createHorarios" title="Confirmar" type="button" class="addbtn">
-                  <i class="fas fa-check"></i>
-                </button>
-              </div>
-            </div>
-          </form>
-        </div>
+            </tr>
+          </tbody>
+        </table>
       </div>
-    </div>
+      <div slot="modal-footer" class="w-100 m-0" style="display: flex">
+        <div class="row ml-0 w-100">
+          <b-button
+            class="btn-azul btn-df mr-2"
+            variant="success"
+            @click="toggleAll()"
+          >Selecionar Todos</b-button>
+          <b-button
+            class="btn-cinza btn-df mr-2"
+            variant="secondary"
+            @click="distoggleAll()"
+          >Desmarcar Todos</b-button>
+        </div>
+        <b-button
+          variant="success"
+          v-on:click="okBtn()"
+          class="btn-verde btn-df mr-2"
+          style="padding-right:15px!important; padding-left:15px!important;"
+        >OK</b-button>
+      </div>
+    </b-modal>
+
+    <!-- MODAL AJUDA -->
     <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
-      
       <div class="modal-body">
-        <ul class="listas list-group"> 
+        <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para exibir conteúdo na tela:</strong> No cartão à direita, selecione o(s) semestre(s), em 
-            seguida o(s) curso(s) que deseja ver e clique em Confirmar 
-            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+            <strong>Para exibir conteúdo na tela:</strong> No cartão à direita, selecione o(s) semestre(s), em
+            seguida o(s) curso(s) que deseja ver e clique em Confirmar
+            <i
+              class="fas fa-check addbtn px-1"
+              style="font-size:12px"
+            ></i>
             .
           </li>
         </ul>
       </div>
 
-      <div slot="modal-footer" style="display: none">
-      </div>
+      <div slot="modal-footer" style="display: none"></div>
     </b-modal>
   </div>
 </template>
@@ -223,14 +232,14 @@ export default {
   data() {
     return {
       cursos: [],
+      cursosSelecionados: [],
       error: undefined,
-      options: [
-        { text: "CC Diurno", value: 1 },
-        { text: "Eng. Comp.", value: 4 },
-        { text: "CC Noturno", value: 2 },
-        { text: "Sis. Informação", value: 3 },
-
-        { text: "Eletivas", value: 5 }
+      options_Cursos: [
+        { nome: "CIÊNCIA DA COMPUTAÇÃO DIURNO", value: 1, codigo: "65C" },
+        { nome: "ENGENHARIA DA COMPUTAÇÃO", value: 4, codigo: "65B" },
+        { nome: "CIÊNCIA DA COMPUTAÇÃO NOTURNO", value: 2, codigo: "35A" },
+        { nome: "SISTEMAS DE INFORMAÇÃO", value: 3, codigo: "76A" },
+        { nome: "ELETIVAS", value: 5, codigo: "-" }
       ],
       evenCCN: "false",
       evenCCD: "false",
@@ -253,7 +262,7 @@ export default {
         Eletivas: []
       },
       selectAll: false,
-      periodo: 1
+      periodo: 1,
     };
   },
 
@@ -262,27 +271,36 @@ export default {
     cursoNoturno,
     horarioEletivas
   },
+    beforeMount: function() {
+    this.createHorarios1();
+    this.createHorarios2();
+  },
 
   methods: {
     defineSelectAll() {
-      if (this.cursos.length === 5) {
+      if (this.cursosSelecionados.length === 5) {
         this.selectAll = true;
       } else {
         this.selectAll = false;
       }
     },
 
-    toggleAll() {
-      if (this.cursos.length === 5) {
-        this.cursos = [];
-      } else {
-        this.cursos = [1, 2, 3, 4, 5];
+    distoggleAll() {
+      if (this.cursosSelecionados.length !== 0) {
+        this.cursosSelecionados = [];
       }
     },
-
+    toggleAll() {
+      if (this.cursosSelecionados.length !== 5) this.cursosSelecionados = [1, 2, 3, 4, 5];
+    },
     isEven(number) {
       if (number % 2 === 0) return "true";
       else return "false";
+    },
+
+    okBtn() {
+      this.cursos = [...this.cursosSelecionados]
+      this.$refs.modalCursos.hide();
     },
 
     emptyTurmas() {
@@ -316,19 +334,7 @@ export default {
         return true;
       } else return false;
     },
-    createHorarios: function() {
-      var periodoSelecionado = parseInt(this.periodo, 10);
-      this.emptyTurmas();
-      if (periodoSelecionado === 1) {
-        this.createHorarios1();
-      } else if (periodoSelecionado === 2) {
-        this.createHorarios2();
-      } else {
-        this.createHorarios1();
-        this.createHorarios2();
-      }
-    },
-
+    
     createHorarios1: function() {
       var grade;
       var grades;
@@ -366,8 +372,7 @@ export default {
         this.evenCCD = "true";
       }
 
-      //CC Diurno está selecionado
-      if (_.indexOf(this.cursos, 1) > -1) {
+      //CCD
         grades = _.filter(this.$store.state.grade.Grades, ["Curso", 4]);
         grades = _.orderBy(grades, "periodoInicio", "desc");
         pedidos = [];
@@ -459,10 +464,8 @@ export default {
             }
           }
         }
-      }
-
-      //CC Noturno está selecionado
-      if (_.indexOf(this.cursos, 2) > -1) {
+      
+        //CCN
         grades = _.filter(this.$store.state.grade.Grades, ["Curso", 1]);
         grades = _.orderBy(grades, "periodoInicio", "desc");
         pedidos = [];
@@ -553,10 +556,9 @@ export default {
             }
           }
         }
-      }
+      
 
-      //SI está selecionado
-      if (_.indexOf(this.cursos, 3) > -1) {
+      //SI
         grades = _.filter(this.$store.state.grade.Grades, ["Curso", 3]);
         grades = _.orderBy(grades, "periodoInicio", "desc");
         pedidos = [];
@@ -647,10 +649,9 @@ export default {
             }
           }
         }
-      }
+      
 
-      //Engenharia Computacional está selecionado
-      if (_.indexOf(this.cursos, 4) > -1) {
+      //Engenharia Computacional
         grades = _.filter(this.$store.state.grade.Grades, ["Curso", 2]);
         grades = _.orderBy(grades, "periodoInicio", "desc");
         pedidos = [];
@@ -741,10 +742,9 @@ export default {
             }
           }
         }
-      }
-      //Eletivas está selecionado:
+      
+      //Eletivas
       var eletiva = true;
-      if (_.indexOf(this.cursos, 5) > -1) {
         for (var t = 0; t < turmas.length; t++) {
           for (var d = 0; d < disciplinaGrades.length; d++) {
             if (turmas[t].Disciplina === disciplinaGrades[d].Disciplina) {
@@ -757,7 +757,6 @@ export default {
             eletiva = true;
           }
         }
-      }
 
       this.$store.commit("redefinirAtivas1", { Ativas: this.ativos1 });
     },
@@ -799,8 +798,7 @@ export default {
         this.evenCCD = "false";
       }
 
-      //CC Diurno está selecionado
-      if (_.indexOf(this.cursos, 1) > -1) {
+      //CC Diurno
         grades = _.filter(this.$store.state.grade.Grades, ["Curso", 4]);
         grades = _.orderBy(grades, "periodoInicio", "desc");
         pedidos = [];
@@ -891,10 +889,9 @@ export default {
             }
           }
         }
-      }
+      
 
-      //CC Noturno está selecionado
-      if (_.indexOf(this.cursos, 2) > -1) {
+      //CC Noturno
         grades = _.filter(this.$store.state.grade.Grades, ["Curso", 1]);
         grades = _.orderBy(grades, "periodoInicio", "desc");
         pedidos = [];
@@ -985,10 +982,9 @@ export default {
             }
           }
         }
-      }
+      
 
-      //SI está selecionado
-      if (_.indexOf(this.cursos, 3) > -1) {
+      //SI
         grades = _.filter(this.$store.state.grade.Grades, ["Curso", 3]);
         grades = _.orderBy(grades, "periodoInicio", "desc");
         pedidos = [];
@@ -1079,10 +1075,9 @@ export default {
             }
           }
         }
-      }
+      
 
-      //Engenharia Computacional está selecionado
-      if (_.indexOf(this.cursos, 4) > -1) {
+      //Engenharia Computacional
         grades = _.filter(this.$store.state.grade.Grades, ["Curso", 2]);
         grades = _.orderBy(grades, "periodoInicio", "desc");
         pedidos = [];
@@ -1173,10 +1168,9 @@ export default {
             }
           }
         }
-      }
-      //Eletivas está selecionado:
+      
+      //Eletivas
       var eletiva = true;
-      if (_.indexOf(this.cursos, 5) > -1) {
         for (var t = 0; t < turmas.length; t++) {
           for (var d = 0; d < disciplinaGrades.length; d++) {
             if (turmas[t].Disciplina === disciplinaGrades[d].Disciplina) {
@@ -1189,7 +1183,7 @@ export default {
             eletiva = true;
           }
         }
-      }
+      
 
       this.$store.commit("redefinirAtivas2", { Ativas: this.ativos2 });
     },
@@ -1324,6 +1318,2240 @@ export default {
       this.$store.commit("redefinirAtivas1", { Ativas2: this.ativos2 });
 
       this.$store.commit("redefinirAtivas2", { Ativas: this.ativos2 });
+    },
+    pdf() {
+      var pdfMake = require("pdfmake/build/pdfmake.js");
+      if (pdfMake.vfs == undefined) {
+        var pdfFonts = require("pdfmake/build/vfs_fonts.js");
+        pdfMake.vfs = pdfFonts.pdfMake.vfs;
+      }
+      var tables = [];
+      var disciplinas = this.$store.state.disciplina.Disciplinas;
+      var periodosCCD1 = this.ativos1.CCD;
+      var periodosCCN1 = this.ativos1.CCN;
+      var periodosEC1 = this.ativos1.EC;
+      var periodosSI1 = this.ativos1.SI;
+      var eletivas1 = this.ativos1.Eletivas;
+      var seg = "",
+        ter = "",
+        qua = "",
+        qui = "",
+        sex = "";
+      var vazio = 0;
+      tables.push({
+        text: "1º Semestre",
+        bold: false,
+        margin: [0, 10, 0, 5],
+        fontSize: 20
+      });
+      tables.push({
+        text: "Ciência da Computação Diurno",
+        bold: false,
+        margin: [0, 10, 0, 5],
+        fontSize: 20
+      });
+
+      for (var i = 0; i < 10; i++) {
+        if (periodosCCD1[i].length === 0) {
+          vazio = vazio + 1;
+        } else {
+          tables.push({
+            text: i + 1 + "º Período",
+            bold: false,
+            margin: [0, 5, 0, 5]
+          });
+          tables.push({
+            table: {
+              widths: ["*", "*", "*", "*", "*", "*"],
+              headerRows: 1,
+              color: "#426",
+              body: [
+                [
+                  { text: "Hora", alignment: "center", bold: true },
+                  {
+                    text: "Segunda",
+                    alignment: "center",
+                    bold: true
+                  },
+                  { text: "Terça", alignment: "center", bold: true },
+                  {
+                    text: "Quarta",
+                    alignment: "center",
+                    bold: true
+                  },
+                  { text: "Quinta", alignment: "center", bold: true },
+                  {
+                    text: "Sexta",
+                    alignment: "center",
+                    bold: true
+                  }
+                ]
+              ]
+            }
+          });
+          for (var d = 0; d < 4; d++) {
+            for (var j = 0; j < periodosCCD1[i].length; j++) {
+              if (this.checkTurmaHorario(periodosCCD1[i][j], 1 + d)) {
+                for (var k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
+                    if (seg !== "") seg = seg + " ";
+                    seg =
+                      seg +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCD1[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosCCD1[i][j], 7 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
+                    if (ter != "") ter = ter + " ";
+                    ter =
+                      ter +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCD1[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosCCD1[i][j], 13 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
+                    if (qua != "") qua = qua + " ";
+                    qua =
+                      qua +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCD1[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosCCD1[i][j], 19 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
+                    if (qui != "") qui = qui + " ";
+                    qui =
+                      qui +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCD1[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosCCD1[i][j], 25 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
+                    if (sex != "") sex = sex + " ";
+                    sex =
+                      sex +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCD1[i][j].letra;
+                  }
+                }
+              }
+            }
+
+            switch (d) {
+              case 0:
+                tables[3 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "08 - 10",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 1:
+                tables[3 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "10 - 12",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 2:
+                tables[3 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "14 - 16",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 3:
+                tables[3 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "16 - 18",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 4:
+                tables[3 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "19 - 21",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 5:
+                tables[3 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "21 - 23",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+            }
+            seg = ter = qua = qui = sex = "";
+          }
+        }
+      }
+
+      tables.push({
+        text: "Ciência da Computação Noturno",
+        bold: true,
+        margin: [0, 10, 0, 5],
+        fontSize: 20,
+        pageBreak: "before"
+      });
+
+      for (var i = 0; i < 10; i++) {
+        if (periodosCCN1[i].length === 0) {
+          vazio = vazio + 1;
+        } else {
+          tables.push({
+            text: i + 1 + "º Período",
+            bold: true,
+            margin: [0, 5, 0, 5]
+          });
+          tables.push({
+            table: {
+              widths: ["*", "*", "*", "*", "*", "*"],
+              headerRows: 1,
+              color: "#426",
+              body: [
+                [
+                  { text: "Hora", alignment: "center", bold: true },
+                  {
+                    text: "Segunda",
+                    alignment: "center",
+                    bold: true
+                  },
+                  { text: "Terça", alignment: "center", bold: true },
+                  {
+                    text: "Quarta",
+                    alignment: "center",
+                    bold: true
+                  },
+                  { text: "Quinta", alignment: "center", bold: true },
+                  {
+                    text: "Sexta",
+                    alignment: "center",
+                    bold: true
+                  }
+                ]
+              ]
+            }
+          });
+          for (var d = 4; d < 6; d++) {
+            for (var j = 0; j < periodosCCN1[i].length; j++) {
+              if (this.checkTurmaHorario(periodosCCN1[i][j], 1 + d)) {
+                for (var k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
+                    if (seg !== "") seg = seg + " ";
+                    seg =
+                      seg +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCN1[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosCCN1[i][j], 7 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
+                    if (ter != "") ter = ter + " ";
+                    ter =
+                      ter +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCN1[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosCCN1[i][j], 13 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
+                    if (qua != "") qua = qua + " ";
+                    qua =
+                      qua +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCN1[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosCCN1[i][j], 19 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
+                    if (qui != "") qui = qui + " ";
+                    qui =
+                      qui +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCN1[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosCCN1[i][j], 25 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
+                    if (sex != "") sex = sex + " ";
+                    sex =
+                      sex +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCN1[i][j].letra;
+                  }
+                }
+              }
+            }
+
+            switch (d) {
+              case 0:
+                tables[24 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "08 - 10",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 1:
+                tables[24 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "10 - 12",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 2:
+                tables[24 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "14 - 16",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 3:
+                tables[24 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "16 - 18",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 4:
+                tables[24 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "19 - 21",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 5:
+                tables[24 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "21 - 23",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+            }
+            seg = ter = qua = qui = sex = "";
+          }
+        }
+      }
+
+      tables.push({
+        text: "Engenharia Computacional",
+        bold: true,
+        margin: [0, 10, 0, 5],
+        fontSize: 20,
+        pageBreak: "before"
+      });
+
+      for (var i = 0; i < 10; i++) {
+        if (periodosEC1[i].length === 0) {
+          vazio = vazio + 1;
+        } else {
+          tables.push({
+            text: i + 1 + "º Período",
+            bold: true,
+            margin: [0, 5, 0, 5]
+          });
+          tables.push({
+            table: {
+              widths: ["*", "*", "*", "*", "*", "*"],
+              headerRows: 1,
+              color: "#426",
+              body: [
+                [
+                  { text: "Hora", alignment: "center", bold: true },
+                  {
+                    text: "Segunda",
+                    alignment: "center",
+                    bold: true
+                  },
+                  { text: "Terça", alignment: "center", bold: true },
+                  {
+                    text: "Quarta",
+                    alignment: "center",
+                    bold: true
+                  },
+                  { text: "Quinta", alignment: "center", bold: true },
+                  {
+                    text: "Sexta",
+                    alignment: "center",
+                    bold: true
+                  }
+                ]
+              ]
+            }
+          });
+          for (var d = 0; d < 4; d++) {
+            for (var j = 0; j < periodosEC1[i].length; j++) {
+              if (this.checkTurmaHorario(periodosEC1[i][j], 1 + d)) {
+                for (var k = 0; k < disciplinas.length; k++) {
+                  if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
+                    if (seg !== "") seg = seg + " ";
+                    seg =
+                      seg +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosEC1[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosEC1[i][j], 7 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
+                    if (ter != "") ter = ter + " ";
+                    ter =
+                      ter +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosEC1[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosEC1[i][j], 13 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
+                    if (qua != "") qua = qua + " ";
+                    qua =
+                      qua +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosEC1[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosEC1[i][j], 19 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
+                    if (qui != "") qui = qui + " ";
+                    qui =
+                      qui +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosEC1[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosEC1[i][j], 25 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
+                    if (sex != "") sex = sex + " ";
+                    sex =
+                      sex +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosEC1[i][j].letra;
+                  }
+                }
+              }
+            }
+
+            switch (d) {
+              case 0:
+                tables[45 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "08 - 10",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 1:
+                tables[45 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "10 - 12",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 2:
+                tables[45 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "14 - 16",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 3:
+                tables[45 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "16 - 18",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 4:
+                tables[45 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "19 - 21",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 5:
+                tables[45 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "21 - 23",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+            }
+            seg = ter = qua = qui = sex = "";
+          }
+        }
+      }
+
+      tables.push({
+        text: "Sistemas de Informação",
+        bold: true,
+        margin: [0, 10, 0, 5],
+        fontSize: 20,
+        pageBreak: "before"
+      });
+
+      for (var i = 0; i < 10; i++) {
+        if (periodosSI1[i].length === 0) {
+          vazio = vazio + 1;
+        } else {
+          tables.push({
+            text: i + 1 + "º Período",
+            bold: true,
+            margin: [0, 5, 0, 5]
+          });
+          tables.push({
+            table: {
+              widths: ["*", "*", "*", "*", "*", "*"],
+              headerRows: 1,
+              color: "#426",
+              body: [
+                [
+                  { text: "Hora", alignment: "center", bold: true },
+                  {
+                    text: "Segunda",
+                    alignment: "center",
+                    bold: true
+                  },
+                  { text: "Terça", alignment: "center", bold: true },
+                  {
+                    text: "Quarta",
+                    alignment: "center",
+                    bold: true
+                  },
+                  { text: "Quinta", alignment: "center", bold: true },
+                  {
+                    text: "Sexta",
+                    alignment: "center",
+                    bold: true
+                  }
+                ]
+              ]
+            }
+          });
+          for (var d = 4; d < 6; d++) {
+            for (var j = 0; j < periodosSI1[i].length; j++) {
+              if (this.checkTurmaHorario(periodosSI1[i][j], 1 + d)) {
+                for (var k = 0; k < disciplinas.length; k++) {
+                  if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
+                    if (seg !== "") seg = seg + " ";
+                    seg =
+                      seg +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosSI1[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosSI1[i][j], 7 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
+                    if (ter != "") ter = ter + " ";
+                    ter =
+                      ter +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosSI1[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosSI1[i][j], 13 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
+                    if (qua != "") qua = qua + " ";
+                    qua =
+                      qua +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosSI1[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosSI1[i][j], 19 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
+                    if (qui != "") qui = qui + " ";
+                    qui =
+                      qui +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosSI1[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosSI1[i][j], 25 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
+                    if (sex != "") sex = sex + " ";
+                    sex =
+                      sex +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosSI1[i][j].letra;
+                  }
+                }
+              }
+            }
+
+            switch (d) {
+              case 0:
+                tables[66 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "08 - 10",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 1:
+                tables[66 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "10 - 12",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 2:
+                tables[66 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "14 - 16",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 3:
+                tables[66 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "16 - 18",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 4:
+                tables[66 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "19 - 21",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 5:
+                tables[66 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "21 - 23",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+            }
+            seg = ter = qua = qui = sex = "";
+          }
+        }
+      }
+
+      tables.push({
+        text: "Eletivas",
+        bold: true,
+        margin: [0, 10, 0, 5],
+        fontSize: 20,
+        pageBreak: "before"
+      });
+
+      if (eletivas1.length === 0) {
+        vazio = vazio + 1;
+      } else {
+        tables.push({
+          table: {
+            widths: ["*", "*", "*", "*", "*", "*"],
+            headerRows: 1,
+            color: "#426",
+            body: [
+              [
+                { text: "Hora", alignment: "center", bold: true },
+                {
+                  text: "Segunda",
+                  alignment: "center",
+                  bold: true
+                },
+                { text: "Terça", alignment: "center", bold: true },
+                {
+                  text: "Quarta",
+                  alignment: "center",
+                  bold: true
+                },
+                { text: "Quinta", alignment: "center", bold: true },
+                {
+                  text: "Sexta",
+                  alignment: "center",
+                  bold: true
+                }
+              ]
+            ]
+          }
+        });
+        for (var d = 0; d < 8; d++) {
+          for (var j = 0; j < eletivas1.length; j++) {
+            if (
+              this.checkTurmaHorario(
+                eletivas1[j],
+                (d === 4 || d === 5 ? 28 : 1) + (d > 5 ? d - 2 : d)
+              )
+            ) {
+              for (var k = 0; k < disciplinas.length; k++) {
+                if (eletivas1[j].Disciplina === disciplinas[k].id) {
+                  if (seg !== "") seg = seg + " ";
+                  seg = seg + disciplinas[k].codigo + " " + eletivas1[j].letra;
+                }
+              }
+            }
+            if (
+              this.checkTurmaHorario(
+                eletivas1[j],
+                (d === 4 || d === 5 ? 30 : 7) + (d > 5 ? d - 2 : d)
+              )
+            ) {
+              for (k = 0; k < disciplinas.length; k++) {
+                if (eletivas1[j].Disciplina === disciplinas[k].id) {
+                  if (ter != "") ter = ter + " ";
+                  ter = ter + disciplinas[k].codigo + " " + eletivas1[j].letra;
+                }
+              }
+            }
+            if (
+              this.checkTurmaHorario(
+                eletivas1[j],
+                (d === 4 || d === 5 ? 32 : 13) + (d > 5 ? d - 2 : d)
+              )
+            ) {
+              for (k = 0; k < disciplinas.length; k++) {
+                if (eletivas1[j].Disciplina === disciplinas[k].id) {
+                  if (qua != "") qua = qua + " ";
+                  qua = qua + disciplinas[k].codigo + " " + eletivas1[j].letra;
+                }
+              }
+            }
+            if (
+              this.checkTurmaHorario(
+                eletivas1[j],
+                (d === 4 || d === 5 ? 34 : 19) + (d > 5 ? d - 2 : d)
+              )
+            ) {
+              for (k = 0; k < disciplinas.length; k++) {
+                if (eletivas1[j].Disciplina === disciplinas[k].id) {
+                  if (qui != "") qui = qui + " ";
+                  qui = qui + disciplinas[k].codigo + " " + eletivas1[j].letra;
+                }
+              }
+            }
+            if (
+              this.checkTurmaHorario(
+                eletivas1[j],
+                (d === 4 || d === 5 ? 36 : 25) + (d > 5 ? d - 2 : d)
+              )
+            ) {
+              for (k = 0; k < disciplinas.length; k++) {
+                if (eletivas1[j].Disciplina === disciplinas[k].id) {
+                  if (sex != "") sex = sex + " ";
+                  sex = sex + disciplinas[k].codigo + " " + eletivas1[j].letra;
+                }
+              }
+            }
+          }
+          switch (d) {
+            case 0:
+              tables[86 - 2 * vazio].table.body.push([
+                {
+                  text: "08 - 10",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+              ]);
+              break;
+            case 1:
+              tables[86 - 2 * vazio].table.body.push([
+                {
+                  text: "10 - 12",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+              ]);
+              break;
+            case 2:
+              tables[86 - 2 * vazio].table.body.push([
+                {
+                  text: "14 - 16",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+              ]);
+              break;
+            case 3:
+              tables[86 - 2 * vazio].table.body.push([
+                {
+                  text: "16 - 18",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+              ]);
+              break;
+            case 4:
+              tables[86 - 2 * vazio].table.body.push([
+                {
+                  text: "17 - 19",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+              ]);
+              break;
+            case 5:
+              tables[86 - 2 * vazio].table.body.push([
+                {
+                  text: "18 - 20",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+              ]);
+              break;
+            case 6:
+              tables[86 - 2 * vazio].table.body.push([
+                {
+                  text: "19 - 21",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+              ]);
+              break;
+            case 7:
+              tables[86 - 2 * vazio].table.body.push([
+                {
+                  text: "21 - 23",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+              ]);
+              break;
+          }
+          seg = ter = qua = qui = sex = "";
+        }
+      }
+
+      var periodosCCD2 = this.ativos2.CCD;
+      var periodosCCN2 = this.ativos2.CCN;
+      var periodosEC2 = this.ativos2.EC;
+      var periodosSI2 = this.ativos2.SI;
+      var eletivas2 = this.ativos2.Eletivas;
+
+      tables.push({
+        text: "2º Semestre",
+        bold: true,
+        margin: [0, 10, 0, 5],
+        fontSize: 20,
+        pageBreak: "before"
+      });
+      tables.push({
+        text: "Ciência da Computação Diurno",
+        bold: true,
+        margin: [0, 10, 0, 5],
+        fontSize: 20
+      });
+
+      for (var i = 0; i < 10; i++) {
+        if (periodosCCD2[i].length === 0) {
+          vazio = vazio + 1;
+        } else {
+          tables.push({
+            text: i + 1 + "º Período",
+            bold: true,
+            margin: [0, 5, 0, 5]
+          });
+          tables.push({
+            table: {
+              widths: ["*", "*", "*", "*", "*", "*"],
+              headerRows: 1,
+              color: "#426",
+              body: [
+                [
+                  { text: "Hora", alignment: "center", bold: true },
+                  {
+                    text: "Segunda",
+                    alignment: "center",
+                    bold: true
+                  },
+                  { text: "Terça", alignment: "center", bold: true },
+                  {
+                    text: "Quarta",
+                    alignment: "center",
+                    bold: true
+                  },
+                  { text: "Quinta", alignment: "center", bold: true },
+                  {
+                    text: "Sexta",
+                    alignment: "center",
+                    bold: true
+                  }
+                ]
+              ]
+            }
+          });
+          for (var d = 0; d < 4; d++) {
+            for (var j = 0; j < periodosCCD2[i].length; j++) {
+              if (this.checkTurmaHorario(periodosCCD2[i][j], 1 + d)) {
+                for (var k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
+                    if (seg !== "") seg = seg + " ";
+                    seg =
+                      seg +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCD2[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosCCD2[i][j], 7 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
+                    if (ter != "") ter = ter + " ";
+                    ter =
+                      ter +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCD2[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosCCD2[i][j], 13 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
+                    if (qua != "") qua = qua + " ";
+                    qua =
+                      qua +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCD2[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosCCD2[i][j], 19 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
+                    if (qui != "") qui = qui + " ";
+                    qui =
+                      qui +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCD2[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosCCD2[i][j], 25 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
+                    if (sex != "") sex = sex + " ";
+                    sex =
+                      sex +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCD2[i][j].letra;
+                  }
+                }
+              }
+            }
+
+            switch (d) {
+              case 0:
+                tables[90 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "08 - 10",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 1:
+                tables[90 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "10 - 12",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 2:
+                tables[90 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "14 - 16",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 3:
+                tables[90 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "16 - 18",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 4:
+                tables[90 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "19 - 21",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 5:
+                tables[90 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "21 - 23",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+            }
+            seg = ter = qua = qui = sex = "";
+          }
+        }
+      }
+
+      tables.push({
+        text: "Ciência da Computação Noturno",
+        bold: true,
+        margin: [0, 10, 0, 5],
+        fontSize: 20,
+        pageBreak: "before"
+      });
+
+      for (var i = 0; i < 10; i++) {
+        if (periodosCCN2[i].length === 0) {
+          vazio = vazio + 1;
+        } else {
+          tables.push({
+            text: i + 1 + "º Período",
+            bold: true,
+            margin: [0, 5, 0, 5]
+          });
+          tables.push({
+            table: {
+              widths: ["*", "*", "*", "*", "*", "*"],
+              headerRows: 1,
+              color: "#426",
+              body: [
+                [
+                  { text: "Hora", alignment: "center", bold: true },
+                  {
+                    text: "Segunda",
+                    alignment: "center",
+                    bold: true
+                  },
+                  { text: "Terça", alignment: "center", bold: true },
+                  {
+                    text: "Quarta",
+                    alignment: "center",
+                    bold: true
+                  },
+                  { text: "Quinta", alignment: "center", bold: true },
+                  {
+                    text: "Sexta",
+                    alignment: "center",
+                    bold: true
+                  }
+                ]
+              ]
+            }
+          });
+          for (var d = 4; d < 6; d++) {
+            for (var j = 0; j < periodosCCN2[i].length; j++) {
+              if (this.checkTurmaHorario(periodosCCN2[i][j], 1 + d)) {
+                for (var k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
+                    if (seg !== "") seg = seg + " ";
+                    seg =
+                      seg +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCN2[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosCCN2[i][j], 7 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
+                    if (ter != "") ter = ter + " ";
+                    ter =
+                      ter +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCN2[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosCCN2[i][j], 13 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
+                    if (qua != "") qua = qua + " ";
+                    qua =
+                      qua +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCN2[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosCCN2[i][j], 19 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
+                    if (qui != "") qui = qui + " ";
+                    qui =
+                      qui +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCN2[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosCCN2[i][j], 25 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
+                    if (sex != "") sex = sex + " ";
+                    sex =
+                      sex +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosCCN2[i][j].letra;
+                  }
+                }
+              }
+            }
+
+            switch (d) {
+              case 0:
+                tables[111 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "08 - 10",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 1:
+                tables[111 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "10 - 12",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 2:
+                tables[111 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "14 - 16",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 3:
+                tables[111 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "16 - 18",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 4:
+                tables[111 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "19 - 21",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 5:
+                tables[111 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "21 - 23",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+            }
+            seg = ter = qua = qui = sex = "";
+          }
+        }
+      }
+
+      tables.push({
+        text: "Engenharia Computacional",
+        bold: true,
+        margin: [0, 10, 0, 5],
+        fontSize: 20,
+        pageBreak: "before"
+      });
+
+      for (var i = 0; i < 10; i++) {
+        if (periodosEC2[i].length === 0) {
+          vazio = vazio + 1;
+        } else {
+          tables.push({
+            text: i + 1 + "º Período",
+            bold: true,
+            margin: [0, 5, 0, 5]
+          });
+          tables.push({
+            table: {
+              widths: ["*", "*", "*", "*", "*", "*"],
+              headerRows: 1,
+              color: "#426",
+              body: [
+                [
+                  { text: "Hora", alignment: "center", bold: true },
+                  {
+                    text: "Segunda",
+                    alignment: "center",
+                    bold: true
+                  },
+                  { text: "Terça", alignment: "center", bold: true },
+                  {
+                    text: "Quarta",
+                    alignment: "center",
+                    bold: true
+                  },
+                  { text: "Quinta", alignment: "center", bold: true },
+                  {
+                    text: "Sexta",
+                    alignment: "center",
+                    bold: true
+                  }
+                ]
+              ]
+            }
+          });
+          for (var d = 0; d < 4; d++) {
+            for (var j = 0; j < periodosEC2[i].length; j++) {
+              if (this.checkTurmaHorario(periodosEC2[i][j], 1 + d)) {
+                for (var k = 0; k < disciplinas.length; k++) {
+                  if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
+                    if (seg !== "") seg = seg + " ";
+                    seg =
+                      seg +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosEC2[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosEC2[i][j], 7 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
+                    if (ter != "") ter = ter + " ";
+                    ter =
+                      ter +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosEC2[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosEC2[i][j], 13 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
+                    if (qua != "") qua = qua + " ";
+                    qua =
+                      qua +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosEC2[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosEC2[i][j], 19 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
+                    if (qui != "") qui = qui + " ";
+                    qui =
+                      qui +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosEC2[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosEC2[i][j], 25 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
+                    if (sex != "") sex = sex + " ";
+                    sex =
+                      sex +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosEC2[i][j].letra;
+                  }
+                }
+              }
+            }
+
+            switch (d) {
+              case 0:
+                tables[132 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "08 - 10",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 1:
+                tables[132 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "10 - 12",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 2:
+                tables[132 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "14 - 16",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 3:
+                tables[132 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "16 - 18",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 4:
+                tables[132 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "19 - 21",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 5:
+                tables[132 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "21 - 23",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+            }
+            seg = ter = qua = qui = sex = "";
+          }
+        }
+      }
+
+      tables.push({
+        text: "Sistemas de Informação",
+        bold: true,
+        margin: [0, 10, 0, 5],
+        fontSize: 20,
+        pageBreak: "before"
+      });
+
+      for (var i = 0; i < 10; i++) {
+        if (periodosSI2[i].length === 0) {
+          vazio = vazio + 1;
+        } else {
+          tables.push({
+            text: i + 1 + "º Período",
+            bold: true,
+            margin: [0, 5, 0, 5]
+          });
+          tables.push({
+            table: {
+              widths: ["*", "*", "*", "*", "*", "*"],
+              headerRows: 1,
+              color: "#426",
+              body: [
+                [
+                  { text: "Hora", alignment: "center", bold: true },
+                  {
+                    text: "Segunda",
+                    alignment: "center",
+                    bold: true
+                  },
+                  { text: "Terça", alignment: "center", bold: true },
+                  {
+                    text: "Quarta",
+                    alignment: "center",
+                    bold: true
+                  },
+                  { text: "Quinta", alignment: "center", bold: true },
+                  {
+                    text: "Sexta",
+                    alignment: "center",
+                    bold: true
+                  }
+                ]
+              ]
+            }
+          });
+          for (var d = 4; d < 6; d++) {
+            for (var j = 0; j < periodosSI2[i].length; j++) {
+              if (this.checkTurmaHorario(periodosSI2[i][j], 1 + d)) {
+                for (var k = 0; k < disciplinas.length; k++) {
+                  if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
+                    if (seg !== "") seg = seg + " ";
+                    seg =
+                      seg +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosSI2[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosSI2[i][j], 7 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
+                    if (ter != "") ter = ter + " ";
+                    ter =
+                      ter +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosSI2[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosSI2[i][j], 13 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
+                    if (qua != "") qua = qua + " ";
+                    qua =
+                      qua +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosSI2[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosSI2[i][j], 19 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
+                    if (qui != "") qui = qui + " ";
+                    qui =
+                      qui +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosSI2[i][j].letra;
+                  }
+                }
+              }
+              if (this.checkTurmaHorario(periodosSI2[i][j], 25 + d)) {
+                for (k = 0; k < disciplinas.length; k++) {
+                  if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
+                    if (sex != "") sex = sex + " ";
+                    sex =
+                      sex +
+                      disciplinas[k].codigo +
+                      " " +
+                      periodosSI2[i][j].letra;
+                  }
+                }
+              }
+            }
+
+            switch (d) {
+              case 0:
+                tables[153 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "08 - 10",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 1:
+                tables[153 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "10 - 12",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 2:
+                tables[153 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "14 - 16",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 3:
+                tables[153 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "16 - 18",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 4:
+                tables[153 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "19 - 21",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+              case 5:
+                tables[153 + 2 * (i - vazio)].table.body.push([
+                  {
+                    text: "21 - 23",
+                    alignment: "center"
+                  },
+                  { text: seg, alignment: "center" },
+                  { text: ter, alignment: "center" },
+                  {
+                    text: qua,
+                    alignment: "center"
+                  },
+                  { text: qui, alignment: "center" },
+                  { text: sex, alignment: "center" }
+                ]);
+                break;
+            }
+            seg = ter = qua = qui = sex = "";
+          }
+        }
+      }
+
+      tables.push({
+        text: "Eletivas",
+        bold: true,
+        margin: [0, 10, 0, 5],
+        fontSize: 20,
+        pageBreak: "before"
+      });
+
+      if (eletivas2.length === 0) {
+        vazio = vazio + 1;
+      } else {
+        tables.push({
+          table: {
+            widths: ["*", "*", "*", "*", "*", "*"],
+            headerRows: 1,
+            color: "#426",
+            body: [
+              [
+                { text: "Hora", alignment: "center", bold: true },
+                {
+                  text: "Segunda",
+                  alignment: "center",
+                  bold: true
+                },
+                { text: "Terça", alignment: "center", bold: true },
+                {
+                  text: "Quarta",
+                  alignment: "center",
+                  bold: true
+                },
+                { text: "Quinta", alignment: "center", bold: true },
+                {
+                  text: "Sexta",
+                  alignment: "center",
+                  bold: true
+                }
+              ]
+            ]
+          }
+        });
+        for (var d = 0; d < 8; d++) {
+          for (var j = 0; j < eletivas2.length; j++) {
+            if (
+              this.checkTurmaHorario(
+                eletivas2[j],
+                (d === 4 || d === 5 ? 28 : 1) + (d > 5 ? d - 2 : d)
+              )
+            ) {
+              for (var k = 0; k < disciplinas.length; k++) {
+                if (eletivas2[j].Disciplina === disciplinas[k].id) {
+                  if (seg !== "") seg = seg + " ";
+                  seg = seg + disciplinas[k].codigo + " " + eletivas2[j].letra;
+                }
+              }
+            }
+            if (
+              this.checkTurmaHorario(
+                eletivas2[j],
+                (d === 4 || d === 5 ? 30 : 7) + (d > 5 ? d - 2 : d)
+              )
+            ) {
+              for (k = 0; k < disciplinas.length; k++) {
+                if (eletivas2[j].Disciplina === disciplinas[k].id) {
+                  if (ter != "") ter = ter + " ";
+                  ter = ter + disciplinas[k].codigo + " " + eletivas2[j].letra;
+                }
+              }
+            }
+            if (
+              this.checkTurmaHorario(
+                eletivas2[j],
+                (d === 4 || d === 5 ? 32 : 13) + (d > 5 ? d - 2 : d)
+              )
+            ) {
+              for (k = 0; k < disciplinas.length; k++) {
+                if (eletivas2[j].Disciplina === disciplinas[k].id) {
+                  if (qua != "") qua = qua + " ";
+                  qua = qua + disciplinas[k].codigo + " " + eletivas2[j].letra;
+                }
+              }
+            }
+            if (
+              this.checkTurmaHorario(
+                eletivas2[j],
+                (d === 4 || d === 5 ? 34 : 19) + (d > 5 ? d - 2 : d)
+              )
+            ) {
+              for (k = 0; k < disciplinas.length; k++) {
+                if (eletivas2[j].Disciplina === disciplinas[k].id) {
+                  if (qui != "") qui = qui + " ";
+                  qui = qui + disciplinas[k].codigo + " " + eletivas2[j].letra;
+                }
+              }
+            }
+            if (
+              this.checkTurmaHorario(
+                eletivas2[j],
+                (d === 4 || d === 5 ? 36 : 25) + (d > 5 ? d - 2 : d)
+              )
+            ) {
+              for (k = 0; k < disciplinas.length; k++) {
+                if (eletivas2[j].Disciplina === disciplinas[k].id) {
+                  if (sex != "") sex = sex + " ";
+                  sex = sex + disciplinas[k].codigo + " " + eletivas2[j].letra;
+                }
+              }
+            }
+          }
+          switch (d) {
+            case 0:
+              tables[173 - 2 * vazio].table.body.push([
+                {
+                  text: "08 - 10",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+              ]);
+              break;
+            case 1:
+              tables[173 - 2 * vazio].table.body.push([
+                {
+                  text: "10 - 12",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+              ]);
+              break;
+            case 2:
+              tables[173 - 2 * vazio].table.body.push([
+                {
+                  text: "14 - 16",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+              ]);
+              break;
+            case 3:
+              tables[173 - 2 * vazio].table.body.push([
+                {
+                  text: "16 - 18",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+              ]);
+              break;
+            case 4:
+              tables[173 - 2 * vazio].table.body.push([
+                {
+                  text: "17 - 19",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+              ]);
+              break;
+            case 5:
+              tables[173 - 2 * vazio].table.body.push([
+                {
+                  text: "18 - 20",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+              ]);
+              break;
+            case 6:
+              tables[173 - 2 * vazio].table.body.push([
+                {
+                  text: "19 - 21",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+              ]);
+              break;
+            case 7:
+              tables[173 - 2 * vazio].table.body.push([
+                {
+                  text: "21 - 23",
+                  alignment: "center"
+                },
+                { text: seg, alignment: "center" },
+                { text: ter, alignment: "center" },
+                {
+                  text: qua,
+                  alignment: "center"
+                },
+                { text: qui, alignment: "center" },
+                { text: sex, alignment: "center" }
+              ]);
+              break;
+          }
+          seg = ter = qua = qui = sex = "";
+        }
+      }
+
+      var docDefinition = {
+        content: tables,
+        header: {
+          text: new Date(Date.now()).toLocaleString(),
+          margin: [40, 20, 0, 0],
+          fontSize: 10
+        }
+      };
+      pdfMake.createPdf(docDefinition).open();
     }
   },
 
@@ -1438,124 +3666,20 @@ h4 {
   text-align: start !important;
 }
 
-/* ====== CARD ====== */
-.div-card {
-  margin-left: auto;
+h3 {
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center !important;
 }
-.card-title {
-  font-size: 16px;
+h4 {
+  font-size: 12px !important;
+  font-weight: bold !important;
+}
+h5 {
+  font-size: 12px;
   font-weight: normal;
-  padding-left: 0;
-  margin: 0;
-  text-align: center;
-}
-.card {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-  -webkit-box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
-  -moz-box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
-  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
-  margin-left: auto;
-}
-.card-body {
-  font-size: 12px;
-  padding-top: 15px;
-}
-/*
-.card label {
-  line-height: 1.2;
-  font-size: 12px;
-  text-align: start;
-  padding-top: 0 !important;
-}
-*/
-.card label {
-  margin: 0;
-}
-.selectMaior2 {
-  width: 300px;
-  text-align: start;
-}
-input {
-  height: 25px !important;
-  padding: 0px 5px 0px 5px !important;
-  font-size: 11px !important;
-  text-align: start;
-}
-.inputMenor {
-  width: 60px;
-  text-align: center;
-}
-.inputMenor2 {
-  width: 40px;
-  margin-right: 10px;
-  text-align: center;
-}
-.inputMaior {
-  width: 250px;
-  text-align: start;
 }
 
-.listas {
-  line-height: 30px;
-  font-size: 12px;
-  text-align: justify;
-  line-height: inherit;
-  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
-}
-strong{color:#007bff}
-
-button {
-  padding: 0;
-  border: none;
-  background: none;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-  margin-right: 15px;
-  -webkit-transition: all 0.3s ease 0s;
-  -o-transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  transition: all 0.3s ease 0s;
-  cursor: pointer;
-}
-i.fas,
-i.far {
-  font-size: 25px;
-}
-.addbtn {
-  background-color: white;
-  color: #a0e7a0;
-}
-.addbtn:hover {
-  background-color: white;
-  color: #77dd77;
-}
-.addbtn:focus {
-  color: #77dd77;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #2fbf53;
-}
-.relatbtn {
-  background-color: white;
-  color: #9ab3ff !important;
-}
-
-.relatbtn:hover {
-  color: #82a0ff !important;
-  background-color: white;
-}
-
-.relatbtn:focus {
-  color: #82a0ff;
-  background-color: white;
-  -webkit-text-stroke-width: 0.5px;
-  -webkit-text-stroke-color: #698dff;
-}
-.texto {
-  font-size: 12px;
-}
 .input-group-text {
   display: -ms-flexbox;
   display: -webkit-box;
@@ -1589,31 +3713,6 @@ i.far {
   max-width: 100px;
   text-align: start;
 }
-.form-group {
-  display: -ms-flexbox;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: flex;
-  -ms-flex: 0 0 auto;
-  -webkit-box-flex: 0;
-  -webkit-flex: 0 0 auto;
-  -moz-box-flex: 0;
-  flex: 0 0 auto;
-  -ms-flex-flow: row wrap;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -webkit-flex-flow: row wrap;
-  -moz-box-orient: horizontal;
-  -moz-box-direction: normal;
-  flex-flow: row wrap;
-  -ms-flex-align: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -moz-box-align: center;
-  align-items: center;
-  margin-bottom: 0;
-}
 .form-inline .input-group,
 .form-inline {
   width: auto;
@@ -1621,11 +3720,86 @@ i.far {
 .tabelas {
   overflow-y: auto;
   overflow-x: hidden;
-  height: -webkit-calc(100vh - 95px);
-  height: -moz-calc(100vh - 95px);
-  height: calc(100vh - 95px);
+  height: -webkit-calc(100vh - 85px);
+  height: -moz-calc(100vh - 85px);
+  height: calc(100vh - 85px);
 }
-table {
+
+.listas {
+  line-height: 30px;
+  font-size: 12px;
+  text-align: justify;
+  line-height: inherit;
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+}
+strong {
+  color: #007bff;
+}
+i.fas,
+i.far {
+  font-size: 25px;
+}
+
+.relatbtn {
+  background-color: white;
+  color: #9ab3ff !important;
+  float: right;
+}
+.relatbtn:hover {
+  color: #82a0ff !important;
+  background-color: white;
+}
+.relatbtn:focus {
+  color: #82a0ff;
+  background-color: white;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #698dff;
+}
+
+.addbtn {
+  background-color: white;
+  color: #a0e7a0;
+}
+.addbtn:hover {
+  background-color: white;
+  color: #77dd77;
+}
+.addbtn:focus {
+  color: #77dd77;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #2fbf53;
+}
+
+.cancelbtn {
+  background-color: white;
+  color: #cfcfc4;
+}
+.cancelbtn:hover {
+  background-color: white;
+  color: #b8b4a8;
+}
+
+.cancelbtn:focus {
+  background-color: white;
+  color: #b8b8a8;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #ada89a;
+}
+button {
+  padding: 0;
+  border: none;
+  background: none;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  margin-right: 15px;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+}
+
+.modal-table {
   display: block !important;
   overflow: auto !important;
   font-size: 11px !important;
@@ -1642,7 +3816,6 @@ table td {
   vertical-align: middle !important;
   padding: 0 !important;
   font-size: 10px !important;
-  height: 20px;
 }
 tr thead {
   display: block;
@@ -1651,14 +3824,14 @@ th {
   padding: 0 !important;
   font-size: 14px;
   text-align: center !important;
-  height: 20px !important;
-  vertical-align: middle !important;
+  height: 18px !important;
 }
 .p-header {
   padding: 0 5px 0 5px !important;
   margin: 0 !important;
   font-size: 11px !important;
   text-align: center;
+  height: 18px;
 }
 table p {
   margin-bottom: 0 !important;
@@ -1668,15 +3841,100 @@ table p {
   font-size: 10px !important;
 }
 table input[type="checkbox"] {
-  height: 13px !important;
   margin-left: 0 !important;
-  margin-top: 3.5px !important;
+  margin-top: 4px !important;
 }
-.sticky {
-  display: block !important;
-  overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 0 !important;
+
+.clickable-header {
+  cursor: pointer;
+  padding-left: 5px;
+}
+
+.form-control {
+  height: 25px !important;
+  font-size: 12px !important;
+  padding: 2px 5px 0px 5px !important;
+  min-width: 80px;
+  max-width: 80px;
+  text-align: start;
+}
+.form-group {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 0;
+}
+.form-inline .input-group,
+.form-inline {
+  width: auto;
+}
+
+/* BOTOÕES MODALS */
+
+.btn-df {
+  font-size: 12px;
+  height: 25px;
+  min-width: -webkit-max-content;
+  min-width: -moz-max-content;
+  min-width: max-content;
+  max-width: -webkit-max-content;
+  max-width: -moz-max-content;
+  max-width: max-content;
+  padding: 0 5px 0 5px;
+}
+.btn-azul {
+  background-color: #718de0 !important;
+  border-color: #9ab3ff !important;
+}
+.btn-azul:hover {
+  background-color: rgb(74, 101, 190) !important;
+  border-color: #82a0ff !important;
+}
+
+.btn-azul:focus {
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(122, 128, 124, 0.5) !important;
+  -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
+  box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
+}
+
+.btn-cinza {
+  background-color: #999999 !important;
+  border-color: #c3c3c3 !important;
+}
+.btn-cinza:hover {
+  background-color: #747474 !important;
+  border-color: #aaaaaa !important;
+}
+
+.btn-cinza:focus {
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
+  -moz-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
+  box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
+}
+.btn-verde {
+  background-color: #70b670 !important;
+  border-color: #a0e7a0 !important;
+}
+.btn-verde:hover {
+  background-color: #4c8a4c !important;
+  border-color: #77dd77 !important;
+}
+
+.btn-verde:focus {
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
+  -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
+  box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
+}
+/*  */
+
+@media screen and (max-width: 430px) {
+  .div-titulo {
+    height: 70px !important;
+  }
 }
 </style>

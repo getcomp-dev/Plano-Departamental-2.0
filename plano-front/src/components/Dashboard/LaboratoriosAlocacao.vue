@@ -1059,10 +1059,11 @@
       ref="LaboratoriosModal"
       scrollable
       title="Selecione os laboratórios"
+      :size="'sm'"
     >
       <div
         class="form-group col m-0 p-0 border"
-        style="height: 395px; width:max-content; border-color: rgba(0,0,0,0.125);"
+        style="width:100%; border-color: rgba(0,0,0,0.125);"
       >
         <table class="table table-sm modal-table" style="max-height: 392px !important;">
           <tr>
@@ -1071,15 +1072,15 @@
                 <p style="width:25px !important" class="p-header"></p>
               </th>
               <th class="border-0">
-                <p class="p-header" style="width: 424px; text-align:start">Nome</p>
+                <p class="p-header" style="width: 230px; text-align:start">Nome</p>
               </th>
             </div>
           </tr>
           <tbody>
             <tr v-for="laboratorio in Laboratorios" :key="`laboratorio${laboratorio.id}`">
               <div style="width: max-content">
-                <td style="padding:0;broder:0;margin:0!important;">
-                  <div style="width:25px;">
+                <td style="padding:0;broder:0;margin:0 auto !important;">
+                  <div style="width:25px; height: 100%; margin:0 auto">
                     <input
                       type="checkbox"
                       v-model="LaboratoriosSelecionados"
@@ -1089,7 +1090,7 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:424px; text-align:start">{{laboratorio.nome}}</p>
+                  <p class="center-row" style="width:230px; text-align:start">{{laboratorio.nome}}</p>
                 </td>
               </div>
             </tr>
@@ -1097,17 +1098,19 @@
         </table>
       </div>
 
-      <div slot="modal-footer" style="display: flex; margin-right: 10px !important;">
-        <b-button
-          class="btn-azul btn-df mr-2"
-          variant="success"
-          @click="selectAll()"
-        >Selecionar Todos</b-button>
-        <b-button
-          class="btn-cinza btn-df mr-2"
-          variant="secondary"
-          @click="selectNone()"
-        >Desmarcar Todos</b-button>
+      <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
+        <div class="w-100 ml-2 d-flex">
+          <b-button
+            class="btn-azul btn-df mr-2"
+            variant="success"
+            @click="selectAll()"
+          >Selecionar Todos</b-button>
+          <b-button
+            class="btn-cinza btn-df mr-2"
+            variant="secondary"
+            @click="selectNone()"
+          >Desmarcar Todos</b-button>
+        </div>
         <b-button
           variant="success"
           @click="btnOK()"
@@ -1333,6 +1336,19 @@ th {
 .tablab {
   flex-basis: 30%;
 }
+
+.table {
+  margin: 0px;
+}
+
+p {
+  margin:0px;
+}
+
+.center-row {
+  font-size: 10px;
+}
+
 .tg {
   border-collapse: collapse;
   border-spacing: 0;
