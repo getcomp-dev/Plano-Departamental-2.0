@@ -354,8 +354,8 @@
           </li>
           <li class="list-group-item">
             <strong>Observações:</strong> Em cada coluna de cursos a disciplina adicionada permite a inclusão em dois espaços, sendo acima
-            destinado para vagas declaradas, e abaixo para pedidos de vagas. Para que uma disciplina externa apareça em Horários de um determinado
-            curso é preciso que pelo menos uma vaga declarada seja destinada ao mesmo.
+            destinado para alunos na grade, e abaixo para alunos repetentes. Para que uma disciplina externa apareça em Horários de um determinado
+            curso é preciso que pelo menos uma vaga para alunos na grade seja destinada ao mesmo.
           </li>
         </ul>
       </div>

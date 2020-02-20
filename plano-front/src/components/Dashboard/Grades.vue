@@ -25,121 +25,127 @@
       <!-- Grid esquerdo -->
       <div class="col-lg-7 col-md-6 col-sm-12 col-12 m-0 px-0">
         <div class="divTable ml-0 mt-0 pl-0 pr-0 border">
-          <table class="table table-sm">
+          <table class="table table-sm table-hover">
             <thead class="thead-light">
               <th scope="col">
-                <p class="p-header" style="width: 300px">Cursos</p>
+                <p class="p-header" style="width: 220px">Cursos</p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width: 250px">Grades</p>
+                <p class="p-header" style="width: 100px">Grades</p>
               </th>
             </thead>
 
             <tbody>
               <tr class="bg-custom-tr">
                 <td>
-                  <p style="width: 300px">Ciência da Computação Diurno</p>
+                  <p style="width: 220px">Ciência da Computação Diurno</p>
                 </td>
                 <td>
-                  <div style="width:250px">
-                    <span class="badge badge-light">{{Grades_CCDiurno.length}}</span>
-                  </div>
+                  <div style="width:100px"></div>
                 </td>
               </tr>
               <template v-for="grade in Grades_CCDiurno">
                 <tr
-                  :key="'grade-id'+grade.id"
-                  :class="{'bg-custom' : gradeForm.nome == grade.nome && gradeForm.Curso == 4}"
+                  @click="
+                    (currentGrade = grade.id),
+                      findGrade(),
+                      (grade_selected = true)
+                  "
+                  :key="'grade-id' + grade.id"
+                  :class="[
+                    {
+                      'bg-custom':
+                        gradeForm.nome == grade.nome && gradeForm.Curso == 4
+                    },
+                    'clickable'
+                  ]"
                 >
                   <td>
-                    <p style="width: 300px"></p>
+                    <p style="width: 220px"></p>
                   </td>
-                  <td class="clickable-td">
-                    <p
-                      @click="currentGrade=grade.id, findGrade(), grade_selected=true "
-                      style="width: 250px"
-                    >{{grade.nome}}</p>
+                  <td>
+                    <p style="width: 100px">{{ grade.nome }}</p>
                   </td>
                 </tr>
               </template>
 
               <tr class="bg-custom-tr">
                 <td>
-                  <p style="width: 300px">Ciência da Computação Noturno</p>
+                  <p style="width: 220px">Ciência da Computação Noturno</p>
                 </td>
                 <td>
-                  <div style="width:250px">
-                    <span class="badge badge-light">{{Grades_CCNoturno.length}}</span>
-                  </div>
+                  <div style="width:100px"></div>
                 </td>
               </tr>
               <template v-for="grade in Grades_CCNoturno">
                 <tr
-                  :key="'grade-id'+grade.id"
-                  :class="{'bg-custom' : gradeForm.nome == grade.nome && gradeForm.Curso == 1}"
+                  @click="(currentGrade = grade.id),findGrade(),(grade_selected = true)"
+                  :key="'grade-id' + grade.id"
+                  :class="[
+                    {
+                      'bg-custom':
+                        gradeForm.nome == grade.nome && gradeForm.Curso == 1
+                    },
+                    'clickable'
+                  ]"
                 >
                   <td>
-                    <p style="width: 300px"></p>
+                    <p style="width: 220px"></p>
                   </td>
-                  <td class="clickable-td">
-                    <p
-                      @click="currentGrade=grade.id, findGrade(), grade_selected=true "
-                      style="width: 250px"
-                    >{{grade.nome}}</p>
+                  <td>
+                    <p style="width: 100px">{{ grade.nome }}</p>
                   </td>
                 </tr>
               </template>
 
               <tr class="bg-custom-tr">
                 <td>
-                  <p style="width: 300px">Sistemas de informação</p>
+                  <p style="width: 220px">Sistemas de informação</p>
                 </td>
                 <td>
-                  <div style="width:250px">
-                    <span class="badge badge-light">{{Grades_SI.length}}</span>
-                  </div>
+                  <div style="width:100px"></div>
                 </td>
               </tr>
               <template v-for="grade in Grades_SI">
                 <tr
-                  :key="'grade-id'+grade.id"
-                  :class="{'bg-custom' : gradeForm.nome == grade.nome && gradeForm.Curso == 3}"
+                  @click=" (currentGrade = grade.id), findGrade(),  (grade_selected = true)"
+                  :key="'grade-id' + grade.id"
+                  :class="[{
+                    'bg-custom':
+                      gradeForm.nome == grade.nome && gradeForm.Curso == 3
+                  },'clickable']"
                 >
                   <td>
-                    <p style="width: 300px"></p>
+                    <p style="width: 220px"></p>
                   </td>
-                  <td class="clickable-td">
-                    <p
-                      @click="currentGrade=grade.id, findGrade(), grade_selected=true "
-                      style="width: 250px"
-                    >{{grade.nome}}</p>
+                  <td>
+                    <p style="width: 100px">{{ grade.nome }}</p>
                   </td>
                 </tr>
               </template>
 
               <tr class="bg-custom-tr">
                 <td>
-                  <p style="width: 300px">Engenharia da Computação</p>
+                  <p style="width: 220px">Engenharia da Computação</p>
                 </td>
                 <td>
-                  <div style="width:250px">
-                    <span class="badge badge-light">{{Grade_EC.length}}</span>
-                  </div>
+                  <div style="width:100px"></div>
                 </td>
               </tr>
               <template v-for="grade in Grade_EC">
                 <tr
-                  :key="'grade-id'+grade.id"
-                  :class="{'bg-custom' : gradeForm.nome == grade.nome && gradeForm.Curso == 2}"
+                  @click=" (currentGrade = grade.id), findGrade(),(grade_selected = true)"
+                  :key="'grade-id' + grade.id"
+                  :class="[{
+                    'bg-custom':
+                      gradeForm.nome == grade.nome && gradeForm.Curso == 2
+                  },'clickable']"
                 >
                   <td>
-                    <p style="width: 300px"></p>
+                    <p style="width: 220px"></p>
                   </td>
-                  <td class="clickable-td">
-                    <p
-                      @click="currentGrade=grade.id, findGrade(), grade_selected=true"
-                      style="width: 250px"
-                    >{{grade.nome}}</p>
+                  <td>
+                    <p style="width: 100px">{{ grade.nome }}</p>
                   </td>
                 </tr>
               </template>
@@ -264,20 +270,35 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para adicionar grades:</strong> Com o cartão a direita em branco, preencha-o. Em seguida, 
-            clique em Adicionar <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>.
+            <strong>Para adicionar grades:</strong> Com o cartão a direita em
+            branco, preencha-o. Em seguida, clique em Adicionar
+            <i
+              class="fas fa-plus addbtn px-1"
+              style="font-size:12px"
+            ></i>.
           </li>
           <li class="list-group-item">
-            <strong>Para editar ou deletar uma grade:</strong> Na tabela, clique na grade que deseja alterar.
-             Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar
-            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
-            ou, para excluí-la,
-            clique em Deletar 
-            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
+            <strong>Para editar ou deletar uma grade:</strong> Na tabela, clique
+            na grade que deseja alterar. Logo após, no cartão à direita, altere
+            as informações que desejar e clique em Salvar
+            <i
+              class="fas fa-check addbtn px-1"
+              style="font-size:12px"
+            ></i>
+            ou, para excluí-la, clique em Deletar
+            <i
+              class="far fa-trash-alt delbtn px-1"
+              style="font-size: 12px"
+            ></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>.
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à
+            direita, clique em Cancelar
+            <i
+              class="fas fa-times cancelbtn px-1"
+              style="font-size: 12px"
+            ></i>.
           </li>
         </ul>
       </div>
@@ -457,6 +478,7 @@ export default {
   overflow: hidden;
   margin: 0;
 }
+
 .btn {
   height: 25px;
   min-width: -webkit-max-content;
@@ -468,16 +490,19 @@ export default {
   font-size: 12px;
   padding: 0 5px 0 5px;
 }
+
 .titulo {
   font-size: 25px;
   font-weight: normal;
   padding-left: 0;
   margin: 0 !important;
 }
+
 /* ====== CARD ====== */
 .div-card {
   margin-left: auto;
 }
+
 .card-title {
   font-size: 16px;
   font-weight: normal;
@@ -485,21 +510,25 @@ export default {
   margin: 0;
   text-align: center;
 }
+
 .card {
   width: 260px;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
   margin-left: auto;
 }
+
 .card-body {
   font-size: 12px !important;
   padding-top: 15px;
 }
+
 .card label {
   line-height: 1.2;
   font-size: 12px;
   text-align: start;
   padding-top: 0 !important;
 }
+
 select {
   height: 25px !important;
   font-size: 11px !important;
@@ -508,22 +537,26 @@ select {
   max-width: 100px;
   text-align: center;
 }
+
 .selectMaior {
   min-width: 220px;
   max-width: 220px;
   text-align: start !important;
 }
+
 input {
   height: 25px !important;
   padding: 0px 5px 0px 5px !important;
   font-size: 11px !important;
   text-align: start;
 }
+
 .inputMenor {
   max-width: 60px;
   min-width: 60px;
   text-align: center;
 }
+
 .p-header {
   padding: 0 5px 0 5px;
   margin: 0;
@@ -531,6 +564,7 @@ input {
   text-align: center;
   height: 18px;
 }
+
 .listas {
   line-height: 30px;
   font-size: 12px;
@@ -538,9 +572,11 @@ input {
   line-height: inherit;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
+
 strong {
   color: #007bff;
 }
+
 /* Botoes */
 button {
   padding: 0;
@@ -552,6 +588,7 @@ button {
   transition: all 0.3s ease 0s;
   cursor: pointer;
 }
+
 i.fas,
 i.far {
   font-size: 25px;
@@ -561,10 +598,12 @@ i.far {
   background-color: white;
   color: #a0e7a0;
 }
+
 .addbtn:hover {
   background-color: white;
   color: #77dd77;
 }
+
 .addbtn:focus {
   color: #77dd77;
   -webkit-text-stroke-width: 1px;
@@ -575,9 +614,11 @@ i.far {
   background-color: white;
   color: #cfcfc4;
 }
+
 .cancelbtn:hover {
   color: #b8b4a8;
 }
+
 .cancelbtn:focus {
   color: #b8b8a8;
   -webkit-text-stroke-width: 1px;
@@ -588,9 +629,11 @@ i.far {
   background-color: white;
   color: #ff817b;
 }
+
 .delbtn:hover {
   color: #ff5f48;
 }
+
 .delbtn:focus {
   color: #ff5f48;
   -webkit-text-stroke-width: 2px;
@@ -601,10 +644,12 @@ i.far {
   background-color: white;
   color: #9ab3ff !important;
 }
+
 .relatbtn:hover {
   color: #82a0ff !important;
   background-color: white;
 }
+
 .relatbtn:focus {
   color: #82a0ff;
   background-color: white;
@@ -619,17 +664,21 @@ i.far {
     margin-top: 20px !important;
     top: 0 !important;
   }
+
   .card {
     margin-left: 0px !important;
   }
 }
+
 .modal-header {
   background-color: rgba(0, 0, 0, 0.03);
   text-align: center;
 }
+
 header {
   text-align: center;
 }
+
 .modal-title {
   font-size: 16px;
   font-weight: normal;
@@ -647,43 +696,51 @@ table {
   background-color: white;
   margin: 0 !important;
 }
+
 tbody {
   max-height: 100%;
   width: 100%;
 }
+
 table td {
   text-align: center;
   vertical-align: middle;
   padding: 0 !important;
   height: 20px !important;
 }
+
 div-tab {
   text-align: center;
   vertical-align: middle;
   padding: 0 !important;
   height: 40px !important;
 }
+
 table p {
   margin-bottom: 0;
   text-align: center;
   padding-right: 5px;
   padding-left: 5px;
 }
+
 p-tab {
   margin-bottom: 0;
   text-align: center;
   padding-right: 5px;
   padding-left: 5px;
 }
+
 tr thead {
   display: block;
 }
+
 thead th {
   padding: 0 !important;
   font-size: 14px;
   text-align: center;
   height: 18px !important;
 }
+
 .divTable {
   overflow: hidden !important;
   height: -webkit-max-content !important;
@@ -693,15 +750,19 @@ thead th {
   width: -moz-max-content !important;
   width: max-content !important;
 }
-.clickable-td {
+
+.clickable {
   cursor: pointer;
 }
+
 .bg-custom {
   background-color: #c8c8c8;
 }
+
 .bg-custom:hover {
   background-color: #c8c8c8;
 }
+
 .bg-custom-tr {
   background-color: rgba(0, 0, 0, 0.089);
   color: black;

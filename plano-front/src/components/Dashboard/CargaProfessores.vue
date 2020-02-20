@@ -369,19 +369,23 @@
     </b-modal>
 
     <!-- Modals do botão para escolher docentes -->
-    <b-modal id="modalDocentes" ref="DocentesModal" scrollable title="Selecione os docentes">
+    <b-modal id="modalDocentes" 
+            ref="DocentesModal" 
+            scrollable title="Selecione os docentes"
+            :size="'sm'"
+            >
       <div
-              class="form-group col m-0 p-0 border"
-              style="height: 395px; width:max-content; border-color: rgba(0,0,0,0.125);"
+              class="form-group col m-0 p-0"
+              style="height: 302px; width:max-content; border-color: rgba(0,0,0,0.125);"
       >
-        <table class="table table-sm modal-table" style="max-height: 392px !important;">
+        <table class="table table-sm modal-table border " style="max-height: 302px !important;  overflow-x: hidden !important;">
           <tr>
-            <div style="width: max-content; font-size: 11px!important">
-              <th class="border-0">
-                <p style="width:25px" class="p-header"></p>
+            <div class="p-0" style="width: max-content; font-size: 11px!important; height: 18px">
+              <th class="border-0 p-0">
+                <p style="width:30px; height: 18px !important;" class="p-header"></p>
               </th>
-              <th class="border-0">
-                <p class="p-header" style="width: 424px; text-align:start">Nome</p>
+              <th class="border-0 p-0">
+                <p class="p-header" style="width: 225px; text-align:start; height: 18px !important">Nome</p>
               </th>
             </div>
           </tr>
@@ -389,7 +393,7 @@
           <tr v-for="docente in Professores" :key="`docente${docente.id}`">
             <div style="width: max-content">
               <td style="padding:0;broder:0;margin:0!important;">
-                <div style="width:25px;">
+                <div style="width:30px; height: 22px !important;">
                   <input
                           type="checkbox"
                           v-model="DocentesSelecionados"
@@ -399,7 +403,7 @@
                 </div>
               </td>
               <td>
-                <p style="width:424px; text-align:start">{{docente.apelido}}</p>
+                <p style="width:225px; text-align:start">{{docente.apelido}}</p>
               </td>
             </div>
           </tr>
@@ -408,7 +412,7 @@
       </div>
 
       <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
-        <div class="w-100 ml-2">
+        <div class="w-100 d-flex">
           <b-button
                   class="btn-azul btn-df mr-2"
                   variant="success"
@@ -712,19 +716,21 @@ tbody {
 }
 table td {
   text-align: center;
-  vertical-align: middle;
+  vertical-align: middle !important;
   padding: 0 !important;
-  border: none;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
-.linhas {
+/* .linhas {
   border-top: 1px solid #dee2e6;
-}
+} */
 table p {
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
   text-align: center;
   padding-left: 2px;
   padding-right: 2px;
 }
+
 /* texto maiusculo */
 .toUpperCase {
   text-transform: uppercase;
@@ -745,6 +751,18 @@ table select {
 table input {
   height: 18px !important;
   text-align: center !important;
+}
+table input[type="checkbox"] {
+  margin-left: 0 !important;
+  margin-top: 4px !important;
+}
+.modal-table {
+  display: block !important;
+  overflow: auto !important;
+  font-size: 10px !important;
+  font-weight: normal !important;
+  background-color: white;
+  margin: 0 !important;
 }
 .sticky {
   position: sticky;

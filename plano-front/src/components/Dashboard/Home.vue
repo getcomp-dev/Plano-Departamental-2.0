@@ -36,14 +36,10 @@
             </li>
             <li class="list-group-item">
               <strong>
-                <router-link :to="{ name: 'cargaPos' }">Tabela Pós:</router-link>
+                <router-link :to="{ name: 'cargaPos' }">Creditação Pós:</router-link>
               </strong> Tela onde localiza-se uma tabela com as cargas horárias de cada docente encarregado das bolsas de pós-graduação.
             </li>
-            <li class="list-group-item">
-              <strong>
-                <router-link :to="{ name: 'horarios' }">Horarios:</router-link>
-              </strong> Página onde listam-se os horarios dos cursos do DCC, permitindo filtragem por semestres e cursos.
-            </li>
+            
           </ul>
         </div>
         <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3">
@@ -62,12 +58,18 @@
             </li>
             <li class="list-group-item">
               <strong>
+                <router-link :to="{ name: 'horarios' }">Horários - Cursos:</router-link>
+              </strong> Página onde listam-se os horarios dos cursos do DCC, permitindo filtragem por semestres e cursos.
+            </li>
+            
+            <!-- <li class="list-group-item">
+              <strong>
                 <router-link :to="{ name: 'horariosResumo' }">Horários - Resumo:</router-link>
               </strong> Listagem resumida dos horários de todos os cursos do DCC.
-            </li>
+            </li> -->
             <li class="list-group-item">
               <strong>
-                <router-link :to="{ name: 'laboratoriosAlocacao' }">Alocação - Laboratórios:</router-link>
+                <router-link :to="{ name: 'laboratoriosAlocacao' }">Horários - Laboratórios:</router-link>
               </strong> Lista as alocações dos laboratórios em ambos os semestres.
             </li>
             <li class="list-group-item">
@@ -107,7 +109,7 @@
             </li>
             <li class="list-group-item">
               <strong>
-                <router-link :to="{ name: 'disciplinas' }">Disciplina:</router-link>
+                <router-link :to="{ name: 'disciplinas' }">Disciplinas:</router-link>
               </strong> Listagem de disciplinas de todos os departamentos cadastrados no sistema. Permite a alteração de nome, código, carga teórica e pratica,
               perfis e também define se é EAD ou não.
             </li>

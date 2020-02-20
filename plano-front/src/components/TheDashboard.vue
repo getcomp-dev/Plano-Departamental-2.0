@@ -110,11 +110,7 @@
                     <i class="fas fa-clipboard"></i> Creditação Pós
                   </router-link>
                 </li>
-                <li v-if="Admin" @click="show=false" class="nav-item">
-                  <router-link :to="{ name: 'horarios' }" class="nav-link">
-                    <i class="fas fa-calendar-alt"></i> Horários
-                  </router-link>
-                </li>
+                
                 <!--<li v-if="Admin" @click="show=false" class="nav-item">
                   <router-link :to="{ name: 'turmas' }" class="nav-link">
                     <i class="fas fa-bars"></i> Turmas
@@ -138,9 +134,14 @@
                     <i class="fas fa-clipboard"></i> Horários - Resumo
                   </router-link>
                 </li>-->
+                <li v-if="Admin" @click="show=false" class="nav-item">
+                  <router-link :to="{ name: 'horarios' }" class="nav-link">
+                    <i class="fas fa-calendar-alt"></i> Horários - Cursos
+                  </router-link>
+                </li>
                 <li @click="show=false" class="nav-item">
                   <router-link :to="{ name: 'laboratoriosAlocacao' }" class="nav-link">
-                    <i class="fas fa-clipboard"></i> Alocação - Laboratórios
+                    <i class="fas fa-calendar-alt"></i> Horários - Laboratórios
                   </router-link>
                 </li>
                 <li @click="show=false" class="nav-item">

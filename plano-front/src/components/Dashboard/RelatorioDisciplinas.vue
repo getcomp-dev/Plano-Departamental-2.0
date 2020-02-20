@@ -181,14 +181,14 @@
             >
                 <table class="table table-sm modal-table" style="max-height: 392px !important;">
                     <tr>
-                        <div style="width: max-content; font-size: 11px!important">
-                            <th class="border-0">
+                        <div style="width: max-content; height: 18px !important; font-size: 11px!important">
+                            <th class="border-0 p-0">
                                 <p style="width:25px" class="p-header"></p>
                             </th>
-                            <th class="border-0">
+                            <th class="border-0 p-0">
                                 <p class="p-header" style="width: 80px; text-align:start">Cod.</p>
                             </th>
-                            <th class="border-0">
+                            <th class="border-0 p-0">
                                 <p class="p-header" style="width: 424px; text-align:start">Nome</p>
                             </th>
                         </div>
@@ -339,7 +339,7 @@
         margin: 0;
         font-size: 11px;
         text-align: center;
-        height: 18px;
+        height: 18px !important;
     }
     .divTable {
         overflow: hidden;
@@ -368,11 +368,10 @@
         text-align: center;
         vertical-align: middle;
         padding: 0 !important;
-        border: none;
     }
-    .linhas {
+    /* .linhas {
         border-top: 1px solid #dee2e6;
-    }
+    } */
     table p {
         margin-bottom: 0;
         text-align: center;
@@ -399,6 +398,18 @@
     table input {
         height: 18px !important;
         text-align: center !important;
+    }
+    table input[type="checkbox"] {
+        margin-left: 0 !important;
+        margin-top: 4px !important;
+    }
+    .modal-table {
+        display: block !important;
+        overflow: auto !important;
+        font-size: 10px !important;
+        font-weight: normal !important;
+        background-color: white;
+        margin: 0 !important;
     }
     .sticky {
         position: sticky;

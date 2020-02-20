@@ -6,17 +6,13 @@
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="titulo col-xl-2 col-md-2 col-sm-2 col-4 px-0 pr-1">Horários</h1>
-
+        <h1 class="titulo col-xl-3 col-lg-3 col-md-4 col-sm-5 col-5 px-0 pr-1">Horários - Cursos</h1>
         <div
-          class="form-group col-xl-10 col-md-10 col-sm-10 col-8 mb-0 p-0"
+          class="form-group col-xl-9 col-lg-9 col-md-8 col-sm-7 col-7 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
           <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
-            <select
-              class="form-control form-control-sm"
-              v-model="periodo"
-            >
+            <select class="form-control form-control-sm" v-model="periodo">
               <option value="1">Primeiro</option>
               <option value="2">Segundo</option>
               <option value="3">Ambos</option>
@@ -25,7 +21,7 @@
               <label class="input-group-text">Semestre</label>
             </div>
           </div>
-          <div class="d-flex">
+          <div class="d-flex p-0 m-0">
             <b-button v-b-modal.modalCursos title="Cursos" class="cancelbtn">
               <i class="fas fa-graduation-cap"></i>
             </b-button>
@@ -45,86 +41,80 @@
 
     <div class="w-100 mb-2 border-bottom"></div>
 
-    <div class="p-0 m-0 w-100">
-      <div class="tabelas p-0" style="margin-right: -8px!important;">
-        <!-- -------------------------------------------- 1º periodo ----------------------------------------- -->
-        <template v-if="this.cursos.length != 0 && (periodo==1 || periodo==3)">
-          <h3
-            class="title"
-            style="font-weight: bold; font-size: 18px; text-align: center !important;"
-          >1º SEMESTRE</h3>
-          <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
-          <template v-if="activeCCD">
-            <!-- passar o nome do curso pra dentro da tabela -->
-            <h4>Ciência da Computação Diurno</h4>
+    <div class="p-0 w-100 col-12">
+      <!-- -------------------------------------------- 1º periodo ----------------------------------------- -->
+      <template v-if="this.cursos.length != 0 && (periodo == 1 || periodo == 3)">
+        <h3 class="title px-2" style="background-color: rgba(0, 0, 0, 0.089);">1º SEMESTRE</h3>
+        <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
 
+        <template v-if="activeCCD">
+          <!-- passar o nome do curso pra dentro da tabela -->
+          <h4>Ciência da Computação Diurno</h4>
+          <!-- Para centralizar a tabela:
+            <div class="flex-container">
+              <curso-diurno :Curso="ativos1.CCD"></curso-diurno>
+          </div>-->
           <curso-diurno :Curso="ativos1.CCD"></curso-diurno>
-          </template>
-          <!-- -------------------------------------------- EC ----------------------------------------- -->
-          <template v-if="activeEC">
-            <h4>Engenharia Computacional</h4>
+        </template>
+        <!-- -------------------------------------------- EC ----------------------------------------- -->
+        <template v-if="activeEC">
+          <h4>Engenharia Computacional</h4>
 
           <curso-diurno :Curso="ativos1.EC"></curso-diurno>
-          </template>
-          <!-- -------------------------------------------- CC Noturno ----------------------------------------- -->
-          <template v-if="activeCCN">
-            <h4>Ciência da Computação Noturno</h4>
+        </template>
+        <!-- -------------------------------------------- CC Noturno ----------------------------------------- -->
+        <template v-if="activeCCN">
+          <h4>Ciência da Computação Noturno</h4>
 
           <curso-noturno :Curso="ativos1.CCN"></curso-noturno>
-          </template>
-          <!-- -------------------------------------------- SI ----------------------------------------- -->
-          <template v-if="activeSI">
-            <h4>Sistemas de Informação</h4>
+        </template>
+        <!-- -------------------------------------------- SI ----------------------------------------- -->
+        <template v-if="activeSI">
+          <h4>Sistemas de Informação</h4>
 
           <curso-noturno :Curso="ativos1.SI"></curso-noturno>
-          </template>
-          <!-- -------------------------------------------- Eletivas ----------------------------------------- -->
-          <template v-if="activeEletivas">
-            <h4>Eletivas</h4>
-          <horario-eletivas :Eletivas="ativos1.Eletivas"></horario-eletivas>
-          </template>
-
         </template>
+        <!-- -------------------------------------------- Eletivas ----------------------------------------- -->
+        <template v-if="activeEletivas">
+          <h4>Eletivas</h4>
+          <horario-eletivas :Eletivas="ativos1.Eletivas"></horario-eletivas>
+        </template>
+      </template>
 
-        <!-- -------------------------------------------- 2º periodo ----------------------------------------- -->
-        <template v-if="this.cursos.length != 0 && (periodo==2 || periodo==3)">
-          <h3
-            class="title"
-            style="font-weight: bold; font-size: 18px; text-align: center !important;"
-          >2º SEMESTRE</h3>
-          <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
-          <template v-if="activeCCD">
-            <h4>Ciência da Computação Diurno</h4>
+      <!-- -------------------------------------------- 2º periodo ----------------------------------------- -->
+      <template v-if="this.cursos.length != 0 && (periodo == 2 || periodo == 3)">
+        <h3 class="title px-2" style="background-color: rgba(0, 0, 0, 0.089)">2º SEMESTRE</h3>
+        <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
+        <template v-if="activeCCD">
+          <h4>Ciência da Computação Diurno</h4>
 
           <curso-diurno :Curso="ativos2.CCD"></curso-diurno>
-          </template>
-          <!-- -------------------------------------------- EC ----------------------------------------- -->
-          <template v-if="activeEC">
-            <h4>Engenharia Computacional</h4>
+        </template>
+        <!-- -------------------------------------------- EC ----------------------------------------- -->
+        <template v-if="activeEC">
+          <h4>Engenharia Computacional</h4>
 
           <curso-diurno :Curso="ativos2.EC"></curso-diurno>
-          </template>
-          <!-- -------------------------------------------- CC Noturno ----------------------------------------- -->
-          <template v-if="activeCCN">
-            <h4>Ciência da Computação Noturno</h4>
+        </template>
+        <!-- -------------------------------------------- CC Noturno ----------------------------------------- -->
+        <template v-if="activeCCN">
+          <h4>Ciência da Computação Noturno</h4>
 
           <curso-noturno :Curso="ativos2.CCN"></curso-noturno>
-          </template>
-          <!-- -------------------------------------------- SI ----------------------------------------- -->
-          <template v-if="activeSI">
-            <h4>Sistemas de Informação</h4>
+        </template>
+        <!-- -------------------------------------------- SI ----------------------------------------- -->
+        <template v-if="activeSI">
+          <h4>Sistemas de Informação</h4>
 
           <curso-noturno :Curso="ativos2.SI"></curso-noturno>
-          </template>
-          <!-- -------------------------------------------- Eletivas ----------------------------------------- -->
-          <template v-if="activeEletivas">
-            <h4>Eletivas</h4>
-          <horario-eletivas :Eletivas="ativos2.Eletivas"></horario-eletivas>
-          </template>
-
         </template>
-        <!-- ----------------------------------------------------------------------------------------------- -->
-      </div>
+        <!-- -------------------------------------------- Eletivas ----------------------------------------- -->
+        <template v-if="activeEletivas">
+          <h4>Eletivas</h4>
+          <horario-eletivas :Eletivas="ativos2.Eletivas"></horario-eletivas>
+        </template>
+      </template>
+      <!-- ----------------------------------------------------------------------------------------------- -->
     </div>
 
     <b-modal
@@ -139,7 +129,7 @@
       <div class="col m-0 p-0 border" style="width:max-content; border-color: rgba(0,0,0,0.125);">
         <table class="table table-sm modal-table">
           <tr>
-            <div style="font-size: 11px!important">
+            <div style="font-size: 11px!important; height: 18px !important">
               <th class="border-0">
                 <p style="width:20px" class="p-header"></p>
               </th>
@@ -153,8 +143,8 @@
           </tr>
           <tbody>
             <!-- v-for em tr -->
-            <tr v-for="curso in options_Cursos" :key="'curso-id-'+curso.value">
-              <div style="width: max-content">
+            <tr v-for="curso in options_Cursos" :key="'curso-id-' + curso.value">
+              <div style="width: max-content; height: 22px !important">
                 <td>
                   <div style="width:20px;">
                     <input
@@ -167,10 +157,10 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:40px; text-align:center">{{curso.codigo.toUpperCase()}}</p>
+                  <p style="width:40px; text-align:center;">{{ curso.codigo.toUpperCase() }}</p>
                 </td>
                 <td>
-                  <p style="width:200px; text-align:start">{{curso.nome}}</p>
+                  <p style="width:200px; text-align:start;">{{ curso.nome }}</p>
                 </td>
               </div>
             </tr>
@@ -204,13 +194,9 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para exibir conteúdo na tela:</strong> No cartão à direita, selecione o(s) semestre(s), em
-            seguida o(s) curso(s) que deseja ver e clique em Confirmar
-            <i
-              class="fas fa-check addbtn px-1"
-              style="font-size:12px"
-            ></i>
-            .
+            <strong>Para exibir conteúdo na tela:</strong> Clique em Cursos
+            <i class="fas fa-graduation-cap cancelbtn" style="font-size: 12px"></i>
+            e selecione quais deseja visualizar, em seguida confirme em OK.
           </li>
         </ul>
       </div>
@@ -235,11 +221,31 @@ export default {
       cursosSelecionados: [],
       error: undefined,
       options_Cursos: [
-        { nome: "CIÊNCIA DA COMPUTAÇÃO DIURNO", value: 1, codigo: "65C" },
-        { nome: "ENGENHARIA DA COMPUTAÇÃO", value: 4, codigo: "65B" },
-        { nome: "CIÊNCIA DA COMPUTAÇÃO NOTURNO", value: 2, codigo: "35A" },
-        { nome: "SISTEMAS DE INFORMAÇÃO", value: 3, codigo: "76A" },
-        { nome: "ELETIVAS", value: 5, codigo: "-" }
+        {
+          nome: "CIÊNCIA DA COMPUTAÇÃO DIURNO",
+          value: 1,
+          codigo: "65C"
+        },
+        {
+          nome: "ENGENHARIA DA COMPUTAÇÃO",
+          value: 4,
+          codigo: "65B"
+        },
+        {
+          nome: "CIÊNCIA DA COMPUTAÇÃO NOTURNO",
+          value: 2,
+          codigo: "35A"
+        },
+        {
+          nome: "SISTEMAS DE INFORMAÇÃO",
+          value: 3,
+          codigo: "76A"
+        },
+        {
+          nome: "ELETIVAS",
+          value: 5,
+          codigo: "-"
+        }
       ],
       evenCCN: "false",
       evenCCD: "false",
@@ -262,7 +268,7 @@ export default {
         Eletivas: []
       },
       selectAll: false,
-      periodo: 1,
+      periodo: 3
     };
   },
 
@@ -271,7 +277,7 @@ export default {
     cursoNoturno,
     horarioEletivas
   },
-    beforeMount: function() {
+  beforeMount: function() {
     this.createHorarios1();
     this.createHorarios2();
   },
@@ -291,7 +297,8 @@ export default {
       }
     },
     toggleAll() {
-      if (this.cursosSelecionados.length !== 5) this.cursosSelecionados = [1, 2, 3, 4, 5];
+      if (this.cursosSelecionados.length !== 5)
+        this.cursosSelecionados = [1, 2, 3, 4, 5];
     },
     isEven(number) {
       if (number % 2 === 0) return "true";
@@ -299,7 +306,7 @@ export default {
     },
 
     okBtn() {
-      this.cursos = [...this.cursosSelecionados]
+      this.cursos = [...this.cursosSelecionados];
       this.$refs.modalCursos.hide();
     },
 
@@ -334,7 +341,7 @@ export default {
         return true;
       } else return false;
     },
-    
+
     createHorarios1: function() {
       var grade;
       var grades;
@@ -373,392 +380,384 @@ export default {
       }
 
       //CCD
-        grades = _.filter(this.$store.state.grade.Grades, ["Curso", 4]);
-        grades = _.orderBy(grades, "periodoInicio", "desc");
-        pedidos = [];
-        for (var t in this.$store.state.pedido.Pedidos) {
-          for (var pedido in this.$store.state.pedido.Pedidos[t]) {
-            if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 4) {
-              pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
-            }
+      grades = _.filter(this.$store.state.grade.Grades, ["Curso", 4]);
+      grades = _.orderBy(grades, "periodoInicio", "desc");
+      pedidos = [];
+      for (var t in this.$store.state.pedido.Pedidos) {
+        for (var pedido in this.$store.state.pedido.Pedidos[t]) {
+          if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 4) {
+            pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
           }
         }
-        pedidosExternos = [];
-        for (let t in this.$store.state.pedidoExterno.Pedidos) {
-          for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
-            if (
-              this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 4
-            ) {
-              pedidosExternos.push(
-                this.$store.state.pedidoExterno.Pedidos[t][pedido]
-              );
-            }
+      }
+      pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 4) {
+            pedidosExternos.push(
+              this.$store.state.pedidoExterno.Pedidos[t][pedido]
+            );
           }
         }
+      }
 
-        for (var i = 0; i < grades.length && inicio <= 10; i++) {
-          //grade
-          grade = grades[i].id;
-          //inicio
-          if (i === 0) inicio = 1;
-          else inicio = fim + 1;
-          //fim
-          if (i + 1 === grades.length) fim = 10;
-          else if (i == 0)
-            fim =
-              1 +
-              2 *
-                (parseInt(anoAtual, 10) -
-                  parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
-              (parseInt(semestreAtual, 10) -
-                parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
-                2;
-          else
-            fim =
-              inicio -
-              1 +
-              2 *
-                (parseInt(grades[i - 1].periodoInicio.slice(0, 4), 10) -
-                  parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
-              (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
-                parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
-                2;
-          for (var k = 0; k < disciplinaGrades.length; k++) {
-            if (
-              disciplinaGrades[k].Grade == grade &&
-              this.isEven(disciplinaGrades[k].periodo) == this.evenCCD &&
-              disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
-              disciplinaGrades[k].periodo <= parseInt(fim, 10)
-            ) {
-              for (var j = 0; j < turmas.length; j++) {
-                if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                  for (var p = 0; p < pedidos.length; p++) {
-                    if (
-                      pedidos[p].vagasPeriodizadas > 0 &&
-                      pedidos[p].Turma == turmas[j].id
-                    ) {
-                      this.ativos1.CCD[disciplinaGrades[k].periodo - 1].push(
-                        turmas[j]
-                      );
-                    }
-                  }
-                }
-              }
-              for (var j = 0; j < turmasExternas.length; j++) {
-                if (
-                  turmasExternas[j].periodo == 1 &&
-                  turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
-                ) {
-                  for (var p = 0; p < pedidosExternos.length; p++) {
-                    if (
-                      pedidosExternos[p].vagasPeriodizadas > 0 &&
-                      pedidosExternos[p].Turma == turmasExternas[j].id
-                    ) {
-                      this.ativos1.CCD[disciplinaGrades[k].periodo - 1].push(
-                        turmasExternas[j]
-                      );
-                    }
+      for (var i = 0; i < grades.length && inicio <= 10; i++) {
+        //grade
+        grade = grades[i].id;
+        //inicio
+        if (i === 0) inicio = 1;
+        else inicio = fim + 1;
+        //fim
+        if (i + 1 === grades.length) fim = 10;
+        else if (i == 0)
+          fim =
+            1 +
+            2 *
+              (parseInt(anoAtual, 10) -
+                parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (parseInt(semestreAtual, 10) -
+              parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
+              2;
+        else
+          fim =
+            inicio -
+            1 +
+            2 *
+              (parseInt(grades[i - 1].periodoInicio.slice(0, 4), 10) -
+                parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
+              parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
+              2;
+        for (var k = 0; k < disciplinaGrades.length; k++) {
+          if (
+            disciplinaGrades[k].Grade == grade &&
+            this.isEven(disciplinaGrades[k].periodo) == this.evenCCD &&
+            disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
+            disciplinaGrades[k].periodo <= parseInt(fim, 10)
+          ) {
+            for (var j = 0; j < turmas.length; j++) {
+              if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                for (var p = 0; p < pedidos.length; p++) {
+                  if (
+                    pedidos[p].vagasPeriodizadas > 0 &&
+                    pedidos[p].Turma == turmas[j].id
+                  ) {
+                    this.ativos1.CCD[disciplinaGrades[k].periodo - 1].push(
+                      turmas[j]
+                    );
                   }
                 }
               }
             }
-          }
-        }
-      
-        //CCN
-        grades = _.filter(this.$store.state.grade.Grades, ["Curso", 1]);
-        grades = _.orderBy(grades, "periodoInicio", "desc");
-        pedidos = [];
-        for (var t in this.$store.state.pedido.Pedidos) {
-          for (var pedido in this.$store.state.pedido.Pedidos[t]) {
-            if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 1) {
-              pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
-            }
-          }
-        }
-        pedidosExternos = [];
-        for (let t in this.$store.state.pedidoExterno.Pedidos) {
-          for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
-            if (
-              this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 1
-            ) {
-              pedidosExternos.push(
-                this.$store.state.pedidoExterno.Pedidos[t][pedido]
-              );
-            }
-          }
-        }
-        for (var i = 0; i < grades.length && inicio <= 10; i++) {
-          //grade
-          grade = grades[i].id;
-          //inicio
-          if (i === 0) inicio = 1;
-          else inicio = fim + 1;
-          //fim
-          if (i + 1 === grades.length) fim = 10;
-          else if (i == 0)
-            fim =
-              1 +
-              2 *
-                (parseInt(anoAtual, 10) -
-                  parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
-              (parseInt(semestreAtual, 10) -
-                parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
-                2;
-          else
-            fim =
-              inicio -
-              1 +
-              2 *
-                (parseInt(grades[i - 1].periodoInicio.slice(0, 4), 10) -
-                  parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
-              (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
-                parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
-                2;
-          for (var k = 0; k < disciplinaGrades.length; k++) {
-            if (
-              disciplinaGrades[k].Grade == grade &&
-              this.isEven(disciplinaGrades[k].periodo) == this.evenCCN &&
-              disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
-              disciplinaGrades[k].periodo <= parseInt(fim, 10)
-            ) {
-              for (var j = 0; j < turmas.length; j++) {
-                if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                  for (var p = 0; p < pedidos.length; p++) {
-                    if (
-                      pedidos[p].vagasPeriodizadas > 0 &&
-                      pedidos[p].Turma == turmas[j].id
-                    ) {
-                      this.ativos1.CCN[disciplinaGrades[k].periodo - 1].push(
-                        turmas[j]
-                      );
-                    }
-                  }
-                }
-              }
-              for (var j = 0; j < turmasExternas.length; j++) {
-                if (
-                  turmasExternas[j].periodo == 1 &&
-                  turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
-                ) {
-                  for (var p = 0; p < pedidosExternos.length; p++) {
-                    if (
-                      pedidosExternos[p].vagasPeriodizadas > 0 &&
-                      pedidosExternos[p].Turma == turmasExternas[j].id
-                    ) {
-                      this.ativos1.CCN[disciplinaGrades[k].periodo - 1].push(
-                        turmasExternas[j]
-                      );
-                    }
+            for (var j = 0; j < turmasExternas.length; j++) {
+              if (
+                turmasExternas[j].periodo == 1 &&
+                turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
+              ) {
+                for (var p = 0; p < pedidosExternos.length; p++) {
+                  if (
+                    pedidosExternos[p].vagasPeriodizadas > 0 &&
+                    pedidosExternos[p].Turma == turmasExternas[j].id
+                  ) {
+                    this.ativos1.CCD[disciplinaGrades[k].periodo - 1].push(
+                      turmasExternas[j]
+                    );
                   }
                 }
               }
             }
           }
         }
-      
+      }
+
+      //CCN
+      grades = _.filter(this.$store.state.grade.Grades, ["Curso", 1]);
+      grades = _.orderBy(grades, "periodoInicio", "desc");
+      pedidos = [];
+      for (var t in this.$store.state.pedido.Pedidos) {
+        for (var pedido in this.$store.state.pedido.Pedidos[t]) {
+          if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 1) {
+            pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
+          }
+        }
+      }
+      pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 1) {
+            pedidosExternos.push(
+              this.$store.state.pedidoExterno.Pedidos[t][pedido]
+            );
+          }
+        }
+      }
+      for (var i = 0; i < grades.length && inicio <= 10; i++) {
+        //grade
+        grade = grades[i].id;
+        //inicio
+        if (i === 0) inicio = 1;
+        else inicio = fim + 1;
+        //fim
+        if (i + 1 === grades.length) fim = 10;
+        else if (i == 0)
+          fim =
+            1 +
+            2 *
+              (parseInt(anoAtual, 10) -
+                parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (parseInt(semestreAtual, 10) -
+              parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
+              2;
+        else
+          fim =
+            inicio -
+            1 +
+            2 *
+              (parseInt(grades[i - 1].periodoInicio.slice(0, 4), 10) -
+                parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
+              parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
+              2;
+        for (var k = 0; k < disciplinaGrades.length; k++) {
+          if (
+            disciplinaGrades[k].Grade == grade &&
+            this.isEven(disciplinaGrades[k].periodo) == this.evenCCN &&
+            disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
+            disciplinaGrades[k].periodo <= parseInt(fim, 10)
+          ) {
+            for (var j = 0; j < turmas.length; j++) {
+              if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                for (var p = 0; p < pedidos.length; p++) {
+                  if (
+                    pedidos[p].vagasPeriodizadas > 0 &&
+                    pedidos[p].Turma == turmas[j].id
+                  ) {
+                    this.ativos1.CCN[disciplinaGrades[k].periodo - 1].push(
+                      turmas[j]
+                    );
+                  }
+                }
+              }
+            }
+            for (var j = 0; j < turmasExternas.length; j++) {
+              if (
+                turmasExternas[j].periodo == 1 &&
+                turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
+              ) {
+                for (var p = 0; p < pedidosExternos.length; p++) {
+                  if (
+                    pedidosExternos[p].vagasPeriodizadas > 0 &&
+                    pedidosExternos[p].Turma == turmasExternas[j].id
+                  ) {
+                    this.ativos1.CCN[disciplinaGrades[k].periodo - 1].push(
+                      turmasExternas[j]
+                    );
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
 
       //SI
-        grades = _.filter(this.$store.state.grade.Grades, ["Curso", 3]);
-        grades = _.orderBy(grades, "periodoInicio", "desc");
-        pedidos = [];
-        for (var t in this.$store.state.pedido.Pedidos) {
-          for (var pedido in this.$store.state.pedido.Pedidos[t]) {
-            if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 3) {
-              pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
-            }
+      grades = _.filter(this.$store.state.grade.Grades, ["Curso", 3]);
+      grades = _.orderBy(grades, "periodoInicio", "desc");
+      pedidos = [];
+      for (var t in this.$store.state.pedido.Pedidos) {
+        for (var pedido in this.$store.state.pedido.Pedidos[t]) {
+          if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 3) {
+            pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
           }
         }
-        pedidosExternos = [];
-        for (let t in this.$store.state.pedidoExterno.Pedidos) {
-          for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
-            if (
-              this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 3
-            ) {
-              pedidosExternos.push(
-                this.$store.state.pedidoExterno.Pedidos[t][pedido]
-              );
-            }
+      }
+      pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 3) {
+            pedidosExternos.push(
+              this.$store.state.pedidoExterno.Pedidos[t][pedido]
+            );
           }
         }
-        for (var i = 0; i < grades.length && inicio <= 10; i++) {
-          //grade
-          grade = grades[i].id;
-          //inicio
-          if (i === 0) inicio = 1;
-          else inicio = fim + 1;
-          //fim
-          if (i + 1 === grades.length) fim = 10;
-          else if (i == 0)
-            fim =
-              1 +
-              2 *
-                (parseInt(anoAtual, 10) -
-                  parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
-              (parseInt(semestreAtual, 10) -
-                parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
-                2;
-          else
-            fim =
-              inicio -
-              1 +
-              2 *
-                (parseInt(grades[i - 1].periodoInicio.slice(0, 4), 10) -
-                  parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
-              (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
-                parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
-                2;
-          for (var k = 0; k < disciplinaGrades.length; k++) {
-            if (
-              disciplinaGrades[k].Grade == grade &&
-              this.isEven(disciplinaGrades[k].periodo) == this.evenSI &&
-              disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
-              disciplinaGrades[k].periodo <= parseInt(fim, 10)
-            ) {
-              for (var j = 0; j < turmas.length; j++) {
-                if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                  for (var p = 0; p < pedidos.length; p++) {
-                    if (
-                      pedidos[p].vagasPeriodizadas > 0 &&
-                      pedidos[p].Turma == turmas[j].id
-                    ) {
-                      this.ativos1.SI[disciplinaGrades[k].periodo - 1].push(
-                        turmas[j]
-                      );
-                    }
-                  }
-                }
-              }
-              for (var j = 0; j < turmasExternas.length; j++) {
-                if (
-                  turmasExternas[j].periodo == 1 &&
-                  turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
-                ) {
-                  for (var p = 0; p < pedidosExternos.length; p++) {
-                    if (
-                      pedidosExternos[p].vagasPeriodizadas > 0 &&
-                      pedidosExternos[p].Turma == turmasExternas[j].id
-                    ) {
-                      this.ativos1.SI[disciplinaGrades[k].periodo - 1].push(
-                        turmasExternas[j]
-                      );
-                    }
+      }
+      for (var i = 0; i < grades.length && inicio <= 10; i++) {
+        //grade
+        grade = grades[i].id;
+        //inicio
+        if (i === 0) inicio = 1;
+        else inicio = fim + 1;
+        //fim
+        if (i + 1 === grades.length) fim = 10;
+        else if (i == 0)
+          fim =
+            1 +
+            2 *
+              (parseInt(anoAtual, 10) -
+                parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (parseInt(semestreAtual, 10) -
+              parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
+              2;
+        else
+          fim =
+            inicio -
+            1 +
+            2 *
+              (parseInt(grades[i - 1].periodoInicio.slice(0, 4), 10) -
+                parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
+              parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
+              2;
+        for (var k = 0; k < disciplinaGrades.length; k++) {
+          if (
+            disciplinaGrades[k].Grade == grade &&
+            this.isEven(disciplinaGrades[k].periodo) == this.evenSI &&
+            disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
+            disciplinaGrades[k].periodo <= parseInt(fim, 10)
+          ) {
+            for (var j = 0; j < turmas.length; j++) {
+              if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                for (var p = 0; p < pedidos.length; p++) {
+                  if (
+                    pedidos[p].vagasPeriodizadas > 0 &&
+                    pedidos[p].Turma == turmas[j].id
+                  ) {
+                    this.ativos1.SI[disciplinaGrades[k].periodo - 1].push(
+                      turmas[j]
+                    );
                   }
                 }
               }
             }
+            for (var j = 0; j < turmasExternas.length; j++) {
+              if (
+                turmasExternas[j].periodo == 1 &&
+                turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
+              ) {
+                for (var p = 0; p < pedidosExternos.length; p++) {
+                  if (
+                    pedidosExternos[p].vagasPeriodizadas > 0 &&
+                    pedidosExternos[p].Turma == turmasExternas[j].id
+                  ) {
+                    this.ativos1.SI[disciplinaGrades[k].periodo - 1].push(
+                      turmasExternas[j]
+                    );
+                  }
+                }
+              }
+            }
           }
         }
-      
+      }
 
       //Engenharia Computacional
-        grades = _.filter(this.$store.state.grade.Grades, ["Curso", 2]);
-        grades = _.orderBy(grades, "periodoInicio", "desc");
-        pedidos = [];
-        for (var t in this.$store.state.pedido.Pedidos) {
-          for (var pedido in this.$store.state.pedido.Pedidos[t]) {
-            if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 2) {
-              pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
-            }
+      grades = _.filter(this.$store.state.grade.Grades, ["Curso", 2]);
+      grades = _.orderBy(grades, "periodoInicio", "desc");
+      pedidos = [];
+      for (var t in this.$store.state.pedido.Pedidos) {
+        for (var pedido in this.$store.state.pedido.Pedidos[t]) {
+          if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 2) {
+            pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
           }
         }
-        pedidosExternos = [];
-        for (let t in this.$store.state.pedidoExterno.Pedidos) {
-          for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
-            if (
-              this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 2
-            ) {
-              pedidosExternos.push(
-                this.$store.state.pedidoExterno.Pedidos[t][pedido]
-              );
-            }
+      }
+      pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 2) {
+            pedidosExternos.push(
+              this.$store.state.pedidoExterno.Pedidos[t][pedido]
+            );
           }
         }
-        for (var i = 0; i < grades.length && inicio <= 10; i++) {
-          //grade
-          grade = grades[i].id;
-          //inicio
-          if (i === 0) inicio = 1;
-          else inicio = fim + 1;
-          //fim
-          if (i + 1 === grades.length) fim = 10;
-          else if (i == 0)
-            fim =
-              1 +
-              2 *
-                (parseInt(anoAtual, 10) -
-                  parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
-              (parseInt(semestreAtual, 10) -
-                parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
-                2;
-          else
-            fim =
-              inicio -
-              1 +
-              2 *
-                (parseInt(grades[i - 1].periodoInicio.slice(0, 4), 10) -
-                  parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
-              (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
-                parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
-                2;
-          for (var k = 0; k < disciplinaGrades.length; k++) {
-            if (
-              disciplinaGrades[k].Grade == grade &&
-              this.isEven(disciplinaGrades[k].periodo) == this.evenEC &&
-              disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
-              disciplinaGrades[k].periodo <= parseInt(fim, 10)
-            ) {
-              for (var j = 0; j < turmas.length; j++) {
-                if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                  for (var p = 0; p < pedidos.length; p++) {
-                    if (
-                      pedidos[p].vagasPeriodizadas > 0 &&
-                      pedidos[p].Turma == turmas[j].id
-                    ) {
-                      this.ativos1.EC[disciplinaGrades[k].periodo - 1].push(
-                        turmas[j]
-                      );
-                    }
-                  }
-                }
-              }
-              for (var j = 0; j < turmasExternas.length; j++) {
-                if (
-                  turmasExternas[j].periodo == 1 &&
-                  turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
-                ) {
-                  for (var p = 0; p < pedidosExternos.length; p++) {
-                    if (
-                      pedidosExternos[p].vagasPeriodizadas > 0 &&
-                      pedidosExternos[p].Turma == turmasExternas[j].id
-                    ) {
-                      this.ativos1.EC[disciplinaGrades[k].periodo - 1].push(
-                        turmasExternas[j]
-                      );
-                    }
+      }
+      for (var i = 0; i < grades.length && inicio <= 10; i++) {
+        //grade
+        grade = grades[i].id;
+        //inicio
+        if (i === 0) inicio = 1;
+        else inicio = fim + 1;
+        //fim
+        if (i + 1 === grades.length) fim = 10;
+        else if (i == 0)
+          fim =
+            1 +
+            2 *
+              (parseInt(anoAtual, 10) -
+                parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (parseInt(semestreAtual, 10) -
+              parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
+              2;
+        else
+          fim =
+            inicio -
+            1 +
+            2 *
+              (parseInt(grades[i - 1].periodoInicio.slice(0, 4), 10) -
+                parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
+              parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
+              2;
+        for (var k = 0; k < disciplinaGrades.length; k++) {
+          if (
+            disciplinaGrades[k].Grade == grade &&
+            this.isEven(disciplinaGrades[k].periodo) == this.evenEC &&
+            disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
+            disciplinaGrades[k].periodo <= parseInt(fim, 10)
+          ) {
+            for (var j = 0; j < turmas.length; j++) {
+              if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                for (var p = 0; p < pedidos.length; p++) {
+                  if (
+                    pedidos[p].vagasPeriodizadas > 0 &&
+                    pedidos[p].Turma == turmas[j].id
+                  ) {
+                    this.ativos1.EC[disciplinaGrades[k].periodo - 1].push(
+                      turmas[j]
+                    );
                   }
                 }
               }
             }
+            for (var j = 0; j < turmasExternas.length; j++) {
+              if (
+                turmasExternas[j].periodo == 1 &&
+                turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
+              ) {
+                for (var p = 0; p < pedidosExternos.length; p++) {
+                  if (
+                    pedidosExternos[p].vagasPeriodizadas > 0 &&
+                    pedidosExternos[p].Turma == turmasExternas[j].id
+                  ) {
+                    this.ativos1.EC[disciplinaGrades[k].periodo - 1].push(
+                      turmasExternas[j]
+                    );
+                  }
+                }
+              }
+            }
           }
         }
-      
+      }
+
       //Eletivas
       var eletiva = true;
-        for (var t = 0; t < turmas.length; t++) {
-          for (var d = 0; d < disciplinaGrades.length; d++) {
-            if (turmas[t].Disciplina === disciplinaGrades[d].Disciplina) {
-              eletiva = false;
-            }
-          }
-          if (eletiva) {
-            this.ativos1.Eletivas.push(turmas[t]);
-          } else {
-            eletiva = true;
+      for (var t = 0; t < turmas.length; t++) {
+        for (var d = 0; d < disciplinaGrades.length; d++) {
+          if (turmas[t].Disciplina === disciplinaGrades[d].Disciplina) {
+            eletiva = false;
           }
         }
+        if (eletiva) {
+          this.ativos1.Eletivas.push(turmas[t]);
+        } else {
+          eletiva = true;
+        }
+      }
 
-      this.$store.commit("redefinirAtivas1", { Ativas: this.ativos1 });
+      this.$store.commit("redefinirAtivas1", {
+        Ativas: this.ativos1
+      });
     },
 
     createHorarios2: function() {
@@ -799,393 +798,383 @@ export default {
       }
 
       //CC Diurno
-        grades = _.filter(this.$store.state.grade.Grades, ["Curso", 4]);
-        grades = _.orderBy(grades, "periodoInicio", "desc");
-        pedidos = [];
-        for (var t in this.$store.state.pedido.Pedidos) {
-          for (var pedido in this.$store.state.pedido.Pedidos[t]) {
-            if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 4) {
-              pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
-            }
+      grades = _.filter(this.$store.state.grade.Grades, ["Curso", 4]);
+      grades = _.orderBy(grades, "periodoInicio", "desc");
+      pedidos = [];
+      for (var t in this.$store.state.pedido.Pedidos) {
+        for (var pedido in this.$store.state.pedido.Pedidos[t]) {
+          if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 4) {
+            pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
           }
         }
-        pedidosExternos = [];
-        for (let t in this.$store.state.pedidoExterno.Pedidos) {
-          for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
-            if (
-              this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 4
-            ) {
-              pedidosExternos.push(
-                this.$store.state.pedidoExterno.Pedidos[t][pedido]
-              );
-            }
+      }
+      pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 4) {
+            pedidosExternos.push(
+              this.$store.state.pedidoExterno.Pedidos[t][pedido]
+            );
           }
         }
-        for (var i = 0; i < grades.length && inicio <= 10; i++) {
-          //grade
-          grade = grades[i].id;
-          //inicio
-          if (i === 0) inicio = 1;
-          else inicio = fim + 1;
-          //fim
-          if (i + 1 === grades.length) fim = 10;
-          else if (i == 0)
-            fim =
-              1 +
-              2 *
-                (parseInt(anoAtual, 10) -
-                  parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
-              (parseInt(semestreAtual, 10) -
-                parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
-                2;
-          else
-            fim =
-              inicio -
-              1 +
-              2 *
-                (parseInt(grades[i - 1].periodoInicio.slice(0, 4), 10) -
-                  parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
-              (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
-                parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
-                2;
-          for (var k = 0; k < disciplinaGrades.length; k++) {
-            if (
-              disciplinaGrades[k].Grade == grade &&
-              this.isEven(disciplinaGrades[k].periodo) == this.evenCCD &&
-              disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
-              disciplinaGrades[k].periodo <= parseInt(fim, 10)
-            ) {
-              for (var j = 0; j < turmas.length; j++) {
-                if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                  for (var p = 0; p < pedidos.length; p++) {
-                    if (
-                      pedidos[p].vagasPeriodizadas > 0 &&
-                      pedidos[p].Turma == turmas[j].id
-                    ) {
-                      this.ativos2.CCD[disciplinaGrades[k].periodo - 1].push(
-                        turmas[j]
-                      );
-                    }
-                  }
-                }
-              }
-              for (var j = 0; j < turmasExternas.length; j++) {
-                if (
-                  turmasExternas[j].periodo == 3 &&
-                  turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
-                ) {
-                  for (var p = 0; p < pedidosExternos.length; p++) {
-                    if (
-                      pedidosExternos[p].vagasPeriodizadas > 0 &&
-                      pedidosExternos[p].Turma == turmasExternas[j].id
-                    ) {
-                      this.ativos2.CCD[disciplinaGrades[k].periodo - 1].push(
-                        turmasExternas[j]
-                      );
-                    }
+      }
+      for (var i = 0; i < grades.length && inicio <= 10; i++) {
+        //grade
+        grade = grades[i].id;
+        //inicio
+        if (i === 0) inicio = 1;
+        else inicio = fim + 1;
+        //fim
+        if (i + 1 === grades.length) fim = 10;
+        else if (i == 0)
+          fim =
+            1 +
+            2 *
+              (parseInt(anoAtual, 10) -
+                parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (parseInt(semestreAtual, 10) -
+              parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
+              2;
+        else
+          fim =
+            inicio -
+            1 +
+            2 *
+              (parseInt(grades[i - 1].periodoInicio.slice(0, 4), 10) -
+                parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
+              parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
+              2;
+        for (var k = 0; k < disciplinaGrades.length; k++) {
+          if (
+            disciplinaGrades[k].Grade == grade &&
+            this.isEven(disciplinaGrades[k].periodo) == this.evenCCD &&
+            disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
+            disciplinaGrades[k].periodo <= parseInt(fim, 10)
+          ) {
+            for (var j = 0; j < turmas.length; j++) {
+              if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                for (var p = 0; p < pedidos.length; p++) {
+                  if (
+                    pedidos[p].vagasPeriodizadas > 0 &&
+                    pedidos[p].Turma == turmas[j].id
+                  ) {
+                    this.ativos2.CCD[disciplinaGrades[k].periodo - 1].push(
+                      turmas[j]
+                    );
                   }
                 }
               }
             }
+            for (var j = 0; j < turmasExternas.length; j++) {
+              if (
+                turmasExternas[j].periodo == 3 &&
+                turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
+              ) {
+                for (var p = 0; p < pedidosExternos.length; p++) {
+                  if (
+                    pedidosExternos[p].vagasPeriodizadas > 0 &&
+                    pedidosExternos[p].Turma == turmasExternas[j].id
+                  ) {
+                    this.ativos2.CCD[disciplinaGrades[k].periodo - 1].push(
+                      turmasExternas[j]
+                    );
+                  }
+                }
+              }
+            }
           }
         }
-      
+      }
 
       //CC Noturno
-        grades = _.filter(this.$store.state.grade.Grades, ["Curso", 1]);
-        grades = _.orderBy(grades, "periodoInicio", "desc");
-        pedidos = [];
-        for (var t in this.$store.state.pedido.Pedidos) {
-          for (var pedido in this.$store.state.pedido.Pedidos[t]) {
-            if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 1) {
-              pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
-            }
+      grades = _.filter(this.$store.state.grade.Grades, ["Curso", 1]);
+      grades = _.orderBy(grades, "periodoInicio", "desc");
+      pedidos = [];
+      for (var t in this.$store.state.pedido.Pedidos) {
+        for (var pedido in this.$store.state.pedido.Pedidos[t]) {
+          if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 1) {
+            pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
           }
         }
-        pedidosExternos = [];
-        for (let t in this.$store.state.pedidoExterno.Pedidos) {
-          for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
-            if (
-              this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 1
-            ) {
-              pedidosExternos.push(
-                this.$store.state.pedidoExterno.Pedidos[t][pedido]
-              );
-            }
+      }
+      pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 1) {
+            pedidosExternos.push(
+              this.$store.state.pedidoExterno.Pedidos[t][pedido]
+            );
           }
         }
-        for (var i = 0; i < grades.length && inicio <= 10; i++) {
-          //grade
-          grade = grades[i].id;
-          //inicio
-          if (i === 0) inicio = 1;
-          else inicio = fim + 1;
-          //fim
-          if (i + 1 === grades.length) fim = 10;
-          else if (i == 0)
-            fim =
-              1 +
-              2 *
-                (parseInt(anoAtual, 10) -
-                  parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
-              (parseInt(semestreAtual, 10) -
-                parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
-                2;
-          else
-            fim =
-              inicio -
-              1 +
-              2 *
-                (parseInt(grades[i - 1].periodoInicio.slice(0, 4), 10) -
-                  parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
-              (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
-                parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
-                2;
-          for (var k = 0; k < disciplinaGrades.length; k++) {
-            if (
-              disciplinaGrades[k].Grade == grade &&
-              this.isEven(disciplinaGrades[k].periodo) == this.evenCCN &&
-              disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
-              disciplinaGrades[k].periodo <= parseInt(fim, 10)
-            ) {
-              for (var j = 0; j < turmas.length; j++) {
-                if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                  for (var p = 0; p < pedidos.length; p++) {
-                    if (
-                      pedidos[p].vagasPeriodizadas > 0 &&
-                      pedidos[p].Turma == turmas[j].id
-                    ) {
-                      this.ativos2.CCN[disciplinaGrades[k].periodo - 1].push(
-                        turmas[j]
-                      );
-                    }
-                  }
-                }
-              }
-              for (var j = 0; j < turmasExternas.length; j++) {
-                if (
-                  turmasExternas[j].periodo == 3 &&
-                  turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
-                ) {
-                  for (var p = 0; p < pedidosExternos.length; p++) {
-                    if (
-                      pedidosExternos[p].vagasPeriodizadas > 0 &&
-                      pedidosExternos[p].Turma == turmasExternas[j].id
-                    ) {
-                      this.ativos2.CCN[disciplinaGrades[k].periodo - 1].push(
-                        turmasExternas[j]
-                      );
-                    }
+      }
+      for (var i = 0; i < grades.length && inicio <= 10; i++) {
+        //grade
+        grade = grades[i].id;
+        //inicio
+        if (i === 0) inicio = 1;
+        else inicio = fim + 1;
+        //fim
+        if (i + 1 === grades.length) fim = 10;
+        else if (i == 0)
+          fim =
+            1 +
+            2 *
+              (parseInt(anoAtual, 10) -
+                parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (parseInt(semestreAtual, 10) -
+              parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
+              2;
+        else
+          fim =
+            inicio -
+            1 +
+            2 *
+              (parseInt(grades[i - 1].periodoInicio.slice(0, 4), 10) -
+                parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
+              parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
+              2;
+        for (var k = 0; k < disciplinaGrades.length; k++) {
+          if (
+            disciplinaGrades[k].Grade == grade &&
+            this.isEven(disciplinaGrades[k].periodo) == this.evenCCN &&
+            disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
+            disciplinaGrades[k].periodo <= parseInt(fim, 10)
+          ) {
+            for (var j = 0; j < turmas.length; j++) {
+              if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                for (var p = 0; p < pedidos.length; p++) {
+                  if (
+                    pedidos[p].vagasPeriodizadas > 0 &&
+                    pedidos[p].Turma == turmas[j].id
+                  ) {
+                    this.ativos2.CCN[disciplinaGrades[k].periodo - 1].push(
+                      turmas[j]
+                    );
                   }
                 }
               }
             }
+            for (var j = 0; j < turmasExternas.length; j++) {
+              if (
+                turmasExternas[j].periodo == 3 &&
+                turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
+              ) {
+                for (var p = 0; p < pedidosExternos.length; p++) {
+                  if (
+                    pedidosExternos[p].vagasPeriodizadas > 0 &&
+                    pedidosExternos[p].Turma == turmasExternas[j].id
+                  ) {
+                    this.ativos2.CCN[disciplinaGrades[k].periodo - 1].push(
+                      turmasExternas[j]
+                    );
+                  }
+                }
+              }
+            }
           }
         }
-      
+      }
 
       //SI
-        grades = _.filter(this.$store.state.grade.Grades, ["Curso", 3]);
-        grades = _.orderBy(grades, "periodoInicio", "desc");
-        pedidos = [];
-        for (var t in this.$store.state.pedido.Pedidos) {
-          for (var pedido in this.$store.state.pedido.Pedidos[t]) {
-            if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 3) {
-              pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
-            }
+      grades = _.filter(this.$store.state.grade.Grades, ["Curso", 3]);
+      grades = _.orderBy(grades, "periodoInicio", "desc");
+      pedidos = [];
+      for (var t in this.$store.state.pedido.Pedidos) {
+        for (var pedido in this.$store.state.pedido.Pedidos[t]) {
+          if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 3) {
+            pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
           }
         }
-        pedidosExternos = [];
-        for (let t in this.$store.state.pedidoExterno.Pedidos) {
-          for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
-            if (
-              this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 3
-            ) {
-              pedidosExternos.push(
-                this.$store.state.pedidoExterno.Pedidos[t][pedido]
-              );
-            }
+      }
+      pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 3) {
+            pedidosExternos.push(
+              this.$store.state.pedidoExterno.Pedidos[t][pedido]
+            );
           }
         }
-        for (var i = 0; i < grades.length && inicio <= 10; i++) {
-          //grade
-          grade = grades[i].id;
-          //inicio
-          if (i === 0) inicio = 1;
-          else inicio = fim + 1;
-          //fim
-          if (i + 1 === grades.length) fim = 10;
-          else if (i == 0)
-            fim =
-              1 +
-              2 *
-                (parseInt(anoAtual, 10) -
-                  parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
-              (parseInt(semestreAtual, 10) -
-                parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
-                2;
-          else
-            fim =
-              inicio -
-              1 +
-              2 *
-                (parseInt(grades[i - 1].periodoInicio.slice(0, 4), 10) -
-                  parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
-              (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
-                parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
-                2;
-          for (var k = 0; k < disciplinaGrades.length; k++) {
-            if (
-              disciplinaGrades[k].Grade == grade &&
-              this.isEven(disciplinaGrades[k].periodo) == this.evenSI &&
-              disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
-              disciplinaGrades[k].periodo <= parseInt(fim, 10)
-            ) {
-              for (var j = 0; j < turmas.length; j++) {
-                if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                  for (var p = 0; p < pedidos.length; p++) {
-                    if (
-                      pedidos[p].vagasPeriodizadas > 0 &&
-                      pedidos[p].Turma == turmas[j].id
-                    ) {
-                      this.ativos2.SI[disciplinaGrades[k].periodo - 1].push(
-                        turmas[j]
-                      );
-                    }
-                  }
-                }
-              }
-              for (var j = 0; j < turmasExternas.length; j++) {
-                if (
-                  turmasExternas[j].periodo == 3 &&
-                  turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
-                ) {
-                  for (var p = 0; p < pedidosExternos.length; p++) {
-                    if (
-                      pedidosExternos[p].vagasPeriodizadas > 0 &&
-                      pedidosExternos[p].Turma == turmasExternas[j].id
-                    ) {
-                      this.ativos2.SI[disciplinaGrades[k].periodo - 1].push(
-                        turmasExternas[j]
-                      );
-                    }
+      }
+      for (var i = 0; i < grades.length && inicio <= 10; i++) {
+        //grade
+        grade = grades[i].id;
+        //inicio
+        if (i === 0) inicio = 1;
+        else inicio = fim + 1;
+        //fim
+        if (i + 1 === grades.length) fim = 10;
+        else if (i == 0)
+          fim =
+            1 +
+            2 *
+              (parseInt(anoAtual, 10) -
+                parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (parseInt(semestreAtual, 10) -
+              parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
+              2;
+        else
+          fim =
+            inicio -
+            1 +
+            2 *
+              (parseInt(grades[i - 1].periodoInicio.slice(0, 4), 10) -
+                parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
+              parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
+              2;
+        for (var k = 0; k < disciplinaGrades.length; k++) {
+          if (
+            disciplinaGrades[k].Grade == grade &&
+            this.isEven(disciplinaGrades[k].periodo) == this.evenSI &&
+            disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
+            disciplinaGrades[k].periodo <= parseInt(fim, 10)
+          ) {
+            for (var j = 0; j < turmas.length; j++) {
+              if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                for (var p = 0; p < pedidos.length; p++) {
+                  if (
+                    pedidos[p].vagasPeriodizadas > 0 &&
+                    pedidos[p].Turma == turmas[j].id
+                  ) {
+                    this.ativos2.SI[disciplinaGrades[k].periodo - 1].push(
+                      turmas[j]
+                    );
                   }
                 }
               }
             }
+            for (var j = 0; j < turmasExternas.length; j++) {
+              if (
+                turmasExternas[j].periodo == 3 &&
+                turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
+              ) {
+                for (var p = 0; p < pedidosExternos.length; p++) {
+                  if (
+                    pedidosExternos[p].vagasPeriodizadas > 0 &&
+                    pedidosExternos[p].Turma == turmasExternas[j].id
+                  ) {
+                    this.ativos2.SI[disciplinaGrades[k].periodo - 1].push(
+                      turmasExternas[j]
+                    );
+                  }
+                }
+              }
+            }
           }
         }
-      
+      }
 
       //Engenharia Computacional
-        grades = _.filter(this.$store.state.grade.Grades, ["Curso", 2]);
-        grades = _.orderBy(grades, "periodoInicio", "desc");
-        pedidos = [];
-        for (var t in this.$store.state.pedido.Pedidos) {
-          for (var pedido in this.$store.state.pedido.Pedidos[t]) {
-            if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 2) {
-              pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
-            }
+      grades = _.filter(this.$store.state.grade.Grades, ["Curso", 2]);
+      grades = _.orderBy(grades, "periodoInicio", "desc");
+      pedidos = [];
+      for (var t in this.$store.state.pedido.Pedidos) {
+        for (var pedido in this.$store.state.pedido.Pedidos[t]) {
+          if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 2) {
+            pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
           }
         }
-        pedidosExternos = [];
-        for (let t in this.$store.state.pedidoExterno.Pedidos) {
-          for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
-            if (
-              this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 2
-            ) {
-              pedidosExternos.push(
-                this.$store.state.pedidoExterno.Pedidos[t][pedido]
-              );
-            }
+      }
+      pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === 2) {
+            pedidosExternos.push(
+              this.$store.state.pedidoExterno.Pedidos[t][pedido]
+            );
           }
         }
-        for (var i = 0; i < grades.length && inicio <= 10; i++) {
-          //grade
-          grade = grades[i].id;
-          //inicio
-          if (i === 0) inicio = 1;
-          else inicio = fim + 1;
-          //fim
-          if (i + 1 === grades.length) fim = 10;
-          else if (i == 0)
-            fim =
-              1 +
-              2 *
-                (parseInt(anoAtual, 10) -
-                  parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
-              (parseInt(semestreAtual, 10) -
-                parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
-                2;
-          else
-            fim =
-              inicio -
-              1 +
-              2 *
-                (parseInt(grades[i - 1].periodoInicio.slice(0, 4), 10) -
-                  parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
-              (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
-                parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
-                2;
-          for (var k = 0; k < disciplinaGrades.length; k++) {
-            if (
-              disciplinaGrades[k].Grade == grade &&
-              this.isEven(disciplinaGrades[k].periodo) == this.evenEC &&
-              disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
-              disciplinaGrades[k].periodo <= parseInt(fim, 10)
-            ) {
-              for (var j = 0; j < turmas.length; j++) {
-                if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                  for (var p = 0; p < pedidos.length; p++) {
-                    if (
-                      pedidos[p].vagasPeriodizadas > 0 &&
-                      pedidos[p].Turma == turmas[j].id
-                    ) {
-                      this.ativos2.EC[disciplinaGrades[k].periodo - 1].push(
-                        turmas[j]
-                      );
-                    }
-                  }
-                }
-              }
-              for (var j = 0; j < turmasExternas.length; j++) {
-                if (
-                  turmasExternas[j].periodo == 3 &&
-                  turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
-                ) {
-                  for (var p = 0; p < pedidosExternos.length; p++) {
-                    if (
-                      pedidosExternos[p].vagasPeriodizadas > 0 &&
-                      pedidosExternos[p].Turma == turmasExternas[j].id
-                    ) {
-                      this.ativos2.EC[disciplinaGrades[k].periodo - 1].push(
-                        turmasExternas[j]
-                      );
-                    }
+      }
+      for (var i = 0; i < grades.length && inicio <= 10; i++) {
+        //grade
+        grade = grades[i].id;
+        //inicio
+        if (i === 0) inicio = 1;
+        else inicio = fim + 1;
+        //fim
+        if (i + 1 === grades.length) fim = 10;
+        else if (i == 0)
+          fim =
+            1 +
+            2 *
+              (parseInt(anoAtual, 10) -
+                parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (parseInt(semestreAtual, 10) -
+              parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
+              2;
+        else
+          fim =
+            inicio -
+            1 +
+            2 *
+              (parseInt(grades[i - 1].periodoInicio.slice(0, 4), 10) -
+                parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
+              parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
+              2;
+        for (var k = 0; k < disciplinaGrades.length; k++) {
+          if (
+            disciplinaGrades[k].Grade == grade &&
+            this.isEven(disciplinaGrades[k].periodo) == this.evenEC &&
+            disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
+            disciplinaGrades[k].periodo <= parseInt(fim, 10)
+          ) {
+            for (var j = 0; j < turmas.length; j++) {
+              if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
+                for (var p = 0; p < pedidos.length; p++) {
+                  if (
+                    pedidos[p].vagasPeriodizadas > 0 &&
+                    pedidos[p].Turma == turmas[j].id
+                  ) {
+                    this.ativos2.EC[disciplinaGrades[k].periodo - 1].push(
+                      turmas[j]
+                    );
                   }
                 }
               }
             }
+            for (var j = 0; j < turmasExternas.length; j++) {
+              if (
+                turmasExternas[j].periodo == 3 &&
+                turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
+              ) {
+                for (var p = 0; p < pedidosExternos.length; p++) {
+                  if (
+                    pedidosExternos[p].vagasPeriodizadas > 0 &&
+                    pedidosExternos[p].Turma == turmasExternas[j].id
+                  ) {
+                    this.ativos2.EC[disciplinaGrades[k].periodo - 1].push(
+                      turmasExternas[j]
+                    );
+                  }
+                }
+              }
+            }
           }
         }
-      
+      }
+
       //Eletivas
       var eletiva = true;
-        for (var t = 0; t < turmas.length; t++) {
-          for (var d = 0; d < disciplinaGrades.length; d++) {
-            if (turmas[t].Disciplina === disciplinaGrades[d].Disciplina) {
-              eletiva = false;
-            }
-          }
-          if (eletiva) {
-            this.ativos2.Eletivas.push(turmas[t]);
-          } else {
-            eletiva = true;
+      for (var t = 0; t < turmas.length; t++) {
+        for (var d = 0; d < disciplinaGrades.length; d++) {
+          if (turmas[t].Disciplina === disciplinaGrades[d].Disciplina) {
+            eletiva = false;
           }
         }
-      
+        if (eletiva) {
+          this.ativos2.Eletivas.push(turmas[t]);
+        } else {
+          eletiva = true;
+        }
+      }
 
-      this.$store.commit("redefinirAtivas2", { Ativas: this.ativos2 });
+      this.$store.commit("redefinirAtivas2", {
+        Ativas: this.ativos2
+      });
     },
 
     horarioVazio(curso) {
@@ -1262,7 +1251,9 @@ export default {
           }
       }
 
-      this.$store.commit("redefinirAtivas1", { Ativas: this.ativos1 });
+      this.$store.commit("redefinirAtivas1", {
+        Ativas: this.ativos1
+      });
 
       for (var i = 0; i < 10; i++) {
         for (var j = 0; j < this.ativos2.CCD[i].length; j++)
@@ -1315,9 +1306,13 @@ export default {
           }
       }
 
-      this.$store.commit("redefinirAtivas1", { Ativas2: this.ativos2 });
+      this.$store.commit("redefinirAtivas1", {
+        Ativas2: this.ativos2
+      });
 
-      this.$store.commit("redefinirAtivas2", { Ativas: this.ativos2 });
+      this.$store.commit("redefinirAtivas2", {
+        Ativas: this.ativos2
+      });
     },
     pdf() {
       var pdfMake = require("pdfmake/build/pdfmake.js");
@@ -1367,19 +1362,31 @@ export default {
               color: "#426",
               body: [
                 [
-                  { text: "Hora", alignment: "center", bold: true },
+                  {
+                    text: "Hora",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Segunda",
                     alignment: "center",
                     bold: true
                   },
-                  { text: "Terça", alignment: "center", bold: true },
+                  {
+                    text: "Terça",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Quarta",
                     alignment: "center",
                     bold: true
                   },
-                  { text: "Quinta", alignment: "center", bold: true },
+                  {
+                    text: "Quinta",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Sexta",
                     alignment: "center",
@@ -1460,14 +1467,26 @@ export default {
                     text: "08 - 10",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 1:
@@ -1476,14 +1495,26 @@ export default {
                     text: "10 - 12",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 2:
@@ -1492,14 +1523,26 @@ export default {
                     text: "14 - 16",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 3:
@@ -1508,14 +1551,26 @@ export default {
                     text: "16 - 18",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 4:
@@ -1524,14 +1579,26 @@ export default {
                     text: "19 - 21",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 5:
@@ -1540,14 +1607,26 @@ export default {
                     text: "21 - 23",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
             }
@@ -1580,19 +1659,31 @@ export default {
               color: "#426",
               body: [
                 [
-                  { text: "Hora", alignment: "center", bold: true },
+                  {
+                    text: "Hora",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Segunda",
                     alignment: "center",
                     bold: true
                   },
-                  { text: "Terça", alignment: "center", bold: true },
+                  {
+                    text: "Terça",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Quarta",
                     alignment: "center",
                     bold: true
                   },
-                  { text: "Quinta", alignment: "center", bold: true },
+                  {
+                    text: "Quinta",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Sexta",
                     alignment: "center",
@@ -1673,14 +1764,26 @@ export default {
                     text: "08 - 10",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 1:
@@ -1689,14 +1792,26 @@ export default {
                     text: "10 - 12",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 2:
@@ -1705,14 +1820,26 @@ export default {
                     text: "14 - 16",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 3:
@@ -1721,14 +1848,26 @@ export default {
                     text: "16 - 18",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 4:
@@ -1737,14 +1876,26 @@ export default {
                     text: "19 - 21",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 5:
@@ -1753,14 +1904,26 @@ export default {
                     text: "21 - 23",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
             }
@@ -1793,19 +1956,31 @@ export default {
               color: "#426",
               body: [
                 [
-                  { text: "Hora", alignment: "center", bold: true },
+                  {
+                    text: "Hora",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Segunda",
                     alignment: "center",
                     bold: true
                   },
-                  { text: "Terça", alignment: "center", bold: true },
+                  {
+                    text: "Terça",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Quarta",
                     alignment: "center",
                     bold: true
                   },
-                  { text: "Quinta", alignment: "center", bold: true },
+                  {
+                    text: "Quinta",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Sexta",
                     alignment: "center",
@@ -1886,14 +2061,26 @@ export default {
                     text: "08 - 10",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 1:
@@ -1902,14 +2089,26 @@ export default {
                     text: "10 - 12",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 2:
@@ -1918,14 +2117,26 @@ export default {
                     text: "14 - 16",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 3:
@@ -1934,14 +2145,26 @@ export default {
                     text: "16 - 18",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 4:
@@ -1950,14 +2173,26 @@ export default {
                     text: "19 - 21",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 5:
@@ -1966,14 +2201,26 @@ export default {
                     text: "21 - 23",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
             }
@@ -2006,19 +2253,31 @@ export default {
               color: "#426",
               body: [
                 [
-                  { text: "Hora", alignment: "center", bold: true },
+                  {
+                    text: "Hora",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Segunda",
                     alignment: "center",
                     bold: true
                   },
-                  { text: "Terça", alignment: "center", bold: true },
+                  {
+                    text: "Terça",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Quarta",
                     alignment: "center",
                     bold: true
                   },
-                  { text: "Quinta", alignment: "center", bold: true },
+                  {
+                    text: "Quinta",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Sexta",
                     alignment: "center",
@@ -2099,14 +2358,26 @@ export default {
                     text: "08 - 10",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 1:
@@ -2115,14 +2386,26 @@ export default {
                     text: "10 - 12",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 2:
@@ -2131,14 +2414,26 @@ export default {
                     text: "14 - 16",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 3:
@@ -2147,14 +2442,26 @@ export default {
                     text: "16 - 18",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 4:
@@ -2163,14 +2470,26 @@ export default {
                     text: "19 - 21",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 5:
@@ -2179,14 +2498,26 @@ export default {
                     text: "21 - 23",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
             }
@@ -2213,19 +2544,31 @@ export default {
             color: "#426",
             body: [
               [
-                { text: "Hora", alignment: "center", bold: true },
+                {
+                  text: "Hora",
+                  alignment: "center",
+                  bold: true
+                },
                 {
                   text: "Segunda",
                   alignment: "center",
                   bold: true
                 },
-                { text: "Terça", alignment: "center", bold: true },
+                {
+                  text: "Terça",
+                  alignment: "center",
+                  bold: true
+                },
                 {
                   text: "Quarta",
                   alignment: "center",
                   bold: true
                 },
-                { text: "Quinta", alignment: "center", bold: true },
+                {
+                  text: "Quinta",
+                  alignment: "center",
+                  bold: true
+                },
                 {
                   text: "Sexta",
                   alignment: "center",
@@ -2310,14 +2653,26 @@ export default {
                   text: "08 - 10",
                   alignment: "center"
                 },
-                { text: seg, alignment: "center" },
-                { text: ter, alignment: "center" },
+                {
+                  text: seg,
+                  alignment: "center"
+                },
+                {
+                  text: ter,
+                  alignment: "center"
+                },
                 {
                   text: qua,
                   alignment: "center"
                 },
-                { text: qui, alignment: "center" },
-                { text: sex, alignment: "center" }
+                {
+                  text: qui,
+                  alignment: "center"
+                },
+                {
+                  text: sex,
+                  alignment: "center"
+                }
               ]);
               break;
             case 1:
@@ -2326,14 +2681,26 @@ export default {
                   text: "10 - 12",
                   alignment: "center"
                 },
-                { text: seg, alignment: "center" },
-                { text: ter, alignment: "center" },
+                {
+                  text: seg,
+                  alignment: "center"
+                },
+                {
+                  text: ter,
+                  alignment: "center"
+                },
                 {
                   text: qua,
                   alignment: "center"
                 },
-                { text: qui, alignment: "center" },
-                { text: sex, alignment: "center" }
+                {
+                  text: qui,
+                  alignment: "center"
+                },
+                {
+                  text: sex,
+                  alignment: "center"
+                }
               ]);
               break;
             case 2:
@@ -2342,14 +2709,26 @@ export default {
                   text: "14 - 16",
                   alignment: "center"
                 },
-                { text: seg, alignment: "center" },
-                { text: ter, alignment: "center" },
+                {
+                  text: seg,
+                  alignment: "center"
+                },
+                {
+                  text: ter,
+                  alignment: "center"
+                },
                 {
                   text: qua,
                   alignment: "center"
                 },
-                { text: qui, alignment: "center" },
-                { text: sex, alignment: "center" }
+                {
+                  text: qui,
+                  alignment: "center"
+                },
+                {
+                  text: sex,
+                  alignment: "center"
+                }
               ]);
               break;
             case 3:
@@ -2358,14 +2737,26 @@ export default {
                   text: "16 - 18",
                   alignment: "center"
                 },
-                { text: seg, alignment: "center" },
-                { text: ter, alignment: "center" },
+                {
+                  text: seg,
+                  alignment: "center"
+                },
+                {
+                  text: ter,
+                  alignment: "center"
+                },
                 {
                   text: qua,
                   alignment: "center"
                 },
-                { text: qui, alignment: "center" },
-                { text: sex, alignment: "center" }
+                {
+                  text: qui,
+                  alignment: "center"
+                },
+                {
+                  text: sex,
+                  alignment: "center"
+                }
               ]);
               break;
             case 4:
@@ -2374,14 +2765,26 @@ export default {
                   text: "17 - 19",
                   alignment: "center"
                 },
-                { text: seg, alignment: "center" },
-                { text: ter, alignment: "center" },
+                {
+                  text: seg,
+                  alignment: "center"
+                },
+                {
+                  text: ter,
+                  alignment: "center"
+                },
                 {
                   text: qua,
                   alignment: "center"
                 },
-                { text: qui, alignment: "center" },
-                { text: sex, alignment: "center" }
+                {
+                  text: qui,
+                  alignment: "center"
+                },
+                {
+                  text: sex,
+                  alignment: "center"
+                }
               ]);
               break;
             case 5:
@@ -2390,14 +2793,26 @@ export default {
                   text: "18 - 20",
                   alignment: "center"
                 },
-                { text: seg, alignment: "center" },
-                { text: ter, alignment: "center" },
+                {
+                  text: seg,
+                  alignment: "center"
+                },
+                {
+                  text: ter,
+                  alignment: "center"
+                },
                 {
                   text: qua,
                   alignment: "center"
                 },
-                { text: qui, alignment: "center" },
-                { text: sex, alignment: "center" }
+                {
+                  text: qui,
+                  alignment: "center"
+                },
+                {
+                  text: sex,
+                  alignment: "center"
+                }
               ]);
               break;
             case 6:
@@ -2406,14 +2821,26 @@ export default {
                   text: "19 - 21",
                   alignment: "center"
                 },
-                { text: seg, alignment: "center" },
-                { text: ter, alignment: "center" },
+                {
+                  text: seg,
+                  alignment: "center"
+                },
+                {
+                  text: ter,
+                  alignment: "center"
+                },
                 {
                   text: qua,
                   alignment: "center"
                 },
-                { text: qui, alignment: "center" },
-                { text: sex, alignment: "center" }
+                {
+                  text: qui,
+                  alignment: "center"
+                },
+                {
+                  text: sex,
+                  alignment: "center"
+                }
               ]);
               break;
             case 7:
@@ -2422,14 +2849,26 @@ export default {
                   text: "21 - 23",
                   alignment: "center"
                 },
-                { text: seg, alignment: "center" },
-                { text: ter, alignment: "center" },
+                {
+                  text: seg,
+                  alignment: "center"
+                },
+                {
+                  text: ter,
+                  alignment: "center"
+                },
                 {
                   text: qua,
                   alignment: "center"
                 },
-                { text: qui, alignment: "center" },
-                { text: sex, alignment: "center" }
+                {
+                  text: qui,
+                  alignment: "center"
+                },
+                {
+                  text: sex,
+                  alignment: "center"
+                }
               ]);
               break;
           }
@@ -2473,19 +2912,31 @@ export default {
               color: "#426",
               body: [
                 [
-                  { text: "Hora", alignment: "center", bold: true },
+                  {
+                    text: "Hora",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Segunda",
                     alignment: "center",
                     bold: true
                   },
-                  { text: "Terça", alignment: "center", bold: true },
+                  {
+                    text: "Terça",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Quarta",
                     alignment: "center",
                     bold: true
                   },
-                  { text: "Quinta", alignment: "center", bold: true },
+                  {
+                    text: "Quinta",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Sexta",
                     alignment: "center",
@@ -2566,14 +3017,26 @@ export default {
                     text: "08 - 10",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 1:
@@ -2582,14 +3045,26 @@ export default {
                     text: "10 - 12",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 2:
@@ -2598,14 +3073,26 @@ export default {
                     text: "14 - 16",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 3:
@@ -2614,14 +3101,26 @@ export default {
                     text: "16 - 18",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 4:
@@ -2630,14 +3129,26 @@ export default {
                     text: "19 - 21",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 5:
@@ -2646,14 +3157,26 @@ export default {
                     text: "21 - 23",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
             }
@@ -2686,19 +3209,31 @@ export default {
               color: "#426",
               body: [
                 [
-                  { text: "Hora", alignment: "center", bold: true },
+                  {
+                    text: "Hora",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Segunda",
                     alignment: "center",
                     bold: true
                   },
-                  { text: "Terça", alignment: "center", bold: true },
+                  {
+                    text: "Terça",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Quarta",
                     alignment: "center",
                     bold: true
                   },
-                  { text: "Quinta", alignment: "center", bold: true },
+                  {
+                    text: "Quinta",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Sexta",
                     alignment: "center",
@@ -2779,14 +3314,26 @@ export default {
                     text: "08 - 10",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 1:
@@ -2795,14 +3342,26 @@ export default {
                     text: "10 - 12",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 2:
@@ -2811,14 +3370,26 @@ export default {
                     text: "14 - 16",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 3:
@@ -2827,14 +3398,26 @@ export default {
                     text: "16 - 18",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 4:
@@ -2843,14 +3426,26 @@ export default {
                     text: "19 - 21",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 5:
@@ -2859,14 +3454,26 @@ export default {
                     text: "21 - 23",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
             }
@@ -2899,19 +3506,31 @@ export default {
               color: "#426",
               body: [
                 [
-                  { text: "Hora", alignment: "center", bold: true },
+                  {
+                    text: "Hora",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Segunda",
                     alignment: "center",
                     bold: true
                   },
-                  { text: "Terça", alignment: "center", bold: true },
+                  {
+                    text: "Terça",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Quarta",
                     alignment: "center",
                     bold: true
                   },
-                  { text: "Quinta", alignment: "center", bold: true },
+                  {
+                    text: "Quinta",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Sexta",
                     alignment: "center",
@@ -2992,14 +3611,26 @@ export default {
                     text: "08 - 10",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 1:
@@ -3008,14 +3639,26 @@ export default {
                     text: "10 - 12",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 2:
@@ -3024,14 +3667,26 @@ export default {
                     text: "14 - 16",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 3:
@@ -3040,14 +3695,26 @@ export default {
                     text: "16 - 18",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 4:
@@ -3056,14 +3723,26 @@ export default {
                     text: "19 - 21",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 5:
@@ -3072,14 +3751,26 @@ export default {
                     text: "21 - 23",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
             }
@@ -3112,19 +3803,31 @@ export default {
               color: "#426",
               body: [
                 [
-                  { text: "Hora", alignment: "center", bold: true },
+                  {
+                    text: "Hora",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Segunda",
                     alignment: "center",
                     bold: true
                   },
-                  { text: "Terça", alignment: "center", bold: true },
+                  {
+                    text: "Terça",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Quarta",
                     alignment: "center",
                     bold: true
                   },
-                  { text: "Quinta", alignment: "center", bold: true },
+                  {
+                    text: "Quinta",
+                    alignment: "center",
+                    bold: true
+                  },
                   {
                     text: "Sexta",
                     alignment: "center",
@@ -3205,14 +3908,26 @@ export default {
                     text: "08 - 10",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 1:
@@ -3221,14 +3936,26 @@ export default {
                     text: "10 - 12",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 2:
@@ -3237,14 +3964,26 @@ export default {
                     text: "14 - 16",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 3:
@@ -3253,14 +3992,26 @@ export default {
                     text: "16 - 18",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 4:
@@ -3269,14 +4020,26 @@ export default {
                     text: "19 - 21",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
               case 5:
@@ -3285,14 +4048,26 @@ export default {
                     text: "21 - 23",
                     alignment: "center"
                   },
-                  { text: seg, alignment: "center" },
-                  { text: ter, alignment: "center" },
+                  {
+                    text: seg,
+                    alignment: "center"
+                  },
+                  {
+                    text: ter,
+                    alignment: "center"
+                  },
                   {
                     text: qua,
                     alignment: "center"
                   },
-                  { text: qui, alignment: "center" },
-                  { text: sex, alignment: "center" }
+                  {
+                    text: qui,
+                    alignment: "center"
+                  },
+                  {
+                    text: sex,
+                    alignment: "center"
+                  }
                 ]);
                 break;
             }
@@ -3319,19 +4094,31 @@ export default {
             color: "#426",
             body: [
               [
-                { text: "Hora", alignment: "center", bold: true },
+                {
+                  text: "Hora",
+                  alignment: "center",
+                  bold: true
+                },
                 {
                   text: "Segunda",
                   alignment: "center",
                   bold: true
                 },
-                { text: "Terça", alignment: "center", bold: true },
+                {
+                  text: "Terça",
+                  alignment: "center",
+                  bold: true
+                },
                 {
                   text: "Quarta",
                   alignment: "center",
                   bold: true
                 },
-                { text: "Quinta", alignment: "center", bold: true },
+                {
+                  text: "Quinta",
+                  alignment: "center",
+                  bold: true
+                },
                 {
                   text: "Sexta",
                   alignment: "center",
@@ -3416,14 +4203,26 @@ export default {
                   text: "08 - 10",
                   alignment: "center"
                 },
-                { text: seg, alignment: "center" },
-                { text: ter, alignment: "center" },
+                {
+                  text: seg,
+                  alignment: "center"
+                },
+                {
+                  text: ter,
+                  alignment: "center"
+                },
                 {
                   text: qua,
                   alignment: "center"
                 },
-                { text: qui, alignment: "center" },
-                { text: sex, alignment: "center" }
+                {
+                  text: qui,
+                  alignment: "center"
+                },
+                {
+                  text: sex,
+                  alignment: "center"
+                }
               ]);
               break;
             case 1:
@@ -3432,14 +4231,26 @@ export default {
                   text: "10 - 12",
                   alignment: "center"
                 },
-                { text: seg, alignment: "center" },
-                { text: ter, alignment: "center" },
+                {
+                  text: seg,
+                  alignment: "center"
+                },
+                {
+                  text: ter,
+                  alignment: "center"
+                },
                 {
                   text: qua,
                   alignment: "center"
                 },
-                { text: qui, alignment: "center" },
-                { text: sex, alignment: "center" }
+                {
+                  text: qui,
+                  alignment: "center"
+                },
+                {
+                  text: sex,
+                  alignment: "center"
+                }
               ]);
               break;
             case 2:
@@ -3448,14 +4259,26 @@ export default {
                   text: "14 - 16",
                   alignment: "center"
                 },
-                { text: seg, alignment: "center" },
-                { text: ter, alignment: "center" },
+                {
+                  text: seg,
+                  alignment: "center"
+                },
+                {
+                  text: ter,
+                  alignment: "center"
+                },
                 {
                   text: qua,
                   alignment: "center"
                 },
-                { text: qui, alignment: "center" },
-                { text: sex, alignment: "center" }
+                {
+                  text: qui,
+                  alignment: "center"
+                },
+                {
+                  text: sex,
+                  alignment: "center"
+                }
               ]);
               break;
             case 3:
@@ -3464,14 +4287,26 @@ export default {
                   text: "16 - 18",
                   alignment: "center"
                 },
-                { text: seg, alignment: "center" },
-                { text: ter, alignment: "center" },
+                {
+                  text: seg,
+                  alignment: "center"
+                },
+                {
+                  text: ter,
+                  alignment: "center"
+                },
                 {
                   text: qua,
                   alignment: "center"
                 },
-                { text: qui, alignment: "center" },
-                { text: sex, alignment: "center" }
+                {
+                  text: qui,
+                  alignment: "center"
+                },
+                {
+                  text: sex,
+                  alignment: "center"
+                }
               ]);
               break;
             case 4:
@@ -3480,14 +4315,26 @@ export default {
                   text: "17 - 19",
                   alignment: "center"
                 },
-                { text: seg, alignment: "center" },
-                { text: ter, alignment: "center" },
+                {
+                  text: seg,
+                  alignment: "center"
+                },
+                {
+                  text: ter,
+                  alignment: "center"
+                },
                 {
                   text: qua,
                   alignment: "center"
                 },
-                { text: qui, alignment: "center" },
-                { text: sex, alignment: "center" }
+                {
+                  text: qui,
+                  alignment: "center"
+                },
+                {
+                  text: sex,
+                  alignment: "center"
+                }
               ]);
               break;
             case 5:
@@ -3496,14 +4343,26 @@ export default {
                   text: "18 - 20",
                   alignment: "center"
                 },
-                { text: seg, alignment: "center" },
-                { text: ter, alignment: "center" },
+                {
+                  text: seg,
+                  alignment: "center"
+                },
+                {
+                  text: ter,
+                  alignment: "center"
+                },
                 {
                   text: qua,
                   alignment: "center"
                 },
-                { text: qui, alignment: "center" },
-                { text: sex, alignment: "center" }
+                {
+                  text: qui,
+                  alignment: "center"
+                },
+                {
+                  text: sex,
+                  alignment: "center"
+                }
               ]);
               break;
             case 6:
@@ -3512,14 +4371,26 @@ export default {
                   text: "19 - 21",
                   alignment: "center"
                 },
-                { text: seg, alignment: "center" },
-                { text: ter, alignment: "center" },
+                {
+                  text: seg,
+                  alignment: "center"
+                },
+                {
+                  text: ter,
+                  alignment: "center"
+                },
                 {
                   text: qua,
                   alignment: "center"
                 },
-                { text: qui, alignment: "center" },
-                { text: sex, alignment: "center" }
+                {
+                  text: qui,
+                  alignment: "center"
+                },
+                {
+                  text: sex,
+                  alignment: "center"
+                }
               ]);
               break;
             case 7:
@@ -3528,14 +4399,26 @@ export default {
                   text: "21 - 23",
                   alignment: "center"
                 },
-                { text: seg, alignment: "center" },
-                { text: ter, alignment: "center" },
+                {
+                  text: seg,
+                  alignment: "center"
+                },
+                {
+                  text: ter,
+                  alignment: "center"
+                },
                 {
                   text: qua,
                   alignment: "center"
                 },
-                { text: qui, alignment: "center" },
-                { text: sex, alignment: "center" }
+                {
+                  text: qui,
+                  alignment: "center"
+                },
+                {
+                  text: sex,
+                  alignment: "center"
+                }
               ]);
               break;
           }
@@ -3648,22 +4531,27 @@ export default {
   overflow: hidden;
   margin: 0;
 }
+
 .titulo {
   font-size: 25px;
   font-weight: normal;
   padding-left: 0;
   margin: 0 !important;
 }
+
 h4 {
   text-align: start !important;
   font-size: 12px !important;
   font-weight: bold !important;
 }
+
 .title {
   clear: both;
   display: block;
   padding-top: 0px;
   text-align: start !important;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 h3 {
@@ -3671,10 +4559,12 @@ h3 {
   font-size: 20px;
   text-align: center !important;
 }
+
 h4 {
   font-size: 12px !important;
   font-weight: bold !important;
 }
+
 h5 {
   font-size: 12px;
   font-weight: normal;
@@ -3705,24 +4595,19 @@ h5 {
   padding-left: 15px;
   font-size: 12px !important;
 }
+
 .form-control {
   height: 25px !important;
   font-size: 12px !important;
   padding: 0px 0px 0px 5px !important;
-  min-width: 100px;
-  max-width: 100px;
+  min-width: 80px !important;
+  max-width: 80px !important;
   text-align: start;
 }
+
 .form-inline .input-group,
 .form-inline {
   width: auto;
-}
-.tabelas {
-  overflow-y: auto;
-  overflow-x: hidden;
-  height: -webkit-calc(100vh - 85px);
-  height: -moz-calc(100vh - 85px);
-  height: calc(100vh - 85px);
 }
 
 .listas {
@@ -3732,9 +4617,11 @@ h5 {
   line-height: inherit;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
+
 strong {
   color: #007bff;
 }
+
 i.fas,
 i.far {
   font-size: 25px;
@@ -3745,10 +4632,12 @@ i.far {
   color: #9ab3ff !important;
   float: right;
 }
+
 .relatbtn:hover {
   color: #82a0ff !important;
   background-color: white;
 }
+
 .relatbtn:focus {
   color: #82a0ff;
   background-color: white;
@@ -3756,35 +4645,6 @@ i.far {
   -webkit-text-stroke-color: #698dff;
 }
 
-.addbtn {
-  background-color: white;
-  color: #a0e7a0;
-}
-.addbtn:hover {
-  background-color: white;
-  color: #77dd77;
-}
-.addbtn:focus {
-  color: #77dd77;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #2fbf53;
-}
-
-.cancelbtn {
-  background-color: white;
-  color: #cfcfc4;
-}
-.cancelbtn:hover {
-  background-color: white;
-  color: #b8b4a8;
-}
-
-.cancelbtn:focus {
-  background-color: white;
-  color: #b8b8a8;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #ada89a;
-}
 button {
   padding: 0;
   border: none;
@@ -3798,6 +4658,38 @@ button {
   transition: all 0.3s ease 0s;
   cursor: pointer;
 }
+.addbtn {
+  background-color: white;
+  color: #a0e7a0;
+}
+
+.addbtn:hover {
+  background-color: white;
+  color: #77dd77;
+}
+
+.addbtn:focus {
+  color: #77dd77;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #2fbf53;
+}
+
+.cancelbtn {
+  background-color: white;
+  color: #cfcfc4;
+}
+
+.cancelbtn:hover {
+  background-color: white;
+  color: #b8b4a8;
+}
+
+.cancelbtn:focus {
+  background-color: white;
+  color: #b8b8a8;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #ada89a;
+}
 
 .modal-table {
   display: block !important;
@@ -3807,32 +4699,39 @@ button {
   background-color: white;
   margin: 0 !important;
 }
+
 tbody {
   max-height: 100%;
   width: 100%;
 }
+
 table td {
   text-align: center;
   vertical-align: middle !important;
   padding: 0 !important;
   font-size: 10px !important;
+  height: 22px !important;
 }
+
 tr thead {
   display: block;
 }
+
 th {
   padding: 0 !important;
   font-size: 14px;
   text-align: center !important;
   height: 18px !important;
 }
+
 .p-header {
   padding: 0 5px 0 5px !important;
   margin: 0 !important;
   font-size: 11px !important;
   text-align: center;
-  height: 18px;
+  height: 18px !important;
 }
+
 table p {
   margin-bottom: 0 !important;
   text-align: center;
@@ -3840,9 +4739,11 @@ table p {
   padding-left: 5px !important;
   font-size: 10px !important;
 }
+
 table input[type="checkbox"] {
   margin-left: 0 !important;
   margin-top: 4px !important;
+  margin-bottom: auto !important;
 }
 
 .clickable-header {
@@ -3850,14 +4751,6 @@ table input[type="checkbox"] {
   padding-left: 5px;
 }
 
-.form-control {
-  height: 25px !important;
-  font-size: 12px !important;
-  padding: 2px 5px 0px 5px !important;
-  min-width: 80px;
-  max-width: 80px;
-  text-align: start;
-}
 .form-group {
   display: -ms-flexbox;
   display: flex;
@@ -3869,13 +4762,13 @@ table input[type="checkbox"] {
   align-items: center;
   margin-bottom: 0;
 }
+
 .form-inline .input-group,
 .form-inline {
   width: auto;
 }
 
 /* BOTOÕES MODALS */
-
 .btn-df {
   font-size: 12px;
   height: 25px;
@@ -3887,10 +4780,12 @@ table input[type="checkbox"] {
   max-width: max-content;
   padding: 0 5px 0 5px;
 }
+
 .btn-azul {
   background-color: #718de0 !important;
   border-color: #9ab3ff !important;
 }
+
 .btn-azul:hover {
   background-color: rgb(74, 101, 190) !important;
   border-color: #82a0ff !important;
@@ -3906,6 +4801,7 @@ table input[type="checkbox"] {
   background-color: #999999 !important;
   border-color: #c3c3c3 !important;
 }
+
 .btn-cinza:hover {
   background-color: #747474 !important;
   border-color: #aaaaaa !important;
@@ -3916,10 +4812,12 @@ table input[type="checkbox"] {
   -moz-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
   box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
 }
+
 .btn-verde {
   background-color: #70b670 !important;
   border-color: #a0e7a0 !important;
 }
+
 .btn-verde:hover {
   background-color: #4c8a4c !important;
   border-color: #77dd77 !important;
@@ -3930,9 +4828,10 @@ table input[type="checkbox"] {
   -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
   box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
 }
+
 /*  */
 
-@media screen and (max-width: 430px) {
+@media screen and (max-width: 499px) {
   .div-titulo {
     height: 70px !important;
   }

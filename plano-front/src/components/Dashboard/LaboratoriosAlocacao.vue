@@ -3,30 +3,44 @@
     <!-- Titulo -->
 
     <div
-      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-xl-3 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Laboratórios - Alocação</h1>
-
+        <h1
+          class="titulo col-xl-3 col-lg-4 col-md-5 col-sm-6 col-6 px-0 pr-1"
+        >Horários - Laborátorios</h1>
         <div
-          class="form-group col-xl-9 col-md-8 col-sm-7 col-5 mb-0 p-0"
+          class="form-group col-xl-9 col-lg-8 col-md-7 col-sm-6 col-6 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
-          <b-button v-b-modal.modalLaboratorios title="Laboratórios" class="cancelbtn">
-            <i class="fas fa-list-ul"></i>
-          </b-button>
+          <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
+            <select class="form-control form-control-sm" v-model="periodo">
+              <option value="1">Primeiro</option>
+              <option value="2">Segundo</option>
+              <option value="3">Ambos</option>
+            </select>
+            <div class="input-group-append">
+              <label class="input-group-text">Semestre</label>
+            </div>
+          </div>
+          <div class="d-flex p-0 m-0">
+            <b-button v-b-modal.modalLaboratorios title="Laboratórios" class="cancelbtn">
+              <i class="fas fa-list-ul"></i>
+            </b-button>
 
-          <button type="button" class="relatbtn" title="Relatório" v-on:click.prevent="pdf">
-            <i class="far fa-file-alt"></i>
-          </button>
+            <button type="button" class="relatbtn" title="Relatório" v-on:click.prevent="pdf">
+              <i class="far fa-file-alt"></i>
+            </button>
 
-          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
-            <i class="fas fa-question"></i>
-          </b-button>
+            <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
+              <i class="fas fa-question"></i>
+            </b-button>
+          </div>
         </div>
       </div>
     </div>
+
     <div class="w-100 mb-2 border-bottom"></div>
 
     <!-- <div class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0">
@@ -47,990 +61,993 @@
         </div>
     <div class="w-100 mb-2 border-bottom"></div>-->
 
-    <div class="col-12">
-      <h6>1º SEMESTRE</h6>
-      <div class="flex-container">
-        <div class="tablab" v-for="lab in LaboratoriosAtivados" :key="'2-lab-id'+lab.id">
-          <h5 class="lab-num">{{lab.nome}}</h5>
-          <div class="row m-0">
-            <table class="tg">
-              <tr>
-                <th class="tg-0lax">Horário</th>
-                <th class="tg-0lax">Seg</th>
-                <th class="tg-0lax">Ter</th>
-                <th class="tg-0lax">Qua</th>
-                <th class="tg-0lax">Qui</th>
-                <th class="tg-0lax">Sex</th>
-              </tr>
+    <div class="col-12 p-0 w-100">
+      <template v-if="LaboratoriosAtivados.length != 0 && (periodo == 1 || periodo == 3)">
+        <h3 class="title px-2" style="background-color: rgba(0, 0, 0, 0.089);">1º SEMESTRE</h3>
+        <div class="flex-container">
+          <div class="tablab" v-for="lab in LaboratoriosAtivados" :key="'2-lab-id'+lab.id">
+            <h5 class="lab-num">{{lab.nome}}</h5>
+            <div class="row m-0">
+              <table class="tg">
+                <tr>
+                  <th class="tg-0lax">Horário</th>
+                  <th class="tg-0lax">Seg</th>
+                  <th class="tg-0lax">Ter</th>
+                  <th class="tg-0lax">Qua</th>
+                  <th class="tg-0lax">Qui</th>
+                  <th class="tg-0lax">Sex</th>
+                </tr>
 
-              <tr>
-                <td class="tg-0lax tg-hor">08-10</td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 1)"
-                  >
+                <tr>
+                  <td class="tg-0lax tg-hor">08-10</td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 7)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 1)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 13)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 7)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 19)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 13)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 25)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 19)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-              </tr>
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 25)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                </tr>
 
-              <tr>
-                <td class="tg-0lax tg-hor">10-12</td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 2)"
-                  >
+                <tr>
+                  <td class="tg-0lax tg-hor">10-12</td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 8)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 2)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 14)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 8)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 20)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 14)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 26)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 20)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-              </tr>
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 26)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                </tr>
 
-              <tr>
-                <td class="tg-0lax tg-hor">14-16</td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 3)"
-                  >
+                <tr>
+                  <td class="tg-0lax tg-hor">14-16</td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 9)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 3)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 15)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 9)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 21)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 15)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 27)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 21)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-              </tr>
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 27)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                </tr>
 
-              <tr>
-                <td class="tg-0lax tg-hor">16-18</td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 4)"
-                  >
+                <tr>
+                  <td class="tg-0lax tg-hor">16-18</td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 10)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 4)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 16)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 10)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 22)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 16)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 28)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 22)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-              </tr>
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 28)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                </tr>
 
-              <tr>
-                <td class="tg-0lax tg-hor">17-19</td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 32)"
-                  >
+                <tr>
+                  <td class="tg-0lax tg-hor">17-19</td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 34)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 32)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 36)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 34)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 38)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 36)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 40)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 38)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-              </tr>
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 40)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                </tr>
 
-              <tr>
-                <td class="tg-0lax tg-hor">18-20</td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 33)"
-                  >
+                <tr>
+                  <td class="tg-0lax tg-hor">18-20</td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 35)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 33)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 37)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 35)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 39)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 37)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 41)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 39)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-              </tr>
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 41)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                </tr>
 
-              <tr>
-                <td class="tg-0lax tg-hor">19-21</td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 5)"
-                  >
+                <tr>
+                  <td class="tg-0lax tg-hor">19-21</td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 11)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 5)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 17)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 11)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 23)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 17)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 29)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 23)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-              </tr>
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 29)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                </tr>
 
-              <tr>
-                <td class="tg-0lax tg-hor">21-23</td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 6)"
-                  >
+                <tr>
+                  <td class="tg-0lax tg-hor">21-23</td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 12)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 6)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 18)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 12)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 24)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 18)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas1"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 30)"
-                  >
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 24)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-              </tr>
-            </table>
+                      v-for="turma in Turmas1"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 30)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                </tr>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
+      </template>
 
-      <h6>2º SEMESTRE</h6>
+      <template v-if="LaboratoriosAtivados.length != 0 && (periodo == 2 || periodo == 3)">
+        <h3 class="title px-2" style="background-color: rgba(0, 0, 0, 0.089);">2º SEMESTRE</h3>
+        <div class="flex-container">
+          <div class="tablab" :key="'2-lab-id'+lab.id" v-for="lab in LaboratoriosAtivados">
+            <h5 class="lab-num">{{lab.nome}}</h5>
+            <div class="row m-0">
+              <table class="tg">
+                <tr>
+                  <th class="tg-0lax">Horário</th>
+                  <th class="tg-0lax">Seg</th>
+                  <th class="tg-0lax">Ter</th>
+                  <th class="tg-0lax">Qua</th>
+                  <th class="tg-0lax">Qui</th>
+                  <th class="tg-0lax">Sex</th>
+                </tr>
 
-      <div class="flex-container">
-        <div class="tablab" :key="'2-lab-id'+lab.id" v-for="lab in LaboratoriosAtivados">
-          <h5 class="lab-num">{{lab.nome}}</h5>
-          <div class="row m-0">
-            <table class="tg">
-              <tr>
-                <th class="tg-0lax">Horário</th>
-                <th class="tg-0lax">Seg</th>
-                <th class="tg-0lax">Ter</th>
-                <th class="tg-0lax">Qua</th>
-                <th class="tg-0lax">Qui</th>
-                <th class="tg-0lax">Sex</th>
-              </tr>
+                <tr>
+                  <td class="tg-0lax tg-hor">08-10</td>
+                  <td class="tg-0lax">
+                    <template
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 1)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
+                    <template
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 7)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
+                    <template
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 13)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
+                    <template
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 19)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
+                    <template
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 25)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                </tr>
 
-              <tr>
-                <td class="tg-0lax tg-hor">08-10</td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 1)"
-                  >
+                <tr>
+                  <td class="tg-0lax tg-hor">10-12</td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 7)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 2)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 13)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 8)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 19)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 14)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 25)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 20)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-              </tr>
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 26)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                </tr>
 
-              <tr>
-                <td class="tg-0lax tg-hor">10-12</td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 2)"
-                  >
+                <tr>
+                  <td class="tg-0lax tg-hor">14-16</td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 8)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 3)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 14)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 9)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 20)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 15)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 26)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 21)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-              </tr>
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 27)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                </tr>
 
-              <tr>
-                <td class="tg-0lax tg-hor">14-16</td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 3)"
-                  >
+                <tr>
+                  <td class="tg-0lax tg-hor">16-18</td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 9)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 4)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 15)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 10)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 21)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 16)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 27)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 22)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-              </tr>
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 28)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                </tr>
 
-              <tr>
-                <td class="tg-0lax tg-hor">16-18</td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 4)"
-                  >
+                <tr>
+                  <td class="tg-0lax tg-hor">17-19</td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 10)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 32)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 16)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 34)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 22)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 36)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 28)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 38)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-              </tr>
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 40)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                </tr>
 
-              <tr>
-                <td class="tg-0lax tg-hor">17-19</td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 32)"
-                  >
+                <tr>
+                  <td class="tg-0lax tg-hor">18-20</td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 34)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 33)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 36)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 35)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 38)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 37)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 40)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 39)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-              </tr>
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 41)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                </tr>
 
-              <tr>
-                <td class="tg-0lax tg-hor">18-20</td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 33)"
-                  >
+                <tr>
+                  <td class="tg-0lax tg-hor">19-21</td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 35)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 5)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 37)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 11)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 39)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 17)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 41)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 23)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-              </tr>
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 29)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                </tr>
 
-              <tr>
-                <td class="tg-0lax tg-hor">19-21</td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 5)"
-                  >
+                <tr>
+                  <td class="tg-0lax tg-hor">21-23</td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 11)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 6)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 17)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 12)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 23)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 18)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 29)"
-                  >
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 24)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                  <td class="tg-0lax">
                     <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-              </tr>
-
-              <tr>
-                <td class="tg-0lax tg-hor">21-23</td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 6)"
-                  >
-                    <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 12)"
-                  >
-                    <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 18)"
-                  >
-                    <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 24)"
-                  >
-                    <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-                <td class="tg-0lax">
-                  <template
-                    v-for="turma in Turmas2"
-                    v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 30)"
-                  >
-                    <template
-                      v-for="disciplina in Disciplinas"
-                      v-if="turma.Disciplina === disciplina.id"
-                    >{{disciplina.codigo}} {{turma.letra}}</template>
-                  </template>
-                </td>
-              </tr>
-            </table>
-            <br />
+                      v-for="turma in Turmas2"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 30)"
+                    >
+                      <template
+                        v-for="disciplina in Disciplinas"
+                        v-if="turma.Disciplina === disciplina.id"
+                      >{{disciplina.codigo}} {{turma.letra}}</template>
+                    </template>
+                  </td>
+                </tr>
+              </table>
+              <br />
+            </div>
           </div>
         </div>
-      </div>
+      </template>
     </div>
 
     <!-- MODAL DE AJUDA -->
@@ -1038,22 +1055,26 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para exibir conteúdo na tela: </strong> Clique em Laboratórios
+            <strong>Para exibir conteúdo na tela:</strong> Clique em Laboratórios
             <i class="fas fa-list-ul cancelbtn px-1" style="font-size: 12px"></i>
-             e selecione o(s) laboratório(s) que deseja 
+            e selecione o(s) laboratório(s) que deseja
             ver, em seguida confirme em OK. Caso queira ver todos basta clicar em Selecionar Todos.
           </li>
           <li class="list-group-item">
-              <strong>Para gerar relatório:</strong> Clique no botão Relatório
-              <i class="far fa-file-alt relatbtn px-1" style="font-size: 12px"></i>
-               e aguarde para fazer <font style='font-style:italic;'>download</font> do mesmo.
+            <strong>Para gerar relatório:</strong> Clique no botão Relatório
+            <i
+              class="far fa-file-alt relatbtn px-1"
+              style="font-size: 12px"
+            ></i>
+            e aguarde para fazer
+            <font style="font-style:italic;">download</font> do mesmo.
           </li>
         </ul>
       </div>
 
       <div slot="modal-footer" style="display: none"></div>
     </b-modal>
-    <!-- Modals do botão para escolher disciplinas -->
+    <!-- Modals do botão para escolher laboratorio -->
     <b-modal
       id="modalLaboratorios"
       ref="LaboratoriosModal"
@@ -1079,7 +1100,7 @@
           <tbody>
             <tr v-for="laboratorio in Laboratorios" :key="`laboratorio${laboratorio.id}`">
               <div style="width: max-content">
-                <td style="padding:0;broder:0;margin:0 auto !important;">
+                <td style="padding:0;margin:0 auto !important;">
                   <div style="width:25px; height: 100%; margin:0 auto">
                     <input
                       type="checkbox"
@@ -1099,7 +1120,7 @@
       </div>
 
       <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
-        <div class="w-100 ml-2 d-flex">
+        <div class="w-100 m-0 d-flex">
           <b-button
             class="btn-azul btn-df mr-2"
             variant="success"
@@ -1114,7 +1135,7 @@
         <b-button
           variant="success"
           @click="btnOK()"
-          class="btn-verde btn-df mr-2"
+          class="btn-verde btn-df mr-0"
           style="padding-right:15px!important; padding-left:15px!important;"
         >OK</b-button>
       </div>
@@ -1129,6 +1150,7 @@ export default {
   name: "DashboardLaboratoriosAlocacao",
   data() {
     return {
+      periodo: 3,
       value: 0,
       LaboratoriosSelecionados: [],
       LaboratoriosAtivados: []
@@ -1233,6 +1255,14 @@ export default {
   padding-left: 0;
   margin: 0 !important;
 }
+.title {
+  clear: both;
+  display: block;
+  padding-top: 0px;
+  text-align: start !important;
+  font-weight: bold;
+  font-size: 18px;
+}
 
 .listas {
   line-height: 30px;
@@ -1244,12 +1274,6 @@ export default {
 strong {
   color: #007bff;
 }
-
-i.fas,
-i.far {
-  font-size: 25px;
-}
-
 .relatbtn {
   background-color: white;
   color: #9ab3ff !important;
@@ -1342,7 +1366,7 @@ th {
 }
 
 p {
-  margin:0px;
+  margin: 0px;
 }
 
 .center-row {
@@ -1385,11 +1409,7 @@ p {
   vertical-align: center;
   height: 22px;
 }
-@media screen and (max-width: 575px) {
-  .lab-num {
-    font-size: 22px !important;
-  }
-}
+
 .btn-df {
   font-size: 12px;
   height: 25px;
@@ -1465,5 +1485,62 @@ i.far {
   color: #b8b8a8;
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #ada89a;
+}
+
+.input-group-text {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  -ms-flex-align: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  align-items: center;
+  -ms-flex-pack: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -moz-box-pack: center;
+  justify-content: center;
+  margin-bottom: 0;
+  /*===*/
+  max-width: 70px;
+  min-width: 70px;
+  height: 25px !important;
+  margin-left: -5px;
+  padding-left: 15px;
+  font-size: 12px !important;
+}
+
+.form-control {
+  height: 25px !important;
+  font-size: 12px !important;
+  padding: 0px 0px 0px 5px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
+  text-align: start !important;
+}
+
+.form-group {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.form-inline .input-group,
+.form-inline {
+  width: auto;
+}
+@media screen and (max-width: 539px) {
+  .div-titulo {
+    height: 70px !important;
+  }
 }
 </style>

@@ -486,7 +486,7 @@
              e confirme no botão OK.
           </li>
           <li class="list-group-item">
-            <strong>Para alterar ordenação:</strong> Clique em T. no cabeçalho de cada tabela para alternar a ordenação entre alfabética e por trimestre.
+            <strong>Para alterar ordenação:</strong> Clique em Docente ou em T. no cabeçalho de cada tabela para alternar a ordenação entre alfabética e por trimestre.
           </li>
         </ul>
       </div>

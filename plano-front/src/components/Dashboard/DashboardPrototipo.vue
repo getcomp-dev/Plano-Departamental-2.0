@@ -169,10 +169,6 @@
             que quer ver, confirmando a seleção em OK.
           </li>
           <li class="list-group-item">
-            <<<<<<< HEAD
-            <strong>Para adicionar disciplinas à Tabela:</strong> Clique em Adicionar (+), em seguida, preencha a nova linha que surgirá na tabela. Após concluído, clique em Salvar (&#10003;)
-            ou em Cancelar (X).
-            =======
             <strong>Para adicionar disciplinas à Tabela:</strong> Clique em Adicionar
             <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
             , em seguida, preencha a nova linha que surgirá na tabela. Após concluído, clique em Salvar
@@ -186,10 +182,9 @@
               style="font-size: 12px"
             ></i>
             .
-            >>>>>>> 61d631b304f32197853a171366e1114bbde01b1d
           </li>
           <li class="list-group-item">
-            <strong>Para editar disciplinas da Tabela:</strong>Faça as alterações necessárias diretamente na tabela e o sistema irá salvar automaticamente.
+            <strong>Para editar disciplinas da Tabela:</strong> Faça as alterações necessárias diretamente na tabela e o sistema irá salvar automaticamente.
           </li>
           <li class="list-group-item">
             <strong>Para deletar disciplinas da Tabela:</strong> Marque a(s) disciplina(s) que deseja deletar
@@ -205,6 +200,10 @@
             <i class="far fa-file-alt relatbtn px-1" style="font-size: 12px"></i>
             e aguarde para fazer
             <font style="font-style:italic;">download</font> do relatório.
+          </li>
+          <li class="list-group-item">
+            <strong>Observações:</strong> Em cada coluna de cursos a disciplina adicionada permite a inclusão em dois espaços, sendo acima
+            destinado para alunos na grade, e abaixo para alunos repetentes.
           </li>
         </ul>
       </div>
