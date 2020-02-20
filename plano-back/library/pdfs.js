@@ -749,7 +749,9 @@ const pdfCargaProfessores = () => new Promise((resolve, reject) => {
                     horarioTotal = ''
                 }else if (horario2 === undefined) {
                     horarioTotal = horario1.horario
-                } else {
+                } else if (horario1 === undefined) {
+                    horarioTotal = horario2.horario
+                }else{
                     horarioTotal = horario1.horario + '/' + horario2.horario
                 }
                 if (turmasProf[j].periodo == 1) {
@@ -832,11 +834,11 @@ const pdfCargaProfessores = () => new Promise((resolve, reject) => {
             if(horario1===undefined && horario2===undefined){
                 horarioTotal = ''
             }else if (horario2 === undefined) {
-                var horarioTotal = horario1.horario
+                horarioTotal = horario1.horario
             } else if (horario1 === undefined) {
-                var horarioTotal = horario2.horario
+                horarioTotal = horario2.horario
             }else{
-                var horarioTotal = horario1.horario + '/' + horario2.horario
+                horarioTotal = horario1.horario + '/' + horario2.horario
             }
             if (turmasSemAloc[j].periodo == 1) {
                 if((turmasSemAloc[j].Docente1 > 0) && (turmasSemAloc[j].Docente2 > 0))
