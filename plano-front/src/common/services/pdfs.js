@@ -812,6 +812,33 @@ export default {
         }
     },
 
+    vagasTurma(turma, semestre){
+        if((semestre === 1 && (turma.periodo == 3 || turma.periodo == 4)) || (semestre === 2 && (turma.periodo == 1 || turma.periodo == 2)))
+            return 0
+        let pedidos = store.state.pedido.Pedidos[turma.id]
+        let vagasP = 0
+        let vagasNP = 0
+        pedidos.forEach(p => {
+            vagasP += p.vagasPeriodizadas
+            vagasNP += p.vagasNaoPeriodizadas
+        })
+        return vagasP + vagasNP
+    },
+
+    vagasDisciplina(disciplina, semestre){
+        let turmas = _.filter(store.state.turma.Turmas, {'Disciplina' : disciplina.id})
+        let vagas = 0
+        turmas.forEach(t => {
+            vagas += this.vagasTurma(t, semestre)
+        })
+        return vagas
+    },
+
+    perfilDisciplina(disciplina){
+        let perfil = _.find(store.state.perfil.Perfis, {'id': disciplina.Perfil})
+        return perfil.abreviacao
+    },
+
     pdfRelatorioDisciplinas() {
         var pdfMake = require('pdfmake/build/pdfmake.js')
         if (pdfMake.vfs == undefined){
@@ -835,21 +862,45 @@ export default {
                     }, {
                         text: disciplinas[i].nome,
                         bold: true,
-                        alignment: 'left'
-                    }], margin: [0, 10, 0, 10]
+                        width: '*'
+                    },
+                    {
+                        text: this.perfilDisciplina(disciplinas[i]),
+                        bold: true,
+                        alignment: 'center',
+                        width: 72
+                    },
+
+                    {
+                        text: this.vagasDisciplina(disciplinas[i], 1),
+                        bold: true,
+                        alignment: 'center',
+                        width: 74
+                    },
+
+                    {
+                        text: this.vagasDisciplina(disciplinas[i], 2),
+                        bold: true,
+                        alignment: 'center',
+                        width: 74
+                    }
+
+                    ], margin: [0, 10, 0, 10]
                 })
 
                 tables.push({
                     style: 'tableExample',
                     table: {
-                        widths: [8, 8, '*', 120],
+                        widths: [8, 8, '*', 120, 65, 65],
                         headerRows: 1,
                         color: '#426',
                         body: [
                             [{text: 'S', alignment: 'center', bold: true},
                                 {text: 'T', alignment: 'center', bold: true},
                                 {text: 'Docentes', alignment: 'center', bold: true},
-                                {text: 'Horário', alignment: 'center',}]
+                                {text: 'Horário', alignment: 'center', bold: true},
+                                {text: 'Vagas 1º S.', alignment: 'center', bold: true},
+                                {text: 'Vagas 2º S.', alignment: 'center', bold: true}]
                         ]
                     }
                 })
@@ -871,7 +922,9 @@ export default {
                         {text:turmasDisc[j].periodo, alignment: 'center'},
                         {text: turmasDisc[j].letra, alignment: 'center'},
                         {text: docentes, alignment: 'center'},
-                        {text: horarioTotal, alignment: 'center'}
+                        {text: horarioTotal, alignment: 'center'},
+                        {text: this.vagasTurma(turmasDisc[j], 1), alignment: 'center'},
+                        {text: this.vagasTurma(turmasDisc[j], 2), alignment: 'center'}
                     ])
 
                 }

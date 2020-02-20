@@ -9,7 +9,7 @@
         <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Grades</h1>
 
         <div
-          class="form-group col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
+          class="form-group form-group-top col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
           <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn p-0">
@@ -23,8 +23,8 @@
 
     <div class="row w-100 m-0" style="font-size:11px">
       <!-- Grid esquerdo -->
-      <div class="col-lg-7 col-md-6 col-sm-12 col-12 m-0 px-0">
-        <div class="divTable ml-0 mt-0 pl-0 pr-0 border">
+      <div class="col-lg-7 col-md-6 col-sm-6 col-12 m-0 px-0">
+        <div class="divTable m-0 pl-0 pr-0 border">
           <table class="table table-sm table-hover">
             <thead class="thead-light">
               <th scope="col">
@@ -155,7 +155,7 @@
       </div>
       <!-- Fim Grid esquerdo  -->
       <!-- Grid direito -->
-      <div class="div-card p-0 mt-0 mb-2 col-lg-5 col-md-6 col-sm-12 col-12">
+      <div class="div-card p-0 mt-0 mb-2 col-lg-5 col-md-6 col-sm-6 col-12">
         <!-- Inicio card -->
         <div class="card mr-3 ml-auto">
           <div class="card-header">
@@ -657,7 +657,7 @@ i.far {
   -webkit-text-stroke-color: #698dff;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 625px) {
   .div-card {
     margin-left: 0px !important;
     margin-right: 50px !important;
@@ -766,5 +766,22 @@ thead th {
 .bg-custom-tr {
   background-color: rgba(0, 0, 0, 0.089);
   color: black;
+}
+
+.form-inline .input-group,
+.form-inline {
+  width: auto;
+}
+
+.form-group-top {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 0;
 }
 </style>

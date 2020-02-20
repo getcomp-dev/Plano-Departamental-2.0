@@ -14,7 +14,7 @@
           class="form-group col-xl-9 col-lg-8 col-md-7 col-sm-6 col-6 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
-          <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
+          <div class="input-group mr-3 ml-auto my-0 p-0">
             <select class="form-control form-control-sm" v-model="periodo">
               <option value="1">Primeiro</option>
               <option value="2">Segundo</option>
@@ -26,14 +26,14 @@
           </div>
           <div class="d-flex p-0 m-0">
             <b-button v-b-modal.modalLaboratorios title="Laboratórios" class="cancelbtn">
-              <i class="fas fa-list-ul"></i>
+              <i class="fas fa-list-ul" style="padding-left: 6.5px"></i>
             </b-button>
 
             <button type="button" class="relatbtn" title="Relatório" v-on:click.prevent="pdf">
               <i class="far fa-file-alt"></i>
             </button>
 
-            <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
+            <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
               <i class="fas fa-question"></i>
             </b-button>
           </div>
@@ -1263,7 +1263,6 @@ export default {
   font-weight: bold;
   font-size: 18px;
 }
-
 .listas {
   line-height: 30px;
   font-size: 12px;
@@ -1273,36 +1272,6 @@ export default {
 }
 strong {
   color: #007bff;
-}
-.relatbtn {
-  background-color: white;
-  color: #9ab3ff !important;
-}
-
-.relatbtn:hover {
-  background-color: white;
-  color: #82a0ff !important;
-}
-
-.relatbtn:focus {
-  color: #82a0ff;
-  background-color: white;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #698dff;
-}
-
-button {
-  padding: 0;
-  border: none;
-  background: none;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-  margin-right: 15px;
-  margin-top: 5px;
-  margin-bottom: 0px;
-  transition: all 0.3s ease 0s;
-  cursor: pointer;
 }
 
 h5 {
@@ -1409,7 +1378,36 @@ p {
   vertical-align: center;
   height: 22px;
 }
+/* ====== BOTÕES ====== */
+button {
+  padding: 0;
+  border: none;
+  background: none;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  margin-right: 15px;
+  margin-top: 5px;
+  margin-bottom: 0px;
+  transition: all 0.3s ease 0s;
+  cursor: pointer;
+}
+.relatbtn {
+  background-color: white;
+  color: #9ab3ff !important;
+}
 
+.relatbtn:hover {
+  background-color: white;
+  color: #82a0ff !important;
+}
+
+.relatbtn:focus {
+  color: #82a0ff;
+  background-color: white;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #698dff;
+}
 .btn-df {
   font-size: 12px;
   height: 25px;
@@ -1487,6 +1485,7 @@ i.far {
   -webkit-text-stroke-color: #ada89a;
 }
 
+/* Formularios no topo da tela */
 .input-group-text {
   display: -ms-flexbox;
   display: -webkit-box;
@@ -1512,16 +1511,10 @@ i.far {
   padding-left: 15px;
   font-size: 12px !important;
 }
-
-.form-control {
-  height: 25px !important;
-  font-size: 12px !important;
-  padding: 0px 0px 0px 5px !important;
-  min-width: 80px !important;
-  max-width: 80px !important;
-  text-align: start !important;
+.form-inline .input-group,
+.form-inline {
+  width: auto;
 }
-
 .form-group {
   display: -ms-flexbox;
   display: flex;
@@ -1533,12 +1526,16 @@ i.far {
   align-items: center;
   margin-bottom: 0;
 }
-
-.form-inline .input-group,
-.form-inline {
-  width: auto;
+.form-control {
+  height: 25px !important;
+  font-size: 12px !important;
+  padding: 0px 0px 0px 5px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
+  text-align: start !important;
 }
-@media screen and (max-width: 539px) {
+/* =========================== */
+@media screen and (max-width: 567px) {
   .div-titulo {
     height: 70px !important;
   }

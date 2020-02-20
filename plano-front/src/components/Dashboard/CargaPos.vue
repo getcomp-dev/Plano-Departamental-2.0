@@ -6,15 +6,15 @@
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="titulo col-xl-2 col-md-3 col-sm-4 col-4 px-0 pr-1">Creditação Pós</h1>
+        <h1 class="titulo col-xl-2 col-md-3 col-sm-4 col-5 px-0 pr-1">Creditação Pós</h1>
 
         <div
-          class="form-group col-xl-10 col-md-9 col-sm-8 col-7 mb-0 p-0"
+          class="form-group form-group-top col-xl-10 col-md-9 col-sm-8 col-7 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
           <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
             <select
-              class="form-control form-control-sm form-control-top"
+              class="form-control form-control-top form-control-sm form-control-top"
               v-model="periodos"
               v-on:change="CreditoTotal_PGMC, CreditoTotal_PGCC, CreditoTotal_PGEM"
             >
@@ -82,7 +82,7 @@
                   <p
                     class="p-header"
                     style="width:24px!important; cursor: pointer;"
-                    @click="toggleOrdenacaoPGMC"
+                    @click="toggleOrdenacaoPGMC('periodo')"
                   >
                     T.
                     <i
@@ -93,7 +93,18 @@
                   </p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:135px!important;">Docente</p>
+                  <p
+                    class="p-header"
+                    @click="toggleOrdenacaoPGMC('nome')"
+                    style="width:135px!important;  cursor: pointer;"
+                  >
+                    Docente
+                    <i
+                      v-if="ordenacaoAtualPGMC==='nome'"
+                      style="font-size:0.6rem"
+                      class="fas fa-arrow-down fa-sm"
+                    ></i>
+                  </p>
                 </th>
                 <th scope="col">
                   <p class="p-header" style="width:30px!important;">C.</p>
@@ -161,7 +172,7 @@
                   <p
                     class="p-header"
                     style="width:24px!important; cursor: pointer"
-                    @click="toggleOrdenacaoPGCC"
+                    @click="toggleOrdenacaoPGCC('periodo')"
                   >
                     T.
                     <i
@@ -172,7 +183,18 @@
                   </p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:135px!important;">Docente</p>
+                  <p
+                    class="p-header"
+                    @click="toggleOrdenacaoPGCC('nome')"
+                    style="width:135px!important; cursor: pointer"
+                  >
+                    Docente
+                    <i
+                      v-if="ordenacaoAtualPGCC==='nome'"
+                      style="font-size:0.6rem"
+                      class="fas fa-arrow-down fa-sm"
+                    ></i>
+                  </p>
                 </th>
                 <th scope="col">
                   <p class="p-header" style="width:30px!important;">C.</p>
@@ -243,7 +265,7 @@
                   <p
                     class="p-header"
                     style="width:24px!important; cursor: pointer"
-                    @click="toggleOrdenacaoPGEM"
+                    @click="toggleOrdenacaoPGEM('periodo')"
                   >
                     T.
                     <i
@@ -254,7 +276,18 @@
                   </p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:135px!important;">Docente</p>
+                  <p
+                    class="p-header"
+                    style="width:135px!important; cursor: pointer"
+                    @click="toggleOrdenacaoPGEM('nome')"
+                  >
+                    Docente
+                    <i
+                      v-if="ordenacaoAtualPGEM==='nome'"
+                      style="font-size:0.6rem"
+                      class="fas fa-arrow-down fa-sm"
+                    ></i>
+                  </p>
                 </th>
                 <th scope="col">
                   <p class="p-header" style="width:30px!important;">C.</p>
@@ -464,26 +497,41 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para adicionar docentes à Tabela:</strong> Preencha o cartão à direita. Após concluído, 
-            clique em Adicionar 
-            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
-             ou em Cancelar 
-             <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
-             .
+            <strong>Para adicionar docentes à Tabela:</strong> Preencha o cartão à direita. Após concluído,
+            clique em Adicionar
+            <i
+              class="fas fa-plus addbtn px-1"
+              style="font-size:12px"
+            ></i>
+            ou em Cancelar
+            <i
+              class="fas fa-times cancelbtn px-1"
+              style="font-size: 12px"
+            ></i>
+            .
           </li>
           <li class="list-group-item">
-            <strong>Para editar docentes da Tabela:</strong> Na tabela, clique no docente que deseja alterar. 
-            No cartão à direita faça as mudanças desejadas e, em seguida, clique em Salvar 
-            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
-             ou em Cancelar 
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>             
-             .
+            <strong>Para editar docentes da Tabela:</strong> Na tabela, clique no docente que deseja alterar.
+            No cartão à direita faça as mudanças desejadas e, em seguida, clique em Salvar
+            <i
+              class="fas fa-check addbtn px-1"
+              style="font-size:12px"
+            ></i>
+            ou em Cancelar
+            <i
+              class="fas fa-times cancelbtn px-1"
+              style="font-size: 12px"
+            ></i>
+            .
           </li>
           <li class="list-group-item">
-            <strong>Para deletar docentes da Tabela:</strong> Marque o(s) docente(s) que deseja deletar através 
+            <strong>Para deletar docentes da Tabela:</strong> Marque o(s) docente(s) que deseja deletar através
             da caixa de seleção à esquerda e em seguida clique em Deletar Selecionados
-            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
-             e confirme no botão OK.
+            <i
+              class="far fa-trash-alt delbtn px-1"
+              style="font-size: 12px"
+            ></i>
+            e confirme no botão OK.
           </li>
           <li class="list-group-item">
             <strong>Para alterar ordenação:</strong> Clique em Docente ou em T. no cabeçalho de cada tabela para alternar a ordenação entre alfabética e por trimestre.
@@ -568,8 +616,8 @@ export default {
       this.cargaPosForm = _.clone(carga);
     },
 
-    toggleOrdenacaoPGMC() {
-      if (this.ordenacaoAtualPGMC === "periodo") {
+    toggleOrdenacaoPGMC(ordenacao) {
+      if (ordenacao === "nome") {
         this.ordenacaoAtualPGMC = "nome";
         this.vetorPeriodosPGMC = [1];
       } else {
@@ -577,8 +625,8 @@ export default {
         this.vetorPeriodosPGMC = [1, 2, 3, 4];
       }
     },
-    toggleOrdenacaoPGCC() {
-      if (this.ordenacaoAtualPGCC === "periodo") {
+    toggleOrdenacaoPGCC(ordenacao) {
+      if (ordenacao === "nome") {
         this.ordenacaoAtualPGCC = "nome";
         this.vetorPeriodosPGCC = [1];
       } else {
@@ -586,8 +634,8 @@ export default {
         this.vetorPeriodosPGCC = [1, 2, 3, 4];
       }
     },
-    toggleOrdenacaoPGEM() {
-      if (this.ordenacaoAtualPGEM === "periodo") {
+    toggleOrdenacaoPGEM(ordenacao) {
+      if (ordenacao === "nome") {
         this.ordenacaoAtualPGEM = "nome";
         this.vetorPeriodosPGEM = [1];
       } else {
@@ -1224,30 +1272,8 @@ i.far {
   background-color: #e9ecef !important;
   border: none;
 }
-.input-group-text {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-align: center;
-  align-items: center;
-  -ms-flex-pack: center;
-  justify-content: center;
-  margin-bottom: 0;
-  /*===*/
-  max-width: 70px;
-  min-width: 70px;
-  height: 25px !important;
-  margin-left: -5px;
-  padding-left: 15px;
-  font-size: 12px !important;
-}
-.form-control-top {
-  height: 25px !important;
-  font-size: 12px !important;
-  padding: 2px 5px 0px 5px !important;
-  min-width: 30px;
-  text-align: start;
-}
-@media screen and (max-width: 521px) {
+
+@media screen and (max-width: 439px) {
   .div-titulo {
     height: 70px !important;
   }
@@ -1258,4 +1284,59 @@ i.far {
 .bg-custom:hover {
   background-color: #c8c8c8;
 }
+
+/* Formularios no topo da tela */
+.input-group-text {
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  -ms-flex-align: center;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -moz-box-align: center;
+  align-items: center;
+  -ms-flex-pack: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -moz-box-pack: center;
+  justify-content: center;
+  margin-bottom: 0;
+  /*===*/
+  max-width: 70px;
+  min-width: 70px;
+  height: 25px !important;
+  margin-left: -5px;
+  padding-left: 15px;
+  font-size: 12px !important;
+}
+
+.form-inline .input-group,
+.form-inline {
+  width: auto;
+}
+
+.form-group-top {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.form-control-top {
+  height: 25px !important;
+  font-size: 12px !important;
+  padding: 0px 0px 0px 5px !important;
+  min-width: 80px !important;
+  max-width: 80px !important;
+  text-align: start !important;
+}
+
+/* =========================== */
 </style>

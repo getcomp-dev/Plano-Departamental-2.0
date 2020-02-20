@@ -62,6 +62,17 @@
                                 ></i>
                             </p>
                         </th>
+
+                        <th scope="col">
+                            <p class="p-header clickable-header" style="width: 65px"
+                               @click="toggleOrderPerfil()"
+                               title="Clique para ordenar por nome">Perfil
+                                <i
+                                        v-if="Array.isArray(ordenacao)"
+                                        style="font-size:0.6rem; text-align:right"
+                                        class="fas fa-arrow-down fa-sm"
+                                ></i></p>
+                        </th>
                         <th scope="col">
                             <p class="p-header" style="width: 24px">S.</p>
                         </th>
@@ -74,6 +85,13 @@
                         <th scope="col">
                             <p class="p-header" style="width: 180px">Horário</p>
                         </th>
+                        <th scope="col">
+                            <p class="p-header" style="width: 65px">Vagas 1º S.</p>
+                        </th>
+                        <th scope="col">
+                            <p class="p-header" style="width: 65px">Vagas 2º S.</p>
+                        </th>
+
                     </div>
                 </tr>
                 </thead>
@@ -89,7 +107,16 @@
                                     <div style="width: 350px;">{{disciplina.nome}}</div>
                                 </td>
                                 <td class="disc-td">
+                                    <div style="width: 65px;">{{perfil(disciplina)}}</div>
+                                </td>
+                                <td class="disc-td">
                                     <div style="width: 428px; height: 20px;"></div>
+                                </td>
+                                <td class="disc-td">
+                                    <div style="width: 65px; height: 20px;">{{vagasDisciplina(disciplina, 1)}}</div>
+                                </td>
+                                <td class="disc-td">
+                                    <div style="width: 65px; height: 20px;">{{vagasDisciplina(disciplina, 2)}}</div>
                                 </td>
 
                             </div>
@@ -104,6 +131,9 @@
                                         </td>
                                         <td>
                                             <p style="width: 350px"></p>
+                                        </td>
+                                        <td>
+                                            <p style="width: 65px"></p>
                                         </td>
                                         <td>
                                             <p style="width: 24px">{{turma.periodo}}</p>
@@ -129,6 +159,12 @@
                                                     </p>
                                                 </template>
                                             </div>
+                                        </td>
+                                        <td>
+                                            <p style="width: 65px;">{{vagasTurma(turma, 1)}}</p>
+                                        </td>
+                                        <td>
+                                            <p style="width: 65px;">{{vagasTurma(turma, 2)}}</p>
                                         </td>
                                     </div>
                                 </template>
@@ -186,10 +222,37 @@
                                 <p style="width:25px" class="p-header"></p>
                             </th>
                             <th class="border-0 p-0">
-                                <p class="p-header" style="width: 80px; text-align:start">Cod.</p>
+                                <p class="p-header clickable-header" style="width: 80px; text-align: start;"
+                                   @click="toggleOrderCodigo()"
+                                   title="Clique para ordenar por código">Cod.
+                                    <i
+                                            v-if="ordenacao=='codigo'"
+                                            style="font-size:0.6rem; text-align:right"
+                                            class="fas fa-arrow-down fa-sm"
+                                    ></i>
+                                </p>
                             </th>
                             <th class="border-0 p-0">
-                                <p class="p-header" style="width: 424px; text-align:start">Nome</p>
+                                <p class="p-header clickable-header" style="width: 277px; text-align: start;"
+                                   @click="toggleOrderNome()"
+                                   title="Clique para ordenar por nome">Nome
+                                    <i
+                                            v-if="ordenacao=='nome'"
+                                            style="font-size:0.6rem; text-align:right"
+                                            class="fas fa-arrow-down fa-sm"
+                                    ></i>
+                                </p>
+                            </th>
+
+                            <th class="border-0 p-0">
+                                <p class="p-header clickable-header" style="width: 65px; text-align: start;"
+                                   @click="toggleOrderPerfil()"
+                                   title="Clique para ordenar por nome">Perfil
+                                    <i
+                                            v-if="Array.isArray(ordenacao)"
+                                            style="font-size:0.6rem; text-align:right"
+                                            class="fas fa-arrow-down fa-sm"
+                                    ></i></p>
                             </th>
                         </div>
                     </tr>
@@ -210,7 +273,10 @@
                                 <p style="width:80px; text-align:start">{{disciplina.codigo}}</p>
                             </td>
                             <td>
-                                <p style="width:424px; text-align:start">{{disciplina.nome}}</p>
+                                <p style="width:277px; text-align:start">{{disciplina.nome}}</p>
+                            </td>
+                            <td>
+                                <p style="width:65px; text-align:start">{{perfil(disciplina)}}</p>
                             </td>
                         </div>
                     </tr>
@@ -263,7 +329,7 @@
 
             btnOK() {
                 //Somente atualiza o vetor de perfis ativados quando o botão OK for clickado
-                this.DisciplinasAtivados = [..._.orderBy(this.DisciplinasSelecionados, 'codigo')];
+                this.DisciplinasAtivados = [..._.orderBy(this.DisciplinasSelecionados, this.ordenacao)];
                 this.$refs.DisciplinasModal.hide();
             },
 
@@ -284,6 +350,37 @@
             toggleOrderCodigo() {
                 this.DisciplinasAtivados = _.orderBy(this.DisciplinasAtivados, 'codigo')
                 this.ordenacao = "codigo";
+            },
+            toggleOrderPerfil() {
+                this.DisciplinasAtivados = _.orderBy(this.DisciplinasAtivados, ['Perfil', 'codigo'])
+                this.ordenacao = ['Perfil', 'codigo'];
+            },
+
+            vagasTurma(turma, semestre){
+                if((semestre === 1 && (turma.periodo == 3 || turma.periodo == 4)) || (semestre === 2 && (turma.periodo == 1 || turma.periodo == 2)))
+                    return 0
+                let pedidos = this.$store.state.pedido.Pedidos[turma.id]
+                let vagasP = 0
+                let vagasNP = 0
+                pedidos.forEach(p => {
+                    vagasP += p.vagasPeriodizadas
+                    vagasNP += p.vagasNaoPeriodizadas
+                })
+                return vagasP + vagasNP
+            },
+
+            vagasDisciplina(disciplina, semestre){
+                let turmas = _.filter(this.$store.state.turma.Turmas, {'Disciplina' : disciplina.id})
+                let vagas = 0
+                turmas.forEach(t => {
+                    vagas += this.vagasTurma(t, semestre)
+                })
+                return vagas
+            },
+
+            perfil(disciplina){
+              let perfil = _.find(this.$store.state.perfil.Perfis, {'id': disciplina.Perfil})
+              return perfil.abreviacao
             },
 
             turmas(disciplina) {

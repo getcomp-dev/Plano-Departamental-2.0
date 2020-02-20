@@ -229,7 +229,7 @@
                 </template>
               </template>
             </template>
-            <template v-if="turmasSemAlocacao().length > 0">
+            <template v-if="(turmasSemAlocacao().length > 0) && SemAlocacao">
               <template v-if="turmasSemAlocacao().length > 0">
                 <div class="linhas" style="width: ‭845‬px;" :key="'semAlocacao'">
                   <td class="prof-td">
@@ -407,6 +407,22 @@
               </td>
             </div>
           </tr>
+          <tr>
+            <div style="width: max-content">
+              <td style="padding:0;broder:0;margin:0!important;">
+                <div style="width:30px; height: 22px !important;">
+                  <input
+                          type="checkbox"
+                          v-model="SemAlocacaoCheck"
+                          class="form-check-input position-static m-0"
+                  />
+                </div>
+              </td>
+              <td>
+                <p style="width:225px; text-align:start">SEM ALOCAÇÃO</p>
+              </td>
+            </div>
+          </tr>
           </tbody>
         </table>
       </div>
@@ -446,7 +462,9 @@ export default {
   data () {
       return {
           DocentesSelecionados: [],
-          DocentesAtivados: []
+          DocentesAtivados: [],
+          SemAlocacao: false,
+          SemAlocacaoCheck: false
       }
   },
 
@@ -458,6 +476,7 @@ export default {
     btnOK() {
       //Somente atualiza o vetor de perfis ativados quando o botão OK for clickado
       this.DocentesAtivados = [..._.orderBy(this.DocentesSelecionados, 'apelido')];
+      this.SemAlocacao = this.SemAlocacaoCheck
       this.$refs.DocentesModal.hide();
     },
 
@@ -465,10 +484,12 @@ export default {
       if (this.DocentesSelecionados != []) this.DocentesSelecionados = [];
       for (var i = 0; i < this.$store.state.docente.Docentes.length; i++)
         this.DocentesSelecionados.push(this.$store.state.docente.Docentes[i]);
+      this.SemAlocacaoCheck = true
     },
 
     selectNone() {
       this.DocentesSelecionados = [];
+      this.SemAlocacaoCheck = false
     },
 
     turmas(professor) {
