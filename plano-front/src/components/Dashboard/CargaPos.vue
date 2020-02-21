@@ -335,7 +335,7 @@
     </div>
 
     <!-- Card de Adição -->
-    <div class="div-card p-0 mt-0 mb-2 col-lg-4 col-md-12 col-sm-12 col-12">
+    <div class="div-card p-0 mt-0 mb-2 col-auto">
       <!-- Inicio card -->
       <div class="card mr-3 ml-auto">
         <div class="card-header">
@@ -1273,11 +1273,6 @@ i.far {
   border: none;
 }
 
-@media screen and (max-width: 439px) {
-  .div-titulo {
-    height: 70px !important;
-  }
-}
 .bg-custom {
   background-color: #c8c8c8;
 }
@@ -1337,6 +1332,22 @@ i.far {
   max-width: 80px !important;
   text-align: start !important;
 }
-
 /* =========================== */
+@media screen and (max-width: 439px) {
+  .div-titulo {
+    height: 70px !important;
+  }
+}
+
+@media screen and (max-width: 995px) {
+  .div-card {
+    margin-left: 0px !important;
+    margin-right: 50px !important;
+    top: 0 !important;
+  }
+
+  .card {
+    margin-left: 0px !important;
+  }
+}
 </style>

@@ -110,7 +110,7 @@
                     <i class="fas fa-clipboard"></i> Creditação Pós
                   </router-link>
                 </li>
-                
+
                 <!--<li v-if="Admin" @click="show=false" class="nav-item">
                   <router-link :to="{ name: 'turmas' }" class="nav-link">
                     <i class="fas fa-bars"></i> Turmas
@@ -134,6 +134,11 @@
                     <i class="fas fa-clipboard"></i> Horários - Resumo
                   </router-link>
                 </li>-->
+                <li @click="show=false" class="nav-item">
+                  <router-link :to="{ name: 'gradeDisciplinas' }" class="nav-link">
+                    <i class="fas fa-clipboard"></i> Grades Disciplinas
+                  </router-link>
+                </li>
                 <li v-if="Admin" @click="show=false" class="nav-item">
                   <router-link :to="{ name: 'horarios' }" class="nav-link">
                     <i class="fas fa-calendar-alt"></i> Horários - Cursos
@@ -142,11 +147,6 @@
                 <li @click="show=false" class="nav-item">
                   <router-link :to="{ name: 'laboratoriosAlocacao' }" class="nav-link">
                     <i class="fas fa-calendar-alt"></i> Horários - Laboratórios
-                  </router-link>
-                </li>
-                <li @click="show=false" class="nav-item">
-                  <router-link :to="{ name: 'gradeDisciplinas' }" class="nav-link">
-                    <i class="fas fa-clipboard"></i> Grades Disciplinas
                   </router-link>
                 </li>
               </ul>
@@ -710,16 +710,26 @@ export default {
 }
 /* SCROLL BAR CUSTOM */
 .sidebar-sticky ::-webkit-scrollbar-track {
-  background-color: #f4f4f4;
+  background-color: #f4f4f4 !important;
 }
 .sidebar-sticky::-webkit-scrollbar {
-  width: 6px;
-  background: #f4f4f4;
+  width: 6px !important;
+  background: #f4f4f4 !important;
 }
 .sidebar-sticky::-webkit-scrollbar-thumb {
-  background: #666;
+  background: #666 !important;
 }
-/* ========= */
+/* ========================== */
+[role="main"]::-webkit-scrollbar-track {
+  background-color: #f4f4f4 !important;
+}
+[role="main"]::-webkit-scrollbar {
+  width: 6px !important;
+  background: #f4f4f4 !important;
+}
+[role="main"]::-webkit-scrollbar-thumb {
+  background: #666 !important;
+}
 
 .container-fluid {
   max-width: 100%;
@@ -737,7 +747,7 @@ export default {
 
 .navbar-brand {
   height: 30px;
-  color: rgb(213, 214, 216);
+  color: rgb(224, 224, 224) !important;
   font-size: 15px;
   padding: 3px 12px 5px 10px;
   min-width: -webkit-max-content;
@@ -753,7 +763,7 @@ export default {
   box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25);
 }
 .navbar-brand:hover {
-  color: rgb(255, 255, 255);
+  color: rgb(255, 255, 255) !important;
 }
 .navbar {
   padding: 0;
@@ -972,7 +982,7 @@ export default {
   padding: 0 6px 0 6px;
   height: 30px;
   margin-left: 0px;
-  color: #cccdcf;
+  color: rgb(205, 206, 208);
   background-color: rgba(0, 0, 0, 0.25);
   font-size: 20px;
   border: 1px;

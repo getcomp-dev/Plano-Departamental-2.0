@@ -708,7 +708,7 @@ const pdfCargaProfessores = () => new Promise((resolve, reject) => {
             tables.push({
                 style: 'tableExample',
                 table: {
-                    widths: [8, 68, '*', 18, 104, 16, 16],
+                    widths: [8, 68, '*', 18, 104, 24, 24],
                     headerRows: 1,
                     color: '#426',
                     body: [

@@ -150,7 +150,6 @@
                     <input
                       type="checkbox"
                       :value="curso.value"
-                      v-on:change.capture="defineSelectAll"
                       v-model="cursosSelecionados"
                       class="form-check-input position-static m-0"
                     />
@@ -222,6 +221,16 @@ export default {
       error: undefined,
       options_Cursos: [
         {
+          nome: "SISTEMAS DE INFORMAÇÃO",
+          value: 3,
+          codigo: "76A"
+        },
+        {
+          nome: "CIÊNCIA DA COMPUTAÇÃO NOTURNO",
+          value: 2,
+          codigo: "35A"
+        },
+        {
           nome: "CIÊNCIA DA COMPUTAÇÃO DIURNO",
           value: 1,
           codigo: "65C"
@@ -230,16 +239,6 @@ export default {
           nome: "ENGENHARIA DA COMPUTAÇÃO",
           value: 4,
           codigo: "65B"
-        },
-        {
-          nome: "CIÊNCIA DA COMPUTAÇÃO NOTURNO",
-          value: 2,
-          codigo: "35A"
-        },
-        {
-          nome: "SISTEMAS DE INFORMAÇÃO",
-          value: 3,
-          codigo: "76A"
         },
         {
           nome: "ELETIVAS",
@@ -4531,7 +4530,6 @@ export default {
   overflow: hidden;
   margin: 0;
 }
-
 .titulo {
   font-size: 25px;
   font-weight: normal;

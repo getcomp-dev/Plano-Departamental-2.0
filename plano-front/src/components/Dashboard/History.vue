@@ -13,17 +13,17 @@
                         style="display:flex;"
                 >
                     <div class="input-group ml-auto mb-0 mt-0 p-0">
-
-
-                        <div class="input-group-append mt-auto mb-auto">
-                            <label class="input-group-text">Operação</label>
-                        </div>
+                      
                         <select class="form-control form-control-sm mt-auto mb-auto" v-model="operacoes">
                             <option value="Todos">Todas</option>
                             <option value="Create">Create</option>
                             <option value="Delete">Delete</option>
                             <option value="Edit">Edit</option>
                         </select>
+                          <div class="input-group-append mt-auto mb-auto mr-2">
+                            <label class="input-group-text">Operação</label>
+                        </div>
+
 
                         <b-button v-b-modal.modalTabelas title="Tabelas" class="cancelbtn ml-2">
                             <i class="fas fa-list-ul"></i>
@@ -126,22 +126,22 @@
         <b-modal id="modalTabelas" ref="TabelasModal" scrollable title="Selecione as tabelas" :size="'sm'">
             <div
                     class="form-group col m-0 p-0 border"
-                    style="height: 395px; width:max-content; border-color: rgba(0,0,0,0.125);"
+                    style="max-height: 395px; height: 372px; width:max-content; border-color: rgba(0,0,0,0.125);"
             >
-                <table class="table table-sm modal-table" style="max-height: 392px !important;">
+                <table class="table table-sm modal-table" style="max-height: 370px !important;">
                     <tr>
-                        <div style="width: max-content; font-size: 11px!important">
-                            <th class="border-0">
-                                <p style="width:25px" class="p-header"></p>
+                        <div class="p-0" style="width: max-content; font-size: 11px!important">
+                            <th class="border-0 p-0">
+                                <p style="width:20px" class="p-header"></p>
                             </th>
-                            <th class="border-0">
+                            <th class="border-0 p-0">
                                 <p class="p-header" style="width: 200px; text-align:start">Nome</p>
                             </th>
                         </div>
                     </tr>
                     <tbody>
                     <tr v-for="o in options" :key="`tabeka${o.value}`">
-                        <div style="width: max-content">
+                        <div style="width: max-content; height: 18px !important">
                             <td style="padding:0;broder:0;margin:0!important;">
                                 <div style="width:25px;">
                                     <input
@@ -153,7 +153,7 @@
                                 </div>
                             </td>
                             <td>
-                                <p style="width:200px; text-align:start">{{o.text}}</p>
+                                <p style="width:220px; text-align:start; font-size: 10px !important;">{{o.text}}</p>
                             </td>
                         </div>
                     </tr>
@@ -161,17 +161,19 @@
                 </table>
             </div>
 
-            <div slot="modal-footer" style="display: flex; margin-right: 10px !important;">
-                <b-button
-                        class="btn-azul btn-df mr-2"
-                        variant="success"
-                        @click="selectAll()"
-                >Selecionar Todos</b-button>
-                <b-button
-                        class="btn-cinza btn-df mr-2"
-                        variant="secondary"
-                        @click="selectNone()"
-                >Desmarcar Todos</b-button>
+            <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
+                <div class="w-100 d-flex">
+                    <b-button
+                            class="btn-azul btn-df mr-2"
+                            variant="success"
+                            @click="selectAll()"
+                    >Selecionar Todos</b-button>
+                    <b-button
+                            class="btn-cinza btn-df mr-2"
+                            variant="secondary"
+                            @click="selectNone()"
+                    >Desmarcar Todos</b-button>
+                </div>
                 <b-button
                         variant="success"
                         @click="btnOK()"
@@ -192,19 +194,19 @@
         data () {
           return {
               options: [
-                  {text: 'CargaPos', value:'CargaPos'},
-                  {text: 'Curso', value:'Curso'},
-                  {text: 'Disciplina', value:'Disciplina'},
-                  {text: 'DisciplinaGrade', value:'DisciplinaGrade'},
-                  {text: 'Docente', value:'Docente'},
-                  {text: 'DocentePerfil', value:'DocentePerfil'},
-                  {text: 'Grade', value:'Grade'},
-                  {text: 'Pedido', value:'Pedido'},
-                  {text: 'PedidoExterno', value:'PedidoExterno'},
-                  {text: 'Perfil', value:'Perfil'},
-                  {text: 'Sala', value:'Sala'},
-                  {text: 'Turma', value:'Turma'},
-                  {text: 'TurmaExterna', value:'TurmaExterna'},
+                  {text: 'CARGA PÓS', value:'CargaPos'},
+                  {text: 'CURSO', value:'Curso'},
+                  {text: 'DISCIPLINA', value:'Disciplina'},
+                  {text: 'DISCIPLINA GRADE', value:'DisciplinaGrade'},
+                  {text: 'DOCENTE', value:'Docente'},
+                  {text: 'DOCENTE PERFIL', value:'DocentePerfil'},
+                  {text: 'GRADE', value:'Grade'},
+                  {text: 'PEDIDO', value:'Pedido'},
+                  {text: 'PEDIDO EXTERNO', value:'PedidoExterno'},
+                  {text: 'PERFIL', value:'Perfil'},
+                  {text: 'SALA', value:'Sala'},
+                  {text: 'TURMA', value:'Turma'},
+                  {text: 'TURMA EXTERNA', value:'TurmaExterna'},
               ],
               TabelasSelecionadas:[],
               TabelasAtivadas: [],
@@ -491,7 +493,7 @@
         text-align: center;
         vertical-align: middle;
         padding: 0 !important;
-        border: none;
+        
     }
     .linhas {
         border-top: 1px solid #dee2e6;
@@ -522,6 +524,10 @@
     table input {
         height: 18px !important;
         text-align: center !important;
+    }
+    table input[type="checkbox"] {
+        margin-left: 0 !important;
+        margin-top: 4px !important;
     }
     .sticky {
         position: sticky;
@@ -700,10 +706,19 @@
 
     .input-group-text {
         display: -ms-flexbox;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-box;
         display: flex;
         -ms-flex-align: center;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -moz-box-align: center;
         align-items: center;
         -ms-flex-pack: center;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -moz-box-pack: center;
         justify-content: center;
         margin-bottom: 0;
         /*===*/
@@ -713,5 +728,10 @@
         margin-left: -5px;
         padding-left: 15px;
         font-size: 12px !important;
+    }
+
+    label.input-group-text{
+        border-top-right-radius: 0.25rem !important;
+        border-bottom-right-radius: 0.25rem !important;
     }
 </style>

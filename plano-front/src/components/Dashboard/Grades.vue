@@ -657,19 +657,6 @@ i.far {
   -webkit-text-stroke-color: #698dff;
 }
 
-@media screen and (max-width: 625px) {
-  .div-card {
-    margin-left: 0px !important;
-    margin-right: 50px !important;
-    margin-top: 20px !important;
-    top: 0 !important;
-  }
-
-  .card {
-    margin-left: 0px !important;
-  }
-}
-
 .modal-header {
   background-color: rgba(0, 0, 0, 0.03);
   text-align: center;
@@ -783,5 +770,18 @@ thead th {
   -ms-flex-align: center;
   align-items: center;
   margin-bottom: 0;
+}
+
+@media screen and (max-width: 625px) {
+  .div-card {
+    margin-left: 0px !important;
+    margin-right: 50px !important;
+    margin-top: 20px !important;
+    top: 0 !important;
+  }
+
+  .card {
+    margin-left: 0px !important;
+  }
 }
 </style>

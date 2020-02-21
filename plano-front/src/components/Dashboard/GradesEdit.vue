@@ -21,7 +21,7 @@
     <div class="w-100 mb-2 border-bottom"></div>
 
     <div class="row w-100 m-0" style="font-size:11px">
-      <div class="col-lg-7 col-md-6 col-sm-12 col-12 m-0 px-0">
+      <div class="col-lg-7 col-md-7 col-sm-12 col-12 m-0 px-0">
         <div class="row w-100 m-0" style="font-size:11px">
           <!-- Grind esquerdo -->
           <!-- Inicio da tabela -->
@@ -29,7 +29,7 @@
             <table class="table table-sm table-hover">
               <thead class="thead-light">
                 <tr>
-                  <div style="width: 505px;" class="sticky">
+                  <div style="display: block; overflow: hidden; width: 505px;" class="sticky">
                     <th scope="col">
                       <p class="p-header" style="width: 32px">P.</p>
                     </th>
@@ -94,7 +94,7 @@
       <!-- Fim Grind esquerdo  -->
 
       <!-- Grind direito -->
-      <div class="div-card p-0 mt-0 mb-2 col-lg-5 col-md-6 col-sm-12 col-12">
+      <div class="div-card p-0 mt-0 mb-2 col-lg-5 col-md-5 col-sm-12 col-12">
         <!-- Inicio card Disciplina -->
         <div class="card mr-3 ml-auto">
           <div class="card-header">
@@ -300,24 +300,37 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para exibir conteúdo na tabela:</strong> Comece selecionando o curso desejado. Em seguida, selecione 
+            <strong>Para exibir conteúdo na tabela:</strong> Comece selecionando o curso desejado. Em seguida, selecione
             a grade que quer visualizar.
           </li>
           <li class="list-group-item">
-            <strong>Para adicionar disciplinas à Grade:</strong> Com o cartão a direita em branco, preencha-o. Em seguida, 
-            clique em Adicionar <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>.
+            <strong>Para adicionar disciplinas à Grade:</strong> Com o cartão a direita em branco, preencha-o. Em seguida,
+            clique em Adicionar
+            <i
+              class="fas fa-plus addbtn px-1"
+              style="font-size:12px"
+            ></i>.
           </li>
           <li class="list-group-item">
-            <strong>Para editar ou deletar uma disciplina:</strong> Na tabela, clique na disciplina que deseja modificar. 
-            Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar 
-            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
-             ou, para excluí-la, clique em Deletar 
-             <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
-             .
+            <strong>Para editar ou deletar uma disciplina:</strong> Na tabela, clique na disciplina que deseja modificar.
+            Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar
+            <i
+              class="fas fa-check addbtn px-1"
+              style="font-size:12px"
+            ></i>
+            ou, para excluí-la, clique em Deletar
+            <i
+              class="far fa-trash-alt delbtn px-1"
+              style="font-size: 12px"
+            ></i>
+            .
           </li>
           <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar 
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar
+            <i
+              class="fas fa-times cancelbtn px-1"
+              style="font-size: 12px"
+            ></i>
             .
           </li>
         </ul>
@@ -710,7 +723,7 @@ input {
 table {
   display: block !important;
   overflow-y: auto !important;
-  overflow-x: hidden !important;
+  overflow-x: auto !important;
   font-size: 11px !important;
   font-weight: normal !important;
   background-color: white;
@@ -864,17 +877,6 @@ i.far {
   border: 0;
 }
 
-@media screen and (max-width: 900px) {
-  .div-card {
-    margin-left: 0px !important;
-    margin-right: 50px !important;
-    margin-top: 20px !important;
-    top: 0 !important;
-  }
-  .card {
-    margin-left: 0px !important;
-  }
-}
 .modal-header {
   background-color: rgba(0, 0, 0, 0.03);
   text-align: center;
@@ -888,5 +890,17 @@ header {
   padding-left: 0;
   margin: 0;
   text-align: center;
+}
+
+@media screen and (max-width: 885px) {
+  .div-card {
+    margin-left: 0px !important;
+    margin-right: 50px !important;
+    margin-top: 20px !important;
+    top: 0 !important;
+  }
+  .card {
+    margin-left: 0px !important;
+  }
 }
 </style>

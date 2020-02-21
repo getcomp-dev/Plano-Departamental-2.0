@@ -2,26 +2,28 @@
   <div class="DashboardCargaProfessores row pr-2">
     <!-- Titulo -->
     <div
-      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
+      class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="titulo col-7 col-sm-5 col-md-4 col-xl-2">Carga Professores</h1>
+        <h1 class="titulo col-8 col-sm-5 col-md-4 col-lg-3 col-xl-3">Carga Professores</h1>
 
         <div
-          class="form-group col-5 col-sm-7 col-md-8 col-xl-10 mb-0 pr-0"
+          class="form-group col-4 col-sm-7 col-md-8 col-lg-9 col-xl-9 mb-0 pr-0"
           style="justify-content: flex-end;"
         >
-          <b-button v-b-modal.modalDocentes title="Docentes" class="cancelbtn">
-            <i class="fas fa-list-ul"></i>
-          </b-button>
-          <button type="button" class="relatbtn" title="Relatório" v-on:click.prevent="pdf">
-            <i class="far fa-file-alt"></i>
-          </button>
+          <div class="d-flex">
+            <b-button v-b-modal.modalDocentes title="Docentes" class="cancelbtn">
+              <i class="fas fa-list-ul"></i>
+            </b-button>
+            <button type="button" class="relatbtn" title="Relatório" v-on:click.prevent="pdf">
+              <i class="far fa-file-alt"></i>
+            </button>
 
-          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
-                <i class="fas fa-question"></i>
-          </b-button>
+            <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
+              <i class="fas fa-question"></i>
+            </b-button>
+          </div>
         </div>
       </div>
     </div>
@@ -347,82 +349,92 @@
       </table>
     </div>
 
-  <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
-      
+    <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
       <div class="modal-body">
-        <ul class="listas list-group"> 
+        <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para exibir conteúdo na Tabela: </strong> Clique em Docentes
+            <strong>Para exibir conteúdo na Tabela:</strong> Clique em Docentes
             <i class="fas fa-list-ul cancelbtn px-1" style="font-size: 12px"></i>
-             e selecione o(s) professor(es) que deseja ver, em seguida confirme em OK. Caso queira ver todos basta clicar em Selecionar Todos.
+            e selecione o(s) professor(es) que deseja ver, em seguida confirme em OK. Caso queira ver todos basta clicar em Selecionar Todos.
           </li>
           <li class="list-group-item">
-             <strong>Para gerar relatório:</strong> Clique no botão Relatório 
-             <i class="far fa-file-alt relatbtn px-1" style="font-size: 12px"></i>
-             e aguarde para fazer <font style='font-style:italic;'>download</font> do mesmo.
+            <strong>Para gerar relatório:</strong> Clique no botão Relatório
+            <i
+              class="far fa-file-alt relatbtn px-1"
+              style="font-size: 12px"
+            ></i>
+            e aguarde para fazer
+            <font style="font-style:italic;">download</font> do mesmo.
           </li>
         </ul>
       </div>
 
-      <div slot="modal-footer" style="display: none">
-      </div>
+      <div slot="modal-footer" style="display: none"></div>
     </b-modal>
 
     <!-- Modals do botão para escolher docentes -->
-    <b-modal id="modalDocentes" 
-            ref="DocentesModal" 
-            scrollable title="Selecione os docentes"
-            :size="'sm'"
-            >
+    <b-modal
+      id="modalDocentes"
+      ref="DocentesModal"
+      scrollable
+      title="Selecione os docentes"
+      :size="'sm'"
+    >
       <div
-              class="form-group col m-0 p-0"
-              style="height: 302px; width:max-content; border-color: rgba(0,0,0,0.125);"
+        class="form-group col m-0 p-0"
+        style="height: 302px; width:max-content; border-color: rgba(0,0,0,0.125);"
       >
-        <table class="table table-sm modal-table border " style="max-height: 302px !important;  overflow-x: hidden !important;">
+        <table
+          class="table table-sm modal-table border"
+          style="max-height: 302px !important;  overflow-x: hidden !important;"
+        >
           <tr>
             <div class="p-0" style="width: max-content; font-size: 11px!important; height: 18px">
               <th class="border-0 p-0">
                 <p style="width:30px; height: 18px !important;" class="p-header"></p>
               </th>
               <th class="border-0 p-0">
-                <p class="p-header" style="width: 225px; text-align:start; height: 18px !important">Nome</p>
+                <p
+                  class="p-header"
+                  style="width: 225px; text-align:start; height: 18px !important"
+                >Nome</p>
               </th>
             </div>
           </tr>
           <tbody>
-          <tr v-for="docente in Professores" :key="`docente${docente.id}`">
-            <div style="width: max-content">
-              <td style="padding:0;broder:0;margin:0!important;">
-                <div style="width:30px; height: 22px !important;">
-                  <input
-                          type="checkbox"
-                          v-model="DocentesSelecionados"
-                          :value="docente"
-                          class="form-check-input position-static m-0"
-                  />
-                </div>
-              </td>
-              <td>
-                <p style="width:225px; text-align:start">{{docente.apelido}}</p>
-              </td>
-            </div>
-          </tr>
-          <tr>
-            <div style="width: max-content">
-              <td style="padding:0;broder:0;margin:0!important;">
-                <div style="width:30px; height: 22px !important;">
-                  <input
-                          type="checkbox"
-                          v-model="SemAlocacaoCheck"
-                          class="form-check-input position-static m-0"
-                  />
-                </div>
-              </td>
-              <td>
-                <p style="width:225px; text-align:start">SEM ALOCAÇÃO</p>
-              </td>
-            </div>
-          </tr>
+            <tr v-for="docente in Professores" :key="`docente${docente.id}`">
+              <div style="width: max-content">
+                <td style="padding:0;broder:0;margin:0!important;">
+                  <div style="width:30px; height: 22px !important;">
+                    <input
+                      type="checkbox"
+                      v-model="DocentesSelecionados"
+                      :value="docente"
+                      class="form-check-input position-static m-0"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <p style="width:225px; text-align:start">{{docente.apelido}}</p>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div style="width: max-content">
+                <td style="padding:0;broder:0;margin:0!important;">
+                  <div style="width:30px; height: 22px !important;">
+                    <input
+                      type="checkbox"
+                      v-model="SemAlocacaoCheck"
+                      class="form-check-input position-static m-0"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <p style="width:225px; text-align:start">SEM ALOCAÇÃO</p>
+                </td>
+              </div>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -430,21 +442,21 @@
       <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
         <div class="w-100 d-flex">
           <b-button
-                  class="btn-azul btn-df mr-2"
-                  variant="success"
-                  @click="selectAll()"
+            class="btn-azul btn-df mr-2"
+            variant="success"
+            @click="selectAll()"
           >Selecionar Todos</b-button>
           <b-button
-                  class="btn-cinza btn-df mr-2"
-                  variant="secondary"
-                  @click="selectNone()"
+            class="btn-cinza btn-df mr-2"
+            variant="secondary"
+            @click="selectNone()"
           >Desmarcar Todos</b-button>
         </div>
         <b-button
-                variant="success"
-                @click="btnOK()"
-                class="btn-verde btn-df mr-2"
-                style="padding-right:15px!important; padding-left:15px!important;"
+          variant="success"
+          @click="btnOK()"
+          class="btn-verde btn-df mr-2"
+          style="padding-right:15px!important; padding-left:15px!important;"
         >OK</b-button>
       </div>
     </b-modal>
@@ -459,13 +471,13 @@ import html2canvas from "html2canvas";
 export default {
   name: "DashboardCargaProfessores",
 
-  data () {
-      return {
-          DocentesSelecionados: [],
-          DocentesAtivados: [],
-          SemAlocacao: false,
-          SemAlocacaoCheck: false
-      }
+  data() {
+    return {
+      DocentesSelecionados: [],
+      DocentesAtivados: [],
+      SemAlocacao: false,
+      SemAlocacaoCheck: false
+    };
   },
 
   methods: {
@@ -475,8 +487,10 @@ export default {
 
     btnOK() {
       //Somente atualiza o vetor de perfis ativados quando o botão OK for clickado
-      this.DocentesAtivados = [..._.orderBy(this.DocentesSelecionados, 'apelido')];
-      this.SemAlocacao = this.SemAlocacaoCheck
+      this.DocentesAtivados = [
+        ..._.orderBy(this.DocentesSelecionados, "apelido")
+      ];
+      this.SemAlocacao = this.SemAlocacaoCheck;
       this.$refs.DocentesModal.hide();
     },
 
@@ -484,12 +498,12 @@ export default {
       if (this.DocentesSelecionados != []) this.DocentesSelecionados = [];
       for (var i = 0; i < this.$store.state.docente.Docentes.length; i++)
         this.DocentesSelecionados.push(this.$store.state.docente.Docentes[i]);
-      this.SemAlocacaoCheck = true
+      this.SemAlocacaoCheck = true;
     },
 
     selectNone() {
       this.DocentesSelecionados = [];
-      this.SemAlocacaoCheck = false
+      this.SemAlocacaoCheck = false;
     },
 
     turmas(professor) {
@@ -803,7 +817,9 @@ table input[type="checkbox"] {
   line-height: inherit;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
-strong{color:#007bff}
+strong {
+  color: #007bff;
+}
 /* Botoes */
 button {
   padding: 0;
@@ -948,4 +964,26 @@ i.far {
   -webkit-text-stroke-color: #ada89a;
 }
 
+/* Formularios no topo da tela */
+.form-inline .input-group,
+.form-inline {
+  width: auto;
+}
+
+.form-group {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 0;
+}
+@media screen and (max-width: 355px) {
+  .div-titulo {
+    height: 70px !important;
+  }
+}
 </style>
