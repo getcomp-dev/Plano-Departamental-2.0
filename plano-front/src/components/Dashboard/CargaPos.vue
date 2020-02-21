@@ -46,14 +46,13 @@
       </div>
     </div>
 
-    <div class="w-100 mb-2 border-bottom"></div>
-
     <div id="loading" v-if="isLoading">
       <div class="cube1"></div>
       <div class="cube2"></div>
     </div>
+    <div class="w-100 mb-2 border-bottom"></div>
 
-    <div class="row p-0 m-0">
+    <div class="row m-0">
       <!-- Inicio Tabela 1 -->
       <div class="p-0 divTable mr-2 mb-2" v-if="!isLoading">
         <div class="alert alert-dark p-0 m-0 text-center rounded-0" role="alert">
@@ -459,6 +458,7 @@
         </div>
       </div>
     </div>
+
     <!-- modal -->
     <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
       <template v-if="Deletar.length === 0">

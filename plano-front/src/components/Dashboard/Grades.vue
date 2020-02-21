@@ -581,10 +581,12 @@ strong {
 button {
   padding: 0;
   border: none;
+  background: none;
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
   margin-right: 15px;
+  margin-top: 0px;
   transition: all 0.3s ease 0s;
   cursor: pointer;
 }
@@ -754,10 +756,12 @@ thead th {
   background-color: rgba(0, 0, 0, 0.089);
   color: black;
 }
-
-.form-inline .input-group,
-.form-inline {
-  width: auto;
+.listas {
+  line-height: 30px;
+  font-size: 12px;
+  text-align: justify;
+  line-height: inherit;
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
 
 .form-group-top {
@@ -772,6 +776,10 @@ thead th {
   margin-bottom: 0;
 }
 
+.form-inline .input-group,
+.form-inline {
+  width: auto;
+}
 @media screen and (max-width: 625px) {
   .div-card {
     margin-left: 0px !important;

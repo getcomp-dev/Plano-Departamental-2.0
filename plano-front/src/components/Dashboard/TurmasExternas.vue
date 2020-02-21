@@ -135,6 +135,7 @@
                       type="text"
                       style="width: 20px; height:20px; text-align: center; "
                       id="periodo"
+                      @keypress="onlyNumber"
                       v-model="turmaForm.periodo"
                     />
                   </div>
@@ -335,19 +336,28 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para adicionar disciplinas à Tabela:</strong> Clique em Adicionar 
+            <strong>Para adicionar disciplinas à Tabela:</strong> Clique em Adicionar
             <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
-            , em seguida, preencha a nova linha que surgirá na tabela. Após concluído, clique em Salvar 
-            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
-            ou em Cancelar 
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+            , em seguida, preencha a nova linha que surgirá na tabela. Após concluído, clique em Salvar
+            <i
+              class="fas fa-check addbtn px-1"
+              style="font-size:12px"
+            ></i>
+            ou em Cancelar
+            <i
+              class="fas fa-times cancelbtn px-1"
+              style="font-size: 12px"
+            ></i>
             .
           </li>
           <li class="list-group-item">
             <strong>Para deletar disciplinas da Tabela:</strong> Marque a(s) disciplina(s) que deseja deletar através
-             da caixa de seleção à esquerda e em seguida clique em Deletar 
-             <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
-              e confirme no botão OK.
+            da caixa de seleção à esquerda e em seguida clique em Deletar
+            <i
+              class="far fa-trash-alt delbtn px-1"
+              style="font-size: 12px"
+            ></i>
+            e confirme no botão OK.
           </li>
           <li class="list-group-item">
             <strong>Para editar disciplinas da Tabela:</strong> Faça as alterações necessárias diretamente na tabela e o sistema irá salvar automaticamente.
@@ -411,6 +421,12 @@ export default {
         },
         */
   methods: {
+    onlyNumber($event) {
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      if (keyCode < 48 || keyCode > 57) {
+        $event.preventDefault();
+      }
+    },
     adjustTurno1: function() {
       if (
         this.turmaForm.Horario1 == 1 ||

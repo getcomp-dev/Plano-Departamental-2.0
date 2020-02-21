@@ -6,10 +6,10 @@
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-xl-3 col-md-4 col-sm-5 col px-0 pr-1 titulo">Disciplinas na Grade</h1>
+        <h1 class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-10 px-0 pr-1 titulo">Disciplinas na Grade</h1>
 
         <div
-          class="form-group col-xl-9 col-md-8 col-sm-7 col-1 mb-0 p-0"
+          class="form-group form-group-top col-xl-8 col-lg-8 col-md-8 col-sm-6 col-2 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
           <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn p-0">
@@ -20,81 +20,76 @@
     </div>
     <div class="w-100 mb-2 border-bottom"></div>
 
-    <div class="row w-100 m-0" style="font-size:11px">
-      <div class="col-lg-7 col-md-7 col-sm-12 col-12 m-0 px-0">
-        <div class="row w-100 m-0" style="font-size:11px">
-          <!-- Grind esquerdo -->
-          <!-- Inicio da tabela -->
-          <div class="divTable ml-0 mt-0 pl-0 pr-0 border">
-            <table class="table table-sm table-hover">
-              <thead class="thead-light">
-                <tr>
-                  <div style="display: block; overflow: hidden; width: 505px;" class="sticky">
-                    <th scope="col">
-                      <p class="p-header" style="width: 32px">P.</p>
-                    </th>
-                    <th scope="col">
-                      <p class="p-header" style="width:70px">Código</p>
-                    </th>
-                    <th scope="col">
-                      <p class="p-header" style="width: 403px; text-align:start">Disciplina</p>
-                    </th>
-                  </div>
-                </tr>
-              </thead>
-
-              <tbody>
-                <template v-if="grade_selected">
-                  <template v-for="grade in Grades">
-                    <template v-for="disciplinaGrade in DisciplinaGrades">
-                      <tr
-                        :key="disciplinaGrade.Disciplina+'-'+disciplinaGrade.Grade+'-'+grade.id"
-                        v-if="grade.id===currentGrade"
-                        :class="[isEven(disciplinaGrade.periodo)? 'even':'notEven']"
-                      >
-                        <div style="width: 505px; font-size:11px;">
-                          <template v-if="disciplinaGrade.Grade===grade.id">
-                            <td>
-                              <p style="width:32px;">{{disciplinaGrade.periodo}}</p>
-                            </td>
-
-                            <template v-for="disciplina in Disciplinas">
-                              <template v-if="andConnector(grade, disciplina, disciplinaGrade)">
-                                <td
-                                  :key="'disciplina-codigo'+disciplina.codigo"
-                                  v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.id, disciplina.nome), showGrade(grade)"
-                                  :class="{ 'bg-custom': disciplinaClickada===disciplina.id}"
-                                  style="cursor:pointer;"
-                                >
-                                  <p style="width: 70px">{{disciplina.codigo}}</p>
-                                </td>
-                                <td
-                                  :key="'2-disciplina-codigo'+disciplina.codigoo"
-                                  v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.id, disciplina.nome), showGrade(grade)"
-                                  :class="{ 'bg-custom': disciplinaClickada===disciplina.id}"
-                                  style="cursor:pointer;"
-                                >
-                                  <p style="width: 400px; text-align: start;">{{disciplina.nome}}</p>
-                                </td>
-                              </template>
-                            </template>
-                          </template>
-                        </div>
-                      </tr>
-                    </template>
-                  </template>
-                </template>
-              </tbody>
-            </table>
-
-            <!-- Final da tabela -->
-          </div>
-        </div>
-      </div>
+    <div class="row w-100 m-0 p-0">
       <!-- Fim Grind esquerdo  -->
 
+      <!-- Inicio da tabela -->
+      <div class="divTable ml-0 mt-0 pl-0 pr-0 border">
+        <table class="table table-sm table-hover">
+          <thead class="thead-light">
+            <tr>
+              <div style="display: block; overflow: hidden; width: 505px;" class="sticky">
+                <th scope="col">
+                  <p class="p-header" style="width: 32px">P.</p>
+                </th>
+                <th scope="col">
+                  <p class="p-header" style="width:70px">Código</p>
+                </th>
+                <th scope="col">
+                  <p class="p-header" style="width: 403px; text-align:start">Disciplina</p>
+                </th>
+              </div>
+            </tr>
+          </thead>
+
+          <tbody>
+            <template v-if="grade_selected">
+              <template v-for="grade in Grades">
+                <template v-for="disciplinaGrade in DisciplinaGrades">
+                  <tr
+                    :key="disciplinaGrade.Disciplina+'-'+disciplinaGrade.Grade+'-'+grade.id"
+                    v-if="grade.id===currentGrade"
+                    :class="[isEven(disciplinaGrade.periodo)? 'even':'notEven']"
+                  >
+                    <div style="width: 505px; font-size:11px;">
+                      <template v-if="disciplinaGrade.Grade===grade.id">
+                        <td>
+                          <p style="width:32px;">{{disciplinaGrade.periodo}}</p>
+                        </td>
+
+                        <template v-for="disciplina in Disciplinas">
+                          <template v-if="andConnector(grade, disciplina, disciplinaGrade)">
+                            <td
+                              :key="'disciplina-codigo'+disciplina.codigo"
+                              v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.id, disciplina.nome), showGrade(grade)"
+                              :class="{ 'bg-custom': disciplinaClickada===disciplina.id}"
+                              style="cursor:pointer;"
+                            >
+                              <p style="width: 70px">{{disciplina.codigo}}</p>
+                            </td>
+                            <td
+                              :key="'2-disciplina-codigo'+disciplina.codigoo"
+                              v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.id, disciplina.nome), showGrade(grade)"
+                              :class="{ 'bg-custom': disciplinaClickada===disciplina.id}"
+                              style="cursor:pointer;"
+                            >
+                              <p style="width: 400px; text-align: start;">{{disciplina.nome}}</p>
+                            </td>
+                          </template>
+                        </template>
+                      </template>
+                    </div>
+                  </tr>
+                </template>
+              </template>
+            </template>
+          </tbody>
+        </table>
+        <!-- Final da tabela -->
+      </div>
+
       <!-- Grind direito -->
-      <div class="div-card p-0 mt-0 mb-2 col-lg-5 col-md-5 col-sm-12 col-12">
+      <div class="div-card p-0 mt-0 mb-4 col-auto">
         <!-- Inicio card Disciplina -->
         <div class="card mr-3 ml-auto">
           <div class="card-header">
@@ -290,11 +285,10 @@
             </form>
           </div>
         </div>
-
-        <!-- Final card -->
       </div>
-      <!-- FIM DA REPETIÇÃO -->
+      <!-- Final card -->
     </div>
+
     <!-- MODAL DE AJUDA -->
     <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
       <div class="modal-body">
@@ -890,6 +884,22 @@ header {
   padding-left: 0;
   margin: 0;
   text-align: center;
+}
+.form-inline .input-group,
+.form-inline {
+  width: auto;
+}
+
+.form-group-top {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 0;
 }
 
 @media screen and (max-width: 885px) {

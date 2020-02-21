@@ -20,186 +20,183 @@
     </div>
     <div class="w-100 mb-2 border-bottom"></div>
 
-    <!-- Grid Esquerdo -->
-
-    <!-- Inicio da Tabela -->
-    <div class="divTable">
-      <table class="table table-hover table-sm">
-        <thead class="thead-light">
-          <tr>
-            <div style="width: 525px;" class="sticky">
-              <th scope="col">
-                <p
-                  @click="toggleOrderNome()"
-                  title="Clique para ordenar por nome"
-                  class="p-header clickable-header"
-                  style="width:300px!important; text-align: start !important;"
-                >
-                  Nome
-                  <i
-                    v-if="ordenacao=='nome'"
-                    style="font-size:0.6rem"
-                    class="fas fa-arrow-down fa-sm"
-                  ></i>
-                </p>
-              </th>
-              <th scope="col">
-                <p
-                  @click="toggleOrderCod()"
-                  title="Clique para ordenar por nome"
-                  class="p-header clickable-header"
-                  style="width:60px!important;"
-                >
-                  Código
-                  <i
-                    v-if="ordenacao=='codigo'"
-                    style="font-size:0.6rem"
-                    class="fas fa-arrow-down fa-sm"
-                  ></i>
-                </p>
-              </th>
-              <th scope="col">
-                <p class="p-header" style="width:52px!important;">Turno</p>
-              </th>
-              <th scope="col">
-                <p
-                  class="p-header"
-                  style="width:52px!important;"
-                  title="Entrada de alunos 1º Semestre"
-                >1º Sem.</p>
-              </th>
-              <th scope="col">
-                <p
-                  class="p-header"
-                  style="width:52px!important;"
-                  title="Entrada de alunos 2º Semestre"
-                >2º Sem.</p>
-              </th>
-              <th scope="col">
-                <p style="width: 9px"></p>
-              </th>
-            </div>
-          </tr>
-        </thead>
-
-        <tbody>
-          <template v-if="Cursos.length > 0">
-            <tr
-              v-for="curso in Cursos"
-              :key="'curso codigo'+curso.codigo"
-              v-on:click.prevent="showCurso(curso), clickada(curso.codigo)"
-              :class="{'bg-custom':cursoClickado === curso.codigo}"
-              style="cursor: pointer;"
-            >
-              <div style="width: 525px">
-                <td>
-                  <p style="width: 300px; text-align: start">{{ curso.nome }}</p>
-                </td>
-                <td>
-                  <p style="width: 60px">{{ curso.codigo}}</p>
-                </td>
-                <td>
-                  <p style="width: 52px;">{{ curso.turno }}</p>
-                </td>
-                <!-- 1 = 1º semestre, 2 = 2º semestre, 3 = Ambos-->
-                <td>
-                  <p style="width: 52px">{{ curso.alunosEntrada }}</p>
-                </td>
-                <td>
-                  <p style="width: 52px">{{ curso.alunosEntrada2 }}</p>
-                </td>
-                <td>
-                  <p style="width: 9px"></p>
-                </td>
-              </div>
-            </tr>
-          </template>
-          <template v-else>
+    <div class="row w-100 m-0">
+      <!-- Inicio da Tabela -->
+      <div class="p-0 divTable">
+        <table class="table table-hover table-sm">
+          <thead class="thead-light">
             <tr>
-              <td colspan="2" class="text-center">
-                <i class="fas fa-exclamation-triangle"></i> Nenhum curso
-                encontrado!
-              </td>
+              <div style="display: block; overflow: hidden; width: 525px;" class="sticky">
+                <th scope="col">
+                  <p
+                    @click="toggleOrderNome()"
+                    title="Clique para ordenar por nome"
+                    class="p-header clickable-header"
+                    style="width:300px!important; text-align: start !important;"
+                  >
+                    Nome
+                    <i
+                      v-if="ordenacao=='nome'"
+                      style="font-size:0.6rem"
+                      class="fas fa-arrow-down fa-sm"
+                    ></i>
+                  </p>
+                </th>
+                <th scope="col">
+                  <p
+                    @click="toggleOrderCod()"
+                    title="Clique para ordenar por nome"
+                    class="p-header clickable-header"
+                    style="width:60px!important;"
+                  >
+                    Código
+                    <i
+                      v-if="ordenacao=='codigo'"
+                      style="font-size:0.6rem"
+                      class="fas fa-arrow-down fa-sm"
+                    ></i>
+                  </p>
+                </th>
+                <th scope="col">
+                  <p class="p-header" style="width:52px!important;">Turno</p>
+                </th>
+                <th scope="col">
+                  <p
+                    class="p-header"
+                    style="width:52px!important;"
+                    title="Entrada de alunos 1º Semestre"
+                  >1º Sem.</p>
+                </th>
+                <th scope="col">
+                  <p
+                    class="p-header"
+                    style="width:52px!important;"
+                    title="Entrada de alunos 2º Semestre"
+                  >2º Sem.</p>
+                </th>
+                <th scope="col">
+                  <p style="width: 9px"></p>
+                </th>
+              </div>
             </tr>
-          </template>
-        </tbody>
-      </table>
-      <!-- Fim da Tabela -->
-    </div>
+          </thead>
 
-    <!-- Fim do Grid Esquerdo -->
+          <tbody>
+            <template v-if="Cursos.length > 0">
+              <tr
+                v-for="curso in Cursos"
+                :key="'curso codigo'+curso.codigo"
+                v-on:click.prevent="showCurso(curso), clickada(curso.codigo)"
+                :class="{'bg-custom':cursoClickado === curso.codigo}"
+                style="cursor: pointer;"
+              >
+                <div style="width: 525px">
+                  <td>
+                    <p style="width: 300px; text-align: start">{{ curso.nome }}</p>
+                  </td>
+                  <td>
+                    <p style="width: 60px">{{ curso.codigo}}</p>
+                  </td>
+                  <td>
+                    <p style="width: 52px;">{{ curso.turno }}</p>
+                  </td>
+                  <!-- 1 = 1º semestre, 2 = 2º semestre, 3 = Ambos-->
+                  <td>
+                    <p style="width: 52px">{{ curso.alunosEntrada }}</p>
+                  </td>
+                  <td>
+                    <p style="width: 52px">{{ curso.alunosEntrada2 }}</p>
+                  </td>
+                  <td>
+                    <p style="width: 9px"></p>
+                  </td>
+                </div>
+              </tr>
+            </template>
+            <template v-else>
+              <tr>
+                <td colspan="2" class="text-center">
+                  <i class="fas fa-exclamation-triangle"></i> Nenhum curso
+                  encontrado!
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+        <!-- Fim da Tabela -->
+      </div>
 
-    <!-- Grid Direito -->
-    <div class="div-card p-0 mt-0 mb-2 col-lg-4 col-md-12 col-sm-12 col-12">
-      <div class="card mr-3 ml-auto">
-        <div class="card-header">
-          <h1 class="card-title">Curso</h1>
-        </div>
+      <!-- Grid Direito -->
+      <div class="div-card p-0 mt-0 mb-4 col-auto">
+        <div class="card mr-3 ml-auto">
+          <div class="card-header">
+            <h1 class="card-title">Curso</h1>
+          </div>
 
-        <div class="card-body">
-          <form>
-            <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 px-0">
-                <label for="nome" class="col-form-label">Nome</label>
-                <input
-                  type="text"
-                  class="inputMaior form-control form-control-sm"
-                  id="nome"
-                  v-model="cursoForm.nome"
-                />
+          <div class="card-body">
+            <form>
+              <div class="row mb-2 mx-0">
+                <div class="form-group col m-0 px-0">
+                  <label for="nome" class="col-form-label">Nome</label>
+                  <input
+                    type="text"
+                    class="inputMaior form-control form-control-sm"
+                    id="nome"
+                    v-model="cursoForm.nome"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 px-0">
-                <label for="codigo" class="col-form-label">Código</label>
-                <input
-                  type="text"
-                  class="form-control form-control-sm inputMenor"
-                  id="codigo"
-                  v-model="cursoForm.codigo"
-                />
+              <div class="row mb-2 mx-0">
+                <div class="form-group col m-0 px-0">
+                  <label for="codigo" class="col-form-label">Código</label>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm inputMenor"
+                    id="codigo"
+                    v-model="cursoForm.codigo"
+                  />
+                </div>
+                <div class="form-group col m-0 px-0">
+                  <label for="turno" class="col-form-label">Turno</label>
+                  <select
+                    type="text"
+                    class="form-control form-control-sm selectMenor"
+                    id="turno"
+                    v-model="cursoForm.turno"
+                  >
+                    <option value="Diurno">Diurno</option>
+                    <option value="Noturno">Noturno</option>
+                    <option value="Integral">Integral</option>
+                  </select>
+                </div>
               </div>
-              <div class="form-group col m-0 px-0">
-                <label for="turno" class="col-form-label">Turno</label>
-                <select
-                  type="text"
-                  class="form-control form-control-sm selectMenor"
-                  id="turno"
-                  v-model="cursoForm.turno"
-                >
-                  <option value="Diurno">Diurno</option>
-                  <option value="Noturno">Noturno</option>
-                  <option value="Integral">Integral</option>
-                </select>
-              </div>
-            </div>
 
-            <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 px-0">
-                <label for="alunosEntrada" class="col-form-label">Alunos 1º Sem.</label>
-                <input
-                  type="text"
-                  class="form-control form-control-sm inputMenor"
-                  id="alunosEnrada"
-                  @keypress="onlyNumber"
-                  v-model="cursoForm.alunosEntrada"
-                />
+              <div class="row mb-2 mx-0">
+                <div class="form-group col m-0 px-0">
+                  <label for="alunosEntrada" class="col-form-label">Alunos 1º Sem.</label>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm inputMenor"
+                    id="alunosEnrada"
+                    @keypress="onlyNumber"
+                    v-model="cursoForm.alunosEntrada"
+                  />
+                </div>
+                <!-- </div> -->
+                <div class="form-group col m-0 px-0">
+                  <label for="alunosEntrada" class="col-form-label">Alunos 2º Sem.</label>
+                  <input
+                    type="text"
+                    class="form-control form-control-sm inputMenor"
+                    id="alunosEnrada"
+                    @keypress="onlyNumber"
+                    v-model="cursoForm.alunosEntrada2"
+                  />
+                </div>
               </div>
-              <!-- </div> -->
-              <div class="form-group col m-0 px-0">
-                <label for="alunosEntrada" class="col-form-label">Alunos 2º Sem.</label>
-                <input
-                  type="text"
-                  class="form-control form-control-sm inputMenor"
-                  id="alunosEnrada"
-                  @keypress="onlyNumber"
-                  v-model="cursoForm.alunosEntrada2"
-                />
-              </div>
-            </div>
 
-            <!-- <div class="row mb-2 mt-1 mx-0">
+              <!-- <div class="row mb-2 mt-1 mx-0">
               <div class="form-group col m-0 px-0">
                 <h5 style="font-size:14px" class="mt-1">Turno:</h5>
                 <div class="form-check form-check-inline">
@@ -236,68 +233,69 @@
                   <label class="form-check-label" for="noturno">Noturno</label>
                 </div>
               </div>
-            </div>-->
+              </div>-->
 
-            <div class="row mb-0 mt-3 mx-0">
-              <div class="d-flex mr-0 ml-auto">
-                <template v-if="isEdit">
-                  <!-- Editar -->
-                  <button
-                    type="button"
-                    class="addbtn"
-                    title="Salvar"
-                    v-on:click.prevent="editCurso"
-                    :key="1"
-                  >
-                    <i class="fas fa-check"></i>
-                  </button>
-                  <!-- Excluir -->
-                  <button
-                    type="button"
-                    title="Deletar"
-                    class="delbtn"
-                    v-on:click.prevent="deleteCurso"
-                    :key="2"
-                  >
-                    <i class="far fa-trash-alt"></i>
-                  </button>
-                  <!-- Cancelar -->
-                  <button
-                    type="button"
-                    title="Cancelar"
-                    class="cancelbtn"
-                    v-on:click.prevent="cleanCurso"
-                    :key="3"
-                  >
-                    <i class="fas fa-times"></i>
-                  </button>
-                </template>
+              <div class="row mb-0 mt-3 mx-0">
+                <div class="d-flex mr-0 ml-auto">
+                  <template v-if="isEdit">
+                    <!-- Editar -->
+                    <button
+                      type="button"
+                      class="addbtn"
+                      title="Salvar"
+                      v-on:click.prevent="editCurso"
+                      :key="1"
+                    >
+                      <i class="fas fa-check"></i>
+                    </button>
+                    <!-- Excluir -->
+                    <button
+                      type="button"
+                      title="Deletar"
+                      class="delbtn"
+                      v-on:click.prevent="deleteCurso"
+                      :key="2"
+                    >
+                      <i class="far fa-trash-alt"></i>
+                    </button>
+                    <!-- Cancelar -->
+                    <button
+                      type="button"
+                      title="Cancelar"
+                      class="cancelbtn"
+                      v-on:click.prevent="cleanCurso"
+                      :key="3"
+                    >
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </template>
 
-                <template v-else>
-                  <!-- Adicionar -->
-                  <button
-                    type="button"
-                    title="Adicionar"
-                    class="addbtn"
-                    v-on:click.prevent="addCurso"
-                    :key="1"
-                  >
-                    <i class="fas fa-plus"></i>
-                  </button>
-                  <!-- Resetar -->
-                  <button
-                    type="button"
-                    title="Cancelar"
-                    class="cancelbtn"
-                    v-on:click.prevent="cleanCurso"
-                    :key="2"
-                  >
-                    <i class="fas fa-times"></i>
-                  </button>
-                </template>
+                  <template v-else>
+                    <!-- Adicionar -->
+                    <button
+                      type="button"
+                      title="Adicionar"
+                      class="addbtn"
+                      v-on:click.prevent="addCurso"
+                      :key="1"
+                    >
+                      <i class="fas fa-plus"></i>
+                    </button>
+                    <!-- Resetar -->
+                    <button
+                      type="button"
+                      title="Cancelar"
+                      class="cancelbtn"
+                      v-on:click.prevent="cleanCurso"
+                      :key="2"
+                    >
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </template>
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -307,22 +305,34 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para adicionar cursos:</strong> Com o cartão à direita em branco, preencha-o. Em seguida, 
-            clique em Adicionar 
-            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
+            <strong>Para adicionar cursos:</strong> Com o cartão à direita em branco, preencha-o. Em seguida,
+            clique em Adicionar
+            <i
+              class="fas fa-plus addbtn px-1"
+              style="font-size:12px"
+            ></i>
             .
           </li>
           <li class="list-group-item">
             <strong>Para editar ou deletar um curso:</strong> Na tabela, clique no curso que deseja alterar.
-             Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar 
-            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
-            ou, para excluí-lo, clique em Deletar 
-            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
+            Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar
+            <i
+              class="fas fa-check addbtn px-1"
+              style="font-size:12px"
+            ></i>
+            ou, para excluí-lo, clique em Deletar
+            <i
+              class="far fa-trash-alt delbtn px-1"
+              style="font-size: 12px"
+            ></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar 
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar
+            <i
+              class="fas fa-times cancelbtn px-1"
+              style="font-size: 12px"
+            ></i>
             .
           </li>
           <li class="list-group-item">
@@ -583,8 +593,7 @@ export default {
   height: 18px;
 }
 .divTable {
-  overflow-x: hidden;
-  overflow-y: auto !important;
+  overflow: auto !important;
   border: rgba(0, 0, 0, 0.125) solid 1px;
   height: -webkit-max-content;
   height: -moz-max-content;
@@ -595,8 +604,7 @@ export default {
 }
 table {
   display: block !important;
-  overflow-x: hidden !important;
-  overflow-y: auto !important;
+  overflow: auto !important;
   font-size: 11px !important;
   font-weight: normal !important;
   background-color: white;
@@ -818,12 +826,11 @@ i.far {
   -webkit-text-stroke-color: #698dff;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 858px) {
   .div-card {
     margin-left: 0px !important;
     margin-right: 50px !important;
     margin-top: 20px !important;
-    margin-bottom: 20px !important;
     top: 0 !important;
   }
   .card {

@@ -220,16 +220,11 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>lelele</strong> lalala
-          </li>
-          <li class="list-group-item">
-            <strong>lelele</strong>lalala
-          </li>
-          <li class="list-group-item">
-            <strong>lelele</strong> lalala
-          </li>
-          <li class="list-group-item">
-            <strong>lelele</strong> lalala
+            <strong>Para exibir conteúdo na Tabela: </strong> Clique em Perfis
+            <i class="fas fa-list-ul cancelbtn px-1" style="font-size: 12px"></i>
+             e marque quais deseja mostrar, depois clique em OK. Logo após, escolha os Cursos
+             <i class="fas fa-graduation-cap cancelbtn px-1" style="font-size: 12px"></i>
+              que quer ver, confirmando a seleção em OK. Caso queira ver todos basta clicar em Selecionar Todos.
           </li>
         </ul>
       </div>

@@ -6,18 +6,17 @@
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Lista Docentes</h1>
-      
-      <div
-          class="form-group col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
+        <h1 class="col-xl-2 col-md-4 col-sm-5 col-9 px-0 pr-1 titulo">Lista Docentes</h1>
+
+        <div
+          class="form-group form-group-top col-xl-10 col-md-8 col-sm-7 col-3 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
           <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
             <i class="fas fa-question"></i>
           </b-button>
-          </div>
-          
         </div>
+      </div>
     </div>
     <div class="w-100 mb-2 border-bottom"></div>
     <!-- Fim do Titulo -->
@@ -25,91 +24,92 @@
     <!-- Grid Esquerdo -->
 
     <!-- Inicio da Tabela -->
-    <div class="p-0 divTable">
-      <table class="table table-hover table-sm">
-        <thead class="thead-light">
-          <tr>
-            <div style="width: 415px " class="sticky">
-              <th scope="col">
-                <p
-                  @click="toggleOrdenacaoNome()"
-                  title="Clique para ordenar por nome"
-                  class="p-header clickable-header"
-                  style="width: 240px; text-align: start;"
-                >
-                  Nome
-                  <i
-                    v-if="ordenacao=='nome'"
-                    style="font-size:0.6rem"
-                    class="fas fa-arrow-down fa-sm"
-                  ></i>
-                </p>
-              </th>
-              <th scope="col">
-                <p
-                  @click="toggleOrdenacaoApelido()"
-                  title="Clique para ordenar por apelido"
-                  class="p-header clickable-header"
-                  style="width: 130px"
-                >
-                  Apelido
-                  <i
-                    v-if="ordenacao=='apelido'"
-                    style="font-size:0.6rem"
-                    class="fas fa-arrow-down fa-sm"
-                  ></i>
-                </p>
-              </th>
-              <th scope="col">
-                <p class="p-header" style="width: 45px">Ativo</p>
-              </th>
-            </div>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-if="Docentes.length > 0">
-            <tr
-              v-for="docente in Docentes"
-              :key="'docente-id'+docente.id"
-              v-on:click.prevent="showDocentes(docente, DocentePerfis)"
-              :class="{'bg-custom':docenteClickado == docente.nome}"
-              style="cursor: pointer"
-            >
-              <div style="width: 415px">
-                <td>
-                  <p style="width: 240px; text-align: start!important">{{docente.nome}}</p>
-                </td>
-                <td>
-                  <p style="width: 130px">{{docente.apelido}}</p>
-                </td>
-                <td>
-                  <div style="width: 45px">
-                    <input
-                      class="form-check-input position-static noHover"
-                      v-on:click.prevent="showDocentes(docente, DocentePerfis)"
-                      type="checkbox"
-                      v-model="docente.ativo"
-                    />
-                  </div>
-                </td>
+    <div class="row p-0 m-0">
+      <div class="p-0 divTable">
+        <table class="table table-hover table-sm">
+          <thead class="thead-light">
+            <tr>
+              <div style="width: 415px " class="sticky">
+                <th scope="col">
+                  <p
+                    @click="toggleOrdenacaoNome()"
+                    title="Clique para ordenar por nome"
+                    class="p-header clickable-header"
+                    style="width: 240px; text-align: start;"
+                  >
+                    Nome
+                    <i
+                      v-if="ordenacao=='nome'"
+                      style="font-size:0.6rem"
+                      class="fas fa-arrow-down fa-sm"
+                    ></i>
+                  </p>
+                </th>
+                <th scope="col">
+                  <p
+                    @click="toggleOrdenacaoApelido()"
+                    title="Clique para ordenar por apelido"
+                    class="p-header clickable-header"
+                    style="width: 130px"
+                  >
+                    Apelido
+                    <i
+                      v-if="ordenacao=='apelido'"
+                      style="font-size:0.6rem"
+                      class="fas fa-arrow-down fa-sm"
+                    ></i>
+                  </p>
+                </th>
+                <th scope="col">
+                  <p class="p-header" style="width: 45px">Ativo</p>
+                </th>
               </div>
             </tr>
-          </template>
-          <template v-else>
-            <tr>
-              <td colspan="2" class="text-center">
-                <i class="fas fa-exclamation-triangle"></i> Nenhum docente encontrado!
-              </td>
-            </tr>
-          </template>
-        </tbody>
-      </table>
-      <!-- Fim da Tabela -->
+          </thead>
+          <tbody>
+            <template v-if="Docentes.length > 0">
+              <tr
+                v-for="docente in Docentes"
+                :key="'docente-id'+docente.id"
+                v-on:click.prevent="showDocentes(docente, DocentePerfis)"
+                :class="{'bg-custom':docenteClickado == docente.nome}"
+                style="cursor: pointer"
+              >
+                <div style="width: 415px">
+                  <td>
+                    <p style="width: 240px; text-align: start!important">{{docente.nome}}</p>
+                  </td>
+                  <td>
+                    <p style="width: 130px">{{docente.apelido}}</p>
+                  </td>
+                  <td>
+                    <div style="width: 45px">
+                      <input
+                        class="form-check-input position-static noHover"
+                        v-on:click.prevent="showDocentes(docente, DocentePerfis)"
+                        type="checkbox"
+                        v-model="docente.ativo"
+                      />
+                    </div>
+                  </td>
+                </div>
+              </tr>
+            </template>
+            <template v-else>
+              <tr>
+                <td colspan="2" class="text-center">
+                  <i class="fas fa-exclamation-triangle"></i> Nenhum docente encontrado!
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+        <!-- Fim da Tabela -->
+      </div>
     </div>
     <!-- Fim do Grid Esquerdo -->
-
     <!-- Grid Direito -->
-    <div class="div-card p-0 mt-0 mb-2 col-lg-6 col-md-6 col-sm-12 col-12">
+    <div class="div-card p-0 mt-0 mb-4 col-auto">
       <div class="card mr-3 ml-auto">
         <div class="card-header">
           <h1 class="card-title">Docente</h1>
@@ -209,7 +209,7 @@
               </div>
             </template>
 
-            <div class="form-group row">
+            <div class="row mb-0 mt-3 mx-0">
               <template v-if="isEdit">
                 <div class="d-flex mr-0 ml-auto">
                   <button
@@ -242,7 +242,7 @@
                 </div>
               </template>
               <template v-else>
-                <div style="display: flex; margin-right: 0; margin-left: auto">
+                <div class="d-flex mr-0 ml-auto">
                   <button
                     type="button"
                     title="Adicionar"
@@ -268,29 +268,41 @@
         </div>
       </div>
     </div>
+
     <!-- Fim do Grid Direito -->
     <!-- MODAL DE AJUDA -->
     <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
-      
       <div class="modal-body">
-        <ul class="listas list-group"> 
+        <ul class="listas list-group">
           <li class="list-group-item">
-             <strong>Para adicionar docentes: </strong> Com o cartão à direita em branco, preencha-o. Em seguida, 
-             clique em Adicionar 
-            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
-             .
+            <strong>Para adicionar docentes:</strong> Com o cartão à direita em branco, preencha-o. Em seguida,
+            clique em Adicionar
+            <i
+              class="fas fa-plus addbtn px-1"
+              style="font-size:12px"
+            ></i>
+            .
           </li>
           <li class="list-group-item">
-            <strong>Para editar ou deletar um docente: </strong>Na tabela, clique no docente que deseja alterar. 
-            Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar 
-            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
-             ou, para excluí-lo, clique em Deletar 
-             <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
-             . 
+            <strong>Para editar ou deletar um docente:</strong>Na tabela, clique no docente que deseja alterar.
+            Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar
+            <i
+              class="fas fa-check addbtn px-1"
+              style="font-size:12px"
+            ></i>
+            ou, para excluí-lo, clique em Deletar
+            <i
+              class="fas fa-times cancelbtn px-1"
+              style="font-size: 12px"
+            ></i>
+            .
           </li>
           <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar 
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar
+            <i
+              class="fas fa-times cancelbtn px-1"
+              style="font-size: 12px"
+            ></i>
             .
           </li>
           <li class="list-group-item">
@@ -299,8 +311,7 @@
         </ul>
       </div>
 
-      <div slot="modal-footer" style="display: none">
-      </div>
+      <div slot="modal-footer" style="display: none"></div>
     </b-modal>
   </div>
 </template>
@@ -554,7 +565,7 @@ export default {
 }
 .divTable {
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.125);
+  border: rgba(0, 0, 0, 0.125) solid 1px;
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
@@ -710,7 +721,9 @@ input {
   line-height: inherit;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
-strong{color:#007bff}
+strong {
+  color: #007bff;
+}
 
 /* Botoes */
 button {
@@ -721,6 +734,7 @@ button {
   height: -moz-max-content;
   height: max-content;
   margin-right: 15px;
+  margin-top: 0px;
   transition: all 0.3s ease 0s;
   cursor: pointer;
 }
@@ -783,7 +797,23 @@ i.far {
   -webkit-text-stroke-color: #698dff;
 }
 
-@media screen and (max-width: 849px) {
+.form-group-top {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+.form-inline .input-group,
+.form-inline {
+  width: auto;
+}
+@media screen and (max-width: 705px) {
   .div-card {
     margin-left: 0px !important;
     margin-top: 20px !important;

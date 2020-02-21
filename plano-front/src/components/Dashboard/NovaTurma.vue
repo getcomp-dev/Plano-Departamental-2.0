@@ -6,6 +6,7 @@
           type="text"
           style="width: 18px; height:15px; margin-top:3px"
           id="3periodo"
+          @keypress="onlyNumber"
           v-model="turmaForm.periodo"
         />
       </div>
@@ -189,6 +190,12 @@ export default {
     EventBus.$off("addTurma");
   },
   methods: {
+    onlyNumber($event) {
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      if (keyCode < 48 || keyCode > 57) {
+        $event.preventDefault();
+      }
+    },
     adjustTurno1: function() {
       if (
         this.turmaForm.Horario1 == 1 ||
