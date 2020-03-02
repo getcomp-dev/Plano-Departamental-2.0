@@ -22,7 +22,7 @@ export default {
 
     },
 
-    checkTurmaHorarioLabs (turma, horario) {
+    checkTurmaHorarioLabs (turma, horario, lab) {
         if(turma.Horario1==horario || turma.Horario2==horario) {
             let sala = this.checkTurmaLab(turma)
             switch(sala){
@@ -39,6 +39,12 @@ export default {
                     return false
                     break
                 case 3:
+                    if (turma.Sala1 === lab){
+                        if (turma.Horario1 == horario) return true;
+                    }else if(turma.Sala2 === lab){
+                        if (turma.Horario2 == horario) return true;
+                    }
+                    return false
                 case 4: return true
                     break
 
@@ -100,7 +106,7 @@ export default {
                 for (var j = 0; j < turmas1.length; j++) {
                     if (turmas1[j].Sala1 === laboratorios[i].id || turmas1[j].Sala2 === laboratorios[i].id) {
                         if (d < 4) {
-                            if (this.checkTurmaHorarioLabs(turmas1[j], 1 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas1[j], 1 + d, laboratorios[i].id)) {
                                 for (var k = 0; k < disciplinas.length; k++) {
                                     if (turmas1[j].Disciplina === disciplinas[k].id) {
                                         if (seg !== '')
@@ -109,7 +115,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas1[j], 7 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas1[j], 7 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas1[j].Disciplina === disciplinas[k].id) {
                                         if (ter != '')
@@ -118,7 +124,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas1[j], 13 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas1[j], 13 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas1[j].Disciplina === disciplinas[k].id) {
                                         if (qua != '')
@@ -127,7 +133,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas1[j], 19 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas1[j], 19 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas1[j].Disciplina === disciplinas[k].id) {
                                         if (qui != '')
@@ -136,7 +142,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas1[j], 25 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas1[j], 25 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas1[j].Disciplina === disciplinas[k].id) {
                                         if (sex != '')
@@ -146,7 +152,7 @@ export default {
                                 }
                             }
                         } else if (d === 4 || d === 5) {
-                            if (this.checkTurmaHorarioLabs(turmas1[j], 28 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas1[j], 28 + d, laboratorios[i].id)) {
                                 for (var k = 0; k < disciplinas.length; k++) {
                                     if (turmas1[j].Disciplina === disciplinas[k].id) {
                                         if (seg !== '')
@@ -155,7 +161,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas1[j], 30 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas1[j], 30 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas1[j].Disciplina === disciplinas[k].id) {
                                         if (ter != '')
@@ -164,7 +170,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas1[j], 32 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas1[j], 32 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas1[j].Disciplina === disciplinas[k].id) {
                                         if (qua != '')
@@ -173,7 +179,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas1[j], 34 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas1[j], 34 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas1[j].Disciplina === disciplinas[k].id) {
                                         if (qui != '')
@@ -182,7 +188,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas1[j], 36 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas1[j], 36 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas1[j].Disciplina === disciplinas[k].id) {
                                         if (sex != '')
@@ -201,7 +207,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas1[j], 5 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas1[j], 5 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas1[j].Disciplina === disciplinas[k].id) {
                                         if (ter != '')
@@ -210,7 +216,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas1[j], 11 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas1[j], 11 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas1[j].Disciplina === disciplinas[k].id) {
                                         if (qua != '')
@@ -219,7 +225,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas1[j], 17 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas1[j], 17 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas1[j].Disciplina === disciplinas[k].id) {
                                         if (qui != '')
@@ -228,7 +234,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas1[j], 23 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas1[j], 23 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas1[j].Disciplina === disciplinas[k].id) {
                                         if (sex != '')
@@ -339,7 +345,7 @@ export default {
                 for (var j = 0; j < turmas2.length; j++) {
                     if(turmas2[j].Sala1===laboratorios[i].id || turmas2[j].Sala2===laboratorios[i].id){
                         if(d < 4) {
-                            if (this.checkTurmaHorarioLabs(turmas2[j], 1 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas2[j], 1 + d, laboratorios[i].id)) {
                                 for (var k = 0; k < disciplinas.length; k++) {
                                     if (turmas2[j].Disciplina === disciplinas[k].id) {
                                         if (seg !== '')
@@ -348,7 +354,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas2[j], 7 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas2[j], 7 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas2[j].Disciplina === disciplinas[k].id) {
                                         if (ter != '')
@@ -357,7 +363,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas2[j], 13 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas2[j], 13 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas2[j].Disciplina === disciplinas[k].id) {
                                         if (qua != '')
@@ -366,7 +372,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas2[j], 19 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas2[j], 19 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas2[j].Disciplina === disciplinas[k].id) {
                                         if (qui != '')
@@ -375,7 +381,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas2[j], 25 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas2[j], 25 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas2[j].Disciplina === disciplinas[k].id) {
                                         if (sex != '')
@@ -385,7 +391,7 @@ export default {
                                 }
                             }
                         } else if(d === 4 || d === 5) {
-                            if (this.checkTurmaHorarioLabs(turmas2[j], 28 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas2[j], 28 + d, laboratorios[i].id)) {
                                 for (var k = 0; k < disciplinas.length; k++) {
                                     if (turmas2[j].Disciplina === disciplinas[k].id) {
                                         if (seg !== '')
@@ -394,7 +400,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas2[j], 30 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas2[j], 30 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas2[j].Disciplina === disciplinas[k].id) {
                                         if (ter != '')
@@ -403,7 +409,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas2[j], 32 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas2[j], 32 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas2[j].Disciplina === disciplinas[k].id) {
                                         if (qua != '')
@@ -412,7 +418,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas2[j], 34 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas2[j], 34 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas2[j].Disciplina === disciplinas[k].id) {
                                         if (qui != '')
@@ -421,7 +427,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas2[j], 36 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas2[j], 36 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas2[j].Disciplina === disciplinas[k].id) {
                                         if (sex != '')
@@ -440,7 +446,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas2[j], 5 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas2[j], 5 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas2[j].Disciplina === disciplinas[k].id) {
                                         if (ter != '')
@@ -449,7 +455,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas2[j], 11 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas2[j], 11 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas2[j].Disciplina === disciplinas[k].id) {
                                         if (qua != '')
@@ -458,7 +464,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas2[j], 17 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas2[j], 17 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas2[j].Disciplina === disciplinas[k].id) {
                                         if (qui != '')
@@ -467,7 +473,7 @@ export default {
                                     }
                                 }
                             }
-                            if (this.checkTurmaHorarioLabs(turmas2[j], 23 + d)) {
+                            if (this.checkTurmaHorarioLabs(turmas2[j], 23 + d, laboratorios[i].id)) {
                                 for (k = 0; k < disciplinas.length; k++) {
                                     if (turmas2[j].Disciplina === disciplinas[k].id) {
                                         if (sex != '')

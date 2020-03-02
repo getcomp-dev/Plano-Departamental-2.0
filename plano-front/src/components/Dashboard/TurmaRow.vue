@@ -324,11 +324,11 @@ export default {
             }
             let h1, h2
             if(horario === 1) {
-                h1 = ((this.turmaForm.Horario1 === t.Horario1) || ((32 + (this.turmaForm.Horario1 - 4) * 3) === t.Horario1))
-                h2 = ((this.turmaForm.Horario1 === t.Horario2) || ((32 + (this.turmaForm.Horario1 - 4) * 3) === t.Horario2))
+                h1 = ((this.turmaForm.Horario1 === t.Horario1) || ((32 + (this.turmaForm.Horario1 - 4) / 3) === t.Horario1))
+                h2 = ((this.turmaForm.Horario1 === t.Horario2) || ((32 + (this.turmaForm.Horario1 - 4) / 3) === t.Horario2))
             } else {
-                h1 = ((this.turmaForm.Horario2 === t.Horario1) || ((32 + (this.turmaForm.Horario2 - 4) * 3) === t.Horario1))
-                h2 = ((this.turmaForm.Horario2 === t.Horario2) || ((32 + (this.turmaForm.Horario2 - 4) * 3) === t.Horario2))
+                h1 = ((this.turmaForm.Horario2 === t.Horario1) || ((32 + (this.turmaForm.Horario2 - 4) / 3) === t.Horario1))
+                h2 = ((this.turmaForm.Horario2 === t.Horario2) || ((32 + (this.turmaForm.Horario2 - 4) / 3) === t.Horario2))
             }
             let d1, d2
             if (docente === 1) {
@@ -578,11 +578,11 @@ export default {
               }
               let h1, h2
               if(horario === 1) {
-                  h1 = ((this.turmaForm.Horario1 === t.Horario1) || ((32 + (this.turmaForm.Horario1 - 4) * 3) === t.Horario1))
-                  h2 = ((this.turmaForm.Horario1 === t.Horario2) || ((32 + (this.turmaForm.Horario1 - 4) * 3) === t.Horario2))
+                  h1 = ((this.turmaForm.Horario1 === t.Horario1) || ((32 + (this.turmaForm.Horario1 - 4) / 3) === t.Horario1))
+                  h2 = ((this.turmaForm.Horario1 === t.Horario2) || ((32 + (this.turmaForm.Horario1 - 4) / 3) === t.Horario2))
               } else {
-                  h1 = ((this.turmaForm.Horario2 === t.Horario1) || ((32 + (this.turmaForm.Horario2 - 4) * 3) === t.Horario1))
-                  h2 = ((this.turmaForm.Horario2 === t.Horario2) || ((32 + (this.turmaForm.Horario2 - 4) * 3) === t.Horario2))
+                  h1 = ((this.turmaForm.Horario2 === t.Horario1) || ((32 + (this.turmaForm.Horario2 - 4) / 3) === t.Horario1))
+                  h2 = ((this.turmaForm.Horario2 === t.Horario2) || ((32 + (this.turmaForm.Horario2 - 4) / 3) === t.Horario2))
               }
               let d1, d2
               if (sala === 1) {

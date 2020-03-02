@@ -63,7 +63,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 1)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 1, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -74,7 +74,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 7)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 7, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -85,7 +85,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 13)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 13, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -96,7 +96,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 19)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 19, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -107,7 +107,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 25)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 25, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -122,7 +122,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 2)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 2, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -133,7 +133,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 8)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 8, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -144,7 +144,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 14)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 14, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -155,7 +155,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 20)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 20, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -166,7 +166,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 26)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 26, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -181,7 +181,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 3)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 3, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -192,7 +192,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 9)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 9, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -203,7 +203,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 15)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 15, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -214,7 +214,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 21)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 21, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -225,7 +225,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 27)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 27, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -240,7 +240,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 4)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 4, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -251,7 +251,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 10)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 10, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -262,7 +262,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 16)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 16, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -273,7 +273,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 22)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 22, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -284,7 +284,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 28)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 28, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -299,7 +299,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 32)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 32, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -310,7 +310,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 34)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 34, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -321,7 +321,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 36)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 36, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -332,7 +332,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 38)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 38, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -343,7 +343,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 40)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 40, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -358,7 +358,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 33)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 33, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -369,7 +369,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 35)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 35, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -380,7 +380,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 37)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 37, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -391,7 +391,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 39)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 39, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -402,7 +402,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 41)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 41, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -417,7 +417,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 5)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 5, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -428,7 +428,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 11)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 11, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -439,7 +439,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 17)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 17, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -450,7 +450,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 23)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 23, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -461,7 +461,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 29)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 29, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -476,7 +476,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 6)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 6, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -487,7 +487,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 12)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 12, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -498,7 +498,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 18)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 18, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -509,7 +509,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 24)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 24, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -520,7 +520,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas1"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 30)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 30, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -555,7 +555,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 1)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 1, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -566,7 +566,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 7)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 7, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -577,7 +577,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 13)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 13, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -588,7 +588,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 19)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 19, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -599,7 +599,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 25)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 25, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -614,7 +614,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 2)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 2, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -625,7 +625,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 8)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 8, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -636,7 +636,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 14)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 14, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -647,7 +647,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 20)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 20, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -658,7 +658,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 26)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 26, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -673,7 +673,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 3)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 3, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -684,7 +684,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 9)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 9, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -695,7 +695,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 15)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 15, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -706,7 +706,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 21)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 21, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -717,7 +717,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 27)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 27, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -732,7 +732,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 4)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 4, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -743,7 +743,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 10)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 10, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -754,7 +754,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 16)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 16, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -765,7 +765,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 22)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 22, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -776,7 +776,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 28)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 28, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -791,7 +791,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 32)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 32, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -802,7 +802,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 34)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 34, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -813,7 +813,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 36)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 36, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -824,7 +824,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 38)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 38, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -835,7 +835,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 40)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 40, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -850,7 +850,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 33)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 33, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -861,7 +861,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 35)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 35, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -872,7 +872,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 37)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 37, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -883,7 +883,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 39)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 39, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -894,7 +894,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 41)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 41, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -909,7 +909,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 5)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 5, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -920,7 +920,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 11)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 11, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -931,7 +931,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 17)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 17, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -942,7 +942,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 23)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 23, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -953,7 +953,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 29)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 29, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -968,7 +968,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 6)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 6, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -979,7 +979,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 12)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 12, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -990,7 +990,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 18)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 18, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -1001,7 +1001,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 24)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 24, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -1012,7 +1012,7 @@
                   <td class="tg-0lax">
                     <template
                       v-for="turma in Turmas2"
-                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 30)"
+                      v-if="(turma.Sala1 === lab.id || turma.Sala2 === lab.id) && checkTurmaHorario(turma, 30, lab.id)"
                     >
                       <template
                         v-for="disciplina in Disciplinas"
@@ -1173,7 +1173,7 @@ export default {
       return result;
     },
 
-    checkTurmaHorario(turma, horario) {
+    checkTurmaHorario(turma, horario, lab) {
       if (turma.Horario1 == horario || turma.Horario2 == horario) {
         let sala = this.checkTurmaLab(turma);
         switch (sala) {
@@ -1189,6 +1189,12 @@ export default {
             else return false;
             break;
           case 3:
+            if (turma.Sala1 === lab){
+                if (turma.Horario1 == horario) return true;
+            }else if(turma.Sala2 === lab){
+                if (turma.Horario2 == horario) return true;
+            }
+            return false
           case 4:
             return true;
             break;
