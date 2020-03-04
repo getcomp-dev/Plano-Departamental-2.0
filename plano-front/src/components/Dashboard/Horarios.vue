@@ -1,5 +1,5 @@
 <template>
-  <div class="DashboardHorarios row pr-2" v-if="Admin">
+  <div class="DashboardHorarios row pr-2">
     <!-- Titulo -->
     <div
       class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
@@ -4491,14 +4491,6 @@ export default {
 
     activeEletivas() {
       return _.indexOf(this.cursos, 5) > -1;
-    },
-
-    Admin() {
-      if (this.$store.state.auth.Usuario.admin === 1) {
-        return true;
-      } else {
-        return false;
-      }
     },
 
     CursosSelecionados() {

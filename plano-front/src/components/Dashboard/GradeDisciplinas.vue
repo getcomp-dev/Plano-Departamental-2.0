@@ -1,5 +1,5 @@
 <template>
-  <div class="GradesDisciplinas row pr-2" v-if="Admin">
+  <div class="GradesDisciplinas row pr-2">
     <!-- Titulo -->
     <div
       class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
@@ -657,13 +657,6 @@ export default {
       return this.$store.state.isLoading;
     },
 
-    Admin() {
-      if (this.$store.state.auth.Usuario.admin === 1) {
-        return true;
-      } else {
-        return false;
-      }
-    }
   },
   watch: {
     CursosSelecionados: function() {

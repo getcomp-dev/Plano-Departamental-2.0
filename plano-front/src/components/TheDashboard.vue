@@ -139,7 +139,7 @@
                     <i class="fas fa-clipboard"></i> Grades Disciplinas
                   </router-link>
                 </li>
-                <li v-if="Admin" @click="show=false" class="nav-item">
+                <li @click="show=false" class="nav-item">
                   <router-link :to="{ name: 'horarios' }" class="nav-link">
                     <i class="fas fa-calendar-alt"></i> Horários - Cursos
                   </router-link>
