@@ -809,7 +809,7 @@ export default {
       if (this.turmaForm.Sala2 === "") this.turmaForm.Sala2 = null;
 
       if(this.turmaForm.turno1==="")  this.turmaForm.turno1=null
-        
+
       turmaService
         .update(this.turma.id, this.turmaForm)
         .then(response => {

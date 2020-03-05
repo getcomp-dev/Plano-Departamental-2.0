@@ -131,7 +131,7 @@
           <tr>
             <div style="font-size: 11px!important; height: 18px !important">
               <th class="border-0">
-                <p style="width:30px" class="p-header"></p>
+                <p style="width:25px" class="p-header"></p>
               </th>
               <th class="border-0">
                 <p style="width:50px" class="p-header">Cód.</p>
@@ -146,7 +146,7 @@
             <tr v-for="curso in options_Cursos" :key="'curso-id-' + curso.value">
               <div style="width: max-content; height: 22px !important">
                 <td>
-                  <div style="width:30px;">
+                  <div style="width:25px;">
                     <input
                       type="checkbox"
                       :value="curso.value"
@@ -156,7 +156,7 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:50px; text-align:center;">{{ curso.codigo.toUpperCase() }}</p>
+                  <p style="width:50px; text-align:start;">{{ curso.codigo.toUpperCase() }}</p>
                 </td>
                 <td>
                   <p style="width:380px; text-align:start;">{{ curso.nome }}</p>
@@ -4742,61 +4742,51 @@ button {
   -webkit-text-stroke-color: #ada89a;
 }
 
-/* ==== MODAL ==== */
+/* ==== MODAL TABLE ==== */
 .modal-table {
   display: block !important;
   overflow: auto !important;
-  font-size: 11px !important;
+  font-size: 10px !important;
   font-weight: normal !important;
   background-color: white;
   margin: 0 !important;
 }
-
-tbody {
-  max-height: 100%;
-  width: 100%;
-}
-
-table td {
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  font-size: 10px !important;
-  height: 22px !important;
-}
-
-tr thead {
+.modal-table tr thead {
   display: block;
 }
-
-th {
+.modal-table th {
   padding: 0 !important;
-  font-size: 14px;
   text-align: center !important;
   height: 18px !important;
 }
-
-.p-header {
-  padding: 0 5px 0 5px !important;
+.modal-table .p-header {
+  padding: 0px 5px 0px 5px !important;
   margin: 0 !important;
-  font-size: 11px !important;
-  text-align: center;
+  text-align: start;
   height: 18px !important;
 }
-
-table p {
-  margin-bottom: 0 !important;
+.modal-table tbody {
+  max-height: 100%;
+  width: 100%;
+}
+.modal-table td {
+  text-align: center;
+  vertical-align: middle !important;
+  padding: 0 !important;
+  height: 22px !important;
+}
+.modal-table p {
+  margin: 0 !important;
   text-align: center;
   padding-right: 5px !important;
   padding-left: 5px !important;
-  font-size: 10px !important;
 }
-
-table input[type="checkbox"] {
+.modal-table input[type="checkbox"] {
   margin-left: 0 !important;
   margin-top: 4px !important;
   margin-bottom: auto !important;
 }
+/* FIM MODAL TABLE */
 
 .clickable-header {
   cursor: pointer;

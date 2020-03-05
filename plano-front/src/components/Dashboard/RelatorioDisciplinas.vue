@@ -48,7 +48,7 @@
                   @click="toggleOrderCodigo()"
                   title="Clique para ordenar por código"
                 >
-                  Cod.
+                  Cód.
                   <i
                     v-if="ordenacao=='codigo'"
                     style="font-size:0.6rem; text-align:right"
@@ -100,13 +100,13 @@
                 <p class="p-header" style="width: 180px">Horário</p>
               </th>
 
-              <th scope="col" v-if="semestreAtual===1">
+              <th scope="col" v-if="semestreAtual===1" title="Vagas do 1º semestre">
                 <p class="p-header" style="width: 70px">Vagas 1º S.</p>
               </th>
-              <th scope="col" v-if="semestreAtual===2">
+              <th scope="col" v-if="semestreAtual===2" title="Vagas do 2º semestre">
                 <p class="p-header" style="width: 70px">Vagas 2º S.</p>
               </th>
-              <th scope="col" v-if="semestreAtual===3">
+              <th scope="col" v-if="semestreAtual===3" title="Vagas do primeiro e segundo semestre">
                 <p class="p-header" style="width: 70px">Vagas</p>
               </th>
             </div>
@@ -116,32 +116,33 @@
           <template v-if="Disciplinas.length > 0">
             <template v-for="disciplina in DisciplinasAtivados">
               <template v-if="turmas(disciplina, semestreAtual).length > 0">
-                <div class="linhas" style="width: ‭845‬px;" :key="disciplina.codigo">
-                  <td class="disc-td">
-                    <div style="width: 80px">{{disciplina.codigo}}</div>
-                  </td>
-                  <td class="disc-td">
-                    <div style="width: 350px;">{{disciplina.nome}}</div>
-                  </td>
-                  <td class="disc-td">
-                    <div style="width: 65px;">{{perfil(disciplina)}}</div>
-                  </td>
-                  <td class="disc-td">
-                    <div style="width: 428px; height: 20px;"></div>
-                  </td>
-                  <td class="disc-td" v-if="semestreAtual==1">
-                    <div style="width: 70px; height: 20px;">{{vagasDisciplina(disciplina, 1)}}</div>
-                  </td>
-                  <td class="disc-td" v-if="semestreAtual==2">
-                    <div style="width: 70px; height: 20px;">{{vagasDisciplina(disciplina, 2)}}</div>
-                  </td>
-
-                  <td class="disc-td" v-if="semestreAtual==3">
-                    <div
-                      style="width: 70px; height: 20px;"
-                    >{{vagasDisciplina(disciplina, 2) + vagasDisciplina(disciplina, 1)}}</div>
-                  </td>
-                </div>
+                <tr class="disc-tr" :key="disciplina.codigo">
+                  <div style="width: ‭max-contet;">
+                    <td>
+                      <p style="width: 80px">{{disciplina.codigo}}</p>
+                    </td>
+                    <td>
+                      <p style="width: 350px;">{{disciplina.nome}}</p>
+                    </td>
+                    <td>
+                      <p style="width: 65px;">{{perfil(disciplina)}}</p>
+                    </td>
+                    <td>
+                      <p style="width: 428px"></p>
+                    </td>
+                    <td v-if="semestreAtual==1">
+                      <p style="width: 70px">{{vagasDisciplina(disciplina, 1)}}</p>
+                    </td>
+                    <td v-if="semestreAtual==2">
+                      <p style="width: 70px">{{vagasDisciplina(disciplina, 2)}}</p>
+                    </td>
+                    <td v-if="semestreAtual==3">
+                      <p
+                        style="width: 70px"
+                      >{{vagasDisciplina(disciplina, 2) + vagasDisciplina(disciplina, 1)}}</p>
+                    </td>
+                  </div>
+                </tr>
               </template>
 
               <template v-for="turma in turmas(disciplina, semestreAtual)">
@@ -218,18 +219,18 @@
       </table>
     </div>
 
-    <b-modal id="modalSemestre" ref="modalSemestre" scrollable title="Selecione as disciplinas">
+    <b-modal id="modalSemestre" ref="modalSemestre" scrollable title="Selecione o semestre">
       <div class="col m-0 p-0 border" style="width:max-content; border-color: rgba(0,0,0,0.125);">
         <table class="table table-sm modal-table" style="max-height: 392px !important;">
           <tr>
             <div style="width: max-content; height: 18px !important; font-size: 11px!important">
               <th class="border-0 p-0">
-                <p style="width:40px" class="p-header"></p>
+                <p style="width:25px" class="p-header"></p>
               </th>
               <th class="border-0 p-0">
                 <p
                   class="p-header clickable-header"
-                  style="width: 420px; text-align: start;"
+                  style="width: 435px; text-align: start;"
                 >Semestre</p>
               </th>
             </div>
@@ -238,7 +239,7 @@
             <tr>
               <div style="width: max-content">
                 <td style="padding:0;broder:0;margin:0!important;">
-                  <div style="width:40px;">
+                  <div style="width:25px;">
                     <input
                       type="checkbox"
                       v-model="semestre_1Ativo"
@@ -247,14 +248,14 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:420px; text-align:start">Primeiro</p>
+                  <p style="width:435px; text-align:start">Primeiro</p>
                 </td>
               </div>
             </tr>
             <tr>
               <div style="width: max-content">
                 <td style="padding:0;broder:0;margin:0!important;">
-                  <div style="width:40px;">
+                  <div style="width:25px;">
                     <input
                       type="checkbox"
                       v-model="semestre_2Ativo"
@@ -263,7 +264,7 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:420px; text-align:start">Segundo</p>
+                  <p style="width:435px; text-align:start">Segundo</p>
                 </td>
               </div>
             </tr>
@@ -327,10 +328,7 @@
       scrollable
       title="Selecione as disciplinas"
     >
-      <div
-        class="form-group col m-0 p-0 border"
-        style="height: 395px; width:max-content; border-color: rgba(0,0,0,0.125);"
-      >
+      <div class="col m-0 p-0 border" style="width:max-content; border-color: rgba(0,0,0,0.125);">
         <table class="table table-sm modal-table" style="max-height: 392px !important;">
           <tr>
             <div style="width: max-content; height: 18px !important; font-size: 11px!important">
@@ -344,7 +342,7 @@
                   @click="toggleOrderCodigo()"
                   title="Clique para ordenar por código"
                 >
-                  Cod.
+                  Cód.
                   <i
                     v-if="ordenacao=='codigo'"
                     style="font-size:0.6rem; text-align:right"
@@ -607,13 +605,6 @@ export default {
   overflow: hidden;
   margin: 0;
 }
-.p-header {
-  padding: 0px 0 0px 0;
-  margin: 0;
-  font-size: 11px;
-  text-align: center;
-  height: 18px !important;
-}
 .divTable {
   overflow: hidden;
   height: -webkit-max-content;
@@ -633,56 +624,35 @@ export default {
   background-color: white;
   margin: 0;
 }
-tbody {
+.main-table .p-header {
+  padding: 0px 5px 0px 5px !important;
+  margin: 0 !important;
+  text-align: center;
+  height: 18px !important;
+}
+.main-table tbody {
   max-height: 100%;
   width: 100%;
 }
-table td {
+.main-table td {
   text-align: center;
-  vertical-align: middle;
+  vertical-align: middle !important;
   padding: 0 !important;
+  height: 18px !important;
 }
-/* .linhas {
-        border-top: 1px solid #dee2e6;
-    } */
-table p {
-  margin-bottom: 0;
+.main-table p {
+  margin: 0 !important;
   text-align: center;
-  padding-left: 2px;
-  padding-right: 2px;
+  padding-right: 5px !important;
+  padding-left: 5px !important;
 }
-/* texto maiusculo */
-.toUpperCase {
-  text-transform: uppercase;
-}
-tr thead {
+.main-table tr thead {
   display: block;
 }
-thead th {
+.main-table thead th {
   padding: 0 !important;
-  font-size: 14px;
   text-align: center;
   height: 18px !important;
-}
-table select {
-  height: 15px !important;
-  text-align: left;
-}
-table input {
-  height: 18px !important;
-  text-align: center !important;
-}
-table input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-}
-.modal-table {
-  display: block !important;
-  overflow: auto !important;
-  font-size: 10px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
 }
 .sticky {
   position: sticky;
@@ -704,6 +674,10 @@ table input[type="checkbox"] {
 }
 strong {
   color: #007bff;
+}
+/* texto maiusculo */
+.toUpperCase {
+  text-transform: uppercase;
 }
 /* Botoes */
 button {
@@ -740,34 +714,7 @@ i.far {
   -webkit-text-stroke-color: #698dff;
 }
 
-/* APENAS NO FIREFOX */
-@-moz-document url-prefix() {
-  select {
-    height: 15px !important;
-    text-align: left;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-
-    line-height: 8px;
-    border: 0.5px solid rgb(133, 133, 133);
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    background-color: rgb(245, 245, 245);
-  }
-  input {
-    height: 18px !important;
-    text-align: center;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-
-    line-height: 8px;
-    border: 0.5px solid rgb(92, 92, 92);
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    background-color: rgb(245, 245, 245);
-  }
-}
-.disc-td {
+.disc-tr {
   background-color: rgba(0, 0, 0, 0.089);
   color: black;
 }
@@ -873,4 +820,50 @@ i.far {
     height: 70px !important;
   }
 }
+
+/* ==== MODAL TABLE ==== */
+.modal-table {
+  display: block !important;
+  overflow: auto !important;
+  font-size: 10px !important;
+  font-weight: normal !important;
+  background-color: white;
+  margin: 0 !important;
+}
+.modal-table tr thead {
+  display: block;
+}
+.modal-table thead th {
+  padding: 0 !important;
+  text-align: center !important;
+  height: 18px !important;
+}
+.modal-table .p-header {
+  padding: 0px 5px 0px 5px !important;
+  margin: 0 !important;
+  text-align: start;
+  height: 18px !important;
+}
+.modal-table tbody {
+  max-height: 100%;
+  width: 100%;
+}
+.modal-table td {
+  text-align: center;
+  vertical-align: middle !important;
+  padding: 0 !important;
+  height: 22px !important;
+}
+.modal-table p {
+  margin: 0 !important;
+  text-align: center;
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+}
+.modal-table input[type="checkbox"] {
+  margin-left: 0 !important;
+  margin-top: 4px !important;
+  margin-bottom: auto !important;
+}
+/* FIM MODAL TABLE */
 </style>
