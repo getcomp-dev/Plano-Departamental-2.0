@@ -77,14 +77,36 @@
                     v-on:change="checkHorario(1)">
                 <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
                 <option v-else value=""></option>
-                <option v-for="horario in Horarios" :key="'1-horario-id'+horario.id" :value="horario.id">{{horario.horario}}</option>
+                <template v-if="turmaForm.turno1 === 'Diurno'">
+                    <option v-for="horario in HorariosDiurnos" :key="'1-horariodiurno-id'+horario.id" :value="horario.id">{{horario.horario}}</option>
+                </template>
+                <template v-else-if="turmaForm.turno1 === 'Noturno'">
+                    <option v-for="horario in HorariosNoturnos" :key="'1-horarionoturno-id'+horario.id" :value="horario.id">{{horario.horario}}</option>
+                </template>
+                <template v-else-if="turmaForm.turno1 === 'EAD'">
+                    <option v-for="horario in HorariosEAD" :key="'1-horarioEAD-id'+horario.id" :value="horario.id">{{horario.horario}}</option>
+                </template>
+                <template v-else>
+                    <option v-for="horario in Horarios" :key="'1-horario-id'+horario.id" :value="horario.id">{{horario.horario}}</option>
+                </template>
             </select>
 
-            <select :disabled="Admin ? false : true" type="text" style="width: 67px" id="horario2" v-model="turmaForm.Horario2"
+            <select v-if="(Disciplina.cargaTeorica + Disciplina.cargaPratica) >= 4" :disabled="Admin ? false : true" type="text" style="width: 67px" id="horario2" v-model="turmaForm.Horario2"
                     v-on:change="checkHorario(2)">
                 <option v-if="Horarios.length===0" type="text" value="">Nenhum Horário Encontrado</option>
                 <option v-else value=""></option>
-                <option v-for="horario in Horarios" :key="'2-horario-id'+horario.id" :value="horario.id">{{horario.horario}}</option>
+                <template v-if="turmaForm.turno1 === 'Diurno'">
+                    <option v-for="horario in HorariosDiurnos" :key="'2-horariodiurno-id'+horario.id" :value="horario.id">{{horario.horario}}</option>
+                </template>
+                <template v-else-if="turmaForm.turno1 === 'Noturno'">
+                    <option v-for="horario in HorariosNoturnos" :key="'2-horarionoturno-id'+horario.id" :value="horario.id">{{horario.horario}}</option>
+                </template>
+                <template v-else-if="turmaForm.turno1 === 'EAD'">
+                    <option v-for="horario in HorariosEAD" :key="'2-horarioEAD-id'+horario.id" :value="horario.id">{{horario.horario}}</option>
+                </template>
+                <template v-else>
+                    <option v-for="horario in Horarios" :key="'2-horario-id'+horario.id" :value="horario.id">{{horario.horario}}</option>
+                </template>
             </select>
         </div>
     </td>
@@ -96,7 +118,7 @@
                 <option v-else value=""></option>
                 <option v-for="sala in Salas" :key="'1-sala-id'+sala.id" :value="sala.id">{{sala.nome}}</option>
             </select>
-            <select :disabled="Admin ? false : true" type="text" style="width: 92px" id="sala2" v-model="turmaForm.Sala2"
+            <select v-if="(Disciplina.cargaTeorica + Disciplina.cargaPratica) >= 4" :disabled="Admin ? false : true" type="text" style="width: 92px" id="sala2" v-model="turmaForm.Sala2"
                     v-on:change="checkSala()">
                 <option v-if="Salas.length===0" type="text" value="">Nenhuma Sala Encontrada</option>
                 <option v-else value=""></option>
@@ -266,7 +288,7 @@ export default {
 
       if((!(_.isNull(this.turmaForm.Horario1)) || !(_.isNull(this.turmaForm.Horario2)))&&(!(_.isNull(this.turmaForm.Docente1)) || !(_.isNull(this.turmaForm.Docente2)))){
 
-          if(this.turmaForm.Horario1 === 31){
+          if((horario === 1 ? this.turmaForm.Horario1 === 31 : this.turmaForm.Horario2 === 31)){
               return false
           }else if(horario === 1 &&(_.includes(horarios1618, this.turmaForm.Horario1))) {
               if(this.checkHorarioDocente1618(1, 1)) return true
@@ -524,34 +546,29 @@ export default {
           if(this.turmaForm.Sala2 === "") this.turmaForm.Sala2 = null
           if((!(_.isNull(this.turmaForm.Horario1)) || !(_.isNull(this.turmaForm.Horario2)))&&(!(_.isNull(this.turmaForm.Sala1)) || !(_.isNull(this.turmaForm.Sala2)))){
 
-              if(this.turmaForm.Horario1 === 31){
+              if((horario === 1 ? this.turmaForm.Horario1 === 31 : this.turmaForm.Horario2 === 31)){
                   return false
               }else if(horario === 1 && (_.includes(horarios1618, this.turmaForm.Horario1))) {
                   if(this.checkHorarioSala1618(1, 1)) return true
               }else if(horario === 2 && (_.includes(horarios1618, this.turmaForm.Horario2))) {
-                  if((_.isNull(this.turmaForm.Sala2) || _.isUndefined(this.turmaForm.Sala2)) && this.checkHorarioSala1618(2, 1)) return true
-                  if((!(_.isUndefined(this.turmaForm.Sala2)) || !(_.isNull(this.turmaForm.Sala2))) && this.checkHorarioSala1618(2, 2)) return true
+                  if(this.checkHorarioSala1618(2, 2)) return true
               }else if(horario === 1 && (_.includes(horarios1719, this.turmaForm.Horario1))) {
                   if(this.checkHorarioSala1719(1, 1)) return true
               }else if(horario === 2 && (_.includes(horarios1719, this.turmaForm.Horario2))) {
-                  if((_.isNull(this.turmaForm.Sala2) || _.isUndefined(this.turmaForm.Sala2)) && this.checkHorarioSala1719(2, 1)) return true
-                  if((!(_.isUndefined(this.turmaForm.Sala2)) || !(_.isNull(this.turmaForm.Sala2))) && this.checkHorarioSala1719(2, 2)) return true
+                  if(this.checkHorarioSala1719(2, 2)) return true
               }else if(horario === 1 && (_.includes(horarios1820, this.turmaForm.Horario1))) {
                   if(this.checkHorarioSala1820(1, 1)) return true
               }else if(horario === 2 && (_.includes(horarios1820, this.turmaForm.Horario2))) {
-                  if((_.isNull(this.turmaForm.Sala2) || _.isUndefined(this.turmaForm.Sala2)) && this.checkHorarioSala1820(2, 1)) return true
-                  if((!(_.isUndefined(this.turmaForm.Sala2)) || !(_.isNull(this.turmaForm.Sala2))) && this.checkHorarioSala1820(2, 2)) return true
+                  if(this.checkHorarioSala1820(2, 2)) return true
               }else if(horario === 1 && (_.includes(horarios1921, this.turmaForm.Horario1))) {
                   if(this.checkHorarioSala1921(1, 1)) return true
               }else if(horario === 2 && (_.includes(horarios1921, this.turmaForm.Horario2))) {
-                  if((_.isNull(this.turmaForm.Sala2) || _.isUndefined(this.turmaForm.Sala2)) && this.checkHorarioSala1921(2, 1)) return true
-                  if((!(_.isUndefined(this.turmaForm.Sala2)) || !(_.isNull(this.turmaForm.Sala2))) && this.checkHorarioSala1921(2, 2)) return true
+                  if(this.checkHorarioSala1921(2, 2)) return true
               }else{
                   if(horario == 1){
-                      if(this.checkHorarioSalaGeral(1, 1)) return truee
+                      if(this.checkHorarioSalaGeral(1, 1)) return true
                   }else{
-                      if((_.isNull(this.turmaForm.Sala2) || _.isUndefined(this.turmaForm.Sala2)) && this.checkHorarioSalaGeral(2, 1)) return true
-                      if((!(_.isUndefined(this.turmaForm.Sala2)) || !(_.isNull(this.turmaForm.Sala2))) && this.checkHorarioSalaGeral(2, 2)) return true
+                      if(this.checkHorarioSalaGeral(2, 2)) return true
                   }
               }
           }
@@ -792,12 +809,7 @@ export default {
       if (this.turmaForm.Sala2 === "") this.turmaForm.Sala2 = null;
 
       if(this.turmaForm.turno1==="")  this.turmaForm.turno1=null
-
-      if(this.turmaForm.turno1==="EAD"){
-        this.turmaForm.Horario1 = 31
-        if(this.turmaForm.Horario2 > 0)
-          this.turmaForm.Horario2 = null
-      }
+        
       turmaService
         .update(this.turma.id, this.turmaForm)
         .then(response => {
@@ -846,8 +858,38 @@ export default {
       return _.orderBy(this.$store.state.horario.Horarios, "horario");
     },
 
+    HorariosDiurnos () {
+        return _.orderBy(
+            _.filter(this.$store.state.horario.Horarios, function (h) {
+                if(parseInt(h.horario.slice(3,5)) < 17)
+                    return true
+                if(h.id === 31)
+                    return true
+            }
+        ), "horario");
+    },
+
+    HorariosNoturnos () {
+        return _.orderBy(
+            _.filter(this.$store.state.horario.Horarios, function (h) {
+                    if(parseInt(h.horario.slice(3,5)) >= 17)
+                        return true
+                if(h.id === 31)
+                    return true
+                }
+            ), "horario");
+    },
+
+    HorariosEAD () {
+        return _.filter(this.$store.state.horario.Horarios, {'id': 31})
+    },
+
     Pedidos () {
         return this.$store.state.pedido.Pedidos[this.turma.id]
+    },
+
+    Disciplina () {
+        return _.find(this.$store.state.disciplina.Disciplinas, {'id': this.turma.Disciplina})
     },
 
     Admin () {
