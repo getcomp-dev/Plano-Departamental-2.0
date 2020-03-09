@@ -610,7 +610,7 @@ export default {
                   d2 = (!(_.isNull(this.turmaForm.Sala2)) && (this.turmaForm.Sala2 === t.Sala2))
               }
 
-              return(((h1||h2) && d1)||((h1||h2) && d2))
+              return((h1 && d1)||(h2 && d2))
           })
           if(conflitos.length > 0){
               if(conflitos.length === 1){
@@ -649,7 +649,7 @@ export default {
                   d2 = (!(_.isNull(this.turmaForm.Sala2)) && (this.turmaForm.Sala2 === t.Sala2))
               }
 
-              return(((h1||h2) && d1)||((h1||h2) && d2))
+              return((h1 && d1)||(h2 && d2))
           })
           if(conflitos.length > 0){
               if(conflitos.length === 1){
@@ -688,7 +688,7 @@ export default {
                   d2 = (!(_.isNull(this.turmaForm.Sala2)) && (this.turmaForm.Sala2 === t.Sala2))
               }
 
-              return(((h1||h2) && d1)||((h1||h2) && d2))
+              return((h1 && d1)||(h2 && d2))
           })
           if(conflitos.length > 0){
               if(conflitos.length === 1){
@@ -727,7 +727,7 @@ export default {
                   d2 = (!(_.isNull(this.turmaForm.Sala2)) && (this.turmaForm.Sala2 === t.Sala2))
               }
 
-              return(((h1||h2) && d1)||((h1||h2) && d2))
+              return((h1 && d1)||(h2 && d2))
           })
           if(conflitos.length > 0){
               if(conflitos.length === 1){
@@ -766,7 +766,7 @@ export default {
                   d2 = (!(_.isNull(this.turmaForm.Sala2)) && (this.turmaForm.Sala2 === t.Sala2))
               }
 
-              return(((h1||h2) && d1)||((h1||h2) && d2))
+              return((h1 && d1)||(h2 && d2))
           })
           if(conflitos.length > 0){
               if(conflitos.length === 1){

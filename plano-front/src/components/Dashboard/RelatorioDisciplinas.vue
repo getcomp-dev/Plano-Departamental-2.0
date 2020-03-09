@@ -35,7 +35,7 @@
 
     <div class="divTable p-0" ref="carga">
       <table class="table main-table table-hover border table-sm">
-        <thead class="thead-light sticky">
+        <thead class="thead-light">
           <tr>
             <div
               style="display: block; overflow: hidden; width: ‭max-contet; height:20px !important"
@@ -219,52 +219,60 @@
       </table>
     </div>
 
-    <b-modal id="modalSemestre" ref="modalSemestre" scrollable title="Selecione o semestre">
-      <div class="col m-0 p-0 border" style="width:max-content; border-color: rgba(0,0,0,0.125);">
-        <table class="table table-sm modal-table" style="max-height: 392px !important;">
-          <tr>
-            <div style="width: max-content; height: 18px !important; font-size: 11px!important">
-              <th class="border-0 p-0">
-                <p style="width:25px" class="p-header"></p>
-              </th>
-              <th class="border-0 p-0">
-                <p
-                  class="p-header clickable-header"
-                  style="width: 435px; text-align: start;"
-                >Semestre</p>
-              </th>
-            </div>
-          </tr>
+    <b-modal id="modalSemestre" ref="modalSemestre" scrollable title="Selecione os semestres">
+      <div class="col m-0 p-0" style="width:max-content;heigth:max-content;">
+        <table
+          class="table table-bordered table-sm modal-table"
+          style="max-height: 392px !important;"
+        >
+          <thead class="thead-light">
+            <tr>
+              <div
+                style="width: max-content; height: 18px !important; font-size: 11px!important"
+                class="sticky"
+              >
+                <th>
+                  <p style="width:25px" class="p-header"></p>
+                </th>
+                <th>
+                  <p
+                    class="p-header clickable-header"
+                    style="width: 432px; text-align: start;"
+                  >Semestre Letivo</p>
+                </th>
+              </div>
+            </tr>
+          </thead>
           <tbody>
             <tr>
               <div style="width: max-content">
-                <td style="padding:0;broder:0;margin:0!important;">
-                  <div style="width:25px;">
+                <td>
+                  <div style="width: 25px; height: inherit;" class="px-1">
                     <input
                       type="checkbox"
-                      v-model="semestre_1Ativo"
                       class="form-check-input position-static m-0"
+                      v-model="semestre_1Ativo"
                     />
                   </div>
                 </td>
                 <td>
-                  <p style="width:435px; text-align:start">Primeiro</p>
+                  <p style="width:432px; text-align:start">Primeiro semestre</p>
                 </td>
               </div>
             </tr>
             <tr>
               <div style="width: max-content">
-                <td style="padding:0;broder:0;margin:0!important;">
-                  <div style="width:25px;">
+                <td>
+                  <div style="width: 25px; height: inherit;" class="px-1">
                     <input
                       type="checkbox"
-                      v-model="semestre_2Ativo"
                       class="form-check-input position-static m-0"
+                      v-model="semestre_2Ativo"
                     />
                   </div>
                 </td>
                 <td>
-                  <p style="width:435px; text-align:start">Segundo</p>
+                  <p style="width:432px; text-align:start">Segundo semestre</p>
                 </td>
               </div>
             </tr>
@@ -326,84 +334,93 @@
       id="modalDisciplinas"
       ref="DisciplinasModal"
       scrollable
+      size="lg"
       title="Selecione as disciplinas"
     >
-      <div class="col m-0 p-0 border" style="width:max-content; border-color: rgba(0,0,0,0.125);">
-        <table class="table table-sm modal-table" style="max-height: 392px !important;">
-          <tr>
-            <div style="width: max-content; height: 18px !important; font-size: 11px!important">
-              <th class="border-0 p-0">
-                <p style="width:25px" class="p-header"></p>
-              </th>
-              <th class="border-0 p-0">
-                <p
-                  class="p-header clickable-header"
-                  style="width: 80px; text-align: start;"
-                  @click="toggleOrderCodigo()"
-                  title="Clique para ordenar por código"
-                >
-                  Cód.
-                  <i
-                    v-if="ordenacao=='codigo'"
-                    style="font-size:0.6rem; text-align:right"
-                    class="fas fa-arrow-down fa-sm"
-                  ></i>
-                </p>
-              </th>
-              <th class="border-0 p-0">
-                <p
-                  class="p-header clickable-header"
-                  style="width: 277px; text-align: start;"
-                  @click="toggleOrderNome()"
-                  title="Clique para ordenar por nome"
-                >
-                  Nome
-                  <i
-                    v-if="ordenacao=='nome'"
-                    style="font-size:0.6rem; text-align:right"
-                    class="fas fa-arrow-down fa-sm"
-                  ></i>
-                </p>
-              </th>
+      <div class="col m-0 p-0" style="width:max-content; border-color: rgba(0,0,0,0.125);">
+        <table
+          class="table table-bordered table-sm modal-table"
+          style="max-height: 450px !important;"
+        >
+          <thead class="thead-light">
+            <tr>
+              <div
+                style="width: max-content; height: 18px !important; font-size: 11px!important"
+                class="sticky"
+              >
+                <th>
+                  <p style="width:25px" class="p-header"></p>
+                </th>
+                <th>
+                  <p
+                    class="p-header clickable-header"
+                    style="width: 100px; text-align: start;"
+                    @click="toggleOrderCodigo()"
+                    title="Clique para ordenar por código"
+                  >
+                    Cód.
+                    <i
+                      v-if="ordenacao=='codigo'"
+                      style="font-size:0.6rem; text-align:right"
+                      class="fas fa-arrow-down fa-sm"
+                    ></i>
+                  </p>
+                </th>
+                <th>
+                  <p
+                    class="p-header clickable-header"
+                    style="width: 428px; text-align: start;"
+                    @click="toggleOrderNome()"
+                    title="Clique para ordenar por nome"
+                  >
+                    Nome
+                    <i
+                      v-if="ordenacao=='nome'"
+                      style="font-size:0.6rem; text-align:right"
+                      class="fas fa-arrow-down fa-sm"
+                    ></i>
+                  </p>
+                </th>
 
-              <th class="border-0 p-0">
-                <p
-                  class="p-header clickable-header"
-                  style="width: 65px; text-align: start;"
-                  @click="toggleOrderPerfil()"
-                  title="Clique para ordenar por nome"
-                >
-                  Perfil
-                  <i
-                    v-if="Array.isArray(ordenacao)"
-                    style="font-size:0.6rem; text-align:right"
-                    class="fas fa-arrow-down fa-sm"
-                  ></i>
-                </p>
-              </th>
-            </div>
-          </tr>
+                <th>
+                  <p
+                    class="p-header clickable-header"
+                    style="width: 190px; text-align: start;"
+                    @click="toggleOrderPerfil()"
+                    title="Clique para ordenar por nome"
+                  >
+                    Perfil
+                    <i
+                      v-if="Array.isArray(ordenacao)"
+                      style="font-size:0.6rem; text-align:right"
+                      class="fas fa-arrow-down fa-sm"
+                    ></i>
+                  </p>
+                </th>
+              </div>
+            </tr>
+          </thead>
           <tbody>
             <tr v-for="disciplina in Disciplinas" :key="`disciplina${disciplina.id}`">
               <div style="width: max-content">
-                <td style="padding:0;broder:0;margin:0!important;">
-                  <div style="width:25px;">
+                <td>
+                  <div style="width: 25px; height: inherit;" class="px-1">
                     <input
                       type="checkbox"
+                      class="form-check-input position-static m-0"
                       v-model="DisciplinasSelecionados"
                       :value="disciplina"
-                      class="form-check-input position-static m-0"
                     />
                   </div>
                 </td>
                 <td>
-                  <p style="width:80px; text-align:start">{{disciplina.codigo}}</p>
+                  <p style="width:100px; text-align:start">{{disciplina.codigo}}</p>
                 </td>
                 <td>
-                  <p style="width:277px; text-align:start">{{disciplina.nome}}</p>
+                  <p style="width:428px; text-align:start">{{disciplina.nome}}</p>
                 </td>
                 <td>
-                  <p style="width:65px; text-align:start">{{perfil(disciplina)}}</p>
+                  <p style="width:190px; text-align:start">{{perfil(disciplina)}}</p>
                 </td>
               </div>
             </tr>
@@ -638,6 +655,7 @@ export default {
   text-align: center;
   vertical-align: middle !important;
   padding: 0 !important;
+  margin: 0 !important;
   height: 18px !important;
 }
 .main-table p {
@@ -655,9 +673,15 @@ export default {
   height: 18px !important;
 }
 .sticky {
-  position: sticky;
-  position: -webkit-sticky;
-  top: 0;
+  display: block !important;
+  overflow: hidden !important;
+  height: 20px !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 0 !important;
+  display: block !important;
+  overflow: hidden !important;
+  z-index: 3;
 }
 .titulo {
   font-size: 25px;
@@ -833,10 +857,12 @@ i.far {
 .modal-table tr thead {
   display: block;
 }
-.modal-table thead th {
+.modal-table th {
   padding: 0 !important;
   text-align: center !important;
   height: 18px !important;
+  border-bottom: 0;
+  border-top: 0;
 }
 .modal-table .p-header {
   padding: 0px 5px 0px 5px !important;
@@ -852,11 +878,13 @@ i.far {
   text-align: center;
   vertical-align: middle !important;
   padding: 0 !important;
-  height: 22px !important;
+  margin: 0 !important;
+  /* height: 22px !important; */
 }
 .modal-table p {
   margin: 0 !important;
   text-align: center;
+  padding: 0 !important;
   padding-right: 5px !important;
   padding-left: 5px !important;
 }

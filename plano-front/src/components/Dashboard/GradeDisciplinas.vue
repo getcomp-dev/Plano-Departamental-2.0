@@ -151,10 +151,7 @@
       title="Selecione os Cursos"
       :size="'sm'"
     >
-      <div
-        class="div-modal-table col m-0 p-0 border"
-        style="width:max-content; border-color: rgba(0,0,0,0.125);"
-      >
+      <div class="col m-0 p-0 border" style="width:max-content; border-color: rgba(0,0,0,0.125);">
         <table class="m-table table table-sm modal-table">
           <tr>
             <div style="font-size: 11px!important; height: 18px !important">
@@ -220,11 +217,14 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para exibir conteúdo na Tabela: </strong> Clique em Perfis
+            <strong>Para exibir conteúdo na Tabela:</strong> Clique em Perfis
             <i class="fas fa-list-ul cancelbtn px-1" style="font-size: 12px"></i>
-             e marque quais deseja mostrar, depois clique em OK. Logo após, escolha os Cursos
-             <i class="fas fa-graduation-cap cancelbtn px-1" style="font-size: 12px"></i>
-              que quer ver, confirmando a seleção em OK. Caso queira ver todos basta clicar em Selecionar Todos.
+            e marque quais deseja mostrar, depois clique em OK. Logo após, escolha os Cursos
+            <i
+              class="fas fa-graduation-cap cancelbtn px-1"
+              style="font-size: 12px"
+            ></i>
+            que quer ver, confirmando a seleção em OK. Caso queira ver todos basta clicar em Selecionar Todos.
           </li>
         </ul>
       </div>
@@ -234,7 +234,7 @@
     <!-- Modals do botão perfis slot="modal-footer" -->
     <b-modal id="modalPerfis" ref="PerfisModal" scrollable title="Selecione os perfis">
       <div
-        class="div-modal-table col m-0 p-0 border"
+        class="col m-0 p-0 border"
         style="height: 395px; width:max-content; border-color: rgba(0,0,0,0.125);"
       >
         <table class="table table-sm modal-table" style="max-height: 392px !important;">
@@ -655,8 +655,7 @@ export default {
 
     isLoading() {
       return this.$store.state.isLoading;
-    },
-
+    }
   },
   watch: {
     CursosSelecionados: function() {
@@ -930,7 +929,7 @@ i.far {
 }
 
 /* TABELA MODAL */
-.div-modal-table table {
+.modal-table {
   display: block !important;
   overflow: auto !important;
   font-size: 11px !important;
@@ -939,12 +938,12 @@ i.far {
   margin: 0 !important;
 }
 
-.div-modal-table tbody {
+.modal-table tbody {
   max-height: 100%;
   width: 100%;
 }
 
-.div-modal-table table td {
+.modal-table td {
   text-align: center;
   vertical-align: middle !important;
   padding: 0 !important;
@@ -952,18 +951,18 @@ i.far {
   height: 22px !important;
 }
 
-.div-modal-table tr thead {
+.modal-table tr thead {
   display: block;
 }
 
-.div-modal-table th {
+.modal-table th {
   padding: 0 !important;
   font-size: 14px;
   text-align: center !important;
   height: 18px !important;
 }
 
-.div-modal-table .p-header {
+.modal-table .p-header {
   padding: 0 5px 0 5px !important;
   margin: 0 !important;
   font-size: 11px !important;
@@ -971,7 +970,7 @@ i.far {
   height: 18px !important;
 }
 
-.div-modal-table table p {
+.modal-table p {
   margin-bottom: 0 !important;
   text-align: center;
   padding-right: 5px !important;
@@ -979,7 +978,7 @@ i.far {
   font-size: 10px !important;
 }
 
-.div-modal-table table input[type="checkbox"] {
+.modal-table input[type="checkbox"] {
   margin-left: 0 !important;
   margin-top: 4px !important;
   margin-bottom: auto !important;

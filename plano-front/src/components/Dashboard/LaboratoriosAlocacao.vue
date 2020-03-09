@@ -1165,11 +1165,6 @@ export default {
         if (lab.id === turma.Sala2) result += 2;
       });
 
-      if (result === 1) {
-        if (_.isNull(turma.Sala2)) {
-          return 4;
-        }
-      }
       return result;
     },
 
@@ -1195,9 +1190,6 @@ export default {
                 if (turma.Horario2 == horario) return true;
             }
             return false
-          case 4:
-            return true;
-            break;
         }
         return true;
       } else return false;
@@ -1213,11 +1205,11 @@ export default {
     },
 
     Turmas1() {
-      return _.filter(this.$store.state.turma.Turmas, ["periodo", 1]);
+      return _.concat(_.filter(this.$store.state.turma.Turmas, ["periodo", 1]), _.filter(this.$store.state.turmaExterna.Turmas, ["periodo", 1]));
     },
 
     Turmas2() {
-      return _.filter(this.$store.state.turma.Turmas, ["periodo", 3]);
+      return _.concat(_.filter(this.$store.state.turma.Turmas, ["periodo", 3]), _.filter(this.$store.state.turmaExterna.Turmas, ["periodo", 3]))
     },
 
     Disciplinas() {

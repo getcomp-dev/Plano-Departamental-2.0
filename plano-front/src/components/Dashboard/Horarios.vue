@@ -119,12 +119,11 @@
 
     <b-modal
       id="modalCursos"
-      class="mw-100"
-      style="width: max-content"
       ref="modalCursos"
-      scrollable
       title="Selecione os Cursos"
-      :size="'md'"
+      class="mw-100"
+      size="md"
+      scrollable
     >
       <div class="col m-0 p-0 border" style="width:max-content; border-color: rgba(0,0,0,0.125);">
         <table class="table table-sm modal-table">
@@ -137,7 +136,7 @@
                 <p style="width:50px" class="p-header">Cód.</p>
               </th>
               <th class="border-0">
-                <p class="p-header" style="width: 380px; text-align:start">Nome</p>
+                <p class="p-header" style="width: 385px; text-align:start">Nome</p>
               </th>
             </div>
           </tr>
@@ -159,7 +158,7 @@
                   <p style="width:50px; text-align:start;">{{ curso.codigo.toUpperCase() }}</p>
                 </td>
                 <td>
-                  <p style="width:380px; text-align:start;">{{ curso.nome }}</p>
+                  <p style="width:385px; text-align:start;">{{ curso.nome }}</p>
                 </td>
               </div>
             </tr>
