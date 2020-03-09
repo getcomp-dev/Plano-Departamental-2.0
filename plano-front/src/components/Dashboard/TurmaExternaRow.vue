@@ -229,7 +229,7 @@ export default {
 
             if (turma.Horario2 === "") turma.Horario2 = null;
 
-            if (turma.Sala1 === "") turma.Sala111 = null;
+            if (turma.Sala1 === "") turma.Sala1 = null;
 
             if (turma.Sala2 === "") turma.Sala2 = null;
 
