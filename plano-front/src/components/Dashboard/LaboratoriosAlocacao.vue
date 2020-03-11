@@ -1186,7 +1186,8 @@ export default {
           case 3:
             if (turma.Sala1 === lab){
                 if (turma.Horario1 == horario) return true;
-            }else if(turma.Sala2 === lab){
+            }
+            if(turma.Sala2 === lab){
                 if (turma.Horario2 == horario) return true;
             }
             return false

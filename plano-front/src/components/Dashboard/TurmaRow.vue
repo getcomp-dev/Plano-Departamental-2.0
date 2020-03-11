@@ -589,7 +589,7 @@ export default {
       },
 
     checkHorarioSala1618(horario, sala) {
-          let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+          let conflitos = _.filter(_.concat(this.$store.state.turma.Turmas, this.$store.state.turmaExterna.Turmas), (t) => {
               if(this.turmaForm.periodo != t.periodo){
                 return false
               }
@@ -628,7 +628,7 @@ export default {
       },
 
     checkHorarioSala1719(horario, sala) {
-          let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+          let conflitos = _.filter(_.concat(this.$store.state.turma.Turmas, this.$store.state.turmaExterna.Turmas), (t) => {
               if(this.turmaForm.periodo != t.periodo){
                 return false
               }
@@ -667,7 +667,7 @@ export default {
       },
 
     checkHorarioSala1820(horario, sala) {
-          let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+          let conflitos = _.filter(_.concat(this.$store.state.turma.Turmas, this.$store.state.turmaExterna.Turmas), (t) => {
               if(this.turmaForm.periodo != t.periodo){
                 return false
               }
@@ -706,7 +706,7 @@ export default {
       },
 
     checkHorarioSala1921(horario, sala) {
-          let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+          let conflitos = _.filter(_.concat(this.$store.state.turma.Turmas, this.$store.state.turmaExterna.Turmas), (t) => {
               if(this.turmaForm.periodo != t.periodo){
                 return false
               }
@@ -745,7 +745,7 @@ export default {
       },
 
     checkHorarioSalaGeral(horario,sala) {
-          let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
+          let conflitos = _.filter(_.concat(this.$store.state.turma.Turmas, this.$store.state.turmaExterna.Turmas), (t) => {
               if(this.turmaForm.periodo != t.periodo){
                 return false
               }
