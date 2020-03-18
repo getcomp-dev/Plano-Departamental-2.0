@@ -183,19 +183,19 @@
                           </template>
                         </div>
                       </td>
-                      <td v-if="semestreAtual==1" v-on:click="selecionaTurma(turma)">
+                      <td v-if="semestreAtual==1" v-on:click="selecionaTurma(turma)" class="clickable-header">
                         <p
                           v-if="turma.periodo == 1 || turma.periodo == 2"
                           style="width: 70px;"
                         >{{vagasTurma(turma, 1)}}</p>
                       </td>
-                      <td v-if="semestreAtual==2" v-on:click="selecionaTurma(turma)">
+                      <td v-if="semestreAtual==2" v-on:click="selecionaTurma(turma)" class="clickable-header">
                         <p
                           v-if="turma.periodo == 3 || turma.periodo == 4"
                           style="width: 70px;"
                         >{{vagasTurma(turma, 2)}}</p>
                       </td>
-                      <td v-if="semestreAtual==3" v-on:click="selecionaTurma(turma)">
+                      <td v-if="semestreAtual==3" v-on:click="selecionaTurma(turma)" class="clickable-header">
                         <p
                           v-if="turma.periodo == 1 || turma.periodo == 2"
                           style="width: 70px;"
@@ -408,7 +408,7 @@
           </thead>
 
           <tbody>
-            <tr v-for="disciplina in Disciplinas" :key="`disciplina${disciplina.id}`">
+            <tr v-for="disciplina in Disciplinas" :key="'disciplina'+disciplina.id">
               <div style="width: max-content">
                 <td>
                   <div style="width: 25px; height: inherit;" class="px-1">
@@ -456,6 +456,122 @@
         >OK</b-button>
       </div>
     </b-modal>
+    <!-- Modals para ver divisões de vagas por curso -->
+    <b-modal
+            id="modalVagas"
+            ref="VagasModal"
+            scrollable
+            size="lg"
+    >
+      <div slot="modal-header" style="width:100%">
+        <div class="row col-12">
+          <h6 class="col-11">{{(turmaSelecionada !== undefined ? disciplina(turmaSelecionada).codigo + ' - ' + disciplina(turmaSelecionada).nome : 'Nenhuma Turma Selecionada')}}</h6>
+          <select class="col-1" v-model="turmaSelecionada" style="height:25px!important">
+           <option v-for="turma in (turmaSelecionada !== undefined ? turmas(disciplina(turmaSelecionada), (turmaSelecionada.periodo === 1 || turmaSelecionada.periodo === 2 ? 1 : 2)) : [])" :key="'selectModalVagas' + turma.id" :value="turma" >{{turma.letra}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col m-0 p-0" style="width:max-content;">
+        <table
+                class="table table-sm modal-table table-bordered"
+                style="max-height: 450px !important;"
+        >
+          <thead class="thead-light">
+          <tr>
+            <div
+                    style="width: max-content; height: 18px !important; font-size: 11px!important"
+                    class="sticky"
+            >
+              <th>
+                <p
+                        class="p-header clickable-header"
+                        style="width: 100px; text-align: start;"
+                        v-on:click="ordemCursos('codigo')"
+                        title="Clique para ordenar por código"
+                >
+                  Cód.
+                  <i
+                          v-if="ordemCurso==='codigo'"
+                          style="font-size:0.6rem; text-align:right"
+                          class="fas fa-arrow-down fa-sm"
+                  ></i>
+                </p>
+              </th>
+              <th>
+                <p
+                        class="p-header clickable-header"
+                        style="width: 428px; text-align: start;"
+                        v-on:click="ordemCursos('nome')"
+                        title="Clique para ordenar por nome"
+                >
+                  Nome
+                  <i
+                          v-if="ordemCurso==='nome'"
+                          style="font-size:0.6rem; text-align:right"
+                          class="fas fa-arrow-down fa-sm"
+                  ></i>
+                </p>
+              </th>
+
+              <th>
+                <p
+                        class="p-header clickable-header"
+                        style="width: 70px; text-align: start;"
+                        v-on:click="ordemCursos('vagasPeriodizadas')"
+                        title="Clique para ordenar por vagas da grade"
+                >
+                  Grade
+                  <i
+                          v-if="ordemCurso==='vagasPeriodizadas'"
+                          style="font-size:0.6rem; text-align:right"
+                          class="fas fa-arrow-down fa-sm"
+                  ></i>
+                </p>
+              </th>
+              <th>
+                <p
+                        class="p-header clickable-header"
+                        style="width: 70px; text-align: start;"
+                        v-on:click="ordemCursos('vagasNaoPeriodizadas')"
+                        title="Clique para ordenar por vagas extras"
+                >
+                  Extra
+                  <i
+                          v-if="ordemCurso==='vagasNaoPeriodizadas'"
+                          style="font-size:0.6rem; text-align:right"
+                          class="fas fa-arrow-down fa-sm"
+                  ></i>
+                </p>
+              </th>
+            </div>
+          </tr>
+          </thead>
+
+          <tbody>
+          <tr v-for="p in VagasTurmaSelecionada" :key="'vaga'+p.Curso+'-'+p.Turma">
+            <div style="width: max-content">
+              <td>
+                <p style="width:100px; text-align:start">{{curso(p).codigo}}</p>
+              </td>
+              <td>
+                <p style="width:428px; text-align:start">{{curso(p).nome}}</p>
+              </td>
+              <td>
+                <p style="width:70px; text-align:start">{{p.vagasPeriodizadas}}</p>
+              </td>
+              <td>
+                <p style="width:70px; text-align:start">{{p.vagasNaoPeriodizadas}}</p>
+              </td>
+            </div>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
+
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -473,7 +589,8 @@ export default {
       semestre_1Ativo: true,
       semestre_2Ativo: true,
       semestreAtual: 3,
-      turmaSelecionada: undefined
+      turmaSelecionada: undefined,
+      ordemCurso: 'codigo',
     };
   },
 
@@ -607,19 +724,19 @@ export default {
 
     selecionaTurma(turma) {
       this.turmaSelecionada = turma;
-      for (let i = 0; i < this.VagasTurmaSelecionada.length; i++) {
-        console.log({
-          nome: this.curso(this.VagasTurmaSelecionada[i]).nome,
-          codigo: this.curso(this.VagasTurmaSelecionada[i]).codigo,
-          vagasPeriodizadas: this.VagasTurmaSelecionada[i].vagasPeriodizadas,
-          vagasNaoPeriodizadas: this.VagasTurmaSelecionada[i]
-            .vagasNaoPeriodizadas
-        });
-      }
+      this.$refs.VagasModal.show()
     },
 
     curso(pedido) {
       return _.find(this.$store.state.curso.Cursos, { id: pedido.Curso });
+    },
+
+    disciplina(turma) {
+      return _.find(this.$store.state.disciplina.Disciplinas, { id: turma.Disciplina });
+    },
+
+    ordemCursos(ordem){
+      this.ordemCurso = ordem
     }
   },
 
@@ -634,12 +751,21 @@ export default {
     },
 
     VagasTurmaSelecionada() {
-      return _.filter(
+      if(this.turmaSelecionada === undefined) return []
+      return _.sortBy(_.filter(
         this.$store.state.pedido.Pedidos[this.turmaSelecionada.id],
         function(p) {
           return p.vagasPeriodizadas > 0 || p.vagasNaoPeriodizadas > 0;
         }
-      );
+      ), (p) => {
+        switch(this.ordemCurso){
+          case 'codigo' : return this.curso(p).codigo
+          case 'nome' : return this.curso(p).nome
+          case 'vagasPeriodizadas' : return -p.vagasPeriodizadas
+          case 'vagasNaoPeriodizadas' : return -p.vagasNaoPeriodizadas
+          default: return this.curso(p).codigo
+        }
+      })
     },
 
     Horarios() {
