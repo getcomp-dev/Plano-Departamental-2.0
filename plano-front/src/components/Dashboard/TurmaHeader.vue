@@ -4,7 +4,7 @@
       <p style="width:24px !important;" title="Semestre">S.</p>
     </th>
     <th scope="col">
-      <p style="width:70px !important;" title="Código">Cod</p>
+      <p style="width:70px !important;" title="Código">Cód.</p>
     </th>
     <th scope="col">
       <p style="width:330px !important;">Disciplina</p>

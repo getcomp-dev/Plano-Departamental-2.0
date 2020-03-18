@@ -6,28 +6,28 @@
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="titulo col-xl-3 col-lg-3 col-md-4 col-sm-5 col-5 px-0 pr-1">Horários - Cursos</h1>
+        <h1 class="titulo col-xl-3 col-lg-3 col-md-4 col-sm-5 col-5 px-0 pr-1">
+          Horários - Cursos
+        </h1>
         <div
           class="form-group col-xl-9 col-lg-9 col-md-8 col-sm-7 col-7 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
-          <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
-            <select class="form-control form-control-sm" v-model="periodo">
-              <option value="1">Primeiro</option>
-              <option value="2">Segundo</option>
-              <option value="3">Ambos</option>
-            </select>
-            <div class="input-group-append">
-              <label class="input-group-text">Semestre</label>
-            </div>
-          </div>
+          <b-button v-b-modal.modalSemestre title="Semestre" class="cancelbtn">
+            <i class="fas fa-calendar-alt"></i>
+          </b-button>
           <div class="d-flex p-0 m-0">
-            <b-button v-b-modal.modalCursos title="Cursos" class="cancelbtn">
+            <!-- <b-button v-b-modal.modalCursos title="Cursos" class="cancelbtn">
               <i class="fas fa-graduation-cap"></i>
-            </b-button>
+            </b-button> -->
 
             <!--  -->
-            <button type="button" class="relatbtn" v-on:click.prevent="pdf" title="Relatório">
+            <button
+              type="button"
+              class="relatbtn"
+              v-on:click.prevent="pdf"
+              title="Relatório"
+            >
               <i class="far fa-file-alt"></i>
             </button>
 
@@ -43,75 +43,97 @@
 
     <div class="p-0 w-100 col-12">
       <!-- -------------------------------------------- 1º periodo ----------------------------------------- -->
-      <template v-if="this.cursos.length != 0 && (periodo == 1 || periodo == 3)">
-        <h3 class="title px-2" style="background-color: rgba(0, 0, 0, 0.089);">1º SEMESTRE</h3>
+      <template
+        v-if="
+          this.cursos.length != 0 && (semestreAtual == 1 || semestreAtual == 3)
+        "
+      >
+        <h3 class="title px-2" style="background-color: rgba(0, 0, 0, 0.089);">
+          1º SEMESTRE
+        </h3>
         <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
 
         <template v-if="activeCCD">
           <!-- passar o nome do curso pra dentro da tabela -->
-          <h4>Ciência da Computação Diurno</h4>
-          <!-- Para centralizar a tabela:
-            <div class="flex-container">
-              <curso-diurno :Curso="ativos1.CCD"></curso-diurno>
-          </div>-->
-          <curso-diurno :Curso="ativos1.CCD"></curso-diurno>
+          <!-- Para centralizar a tabela: -->
+          <div class="flex-container">
+            <h4 class="pl-1">Ciência da Computação Diurno</h4>
+            <curso-diurno :Curso="ativos1.CCD"></curso-diurno>
+          </div>
         </template>
         <!-- -------------------------------------------- EC ----------------------------------------- -->
         <template v-if="activeEC">
-          <h4>Engenharia Computacional</h4>
-
-          <curso-diurno :Curso="ativos1.EC"></curso-diurno>
+          <div class="flex-container">
+            <h4 class="pl-1">Engenharia Computacional</h4>
+            <curso-diurno :Curso="ativos1.EC"></curso-diurno>
+          </div>
         </template>
         <!-- -------------------------------------------- CC Noturno ----------------------------------------- -->
         <template v-if="activeCCN">
-          <h4>Ciência da Computação Noturno</h4>
-
-          <curso-noturno :Curso="ativos1.CCN"></curso-noturno>
+          <div class="flex-container">
+            <h4 class="pl-1">Ciência da Computação Noturno</h4>
+            <curso-noturno :Curso="ativos1.CCN"></curso-noturno>
+          </div>
         </template>
         <!-- -------------------------------------------- SI ----------------------------------------- -->
         <template v-if="activeSI">
-          <h4>Sistemas de Informação</h4>
-
-          <curso-noturno :Curso="ativos1.SI"></curso-noturno>
+          <div class="flex-container">
+            <h4 class="pl-1">Sistemas de Informação</h4>
+            <curso-noturno :Curso="ativos1.SI"></curso-noturno>
+          </div>
         </template>
         <!-- -------------------------------------------- Eletivas ----------------------------------------- -->
         <template v-if="activeEletivas">
-          <h4>Eletivas</h4>
-          <horario-eletivas :Eletivas="ativos1.Eletivas"></horario-eletivas>
+          <div class="flex-container">
+            <h4 class="pl-1">Eletivas</h4>
+            <horario-eletivas :Eletivas="ativos1.Eletivas"></horario-eletivas>
+          </div>
         </template>
       </template>
 
       <!-- -------------------------------------------- 2º periodo ----------------------------------------- -->
-      <template v-if="this.cursos.length != 0 && (periodo == 2 || periodo == 3)">
-        <h3 class="title px-2" style="background-color: rgba(0, 0, 0, 0.089)">2º SEMESTRE</h3>
+      <template
+        v-if="
+          this.cursos.length != 0 && (semestreAtual == 2 || semestreAtual == 3)
+        "
+      >
+        <h3 class="title px-2" style="background-color: rgba(0, 0, 0, 0.089)">
+          2º SEMESTRE
+        </h3>
         <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
         <template v-if="activeCCD">
-          <h4>Ciência da Computação Diurno</h4>
-
-          <curso-diurno :Curso="ativos2.CCD"></curso-diurno>
+          <div class="flex-container">
+            <h4 class="pl-1">Ciência da Computação Diurno</h4>
+            <curso-diurno :Curso="ativos2.CCD"></curso-diurno>
+          </div>
         </template>
         <!-- -------------------------------------------- EC ----------------------------------------- -->
         <template v-if="activeEC">
-          <h4>Engenharia Computacional</h4>
-
-          <curso-diurno :Curso="ativos2.EC"></curso-diurno>
+          <div class="flex-container">
+            <h4 class="pl-1">Engenharia Computacional</h4>
+            <curso-diurno :Curso="ativos2.EC"></curso-diurno>
+          </div>
         </template>
         <!-- -------------------------------------------- CC Noturno ----------------------------------------- -->
         <template v-if="activeCCN">
-          <h4>Ciência da Computação Noturno</h4>
-
-          <curso-noturno :Curso="ativos2.CCN"></curso-noturno>
+          <div class="flex-container">
+            <h4 class="pl-1">Ciência da Computação Noturno</h4>
+            <curso-noturno :Curso="ativos2.CCN"></curso-noturno>
+          </div>
         </template>
         <!-- -------------------------------------------- SI ----------------------------------------- -->
         <template v-if="activeSI">
-          <h4>Sistemas de Informação</h4>
-
-          <curso-noturno :Curso="ativos2.SI"></curso-noturno>
+          <div class="flex-container">
+            <h4 class="pl-1">Sistemas de Informação</h4>
+            <curso-noturno :Curso="ativos2.SI"></curso-noturno>
+          </div>
         </template>
         <!-- -------------------------------------------- Eletivas ----------------------------------------- -->
         <template v-if="activeEletivas">
-          <h4>Eletivas</h4>
-          <horario-eletivas :Eletivas="ativos2.Eletivas"></horario-eletivas>
+          <div class="flex-container">
+            <h4 class="pl-1">Eletivas</h4>
+            <horario-eletivas :Eletivas="ativos2.Eletivas"></horario-eletivas>
+          </div>
         </template>
       </template>
       <!-- ----------------------------------------------------------------------------------------------- -->
@@ -121,31 +143,45 @@
       id="modalCursos"
       ref="modalCursos"
       title="Selecione os Cursos"
-      class="mw-100"
       size="md"
       scrollable
     >
-      <div class="col m-0 p-0 border" style="width:max-content; border-color: rgba(0,0,0,0.125);">
-        <table class="table table-sm modal-table">
-          <tr>
-            <div style="font-size: 11px!important; height: 18px !important">
-              <th class="border-0">
-                <p style="width:25px" class="p-header"></p>
-              </th>
-              <th class="border-0">
-                <p style="width:50px" class="p-header">Cód.</p>
-              </th>
-              <th class="border-0">
-                <p class="p-header" style="width: 385px; text-align:start">Nome</p>
-              </th>
-            </div>
-          </tr>
+      <div class="col m-0 p-0" style="width:max-content;heigth:max-content;">
+        <table
+          class="table table-sm modal-table table-bordered"
+          style="max-height: 450px !important;"
+        >
+          <thead class="thead-light">
+            <tr>
+              <div
+                style="width: max-content; height: 18px !important; font-size: 11px!important"
+                class="sticky"
+              >
+                <th>
+                  <p style="width:25px" class="p-header"></p>
+                </th>
+                <th>
+                  <p style="width:50px; text-align:center" class="p-header">
+                    Cód.
+                  </p>
+                </th>
+                <th>
+                  <p class="p-header" style="width: 384px; text-align:start">
+                    Nome
+                  </p>
+                </th>
+              </div>
+            </tr>
+          </thead>
           <tbody>
             <!-- v-for em tr -->
-            <tr v-for="curso in options_Cursos" :key="'curso-id-' + curso.value">
+            <tr
+              v-for="curso in options_Cursos"
+              :key="'curso-id-' + curso.value"
+            >
               <div style="width: max-content; height: 22px !important">
                 <td>
-                  <div style="width:25px;">
+                  <div style="width: 25px; height: inherit;" class="px-1">
                     <input
                       type="checkbox"
                       :value="curso.value"
@@ -155,35 +191,248 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:50px; text-align:start;">{{ curso.codigo.toUpperCase() }}</p>
+                  <p style="width:50px; text-align:center;">
+                    {{ curso.codigo }}
+                  </p>
                 </td>
                 <td>
-                  <p style="width:385px; text-align:start;">{{ curso.nome }}</p>
+                  <p style="width:384px; text-align:start;">{{ curso.nome }}</p>
                 </td>
               </div>
             </tr>
           </tbody>
         </table>
       </div>
+
       <div slot="modal-footer" class="w-100 m-0" style="display: flex">
         <div class="row ml-0 w-100">
           <b-button
             class="btn-azul btn-df mr-2"
             variant="success"
             @click="toggleAll()"
-          >Selecionar Todos</b-button>
+            >Selecionar Todos</b-button
+          >
           <b-button
             class="btn-cinza btn-df mr-2"
             variant="secondary"
             @click="distoggleAll()"
-          >Desmarcar Todos</b-button>
+            >Desmarcar Todos</b-button
+          >
         </div>
         <b-button
           variant="success"
           v-on:click="okBtn()"
           class="btn-verde btn-df mr-2"
           style="padding-right:15px!important; padding-left:15px!important;"
-        >OK</b-button>
+          >OK</b-button
+        >
+      </div>
+    </b-modal>
+
+    <!-- MODAL SEMESTRE -->
+    <b-modal
+      id="modalSemestre"
+      ref="modalSemestre"
+      scrollable
+      title="Selecione os semestres"
+    >
+      <div class="p-0 m-0" style="height: 30px; width: 465px;">
+        <ul
+          class="nav nav-tabs card-header-tabs m-0"
+          style="font-size: 11px!important;height: 30px;"
+        >
+          <li class="nav-item" @click="nav_ativo = 'semestre'">
+            <a
+              class="nav-link border border-right-0"
+              :class="[
+                {
+                  active: nav_ativo == 'semestre'
+                },
+                'clickable'
+              ]"
+              >Semestre</a
+            >
+          </li>
+          <li class="nav-item" @click="nav_ativo = 'cursos'">
+            <a
+              class="nav-link border"
+              :class="[
+                {
+                  active: nav_ativo == 'cursos'
+                },
+                'clickable'
+              ]"
+              >Cursos</a
+            >
+          </li>
+        </ul>
+      </div>
+      <div
+        class="col m-0 p-0"
+        style="width:max-content;height: 450px!important;"
+      >
+        <table
+          v-if="nav_ativo == 'semestre'"
+          class="table table-bordered table-sm modal-table"
+          style="max-height: 392px !important;"
+        >
+          <thead class="thead-light">
+            <tr>
+              <div
+                style="width: max-content; height: 18px !important; font-size: 11px!important"
+                class="sticky"
+              >
+                <th>
+                  <p style="width:25px" class="p-header"></p>
+                </th>
+                <th>
+                  <p class="p-header" style="width: 435px; text-align: start;">
+                    Semestre Letivo
+                  </p>
+                </th>
+              </div>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <div style="width: max-content">
+                <td>
+                  <div style="width: 25px; height: inherit;" class="px-1">
+                    <input
+                      type="checkbox"
+                      class="form-check-input position-static m-0"
+                      v-model="semestre_1Ativo"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <p style="width:435px; text-align:start">
+                    Primeiro semestre
+                  </p>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div style="width: max-content">
+                <td>
+                  <div style="width: 25px; height: inherit;" class="px-1">
+                    <input
+                      type="checkbox"
+                      class="form-check-input position-static m-0"
+                      v-model="semestre_2Ativo"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <p style="width:435px; text-align:start">
+                    Segundo semestre
+                  </p>
+                </td>
+              </div>
+            </tr>
+          </tbody>
+        </table>
+
+        <table
+          v-else
+          class="table table-sm modal-table table-bordered"
+          style="max-height: 450px !important;"
+        >
+          <thead class="thead-light">
+            <tr>
+              <div
+                style="width: max-content; height: 18px !important; font-size: 11px!important"
+                class="sticky"
+              >
+                <th>
+                  <p style="width:25px" class="p-header"></p>
+                </th>
+                <th>
+                  <p style="width:50px; text-align:center" class="p-header">
+                    Cód.
+                  </p>
+                </th>
+                <th>
+                  <p class="p-header" style="width: 384px; text-align:start">
+                    Nome
+                  </p>
+                </th>
+              </div>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- v-for em tr -->
+            <tr
+              v-for="curso in options_Cursos"
+              :key="'curso-id-' + curso.value"
+            >
+              <div style="width: max-content; height: 22px !important">
+                <td>
+                  <div style="width: 25px; height: inherit;" class="px-1">
+                    <input
+                      type="checkbox"
+                      :value="curso.value"
+                      v-model="cursosSelecionados"
+                      class="form-check-input position-static m-0"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <p style="width:50px; text-align:center;">
+                    {{ curso.codigo }}
+                  </p>
+                </td>
+                <td>
+                  <p style="width:384px; text-align:start;">
+                    {{ curso.nome }}
+                  </p>
+                </td>
+              </div>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
+        <div class="w-100">
+          <template v-if="nav_ativo == 'semestre'">
+            <b-button
+              class="btn-azul btn-df mr-2"
+              variant="success"
+              @click="selectAllSemestre()"
+              >Selecionar Todos</b-button
+            >
+            <b-button
+              class="btn-cinza btn-df mr-2"
+              variant="secondary"
+              @click="selectNoneSemestre()"
+              >Desmarcar Todos</b-button
+            >
+          </template>
+          <template v-else>
+            <b-button
+              class="btn-azul btn-df mr-2"
+              variant="success"
+              @click="toggleAll()"
+              >Selecionar Todos</b-button
+            >
+            <b-button
+              class="btn-cinza btn-df mr-2"
+              variant="secondary"
+              @click="distoggleAll()"
+              >Desmarcar Todos</b-button
+            >
+          </template>
+        </div>
+
+        <b-button
+          variant="success"
+          @click="okBtn()"
+          class="btn-verde btn-df mr-2"
+          style="padding-right:15px!important; padding-left:15px!important;"
+          >OK</b-button
+        >
       </div>
     </b-modal>
 
@@ -193,7 +442,10 @@
         <ul class="listas list-group">
           <li class="list-group-item">
             <strong>Para exibir conteúdo na tela:</strong> Clique em Cursos
-            <i class="fas fa-graduation-cap cancelbtn" style="font-size: 12px"></i>
+            <i
+              class="fas fa-graduation-cap cancelbtn"
+              style="font-size: 12px"
+            ></i>
             e selecione quais deseja visualizar, em seguida confirme em OK.
           </li>
         </ul>
@@ -242,7 +494,7 @@ export default {
         {
           nome: "ELETIVAS",
           value: 5,
-          codigo: "-"
+          codigo: ""
         }
       ],
       evenCCN: "false",
@@ -266,7 +518,10 @@ export default {
         Eletivas: []
       },
       selectAll: false,
-      periodo: 3
+      semestre_1Ativo: true,
+      semestre_2Ativo: true,
+      semestreAtual: 3,
+      nav_ativo: "semestre"
     };
   },
 
@@ -281,6 +536,26 @@ export default {
   },
 
   methods: {
+    btnOKSemestre() {
+      if (this.semestre_1Ativo && !this.semestre_2Ativo) {
+        this.semestreAtual = 1;
+      } else if (this.semestre_2Ativo && !this.semestre_1Ativo) {
+        this.semestreAtual = 2;
+      } else if (this.semestre_1Ativo && this.semestre_1Ativo) {
+        this.semestreAtual = 3;
+      } else {
+        this.semestreAtual = undefined;
+      }
+      this.$refs.modalSemestre.hide();
+    },
+    selectAllSemestre() {
+      this.semestre_1Ativo = true;
+      this.semestre_2Ativo = true;
+    },
+    selectNoneSemestre() {
+      this.semestre_1Ativo = false;
+      this.semestre_2Ativo = false;
+    },
     defineSelectAll() {
       if (this.cursosSelecionados.length === 5) {
         this.selectAll = true;
@@ -304,6 +579,7 @@ export default {
     },
 
     okBtn() {
+      this.btnOKSemestre();
       this.cursos = [...this.cursosSelecionados];
       this.$refs.modalCursos.hide();
     },
@@ -381,7 +657,7 @@ export default {
       grades = _.filter(this.$store.state.grade.Grades, ["Curso", 4]);
       grades = _.orderBy(grades, "periodoInicio", "desc");
       pedidos = [];
-      for (var t in this.$store.state.pedido.Pedidos) {
+      for (let t in this.$store.state.pedido.Pedidos) {
         for (var pedido in this.$store.state.pedido.Pedidos[t]) {
           if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 4) {
             pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
@@ -399,7 +675,7 @@ export default {
         }
       }
 
-      for (var i = 0; i < grades.length && inicio <= 10; i++) {
+      for (let i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
         //inicio
@@ -426,16 +702,16 @@ export default {
             (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
               parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
               2;
-        for (var k = 0; k < disciplinaGrades.length; k++) {
+        for (let k = 0; k < disciplinaGrades.length; k++) {
           if (
             disciplinaGrades[k].Grade == grade &&
             this.isEven(disciplinaGrades[k].periodo) == this.evenCCD &&
             disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
             disciplinaGrades[k].periodo <= parseInt(fim, 10)
           ) {
-            for (var j = 0; j < turmas.length; j++) {
+            for (let j = 0; j < turmas.length; j++) {
               if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                for (var p = 0; p < pedidos.length; p++) {
+                for (let p = 0; p < pedidos.length; p++) {
                   if (
                     pedidos[p].vagasPeriodizadas > 0 &&
                     pedidos[p].Turma == turmas[j].id
@@ -447,12 +723,12 @@ export default {
                 }
               }
             }
-            for (var j = 0; j < turmasExternas.length; j++) {
+            for (let j = 0; j < turmasExternas.length; j++) {
               if (
                 turmasExternas[j].periodo == 1 &&
                 turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
               ) {
-                for (var p = 0; p < pedidosExternos.length; p++) {
+                for (let p = 0; p < pedidosExternos.length; p++) {
                   if (
                     pedidosExternos[p].vagasPeriodizadas > 0 &&
                     pedidosExternos[p].Turma == turmasExternas[j].id
@@ -472,7 +748,7 @@ export default {
       grades = _.filter(this.$store.state.grade.Grades, ["Curso", 1]);
       grades = _.orderBy(grades, "periodoInicio", "desc");
       pedidos = [];
-      for (var t in this.$store.state.pedido.Pedidos) {
+      for (let t in this.$store.state.pedido.Pedidos) {
         for (var pedido in this.$store.state.pedido.Pedidos[t]) {
           if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 1) {
             pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
@@ -489,7 +765,7 @@ export default {
           }
         }
       }
-      for (var i = 0; i < grades.length && inicio <= 10; i++) {
+      for (let i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
         //inicio
@@ -516,16 +792,16 @@ export default {
             (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
               parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
               2;
-        for (var k = 0; k < disciplinaGrades.length; k++) {
+        for (let k = 0; k < disciplinaGrades.length; k++) {
           if (
             disciplinaGrades[k].Grade == grade &&
             this.isEven(disciplinaGrades[k].periodo) == this.evenCCN &&
             disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
             disciplinaGrades[k].periodo <= parseInt(fim, 10)
           ) {
-            for (var j = 0; j < turmas.length; j++) {
+            for (let j = 0; j < turmas.length; j++) {
               if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                for (var p = 0; p < pedidos.length; p++) {
+                for (let p = 0; p < pedidos.length; p++) {
                   if (
                     pedidos[p].vagasPeriodizadas > 0 &&
                     pedidos[p].Turma == turmas[j].id
@@ -537,12 +813,12 @@ export default {
                 }
               }
             }
-            for (var j = 0; j < turmasExternas.length; j++) {
+            for (let j = 0; j < turmasExternas.length; j++) {
               if (
                 turmasExternas[j].periodo == 1 &&
                 turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
               ) {
-                for (var p = 0; p < pedidosExternos.length; p++) {
+                for (let p = 0; p < pedidosExternos.length; p++) {
                   if (
                     pedidosExternos[p].vagasPeriodizadas > 0 &&
                     pedidosExternos[p].Turma == turmasExternas[j].id
@@ -562,7 +838,7 @@ export default {
       grades = _.filter(this.$store.state.grade.Grades, ["Curso", 3]);
       grades = _.orderBy(grades, "periodoInicio", "desc");
       pedidos = [];
-      for (var t in this.$store.state.pedido.Pedidos) {
+      for (let t in this.$store.state.pedido.Pedidos) {
         for (var pedido in this.$store.state.pedido.Pedidos[t]) {
           if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 3) {
             pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
@@ -579,7 +855,7 @@ export default {
           }
         }
       }
-      for (var i = 0; i < grades.length && inicio <= 10; i++) {
+      for (let i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
         //inicio
@@ -606,16 +882,16 @@ export default {
             (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
               parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
               2;
-        for (var k = 0; k < disciplinaGrades.length; k++) {
+        for (let k = 0; k < disciplinaGrades.length; k++) {
           if (
             disciplinaGrades[k].Grade == grade &&
             this.isEven(disciplinaGrades[k].periodo) == this.evenSI &&
             disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
             disciplinaGrades[k].periodo <= parseInt(fim, 10)
           ) {
-            for (var j = 0; j < turmas.length; j++) {
+            for (let j = 0; j < turmas.length; j++) {
               if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                for (var p = 0; p < pedidos.length; p++) {
+                for (let p = 0; p < pedidos.length; p++) {
                   if (
                     pedidos[p].vagasPeriodizadas > 0 &&
                     pedidos[p].Turma == turmas[j].id
@@ -627,12 +903,12 @@ export default {
                 }
               }
             }
-            for (var j = 0; j < turmasExternas.length; j++) {
+            for (let j = 0; j < turmasExternas.length; j++) {
               if (
                 turmasExternas[j].periodo == 1 &&
                 turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
               ) {
-                for (var p = 0; p < pedidosExternos.length; p++) {
+                for (let p = 0; p < pedidosExternos.length; p++) {
                   if (
                     pedidosExternos[p].vagasPeriodizadas > 0 &&
                     pedidosExternos[p].Turma == turmasExternas[j].id
@@ -652,7 +928,7 @@ export default {
       grades = _.filter(this.$store.state.grade.Grades, ["Curso", 2]);
       grades = _.orderBy(grades, "periodoInicio", "desc");
       pedidos = [];
-      for (var t in this.$store.state.pedido.Pedidos) {
+      for (let t in this.$store.state.pedido.Pedidos) {
         for (var pedido in this.$store.state.pedido.Pedidos[t]) {
           if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 2) {
             pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
@@ -669,7 +945,7 @@ export default {
           }
         }
       }
-      for (var i = 0; i < grades.length && inicio <= 10; i++) {
+      for (let i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
         //inicio
@@ -696,16 +972,16 @@ export default {
             (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
               parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
               2;
-        for (var k = 0; k < disciplinaGrades.length; k++) {
+        for (let k = 0; k < disciplinaGrades.length; k++) {
           if (
             disciplinaGrades[k].Grade == grade &&
             this.isEven(disciplinaGrades[k].periodo) == this.evenEC &&
             disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
             disciplinaGrades[k].periodo <= parseInt(fim, 10)
           ) {
-            for (var j = 0; j < turmas.length; j++) {
+            for (let j = 0; j < turmas.length; j++) {
               if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                for (var p = 0; p < pedidos.length; p++) {
+                for (let p = 0; p < pedidos.length; p++) {
                   if (
                     pedidos[p].vagasPeriodizadas > 0 &&
                     pedidos[p].Turma == turmas[j].id
@@ -717,12 +993,12 @@ export default {
                 }
               }
             }
-            for (var j = 0; j < turmasExternas.length; j++) {
+            for (let j = 0; j < turmasExternas.length; j++) {
               if (
                 turmasExternas[j].periodo == 1 &&
                 turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
               ) {
-                for (var p = 0; p < pedidosExternos.length; p++) {
+                for (let p = 0; p < pedidosExternos.length; p++) {
                   if (
                     pedidosExternos[p].vagasPeriodizadas > 0 &&
                     pedidosExternos[p].Turma == turmasExternas[j].id
@@ -741,7 +1017,7 @@ export default {
       //Eletivas
       var eletiva = true;
       for (var t = 0; t < turmas.length; t++) {
-        for (var d = 0; d < disciplinaGrades.length; d++) {
+        for (let d = 0; d < disciplinaGrades.length; d++) {
           if (turmas[t].Disciplina === disciplinaGrades[d].Disciplina) {
             eletiva = false;
           }
@@ -799,7 +1075,7 @@ export default {
       grades = _.filter(this.$store.state.grade.Grades, ["Curso", 4]);
       grades = _.orderBy(grades, "periodoInicio", "desc");
       pedidos = [];
-      for (var t in this.$store.state.pedido.Pedidos) {
+      for (let t in this.$store.state.pedido.Pedidos) {
         for (var pedido in this.$store.state.pedido.Pedidos[t]) {
           if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 4) {
             pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
@@ -816,7 +1092,7 @@ export default {
           }
         }
       }
-      for (var i = 0; i < grades.length && inicio <= 10; i++) {
+      for (let i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
         //inicio
@@ -843,16 +1119,16 @@ export default {
             (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
               parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
               2;
-        for (var k = 0; k < disciplinaGrades.length; k++) {
+        for (let k = 0; k < disciplinaGrades.length; k++) {
           if (
             disciplinaGrades[k].Grade == grade &&
             this.isEven(disciplinaGrades[k].periodo) == this.evenCCD &&
             disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
             disciplinaGrades[k].periodo <= parseInt(fim, 10)
           ) {
-            for (var j = 0; j < turmas.length; j++) {
+            for (let j = 0; j < turmas.length; j++) {
               if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                for (var p = 0; p < pedidos.length; p++) {
+                for (let p = 0; p < pedidos.length; p++) {
                   if (
                     pedidos[p].vagasPeriodizadas > 0 &&
                     pedidos[p].Turma == turmas[j].id
@@ -864,12 +1140,12 @@ export default {
                 }
               }
             }
-            for (var j = 0; j < turmasExternas.length; j++) {
+            for (let j = 0; j < turmasExternas.length; j++) {
               if (
                 turmasExternas[j].periodo == 3 &&
                 turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
               ) {
-                for (var p = 0; p < pedidosExternos.length; p++) {
+                for (let p = 0; p < pedidosExternos.length; p++) {
                   if (
                     pedidosExternos[p].vagasPeriodizadas > 0 &&
                     pedidosExternos[p].Turma == turmasExternas[j].id
@@ -889,7 +1165,7 @@ export default {
       grades = _.filter(this.$store.state.grade.Grades, ["Curso", 1]);
       grades = _.orderBy(grades, "periodoInicio", "desc");
       pedidos = [];
-      for (var t in this.$store.state.pedido.Pedidos) {
+      for (let t in this.$store.state.pedido.Pedidos) {
         for (var pedido in this.$store.state.pedido.Pedidos[t]) {
           if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 1) {
             pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
@@ -906,7 +1182,7 @@ export default {
           }
         }
       }
-      for (var i = 0; i < grades.length && inicio <= 10; i++) {
+      for (let i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
         //inicio
@@ -933,16 +1209,16 @@ export default {
             (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
               parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
               2;
-        for (var k = 0; k < disciplinaGrades.length; k++) {
+        for (let k = 0; k < disciplinaGrades.length; k++) {
           if (
             disciplinaGrades[k].Grade == grade &&
             this.isEven(disciplinaGrades[k].periodo) == this.evenCCN &&
             disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
             disciplinaGrades[k].periodo <= parseInt(fim, 10)
           ) {
-            for (var j = 0; j < turmas.length; j++) {
+            for (let j = 0; j < turmas.length; j++) {
               if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                for (var p = 0; p < pedidos.length; p++) {
+                for (let p = 0; p < pedidos.length; p++) {
                   if (
                     pedidos[p].vagasPeriodizadas > 0 &&
                     pedidos[p].Turma == turmas[j].id
@@ -954,12 +1230,12 @@ export default {
                 }
               }
             }
-            for (var j = 0; j < turmasExternas.length; j++) {
+            for (let j = 0; j < turmasExternas.length; j++) {
               if (
                 turmasExternas[j].periodo == 3 &&
                 turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
               ) {
-                for (var p = 0; p < pedidosExternos.length; p++) {
+                for (let p = 0; p < pedidosExternos.length; p++) {
                   if (
                     pedidosExternos[p].vagasPeriodizadas > 0 &&
                     pedidosExternos[p].Turma == turmasExternas[j].id
@@ -979,7 +1255,7 @@ export default {
       grades = _.filter(this.$store.state.grade.Grades, ["Curso", 3]);
       grades = _.orderBy(grades, "periodoInicio", "desc");
       pedidos = [];
-      for (var t in this.$store.state.pedido.Pedidos) {
+      for (let t in this.$store.state.pedido.Pedidos) {
         for (var pedido in this.$store.state.pedido.Pedidos[t]) {
           if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 3) {
             pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
@@ -996,7 +1272,7 @@ export default {
           }
         }
       }
-      for (var i = 0; i < grades.length && inicio <= 10; i++) {
+      for (let i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
         //inicio
@@ -1023,16 +1299,16 @@ export default {
             (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
               parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
               2;
-        for (var k = 0; k < disciplinaGrades.length; k++) {
+        for (let k = 0; k < disciplinaGrades.length; k++) {
           if (
             disciplinaGrades[k].Grade == grade &&
             this.isEven(disciplinaGrades[k].periodo) == this.evenSI &&
             disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
             disciplinaGrades[k].periodo <= parseInt(fim, 10)
           ) {
-            for (var j = 0; j < turmas.length; j++) {
+            for (let j = 0; j < turmas.length; j++) {
               if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                for (var p = 0; p < pedidos.length; p++) {
+                for (let p = 0; p < pedidos.length; p++) {
                   if (
                     pedidos[p].vagasPeriodizadas > 0 &&
                     pedidos[p].Turma == turmas[j].id
@@ -1044,12 +1320,12 @@ export default {
                 }
               }
             }
-            for (var j = 0; j < turmasExternas.length; j++) {
+            for (let j = 0; j < turmasExternas.length; j++) {
               if (
                 turmasExternas[j].periodo == 3 &&
                 turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
               ) {
-                for (var p = 0; p < pedidosExternos.length; p++) {
+                for (let p = 0; p < pedidosExternos.length; p++) {
                   if (
                     pedidosExternos[p].vagasPeriodizadas > 0 &&
                     pedidosExternos[p].Turma == turmasExternas[j].id
@@ -1069,7 +1345,7 @@ export default {
       grades = _.filter(this.$store.state.grade.Grades, ["Curso", 2]);
       grades = _.orderBy(grades, "periodoInicio", "desc");
       pedidos = [];
-      for (var t in this.$store.state.pedido.Pedidos) {
+      for (let t in this.$store.state.pedido.Pedidos) {
         for (var pedido in this.$store.state.pedido.Pedidos[t]) {
           if (this.$store.state.pedido.Pedidos[t][pedido].Curso === 2) {
             pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
@@ -1086,7 +1362,7 @@ export default {
           }
         }
       }
-      for (var i = 0; i < grades.length && inicio <= 10; i++) {
+      for (let i = 0; i < grades.length && inicio <= 10; i++) {
         //grade
         grade = grades[i].id;
         //inicio
@@ -1113,16 +1389,16 @@ export default {
             (parseInt(grades[i - 1].periodoInicio.slice(5, 6), 10) -
               parseInt(grades[i].periodoInicio.slice(5, 6), 10)) /
               2;
-        for (var k = 0; k < disciplinaGrades.length; k++) {
+        for (let k = 0; k < disciplinaGrades.length; k++) {
           if (
             disciplinaGrades[k].Grade == grade &&
             this.isEven(disciplinaGrades[k].periodo) == this.evenEC &&
             disciplinaGrades[k].periodo >= parseInt(inicio, 10) &&
             disciplinaGrades[k].periodo <= parseInt(fim, 10)
           ) {
-            for (var j = 0; j < turmas.length; j++) {
+            for (let j = 0; j < turmas.length; j++) {
               if (turmas[j].Disciplina == disciplinaGrades[k].Disciplina) {
-                for (var p = 0; p < pedidos.length; p++) {
+                for (let p = 0; p < pedidos.length; p++) {
                   if (
                     pedidos[p].vagasPeriodizadas > 0 &&
                     pedidos[p].Turma == turmas[j].id
@@ -1134,12 +1410,12 @@ export default {
                 }
               }
             }
-            for (var j = 0; j < turmasExternas.length; j++) {
+            for (let j = 0; j < turmasExternas.length; j++) {
               if (
                 turmasExternas[j].periodo == 3 &&
                 turmasExternas[j].Disciplina == disciplinaGrades[k].Disciplina
               ) {
-                for (var p = 0; p < pedidosExternos.length; p++) {
+                for (let p = 0; p < pedidosExternos.length; p++) {
                   if (
                     pedidosExternos[p].vagasPeriodizadas > 0 &&
                     pedidosExternos[p].Turma == turmasExternas[j].id
@@ -1158,7 +1434,7 @@ export default {
       //Eletivas
       var eletiva = true;
       for (var t = 0; t < turmas.length; t++) {
-        for (var d = 0; d < disciplinaGrades.length; d++) {
+        for (let d = 0; d < disciplinaGrades.length; d++) {
           if (turmas[t].Disciplina === disciplinaGrades[d].Disciplina) {
             eletiva = false;
           }
@@ -1198,9 +1474,9 @@ export default {
     },
 
     updateHorarios() {
-      for (var i = 0; i < 10; i++) {
-        for (var j = 0; j < this.ativos1.CCD[i].length; j++)
-          for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+      for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < this.ativos1.CCD[i].length; j++)
+          for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
             if (
               this.ativos1.CCD[i][j].id == this.$store.state.turma.Turmas[k].id
             ) {
@@ -1211,8 +1487,8 @@ export default {
               );
             }
           }
-        for (var j = 0; j < this.ativos1.CCN[i].length; j++)
-          for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+        for (let j = 0; j < this.ativos1.CCN[i].length; j++)
+          for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
             if (
               this.ativos1.CCN[i][j].id == this.$store.state.turma.Turmas[k].id
             ) {
@@ -1223,8 +1499,8 @@ export default {
               );
             }
           }
-        for (var j = 0; j < this.ativos1.EC[i].length; j++)
-          for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+        for (let j = 0; j < this.ativos1.EC[i].length; j++)
+          for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
             if (
               this.ativos1.EC[i][j].id == this.$store.state.turma.Turmas[k].id
             ) {
@@ -1235,8 +1511,8 @@ export default {
               );
             }
           }
-        for (var j = 0; j < this.ativos1.SI[i].length; j++)
-          for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+        for (let j = 0; j < this.ativos1.SI[i].length; j++)
+          for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
             if (
               this.ativos1.SI[i][j].id == this.$store.state.turma.Turmas[k].id
             ) {
@@ -1253,9 +1529,9 @@ export default {
         Ativas: this.ativos1
       });
 
-      for (var i = 0; i < 10; i++) {
-        for (var j = 0; j < this.ativos2.CCD[i].length; j++)
-          for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+      for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < this.ativos2.CCD[i].length; j++)
+          for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
             if (
               this.ativos2.CCD[i][j].id == this.$store.state.turma.Turmas[k].id
             ) {
@@ -1266,8 +1542,8 @@ export default {
               );
             }
           }
-        for (var j = 0; j < this.ativos2.CCN[i].length; j++)
-          for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+        for (let j = 0; j < this.ativos2.CCN[i].length; j++)
+          for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
             if (
               this.ativos2.CCN[i][j].id == this.$store.state.turma.Turmas[k].id
             ) {
@@ -1278,8 +1554,8 @@ export default {
               );
             }
           }
-        for (var j = 0; j < this.ativos2.EC[i].length; j++)
-          for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+        for (let j = 0; j < this.ativos2.EC[i].length; j++)
+          for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
             if (
               this.ativos2.EC[i][j].id == this.$store.state.turma.Turmas[k].id
             ) {
@@ -1290,8 +1566,8 @@ export default {
               );
             }
           }
-        for (var j = 0; j < this.ativos2.SI[i].length; j++)
-          for (var k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+        for (let j = 0; j < this.ativos2.SI[i].length; j++)
+          for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
             if (
               this.ativos2.SI[i][j].id == this.$store.state.turma.Turmas[k].id
             ) {
@@ -1344,7 +1620,7 @@ export default {
         fontSize: 20
       });
 
-      for (var i = 0; i < 10; i++) {
+      for (let i = 0; i < 10; i++) {
         if (periodosCCD1[i].length === 0) {
           vazio = vazio + 1;
         } else {
@@ -1394,10 +1670,10 @@ export default {
               ]
             }
           });
-          for (var d = 0; d < 4; d++) {
-            for (var j = 0; j < periodosCCD1[i].length; j++) {
+          for (let d = 0; d < 4; d++) {
+            for (let j = 0; j < periodosCCD1[i].length; j++) {
               if (this.checkTurmaHorario(periodosCCD1[i][j], 1 + d)) {
-                for (var k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                     if (seg !== "") seg = seg + " ";
                     seg =
@@ -1409,7 +1685,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosCCD1[i][j], 7 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                     if (ter != "") ter = ter + " ";
                     ter =
@@ -1421,7 +1697,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosCCD1[i][j], 13 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                     if (qua != "") qua = qua + " ";
                     qua =
@@ -1433,7 +1709,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosCCD1[i][j], 19 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                     if (qui != "") qui = qui + " ";
                     qui =
@@ -1445,7 +1721,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosCCD1[i][j], 25 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                     if (sex != "") sex = sex + " ";
                     sex =
@@ -1641,7 +1917,7 @@ export default {
         pageBreak: "before"
       });
 
-      for (var i = 0; i < 10; i++) {
+      for (let i = 0; i < 10; i++) {
         if (periodosCCN1[i].length === 0) {
           vazio = vazio + 1;
         } else {
@@ -1691,10 +1967,10 @@ export default {
               ]
             }
           });
-          for (var d = 4; d < 6; d++) {
-            for (var j = 0; j < periodosCCN1[i].length; j++) {
+          for (let d = 4; d < 6; d++) {
+            for (let j = 0; j < periodosCCN1[i].length; j++) {
               if (this.checkTurmaHorario(periodosCCN1[i][j], 1 + d)) {
-                for (var k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                     if (seg !== "") seg = seg + " ";
                     seg =
@@ -1706,7 +1982,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosCCN1[i][j], 7 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                     if (ter != "") ter = ter + " ";
                     ter =
@@ -1718,7 +1994,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosCCN1[i][j], 13 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                     if (qua != "") qua = qua + " ";
                     qua =
@@ -1730,7 +2006,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosCCN1[i][j], 19 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                     if (qui != "") qui = qui + " ";
                     qui =
@@ -1742,7 +2018,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosCCN1[i][j], 25 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                     if (sex != "") sex = sex + " ";
                     sex =
@@ -1938,7 +2214,7 @@ export default {
         pageBreak: "before"
       });
 
-      for (var i = 0; i < 10; i++) {
+      for (let i = 0; i < 10; i++) {
         if (periodosEC1[i].length === 0) {
           vazio = vazio + 1;
         } else {
@@ -1988,10 +2264,10 @@ export default {
               ]
             }
           });
-          for (var d = 0; d < 4; d++) {
-            for (var j = 0; j < periodosEC1[i].length; j++) {
+          for (let d = 0; d < 4; d++) {
+            for (let j = 0; j < periodosEC1[i].length; j++) {
               if (this.checkTurmaHorario(periodosEC1[i][j], 1 + d)) {
-                for (var k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                     if (seg !== "") seg = seg + " ";
                     seg =
@@ -2003,7 +2279,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosEC1[i][j], 7 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                     if (ter != "") ter = ter + " ";
                     ter =
@@ -2015,7 +2291,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosEC1[i][j], 13 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                     if (qua != "") qua = qua + " ";
                     qua =
@@ -2027,7 +2303,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosEC1[i][j], 19 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                     if (qui != "") qui = qui + " ";
                     qui =
@@ -2039,7 +2315,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosEC1[i][j], 25 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                     if (sex != "") sex = sex + " ";
                     sex =
@@ -2235,7 +2511,7 @@ export default {
         pageBreak: "before"
       });
 
-      for (var i = 0; i < 10; i++) {
+      for (let i = 0; i < 10; i++) {
         if (periodosSI1[i].length === 0) {
           vazio = vazio + 1;
         } else {
@@ -2285,10 +2561,10 @@ export default {
               ]
             }
           });
-          for (var d = 4; d < 6; d++) {
-            for (var j = 0; j < periodosSI1[i].length; j++) {
+          for (let d = 4; d < 6; d++) {
+            for (let j = 0; j < periodosSI1[i].length; j++) {
               if (this.checkTurmaHorario(periodosSI1[i][j], 1 + d)) {
-                for (var k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                     if (seg !== "") seg = seg + " ";
                     seg =
@@ -2300,7 +2576,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosSI1[i][j], 7 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                     if (ter != "") ter = ter + " ";
                     ter =
@@ -2312,7 +2588,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosSI1[i][j], 13 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                     if (qua != "") qua = qua + " ";
                     qua =
@@ -2324,7 +2600,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosSI1[i][j], 19 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                     if (qui != "") qui = qui + " ";
                     qui =
@@ -2336,7 +2612,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosSI1[i][j], 25 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                     if (sex != "") sex = sex + " ";
                     sex =
@@ -2576,15 +2852,15 @@ export default {
             ]
           }
         });
-        for (var d = 0; d < 8; d++) {
-          for (var j = 0; j < eletivas1.length; j++) {
+        for (let d = 0; d < 8; d++) {
+          for (let j = 0; j < eletivas1.length; j++) {
             if (
               this.checkTurmaHorario(
                 eletivas1[j],
                 (d === 4 || d === 5 ? 28 : 1) + (d > 5 ? d - 2 : d)
               )
             ) {
-              for (var k = 0; k < disciplinas.length; k++) {
+              for (let k = 0; k < disciplinas.length; k++) {
                 if (eletivas1[j].Disciplina === disciplinas[k].id) {
                   if (seg !== "") seg = seg + " ";
                   seg = seg + disciplinas[k].codigo + " " + eletivas1[j].letra;
@@ -2597,7 +2873,7 @@ export default {
                 (d === 4 || d === 5 ? 30 : 7) + (d > 5 ? d - 2 : d)
               )
             ) {
-              for (k = 0; k < disciplinas.length; k++) {
+              for (let k = 0; k < disciplinas.length; k++) {
                 if (eletivas1[j].Disciplina === disciplinas[k].id) {
                   if (ter != "") ter = ter + " ";
                   ter = ter + disciplinas[k].codigo + " " + eletivas1[j].letra;
@@ -2610,7 +2886,7 @@ export default {
                 (d === 4 || d === 5 ? 32 : 13) + (d > 5 ? d - 2 : d)
               )
             ) {
-              for (k = 0; k < disciplinas.length; k++) {
+              for (let k = 0; k < disciplinas.length; k++) {
                 if (eletivas1[j].Disciplina === disciplinas[k].id) {
                   if (qua != "") qua = qua + " ";
                   qua = qua + disciplinas[k].codigo + " " + eletivas1[j].letra;
@@ -2623,7 +2899,7 @@ export default {
                 (d === 4 || d === 5 ? 34 : 19) + (d > 5 ? d - 2 : d)
               )
             ) {
-              for (k = 0; k < disciplinas.length; k++) {
+              for (let k = 0; k < disciplinas.length; k++) {
                 if (eletivas1[j].Disciplina === disciplinas[k].id) {
                   if (qui != "") qui = qui + " ";
                   qui = qui + disciplinas[k].codigo + " " + eletivas1[j].letra;
@@ -2636,7 +2912,7 @@ export default {
                 (d === 4 || d === 5 ? 36 : 25) + (d > 5 ? d - 2 : d)
               )
             ) {
-              for (k = 0; k < disciplinas.length; k++) {
+              for (let k = 0; k < disciplinas.length; k++) {
                 if (eletivas1[j].Disciplina === disciplinas[k].id) {
                   if (sex != "") sex = sex + " ";
                   sex = sex + disciplinas[k].codigo + " " + eletivas1[j].letra;
@@ -2894,7 +3170,7 @@ export default {
         fontSize: 20
       });
 
-      for (var i = 0; i < 10; i++) {
+      for (let i = 0; i < 10; i++) {
         if (periodosCCD2[i].length === 0) {
           vazio = vazio + 1;
         } else {
@@ -2944,10 +3220,10 @@ export default {
               ]
             }
           });
-          for (var d = 0; d < 4; d++) {
-            for (var j = 0; j < periodosCCD2[i].length; j++) {
+          for (let d = 0; d < 4; d++) {
+            for (let j = 0; j < periodosCCD2[i].length; j++) {
               if (this.checkTurmaHorario(periodosCCD2[i][j], 1 + d)) {
-                for (var k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
                     if (seg !== "") seg = seg + " ";
                     seg =
@@ -2959,7 +3235,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosCCD2[i][j], 7 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
                     if (ter != "") ter = ter + " ";
                     ter =
@@ -2971,7 +3247,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosCCD2[i][j], 13 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
                     if (qua != "") qua = qua + " ";
                     qua =
@@ -2983,7 +3259,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosCCD2[i][j], 19 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
                     if (qui != "") qui = qui + " ";
                     qui =
@@ -2995,7 +3271,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosCCD2[i][j], 25 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
                     if (sex != "") sex = sex + " ";
                     sex =
@@ -3191,7 +3467,7 @@ export default {
         pageBreak: "before"
       });
 
-      for (var i = 0; i < 10; i++) {
+      for (let i = 0; i < 10; i++) {
         if (periodosCCN2[i].length === 0) {
           vazio = vazio + 1;
         } else {
@@ -3241,10 +3517,10 @@ export default {
               ]
             }
           });
-          for (var d = 4; d < 6; d++) {
-            for (var j = 0; j < periodosCCN2[i].length; j++) {
+          for (let d = 4; d < 6; d++) {
+            for (let j = 0; j < periodosCCN2[i].length; j++) {
               if (this.checkTurmaHorario(periodosCCN2[i][j], 1 + d)) {
-                for (var k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
                     if (seg !== "") seg = seg + " ";
                     seg =
@@ -3256,7 +3532,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosCCN2[i][j], 7 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
                     if (ter != "") ter = ter + " ";
                     ter =
@@ -3268,7 +3544,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosCCN2[i][j], 13 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
                     if (qua != "") qua = qua + " ";
                     qua =
@@ -3280,7 +3556,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosCCN2[i][j], 19 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
                     if (qui != "") qui = qui + " ";
                     qui =
@@ -3292,7 +3568,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosCCN2[i][j], 25 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
                     if (sex != "") sex = sex + " ";
                     sex =
@@ -3488,7 +3764,7 @@ export default {
         pageBreak: "before"
       });
 
-      for (var i = 0; i < 10; i++) {
+      for (let i = 0; i < 10; i++) {
         if (periodosEC2[i].length === 0) {
           vazio = vazio + 1;
         } else {
@@ -3538,10 +3814,10 @@ export default {
               ]
             }
           });
-          for (var d = 0; d < 4; d++) {
-            for (var j = 0; j < periodosEC2[i].length; j++) {
+          for (let d = 0; d < 4; d++) {
+            for (let j = 0; j < periodosEC2[i].length; j++) {
               if (this.checkTurmaHorario(periodosEC2[i][j], 1 + d)) {
-                for (var k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
                     if (seg !== "") seg = seg + " ";
                     seg =
@@ -3553,7 +3829,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosEC2[i][j], 7 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
                     if (ter != "") ter = ter + " ";
                     ter =
@@ -3565,7 +3841,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosEC2[i][j], 13 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
                     if (qua != "") qua = qua + " ";
                     qua =
@@ -3577,7 +3853,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosEC2[i][j], 19 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
                     if (qui != "") qui = qui + " ";
                     qui =
@@ -3589,7 +3865,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosEC2[i][j], 25 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
                     if (sex != "") sex = sex + " ";
                     sex =
@@ -3785,7 +4061,7 @@ export default {
         pageBreak: "before"
       });
 
-      for (var i = 0; i < 10; i++) {
+      for (let i = 0; i < 10; i++) {
         if (periodosSI2[i].length === 0) {
           vazio = vazio + 1;
         } else {
@@ -3835,10 +4111,10 @@ export default {
               ]
             }
           });
-          for (var d = 4; d < 6; d++) {
-            for (var j = 0; j < periodosSI2[i].length; j++) {
+          for (let d = 4; d < 6; d++) {
+            for (let j = 0; j < periodosSI2[i].length; j++) {
               if (this.checkTurmaHorario(periodosSI2[i][j], 1 + d)) {
-                for (var k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
                     if (seg !== "") seg = seg + " ";
                     seg =
@@ -3850,7 +4126,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosSI2[i][j], 7 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
                     if (ter != "") ter = ter + " ";
                     ter =
@@ -3862,7 +4138,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosSI2[i][j], 13 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
                     if (qua != "") qua = qua + " ";
                     qua =
@@ -3874,7 +4150,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosSI2[i][j], 19 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
                     if (qui != "") qui = qui + " ";
                     qui =
@@ -3886,7 +4162,7 @@ export default {
                 }
               }
               if (this.checkTurmaHorario(periodosSI2[i][j], 25 + d)) {
-                for (k = 0; k < disciplinas.length; k++) {
+                for (let k = 0; k < disciplinas.length; k++) {
                   if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
                     if (sex != "") sex = sex + " ";
                     sex =
@@ -4126,15 +4402,15 @@ export default {
             ]
           }
         });
-        for (var d = 0; d < 8; d++) {
-          for (var j = 0; j < eletivas2.length; j++) {
+        for (let d = 0; d < 8; d++) {
+          for (let j = 0; j < eletivas2.length; j++) {
             if (
               this.checkTurmaHorario(
                 eletivas2[j],
                 (d === 4 || d === 5 ? 28 : 1) + (d > 5 ? d - 2 : d)
               )
             ) {
-              for (var k = 0; k < disciplinas.length; k++) {
+              for (let k = 0; k < disciplinas.length; k++) {
                 if (eletivas2[j].Disciplina === disciplinas[k].id) {
                   if (seg !== "") seg = seg + " ";
                   seg = seg + disciplinas[k].codigo + " " + eletivas2[j].letra;
@@ -4147,7 +4423,7 @@ export default {
                 (d === 4 || d === 5 ? 30 : 7) + (d > 5 ? d - 2 : d)
               )
             ) {
-              for (k = 0; k < disciplinas.length; k++) {
+              for (let k = 0; k < disciplinas.length; k++) {
                 if (eletivas2[j].Disciplina === disciplinas[k].id) {
                   if (ter != "") ter = ter + " ";
                   ter = ter + disciplinas[k].codigo + " " + eletivas2[j].letra;
@@ -4160,7 +4436,7 @@ export default {
                 (d === 4 || d === 5 ? 32 : 13) + (d > 5 ? d - 2 : d)
               )
             ) {
-              for (k = 0; k < disciplinas.length; k++) {
+              for (let k = 0; k < disciplinas.length; k++) {
                 if (eletivas2[j].Disciplina === disciplinas[k].id) {
                   if (qua != "") qua = qua + " ";
                   qua = qua + disciplinas[k].codigo + " " + eletivas2[j].letra;
@@ -4173,7 +4449,7 @@ export default {
                 (d === 4 || d === 5 ? 34 : 19) + (d > 5 ? d - 2 : d)
               )
             ) {
-              for (k = 0; k < disciplinas.length; k++) {
+              for (let k = 0; k < disciplinas.length; k++) {
                 if (eletivas2[j].Disciplina === disciplinas[k].id) {
                   if (qui != "") qui = qui + " ";
                   qui = qui + disciplinas[k].codigo + " " + eletivas2[j].letra;
@@ -4186,7 +4462,7 @@ export default {
                 (d === 4 || d === 5 ? 36 : 25) + (d > 5 ? d - 2 : d)
               )
             ) {
-              for (k = 0; k < disciplinas.length; k++) {
+              for (let k = 0; k < disciplinas.length; k++) {
                 if (eletivas2[j].Disciplina === disciplinas[k].id) {
                   if (sex != "") sex = sex + " ";
                   sex = sex + disciplinas[k].codigo + " " + eletivas2[j].letra;
@@ -4529,6 +4805,7 @@ export default {
 }
 
 h4 {
+  width: 100%;
   text-align: start !important;
   font-size: 12px !important;
   font-weight: bold !important;
@@ -4549,52 +4826,7 @@ h3 {
   text-align: center !important;
 }
 
-h4 {
-  font-size: 12px !important;
-  font-weight: bold !important;
-}
-
-h5 {
-  font-size: 12px;
-  font-weight: normal;
-}
-
-.input-group-text {
-  display: -ms-flexbox;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: flex;
-  -ms-flex-align: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -moz-box-align: center;
-  align-items: center;
-  -ms-flex-pack: center;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -moz-box-pack: center;
-  justify-content: center;
-  margin-bottom: 0;
-  /*===*/
-  max-width: 70px;
-  min-width: 70px;
-  height: 25px !important;
-  margin-left: -5px;
-  padding-left: 15px;
-  font-size: 12px !important;
-}
-
-.form-control {
-  height: 25px !important;
-  font-size: 12px !important;
-  padding: 0px 0px 0px 5px !important;
-  min-width: 80px !important;
-  max-width: 80px !important;
-  text-align: start;
-}
-
-.form-inline .input-group,
+.form-inline,
 .form-inline {
   width: auto;
 }
@@ -4702,11 +4934,15 @@ button {
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
-  margin-right: 15px;
-  margin-top: 5px;
+  width: 32px !important;
+  margin-left: 4px;
+  margin-right: 4px;
+  margin-top: 0px;
+  line-height: 50%;
   margin-bottom: 0px;
   transition: all 0.3s ease 0s;
   cursor: pointer;
+  text-align: center !important;
 }
 .addbtn {
   background-color: white;
@@ -4741,57 +4977,32 @@ button {
   -webkit-text-stroke-color: #ada89a;
 }
 
-/* ==== MODAL TABLE ==== */
-.modal-table {
-  display: block !important;
-  overflow: auto !important;
-  font-size: 10px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-}
-.modal-table tr thead {
-  display: block;
-}
-.modal-table th {
-  padding: 0 !important;
-  text-align: center !important;
-  height: 18px !important;
-}
-.modal-table .p-header {
-  padding: 0px 5px 0px 5px !important;
-  margin: 0 !important;
-  text-align: start;
-  height: 18px !important;
-}
-.modal-table tbody {
-  max-height: 100%;
-  width: 100%;
-}
-.modal-table td {
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  height: 22px !important;
-}
-.modal-table p {
-  margin: 0 !important;
-  text-align: center;
-  padding-right: 5px !important;
-  padding-left: 5px !important;
-}
-.modal-table input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-  margin-bottom: auto !important;
-}
-/* FIM MODAL TABLE */
-
 .clickable-header {
   cursor: pointer;
-  padding-left: 5px;
 }
 
+.flex-container {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  -moz-box-orient: horizontal;
+  -moz-box-direction: normal;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: space-evenly;
+  -webkit-justify-content: space-evenly;
+  -moz-box-pack: space-evenly;
+  -ms-flex-pack: space-evenly;
+  justify-content: space-evenly;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
 .form-group {
   display: -ms-flexbox;
   display: flex;
@@ -4804,16 +5015,94 @@ button {
   margin-bottom: 0;
 }
 
-.form-inline .input-group,
+.form-inline,
 .form-inline {
   width: auto;
 }
-
-/*  */
-
+.sticky {
+  display: block !important;
+  overflow: hidden !important;
+  height: 20px !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 0 !important;
+  display: block !important;
+  overflow: hidden !important;
+  z-index: 3;
+}
 @media screen and (max-width: 499px) {
   .div-titulo {
     height: 70px !important;
   }
+}
+/* ==== MODAL TABLE ==== */
+.modal-table {
+  display: block !important;
+  overflow: auto !important;
+  font-size: 10px !important;
+  font-weight: normal !important;
+  background-color: white;
+  margin: 0 !important;
+}
+.modal-table tr thead {
+  display: block;
+}
+.clickable {
+  cursor: pointer;
+}
+.modal-table th {
+  padding: 0 !important;
+  text-align: center !important;
+  height: 18px !important;
+  border-bottom: 0 !important;
+  border-top: 0 !important;
+}
+.modal-table .p-header {
+  padding: 0px 5px 0px 5px !important;
+  margin: 0 !important;
+  text-align: start;
+  height: 18px !important;
+}
+.modal-table tbody {
+  max-height: 100%;
+  width: 100%;
+}
+.modal-table td {
+  border-bottom: 0;
+  text-align: center;
+  vertical-align: middle !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  /* height: 22px !important; */
+}
+.modal-table p {
+  margin: 0 !important;
+  text-align: center;
+  padding: 0 !important;
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+}
+.modal-table input[type="checkbox"] {
+  margin-left: 0 !important;
+  margin-top: 4px !important;
+  margin-bottom: auto !important;
+}
+/* FIM MODAL TABLE */
+
+.nav-link {
+  color: #007bff !important;
+  user-select: none; /* supported by Chrome and Opera */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none;
+}
+.clickable {
+  cursor: pointer;
+}
+.active {
+  background-color: #e9ecef !important;
+  color: #495057 !important;
+  cursor: default;
 }
 </style>

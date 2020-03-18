@@ -6,13 +6,15 @@
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Disciplinas</h1>
+        <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">
+          Disciplinas
+        </h1>
 
         <div
           class="form-group col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
-          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
+          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
             <i class="fas fa-question"></i>
           </b-button>
         </div>
@@ -35,7 +37,7 @@
                 >
                   Nome
                   <i
-                    v-if="ordenacao=='nome'"
+                    v-if="ordenacao == 'nome'"
                     style="font-size:0.6rem; text-align:right"
                     class="fas fa-arrow-down fa-sm"
                   ></i>
@@ -50,20 +52,26 @@
                 >
                   Código
                   <i
-                    v-if="ordenacao=='codigo'"
+                    v-if="ordenacao == 'codigo'"
                     style="font-size:0.6rem"
                     class="fas fa-arrow-down fa-sm"
                   ></i>
                 </p>
               </th>
               <th scope="col">
-                <p style="width: 30px;" class="p-header" title="Carga Teórica">C.T.</p>
+                <p style="width: 30px;" class="p-header" title="Carga Teórica">
+                  C.T.
+                </p>
               </th>
               <th scope="col">
-                <p style="width: 30px;" class="p-header" title="Carga Prática">C.P.</p>
+                <p style="width: 30px;" class="p-header" title="Carga Prática">
+                  C.P.
+                </p>
               </th>
               <th scope="col">
-                <p style="width: 230px;text-align: start" class="p-header">Perfil</p>
+                <p style="width: 230px;text-align: start" class="p-header">
+                  Perfil
+                </p>
               </th>
               <th scope="col">
                 <p style="width: 28px" class="p-header">EAD</p>
@@ -76,25 +84,33 @@
             <tr
               v-for="disciplina in Disciplinas"
               :key="disciplina.id"
-              v-on:click.prevent="showDisciplina(disciplina), clickada(disciplina.codigo)"
-              :class="{'bg-custom' : disciplinaClickada === disciplina.codigo}"
+              v-on:click.prevent="
+                showDisciplina(disciplina), clickada(disciplina.codigo)
+              "
+              :class="{ 'bg-custom': disciplinaClickada === disciplina.codigo }"
             >
               <div style="width:700px">
                 <td>
-                  <p style="width: 300px; text-align: start">{{disciplina.nome}}</p>
+                  <p style="width: 300px; text-align: start">
+                    {{ disciplina.nome }}
+                  </p>
                 </td>
                 <td>
-                  <p style="width: 82px; text-align: start">{{disciplina.codigo}}</p>
+                  <p style="width: 82px; text-align: start">
+                    {{ disciplina.codigo }}
+                  </p>
                 </td>
                 <td>
-                  <p style="width: 30px">{{disciplina.cargaTeorica}}</p>
+                  <p style="width: 30px">{{ disciplina.cargaTeorica }}</p>
                 </td>
                 <td>
-                  <p style="width: 30px">{{disciplina.cargaPratica}}</p>
+                  <p style="width: 30px">{{ disciplina.cargaPratica }}</p>
                 </td>
                 <template v-for="perfil in Perfis">
-                  <td v-if="perfil.id===disciplina.Perfil" :key="perfil.id">
-                    <p style="width: 230px; text-align: start">{{perfil.nome}}</p>
+                  <td v-if="perfil.id === disciplina.Perfil" :key="perfil.id">
+                    <p style="width: 230px; text-align: start">
+                      {{ perfil.nome }}
+                    </p>
                   </td>
                 </template>
                 <td>
@@ -103,7 +119,9 @@
                       class="noHover"
                       type="checkbox"
                       v-model="disciplina.ead"
-                      v-on:click.prevent="showDisciplina(disciplina), clickada(disciplina.nome)"
+                      v-on:click.prevent="
+                        showDisciplina(disciplina), clickada(disciplina.nome)
+                      "
                       value
                     />
                   </div>
@@ -114,7 +132,8 @@
           <template v-else>
             <tr>
               <td colspan="3" class="text-center">
-                <i class="fas fa-exclamation-triangle"></i> Nenhuma disciplina encontrada!
+                <i class="fas fa-exclamation-triangle"></i> Nenhuma disciplina
+                encontrada!
               </td>
             </tr>
           </template>
@@ -125,7 +144,9 @@
 
     <!-- Fim do Grid Esquerdo -->
     <!-- Grid Direito -->
-    <div class="div-card p-0 mt-3 mb-2 ml-auto col-lg-4 col-md-12 col-sm-12 col-12">
+    <div
+      class="div-card p-0 mt-3 mb-2 ml-auto col-lg-4 col-md-12 col-sm-12 col-12"
+    >
       <div class="card ml-auto mr-3">
         <div class="card-header">
           <h2 class="card-title">Disciplina</h2>
@@ -160,7 +181,9 @@
             </div>
             <div class="row mb-2 mx-0">
               <div class="form-group m-0 col px-0">
-                <label for="cargaTeorica" class="col-form-label">Carga Teórica</label>
+                <label for="cargaTeorica" class="col-form-label"
+                  >Carga Teórica</label
+                >
                 <input
                   type="text"
                   id="cargaTeorica"
@@ -172,7 +195,9 @@
               </div>
 
               <div class="form-group m-0 col px-0">
-                <label for="cargaPratica" class="col-form-label">Carga Prática</label>
+                <label for="cargaPratica" class="col-form-label"
+                  >Carga Prática</label
+                >
                 <input
                   type="text"
                   id="cargaPratica"
@@ -193,12 +218,15 @@
                   style="width: 288px!important"
                   v-model="disciplinaForm.Perfil"
                 >
-                  <option v-if="Perfis.length===0" type="text" value>Nenhum Perfil Encontrado</option>
+                  <option v-if="Perfis.length === 0" type="text" value
+                    >Nenhum Perfil Encontrado</option
+                  >
                   <option
                     v-for="perfil in Perfis"
                     :key="perfil.id"
                     :value="perfil.id"
-                  >{{perfil.nome}}</option>
+                    >{{ perfil.nome }}</option
+                  >
                 </select>
               </div>
             </div>
@@ -283,26 +311,29 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para adicionar disciplinas:</strong> Com o cartão à direita em branco, preencha-o. 
-            Em seguida, clique em Adicionar
+            <strong>Para adicionar disciplinas:</strong> Com o cartão à direita
+            em branco, preencha-o. Em seguida, clique em Adicionar
             <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para editar ou deletar uma disciplina:</strong>Na tabela, clique na disciplina que deseja alterar.
-            Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar 
+            <strong>Para editar ou deletar uma disciplina:</strong>Na tabela,
+            clique na disciplina que deseja alterar. Logo após, no cartão à
+            direita, altere as informações que desejar e clique em Salvar
             <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
-             ou, para excluí-lo, clique em Deletar 
+            ou, para excluí-lo, clique em Deletar
             <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
-             .
+            .
           </li>
           <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar 
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à
+            direita, clique em Cancelar
             <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para alterar a ordenação:</strong> Clique em Nome ou Código no cabeçalho da tabela para ordenação alfabética do mesmo.
+            <strong>Para alterar a ordenação:</strong> Clique em Nome ou Código
+            no cabeçalho da tabela para ordenação alfabética do mesmo.
           </li>
         </ul>
       </div>
@@ -699,6 +730,7 @@ strong {
 }
 
 /* Botoes */
+
 button {
   padding: 0;
   border: none;
@@ -706,9 +738,15 @@ button {
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
-  margin-right: 15px;
+  width: 32px !important;
+  margin-left: 4px;
+  margin-right: 4px;
+  margin-top: 0px;
+  line-height: 50%;
+  margin-bottom: 0px;
   transition: all 0.3s ease 0s;
   cursor: pointer;
+  text-align: center !important;
 }
 
 i.fas,

@@ -15,10 +15,10 @@
           <b-button v-b-modal.modalSemestre title="Semestre" class="cancelbtn">
             <i class="fas fa-calendar-alt"></i>
           </b-button>
+          <b-button v-b-modal.modalDisciplinas title="Disciplinas" class="cancelbtn">
+            <i class="fas fa-list-ul"></i>
+          </b-button>
           <div class="d-flex">
-            <b-button v-b-modal.modalDisciplinas title="Disciplinas" class="cancelbtn">
-              <i class="fas fa-list-ul"></i>
-            </b-button>
             <button type="button" class="relatbtn" title="Relatório" v-on:click.prevent="pdf">
               <i class="far fa-file-alt"></i>
             </button>
@@ -101,12 +101,12 @@
               </th>
 
               <th scope="col" v-if="semestreAtual===1" title="Vagas do 1º semestre">
-                <p class="p-header" style="width: 70px">Vagas 1º S.</p>
+                <p class="p-header" style="width: 70px">Vagas</p>
               </th>
               <th scope="col" v-if="semestreAtual===2" title="Vagas do 2º semestre">
-                <p class="p-header" style="width: 70px">Vagas 2º S.</p>
+                <p class="p-header" style="width: 70px">Vagas</p>
               </th>
-              <th scope="col" v-if="semestreAtual===3" title="Vagas do primeiro e segundo semestre">
+              <th scope="col" v-if="semestreAtual===3" title="Vagas do 1º e 2º semestre">
                 <p class="p-header" style="width: 70px">Vagas</p>
               </th>
             </div>
@@ -183,19 +183,19 @@
                           </template>
                         </div>
                       </td>
-                      <td v-if="semestreAtual==1">
+                      <td v-if="semestreAtual==1" v-on:click="selecionaTurma(turma)">
                         <p
                           v-if="turma.periodo == 1 || turma.periodo == 2"
                           style="width: 70px;"
                         >{{vagasTurma(turma, 1)}}</p>
                       </td>
-                      <td v-if="semestreAtual==2">
+                      <td v-if="semestreAtual==2" v-on:click="selecionaTurma(turma)">
                         <p
                           v-if="turma.periodo == 3 || turma.periodo == 4"
                           style="width: 70px;"
                         >{{vagasTurma(turma, 2)}}</p>
                       </td>
-                      <td v-if="semestreAtual==3">
+                      <td v-if="semestreAtual==3" v-on:click="selecionaTurma(turma)">
                         <p
                           v-if="turma.periodo == 1 || turma.periodo == 2"
                           style="width: 70px;"
@@ -219,7 +219,13 @@
       </table>
     </div>
 
-    <b-modal id="modalSemestre" ref="modalSemestre" scrollable title="Selecione os semestres">
+    <b-modal
+      id="modalSemestre"
+      ref="modalSemestre"
+      size="md"
+      title="Selecione os semestres"
+      scrollable
+    >
       <div class="col m-0 p-0" style="width:max-content;heigth:max-content;">
         <table
           class="table table-bordered table-sm modal-table"
@@ -237,7 +243,7 @@
                 <th>
                   <p
                     class="p-header clickable-header"
-                    style="width: 432px; text-align: start;"
+                    style="width: 435px; text-align: start;"
                   >Semestre Letivo</p>
                 </th>
               </div>
@@ -256,7 +262,7 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:432px; text-align:start">Primeiro semestre</p>
+                  <p style="width:435px; text-align:start">Primeiro semestre</p>
                 </td>
               </div>
             </tr>
@@ -272,7 +278,7 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:432px; text-align:start">Segundo semestre</p>
+                  <p style="width:435px; text-align:start">Segundo semestre</p>
                 </td>
               </div>
             </tr>
@@ -337,9 +343,9 @@
       size="lg"
       title="Selecione as disciplinas"
     >
-      <div class="col m-0 p-0" style="width:max-content; border-color: rgba(0,0,0,0.125);">
+      <div class="col m-0 p-0" style="width:max-content;">
         <table
-          class="table table-bordered table-sm modal-table"
+          class="table table-sm modal-table table-bordered"
           style="max-height: 450px !important;"
         >
           <thead class="thead-light">
@@ -400,6 +406,7 @@
               </div>
             </tr>
           </thead>
+
           <tbody>
             <tr v-for="disciplina in Disciplinas" :key="`disciplina${disciplina.id}`">
               <div style="width: max-content">
@@ -429,7 +436,7 @@
       </div>
 
       <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
-        <div class="w-100 ml-2">
+        <div class="row ml-0 w-100">
           <b-button
             class="btn-azul btn-df mr-2"
             variant="success"
@@ -465,7 +472,8 @@ export default {
       DisciplinasAtivados: [],
       semestre_1Ativo: true,
       semestre_2Ativo: true,
-      semestreAtual: 3
+      semestreAtual: 3,
+      turmaSelecionada: undefined
     };
   },
 
@@ -595,6 +603,23 @@ export default {
       } else {
         return `${d1.apelido} / ${d2.apelido}`;
       }
+    },
+
+    selecionaTurma(turma) {
+      this.turmaSelecionada = turma;
+      for (let i = 0; i < this.VagasTurmaSelecionada.length; i++) {
+        console.log({
+          nome: this.curso(this.VagasTurmaSelecionada[i]).nome,
+          codigo: this.curso(this.VagasTurmaSelecionada[i]).codigo,
+          vagasPeriodizadas: this.VagasTurmaSelecionada[i].vagasPeriodizadas,
+          vagasNaoPeriodizadas: this.VagasTurmaSelecionada[i]
+            .vagasNaoPeriodizadas
+        });
+      }
+    },
+
+    curso(pedido) {
+      return _.find(this.$store.state.curso.Cursos, { id: pedido.Curso });
     }
   },
 
@@ -607,6 +632,16 @@ export default {
         this.ordenacao
       );
     },
+
+    VagasTurmaSelecionada() {
+      return _.filter(
+        this.$store.state.pedido.Pedidos[this.turmaSelecionada.id],
+        function(p) {
+          return p.vagasPeriodizadas > 0 || p.vagasNaoPeriodizadas > 0;
+        }
+      );
+    },
+
     Horarios() {
       return this.$store.state.horario.Horarios;
     }
@@ -633,7 +668,7 @@ export default {
 }
 .main-table {
   display: block;
-  overflow-y: scroll;
+  overflow-y: auto;
   height: -webkit-calc(100vh - 100px);
   height: -moz-calc(100vh - 100px);
   height: calc(100vh - 100px);
@@ -675,7 +710,6 @@ export default {
 .sticky {
   display: block !important;
   overflow: hidden !important;
-  height: 20px !important;
   position: sticky !important;
   position: -webkit-sticky !important;
   top: 0 !important;
@@ -711,11 +745,15 @@ button {
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
-  margin-right: 15px;
-  margin-top: 5px;
+  width: 32px !important;
+  margin-left: 4px;
+  margin-right: 4px;
+  margin-top: 0px;
+  line-height: 50%;
   margin-bottom: 0px;
   transition: all 0.3s ease 0s;
   cursor: pointer;
+  text-align: center !important;
 }
 i.fas,
 i.far {
@@ -861,8 +899,8 @@ i.far {
   padding: 0 !important;
   text-align: center !important;
   height: 18px !important;
-  border-bottom: 0;
-  border-top: 0;
+  border-bottom: 0 !important;
+  border-top: 0 !important;
 }
 .modal-table .p-header {
   padding: 0px 5px 0px 5px !important;
@@ -875,6 +913,7 @@ i.far {
   width: 100%;
 }
 .modal-table td {
+  border-bottom: 0;
   text-align: center;
   vertical-align: middle !important;
   padding: 0 !important;

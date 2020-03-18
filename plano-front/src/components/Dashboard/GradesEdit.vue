@@ -6,13 +6,15 @@
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-10 px-0 pr-1 titulo">Disciplinas na Grade</h1>
+        <h1 class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-10 px-0 pr-1 titulo">
+          Disciplinas de Grades
+        </h1>
 
         <div
           class="form-group form-group-top col-xl-8 col-lg-8 col-md-8 col-sm-6 col-2 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
-          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn p-0">
+          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
             <i class="fas fa-question"></i>
           </b-button>
         </div>
@@ -28,7 +30,10 @@
         <table class="table table-sm table-hover">
           <thead class="thead-light">
             <tr>
-              <div style="display: block; overflow: hidden; width: 505px;" class="sticky">
+              <div
+                style="display: block; overflow: hidden; width: 505px;"
+                class="sticky"
+              >
                 <th scope="col">
                   <p class="p-header" style="width: 32px">P.</p>
                 </th>
@@ -36,7 +41,9 @@
                   <p class="p-header" style="width:70px">Código</p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width: 403px; text-align:start">Disciplina</p>
+                  <p class="p-header" style="width: 403px; text-align:start">
+                    Disciplina
+                  </p>
                 </th>
               </div>
             </tr>
@@ -47,33 +54,63 @@
               <template v-for="grade in Grades">
                 <template v-for="disciplinaGrade in DisciplinaGrades">
                   <tr
-                    :key="disciplinaGrade.Disciplina+'-'+disciplinaGrade.Grade+'-'+grade.id"
-                    v-if="grade.id===currentGrade"
-                    :class="[isEven(disciplinaGrade.periodo)? 'even':'notEven']"
+                    :key="
+                      disciplinaGrade.Disciplina +
+                        '-' +
+                        disciplinaGrade.Grade +
+                        '-' +
+                        grade.id
+                    "
+                    v-if="grade.id === currentGrade"
+                    :class="[
+                      isEven(disciplinaGrade.periodo) ? 'even' : 'notEven'
+                    ]"
                   >
                     <div style="width: 505px; font-size:11px;">
-                      <template v-if="disciplinaGrade.Grade===grade.id">
+                      <template v-if="disciplinaGrade.Grade === grade.id">
                         <td>
-                          <p style="width:32px;">{{disciplinaGrade.periodo}}</p>
+                          <p style="width:32px;">
+                            {{ disciplinaGrade.periodo }}
+                          </p>
                         </td>
 
                         <template v-for="disciplina in Disciplinas">
-                          <template v-if="andConnector(grade, disciplina, disciplinaGrade)">
+                          <template
+                            v-if="
+                              andConnector(grade, disciplina, disciplinaGrade)
+                            "
+                          >
                             <td
-                              :key="'disciplina-codigo'+disciplina.codigo"
-                              v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.id, disciplina.nome), showGrade(grade)"
-                              :class="{ 'bg-custom': disciplinaClickada===disciplina.id}"
+                              :key="'disciplina-codigo' + disciplina.codigo"
+                              v-on:click.prevent="
+                                showDisciplina(disciplinaGrade),
+                                  clickada(disciplina.id, disciplina.nome),
+                                  showGrade(grade)
+                              "
+                              :class="{
+                                'bg-custom':
+                                  disciplinaClickada === disciplina.id
+                              }"
                               style="cursor:pointer;"
                             >
-                              <p style="width: 70px">{{disciplina.codigo}}</p>
+                              <p style="width: 70px">{{ disciplina.codigo }}</p>
                             </td>
                             <td
-                              :key="'2-disciplina-codigo'+disciplina.codigoo"
-                              v-on:click.prevent="showDisciplina(disciplinaGrade), clickada(disciplina.id, disciplina.nome), showGrade(grade)"
-                              :class="{ 'bg-custom': disciplinaClickada===disciplina.id}"
+                              :key="'2-disciplina-codigo' + disciplina.codigoo"
+                              v-on:click.prevent="
+                                showDisciplina(disciplinaGrade),
+                                  clickada(disciplina.id, disciplina.nome),
+                                  showGrade(grade)
+                              "
+                              :class="{
+                                'bg-custom':
+                                  disciplinaClickada === disciplina.id
+                              }"
                               style="cursor:pointer;"
                             >
-                              <p style="width: 400px; text-align: start;">{{disciplina.nome}}</p>
+                              <p style="width: 400px; text-align: start;">
+                                {{ disciplina.nome }}
+                              </p>
                             </td>
                           </template>
                         </template>
@@ -99,7 +136,10 @@
           <div class="card-body">
             <form>
               <div class="row mb-2 mx-0">
-                <div class="form-group col m-0 px-0" style="margin-right: 18px!important">
+                <div
+                  class="form-group col m-0 px-0"
+                  style="margin-right: 18px!important"
+                >
                   <label for="cursoAtual" class="col-form-label">Curso</label>
                   <select
                     id="cursoAtual"
@@ -120,15 +160,18 @@
                     <select
                       id="gradeAtual"
                       v-model="currentGrade"
-                      v-on:change="findGrade(), cleanDisciplina(), grade_selected=true"
+                      v-on:change="
+                        findGrade(), cleanDisciplina(), (grade_selected = true)
+                      "
                       class="form-control form-control-sm selectMenor"
                     >
                       <template v-for="grade in Grades">
                         <option
                           v-if="grade.Curso == currentCurso"
-                          :key="'grade-id'+grade.id"
+                          :key="'grade-id' + grade.id"
                           :value="grade.id"
-                        >{{grade.nome}}</option>
+                          >{{ grade.nome }}</option
+                        >
                       </template>
                     </select>
                   </template>
@@ -150,7 +193,9 @@
               <template v-if="grade_selected">
                 <div class="row mb-2 mx-0">
                   <div class="form-group m-0 col px-0">
-                    <label for="disciplina" class="col-form-label">Disciplina</label>
+                    <label for="disciplina" class="col-form-label"
+                      >Disciplina</label
+                    >
                     <select
                       type="text"
                       class="form-control form-control-sm selectMaior2"
@@ -158,24 +203,27 @@
                       v-model="disciplinaGradeForm.Disciplina"
                       v-on:change="clearClick()"
                     >
-                      <option
-                        v-if="Disciplinas.length===0"
-                        type="text"
-                        value
-                      >Nenhuma Disciplina Encontrada</option>
+                      <option v-if="Disciplinas.length === 0" type="text" value
+                        >Nenhuma Disciplina Encontrada</option
+                      >
                       <option
                         v-else
                         v-for="disciplina in Disciplinas"
-                        :key="'2-grade-id'+disciplina.id+'-'+disciplina.codigo"
+                        :key="
+                          '2-grade-id' + disciplina.id + '-' + disciplina.codigo
+                        "
                         :value="disciplina.id"
-                      >{{disciplina.nome}}</option>
+                        >{{ disciplina.nome }}</option
+                      >
                     </select>
                   </div>
                 </div>
 
                 <div class="row mb-2 mx-0">
                   <div class="form-group m-0 col px-0">
-                    <label for="periodoDisciplina" class="col-form-label">Período</label>
+                    <label for="periodoDisciplina" class="col-form-label"
+                      >Período</label
+                    >
                     <div class="d-flex">
                       <input
                         type="text"
@@ -201,7 +249,11 @@
 
                 <div class="row mb-0 mt-3 mx-0">
                   <div class="d-flex mr-0 ml-auto">
-                    <template v-if="disciplinaClickada !== disciplinaGradeForm.Disciplina">
+                    <template
+                      v-if="
+                        disciplinaClickada !== disciplinaGradeForm.Disciplina
+                      "
+                    >
                       <button
                         type="button"
                         title="Adicionar à Grade"
@@ -236,7 +288,9 @@
               <template v-else>
                 <div class="row mb-2 mx-0">
                   <div class="form-group m-0 col px-0">
-                    <label for="disciplina" class="mr-2 col-form-label">Disciplina</label>
+                    <label for="disciplina" class="mr-2 col-form-label"
+                      >Disciplina</label
+                    >
                     <select
                       type="text"
                       class="selectMaior2 form-control form-control-sm"
@@ -248,7 +302,9 @@
 
                 <div class="row mb-2 mx-0">
                   <div class="form-group m-0 col px-0">
-                    <label for="periodoDisciplina" class="col-form-label">Período</label>
+                    <label for="periodoDisciplina" class="col-form-label"
+                      >Período</label
+                    >
 
                     <div class="d-flex">
                       <input
@@ -259,7 +315,11 @@
                         disabled
                       />
 
-                      <button type="button" class="btn-disable" style="margin-top: -1px">
+                      <button
+                        type="button"
+                        class="btn-disable"
+                        style="margin-top: -1px"
+                      >
                         <i class="fas fa-check"></i>
                       </button>
                     </div>
@@ -294,37 +354,27 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para exibir conteúdo na tabela:</strong> Comece selecionando o curso desejado. Em seguida, selecione
-            a grade que quer visualizar.
+            <strong>Para exibir conteúdo na tabela:</strong> Comece selecionando
+            o curso desejado. Em seguida, selecione a grade que quer visualizar.
           </li>
           <li class="list-group-item">
-            <strong>Para adicionar disciplinas à Grade:</strong> Com o cartão a direita em branco, preencha-o. Em seguida,
-            clique em Adicionar
-            <i
-              class="fas fa-plus addbtn px-1"
-              style="font-size:12px"
-            ></i>.
+            <strong>Para adicionar disciplinas à Grade:</strong> Com o cartão a
+            direita em branco, preencha-o. Em seguida, clique em Adicionar
+            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>.
           </li>
           <li class="list-group-item">
-            <strong>Para editar ou deletar uma disciplina:</strong> Na tabela, clique na disciplina que deseja modificar.
-            Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar
-            <i
-              class="fas fa-check addbtn px-1"
-              style="font-size:12px"
-            ></i>
+            <strong>Para editar ou deletar uma disciplina:</strong> Na tabela,
+            clique na disciplina que deseja modificar. Logo após, no cartão à
+            direita, altere as informações que desejar e clique em Salvar
+            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
             ou, para excluí-la, clique em Deletar
-            <i
-              class="far fa-trash-alt delbtn px-1"
-              style="font-size: 12px"
-            ></i>
+            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar
-            <i
-              class="fas fa-times cancelbtn px-1"
-              style="font-size: 12px"
-            ></i>
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à
+            direita, clique em Cancelar
+            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
             .
           </li>
         </ul>
@@ -621,17 +671,7 @@ export default {
   overflow: hidden;
   margin: 0;
 }
-.btn {
-  height: 25px;
-  min-width: -webkit-max-content;
-  min-width: -moz-max-content;
-  min-width: max-content;
-  max-width: -webkit-max-content;
-  max-width: -moz-max-content;
-  max-width: max-content;
-  font-size: 12px;
-  padding: 0 5px 0 5px;
-}
+
 .titulo {
   font-size: 25px;
   font-weight: normal;
@@ -795,12 +835,19 @@ strong {
 button {
   padding: 0;
   border: none;
+  background: none;
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
-  margin-right: 15px;
+  width: 32px !important;
+  margin-left: 4px;
+  margin-right: 4px;
+  margin-top: 0px;
+  line-height: 50%;
+  margin-bottom: 0px;
   transition: all 0.3s ease 0s;
   cursor: pointer;
+  text-align: center !important;
 }
 i.fas,
 i.far {

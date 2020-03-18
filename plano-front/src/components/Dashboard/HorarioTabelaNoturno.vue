@@ -14,50 +14,50 @@
       <td class="tg-0lax">
         <template v-for="turma in Turmas" v-if="checkTurmaHorario(turma, 5)">
           <template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">
-            <div
+            <p
               :key="'1-noturno'+turma.Disciplina+'-'+disciplina.id"
               v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }"
-            >{{disciplina.codigo}}</div>
+            >{{disciplina.codigo}}</p>
           </template>
         </template>
       </td>
       <td class="tg-0lax">
         <template v-for="turma in Turmas" v-if="checkTurmaHorario(turma, 11)">
           <template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">
-            <div
+            <p
               :key="'1-noturno'+turma.Disciplina+'-'+disciplina.id"
               v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }"
-            >{{disciplina.codigo}}</div>
+            >{{disciplina.codigo}}</p>
           </template>
         </template>
       </td>
       <td class="tg-0lax">
         <template v-for="turma in Turmas" v-if="checkTurmaHorario(turma, 17)">
           <template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">
-            <div
+            <p
               :key="'1-noturno'+turma.Disciplina+'-'+disciplina.id"
               v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }"
-            >{{disciplina.codigo}}</div>
+            >{{disciplina.codigo}}</p>
           </template>
         </template>
       </td>
       <td class="tg-0lax">
         <template v-for="turma in Turmas" v-if="checkTurmaHorario(turma, 23)">
           <template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">
-            <div
+            <p
               :key="'1-noturno'+turma.Disciplina+'-'+disciplina.id"
               v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }"
-            >{{disciplina.codigo}}</div>
+            >{{disciplina.codigo}}</p>
           </template>
         </template>
       </td>
       <td class="tg-0lax">
         <template v-for="turma in Turmas" v-if="checkTurmaHorario(turma, 29)">
           <template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">
-            <div
+            <p
               :key="'1-noturno'+turma.Disciplina+'-'+disciplina.id"
               v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }"
-            >{{disciplina.codigo}}</div>
+            >{{disciplina.codigo}}</p>
           </template>
         </template>
       </td>
@@ -68,50 +68,50 @@
       <td class="tg-0lax">
         <template v-for="turma in Turmas" v-if="checkTurmaHorario(turma, 6)">
           <template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">
-            <div
+            <p
               :key="'1-noturno'+turma.Disciplina+'-'+disciplina.id"
               v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }"
-            >{{disciplina.codigo}}</div>
+            >{{disciplina.codigo}}</p>
           </template>
         </template>
       </td>
       <td class="tg-0lax">
         <template v-for="turma in Turmas" v-if="checkTurmaHorario(turma, 12)">
           <template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">
-            <div
+            <p
               :key="'1-noturno'+turma.Disciplina+'-'+disciplina.id"
               v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }"
-            >{{disciplina.codigo}}</div>
+            >{{disciplina.codigo}}</p>
           </template>
         </template>
       </td>
       <td class="tg-0lax">
         <template v-for="turma in Turmas" v-if="checkTurmaHorario(turma, 18)">
           <template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">
-            <div
+            <p
               :key="'1-noturno'+turma.Disciplina+'-'+disciplina.id"
               v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }"
-            >{{disciplina.codigo}}</div>
+            >{{disciplina.codigo}}</p>
           </template>
         </template>
       </td>
       <td class="tg-0lax">
         <template v-for="turma in Turmas" v-if="checkTurmaHorario(turma, 24)">
           <template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">
-            <div
+            <p
               :key="'1-noturno'+turma.Disciplina+'-'+disciplina.id"
               v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }"
-            >{{disciplina.codigo}}</div>
+            >{{disciplina.codigo}}</p>
           </template>
         </template>
       </td>
       <td class="tg-0lax">
         <template v-for="turma in Turmas" v-if="checkTurmaHorario(turma, 30)">
           <template v-for="disciplina in Disciplinas" v-if="turma.Disciplina === disciplina.id">
-            <div
+            <p
               :key="'1-noturno'+turma.Disciplina+'-'+disciplina.id"
               v-b-popover.html.hover.top="{customClass: 'popoverText', content:disciplina.nome + ' <br> ' + professor(turma) }"
-            >{{disciplina.codigo}}</div>
+            >{{disciplina.codigo}}</p>
           </template>
         </template>
       </td>
@@ -166,8 +166,8 @@ export default {
   border-collapse: collapse;
   border-spacing: 0;
   border-color: #ccc;
+  margin-right: 5px !important;
   margin-bottom: 20px !important;
-  margin-right: 20px !important;
 }
 .tg td {
   font-family: Arial, sans-serif;
@@ -199,9 +199,14 @@ export default {
   vertical-align: center;
   text-align: center;
   height: 22px;
-  width: 49px !important;
+  min-width: 50px !important;
 }
-
+td p {
+  min-width: 48px !important;
+  padding-right: 1px !important;
+  padding-left: 1px !important;
+  margin: 0 !important;
+}
 .popoverText {
   font-family: Arial, sans-serif;
   font-size: 11px;

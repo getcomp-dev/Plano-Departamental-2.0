@@ -6,18 +6,19 @@
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Perfis</h1>
-      
-      <div
+        <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">
+          Perfis
+        </h1>
+
+        <div
           class="form-group col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
-          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
+          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
             <i class="fas fa-question"></i>
           </b-button>
-          </div>
-          
         </div>
+      </div>
     </div>
     <div class="w-100 mb-2 border-bottom"></div>
 
@@ -27,7 +28,10 @@
       <table class="table table-hover border table-sm">
         <thead class="thead-light">
           <tr>
-            <div style="display: block; overflow: hidden; width: 482px;" class="sticky">
+            <div
+              style="display: block; overflow: hidden; width: 482px;"
+              class="sticky"
+            >
               <th scope="col">
                 <p
                   style="width: 350px; text-align:start"
@@ -37,7 +41,7 @@
                 >
                   Nome
                   <i
-                    v-if="ordenacao=='nome'"
+                    v-if="ordenacao == 'nome'"
                     style="font-size:0.6rem"
                     class="fas fa-arrow-down fa-sm"
                   ></i>
@@ -52,7 +56,7 @@
                 >
                   Abreviação
                   <i
-                    v-if="ordenacao=='abreviacao'"
+                    v-if="ordenacao == 'abreviacao'"
                     style="font-size:0.6rem"
                     class="fas fa-arrow-down fa-sm"
                   ></i>
@@ -70,15 +74,17 @@
               v-for="perfil in Perfis"
               :key="perfil.id"
               v-on:click.prevent="showPerfil(perfil), clickada(perfil.nome)"
-              :class="{'bg-custom' : perfilClickado === perfil.nome}"
+              :class="{ 'bg-custom': perfilClickado === perfil.nome }"
               style="cursor: pointer"
             >
               <div style="width: 482px">
                 <td>
-                  <p style="width: 350px; text-align: start">{{perfil.nome}}</p>
+                  <p style="width: 350px; text-align: start">
+                    {{ perfil.nome }}
+                  </p>
                 </td>
                 <td>
-                  <p style="width: 90px">{{perfil.abreviacao}}</p>
+                  <p style="width: 90px">{{ perfil.abreviacao }}</p>
                 </td>
                 <td>
                   <div style="padding-left: 2px; width: 42px">
@@ -95,7 +101,8 @@
           <template v-else>
             <tr>
               <td colspan="2" class="text-center">
-                <i class="fas fa-exclamation-triangle"></i> Nenhum perfil encontrado!
+                <i class="fas fa-exclamation-triangle"></i> Nenhum perfil
+                encontrado!
               </td>
             </tr>
           </template>
@@ -106,7 +113,9 @@
     <!-- Fim do Grid Esquerdo -->
 
     <!-- Grid Direito -->
-    <div class="div-card p-0 mt-0 mb-2 ml-auto col-lg-5 col-md-5 col-sm-12 col-12">
+    <div
+      class="div-card p-0 mt-0 mb-2 ml-auto col-lg-5 col-md-5 col-sm-12 col-12"
+    >
       <div class="card mr-3 ml-auto">
         <div class="card-header">
           <h2 class="card-title">Perfil</h2>
@@ -128,7 +137,9 @@
 
             <div class="row mb-2 mx-0">
               <div class="form-group col m-0 mr-4 px-0">
-                <label for="abreviacao" class="col-form-label">Abreviação</label>
+                <label for="abreviacao" class="col-form-label"
+                  >Abreviação</label
+                >
                 <input
                   type="text"
                   class="form-control form-control-sm"
@@ -208,36 +219,38 @@
     <!-- Fim do Grid Direito -->
     <!-- MODAL DE AJUDA -->
     <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
-      
       <div class="modal-body">
-        <ul class="listas list-group"> 
+        <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para adicionar perfis: </strong> Com o cartão à direita em branco, preencha-o. 
-            Em seguida, clique em Adicionar 
+            <strong>Para adicionar perfis: </strong> Com o cartão à direita em
+            branco, preencha-o. Em seguida, clique em Adicionar
             <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para editar ou deletar um perfil: </strong>Na tabela, clique no perfil que deseja alterar. 
-            Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar 
+            <strong>Para editar ou deletar um perfil: </strong>Na tabela, clique
+            no perfil que deseja alterar. Logo após, no cartão à direita, altere
+            as informações que desejar e clique em Salvar
             <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
-            ou, para excluí-lo, clique em Deletar 
+            ou, para excluí-lo, clique em Deletar
             <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
-            . 
+            .
           </li>
           <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar 
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à
+            direita, clique em Cancelar
             <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para alterar a ordenação:</strong> Clique em Nome ou Abreviação no cabeçalho da tabela para ordenação alfabética do mesmo. 
+            <strong>Para alterar a ordenação:</strong> Clique em Nome ou
+            Abreviação no cabeçalho da tabela para ordenação alfabética do
+            mesmo.
           </li>
         </ul>
       </div>
 
-      <div slot="modal-footer" style="display: none">
-      </div>
+      <div slot="modal-footer" style="display: none"></div>
     </b-modal>
   </div>
 </template>
@@ -558,7 +571,9 @@ input[type="text"] {
   line-height: inherit;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
-strong{color:#007bff}
+strong {
+  color: #007bff;
+}
 
 /* Botoes */
 button {
@@ -568,9 +583,15 @@ button {
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
-  margin-right: 15px;
+  width: 32px !important;
+  margin-left: 4px;
+  margin-right: 4px;
+  margin-top: 0px;
+  line-height: 50%;
+  margin-bottom: 0px;
   transition: all 0.3s ease 0s;
   cursor: pointer;
+  text-align: center !important;
 }
 i.fas,
 i.far {

@@ -793,11 +793,11 @@ export default {
         pdfMake.createPdf(docDefinition).open()
     },
 
-    turmasRelatorioDisciplinas(disciplina) {
+    turmasRelatorioDisciplinas(disciplina, semestre) {
         return _.orderBy(
             _.filter(store.state.turma.Turmas, turma => {
                 return (
-                    turma.Disciplina === disciplina.id
+                    (turma.Disciplina === disciplina.id) && (semestre === 1 ? (turma.periodo === 1 || turma.periodo === 2) : (turma.periodo === 3 || turma.periodo === 4))
                 );
             }),
             ['periodo', 'letra']
@@ -845,6 +845,21 @@ export default {
         return perfil.abreviacao
     },
 
+    curso(pedido){
+        return _.find(store.state.curso.Cursos, { id: pedido.Curso });
+    },
+
+    pedidosTurma(turma){
+        return _.sortBy(_.filter(
+            store.state.pedido.Pedidos[turma.id],
+            function(p) {
+                return p.vagasPeriodizadas > 0 || p.vagasNaoPeriodizadas > 0;
+            }
+        ), (p) => {
+            return this.curso(p).codigo
+        });
+    },
+
     pdfRelatorioDisciplinas() {
         var pdfMake = require('pdfmake/build/pdfmake.js')
         if (pdfMake.vfs == undefined){
@@ -854,62 +869,33 @@ export default {
         let tables = []
         let disciplinas = _.orderBy(store.state.disciplina.Disciplinas, 'codigo')
         let turmasDisc = undefined
-        let vazio = 0
+        tables.push({
+            text: 'Relação de turmas oferecidas por departamento - DCC', alignment: 'center', bold:true, fontSie:11
+        })
+        tables.push({
+            text: '1º Semestre - ' + store.state.plano.Plano[0].ano, alignment: 'center', bold:true, fontSie:10, margin: [0, 0, 0, 5]
+        })
         for(let i = 0; i < disciplinas.length; i++){
-            turmasDisc = this.turmasRelatorioDisciplinas(disciplinas[i])
-            if(turmasDisc.length === 0){
-                vazio = vazio + 1
-            }else {
-                tables.push({
-                    columns: [{
-                        text: disciplinas[i].codigo,
-                        bold: true,
-                        width: 60
-                    }, {
-                        text: disciplinas[i].nome,
-                        bold: true,
-                        width: '*'
-                    },
-                    {
-                        text: this.perfilDisciplina(disciplinas[i]),
-                        bold: true,
-                        alignment: 'center',
-                        width: 72
-                    },
-
-                    {
-                        text: this.vagasDisciplina(disciplinas[i], 1),
-                        bold: true,
-                        alignment: 'center',
-                        width: 74
-                    },
-
-                    {
-                        text: this.vagasDisciplina(disciplinas[i], 2),
-                        bold: true,
-                        alignment: 'center',
-                        width: 74
-                    }
-
-                    ], margin: [0, 10, 0, 10]
-                })
-
+            turmasDisc = this.turmasRelatorioDisciplinas(disciplinas[i], 1)
+            if(turmasDisc.length > 0){
                 tables.push({
                     style: 'tableExample',
                     table: {
-                        widths: [8, 8, '*', 120, 65, 65],
+                        widths: [60, '*', 72],
                         headerRows: 1,
                         color: '#426',
                         body: [
-                            [{text: 'S', alignment: 'center', bold: true},
-                                {text: 'T', alignment: 'center', bold: true},
-                                {text: 'Docentes', alignment: 'center', bold: true},
-                                {text: 'Horário', alignment: 'center', bold: true},
-                                {text: 'Vagas 1º S.', alignment: 'center', bold: true},
-                                {text: 'Vagas 2º S.', alignment: 'center', bold: true}]
+                            [{text: disciplinas[i].codigo, alignment: 'left', bold: true, fontSize:10},
+                             {text: disciplinas[i].nome, alignment: 'left', bold: true, fontSize:10},
+                             {text: this.perfilDisciplina(disciplinas[i]), alignment: 'center', bold: true, fontSize:10}]
                         ]
+                    },
+
+                    layout: {
+                        vLineWidth: function () { return 0 }
                     }
                 })
+
                 for(let j = 0; j < turmasDisc.length; j++){
                     let docentes = this.docentesRelatorioDisciplina(turmasDisc[j])
                     let horario1 = _.find(store.state.horario.Horarios, {'id': turmasDisc[j].Horario1})
@@ -924,22 +910,162 @@ export default {
                     }else{
                         horarioTotal = horario1.horario + '/' + horario2.horario
                     }
-                    tables[1 + 2 * (i - vazio)].table.body.push([
-                        {text:turmasDisc[j].periodo, alignment: 'center'},
-                        {text: turmasDisc[j].letra, alignment: 'center'},
-                        {text: docentes, alignment: 'center'},
-                        {text: horarioTotal, alignment: 'center'},
-                        {text: this.vagasTurma(turmasDisc[j], 1), alignment: 'center'},
-                        {text: this.vagasTurma(turmasDisc[j], 2), alignment: 'center'}
-                    ])
 
+                    tables.push({
+                        style: 'tableExample',
+                        table: {
+                            widths: [16, '*', 110, 65, ],
+                            headerRows: 1,
+                            color: '#426',
+                            body: [
+                                [
+                                    {text: 'T: ' + turmasDisc[j].letra, alignment: 'center', fontSize: 9},
+                                    {text: 'Docentes: ' + docentes, alignment: 'left', fontSize: 9},
+                                    {text: 'Horário: ' + horarioTotal, alignment: 'left', fontSize: 9},
+                                    {text: 'Vagas: ' + this.vagasTurma(turmasDisc[j], 1), alignment: 'left', fontSize: 9}]
+                            ]
+                        },
+                        layout: {
+                            hLineWidth: function (i) { return (i === 0 ? (j === 0 ? 0 : 0.5) : 0) },
+                            vLineWidth: function () { return 0 }
+                        }
+                    })
+                    let pedidosTurma = this.pedidosTurma(turmasDisc[j])
+                    console.log(pedidosTurma)
+                    if(pedidosTurma.length > 0){
+                        let tabelaCursosBody = [
+                            [
+                                {text: 'Curso', alignment: 'center', bold: 'true', fontSize:9},
+                                {text: 'Grade', alignment: 'center', bold: 'true', fontSize:9},
+                                {text: 'Extra', alignment: 'center', bold: 'true', fontSize:9},
+                            ]
+                        ]
+                        for(let k = 0; k < pedidosTurma.length; k++){
+                            tabelaCursosBody.push([
+                                {text: this.curso(pedidosTurma[k]).codigo + ' - ' + this.curso(pedidosTurma[k]).nome, alignment: 'left', fontSize:9},
+                                {text: pedidosTurma[k].vagasPeriodizadas, alignment: 'center', fontSize:9},
+                                {text: pedidosTurma[k].vagasNaoPeriodizadas, alignment: 'center', fontSize:9},
+                            ])
+                        }
+                        tables.push({
+                            style: 'tableExample',
+                            table: {
+                                widths: ['*', 24, 24, ],
+                                headerRows: 1,
+                                color: '#426',
+                                body: tabelaCursosBody
+                            },
+                            layout: {
+                                hLineWidth: function () { return 0 },
+                                vLineWidth: function () { return 0 }
+                            }
+                        })
+                    }
+                }
+            }
+        }
+        tables.push({
+            text: 'Relação de turmas oferecidas por departamento - DCC', alignment: 'center', bold:true, fontSie:11, pageBreak:'before'
+        })
+        tables.push({
+            text: '2º Semestre - ' + store.state.plano.Plano[0].ano, alignment: 'center', bold:true, fontSie:10, margin: [0, 0, 0, 5]
+        })
+        for(let i = 0; i < disciplinas.length; i++){
+            turmasDisc = this.turmasRelatorioDisciplinas(disciplinas[i], 2)
+            if(turmasDisc.length > 0){
+                tables.push({
+                    style: 'tableExample',
+                    table: {
+                        widths: [60, '*', 72],
+                        headerRows: 1,
+                        color: '#426',
+                        body: [
+                            [{text: disciplinas[i].codigo, alignment: 'left', bold: true, fontSize:10},
+                                {text: disciplinas[i].nome, alignment: 'left', bold: true, fontSize:10},
+                                {text: this.perfilDisciplina(disciplinas[i]), alignment: 'center', bold: true, fontSize:10}]
+                        ]
+                    },
+
+                    layout: {
+                        vLineWidth: function () { return 0 }
+                    }
+                })
+
+                for(let j = 0; j < turmasDisc.length; j++){
+                    let docentes = this.docentesRelatorioDisciplina(turmasDisc[j])
+                    let horario1 = _.find(store.state.horario.Horarios, {'id': turmasDisc[j].Horario1})
+                    let horario2 = _.find(store.state.horario.Horarios, {'id': turmasDisc[j].Horario2})
+                    let horarioTotal = undefined
+                    if(horario1===undefined && horario2===undefined){
+                        horarioTotal = ''
+                    }else if (horario2 === undefined) {
+                        horarioTotal = horario1.horario
+                    } else if (horario1 === undefined) {
+                        horarioTotal = horario2.horario
+                    }else{
+                        horarioTotal = horario1.horario + '/' + horario2.horario
+                    }
+
+                    tables.push({
+                        style: 'tableExample',
+                        table: {
+                            widths: [16, '*', 110, 65, ],
+                            headerRows: 1,
+                            color: '#426',
+                            body: [
+                                [
+                                    {text: 'T: ' + turmasDisc[j].letra, alignment: 'center', fontSize: 9},
+                                    {text: 'Docentes: ' + docentes, alignment: 'left', fontSize: 9},
+                                    {text: 'Horário: ' + horarioTotal, alignment: 'left', fontSize: 9},
+                                    {text: 'Vagas: ' + this.vagasTurma(turmasDisc[j], 2), alignment: 'left', fontSize: 9}]
+                            ]
+                        },
+                        layout: {
+                            hLineWidth: function (i) { return (i === 0 ? (j === 0 ? 0 : 0.5) : 0) },
+                            vLineWidth: function () { return 0 }
+                        }
+                    })
+                    let pedidosTurma = this.pedidosTurma(turmasDisc[j])
+                    console.log(pedidosTurma)
+                    if(pedidosTurma.length > 0){
+                        let tabelaCursosBody = [
+                            [
+                                {text: 'Curso', alignment: 'center', bold: 'true', fontSize:9},
+                                {text: 'Grade', alignment: 'center', bold: 'true', fontSize:9},
+                                {text: 'Extra', alignment: 'center', bold: 'true', fontSize:9},
+                            ]
+                        ]
+                        for(let k = 0; k < pedidosTurma.length; k++){
+                            tabelaCursosBody.push([
+                                {text: this.curso(pedidosTurma[k]).codigo + ' - ' + this.curso(pedidosTurma[k]).nome, alignment: 'left', fontSize:9},
+                                {text: pedidosTurma[k].vagasPeriodizadas, alignment: 'center', fontSize:9},
+                                {text: pedidosTurma[k].vagasNaoPeriodizadas, alignment: 'center', fontSize:9},
+                            ])
+                        }
+                        tables.push({
+                            style: 'tableExample',
+                            table: {
+                                widths: ['*', 24, 24, ],
+                                headerRows: 1,
+                                color: '#426',
+                                body: tabelaCursosBody
+                            },
+                            layout: {
+                                hLineWidth: function () { return 0 },
+                                vLineWidth: function () { return 0 }
+                            }
+                        })
+                    }
                 }
             }
         }
 
         var docDefinition = {
             content: tables,
-            header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
+            header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10},
+            footer: function(currentPage, pageCount) {
+                return  { text: currentPage.toString() + ' de ' + pageCount, alignment: 'right', margin:[0, 0, 30, 0], fontSize:8 }
+            }
         }
         pdfMake.createPdf(docDefinition).open()
     }

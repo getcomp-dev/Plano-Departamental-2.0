@@ -6,15 +6,23 @@
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="titulo col-xl-3 col-lg-3 col-md-4 col-sm-5 col-6 px-0 pr-1">Grades Disciplinas</h1>
+        <h1 class="titulo col-xl-3 col-lg-3 col-md-4 col-sm-5 col-6 px-0 pr-1">
+          Grades Disciplinas
+        </h1>
         <div
           class="form-group col-xl-9 col-lg-9 col-md-8 col-sm-7 col-6 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
           <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
-            <input type="text" class="form-control form-control-sm" v-model="novoAno" />
+            <input
+              type="text"
+              class="form-control form-control-sm"
+              v-model="novoAno"
+            />
             <div class="input-group-append">
-              <label class="input-group-text">Ano</label>
+              <label class="input-group-text" v-on:click="runNovoAno()"
+                >Ano</label
+              >
             </div>
           </div>
           <div class="d-flex">
@@ -24,7 +32,7 @@
             <b-button v-b-modal.modalCursos title="Cursos" class="cancelbtn">
               <i class="fas fa-graduation-cap"></i>
             </b-button>
-            <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
+            <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
               <i class="fas fa-question"></i>
             </b-button>
           </div>
@@ -43,19 +51,45 @@
                 <p class="p-header" style="width: 100px;">Código</p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width: 380px; text-align:start">Disciplina</p>
+                <p class="p-header" style="width: 380px; text-align:start">
+                  Disciplina
+                </p>
               </th>
               <th scope="col" v-if="activeSI">
-                <p class="p-header" style="width: 150px;" title="Sistemas de informação">76A</p>
+                <p
+                  class="p-header"
+                  style="width: 150px;"
+                  title="Sistemas de informação"
+                >
+                  76A
+                </p>
               </th>
               <th scope="col" v-if="activeCCN">
-                <p class="p-header" style="width: 150px;" title="Ciência da Computação Noturno">35A</p>
+                <p
+                  class="p-header"
+                  style="width: 150px;"
+                  title="Ciência da Computação Noturno"
+                >
+                  35A
+                </p>
               </th>
               <th scope="col" v-if="activeCCD">
-                <p class="p-header" style="width: 150px;" title="Ciência da Computação Noturno">65C</p>
+                <p
+                  class="p-header"
+                  style="width: 150px;"
+                  title="Ciência da Computação Noturno"
+                >
+                  65C
+                </p>
               </th>
               <th scope="col" v-if="activeEC">
-                <p class="p-header" style="width: 150px;" title="Engenharia da Computação">65B</p>
+                <p
+                  class="p-header"
+                  style="width: 150px;"
+                  title="Engenharia da Computação"
+                >
+                  65B
+                </p>
               </th>
             </div>
           </tr>
@@ -65,72 +99,98 @@
             <tr
               v-for="disciplina in inPerfil(perfil, Disciplinas)"
               :key="disciplina.id"
-              v-bind:style="{backgroundColor: perfil.cor}"
+              v-bind:style="{ backgroundColor: perfil.cor }"
             >
               <div style="width: max-content">
                 <td>
-                  <p style="width: 100px">{{disciplina.codigo}}</p>
+                  <p style="width: 100px">{{ disciplina.codigo }}</p>
                 </td>
                 <td>
-                  <p style="width:380px; text-align:start">{{disciplina.nome}}</p>
+                  <p style="width:380px; text-align:start">
+                    {{ disciplina.nome }}
+                  </p>
                 </td>
                 <!-- 76A-  -->
                 <td v-if="activeSI">
                   <p style="width:150px;">
-                    <template v-if="disciplinasGrades[disciplina.id][2][0].length !== 0">
+                    <template
+                      v-if="disciplinasGrades[disciplina.id][2][0].length !== 0"
+                    >
                       <template
                         v-for="d in disciplinasGrades[disciplina.id][2][0]"
-                      >1º Semestre: {{d}}º Período</template>
+                        >1º Semestre: {{ d }}º Período</template
+                      >
                     </template>
-                    <template v-if="disciplinasGrades[disciplina.id][2][1].length !== 0">
+                    <template
+                      v-if="disciplinasGrades[disciplina.id][2][1].length !== 0"
+                    >
                       <template
                         v-for="d in disciplinasGrades[disciplina.id][2][1]"
-                      >2º Semestre: {{d}}º Período</template>
+                        >2º Semestre: {{ d }}º Período</template
+                      >
                     </template>
                   </p>
                 </td>
                 <!-- 35A-  -->
                 <td v-if="activeCCN">
                   <p style="width: 150px">
-                    <template v-if="disciplinasGrades[disciplina.id][0][0].length !== 0">
+                    <template
+                      v-if="disciplinasGrades[disciplina.id][0][0].length !== 0"
+                    >
                       <template
                         v-for="d in disciplinasGrades[disciplina.id][0][0]"
-                      >1º Semestre: {{d}}º Período</template>
+                        >1º Semestre: {{ d }}º Período</template
+                      >
                     </template>
-                    <template v-if="disciplinasGrades[disciplina.id][0][1].length !== 0">
+                    <template
+                      v-if="disciplinasGrades[disciplina.id][0][1].length !== 0"
+                    >
                       <template
                         v-for="d in disciplinasGrades[disciplina.id][0][1]"
-                      >2º Semestre: {{d}}º Período</template>
+                        >2º Semestre: {{ d }}º Período</template
+                      >
                     </template>
                   </p>
                 </td>
                 <!-- 65C -->
                 <td v-if="activeCCD">
                   <p style="width: 150px">
-                    <template v-if="disciplinasGrades[disciplina.id][3][0].length !== 0">
+                    <template
+                      v-if="disciplinasGrades[disciplina.id][3][0].length !== 0"
+                    >
                       <template
                         v-for="d in disciplinasGrades[disciplina.id][3][0]"
-                      >1º Semestre: {{d}}º Período</template>
+                        >1º Semestre: {{ d }}º Período</template
+                      >
                     </template>
-                    <template v-if="disciplinasGrades[disciplina.id][3][1].length !== 0">
+                    <template
+                      v-if="disciplinasGrades[disciplina.id][3][1].length !== 0"
+                    >
                       <template
                         v-for="d in disciplinasGrades[disciplina.id][3][1]"
-                      >2º Semestre: {{d}}º Período</template>
+                        >2º Semestre: {{ d }}º Período</template
+                      >
                     </template>
                   </p>
                 </td>
                 <!-- 65B -->
                 <td v-if="activeEC">
                   <p style="width: 150px">
-                    <template v-if="disciplinasGrades[disciplina.id][1][0].length !== 0">
+                    <template
+                      v-if="disciplinasGrades[disciplina.id][1][0].length !== 0"
+                    >
                       <template
                         v-for="d in disciplinasGrades[disciplina.id][1][0]"
-                      >1º Semestre: {{d}}º Período</template>
+                        >1º Semestre: {{ d }}º Período</template
+                      >
                     </template>
-                    <template v-if="disciplinasGrades[disciplina.id][1][1].length !== 0">
+                    <template
+                      v-if="disciplinasGrades[disciplina.id][1][1].length !== 0"
+                    >
                       <template
                         v-for="d in disciplinasGrades[disciplina.id][1][1]"
-                      >2º Semestre: {{d}}º Período</template>
+                        >2º Semestre: {{ d }}º Período</template
+                      >
                     </template>
                   </p>
                 </td>
@@ -151,7 +211,10 @@
       title="Selecione os Cursos"
       :size="'sm'"
     >
-      <div class="col m-0 p-0 border" style="width:max-content; border-color: rgba(0,0,0,0.125);">
+      <div
+        class="col m-0 p-0 border"
+        style="width:max-content; border-color: rgba(0,0,0,0.125);"
+      >
         <table class="m-table table table-sm modal-table">
           <tr>
             <div style="font-size: 11px!important; height: 18px !important">
@@ -162,13 +225,18 @@
                 <p style="width:40px" class="p-header">Cód.</p>
               </th>
               <th class="border-0">
-                <p class="p-header" style="width: 200px; text-align:start">Nome</p>
+                <p class="p-header" style="width: 200px; text-align:start">
+                  Nome
+                </p>
               </th>
             </div>
           </tr>
           <tbody>
             <!-- v-for em tr -->
-            <tr v-for="curso in options_Cursos" :key="'curso-id-' + curso.value">
+            <tr
+              v-for="curso in options_Cursos"
+              :key="'curso-id-' + curso.value"
+            >
               <div style="width: max-content; height: 22px !important">
                 <td>
                   <div style="width:20px;">
@@ -181,7 +249,9 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:40px; text-align:center;">{{ curso.codigo.toUpperCase() }}</p>
+                  <p style="width:40px; text-align:center;">
+                    {{ curso.codigo.toUpperCase() }}
+                  </p>
                 </td>
                 <td>
                   <p style="width:200px; text-align:start;">{{ curso.nome }}</p>
@@ -197,19 +267,22 @@
             class="btn-azul btn-df mr-2"
             variant="success"
             @click="selectAllCursos()"
-          >Selecionar Todos</b-button>
+            >Selecionar Todos</b-button
+          >
           <b-button
             class="btn-cinza btn-df mr-2"
             variant="secondary"
             @click="selectNoneCursos()"
-          >Desmarcar Todos</b-button>
+            >Desmarcar Todos</b-button
+          >
         </div>
         <b-button
           variant="success"
           v-on:click="btnOkCursos()"
           class="btn-verde btn-df mr-2"
           style="padding-right:15px!important; padding-left:15px!important;"
-        >OK</b-button>
+          >OK</b-button
+        >
       </div>
     </b-modal>
     <!-- modal de ajuda -->
@@ -218,13 +291,18 @@
         <ul class="listas list-group">
           <li class="list-group-item">
             <strong>Para exibir conteúdo na Tabela:</strong> Clique em Perfis
-            <i class="fas fa-list-ul cancelbtn px-1" style="font-size: 12px"></i>
-            e marque quais deseja mostrar, depois clique em OK. Logo após, escolha os Cursos
+            <i
+              class="fas fa-list-ul cancelbtn px-1"
+              style="font-size: 12px"
+            ></i>
+            e marque quais deseja mostrar, depois clique em OK. Logo após,
+            escolha os Cursos
             <i
               class="fas fa-graduation-cap cancelbtn px-1"
               style="font-size: 12px"
             ></i>
-            que quer ver, confirmando a seleção em OK. Caso queira ver todos basta clicar em Selecionar Todos.
+            que quer ver, confirmando a seleção em OK. Caso queira ver todos
+            basta clicar em Selecionar Todos.
           </li>
         </ul>
       </div>
@@ -232,24 +310,34 @@
     </b-modal>
 
     <!-- Modals do botão perfis slot="modal-footer" -->
-    <b-modal id="modalPerfis" ref="PerfisModal" scrollable title="Selecione os perfis">
+    <b-modal
+      id="modalPerfis"
+      ref="PerfisModal"
+      scrollable
+      title="Selecione os perfis"
+    >
       <div
         class="col m-0 p-0 border"
         style="height: 395px; width:max-content; border-color: rgba(0,0,0,0.125);"
       >
-        <table class="table table-sm modal-table" style="max-height: 392px !important;">
+        <table
+          class="table table-sm modal-table"
+          style="max-height: 392px !important;"
+        >
           <tr>
             <div style="width: max-content; font-size: 11px!important">
               <th class="border-0">
                 <p style="width:25px" class="p-header"></p>
               </th>
               <th class="border-0">
-                <p class="p-header" style="width: 424px; text-align:start">Nome</p>
+                <p class="p-header" style="width: 424px; text-align:start">
+                  Nome
+                </p>
               </th>
             </div>
           </tr>
           <tbody>
-            <tr v-for="perfil in Perfis" :key="'perfil-id'+perfil.id">
+            <tr v-for="perfil in Perfis" :key="'perfil-id' + perfil.id">
               <div style="width: max-content">
                 <td style="padding:0;broder:0;margin:0!important;">
                   <div style="width:25px;">
@@ -262,7 +350,7 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:424px; text-align:start">{{perfil.nome}}</p>
+                  <p style="width:424px; text-align:start">{{ perfil.nome }}</p>
                 </td>
               </div>
             </tr>
@@ -275,19 +363,22 @@
             class="btn-azul btn-df mr-2"
             variant="success"
             @click="selectAllPerfis()"
-          >Selecionar Todos</b-button>
+            >Selecionar Todos</b-button
+          >
           <b-button
             class="btn-cinza btn-df mr-2"
             variant="secondary"
             @click="selectNonePerfis()"
-          >Desmarcar Todos</b-button>
+            >Desmarcar Todos</b-button
+          >
         </div>
         <b-button
           variant="success"
           @click="btnOkPerfis()"
           class="btn-verde btn-df mr-2"
           style="padding-right:15px!important; padding-left:15px!important;"
-        >OK</b-button>
+          >OK</b-button
+        >
       </div>
     </b-modal>
   </div>
@@ -393,10 +484,11 @@ export default {
 
     runNovoAno: function() {
       //executa runAll, modificando o ano
-      console.log("novo Ano");
       if (this.ano != this.novoAno) {
         this.ano = this.novoAno;
         this.runAll();
+        this.novoAno = 0;
+        this.novoAno = this.ano;
       }
     },
 
@@ -829,11 +921,15 @@ button {
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
-  margin-right: 15px;
-  margin-top: 5px;
+  width: 32px !important;
+  margin-left: 4px;
+  margin-right: 4px;
+  margin-top: 0px;
+  line-height: 50%;
   margin-bottom: 0px;
   transition: all 0.3s ease 0s;
   cursor: pointer;
+  text-align: center !important;
 }
 .relatbtn {
   background-color: white;

@@ -6,13 +6,15 @@
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Grades</h1>
+        <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">
+          Grades
+        </h1>
 
         <div
           class="form-group form-group-top col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
-          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn p-0">
+          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
             <i class="fas fa-question"></i>
           </b-button>
         </div>
@@ -79,7 +81,11 @@
               </tr>
               <template v-for="grade in Grades_CCNoturno">
                 <tr
-                  @click="(currentGrade = grade.id),findGrade(),(grade_selected = true)"
+                  @click="
+                    (currentGrade = grade.id),
+                      findGrade(),
+                      (grade_selected = true)
+                  "
                   :key="'grade-id' + grade.id"
                   :class="[
                     {
@@ -108,12 +114,19 @@
               </tr>
               <template v-for="grade in Grades_SI">
                 <tr
-                  @click=" (currentGrade = grade.id), findGrade(),  (grade_selected = true)"
+                  @click="
+                    (currentGrade = grade.id),
+                      findGrade(),
+                      (grade_selected = true)
+                  "
                   :key="'grade-id' + grade.id"
-                  :class="[{
-                    'bg-custom':
-                      gradeForm.nome == grade.nome && gradeForm.Curso == 3
-                  },'clickable']"
+                  :class="[
+                    {
+                      'bg-custom':
+                        gradeForm.nome == grade.nome && gradeForm.Curso == 3
+                    },
+                    'clickable'
+                  ]"
                 >
                   <td>
                     <p style="width: 220px"></p>
@@ -134,12 +147,19 @@
               </tr>
               <template v-for="grade in Grade_EC">
                 <tr
-                  @click=" (currentGrade = grade.id), findGrade(),(grade_selected = true)"
+                  @click="
+                    (currentGrade = grade.id),
+                      findGrade(),
+                      (grade_selected = true)
+                  "
                   :key="'grade-id' + grade.id"
-                  :class="[{
-                    'bg-custom':
-                      gradeForm.nome == grade.nome && gradeForm.Curso == 2
-                  },'clickable']"
+                  :class="[
+                    {
+                      'bg-custom':
+                        gradeForm.nome == grade.nome && gradeForm.Curso == 2
+                    },
+                    'clickable'
+                  ]"
                 >
                   <td>
                     <p style="width: 220px"></p>
@@ -176,7 +196,9 @@
                 </div>
 
                 <div class="form-group col-7 m-0 px-0">
-                  <label for="periodoInicio" class="col-form-label">Período de Início</label>
+                  <label for="periodoInicio" class="col-form-label"
+                    >Período de Início</label
+                  >
                   <input
                     type="text"
                     class="inputMenor form-control form-control-sm col"
@@ -272,33 +294,21 @@
           <li class="list-group-item">
             <strong>Para adicionar grades:</strong> Com o cartão a direita em
             branco, preencha-o. Em seguida, clique em Adicionar
-            <i
-              class="fas fa-plus addbtn px-1"
-              style="font-size:12px"
-            ></i>.
+            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>.
           </li>
           <li class="list-group-item">
             <strong>Para editar ou deletar uma grade:</strong> Na tabela, clique
             na grade que deseja alterar. Logo após, no cartão à direita, altere
             as informações que desejar e clique em Salvar
-            <i
-              class="fas fa-check addbtn px-1"
-              style="font-size:12px"
-            ></i>
+            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
             ou, para excluí-la, clique em Deletar
-            <i
-              class="far fa-trash-alt delbtn px-1"
-              style="font-size: 12px"
-            ></i>
+            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
             .
           </li>
           <li class="list-group-item">
             <strong>Para deixar o cartão em branco:</strong> No cartão, à
             direita, clique em Cancelar
-            <i
-              class="fas fa-times cancelbtn px-1"
-              style="font-size: 12px"
-            ></i>.
+            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>.
           </li>
         </ul>
       </div>
@@ -479,18 +489,6 @@ export default {
   margin: 0;
 }
 
-.btn {
-  height: 25px;
-  min-width: -webkit-max-content;
-  min-width: -moz-max-content;
-  min-width: max-content;
-  max-width: -webkit-max-content;
-  max-width: -moz-max-content;
-  max-width: max-content;
-  font-size: 12px;
-  padding: 0 5px 0 5px;
-}
-
 .titulo {
   font-size: 25px;
   font-weight: normal;
@@ -579,16 +577,21 @@ strong {
 
 /* Botoes */
 button {
-  padding: 0;
+  padding: 0 !important;
   border: none;
   background: none;
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
-  margin-right: 15px;
+  width: 32px !important;
+  margin-left: 4px;
+  margin-right: 4px;
   margin-top: 0px;
+  line-height: 50%;
+  margin-bottom: 0px;
   transition: all 0.3s ease 0s;
   cursor: pointer;
+  text-align: center !important;
 }
 
 i.fas,

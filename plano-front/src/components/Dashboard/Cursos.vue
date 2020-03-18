@@ -6,13 +6,15 @@
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Cursos</h1>
+        <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">
+          Cursos
+        </h1>
 
         <div
           class="form-group col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
-          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
+          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
             <i class="fas fa-question"></i>
           </b-button>
         </div>
@@ -26,7 +28,10 @@
         <table class="table table-hover table-sm">
           <thead class="thead-light">
             <tr>
-              <div style="display: block; overflow: hidden; width: 525px;" class="sticky">
+              <div
+                style="display: block; overflow: hidden; width: 525px;"
+                class="sticky"
+              >
                 <th scope="col">
                   <p
                     @click="toggleOrderNome()"
@@ -36,7 +41,7 @@
                   >
                     Nome
                     <i
-                      v-if="ordenacao=='nome'"
+                      v-if="ordenacao == 'nome'"
                       style="font-size:0.6rem"
                       class="fas fa-arrow-down fa-sm"
                     ></i>
@@ -51,7 +56,7 @@
                   >
                     Código
                     <i
-                      v-if="ordenacao=='codigo'"
+                      v-if="ordenacao == 'codigo'"
                       style="font-size:0.6rem"
                       class="fas fa-arrow-down fa-sm"
                     ></i>
@@ -65,14 +70,18 @@
                     class="p-header"
                     style="width:52px!important;"
                     title="Entrada de alunos 1º Semestre"
-                  >1º Sem.</p>
+                  >
+                    1º Sem.
+                  </p>
                 </th>
                 <th scope="col">
                   <p
                     class="p-header"
                     style="width:52px!important;"
                     title="Entrada de alunos 2º Semestre"
-                  >2º Sem.</p>
+                  >
+                    2º Sem.
+                  </p>
                 </th>
                 <th scope="col">
                   <p style="width: 9px"></p>
@@ -85,17 +94,19 @@
             <template v-if="Cursos.length > 0">
               <tr
                 v-for="curso in Cursos"
-                :key="'curso codigo'+curso.codigo"
+                :key="'curso codigo' + curso.codigo"
                 v-on:click.prevent="showCurso(curso), clickada(curso.codigo)"
-                :class="{'bg-custom':cursoClickado === curso.codigo}"
+                :class="{ 'bg-custom': cursoClickado === curso.codigo }"
                 style="cursor: pointer;"
               >
                 <div style="width: 525px">
                   <td>
-                    <p style="width: 300px; text-align: start">{{ curso.nome }}</p>
+                    <p style="width: 300px; text-align: start">
+                      {{ curso.nome }}
+                    </p>
                   </td>
                   <td>
-                    <p style="width: 60px">{{ curso.codigo}}</p>
+                    <p style="width: 60px">{{ curso.codigo }}</p>
                   </td>
                   <td>
                     <p style="width: 52px;">{{ curso.turno }}</p>
@@ -174,7 +185,9 @@
 
               <div class="row mb-2 mx-0">
                 <div class="form-group col m-0 px-0">
-                  <label for="alunosEntrada" class="col-form-label">Alunos 1º Sem.</label>
+                  <label for="alunosEntrada" class="col-form-label"
+                    >Alunos 1º Sem.</label
+                  >
                   <input
                     type="text"
                     class="form-control form-control-sm inputMenor"
@@ -185,7 +198,9 @@
                 </div>
                 <!-- </div> -->
                 <div class="form-group col m-0 px-0">
-                  <label for="alunosEntrada" class="col-form-label">Alunos 2º Sem.</label>
+                  <label for="alunosEntrada" class="col-form-label"
+                    >Alunos 2º Sem.</label
+                  >
                   <input
                     type="text"
                     class="form-control form-control-sm inputMenor"
@@ -305,39 +320,30 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para adicionar cursos:</strong> Com o cartão à direita em branco, preencha-o. Em seguida,
-            clique em Adicionar
-            <i
-              class="fas fa-plus addbtn px-1"
-              style="font-size:12px"
-            ></i>
+            <strong>Para adicionar cursos:</strong> Com o cartão à direita em
+            branco, preencha-o. Em seguida, clique em Adicionar
+            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para editar ou deletar um curso:</strong> Na tabela, clique no curso que deseja alterar.
-            Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar
-            <i
-              class="fas fa-check addbtn px-1"
-              style="font-size:12px"
-            ></i>
+            <strong>Para editar ou deletar um curso:</strong> Na tabela, clique
+            no curso que deseja alterar. Logo após, no cartão à direita, altere
+            as informações que desejar e clique em Salvar
+            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
             ou, para excluí-lo, clique em Deletar
-            <i
-              class="far fa-trash-alt delbtn px-1"
-              style="font-size: 12px"
-            ></i>
+            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar
-            <i
-              class="fas fa-times cancelbtn px-1"
-              style="font-size: 12px"
-            ></i>
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à
+            direita, clique em Cancelar
+            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para alterar a ordenação:</strong> Clique em Nome no cabeçalho da tabela para ordenar por ordem alfabética
-            ou em Código para ordem numérica do código do curso.
+            <strong>Para alterar a ordenação:</strong> Clique em Nome no
+            cabeçalho da tabela para ordenar por ordem alfabética ou em Código
+            para ordem numérica do código do curso.
           </li>
         </ul>
       </div>
@@ -757,15 +763,21 @@ strong {
 
 /* Botoes */
 button {
-  padding: 0;
+  padding: 0 !important;
   border: none;
   background: none;
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
-  margin-right: 15px;
+  width: 32px !important;
+  margin-left: 4px;
+  margin-right: 4px;
+  margin-top: 0px;
+  line-height: 50%;
+  margin-bottom: 0px;
   transition: all 0.3s ease 0s;
   cursor: pointer;
+  text-align: center !important;
 }
 i.fas,
 i.far {

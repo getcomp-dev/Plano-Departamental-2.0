@@ -6,13 +6,15 @@
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-xl-2 col-md-4 col-sm-5 col-9 px-0 pr-1 titulo">Lista Docentes</h1>
+        <h1 class="col-xl-2 col-md-4 col-sm-5 col-9 px-0 pr-1 titulo">
+          Lista Docentes
+        </h1>
 
         <div
           class="form-group form-group-top col-xl-10 col-md-8 col-sm-7 col-3 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
-          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
+          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
             <i class="fas fa-question"></i>
           </b-button>
         </div>
@@ -39,7 +41,7 @@
                   >
                     Nome
                     <i
-                      v-if="ordenacao=='nome'"
+                      v-if="ordenacao == 'nome'"
                       style="font-size:0.6rem"
                       class="fas fa-arrow-down fa-sm"
                     ></i>
@@ -54,7 +56,7 @@
                   >
                     Apelido
                     <i
-                      v-if="ordenacao=='apelido'"
+                      v-if="ordenacao == 'apelido'"
                       style="font-size:0.6rem"
                       class="fas fa-arrow-down fa-sm"
                     ></i>
@@ -70,23 +72,27 @@
             <template v-if="Docentes.length > 0">
               <tr
                 v-for="docente in Docentes"
-                :key="'docente-id'+docente.id"
+                :key="'docente-id' + docente.id"
                 v-on:click.prevent="showDocentes(docente, DocentePerfis)"
-                :class="{'bg-custom':docenteClickado == docente.nome}"
+                :class="{ 'bg-custom': docenteClickado == docente.nome }"
                 style="cursor: pointer"
               >
                 <div style="width: 415px">
                   <td>
-                    <p style="width: 240px; text-align: start!important">{{docente.nome}}</p>
+                    <p style="width: 240px; text-align: start!important">
+                      {{ docente.nome }}
+                    </p>
                   </td>
                   <td>
-                    <p style="width: 130px">{{docente.apelido}}</p>
+                    <p style="width: 130px">{{ docente.apelido }}</p>
                   </td>
                   <td>
                     <div style="width: 45px">
                       <input
                         class="form-check-input position-static noHover"
-                        v-on:click.prevent="showDocentes(docente, DocentePerfis)"
+                        v-on:click.prevent="
+                          showDocentes(docente, DocentePerfis)
+                        "
                         type="checkbox"
                         v-model="docente.ativo"
                       />
@@ -98,7 +104,8 @@
             <template v-else>
               <tr>
                 <td colspan="2" class="text-center">
-                  <i class="fas fa-exclamation-triangle"></i> Nenhum docente encontrado!
+                  <i class="fas fa-exclamation-triangle"></i> Nenhum docente
+                  encontrado!
                 </td>
               </tr>
             </template>
@@ -123,7 +130,7 @@
                 <template v-if="!isEdit">
                   <input
                     type="text"
-                    :class="{'inputMaior': isEdit}"
+                    :class="{ inputMaior: isEdit }"
                     class="form-control form-control-sm"
                     id="nome"
                     v-model="docenteForm.nome"
@@ -173,19 +180,30 @@
                   class="form-group col m-0 px-0 border rounded-top"
                   style="height: 302px; border-color: rgba(0,0,0,0.125);"
                 >
-                  <table class="table table-sm" style=" max-height:300px!important; overflow:auto;">
+                  <table
+                    class="table table-sm"
+                    style=" max-height:300px!important; overflow:auto;"
+                  >
                     <tr class="thead-light">
                       <div class="sticky2 border" style="width:300px;">
                         <th scope="col" class="border-top-0">
                           <p class="p-header" style="width: 25px;"></p>
                         </th>
                         <th scope="col" class="border-top-0">
-                          <p class="p-header" style="width: 275px; text-align: start">Perfis</p>
+                          <p
+                            class="p-header"
+                            style="width: 275px; text-align: start"
+                          >
+                            Perfis
+                          </p>
                         </th>
                       </div>
                     </tr>
                     <tbody>
-                      <tr v-for="perfil in Perfis" :key="'perfil-id'+perfil.id">
+                      <tr
+                        v-for="perfil in Perfis"
+                        :key="'perfil-id' + perfil.id"
+                      >
                         <div style="width: 300px">
                           <td style="padding:0;broder:0;margin:0!important">
                             <div style="width:25px;">
@@ -199,7 +217,9 @@
                             </div>
                           </td>
                           <td>
-                            <p style="width:275px; text-align:start">{{perfil.nome}}</p>
+                            <p style="width:275px; text-align:start">
+                              {{ perfil.nome }}
+                            </p>
                           </td>
                         </div>
                       </tr>
@@ -275,38 +295,29 @@
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para adicionar docentes:</strong> Com o cartão à direita em branco, preencha-o. Em seguida,
-            clique em Adicionar
-            <i
-              class="fas fa-plus addbtn px-1"
-              style="font-size:12px"
-            ></i>
+            <strong>Para adicionar docentes:</strong> Com o cartão à direita em
+            branco, preencha-o. Em seguida, clique em Adicionar
+            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para editar ou deletar um docente:</strong>Na tabela, clique no docente que deseja alterar.
-            Logo após, no cartão à direita, altere as informações que desejar e clique em Salvar
-            <i
-              class="fas fa-check addbtn px-1"
-              style="font-size:12px"
-            ></i>
+            <strong>Para editar ou deletar um docente:</strong>Na tabela, clique
+            no docente que deseja alterar. Logo após, no cartão à direita,
+            altere as informações que desejar e clique em Salvar
+            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
             ou, para excluí-lo, clique em Deletar
-            <i
-              class="fas fa-times cancelbtn px-1"
-              style="font-size: 12px"
-            ></i>
+            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar
-            <i
-              class="fas fa-times cancelbtn px-1"
-              style="font-size: 12px"
-            ></i>
+            <strong>Para deixar o cartão em branco:</strong> No cartão, à
+            direita, clique em Cancelar
+            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para alterar a ordenação:</strong> Clique em Nome ou Apelido no cabeçalho da tabela para ordenação alfabética do mesmo.
+            <strong>Para alterar a ordenação:</strong> Clique em Nome ou Apelido
+            no cabeçalho da tabela para ordenação alfabética do mesmo.
           </li>
         </ul>
       </div>
@@ -733,10 +744,15 @@ button {
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
-  margin-right: 15px;
+  width: 32px !important;
+  margin-left: 4px;
+  margin-right: 4px;
   margin-top: 0px;
+  line-height: 50%;
+  margin-bottom: 0px;
   transition: all 0.3s ease 0s;
   cursor: pointer;
+  text-align: center !important;
 }
 i.fas,
 i.far {
