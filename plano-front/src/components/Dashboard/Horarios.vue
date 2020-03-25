@@ -13,15 +13,10 @@
           class="form-group col-xl-9 col-lg-9 col-md-8 col-sm-7 col-7 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
-          <b-button v-b-modal.modalSemestre title="Semestre" class="cancelbtn">
-            <i class="fas fa-calendar-alt"></i>
+          <b-button v-b-modal.modalFiltros title="Filtros" class="cancelbtn">
+            <i class="fas fa-list-ul"></i>
           </b-button>
           <div class="d-flex p-0 m-0">
-            <!-- <b-button v-b-modal.modalCursos title="Cursos" class="cancelbtn">
-              <i class="fas fa-graduation-cap"></i>
-            </b-button> -->
-
-            <!--  -->
             <button
               type="button"
               class="relatbtn"
@@ -139,123 +134,16 @@
       <!-- ----------------------------------------------------------------------------------------------- -->
     </div>
 
-    <b-modal
-      id="modalCursos"
-      ref="modalCursos"
-      title="Selecione os Cursos"
-      size="md"
-      scrollable
-    >
-      <div class="col m-0 p-0" style="width:max-content;heigth:max-content;">
-        <table
-          class="table table-sm modal-table table-bordered"
-          style="max-height: 450px !important;"
-        >
-          <thead class="thead-light">
-            <tr>
-              <div
-                style="width: max-content; height: 18px !important; font-size: 11px!important"
-                class="sticky"
-              >
-                <th>
-                  <p style="width:25px" class="p-header"></p>
-                </th>
-                <th>
-                  <p style="width:50px; text-align:center" class="p-header">
-                    Cód.
-                  </p>
-                </th>
-                <th>
-                  <p class="p-header" style="width: 384px; text-align:start">
-                    Nome
-                  </p>
-                </th>
-              </div>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- v-for em tr -->
-            <tr
-              v-for="curso in options_Cursos"
-              :key="'curso-id-' + curso.value"
-            >
-              <div style="width: max-content; height: 22px !important">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      :value="curso.value"
-                      v-model="cursosSelecionados"
-                      class="form-check-input position-static m-0"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p style="width:50px; text-align:center;">
-                    {{ curso.codigo }}
-                  </p>
-                </td>
-                <td>
-                  <p style="width:384px; text-align:start;">{{ curso.nome }}</p>
-                </td>
-              </div>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div slot="modal-footer" class="w-100 m-0" style="display: flex">
-        <div class="row ml-0 w-100">
-          <b-button
-            class="btn-azul btn-df mr-2"
-            variant="success"
-            @click="toggleAll()"
-            >Selecionar Todos</b-button
-          >
-          <b-button
-            class="btn-cinza btn-df mr-2"
-            variant="secondary"
-            @click="distoggleAll()"
-            >Desmarcar Todos</b-button
-          >
-        </div>
-        <b-button
-          variant="success"
-          v-on:click="okBtn()"
-          class="btn-verde btn-df mr-2"
-          style="padding-right:15px!important; padding-left:15px!important;"
-          >OK</b-button
-        >
-      </div>
-    </b-modal>
-
     <!-- MODAL SEMESTRE -->
-    <b-modal
-      id="modalSemestre"
-      ref="modalSemestre"
-      scrollable
-      title="Selecione os semestres"
-    >
+    <b-modal id="modalFiltros" ref="modalFiltros" scrollable title="Filtros">
       <div class="p-0 m-0" style="height: 30px; width: 465px;">
         <ul
           class="nav nav-tabs card-header-tabs m-0"
           style="font-size: 11px!important;height: 30px;"
         >
-          <li class="nav-item" @click="nav_ativo = 'semestre'">
-            <a
-              class="nav-link border border-right-0"
-              :class="[
-                {
-                  active: nav_ativo == 'semestre'
-                },
-                'clickable'
-              ]"
-              >Semestre</a
-            >
-          </li>
           <li class="nav-item" @click="nav_ativo = 'cursos'">
             <a
-              class="nav-link border"
+              class="nav-link border border-right-0"
               :class="[
                 {
                   active: nav_ativo == 'cursos'
@@ -263,6 +151,18 @@
                 'clickable'
               ]"
               >Cursos</a
+            >
+          </li>
+          <li class="nav-item" @click="nav_ativo = 'semestre'">
+            <a
+              class="nav-link border"
+              :class="[
+                {
+                  active: nav_ativo == 'semestre'
+                },
+                'clickable'
+              ]"
+              >Semestre</a
             >
           </li>
         </ul>
@@ -428,7 +328,7 @@
 
         <b-button
           variant="success"
-          @click="okBtn()"
+          @click="btnOK()"
           class="btn-verde btn-df mr-2"
           style="padding-right:15px!important; padding-left:15px!important;"
           >OK</b-button
@@ -521,7 +421,7 @@ export default {
       semestre_1Ativo: true,
       semestre_2Ativo: true,
       semestreAtual: 3,
-      nav_ativo: "semestre"
+      nav_ativo: "cursos"
     };
   },
 
@@ -546,7 +446,6 @@ export default {
       } else {
         this.semestreAtual = undefined;
       }
-      this.$refs.modalSemestre.hide();
     },
     selectAllSemestre() {
       this.semestre_1Ativo = true;
@@ -578,10 +477,11 @@ export default {
       else return "false";
     },
 
-    okBtn() {
+    btnOK() {
       this.btnOKSemestre();
       this.cursos = [...this.cursosSelecionados];
-      this.$refs.modalCursos.hide();
+      this.nav_ativo = "cursos";
+      this.$refs.modalFiltros.hide();
     },
 
     emptyTurmas() {

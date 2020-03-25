@@ -13,15 +13,8 @@
           class="form-group col-xl-9 col-lg-8 col-md-7 col-sm-6 col-7 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
-          <b-button v-b-modal.modalSemestre title="Semestre" class="cancelbtn">
-            <i class="fas fa-calendar-alt"></i>
-          </b-button>
-          <b-button
-            v-b-modal.modalLaboratorios
-            title="Laboratórios"
-            class="cancelbtn"
-          >
-            <i class="fas fa-list-ul" style="padding-left: 6.5px"></i>
+          <b-button v-b-modal.modalFiltros title="Semestre" class="cancelbtn">
+            <i class="fas fa-list-ul"></i>
           </b-button>
           <div class="d-flex p-0 m-0">
             <button
@@ -923,7 +916,7 @@
               v-for="lab in LaboratoriosAtivados"
               :key="'2-lab-id' + lab.id"
             >
-              <h5>{{lab.nome}}</h5>
+              <h5>{{ lab.nome }}</h5>
 
               <table class="tg">
                 <tr>
@@ -1754,6 +1747,7 @@
                       "
                     >
                       <p
+                        :key="turma.Displina + disciplina.id"
                         v-for="disciplina in Disciplinas"
                         v-if="turma.Disciplina === disciplina.id"
                         v-b-popover.html.hover.top="{
@@ -1773,14 +1767,44 @@
       </template>
     </div>
 
-    <b-modal
-      id="modalSemestre"
-      ref="modalSemestre"
-      scrollable
-      title="Selecione os semestres"
-    >
-      <div class="col m-0 p-0" style="width:max-content;heigth:max-content;">
+    <b-modal id="modalFiltros" ref="modalFiltros" scrollable title="Filtros">
+      <div class="p-0 m-0" style="height: 30px; width: 465px;">
+        <ul
+          class="nav nav-tabs card-header-tabs m-0"
+          style="font-size: 11px!important;height: 30px;"
+        >
+          <li class="nav-item" @click="nav_ativo = 'labs'">
+            <a
+              class="nav-link border border-right-0"
+              :class="[
+                {
+                  active: nav_ativo == 'labs'
+                },
+                'clickable'
+              ]"
+              >Laborátorios</a
+            >
+          </li>
+          <li class="nav-item" @click="nav_ativo = 'semestre'">
+            <a
+              class="nav-link border"
+              :class="[
+                {
+                  active: nav_ativo == 'semestre'
+                },
+                'clickable'
+              ]"
+              >Semestre</a
+            >
+          </li>
+        </ul>
+      </div>
+      <div
+        class="col m-0 p-0"
+        style="width:max-content;height: 450px!important;"
+      >
         <table
+          v-if="nav_ativo == 'semestre'"
           class="table table-bordered table-sm modal-table"
           style="max-height: 392px !important;"
         >
@@ -1839,42 +1863,9 @@
             </tr>
           </tbody>
         </table>
-      </div>
-
-      <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
-        <div class="w-100 ml-2">
-          <b-button
-            class="btn-azul btn-df mr-2"
-            variant="success"
-            @click="selectAllSemestre()"
-            >Selecionar Todos</b-button
-          >
-          <b-button
-            class="btn-cinza btn-df mr-2"
-            variant="secondary"
-            @click="selectNoneSemestre()"
-            >Desmarcar Todos</b-button
-          >
-        </div>
-        <b-button
-          variant="success"
-          @click="btnOKSemestre()"
-          class="btn-verde btn-df mr-2"
-          style="padding-right:15px!important; padding-left:15px!important;"
-          >OK</b-button
-        >
-      </div>
-    </b-modal>
-    <!-- Modals do botão para escolher laboratorio -->
-    <b-modal
-      id="modalLaboratorios"
-      ref="LaboratoriosModal"
-      size="md"
-      title="Selecione os laboratórios"
-      scrollable
-    >
-      <div class="col m-0 p-0" style="width:max-content;heigth:max-content;">
+        <!-- TABLE LABS -->
         <table
+          v-else
           class="table table-sm modal-table table-bordered"
           style="max-height: 392px !important;"
         >
@@ -1921,6 +1912,56 @@
           </tbody>
         </table>
       </div>
+
+      <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
+        <div class="w-100">
+          <template v-if="nav_ativo == 'semestre'">
+            <b-button
+              class="btn-azul btn-df mr-2"
+              variant="success"
+              @click="selectAllSemestre()"
+              >Selecionar Todos</b-button
+            >
+            <b-button
+              class="btn-cinza btn-df mr-2"
+              variant="secondary"
+              @click="selectNoneSemestre()"
+              >Desmarcar Todos</b-button
+            >
+          </template>
+
+          <template v-else>
+            <b-button
+              class="btn-azul btn-df mr-2"
+              variant="success"
+              @click="selectAll()"
+              >Selecionar Todos</b-button
+            >
+            <b-button
+              class="btn-cinza btn-df mr-2"
+              variant="secondary"
+              @click="selectNone()"
+              >Desmarcar Todos</b-button
+            >
+          </template>
+        </div>
+        <b-button
+          variant="success"
+          @click="btnOK()"
+          class="btn-verde btn-df mr-2"
+          style="padding-right:15px!important; padding-left:15px!important;"
+          >OK</b-button
+        >
+      </div>
+    </b-modal>
+    <!-- Modals do botão para escolher laboratorio -->
+    <b-modal
+      id="modalLaboratorios"
+      ref="LaboratoriosModal"
+      size="md"
+      title="Selecione os laboratórios"
+      scrollable
+    >
       <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
         <div class="w-100 m-0 d-flex">
           <b-button
@@ -1988,7 +2029,8 @@ export default {
       LaboratoriosAtivados: [],
       semestre_1Ativo: true,
       semestre_2Ativo: true,
-      semestreAtual: 3
+      semestreAtual: 3,
+      nav_ativo: "labs"
     };
   },
   methods: {
@@ -2002,7 +2044,6 @@ export default {
       } else {
         this.semestreAtual = undefined;
       }
-      this.$refs.modalSemestre.hide();
     },
     selectAllSemestre() {
       this.semestre_1Ativo = true;
@@ -2013,11 +2054,13 @@ export default {
       this.semestre_2Ativo = false;
     },
     btnOK() {
+      this.btnOKSemestre();
       //Somente atualiza o vetor de perfis ativados quando o botão OK for clickado
       this.LaboratoriosAtivados = [
         ..._.orderBy(this.LaboratoriosSelecionados, "id")
       ];
-      this.$refs.LaboratoriosModal.hide();
+      this.nav_ativo = "labs";
+      this.$refs.modalFiltros.hide();
     },
 
     selectAll() {
@@ -2217,7 +2260,7 @@ h5 {
   border-color: rgba(189, 189, 189, 0.623);
   color: #333;
   background-color: #e9ecef !important;
-  min-width: 50px!important;
+  min-width: 50px !important;
 }
 .tg .tg-0lax {
   vertical-align: center;
@@ -2238,7 +2281,7 @@ h5 {
   padding-left: 1px !important;
   margin: 0 !important;
 }
- @media screen and (min-width: 1570px) and (max-width: 1741px) {
+@media screen and (min-width: 1570px) and (max-width: 1741px) {
   .marg {
     margin-right: 10% !important;
   }
@@ -2253,7 +2296,6 @@ h5 {
     margin-right: 22% !important;
   }
 }
-
 
 /* ====== BOTÕES ====== */
 button {
@@ -2446,5 +2488,21 @@ i.far {
 .div-table {
   display: inline;
   position: relative;
+}
+.clickable {
+  cursor: pointer;
+}
+.nav-link {
+  color: #007bff !important;
+  user-select: none; /* supported by Chrome and Opera */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none;
+}
+.active {
+  background-color: #e9ecef !important;
+  color: #495057 !important;
+  cursor: default;
 }
 </style>
