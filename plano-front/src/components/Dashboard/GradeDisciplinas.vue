@@ -14,16 +14,21 @@
           style="justify-content: flex-end!important;"
         >
           <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
-            <select v-model="novoAno" v-on:change="runNovoAno()" style="height: 25px!important">
-            <option v-for="i in Array.from(Array(11), (e, i)=>i -5)" :value="AnoAtual + i">{{AnoAtual + i}}</option>
+            <select
+              v-model="novoAno"
+              v-on:change="runNovoAno()"
+              style="height: 25px!important"
+            >
+              <option
+                v-for="i in Array.from(Array(11), (e, i) => i - 5)"
+                :value="AnoAtual + i"
+                >{{ AnoAtual + i }}</option
+              >
             </select>
           </div>
           <div class="d-flex">
-            <b-button v-b-modal.modalPerfis title="Perfis" class="cancelbtn">
+            <b-button v-b-modal.modalFiltros title="Cursos" class="cancelbtn">
               <i class="fas fa-list-ul"></i>
-            </b-button>
-            <b-button v-b-modal.modalCursos title="Cursos" class="cancelbtn">
-              <i class="fas fa-graduation-cap"></i>
             </b-button>
             <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
               <i class="fas fa-question"></i>
@@ -36,7 +41,7 @@
     <div class="w-100 mb-2 border-bottom"></div>
 
     <div class="divTable">
-      <table class="table table-hover border table-sm">
+      <table class="main-table table table-hover border table-sm">
         <thead class="thead-light">
           <tr>
             <div class="sticky" style="width: max-content">
@@ -194,45 +199,128 @@
       </table>
     </div>
 
-    <!-- MODAL CURSOS -->
+    <!-- MODAL FILTROS -->
     <b-modal
-      id="modalCursos"
-      class="mw-100"
-      style="width: max-content"
-      ref="modalCursos"
+      id="modalFiltros"
+      ref="modalFiltros"
       scrollable
-      title="Selecione os Cursos"
-      :size="'sm'"
+      size="md"
+      title="Filtros"
     >
+      <div class="p-0 m-0" style="height: 30px; width: 465px;">
+        <ul
+          class="nav nav-tabs card-header-tabs m-0"
+          style="font-size: 11px!important;height: 30px;"
+        >
+          <li class="nav-item" @click="nav_ativo = 'perfis'">
+            <a
+              class="nav-link border border-right-0"
+              :class="[
+                {
+                  active: nav_ativo == 'perfis'
+                },
+                'clickable'
+              ]"
+              >Perfis</a
+            >
+          </li>
+          <li class="nav-item" @click="nav_ativo = 'cursos'">
+            <a
+              class="nav-link border"
+              :class="[
+                {
+                  active: nav_ativo == 'cursos'
+                },
+                'clickable'
+              ]"
+              >Cursos</a
+            >
+          </li>
+        </ul>
+      </div>
       <div
-        class="col m-0 p-0 border"
-        style="width:max-content; border-color: rgba(0,0,0,0.125);"
+        class="col m-0 p-0"
+        style="width:max-content;height: 450px!important;"
       >
-        <table class="m-table table table-sm modal-table">
-          <tr>
-            <div style="font-size: 11px!important; height: 18px !important">
-              <th class="border-0">
-                <p style="width:20px" class="p-header"></p>
-              </th>
-              <th class="border-0">
-                <p style="width:40px" class="p-header">Cód.</p>
-              </th>
-              <th class="border-0">
-                <p class="p-header" style="width: 200px; text-align:start">
-                  Nome
-                </p>
-              </th>
-            </div>
-          </tr>
+        <!-- TABLE PERFIS -->
+        <table
+          v-if="nav_ativo == 'perfis'"
+          class="table table-sm modal-table table-bordered"
+          style="max-height: 450px !important;"
+        >
+          <thead class="thead-light">
+            <tr>
+              <div
+                style="width: max-content; height: 18px !important; font-size: 11px!important"
+                class="sticky"
+              >
+                <th>
+                  <p style="width:25px" class="p-header"></p>
+                </th>
+                <th>
+                  <p class="p-header" style="width: 435px; text-align:start">
+                    Nome
+                  </p>
+                </th>
+              </div>
+            </tr>
+          </thead>
           <tbody>
-            <!-- v-for em tr -->
+            <tr v-for="perfil in Perfis" :key="'perfil-id' + perfil.id">
+              <div style="width: max-content">
+                <td>
+                  <div style="width: 25px; height: inherit;" class="px-1">
+                    <input
+                      type="checkbox"
+                      v-model="PerfisSelecionados"
+                      :value="perfil"
+                      class="form-check-input position-static m-0"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <p style="width:435px; text-align:start">{{ perfil.nome }}</p>
+                </td>
+              </div>
+            </tr>
+          </tbody>
+        </table>
+        <!-- TABLE CURSOS -->
+        <table
+          v-else
+          class="table table-sm modal-table table-bordered"
+          style="max-height: 450px !important;"
+        >
+          <thead class="thead-light">
+            <tr>
+              <div
+                style="width: max-content; height: 18px !important; font-size: 11px!important"
+                class="sticky "
+              >
+                <th>
+                  <p style="width:25px" class="p-header"></p>
+                </th>
+                <th>
+                  <p class="p-header" style="width: 50px; text-align: center;">
+                    Cód.
+                  </p>
+                </th>
+                <th>
+                  <p class="p-header" style="width: 385px; text-align:start">
+                    Nome
+                  </p>
+                </th>
+              </div>
+            </tr>
+          </thead>
+          <tbody>
             <tr
               v-for="curso in options_Cursos"
               :key="'curso-id-' + curso.value"
             >
               <div style="width: max-content; height: 22px !important">
                 <td>
-                  <div style="width:20px;">
+                  <div style="width: 25px; height: inherit;" class="px-1">
                     <input
                       type="checkbox"
                       :value="curso.value"
@@ -242,36 +330,54 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:40px; text-align:center;">
+                  <p style="width:50px; text-align:center;">
                     {{ curso.codigo.toUpperCase() }}
                   </p>
                 </td>
                 <td>
-                  <p style="width:200px; text-align:start;">{{ curso.nome }}</p>
+                  <p style="width:385px; text-align:start;">{{ curso.nome }}</p>
                 </td>
               </div>
             </tr>
           </tbody>
         </table>
       </div>
+
       <div slot="modal-footer" class="w-100 m-0" style="display: flex">
-        <div class="row ml-0 w-100">
-          <b-button
-            class="btn-azul btn-df mr-2"
-            variant="success"
-            @click="selectAllCursos()"
-            >Selecionar Todos</b-button
-          >
-          <b-button
-            class="btn-cinza btn-df mr-2"
-            variant="secondary"
-            @click="selectNoneCursos()"
-            >Desmarcar Todos</b-button
-          >
+        <div class="w-100">
+          <template v-if="nav_ativo == 'perfis'">
+            <b-button
+              class="btn-azul btn-df mr-2"
+              variant="success"
+              @click="selectAllPerfis()"
+              >Selecionar Todos</b-button
+            >
+            <b-button
+              class="btn-cinza btn-df mr-2"
+              variant="secondary"
+              @click="selectNonePerfis()"
+              >Desmarcar Todos</b-button
+            >
+          </template>
+
+          <template v-else>
+            <b-button
+              class="btn-azul btn-df mr-2"
+              variant="success"
+              @click="selectAllCursos()"
+              >Selecionar Todos</b-button
+            >
+            <b-button
+              class="btn-cinza btn-df mr-2"
+              variant="secondary"
+              @click="selectNoneCursos()"
+              >Desmarcar Todos</b-button
+            >
+          </template>
         </div>
         <b-button
           variant="success"
-          v-on:click="btnOkCursos()"
+          v-on:click="btnOK()"
           class="btn-verde btn-df mr-2"
           style="padding-right:15px!important; padding-left:15px!important;"
           >OK</b-button
@@ -353,25 +459,13 @@
       <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
         <div class="row ml-2 w-100">
           <b-button
-            class="btn-azul btn-df mr-2"
             variant="success"
-            @click="selectAllPerfis()"
-            >Selecionar Todos</b-button
-          >
-          <b-button
-            class="btn-cinza btn-df mr-2"
-            variant="secondary"
-            @click="selectNonePerfis()"
-            >Desmarcar Todos</b-button
+            @click="btnOkPerfis()"
+            class="btn-verde btn-df mr-2"
+            style="padding-right:15px!important; padding-left:15px!important;"
+            >OK</b-button
           >
         </div>
-        <b-button
-          variant="success"
-          @click="btnOkPerfis()"
-          class="btn-verde btn-df mr-2"
-          style="padding-right:15px!important; padding-left:15px!important;"
-          >OK</b-button
-        >
       </div>
     </b-modal>
   </div>
@@ -427,7 +521,8 @@ export default {
           codigo: "65B"
         }
       ],
-      showCurso: undefined
+      showCurso: undefined,
+      nav_ativo: "perfis"
     };
   },
 
@@ -438,18 +533,20 @@ export default {
   },
 
   methods: {
-    //PERFIS SELECTIONS
-    btnOkPerfis() {
-      //Somente atualiza o vetor de perfis ativados quando o botão OK for clickado
+    btnOK() {
+      //Somente atualiza perfis ativados quando o botão OK for clickado
       this.PerfisAtivados = [...this.PerfisSelecionados];
       this.$refs.PerfisModal.hide();
+      //Somente atualiza cursos se alterar
+      this.cursos = [...this.cursosSelecionados];
+      this.$refs.modalFiltros.hide();
     },
+    //PERFIS SELECTIONS
     selectAllPerfis() {
       if (this.PerfisSelecionados != []) this.PerfisSelecionados = [];
       for (var i = 0; i < this.$store.state.perfil.Perfis.length; i++)
         this.PerfisSelecionados.push(this.$store.state.perfil.Perfis[i]);
     },
-
     selectNonePerfis() {
       this.PerfisSelecionados = [];
     },
@@ -463,18 +560,12 @@ export default {
       if (this.cursosSelecionados.length !== 5)
         this.cursosSelecionados = [1, 2, 3, 4, 5];
     },
-    btnOkCursos() {
-      this.cursos = [...this.cursosSelecionados];
-      this.$refs.modalCursos.hide();
-    },
-
     inPerfil: function(perfil, disciplinas) {
       //Verifica se uma disciplina faz parte de um perfil
       return disciplinas.filter(function(disciplina) {
         return disciplina.Perfil === perfil.id;
       });
     },
-
     runNovoAno: function() {
       //executa runAll, modificando o ano
       if (this.ano != this.novoAno) {
@@ -743,8 +834,8 @@ export default {
     },
 
     AnoAtual() {
-      return this.$store.state.plano.Plano[0].ano
-    },
+      return this.$store.state.plano.Plano[0].ano;
+    }
   },
   watch: {
     CursosSelecionados: function() {
@@ -769,8 +860,8 @@ export default {
   padding-left: 0;
   margin: 0 !important;
 }
-/* Tabela Lucas */
-.p-header {
+/* main-table */
+.main-table .p-header {
   padding: 0 5px 0 5px !important;
   margin: 0;
   font-size: 11px;
@@ -787,7 +878,7 @@ export default {
   width: -moz-max-content;
   width: max-content;
 }
-.divTable table {
+.divTable .main-table {
   display: block !important;
   overflow: auto !important;
   font-size: 11px !important;
@@ -798,57 +889,58 @@ export default {
   height: -moz-calc(100vh - 95px);
   height: calc(100vh - 95px);
 }
-tbody {
+.main-table tbody {
   max-height: 100%;
   width: 100%;
 }
-table td {
+.main-table td {
   text-align: center;
   vertical-align: middle !important;
   padding: 0 !important;
   height: 18px !important;
 }
-table p {
+.main-table p {
   margin-bottom: 0 !important;
   text-align: center;
   padding-right: 5px !important;
   padding-left: 5px !important;
   font-size: 11px !important;
 }
-tr thead {
+.main-tabletr thead {
   display: block !important;
 }
-th {
+.main-table th {
   padding: 0 !important;
   font-size: 14px !important;
   text-align: center !important;
   height: 18px !important;
 }
-table input {
+.main-table input {
   height: 11px !important;
   text-align: center !important;
 }
-input[type="checkbox"] {
+.main-table input[type="checkbox"] {
   width: 16px !important;
   height: 14px !important;
   text-align: center !important;
 }
-table input[type="checkbox"] {
+.main-table input[type="checkbox"] {
   margin-left: 0 !important;
   margin-top: 4px !important;
 }
-input[type="text"] {
+.main-table input[type="text"] {
   height: 25px !important;
   font-size: 11px !important;
 }
 .sticky {
   display: block !important;
   overflow: hidden !important;
-  height: 20px !important;
   position: sticky !important;
   position: -webkit-sticky !important;
   top: 0 !important;
-  z-index: 3 !important;
+  display: block !important;
+  overflow: hidden !important;
+  z-index: 3;
 }
 /* ============================================ */
 /* Formularios no topo da tela */
@@ -1021,60 +1113,66 @@ i.far {
   -webkit-text-stroke-color: #ada89a;
 }
 
-/* TABELA MODAL */
+/* ==== MODAL TABLE ==== */
 .modal-table {
   display: block !important;
-  overflow: auto !important;
-  font-size: 11px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  font-size: 10px !important;
   font-weight: normal !important;
   background-color: white;
   margin: 0 !important;
 }
-
+.modal-table tr thead {
+  display: block;
+}
+.modal-table th {
+  padding: 0 !important;
+  text-align: center !important;
+  height: 18px !important;
+  border-bottom: 0 !important;
+  border-top: 0 !important;
+}
+.modal-table .p-header {
+  padding: 0px 5px 0px 5px !important;
+  margin: 0 !important;
+  text-align: start;
+  height: 18px !important;
+}
 .modal-table tbody {
   max-height: 100%;
   width: 100%;
 }
-
 .modal-table td {
+  border-bottom: 0;
   text-align: center;
   vertical-align: middle !important;
   padding: 0 !important;
-  font-size: 10px !important;
-  height: 22px !important;
-}
-
-.modal-table tr thead {
-  display: block;
-}
-
-.modal-table th {
-  padding: 0 !important;
-  font-size: 14px;
-  text-align: center !important;
-  height: 18px !important;
-}
-
-.modal-table .p-header {
-  padding: 0 5px 0 5px !important;
   margin: 0 !important;
-  font-size: 11px !important;
-  text-align: center;
-  height: 18px !important;
+  /* height: 22px !important; */
 }
-
 .modal-table p {
-  margin-bottom: 0 !important;
+  margin: 0 !important;
   text-align: center;
+  padding: 0 !important;
   padding-right: 5px !important;
   padding-left: 5px !important;
-  font-size: 10px !important;
 }
-
 .modal-table input[type="checkbox"] {
   margin-left: 0 !important;
   margin-top: 4px !important;
   margin-bottom: auto !important;
+  height: 13px !important;
+}
+/* FIM MODAL TABLE */
+.clickable {
+  color: #007bff !important;
+  cursor: pointer;
+}
+.active {
+  background-color: #e9ecef !important;
+  color: #495057 !important;
+  cursor: default;
 }
 
 @media screen and (max-width: 519px) {

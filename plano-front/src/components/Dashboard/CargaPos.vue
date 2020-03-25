@@ -555,7 +555,10 @@
           </li>
         </ul>
       </div>
-      <div class="col m-0 p-0" style="width:max-content;heigth:max-content;">
+      <div
+        class="col m-0 p-0"
+        style="width:max-content;height: 450px!important;"
+      >
         <table
           class="table table-bordered table-sm modal-table"
           style="max-height: 392px !important;"

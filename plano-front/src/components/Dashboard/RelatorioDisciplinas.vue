@@ -275,100 +275,6 @@
       </table>
     </div>
 
-    <b-modal
-      id="modalSemestre"
-      ref="modalSemestre"
-      size="md"
-      title="Selecione os semestres"
-      scrollable
-    >
-      <div class="col m-0 p-0" style="width:max-content;heigth:max-content;">
-        <table
-          class="table table-bordered table-sm modal-table"
-          style="max-height: 392px !important;"
-        >
-          <thead class="thead-light">
-            <tr>
-              <div
-                style="width: max-content; height: 18px !important; font-size: 11px!important"
-                class="sticky"
-              >
-                <th>
-                  <p style="width:25px" class="p-header"></p>
-                </th>
-                <th>
-                  <p
-                    class="p-header clickable-header"
-                    style="width: 435px; text-align: start;"
-                  >
-                    Semestre Letivo
-                  </p>
-                </th>
-              </div>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <div style="width: max-content">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      class="form-check-input position-static m-0"
-                      v-model="semestre_1Ativo"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p style="width:435px; text-align:start">Primeiro semestre</p>
-                </td>
-              </div>
-            </tr>
-            <tr>
-              <div style="width: max-content">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      class="form-check-input position-static m-0"
-                      v-model="semestre_2Ativo"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p style="width:435px; text-align:start">Segundo semestre</p>
-                </td>
-              </div>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
-        <div class="w-100 ml-2">
-          <b-button
-            class="btn-azul btn-df mr-2"
-            variant="success"
-            @click="selectAllSemestre()"
-            >Selecionar Todos</b-button
-          >
-          <b-button
-            class="btn-cinza btn-df mr-2"
-            variant="secondary"
-            @click="selectNoneSemestre()"
-            >Desmarcar Todos</b-button
-          >
-        </div>
-        <b-button
-          variant="success"
-          @click="btnOKSemestre()"
-          class="btn-verde btn-df mr-2"
-          style="padding-right:15px!important; padding-left:15px!important;"
-          >OK</b-button
-        >
-      </div>
-    </b-modal>
-
     <!-- MODAL DE AJUDA -->
     <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
       <div class="modal-body">
@@ -393,10 +299,14 @@
             <font style="font-style:italic;">download</font> do mesmo.
           </li>
           <li class="list-group-item">
-            <strong>Para alterar ordenação:</strong> Clique em Cod. no cabeçalho da tabela para ordenar por código, ou em Nome para ordenar por ordem alfabética, ou em Perfil para ordenar por perfil.
+            <strong>Para alterar ordenação:</strong> Clique em Cod. no cabeçalho
+            da tabela para ordenar por código, ou em Nome para ordenar por ordem
+            alfabética, ou em Perfil para ordenar por perfil.
           </li>
           <li class="list-group-item">
-            <strong>Para visualizar divisões de vagas:</strong> Clique no número de vagas de uma turma para visualizar a alocação das vagas por cursos.
+            <strong>Para visualizar divisões de vagas:</strong> Clique no número
+            de vagas de uma turma para visualizar a alocação das vagas por
+            cursos.
           </li>
         </ul>
       </div>
@@ -411,21 +321,40 @@
       size="md"
       title="Filtros"
     >
-      <div class="p-0 m-0" style="height: 30px; width: 465px;">
+      <div class="p-0 m-0 hhed" style="height: 30px; width: 465px;">
         <ul
           class="nav nav-tabs card-header-tabs m-0"
           style="font-size: 11px!important;height: 30px;"
         >
-          <li class="nav-item" @click="nav_ativo = 'disciplinas'">
+          <li class="nav-item" @click="showSearch(), (search = '')">
             <a
-              class="nav-link border border-right-0 clickable"
+              class="nav-link border border-right-0 "
+              :class="{
+                clickable: nav_ativo != 'semestre'
+              }"
+              ><i
+                v-if="show_search == false"
+                class="fas fa-search"
+                style="font-size: 12px;width: 12px; padding-top: 0;"
+              ></i>
+              <i
+                v-else
+                style="font-size: 12px;width: 12px; padding-top: 0"
+                class="fas fa-times"
+              ></i
+            ></a>
+          </li>
+
+          <li class="nav-item" @click="changeTab('disciplinas')">
+            <a
+              class="nav-link border border-right-0  clickable"
               :class="{
                 active: nav_ativo == 'disciplinas'
               }"
               >Disciplinas</a
             >
           </li>
-          <li class="nav-item" @click="nav_ativo = 'semestre'">
+          <li class="nav-item" @click="changeTab('semestre')">
             <a
               class="nav-link border clickable"
               :class="{
@@ -468,22 +397,7 @@
                 class="sticky "
               >
                 <th style="vertical-align: middle !important;">
-                  <p
-                    style="width:25px; text-align:center"
-                    class="p-header clickable"
-                    @click="(show_search = !show_search), (search = '')"
-                  >
-                    <i
-                      v-if="show_search == false"
-                      class="fas fa-search"
-                      style="font-size: 11px;padding-top: 4px"
-                    ></i>
-                    <i
-                      v-else
-                      style="font-size: 11px;padding-top: 4px"
-                      class="fas fa-times"
-                    ></i>
-                  </p>
+                  <p style="width:25px; text-align:center" class="p-header"></p>
                 </th>
                 <th>
                   <p
@@ -808,16 +722,16 @@
                 </th>
                 <th>
                   <p
-                          class="p-header clickable-header"
-                          style="width: 70px; text-align: start;"
-                          v-on:click="ordemCursos('vagasTotais')"
-                          title="Clique para ordenar por vagas extras"
+                    class="p-header clickable-header"
+                    style="width: 70px; text-align: start;"
+                    v-on:click="ordemCursos('vagasTotais')"
+                    title="Clique para ordenar por vagas extras"
                   >
                     Total
                     <i
-                            v-if="ordemCurso === 'vagasTotais'"
-                            style="font-size:0.6rem; text-align:right"
-                            class="fas fa-arrow-down fa-sm"
+                      v-if="ordemCurso === 'vagasTotais'"
+                      style="font-size:0.6rem; text-align:right"
+                      class="fas fa-arrow-down fa-sm"
                     ></i>
                   </p>
                 </th>
@@ -890,6 +804,21 @@ export default {
   },
 
   methods: {
+    showSearch() {
+      if (this.nav_ativo == "semestre") {
+        this.clearSearch();
+      } else {
+        this.show_search = !this.show_search;
+      }
+    },
+    changeTab(tab) {
+      this.nav_ativo = tab;
+      this.clearSearch();
+    },
+    clearSearch() {
+      this.show_search = false;
+      this.search = "";
+    },
     pdf() {
       pdfs.pdfRelatorioDisciplinas();
     },
@@ -913,11 +842,12 @@ export default {
       this.semestre_2Ativo = false;
     },
     btnOK() {
-      this.btnOKSemestre();
+      this.btnOKSemestre(); //Atualiza semestre selecionados
       //Somente atualiza o vetor de perfis ativados quando o botão OK for clickado
       this.DisciplinasAtivados = [
         ..._.orderBy(this.DisciplinasSelecionados, this.ordenacao)
       ];
+      this.clearSearch();
       this.$refs.modalFiltros.hide();
     },
 
@@ -1406,10 +1336,9 @@ i.far {
   height: 13px !important;
 }
 /* FIM MODAL TABLE */
-.nav-link {
-  color: #007bff !important;
-}
+
 .clickable {
+  color: #007bff !important;
   cursor: pointer;
 }
 .active {
@@ -1432,5 +1361,8 @@ i.far {
   -moz-animation-fill-mode: both;
   -o-animation-fill-mode: both;
   animation-fill-mode: both;
+}
+.disable-link {
+  color: #495057 !important;
 }
 </style>
