@@ -14,16 +14,10 @@
           class="form-group col-xl-10 col-lg-10 col-md-10 col-sm-10 col-9 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
-          <b-button v-b-modal.modalSemestre title="Filtros" class="cancelbtn">
-            <i class="fas fa-calendar-alt"></i>
-          </b-button>
-          <!--
-          <b-button v-b-modal.modalPerfis title="Perfis" class="cancelbtn">
+          <b-button v-b-modal.modalFiltros title="Filtros" class="cancelbtn">
             <i class="fas fa-list-ul"></i>
           </b-button>
-          <b-button v-b-modal.modalCursos title="Cursos" class="cancelbtn">
-            <i class="fas fa-graduation-cap"></i>
-          </b-button> -->
+
           <div class="d-flex">
             <template v-if="isAdd">
               <b-button
@@ -161,24 +155,12 @@
     </b-modal>
 
     <!-- MODAL SEMESTRE -->
-    <b-modal id="modalSemestre" ref="modalSemestre" scrollable title="Filtros">
+    <b-modal id="modalFiltros" ref="modalFiltros" scrollable title="Filtros">
       <div class="p-0 m-0" style="height: 30px; width: 465px;">
         <ul
           class="nav nav-tabs card-header-tabs m-0"
           style="font-size: 11px!important;height: 30px;"
         >
-          <li class="nav-item" @click="nav_ativo = 'semestre'">
-            <a
-              class="nav-link border border-right-0"
-              :class="[
-                {
-                  active: nav_ativo == 'semestre'
-                },
-                'clickable'
-              ]"
-              >Semestre</a
-            >
-          </li>
           <li class="nav-item" @click="nav_ativo = 'perfis'">
             <a
               class="nav-link border border-right-0"
@@ -193,7 +175,7 @@
           </li>
           <li class="nav-item" @click="nav_ativo = 'cursos'">
             <a
-              class="nav-link border"
+              class="nav-link border border-right-0"
               :class="[
                 {
                   active: nav_ativo == 'cursos'
@@ -203,77 +185,27 @@
               >Cursos</a
             >
           </li>
+          <li class="nav-item" @click="nav_ativo = 'semestre'">
+            <a
+              class="nav-link border"
+              :class="[
+                {
+                  active: nav_ativo == 'semestre'
+                },
+                'clickable'
+              ]"
+              >Semestre</a
+            >
+          </li>
         </ul>
       </div>
       <div
         class="col m-0 p-0"
         style="width:max-content;height: 450px!important;"
       >
-        <!-- TABLE SEMESTRE -->
-        <table
-          v-if="nav_ativo == 'semestre'"
-          class="table table-bordered table-sm modal-table"
-          style="max-height: 392px !important;"
-        >
-          <thead class="thead-light">
-            <tr>
-              <div
-                style="width: max-content; height: 18px !important; font-size: 11px!important"
-                class="sticky"
-              >
-                <th>
-                  <p style="width:25px" class="p-header"></p>
-                </th>
-                <th>
-                  <p
-                    class="p-header clickable-header"
-                    style="width: 435px; text-align: start;"
-                  >
-                    Semestre Letivo
-                  </p>
-                </th>
-              </div>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr>
-              <div style="width: max-content">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      class="form-check-input position-static m-0"
-                      v-model="semestre_1Ativo"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p style="width:435px; text-align:start">Primeiro semestre</p>
-                </td>
-              </div>
-            </tr>
-            <tr>
-              <div style="width: max-content">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      class="form-check-input position-static m-0"
-                      v-model="semestre_2Ativo"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p style="width:435px; text-align:start">Segundo semestre</p>
-                </td>
-              </div>
-            </tr>
-          </tbody>
-        </table>
         <!-- TABLE PERFIS -->
         <table
-          v-else-if="nav_ativo == 'perfis'"
+          v-if="nav_ativo == 'perfis'"
           class="table table-sm modal-table table-bordered"
           style="max-height: 450px !important;"
         >
@@ -316,9 +248,9 @@
         </table>
         <!-- TABLE CURSOS -->
         <table
-          v-else
+          v-else-if="nav_ativo == 'cursos'"
           class="table table-sm modal-table table-bordered"
-          style="max-height: 450px !important;"
+          style="height: 450px !important;"
         >
           <thead class="thead-light">
             <tr>
@@ -344,7 +276,7 @@
                   </p>
                 </th>
                 <th class="clickable-header" @click="ToggleNomeOrdering()">
-                  <p style="width:384px; text-align: start" class="p-header">
+                  <p style="width:385px; text-align: start" class="p-header">
                     Nome
                     <i
                       v-if="ordenacaoCurso == 'nome'"
@@ -373,9 +305,71 @@
                   <p style="width: 50px">{{ curso.codigo }}</p>
                 </td>
                 <td>
-                  <p style="width:384px; text-align: start;">
+                  <p style="width:385px; text-align: start;">
                     {{ curso.nome }}
                   </p>
+                </td>
+              </div>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- TABLE SEMESTRE -->
+        <table
+          v-else
+          class="table table-bordered table-sm modal-table"
+          style="max-height: 392px !important;"
+        >
+          <thead class="thead-light">
+            <tr>
+              <div
+                style="width: max-content; height: 18px !important; font-size: 11px!important"
+                class="sticky"
+              >
+                <th>
+                  <p style="width:25px" class="p-header"></p>
+                </th>
+                <th>
+                  <p
+                    class="p-header clickable-header"
+                    style="width: 435px; text-align: start;"
+                  >
+                    Semestre Letivo
+                  </p>
+                </th>
+              </div>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <div style="width: max-content">
+                <td>
+                  <div style="width: 25px; height: inherit;" class="px-1">
+                    <input
+                      type="checkbox"
+                      class="form-check-input position-static m-0"
+                      v-model="semestre_1Ativo"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <p style="width:435px; text-align:start">Primeiro semestre</p>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div style="width: max-content">
+                <td>
+                  <div style="width: 25px; height: inherit;" class="px-1">
+                    <input
+                      type="checkbox"
+                      class="form-check-input position-static m-0"
+                      v-model="semestre_2Ativo"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <p style="width:435px; text-align:start">Segundo semestre</p>
                 </td>
               </div>
             </tr>
@@ -746,7 +740,7 @@ export default {
       semestre_1Ativo: true,
       semestre_2Ativo: true,
       semestreAtual: 3,
-      nav_ativo: "semestre"
+      nav_ativo: "perfis"
     };
   },
 
@@ -799,7 +793,7 @@ export default {
       } else {
         this.semestreAtual = undefined;
       }
-      this.$refs.modalSemestre.hide();
+      this.$refs.modalFiltros.hide();
     },
     selectAllSemestre() {
       this.semestre_1Ativo = true;
@@ -1382,6 +1376,7 @@ i.far {
   margin-left: 0 !important;
   margin-top: 4px !important;
   margin-bottom: auto !important;
+  height: 13px !important;
 }
 /* FIM MODAL TABLE */
 .nav-link {
@@ -1549,5 +1544,4 @@ i.far {
   text-align: center !important;
   width: 100%;
 }
-
 </style>

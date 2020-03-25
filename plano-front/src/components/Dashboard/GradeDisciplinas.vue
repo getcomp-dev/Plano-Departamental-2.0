@@ -14,16 +14,9 @@
           style="justify-content: flex-end!important;"
         >
           <div class="input-group mr-3 ml-auto mb-0 mt-0 p-0">
-            <input
-              type="text"
-              class="form-control form-control-sm"
-              v-model="novoAno"
-            />
-            <div class="input-group-append">
-              <label class="input-group-text" v-on:click="runNovoAno()"
-                >Ano</label
-              >
-            </div>
+            <select v-model="novoAno" v-on:change="runNovoAno()" style="height: 25px!important">
+            <option v-for="i in Array.from(Array(11), (e, i)=>i -5)" :value="AnoAtual + i">{{AnoAtual + i}}</option>
+            </select>
           </div>
           <div class="d-flex">
             <b-button v-b-modal.modalPerfis title="Perfis" class="cancelbtn">
@@ -747,7 +740,11 @@ export default {
 
     isLoading() {
       return this.$store.state.isLoading;
-    }
+    },
+
+    AnoAtual() {
+      return this.$store.state.plano.Plano[0].ano
+    },
   },
   watch: {
     CursosSelecionados: function() {

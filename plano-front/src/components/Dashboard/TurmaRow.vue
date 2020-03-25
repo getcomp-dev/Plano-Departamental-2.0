@@ -129,7 +129,7 @@
 
     <td>
         <div style="width:32px">
-            <p style="width: 32px">
+            <p style="width: 32px; font-weight: bold">
                 {{totalPedidos()}}
             </p>
             <p style="width: 32px; margin:0;">

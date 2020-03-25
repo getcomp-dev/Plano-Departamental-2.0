@@ -870,10 +870,10 @@ export default {
         let disciplinas = _.orderBy(store.state.disciplina.Disciplinas, 'codigo')
         let turmasDisc = undefined
         tables.push({
-            text: 'Relação de turmas oferecidas por departamento - DCC', alignment: 'center', bold:true, fontSie:11
+            text: 'Relação de turmas oferecidas pelo Departamento de Ciência da Computação', alignment: 'center', bold:true, fontSize: 10
         })
         tables.push({
-            text: '1º Semestre - ' + store.state.plano.Plano[0].ano, alignment: 'center', bold:true, fontSie:10, margin: [0, 0, 0, 5]
+            text: '1º Semestre - ' + store.state.plano.Plano[0].ano, alignment: 'center', bold:true, fontSize: 10, margin: [0, 0, 0, 5]
         })
         for(let i = 0; i < disciplinas.length; i++){
             turmasDisc = this.turmasRelatorioDisciplinas(disciplinas[i], 1)
@@ -885,9 +885,9 @@ export default {
                         headerRows: 1,
                         color: '#426',
                         body: [
-                            [{text: disciplinas[i].codigo, alignment: 'left', bold: true, fontSize:10},
-                             {text: disciplinas[i].nome, alignment: 'left', bold: true, fontSize:10},
-                             {text: this.perfilDisciplina(disciplinas[i]), alignment: 'center', bold: true, fontSize:10}]
+                            [{text: disciplinas[i].codigo, alignment: 'left', bold: true, fontSize: 9},
+                             {text: disciplinas[i].nome, alignment: 'left', bold: true, fontSize: 9},
+                             {text: this.perfilDisciplina(disciplinas[i]), alignment: 'center', bold: true, fontSize: 9}]
                         ]
                     },
 
@@ -919,10 +919,10 @@ export default {
                             color: '#426',
                             body: [
                                 [
-                                    {text: 'T: ' + turmasDisc[j].letra, alignment: 'center', fontSize: 9},
-                                    {text: 'Docentes: ' + docentes, alignment: 'left', fontSize: 9},
-                                    {text: 'Horário: ' + horarioTotal, alignment: 'left', fontSize: 9},
-                                    {text: 'Vagas: ' + this.vagasTurma(turmasDisc[j], 1), alignment: 'left', fontSize: 9}]
+                                    {text: 'T: ' + turmasDisc[j].letra, alignment: 'center', fontSize: 8},
+                                    {text: 'Docentes: ' + docentes, alignment: 'left', fontSize: 8},
+                                    {text: 'Horário: ' + horarioTotal, alignment: 'left', fontSize: 8},
+                                    {text: 'Vagas: ' + this.vagasTurma(turmasDisc[j], 1), alignment: 'left', fontSize: 8}]
                             ]
                         },
                         layout: {
@@ -935,22 +935,26 @@ export default {
                     if(pedidosTurma.length > 0){
                         let tabelaCursosBody = [
                             [
-                                {text: 'Curso', alignment: 'center', bold: 'true', fontSize:9},
-                                {text: 'Grade', alignment: 'center', bold: 'true', fontSize:9},
-                                {text: 'Extra', alignment: 'center', bold: 'true', fontSize:9},
+                                {text: ''},
+                                {text: 'Curso', alignment: 'center', bold: 'true', fontSize: 8},
+                                {text: 'Grade', alignment: 'center', bold: 'true', fontSize: 8},
+                                {text: 'Extra', alignment: 'center', bold: 'true', fontSize: 8},
+                                {text: 'Total', alignment: 'center', bold: 'true', fontSize: 8},
                             ]
                         ]
                         for(let k = 0; k < pedidosTurma.length; k++){
                             tabelaCursosBody.push([
-                                {text: this.curso(pedidosTurma[k]).codigo + ' - ' + this.curso(pedidosTurma[k]).nome, alignment: 'left', fontSize:9},
-                                {text: pedidosTurma[k].vagasPeriodizadas, alignment: 'center', fontSize:9},
-                                {text: pedidosTurma[k].vagasNaoPeriodizadas, alignment: 'center', fontSize:9},
+                                {text: ''},
+                                {text: this.curso(pedidosTurma[k]).codigo + ' - ' + this.curso(pedidosTurma[k]).nome, alignment: 'left', fontSize: 8},
+                                {text: pedidosTurma[k].vagasPeriodizadas, alignment: 'center', fontSize: 8},
+                                {text: pedidosTurma[k].vagasNaoPeriodizadas, alignment: 'center', fontSize: 8},
+                                {text: pedidosTurma[k].vagasPeriodizadas + pedidosTurma[k].vagasNaoPeriodizadas, alignment: 'center', fontSize: 8},
                             ])
                         }
                         tables.push({
                             style: 'tableExample',
                             table: {
-                                widths: ['*', 24, 24, ],
+                                widths: [10, '*', 24, 24, 24],
                                 headerRows: 1,
                                 color: '#426',
                                 body: tabelaCursosBody
@@ -965,10 +969,10 @@ export default {
             }
         }
         tables.push({
-            text: 'Relação de turmas oferecidas por departamento - DCC', alignment: 'center', bold:true, fontSie:11, pageBreak:'before'
+            text: 'Relação de turmas oferecidas pelo Departamento de Ciência da Computação', alignment: 'center', bold:true, fontSize: 10, pageBreak:'before'
         })
         tables.push({
-            text: '2º Semestre - ' + store.state.plano.Plano[0].ano, alignment: 'center', bold:true, fontSie:10, margin: [0, 0, 0, 5]
+            text: '2º Semestre - ' + store.state.plano.Plano[0].ano, alignment: 'center', bold:true, fontSize: 10, margin: [0, 0, 0, 5]
         })
         for(let i = 0; i < disciplinas.length; i++){
             turmasDisc = this.turmasRelatorioDisciplinas(disciplinas[i], 2)
@@ -980,9 +984,9 @@ export default {
                         headerRows: 1,
                         color: '#426',
                         body: [
-                            [{text: disciplinas[i].codigo, alignment: 'left', bold: true, fontSize:10},
-                                {text: disciplinas[i].nome, alignment: 'left', bold: true, fontSize:10},
-                                {text: this.perfilDisciplina(disciplinas[i]), alignment: 'center', bold: true, fontSize:10}]
+                            [{text: disciplinas[i].codigo, alignment: 'left', bold: true, fontSize: 9},
+                                {text: disciplinas[i].nome, alignment: 'left', bold: true, fontSize: 9},
+                                {text: this.perfilDisciplina(disciplinas[i]), alignment: 'center', bold: true, fontSize: 9}]
                         ]
                     },
 
@@ -1014,10 +1018,10 @@ export default {
                             color: '#426',
                             body: [
                                 [
-                                    {text: 'T: ' + turmasDisc[j].letra, alignment: 'center', fontSize: 9},
-                                    {text: 'Docentes: ' + docentes, alignment: 'left', fontSize: 9},
-                                    {text: 'Horário: ' + horarioTotal, alignment: 'left', fontSize: 9},
-                                    {text: 'Vagas: ' + this.vagasTurma(turmasDisc[j], 2), alignment: 'left', fontSize: 9}]
+                                    {text: 'T: ' + turmasDisc[j].letra, alignment: 'center', fontSize: 8},
+                                    {text: 'Docentes: ' + docentes, alignment: 'left', fontSize: 8},
+                                    {text: 'Horário: ' + horarioTotal, alignment: 'left', fontSize: 8},
+                                    {text: 'Vagas: ' + this.vagasTurma(turmasDisc[j], 2), alignment: 'left', fontSize: 8}]
                             ]
                         },
                         layout: {
@@ -1030,22 +1034,26 @@ export default {
                     if(pedidosTurma.length > 0){
                         let tabelaCursosBody = [
                             [
-                                {text: 'Curso', alignment: 'center', bold: 'true', fontSize:9},
-                                {text: 'Grade', alignment: 'center', bold: 'true', fontSize:9},
-                                {text: 'Extra', alignment: 'center', bold: 'true', fontSize:9},
+                                {text: ''},
+                                {text: 'Curso', alignment: 'center', bold: 'true', fontSize: 8},
+                                {text: 'Grade', alignment: 'center', bold: 'true', fontSize: 8},
+                                {text: 'Extra', alignment: 'center', bold: 'true', fontSize: 8},
+                                {text: 'Total', alignment: 'center', bold: 'true', fontSize: 8},
                             ]
                         ]
                         for(let k = 0; k < pedidosTurma.length; k++){
                             tabelaCursosBody.push([
-                                {text: this.curso(pedidosTurma[k]).codigo + ' - ' + this.curso(pedidosTurma[k]).nome, alignment: 'left', fontSize:9},
-                                {text: pedidosTurma[k].vagasPeriodizadas, alignment: 'center', fontSize:9},
-                                {text: pedidosTurma[k].vagasNaoPeriodizadas, alignment: 'center', fontSize:9},
+                                {text: ''},
+                                {text: this.curso(pedidosTurma[k]).codigo + ' - ' + this.curso(pedidosTurma[k]).nome, alignment: 'left', fontSize: 8},
+                                {text: pedidosTurma[k].vagasPeriodizadas, alignment: 'center', fontSize: 8},
+                                {text: pedidosTurma[k].vagasNaoPeriodizadas, alignment: 'center', fontSize: 8},
+                                {text: pedidosTurma[k].vagasPeriodizadas + pedidosTurma[k].vagasNaoPeriodizadas, alignment: 'center', fontSize: 8},
                             ])
                         }
                         tables.push({
                             style: 'tableExample',
                             table: {
-                                widths: ['*', 24, 24, ],
+                                widths: [10, '*', 24, 24, 24],
                                 headerRows: 1,
                                 color: '#426',
                                 body: tabelaCursosBody
@@ -1062,9 +1070,11 @@ export default {
 
         var docDefinition = {
             content: tables,
-            header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10},
             footer: function(currentPage, pageCount) {
-                return  { text: currentPage.toString() + ' de ' + pageCount, alignment: 'right', margin:[0, 0, 30, 0], fontSize:8 }
+                return { columns: [
+                    { text:new Date(Date.now()).toLocaleString(), margin:[30, 10, 0, 0], fontSize:8, alignment: `left` },
+                    { text: currentPage.toString() + ' de ' + pageCount, alignment: 'right', margin:[0, 10, 30, 0], fontSize:8 }
+                    ] }
             }
         }
         pdfMake.createPdf(docDefinition).open()

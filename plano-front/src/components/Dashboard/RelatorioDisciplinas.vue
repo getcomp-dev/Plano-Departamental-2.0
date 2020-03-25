@@ -328,7 +328,10 @@
             <font style="font-style:italic;">download</font> do mesmo.
           </li>
           <li class="list-group-item">
-            <strong>Para alterar ordenação:</strong> Clique em Cod. no cabeçalho da tabela para ordenar por código, ou em Nome para ordenar por ordem alfabética.
+            <strong>Para alterar ordenação:</strong> Clique em Cod. no cabeçalho da tabela para ordenar por código, ou em Nome para ordenar por ordem alfabética, ou em Perfil para ordenar por perfil.
+          </li>
+          <li class="list-group-item">
+            <strong>Para visualizar divisões de vagas:</strong> Clique no número de vagas de uma turma para visualizar a alocação das vagas por cursos.
           </li>
         </ul>
       </div>
@@ -343,6 +346,9 @@
       size="lg"
       title="Selecione as disciplinas"
     >
+      <div class="col m-0 p-0" style="width:100%;">
+        <input type="text" v-model="filtroDisciplina" style="width:100%; text-align: left">
+      </div>
       <div class="col m-0 p-0" style="width:max-content;">
         <table
           class="table table-sm modal-table table-bordered"
@@ -543,6 +549,21 @@
                   ></i>
                 </p>
               </th>
+              <th>
+                <p
+                        class="p-header clickable-header"
+                        style="width: 70px; text-align: start;"
+                        v-on:click="ordemCursos('vagasTotal')"
+                        title="Clique para ordenar por total de vagas"
+                >
+                  Total
+                  <i
+                          v-if="ordemCurso==='vagasTotal'"
+                          style="font-size:0.6rem; text-align:right"
+                          class="fas fa-arrow-down fa-sm"
+                  ></i>
+                </p>
+              </th>
             </div>
           </tr>
           </thead>
@@ -561,6 +582,9 @@
               </td>
               <td>
                 <p style="width:70px; text-align:start">{{p.vagasNaoPeriodizadas}}</p>
+              </td>
+              <td>
+                <p style="width:70px; text-align:start">{{p.vagasPeriodizadas + p.vagasNaoPeriodizadas}}</p>
               </td>
             </div>
           </tr>
@@ -591,6 +615,7 @@ export default {
       semestreAtual: 3,
       turmaSelecionada: undefined,
       ordemCurso: 'codigo',
+      filtroDisciplina: ''
     };
   },
 
@@ -743,8 +768,8 @@ export default {
   computed: {
     Disciplinas() {
       return _.orderBy(
-        _.filter(this.$store.state.disciplina.Disciplinas, function(d) {
-          return d.Perfil !== 13 && d.Perfil !== 15;
+        _.filter(this.$store.state.disciplina.Disciplinas, (d) => {
+          return (d.Perfil !== 13 && d.Perfil !== 15 && (this.filtroDisciplina === '' ? true : d.nome.includes(this.filtroDisciplina.toUpperCase())));
         }),
         this.ordenacao
       );
@@ -763,6 +788,7 @@ export default {
           case 'nome' : return this.curso(p).nome
           case 'vagasPeriodizadas' : return -p.vagasPeriodizadas
           case 'vagasNaoPeriodizadas' : return -p.vagasNaoPeriodizadas
+          case 'vagasTotal' : return -(p.vagasPeriodizadas + p.vagasNaoPeriodizadas)
           default: return this.curso(p).codigo
         }
       })

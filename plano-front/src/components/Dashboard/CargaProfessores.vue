@@ -15,13 +15,10 @@
           style="justify-content: flex-end;"
         >
           <div class="d-flex">
-            <b-button
-              v-b-modal.modalDocentes
-              title="Docentes"
-              class="cancelbtn"
-            >
+            <b-button v-b-modal.modalFiltros title="Filtros" class="cancelbtn">
               <i class="fas fa-list-ul"></i>
             </b-button>
+
             <button
               type="button"
               class="relatbtn"
@@ -41,8 +38,8 @@
     <div class="w-100 mb-2 border-bottom"></div>
 
     <div class="divTable p-0" ref="carga">
-      <table class="table table-hover border table-sm">
-        <thead class="thead-light sticky">
+      <table class="main-table table table-hover border table-sm">
+        <thead class="thead-light">
           <tr>
             <div
               style="display: block; overflow: hidden; width: ‭845‬px; height:20px !important"
@@ -63,7 +60,7 @@
                 <p class="p-header" style="width: 80px">Cod</p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width: 300px">Disciplina</p>
+                <p class="p-header" style="width: 300px;">Disciplina</p>
               </th>
               <th scope="col">
                 <p class="p-header" style="width: 24px">T.</p>
@@ -108,37 +105,35 @@
           <template v-if="Professores.length > 0">
             <template v-for="professor in DocentesAtivados">
               <template v-if="turmas(professor).length > 0">
-                <div
-                  class="linhas"
-                  style="width: ‭845‬px;"
-                  :key="professor.apelido"
-                >
+                <div style="width: ‭845‬px;" :key="professor.apelido">
                   <td class="prof-td">
-                    <div style="width: 130px">{{ professor.apelido }}</div>
+                    <p style="width: 130px; text-align: start !important;">
+                      {{ professor.apelido }}
+                    </p>
                   </td>
                   <td class="prof-td">
-                    <div style="width: 24px"></div>
+                    <p style="width: 24px"></p>
                   </td>
                   <td class="prof-td">
-                    <div style="width: 80px"></div>
+                    <p style="width: 80px"></p>
                   </td>
                   <td class="prof-td">
-                    <div style="width: 300px; height: 20px;"></div>
+                    <p style="width: 300px; height: 20px;"></p>
                   </td>
                   <td class="prof-td">
-                    <div style="width: 24px"></div>
+                    <p style="width: 24px"></p>
                   </td>
                   <td class="prof-td">
-                    <div style="width: 180px"></div>
+                    <p style="width: 180px"></p>
                   </td>
                   <td class="prof-td">
-                    <div style="width: 32px">{{ creditos1(professor) }}</div>
+                    <p style="width: 32px">{{ creditos1(professor) }}</p>
                   </td>
                   <td class="prof-td">
-                    <div style="width: 32px">{{ creditos2(professor) }}</div>
+                    <p style="width: 32px">{{ creditos2(professor) }}</p>
                   </td>
                   <td class="prof-td">
-                    <div style="width: 42px;">{{ creditos(professor) }}</div>
+                    <p style="width: 42px;">{{ creditos(professor) }}</p>
                   </td>
                 </div>
               </template>
@@ -162,7 +157,7 @@
                           turma.Docente2 === professor.id)
                     "
                   >
-                    <div class="linhas" style="width: ‭845‬px;">
+                    <div style="width: ‭845‬px;">
                       <td>
                         <p style="width: 130px"></p>
                       </td>
@@ -217,7 +212,7 @@
                       </td>
 
                       <td v-else>
-                        <div style="width: 32px"></div>
+                        <p style="width: 32px"></p>
                       </td>
 
                       <td v-if="turma.periodo === 3">
@@ -237,11 +232,11 @@
                         </div>
                       </td>
                       <td v-else>
-                        <div style="width: 32px"></div>
+                        <p style="width: 32px"></p>
                       </td>
 
                       <td>
-                        <div style="width: 42px"></div>
+                        <p style="width: 42px"></p>
                       </td>
                     </div>
                   </template>
@@ -251,7 +246,7 @@
               <template v-for="carga in CargasPos">
                 <template v-if="carga.Docente === professor.id">
                   <tr :key="'cargaPos' + carga.id + 'professor' + professor.id">
-                    <div class="linhas" style="width: ‭845‬px;">
+                    <div style="width: ‭845‬px;">
                       <td>
                         <p style="width: 130px"></p>
                       </td>
@@ -287,7 +282,7 @@
                         <p style="width: 32px"></p>
                       </td>
 
-                      <td></td>
+                      <td><p style="width: 42px"></p></td>
                     </div>
                   </tr>
                 </template>
@@ -295,11 +290,7 @@
             </template>
             <template v-if="turmasSemAlocacao().length > 0 && SemAlocacao">
               <template v-if="turmasSemAlocacao().length > 0">
-                <div
-                  class="linhas"
-                  style="width: ‭845‬px;"
-                  :key="'semAlocacao'"
-                >
+                <div style="width: ‭845‬px;" :key="'semAlocacao'">
                   <td class="prof-td">
                     <div style="width: 130px">SEM ALOCAÇÃO</div>
                   </td>
@@ -343,10 +334,11 @@
                   <template
                     v-if="
                       turma.Disciplina === disciplina.id &&
-                        turma.Docente1 == null && turma.Docente2 == null
+                        turma.Docente1 == null &&
+                        turma.Docente2 == null
                     "
                   >
-                    <div class="linhas" style="width: ‭845‬px;">
+                    <div style="width: ‭845‬px;">
                       <td>
                         <p style="width: 130px"></p>
                       </td>
@@ -474,46 +466,53 @@
 
     <!-- Modals do botão para escolher docentes -->
     <b-modal
-      id="modalDocentes"
+      id="modalFiltros"
       ref="DocentesModal"
       scrollable
-      title="Selecione os docentes"
-      :size="'sm'"
+      title="Filtros"
+      :size="md"
     >
-      <div
-        class="form-group col m-0 p-0"
-        style="height: 302px; width:max-content; border-color: rgba(0,0,0,0.125);"
-      >
-        <table
-          class="table table-sm modal-table border"
-          style="max-height: 302px !important;  overflow-x: hidden !important;"
+      <div class="p-0 m-0" style="height: 30px; width: 465px;">
+        <ul
+          class="nav nav-tabs card-header-tabs m-0"
+          style="font-size: 11px!important;height: 30px;"
         >
-          <tr>
-            <div
-              class="p-0"
-              style="width: max-content; font-size: 11px!important; height: 18px"
-            >
-              <th class="border-0 p-0">
-                <p
-                  style="width:30px; height: 18px !important;"
-                  class="p-header"
-                ></p>
-              </th>
-              <th class="border-0 p-0">
-                <p
-                  class="p-header"
-                  style="width: 225px; text-align:start; height: 18px !important"
-                >
-                  Nome
-                </p>
-              </th>
-            </div>
-          </tr>
+          <li class="nav-item">
+            <a class="nav-link active border clickable">Perfis</a>
+          </li>
+        </ul>
+      </div>
+      <div
+        class="col m-0 p-0"
+        style="width:max-content;height: 450px!important;"
+      >
+        <!-- TABLE PROFS -->
+        <table
+          class="table table-bordered table-sm modal-table"
+          style="max-height: 450px !important;"
+        >
+          <thead class="thead-light">
+            <tr>
+              <div
+                style="width: max-content; height: 18px !important; font-size: 11px!important"
+                class="sticky"
+              >
+                <th>
+                  <p style="width:25px" class="p-header"></p>
+                </th>
+                <th>
+                  <p class="p-header" style="width: 435px; text-align:start;">
+                    Nome
+                  </p>
+                </th>
+              </div>
+            </tr>
+          </thead>
           <tbody>
             <tr v-for="docente in Professores" :key="`docente${docente.id}`">
               <div style="width: max-content">
-                <td style="padding:0;broder:0;margin:0!important;">
-                  <div style="width:30px; height: 22px !important;">
+                <td>
+                  <div style="width: 25px; height: inherit;" class="px-1">
                     <input
                       type="checkbox"
                       v-model="DocentesSelecionados"
@@ -523,7 +522,7 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:225px; text-align:start">
+                  <p style="width:435px; text-align:start">
                     {{ docente.apelido }}
                   </p>
                 </td>
@@ -531,8 +530,8 @@
             </tr>
             <tr>
               <div style="width: max-content">
-                <td style="padding:0;broder:0;margin:0!important;">
-                  <div style="width:30px; height: 22px !important;">
+                <td>
+                  <div style="width: 25px; height: inherit;" class="px-1">
                     <input
                       type="checkbox"
                       v-model="SemAlocacaoCheck"
@@ -541,7 +540,7 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:225px; text-align:start">SEM ALOCAÇÃO</p>
+                  <p style="width:435px; text-align:start">SEM ALOCAÇÃO</p>
                 </td>
               </div>
             </tr>
@@ -550,7 +549,7 @@
       </div>
 
       <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
-        <div class="w-100 d-flex">
+        <div class="w-100">
           <b-button
             class="btn-azul btn-df mr-2"
             variant="success"
@@ -848,9 +847,9 @@ export default {
   width: -moz-max-content;
   width: max-content;
 }
-table {
+.main-table {
   display: block;
-  overflow-y: scroll;
+  overflow: auto;
   height: -webkit-calc(100vh - 100px);
   height: -moz-calc(100vh - 100px);
   height: calc(100vh - 100px);
@@ -862,61 +861,52 @@ tbody {
   max-height: 100%;
   width: 100%;
 }
-table td {
+.main-table td {
   text-align: center;
   vertical-align: middle !important;
   padding: 0 !important;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
-}
-/* .linhas {
-  border-top: 1px solid #dee2e6;
-} */
-table p {
-  margin-bottom: 0 !important;
-  text-align: center;
-  padding-left: 2px;
-  padding-right: 2px;
 }
 
-/* texto maiusculo */
-.toUpperCase {
-  text-transform: uppercase;
+.main-table p {
+  margin-bottom: 0 !important;
+  text-align: center;
+  padding-left: 5px;
+  padding-right: 5px;
 }
-tr thead {
+
+.main-table tr thead {
   display: block;
 }
-thead th {
+.main-table thead th {
   padding: 0 !important;
   font-size: 14px;
   text-align: center;
   height: 18px !important;
 }
-table select {
+.main-table select {
   height: 15px !important;
   text-align: left;
 }
-table input {
+.main-table input {
   height: 18px !important;
   text-align: center !important;
 }
-table input[type="checkbox"] {
+.main-table input[type="checkbox"] {
   margin-left: 0 !important;
   margin-top: 4px !important;
 }
-.modal-table {
-  display: block !important;
-  overflow: auto !important;
-  font-size: 10px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-}
+
 .sticky {
-  position: sticky;
-  position: -webkit-sticky;
-  top: 0;
+  display: block !important;
+  overflow: hidden !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 0 !important;
+  display: block !important;
+  overflow: hidden !important;
+  z-index: 3;
 }
+
 .titulo {
   font-size: 25px;
   font-weight: normal;
@@ -932,6 +922,10 @@ table input[type="checkbox"] {
 }
 strong {
   color: #007bff;
+}
+/* texto maiusculo */
+.toUpperCase {
+  text-transform: uppercase;
 }
 
 /* Botoes */
@@ -1083,11 +1077,9 @@ i.far {
 }
 
 /* Formularios no topo da tela */
-.form-inline .input-group,
 .form-inline {
   width: auto;
 }
-
 .form-group {
   display: -ms-flexbox;
   display: flex;
@@ -1099,9 +1091,66 @@ i.far {
   align-items: center;
   margin-bottom: 0;
 }
+/* ==== MODAL TABLE ==== */
+.modal-table {
+  display: block !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  font-size: 10px !important;
+  font-weight: normal !important;
+  background-color: white;
+  margin: 0 !important;
+}
+.modal-table tr thead {
+  display: block;
+}
+.modal-table th {
+  padding: 0 !important;
+  text-align: center !important;
+  height: 18px !important;
+  border-bottom: 0 !important;
+  border-top: 0 !important;
+}
+.modal-table .p-header {
+  padding: 0px 5px 0px 5px !important;
+  margin: 0 !important;
+  text-align: start;
+  height: 18px !important;
+}
+.modal-table tbody {
+  max-height: 100%;
+  width: 100%;
+}
+.modal-table td {
+  border-bottom: 0;
+  text-align: center;
+  vertical-align: middle !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  /* height: 22px !important; */
+}
+.modal-table p {
+  margin: 0 !important;
+  text-align: center;
+  padding: 0 !important;
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+}
+.modal-table input[type="checkbox"] {
+  margin-left: 0 !important;
+  margin-top: 4px !important;
+  margin-bottom: auto !important;
+  height: 13px !important;
+}
+/* FIM MODAL TABLE */
 @media screen and (max-width: 355px) {
   .div-titulo {
     height: 70px !important;
   }
+}
+.active {
+  background-color: #e9ecef !important;
+  color: #495057 !important;
+  cursor: default;
 }
 </style>

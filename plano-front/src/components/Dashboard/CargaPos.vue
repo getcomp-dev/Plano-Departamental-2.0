@@ -15,12 +15,8 @@
           style="justify-content: flex-end!important;"
         >
           <div class="d-flex p-0 m-0">
-            <b-button
-              v-b-modal.modalSemestre
-              title="Semestre"
-              class="cancelbtn"
-            >
-              <i class="fas fa-calendar-alt"></i>
+            <b-button v-b-modal.modalFiltros title="Filtros" class="cancelbtn">
+              <i class="fas fa-list-ul"></i>
             </b-button>
             <button
               type="button"
@@ -548,7 +544,7 @@
     </b-modal>
 
     <!-- MODAL SEMESTRE -->
-    <b-modal id="modalSemestre" ref="modalSemestre" scrollable title="Filtros">
+    <b-modal id="modalFiltros" ref="modalFiltros" scrollable title="Filtros">
       <div class="p-0 m-0" style="height: 30px; width: 465px;">
         <ul
           class="nav nav-tabs card-header-tabs m-0"
@@ -752,7 +748,7 @@ export default {
       } else {
         this.semestreAtual = undefined;
       }
-      this.$refs.modalSemestre.hide();
+      this.$refs.modalFiltros.hide();
     },
     selectAllSemestre() {
       this.semestre_1Ativo = true;
