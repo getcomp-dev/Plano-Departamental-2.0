@@ -393,9 +393,10 @@
             <font style="font-style:italic;">download</font> do mesmo.
           </li>
           <li class="list-group-item">
-            <strong>Para alterar ordenação:</strong> Clique em Cod. no cabeçalho
-            da tabela para ordenar por código, ou em Nome para ordenar por ordem
-            alfabética.
+            <strong>Para alterar ordenação:</strong> Clique em Cod. no cabeçalho da tabela para ordenar por código, ou em Nome para ordenar por ordem alfabética, ou em Perfil para ordenar por perfil.
+          </li>
+          <li class="list-group-item">
+            <strong>Para visualizar divisões de vagas:</strong> Clique no número de vagas de uma turma para visualizar a alocação das vagas por cursos.
           </li>
         </ul>
       </div>
