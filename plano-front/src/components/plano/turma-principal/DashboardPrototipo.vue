@@ -178,7 +178,7 @@
           class="nav nav-tabs card-header-tabs m-0"
           style="font-size: 11px!important;height: 30px;"
         >
-          <li class="nav-item" @click="nav_ativo = 'perfis'">
+          <li class="nav-item" @click="changeTab('perfis')">
             <a
               class="nav-link border border-right-0"
               :class="[
@@ -190,7 +190,7 @@
               >Perfis</a
             >
           </li>
-          <li class="nav-item" @click="nav_ativo = 'cursos'">
+          <li class="nav-item" @click="changeTab('cursos')">
             <a
               class="nav-link border border-right-0"
               :class="[
@@ -202,7 +202,7 @@
               >Cursos</a
             >
           </li>
-          <li class="nav-item" @click="nav_ativo = 'semestre'">
+          <li class="nav-item" @click="changeTab('semestre')">
             <a
               class="nav-link border"
               :class="[
@@ -298,6 +298,27 @@
                       class="fas fa-arrow-down fa-sm"
                     ></i>
                   </p>
+                </th>
+              </div>
+            </tr>
+            <tr>
+              <div
+                style="width: max-content; font-size: 11px!important"
+                class="stickySearch "
+              >
+                <th>
+                  <div
+                    class="m-0 border"
+                    style="width:465px; height:34px;padding-left: 5px;padding-right: 25px; padding-top: 4px;"
+                  >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="searchBar"
+                      placeholder="Pesquise nome ou codigo de uma disciplina"
+                      v-model="searchCursos"
+                    />
+                  </div>
                 </th>
               </div>
             </tr>
@@ -561,7 +582,8 @@ export default {
       semestre_1Ativo: true,
       semestre_2Ativo: true,
       semestreAtual: 3,
-      nav_ativo: "perfis"
+      nav_ativo: "perfis",
+      searchCursos: null
     };
   },
 
@@ -599,11 +621,16 @@ export default {
   },
 
   methods: {
+    changeTab(tab) {
+      this.nav_ativo = tab;
+      this.searchCursos = null; //clear search
+    },
     btnOK() {
       this.btnOKPerfis();
       this.btnOKSemestre();
       this.btnOKCursos();
       this.$refs.modalFiltros.hide();
+      this.searchCursos = null;
     },
     btnOKSemestre() {
       if (this.semestre_1Ativo && !this.semestre_2Ativo) {
@@ -836,9 +863,17 @@ export default {
 
   computed: {
     Cursos() {
-      return _.orderBy(this.$store.state.curso.Cursos, this.ordenacaoCurso);
+      return _.orderBy(this.Cursos_search, this.ordenacaoCurso);
     },
 
+    Cursos_search() {
+      return this.$store.state.curso.Cursos.filter(curso => {
+        return this.searchCursos == null
+          ? true
+          : curso.nome.match(this.searchCursos.toUpperCase()) ||
+              curso.codigo.match(this.searchCursos.toUpperCase());
+      });
+    },
     CursosAtivos() {
       return this.$store.state.curso.Ativos;
     },
@@ -1211,7 +1246,15 @@ i.far {
   margin-bottom: auto !important;
   height: 13px !important;
 }
+.form-control {
+  height: 25px !important;
+  font-size: 12px !important;
+  padding: 2px 5px 2px 5px !important;
+  text-align: start;
+  width: 100% !important;
+}
 /* FIM MODAL TABLE */
+
 .nav-link {
   color: #007bff !important;
 }
