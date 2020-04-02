@@ -810,11 +810,11 @@ export default {
         if(d1 === undefined && d2 === undefined){
             return ''
         }else if(d2 === undefined){
-            return `${d1.apelido}`
+            return `${d1.nome}`
         }else if(d1 === undefined){
-            return `${d2.apelido}`
+            return `${d2.nome}`
         }else {
-            return `${d1.apelido} / ${d2.apelido}`
+            return `${d1.nome} / ${d2.nome}`
         }
     },
 
@@ -860,14 +860,14 @@ export default {
         });
     },
 
-    pdfRelatorioDisciplinas() {
+    pdfRelatorioDisciplinas(data) {
         var pdfMake = require('pdfmake/build/pdfmake.js')
         if (pdfMake.vfs == undefined){
             var pdfFonts = require('pdfmake/build/vfs_fonts.js')
             pdfMake.vfs = pdfFonts.pdfMake.vfs;
         }
         let tables = []
-        let disciplinas = _.orderBy(store.state.disciplina.Disciplinas, 'codigo')
+        let disciplinas = _.orderBy(data.disciplinasSelecionadas, 'codigo')
         let turmasDisc = undefined
         tables.push({
             columns:[
@@ -922,17 +922,30 @@ export default {
                     }else{
                         horarioTotal = horario1.horario + '/' + horario2.horario
                     }
+                    let sala1 = _.find(store.state.sala.Salas, {'id': turmasDisc[j].Sala1})
+                    let sala2 = _.find(store.state.sala.Salas, {'id': turmasDisc[j].Sala2})
+                    let salaTotal = undefined
+                    if(sala1===undefined && sala2===undefined){
+                        salaTotal = ''
+                    }else if (sala2 === undefined) {
+                        salaTotal = sala1.nome
+                    } else if (sala1 === undefined) {
+                        salaTotal = sala2.nome
+                    }else{
+                        salaTotal = sala1.nome + '/' + sala2.nome
+                    }
 
                     tables.push({
                         style: 'tableExample',
                         table: {
-                            widths: [40, '*', 110, 65, ],
+                            widths: [40, '*', 60, 110, 65, ],
                             headerRows: 1,
                             color: '#426',
                             body: [
                                 [
                                     {text: 'Turma: ' + turmasDisc[j].letra, alignment: 'left', fontSize: 8, bold: true},
                                     {text: 'Docentes: ' + docentes, alignment: 'left', fontSize: 8, bold: true},
+                                    {text: 'Sala: ' + salaTotal, alignment: 'left', fontSize: 8, bold: true},
                                     {text: 'Horário: ' + horarioTotal, alignment: 'left', fontSize: 8, bold: true},
                                     {text: 'Vagas: ' + this.vagasTurma(turmasDisc[j], 1), alignment: 'left', fontSize: 8, bold: true}]
                             ]
@@ -948,7 +961,8 @@ export default {
                         let tabelaCursosBody = [
                             [
                                 {text: ''},
-                                {text: 'Curso', alignment: 'center', bold: 'true', fontSize: 8},
+                                {text: ''},
+                                {text: ''},
                                 {text: 'Grade', alignment: 'center', bold: 'true', fontSize: 8},
                                 {text: 'Extra', alignment: 'center', bold: 'true', fontSize: 8},
                                 {text: 'Total', alignment: 'center', bold: 'true', fontSize: 8},
@@ -957,24 +971,25 @@ export default {
                         for(let k = 0; k < pedidosTurma.length; k++){
                             tabelaCursosBody.push([
                                 {text: ''},
-                                {text: this.curso(pedidosTurma[k]).codigo + ' - ' + this.curso(pedidosTurma[k]).nome, alignment: 'left', fontSize: 8},
-                                {text: pedidosTurma[k].vagasPeriodizadas, alignment: 'center', fontSize: 8},
-                                {text: pedidosTurma[k].vagasNaoPeriodizadas, alignment: 'center', fontSize: 8},
-                                {text: pedidosTurma[k].vagasPeriodizadas + pedidosTurma[k].vagasNaoPeriodizadas, alignment: 'center', fontSize: 8},
+                                {text: this.curso(pedidosTurma[k]).codigo, alignment: 'left', fontSize: 6},
+                                {text: this.curso(pedidosTurma[k]).nome, alignment: 'left', fontSize: 6},
+                                {text: pedidosTurma[k].vagasPeriodizadas, alignment: 'center', fontSize: 6},
+                                {text: pedidosTurma[k].vagasNaoPeriodizadas, alignment: 'center', fontSize: 6},
+                                {text: pedidosTurma[k].vagasPeriodizadas + pedidosTurma[k].vagasNaoPeriodizadas, alignment: 'center', fontSize: 6},
                             ])
                         }
                         tables.push({
                             style: 'tableExample',
                             table: {
-                                widths: [10, '*', 24, 24, 24],
-                                headerRows: 1,
+                                widths: [20, 24, '*', 24, 24, 24],
                                 color: '#426',
                                 body: tabelaCursosBody
                             },
                             layout: {
                                 hLineWidth: function () { return 0 },
                                 vLineWidth: function () { return 0 }
-                            }
+                            },
+                            margin: [0, 0, 0, ((j === (turmasDisc.length - 1)) ? 5 : 0)]
                         })
                     }
                 }
@@ -1033,17 +1048,30 @@ export default {
                     }else{
                         horarioTotal = horario1.horario + '/' + horario2.horario
                     }
+                    let sala1 = _.find(store.state.sala.Salas, {'id': turmasDisc[j].Sala1})
+                    let sala2 = _.find(store.state.sala.Salas, {'id': turmasDisc[j].Sala2})
+                    let salaTotal = undefined
+                    if(sala1===undefined && sala2===undefined){
+                        salaTotal = ''
+                    }else if (sala2 === undefined) {
+                        salaTotal = sala1.nome
+                    } else if (sala1 === undefined) {
+                        salaTotal = sala2.nome
+                    }else{
+                        salaTotal = sala1.nome + '/' + sala2.nome
+                    }
 
                     tables.push({
                         style: 'tableExample',
                         table: {
-                            widths: [40, '*', 110, 65, ],
+                            widths: [40, '*', 60, 110, 65, ],
                             headerRows: 1,
                             color: '#426',
                             body: [
                                 [
                                     {text: 'Turma: ' + turmasDisc[j].letra, alignment: 'left', fontSize: 8, bold: true},
                                     {text: 'Docentes: ' + docentes, alignment: 'left', fontSize: 8, bold: true},
+                                    {text: 'Sala: ' + salaTotal, alignment: 'left', fontSize: 8, bold: true},
                                     {text: 'Horário: ' + horarioTotal, alignment: 'left', fontSize: 8, bold: true},
                                     {text: 'Vagas: ' + this.vagasTurma(turmasDisc[j], 2), alignment: 'left', fontSize: 8, bold: true}]
                             ]
@@ -1059,7 +1087,8 @@ export default {
                         let tabelaCursosBody = [
                             [
                                 {text: ''},
-                                {text: 'Curso', alignment: 'center', bold: 'true', fontSize: 8},
+                                {text: ''},
+                                {text: ''},
                                 {text: 'Grade', alignment: 'center', bold: 'true', fontSize: 8},
                                 {text: 'Extra', alignment: 'center', bold: 'true', fontSize: 8},
                                 {text: 'Total', alignment: 'center', bold: 'true', fontSize: 8},
@@ -1068,16 +1097,17 @@ export default {
                         for(let k = 0; k < pedidosTurma.length; k++){
                             tabelaCursosBody.push([
                                 {text: ''},
-                                {text: this.curso(pedidosTurma[k]).codigo + ' - ' + this.curso(pedidosTurma[k]).nome, alignment: 'left', fontSize: 8},
-                                {text: pedidosTurma[k].vagasPeriodizadas, alignment: 'center', fontSize: 8},
-                                {text: pedidosTurma[k].vagasNaoPeriodizadas, alignment: 'center', fontSize: 8},
-                                {text: pedidosTurma[k].vagasPeriodizadas + pedidosTurma[k].vagasNaoPeriodizadas, alignment: 'center', fontSize: 8},
+                                {text: this.curso(pedidosTurma[k]).codigo, alignment: 'left', fontSize: 6},
+                                {text: this.curso(pedidosTurma[k]).nome, alignment: 'left', fontSize: 6},
+                                {text: pedidosTurma[k].vagasPeriodizadas, alignment: 'center', fontSize: 6},
+                                {text: pedidosTurma[k].vagasNaoPeriodizadas, alignment: 'center', fontSize: 6},
+                                {text: pedidosTurma[k].vagasPeriodizadas + pedidosTurma[k].vagasNaoPeriodizadas, alignment: 'center', fontSize: 6},
                             ])
                         }
                         tables.push({
                             style: 'tableExample',
                             table: {
-                                widths: [10, '*', 24, 24, 24],
+                                widths: [20, 24, '*', 24, 24, 24],
                                 headerRows: 1,
                                 color: '#426',
                                 body: tabelaCursosBody
@@ -1085,7 +1115,8 @@ export default {
                             layout: {
                                 hLineWidth: function () { return 0 },
                                 vLineWidth: function () { return 0 }
-                            }
+                            },
+                            margin: [0, 0, 0, ((j === (turmasDisc.length - 1)) ? 5 : 0)]
                         })
                     }
                 }
