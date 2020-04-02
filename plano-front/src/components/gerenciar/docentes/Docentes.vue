@@ -41,9 +41,14 @@
                   >
                     Nome
                     <i
-                      v-if="ordenacao == 'nome'"
+                      v-if="ordenacao.order == 'nome' && ordenacao.type == 'asc'"
                       style="font-size:0.6rem"
                       class="fas fa-arrow-down fa-sm"
+                    ></i>
+                    <i
+                      v-if="ordenacao.order == 'nome' && ordenacao.type == 'desc'"
+                      style="font-size:0.6rem"
+                      class="fas fa-arrow-up fa-sm"
                     ></i>
                   </p>
                 </th>
@@ -56,9 +61,14 @@
                   >
                     Apelido
                     <i
-                      v-if="ordenacao == 'apelido'"
-                      style="font-size:0.6rem"
-                      class="fas fa-arrow-down fa-sm"
+                            v-if="ordenacao.order == 'apelido' && ordenacao.type == 'asc'"
+                            style="font-size:0.6rem"
+                            class="fas fa-arrow-down fa-sm"
+                    ></i>
+                    <i
+                            v-if="ordenacao.order == 'apelido' && ordenacao.type == 'desc'"
+                            style="font-size:0.6rem"
+                            class="fas fa-arrow-up fa-sm"
                     ></i>
                   </p>
                 </th>
@@ -355,7 +365,7 @@ export default {
       error: undefined,
       docentePerfil: _.clone(emptyPerfil),
       docenteClickado: "",
-      ordenacao: "nome"
+      ordenacao: {order: "nome", type: "asc"}
     };
   },
 
@@ -364,10 +374,18 @@ export default {
       this.docenteClickado = "";
     },
     toggleOrdenacaoNome() {
-      this.ordenacao = "nome";
+      if(this.ordenacao.order === 'nome') this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc')
+      else {
+        this.ordenacao.order = "nome";
+        this.ordenacao.type = 'asc'
+      }
     },
     toggleOrdenacaoApelido() {
-      this.ordenacao = "apelido";
+      if(this.ordenacao.order === 'apelido') this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc')
+      else {
+        this.ordenacao.order = "apelido";
+        this.ordenacao.type = 'asc'
+      }
     },
 
     addDocente() {
@@ -526,7 +544,7 @@ export default {
 
   computed: {
     Docentes() {
-      return _.orderBy(this.$store.state.docente.Docentes, this.ordenacao);
+      return _.orderBy(this.$store.state.docente.Docentes, this.ordenacao.order, this.ordenacao.type);
     },
 
     Perfis() {

@@ -27,8 +27,19 @@
         <thead class="thead-light">
           <tr>
             <div style="width: 157px;" class="sticky">
-              <th scope="col">
-                <p class="p-header" style="width: 82px">Nome</p>
+              <th scope="col" class="clickable-header" v-on:click="toggleOrder">
+                <p class="p-header" style="width: 82px">Nome
+                <i
+                  v-if="ordenacao.type == 'asc'"
+                  style="font-size:0.6rem; text-align:right"
+                  class="fas fa-arrow-down fa-sm"
+                ></i>
+                <i
+                  v-if="ordenacao.type == 'desc'"
+                  style="font-size:0.6rem; text-align:right"
+                  class="fas fa-arrow-up fa-sm"
+                ></i>
+                </p>
               </th>
               <th scope="col">
                 <p class="p-header" style="width: 75px">Laboratório</p>
@@ -224,7 +235,8 @@ export default {
     return {
       salaForm: _.clone(emptySala),
       error: undefined,
-      salaClickada: ""
+      salaClickada: "",
+      ordenacao: {type: 'asc'}
     };
   },
 
@@ -235,6 +247,11 @@ export default {
     clearClick() {
       this.salaClickada = "";
     },
+
+    toggleOrder() {
+      this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc')
+    },
+
     addSala() {
       salaService
         .create(this.salaForm)
@@ -333,7 +350,7 @@ export default {
 
   computed: {
     Salas() {
-      return this.$store.state.sala.Salas;
+      return _.orderBy(this.$store.state.sala.Salas, 'nome', this.ordenacao.type);
     },
 
     isEdit() {
@@ -582,6 +599,12 @@ i.far {
   background-color: white;
   -webkit-text-stroke-width: 0.5px;
   -webkit-text-stroke-color: #698dff;
+}
+
+.clickable-header {
+  cursor: pointer;
+  text-align: start !important;
+  padding-left: 5px;
 }
 
 /* APENAS NO FIREFOX */

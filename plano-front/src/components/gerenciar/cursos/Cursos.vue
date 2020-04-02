@@ -41,9 +41,14 @@
                   >
                     Nome
                     <i
-                      v-if="ordenacao == 'nome'"
+                      v-if="ordenacao.order == 'nome' && ordenacao.type == 'asc'"
                       style="font-size:0.6rem"
                       class="fas fa-arrow-down fa-sm"
+                    ></i>
+                    <i
+                      v-if="ordenacao.order == 'nome' && ordenacao.type == 'desc'"
+                      style="font-size:0.6rem"
+                      class="fas fa-arrow-up fa-sm"
                     ></i>
                   </p>
                 </th>
@@ -56,9 +61,14 @@
                   >
                     Código
                     <i
-                      v-if="ordenacao == 'codigo'"
+                      v-if="ordenacao.order == 'codigo'  && ordenacao.type == 'asc'"
                       style="font-size:0.6rem"
                       class="fas fa-arrow-down fa-sm"
+                    ></i>
+                    <i
+                      v-if="ordenacao.order == 'codigo'  && ordenacao.type == 'desc'"
+                      style="font-size:0.6rem"
+                      class="fas fa-arrow-up fa-sm"
                     ></i>
                   </p>
                 </th>
@@ -383,7 +393,7 @@ export default {
       cursoForm: _.clone(emptyCurso),
       error: undefined,
       cursoClickado: "",
-      ordenacao: "posicao"
+      ordenacao: { order: "nome", type: "asc" }
     };
   },
   created() {
@@ -400,12 +410,18 @@ export default {
       }
     },
     toggleOrderCod() {
-      if (this.ordenacao == "codigo") this.ordenacao = "posicao";
-      else this.ordenacao = "codigo";
+      if (this.ordenacao.order == "codigo") this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc');
+      else {
+        this.ordenacao.order = "codigo";
+        this.ordenacao.type = 'asc'
+      }
     },
     toggleOrderNome() {
-      if (this.ordenacao == "nome") this.ordenacao = "posicao";
-      else this.ordenacao = "nome";
+      if (this.ordenacao.order == "nome") this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc');
+      else {
+        this.ordenacao.order = "nome";
+        this.ordenacao.type = 'asc'
+      }
     },
     clickada(f_curso) {
       this.cursoClickado = f_curso;
@@ -556,7 +572,7 @@ export default {
   },
   computed: {
     Cursos() {
-      return _.orderBy(this.$store.state.curso.Cursos, this.ordenacao);
+      return _.orderBy(this.$store.state.curso.Cursos, this.ordenacao.order, this.ordenacao.type);
     },
     CursosAtivos() {
       return this.$store.state.curso.Ativos;

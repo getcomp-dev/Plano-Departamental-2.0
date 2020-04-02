@@ -37,9 +37,14 @@
                 >
                   Nome
                   <i
-                    v-if="ordenacao == 'nome'"
+                    v-if="ordenacao.order == 'nome' && ordenacao.type == 'asc'"
                     style="font-size:0.6rem; text-align:right"
                     class="fas fa-arrow-down fa-sm"
+                  ></i>
+                  <i
+                    v-if="ordenacao.order == 'nome' && ordenacao.type == 'desc'"
+                    style="font-size:0.6rem; text-align:right"
+                    class="fas fa-arrow-up fa-sm"
                   ></i>
                 </p>
               </th>
@@ -52,9 +57,14 @@
                 >
                   Código
                   <i
-                    v-if="ordenacao == 'codigo'"
-                    style="font-size:0.6rem"
-                    class="fas fa-arrow-down fa-sm"
+                          v-if="ordenacao.order == 'codigo' && ordenacao.type == 'asc'"
+                          style="font-size:0.6rem; text-align:right"
+                          class="fas fa-arrow-down fa-sm"
+                  ></i>
+                  <i
+                          v-if="ordenacao.order == 'codigo' && ordenacao.type == 'desc'"
+                          style="font-size:0.6rem; text-align:right"
+                          class="fas fa-arrow-up fa-sm"
                   ></i>
                 </p>
               </th>
@@ -366,7 +376,7 @@ export default {
       disciplinaForm: _.clone(emptyDisciplina),
       error: undefined,
       disciplinaClickada: "",
-      ordenacao: "nome"
+      ordenacao: {order :"nome", type: "asc"}
     };
   },
 
@@ -378,10 +388,18 @@ export default {
       }
     },
     toggleOrderNome() {
-      this.ordenacao = "nome";
+      if(this.ordenacao.order === 'nome') this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc')
+      else {
+        this.ordenacao.order = "nome";
+        this.ordenacao.type = 'asc'
+      }
     },
     toggleOrderCodigo() {
-      this.ordenacao = "codigo";
+      if(this.ordenacao.order === 'codigo') this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc')
+      else {
+        this.ordenacao.order = "codigo";
+        this.ordenacao.type = 'asc'
+      }
     },
     clickada(discip) {
       this.disciplinaClickada = discip;
@@ -492,7 +510,8 @@ export default {
     Disciplinas() {
       return _.orderBy(
         this.$store.state.disciplina.Disciplinas,
-        this.ordenacao
+        this.ordenacao.order,
+        this.ordenacao.type
       );
     },
 

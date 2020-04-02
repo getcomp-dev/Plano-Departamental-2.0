@@ -41,9 +41,14 @@
                 >
                   Nome
                   <i
-                    v-if="ordenacao == 'nome'"
+                    v-if="ordenacao.order == 'nome' && ordenacao.type == 'asc'"
                     style="font-size:0.6rem"
                     class="fas fa-arrow-down fa-sm"
+                  ></i>
+                  <i
+                    v-if="ordenacao.order == 'nome' && ordenacao.type == 'desc'"
+                    style="font-size:0.6rem"
+                    class="fas fa-arrow-up fa-sm"
                   ></i>
                 </p>
               </th>
@@ -56,9 +61,14 @@
                 >
                   Abreviação
                   <i
-                    v-if="ordenacao == 'abreviacao'"
-                    style="font-size:0.6rem"
-                    class="fas fa-arrow-down fa-sm"
+                          v-if="ordenacao.order == 'abreviacao' && ordenacao.type == 'asc'"
+                          style="font-size:0.6rem"
+                          class="fas fa-arrow-down fa-sm"
+                  ></i>
+                  <i
+                          v-if="ordenacao.order == 'abreviacao' && ordenacao.type == 'desc'"
+                          style="font-size:0.6rem"
+                          class="fas fa-arrow-up fa-sm"
                   ></i>
                 </p>
               </th>
@@ -274,18 +284,24 @@ export default {
       perfilForm: _.clone(emptyPerfil),
       error: undefined,
       perfilClickado: "",
-      ordenacao: ""
+      ordenacao: {order: "nome", type: "asc"}
     };
   },
 
   methods: {
     toggleOrderNome() {
-      if (this.ordenacao == "nome") this.ordenacao = "";
-      else this.ordenacao = "nome";
+      if(this.ordenacao.order === 'nome') this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc')
+      else {
+        this.ordenacao.order = "nome";
+        this.ordenacao.type = 'asc'
+      }
     },
     toggleOrderAbreviacao() {
-      if (this.ordenacao == "abreviacao") this.ordenacao = "";
-      else this.ordenacao = "abreviacao";
+      if(this.ordenacao.order === 'abreviacao') this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc')
+      else {
+        this.ordenacao.order = "abreviacao";
+        this.ordenacao.type = 'asc'
+      }
     },
 
     clickada(f_perfil) {
@@ -392,7 +408,7 @@ export default {
 
   computed: {
     Perfis() {
-      return _.orderBy(this.$store.state.perfil.Perfis, this.ordenacao);
+      return _.orderBy(this.$store.state.perfil.Perfis, this.ordenacao.order, this.ordenacao.type);
     },
 
     isEdit() {
