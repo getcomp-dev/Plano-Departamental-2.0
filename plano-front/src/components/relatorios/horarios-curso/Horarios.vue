@@ -3,7 +3,7 @@
     <!-- Titulo -->
     <div
       class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
-      style="height:38px;"
+      style="height: 38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="titulo col-xl-3 col-lg-3 col-md-4 col-sm-5 col-5 px-0 pr-1">
@@ -11,7 +11,7 @@
         </h1>
         <div
           class="form-group col-xl-9 col-lg-9 col-md-8 col-sm-7 col-7 mb-0 p-0"
-          style="justify-content: flex-end!important;"
+          style="justify-content: flex-end !important;"
         >
           <b-button v-b-modal.modalFiltros title="Filtros" class="cancelbtn">
             <i class="fas fa-list-ul"></i>
@@ -92,7 +92,7 @@
           this.cursos.length != 0 && (semestreAtual == 2 || semestreAtual == 3)
         "
       >
-        <h3 class="title px-2" style="background-color: rgba(0, 0, 0, 0.089)">
+        <h3 class="title px-2" style="background-color: rgba(0, 0, 0, 0.089);">
           2º SEMESTRE
         </h3>
         <!-- -------------------------------------------- CC Diurno ----------------------------------------- -->
@@ -139,16 +139,16 @@
       <div class="p-0 m-0" style="height: 30px; width: 465px;">
         <ul
           class="nav nav-tabs card-header-tabs m-0"
-          style="font-size: 11px!important;height: 30px;"
+          style="font-size: 11px !important; height: 30px;"
         >
           <li class="nav-item" @click="nav_ativo = 'cursos'">
             <a
               class="nav-link border border-right-0"
               :class="[
                 {
-                  active: nav_ativo == 'cursos'
+                  active: nav_ativo == 'cursos',
                 },
-                'clickable'
+                'clickable',
               ]"
               >Cursos</a
             >
@@ -158,9 +158,9 @@
               class="nav-link border"
               :class="[
                 {
-                  active: nav_ativo == 'semestre'
+                  active: nav_ativo == 'semestre',
                 },
-                'clickable'
+                'clickable',
               ]"
               >Semestre</a
             >
@@ -169,21 +169,18 @@
       </div>
       <div
         class="col m-0 p-0"
-        style="width:max-content;height: 450px!important;"
+        style="width: max-content; height: 450px !important;"
       >
         <table
           v-if="nav_ativo == 'semestre'"
           class="table table-bordered table-sm modal-table"
           style="max-height: 392px !important;"
         >
-          <thead class="thead-light">
+          <thead class="thead-light sticky">
             <tr>
-              <div
-                style="width: max-content; height: 18px !important; font-size: 11px!important"
-                class="sticky"
-              >
+              <div style="font-size: 11px !important;" class=" max-content">
                 <th>
-                  <p style="width:25px" class="p-header"></p>
+                  <p style="width: 25px;" class="p-header"></p>
                 </th>
                 <th>
                   <p class="p-header" style="width: 435px; text-align: start;">
@@ -196,7 +193,7 @@
 
           <tbody>
             <tr>
-              <div style="width: max-content">
+              <div style="width: max-content;">
                 <td>
                   <div style="width: 25px; height: inherit;" class="px-1">
                     <input
@@ -207,14 +204,14 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:435px; text-align:start">
-                    Primeiro semestre
+                  <p style="width: 435px; text-align: start;">
+                    PRIMEIRO
                   </p>
                 </td>
               </div>
             </tr>
             <tr>
-              <div style="width: max-content">
+              <div style="width: max-content;">
                 <td>
                   <div style="width: 25px; height: inherit;" class="px-1">
                     <input
@@ -225,37 +222,62 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:435px; text-align:start">
-                    Segundo semestre
+                  <p style="width: 435px; text-align: start;">
+                    SEGUNDO
                   </p>
                 </td>
               </div>
             </tr>
           </tbody>
         </table>
-
+        <!-- TABLE CURSOS -->
         <table
           v-else
           class="table table-sm modal-table table-bordered"
           style="max-height: 450px !important;"
         >
-          <thead class="thead-light">
+          <thead class="thead-light sticky">
             <tr>
-              <div
-                style="width: max-content; height: 18px !important; font-size: 11px!important"
-                class="sticky"
-              >
+              <div style="font-size: 11px !important;" class=" max-content">
                 <th>
-                  <p style="width:25px" class="p-header"></p>
+                  <p style="width: 25px;" class="p-header clickable"></p>
                 </th>
                 <th>
-                  <p style="width:50px; text-align:center" class="p-header">
+                  <p
+                    class="p-header clickable"
+                    style="width: 50px; text-align: center;"
+                    @click="toggleOrdCursos('codigo')"
+                  >
                     Cód.
+                    <i
+                      style="font-size: 0.6rem; text-align: right;"
+                      :class="
+                        ordemCursos.order == 'codigo'
+                          ? ordemCursos.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : ''
+                      "
+                    ></i>
                   </p>
                 </th>
                 <th>
-                  <p class="p-header" style="width: 384px; text-align:start">
+                  <p
+                    class="p-header clickable"
+                    style="width: 385px;"
+                    @click="toggleOrdCursos('nome')"
+                  >
                     Nome
+                    <i
+                      style="font-size: 0.6rem; text-align: right;"
+                      :class="
+                        ordemCursos.order == 'nome'
+                          ? ordemCursos.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : ''
+                      "
+                    ></i>
                   </p>
                 </th>
               </div>
@@ -264,10 +286,10 @@
           <tbody>
             <!-- v-for em tr -->
             <tr
-              v-for="curso in options_Cursos"
+              v-for="curso in Cursos_Modal_Filtred"
               :key="'curso-id-' + curso.value"
             >
-              <div style="width: max-content; height: 22px !important">
+              <div style="width: max-content; height: 22px !important;">
                 <td>
                   <div style="width: 25px; height: inherit;" class="px-1">
                     <input
@@ -279,12 +301,12 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:50px; text-align:center;">
+                  <p style="width: 50px;">
                     {{ curso.codigo }}
                   </p>
                 </td>
                 <td>
-                  <p style="width:384px; text-align:start;">
+                  <p style="width: 385px; text-align: start;">
                     {{ curso.nome }}
                   </p>
                 </td>
@@ -330,7 +352,7 @@
           variant="success"
           @click="btnOK()"
           class="btn-verde btn-df mr-2"
-          style="padding-right:15px!important; padding-left:15px!important;"
+          style="padding-right: 15px !important; padding-left: 15px !important;"
           >OK</b-button
         >
       </div>
@@ -344,14 +366,14 @@
             <strong>Para exibir conteúdo na tela:</strong> Clique em Cursos
             <i
               class="fas fa-graduation-cap cancelbtn"
-              style="font-size: 12px"
+              style="font-size: 12px;"
             ></i>
             e selecione quais deseja visualizar, em seguida confirme em OK.
           </li>
         </ul>
       </div>
 
-      <div slot="modal-footer" style="display: none"></div>
+      <div slot="modal-footer" style="display: none;"></div>
     </b-modal>
   </div>
 </template>
@@ -374,28 +396,28 @@ export default {
         {
           nome: "SISTEMAS DE INFORMAÇÃO",
           value: 3,
-          codigo: "76A"
+          codigo: "76A",
         },
         {
           nome: "CIÊNCIA DA COMPUTAÇÃO NOTURNO",
           value: 2,
-          codigo: "35A"
+          codigo: "35A",
         },
         {
           nome: "CIÊNCIA DA COMPUTAÇÃO DIURNO",
           value: 1,
-          codigo: "65C"
+          codigo: "65C",
         },
         {
           nome: "ENGENHARIA DA COMPUTAÇÃO",
           value: 4,
-          codigo: "65B"
+          codigo: "65B",
         },
         {
           nome: "ELETIVAS",
           value: 5,
-          codigo: ""
-        }
+          codigo: "-",
+        },
       ],
       evenCCN: "false",
       evenCCD: "false",
@@ -407,7 +429,7 @@ export default {
         CCN: [[], [], [], [], [], [], [], [], [], []],
         EC: [[], [], [], [], [], [], [], [], [], []],
         SI: [[], [], [], [], [], [], [], [], [], []],
-        Eletivas: []
+        Eletivas: [],
       },
 
       ativos2: {
@@ -415,20 +437,20 @@ export default {
         CCN: [[], [], [], [], [], [], [], [], [], []],
         EC: [[], [], [], [], [], [], [], [], [], []],
         SI: [[], [], [], [], [], [], [], [], [], []],
-        Eletivas: []
+        Eletivas: [],
       },
       selectAll: false,
       semestre_1Ativo: true,
       semestre_2Ativo: true,
       semestreAtual: 3,
-      nav_ativo: "cursos"
+      nav_ativo: "cursos",
+      ordemCursos: { order: "codigo", type: "asc" },
     };
   },
-
   components: {
     cursoDiurno,
     cursoNoturno,
-    horarioEletivas
+    horarioEletivas,
   },
   beforeMount: function() {
     this.createHorarios1();
@@ -436,6 +458,12 @@ export default {
   },
 
   methods: {
+    btnOK() {
+      this.btnOKSemestre();
+      this.cursos = [...this.cursosSelecionados];
+      this.nav_ativo = "cursos";
+      this.$refs.modalFiltros.hide();
+    },
     btnOKSemestre() {
       if (this.semestre_1Ativo && !this.semestre_2Ativo) {
         this.semestreAtual = 1;
@@ -447,6 +475,16 @@ export default {
         this.semestreAtual = undefined;
       }
     },
+
+    toggleOrdCursos(ord) {
+      if (this.ordemCursos.order != ord) {
+        this.ordemCursos.order = ord;
+        this.ordemCursos.type = "asc";
+      } else {
+        this.ordemCursos.type = this.ordemCursos.type == "asc" ? "desc" : "asc";
+      }
+    },
+
     selectAllSemestre() {
       this.semestre_1Ativo = true;
       this.semestre_2Ativo = true;
@@ -455,6 +493,7 @@ export default {
       this.semestre_1Ativo = false;
       this.semestre_2Ativo = false;
     },
+
     defineSelectAll() {
       if (this.cursosSelecionados.length === 5) {
         this.selectAll = true;
@@ -462,12 +501,12 @@ export default {
         this.selectAll = false;
       }
     },
-
     distoggleAll() {
       if (this.cursosSelecionados.length !== 0) {
         this.cursosSelecionados = [];
       }
     },
+
     toggleAll() {
       if (this.cursosSelecionados.length !== 5)
         this.cursosSelecionados = [1, 2, 3, 4, 5];
@@ -477,20 +516,13 @@ export default {
       else return "false";
     },
 
-    btnOK() {
-      this.btnOKSemestre();
-      this.cursos = [...this.cursosSelecionados];
-      this.nav_ativo = "cursos";
-      this.$refs.modalFiltros.hide();
-    },
-
     emptyTurmas() {
       this.ativos1 = {
         CCD: [[], [], [], [], [], [], [], [], [], []],
         CCN: [[], [], [], [], [], [], [], [], [], []],
         EC: [[], [], [], [], [], [], [], [], [], []],
         SI: [[], [], [], [], [], [], [], [], [], []],
-        Eletivas: []
+        Eletivas: [],
       };
 
       this.ativos2 = {
@@ -498,7 +530,7 @@ export default {
         CCN: [[], [], [], [], [], [], [], [], [], []],
         EC: [[], [], [], [], [], [], [], [], [], []],
         SI: [[], [], [], [], [], [], [], [], [], []],
-        Eletivas: []
+        Eletivas: [],
       };
     },
 
@@ -930,7 +962,7 @@ export default {
       }
 
       this.$store.commit("redefinirAtivas1", {
-        Ativas: this.ativos1
+        Ativas: this.ativos1,
       });
     },
 
@@ -1347,7 +1379,7 @@ export default {
       }
 
       this.$store.commit("redefinirAtivas2", {
-        Ativas: this.ativos2
+        Ativas: this.ativos2,
       });
     },
 
@@ -1426,7 +1458,7 @@ export default {
       }
 
       this.$store.commit("redefinirAtivas1", {
-        Ativas: this.ativos1
+        Ativas: this.ativos1,
       });
 
       for (let i = 0; i < 10; i++) {
@@ -1481,11 +1513,11 @@ export default {
       }
 
       this.$store.commit("redefinirAtivas1", {
-        Ativas2: this.ativos2
+        Ativas2: this.ativos2,
       });
 
       this.$store.commit("redefinirAtivas2", {
-        Ativas: this.ativos2
+        Ativas: this.ativos2,
       });
     },
     pdf() {
@@ -1511,13 +1543,13 @@ export default {
         text: "1º Semestre",
         bold: false,
         margin: [0, 10, 0, 5],
-        fontSize: 20
+        fontSize: 20,
       });
       tables.push({
         text: "Ciência da Computação Diurno",
         bold: false,
         margin: [0, 10, 0, 5],
-        fontSize: 20
+        fontSize: 20,
       });
 
       for (let i = 0; i < 10; i++) {
@@ -1527,7 +1559,7 @@ export default {
           tables.push({
             text: i + 1 + "º Período",
             bold: false,
-            margin: [0, 5, 0, 5]
+            margin: [0, 5, 0, 5],
           });
           tables.push({
             table: {
@@ -1539,36 +1571,36 @@ export default {
                   {
                     text: "Hora",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Segunda",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Terça",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Quarta",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Quinta",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Sexta",
                     alignment: "center",
-                    bold: true
-                  }
-                ]
-              ]
-            }
+                    bold: true,
+                  },
+                ],
+              ],
+            },
           });
           for (let d = 0; d < 4; d++) {
             for (let j = 0; j < periodosCCD1[i].length; j++) {
@@ -1639,168 +1671,168 @@ export default {
                 tables[3 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "08 - 10",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 1:
                 tables[3 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "10 - 12",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 2:
                 tables[3 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "14 - 16",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 3:
                 tables[3 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "16 - 18",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 4:
                 tables[3 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "19 - 21",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 5:
                 tables[3 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "21 - 23",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
             }
@@ -1814,7 +1846,7 @@ export default {
         bold: true,
         margin: [0, 10, 0, 5],
         fontSize: 20,
-        pageBreak: "before"
+        pageBreak: "before",
       });
 
       for (let i = 0; i < 10; i++) {
@@ -1824,7 +1856,7 @@ export default {
           tables.push({
             text: i + 1 + "º Período",
             bold: true,
-            margin: [0, 5, 0, 5]
+            margin: [0, 5, 0, 5],
           });
           tables.push({
             table: {
@@ -1836,36 +1868,36 @@ export default {
                   {
                     text: "Hora",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Segunda",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Terça",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Quarta",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Quinta",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Sexta",
                     alignment: "center",
-                    bold: true
-                  }
-                ]
-              ]
-            }
+                    bold: true,
+                  },
+                ],
+              ],
+            },
           });
           for (let d = 4; d < 6; d++) {
             for (let j = 0; j < periodosCCN1[i].length; j++) {
@@ -1936,168 +1968,168 @@ export default {
                 tables[24 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "08 - 10",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 1:
                 tables[24 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "10 - 12",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 2:
                 tables[24 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "14 - 16",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 3:
                 tables[24 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "16 - 18",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 4:
                 tables[24 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "19 - 21",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 5:
                 tables[24 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "21 - 23",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
             }
@@ -2111,7 +2143,7 @@ export default {
         bold: true,
         margin: [0, 10, 0, 5],
         fontSize: 20,
-        pageBreak: "before"
+        pageBreak: "before",
       });
 
       for (let i = 0; i < 10; i++) {
@@ -2121,7 +2153,7 @@ export default {
           tables.push({
             text: i + 1 + "º Período",
             bold: true,
-            margin: [0, 5, 0, 5]
+            margin: [0, 5, 0, 5],
           });
           tables.push({
             table: {
@@ -2133,36 +2165,36 @@ export default {
                   {
                     text: "Hora",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Segunda",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Terça",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Quarta",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Quinta",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Sexta",
                     alignment: "center",
-                    bold: true
-                  }
-                ]
-              ]
-            }
+                    bold: true,
+                  },
+                ],
+              ],
+            },
           });
           for (let d = 0; d < 4; d++) {
             for (let j = 0; j < periodosEC1[i].length; j++) {
@@ -2233,168 +2265,168 @@ export default {
                 tables[45 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "08 - 10",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 1:
                 tables[45 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "10 - 12",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 2:
                 tables[45 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "14 - 16",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 3:
                 tables[45 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "16 - 18",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 4:
                 tables[45 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "19 - 21",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 5:
                 tables[45 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "21 - 23",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
             }
@@ -2408,7 +2440,7 @@ export default {
         bold: true,
         margin: [0, 10, 0, 5],
         fontSize: 20,
-        pageBreak: "before"
+        pageBreak: "before",
       });
 
       for (let i = 0; i < 10; i++) {
@@ -2418,7 +2450,7 @@ export default {
           tables.push({
             text: i + 1 + "º Período",
             bold: true,
-            margin: [0, 5, 0, 5]
+            margin: [0, 5, 0, 5],
           });
           tables.push({
             table: {
@@ -2430,36 +2462,36 @@ export default {
                   {
                     text: "Hora",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Segunda",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Terça",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Quarta",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Quinta",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Sexta",
                     alignment: "center",
-                    bold: true
-                  }
-                ]
-              ]
-            }
+                    bold: true,
+                  },
+                ],
+              ],
+            },
           });
           for (let d = 4; d < 6; d++) {
             for (let j = 0; j < periodosSI1[i].length; j++) {
@@ -2530,168 +2562,168 @@ export default {
                 tables[66 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "08 - 10",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 1:
                 tables[66 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "10 - 12",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 2:
                 tables[66 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "14 - 16",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 3:
                 tables[66 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "16 - 18",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 4:
                 tables[66 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "19 - 21",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 5:
                 tables[66 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "21 - 23",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
             }
@@ -2705,7 +2737,7 @@ export default {
         bold: true,
         margin: [0, 10, 0, 5],
         fontSize: 20,
-        pageBreak: "before"
+        pageBreak: "before",
       });
 
       if (eletivas1.length === 0) {
@@ -2721,36 +2753,36 @@ export default {
                 {
                   text: "Hora",
                   alignment: "center",
-                  bold: true
+                  bold: true,
                 },
                 {
                   text: "Segunda",
                   alignment: "center",
-                  bold: true
+                  bold: true,
                 },
                 {
                   text: "Terça",
                   alignment: "center",
-                  bold: true
+                  bold: true,
                 },
                 {
                   text: "Quarta",
                   alignment: "center",
-                  bold: true
+                  bold: true,
                 },
                 {
                   text: "Quinta",
                   alignment: "center",
-                  bold: true
+                  bold: true,
                 },
                 {
                   text: "Sexta",
                   alignment: "center",
-                  bold: true
-                }
-              ]
-            ]
-          }
+                  bold: true,
+                },
+              ],
+            ],
+          },
         });
         for (let d = 0; d < 8; d++) {
           for (let j = 0; j < eletivas1.length; j++) {
@@ -2825,224 +2857,224 @@ export default {
               tables[86 - 2 * vazio].table.body.push([
                 {
                   text: "08 - 10",
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: seg,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: ter,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qua,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qui,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: sex,
-                  alignment: "center"
-                }
+                  alignment: "center",
+                },
               ]);
               break;
             case 1:
               tables[86 - 2 * vazio].table.body.push([
                 {
                   text: "10 - 12",
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: seg,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: ter,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qua,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qui,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: sex,
-                  alignment: "center"
-                }
+                  alignment: "center",
+                },
               ]);
               break;
             case 2:
               tables[86 - 2 * vazio].table.body.push([
                 {
                   text: "14 - 16",
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: seg,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: ter,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qua,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qui,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: sex,
-                  alignment: "center"
-                }
+                  alignment: "center",
+                },
               ]);
               break;
             case 3:
               tables[86 - 2 * vazio].table.body.push([
                 {
                   text: "16 - 18",
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: seg,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: ter,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qua,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qui,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: sex,
-                  alignment: "center"
-                }
+                  alignment: "center",
+                },
               ]);
               break;
             case 4:
               tables[86 - 2 * vazio].table.body.push([
                 {
                   text: "17 - 19",
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: seg,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: ter,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qua,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qui,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: sex,
-                  alignment: "center"
-                }
+                  alignment: "center",
+                },
               ]);
               break;
             case 5:
               tables[86 - 2 * vazio].table.body.push([
                 {
                   text: "18 - 20",
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: seg,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: ter,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qua,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qui,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: sex,
-                  alignment: "center"
-                }
+                  alignment: "center",
+                },
               ]);
               break;
             case 6:
               tables[86 - 2 * vazio].table.body.push([
                 {
                   text: "19 - 21",
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: seg,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: ter,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qua,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qui,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: sex,
-                  alignment: "center"
-                }
+                  alignment: "center",
+                },
               ]);
               break;
             case 7:
               tables[86 - 2 * vazio].table.body.push([
                 {
                   text: "21 - 23",
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: seg,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: ter,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qua,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qui,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: sex,
-                  alignment: "center"
-                }
+                  alignment: "center",
+                },
               ]);
               break;
           }
@@ -3061,13 +3093,13 @@ export default {
         bold: true,
         margin: [0, 10, 0, 5],
         fontSize: 20,
-        pageBreak: "before"
+        pageBreak: "before",
       });
       tables.push({
         text: "Ciência da Computação Diurno",
         bold: true,
         margin: [0, 10, 0, 5],
-        fontSize: 20
+        fontSize: 20,
       });
 
       for (let i = 0; i < 10; i++) {
@@ -3077,7 +3109,7 @@ export default {
           tables.push({
             text: i + 1 + "º Período",
             bold: true,
-            margin: [0, 5, 0, 5]
+            margin: [0, 5, 0, 5],
           });
           tables.push({
             table: {
@@ -3089,36 +3121,36 @@ export default {
                   {
                     text: "Hora",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Segunda",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Terça",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Quarta",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Quinta",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Sexta",
                     alignment: "center",
-                    bold: true
-                  }
-                ]
-              ]
-            }
+                    bold: true,
+                  },
+                ],
+              ],
+            },
           });
           for (let d = 0; d < 4; d++) {
             for (let j = 0; j < periodosCCD2[i].length; j++) {
@@ -3189,168 +3221,168 @@ export default {
                 tables[90 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "08 - 10",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 1:
                 tables[90 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "10 - 12",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 2:
                 tables[90 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "14 - 16",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 3:
                 tables[90 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "16 - 18",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 4:
                 tables[90 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "19 - 21",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 5:
                 tables[90 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "21 - 23",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
             }
@@ -3364,7 +3396,7 @@ export default {
         bold: true,
         margin: [0, 10, 0, 5],
         fontSize: 20,
-        pageBreak: "before"
+        pageBreak: "before",
       });
 
       for (let i = 0; i < 10; i++) {
@@ -3374,7 +3406,7 @@ export default {
           tables.push({
             text: i + 1 + "º Período",
             bold: true,
-            margin: [0, 5, 0, 5]
+            margin: [0, 5, 0, 5],
           });
           tables.push({
             table: {
@@ -3386,36 +3418,36 @@ export default {
                   {
                     text: "Hora",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Segunda",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Terça",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Quarta",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Quinta",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Sexta",
                     alignment: "center",
-                    bold: true
-                  }
-                ]
-              ]
-            }
+                    bold: true,
+                  },
+                ],
+              ],
+            },
           });
           for (let d = 4; d < 6; d++) {
             for (let j = 0; j < periodosCCN2[i].length; j++) {
@@ -3486,168 +3518,168 @@ export default {
                 tables[111 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "08 - 10",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 1:
                 tables[111 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "10 - 12",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 2:
                 tables[111 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "14 - 16",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 3:
                 tables[111 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "16 - 18",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 4:
                 tables[111 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "19 - 21",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 5:
                 tables[111 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "21 - 23",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
             }
@@ -3661,7 +3693,7 @@ export default {
         bold: true,
         margin: [0, 10, 0, 5],
         fontSize: 20,
-        pageBreak: "before"
+        pageBreak: "before",
       });
 
       for (let i = 0; i < 10; i++) {
@@ -3671,7 +3703,7 @@ export default {
           tables.push({
             text: i + 1 + "º Período",
             bold: true,
-            margin: [0, 5, 0, 5]
+            margin: [0, 5, 0, 5],
           });
           tables.push({
             table: {
@@ -3683,36 +3715,36 @@ export default {
                   {
                     text: "Hora",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Segunda",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Terça",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Quarta",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Quinta",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Sexta",
                     alignment: "center",
-                    bold: true
-                  }
-                ]
-              ]
-            }
+                    bold: true,
+                  },
+                ],
+              ],
+            },
           });
           for (let d = 0; d < 4; d++) {
             for (let j = 0; j < periodosEC2[i].length; j++) {
@@ -3783,168 +3815,168 @@ export default {
                 tables[132 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "08 - 10",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 1:
                 tables[132 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "10 - 12",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 2:
                 tables[132 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "14 - 16",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 3:
                 tables[132 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "16 - 18",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 4:
                 tables[132 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "19 - 21",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 5:
                 tables[132 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "21 - 23",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
             }
@@ -3958,7 +3990,7 @@ export default {
         bold: true,
         margin: [0, 10, 0, 5],
         fontSize: 20,
-        pageBreak: "before"
+        pageBreak: "before",
       });
 
       for (let i = 0; i < 10; i++) {
@@ -3968,7 +4000,7 @@ export default {
           tables.push({
             text: i + 1 + "º Período",
             bold: true,
-            margin: [0, 5, 0, 5]
+            margin: [0, 5, 0, 5],
           });
           tables.push({
             table: {
@@ -3980,36 +4012,36 @@ export default {
                   {
                     text: "Hora",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Segunda",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Terça",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Quarta",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Quinta",
                     alignment: "center",
-                    bold: true
+                    bold: true,
                   },
                   {
                     text: "Sexta",
                     alignment: "center",
-                    bold: true
-                  }
-                ]
-              ]
-            }
+                    bold: true,
+                  },
+                ],
+              ],
+            },
           });
           for (let d = 4; d < 6; d++) {
             for (let j = 0; j < periodosSI2[i].length; j++) {
@@ -4080,168 +4112,168 @@ export default {
                 tables[153 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "08 - 10",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 1:
                 tables[153 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "10 - 12",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 2:
                 tables[153 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "14 - 16",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 3:
                 tables[153 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "16 - 18",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 4:
                 tables[153 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "19 - 21",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
               case 5:
                 tables[153 + 2 * (i - vazio)].table.body.push([
                   {
                     text: "21 - 23",
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: seg,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: ter,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qua,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: qui,
-                    alignment: "center"
+                    alignment: "center",
                   },
                   {
                     text: sex,
-                    alignment: "center"
-                  }
+                    alignment: "center",
+                  },
                 ]);
                 break;
             }
@@ -4255,7 +4287,7 @@ export default {
         bold: true,
         margin: [0, 10, 0, 5],
         fontSize: 20,
-        pageBreak: "before"
+        pageBreak: "before",
       });
 
       if (eletivas2.length === 0) {
@@ -4271,36 +4303,36 @@ export default {
                 {
                   text: "Hora",
                   alignment: "center",
-                  bold: true
+                  bold: true,
                 },
                 {
                   text: "Segunda",
                   alignment: "center",
-                  bold: true
+                  bold: true,
                 },
                 {
                   text: "Terça",
                   alignment: "center",
-                  bold: true
+                  bold: true,
                 },
                 {
                   text: "Quarta",
                   alignment: "center",
-                  bold: true
+                  bold: true,
                 },
                 {
                   text: "Quinta",
                   alignment: "center",
-                  bold: true
+                  bold: true,
                 },
                 {
                   text: "Sexta",
                   alignment: "center",
-                  bold: true
-                }
-              ]
-            ]
-          }
+                  bold: true,
+                },
+              ],
+            ],
+          },
         });
         for (let d = 0; d < 8; d++) {
           for (let j = 0; j < eletivas2.length; j++) {
@@ -4375,224 +4407,224 @@ export default {
               tables[173 - 2 * vazio].table.body.push([
                 {
                   text: "08 - 10",
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: seg,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: ter,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qua,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qui,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: sex,
-                  alignment: "center"
-                }
+                  alignment: "center",
+                },
               ]);
               break;
             case 1:
               tables[173 - 2 * vazio].table.body.push([
                 {
                   text: "10 - 12",
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: seg,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: ter,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qua,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qui,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: sex,
-                  alignment: "center"
-                }
+                  alignment: "center",
+                },
               ]);
               break;
             case 2:
               tables[173 - 2 * vazio].table.body.push([
                 {
                   text: "14 - 16",
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: seg,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: ter,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qua,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qui,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: sex,
-                  alignment: "center"
-                }
+                  alignment: "center",
+                },
               ]);
               break;
             case 3:
               tables[173 - 2 * vazio].table.body.push([
                 {
                   text: "16 - 18",
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: seg,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: ter,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qua,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qui,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: sex,
-                  alignment: "center"
-                }
+                  alignment: "center",
+                },
               ]);
               break;
             case 4:
               tables[173 - 2 * vazio].table.body.push([
                 {
                   text: "17 - 19",
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: seg,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: ter,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qua,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qui,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: sex,
-                  alignment: "center"
-                }
+                  alignment: "center",
+                },
               ]);
               break;
             case 5:
               tables[173 - 2 * vazio].table.body.push([
                 {
                   text: "18 - 20",
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: seg,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: ter,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qua,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qui,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: sex,
-                  alignment: "center"
-                }
+                  alignment: "center",
+                },
               ]);
               break;
             case 6:
               tables[173 - 2 * vazio].table.body.push([
                 {
                   text: "19 - 21",
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: seg,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: ter,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qua,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qui,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: sex,
-                  alignment: "center"
-                }
+                  alignment: "center",
+                },
               ]);
               break;
             case 7:
               tables[173 - 2 * vazio].table.body.push([
                 {
                   text: "21 - 23",
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: seg,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: ter,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qua,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: qui,
-                  alignment: "center"
+                  alignment: "center",
                 },
                 {
                   text: sex,
-                  alignment: "center"
-                }
+                  alignment: "center",
+                },
               ]);
               break;
           }
@@ -4605,14 +4637,21 @@ export default {
         header: {
           text: new Date(Date.now()).toLocaleString(),
           margin: [40, 20, 0, 0],
-          fontSize: 10
-        }
+          fontSize: 10,
+        },
       };
       pdfMake.createPdf(docDefinition).open();
-    }
+    },
   },
 
   computed: {
+    Cursos_Modal_Filtred() {
+      return _.orderBy(
+        this.options_Cursos,
+        this.ordemCursos.order,
+        this.ordemCursos.type
+      );
+    },
     Grades() {
       return this.$store.state.grade.Grades;
     },
@@ -4670,7 +4709,7 @@ export default {
 
     CursosSelecionados() {
       return this.cursos.length;
-    }
+    },
   },
 
   watch: {
@@ -4684,8 +4723,8 @@ export default {
       } else {
         this.selectAll = false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -4710,7 +4749,11 @@ h4 {
   font-size: 12px !important;
   font-weight: bold !important;
 }
-
+h3 {
+  font-weight: bold;
+  font-size: 20px;
+  text-align: center !important;
+}
 .title {
   clear: both;
   display: block;
@@ -4720,17 +4763,9 @@ h4 {
   font-size: 18px;
 }
 
-h3 {
-  font-weight: bold;
-  font-size: 20px;
-  text-align: center !important;
-}
-
-.form-inline,
 .form-inline {
   width: auto;
 }
-
 .listas {
   line-height: 30px;
   font-size: 12px;
@@ -4738,7 +4773,6 @@ h3 {
   line-height: inherit;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
-
 strong {
   color: #007bff;
 }
@@ -4755,12 +4789,10 @@ strong {
   max-width: max-content;
   padding: 0 5px 0 5px;
 }
-
 .btn-azul {
   background-color: #718de0 !important;
   border-color: #9ab3ff !important;
 }
-
 .btn-azul:hover {
   background-color: rgb(74, 101, 190) !important;
   border-color: #82a0ff !important;
@@ -4877,10 +4909,6 @@ button {
   -webkit-text-stroke-color: #ada89a;
 }
 
-.clickable-header {
-  cursor: pointer;
-}
-
 .flex-container {
   display: -webkit-box;
   display: -moz-box;
@@ -4915,10 +4943,6 @@ button {
   margin-bottom: 0;
 }
 
-.form-inline,
-.form-inline {
-  width: auto;
-}
 .sticky {
   display: block !important;
   overflow: hidden !important;
@@ -4930,15 +4954,12 @@ button {
   overflow: hidden !important;
   z-index: 3;
 }
-@media screen and (max-width: 499px) {
-  .div-titulo {
-    height: 70px !important;
-  }
-}
+
 /* ==== MODAL TABLE ==== */
 .modal-table {
   display: block !important;
-  overflow: auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
   font-size: 10px !important;
   font-weight: normal !important;
   background-color: white;
@@ -4947,28 +4968,30 @@ button {
 .modal-table tr thead {
   display: block;
 }
-.clickable {
-  cursor: pointer;
-}
 .modal-table th {
   padding: 0 !important;
   text-align: center !important;
   height: 18px !important;
-  border-bottom: 0 !important;
-  border-top: 0 !important;
 }
+
 .modal-table .p-header {
   padding: 0px 5px 0px 5px !important;
   margin: 0 !important;
   text-align: start;
   height: 18px !important;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
 }
 .modal-table tbody {
   max-height: 100%;
   width: 100%;
 }
 .modal-table td {
-  border-bottom: 0;
+  border-top: 0;
   text-align: center;
   vertical-align: middle !important;
   padding: 0 !important;
@@ -4986,6 +5009,7 @@ button {
   margin-left: 0 !important;
   margin-top: 4px !important;
   margin-bottom: auto !important;
+  height: 13px !important;
 }
 /* FIM MODAL TABLE */
 
@@ -5004,5 +5028,10 @@ button {
   background-color: #e9ecef !important;
   color: #495057 !important;
   cursor: default;
+}
+@media screen and (max-width: 499px) {
+  .div-titulo {
+    height: 70px !important;
+  }
 }
 </style>

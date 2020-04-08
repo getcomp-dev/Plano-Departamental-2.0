@@ -3,7 +3,7 @@
     <!-- Titulo -->
     <div
       class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
-      style="height:38px;"
+      style="height: 38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="titulo col-8 col-sm-6 col-md-4 col-lg-4 px-0 pr-1">
@@ -12,7 +12,7 @@
 
         <div
           class="form-group col-4 col-sm-6 col-md-8 col-lg-8 mb-0 p-0"
-          style="justify-content: flex-end!important;"
+          style="justify-content: flex-end !important;"
         >
           <b-button
             v-b-modal.modalFiltros
@@ -47,27 +47,23 @@
     <div class="w-100 mb-2 border-bottom"></div>
 
     <div class="divTable p-0" ref="carga">
-      <table class="main-table table table-bordered  table-hover table-sm">
-        <thead class="thead-light">
+      <table class="main-table table table-bordered table-hover table-sm">
+        <thead class="thead-light sticky">
           <tr>
-            <div
-              style="display: block; overflow: hidden; width: ?max-contet; height:20px !important"
-              class="sticky"
-            >
+            <div style="font-size: 11px !important;" class="max-content">
               <th scope="col">
                 <p
-                  class="p-header clickable-header"
+                  class="p-header clickable"
                   style="width: 80px;"
-                  @click="toggleOrdem('codigo')"
+                  @click="toggleOrdDiscip('codigo')"
                   title="Clique para ordenar por código"
                 >
                   Cód.
                   <i
-                    v-if="ordenacao.ordemPor == 'codigo'"
-                    style="font-size:0.6rem; text-align:right"
+                    style="font-size: 0.6rem; text-align: right;"
                     :class="
-                      ordenacao.ordemPor == 'codigo'
-                        ? ordenacao.tipo == 'asc'
+                      ordemDiscip.order == 'codigo'
+                        ? ordemDiscip.type == 'asc'
                           ? 'fas fa-arrow-down fa-sm'
                           : 'fas fa-arrow-up fa-sm'
                         : ''
@@ -77,17 +73,17 @@
               </th>
               <th scope="col">
                 <p
-                  class="p-header clickable-header"
-                  style="width: 350px"
-                  @click="toggleOrdem('nome')"
+                  class="p-header clickable"
+                  style="width: 350px;"
+                  @click="toggleOrdDiscip('nome')"
                   title="Clique para ordenar por nome"
                 >
                   Nome
                   <i
-                    style="font-size:0.6rem; text-align:right;"
+                    style="font-size: 0.6rem; text-align: right;"
                     :class="
-                      ordenacao.ordemPor == 'nome'
-                        ? ordenacao.tipo == 'asc'
+                      ordemDiscip.order == 'nome'
+                        ? ordemDiscip.type == 'asc'
                           ? 'fas fa-arrow-down fa-sm'
                           : 'fas fa-arrow-up fa-sm'
                         : ''
@@ -98,18 +94,17 @@
 
               <th scope="col">
                 <p
-                  class="p-header clickable-header"
-                  style="width: 65px"
-                  @click="toggleOrdem('perfil')"
+                  class="p-header clickable"
+                  style="width: 65px;"
+                  @click="toggleOrdDiscip('perfil')"
                   title="Clique para ordenar por nome"
                 >
                   Perfil
                   <i
-                    v-if="ordenacao.ordemPor == 'perfil'"
-                    style="font-size:0.6rem; text-align:right"
+                    style="font-size: 0.6rem; text-align: right;"
                     :class="
-                      ordenacao.ordemPor == 'perfil'
-                        ? ordenacao.tipo == 'asc'
+                      ordemDiscip.order == 'perfil'
+                        ? ordemDiscip.type == 'asc'
                           ? 'fas fa-arrow-down fa-sm'
                           : 'fas fa-arrow-up fa-sm'
                         : ''
@@ -118,16 +113,16 @@
                 </p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width: 24px">S.</p>
+                <p class="p-header" style="width: 24px;">S.</p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width: 24px">T.</p>
+                <p class="p-header" style="width: 24px;">T.</p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width: 200px">Docentes</p>
+                <p class="p-header" style="width: 200px;">Docentes</p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width: 180px">Horário</p>
+                <p class="p-header" style="width: 180px;">Horário</p>
               </th>
 
               <th
@@ -135,21 +130,21 @@
                 v-if="semestreAtual === 1"
                 title="Vagas do 1º semestre"
               >
-                <p class="p-header" style="width: 50px">Vagas</p>
+                <p class="p-header" style="width: 50px;">Vagas</p>
               </th>
               <th
                 scope="col"
                 v-if="semestreAtual === 2"
                 title="Vagas do 2º semestre"
               >
-                <p class="p-header" style="width: 50px">Vagas</p>
+                <p class="p-header" style="width: 50px;">Vagas</p>
               </th>
               <th
                 scope="col"
                 v-if="semestreAtual === 3"
                 title="Vagas do 1º e 2º semestre"
               >
-                <p class="p-header" style="width: 50px">Vagas</p>
+                <p class="p-header" style="width: 50px;">Vagas</p>
               </th>
             </div>
           </tr>
@@ -159,9 +154,9 @@
             <template v-for="disciplina in Disciplinas_Main_Table">
               <template v-if="turmas(disciplina, semestreAtual).length > 0">
                 <tr class="disc-tr" :key="disciplina.codigo">
-                  <div style="width: ?max-contet;">
+                  <div class="max-content">
                     <td>
-                      <p style="width: 80px">{{ disciplina.codigo }}</p>
+                      <p style="width: 80px;">{{ disciplina.codigo }}</p>
                     </td>
                     <td>
                       <p style="width: 350px;">{{ disciplina.nome }}</p>
@@ -170,20 +165,29 @@
                       <p style="width: 65px;">{{ perfil(disciplina) }}</p>
                     </td>
                     <td>
-                      <p style="width: 428px"></p>
+                      <p style="width: 24px;"></p>
+                    </td>
+                    <td>
+                      <p style="width: 24px;"></p>
+                    </td>
+                    <td>
+                      <p style="width: 200px;"></p>
+                    </td>
+                    <td>
+                      <p style="width: 180px;"></p>
                     </td>
                     <td v-if="semestreAtual == 1">
-                      <p style="width: 50px">
+                      <p style="width: 50px;">
                         {{ vagasDisciplina(disciplina, 1) }}
                       </p>
                     </td>
                     <td v-if="semestreAtual == 2">
-                      <p style="width: 50px">
+                      <p style="width: 50px;">
                         {{ vagasDisciplina(disciplina, 2) }}
                       </p>
                     </td>
                     <td v-if="semestreAtual == 3">
-                      <p style="width: 50px">
+                      <p style="width: 50px;">
                         {{
                           vagasDisciplina(disciplina, 2) +
                             vagasDisciplina(disciplina, 1)
@@ -197,28 +201,28 @@
               <template v-for="turma in turmas(disciplina, semestreAtual)">
                 <tr :key="'turma-id:' + turma.id">
                   <template>
-                    <div class="linhas" style="width: ?858px;">
+                    <div class="linhas max-content">
                       <td>
-                        <p style="width: 80px"></p>
+                        <p style="width: 80px;"></p>
                       </td>
                       <td>
-                        <p style="width: 350px"></p>
+                        <p style="width: 350px;"></p>
                       </td>
                       <td>
-                        <p style="width: 65px"></p>
+                        <p style="width: 65px;"></p>
                       </td>
                       <td>
-                        <p style="width: 24px">{{ turma.periodo }}</p>
+                        <p style="width: 24px;">{{ turma.periodo }}</p>
                       </td>
                       <td>
-                        <p style="width: 24px">{{ turma.letra }}</p>
+                        <p style="width: 24px;">{{ turma.letra }}</p>
                       </td>
                       <td>
                         <p style="width: 200px;">{{ docentes(turma) }}</p>
                       </td>
 
                       <td>
-                        <div style="width: 180px">
+                        <div style="width: 180px;">
                           <template v-for="horario in Horarios">
                             <p
                               :key="horario.id"
@@ -239,7 +243,7 @@
                       <td
                         v-if="semestreAtual == 1"
                         v-on:click="selecionaTurma(turma)"
-                        class="clickable-header"
+                        class="clickable"
                       >
                         <p
                           v-if="turma.periodo == 1 || turma.periodo == 2"
@@ -252,7 +256,7 @@
                       <td
                         v-if="semestreAtual == 2"
                         v-on:click="selecionaTurma(turma)"
-                        class="clickable-header"
+                        class="clickable"
                       >
                         <p
                           v-if="turma.periodo == 3 || turma.periodo == 4"
@@ -265,7 +269,7 @@
                       <td
                         v-if="semestreAtual == 3"
                         v-on:click="selecionaTurma(turma)"
-                        class="clickable-header"
+                        class="clickable"
                       >
                         <p
                           v-if="turma.periodo == 1 || turma.periodo == 2"
@@ -305,7 +309,7 @@
             Disciplinas
             <i
               class="fas fa-list-ul cancelbtn px-1"
-              style="font-size: 12px"
+              style="font-size: 12px;"
             ></i>
             e selecione a(s) disciplina(s) que deseja ver, em seguida confirme
             em OK. Caso queira ver todas basta clicar em Selecionar Todos.
@@ -314,10 +318,10 @@
             <strong>Para gerar relatório:</strong> Clique no botão Relatório
             <i
               class="far fa-file-alt relatbtn px-1"
-              style="font-size: 12px"
+              style="font-size: 12px;"
             ></i>
             e aguarde para fazer
-            <font style="font-style:italic;">download</font> do mesmo.
+            <font style="font-style: italic;">download</font> do mesmo.
           </li>
           <li class="list-group-item">
             <strong>Para alterar ordenação:</strong> Clique em Cod. no cabeçalho
@@ -332,7 +336,7 @@
         </ul>
       </div>
 
-      <div slot="modal-footer" style="display: none"></div>
+      <div slot="modal-footer" style="display: none;"></div>
     </b-modal>
     <!-- Modals FILTROS -->
     <b-modal
@@ -345,31 +349,31 @@
       <div class="p-0 m-0" style="height: 30px; width: 465px;">
         <ul
           class="nav nav-tabs card-header-tabs m-0"
-          style="font-size: 11px!important;height: 30px;"
+          style="font-size: 11px !important; height: 30px;"
         >
           <li class="nav-item" @click="changeTab('perfis')">
             <a
-              class="nav-link border border-right-0 clickable"
+              class="nav-link border border-right-0"
               :class="{
-                active: nav_ativo == 'perfis'
+                active: nav_ativo == 'perfis',
               }"
               >Perfis</a
             >
           </li>
           <li class="nav-item" @click="changeTab('disciplinas')">
             <a
-              class="nav-link border border-right-0  clickable"
+              class="nav-link border border-right-0"
               :class="{
-                active: nav_ativo == 'disciplinas'
+                active: nav_ativo == 'disciplinas',
               }"
               >Disciplinas</a
             >
           </li>
           <li class="nav-item" @click="changeTab('semestre')">
             <a
-              class="nav-link border  clickable"
+              class="nav-link border"
               :class="{
-                active: nav_ativo == 'semestre'
+                active: nav_ativo == 'semestre',
               }"
               >Semestre</a
             >
@@ -377,10 +381,7 @@
         </ul>
       </div>
 
-      <div
-        class="col m-0 p-0"
-        style="width:max-content;height: 450px!important;"
-      >
+      <div class="col m-0 p-0 max-content" style="height: 450px !important;">
         <!-- SEARCH BAR -->
         <!-- <div class="w-100 p-0 m-0 mb-1" v-if="nav_ativo == 'disciplinas'">
           <form class="form-inline">
@@ -388,9 +389,9 @@
               <input
                 type="text"
                 class="form-control"
-                id="searchBar"
+                id="searchDisciplinasBar"
                 placeholder="Pesquise nome ou codigo de uma disciplina"
-                v-model="search"
+                v-model="searchDisciplinas"
               />
             </div>
           </form>
@@ -401,26 +402,35 @@
           class="table table-sm modal-table table-bordered"
           style="max-height: 450px !important;"
         >
-          <thead class="thead-light">
+          <thead class="thead-light sticky">
             <tr>
-              <div
-                style="width: max-content; height: 18px !important; font-size: 11px!important"
-                class="sticky"
-              >
+              <div style="font-size: 11px !important;" class="max-content">
                 <th>
-                  <p style="width:25px" class="p-header"></p>
+                  <p style="width: 25px;" class="p-header"></p>
                 </th>
                 <th>
-                  <p class="p-header" style="width: 435px; text-align:start">
+                  <p
+                    class="p-header clickable"
+                    style="width: 435px; text-align: start;"
+                    @click="toggleOrdPerfis()"
+                  >
                     Nome
+                    <i
+                      style="font-size: 0.6rem; text-align: right;"
+                      :class="
+                        ordemPerfis.type == 'asc'
+                          ? 'fas fa-arrow-down fa-sm'
+                          : 'fas fa-arrow-up fa-sm'
+                      "
+                    ></i>
                   </p>
                 </th>
               </div>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="perfil in Perfiss" :key="'perfil-id' + perfil.id">
-              <div style="width: max-content">
+            <tr v-for="perfil in Perfis_Modal" :key="'perfil-id' + perfil.id">
+              <div class="max-content">
                 <td>
                   <div style="width: 25px; height: inherit;" class="px-1">
                     <input
@@ -432,7 +442,9 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:435px; text-align:start">{{ perfil.nome }}</p>
+                  <p style="width: 435px; text-align: start;">
+                    {{ perfil.nome }}
+                  </p>
                 </td>
               </div>
             </tr>
@@ -442,113 +454,125 @@
         <table
           v-else-if="nav_ativo == 'disciplinas'"
           class="table table-sm modal-table table-bordered table-hover"
-          style="max-height: 450px !important; overflow-y: scroll!important"
+          style="max-height: 450px !important; overflow-y: auto !important;"
         >
-          <thead class="thead-light">
+          <thead class="thead-light sticky">
             <tr>
-              <div
-                style="width: max-content; height: 18px !important; font-size: 11px!important"
-                class="sticky "
-              >
-                <th style="vertical-align: middle !important;">
-                  <p style="width:25px; text-align:center" class="p-header"></p>
-                </th>
+              <div style="font-size: 11px !important;" class="max-content">
                 <th>
-                  <p
-                    class="p-header clickable-header"
-                    style="width: 80px; text-align: start;"
-                    @click="toggleOrdem('codigo')"
-                    title="Clique para ordenar por código"
+                  <div
+                    class="m-0 input-group"
+                    style="
+                      width: 462px;
+                      height: 35px;
+                      padding-left: 4px;
+                      padding-right: 20px;
+                      padding-top: 4px;
+                    "
                   >
-                    Cód.
-                    <i
-                      v-if="ordenacao.ordemPor == 'codigo'"
-                      style="font-size:0.6rem; text-align:right"
-                      :class="
-                        ordenacao.ordemPor == 'codigo'
-                          ? ordenacao.tipo == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : ''
-                      "
-                    ></i>
-                  </p>
-                </th>
-                <th>
-                  <p
-                    class="p-header clickable-header"
-                    style="width: 260px; text-align: start;"
-                    @click="toggleOrdem('nome')"
-                    title="Clique para ordenar por nome"
-                  >
-                    Nome
-                    <i
-                      v-if="ordenacao.ordemPor == 'nome'"
-                      style="font-size:0.6rem; text-align:right"
-                      :class="
-                        ordenacao.ordemPor == 'nome'
-                          ? ordenacao.tipo == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : ''
-                      "
-                    ></i>
-                  </p>
-                </th>
-                <th>
-                  <p
-                    class="p-header clickable-header"
-                    style="width: 80px; text-align: start;"
-                    @click="toggleOrdem('perfil')"
-                    title="Clique para ordenar por nome"
-                  >
-                    Perfil
-                    <i
-                      v-if="ordenacao.ordemPor == 'perfil'"
-                      style="font-size:0.6rem; text-align:right"
-                      :class="
-                        ordenacao.ordemPor == 'perfil'
-                          ? ordenacao.tipo == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : ''
-                      "
-                    ></i>
-                  </p>
+                    <input
+                      type="text"
+                      class="form-control"
+                      style="border-right: none;"
+                      placeholder="Pesquise nome ou codigo de uma disciplina..."
+                      v-model="searchDisciplinas"
+                    />
+                    <div
+                      class="input-group-append"
+                      @click="searchDisciplinas = null"
+                    >
+                      <span
+                        class="input-group-text"
+                        style="height: 25px; font-size: 18px; cursor: pointer;"
+                        >&times;</span
+                      >
+                    </div>
+                  </div>
                 </th>
               </div>
             </tr>
 
             <tr>
-              <div
-                style="width: max-content; font-size: 11px!important"
-                class="stickySearch "
-              >
+              <div style="font-size: 11px !important;" class="max-content">
                 <th>
-                  <div
-                    class="m-0 border"
-                    style="width:465px; height:34px;padding-left: 5px;padding-right: 25px; padding-top: 4px;"
+                  <p
+                    style="width: 25px; text-align: center;"
+                    class="p-header"
+                  ></p>
+                </th>
+                <th>
+                  <p
+                    class="p-header clickable"
+                    style="width: 70px; text-align: start;"
+                    @click="toggleOrdDiscip('codigo')"
+                    title="Clique para ordenar por código"
                   >
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="searchBar"
-                      placeholder="Pesquise nome ou codigo de uma disciplina"
-                      v-model="search"
-                    />
-                  </div>
+                    Cód.
+                    <i
+                      v-if="ordemDiscip.order == 'codigo'"
+                      style="font-size: 0.6rem; text-align: right;"
+                      :class="
+                        ordemDiscip.order == 'codigo'
+                          ? ordemDiscip.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : ''
+                      "
+                    ></i>
+                  </p>
+                </th>
+                <th>
+                  <p
+                    class="p-header clickable"
+                    style="width: 280px; text-align: start;"
+                    @click="toggleOrdDiscip('nome')"
+                    title="Clique para ordenar por nome"
+                  >
+                    Nome
+                    <i
+                      v-if="ordemDiscip.order == 'nome'"
+                      style="font-size: 0.6rem; text-align: right;"
+                      :class="
+                        ordemDiscip.order == 'nome'
+                          ? ordemDiscip.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : ''
+                      "
+                    ></i>
+                  </p>
+                </th>
+                <th>
+                  <p
+                    class="p-header clickable"
+                    style="width: 85px; text-align: start;"
+                    @click="toggleOrdDiscip('perfil')"
+                    title="Clique para ordenar por nome"
+                  >
+                    Perfil
+                    <i
+                      v-if="ordemDiscip.order == 'perfil'"
+                      style="font-size: 0.6rem; text-align: right;"
+                      :class="
+                        ordemDiscip.order == 'perfil'
+                          ? ordemDiscip.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : ''
+                      "
+                    ></i>
+                  </p>
                 </th>
               </div>
             </tr>
           </thead>
           <tbody>
             <tr
-              v-for="disciplina in Disciplinas_Modal_Table"
+              v-for="disciplina in Disciplinas_Filtred"
               :key="'disciplina' + disciplina.id"
               value="disciplina.id"
-              @click="addInDisci(disciplina)"
             >
-              <div style="width: max-content">
+              <div class="max-content">
                 <td>
                   <div style="width: 25px; height: inherit;" class="px-1">
                     <input
@@ -560,17 +584,17 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:80px; text-align:start">
+                  <p style="width: 70px; text-align: start;">
                     {{ disciplina.codigo }}
                   </p>
                 </td>
                 <td>
-                  <p style="width:260px; text-align:start">
+                  <p style="width: 280px; text-align: start;">
                     {{ disciplina.nome }}
                   </p>
                 </td>
                 <td>
-                  <p style="width:80px; text-align:start">
+                  <p style="width: 85px; text-align: start;">
                     {{ perfil(disciplina) }}
                   </p>
                 </td>
@@ -584,14 +608,11 @@
           class="table table-bordered table-sm modal-table"
           style="max-height: 392px !important;"
         >
-          <thead class="thead-light">
+          <thead class="thead-light sticky">
             <tr>
-              <div
-                style="width: max-content; height: 18px !important; font-size: 11px!important"
-                class="sticky"
-              >
+              <div style="font-size: 11px !important;" class="max-content">
                 <th>
-                  <p style="width:25px" class="p-header"></p>
+                  <p style="width: 25px;" class="p-header"></p>
                 </th>
                 <th>
                   <p class="p-header" style="width: 435px; text-align: start;">
@@ -603,7 +624,7 @@
           </thead>
           <tbody>
             <tr>
-              <div style="width: max-content">
+              <div style="width: max-content;">
                 <td>
                   <div style="width: 25px; height: inherit;" class="px-1">
                     <input
@@ -614,12 +635,12 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:435px; text-align:start">Primeiro</p>
+                  <p style="width: 435px; text-align: start;">PRIMEIRO</p>
                 </td>
               </div>
             </tr>
             <tr>
-              <div style="width: max-content">
+              <div style="width: max-content;">
                 <td>
                   <div style="width: 25px; height: inherit;" class="px-1">
                     <input
@@ -630,7 +651,7 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:435px; text-align:start">Segundo</p>
+                  <p style="width: 435px; text-align: start;">SEGUNDO</p>
                 </td>
               </div>
             </tr>
@@ -639,18 +660,18 @@
       </div>
 
       <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
-        <div class="row ml-0 w-100">
+        <div class="w-100">
           <template v-if="nav_ativo == 'disciplinas'">
             <b-button
               class="btn-azul btn-df mr-2 btn-custom"
               variant="success"
-              @click="selectAll()"
+              @click="selectAllDisciplinas()"
               >Selecionar Todos</b-button
             >
             <b-button
               class="btn-cinza btn-df mr-2 btn-custom"
               variant="secondary"
-              @click="selectNone()"
+              @click="selectNoneDisciplinas()"
               >Desmarcar Todos</b-button
             >
           </template>
@@ -687,31 +708,40 @@
           variant="success"
           @click="btnOK()"
           class="btn-verde btn-df mr-2 btn-custom"
-          style="padding-right:15px!important; padding-left:15px!important;"
+          style="padding-right: 15px !important; padding-left: 15px !important;"
           >OK</b-button
         >
       </div>
     </b-modal>
 
     <!-- Modals para ver divisões de vagas por curso -->
-    <b-modal id="modalVagas" ref="VagasModal" scrollable size="lg">
-      <div slot="modal-header" style="width:100%">
-        <div class="row col-12">
-          <h6 class="col-9">
-            {{
-              turmaSelecionada !== undefined
-                ? disciplina(turmaSelecionada).codigo +
-                  " - " +
-                  disciplina(turmaSelecionada).nome
-                : "Nenhuma Turma Selecionada"
-            }}
-          </h6>
-          <div class=" col-2 m-0 p-0">
-            <label for="selectTurmaModal">Turma:</label>
+    <b-modal
+      size="md"
+      id="modalVagas"
+      class="modalVagas modal-vagas"
+      ref="VagasModal"
+      scrollable
+    >
+      <div slot="modal-header" class="row w-100 m-0 p-0">
+        <div class="col-11 form-group p-0">
+          <div class="form-row p-0 m-0">
+            <h6 class="p-0 m-0 mr-4 col-12">
+              {{
+                turmaSelecionada !== undefined
+                  ? disciplina(turmaSelecionada).codigo +
+                    " - " +
+                    disciplina(turmaSelecionada).nome
+                  : "Nenhuma Turma Selecionada"
+              }}
+            </h6>
+          </div>
+          <div class="d-flex col-12 p-0 mt-2" style="margin-bottom: -15px;">
+            <label for="selectTurma" class="mr-2">Turma: </label>
             <select
+              id="selectTurma"
+              class="form-control"
+              style="width: 50px !important;"
               v-model="turmaSelecionada"
-              style="height:25px!important; margin-left: 5px"
-              id="selectTurmaModal"
             >
               <option
                 v-for="turma in turmaSelecionada !== undefined
@@ -729,171 +759,128 @@
               >
             </select>
           </div>
-          <div class="col-1 m-0 p-0">
-            <button
-              type="button"
-              class="close"
-              v-on:click="closeModalVagas"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
         </div>
 
-        <div
-          class="col d-flex p-0"
-          style="justify-content: flex-end; align-content: center;"
-        >
+        <div class="col-1 m-0 p-0">
           <button
             type="button"
-            class="btn-x"
-            style="font-size:20px"
-            @click="$refs.VagasModal.hide()"
+            class="close float-right"
+            style="padding-bottom: 4px;"
+            v-on:click="closeModalVagas()"
+            aria-label="Close"
           >
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
       </div>
 
-      <div class="col m-0 p-0" style="width:max-content;">
+      <div class="col m-0 p-0 max-content">
+        <!-- Table vagas -->
         <table
           class="table table-sm modal-table table-bordered"
           style="max-height: 450px !important;"
         >
-          <thead class="thead-light">
+          <thead class="thead-light sticky">
             <tr>
-              <div
-                style="width: max-content; height: 18px !important; font-size: 11px!important"
-                class="sticky"
-              >
+              <div style="font-size: 11px !important;" class=" max-content">
                 <th>
                   <p
-                    class="p-header clickable-header"
+                    class="p-header clickable"
                     style="width: 50px; text-align: start;"
-                    v-on:click="ordemCursos('codigo')"
+                    v-on:click="toggleOrdVagas('codigo')"
                     title="Clique para ordenar por código"
                   >
                     Cód.
                     <i
-                      v-if="
-                        ordemCurso.order === 'codigo' &&
-                          ordemCurso.type === 'asc'
+                      :class="
+                        ordemVagas.order === 'codigo'
+                          ? ordemVagas.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : ''
                       "
-                      style="font-size:0.6rem; text-align:right"
-                      class="fas fa-arrow-down fa-sm"
-                    ></i>
-                    <i
-                      v-if="
-                        ordemCurso.order === 'codigo' &&
-                          ordemCurso.type === 'desc'
-                      "
-                      style="font-size:0.6rem; text-align:right"
-                      class="fas fa-arrow-up fa-sm"
+                      style="font-size: 0.6rem; text-align: right;"
                     ></i>
                   </p>
                 </th>
                 <th>
                   <p
-                    class="p-header clickable-header"
-                    style="width: 260px; text-align: start;"
-                    v-on:click="ordemCursos('nome')"
+                    class="p-header clickable"
+                    style="width: 250px; text-align: start;"
+                    v-on:click="toggleOrdVagas('nome')"
                     title="Clique para ordenar por nome"
                   >
                     Nome
                     <i
-                      v-if="
-                        ordemCurso.order === 'nome' && ordemCurso.type === 'asc'
+                      :class="
+                        ordemVagas.order === 'nome'
+                          ? ordemVagas.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : ''
                       "
-                      style="font-size:0.6rem; text-align:right"
-                      class="fas fa-arrow-down fa-sm"
-                    ></i>
-                    <i
-                      v-if="
-                        ordemCurso.order === 'nome' &&
-                          ordemCurso.type === 'desc'
-                      "
-                      style="font-size:0.6rem; text-align:right"
-                      class="fas fa-arrow-up fa-sm"
+                      style="font-size: 0.6rem; text-align: right;"
                     ></i>
                   </p>
                 </th>
 
                 <th>
                   <p
-                    class="p-header clickable-header"
-                    style="width: 50px; text-align: start;"
-                    v-on:click="ordemCursos('vagasPeriodizadas')"
+                    class="p-header clickable"
+                    style="width: 55px; text-align: start;"
+                    v-on:click="toggleOrdVagas('vagasPeriodizadas')"
                     title="Clique para ordenar por vagas da grade"
                   >
                     Grade
                     <i
-                      v-if="
-                        ordemCurso.order === 'vagasPeriodizadas' &&
-                          ordemCurso.type === 'asc'
+                      :class="
+                        ordemVagas.order === 'vagasPeriodizadas'
+                          ? ordemVagas.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : ''
                       "
-                      style="font-size:0.6rem; text-align:right"
-                      class="fas fa-arrow-down fa-sm"
-                    ></i>
-                    <i
-                      v-if="
-                        ordemCurso.order === 'vagasPeriodizadas' &&
-                          ordemCurso.type === 'desc'
-                      "
-                      style="font-size:0.6rem; text-align:right"
-                      class="fas fa-arrow-up fa-sm"
+                      style="font-size: 0.6rem; text-align: right;"
                     ></i>
                   </p>
                 </th>
                 <th>
                   <p
-                    class="p-header clickable-header"
-                    style="width: 50px; text-align: start;"
-                    v-on:click="ordemCursos('vagasNaoPeriodizadas')"
+                    class="p-header clickable"
+                    style="width: 55px; text-align: start;"
+                    v-on:click="toggleOrdVagas('vagasNaoPeriodizadas')"
                     title="Clique para ordenar por vagas extras"
                   >
                     Extra
                     <i
-                      v-if="
-                        ordemCurso.order === 'vagasNaoPeriodizadas' &&
-                          ordemCurso.type === 'asc'
+                      :class="
+                        ordemVagas.order === 'vagasNaoPeriodizadas'
+                          ? ordemVagas.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : ''
                       "
-                      style="font-size:0.6rem; text-align:right"
-                      class="fas fa-arrow-down fa-sm"
-                    ></i>
-                    <i
-                      v-if="
-                        ordemCurso.order === 'vagasNaoPeriodizadas' &&
-                          ordemCurso.type === 'desc'
-                      "
-                      style="font-size:0.6rem; text-align:right"
-                      class="fas fa-arrow-up fa-sm"
+                      style="font-size: 0.6rem; text-align: right;"
                     ></i>
                   </p>
                 </th>
                 <th>
                   <p
-                    class="p-header clickable-header"
+                    class="p-header clickable"
                     style="width: 50px; text-align: start;"
-                    v-on:click="ordemCursos('vagasTotais')"
+                    v-on:click="toggleOrdVagas('vagasTotais')"
                     title="Clique para ordenar por vagas extras"
                   >
                     Total
                     <i
-                      v-if="
-                        ordemCurso.order === 'vagasTotais' &&
-                          ordemCurso.type === 'asc'
+                      :class="
+                        ordemVagas.order === 'vagasTotais'
+                          ? ordemVagas.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : ''
                       "
-                      style="font-size:0.6rem; text-align:right"
-                      class="fas fa-arrow-down fa-sm"
-                    ></i>
-                    <i
-                      v-if="
-                        ordemCurso.order === 'vagasTotais' &&
-                          ordemCurso.type === 'desc'
-                      "
-                      style="font-size:0.6rem; text-align:right"
-                      class="fas fa-arrow-up fa-sm"
+                      style="font-size: 0.6rem; text-align: right;"
                     ></i>
                   </p>
                 </th>
@@ -906,29 +893,29 @@
               v-for="p in VagasTurmaSelecionada"
               :key="'vaga' + p.Curso + '-' + p.Turma"
             >
-              <div style="width: max-content!important">
+              <div style="width: max-content !important;">
                 <td>
-                  <p style="width: 50px; text-align:start">
+                  <p style="width: 50px; text-align: start;">
                     {{ curso(p).codigo }}
                   </p>
                 </td>
                 <td>
-                  <p style="width:260px; text-align:start">
+                  <p style="width: 250px; text-align: start;">
                     {{ curso(p).nome }}
                   </p>
                 </td>
                 <td>
-                  <p style="width:50px; text-align:start">
+                  <p style="width: 55px; text-align: start;">
                     {{ p.vagasPeriodizadas }}
                   </p>
                 </td>
                 <td>
-                  <p style="width:50px; text-align:start">
+                  <p style="width: 55px; text-align: start;">
                     {{ p.vagasNaoPeriodizadas }}
                   </p>
                 </td>
                 <td>
-                  <p style="width:50px; text-align:start">
+                  <p style="width: 50px; text-align: start;">
                     {{ p.vagasPeriodizadas + p.vagasNaoPeriodizadas }}
                   </p>
                 </td>
@@ -950,7 +937,6 @@ export default {
 
   data() {
     return {
-      ordenacao: { ordemPor: "codigo", tipo: "asc" },
       PerfisAtivados: [],
       DisciplinasSelecionados: [],
       DisciplinasAtivados: [],
@@ -958,40 +944,18 @@ export default {
       semestre_2Ativo: true,
       semestreAtual: 3,
       turmaSelecionada: undefined,
-      ordemCurso: { order: "codigo", type: "asc" },
       nav_ativo: "perfis",
-      search: null
+      searchDisciplinas: null,
+      ordemDiscip: { order: "codigo", type: "asc" },
+      ordemVagas: { order: "codigo", type: "asc" },
+      ordemPerfis: { order: "nome", type: "asc" },
     };
   },
 
   methods: {
-    //Função para adicionar ao clickar no <tr>
-    // addInDisci(disciplina) {
-    //   let indice = this.DisciplinasSelecionados.indexOf(disciplina);
-
-    //   if (indice === -1) {
-    //     this.DisciplinasSelecionados.push(disciplina);
-    //   } else {
-    //     this.DisciplinasSelecionados.splice(indice, 1);
-    //   }
-    // },
     changeTab(tab) {
       this.nav_ativo = tab;
-      this.search = null; //clear search
-    },
-
-    pdf() {
-      pdfs.pdfRelatorioDisciplinas({
-        disciplinasSelecionadas: this.DisciplinasAtivados
-      });
-    },
-    selectAllSemestre() {
-      this.semestre_1Ativo = true;
-      this.semestre_2Ativo = true;
-    },
-    selectNoneSemestre() {
-      this.semestre_1Ativo = false;
-      this.semestre_2Ativo = false;
+      // this.searchDisciplinas = null;
     },
     btnOK() {
       //Atualiza semestre selecionados
@@ -1008,9 +972,45 @@ export default {
       this.DisciplinasAtivados = [...this.DisciplinasSelecionados];
 
       this.$refs.modalFiltros.hide();
-      this.search = null; //clear search
+      this.searchDisciplinas = null;
+    },
+    // Ordem disciplinas Main table
+    toggleOrdDiscip(ord) {
+      if (this.ordemDiscip.order != ord) {
+        this.ordemDiscip.order = ord;
+        this.ordemDiscip.type = "asc";
+      } else {
+        this.ordemDiscip.type = this.ordemDiscip.type == "asc" ? "desc" : "asc";
+      }
     },
 
+    // Ordem Perfis Modal
+    toggleOrdPerfis() {
+      if (this.ordemPerfis.type == "asc") {
+        this.ordemPerfis.type = "desc";
+      } else {
+        this.ordemPerfis.type = "asc";
+      }
+    },
+    // Ordem Vagas Modal
+    toggleOrdVagas(ord) {
+      if (this.ordemVagas.order != ord) {
+        this.ordemVagas.order = ord;
+        this.ordemVagas.type = "asc";
+      } else {
+        this.ordemVagas.type = this.ordemVagas.type == "asc" ? "desc" : "asc";
+      }
+    },
+    //Select Semestre
+    selectAllSemestre() {
+      this.semestre_1Ativo = true;
+      this.semestre_2Ativo = true;
+    },
+    selectNoneSemestre() {
+      this.semestre_1Ativo = false;
+      this.semestre_2Ativo = false;
+    },
+    //Select Perfis
     selectAllPerfis() {
       if (this.PerfisAtivados != []) this.PerfisAtivados = [];
       for (var i = 0; i < this.$store.state.perfil.Perfis.length; i++)
@@ -1019,27 +1019,22 @@ export default {
     selectNonePerfis() {
       this.PerfisAtivados = [];
     },
-    selectAll() {
+    //select Disciplinas
+    selectAllDisciplinas() {
       if (this.DisciplinasSelecionados != []) this.DisciplinasSelecionados = [];
       for (var i = 0; i < this.$store.state.disciplina.Disciplinas.length; i++)
         this.DisciplinasSelecionados.push(
           this.$store.state.disciplina.Disciplinas[i]
         );
     },
-    selectNone() {
+    selectNoneDisciplinas() {
       this.DisciplinasSelecionados = [];
     },
-    toggleOrdem(ord) {
-      if (this.ordenacao.ordemPor != ord) {
-        this.ordenacao.ordemPor = ord;
-        this.ordenacao.tipo = "asc";
-      } else {
-        if (this.ordenacao.tipo == "asc") {
-          this.ordenacao.tipo = "desc";
-        } else {
-          this.ordenacao.tipo = "asc";
-        }
-      }
+
+    pdf() {
+      pdfs.pdfRelatorioDisciplinas({
+        disciplinasSelecionadas: this.DisciplinasAtivados,
+      });
     },
     vagasTurma(turma, semestre) {
       if (
@@ -1050,7 +1045,7 @@ export default {
       let pedidos = this.$store.state.pedido.Pedidos[turma.id];
       let vagasP = 0;
       let vagasNP = 0;
-      pedidos.forEach(p => {
+      pedidos.forEach((p) => {
         vagasP += p.vagasPeriodizadas;
         vagasNP += p.vagasNaoPeriodizadas;
       });
@@ -1059,10 +1054,10 @@ export default {
 
     vagasDisciplina(disciplina, semestre) {
       let turmas = _.filter(this.$store.state.turma.Turmas, {
-        Disciplina: disciplina.id
+        Disciplina: disciplina.id,
       });
       let vagas = 0;
-      turmas.forEach(t => {
+      turmas.forEach((t) => {
         vagas += this.vagasTurma(t, semestre);
       });
       return vagas;
@@ -1070,13 +1065,13 @@ export default {
 
     perfil(disciplina) {
       let perfil = _.find(this.$store.state.perfil.Perfis, {
-        id: disciplina.Perfil
+        id: disciplina.Perfil,
       });
       return perfil.abreviacao;
     },
     turmas(disciplina, semestre) {
       return _.orderBy(
-        _.filter(this.$store.state.turma.Turmas, turma => {
+        _.filter(this.$store.state.turma.Turmas, (turma) => {
           return (
             turma.Disciplina === disciplina.id &&
             (semestre === 1
@@ -1092,10 +1087,10 @@ export default {
 
     docentes(turma) {
       let d1 = _.find(this.$store.state.docente.Docentes, {
-        id: turma.Docente1
+        id: turma.Docente1,
       });
       let d2 = _.find(this.$store.state.docente.Docentes, {
-        id: turma.Docente2
+        id: turma.Docente2,
       });
       if (d1 === undefined && d2 === undefined) {
         return "";
@@ -1119,84 +1114,86 @@ export default {
 
     disciplina(turma) {
       return _.find(this.$store.state.disciplina.Disciplinas, {
-        id: turma.Disciplina
+        id: turma.Disciplina,
       });
-    },
-
-    ordemCursos(ordem) {
-      if (this.ordemCurso.order === ordem)
-        this.ordemCurso.type === "asc"
-          ? (this.ordemCurso.type = "desc")
-          : (this.ordemCurso.type = "asc");
-      else {
-        this.ordemCurso.order = ordem;
-        this.ordemCurso.type = "asc";
-      }
     },
 
     closeModalVagas() {
       this.$refs.VagasModal.hide();
-    }
+    },
   },
 
   computed: {
     //Todas disciplinas
     Disciplinas() {
-      return _.orderBy(
+      let result = _.orderBy(
         _.filter(this.$store.state.disciplina.Disciplinas, function(d) {
           return d.Perfil !== 13 && d.Perfil !== 15;
         })
       );
+      //Filtro search
+      if (this.searchDisciplinas != null) {
+        let searchUpperCase = this.searchDisciplinas.toUpperCase();
+
+        return result.filter((disci) => {
+          return (
+            disci.nome
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .match(searchUpperCase) ||
+            disci.nome.match(searchUpperCase) ||
+            disci.codigo.match(searchUpperCase)
+          );
+        });
+      }
+      return result;
     },
-    //Todas disciplinas ordenadas pelo click
-    orderDisciplinas() {
-      if (this.ordenacao.ordemPor == "perfil") {
+    //Disciplinas filtradas
+    Disciplinas_Filtred() {
+      if (this.ordemDiscip.order == "perfil") {
         //Se for ordem pelo perfil, passa o vetor de ordem ["Perfil", "codigo"]
         return _.orderBy(
           this.Disciplinas,
           ["Perfil", "codigo"],
-          [this.ordenacao.tipo, "asc"]
+          [this.ordemDiscip.type, "asc"]
         );
       } else {
         //Outros casos
         return _.orderBy(
           this.Disciplinas,
-          this.ordenacao.ordemPor,
-          this.ordenacao.tipo
+          this.ordemDiscip.order,
+          this.ordemDiscip.type
         );
       }
     },
-    //Disciplinas da Modal Table com a pesquisa
-    Disciplinas_Modal_Table() {
-      return this.orderDisciplinas.filter(disci => {
-        return this.search == null
-          ? true
-          : disci.nome.match(this.search.toUpperCase()) ||
-              disci.codigo.match(this.search.toUpperCase());
-      });
-    },
+
     //Disciplinas da Main Table ordenadas
     Disciplinas_Main_Table() {
-      if (this.ordenacao.ordemPor == "perfil") {
+      if (this.ordemDiscip.order == "perfil") {
         return _.orderBy(
           this.DisciplinasAtivados,
           ["Perfil", "codigo"],
-          [this.ordenacao.tipo, "asc"]
+          [this.ordemDiscip.type, "asc"]
         );
       } else {
         return _.orderBy(
           this.DisciplinasAtivados,
-          this.ordenacao.ordemPor,
-          this.ordenacao.tipo
+          this.ordemDiscip.order,
+          this.ordemDiscip.type
         );
       }
     },
-    Perfiss() {
-      return this.$store.state.perfil.Perfis;
+    Perfis_Modal() {
+      return _.orderBy(
+        this.$store.state.perfil.Perfis,
+        this.ordemPerfis.order,
+        this.ordemPerfis.type
+      );
     },
 
     VagasTurmaSelecionada() {
       if (this.turmaSelecionada === undefined) return [];
+
       return _.orderBy(
         _.filter(
           this.$store.state.pedido.Pedidos[this.turmaSelecionada.id],
@@ -1204,8 +1201,8 @@ export default {
             return p.vagasPeriodizadas > 0 || p.vagasNaoPeriodizadas > 0;
           }
         ),
-        p => {
-          switch (this.ordemCurso.order) {
+        (p) => {
+          switch (this.ordemVagas.order) {
             case "codigo":
               return this.curso(p).codigo;
             case "nome":
@@ -1220,21 +1217,31 @@ export default {
               return this.curso(p).codigo;
           }
         },
-        this.ordemCurso.type
+        this.ordemVagas.type
       );
     },
 
     Horarios() {
       return this.$store.state.horario.Horarios;
-    }
+    },
+    //Função para adicionar ao clickar no <tr>
+    // addInDisci(disciplina) {
+    //   let indice = this.DisciplinasSelecionados.indexOf(disciplina);
+
+    //   if (indice === -1) {
+    //     this.DisciplinasSelecionados.push(disciplina);
+    //   } else {
+    //     this.DisciplinasSelecionados.splice(indice, 1);
+    //   }
+    // },
   },
   watch: {
     PerfisAtivados(newValue, oldValue) {
       //Apaga todas disciplinas selecionadas sempre que um novo perfil é selecionado
       this.DisciplinasSelecionados = [];
 
-      this.Disciplinas.forEach(discip => {
-        this.PerfisAtivados.forEach(perfil => {
+      this.Disciplinas.forEach((discip) => {
+        this.PerfisAtivados.forEach((perfil) => {
           if (
             discip.Perfil == perfil.id &&
             !this.DisciplinasSelecionados.includes(discip)
@@ -1243,8 +1250,8 @@ export default {
           }
         });
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -1280,6 +1287,12 @@ export default {
   margin: 0 !important;
   text-align: center;
   height: 18px !important;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
 }
 .main-table tbody {
   max-height: 100%;
@@ -1306,6 +1319,7 @@ export default {
   text-align: center;
   height: 18px !important;
 }
+
 .sticky {
   display: block !important;
   overflow: hidden !important;
@@ -1316,16 +1330,7 @@ export default {
   overflow: hidden !important;
   z-index: 3;
 }
-.stickySearch {
-  display: block !important;
-  overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 18px !important;
-  display: block !important;
-  overflow: hidden !important;
-  z-index: 3;
-}
+
 .titulo {
   font-size: 25px;
   font-weight: normal;
@@ -1347,13 +1352,6 @@ strong {
   text-transform: uppercase;
 }
 /* Botoes */
-.btn-x {
-  background: none;
-  border: none;
-  margin-top: 0px;
-  line-height: 50%;
-  padding-bottom: 8px;
-}
 .btn-custom {
   padding: 0;
   border: none;
@@ -1395,9 +1393,6 @@ i.far {
 .disc-tr {
   background-color: rgba(0, 0, 0, 0.089);
   color: black;
-}
-.clickable-header:hover {
-  cursor: pointer;
 }
 
 .btn-df {
@@ -1512,6 +1507,7 @@ i.far {
 /* ==== MODAL TABLE ==== */
 .modal-table {
   display: block !important;
+  overflow-y: auto !important;
   overflow-x: hidden !important;
   font-size: 10px !important;
   font-weight: normal !important;
@@ -1525,27 +1521,32 @@ i.far {
   padding: 0 !important;
   text-align: center !important;
   height: 18px !important;
-  border-bottom: 0 !important;
-  border-top: 0 !important;
 }
+
 .modal-table .p-header {
   padding: 0px 5px 0px 5px !important;
   margin: 0 !important;
   text-align: start;
   height: 18px !important;
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
 }
 .modal-table tbody {
   max-height: 100%;
   width: 100%;
 }
 .modal-table td {
+  border-top: 0;
   text-align: center;
   vertical-align: middle !important;
   padding: 0 !important;
   margin: 0 !important;
   /* height: 22px !important; */
 }
-
 .modal-table p {
   margin: 0 !important;
   text-align: center;
@@ -1561,14 +1562,27 @@ i.far {
 }
 /* FIM MODAL TABLE */
 
-.clickable {
+/* searchDisciplinas */
+.input-group-text:hover {
+  color: rgb(102, 102, 102);
+  background-color: #dddddd;
+}
+.input-group-text {
+  background-color: #ffffff;
+  border-left: none;
+}
+.nav-link {
   color: #007bff !important;
   cursor: pointer;
+}
+.nav-link:hover {
+  text-decoration: underline;
 }
 .active {
   background-color: #e9ecef !important;
   color: #495057 !important;
   cursor: default;
+  text-decoration: none !important;
 }
 
 .p-vagas:hover {
@@ -1588,5 +1602,8 @@ i.far {
 }
 .disable-link {
   color: #495057 !important;
+}
+.modal-content .modal-header {
+  padding: 0 !important;
 }
 </style>

@@ -1,44 +1,42 @@
 <template>
   <div class="DashboardSalas row pr-2" v-if="Admin">
     <!-- Titulo -->
-     <div
+    <div
       class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
       style="height:38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">Salas</h1>
-      
-      <div
+
+        <div
           class="form-group col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
           style="justify-content: flex-end!important;"
         >
           <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn mt-1">
             <i class="fas fa-question"></i>
           </b-button>
-          </div>
-          
         </div>
+      </div>
     </div>
     <div class="w-100 mb-2 border-bottom"></div>
 
-    <div class="divTable">
+    <div class="divTable p-0">
       <!-- Inicio da Tabela -->
-      <table class="table table-hover table-sm border">
+      <table class="main-table table table-sm table-hover table-bordered">
         <thead class="thead-light">
           <tr>
-            <div style="width: 157px;" class="sticky">
-              <th scope="col" class="clickable-header" v-on:click="toggleOrder">
-                <p class="p-header" style="width: 82px">Nome
-                <i
-                  v-if="ordenacao.type == 'asc'"
-                  style="font-size:0.6rem; text-align:right"
-                  class="fas fa-arrow-down fa-sm"
-                ></i>
-                <i
-                  v-if="ordenacao.type == 'desc'"
-                  style="font-size:0.6rem; text-align:right"
-                  class="fas fa-arrow-up fa-sm"
-                ></i>
+            <div class="sticky max-content">
+              <th scope="col" class="clickable" v-on:click="toggleOrdMain()">
+                <p class="p-header" style="width: 82px">
+                  Nome
+                  <i
+                    style="font-size:0.6rem; text-align:right"
+                    :class="
+                      ordenacao.type == 'asc'
+                        ? 'fas fa-arrow-down fa-sm'
+                        : 'fas fa-arrow-up fa-sm'
+                    "
+                  ></i>
                 </p>
               </th>
               <th scope="col">
@@ -48,17 +46,18 @@
           </tr>
         </thead>
         <tbody>
-          <template v-if="Salas.length > 0">
+          <template v-for="sala in Salas">
             <tr
-              v-for="sala in Salas"
               :key="sala.id"
               v-on:click.prevent="showSala(sala), clickada(sala.nome)"
-              :class="{'bg-custom':salaClickada === sala.nome}"
-              style="cursor:pointer"
+              :class="[
+                { 'bg-custom': salaClickada === sala.nome },
+                'clickable',
+              ]"
             >
-              <div style="width: 157px">
+              <div class="max-content">
                 <td>
-                  <p style="width: 82px">{{sala.nome}}</p>
+                  <p style="width: 82px">{{ sala.nome }}</p>
                 </td>
 
                 <td>
@@ -74,11 +73,12 @@
               </div>
             </tr>
           </template>
-          <template v-else>
+          <template v-if="Salas.length === 0">
             <tr>
               <div style="width: 139px">
                 <td colspan="2" class="text-center">
-                  <i class="fas fa-exclamation-triangle"></i> Nenhuma sala encontrada!
+                  <i class="fas fa-exclamation-triangle"></i> Nenhuma sala
+                  encontrada!
                 </td>
               </div>
             </tr>
@@ -88,34 +88,40 @@
       <!-- Fim da Tabela -->
       <!-- modal de ajuda -->
       <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
-      
-      <div class="modal-body">
-        <ul class="listas list-group"> 
-          <li class="list-group-item">
-            <strong>Para adicionar sala: </strong> Com o cartão à direita em branco, preencha-o. Em seguida, 
-            clique em Adicionar 
-            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
-            .
-          </li>
-          <li class="list-group-item">
-            <strong>Para editar ou deletar uma sala: </strong>Na tabela, clique na sala que deseja alterar. Logo após,
-             no cartão à direita, altere as informações que desejar e clique em Salvar 
-             <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
-              ou, para excluí-la, clique em Deletar 
-              <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
-              . 
-          </li>
-          <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à direita, clique em Cancelar 
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
-            .
-          </li>
-        </ul>
-      </div>
+        <div class="modal-body">
+          <ul class="listas list-group">
+            <li class="list-group-item">
+              <strong>Para adicionar sala: </strong> Com o cartão à direita em
+              branco, preencha-o. Em seguida, clique em Adicionar
+              <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
+              .
+            </li>
+            <li class="list-group-item">
+              <strong>Para editar ou deletar uma sala: </strong>Na tabela,
+              clique na sala que deseja alterar. Logo após, no cartão à direita,
+              altere as informações que desejar e clique em Salvar
+              <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+              ou, para excluí-la, clique em Deletar
+              <i
+                class="far fa-trash-alt delbtn px-1"
+                style="font-size: 12px"
+              ></i>
+              .
+            </li>
+            <li class="list-group-item">
+              <strong>Para deixar o cartão em branco:</strong> No cartão, à
+              direita, clique em Cancelar
+              <i
+                class="fas fa-times cancelbtn px-1"
+                style="font-size: 12px"
+              ></i>
+              .
+            </li>
+          </ul>
+        </div>
 
-      <div slot="modal-footer" style="display: none">
-      </div>
-    </b-modal>
+        <div slot="modal-footer" style="display: none"></div>
+      </b-modal>
     </div>
 
     <!-- Grid Direito -->
@@ -140,18 +146,17 @@
             </div>
 
             <div class="row mb-2 mt-3 mx-0">
-              <div class="form-group col m-0 px-0">
-                <div class="form-check">
-                  <input
-                    type="checkbox"
-                    id="laboratorio"
-                    class="form-check-input"
-                    style="margin-top: 2px"
-                    v-model="salaForm.laboratorio"
-                    value="1"
-                  />
-                  <label class="form-check-label" for="laboratorio">Laboratório</label>
-                </div>
+              <div class="form-check form-check-inline col m-0 px-0 pl-1">
+                <input
+                  type="checkbox"
+                  id="laboratorio"
+                  class="form-check-input"
+                  v-model="salaForm.laboratorio"
+                  value="1"
+                />
+                <label class="form-check-label" for="laboratorio"
+                  >Laboratório</label
+                >
               </div>
             </div>
 
@@ -225,7 +230,7 @@ import salaService from "@/common/services/sala";
 const emptySala = {
   id: undefined,
   nome: undefined,
-  laboratorio: undefined
+  laboratorio: undefined,
 };
 
 export default {
@@ -236,7 +241,7 @@ export default {
       salaForm: _.clone(emptySala),
       error: undefined,
       salaClickada: "",
-      ordenacao: {type: 'asc'}
+      ordenacao: { type: "asc" },
     };
   },
 
@@ -248,23 +253,23 @@ export default {
       this.salaClickada = "";
     },
 
-    toggleOrder() {
-      this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc')
+    toggleOrdMain() {
+      this.ordenacao.type = this.ordenacao.type === "asc" ? "desc" : "asc";
     },
 
     addSala() {
       salaService
         .create(this.salaForm)
-        .then(response => {
+        .then((response) => {
           this.cleanSala();
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Sala ${response.Sala.nome} foi criada!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao criar Sala</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -274,7 +279,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -282,15 +287,15 @@ export default {
     editSala() {
       salaService
         .update(this.salaForm.id, this.salaForm)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Sala ${response.Sala.nome} foi atualizada!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao atualizar Sala</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -300,7 +305,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -308,13 +313,13 @@ export default {
     deleteSala() {
       salaService
         .delete(this.salaForm.id, this.salaForm)
-        .then(response => {
+        .then((response) => {
           this.cleanSala();
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Sala ${response.Sala.nome} foi excluída!`,
-            type: "warn"
+            type: "warn",
           });
         })
         .catch(() => {
@@ -323,7 +328,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -345,12 +350,16 @@ export default {
           window.scrollTo(0, currentScroll - currentScroll / 5);
         }
       })();
-    }
+    },
   },
 
   computed: {
     Salas() {
-      return _.orderBy(this.$store.state.sala.Salas, 'nome', this.ordenacao.type);
+      return _.orderBy(
+        this.$store.state.sala.Salas,
+        "nome",
+        this.ordenacao.type
+      );
     },
 
     isEdit() {
@@ -363,18 +372,19 @@ export default {
       } else {
         return false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
-/* prefixed by https://autoprefixer.github.io (PostCSS: v7.0.23, autoprefixer: v9.7.3) */
-
 .DashboardSalas {
   max-width: 100%;
   overflow: hidden;
   margin: 0;
+  -webkit-box-sizing: border-box !important;
+  -moz-box-sizing: border-box !important;
+  box-sizing: border-box !important;
 }
 
 .titulo {
@@ -382,6 +392,88 @@ export default {
   font-weight: normal;
   padding-left: 0;
   margin: 0 !important;
+}
+.input-group-text {
+  max-width: 70px;
+  min-width: 70px;
+  height: 26px !important;
+  margin-left: -5px;
+  padding-left: 15px;
+  font-size: 12px !important;
+}
+
+/* main-table */
+.divTable {
+  overflow: hidden;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+}
+.main-table {
+  display: block !important;
+  overflow-y: scroll !important;
+  overflow-x: auto !important;
+  font-size: 11px !important;
+  font-weight: normal !important;
+  background-color: white;
+  margin: 0 !important;
+  height: -webkit-calc(100vh - 95px);
+  height: -moz-calc(100vh - 95px);
+  height: calc(100vh - 95px);
+}
+.main-table .p-header {
+  height: 18px;
+}
+.main-table p {
+  padding: 0 5px 0 5px !important;
+  margin: 0 !important;
+  font-size: 11px !important;
+  text-align: center;
+}
+tbody {
+  max-height: 100% !important;
+  width: 100% !important;
+}
+.main-table td {
+  text-align: center;
+  vertical-align: middle !important;
+  padding: 0 !important;
+  height: 22px !important;
+}
+.main-table tr thead {
+  display: block !important;
+}
+.main-table thead th {
+  padding: 0 !important;
+  font-size: 14px;
+  text-align: center;
+  height: 18px !important;
+}
+.main-table input[type="checkbox"] {
+  width: 13px !important;
+  height: 13px !important;
+  text-align: center !important;
+  margin: 0 !important;
+  margin-top: 4px !important;
+}
+/* fim table */
+
+.sticky {
+  display: block !important;
+  overflow: hidden !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 0 !important;
+  display: block !important;
+  overflow: hidden !important;
+  z-index: 3;
+}
+.inputMenor {
+  min-width: 100px;
+  text-align: start;
 }
 .div-card {
   margin-left: auto;
@@ -406,110 +498,17 @@ export default {
   padding-top: 15px;
   padding-left: 14px !important;
 }
-
-.custom-select {
-  height: 26px !important;
-  font-size: 12px !important;
-  padding: 0px 0px 0px 10px !important;
-  min-width: 85px;
-  max-width: 85px;
-  text-align: center;
-}
-.input-group-text {
-  max-width: 70px;
-  min-width: 70px;
-  height: 26px !important;
-  margin-left: -5px;
-  padding-left: 15px;
-  font-size: 12px !important;
-}
-
-/* Tabela Lucas */
-.p-header {
-  padding: 0px 0 0px 0;
-  margin: 0;
-  font-size: 11px;
-  text-align: center;
-  height: 18px;
-}
-.divTable {
-  overflow: hidden;
-  border: rgba(0, 0, 0, 0.125) solid 1px;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-}
-table {
-  display: block;
-  overflow-y: scroll;
-  height: -webkit-calc(100vh - 95px);
-  height: -moz-calc(100vh - 95px);
-  height: calc(100vh - 95px);
-  font-size: 11px;
-  background-color: white;
-  margin: 0;
-}
-tbody {
-  max-height: 100%;
-  width: 100%;
-}
-table td {
-  text-align: center;
-  vertical-align: middle;
-  padding: 0 !important;
-}
-table p {
-  margin-bottom: 0;
-  text-align: center;
-}
-tr thead {
-  display: block;
-}
-thead th {
-  padding: 0 !important;
-  font-size: 14px;
-  text-align: center;
-  height: 18px !important;
-}
-table tbody tr div {
-  height: 22px !important;
-}
-
-input[type="checkbox"] {
-  width: 16px !important;
-  height: 14px !important;
-  text-align: center !important;
-}
-table input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-}
-input[type="text"] {
-  height: 25px !important;
-  font-size: 11px;
-}
-.sticky {
-  display: block !important;
-  overflow: hidden !important;
-  height: 20px !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 0 !important;
-  display: block !important;
-  overflow: hidden !important;
-}
-.inputMenor {
-  min-width: 100px;
-  text-align: start;
-}
 .card label {
-  line-height: 1.2;
+  /* line-height: 1.2;
   font-size: 12px;
   text-align: start;
-  padding-top: 0 !important;
+  padding-top: 0 !important; */
+}
+.card input[type="text"] {
+  height: 25px !important;
+  padding: 0px 5px 0px 5px !important;
+  font-size: 11px !important;
+  text-align: start;
 }
 
 .noHover {
@@ -529,7 +528,9 @@ input[type="text"] {
   line-height: inherit;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
-strong{color:#007bff}
+strong {
+  color: #007bff;
+}
 
 /* Botoes */
 button {

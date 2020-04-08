@@ -1,7 +1,7 @@
 <template>
-  <div class="turmarow" style="font-size:11px;">
+  <div class="turmarow" style="font-size: 11px;" v-if="turmaForm != undefined">
     <td>
-      <div style="width:25px !important;">
+      <div style="width: 25px !important;">
         <input
           type="checkbox"
           class="form-check-input position-static m-0"
@@ -13,7 +13,7 @@
       </div>
     </td>
     <td>
-      <div style="width:40px !important;">
+      <div style="width: 40px !important;">
         <select
           id="2periodo"
           style="width: 35px;"
@@ -27,10 +27,10 @@
     </td>
 
     <td>
-      <div style="width:70px;">
+      <div style="width: 70px;">
         <template
           type="text"
-          style="width:70px;"
+          style="width: 70px;"
           v-for="disciplina in DisciplinasCod"
         >
           <template v-if="disciplina.id === turma.Disciplina">
@@ -44,7 +44,7 @@
       <div style="width: 330px;">
         <select
           type="text"
-          style="width:325px;"
+          style="width: 325px;"
           id="disciplina"
           v-model="turmaForm.Disciplina"
           v-on:change="editTurma(turmaForm)"
@@ -64,7 +64,7 @@
 
     <td>
       <div style="width: 18px;">
-        <p style="width:18px;">
+        <p style="width: 18px;">
           <template v-for="disciplina in Disciplinas">
             <template v-if="disciplina.id === turma.Disciplina">{{
               disciplina.cargaPratica + disciplina.cargaTeorica
@@ -75,7 +75,7 @@
     </td>
 
     <td>
-      <div style="width: 40px">
+      <div style="width: 40px;">
         <input
           type="text"
           style="width: 20px;"
@@ -89,7 +89,7 @@
       <div style="width: 68px;">
         <select
           type="text"
-          style="width: 63px; "
+          style="width: 63px;"
           id="turno1"
           v-model="turmaForm.turno1"
           v-on:change="editTurma(turmaForm)"
@@ -102,10 +102,10 @@
     </td>
 
     <td>
-      <div style="width: 72px;  padding-top:1px; padding-bottom:1px">
+      <div style="width: 72px; padding-top: 1px; padding-bottom: 1px;">
         <select
           type="text"
-          style="width: 67px; margin-bottom:1px;"
+          style="width: 67px; margin-bottom: 1px;"
           id="horario1"
           v-model="turmaForm.Horario1"
           v-on:change="checkHorario(1)"
@@ -143,10 +143,10 @@
     </td>
 
     <td>
-      <div style="width: 98px;  padding-top:1px; padding-bottom:1px">
+      <div style="width: 98px; padding-top: 1px; padding-bottom: 1px;">
         <select
           type="text"
-          style="width:93px; margin-bottom:1px"
+          style="width: 93px; margin-bottom: 1px;"
           id="sala1"
           v-model="turmaForm.Sala1"
           v-on:change="checkSala(1)"
@@ -161,7 +161,7 @@
         </select>
         <select
           type="text"
-          style="width: 93px"
+          style="width: 93px;"
           id="sala2"
           v-model="turmaForm.Sala2"
           v-on:change="checkSala(2)"
@@ -178,7 +178,7 @@
     </td>
 
     <td>
-      <div style="width:40px">
+      <div style="width: 40px;">
         <p style="40px; font-weight: bold;">{{ totalPedidos() }}</p>
         <p style="width: 40px;">
           {{ totalPedidosPeriodizados() }}+{{ totalPedidosNaoPeriodizados() }}
@@ -211,11 +211,11 @@ export default {
   name: "TurmaRow",
   props: {
     turma: Object,
-    perfil: Object
+    perfil: Object,
   },
 
   components: {
-    turmaExternaPedido
+    turmaExternaPedido,
   },
 
   data() {
@@ -223,12 +223,12 @@ export default {
       ativo: false,
       valorAtual: undefined,
       turmaForm: undefined,
-      currentData: undefined
+      currentData: undefined,
     };
   },
 
   mounted() {
-    this.turmaForm = _.clone(this.turma);
+    this.turmaForm = this.turma;
     this.currentData = this.TurmaForm;
   },
 
@@ -277,20 +277,20 @@ export default {
         if (turma.Horario2 > 0) turma.Horario2 = null;
       }
 
-      console.log(turma);
+      console.log("TURMA: ", turma);
 
       turmaExternaService
         .update(turma.id, turma)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Turma ${response.Turma.letra} foi atualizada!`,
-            type: "success"
+            type: "success",
           });
           this.currentData = _.clone(this.turmaForm);
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao atualizar Turma</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -307,15 +307,15 @@ export default {
     editPedido(pedido) {
       pedidoExternoService
         .update(pedido.Curso, pedido.Turma, pedido)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `O pedido foi atualizado!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao atualizar Pedido</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -416,11 +416,11 @@ export default {
         horario === 1
           ? _.find(this.$store.state.horario.Horarios, [
               "id",
-              this.turmaForm.Horario1
+              this.turmaForm.Horario1,
             ])
           : _.find(this.$store.state.horario.Horarios, [
               "id",
-              this.turmaForm.Horario2
+              this.turmaForm.Horario2,
             ]);
       let s =
         sala === 1
@@ -432,7 +432,7 @@ export default {
         group: "general",
         title: "Erro",
         text: text,
-        type: "error"
+        type: "error",
       });
     },
 
@@ -442,7 +442,7 @@ export default {
           this.$store.state.turma.Turmas,
           this.$store.state.turmaExterna.Turmas
         ),
-        t => {
+        (t) => {
           if (this.turmaForm.periodo != t.periodo) {
             return false;
           }
@@ -502,7 +502,7 @@ export default {
           this.$store.state.turma.Turmas,
           this.$store.state.turmaExterna.Turmas
         ),
-        t => {
+        (t) => {
           if (this.turmaForm.periodo != t.periodo) {
             return false;
           }
@@ -566,7 +566,7 @@ export default {
           this.$store.state.turma.Turmas,
           this.$store.state.turmaExterna.Turmas
         ),
-        t => {
+        (t) => {
           if (this.turmaForm.periodo != t.periodo) {
             return false;
           }
@@ -630,7 +630,7 @@ export default {
           this.$store.state.turma.Turmas,
           this.$store.state.turmaExterna.Turmas
         ),
-        t => {
+        (t) => {
           if (this.turmaForm.periodo != t.periodo) {
             return false;
           }
@@ -690,7 +690,7 @@ export default {
           this.$store.state.turma.Turmas,
           this.$store.state.turmaExterna.Turmas
         ),
-        t => {
+        (t) => {
           if (this.turmaForm.periodo != t.periodo) {
             return false;
           }
@@ -742,7 +742,7 @@ export default {
         return true;
       }
       return false;
-    }
+    },
   },
 
   computed: {
@@ -752,7 +752,7 @@ export default {
 
     Disciplinas() {
       return _.orderBy(
-        _.filter(this.$store.state.disciplina.Disciplinas, function(d) {
+        _.filter(this.$store.state.disciplina.Disciplinas, function (d) {
           return d.Perfil == 13 || d.Perfil == 15;
         }),
         "nome"
@@ -761,7 +761,7 @@ export default {
 
     DisciplinasCod() {
       return _.orderBy(
-        _.filter(this.$store.state.disciplina.Disciplinas, function(d) {
+        _.filter(this.$store.state.disciplina.Disciplinas, function (d) {
           return d.Perfil == 13 || d.Perfil == 15;
         }),
         "codigo"
@@ -782,8 +782,8 @@ export default {
 
     Perfis() {
       return _.orderBy(this.$store.state.perfil.Perfis, "nome");
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -11,21 +11,21 @@ import DashboardPedidos from "@/components/plano/turma-principal/DashboardProtot
 import DashboardTurmasExternas from "@/components/plano/turma-externa/TurmasExternas";
 import DashboardCargaPos from "@/components/plano/carga-pos/CargaPos";
 // Relatorios
-import DashboardCargaProfessores from "@/components/relatorios/carga-professores/CargaProfessores";
-import DashboardRelatorioDisciplinas from "@/components/relatorios/plano-departamental/RelatorioDisciplinas";
-import DashboardGradeDisciplinas from "@/components/relatorios/grades-disciplinas/GradeDisciplinas";
 import DashboardHorarios from "@/components/relatorios/horarios-curso/Horarios";
-import DashboardLaboratoriosAlocacao from "@/components/relatorios/horarios-lab/LaboratoriosAlocacao";
+import DashboardCargaProfessores from "@/components/relatorios/CargaProfessores";
+import DashboardRelatorioDisciplinas from "@/components/relatorios/RelatorioDisciplinas";
+import DashboardGradeDisciplinas from "@/components/relatorios/GradeDisciplinas";
+import DashboardLaboratoriosAlocacao from "@/components/relatorios/LaboratoriosAlocacao";
 
 // Gerenciar
-import DashboardCursos from "@/components/gerenciar/cursos/Cursos";
-import DashboardDocentes from "@/components/gerenciar/docentes/Docentes";
-import DashboardGradesEdit from "@/components/gerenciar/grades-cursos/GradesEdit";
-import DashboardGrades from "@/components/gerenciar/grades-cursos/Grades";
-import DashboardPerfis from "@/components/gerenciar/perfis/Perfis";
-import DashboardDisciplinas from "@/components/gerenciar/disciplinas/Disciplinas";
-import DashboardSalas from "@/components/gerenciar/salas/Salas";
-import DashboardHistory from "@/components/gerenciar/history-log/History";
+import DashboardCursos from "@/components/gerenciar/Cursos";
+import DashboardDocentes from "@/components/gerenciar/Docentes";
+import DashboardGradesEdit from "@/components/gerenciar/GradesEdit";
+import DashboardGrades from "@/components/gerenciar/Grades";
+import DashboardPerfis from "@/components/gerenciar/Perfis";
+import DashboardDisciplinas from "@/components/gerenciar/Disciplinas";
+import DashboardSalas from "@/components/gerenciar/Salas";
+import DashboardHistory from "@/components/gerenciar/History";
 /*
 //Componentes desabilitados 
 import DashboardRelatorios from "@/components/Relatorios";

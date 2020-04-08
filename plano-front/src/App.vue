@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <notifications group="general"
-                   position="top right"
-                   classes="vue-notification"/>
+    <notifications
+      group="general"
+      position="top right"
+      classes="vue-notification"
+    />
     <transition name="slide-fade" mode="out-in">
       <router-view></router-view>
     </transition>
@@ -11,12 +13,11 @@
 
 <script>
 export default {
-  name: 'App'
-}
+  name: "App",
+};
 </script>
 
 <style>
-
 html,
 body {
   height: 100%;
@@ -34,9 +35,8 @@ body {
   font-size: 12px;
 
   color: #ffffff;
-  background: #44A4FC;
-  border-left: 5px solid #187FE7;
-  
+  background: #44a4fc;
+  border-left: 5px solid #187fe7;
 }
 
 .vue-notification .warn {
@@ -45,13 +45,31 @@ body {
 }
 
 .vue-notification .error {
-  background: #E54D42;
-  border-left-color: #B82E24;
+  background: #e54d42;
+  border-left-color: #b82e24;
 }
 
 .vue-notification .success {
-  background: #68CD86;
-  border-left-color: #42A85F;
+  background: #68cd86;
+  border-left-color: #42a85f;
 }
-
+.max-content {
+  width: -webkit-max-content !important;
+  width: -moz-max-content !important;
+  width: max-content !important;
+}
+.clickable {
+  cursor: pointer;
+}
+.p-header {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+}
+.low-opacity {
+  opacity: 0.4;
+}
 </style>

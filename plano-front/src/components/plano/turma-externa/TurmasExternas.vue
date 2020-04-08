@@ -3,7 +3,7 @@
     <!-- Titulo -->
     <div
       class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
-      style="height:38px;"
+      style="height: 38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="titulo col-xl-2 col-md-3 col-sm-4 col-5 px-0 pr-1">
@@ -12,7 +12,7 @@
 
         <div
           class="form-group col-xl-10 col-md-9 col-sm-8 col-7 mb-0 p-0"
-          style="justify-content: flex-end!important;"
+          style="justify-content: flex-end !important;"
         >
           <b-button v-b-modal.modalFiltros title="Filtros" class="cancelbtn">
             <i class="fas fa-list-ul"></i>
@@ -74,20 +74,17 @@
 
     <!-- Inicio Tabela -->
     <div class="p-0 divTable mb-2" v-if="!isLoading">
-      <table class="table main-table table-hover table-bordered table-sm">
-        <thead class="thead-light">
+      <table class="main-table table table-sm table-hover table-bordered">
+        <thead class="thead-light sticky">
           <tr>
-            <div
-              style="display: block; overflow: hidden;"
-              class="sticky max-content"
-            >
+            <div class="max-content">
               <th scope="col">
-                <p style="width: 25px"></p>
+                <p style="width: 25px;"></p>
               </th>
               <th scope="col">
                 <p
                   class="p-header"
-                  style="width:40px !important;"
+                  style="width: 40px !important;"
                   title="Semestre"
                 >
                   S.
@@ -96,46 +93,46 @@
               <th scope="col">
                 <p
                   class="p-header"
-                  style="width:70px !important;"
+                  style="width: 70px !important;"
                   title="Código"
                 >
                   Cód.
                 </p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width:330px !important">
+                <p class="p-header" style="width: 330px !important;">
                   Disciplina
                 </p>
               </th>
               <th scope="col">
                 <p
                   class="p-header"
-                  style="width:18px !important;"
+                  style="width: 18px !important;"
                   title="Créditos"
                 >
                   C.
                 </p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width:40px !important;">Turma</p>
+                <p class="p-header" style="width: 40px !important;">Turma</p>
               </th>
               <th scope="col">
                 <p
                   class="p-header"
-                  style="width:68px !important;"
+                  style="width: 68px !important;"
                   title="Total de vagas"
                 >
                   Turno
                 </p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width:72px !important;">Horário</p>
+                <p class="p-header" style="width: 72px !important;">Horário</p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width:98px !important;">Sala</p>
+                <p class="p-header" style="width: 98px !important;">Sala</p>
               </th>
               <th scope="col">
-                <p class="p-header" style="width:40px !important;">Total</p>
+                <p class="p-header" style="width: 40px !important;">Total</p>
               </th>
               <template v-for="curso in Cursos">
                 <th
@@ -143,7 +140,7 @@
                   :key="'1-curso-id' + curso.id"
                   :id="'curso' + curso.id"
                 >
-                  <p class="p-header" style="width:32px !important;">
+                  <p class="p-header" style="width: 32px !important;">
                     {{ curso.codigo }}
                   </p>
 
@@ -154,7 +151,7 @@
                     triggers="hover focus"
                   >
                     <p
-                      style="text-align:center; font-size: 11px!important;"
+                      style="text-align: center; font-size: 11px !important;"
                       class="p-0 m-0"
                       v-if="
                         curso.semestreInicial == 1 || curso.semestreInicial == 3
@@ -163,7 +160,7 @@
                       1º - {{ curso.alunosEntrada }}
                     </p>
                     <p
-                      style="text-align:center; font-size: 11px!important;"
+                      style="text-align: center; font-size: 11px !important;"
                       class="p-0 m-0"
                       v-if="
                         curso.semestreInicial == 2 || curso.semestreInicial == 3
@@ -173,7 +170,7 @@
                     </p>
 
                     <p
-                      style="text-align:center; font-size: 11px!important;"
+                      style="text-align: center; font-size: 11px !important;"
                       class="p-0 m-0"
                     >
                       <b>{{ curso.nome }}</b>
@@ -191,13 +188,13 @@
             <tr class="stickyAdd">
               <div
                 class="max-content"
-                style="font-size:11px; background-color:#e9e9e9; "
+                style="font-size: 11px; background-color: #e9e9e9;"
               >
                 <td>
-                  <div style="width:25px !important;"></div>
+                  <div style="width: 25px !important;"></div>
                 </td>
                 <td>
-                  <div style="width:40px !important;">
+                  <div style="width: 40px !important;">
                     <select
                       id="2periodo"
                       style="width: 35px;"
@@ -209,10 +206,10 @@
                   </div>
                 </td>
                 <td>
-                  <div style="width:70px;">
+                  <div style="width: 70px;">
                     <select
                       type="text"
-                      style="width:65px;"
+                      style="width: 65px;"
                       id="disciplina"
                       v-model="turmaForm.Disciplina"
                     >
@@ -235,7 +232,7 @@
                   <div style="width: 330px;">
                     <select
                       type="text"
-                      style="width:325px;"
+                      style="width: 325px;"
                       id="disciplina"
                       v-model="turmaForm.Disciplina"
                     >
@@ -253,7 +250,7 @@
                 </td>
                 <td>
                   <div style="width: 18px;">
-                    <p style="width:18px;">
+                    <p style="width: 18px;">
                       <template v-for="disciplina in Disciplinas">
                         <template
                           v-if="disciplina.id === turmaForm.Disciplina"
@@ -266,10 +263,10 @@
                   </div>
                 </td>
                 <td>
-                  <div style="width: 40px">
+                  <div style="width: 40px;">
                     <input
                       type="text"
-                      style="width:20px;"
+                      style="width: 20px;"
                       id="turma"
                       v-model="turmaForm.letra"
                     />
@@ -279,7 +276,7 @@
                   <div style="width: 68px;">
                     <select
                       type="text"
-                      style="width:63px; text-align:center;"
+                      style="width: 63px; text-align: center;"
                       id="turno1"
                       v-model="turmaForm.turno1"
                       v-on:change="setEad"
@@ -329,10 +326,14 @@
                   </div>
                 </td>
                 <td>
-                  <div style="width: 98px">
+                  <div style="width: 98px;">
                     <select
                       type="text"
-                      style="width:93px; text-align:center; margin-bottom:1px;"
+                      style="
+                        width: 93px;
+                        text-align: center;
+                        margin-bottom: 1px;
+                      "
                       id="sala1"
                       v-model="turmaForm.Sala1"
                     >
@@ -348,7 +349,7 @@
                     </select>
                     <select
                       type="text"
-                      style="width:93px;"
+                      style="width: 93px;"
                       id="sala2"
                       v-model="turmaForm.Sala2"
                     >
@@ -364,11 +365,9 @@
                     </select>
                   </div>
                 </td>
-                <td><div style="width:40px"></div></td>
-                <!-- <div style="width: 165px; height:37px"></div> -->
-                <!-- Ocupa espaço vazio das vagas na parte de edição -->
+                <td><div style="width: 40px;"></div></td>
                 <td v-for="n in 4" :key="n">
-                  <div style="width:32px"></div>
+                  <div style="width: 32px;"></div>
                 </td>
               </div>
             </tr>
@@ -399,6 +398,7 @@
                 </tr>
               </template>
             </template>
+
             <template v-for="perfil in Perfis">
               <template v-for="disciplina in DisciplinasCod">
                 <tr
@@ -418,7 +418,7 @@
                     teoria: perfil.id == 10,
                     humempre: perfil.id == 11,
                     multi: perfil.id == 12,
-                    ice: perfil.id == 13
+                    ice: perfil.id == 13,
                   }"
                 >
                   <template
@@ -448,7 +448,7 @@
           <template v-if="disciplina.id === turma.Disciplina">
             <p
               :key="'disciplina' + disciplina.id + 'turma' + turma.id"
-              style="width:80px"
+              style="width: 80px;"
             >
               Disciplina:{{ disciplina.codigo }}
               <br />
@@ -465,19 +465,22 @@
           <li class="list-group-item">
             <strong>Para adicionar disciplinas à Tabela:</strong> Clique em
             Adicionar
-            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
+            <i class="fas fa-plus addbtn px-1" style="font-size: 12px;"></i>
             , em seguida, preencha a nova linha que surgirá na tabela. Após
             concluído, clique em Salvar
-            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+            <i class="fas fa-check addbtn px-1" style="font-size: 12px;"></i>
             ou em Cancelar
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px;"></i>
             .
           </li>
           <li class="list-group-item">
             <strong>Para deletar disciplinas da Tabela:</strong> Marque a(s)
             disciplina(s) que deseja deletar através da caixa de seleção à
             esquerda e em seguida clique em Deletar
-            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
+            <i
+              class="far fa-trash-alt delbtn px-1"
+              style="font-size: 12px;"
+            ></i>
             e confirme no botão OK.
           </li>
           <li class="list-group-item">
@@ -496,14 +499,14 @@
         </ul>
       </div>
 
-      <div slot="modal-footer" style="display: none"></div>
+      <div slot="modal-footer" style="display: none;"></div>
     </b-modal>
     <!-- MODAL SEMESTRE -->
     <b-modal id="modalFiltros" ref="modalFiltros" scrollable title="Filtros">
       <div class="p-0 m-0" style="height: 30px; width: 465px;">
         <ul
           class="nav nav-tabs card-header-tabs m-0"
-          style="font-size: 11px!important;height: 30px;"
+          style="font-size: 11px !important; height: 30px;"
         >
           <li class="nav-item">
             <a class="nav-link border clickable active">Semestre</a>
@@ -512,8 +515,9 @@
       </div>
       <div
         class="col m-0 p-0"
-        style="width:max-content;height: 450px!important;"
+        style="width: max-content; height: 450px !important;"
       >
+        <!-- TABLE SEMESTRE -->
         <table
           class="table table-bordered table-sm modal-table"
           style="max-height: 392px !important;"
@@ -521,11 +525,15 @@
           <thead class="thead-light">
             <tr>
               <div
-                style="width: max-content; height: 18px !important; font-size: 11px!important"
+                style="
+                  width: max-content;
+                  height: 18px !important;
+                  font-size: 11px !important;
+                "
                 class="sticky"
               >
                 <th>
-                  <p style="width:25px" class="p-header"></p>
+                  <p style="width: 25px;" class="p-header"></p>
                 </th>
                 <th>
                   <p
@@ -541,7 +549,7 @@
 
           <tbody>
             <tr>
-              <div style="width: max-content">
+              <div style="width: max-content;">
                 <td>
                   <div style="width: 25px; height: inherit;" class="px-1">
                     <input
@@ -552,12 +560,12 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:435px; text-align:start">Primeiro semestre</p>
+                  <p style="width: 435px; text-align: start;">PRIMEIRO</p>
                 </td>
               </div>
             </tr>
             <tr>
-              <div style="width: max-content">
+              <div style="width: max-content;">
                 <td>
                   <div style="width: 25px; height: inherit;" class="px-1">
                     <input
@@ -568,7 +576,7 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:435px; text-align:start">Segundo semestre</p>
+                  <p style="width: 435px; text-align: start;">SEGUNDO</p>
                 </td>
               </div>
             </tr>
@@ -595,7 +603,7 @@
           variant="success"
           @click="btnOKSemestre()"
           class="btn-verde btn-df mr-2"
-          style="padding-right:15px!important; padding-left:15px!important;"
+          style="padding-right: 15px !important; padding-left: 15px !important;"
           >OK</b-button
         >
       </div>
@@ -618,13 +626,13 @@ const emptyTurma = {
   Horario1: undefined,
   Horario2: undefined,
   Sala1: undefined,
-  Sala2: undefined
+  Sala2: undefined,
 };
 const emptyPedido = {
   vagasPeriodizadas: 0,
   vagasNaoPeriodizadas: 0,
   Curso: undefined,
-  Turma: undefined
+  Turma: undefined,
 };
 export default {
   name: "DashboardTurmasExternas",
@@ -636,11 +644,11 @@ export default {
       semestre: 1,
       semestre_1Ativo: true,
       semestre_2Ativo: true,
-      semestreAtual: 3
+      semestreAtual: 3,
     };
   },
   components: {
-    turmadata
+    turmadata,
   },
   /*
     mounted () {
@@ -688,7 +696,6 @@ export default {
           perfil = "ice";
           break;
       }
-      console.log(perfil);
       return perfil;
     },
     btnOKSemestre() {
@@ -790,7 +797,7 @@ export default {
       }
       this.$store.commit("emptyDeleteExterno");
     },
-    inPerfil: function(perfil, turmas, disciplinas) {
+    inPerfil: function(perfil, turmas, disciplinas, discip) {
       return turmas.filter(function(turma) {
         var disciplina = _.find(disciplinas, function(disc) {
           return disc.id === turma.Disciplina;
@@ -801,7 +808,7 @@ export default {
     addTurma() {
       turmaExternaService
         .create(this.turmaForm)
-        .then(response => {
+        .then((response) => {
           this.semestre = response.Turma.periodo;
           for (var i = 0; i < 4; i++) {
             var pedido = _.clone(emptyPedido);
@@ -809,10 +816,10 @@ export default {
             pedido.Turma = response.Turma.id;
             pedidoExternoService
               .create(pedido)
-              .then(response => {
+              .then((response) => {
                 // console.log(response.Pedido);
               })
-              .catch(error => {
+              .catch((error) => {
                 // console.log("erro ao criar pedido: " + error);
               });
           }
@@ -821,10 +828,10 @@ export default {
             group: "general",
             title: `Sucesso!`,
             text: `A Turma ${response.Turma.letra} foi criada!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao criar Turma</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -835,15 +842,15 @@ export default {
     editTurma(turma) {
       turmaExternaService
         .update(turma.id, turma)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Turma ${response.Turma.letra} foi atualizada!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao atualizar Turma</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -854,12 +861,12 @@ export default {
     deleteTurma(turma) {
       turmaExternaService
         .delete(turma.id, turma)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Turma ${response.Turma.letra} foi excluída!`,
-            type: "success"
+            type: "success",
           });
         })
         .catch(() => {
@@ -875,7 +882,7 @@ export default {
     toggleAdd() {
       this.cleanTurma();
       this.isAdd = !this.isAdd;
-    }
+    },
   },
   computed: {
     Cursos() {
@@ -933,8 +940,8 @@ export default {
       } else {
         return false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style>
@@ -992,14 +999,6 @@ export default {
   padding-left: 0 !important;
   margin: 0 !important;
 }
-
-.p-header {
-  padding: 0px 0 0px 0;
-  margin: 0;
-  font-size: 11px;
-  text-align: center;
-  height: 18px;
-}
 .divTable {
   overflow: hidden;
   height: -webkit-max-content;
@@ -1021,6 +1020,16 @@ export default {
   height: -moz-calc(100vh - 95px);
   height: calc(100vh - 95px);
 }
+.p-header {
+  text-align: center;
+  height: 18px;
+}
+.main-table p {
+  margin: 0 !important;
+  padding: 0 5px 0 5px !important;
+  font-size: 11px !important;
+  text-align: center;
+}
 .main-table tbody {
   max-height: 100%;
   width: 100%;
@@ -1039,10 +1048,6 @@ export default {
   vertical-align: middle;
   padding: 0;
   height: 40px;
-}
-.main-table p {
-  margin-bottom: 0;
-  text-align: center;
 }
 
 .main-table select {
@@ -1304,9 +1309,8 @@ strong {
   padding-left: 5px !important;
 }
 .modal-table input[type="checkbox"] {
-  margin-left: 0 !important;
+  margin: 0 !important;
   margin-top: 4px !important;
-  margin-bottom: auto !important;
 }
 .active {
   background-color: #e9ecef !important;

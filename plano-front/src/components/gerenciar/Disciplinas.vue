@@ -24,47 +24,47 @@
     <!-- Grid Esquerdo -->
     <div class="divTable">
       <!-- Inicio da Tabela -->
-      <table class="table table-hover border table-sm">
-        <thead class="thead-light">
+      <table class="main-table table table-sm table-hover table-bordered ">
+        <thead class="thead-light sticky">
           <tr>
-            <div style="width: 700px;" class="sticky">
+            <div style="font-size: 11px;" class=" max-content">
               <th scope="col">
                 <p
-                  @click="toggleOrderNome()"
-                  style="width: 300px;"
-                  class="p-header clickable-header"
+                  @click="toggleOrdMain('nome')"
+                  style="width: 300px; text-align:start"
+                  class="p-header clickable"
                   title="Clique para ordenar por nome"
                 >
                   Nome
                   <i
-                    v-if="ordenacao.order == 'nome' && ordenacao.type == 'asc'"
                     style="font-size:0.6rem; text-align:right"
-                    class="fas fa-arrow-down fa-sm"
-                  ></i>
-                  <i
-                    v-if="ordenacao.order == 'nome' && ordenacao.type == 'desc'"
-                    style="font-size:0.6rem; text-align:right"
-                    class="fas fa-arrow-up fa-sm"
+                    :class="
+                      ordenacao.order == 'nome'
+                        ? ordenacao.type == 'asc'
+                          ? 'fas fa-arrow-down fa-sm'
+                          : 'fas fa-arrow-up fa-sm'
+                        : 'fas fa-arrow-down fa-sm low-opacity'
+                    "
                   ></i>
                 </p>
               </th>
               <th scope="col">
                 <p
-                  style="width: 82px; cursor: pointer;"
-                  @click="toggleOrderCodigo()"
-                  class="p-header clickable-header"
+                  style="width: 82px; text-align:start"
+                  @click="toggleOrdMain('codigo')"
+                  class="p-header clickable"
                   title="Clique para ordenar por código"
                 >
                   Código
                   <i
-                          v-if="ordenacao.order == 'codigo' && ordenacao.type == 'asc'"
-                          style="font-size:0.6rem; text-align:right"
-                          class="fas fa-arrow-down fa-sm"
-                  ></i>
-                  <i
-                          v-if="ordenacao.order == 'codigo' && ordenacao.type == 'desc'"
-                          style="font-size:0.6rem; text-align:right"
-                          class="fas fa-arrow-up fa-sm"
+                    style="font-size:0.6rem; text-align:right"
+                    :class="
+                      ordenacao.order == 'codigo'
+                        ? ordenacao.type == 'asc'
+                          ? 'fas fa-arrow-down fa-sm'
+                          : 'fas fa-arrow-up fa-sm'
+                        : 'fas fa-arrow-down fa-sm low-opacity'
+                    "
                   ></i>
                 </p>
               </th>
@@ -84,23 +84,24 @@
                 </p>
               </th>
               <th scope="col">
-                <p style="width: 28px" class="p-header">EAD</p>
+                <p style="width: 30px" class="p-header">EAD</p>
               </th>
             </div>
           </tr>
         </thead>
         <tbody>
-          <template v-if="Disciplinas.length > 0">
+          <template v-for="disciplina in Disciplinas">
             <tr
-              v-for="disciplina in Disciplinas"
               :key="disciplina.id"
               v-on:click.prevent="
                 showDisciplina(disciplina), clickada(disciplina.codigo)
               "
-              style="cursor:pointer"
-              :class="{ 'bg-custom': disciplinaClickada === disciplina.codigo }"
+              :class="[
+                { 'bg-custom': disciplinaClickada === disciplina.codigo },
+                'clickable',
+              ]"
             >
-              <div style="width:700px">
+              <div class="max-content">
                 <td>
                   <p style="width: 300px; text-align: start">
                     {{ disciplina.nome }}
@@ -125,10 +126,10 @@
                   </td>
                 </template>
                 <td>
-                  <div style="width: 28px;">
+                  <div style="width: 30px;">
                     <input
-                      class="noHover"
                       type="checkbox"
+                      class="form-check-input position-static noHover"
                       v-model="disciplina.ead"
                       v-on:click.prevent="
                         showDisciplina(disciplina), clickada(disciplina.nome)
@@ -140,7 +141,7 @@
               </div>
             </tr>
           </template>
-          <template v-else>
+          <template v-if="Disciplinas.length == 0">
             <tr>
               <td colspan="3" class="text-center">
                 <i class="fas fa-exclamation-triangle"></i> Nenhuma disciplina
@@ -243,18 +244,16 @@
             </div>
 
             <div class="row mb-2 mt-3 mx-0">
-              <div class="form-group col m-0 px-0">
-                <div class="form-check">
-                  <input
-                    type="checkbox"
-                    id="ead"
-                    value="1"
-                    class="form-check-input"
-                    style="margin-top: 2px"
-                    v-model="disciplinaForm.ead"
-                  />
-                  <label for="ead" class="form-check-label">EAD</label>
-                </div>
+              <div class="form-check form-check-inline col m-0 px-0 pl-1">
+                <input
+                  type="checkbox"
+                  id="ead"
+                  value="1"
+                  class="form-check-input"
+                  style="margin-top: 2px"
+                  v-model="disciplinaForm.ead"
+                />
+                <label for="ead" class="form-check-label">EAD</label>
               </div>
             </div>
 
@@ -365,7 +364,7 @@ const emptyDisciplina = {
   cargaTeorica: undefined,
   cargaPratica: undefined,
   Perfil: undefined,
-  ead: undefined
+  ead: undefined,
 };
 
 export default {
@@ -376,7 +375,7 @@ export default {
       disciplinaForm: _.clone(emptyDisciplina),
       error: undefined,
       disciplinaClickada: "",
-      ordenacao: {order :"nome", type: "asc"}
+      ordenacao: { order: "nome", type: "asc" },
     };
   },
 
@@ -387,20 +386,15 @@ export default {
         $event.preventDefault();
       }
     },
-    toggleOrderNome() {
-      if(this.ordenacao.order === 'nome') this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc')
-      else {
-        this.ordenacao.order = "nome";
-        this.ordenacao.type = 'asc'
+    toggleOrdMain(ord) {
+      if (this.ordenacao.order != ord) {
+        this.ordenacao.order = ord;
+        this.ordenacao.type = "asc";
+      } else {
+        this.ordenacao.type = this.ordenacao.type == "asc" ? "desc" : "asc";
       }
     },
-    toggleOrderCodigo() {
-      if(this.ordenacao.order === 'codigo') this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc')
-      else {
-        this.ordenacao.order = "codigo";
-        this.ordenacao.type = 'asc'
-      }
-    },
+
     clickada(discip) {
       this.disciplinaClickada = discip;
     },
@@ -410,16 +404,16 @@ export default {
     addDisciplina() {
       disciplinaService
         .create(this.disciplinaForm)
-        .then(response => {
+        .then((response) => {
           this.cleanDisciplina();
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Disciplina ${response.Disciplina.nome} foi criada!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao criar Disciplina</b>";
           console.log(error.response);
           if (error.response.data.fullMessage) {
@@ -440,7 +434,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -448,15 +442,15 @@ export default {
     editDisciplina() {
       disciplinaService
         .update(this.disciplinaForm.id, this.disciplinaForm)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Disciplina ${response.Disciplina.nome} foi atualizada!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao atualizar Disciplina</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -466,7 +460,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -474,13 +468,13 @@ export default {
     deleteDisciplina() {
       disciplinaService
         .delete(this.disciplinaForm.id, this.disciplinaForm)
-        .then(response => {
+        .then((response) => {
           this.cleanDisciplina();
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Disciplina ${response.Disciplina.nome} foi excluída!`,
-            type: "success"
+            type: "success",
           });
         })
         .catch(() => {
@@ -489,7 +483,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -503,7 +497,7 @@ export default {
     showDisciplina(disciplina) {
       this.cleanDisciplina();
       this.disciplinaForm = _.clone(disciplina);
-    }
+    },
   },
 
   computed: {
@@ -529,8 +523,8 @@ export default {
       } else {
         return false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -549,6 +543,75 @@ export default {
   margin: 0 !important;
 }
 
+/* main-table */
+.divTable {
+  overflow: hidden;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+}
+.main-table {
+  display: block !important;
+  overflow-y: scroll !important;
+  overflow-x: auto !important;
+  font-size: 11px !important;
+  font-weight: normal !important;
+  background-color: white;
+  margin: 0 !important;
+  height: -webkit-calc(100vh - 95px);
+  height: -moz-calc(100vh - 95px);
+  height: calc(100vh - 95px);
+}
+.main-table .p-header {
+  height: 18px;
+}
+.main-table p {
+  padding: 0 5px 0 5px !important;
+  margin: 0 !important;
+  font-size: 11px !important;
+  text-align: center;
+}
+tbody {
+  max-height: 100% !important;
+  width: 100% !important;
+}
+.main-table td {
+  text-align: center;
+  vertical-align: middle !important;
+  padding: 0 !important;
+  height: 22px !important;
+}
+.main-table tr thead {
+  display: block !important;
+}
+.main-table thead th {
+  padding: 0 !important;
+  font-size: 14px;
+  text-align: center;
+  height: 18px !important;
+}
+.main-table input[type="checkbox"] {
+  width: 13px !important;
+  height: 13px !important;
+  text-align: center !important;
+  margin: 0 !important;
+  margin-top: 4px !important;
+}
+/* fim table */
+
+.sticky {
+  display: block !important;
+  overflow: hidden !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 0 !important;
+  display: block !important;
+  overflow: hidden !important;
+  z-index: 3;
+}
 /* ====== CARD ====== */
 .card-title {
   font-size: 16px;
@@ -574,7 +637,7 @@ export default {
   text-align: start;
   padding-top: 0 !important;
 }
-select {
+.card select {
   height: 25px !important;
   font-size: 11px !important;
   padding: 0px 5px 0px 5px !important;
@@ -590,7 +653,7 @@ select {
   max-width: 200px;
   text-align: start !important;
 }
-input {
+.card input {
   height: 25px !important;
   padding: 0px 5px 0px 5px !important;
   font-size: 11px !important;
@@ -614,98 +677,9 @@ input {
 }
 /* =================== */
 
-/* Tabela Lucas */
-.p-header {
-  padding: 0 5px 0 5px;
-  margin: 0;
-  font-size: 11px;
-  text-align: center;
-  height: 18px;
-}
-.divTable {
-  overflow: hidden;
-  border: rgba(0, 0, 0, 0.125) solid 1px;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-}
-table {
-  display: block !important;
-  overflow-y: scroll !important;
-  overflow-x: auto !important;
-  font-size: 11px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-  height: -webkit-calc(100vh - 95px);
-  height: -moz-calc(100vh - 95px);
-  height: calc(100vh - 95px);
-}
-tbody {
-  max-height: 100%;
-  width: 100%;
-}
-table td {
-  text-align: center;
-  vertical-align: middle;
-  padding: 0 !important;
-}
-table p {
-  margin-bottom: 0;
-  text-align: center;
-  padding-right: 5px;
-  padding-left: 5px;
-  font-size: 11px !important;
-}
-tr thead {
-  display: block;
-}
-thead th {
-  padding: 0 !important;
-  font-size: 14px;
-  text-align: center;
-  height: 18px !important;
-}
-input[type="text"] {
-  height: 25px !important;
-  padding: 0px 5px 0px 5px !important;
-  font-size: 11px !important;
-  text-align: start;
-}
-input[type="checkbox"] {
-  width: 16px !important;
-  height: 14px !important;
-  text-align: center !important;
-}
-table input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-}
-select {
-  height: 25px !important;
-  font-size: 11px !important;
-  padding: 0px 5px 0px 5px !important;
-  text-align: center;
-}
-table tbody tr div {
-  height: 22px !important;
-}
-.sticky {
-  display: block !important;
-  overflow: hidden !important;
-  height: 20px !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 0 !important;
-}
-/* Fim Tabela Lucas */
-
 /* Firefox */
 @-moz-document url-prefix() {
-  table select {
+  .main-table select {
     height: 25px !important;
     text-align: left;
     -moz-box-sizing: border-box;
@@ -716,7 +690,7 @@ table tbody tr div {
     border-radius: 2px;
     background-color: rgb(245, 245, 245);
   }
-  table input {
+  .main-table input {
     height: 25px !important;
     text-align: start;
     -moz-box-sizing: border-box;
@@ -835,10 +809,5 @@ i.far {
   .card {
     margin-left: 0px !important;
   }
-}
-.clickable-header {
-  cursor: pointer;
-  text-align: start !important;
-  padding-left: 5px;
 }
 </style>

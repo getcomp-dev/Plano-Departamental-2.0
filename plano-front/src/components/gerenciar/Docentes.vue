@@ -3,7 +3,7 @@
     <!-- Titulo -->
     <div
       class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
-      style="height:38px;"
+      style="height: 38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="col-xl-2 col-md-4 col-sm-5 col-9 px-0 pr-1 titulo">
@@ -12,7 +12,7 @@
 
         <div
           class="form-group form-group-top col-xl-10 col-md-8 col-sm-7 col-3 mb-0 p-0"
-          style="justify-content: flex-end!important;"
+          style="justify-content: flex-end !important;"
         >
           <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
             <i class="fas fa-question"></i>
@@ -22,108 +22,106 @@
     </div>
     <div class="w-100 mb-2 border-bottom"></div>
     <!-- Fim do Titulo -->
-
-    <!-- Grid Esquerdo -->
-
-    <!-- Inicio da Tabela -->
-    <div class="row p-0 m-0">
-      <div class="p-0 divTable">
-        <table class="table table-hover table-sm">
-          <thead class="thead-light">
-            <tr>
-              <div style="width: 415px " class="sticky">
-                <th scope="col">
-                  <p
-                    @click="toggleOrdenacaoNome()"
-                    title="Clique para ordenar por nome"
-                    class="p-header clickable-header"
-                    style="width: 240px; text-align: start;"
-                  >
-                    Nome
-                    <i
-                      v-if="ordenacao.order == 'nome' && ordenacao.type == 'asc'"
-                      style="font-size:0.6rem"
-                      class="fas fa-arrow-down fa-sm"
-                    ></i>
-                    <i
-                      v-if="ordenacao.order == 'nome' && ordenacao.type == 'desc'"
-                      style="font-size:0.6rem"
-                      class="fas fa-arrow-up fa-sm"
-                    ></i>
+    <div class="p-0 divTable">
+      <!-- Inicio da Tabela -->
+      <table class="main-table table table-sm table-hover table-bordered">
+        <thead class="thead-light sticky">
+          <tr>
+            <div style="font-size: 11px;" class=" max-content">
+              <th scope="col">
+                <p
+                  class="p-header clickable"
+                  @click="toggleOrdMain('nome')"
+                  title="Clique para ordenar por nome"
+                  style="width: 240px; text-align: start;"
+                >
+                  Nome
+                  <i
+                    style="font-size: 0.6rem; text-align:right"
+                    :class="
+                      ordenacao.order == 'nome'
+                        ? ordenacao.type == 'asc'
+                          ? 'fas fa-arrow-down fa-sm'
+                          : 'fas fa-arrow-up fa-sm'
+                        : 'fas fa-arrow-down fa-sm low-opacity'
+                    "
+                  ></i>
+                </p>
+              </th>
+              <th scope="col">
+                <p
+                  class="p-header clickable"
+                  @click="toggleOrdMain('apelido')"
+                  title="Clique para ordenar por apelido"
+                  style="width: 120px; text-align:start"
+                >
+                  Apelido
+                  <i
+                    style="font-size: 0.6rem;"
+                    :class="
+                      ordenacao.order == 'apelido'
+                        ? ordenacao.type == 'asc'
+                          ? 'fas fa-arrow-down fa-sm'
+                          : 'fas fa-arrow-up fa-sm'
+                        : 'fas fa-arrow-down fa-sm low-opacity'
+                    "
+                  ></i>
+                </p>
+              </th>
+              <th scope="col">
+                <p class="p-header" style="width:45px">Ativo</p>
+              </th>
+            </div>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-for="docente in Docentes">
+            <tr
+              :key="'docente-id' + docente.id"
+              v-on:click.prevent="showDocentes(docente, DocentePerfis)"
+              :class="[
+                { 'bg-custom': docenteClickado == docente.nome },
+                'clickable',
+              ]"
+            >
+              <div class="max-content">
+                <td>
+                  <p style="width:240px; text-align:start">
+                    {{ docente.nome }}
                   </p>
-                </th>
-                <th scope="col">
-                  <p
-                    @click="toggleOrdenacaoApelido()"
-                    title="Clique para ordenar por apelido"
-                    class="p-header clickable-header"
-                    style="width: 130px"
-                  >
-                    Apelido
-                    <i
-                            v-if="ordenacao.order == 'apelido' && ordenacao.type == 'asc'"
-                            style="font-size:0.6rem"
-                            class="fas fa-arrow-down fa-sm"
-                    ></i>
-                    <i
-                            v-if="ordenacao.order == 'apelido' && ordenacao.type == 'desc'"
-                            style="font-size:0.6rem"
-                            class="fas fa-arrow-up fa-sm"
-                    ></i>
+                </td>
+                <td>
+                  <p style="width:120px; text-align:start">
+                    {{ docente.apelido }}
                   </p>
-                </th>
-                <th scope="col">
-                  <p class="p-header" style="width: 45px">Ativo</p>
-                </th>
+                </td>
+                <td>
+                  <div style="width:45px!important" class="p-0 m-0">
+                    <input
+                      type="checkbox"
+                      class="form-check-input position-static noHover"
+                      v-model="docente.ativo"
+                      v-on:click.prevent="showDocentes(docente, DocentePerfis)"
+                    />
+                  </div>
+                </td>
               </div>
             </tr>
-          </thead>
-          <tbody>
-            <template v-if="Docentes.length > 0">
-              <tr
-                v-for="docente in Docentes"
-                :key="'docente-id' + docente.id"
-                v-on:click.prevent="showDocentes(docente, DocentePerfis)"
-                :class="{ 'bg-custom': docenteClickado == docente.nome }"
-                style="cursor: pointer"
-              >
-                <div style="width: 415px">
-                  <td>
-                    <p style="width: 240px; text-align: start!important">
-                      {{ docente.nome }}
-                    </p>
-                  </td>
-                  <td>
-                    <p style="width: 130px">{{ docente.apelido }}</p>
-                  </td>
-                  <td>
-                    <div style="width: 45px">
-                      <input
-                        class="form-check-input position-static noHover"
-                        v-on:click.prevent="
-                          showDocentes(docente, DocentePerfis)
-                        "
-                        type="checkbox"
-                        v-model="docente.ativo"
-                      />
-                    </div>
-                  </td>
-                </div>
-              </tr>
-            </template>
-            <template v-else>
-              <tr>
-                <td colspan="2" class="text-center">
-                  <i class="fas fa-exclamation-triangle"></i> Nenhum docente
-                  encontrado!
-                </td>
-              </tr>
-            </template>
-          </tbody>
-        </table>
-        <!-- Fim da Tabela -->
-      </div>
+          </template>
+          <template v-if="Docentes.length == 0">
+            <tr>
+              <td colspan="2" class="text-center">
+                <i class="fas fa-exclamation-triangle"></i> Nenhum docente
+                encontrado!
+              </td>
+            </tr>
+          </template>
+        </tbody>
+      </table>
+
+      <!-- Fim da Tabela -->
     </div>
+
     <!-- Fim do Grid Esquerdo -->
     <!-- Grid Direito -->
     <div class="div-card p-0 mt-0 mb-4 col-auto">
@@ -165,44 +163,41 @@
                   id="apelido"
                   v-model="docenteForm.apelido"
                   class="form-control form-control-sm"
-                  style="width: 120px!important"
+                  style="width: 120px !important;"
                 />
               </div>
 
-              <div class="form-group col m-0 mr-4 px-0">
-                <div class="form-check" style="margin-top:28px">
-                  <input
-                    type="checkbox"
-                    id="ativo"
-                    value="1"
-                    v-model="docenteForm.ativo"
-                    class="form-check-input my-auto"
-                    style="margin-top: 2px"
-                  />
-                  <label for="ativo" class="form-check-label">Ativo</label>
-                </div>
+              <!-- <div class="form-group col m-0  px-0"> -->
+              <div class="form-check form-check-inline col m-0 mr-4 mt-4 px-0">
+                <input
+                  type="checkbox"
+                  id="ativo"
+                  value="1"
+                  v-model="docenteForm.ativo"
+                  class="form-check-input my-auto"
+                />
+                <label for="ativo" class="form-check-label">Ativo</label>
               </div>
+              <!-- </div> -->
             </div>
             <template v-if="isEdit">
-              <div class="border-bottom my-2"></div>
+              <div class="border-bottom mt-2 mb-1"></div>
+              <small>Perfis Associados ao docente</small>
               <div class="row mb-3 mx-0">
-                <div
-                  class="form-group col m-0 px-0 border rounded-top"
-                  style="height: 302px; border-color: rgba(0,0,0,0.125);"
-                >
+                <div class="form-group col m-0 px-0" style="height: 300px;">
                   <table
-                    class="table table-sm"
-                    style=" max-height:300px!important; overflow:auto;"
+                    class="modal-table table table-bordered table-sm"
+                    style="max-height: 300px !important; overflow: auto;"
                   >
-                    <tr class="thead-light">
-                      <div class="sticky2 border" style="width:300px;">
-                        <th scope="col" class="border-top-0">
+                    <tr class="thead-light sticky">
+                      <div class="max-content" style="font-size:11px!important">
+                        <th scope="col">
                           <p class="p-header" style="width: 25px;"></p>
                         </th>
-                        <th scope="col" class="border-top-0">
+                        <th scope="col">
                           <p
                             class="p-header"
-                            style="width: 275px; text-align: start"
+                            style="width: 275px; text-align: start;"
                           >
                             Perfis
                           </p>
@@ -214,9 +209,12 @@
                         v-for="perfil in Perfis"
                         :key="'perfil-id' + perfil.id"
                       >
-                        <div style="width: 300px">
-                          <td style="padding:0;broder:0;margin:0!important">
-                            <div style="width:25px;">
+                        <div class="max-content">
+                          <td>
+                            <div
+                              style="width: 25px; height: inherit;"
+                              class="px-1"
+                            >
                               <input
                                 type="checkbox"
                                 :value="perfil.id"
@@ -227,7 +225,7 @@
                             </div>
                           </td>
                           <td>
-                            <p style="width:275px; text-align:start">
+                            <p style="width: 275px; text-align: start;">
                               {{ perfil.nome }}
                             </p>
                           </td>
@@ -307,22 +305,22 @@
           <li class="list-group-item">
             <strong>Para adicionar docentes:</strong> Com o cartão à direita em
             branco, preencha-o. Em seguida, clique em Adicionar
-            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
+            <i class="fas fa-plus addbtn px-1" style="font-size: 12px;"></i>
             .
           </li>
           <li class="list-group-item">
             <strong>Para editar ou deletar um docente:</strong>Na tabela, clique
             no docente que deseja alterar. Logo após, no cartão à direita,
             altere as informações que desejar e clique em Salvar
-            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+            <i class="fas fa-check addbtn px-1" style="font-size: 12px;"></i>
             ou, para excluí-lo, clique em Deletar
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px;"></i>
             .
           </li>
           <li class="list-group-item">
             <strong>Para deixar o cartão em branco:</strong> No cartão, à
             direita, clique em Cancelar
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px;"></i>
             .
           </li>
           <li class="list-group-item">
@@ -332,7 +330,7 @@
         </ul>
       </div>
 
-      <div slot="modal-footer" style="display: none"></div>
+      <div slot="modal-footer" style="display: none;"></div>
     </b-modal>
   </div>
 </template>
@@ -347,12 +345,12 @@ const emptyDocente = {
   nome: undefined,
   apelido: undefined,
   creditos: 0,
-  ativo: 1
+  ativo: 1,
 };
 
 const emptyPerfil = {
   Docente: undefined,
-  Perfil: undefined
+  Perfil: undefined,
 };
 
 export default {
@@ -365,7 +363,7 @@ export default {
       error: undefined,
       docentePerfil: _.clone(emptyPerfil),
       docenteClickado: "",
-      ordenacao: {order: "nome", type: "asc"}
+      ordenacao: { order: "nome", type: "asc" },
     };
   },
 
@@ -373,34 +371,27 @@ export default {
     clearClick() {
       this.docenteClickado = "";
     },
-    toggleOrdenacaoNome() {
-      if(this.ordenacao.order === 'nome') this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc')
-      else {
-        this.ordenacao.order = "nome";
-        this.ordenacao.type = 'asc'
+    toggleOrdMain(ord) {
+      if (this.ordenacao.order != ord) {
+        this.ordenacao.order = ord;
+        this.ordenacao.type = "asc";
+      } else {
+        this.ordenacao.type = this.ordenacao.type == "asc" ? "desc" : "asc";
       }
     },
-    toggleOrdenacaoApelido() {
-      if(this.ordenacao.order === 'apelido') this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc')
-      else {
-        this.ordenacao.order = "apelido";
-        this.ordenacao.type = 'asc'
-      }
-    },
-
     addDocente() {
       docenteService
         .create(this.docenteForm)
-        .then(response => {
+        .then((response) => {
           this.cleanDocente();
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `Docente ${response.Docente.nome} foi criada!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao criar Docente</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -410,7 +401,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -418,15 +409,15 @@ export default {
     editDocente() {
       docenteService
         .update(this.docenteForm.id, this.docenteForm)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `Docente ${response.Docente.nome} foi atualizada!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao atualizar Docente</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -436,7 +427,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -444,13 +435,13 @@ export default {
     deleteDocente() {
       docenteService
         .delete(this.docenteForm.id, this.docenteForm)
-        .then(response => {
+        .then((response) => {
           this.cleanDocente();
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `Docente ${response.Docente.nome} foi excluída!`,
-            type: "warn"
+            type: "warn",
           });
         })
         .catch(() => {
@@ -459,7 +450,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -487,15 +478,15 @@ export default {
       let perfilData = _.find(this.$store.state.perfil.Perfis, ["id", perfil]);
       docentePerfilService
         .create(this.docentePerfil)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `O Perfil ${perfilData.nome} foi associado ao Docente ${this.docenteForm.apelido}!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao associar Perfil</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -505,7 +496,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -514,12 +505,12 @@ export default {
       let perfilData = _.find(this.$store.state.perfil.Perfis, ["id", perfil]);
       docentePerfilService
         .delete(this.docenteForm.id, perfil)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `O Perfil ${perfilData.nome} foi exluído do Docente ${this.docenteForm.apelido}!`,
-            type: "success"
+            type: "success",
           });
         })
         .catch(() => {
@@ -528,7 +519,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -539,12 +530,16 @@ export default {
       } else {
         this.addPerfil(perfil);
       }
-    }
+    },
   },
 
   computed: {
     Docentes() {
-      return _.orderBy(this.$store.state.docente.Docentes, this.ordenacao.order, this.ordenacao.type);
+      return _.orderBy(
+        this.$store.state.docente.Docentes,
+        this.ordenacao.order,
+        this.ordenacao.type
+      );
     },
 
     Perfis() {
@@ -565,8 +560,8 @@ export default {
       } else {
         return false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -584,17 +579,10 @@ export default {
   padding-left: 0;
   margin: 0 !important;
 }
-/* Tabela Lucas */
-.p-header {
-  padding: 0 5px 0 5px;
-  margin: 0;
-  font-size: 11px;
-  text-align: center;
-  height: 18px;
-}
+
+/* main-table */
 .divTable {
   overflow: hidden;
-  border: rgba(0, 0, 0, 0.125) solid 1px;
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
@@ -602,7 +590,7 @@ export default {
   width: -moz-max-content;
   width: max-content;
 }
-table {
+.main-table {
   display: block !important;
   overflow-y: scroll !important;
   overflow-x: auto !important;
@@ -614,69 +602,56 @@ table {
   height: -moz-calc(100vh - 95px);
   height: calc(100vh - 95px);
 }
-tbody {
-  max-height: 100%;
-  width: 100%;
+.main-table .p-header {
+  height: 18px;
 }
-table td {
+.main-table p {
+  padding: 0 5px 0 5px !important;
+  margin: 0 !important;
+  font-size: 11px !important;
+  text-align: center;
+}
+tbody {
+  max-height: 100% !important;
+  width: 100% !important;
+}
+.main-table td {
   text-align: center;
   vertical-align: middle !important;
   padding: 0 !important;
-  height: 23px !important;
+  height: 22px !important;
 }
-table p {
-  margin-bottom: 0 !important;
-  text-align: center;
-  padding-right: 5px !important;
-  padding-left: 5px !important;
-  font-size: 11px !important;
-}
-tr thead {
+.main-table tr thead {
   display: block !important;
 }
-th {
+.main-table thead th {
   padding: 0 !important;
-  font-size: 14px !important;
-  text-align: center !important;
+  font-size: 14px;
+  text-align: center;
   height: 18px !important;
 }
-table input {
-  height: 11px !important;
+.main-table input[type="checkbox"] {
+  width: 13px !important;
+  height: 13px !important;
   text-align: center !important;
-}
-input[type="checkbox"] {
-  width: 16px !important;
-  height: 14px !important;
-  text-align: center !important;
-}
-table input[type="checkbox"] {
-  margin-left: 0 !important;
+  margin: 0 !important;
   margin-top: 4px !important;
 }
-input[type="text"] {
-  height: 25px !important;
-  font-size: 11px !important;
-}
+/* fim table */
+
 .sticky {
   display: block !important;
   overflow: hidden !important;
-  height: 20px !important;
   position: sticky !important;
   position: -webkit-sticky !important;
   top: 0 !important;
-  z-index: 3 !important;
-}
-.sticky2 {
   display: block !important;
   overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 0 !important;
-  z-index: 3 !important;
+  z-index: 3;
 }
-/* Fim Tabela Lucas */
 
 /* ====== CARD ====== */
+
 .div-card {
   margin-left: auto;
 }
@@ -708,7 +683,7 @@ input[type="text"] {
   width: 300px;
   text-align: start;
 }
-input {
+.card input {
   height: 25px !important;
   padding: 0px 5px 0px 5px !important;
   font-size: 11px !important;
@@ -727,10 +702,58 @@ input {
   width: 250px;
   text-align: start;
 }
-.clickable-header {
-  cursor: pointer;
-  padding-left: 5px;
+
+/* ==== MODAL TABLE ==== */
+.modal-table {
+  display: block !important;
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+  font-size: 10px !important;
+  font-weight: normal !important;
+  background-color: white;
+  margin: 0 !important;
 }
+.modal-table tr thead {
+  display: block;
+}
+.modal-table th {
+  padding: 0 !important;
+  text-align: center !important;
+  height: 18px !important;
+}
+
+.modal-table .p-header {
+  padding: 0px 5px 0px 5px !important;
+  margin: 0 !important;
+  text-align: start;
+  height: 18px !important;
+}
+.modal-table tbody {
+  max-height: 100%;
+  width: 100%;
+}
+.modal-table td {
+  border-top: 0;
+  text-align: center;
+  vertical-align: middle !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  /* height: 22px !important; */
+}
+.modal-table p {
+  margin: 0 !important;
+  text-align: center;
+  padding: 0 !important;
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+}
+.modal-table input[type="checkbox"] {
+  margin-left: 0 !important;
+  margin-top: 4px !important;
+  margin-bottom: auto !important;
+  height: 13px !important;
+}
+/* FIM MODAL TABLE */
 /* =================== */
 
 .bg-custom {
@@ -847,7 +870,10 @@ i.far {
 .form-inline {
   width: auto;
 }
-@media screen and (max-width: 705px) {
+@media screen and (max-width: 825px) {
+  .divTable {
+    margin-right: 100px !important;
+  }
   .div-card {
     margin-left: 0px !important;
     margin-top: 20px !important;

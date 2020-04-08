@@ -3,7 +3,7 @@
     <!-- Titulo -->
     <div
       class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
-      style="height:38px;"
+      style="height: 38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="col-xl-2 col-md-4 col-sm-5 col-7 px-0 pr-1 titulo">
@@ -12,7 +12,7 @@
 
         <div
           class="form-group col-xl-10 col-md-8 col-sm-7 col-5 mb-0 p-0"
-          style="justify-content: flex-end!important;"
+          style="justify-content: flex-end !important;"
         >
           <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
             <i class="fas fa-question"></i>
@@ -23,62 +23,79 @@
     <div class="w-100 mb-2 border-bottom"></div>
 
     <div class="row w-100 m-0">
-      <!-- Inicio da Tabela -->
-      <div class="p-0 divTable">
-        <table class="table table-hover table-sm">
-          <thead class="thead-light">
+      <!-- Grid Esquerdo -->
+      <div class="divTable p-0">
+        <!-- Inicio da Tabela -->
+        <table class="main-table table table-hover table-bordered table-sm">
+          <thead class="thead-light sticky">
             <tr>
-              <div
-                style="display: block; overflow: hidden; width: 525px;"
-                class="sticky"
-              >
+              <div style="font-size: 11px;" class=" max-content">
                 <th scope="col">
                   <p
-                    @click="toggleOrderNome()"
+                    @click="toggleOrd('nome')"
                     title="Clique para ordenar por nome"
                     class="p-header clickable-header"
-                    style="width:300px!important; text-align: start !important;"
+                    style="
+                      width: 300px !important;
+                      text-align: start !important;
+                    "
                   >
                     Nome
                     <i
-                      v-if="ordenacao.order == 'nome' && ordenacao.type == 'asc'"
-                      style="font-size:0.6rem"
-                      class="fas fa-arrow-down fa-sm"
-                    ></i>
-                    <i
-                      v-if="ordenacao.order == 'nome' && ordenacao.type == 'desc'"
-                      style="font-size:0.6rem"
-                      class="fas fa-arrow-up fa-sm"
+                      style="font-size: 0.6rem;"
+                      :class="
+                        ordenacao.order == 'nome'
+                          ? ordenacao.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : ''
+                      "
                     ></i>
                   </p>
                 </th>
                 <th scope="col">
                   <p
-                    @click="toggleOrderCod()"
+                    @click="toggleOrd('codigo')"
                     title="Clique para ordenar por nome"
-                    class="p-header clickable-header"
-                    style="width:60px!important;"
+                    class="p-header clickable"
+                    style="width: 60px !important;"
                   >
                     Código
                     <i
-                      v-if="ordenacao.order == 'codigo'  && ordenacao.type == 'asc'"
-                      style="font-size:0.6rem"
-                      class="fas fa-arrow-down fa-sm"
-                    ></i>
-                    <i
-                      v-if="ordenacao.order == 'codigo'  && ordenacao.type == 'desc'"
-                      style="font-size:0.6rem"
-                      class="fas fa-arrow-up fa-sm"
+                      style="font-size: 0.6rem;"
+                      :class="
+                        ordenacao.order == 'codigo'
+                          ? ordenacao.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : ''
+                      "
                     ></i>
                   </p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:52px!important;">Turno</p>
+                  <p
+                    class="p-header clickable"
+                    style="width: 52px !important;"
+                    @click="toggleOrd('turno')"
+                  >
+                    Turno
+                    <i
+                      style="font-size: 0.6rem;"
+                      :class="
+                        ordenacao.order == 'turno'
+                          ? ordenacao.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : ''
+                      "
+                    ></i>
+                  </p>
                 </th>
                 <th scope="col">
                   <p
                     class="p-header"
-                    style="width:52px!important;"
+                    style="width: 52px !important;"
                     title="Entrada de alunos 1º Semestre"
                   >
                     1º Sem.
@@ -87,14 +104,11 @@
                 <th scope="col">
                   <p
                     class="p-header"
-                    style="width:52px!important;"
+                    style="width: 52px !important;"
                     title="Entrada de alunos 2º Semestre"
                   >
                     2º Sem.
                   </p>
-                </th>
-                <th scope="col">
-                  <p style="width: 9px"></p>
                 </th>
               </div>
             </tr>
@@ -109,27 +123,24 @@
                 :class="{ 'bg-custom': cursoClickado === curso.codigo }"
                 style="cursor: pointer;"
               >
-                <div style="width: 525px">
+                <div class="max-content">
                   <td>
-                    <p style="width: 300px; text-align: start">
+                    <p style="width: 300px; text-align: start;">
                       {{ curso.nome }}
                     </p>
                   </td>
                   <td>
-                    <p style="width: 60px">{{ curso.codigo }}</p>
+                    <p style="width: 60px;">{{ curso.codigo }}</p>
                   </td>
                   <td>
                     <p style="width: 52px;">{{ curso.turno }}</p>
                   </td>
                   <!-- 1 = 1º semestre, 2 = 2º semestre, 3 = Ambos-->
                   <td>
-                    <p style="width: 52px">{{ curso.alunosEntrada }}</p>
+                    <p style="width: 52px;">{{ curso.alunosEntrada }}</p>
                   </td>
                   <td>
-                    <p style="width: 52px">{{ curso.alunosEntrada2 }}</p>
-                  </td>
-                  <td>
-                    <p style="width: 9px"></p>
+                    <p style="width: 52px;">{{ curso.alunosEntrada2 }}</p>
                   </td>
                 </div>
               </tr>
@@ -332,22 +343,25 @@
           <li class="list-group-item">
             <strong>Para adicionar cursos:</strong> Com o cartão à direita em
             branco, preencha-o. Em seguida, clique em Adicionar
-            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
+            <i class="fas fa-plus addbtn px-1" style="font-size: 12px;"></i>
             .
           </li>
           <li class="list-group-item">
             <strong>Para editar ou deletar um curso:</strong> Na tabela, clique
             no curso que deseja alterar. Logo após, no cartão à direita, altere
             as informações que desejar e clique em Salvar
-            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+            <i class="fas fa-check addbtn px-1" style="font-size: 12px;"></i>
             ou, para excluí-lo, clique em Deletar
-            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
+            <i
+              class="far fa-trash-alt delbtn px-1"
+              style="font-size: 12px;"
+            ></i>
             .
           </li>
           <li class="list-group-item">
             <strong>Para deixar o cartão em branco:</strong> No cartão, à
             direita, clique em Cancelar
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px;"></i>
             .
           </li>
           <li class="list-group-item">
@@ -358,7 +372,7 @@
         </ul>
       </div>
 
-      <div slot="modal-footer" style="display: none"></div>
+      <div slot="modal-footer" style="display: none;"></div>
     </b-modal>
   </div>
 </template>
@@ -376,7 +390,7 @@ const emptyCurso = {
   semestreInicial: undefined,
   alunosEntrada: undefined,
   alunosEntrada2: undefined,
-  posicao: undefined
+  posicao: undefined,
 };
 const emptyPedido = {
   vagasPeriodizadas: 0,
@@ -384,7 +398,7 @@ const emptyPedido = {
   Curso: undefined,
   Turma: undefined,
   ultimo: undefined,
-  selectAll: undefined
+  selectAll: undefined,
 };
 export default {
   name: "DashboardCursos",
@@ -393,7 +407,7 @@ export default {
       cursoForm: _.clone(emptyCurso),
       error: undefined,
       cursoClickado: "",
-      ordenacao: { order: "nome", type: "asc" }
+      ordenacao: { order: "nome", type: "asc" },
     };
   },
   created() {
@@ -409,20 +423,15 @@ export default {
         $event.preventDefault();
       }
     },
-    toggleOrderCod() {
-      if (this.ordenacao.order == "codigo") this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc');
-      else {
-        this.ordenacao.order = "codigo";
-        this.ordenacao.type = 'asc'
+    toggleOrd(ord) {
+      if (this.ordenacao.order != ord) {
+        this.ordenacao.order = ord;
+        this.ordenacao.type = "asc";
+      } else {
+        this.ordenacao.type = this.ordenacao.type == "asc" ? "desc" : "asc";
       }
     },
-    toggleOrderNome() {
-      if (this.ordenacao.order == "nome") this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc');
-      else {
-        this.ordenacao.order = "nome";
-        this.ordenacao.type = 'asc'
-      }
-    },
+
     clickada(f_curso) {
       this.cursoClickado = f_curso;
     },
@@ -466,7 +475,7 @@ export default {
       else this.cursoForm.semestreInicial = 3;
       cursoService
         .create(this.cursoForm)
-        .then(response => {
+        .then((response) => {
           for (var i = 0; i < this.$store.state.turma.Turmas.length; i++) {
             var pedido = _.clone(emptyPedido);
             pedido.Curso = response.Curso.id;
@@ -474,8 +483,8 @@ export default {
             console.log(pedido);
             pedidoService
               .create(pedido)
-              .then(response => {})
-              .catch(error => {
+              .then((response) => {})
+              .catch((error) => {
                 console.log("erro ao criar pedido: " + error);
               });
           }
@@ -484,10 +493,10 @@ export default {
             group: "general",
             title: `Sucesso!`,
             text: `O Curso ${response.Curso.nome} foi criado!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao criar Curso</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -497,7 +506,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -520,34 +529,34 @@ export default {
       else this.cursoForm.semestreInicial = 3;
       cursoService
         .update(this.cursoForm.id, this.cursoForm)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `O Curso ${response.Curso.nome} foi atualizado!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao atualizar Curso</b>";
           this.$notify({
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
     deleteCurso() {
       cursoService
         .delete(this.cursoForm.id, this.cursoForm)
-        .then(response => {
+        .then((response) => {
           this.cleanCurso();
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `O Curso ${response.Curso.nome} foi excluído!`,
-            type: "success"
+            type: "success",
           });
         })
         .catch(() => {
@@ -556,7 +565,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -568,11 +577,15 @@ export default {
     showCurso(curso) {
       this.cleanCurso();
       this.cursoForm = _.clone(curso);
-    }
+    },
   },
   computed: {
     Cursos() {
-      return _.orderBy(this.$store.state.curso.Cursos, this.ordenacao.order, this.ordenacao.type);
+      return _.orderBy(
+        this.$store.state.curso.Cursos,
+        this.ordenacao.order,
+        this.ordenacao.type
+      );
     },
     CursosAtivos() {
       return this.$store.state.curso.Ativos;
@@ -586,8 +599,8 @@ export default {
       } else {
         return false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -606,17 +619,9 @@ export default {
   margin: 0 !important;
 }
 
-/* Tabela Lucas */
-.p-header {
-  padding: 0px 0 0px 0;
-  margin: 0;
-  font-size: 11px;
-  text-align: center;
-  height: 18px;
-}
+/* main-table */
 .divTable {
-  overflow: auto !important;
-  border: rgba(0, 0, 0, 0.125) solid 1px;
+  overflow: hidden;
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
@@ -624,9 +629,10 @@ export default {
   width: -moz-max-content;
   width: max-content;
 }
-table {
+.main-table {
   display: block !important;
-  overflow: auto !important;
+  overflow-y: scroll !important;
+  overflow-x: auto !important;
   font-size: 11px !important;
   font-weight: normal !important;
   background-color: white;
@@ -635,47 +641,45 @@ table {
   height: -moz-calc(100vh - 95px);
   height: calc(100vh - 95px);
 }
+.main-table .p-header {
+  height: 18px;
+}
+.main-table p {
+  padding: 0 5px 0 5px !important;
+  margin: 0 !important;
+  font-size: 11px !important;
+  text-align: center;
+}
 tbody {
-  max-height: 100%;
-  width: 100%;
+  max-height: 100% !important;
+  width: 100% !important;
 }
-table td {
+.main-table td {
   text-align: center;
-  vertical-align: middle;
+  vertical-align: middle !important;
   padding: 0 !important;
-  height: 18px !important;
+  height: 22px !important;
 }
-table p {
-  margin-bottom: 0;
-  text-align: center;
-  padding-right: 5px;
-  padding-left: 5px;
+.main-table tr thead {
+  display: block !important;
 }
-tr thead {
-  display: block;
-}
-thead th {
+.main-table thead th {
   padding: 0 !important;
   font-size: 14px;
   text-align: center;
   height: 18px !important;
 }
-table input {
-  height: 18px !important;
-  text-align: center !important;
-  margin: 0;
-}
-/*
-table tbody tr div {
-  height: 22px !important;
-}*/
+/* fim table */
+
 .sticky {
   display: block !important;
   overflow: hidden !important;
-  height: 20px !important;
   position: sticky !important;
   position: -webkit-sticky !important;
   top: 0 !important;
+  display: block !important;
+  overflow: hidden !important;
+  z-index: 3;
 }
 .bg-custom {
   background-color: #c8c8c8;
@@ -760,10 +764,6 @@ input[type="checkbox"] {
 table input[type="checkbox"] {
   margin-left: 0 !important;
   margin-top: 4px !important;
-}
-.clickable-header {
-  cursor: pointer;
-  padding-left: 5px;
 }
 
 .listas {

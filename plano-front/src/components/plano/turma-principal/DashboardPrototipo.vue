@@ -3,7 +3,7 @@
     <!-- Titulo -->
     <div
       class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
-      style="height:38px;"
+      style="height: 38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="titulo col-xl-2 col-lg-2 col-md-2 col-sm-2 col-3 px-0 pr-1">
@@ -12,7 +12,7 @@
 
         <div
           class="form-group col-xl-10 col-lg-10 col-md-10 col-sm-10 col-9 mb-0 p-0"
-          style="justify-content: flex-end!important;"
+          style="justify-content: flex-end !important;"
         >
           <b-button v-b-modal.modalFiltros title="Filtros" class="cancelbtn">
             <i class="fas fa-list-ul"></i>
@@ -153,7 +153,7 @@
             <template v-if="disciplina.id === turma.Disciplina">
               <p
                 :key="'disciplina' + disciplina.id + 'turma' + turma.id"
-                style="width:80px"
+                style="width: 80px;"
               >
                 Disciplina:{{ disciplina.codigo }}
                 <br />
@@ -165,7 +165,7 @@
       </template>
     </b-modal>
 
-    <!-- MODAL SEMESTRE -->
+    <!-- MODAL FILTROS -->
     <b-modal
       id="modalFiltros"
       ref="modalFiltros"
@@ -176,65 +176,68 @@
       <div class="p-0 m-0" style="height: 30px; width: 465px;">
         <ul
           class="nav nav-tabs card-header-tabs m-0"
-          style="font-size: 11px!important;height: 30px;"
+          style="font-size: 11px !important; height: 30px;"
         >
           <li class="nav-item" @click="changeTab('perfis')">
             <a
               class="nav-link border border-right-0"
               :class="[
                 {
-                  active: nav_ativo == 'perfis'
+                  active: nav_ativo == 'perfis',
                 },
-                'clickable'
+                'clickable',
               ]"
               >Perfis</a
             >
           </li>
           <li class="nav-item" @click="changeTab('cursos')">
             <a
-              class="nav-link border border-right-0"
-              :class="[
-                {
-                  active: nav_ativo == 'cursos'
-                },
-                'clickable'
-              ]"
+              class="nav-link clickable border border-right-0"
+              :class="{
+                active: nav_ativo == 'cursos',
+              }"
               >Cursos</a
             >
           </li>
           <li class="nav-item" @click="changeTab('semestre')">
             <a
-              class="nav-link border"
-              :class="[
-                {
-                  active: nav_ativo == 'semestre'
-                },
-                'clickable'
-              ]"
+              class="nav-link clickable border"
+              :class="{
+                active: nav_ativo == 'semestre',
+              }"
               >Semestre</a
             >
           </li>
         </ul>
       </div>
-      <div class="col m-0 p-0 max-content" style="height: 450px!important;">
+      <div class="col m-0 p-0 max-content" style="height: 450px !important;">
         <!-- TABLE PERFIS -->
         <table
           v-if="nav_ativo == 'perfis'"
           class="table table-sm modal-table table-bordered"
           style="max-height: 450px !important;"
         >
-          <thead class="thead-light">
+          <thead class="thead-light sticky">
             <tr>
-              <div
-                style="height: 18px !important; font-size: 11px!important"
-                class="sticky max-content"
-              >
+              <div style="font-size: 11px !important;" class="max-content">
                 <th>
-                  <p style="width:25px" class="p-header"></p>
+                  <p style="width: 25px;" class="p-header"></p>
                 </th>
                 <th>
-                  <p class="p-header" style="width: 435px; text-align:start">
+                  <p
+                    class="p-header clickable"
+                    @click="toggleOrdPerfis()"
+                    style="width: 436px; text-align: start;"
+                  >
                     Nome
+                    <i
+                      style="font-size: 0.6rem; text-align: right;"
+                      :class="
+                        ordenacaoPerfis.type == 'asc'
+                          ? 'fas fa-arrow-down fa-sm'
+                          : 'fas fa-arrow-up fa-sm'
+                      "
+                    ></i>
                   </p>
                 </th>
               </div>
@@ -254,7 +257,9 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:435px; text-align:start">{{ perfil.nome }}</p>
+                  <p style="width: 436px; text-align: start;">
+                    {{ perfil.nome }}
+                  </p>
                 </td>
               </div>
             </tr>
@@ -266,65 +271,85 @@
           class="table table-sm modal-table table-bordered"
           style="height: 450px !important;"
         >
-          <thead class="thead-light">
+          <thead class="thead-light sticky">
             <tr>
-              <div
-                style="height: 18px !important; font-size: 11px!important"
-                class="sticky max-content"
-              >
-                <th>
-                  <p style="width:25px" class="p-header"></p>
-                </th>
-                <th
-                  class="clickable-header"
-                  style="text-align:center;"
-                  @click="ToggleCodigoOrdering()"
-                >
-                  <p style="width:50px; text-align:center" class="p-header">
-                    Cód.
-                    <i
-                      v-if="ordenacaoCurso == 'codigo'"
-                      style="font-size:0.6rem"
-                      class="fas fa-arrow-down fa-sm"
-                    ></i>
-                  </p>
-                </th>
-                <th class="clickable-header" @click="ToggleNomeOrdering()">
-                  <p style="width:385px; text-align: start" class="p-header">
-                    Nome
-                    <i
-                      v-if="ordenacaoCurso == 'nome'"
-                      style="font-size:0.6rem"
-                      class="fas fa-arrow-down fa-sm"
-                    ></i>
-                  </p>
-                </th>
-              </div>
-            </tr>
-            <tr>
-              <div
-                style="width: max-content; font-size: 11px!important"
-                class="stickySearch "
-              >
+              <div style="font-size: 11px !important;" class="max-content">
                 <th>
                   <div
-                    class="m-0 border"
-                    style="width:465px; height:34px;padding-left: 5px;padding-right: 25px; padding-top: 4px;"
+                    class="m-0 input-group"
+                    style="
+                      width: 462px;
+                      height: 35px;
+                      padding-left: 4px;
+                      padding-right: 20px;
+                      padding-top: 4px;
+                    "
                   >
                     <input
                       type="text"
                       class="form-control"
-                      id="searchBar"
-                      placeholder="Pesquise nome ou codigo de uma disciplina"
+                      style="border-right: none;"
+                      placeholder="Pesquise nome ou codigo de um curso..."
                       v-model="searchCursos"
                     />
+                    <div
+                      class="input-group-append"
+                      @click="searchCursos = null"
+                    >
+                      <span
+                        class="input-group-text"
+                        style="height: 25px; font-size: 18px; cursor: pointer;"
+                        >&times;</span
+                      >
+                    </div>
                   </div>
+                </th>
+              </div>
+            </tr>
+            <tr>
+              <div style="font-size: 11px !important;" class=" max-content">
+                <th>
+                  <p style="width: 25px;" class="p-header"></p>
+                </th>
+                <th
+                  class="clickable"
+                  style="text-align: center;"
+                  @click="toggleOrdCursos('codigo')"
+                >
+                  <p style="width: 50px; text-align: start;" class="p-header">
+                    Cód.
+                    <i
+                      style="font-size: 0.6rem;"
+                      :class="
+                        ordenacaoCurso.order == 'codigo'
+                          ? ordenacaoCurso.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : 'fas fa-arrow-down fa-sm low-opacity'
+                      "
+                    ></i>
+                  </p>
+                </th>
+                <th class="clickable" @click="toggleOrdCursos('nome')">
+                  <p style="width: 385px; text-align: start;" class="p-header">
+                    Nome
+                    <i
+                      style="font-size: 0.6rem;"
+                      :class="
+                        ordenacaoCurso.order == 'nome'
+                          ? ordenacaoCurso.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : 'fas fa-arrow-down fa-sm low-opacity'
+                      "
+                    ></i>
+                  </p>
                 </th>
               </div>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="curso in Cursos" :key="'cursoMd' + curso.id">
+            <tr v-for="curso in Cursos_filtred" :key="'cursoMd' + curso.id">
               <div class="max-content">
                 <td>
                   <div style="width: 25px; height: inherit;" class="px-1">
@@ -337,10 +362,12 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width: 50px">{{ curso.codigo }}</p>
+                  <p style="width: 50px; text-align: start;">
+                    {{ curso.codigo }}
+                  </p>
                 </td>
                 <td>
-                  <p style="width:385px; text-align: start;">
+                  <p style="width: 385px; text-align: start;">
                     {{ curso.nome }}
                   </p>
                 </td>
@@ -355,20 +382,14 @@
           class="table table-bordered table-sm modal-table"
           style="max-height: 392px !important;"
         >
-          <thead class="thead-light">
+          <thead class="thead-light sticky">
             <tr>
-              <div
-                style="height: 18px !important; font-size: 11px!important"
-                class="sticky max-content"
-              >
+              <div style="font-size: 11px !important;" class="max-content">
                 <th>
-                  <p style="width:25px" class="p-header"></p>
+                  <p style="width: 25px;" class="p-header"></p>
                 </th>
                 <th>
-                  <p
-                    class="p-header clickable-header"
-                    style="width: 435px; text-align: start;"
-                  >
+                  <p class="p-header" style="width: 435px; text-align: start;">
                     Semestre Letivo
                   </p>
                 </th>
@@ -388,12 +409,12 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:435px; text-align:start">PRIMEIRO SEMESTRE</p>
+                  <p style="width: 435px; text-align: start;">PRIMEIRO</p>
                 </td>
               </div>
             </tr>
             <tr>
-              <div style="width: max-content">
+              <div style="width: max-content;">
                 <td>
                   <div style="width: 25px; height: inherit;" class="px-1">
                     <input
@@ -404,7 +425,7 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:435px; text-align:start">SEGUNDO SEMESTRE</p>
+                  <p style="width: 435px; text-align: start;">SEGUNDO</p>
                 </td>
               </div>
             </tr>
@@ -463,7 +484,7 @@
           variant="success"
           @click="btnOK()"
           class="btn-verde btn-df mr-2"
-          style="padding-right:15px!important; padding-left:15px!important;"
+          style="padding-right: 15px !important; padding-left: 15px !important;"
           >OK</b-button
         >
       </div>
@@ -478,25 +499,25 @@
             o(s) semestre(s) desejado(s). Em seguida, clique em Perfil
             <i
               class="fas fa-list-ul cancelbtn px-1"
-              style="font-size: 12px"
+              style="font-size: 12px;"
             ></i>
             e marque quais deseja mostrar, depois clique em OK. Logo após,
             escolha os Cursos
             <i
               class="fas fa-graduation-cap cancelbtn px-1"
-              style="font-size: 12px"
+              style="font-size: 12px;"
             ></i>
             que quer ver, confirmando a seleção em OK.
           </li>
           <li class="list-group-item">
             <strong>Para adicionar disciplinas à Tabela:</strong> Clique em
             Adicionar
-            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
+            <i class="fas fa-plus addbtn px-1" style="font-size: 12px;"></i>
             , em seguida, preencha a nova linha que surgirá na tabela. Após
             concluído, clique em Salvar
-            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+            <i class="fas fa-check addbtn px-1" style="font-size: 12px;"></i>
             ou em Cancelar
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px;"></i>
             .
           </li>
           <li class="list-group-item">
@@ -508,17 +529,20 @@
             <strong>Para deletar disciplinas da Tabela:</strong> Marque a(s)
             disciplina(s) que deseja deletar através da caixa de seleção à
             esquerda e em seguida clique em Deletar
-            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
+            <i
+              class="far fa-trash-alt delbtn px-1"
+              style="font-size: 12px;"
+            ></i>
             e confirme no botão OK.
           </li>
           <li class="list-group-item">
             <strong>Para gerar relatório:</strong> Clique no botão XLSX
             <i
               class="far fa-file-alt relatbtn px-1"
-              style="font-size: 12px"
+              style="font-size: 12px;"
             ></i>
             e aguarde para fazer
-            <font style="font-style:italic;">download</font> do relatório.
+            <font style="font-style: italic;">download</font> do relatório.
           </li>
           <li class="list-group-item">
             <strong>Observações:</strong> Em cada coluna de cursos a disciplina
@@ -561,7 +585,7 @@ const emptyTurma = {
   Horario1: undefined,
   Horario2: undefined,
   Sala1: undefined,
-  Sala2: undefined
+  Sala2: undefined,
 };
 
 export default {
@@ -578,19 +602,20 @@ export default {
       CursosSelecionados: [],
       PerfisAtivados: [],
       CursosAtivados: [],
-      ordenacaoCurso: "posicao",
       semestre_1Ativo: true,
       semestre_2Ativo: true,
       semestreAtual: 3,
       nav_ativo: "perfis",
-      searchCursos: null
+      searchCursos: null,
+      ordenacaoCurso: { order: "codigo", type: "asc" },
+      ordenacaoPerfis: { order: "nome", type: "asc" },
     };
   },
 
   components: {
     turmadata,
     turmaheader,
-    novaturma
+    novaturma,
   },
 
   mounted: function() {
@@ -623,7 +648,7 @@ export default {
   methods: {
     changeTab(tab) {
       this.nav_ativo = tab;
-      this.searchCursos = null; //clear search
+      // this.searchCursos = null;
     },
     btnOK() {
       this.btnOKPerfis();
@@ -643,18 +668,33 @@ export default {
         this.semestreAtual = undefined;
       }
     },
-    selectAllSemestre() {
-      this.semestre_1Ativo = true;
-      this.semestre_2Ativo = true;
-    },
-    selectNoneSemestre() {
-      this.semestre_1Ativo = false;
-      this.semestre_2Ativo = false;
-    },
     btnOKPerfis() {
       //Somente atualiza o vetor de perfis ativados quando o botão OK for clickado
       this.PerfisAtivados = [...this.PerfisSelecionados];
     },
+    btnOKCursos() {
+      this.CursosAtivados = [...this.CursosSelecionados];
+    },
+    // Ordem Perfis
+    toggleOrdPerfis() {
+      if (this.ordenacaoPerfis.type == "asc") {
+        this.ordenacaoPerfis.type = "desc";
+      } else {
+        this.ordenacaoPerfis.type = "asc";
+      }
+    },
+    // Ordem Cursos
+    toggleOrdCursos(ord) {
+      if (this.ordenacaoCurso.order != ord) {
+        this.ordenacaoCurso.order = ord;
+        this.ordenacaoCurso.type = "asc";
+      } else {
+        this.ordenacaoCurso.type =
+          this.ordenacaoCurso.type == "asc" ? "desc" : "asc";
+      }
+    },
+
+    //Select Perfis
     selectAllPerfis() {
       if (this.PerfisSelecionados != []) this.PerfisSelecionados = [];
       for (var i = 0; i < this.$store.state.perfil.Perfis.length; i++)
@@ -663,11 +703,8 @@ export default {
     selectNonePerfis() {
       this.PerfisSelecionados = [];
     },
-    btnOKCursos() {
-      //Somente atualiza o vetor de perfis ativados quando o botão OK for clickado
-      this.CursosAtivados = [...this.CursosSelecionados];
-      this.CursosAtivados = _.orderBy(this.CursosAtivados, this.ordenacaoCurso);
-    },
+
+    //Select Cursos
     selectAllCursos() {
       if (this.CursosSelecionados != []) this.CursosSelecionados = [];
       for (var i = 0; i < this.$store.state.curso.Cursos.length; i++)
@@ -676,32 +713,34 @@ export default {
     selectNoneCursos() {
       this.CursosSelecionados = [];
     },
-    ToggleCodigoOrdering() {
-      if (this.ordenacaoCurso === "codigo") this.ordenacaoCurso = "posicao";
-      else this.ordenacaoCurso = "codigo";
+
+    //Select Semestre
+    selectAllSemestre() {
+      this.semestre_1Ativo = true;
+      this.semestre_2Ativo = true;
+    },
+    selectNoneSemestre() {
+      this.semestre_1Ativo = false;
+      this.semestre_2Ativo = false;
     },
 
-    ToggleNomeOrdering() {
-      if (this.ordenacaoCurso === "nome") this.ordenacaoCurso = "posicao";
-      else this.ordenacaoCurso = "nome";
-    },
     xlsx: function(pedidos) {
       xlsx
         .downloadTable({
-          pedidos: pedidos
+          pedidos: pedidos,
         })
         .then(() => {
           console.log("done");
           fetch("http://200.131.219.57:3000/api/xlsx/download", {
             method: "GET",
             headers: {
-              Authorization: `Bearer ${this.$store.state.auth.token}`
-            }
+              Authorization: `Bearer ${this.$store.state.auth.token}`,
+            },
           })
-            .then(r => r.blob())
-            .then(blob => saveAs(blob, "tabela.xlsx"));
+            .then((r) => r.blob())
+            .then((blob) => saveAs(blob, "tabela.xlsx"));
         })
-        .catch(error => console.log(error));
+        .catch((error) => console.log(error));
     },
 
     adjustTurno1: function() {
@@ -791,15 +830,15 @@ export default {
     editTurma(turma) {
       turmaService
         .update(turma.id, turma)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Turma ${response.Turma.letra} foi atualizada!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao atualizar Turma</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -841,10 +880,10 @@ export default {
                 group: "general",
                 title: `Sucesso!`,
                 text: `O pedido foi atualizado!`,
-                type: "success"
+                type: "success",
               });
             })
-            .catch(error => {
+            .catch((error) => {
               this.error = "<b>Erro ao atualizar Pedido</b>";
               if (error.response.data.fullMessage) {
                 this.error +=
@@ -858,24 +897,36 @@ export default {
 
     toggleAdd() {
       this.isAdd = !this.isAdd;
-    }
+    },
   },
 
   computed: {
+    //Todos Cursos
     Cursos() {
-      return _.orderBy(this.Cursos_search, this.ordenacaoCurso);
-    },
+      let result = this.$store.state.curso.Cursos;
 
-    Cursos_search() {
-      return this.$store.state.curso.Cursos.filter(curso => {
-        return this.searchCursos == null
-          ? true
-          : curso.nome.match(this.searchCursos.toUpperCase()) ||
-              curso.codigo.match(this.searchCursos.toUpperCase());
-      });
+      //Filtro search
+      if (this.searchCursos != null) {
+        let searchUpperCase = this.searchCursos.toUpperCase();
+
+        return this.$store.state.curso.Cursos.filter((curso) => {
+          return (
+            curso.nome
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .match(searchUpperCase) || curso.codigo.match(searchUpperCase)
+          );
+        });
+      }
+      return result;
     },
-    CursosAtivos() {
-      return this.$store.state.curso.Ativos;
+    //Cursos filtrados
+    Cursos_filtred() {
+      return _.orderBy(
+        this.Cursos,
+        this.ordenacaoCurso.order,
+        this.ordenacaoCurso.type
+      );
     },
 
     Disciplinas() {
@@ -898,7 +949,11 @@ export default {
     },
 
     Perfis() {
-      return this.$store.state.perfil.Perfis;
+      return _.orderBy(
+        this.$store.state.perfil.Perfis,
+        this.ordenacaoPerfis.order,
+        this.ordenacaoPerfis.type
+      );
     },
 
     Turmas() {
@@ -926,7 +981,8 @@ export default {
       } else {
         return false;
       }
-    }
+    },
+    //Juntando o vetor com turmas num unico vetor
     //   turmasFiltradas() {
     //     let result_1 = [];
     //     this.PerfisAtivados.forEach(perfil => {
@@ -941,7 +997,7 @@ export default {
     //     });
     //     return _.orderBy(result_1, "periodo_ord");
     //   }
-  }
+  },
 };
 </script>
 
@@ -1165,12 +1221,6 @@ i.far {
   -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
   box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
 }
-
-.clickable-header {
-  cursor: pointer;
-  padding-left: 5px;
-}
-
 .form-inline {
   width: auto;
 }
@@ -1195,6 +1245,16 @@ i.far {
   overflow: hidden !important;
   z-index: 3;
 }
+/* .sticky-bottom {
+  display: block !important;
+  overflow: hidden !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 38px !important;
+  display: block !important;
+  overflow: hidden !important;
+  z-index: 3;
+} */
 /* ==== MODAL TABLE ==== */
 .modal-table {
   display: block !important;
@@ -1212,9 +1272,8 @@ i.far {
   padding: 0 !important;
   text-align: center !important;
   height: 18px !important;
-  border-bottom: 0 !important;
-  border-top: 0 !important;
 }
+
 .modal-table .p-header {
   padding: 0px 5px 0px 5px !important;
   margin: 0 !important;
@@ -1226,7 +1285,7 @@ i.far {
   width: 100%;
 }
 .modal-table td {
-  border-bottom: 0;
+  border-top: 0;
   text-align: center;
   vertical-align: middle !important;
   padding: 0 !important;
@@ -1254,19 +1313,41 @@ i.far {
   width: 100% !important;
 }
 /* FIM MODAL TABLE */
+/* search */
+.input-group-text:hover {
+  color: rgb(102, 102, 102);
+  background-color: #dddddd;
+}
+.input-group-text {
+  background-color: #ffffff;
+  border-left: none;
+}
 
 .nav-link {
   color: #007bff !important;
-}
-.clickable {
   cursor: pointer;
+}
+.nav-link:hover {
+  text-decoration: underline;
 }
 .active {
   background-color: #e9ecef !important;
   color: #495057 !important;
   cursor: default;
+  text-decoration: none !important;
 }
-
+.modal-title {
+  text-align: center !important;
+  width: 100%;
+}
+.max-content {
+  width: -webkit-max-content !important;
+  width: -moz-max-content !important;
+  width: max-content !important;
+}
+.clickable {
+  cursor: pointer;
+}
 @media screen and (max-width: 536px) {
   .div-titulo {
     height: 70px !important;
@@ -1415,14 +1496,5 @@ i.far {
     transform: rotate(-360deg);
     -webkit-transform: rotate(-360deg);
   }
-}
-.modal-title {
-  text-align: center !important;
-  width: 100%;
-}
-.max-content {
-  width: -webkit-max-content !important;
-  width: -moz-max-content !important;
-  width: max-content !important;
 }
 </style>

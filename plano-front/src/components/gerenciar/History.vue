@@ -34,10 +34,6 @@
               <i class="fas fa-list-ul"></i>
             </b-button>
 
-            <!--<button type="button" class="relatbtn" title="Relatório" v-on:click.prevent="pdf">
-                            <i class="far fa-file-alt"></i>
-                        </button>-->
-
             <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
               <i class="fas fa-question"></i>
             </b-button>
@@ -49,13 +45,10 @@
     <div class="w-100 mb-2 border-bottom"></div>
 
     <div class="divTable p-0" ref="carga">
-      <table class="table table-hover border table-sm">
+      <table class="main-table table table-sm table-hover table-bordered">
         <thead class="thead-light sticky">
           <tr>
-            <div
-              style="display: block; overflow: hidden; width: ‭845‬px; height:20px !important"
-              class="sticky"
-            >
+            <div style="font-size: 11px;" class=" max-content">
               <th scope="col">
                 <p class="p-header" style="width: 100px;">Tabela Modificada</p>
               </th>
@@ -84,13 +77,9 @@
           </tr>
         </thead>
         <tbody>
-          <template v-if="History.length > 0">
-            <template v-for="h in History">
-              <div
-                class="linhas"
-                style="width: ‭845‬px;"
-                :key="`History${h.id}`"
-              >
+          <template v-for="h in History">
+            <tr :key="`History${h.id}`">
+              <div class="linhas max-content">
                 <td class="disc-td">
                   <div style="width: 100px">{{ h.tabelaModificada }}</div>
                 </td>
@@ -116,9 +105,10 @@
                   <div style="width: 160px;">{{ h.createdAt }}</div>
                 </td>
               </div>
-            </template>
+            </tr>
           </template>
-          <template v-else>
+
+          <template v-if="History.length === 0">
             <!--<tr>
                         <td colspan="2" class="text-center">
                             <i class="fas fa-exclamation-triangle"></i> Nenhuma tabela selecionada!
@@ -135,35 +125,41 @@
       ref="TabelasModal"
       scrollable
       title="Selecione as tabelas"
-      :size="'sm'"
+      :size="md"
     >
-      <div
-        class="form-group col m-0 p-0 border"
-        style="max-height: 395px; height: 372px; width:max-content; border-color: rgba(0,0,0,0.125);"
-      >
-        <table
-          class="table table-sm modal-table"
-          style="max-height: 370px !important;"
+      <div class="p-0 m-0" style="height: 30px; width: 465px;">
+        <ul
+          class="nav nav-tabs card-header-tabs m-0"
+          style="font-size: 11px !important; height: 30px;"
         >
-          <tr>
-            <div
-              class="p-0"
-              style="width: max-content; font-size: 11px!important"
-            >
-              <th class="border-0 p-0">
-                <p style="width:20px" class="p-header"></p>
-              </th>
-              <th class="border-0 p-0">
-                <p class="p-header" style="width: 200px; text-align:start">
-                  Nome
-                </p>
-              </th>
-            </div>
-          </tr>
+          <li class="nav-item">
+            <a class="nav-link border active">Perfis</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col m-0 p-0 max-content" style="height: 450px !important;">
+        <table
+          class="table table-sm modal-table table-bordered"
+          style="max-height: 450px !important;"
+        >
+          <thead class="thead-light sticky">
+            <tr>
+              <div style="font-size: 11px;" class=" max-content">
+                <th>
+                  <p style="width:25px" class="p-header"></p>
+                </th>
+                <th>
+                  <p class="p-header" style="width: 436px; text-align:start">
+                    Nome
+                  </p>
+                </th>
+              </div>
+            </tr>
+          </thead>
           <tbody>
             <tr v-for="o in options" :key="`tabeka${o.value}`">
-              <div style="width: max-content; height: 18px !important">
-                <td style="padding:0;broder:0;margin:0!important;">
+              <div class="max-content">
+                <td>
                   <div style="width:25px;">
                     <input
                       type="checkbox"
@@ -174,9 +170,7 @@
                   </div>
                 </td>
                 <td>
-                  <p
-                    style="width:220px; text-align:start; font-size: 10px !important;"
-                  >
+                  <p style="width:436px; text-align:start;">
                     {{ o.text }}
                   </p>
                 </td>
@@ -233,11 +227,11 @@ export default {
         { text: "PERFIL", value: "Perfil" },
         { text: "SALA", value: "Sala" },
         { text: "TURMA", value: "Turma" },
-        { text: "TURMA EXTERNA", value: "TurmaExterna" }
+        { text: "TURMA EXTERNA", value: "TurmaExterna" },
       ],
       TabelasSelecionadas: [],
       TabelasAtivadas: [],
-      operacoes: "Todos"
+      operacoes: "Todos",
     };
   },
 
@@ -266,7 +260,7 @@ export default {
           if (h.tipoOperacao === "Delete") {
             aux = linha.split("/");
             let docente = _.find(this.$store.state.docente.Docentes, {
-              id: parseInt(aux[2])
+              id: parseInt(aux[2]),
             });
             if (docente === undefined) {
               linha = `${aux[0]}/${aux[1]}/${aux[2]}`;
@@ -279,10 +273,10 @@ export default {
         case "DisciplinaGrade":
           aux = linha.split("/");
           let disciplina = _.find(this.$store.state.disciplina.Disciplinas, {
-            id: parseInt(aux[1])
+            id: parseInt(aux[1]),
           });
           let grade = _.find(this.$store.state.grade.Grades, {
-            id: parseInt(aux[2])
+            id: parseInt(aux[2]),
           });
           let curso =
             grade === undefined
@@ -300,10 +294,10 @@ export default {
         case "DocentePerfil":
           aux = linha.split("/");
           let docente = _.find(this.$store.state.docente.Docentes, {
-            id: parseInt(aux[1])
+            id: parseInt(aux[1]),
           });
           let perfil = _.find(this.$store.state.perfil.Perfis, {
-            id: parseInt(aux[0])
+            id: parseInt(aux[0]),
           });
           linha = `${docente === undefined ? aux[1] : docente.nome}/${
             perfil === undefined ? aux[0] : perfil.nome
@@ -313,7 +307,7 @@ export default {
         case "Grade":
           aux = linha.split("/");
           let cursoGrade = _.find(this.$store.state.curso.Cursos, {
-            id: parseInt(aux[0])
+            id: parseInt(aux[0]),
           });
           linha = `${cursoGrade === undefined ? aux[0] : cursoGrade.codigo} - ${
             aux[1]
@@ -323,16 +317,16 @@ export default {
         case "Pedido":
           aux = linha.split("/");
           let turma = _.find(this.$store.state.turma.Turmas, {
-            id: parseInt(aux[0])
+            id: parseInt(aux[0]),
           });
           let disciplinaPedido =
             turma === undefined
               ? undefined
               : _.find(this.$store.state.disciplina.Disciplinas, {
-                  id: turma.Disciplina
+                  id: turma.Disciplina,
                 });
           let cursoPedido = _.find(this.$store.state.curso.Cursos, {
-            id: parseInt(aux[1])
+            id: parseInt(aux[1]),
           });
           linha = `${
             turma === undefined
@@ -346,16 +340,16 @@ export default {
         case "PedidoExterno":
           aux = linha.split("/");
           let turmaExterna = _.find(this.$store.state.turmaExterna.Turmas, {
-            id: parseInt(aux[0])
+            id: parseInt(aux[0]),
           });
           let disciplinaPedidoExterno =
             turmaExterna === undefined
               ? undefined
               : _.find(this.$store.state.disciplina.Disciplinas, {
-                  id: turmaExterna.Disciplina
+                  id: turmaExterna.Disciplina,
                 });
           let cursoPedidoExterno = _.find(this.$store.state.curso.Cursos, {
-            id: parseInt(aux[1])
+            id: parseInt(aux[1]),
           });
           linha = `${
             turmaExterna === undefined
@@ -400,7 +394,7 @@ export default {
       switch (h.campoModificado) {
         case "Curso":
           v = _.find(this.$store.state.curso.Cursos, {
-            id: parseInt(h.valorAnterior)
+            id: parseInt(h.valorAnterior),
           });
           if (v === undefined) v = h.valorAnterior;
           else v = v.codigo;
@@ -408,7 +402,7 @@ export default {
 
         case "Disciplina":
           v = _.find(this.$store.state.disciplina.Disciplinas, {
-            id: parseInt(h.valorAnterior)
+            id: parseInt(h.valorAnterior),
           });
           if (v === undefined) v = h.valorAnterior;
           else v = v.codigo;
@@ -418,7 +412,7 @@ export default {
         case "Docente1":
         case "Docente2":
           v = _.find(this.$store.state.docente.Docentes, {
-            id: parseInt(h.valorAnterior)
+            id: parseInt(h.valorAnterior),
           });
           if (v === undefined) v = h.valorAnterior;
           else v = v.apelido;
@@ -426,12 +420,12 @@ export default {
 
         case "Grade":
           v = _.find(this.$store.state.grade.Grades, {
-            id: parseInt(h.valorAnterior)
+            id: parseInt(h.valorAnterior),
           });
           if (v === undefined) v = h.valorAnterior;
           else {
             let c = _.find(this.$store.state.curso.Cursos, {
-              id: parseInt(v.Curso)
+              id: parseInt(v.Curso),
             });
             v = `${c === undefined ? v.Curso : c.codigo}/${v.nome}`;
           }
@@ -441,7 +435,7 @@ export default {
         case "Horario1":
         case "Horario2":
           v = _.find(this.$store.state.horario.Horarios, {
-            id: parseInt(h.valorAnterior)
+            id: parseInt(h.valorAnterior),
           });
           if (v === undefined) v = h.valorAnterior;
           else v = v.horario;
@@ -449,7 +443,7 @@ export default {
 
         case "Perfil":
           v = _.find(this.$store.state.perfil.Perfis, {
-            id: parseInt(h.valorAnterior)
+            id: parseInt(h.valorAnterior),
           });
           if (v === undefined) v = h.valorAnterior;
           else v = v.nome;
@@ -459,7 +453,7 @@ export default {
         case "Sala1":
         case "Sala2":
           v = _.find(this.$store.state.sala.Salas, {
-            id: parseInt(h.valorAnterior)
+            id: parseInt(h.valorAnterior),
           });
           if (v === undefined) v = h.valorAnterior;
           else v = v.nome;
@@ -474,7 +468,7 @@ export default {
       switch (h.campoModificado) {
         case "Curso":
           v = _.find(this.$store.state.curso.Cursos, {
-            id: parseInt(h.valorNovo)
+            id: parseInt(h.valorNovo),
           });
           if (v === undefined) v = h.valorNovo;
           else v = v.codigo;
@@ -482,7 +476,7 @@ export default {
 
         case "Disciplina":
           v = _.find(this.$store.state.disciplina.Disciplinas, {
-            id: parseInt(h.valorNovo)
+            id: parseInt(h.valorNovo),
           });
           if (v === undefined) v = h.valorNovo;
           else v = v.codigo;
@@ -492,7 +486,7 @@ export default {
         case "Docente1":
         case "Docente2":
           v = _.find(this.$store.state.docente.Docentes, {
-            id: parseInt(h.valorNovo)
+            id: parseInt(h.valorNovo),
           });
           if (v === undefined) v = h.valorNovo;
           else v = v.apelido;
@@ -500,12 +494,12 @@ export default {
 
         case "Grade":
           v = _.find(this.$store.state.grade.Grades, {
-            id: parseInt(h.valorNovo)
+            id: parseInt(h.valorNovo),
           });
           if (v === undefined) v = h.valorNovo;
           else {
             let c = _.find(this.$store.state.curso.Cursos, {
-              id: parseInt(v.Curso)
+              id: parseInt(v.Curso),
             });
             v = `${c === undefined ? v.Curso : c.codigo}/${v.nome}`;
           }
@@ -515,7 +509,7 @@ export default {
         case "Horario1":
         case "Horario2":
           v = _.find(this.$store.state.horario.Horarios, {
-            id: parseInt(h.valorNovo)
+            id: parseInt(h.valorNovo),
           });
           if (v === undefined) v = h.valorNovo;
           else v = v.horario;
@@ -523,7 +517,7 @@ export default {
 
         case "Perfil":
           v = _.find(this.$store.state.perfil.Perfis, {
-            id: parseInt(h.valorNovo)
+            id: parseInt(h.valorNovo),
           });
           if (v === undefined) v = h.valorNovo;
           else v = v.nome;
@@ -533,7 +527,7 @@ export default {
         case "Sala1":
         case "Sala2":
           v = _.find(this.$store.state.sala.Salas, {
-            id: parseInt(h.valorNovo)
+            id: parseInt(h.valorNovo),
           });
           if (v === undefined) v = h.valorNovo;
           else v = v.nome;
@@ -541,7 +535,7 @@ export default {
       }
 
       return v;
-    }
+    },
   },
 
   computed: {
@@ -556,7 +550,7 @@ export default {
             t = TabelasAtivadas
           ) {
             let v = false;
-            t.forEach(o => {
+            t.forEach((o) => {
               if (h.tabelaModificada === o) {
                 v = true;
               }
@@ -578,26 +572,24 @@ export default {
       } else {
         return false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
-/* prefixed */
-
 .DashboardHistory {
   max-width: 100%;
   overflow: hidden;
   margin: 0;
 }
-.p-header {
-  padding: 0px 0 0px 0;
-  margin: 0;
-  font-size: 11px;
-  text-align: center;
-  height: 18px;
+.titulo {
+  font-size: 25px;
+  font-weight: normal;
+  padding-left: 0;
+  margin: 0 !important;
 }
+/* main-table */
 .divTable {
   overflow: hidden;
   height: -webkit-max-content;
@@ -607,70 +599,149 @@ export default {
   width: -moz-max-content;
   width: max-content;
 }
-table {
-  display: block;
-  overflow-y: scroll;
-  height: -webkit-calc(100vh - 100px);
-  height: -moz-calc(100vh - 100px);
-  height: calc(100vh - 100px);
-  font-size: 11px;
+.main-table {
+  display: block !important;
+  overflow-y: scroll !important;
+  overflow-x: auto !important;
+  font-size: 11px !important;
+  font-weight: normal !important;
   background-color: white;
-  margin: 0;
+  margin: 0 !important;
+  height: -webkit-calc(100vh - 95px);
+  height: -moz-calc(100vh - 95px);
+  height: calc(100vh - 95px);
+}
+.main-table .p-header {
+  height: 18px;
+}
+.main-table p {
+  padding: 0 5px 0 5px !important;
+  margin: 0 !important;
+  font-size: 11px !important;
+  text-align: center;
 }
 tbody {
-  max-height: 100%;
-  width: 100%;
+  max-height: 100% !important;
+  width: 100% !important;
 }
-table td {
+.main-table td {
   text-align: center;
-  vertical-align: middle;
+  vertical-align: middle !important;
   padding: 0 !important;
+  height: 22px !important;
 }
-.linhas {
-  border-top: 1px solid #dee2e6;
+.main-table tr thead {
+  display: block !important;
 }
-table p {
-  margin-bottom: 0;
-  text-align: center;
-  padding-left: 2px;
-  padding-right: 2px;
-}
-/* texto maiusculo */
-.toUpperCase {
-  text-transform: uppercase;
-}
-tr thead {
-  display: block;
-}
-thead th {
+.main-table thead th {
   padding: 0 !important;
   font-size: 14px;
   text-align: center;
   height: 18px !important;
 }
-table select {
-  height: 15px !important;
-  text-align: left;
-}
-table input {
-  height: 18px !important;
-  text-align: center !important;
-}
-table input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-}
+/* fim table */
 .sticky {
-  position: sticky;
-  position: -webkit-sticky;
-  top: 0;
+  display: block !important;
+  overflow: hidden !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 0 !important;
+  display: block !important;
+  overflow: hidden !important;
+  z-index: 3;
 }
-.titulo {
-  font-size: 25px;
-  font-weight: normal;
-  padding-left: 0;
+/* APENAS NO FIREFOX */
+@-moz-document url-prefix() {
+  table select {
+    height: 15px !important;
+    text-align: left;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    line-height: 8px;
+    border: 0.5px solid rgb(133, 133, 133);
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background-color: rgb(245, 245, 245);
+  }
+  table input {
+    height: 18px !important;
+    text-align: center;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    line-height: 8px;
+    border: 0.5px solid rgb(92, 92, 92);
+    -moz-border-radius: 2px;
+    border-radius: 2px;
+    background-color: rgb(245, 245, 245);
+  }
+}
+/* ==== MODAL TABLE ==== */
+.modal-table {
+  display: block !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  font-size: 10px !important;
+  font-weight: normal !important;
+  background-color: white;
   margin: 0 !important;
 }
+.modal-table tr thead {
+  display: block;
+}
+.modal-table th {
+  padding: 0 !important;
+  text-align: center !important;
+  height: 18px !important;
+}
+
+.modal-table .p-header {
+  padding: 0px 5px 0px 5px !important;
+  margin: 0 !important;
+  text-align: start;
+  height: 18px !important;
+}
+.modal-table tbody {
+  max-height: 100%;
+  width: 100%;
+}
+.modal-table td {
+  border-top: 0;
+  text-align: center;
+  vertical-align: middle !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  /* height: 22px !important; */
+}
+.modal-table p {
+  margin: 0 !important;
+  text-align: center;
+  padding: 0 !important;
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+}
+.modal-table input[type="checkbox"] {
+  margin-left: 0 !important;
+  margin-top: 4px !important;
+  margin-bottom: auto !important;
+  height: 13px !important;
+}
+/* FIM MODAL TABLE */
+.nav-link {
+  color: #007bff !important;
+  cursor: pointer;
+}
+.nav-link:hover {
+  text-decoration: underline;
+}
+.active {
+  background-color: #e9ecef !important;
+  color: #495057 !important;
+  cursor: default;
+  text-decoration: none !important;
+}
+
 .listas {
   line-height: 30px;
   font-size: 12px;
@@ -720,40 +791,10 @@ i.far {
   -webkit-text-stroke-color: #698dff;
 }
 
-/* APENAS NO FIREFOX */
-@-moz-document url-prefix() {
-  select {
-    height: 15px !important;
-    text-align: left;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-
-    line-height: 8px;
-    border: 0.5px solid rgb(133, 133, 133);
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    background-color: rgb(245, 245, 245);
-  }
-  input {
-    height: 18px !important;
-    text-align: center;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-
-    line-height: 8px;
-    border: 0.5px solid rgb(92, 92, 92);
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    background-color: rgb(245, 245, 245);
-  }
-}
-.disc-td {
+/* .disc-td {
   background-color: rgba(0, 0, 0, 0.089);
   color: black;
-}
-.clickable-header:hover {
-  cursor: pointer;
-}
+} */
 
 .btn-df {
   font-size: 12px;
@@ -832,15 +873,7 @@ i.far {
   -webkit-text-stroke-color: #ada89a;
 }
 
-.form-control {
-  height: 25px !important;
-  font-size: 12px !important;
-  padding: 2px 5px 0px 5px !important;
-  min-width: 80px;
-  max-width: 80px;
-  text-align: start;
-}
-
+/* input no topo da pagina */
 .input-group-text {
   display: -ms-flexbox;
   display: -webkit-box;
@@ -865,6 +898,27 @@ i.far {
   margin-left: -5px;
   padding-left: 15px;
   font-size: 12px !important;
+}
+.form-inline .input-group {
+  width: auto;
+}
+.form-group {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 0;
+}
+.form-control {
+  height: 25px !important;
+  font-size: 12px !important;
+  padding: 2px 5px 0px 5px !important;
+  width: 70px !important;
+  text-align: center;
 }
 
 label.input-group-text {

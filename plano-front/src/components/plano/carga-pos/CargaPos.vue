@@ -72,7 +72,7 @@
         >
           <thead class="thead-light sticky">
             <tr>
-              <div style="display: block; width: 198px;" class="sticky">
+              <div style="font-size:11px!important" class="max-content">
                 <th scope="col">
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
@@ -181,7 +181,7 @@
         <table class="table main-table table-hover table-bordered table-sm">
           <thead class="thead-light sticky">
             <tr>
-              <div style="display: block; width: 198px;" class="sticky">
+              <div style="font-size:11px!important" class="max-content">
                 <th scope="col">
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
@@ -290,7 +290,7 @@
         <table class="table main-table table-hover table-bordered table-sm">
           <thead class="thead-light sticky">
             <tr>
-              <div style="display: block; width: 198px;" class="sticky">
+              <div style="font-size:11px!important" class="max-content">
                 <th scope="col">
                   <p class="p-header" style="width:24px!important;"></p>
                 </th>
@@ -563,12 +563,9 @@
           class="table table-bordered table-sm modal-table"
           style="max-height: 392px !important;"
         >
-          <thead class="thead-light">
+          <thead class="thead-light sticky">
             <tr>
-              <div
-                style="width: max-content; height: 18px !important; font-size: 11px!important"
-                class="sticky"
-              >
+              <div style="font-size: 11px!important" class="max-content">
                 <th>
                   <p style="width:25px" class="p-header"></p>
                 </th>
@@ -597,7 +594,7 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:435px; text-align:start">Primeiro semestre</p>
+                  <p style="width:435px; text-align:start">PRIMEIRO</p>
                 </td>
               </div>
             </tr>
@@ -613,7 +610,7 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width:435px; text-align:start">Segundo semestre</p>
+                  <p style="width:435px; text-align:start">SEGUNDO</p>
                 </td>
               </div>
             </tr>
@@ -622,7 +619,7 @@
       </div>
 
       <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
-        <div class="w-100 ml-2">
+        <div class="w-100">
           <b-button
             class="btn-azul btn-df mr-2"
             variant="success"
@@ -697,7 +694,7 @@ const emptyCarga = {
   trimestre: undefined,
   Docente: undefined,
   programa: undefined,
-  creditos: undefined
+  creditos: undefined,
 };
 
 export default {
@@ -723,12 +720,12 @@ export default {
       apelidoClikado: null,
       semestre_1Ativo: true,
       semestre_2Ativo: true,
-      semestreAtual: 3
+      semestreAtual: 3,
     };
   },
 
   components: {
-    cargadata
+    cargadata,
   },
 
   mounted() {
@@ -736,7 +733,7 @@ export default {
       width:
         this.$refs.tablePGMC.offsetWidth -
         this.$refs.tablePGMC.clientWidth +
-        "px"
+        "px",
     };
   },
 
@@ -829,15 +826,15 @@ export default {
     editCarga(carga) {
       cargaPosService
         .update(carga.id, this.cargaPosForm)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Carga ${response.CargaPos.programa} foi atualizada!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao atualizar Carga</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -849,12 +846,12 @@ export default {
     deleteCarga(carga) {
       cargaPosService
         .delete(carga.id)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Carga ${response.CargaPos.programa} foi excluída!`,
-            type: "success"
+            type: "success",
           });
           this.cleanCarga();
         })
@@ -874,7 +871,7 @@ export default {
     addCarga() {
       cargaPosService
         .create(this.cargaPosForm)
-        .then(response => {
+        .then((response) => {
           this.trimestre = response.CargaPos.trimestre;
           this.programa = response.CargaPos.programa;
           this.cleanCarga();
@@ -882,10 +879,10 @@ export default {
             group: "general",
             title: `Sucesso!`,
             text: `A Carga ${response.CargaPos.programa} foi criada!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao criar Carga</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -900,7 +897,7 @@ export default {
       this.cargaPosForm.id = "";
       this.cargaPosForm.programa = "";
       this.error = undefined;
-    }
+    },
   },
 
   computed: {
@@ -1064,8 +1061,8 @@ export default {
       } else {
         return false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -1226,10 +1223,14 @@ select {
   }
 }
 .sticky {
-  position: sticky;
-  position: -webkit-sticky;
-  top: 0px;
-  z-index: 10;
+  display: block !important;
+  overflow: hidden !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 0 !important;
+  display: block !important;
+  overflow: hidden !important;
+  z-index: 3;
 }
 .listas {
   line-height: 30px;

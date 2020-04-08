@@ -25,30 +25,27 @@
     <!-- Grid Esquerdo -->
     <div class="divTable">
       <!-- Inicio da Tabela -->
-      <table class="table table-hover border table-sm">
-        <thead class="thead-light">
+      <table class="main-table table table-sm table-hover table-bordered ">
+        <thead class="thead-light sticky">
           <tr>
-            <div
-              style="display: block; overflow: hidden; width: 482px;"
-              class="sticky"
-            >
+            <div style="font-size: 11px;" class=" max-content">
               <th scope="col">
                 <p
                   style="width: 350px; text-align:start"
                   title="Clique para ordenar por nome"
-                  @click="toggleOrderNome"
-                  class="p-header clickable-header"
+                  @click="toggleOrdMain('nome')"
+                  class="p-header clickable"
                 >
                   Nome
                   <i
-                    v-if="ordenacao.order == 'nome' && ordenacao.type == 'asc'"
-                    style="font-size:0.6rem"
-                    class="fas fa-arrow-down fa-sm"
-                  ></i>
-                  <i
-                    v-if="ordenacao.order == 'nome' && ordenacao.type == 'desc'"
-                    style="font-size:0.6rem"
-                    class="fas fa-arrow-up fa-sm"
+                    style="font-size:0.6rem;text-align:right"
+                    :class="
+                      ordenacao.order == 'nome'
+                        ? ordenacao.type == 'asc'
+                          ? 'fas fa-arrow-down fa-sm'
+                          : 'fas fa-arrow-up fa-sm'
+                        : 'fas fa-arrow-down fa-sm low-opacity'
+                    "
                   ></i>
                 </p>
               </th>
@@ -56,19 +53,19 @@
                 <p
                   style="width: 90px;"
                   title="Clique para ordenar por abreviação"
-                  @click="toggleOrderAbreviacao"
-                  class="p-header clickable-header"
+                  @click="toggleOrdMain('abreviacao')"
+                  class="p-header clickable"
                 >
                   Abreviação
                   <i
-                          v-if="ordenacao.order == 'abreviacao' && ordenacao.type == 'asc'"
-                          style="font-size:0.6rem"
-                          class="fas fa-arrow-down fa-sm"
-                  ></i>
-                  <i
-                          v-if="ordenacao.order == 'abreviacao' && ordenacao.type == 'desc'"
-                          style="font-size:0.6rem"
-                          class="fas fa-arrow-up fa-sm"
+                    style="font-size:0.6rem; text-align:right"
+                    :class="
+                      ordenacao.order == 'abreviacao'
+                        ? ordenacao.type == 'asc'
+                          ? 'fas fa-arrow-down fa-sm'
+                          : 'fas fa-arrow-up fa-sm'
+                        : 'fas fa-arrow-down fa-sm low-opacity'
+                    "
                   ></i>
                 </p>
               </th>
@@ -98,11 +95,7 @@
                 </td>
                 <td>
                   <div style="padding-left: 2px; width: 42px">
-                    <input
-                      type="color"
-                      style="width: 30px; padding: 0;vertical-align:middle; margin-top:2px"
-                      v-model="perfil.cor"
-                    />
+                    <input type="color" v-model="perfil.cor" />
                   </div>
                 </td>
               </div>
@@ -273,7 +266,7 @@ const emptyPerfil = {
   id: undefined,
   nome: undefined,
   abreviacao: undefined,
-  cor: "#ff0000"
+  cor: "#ff0000",
 };
 
 export default {
@@ -284,26 +277,19 @@ export default {
       perfilForm: _.clone(emptyPerfil),
       error: undefined,
       perfilClickado: "",
-      ordenacao: {order: "nome", type: "asc"}
+      ordenacao: { order: "nome", type: "asc" },
     };
   },
 
   methods: {
-    toggleOrderNome() {
-      if(this.ordenacao.order === 'nome') this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc')
-      else {
-        this.ordenacao.order = "nome";
-        this.ordenacao.type = 'asc'
+    toggleOrdMain(ord) {
+      if (this.ordenacao.order != ord) {
+        this.ordenacao.order = ord;
+        this.ordenacao.type = "asc";
+      } else {
+        this.ordenacao.type = this.ordenacao.type == "asc" ? "desc" : "asc";
       }
     },
-    toggleOrderAbreviacao() {
-      if(this.ordenacao.order === 'abreviacao') this.ordenacao.type = (this.ordenacao.type === 'asc' ? 'desc' : 'asc')
-      else {
-        this.ordenacao.order = "abreviacao";
-        this.ordenacao.type = 'asc'
-      }
-    },
-
     clickada(f_perfil) {
       this.perfilClickado = f_perfil;
     },
@@ -313,16 +299,16 @@ export default {
     addPerfil() {
       perfilService
         .create(this.perfilForm)
-        .then(response => {
+        .then((response) => {
           this.cleanPerfil();
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `O Perfil ${response.Perfil.nome} foi criado!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao criar Perfil</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -332,7 +318,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -340,15 +326,15 @@ export default {
     editPerfil() {
       perfilService
         .update(this.perfilForm.id, this.perfilForm)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `O Perfil ${response.Perfil.nome} foi atualizado!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao atualizar Perfil</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -358,7 +344,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -366,13 +352,13 @@ export default {
     deletePerfil() {
       perfilService
         .delete(this.perfilForm.id, this.perfilForm)
-        .then(response => {
+        .then((response) => {
           this.cleanPerfil();
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `O Perfil ${response.Perfil.nome} foi excluído!`,
-            type: "warn"
+            type: "warn",
           });
         })
         .catch(() => {
@@ -381,7 +367,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -403,12 +389,16 @@ export default {
           window.scrollTo(0, currentScroll - currentScroll / 5);
         }
       })();
-    }
+    },
   },
 
   computed: {
     Perfis() {
-      return _.orderBy(this.$store.state.perfil.Perfis, this.ordenacao.order, this.ordenacao.type);
+      return _.orderBy(
+        this.$store.state.perfil.Perfis,
+        this.ordenacao.order,
+        this.ordenacao.type
+      );
     },
 
     isEdit() {
@@ -421,8 +411,8 @@ export default {
       } else {
         return false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -449,63 +439,70 @@ export default {
   text-align: center;
   height: 18px;
 }
+/* main-table */
 .divTable {
   overflow: hidden;
-  border: rgba(0, 0, 0, 0.125) solid 1px;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
+
   width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
 }
-table {
+.main-table {
   display: block !important;
-  overflow-y: hidden !important;
-  overflow-x: auto !important;
+  overflow: auto !important;
   font-size: 11px !important;
   font-weight: normal !important;
   background-color: white;
   margin: 0 !important;
-  height: auto !important;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+}
+.main-table .p-header {
+  height: 18px;
+}
+.main-table p {
+  padding: 0 5px 0 5px !important;
+  margin: 0 !important;
+  font-size: 11px !important;
+  text-align: center;
 }
 tbody {
-  max-height: 100%;
-  width: 100%;
+  max-height: 100% !important;
+  width: 100% !important;
 }
-table td {
+.main-table td {
   text-align: center;
-  vertical-align: middle;
+  vertical-align: middle !important;
   padding: 0 !important;
+  height: 22px !important;
 }
-table p {
-  margin-bottom: 0;
-  text-align: center;
-  padding-right: 5px;
-  padding-left: 5px;
+.main-table tr thead {
+  display: block !important;
 }
-tr thead {
-  display: block;
-}
-thead th {
+.main-table thead th {
   padding: 0 !important;
   font-size: 14px;
   text-align: center;
   height: 18px !important;
 }
-table input {
-  height: 18px !important;
+.main-table input[type="checkbox"] {
+  width: 13px !important;
+  height: 13px !important;
   text-align: center !important;
-  margin: 0;
+  margin: 0 !important;
+  margin-top: 4px !important;
 }
-table tbody tr div {
-  height: 22px !important;
-}
+/* fim table */
 input[type="color"] {
   background-color: rgb(243, 243, 243);
 }
 table input[type="color"] {
-  padding: 0px 1px 0px 1px !important;
+  padding: 0px 0px 0px 0px !important;
+  width: 30px !important;
+  height: 18px !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 .sticky {
   display: block !important;
@@ -550,7 +547,7 @@ table input[type="color"] {
   text-align: start;
   padding-top: 0 !important;
 }
-input[type="text"] {
+.card input[type="text"] {
   height: 25px !important;
   padding: 0px 5px 0px 5px !important;
   font-size: 11px !important;
@@ -573,10 +570,6 @@ input[type="text"] {
 .inputMaior {
   width: 240px;
   text-align: start;
-}
-.clickable-header {
-  cursor: pointer;
-  padding-left: 5px;
 }
 /* =================== */
 

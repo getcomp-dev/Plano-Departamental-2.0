@@ -27,14 +27,16 @@
       <!-- Grid esquerdo -->
       <div class="col-lg-7 col-md-6 col-sm-6 col-12 m-0 px-0">
         <div class="divTable m-0 pl-0 pr-0 border">
-          <table class="table table-sm table-hover">
+          <table class="main-table table table-sm table-hover table-bordered">
             <thead class="thead-light">
-              <th scope="col">
-                <p class="p-header" style="width: 220px">Cursos</p>
-              </th>
-              <th scope="col">
-                <p class="p-header" style="width: 100px">Grades</p>
-              </th>
+              <tr>
+                <th scope="col">
+                  <p class="p-header" style="width: 220px">Cursos</p>
+                </th>
+                <th scope="col">
+                  <p class="p-header" style="width: 100px">Grades</p>
+                </th>
+              </tr>
             </thead>
 
             <tbody>
@@ -57,9 +59,9 @@
                   :class="[
                     {
                       'bg-custom':
-                        gradeForm.nome == grade.nome && gradeForm.Curso == 4
+                        gradeForm.nome == grade.nome && gradeForm.Curso == 4,
                     },
-                    'clickable'
+                    'clickable',
                   ]"
                 >
                   <td>
@@ -90,9 +92,9 @@
                   :class="[
                     {
                       'bg-custom':
-                        gradeForm.nome == grade.nome && gradeForm.Curso == 1
+                        gradeForm.nome == grade.nome && gradeForm.Curso == 1,
                     },
-                    'clickable'
+                    'clickable',
                   ]"
                 >
                   <td>
@@ -123,9 +125,9 @@
                   :class="[
                     {
                       'bg-custom':
-                        gradeForm.nome == grade.nome && gradeForm.Curso == 3
+                        gradeForm.nome == grade.nome && gradeForm.Curso == 3,
                     },
-                    'clickable'
+                    'clickable',
                   ]"
                 >
                   <td>
@@ -156,9 +158,9 @@
                   :class="[
                     {
                       'bg-custom':
-                        gradeForm.nome == grade.nome && gradeForm.Curso == 2
+                        gradeForm.nome == grade.nome && gradeForm.Curso == 2,
                     },
-                    'clickable'
+                    'clickable',
                   ]"
                 >
                   <td>
@@ -326,12 +328,12 @@ const emptyGrade = {
   id: undefined,
   periodoInicio: undefined,
   Curso: undefined,
-  nome: undefined
+  nome: undefined,
 };
 const emptyDisciplinaGrade = {
   periodo: undefined,
   Disciplina: undefined,
-  Grade: undefined
+  Grade: undefined,
 };
 export default {
   name: "DashboardGrade",
@@ -344,23 +346,23 @@ export default {
       grade_selected: false,
       grades: [],
       showCard: false,
-      nomeAtual: undefined
+      nomeAtual: undefined,
     };
   },
   methods: {
     addGrade() {
       gradeService
         .create(this.gradeForm)
-        .then(response => {
+        .then((response) => {
           this.cleanGrade();
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Grade ${response.Grade.nome} foi criada!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao criar Grade</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -370,7 +372,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
       this.cleanGrade();
@@ -378,21 +380,21 @@ export default {
     editGrade() {
       gradeService
         .update(this.gradeForm.id, this.gradeForm)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Grade ${response.Grade.nome} foi atualizada!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao atualizar Grade</b>";
           this.$notify({
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -400,13 +402,13 @@ export default {
       let grade_nome = this.gradeForm.nome;
       gradeService
         .delete(this.gradeForm.id, this.gradeForm)
-        .then(response => {
+        .then((response) => {
           this.cleanGrade();
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Grade ${grade_nome} foi excluída!`,
-            type: "warn"
+            type: "warn",
           });
         })
         .catch(() => {
@@ -416,7 +418,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error"
+            type: "error",
           });
         });
     },
@@ -433,7 +435,7 @@ export default {
     findGrade() {
       var grade = _.find(this.$store.state.grade.Grades, [
         "id",
-        this.currentGrade
+        this.currentGrade,
       ]);
 
       this.showGrade(grade);
@@ -446,7 +448,7 @@ export default {
     },
     isEven(number) {
       return number % 2 === 0;
-    }
+    },
   },
   watch: {},
   computed: {
@@ -454,14 +456,20 @@ export default {
       return this.$store.state.grade.Grades;
     },
     Grades_CCNoturno() {
-      return this.Grades.filter(function(grade) {
-        return grade.Curso == 1;
-      });
+      return _.orderBy(
+        this.Grades.filter(function(grade) {
+          return grade.Curso == 1;
+        }),
+        "nome"
+      );
     },
     Grades_CCDiurno() {
-      return this.Grades.filter(function(grade) {
-        return grade.Curso == 4;
-      });
+      return _.orderBy(
+        this.Grades.filter(function(grade) {
+          return grade.Curso == 4;
+        }),
+        "nome"
+      );
     },
     Grades_SI() {
       return this.Grades.filter(function(grade) {
@@ -469,14 +477,17 @@ export default {
       });
     },
     Grade_EC() {
-      return this.Grades.filter(function(grade) {
-        return grade.Curso == 2;
-      });
+      return _.orderBy(
+        this.Grades.filter(function(grade) {
+          return grade.Curso == 2;
+        }),
+        "nome"
+      );
     },
     Admin() {
       return this.$store.state.auth.Usuario.admin === 1;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -679,69 +690,63 @@ header {
   text-align: center;
 }
 
-table {
+/* main-table */
+.divTable {
+  overflow: hidden;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+}
+.main-table {
   display: block !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  font-size: 12px !important;
+  overflow: auto !important;
+  font-size: 11px !important;
   font-weight: normal !important;
   background-color: white;
   margin: 0 !important;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
 }
-
+.main-table .p-header {
+  height: 18px;
+}
+.main-table p {
+  padding: 0 5px 0 5px !important;
+  margin: 0 !important;
+  font-size: 11px !important;
+  text-align: center;
+}
 tbody {
-  max-height: 100%;
-  width: 100%;
+  max-height: 100% !important;
+  width: 100% !important;
 }
-
-table td {
+.main-table td {
   text-align: center;
-  vertical-align: middle;
+  vertical-align: middle !important;
   padding: 0 !important;
-  height: 20px !important;
+  height: 22px !important;
 }
-
-div-tab {
-  text-align: center;
-  vertical-align: middle;
-  padding: 0 !important;
-  height: 40px !important;
+.main-table tr thead {
+  display: block !important;
 }
-
-table p {
-  margin-bottom: 0;
-  text-align: center;
-  padding-right: 5px;
-  padding-left: 5px;
-}
-
-p-tab {
-  margin-bottom: 0;
-  text-align: center;
-  padding-right: 5px;
-  padding-left: 5px;
-}
-
-tr thead {
-  display: block;
-}
-
-thead th {
+.main-table thead th {
   padding: 0 !important;
   font-size: 14px;
   text-align: center;
   height: 18px !important;
 }
-
-.divTable {
-  overflow: hidden !important;
-  height: -webkit-max-content !important;
-  height: -moz-max-content !important;
-  height: max-content !important;
-  width: -webkit-max-content !important;
-  width: -moz-max-content !important;
-  width: max-content !important;
+.main-table input[type="checkbox"] {
+  width: 13px !important;
+  height: 13px !important;
+  text-align: center !important;
+  margin: 0 !important;
+  margin-top: 4px !important;
 }
+/* fim table */
 
 .clickable {
   cursor: pointer;
@@ -750,11 +755,9 @@ thead th {
 .bg-custom {
   background-color: #c8c8c8;
 }
-
 .bg-custom:hover {
   background-color: #c8c8c8;
 }
-
 .bg-custom-tr {
   background-color: rgba(0, 0, 0, 0.089);
   color: black;
