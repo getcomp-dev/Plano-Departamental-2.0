@@ -20,8 +20,13 @@ module.exports = function (sequelize, DataTypes) {
     },
     ead: {
       type: DataTypes.BOOLEAN,
-      allowNull:true
-    }
+      allowNull: true
+    },
+    laboratorio: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false
+    },
   }, {
     freezeTableName: true,
     timestamps: false

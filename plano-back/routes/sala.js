@@ -22,7 +22,8 @@ router.post('/', function (req, res, next) {
     console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Sala.create({
         nome: req.body.nome,
-        laboratorio: req.body.laboratorio
+        laboratorio: req.body.laboratorio,
+        lotacao_maxima: req.body.lotacao_maxima
     }).then(function (sala) {
         ioBroadcast(SM.SALA_CREATED, {'msg': 'Sala criada!', 'Sala': sala})
         console.log('\nRequest de '+req.usuario.nome+'\n')
@@ -67,10 +68,14 @@ router.post('/:id([0-9]+)', function (req, res, next) {
         if(sala.laboratorio != req.body.laboratorio)
             history({fieldName:'Laboratorio', lineId:sala.nome, oldValue: sala.laboratorio, newValue: req.body.laboratorio, operationType:'Edit', user: req.usuario.nome})
 
+        if(sala.lotacao_maxima != req.body.lotacao_maxima)
+            history({fieldName:'LotacaoMaxima', lineId:sala.nome, oldValue: sala.lotacao_maxima, newValue: req.body.lotacao_maxima, operationType:'Edit', user: req.usuario.nome})
+
 
         return sala.updateAttributes({
             nome: req.body.nome,
-            laboratorio: req.body.laboratorio
+            laboratorio: req.body.laboratorio,
+            lotacao_maxima: req.body.lotacao_maxima,
         })
     }).then(function (sala) {
         ioBroadcast(SM.SALA_UPDATED, {'msg': 'Sala atualizada!', 'Sala': sala})
