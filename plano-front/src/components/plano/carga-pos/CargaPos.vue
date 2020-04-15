@@ -1,5 +1,5 @@
 <template>
-  <div class="CargaPos row pr-2" v-if="Admin">
+  <div v-if="Admin" class="CargaPos row pr-2">
     <!-- Titulo -->
     <div
       class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
@@ -35,15 +35,11 @@
       </div>
     </div>
 
-    <div id="loading" v-if="isLoading">
-      <div class="cube1"></div>
-      <div class="cube2"></div>
-    </div>
     <div class="w-100 mb-2 border-bottom"></div>
 
     <div class="row m-0">
       <!-- Inicio Tabela 1 -->
-      <div class="p-0 divTable mr-2 mb-2" v-if="!isLoading">
+      <div class="p-0 divTable mr-2 mb-2">
         <div
           class="alert alert-dark p-0 m-0 text-center rounded-0"
           role="alert"
@@ -155,7 +151,7 @@
       </div>
 
       <!-- Inicio Tabela 2 -->
-      <div class="p-0 divTable mr-2 mb-2" v-if="!isLoading">
+      <div class="p-0 divTable mr-2 mb-2">
         <div
           class="alert alert-dark p-0 m-0 text-center rounded-0"
           role="alert"
@@ -264,7 +260,7 @@
       </div>
 
       <!-- Inicio Tabela 3 -->
-      <div class="p-0 divTable mr-2 mb-2" v-if="!isLoading">
+      <div class="p-0 divTable mr-2 mb-2">
         <div
           class="alert alert-dark p-0 m-0 text-center rounded-0"
           role="alert"
@@ -721,14 +717,17 @@ export default {
       semestre_1Ativo: true,
       semestre_2Ativo: true,
       semestreAtual: 3,
+      onLoading: true,
     };
   },
 
   components: {
     cargadata,
   },
-
   mounted() {
+    setTimeout(() => {
+      this.onLoading = false;
+    }, 300);
     this.scrollsize = {
       width:
         this.$refs.tablePGMC.offsetWidth -
@@ -736,7 +735,6 @@ export default {
         "px",
     };
   },
-
   methods: {
     btnOKSemestre() {
       if (this.semestre_1Ativo && !this.semestre_2Ativo) {
@@ -1379,129 +1377,7 @@ i.fas,
 i.far {
   font-size: 25px;
 }
-.cube1,
-.cube2 {
-  background-color: #333;
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  top: 0;
-  left: 0;
-  -webkit-animation: cubemove 1.8s infinite ease-in-out;
-  -moz-animation: cubemove 1.8s infinite ease-in-out;
-  -o-animation: cubemove 1.8s infinite ease-in-out;
-  animation: cubemove 1.8s infinite ease-in-out;
-}
-.cube2 {
-  -webkit-animation-delay: -0.9s;
-  -moz-animation-delay: -0.9s;
-  -o-animation-delay: -0.9s;
-  animation-delay: -0.9s;
-}
-@-webkit-keyframes cubemove {
-  25% {
-    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
-  }
-  50% {
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
-  }
-  75% {
-    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
-      scale(0.5);
-  }
-  100% {
-    -webkit-transform: rotate(-360deg);
-  }
-}
-@-moz-keyframes cubemove {
-  25% {
-    -moz-transform: translateX(42px) rotate(-90deg) scale(0.5);
-    transform: translateX(42px) rotate(-90deg) scale(0.5);
-    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
-  }
-  50% {
-    -moz-transform: translateX(42px) translateY(42px) rotate(-179deg);
-    transform: translateX(42px) translateY(42px) rotate(-179deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
-  }
-  50.1% {
-    -moz-transform: translateX(42px) translateY(42px) rotate(-180deg);
-    transform: translateX(42px) translateY(42px) rotate(-180deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
-  }
-  75% {
-    -moz-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
-      scale(0.5);
-  }
-  100% {
-    -moz-transform: rotate(-360deg);
-    transform: rotate(-360deg);
-    -webkit-transform: rotate(-360deg);
-  }
-}
-@-o-keyframes cubemove {
-  25% {
-    -o-transform: translateX(42px) rotate(-90deg) scale(0.5);
-    transform: translateX(42px) rotate(-90deg) scale(0.5);
-    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
-  }
-  50% {
-    -o-transform: translateX(42px) translateY(42px) rotate(-179deg);
-    transform: translateX(42px) translateY(42px) rotate(-179deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
-  }
-  50.1% {
-    -o-transform: translateX(42px) translateY(42px) rotate(-180deg);
-    transform: translateX(42px) translateY(42px) rotate(-180deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
-  }
-  75% {
-    -o-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
-      scale(0.5);
-  }
-  100% {
-    -o-transform: rotate(-360deg);
-    transform: rotate(-360deg);
-    -webkit-transform: rotate(-360deg);
-  }
-}
-@keyframes cubemove {
-  25% {
-    -moz-transform: translateX(42px) rotate(-90deg) scale(0.5);
-    -o-transform: translateX(42px) rotate(-90deg) scale(0.5);
-    transform: translateX(42px) rotate(-90deg) scale(0.5);
-    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
-  }
-  50% {
-    -moz-transform: translateX(42px) translateY(42px) rotate(-179deg);
-    -o-transform: translateX(42px) translateY(42px) rotate(-179deg);
-    transform: translateX(42px) translateY(42px) rotate(-179deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
-  }
-  50.1% {
-    -moz-transform: translateX(42px) translateY(42px) rotate(-180deg);
-    -o-transform: translateX(42px) translateY(42px) rotate(-180deg);
-    transform: translateX(42px) translateY(42px) rotate(-180deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
-  }
-  75% {
-    -moz-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    -o-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
-      scale(0.5);
-  }
-  100% {
-    -moz-transform: rotate(-360deg);
-    -o-transform: rotate(-360deg);
-    transform: rotate(-360deg);
-    -webkit-transform: rotate(-360deg);
-  }
-}
+
 .alert {
   background-color: #e9ecef !important;
   border: none;

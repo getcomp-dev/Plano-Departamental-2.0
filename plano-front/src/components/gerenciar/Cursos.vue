@@ -34,7 +34,7 @@
                   <p
                     @click="toggleOrd('nome')"
                     title="Clique para ordenar por nome"
-                    class="p-header clickable-header"
+                    class="p-header clickable"
                     style="
                       width: 300px !important;
                       text-align: start !important;
@@ -48,7 +48,7 @@
                           ? ordenacao.type == 'asc'
                             ? 'fas fa-arrow-down fa-sm'
                             : 'fas fa-arrow-up fa-sm'
-                          : ''
+                          : 'fas fa-arrow-down fa-sm low-opacity'
                       "
                     ></i>
                   </p>
@@ -68,7 +68,7 @@
                           ? ordenacao.type == 'asc'
                             ? 'fas fa-arrow-down fa-sm'
                             : 'fas fa-arrow-up fa-sm'
-                          : ''
+                          : 'fas fa-arrow-down fa-sm low-opacity'
                       "
                     ></i>
                   </p>
@@ -76,7 +76,7 @@
                 <th scope="col">
                   <p
                     class="p-header clickable"
-                    style="width: 52px !important;"
+                    style="width: 52px !important; text-align:start"
                     @click="toggleOrd('turno')"
                   >
                     Turno
@@ -87,7 +87,7 @@
                           ? ordenacao.type == 'asc'
                             ? 'fas fa-arrow-down fa-sm'
                             : 'fas fa-arrow-up fa-sm'
-                          : ''
+                          : 'fas fa-arrow-down fa-sm low-opacity'
                       "
                     ></i>
                   </p>
@@ -133,7 +133,9 @@
                     <p style="width: 60px;">{{ curso.codigo }}</p>
                   </td>
                   <td>
-                    <p style="width: 52px;">{{ curso.turno }}</p>
+                    <p style="width: 52px;text-align:start">
+                      {{ curso.turno }}
+                    </p>
                   </td>
                   <!-- 1 = 1º semestre, 2 = 2º semestre, 3 = Ambos-->
                   <td>
@@ -390,7 +392,7 @@ const emptyCurso = {
   semestreInicial: undefined,
   alunosEntrada: undefined,
   alunosEntrada2: undefined,
-  posicao: undefined,
+  posicao: undefined
 };
 const emptyPedido = {
   vagasPeriodizadas: 0,
@@ -398,7 +400,7 @@ const emptyPedido = {
   Curso: undefined,
   Turma: undefined,
   ultimo: undefined,
-  selectAll: undefined,
+  selectAll: undefined
 };
 export default {
   name: "DashboardCursos",
@@ -407,7 +409,7 @@ export default {
       cursoForm: _.clone(emptyCurso),
       error: undefined,
       cursoClickado: "",
-      ordenacao: { order: "nome", type: "asc" },
+      ordenacao: { order: "nome", type: "asc" }
     };
   },
   created() {
@@ -475,7 +477,7 @@ export default {
       else this.cursoForm.semestreInicial = 3;
       cursoService
         .create(this.cursoForm)
-        .then((response) => {
+        .then(response => {
           for (var i = 0; i < this.$store.state.turma.Turmas.length; i++) {
             var pedido = _.clone(emptyPedido);
             pedido.Curso = response.Curso.id;
@@ -483,8 +485,8 @@ export default {
             console.log(pedido);
             pedidoService
               .create(pedido)
-              .then((response) => {})
-              .catch((error) => {
+              .then(response => {})
+              .catch(error => {
                 console.log("erro ao criar pedido: " + error);
               });
           }
@@ -493,10 +495,10 @@ export default {
             group: "general",
             title: `Sucesso!`,
             text: `O Curso ${response.Curso.nome} foi criado!`,
-            type: "success",
+            type: "success"
           });
         })
-        .catch((error) => {
+        .catch(error => {
           this.error = "<b>Erro ao criar Curso</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -506,7 +508,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error",
+            type: "error"
           });
         });
     },
@@ -529,34 +531,34 @@ export default {
       else this.cursoForm.semestreInicial = 3;
       cursoService
         .update(this.cursoForm.id, this.cursoForm)
-        .then((response) => {
+        .then(response => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `O Curso ${response.Curso.nome} foi atualizado!`,
-            type: "success",
+            type: "success"
           });
         })
-        .catch((error) => {
+        .catch(error => {
           this.error = "<b>Erro ao atualizar Curso</b>";
           this.$notify({
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error",
+            type: "error"
           });
         });
     },
     deleteCurso() {
       cursoService
         .delete(this.cursoForm.id, this.cursoForm)
-        .then((response) => {
+        .then(response => {
           this.cleanCurso();
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `O Curso ${response.Curso.nome} foi excluído!`,
-            type: "success",
+            type: "success"
           });
         })
         .catch(() => {
@@ -565,7 +567,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error",
+            type: "error"
           });
         });
     },
@@ -577,7 +579,7 @@ export default {
     showCurso(curso) {
       this.cleanCurso();
       this.cursoForm = _.clone(curso);
-    },
+    }
   },
   computed: {
     Cursos() {
@@ -599,8 +601,8 @@ export default {
       } else {
         return false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

@@ -8,6 +8,7 @@
       v-on:change="editPedido(pedido)"
       v-on:focus="focusPedido"
       v-on:blur="blurPedido"
+      @keypress="onlyNumber"
     />
     <input
       v-else
@@ -17,6 +18,7 @@
       v-on:change="editPedido(pedido)"
       v-on:focus="focusPedido"
       v-on:blur="blurPedido"
+      @keypress="onlyNumber"
     />
     <input
       v-if="pedidoForm.vagasNaoPeriodizadas == 0"
@@ -26,6 +28,7 @@
       v-on:change="editPedido(pedido)"
       v-on:focus="focusPedido"
       v-on:blur="blurPedido"
+      @keypress="onlyNumber"
     />
     <input
       v-else
@@ -35,6 +38,7 @@
       v-on:change="editPedido(pedido)"
       v-on:focus="focusPedido"
       v-on:blur="blurPedido"
+      @keypress="onlyNumber"
     />
   </div>
 </template>
@@ -47,21 +51,21 @@ const emptyPedido = {
   vagasPeriodizadas: 0,
   vagasNaoPeriodizadas: 0,
   Curso: undefined,
-  Turma: undefined
+  Turma: undefined,
 };
 export default {
   name: "TurmaExternaPedido",
 
   props: {
     turma: Object,
-    index: Number
+    index: Number,
   },
 
   data() {
     return {
       ativo: false,
       valorAtual: undefined,
-      pedidoForm: _.clone(emptyPedido)
+      pedidoForm: _.clone(emptyPedido),
     };
   },
   mounted: function() {
@@ -71,6 +75,12 @@ export default {
   },
 
   methods: {
+    onlyNumber($event) {
+      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
+      if (keyCode < 48 || keyCode > 57) {
+        $event.preventDefault();
+      }
+    },
     editPedido() {
       if (this.pedidoForm.vagasPeriodizadas == "")
         this.pedidoForm.vagasPeriodizadas = 0;
@@ -78,18 +88,18 @@ export default {
         this.pedidoForm.vagasNaoPeriodizadas = 0;
       pedidoExternoService
         .update(this.pedidoForm.Curso, this.pedidoForm.Turma, this.pedidoForm)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `O pedido foi atualizado!`,
-            type: "success"
+            type: "success",
           });
           console.log(
             this.$store.state.pedido.Pedidos[this.turma.id][this.index]
           );
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao atualizar Pedido</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -112,13 +122,13 @@ export default {
 
       if (this.pedidoForm.vagasNaoPeriodizadas == "")
         this.pedidoForm.vagasNaoPeriodizadas = 0;
-    }
+    },
   },
 
   computed: {
     pedido() {
       return this.$store.state.pedidoExterno.Pedidos[this.turma.id][this.index];
-    }
+    },
   },
 
   watch: {
@@ -126,8 +136,8 @@ export default {
       this.pedidoForm = _.clone(
         this.$store.state.pedidoExterno.Pedidos[this.turma.id][this.index]
       );
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

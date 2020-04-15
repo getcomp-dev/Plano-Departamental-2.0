@@ -14,6 +14,13 @@
           class="form-group col-xl-10 col-lg-10 col-md-10 col-sm-10 col-9 mb-0 p-0"
           style="justify-content: flex-end !important;"
         >
+          <b-button
+            v-b-modal.modalValidacao
+            title="Validação"
+            class="cancelbtn"
+          >
+            <i class="far fa-calendar-check"></i>
+          </b-button>
           <b-button v-b-modal.modalFiltros title="Filtros" class="cancelbtn">
             <i class="fas fa-list-ul"></i>
           </b-button>
@@ -73,13 +80,13 @@
     <div class="pl-0 divTable" v-if="!isLoading" ref="mainTable">
       <table class="table main-table table-hover table-sm table-bordered">
         <thead class="thead-light">
-          <tr>
+          <tr class="sticky">
             <turmaheader :cursos="CursosAtivados"></turmaheader>
           </tr>
         </thead>
         <tbody>
           <template v-if="isAdd">
-            <tr>
+            <tr class="stickyAdd" style="background-color:#e9e9e9;">
               <novaturma :cursos_length="CursosAtivados.length"></novaturma>
             </tr>
           </template>
@@ -490,6 +497,196 @@
       </div>
     </b-modal>
 
+    <!-- MODAL FILTROS -->
+    <b-modal
+      id="modalValidacao"
+      ref="modalValidacao"
+      scrollable
+      size="lg"
+      title="Validações"
+    >
+      <div class="col m-0 p-0 max-content" style="height: 450px !important;">
+        <!-- TABLE Validações -->
+        <table
+          class="table table-sm modal-table table-bordered"
+          style="height: 450px !important;"
+        >
+          <thead class="thead-light sticky">
+            <tr>
+              <div style="font-size: 11px !important;" class=" max-content">
+                <th>
+                  <p
+                    style="width: 35px; text-align: center;"
+                    class="p-header clickable"
+                    @click="toggleOrdValidacoes('periodo')"
+                  >
+                    S.
+                    <i
+                      style="font-size: 0.6rem; text-align: right;"
+                      :class="
+                        ordemValidacao.order == 'periodo'
+                          ? ordemValidacao.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : 'fas fa-arrow-down fa-sm low-opacity'
+                      "
+                    ></i>
+                  </p>
+                </th>
+                <th>
+                  <p
+                    style="width: 70px; text-align: start;"
+                    class="p-header clickable"
+                    @click="toggleOrdValidacoes('perfil')"
+                  >
+                    Perfil
+                    <i
+                      style="font-size: 0.6rem; text-align: right;"
+                      :class="
+                        ordemValidacao.order == 'perfil'
+                          ? ordemValidacao.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : 'fas fa-arrow-down fa-sm low-opacity'
+                      "
+                    ></i>
+                  </p>
+                </th>
+                <th>
+                  <p
+                    style="width: 70px; text-align: start;"
+                    class="p-header clickable"
+                    @click="toggleOrdValidacoes('disciplina_codigo')"
+                  >
+                    Cód.
+                    <i
+                      style="font-size: 0.6rem; text-align: right;"
+                      :class="
+                        ordemValidacao.order == 'disciplina_codigo'
+                          ? ordemValidacao.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : 'fas fa-arrow-down fa-sm low-opacity'
+                      "
+                    ></i>
+                  </p>
+                </th>
+                <th>
+                  <p
+                    style="width: 240px; text-align: start;"
+                    class="p-header clickable"
+                    @click="toggleOrdValidacoes('disciplina_nome')"
+                  >
+                    Disciplina
+                    <i
+                      style="font-size: 0.6rem; text-align: right;"
+                      :class="
+                        ordemValidacao.order == 'disciplina_nome'
+                          ? ordemValidacao.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : 'fas fa-arrow-down fa-sm low-opacity'
+                      "
+                    ></i>
+                  </p>
+                </th>
+                <th>
+                  <p style="width: 35px; text-align: start;" class="p-header">
+                    Letra
+                  </p>
+                </th>
+
+                <th>
+                  <p style="width: 290px; text-align: start;" class="p-header">
+                    Conflito
+                  </p>
+                </th>
+              </div>
+            </tr>
+          </thead>
+          <!-- id: turma.id,
+            disciplina_nome: disciplina_encontrada.nome,
+            disciplina_codigo: disciplina_encontrada.codigo,
+            periodo: turma.periodo,
+            letra: turma.letra, -->
+          <tbody style="text-transform: uppercase">
+            <template v-for="(turma, index) in Turmas_validacoes_filtred">
+              <tr
+                :key="
+                  index + '-' + turma.id + turma.Disciplina + 'modal-validacoes'
+                "
+                style="background-color:rgba(0, 0, 0, 0.089);"
+              >
+                <div class="max-content">
+                  <td>
+                    <p style="width: 35px; text-align: center;">
+                      {{ turma.periodo }}
+                    </p>
+                  </td>
+                  <td>
+                    <p style="width: 70px; text-align: start;">
+                      {{ turma.perfil }}
+                    </p>
+                  </td>
+                  <td>
+                    <p style="width: 70px; text-align: start;">
+                      {{ turma.disciplina_codigo }}
+                    </p>
+                  </td>
+                  <td>
+                    <p style="width: 240px; text-align: start;">
+                      {{ turma.disciplina_nome }}
+                    </p>
+                  </td>
+                  <td>
+                    <p style="width: 35px; text-align: center;">
+                      {{ turma.letra }}
+                    </p>
+                  </td>
+
+                  <td>
+                    <p style="width: 290px; text-align: start;">
+                      {{ turma.mensagem }}
+                    </p>
+                  </td>
+                </div>
+              </tr>
+              <tr
+                v-for="erro in turma.erros"
+                :key="turma.id + turma.disciplina_codigo + erro.mensagem"
+              >
+                <div class="max-content">
+                  <td>
+                    <p style="width: 35px; text-align: center;"></p>
+                  </td>
+                  <td>
+                    <p style="width: 70px; text-align: start;"></p>
+                  </td>
+                  <td>
+                    <p style="width: 70px; text-align: center;"></p>
+                  </td>
+                  <td>
+                    <p style="width: 240px; text-align: start;"></p>
+                  </td>
+                  <td>
+                    <p style="width: 35px; text-align: center;"></p>
+                  </td>
+
+                  <td>
+                    <p style="width: 290px; text-align: start;">
+                      {{ erro.mensagem }}
+                    </p>
+                  </td>
+                </div>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+      </div>
+
+      <div slot="modal-footer" class="w-100 m-0" style="display: flex;"></div>
+    </b-modal>
+
     <!-- Modal de Ajuda -->
     <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
       <div class="modal-body">
@@ -609,6 +806,7 @@ export default {
       searchCursos: null,
       ordenacaoCurso: { order: "codigo", type: "asc" },
       ordenacaoPerfis: { order: "nome", type: "asc" },
+      ordemValidacao: { order: "periodo", type: "asc" },
     };
   },
 
@@ -648,7 +846,6 @@ export default {
   methods: {
     changeTab(tab) {
       this.nav_ativo = tab;
-      // this.searchCursos = null;
     },
     btnOK() {
       this.btnOKPerfis();
@@ -691,6 +888,16 @@ export default {
       } else {
         this.ordenacaoCurso.type =
           this.ordenacaoCurso.type == "asc" ? "desc" : "asc";
+      }
+    },
+    // Ordem Validacoes
+    toggleOrdValidacoes(ord) {
+      if (this.ordemValidacao.order != ord) {
+        this.ordemValidacao.order = ord;
+        this.ordemValidacao.type = "asc";
+      } else {
+        this.ordemValidacao.type =
+          this.ordemValidacao.type == "asc" ? "desc" : "asc";
       }
     },
 
@@ -898,6 +1105,46 @@ export default {
     toggleAdd() {
       this.isAdd = !this.isAdd;
     },
+    checkIsLab(turma_sala) {
+      let cond = _.find(
+        this.Salas,
+        (sala) => turma_sala == sala.id && sala.laboratorio
+      );
+      if (cond != undefined) return true;
+      else return false;
+    },
+    checkVagasSalas(turma_sala, turma_id) {
+      let pedidosTotais = 0;
+      let pedidos = this.$store.state.pedido.Pedidos[turma_id];
+      for (let p = 0; p < pedidos.length; p++) {
+        pedidosTotais += parseInt(pedidos[p].vagasPeriodizadas, 10);
+        pedidosTotais += parseInt(pedidos[p].vagasNaoPeriodizadas, 10);
+      }
+
+      let sala_encontrada = _.find(this.Salas, (sala) => turma_sala == sala.id);
+
+      if (
+        sala_encontrada != undefined &&
+        sala_encontrada.lotacao_maxima != 0 &&
+        pedidosTotais != undefined
+      ) {
+        if (sala_encontrada.lotacao_maxima < pedidosTotais) {
+          // console.log(
+          //   "sala: " +
+          //     sala_encontrada.nome +
+          //     "lotacao: " +
+          //     sala_encontrada.lotacao_maxima +
+          //     "pedidos: " +
+          //     pedidosTotais
+          // );
+          return {
+            lotacao: sala_encontrada.lotacao_maxima,
+            vagastotais: pedidosTotais,
+          };
+        }
+      }
+      return null;
+    },
   },
 
   computed: {
@@ -920,7 +1167,7 @@ export default {
       }
       return result;
     },
-    //Cursos filtrados
+    //Cursos Ordenados
     Cursos_filtred() {
       return _.orderBy(
         this.Cursos,
@@ -928,7 +1175,122 @@ export default {
         this.ordenacaoCurso.type
       );
     },
+    //Turmas validacoes ordenadas
+    Turmas_validacoes_filtred() {
+      return _.orderBy(
+        this.Turmas_validacoes,
+        this.ordemValidacao.order,
+        this.ordemValidacao.type
+      );
+    },
+    //Verifica validações das turmas
+    Turmas_validacoes() {
+      console.log("Turmas", this.Turmas[0]);
+      console.log("Disciplina", this.Disciplinas[0]);
+      let result = [];
+      this.Turmas.forEach((turma) => {
+        //Encontra a disciplina da turma
+        let disciplina_encontrada = _.find(
+          this.Disciplinas,
+          (disciplina) => disciplina.id == turma.Disciplina
+        );
 
+        if (disciplina_encontrada && turma.periodo == 1) {
+          let obj = {
+            id: turma.id,
+            disciplina_nome: disciplina_encontrada.nome,
+            disciplina_codigo: disciplina_encontrada.codigo,
+            periodo: turma.periodo,
+            letra: turma.letra,
+            erros: [],
+          };
+          //Encontra o nome do perfil pelo ID
+          _.find(this.Perfis, (perfil) => {
+            if (perfil.id == disciplina_encontrada.Perfil) {
+              obj.perfil = perfil.abreviacao;
+              return true;
+            }
+          });
+          //Verifica letra
+          if (!turma.letra.match(/[A-Z]/i)) {
+            obj.erros.push({ mensagem: "Letra da turma invalida" });
+          }
+          //Verifica turno
+          if (turma.turno1 == null) {
+            obj.erros.push({ mensagem: "Turno Invalido" });
+          }
+          //Compatibilidade do turno com disciplina
+          if (!turma.ead && turma.turno1 == "EAD") {
+            obj.erros.push({
+              mensagem:
+                "Disciplina não cadastrada como EAD, porem o turno esta alocado como tal",
+            });
+          }
+          //Verifica Horarios
+          if (!turma.ead || !turma.turno1 == "EAD") {
+            if (turma.Horario1 == null) {
+              obj.erros.push({ mensagem: "Primeiro Horario invalido" });
+            }
+            if (turma.cargaTeorica > 2 && turma.Horario2 == null) {
+              obj.erros.push({ mensagem: "Segundo Horario invalido" });
+            }
+          }
+          //Verifica Docente
+          if (turma.Docente1 == null) {
+            obj.erros.push({ mensagem: "Primeiro Docente invalido" });
+          }
+          //Verifica alocação de Lab e salas
+          if (turma.Sala1 != null || turma.Sala2 != null) {
+            //Verifica se possui lab alocado
+            if (
+              turma.cargaPratica > 0 &&
+              !(this.checkIsLab(turma.Sala1) || this.checkIsLab(turma.Sala2))
+            ) {
+              obj.erros.push({
+                mensagem:
+                  "Turma possui carga pratica porem não possui laboratorio alocado",
+              });
+            }
+
+            let vagasInSala1 =
+              turma.Sala1 != null
+                ? this.checkVagasSalas(turma.Sala1, turma.id)
+                : null;
+            let vagasInSala2 =
+              turma.Sala2 != null
+                ? this.checkVagasSalas(turma.Sala1, turma.id)
+                : null;
+            //Se excedeu o limite da sala 1
+            if (vagasInSala1 != null) {
+              obj.erros.push({
+                mensagem:
+                  "Limite de sala excedido: Sala 1 possui limite de " +
+                  vagasInSala1.lotacao +
+                  " e um total de " +
+                  vagasInSala1.vagastotais +
+                  " vagas alocadas!",
+              });
+            }
+            //Se excedeu o limite da sala 2
+            if (vagasInSala2 != null) {
+              obj.erros.push({
+                mensagem:
+                  "Limite de sala excedido: Sala 2 possui limite de " +
+                  vagasInSala1.lotacao +
+                  " e um total de " +
+                  vagasInSala1.vagastotais +
+                  " vagas alocadas!",
+              });
+            }
+          }
+          if (obj.erros.length) {
+            result.push(obj);
+          }
+        }
+      });
+
+      return result;
+    },
     Disciplinas() {
       return _.orderBy(this.$store.state.disciplina.Disciplinas, "nome");
     },
@@ -1245,6 +1607,16 @@ i.far {
   overflow: hidden !important;
   z-index: 3;
 }
+.stickyAdd {
+  display: block !important;
+  overflow: hidden !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 21px !important;
+  display: block !important;
+  overflow: hidden !important;
+  z-index: 3;
+}
 /* .sticky-bottom {
   display: block !important;
   overflow: hidden !important;
@@ -1351,150 +1723,6 @@ i.far {
 @media screen and (max-width: 536px) {
   .div-titulo {
     height: 70px !important;
-  }
-}
-.cube1,
-.cube2 {
-  background-color: #333;
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  -webkit-animation: cubemove 1.8s infinite ease-in-out;
-  -moz-animation: cubemove 1.8s infinite ease-in-out;
-  -o-animation: cubemove 1.8s infinite ease-in-out;
-  animation: cubemove 1.8s infinite ease-in-out;
-}
-
-.cube2 {
-  -webkit-animation-delay: -0.9s;
-  -moz-animation-delay: -0.9s;
-  -o-animation-delay: -0.9s;
-  animation-delay: -0.9s;
-}
-
-@-webkit-keyframes cubemove {
-  25% {
-    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
-  }
-
-  50% {
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
-  }
-
-  75% {
-    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
-      scale(0.5);
-  }
-
-  100% {
-    -webkit-transform: rotate(-360deg);
-  }
-}
-
-@-moz-keyframes cubemove {
-  25% {
-    -moz-transform: translateX(42px) rotate(-90deg) scale(0.5);
-    transform: translateX(42px) rotate(-90deg) scale(0.5);
-    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
-  }
-
-  50% {
-    -moz-transform: translateX(42px) translateY(42px) rotate(-179deg);
-    transform: translateX(42px) translateY(42px) rotate(-179deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
-  }
-
-  50.1% {
-    -moz-transform: translateX(42px) translateY(42px) rotate(-180deg);
-    transform: translateX(42px) translateY(42px) rotate(-180deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
-  }
-
-  75% {
-    -moz-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
-      scale(0.5);
-  }
-
-  100% {
-    -moz-transform: rotate(-360deg);
-    transform: rotate(-360deg);
-    -webkit-transform: rotate(-360deg);
-  }
-}
-
-@-o-keyframes cubemove {
-  25% {
-    -o-transform: translateX(42px) rotate(-90deg) scale(0.5);
-    transform: translateX(42px) rotate(-90deg) scale(0.5);
-    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
-  }
-
-  50% {
-    -o-transform: translateX(42px) translateY(42px) rotate(-179deg);
-    transform: translateX(42px) translateY(42px) rotate(-179deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
-  }
-
-  50.1% {
-    -o-transform: translateX(42px) translateY(42px) rotate(-180deg);
-    transform: translateX(42px) translateY(42px) rotate(-180deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
-  }
-
-  75% {
-    -o-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
-      scale(0.5);
-  }
-
-  100% {
-    -o-transform: rotate(-360deg);
-    transform: rotate(-360deg);
-    -webkit-transform: rotate(-360deg);
-  }
-}
-
-@keyframes cubemove {
-  25% {
-    -moz-transform: translateX(42px) rotate(-90deg) scale(0.5);
-    -o-transform: translateX(42px) rotate(-90deg) scale(0.5);
-    transform: translateX(42px) rotate(-90deg) scale(0.5);
-    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
-  }
-
-  50% {
-    -moz-transform: translateX(42px) translateY(42px) rotate(-179deg);
-    -o-transform: translateX(42px) translateY(42px) rotate(-179deg);
-    transform: translateX(42px) translateY(42px) rotate(-179deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
-  }
-
-  50.1% {
-    -moz-transform: translateX(42px) translateY(42px) rotate(-180deg);
-    -o-transform: translateX(42px) translateY(42px) rotate(-180deg);
-    transform: translateX(42px) translateY(42px) rotate(-180deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
-  }
-
-  75% {
-    -moz-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    -o-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
-      scale(0.5);
-  }
-
-  100% {
-    -moz-transform: rotate(-360deg);
-    -o-transform: rotate(-360deg);
-    transform: rotate(-360deg);
-    -webkit-transform: rotate(-360deg);
   }
 }
 </style>

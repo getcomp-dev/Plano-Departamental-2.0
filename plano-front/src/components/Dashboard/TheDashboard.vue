@@ -436,12 +436,12 @@ const emptyUser = {
   nome: undefined,
   login: undefined,
   senha: undefined,
-  senhaAtual: undefined
+  senhaAtual: undefined,
 };
 
 const emptyPlano = {
   ano: undefined,
-  obs: undefined
+  obs: undefined,
 };
 
 export default {
@@ -456,7 +456,7 @@ export default {
       userForm: _.clone(emptyUser),
       downloadState: 0,
       planoForm: _.clone(emptyPlano),
-      show: false
+      show: false,
     };
   },
 
@@ -488,7 +488,7 @@ export default {
       } else {
         return false;
       }
-    }
+    },
   },
 
   created() {
@@ -499,7 +499,7 @@ export default {
         this.$socket.open();
         this.$store.commit(COMPONENT_LOADED);
       })
-      .catch(response => {
+      .catch((response) => {
         console.log("ERRORRR");
         console.log(response);
       });
@@ -526,7 +526,7 @@ export default {
             group: "general",
             title: `Sucesso!`,
             text: `O dump foi criado!`,
-            type: "success"
+            type: "success",
           });
           this.returnFiles();
         })
@@ -556,12 +556,12 @@ export default {
       this.isLoadingFile = true;
       bddumpService
         .restoredump(filename)
-        .then(response => {
+        .then((response) => {
           if (response.success == true) {
             this.$notify({
               group: "general",
               type: "success",
-              text: `O banco foi restaurado com sucesso`
+              text: `O banco foi restaurado com sucesso`,
             });
             this.$store.dispatch("fetchAll");
             this.hideModalLoad();
@@ -571,7 +571,7 @@ export default {
             this.$notify({
               group: "general",
               type: "danger",
-              text: "Falha ao restaurar o banco"
+              text: "Falha ao restaurar o banco",
             });
           }
         })
@@ -581,7 +581,7 @@ export default {
     },
 
     download: async function() {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         this.downloadState = 0;
         let pedidos = this.$store.state.pedido.Pedidos;
         xlsxService
@@ -602,22 +602,22 @@ export default {
                     fetch("http://200.131.219.57:3000/api/download/all", {
                       method: "GET",
                       headers: {
-                        Authorization: `Bearer ${this.$store.state.auth.token}`
-                      }
+                        Authorization: `Bearer ${this.$store.state.auth.token}`,
+                      },
                     })
-                      .then(r => r.blob())
-                      .then(blob => {
+                      .then((r) => r.blob())
+                      .then((blob) => {
                         saveAs(blob, "data.zip");
                         this.downloadState++;
                         resolve();
                       })
-                      .catch(e => console.log(e));
+                      .catch((e) => console.log(e));
                   })
-                  .catch(e => console.log(e));
+                  .catch((e) => console.log(e));
               })
-              .catch(e => console.log(e));
+              .catch((e) => console.log(e));
           })
-          .catch(e => console.log(e));
+          .catch((e) => console.log(e));
       });
     },
 
@@ -626,7 +626,7 @@ export default {
     },
 
     returnFiles: function() {
-      bddumpService.returnFiles().then(response => {
+      bddumpService.returnFiles().then((response) => {
         this.files = response.Files.filter(function(elm) {
           return elm.match(/.*\.(sql)/gi);
         });
@@ -710,8 +710,8 @@ export default {
 
     cancelMode() {
       this.userModalMode = 0;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -934,145 +934,6 @@ export default {
   margin-top: -32px;
   z-index: 99999;
 }
-
-.cube1,
-.cube2 {
-  background-color: #333;
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  top: 0;
-  left: 0;
-
-  -webkit-animation: cubemove 1.8s infinite ease-in-out;
-  -moz-animation: cubemove 1.8s infinite ease-in-out;
-  -o-animation: cubemove 1.8s infinite ease-in-out;
-  animation: cubemove 1.8s infinite ease-in-out;
-}
-
-.cube2 {
-  -webkit-animation-delay: -0.9s;
-  -moz-animation-delay: -0.9s;
-  -o-animation-delay: -0.9s;
-  animation-delay: -0.9s;
-}
-
-@-webkit-keyframes cubemove {
-  25% {
-    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
-  }
-  50% {
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
-  }
-  75% {
-    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
-      scale(0.5);
-  }
-  100% {
-    -webkit-transform: rotate(-360deg);
-  }
-}
-
-@-moz-keyframes cubemove {
-  25% {
-    -moz-transform: translateX(42px) rotate(-90deg) scale(0.5);
-    transform: translateX(42px) rotate(-90deg) scale(0.5);
-    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
-  }
-  50% {
-    -moz-transform: translateX(42px) translateY(42px) rotate(-179deg);
-    transform: translateX(42px) translateY(42px) rotate(-179deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
-  }
-  50.1% {
-    -moz-transform: translateX(42px) translateY(42px) rotate(-180deg);
-    transform: translateX(42px) translateY(42px) rotate(-180deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
-  }
-  75% {
-    -moz-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
-      scale(0.5);
-  }
-  100% {
-    -moz-transform: rotate(-360deg);
-    transform: rotate(-360deg);
-    -webkit-transform: rotate(-360deg);
-  }
-}
-
-@-o-keyframes cubemove {
-  25% {
-    -o-transform: translateX(42px) rotate(-90deg) scale(0.5);
-    transform: translateX(42px) rotate(-90deg) scale(0.5);
-    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
-  }
-  50% {
-    -o-transform: translateX(42px) translateY(42px) rotate(-179deg);
-    transform: translateX(42px) translateY(42px) rotate(-179deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
-  }
-  50.1% {
-    -o-transform: translateX(42px) translateY(42px) rotate(-180deg);
-    transform: translateX(42px) translateY(42px) rotate(-180deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
-  }
-  75% {
-    -o-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
-      scale(0.5);
-  }
-  100% {
-    -o-transform: rotate(-360deg);
-    transform: rotate(-360deg);
-    -webkit-transform: rotate(-360deg);
-  }
-}
-
-@keyframes cubemove {
-  25% {
-    -moz-transform: translateX(42px) rotate(-90deg) scale(0.5);
-    -o-transform: translateX(42px) rotate(-90deg) scale(0.5);
-    transform: translateX(42px) rotate(-90deg) scale(0.5);
-    -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
-  }
-  50% {
-    -moz-transform: translateX(42px) translateY(42px) rotate(-179deg);
-    -o-transform: translateX(42px) translateY(42px) rotate(-179deg);
-    transform: translateX(42px) translateY(42px) rotate(-179deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
-  }
-  50.1% {
-    -moz-transform: translateX(42px) translateY(42px) rotate(-180deg);
-    -o-transform: translateX(42px) translateY(42px) rotate(-180deg);
-    transform: translateX(42px) translateY(42px) rotate(-180deg);
-    -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
-  }
-  75% {
-    -moz-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    -o-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
-    -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg)
-      scale(0.5);
-  }
-  100% {
-    -moz-transform: rotate(-360deg);
-    -o-transform: rotate(-360deg);
-    transform: rotate(-360deg);
-    -webkit-transform: rotate(-360deg);
-  }
-}
-
-/* Remove seleção do usuario da nav bar*/
-.navbar {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
 .btn-navbar {
   width: 40px;
   padding: 0 6px 0 6px;
@@ -1093,10 +954,10 @@ export default {
 }
 
 .sidebar-animated {
-  -webkit-animation-duration: 0.3s;
-  -moz-animation-duration: 0.3s;
-  -o-animation-duration: 0.3s;
-  animation-duration: 0.3s;
+  -webkit-animation-duration: 0.28s;
+  -moz-animation-duration: 0.28s;
+  -o-animation-duration: 0.28s;
+  animation-duration: 0.28s;
   -webkit-animation-fill-mode: both;
   -moz-animation-fill-mode: both;
   -o-animation-fill-mode: both;

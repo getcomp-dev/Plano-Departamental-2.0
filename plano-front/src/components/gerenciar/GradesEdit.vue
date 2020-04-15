@@ -28,17 +28,35 @@
       <!-- Inicio da tabela -->
       <div class="divTable ml-0 mt-0 pl-0 pr-0 border">
         <table class="main-table table table-sm table-hover table-bordered">
-          <thead class="thead-light sticky">
-            <tr>
+          <thead class="thead-light ">
+            <tr class="sticky">
               <div style="font-size: 11px;" class=" max-content">
                 <th scope="col">
-                  <p class="p-header" style="width: 32px">P.</p>
+                  <p
+                    class="p-header clickable"
+                    style="width: 32px"
+                    @click="toggleOrd()"
+                  >
+                    P.
+                    <i
+                      style="font-size: 0.6rem;"
+                      :class="
+                        ordenacao.order == 'periodo'
+                          ? ordenacao.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : 'fas fa-arrow-down fa-sm low-opacity'
+                      "
+                    ></i>
+                  </p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width:70px">Código</p>
+                  <p class="p-header " style="width:70px">
+                    Código
+                  </p>
                 </th>
                 <th scope="col">
-                  <p class="p-header" style="width: 400px; text-align:start">
+                  <p class="p-header " style="width: 400px; text-align:start">
                     Disciplina
                   </p>
                 </th>
@@ -58,7 +76,7 @@
                       gradeAtual.id
                   "
                   :class="[
-                    isEven(disciplinaGrade.periodo) ? 'even' : 'notEven',
+                    isEven(disciplinaGrade.periodo) ? 'even' : 'notEven'
                   ]"
                 >
                   <div class="max-content">
@@ -87,7 +105,7 @@
                                 showGrade(gradeAtual)
                             "
                             :class="{
-                              'bg-custom': disciplinaClickada === disciplina.id,
+                              'bg-custom': disciplinaClickada === disciplina.id
                             }"
                             style="cursor:pointer;"
                           >
@@ -101,7 +119,7 @@
                                 showGrade(gradeAtual)
                             "
                             :class="{
-                              'bg-custom': disciplinaClickada === disciplina.id,
+                              'bg-custom': disciplinaClickada === disciplina.id
                             }"
                             style="cursor:pointer;"
                           >
@@ -387,12 +405,12 @@ const emptyGrade = {
   id: undefined,
   periodoInicio: undefined,
   Curso: undefined,
-  nome: undefined,
+  nome: undefined
 };
 const emptyDisciplinaGrade = {
   periodo: undefined,
   Disciplina: undefined,
-  Grade: undefined,
+  Grade: undefined
 };
 export default {
   name: "DashboardGradeEdit",
@@ -410,9 +428,13 @@ export default {
       showCard: false,
       nomeAtual: undefined,
       gradeAtual: undefined,
+      ordenacao: { order: "periodo", type: "asc" }
     };
   },
   methods: {
+    toggleOrd() {
+      this.ordenacao.type = this.ordenacao.type == "asc" ? "desc" : "asc";
+    },
     onlyNumber($event) {
       let keyCode = $event.keyCode ? $event.keyCode : $event.which;
       if (keyCode < 48 || keyCode > 57) {
@@ -437,16 +459,16 @@ export default {
     addGrade() {
       gradeService
         .create(this.gradeForm)
-        .then((response) => {
+        .then(response => {
           this.cleanGrade();
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Grade ${response.Grade.nome} foi criada!`,
-            type: "success",
+            type: "success"
           });
         })
-        .catch((error) => {
+        .catch(error => {
           this.error = "<b>Erro ao criar Grade</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -456,7 +478,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error",
+            type: "error"
           });
         });
     },
@@ -465,27 +487,27 @@ export default {
         group: "general",
         title: `Erro!`,
         text: "Selecione um curso e grade!",
-        type: "error",
+        type: "error"
       });
     },
     editGrade() {
       gradeService
         .update(this.gradeForm.id, this.gradeForm)
-        .then((response) => {
+        .then(response => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Grade ${response.Grade.nome} foi atualizada!`,
-            type: "success",
+            type: "success"
           });
         })
-        .catch((error) => {
+        .catch(error => {
           this.error = "<b>Erro ao atualizar Grade</b>";
           this.$notify({
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error",
+            type: "error"
           });
         });
     },
@@ -493,13 +515,13 @@ export default {
       let grade_nome = this.gradeForm.nome;
       gradeService
         .delete(this.gradeForm.id, this.gradeForm)
-        .then((response) => {
+        .then(response => {
           this.cleanGrade();
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Grade ${grade_nome} foi excluída!`,
-            type: "warn",
+            type: "warn"
           });
         })
         .catch(() => {
@@ -508,7 +530,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error",
+            type: "error"
           });
         });
     },
@@ -533,7 +555,7 @@ export default {
     findGrade() {
       let grade = _.find(this.$store.state.grade.Grades, [
         "id",
-        this.currentGrade,
+        this.currentGrade
       ]);
       this.gradeAtual = grade;
       this.showGrade(grade);
@@ -548,22 +570,22 @@ export default {
       }
       disciplinaGradeService
         .create(this.disciplinaGradeForm)
-        .then((response) => {
+        .then(response => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Disciplina <b>${nome_disciplina}</b> foi adicionada à Grade <b>${this.gradeForm.nome}</b>!`,
-            type: "success",
+            type: "success"
           });
           // this.disciplinaGradeForm.Disciplina = undefined; //Limpa campo de disciplina apos adicionar
         })
-        .catch((error) => {
+        .catch(error => {
           this.error = "<b>Erro ao incluir Disciplina</b>";
           this.$notify({
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error",
+            type: "error"
           });
         });
     },
@@ -574,21 +596,21 @@ export default {
           this.disciplinaGradeForm.Grade,
           this.disciplinaGradeForm
         )
-        .then((response) => {
+        .then(response => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Disciplina <b>${this.nomeAtual}</b> foi atualizada!`,
-            type: "success",
+            type: "success"
           });
         })
-        .catch((error) => {
+        .catch(error => {
           this.error = "<b>Erro ao atualizar Disciplina</b>";
           this.$notify({
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error",
+            type: "error"
           });
         });
     },
@@ -599,12 +621,12 @@ export default {
           this.disciplinaGradeForm.Grade,
           this.disciplinaGradeForm
         )
-        .then((response) => {
+        .then(response => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Disciplina <b>${this.nomeAtual}</b> foi excluída!`,
-            type: "warn",
+            type: "warn"
           });
         })
         .catch(() => {
@@ -613,7 +635,7 @@ export default {
             group: "general",
             title: `Erro!`,
             text: this.error,
-            type: "error",
+            type: "error"
           });
         });
       //this.cleanDisciplina();
@@ -630,9 +652,8 @@ export default {
     },
     isEven(number) {
       return number % 2 === 0;
-    },
+    }
   },
-  watch: {},
   computed: {
     Grades() {
       return this.$store.state.grade.Grades;
@@ -644,9 +665,10 @@ export default {
       return _.sortBy(this.$store.state.disciplina.Disciplinas, "nome");
     },
     DisciplinaGrades() {
-      return _.sortBy(
+      return _.orderBy(
         this.$store.state.disciplinaGrade.DisciplinaGrades,
-        "periodo"
+        this.ordenacao.order,
+        this.ordenacao.type
       );
     },
     Admin() {
@@ -655,8 +677,8 @@ export default {
       } else {
         return false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

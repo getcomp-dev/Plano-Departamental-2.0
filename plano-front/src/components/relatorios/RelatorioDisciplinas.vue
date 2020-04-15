@@ -48,8 +48,8 @@
 
     <div class="divTable p-0" ref="carga">
       <table class="main-table table table-bordered table-hover table-sm">
-        <thead class="thead-light sticky">
-          <tr>
+        <thead class="thead-light">
+          <tr class="sticky">
             <div style="font-size: 11px !important;" class="max-content">
               <th scope="col">
                 <p
@@ -66,7 +66,7 @@
                         ? ordemDiscip.type == 'asc'
                           ? 'fas fa-arrow-down fa-sm'
                           : 'fas fa-arrow-up fa-sm'
-                        : ''
+                        : 'fas fa-arrow-down fa-sm low-opacity'
                     "
                   ></i>
                 </p>
@@ -86,7 +86,7 @@
                         ? ordemDiscip.type == 'asc'
                           ? 'fas fa-arrow-down fa-sm'
                           : 'fas fa-arrow-up fa-sm'
-                        : ''
+                        : 'fas fa-arrow-down fa-sm low-opacity'
                     "
                   ></i>
                 </p>
@@ -107,7 +107,7 @@
                         ? ordemDiscip.type == 'asc'
                           ? 'fas fa-arrow-down fa-sm'
                           : 'fas fa-arrow-up fa-sm'
-                        : ''
+                        : 'fas fa-arrow-down fa-sm low-opacity'
                     "
                   ></i>
                 </p>
@@ -402,8 +402,8 @@
           class="table table-sm modal-table table-bordered"
           style="max-height: 450px !important;"
         >
-          <thead class="thead-light sticky">
-            <tr>
+          <thead class="thead-light">
+            <tr class="sticky">
               <div style="font-size: 11px !important;" class="max-content">
                 <th>
                   <p style="width: 25px;" class="p-header"></p>
@@ -456,8 +456,8 @@
           class="table table-sm modal-table table-bordered table-hover"
           style="max-height: 450px !important; overflow-y: auto !important;"
         >
-          <thead class="thead-light sticky">
-            <tr>
+          <thead class="thead-light ">
+            <tr class="sticky">
               <div style="font-size: 11px !important;" class="max-content">
                 <th>
                   <div
@@ -509,14 +509,13 @@
                   >
                     Cód.
                     <i
-                      v-if="ordemDiscip.order == 'codigo'"
                       style="font-size: 0.6rem; text-align: right;"
                       :class="
                         ordemDiscip.order == 'codigo'
                           ? ordemDiscip.type == 'asc'
                             ? 'fas fa-arrow-down fa-sm'
                             : 'fas fa-arrow-up fa-sm'
-                          : ''
+                          : 'fas fa-arrow-down fa-sm low-opacity'
                       "
                     ></i>
                   </p>
@@ -530,14 +529,13 @@
                   >
                     Nome
                     <i
-                      v-if="ordemDiscip.order == 'nome'"
                       style="font-size: 0.6rem; text-align: right;"
                       :class="
                         ordemDiscip.order == 'nome'
                           ? ordemDiscip.type == 'asc'
                             ? 'fas fa-arrow-down fa-sm'
                             : 'fas fa-arrow-up fa-sm'
-                          : ''
+                          : 'fas fa-arrow-down fa-sm low-opacity'
                       "
                     ></i>
                   </p>
@@ -551,14 +549,13 @@
                   >
                     Perfil
                     <i
-                      v-if="ordemDiscip.order == 'perfil'"
                       style="font-size: 0.6rem; text-align: right;"
                       :class="
                         ordemDiscip.order == 'perfil'
                           ? ordemDiscip.type == 'asc'
                             ? 'fas fa-arrow-down fa-sm'
                             : 'fas fa-arrow-up fa-sm'
-                          : ''
+                          : 'fas fa-arrow-down fa-sm low-opacity'
                       "
                     ></i>
                   </p>
@@ -608,8 +605,8 @@
           class="table table-bordered table-sm modal-table"
           style="max-height: 392px !important;"
         >
-          <thead class="thead-light sticky">
-            <tr>
+          <thead class="thead-light ">
+            <tr class="sticky">
               <div style="font-size: 11px !important;" class="max-content">
                 <th>
                   <p style="width: 25px;" class="p-header"></p>
@@ -780,8 +777,8 @@
           class="table table-sm modal-table table-bordered"
           style="max-height: 450px !important;"
         >
-          <thead class="thead-light sticky">
-            <tr>
+          <thead class="thead-light ">
+            <tr class="sticky">
               <div style="font-size: 11px !important;" class=" max-content">
                 <th>
                   <p
@@ -797,7 +794,7 @@
                           ? ordemVagas.type == 'asc'
                             ? 'fas fa-arrow-down fa-sm'
                             : 'fas fa-arrow-up fa-sm'
-                          : ''
+                          : 'fas fa-arrow-down fa-sm low-opacity'
                       "
                       style="font-size: 0.6rem; text-align: right;"
                     ></i>
@@ -817,7 +814,7 @@
                           ? ordemVagas.type == 'asc'
                             ? 'fas fa-arrow-down fa-sm'
                             : 'fas fa-arrow-up fa-sm'
-                          : ''
+                          : 'fas fa-arrow-down fa-sm low-opacity'
                       "
                       style="font-size: 0.6rem; text-align: right;"
                     ></i>
@@ -838,7 +835,7 @@
                           ? ordemVagas.type == 'asc'
                             ? 'fas fa-arrow-down fa-sm'
                             : 'fas fa-arrow-up fa-sm'
-                          : ''
+                          : 'fas fa-arrow-down fa-sm low-opacity'
                       "
                       style="font-size: 0.6rem; text-align: right;"
                     ></i>
@@ -858,7 +855,7 @@
                           ? ordemVagas.type == 'asc'
                             ? 'fas fa-arrow-down fa-sm'
                             : 'fas fa-arrow-up fa-sm'
-                          : ''
+                          : 'fas fa-arrow-down fa-sm low-opacity'
                       "
                       style="font-size: 0.6rem; text-align: right;"
                     ></i>
@@ -878,7 +875,7 @@
                           ? ordemVagas.type == 'asc'
                             ? 'fas fa-arrow-down fa-sm'
                             : 'fas fa-arrow-up fa-sm'
-                          : ''
+                          : 'fas fa-arrow-down fa-sm low-opacity'
                       "
                       style="font-size: 0.6rem; text-align: right;"
                     ></i>
@@ -1154,7 +1151,44 @@ export default {
         //Se for ordem pelo perfil, passa o vetor de ordem ["Perfil", "codigo"]
         return _.orderBy(
           this.Disciplinas,
-          ["Perfil", "codigo"],
+          (disciplina) => {
+            switch (disciplina.Perfil) {
+              case 1:
+                return "BÁSICO";
+              case 2:
+                return "AVANÇADO";
+              case 3:
+                return "ARQSO";
+              case 4:
+                return "BD";
+              case 5:
+                return "CG";
+              case 6:
+                return "ES";
+              case 7:
+                return "IAIC";
+              case 8:
+                return "NUM/OC";
+              case 9:
+                return "REDES";
+              case 10:
+                return "TEO";
+              case 11:
+                return "HUMEMPR";
+              case 12:
+                return "MULTI";
+              case 13:
+                return "ICE";
+              case 14:
+                return "SI";
+              case 15:
+                return "MAC";
+              case 16:
+                return "EAD";
+              case 17:
+                return "PUI";
+            }
+          },
           [this.ordemDiscip.type, "asc"]
         );
       } else {

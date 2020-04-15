@@ -42,6 +42,9 @@
               <th scope="col">
                 <p class="p-header" style="width: 75px">Laboratório</p>
               </th>
+              <th scope="col">
+                <p class="p-header" style="width: 90px">Lotação Max.</p>
+              </th>
             </div>
           </tr>
         </thead>
@@ -69,6 +72,9 @@
                       v-model="sala.laboratorio"
                     />
                   </div>
+                </td>
+                <td>
+                  <p style="width: 90px">{{ sala.lotacao_maxima }}</p>
                 </td>
               </div>
             </tr>
@@ -160,6 +166,18 @@
               </div>
             </div>
 
+            <div class="row mb-2 mx-0">
+              <div class="form-group col m-0 px-0">
+                <label for="lotacao_maxima" class="col-form-label">Lotação Máx.</label>
+                <input
+                        type="text"
+                        class="inputMenor form-control form-control-sm"
+                        id="lotacao_maxima"
+                        v-model="salaForm.lotacao_maxima"
+                />
+              </div>
+            </div>
+
             <div class="row mb-0 mt-3 mx-0">
               <div class="d-flex mr-0 ml-auto">
                 <template v-if="isEdit">
@@ -231,6 +249,7 @@ const emptySala = {
   id: undefined,
   nome: undefined,
   laboratorio: undefined,
+  lotacao_maxima: undefined
 };
 
 export default {
@@ -285,6 +304,8 @@ export default {
     },
 
     editSala() {
+      if(this.salaForm.lotacao_maxima === '')
+        this.salaForm.lotacao_maxima = 0
       salaService
         .update(this.salaForm.id, this.salaForm)
         .then((response) => {

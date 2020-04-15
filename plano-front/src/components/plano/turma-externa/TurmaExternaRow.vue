@@ -211,7 +211,6 @@ export default {
   name: "TurmaRow",
   props: {
     turma: Object,
-    perfil: Object,
   },
 
   components: {
@@ -229,6 +228,7 @@ export default {
 
   mounted() {
     this.turmaForm = this.turma;
+
     this.currentData = this.TurmaForm;
   },
 
@@ -752,7 +752,7 @@ export default {
 
     Disciplinas() {
       return _.orderBy(
-        _.filter(this.$store.state.disciplina.Disciplinas, function (d) {
+        _.filter(this.$store.state.disciplina.Disciplinas, function(d) {
           return d.Perfil == 13 || d.Perfil == 15;
         }),
         "nome"
@@ -761,7 +761,7 @@ export default {
 
     DisciplinasCod() {
       return _.orderBy(
-        _.filter(this.$store.state.disciplina.Disciplinas, function (d) {
+        _.filter(this.$store.state.disciplina.Disciplinas, function(d) {
           return d.Perfil == 13 || d.Perfil == 15;
         }),
         "codigo"

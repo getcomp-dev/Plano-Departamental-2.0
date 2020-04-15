@@ -1,5 +1,5 @@
 <template>
-  <div style="display:block; overflow: hidden" class="sticky max-content">
+  <div style="font-size:11px!important" class="max-content">
     <th scope="col">
       <p style="width:25px !important;"></p>
     </th>

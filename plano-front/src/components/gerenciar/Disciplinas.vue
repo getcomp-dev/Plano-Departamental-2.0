@@ -86,6 +86,9 @@
               <th scope="col">
                 <p style="width: 30px" class="p-header">EAD</p>
               </th>
+              <th scope="col">
+                <p style="width: 30px" class="p-header">Lab</p>
+              </th>
             </div>
           </tr>
         </thead>
@@ -135,6 +138,19 @@
                         showDisciplina(disciplina), clickada(disciplina.nome)
                       "
                       value
+                    />
+                  </div>
+                </td>
+                <td>
+                  <div style="width: 30px;">
+                    <input
+                            type="checkbox"
+                            class="form-check-input position-static noHover"
+                            v-model="disciplina.laboratorio"
+                            v-on:click.prevent="
+                        showDisciplina(disciplina), clickada(disciplina.nome)
+                      "
+                            value
                     />
                   </div>
                 </td>
@@ -257,6 +273,20 @@
               </div>
             </div>
 
+            <div class="row mb-2 mt-3 mx-0">
+              <div class="form-check form-check-inline col m-0 px-0 pl-1">
+                <input
+                        type="checkbox"
+                        id="laboratorio"
+                        value="1"
+                        class="form-check-input"
+                        style="margin-top: 2px"
+                        v-model="disciplinaForm.laboratorio"
+                />
+                <label for="laboratorio" class="form-check-label">Lab</label>
+              </div>
+            </div>
+
             <div class="row mb-0 mt-3 mx-0">
               <div class="d-flex mr-0 ml-auto">
                 <template v-if="isEdit">
@@ -365,6 +395,7 @@ const emptyDisciplina = {
   cargaPratica: undefined,
   Perfil: undefined,
   ead: undefined,
+  laboratorio: undefined
 };
 
 export default {

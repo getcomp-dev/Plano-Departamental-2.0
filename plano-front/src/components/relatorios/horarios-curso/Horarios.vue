@@ -256,7 +256,7 @@
                           ? ordemCursos.type == 'asc'
                             ? 'fas fa-arrow-down fa-sm'
                             : 'fas fa-arrow-up fa-sm'
-                          : ''
+                          : 'fas fa-arrow-down fa-sm low-opacity'
                       "
                     ></i>
                   </p>
@@ -275,7 +275,7 @@
                           ? ordemCursos.type == 'asc'
                             ? 'fas fa-arrow-down fa-sm'
                             : 'fas fa-arrow-up fa-sm'
-                          : ''
+                          : 'fas fa-arrow-down fa-sm low-opacity'
                       "
                     ></i>
                   </p>

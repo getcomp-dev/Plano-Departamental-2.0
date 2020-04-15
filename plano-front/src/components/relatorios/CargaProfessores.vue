@@ -1,12 +1,17 @@
 <template>
-  <div class="DashboardCargaProfessores row pr-2">
+  <div v-if="onLoading" id="loading">
+    <div class="cube1"></div>
+    <div class="cube2"></div>
+  </div>
+  <div v-else class="DashboardCargaProfessores row pr-2">
+    <!--  -->
     <!-- Titulo -->
     <div
       class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
       style="height: 38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="titulo col-8 col-sm-5 col-md-4 col-lg-3 col-xl-3">
+        <h1 class="titulo col-8 col-sm-5 col-md-4 col-lg-3 col-xl-3" v-on:click="verificaDocentes">
           Carga Professores
         </h1>
 
@@ -39,8 +44,8 @@
 
     <div class="divTable p-0" ref="carga">
       <table class="main-table table table-bordered table-hover table-sm">
-        <thead class="thead-light sticky">
-          <tr>
+        <thead class="thead-light ">
+          <tr class="sticky">
             <div style="font-size: 11px !important;" class="max-content">
               <th scope="col">
                 <p
@@ -74,20 +79,20 @@
               <th scope="col">
                 <p class="p-header" style="width: 180px;">Horário</p>
               </th>
-              <th scope="col" id="creditos1">
+              <th scope="col" id="IDcreditos1">
                 <p class="p-header" style="width: 32px;">CS1</p>
                 <b-popover
-                  :target="'creditos1'"
+                  :target="'IDcreditos1'"
                   placement="bottom"
                   triggers="hover focus"
                 >
                   <p>Somatório dos créditos no 1º semestre</p>
                 </b-popover>
               </th>
-              <th scope="col" id="creditos2">
+              <th scope="col" id="IDcreditos2">
                 <p class="p-header" style="width: 32px;">CS2</p>
                 <b-popover
-                  :target="'creditos2'"
+                  :target="'IDcreditos2'"
                   placement="bottom"
                   triggers="hover focus"
                 >
@@ -108,330 +113,268 @@
           </tr>
         </thead>
         <tbody>
-          <template v-if="Docentes.length > 0">
-            <template v-for="professor in Docentes_Ativados_filtred">
-              <template v-if="turmas(professor).length > 0">
-                <div class="max-content" :key="professor.apelido">
-                  <td class="prof-td">
-                    <p style="width: 130px; text-align: start !important;">
-                      {{ professor.apelido }}
+          <template v-for="professor in Docentes_Ativados_filtred">
+            <tr class="prof-td" :key="professor.apelido">
+              <div class="max-content">
+                <td>
+                  <p style="width: 130px; text-align: start !important;">
+                    {{ professor.apelido }}
+                  </p>
+                </td>
+                <td>
+                  <p style="width: 24px;"></p>
+                </td>
+                <td>
+                  <p style="width: 80px;"></p>
+                </td>
+                <td>
+                  <p style="width: 300px"></p>
+                </td>
+                <td>
+                  <p style="width: 24px;"></p>
+                </td>
+                <td>
+                  <p style="width: 180px;"></p>
+                </td>
+                <td>
+                  <p style="width: 32px;">{{ professor.cred1 }}</p>
+                </td>
+                <td>
+                  <p style="width: 32px;">{{ professor.cred2 }}</p>
+                </td>
+                <td>
+                  <p style="width: 42px;">
+                    {{ professor.cred1 + professor.cred2 }}
+                  </p>
+                </td>
+              </div>
+            </tr>
+
+            <template v-for="turma in turmasInProf(professor)">
+              <tr :key="'turma' + turma.id + professor.apelido">
+                <div class="max-content">
+                  <td>
+                    <p style="width: 130px;"></p>
+                  </td>
+                  <td>
+                    <p style="width: 24px;">{{ turma.periodo }}</p>
+                  </td>
+                  <td>
+                    <p style="width: 80px;">{{ turma.disciplina_codigo }}</p>
+                  </td>
+                  <td>
+                    <p style="width: 300px;">{{ turma.disciplina_nome }}</p>
+                  </td>
+                  <td>
+                    <p style="width: 24px;">{{ turma.letra }}</p>
+                  </td>
+                  <td>
+                    <p style="width: 180px">
+                      <span v-for="horario in Horarios" :key="horario.id">
+                        {{
+                          horario.id === turma.Horario1 ? horario.horario : ""
+                        }}
+                        {{
+                          horario.id === turma.Horario2
+                            ? " / " + horario.horario
+                            : ""
+                        }}
+                      </span>
                     </p>
                   </td>
-                  <td class="prof-td">
-                    <p style="width: 24px;"></p>
+
+                  <td>
+                    <p style="width: 32px;">
+                      <span v-if="turma.periodo === 1">
+                        {{
+                          turma.Docente1 > 0 && turma.Docente2 > 0
+                            ? (turma.disciplina_cargaTeorica +
+                                turma.disciplina_cargaPratica) /
+                              2
+                            : turma.disciplina_cargaTeorica +
+                              turma.disciplina_cargaPratica
+                        }}
+                      </span>
+                    </p>
                   </td>
-                  <td class="prof-td">
-                    <p style="width: 80px;"></p>
+
+                  <td>
+                    <p style="width:32px">
+                      <span v-if="turma.periodo === 3"
+                        >{{
+                          turma.Docente1 > 0 && turma.Docente2 > 0
+                            ? (turma.disciplina_cargaTeorica +
+                                turma.disciplina_cargaPratica) /
+                              2
+                            : turma.disciplina_cargaTeorica +
+                              turma.disciplina_cargaPratica
+                        }}
+                      </span>
+                    </p>
                   </td>
-                  <td class="prof-td">
-                    <p style="width: 300px; height: 20px;"></p>
-                  </td>
-                  <td class="prof-td">
-                    <p style="width: 24px;"></p>
-                  </td>
-                  <td class="prof-td">
-                    <p style="width: 180px;"></p>
-                  </td>
-                  <td class="prof-td">
-                    <p style="width: 32px;">{{ creditos1(professor) }}</p>
-                  </td>
-                  <td class="prof-td">
-                    <p style="width: 32px;">{{ creditos2(professor) }}</p>
-                  </td>
-                  <td class="prof-td">
-                    <p style="width: 42px;">{{ creditos(professor) }}</p>
+
+                  <td>
+                    <p style="width: 42px;"></p>
                   </td>
                 </div>
-              </template>
-
-              <template v-for="turma in turmas(professor)">
-                <tr
-                  v-for="disciplina in Disciplinas"
-                  :key="
-                    'turma' +
-                      turma.id +
-                      'disciplina' +
-                      disciplina.id +
-                      'professor' +
-                      professor.id
-                  "
-                >
-                  <template
-                    v-if="
-                      turma.Disciplina === disciplina.id &&
-                        (turma.Docente1 === professor.id ||
-                          turma.Docente2 === professor.id)
-                    "
-                  >
-                    <div class="max-content">
-                      <td>
-                        <p style="width: 130px;"></p>
-                      </td>
-                      <td>
-                        <p style="width: 24px;">{{ turma.periodo }}</p>
-                      </td>
-                      <td>
-                        <p style="width: 80px;">{{ disciplina.codigo }}</p>
-                      </td>
-                      <td>
-                        <p style="width: 300px;">{{ disciplina.nome }}</p>
-                      </td>
-                      <td>
-                        <p style="width: 24px;">{{ turma.letra }}</p>
-                      </td>
-                      <td>
-                        <div style="width: 180px;">
-                          <template v-for="horario in Horarios">
-                            <p
-                              :key="horario.id"
-                              v-if="horario.id === turma.Horario1"
-                            >
-                              {{ horario.horario }}
-                              <template v-for="horario in Horarios">
-                                <span
-                                  :key="horario.id"
-                                  v-if="horario.id === turma.Horario2"
-                                  >/ {{ horario.horario }}</span
-                                >
-                              </template>
-                            </p>
-                          </template>
-                        </div>
-                      </td>
-
-                      <td v-if="turma.periodo === 1">
-                        <div style="width: 32px;">
-                          <p v-if="turma.Docente1 > 0 && turma.Docente2 > 0">
-                            {{
-                              (disciplina.cargaTeorica +
-                                disciplina.cargaPratica) /
-                                2
-                            }}
-                          </p>
-
-                          <p v-else>
-                            {{
-                              disciplina.cargaTeorica + disciplina.cargaPratica
-                            }}
-                          </p>
-                        </div>
-                      </td>
-
-                      <td v-else>
-                        <p style="width: 32px;"></p>
-                      </td>
-
-                      <td v-if="turma.periodo === 3">
-                        <div style="width: 32px;">
-                          <p v-if="turma.Docente1 > 0 && turma.Docente2 > 0">
-                            {{
-                              (disciplina.cargaTeorica +
-                                disciplina.cargaPratica) /
-                                2
-                            }}
-                          </p>
-                          <p v-else>
-                            {{
-                              disciplina.cargaTeorica + disciplina.cargaPratica
-                            }}
-                          </p>
-                        </div>
-                      </td>
-                      <td v-else>
-                        <p style="width: 32px;"></p>
-                      </td>
-
-                      <td>
-                        <p style="width: 42px;"></p>
-                      </td>
-                    </div>
-                  </template>
-                </tr>
-              </template>
-
-              <template v-for="carga in CargasPos">
-                <template v-if="carga.Docente === professor.id">
-                  <tr :key="'cargaPos' + carga.id + 'professor' + professor.id">
-                    <div class="max-content">
-                      <td>
-                        <p style="width: 130px;"></p>
-                      </td>
-                      <td>
-                        <p style="width: 24px;">{{ carga.trimestre }}</p>
-                      </td>
-                      <td>
-                        <p style="width: 80px;"></p>
-                      </td>
-                      <td>
-                        <p style="width: 300px;" class="toUpperCase">
-                          Disciplina do {{ carga.programa }}
-                        </p>
-                      </td>
-                      <td>
-                        <p style="width: 24px;"></p>
-                      </td>
-                      <td>
-                        <p style="width: 180px;"></p>
-                      </td>
-
-                      <td v-if="carga.trimestre == 1 || carga.trimestre == 2">
-                        <p style="width: 32px;">{{ carga.creditos }}</p>
-                      </td>
-                      <td v-else>
-                        <p style="width: 32px;"></p>
-                      </td>
-
-                      <td v-if="carga.trimestre == 3 || carga.trimestre == 4">
-                        <p style="width: 32px;">{{ carga.creditos }}</p>
-                      </td>
-                      <td v-else>
-                        <p style="width: 32px;"></p>
-                      </td>
-
-                      <td><p style="width: 42px;"></p></td>
-                    </div>
-                  </tr>
-                </template>
-              </template>
+              </tr>
             </template>
-            <template v-if="turmasSemAlocacao().length > 0 && SemAlocacao">
-              <template v-if="turmasSemAlocacao().length > 0">
-                <div style="width: ‭845‬px;" :key="'semAlocacao'">
-                  <td class="prof-td">
-                    <div style="width: 130px;">SEM ALOCAÇÃO</div>
+
+            <template v-for="carga in CargasPosFiltred(professor.id)">
+              <tr :key="'cargaPos' + carga.id + 'professor' + professor.id">
+                <div class="max-content">
+                  <td>
+                    <p style="width: 130px;"></p>
                   </td>
-                  <td class="prof-td">
-                    <div style="width: 24px;"></div>
+                  <td>
+                    <p style="width: 24px;">{{ carga.trimestre }}</p>
                   </td>
-                  <td class="prof-td">
-                    <div style="width: 80px;"></div>
+                  <td>
+                    <p style="width: 80px;"></p>
                   </td>
-                  <td class="prof-td">
-                    <div style="width: 300px; height: 20px;"></div>
+                  <td>
+                    <p style="width: 300px;" class="toUpperCase">
+                      Disciplina do {{ carga.programa }}
+                    </p>
                   </td>
-                  <td class="prof-td">
-                    <div style="width: 24px;"></div>
+                  <td>
+                    <p style="width: 24px;"></p>
                   </td>
-                  <td class="prof-td">
-                    <div style="width: 180px;"></div>
+                  <td>
+                    <p style="width: 180px;"></p>
                   </td>
-                  <td class="prof-td">
-                    <div style="width: 32px;"></div>
+
+                  <td>
+                    <p style="width: 32px;">
+                      {{
+                        carga.trimestre == 1 || carga.trimestre == 2
+                          ? carga.creditos
+                          : ""
+                      }}
+                    </p>
                   </td>
-                  <td class="prof-td">
-                    <div style="width: 32px;"></div>
+
+                  <td>
+                    <p style="width: 32px;">
+                      {{
+                        carga.trimestre == 3 || carga.trimestre == 4
+                          ? carga.creditos
+                          : ""
+                      }}
+                    </p>
                   </td>
-                  <td class="prof-td">
+
+                  <td><p style="width: 42px;"></p></td>
+                </div>
+              </tr>
+            </template>
+          </template>
+
+          <template v-if="turmasSemAlocacao().length > 0 && SemAlocacao">
+            <div class="max-content">
+              <td class="prof-td">
+                <div style="width: 130px;">SEM ALOCAÇÃO</div>
+              </td>
+              <td class="prof-td">
+                <div style="width: 24px;"></div>
+              </td>
+              <td class="prof-td">
+                <div style="width: 80px;"></div>
+              </td>
+              <td class="prof-td">
+                <div style="width: 300px;"></div>
+              </td>
+              <td class="prof-td">
+                <div style="width: 24px;"></div>
+              </td>
+              <td class="prof-td">
+                <div style="width: 180px;"></div>
+              </td>
+              <td class="prof-td">
+                <div style="width: 32px;"></div>
+              </td>
+              <td class="prof-td">
+                <div style="width: 32px;"></div>
+              </td>
+              <td class="prof-td">
+                <div style="width: 42px;"></div>
+              </td>
+            </div>
+
+            <template v-for="turma in turmasSemAlocacao()">
+              <tr :key="'turma' + turma.id + 'semAlocacao'">
+                <div class="max-content">
+                  <td>
+                    <p style="width: 130px;"></p>
+                  </td>
+                  <td>
+                    <p style="width: 24px;">{{ turma.periodo }}</p>
+                  </td>
+                  <td>
+                    <p style="width: 80px;">{{ turma.disciplina_codigo }}</p>
+                  </td>
+                  <td>
+                    <p style="width: 300px;">{{ turma.disciplina_nome }}</p>
+                  </td>
+                  <td>
+                    <p style="width: 24px;">{{ turma.letra }}</p>
+                  </td>
+                  <td>
+                    <p style="width:180px">
+                      <template v-for="horario in Horarios">
+                        <span :key="horario.id">
+                          {{
+                            horario.id === turma.Horario1 ? horario.horario : ""
+                          }}
+                          {{
+                            horario.id === turma.Horario2
+                              ? " / " + horario.horario
+                              : ""
+                          }}
+                        </span>
+                      </template>
+                    </p>
+                  </td>
+
+                  <td>
+                    <p style="width: 32px">
+                      <span v-if="turma.periodo === 1">
+                        {{
+                          turma.Docente1 > 0 && turma.Docente2 > 0
+                            ? (turma.disciplina_cargaTeorica +
+                                turma.disciplina_cargaPratica) /
+                              2
+                            : turma.disciplina_cargaTeorica +
+                              turma.disciplina_cargaPratica
+                        }}
+                      </span>
+                    </p>
+                  </td>
+
+                  <td>
+                    <p style="width: 32px;">
+                      <span v-if="turma.periodo === 3">
+                        {{
+                          turma.Docente1 > 0 && turma.Docente2 > 0
+                            ? (turma.disciplina_cargaTeorica +
+                                turma.disciplina_cargaPratica) /
+                              2
+                            : turma.disciplina_cargaTeorica +
+                              turma.disciplina_cargaPratica
+                        }}
+                      </span>
+                    </p>
+                  </td>
+
+                  <td>
                     <div style="width: 42px;"></div>
                   </td>
                 </div>
-              </template>
-              <template v-for="turma in turmasSemAlocacao()">
-                <tr
-                  v-for="disciplina in Disciplinas"
-                  :key="
-                    'turma' +
-                      turma.id +
-                      'disciplina' +
-                      disciplina.id +
-                      'semAlocacao'
-                  "
-                >
-                  <template
-                    v-if="
-                      turma.Disciplina === disciplina.id &&
-                        turma.Docente1 == null &&
-                        turma.Docente2 == null
-                    "
-                  >
-                    <div class="max-content">
-                      <td>
-                        <p style="width: 130px;"></p>
-                      </td>
-                      <td>
-                        <p style="width: 24px;">{{ turma.periodo }}</p>
-                      </td>
-                      <td>
-                        <p style="width: 80px;">{{ disciplina.codigo }}</p>
-                      </td>
-                      <td>
-                        <p style="width: 300px;">{{ disciplina.nome }}</p>
-                      </td>
-                      <td>
-                        <p style="width: 24px;">{{ turma.letra }}</p>
-                      </td>
-                      <td>
-                        <div style="width: 180px;">
-                          <template v-for="horario in Horarios">
-                            <p
-                              :key="horario.id"
-                              v-if="horario.id === turma.Horario1"
-                            >
-                              {{ horario.horario }}
-                              <template v-for="horario in Horarios">
-                                <span
-                                  :key="horario.id"
-                                  v-if="horario.id === turma.Horario2"
-                                  >/ {{ horario.horario }}</span
-                                >
-                              </template>
-                            </p>
-                          </template>
-                        </div>
-                      </td>
-
-                      <td v-if="turma.periodo === 1">
-                        <div style="width: 32px;">
-                          <p v-if="turma.Docente1 > 0 && turma.Docente2 > 0">
-                            {{
-                              (disciplina.cargaTeorica +
-                                disciplina.cargaPratica) /
-                                2
-                            }}
-                          </p>
-
-                          <p v-else>
-                            {{
-                              disciplina.cargaTeorica + disciplina.cargaPratica
-                            }}
-                          </p>
-                        </div>
-                      </td>
-
-                      <td v-else>
-                        <div style="width: 32px;"></div>
-                      </td>
-
-                      <td v-if="turma.periodo === 3">
-                        <div style="width: 32px;">
-                          <p v-if="turma.Docente1 > 0 && turma.Docente2 > 0">
-                            {{
-                              (disciplina.cargaTeorica +
-                                disciplina.cargaPratica) /
-                                2
-                            }}
-                          </p>
-                          <p v-else>
-                            {{
-                              disciplina.cargaTeorica + disciplina.cargaPratica
-                            }}
-                          </p>
-                        </div>
-                      </td>
-                      <td v-else>
-                        <div style="width: 32px;"></div>
-                      </td>
-
-                      <td>
-                        <div style="width: 42px;"></div>
-                      </td>
-                    </div>
-                  </template>
-                </tr>
-              </template>
+              </tr>
             </template>
           </template>
-          <template v-else>
+
+          <template v-if="Docentes.length === 0">
             <tr>
               <td colspan="2" class="text-center">
                 <i class="fas fa-exclamation-triangle"></i> Nenhum curso
@@ -484,7 +427,7 @@
           style="font-size: 11px !important; height: 30px;"
         >
           <li class="nav-item">
-            <a class="nav-link active border clickable">Perfis</a>
+            <a class="nav-link active border clickable">Docentes</a>
           </li>
         </ul>
       </div>
@@ -495,9 +438,9 @@
           class="table table-sm modal-table table-bordered"
           style="max-height: 450px !important;"
         >
-          <thead class="thead-light sticky">
-            <tr>
-              <div style="font-size: 11px !important;" class="max-content">
+          <thead class="thead-light ">
+            <tr class="sticky">
+              <div style="font-size: 11px !important;" class="max-content ">
                 <th>
                   <div
                     class="m-0 input-group"
@@ -555,7 +498,7 @@
           </thead>
           <tbody>
             <tr
-              v-for="docente in Docentes_Filtred"
+              v-for="docente in Docentes_Modal_Filtred"
               :key="`docente${docente.id}`"
             >
               <div class="max-content">
@@ -621,6 +564,7 @@
         >
       </div>
     </b-modal>
+
   </div>
 </template>
 
@@ -641,9 +585,16 @@ export default {
       searchProf: null,
       ordemProf_Modal: { order: "apelido", type: "asc" },
       ordemProf_Main: { order: "apelido", type: "asc" },
+      credito1Atual: 0,
+      credito2Atual: 0,
+      onLoading: true,
     };
   },
-
+  beforeCreate() {
+    setTimeout(() => {
+      this.onLoading = false;
+    }, 300);
+  },
   methods: {
     pdf() {
       pdfs.pdfCargaProfessores();
@@ -669,214 +620,190 @@ export default {
       this.$refs.modalFiltros.hide();
       this.searchProf = null;
     },
-
     selectAll() {
-      if (this.DocentesSelecionados != []) this.DocentesSelecionados = [];
-      for (var i = 0; i < this.$store.state.docente.Docentes.length; i++)
-        this.DocentesSelecionados.push(this.$store.state.docente.Docentes[i]);
+      this.DocentesSelecionados = [...this.Docentes];
       this.SemAlocacaoCheck = true;
     },
-
     selectNone() {
-      this.DocentesSelecionados = [];
+      this.DocentesSelecionados.length = 0;
       this.SemAlocacaoCheck = false;
     },
-
-    turmas(professor) {
+    turmasInProf(professor) {
       return _.orderBy(
-        _.filter(this.$store.state.turma.Turmas, (turma) => {
-          return (
-            turma.Docente1 === professor.id || turma.Docente2 === professor.id
-          );
+        _.filter(this.Turmas, (turma) => {
+          if (
+            turma.Docente1 === professor.id ||
+            turma.Docente2 === professor.id
+          ) {
+            _.find(this.Disciplinas, (disciplina) => {
+              if (turma.Disciplina === disciplina.id) {
+                turma.disciplina_nome = disciplina.nome;
+                turma.disciplina_codigo = disciplina.codigo;
+                turma.disciplina_cargaTeorica = disciplina.cargaTeorica;
+                turma.disciplina_cargaPratica = disciplina.cargaPratica;
+              }
+            });
+            return true;
+          }
+          return false;
         }),
         ["periodo", "Disciplina", "letra"]
       );
     },
-
     turmasSemAlocacao() {
       return _.orderBy(
-        _.filter(this.$store.state.turma.Turmas, (turma) => {
-          return (
+        _.filter(this.Turmas, (turma) => {
+          if (
             turma.Docente1 == null &&
             turma.Docente2 == null &&
             turma.Disciplina != null
-          );
+          ) {
+            _.find(this.Disciplinas, (disciplina) => {
+              if (turma.Disciplina === disciplina.id) {
+                turma.disciplina_nome = disciplina.nome;
+                turma.disciplina_codigo = disciplina.codigo;
+                turma.disciplina_cargaTeorica = disciplina.cargaTeorica;
+                turma.disciplina_cargaPratica = disciplina.cargaPratica;
+              }
+            });
+            return true;
+          }
+          return false;
         }),
         ["periodo", "Disciplina", "letra"]
       );
     },
+    CalculaCreditos(professor) {
+      var creditos_prof = { periodo1: 0, periodo2: 0 };
 
-    pos(professor) {
-      return _.filter(this.$store.state.cargaPos.Cargas, (turma) => {
-        return turma.Docente === professor.id;
+      for (var t = 0; t < this.Turmas.length; t++) {
+        if (
+          this.Turmas[t].Docente1 === professor.id ||
+          this.Turmas[t].Docente2 === professor.id
+        ) {
+          for (var d = 0; d < this.Disciplinas.length; d++) {
+            if (this.Disciplinas[d].id === this.Turmas[t].Disciplina) {
+              if (this.Turmas[t].Docente1 > 0 && this.Turmas[t].Docente2 > 0) {
+                //PRIMEIRO PERIODO
+                if (this.Turmas[t].periodo === 1) {
+                  creditos_prof.periodo1 +=
+                    parseFloat(this.Disciplinas[d].cargaPratica) / 2;
+                  creditos_prof.periodo1 +=
+                    parseFloat(this.Disciplinas[d].cargaTeorica) / 2;
+                } else {
+                  //SEGUNDO PERIODO
+                  creditos_prof.periodo2 +=
+                    parseFloat(this.Disciplinas[d].cargaPratica) / 2;
+                  creditos_prof.periodo2 +=
+                    parseFloat(this.Disciplinas[d].cargaTeorica) / 2;
+                }
+              } else {
+                //PRIMEIRO PERIODO
+                if (this.Turmas[t].periodo === 1) {
+                  creditos_prof.periodo1 += parseFloat(
+                    this.Disciplinas[d].cargaPratica
+                  );
+                  creditos_prof.periodo1 += parseFloat(
+                    this.Disciplinas[d].cargaTeorica
+                  );
+                }
+                //SEGUNDO PERIODO
+                else {
+                  creditos_prof.periodo2 += parseFloat(
+                    this.Disciplinas[d].cargaPratica
+                  );
+                  creditos_prof.periodo2 += parseFloat(
+                    this.Disciplinas[d].cargaTeorica
+                  );
+                }
+              }
+            }
+          }
+        }
+      }
+      for (var t = 0; t < this.CargasPos.length; t++) {
+        if (this.CargasPos[t].Docente === professor.id) {
+          if (this.CargasPos[t].trimestre == 3) {
+            creditos_prof.periodo2 += parseFloat(this.CargasPos[t].creditos);
+          } else {
+            creditos_prof.periodo1 += parseFloat(this.CargasPos[t].creditos);
+          }
+        }
+      }
+      return creditos_prof;
+    },
+    CargasPosFiltred(prof_id) {
+      return this.CargasPos.filter((carga) => {
+        return carga.Docente === prof_id;
       });
     },
 
-    creditos1(professor) {
-      var c = 0;
-      for (var t = 0; t < this.$store.state.turma.Turmas.length; t++) {
-        if (
-          this.$store.state.turma.Turmas[t].periodo === 1 &&
-          (this.$store.state.turma.Turmas[t].Docente1 === professor.id ||
-            this.$store.state.turma.Turmas[t].Docente2 === professor.id)
-        ) {
-          for (
-            var d = 0;
-            d < this.$store.state.disciplina.Disciplinas.length;
-            d++
-          ) {
-            if (
-              this.$store.state.disciplina.Disciplinas[d].id ===
-              this.$store.state.turma.Turmas[t].Disciplina
-            ) {
-              if (
-                this.$store.state.turma.Turmas[t].Docente1 > 0 &&
-                this.$store.state.turma.Turmas[t].Docente2 > 0
-              ) {
-                c +=
-                  parseFloat(
-                    this.$store.state.disciplina.Disciplinas[d].cargaPratica
-                  ) / 2;
-                c +=
-                  parseFloat(
-                    this.$store.state.disciplina.Disciplinas[d].cargaTeorica
-                  ) / 2;
-              } else {
-                c += parseFloat(
-                  this.$store.state.disciplina.Disciplinas[d].cargaPratica
-                );
-                c += parseFloat(
-                  this.$store.state.disciplina.Disciplinas[d].cargaTeorica
-                );
-              }
-            }
+    creditosGraduacao(docente){
+      let turmas = _.filter(this.$store.state.turma.Turmas, (t) => {
+        return (t.Docente1 === docente.id || t.Docente2 === docente.id)
+      })
+
+      let cargaTotalDocente = 0
+
+      for(let i = 0; i < turmas.length; i++){
+        let disciplina = _.find(this.$store.state.disciplina.Disciplinas, {id: turmas[i].Disciplina})
+        let cargaTotalDisciplina = disciplina.cargaTeorica + disciplina.cargaPratica
+        if(turmas[i].Docente1 != null && turmas[i].Docente2 != null){
+          if(turmas[i].Docente1 !== turmas[i].Docente2){
+            cargaTotalDisciplina = cargaTotalDisciplina/2.0
           }
         }
+        cargaTotalDocente = cargaTotalDocente + cargaTotalDisciplina
       }
-      for (var t = 0; t < this.$store.state.cargaPos.Cargas.length; t++) {
-        if (this.$store.state.cargaPos.Cargas[t].Docente === professor.id) {
-          if (
-            this.$store.state.cargaPos.Cargas[t].trimestre == 1 ||
-            this.$store.state.cargaPos.Cargas[t].trimestre == 2
-          ) {
-            c += parseFloat(this.$store.state.cargaPos.Cargas[t].creditos);
-          }
-        }
-      }
-      return c;
+
+      return cargaTotalDocente
     },
 
-    creditos2(professor) {
-      var c = 0;
-      for (var t = 0; t < this.$store.state.turma.Turmas.length; t++) {
-        if (
-          this.$store.state.turma.Turmas[t].periodo === 3 &&
-          (this.$store.state.turma.Turmas[t].Docente1 === professor.id ||
-            this.$store.state.turma.Turmas[t].Docente2 === professor.id)
-        ) {
-          for (
-            var d = 0;
-            d < this.$store.state.disciplina.Disciplinas.length;
-            d++
-          ) {
-            if (
-              this.$store.state.disciplina.Disciplinas[d].id ===
-              this.$store.state.turma.Turmas[t].Disciplina
-            ) {
-              if (
-                this.$store.state.turma.Turmas[t].Docente1 > 0 &&
-                this.$store.state.turma.Turmas[t].Docente2 > 0
-              ) {
-                c +=
-                  parseFloat(
-                    this.$store.state.disciplina.Disciplinas[d].cargaPratica
-                  ) / 2;
-                c +=
-                  parseFloat(
-                    this.$store.state.disciplina.Disciplinas[d].cargaTeorica
-                  ) / 2;
-              } else {
-                c += parseFloat(
-                  this.$store.state.disciplina.Disciplinas[d].cargaPratica
-                );
-                c += parseFloat(
-                  this.$store.state.disciplina.Disciplinas[d].cargaTeorica
-                );
-              }
-            }
-          }
-        }
+    creditosPos(docente){
+      let turmas = _.filter(this.$store.state.cargaPos.Cargas, (t) => {
+        return t.Docente === docente.id
+      })
+
+      let cargaTotalDocente = 0
+
+      for(let i = 0; i < turmas.length; i++){
+        cargaTotalDocente = cargaTotalDocente + turmas[i].creditos
       }
-      for (var t = 0; t < this.$store.state.cargaPos.Cargas.length; t++) {
-        if (this.$store.state.cargaPos.Cargas[t].Docente === professor.id) {
-          if (this.$store.state.cargaPos.Cargas[t].trimestre == 3) {
-            c += parseFloat(this.$store.state.cargaPos.Cargas[t].creditos);
-          }
-        }
-      }
-      return c;
+
+      return cargaTotalDocente
     },
 
-    creditos(professor) {
-      var c = 0;
-      for (var t = 0; t < this.$store.state.turma.Turmas.length; t++) {
-        if (
-          this.$store.state.turma.Turmas[t].Docente1 === professor.id ||
-          this.$store.state.turma.Turmas[t].Docente2 === professor.id
-        ) {
-          for (
-            var d = 0;
-            d < this.$store.state.disciplina.Disciplinas.length;
-            d++
-          ) {
-            if (
-              this.$store.state.disciplina.Disciplinas[d].id ===
-              this.$store.state.turma.Turmas[t].Disciplina
-            ) {
-              if (
-                this.$store.state.turma.Turmas[t].Docente1 > 0 &&
-                this.$store.state.turma.Turmas[t].Docente2 > 0
-              ) {
-                c +=
-                  parseFloat(
-                    this.$store.state.disciplina.Disciplinas[d].cargaPratica
-                  ) / 2;
-                c +=
-                  parseFloat(
-                    this.$store.state.disciplina.Disciplinas[d].cargaTeorica
-                  ) / 2;
-              } else {
-                c += parseFloat(
-                  this.$store.state.disciplina.Disciplinas[d].cargaPratica
-                );
-                c += parseFloat(
-                  this.$store.state.disciplina.Disciplinas[d].cargaTeorica
-                );
-              }
-            }
-          }
+    verificaDocentes(){
+      let erros = []
+      let docentesAtivos = _.orderBy(_.filter(this.$store.state.docente.Docentes, (d) => {return d.ativo === true}), 'nome')
+      docentesAtivos.forEach((d) => {
+        let cargaGraduacao = this.creditosGraduacao(d)
+        let cargaPos = this.creditosPos(d)
+        if(cargaGraduacao < 8.0){
+          erros.push([d.nome, `Apenas ${cargaGraduacao} créditos na graduação`])
         }
-      }
-      for (var t = 0; t < this.$store.state.cargaPos.Cargas.length; t++) {
-        if (this.$store.state.cargaPos.Cargas[t].Docente === professor.id) {
-          c += parseFloat(this.$store.state.cargaPos.Cargas[t].creditos);
+        if((cargaGraduacao + cargaPos) < 16.0){
+          erros.push([d.nome, `Apenas ${cargaGraduacao + cargaPos} créditos, ${cargaGraduacao}  na graduação e ${cargaPos} na pós`])
         }
-      }
-      return c;
+      })
+      console.log(erros)
     },
   },
 
   computed: {
+    Turmas() {
+      return this.$store.state.turma.Turmas;
+    },
     CargasPos() {
       return _.orderBy(this.$store.state.cargaPos.Cargas, "trimestre");
     },
-
     Disciplinas() {
       return _.orderBy(this.$store.state.disciplina.Disciplinas, "nome");
     },
     Horarios() {
       return this.$store.state.horario.Horarios;
     },
+    //Usado na tabela Main
     Docentes_Ativados_filtred() {
       return _.orderBy(
         this.DocentesAtivados,
@@ -884,24 +811,42 @@ export default {
         this.ordemProf_Main.type
       );
     },
-    Docentes_Filtred() {
-      //Filtro ordem
+    //Usado na tabela Modal
+    Docentes_Modal_Filtred() {
+      //Filtro de ordem
       return _.orderBy(
-        this.Docentes,
+        this.Docentes_Search,
         this.ordemProf_Modal.order,
         this.ordemProf_Modal.type
       );
     },
-    Docentes() {
-      //Filtro search
+
+    Docentes_Search() {
+      //Filtro do search
       if (this.searchProf != null && this.searchProf != "") {
-        return this.$store.state.docente.Docentes.filter((prof) => {
-          return prof.ativo
-            ? prof.apelido.match(this.searchProf.toUpperCase())
+        return this.Docentes.filter((prof) => {
+          return prof.apelido
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .match(this.searchProf.toUpperCase())
+            ? true
             : false;
         });
       }
-      return this.$store.state.docente.Docentes;
+      return this.Docentes;
+    },
+    Docentes() {
+      //Adiciona atributos creditos 1 e 2 em todos professores
+      let result = _.filter(this.$store.state.docente.Docentes, [
+        "ativo",
+        true,
+      ]);
+      result.forEach((prof) => {
+        let creditos = this.CalculaCreditos(prof);
+        prof.cred1 = creditos.periodo1;
+        prof.cred2 = creditos.periodo2;
+      });
+      return result;
     },
   },
 };
@@ -909,7 +854,15 @@ export default {
 
 <style scoped>
 /* prefixed */
-
+.inLoading {
+  background-color: #e6e6e6;
+  color: white;
+  font-size: 32px;
+  padding-top: 10vh;
+  height: 100vh;
+  text-align: center;
+  z-index: 5;
+}
 .DashboardCargaProfessores {
   max-width: 100%;
   overflow: hidden;
@@ -921,12 +874,6 @@ export default {
   font-size: 11px !important;
   text-align: center;
   height: 18px;
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none;
 }
 .divTable {
   overflow: hidden;
@@ -999,17 +946,6 @@ tbody {
   overflow: hidden !important;
   z-index: 3;
 }
-.sticky-bottom {
-  display: block !important;
-  overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 38px !important;
-  display: block !important;
-  overflow: hidden !important;
-  z-index: 3;
-}
-
 .titulo {
   font-size: 25px;
   font-weight: normal;

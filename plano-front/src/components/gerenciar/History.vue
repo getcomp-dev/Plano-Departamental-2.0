@@ -46,9 +46,9 @@
 
     <div class="divTable p-0" ref="carga">
       <table class="main-table table table-sm table-hover table-bordered">
-        <thead class="thead-light sticky">
-          <tr>
-            <div style="font-size: 11px;" class=" max-content">
+        <thead class="thead-light ">
+          <tr class="sticky">
+            <div style="font-size: 11px;" class="max-content">
               <th scope="col">
                 <p class="p-header" style="width: 100px;">Tabela Modificada</p>
               </th>
@@ -125,7 +125,7 @@
       ref="TabelasModal"
       scrollable
       title="Selecione as tabelas"
-      :size="md"
+      size="md"
     >
       <div class="p-0 m-0" style="height: 30px; width: 465px;">
         <ul
@@ -227,11 +227,11 @@ export default {
         { text: "PERFIL", value: "Perfil" },
         { text: "SALA", value: "Sala" },
         { text: "TURMA", value: "Turma" },
-        { text: "TURMA EXTERNA", value: "TurmaExterna" },
+        { text: "TURMA EXTERNA", value: "TurmaExterna" }
       ],
       TabelasSelecionadas: [],
       TabelasAtivadas: [],
-      operacoes: "Todos",
+      operacoes: "Todos"
     };
   },
 
@@ -260,7 +260,7 @@ export default {
           if (h.tipoOperacao === "Delete") {
             aux = linha.split("/");
             let docente = _.find(this.$store.state.docente.Docentes, {
-              id: parseInt(aux[2]),
+              id: parseInt(aux[2])
             });
             if (docente === undefined) {
               linha = `${aux[0]}/${aux[1]}/${aux[2]}`;
@@ -273,10 +273,10 @@ export default {
         case "DisciplinaGrade":
           aux = linha.split("/");
           let disciplina = _.find(this.$store.state.disciplina.Disciplinas, {
-            id: parseInt(aux[1]),
+            id: parseInt(aux[1])
           });
           let grade = _.find(this.$store.state.grade.Grades, {
-            id: parseInt(aux[2]),
+            id: parseInt(aux[2])
           });
           let curso =
             grade === undefined
@@ -294,10 +294,10 @@ export default {
         case "DocentePerfil":
           aux = linha.split("/");
           let docente = _.find(this.$store.state.docente.Docentes, {
-            id: parseInt(aux[1]),
+            id: parseInt(aux[1])
           });
           let perfil = _.find(this.$store.state.perfil.Perfis, {
-            id: parseInt(aux[0]),
+            id: parseInt(aux[0])
           });
           linha = `${docente === undefined ? aux[1] : docente.nome}/${
             perfil === undefined ? aux[0] : perfil.nome
@@ -307,7 +307,7 @@ export default {
         case "Grade":
           aux = linha.split("/");
           let cursoGrade = _.find(this.$store.state.curso.Cursos, {
-            id: parseInt(aux[0]),
+            id: parseInt(aux[0])
           });
           linha = `${cursoGrade === undefined ? aux[0] : cursoGrade.codigo} - ${
             aux[1]
@@ -317,16 +317,16 @@ export default {
         case "Pedido":
           aux = linha.split("/");
           let turma = _.find(this.$store.state.turma.Turmas, {
-            id: parseInt(aux[0]),
+            id: parseInt(aux[0])
           });
           let disciplinaPedido =
             turma === undefined
               ? undefined
               : _.find(this.$store.state.disciplina.Disciplinas, {
-                  id: turma.Disciplina,
+                  id: turma.Disciplina
                 });
           let cursoPedido = _.find(this.$store.state.curso.Cursos, {
-            id: parseInt(aux[1]),
+            id: parseInt(aux[1])
           });
           linha = `${
             turma === undefined
@@ -340,16 +340,16 @@ export default {
         case "PedidoExterno":
           aux = linha.split("/");
           let turmaExterna = _.find(this.$store.state.turmaExterna.Turmas, {
-            id: parseInt(aux[0]),
+            id: parseInt(aux[0])
           });
           let disciplinaPedidoExterno =
             turmaExterna === undefined
               ? undefined
               : _.find(this.$store.state.disciplina.Disciplinas, {
-                  id: turmaExterna.Disciplina,
+                  id: turmaExterna.Disciplina
                 });
           let cursoPedidoExterno = _.find(this.$store.state.curso.Cursos, {
-            id: parseInt(aux[1]),
+            id: parseInt(aux[1])
           });
           linha = `${
             turmaExterna === undefined
@@ -394,7 +394,7 @@ export default {
       switch (h.campoModificado) {
         case "Curso":
           v = _.find(this.$store.state.curso.Cursos, {
-            id: parseInt(h.valorAnterior),
+            id: parseInt(h.valorAnterior)
           });
           if (v === undefined) v = h.valorAnterior;
           else v = v.codigo;
@@ -402,7 +402,7 @@ export default {
 
         case "Disciplina":
           v = _.find(this.$store.state.disciplina.Disciplinas, {
-            id: parseInt(h.valorAnterior),
+            id: parseInt(h.valorAnterior)
           });
           if (v === undefined) v = h.valorAnterior;
           else v = v.codigo;
@@ -412,7 +412,7 @@ export default {
         case "Docente1":
         case "Docente2":
           v = _.find(this.$store.state.docente.Docentes, {
-            id: parseInt(h.valorAnterior),
+            id: parseInt(h.valorAnterior)
           });
           if (v === undefined) v = h.valorAnterior;
           else v = v.apelido;
@@ -420,12 +420,12 @@ export default {
 
         case "Grade":
           v = _.find(this.$store.state.grade.Grades, {
-            id: parseInt(h.valorAnterior),
+            id: parseInt(h.valorAnterior)
           });
           if (v === undefined) v = h.valorAnterior;
           else {
             let c = _.find(this.$store.state.curso.Cursos, {
-              id: parseInt(v.Curso),
+              id: parseInt(v.Curso)
             });
             v = `${c === undefined ? v.Curso : c.codigo}/${v.nome}`;
           }
@@ -435,7 +435,7 @@ export default {
         case "Horario1":
         case "Horario2":
           v = _.find(this.$store.state.horario.Horarios, {
-            id: parseInt(h.valorAnterior),
+            id: parseInt(h.valorAnterior)
           });
           if (v === undefined) v = h.valorAnterior;
           else v = v.horario;
@@ -443,7 +443,7 @@ export default {
 
         case "Perfil":
           v = _.find(this.$store.state.perfil.Perfis, {
-            id: parseInt(h.valorAnterior),
+            id: parseInt(h.valorAnterior)
           });
           if (v === undefined) v = h.valorAnterior;
           else v = v.nome;
@@ -453,7 +453,7 @@ export default {
         case "Sala1":
         case "Sala2":
           v = _.find(this.$store.state.sala.Salas, {
-            id: parseInt(h.valorAnterior),
+            id: parseInt(h.valorAnterior)
           });
           if (v === undefined) v = h.valorAnterior;
           else v = v.nome;
@@ -468,7 +468,7 @@ export default {
       switch (h.campoModificado) {
         case "Curso":
           v = _.find(this.$store.state.curso.Cursos, {
-            id: parseInt(h.valorNovo),
+            id: parseInt(h.valorNovo)
           });
           if (v === undefined) v = h.valorNovo;
           else v = v.codigo;
@@ -476,7 +476,7 @@ export default {
 
         case "Disciplina":
           v = _.find(this.$store.state.disciplina.Disciplinas, {
-            id: parseInt(h.valorNovo),
+            id: parseInt(h.valorNovo)
           });
           if (v === undefined) v = h.valorNovo;
           else v = v.codigo;
@@ -486,7 +486,7 @@ export default {
         case "Docente1":
         case "Docente2":
           v = _.find(this.$store.state.docente.Docentes, {
-            id: parseInt(h.valorNovo),
+            id: parseInt(h.valorNovo)
           });
           if (v === undefined) v = h.valorNovo;
           else v = v.apelido;
@@ -494,12 +494,12 @@ export default {
 
         case "Grade":
           v = _.find(this.$store.state.grade.Grades, {
-            id: parseInt(h.valorNovo),
+            id: parseInt(h.valorNovo)
           });
           if (v === undefined) v = h.valorNovo;
           else {
             let c = _.find(this.$store.state.curso.Cursos, {
-              id: parseInt(v.Curso),
+              id: parseInt(v.Curso)
             });
             v = `${c === undefined ? v.Curso : c.codigo}/${v.nome}`;
           }
@@ -509,7 +509,7 @@ export default {
         case "Horario1":
         case "Horario2":
           v = _.find(this.$store.state.horario.Horarios, {
-            id: parseInt(h.valorNovo),
+            id: parseInt(h.valorNovo)
           });
           if (v === undefined) v = h.valorNovo;
           else v = v.horario;
@@ -517,7 +517,7 @@ export default {
 
         case "Perfil":
           v = _.find(this.$store.state.perfil.Perfis, {
-            id: parseInt(h.valorNovo),
+            id: parseInt(h.valorNovo)
           });
           if (v === undefined) v = h.valorNovo;
           else v = v.nome;
@@ -527,7 +527,7 @@ export default {
         case "Sala1":
         case "Sala2":
           v = _.find(this.$store.state.sala.Salas, {
-            id: parseInt(h.valorNovo),
+            id: parseInt(h.valorNovo)
           });
           if (v === undefined) v = h.valorNovo;
           else v = v.nome;
@@ -535,7 +535,7 @@ export default {
       }
 
       return v;
-    },
+    }
   },
 
   computed: {
@@ -550,7 +550,7 @@ export default {
             t = TabelasAtivadas
           ) {
             let v = false;
-            t.forEach((o) => {
+            t.forEach(o => {
               if (h.tabelaModificada === o) {
                 v = true;
               }
@@ -572,8 +572,8 @@ export default {
       } else {
         return false;
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

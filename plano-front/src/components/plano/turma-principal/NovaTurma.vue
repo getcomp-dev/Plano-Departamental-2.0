@@ -1,20 +1,9 @@
 <template>
-  <div
-    style="font-size:11px; background-color:#e9e9e9;"
-    class="stickyAdd max-content"
-  >
+  <div style="font-size:11px;" class="max-content">
     <td>
       <div style="width: 25px;"></div>
     </td>
     <td>
-      <!-- <div style="width: 25px;">
-        <input
-          type="text"
-          class="form-check-input position-static m-0"
-          id="3periodo"
-          @keypress="onlyNumber"
-          v-model="turmaForm.periodo"
-        /> -->
       <div style="width: 40px;">
         <select style="width: 35px;" v-model="turmaForm.periodo">
           <option value="1">1</option>
@@ -435,16 +424,7 @@ input[type="text"] {
 select {
   height: 18px;
 }
-.stickyAdd {
-  display: block !important;
-  overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 21px !important;
-  display: block !important;
-  overflow: hidden !important;
-  z-index: 3;
-}
+
 @-moz-document url-prefix() {
   select {
     height: 18px !important;
