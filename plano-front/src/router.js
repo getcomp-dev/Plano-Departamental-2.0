@@ -10,6 +10,7 @@ import DashboardHome from "@/components/Dashboard/Home";
 import DashboardPedidos from "@/components/plano/turma-principal/DashboardPrototipo";
 import DashboardTurmasExternas from "@/components/plano/turma-externa/TurmasExternas";
 import DashboardCargaPos from "@/components/plano/carga-pos/CargaPos";
+import DashboardValidacoes from "@/components/plano/Validacoes";
 // Relatorios
 import DashboardHorarios from "@/components/relatorios/horarios-curso/Horarios";
 import DashboardCargaProfessores from "@/components/relatorios/CargaProfessores";
@@ -26,6 +27,7 @@ import DashboardPerfis from "@/components/gerenciar/Perfis";
 import DashboardDisciplinas from "@/components/gerenciar/Disciplinas";
 import DashboardSalas from "@/components/gerenciar/Salas";
 import DashboardHistory from "@/components/gerenciar/History";
+
 /*
 //Componentes desabilitados 
 import DashboardRelatorios from "@/components/Relatorios";
@@ -48,7 +50,7 @@ function requireAuth(to, from, next) {
     .catch(() => {
       next({
         path: "/login",
-        query: { redirect: to.fullPath }
+        query: { redirect: to.fullPath },
       });
     });
 }
@@ -67,7 +69,7 @@ const routes = [
       {
         path: "turmasExternas",
         name: "turmasExternas",
-        component: DashboardTurmasExternas
+        component: DashboardTurmasExternas,
       },
 
       { path: "horarios", name: "horarios", component: DashboardHorarios },
@@ -77,23 +79,23 @@ const routes = [
       {
         path: "gradeDisciplinas",
         name: "gradeDisciplinas",
-        component: DashboardGradeDisciplinas
+        component: DashboardGradeDisciplinas,
       },
       {
         path: "disciplinas",
         name: "disciplinas",
-        component: DashboardDisciplinas
+        component: DashboardDisciplinas,
       },
       { path: "perfis", name: "perfis", component: DashboardPerfis },
       {
         path: "cargaProfessores",
         name: "cargaProfessores",
-        component: DashboardCargaProfessores
+        component: DashboardCargaProfessores,
       },
       {
         path: "laboratoriosAlocacao",
         name: "laboratoriosAlocacao",
-        component: DashboardLaboratoriosAlocacao
+        component: DashboardLaboratoriosAlocacao,
       },
       { path: "cargaPos", name: "cargaPos", component: DashboardCargaPos },
       { path: "salas", name: "salas", component: DashboardSalas },
@@ -101,11 +103,16 @@ const routes = [
       {
         path: "relatorioDisciplinas",
         name: "relatorioDisciplinas",
-        component: DashboardRelatorioDisciplinas
+        component: DashboardRelatorioDisciplinas,
       },
       { path: "gradeEdit", name: "gradeEdit", component: DashboardGradesEdit },
-      { path: "history", name: "history", component: DashboardHistory }
-    ]
+      { path: "history", name: "history", component: DashboardHistory },
+      {
+        path: "validacoes",
+        name: "validacoes",
+        component: DashboardValidacoes,
+      },
+    ],
   },
   {
     path: "/logout",
@@ -113,13 +120,13 @@ const routes = [
     beforeEnter: function(to, from, next) {
       store.commit(USER_LOGGED_OUT);
       next("/login");
-    }
+    },
   },
-  { path: "/*", redirect: "/" }
+  { path: "/*", redirect: "/" },
 ];
 export default new VueRouter({
   routes,
   mode: "history",
   linkExactActiveClass: "active",
-  saveScrollPosition: true
+  saveScrollPosition: true,
 });
