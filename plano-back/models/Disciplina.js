@@ -23,7 +23,7 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: true
     },
     laboratorio: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: false
     },
