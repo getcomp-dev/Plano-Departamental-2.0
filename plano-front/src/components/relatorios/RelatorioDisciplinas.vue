@@ -382,20 +382,6 @@
       </div>
 
       <div class="col m-0 p-0 max-content" style="height: 450px !important;">
-        <!-- SEARCH BAR -->
-        <!-- <div class="w-100 p-0 m-0 mb-1" v-if="nav_ativo == 'disciplinas'">
-          <form class="form-inline">
-            <div class="form-group row m-0 w-100">
-              <input
-                type="text"
-                class="form-control"
-                id="searchDisciplinasBar"
-                placeholder="Pesquise nome ou codigo de uma disciplina"
-                v-model="searchDisciplinas"
-              />
-            </div>
-          </form>
-        </div> -->
         <!-- TABLE PERFIS -->
         <table
           v-if="nav_ativo == 'perfis'"
@@ -482,7 +468,7 @@
                       @click="searchDisciplinas = null"
                     >
                       <span
-                        class="input-group-text"
+                        class="input-group-text search-text"
                         style="height: 25px; font-size: 18px; cursor: pointer;"
                         >&times;</span
                       >
@@ -1121,16 +1107,17 @@ export default {
   },
 
   computed: {
-    //Todas disciplinas
+    //Todas disciplinas do DCC
     Disciplinas() {
-      let result = _.orderBy(
-        _.filter(this.$store.state.disciplina.Disciplinas, function(d) {
-          return d.Perfil !== 13 && d.Perfil !== 15;
-        })
-      );
+      let result = _.filter(this.$store.state.disciplina.Disciplinas, (d) => {
+        return d.Perfil !== 13 && d.Perfil !== 15;
+      });
       //Filtro search
       if (this.searchDisciplinas != null) {
-        let searchUpperCase = this.searchDisciplinas.toUpperCase();
+        let searchUpperCase = this.searchDisciplinas
+          .toUpperCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
 
         return result.filter((disci) => {
           return (
@@ -1142,8 +1129,7 @@ export default {
             disci.codigo.match(searchUpperCase)
           );
         });
-      }
-      return result;
+      } else return result;
     },
     //Disciplinas filtradas
     Disciplinas_Filtred() {
@@ -1206,7 +1192,44 @@ export default {
       if (this.ordemDiscip.order == "perfil") {
         return _.orderBy(
           this.DisciplinasAtivados,
-          ["Perfil", "codigo"],
+          (disciplina) => {
+            switch (disciplina.Perfil) {
+              case 1:
+                return "BÁSICO";
+              case 2:
+                return "AVANÇADO";
+              case 3:
+                return "ARQSO";
+              case 4:
+                return "BD";
+              case 5:
+                return "CG";
+              case 6:
+                return "ES";
+              case 7:
+                return "IAIC";
+              case 8:
+                return "NUM/OC";
+              case 9:
+                return "REDES";
+              case 10:
+                return "TEO";
+              case 11:
+                return "HUMEMPR";
+              case 12:
+                return "MULTI";
+              case 13:
+                return "ICE";
+              case 14:
+                return "SI";
+              case 15:
+                return "MAC";
+              case 16:
+                return "EAD";
+              case 17:
+                return "PUI";
+            }
+          },
           [this.ordemDiscip.type, "asc"]
         );
       } else {
@@ -1562,12 +1585,6 @@ i.far {
   margin: 0 !important;
   text-align: start;
   height: 18px !important;
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none;
 }
 .modal-table tbody {
   max-height: 100%;
@@ -1597,11 +1614,11 @@ i.far {
 /* FIM MODAL TABLE */
 
 /* searchDisciplinas */
-.input-group-text:hover {
+.search-text:hover {
   color: rgb(102, 102, 102);
   background-color: #dddddd;
 }
-.input-group-text {
+.search-text {
   background-color: #ffffff;
   border-left: none;
 }

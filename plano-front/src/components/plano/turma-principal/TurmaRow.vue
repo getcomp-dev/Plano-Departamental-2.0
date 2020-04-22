@@ -24,15 +24,6 @@
           <option value="1">1</option>
           <option value="3">3</option>
         </select>
-        <!-- <input
-          :disabled="Admin ? false : true"
-          type="text"
-          class="form-check-input position-static m-0"
-          id="2periodo"
-          v-model="turmaForm.periodo"
-          v-on:blur="checkHorariosPeriodo()"
-          @keypress="onlyNumber"
-        /> -->
       </div>
     </td>
     <td>
@@ -85,8 +76,9 @@
         <input
           :disabled="Admin ? false : true"
           type="text"
-          style="width: 20px;"
+          style="text-transform: uppercase"
           v-model="turmaForm.letra"
+          @keypress="onlyA_Z"
           v-on:blur="editTurma(turma)"
         />
       </div>
@@ -336,7 +328,7 @@ const emptyTurma = {
   Horario1: undefined,
   Horario2: undefined,
   Sala1: undefined,
-  Sala2: undefined
+  Sala2: undefined,
 };
 
 export default {
@@ -344,7 +336,7 @@ export default {
   props: {
     turma: Object,
     perfil: Object,
-    cursos: Array
+    cursos: Array,
   },
 
   data() {
@@ -352,12 +344,12 @@ export default {
       ativo: false,
       valorAtual: undefined,
       turmaForm: _.clone(emptyTurma),
-      currentData: undefined
+      currentData: undefined,
     };
   },
 
   components: {
-    turmaPedido
+    turmaPedido,
   },
 
   mounted: function() {
@@ -366,11 +358,9 @@ export default {
   },
 
   methods: {
-    onlyNumber($event) {
-      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
-      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
-        $event.preventDefault();
-      }
+    onlyA_Z($event) {
+      let key = $event.key ? $event.key : $event.which;
+      if (!key.match(/[A-Z]/i)) $event.preventDefault();
     },
     totalPedidos() {
       var t = 0;
@@ -536,33 +526,33 @@ export default {
         horario === 1
           ? _.find(this.$store.state.horario.Horarios, [
               "id",
-              this.turmaForm.Horario1
+              this.turmaForm.Horario1,
             ])
           : _.find(this.$store.state.horario.Horarios, [
               "id",
-              this.turmaForm.Horario2
+              this.turmaForm.Horario2,
             ]);
       let d =
         docente === 1
           ? _.find(this.$store.state.docente.Docentes, [
               "id",
-              this.turmaForm.Docente1
+              this.turmaForm.Docente1,
             ])
           : _.find(this.$store.state.docente.Docentes, [
               "id",
-              this.turmaForm.Docente2
+              this.turmaForm.Docente2,
             ]);
       let text = `Conflito no horário ${h.horario} com o docente ${d.apelido}`;
       this.$notify({
         group: "general",
         title: "Erro",
         text: text,
-        type: "error"
+        type: "error",
       });
     },
 
     checkHorarioDocente1618(horario, docente) {
-      let conflitos = _.filter(this.$store.state.turma.Turmas, t => {
+      let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
         if (this.turmaForm.periodo != t.periodo) {
           return false;
         }
@@ -616,7 +606,7 @@ export default {
     },
 
     checkHorarioDocente1719(horario, docente) {
-      let conflitos = _.filter(this.$store.state.turma.Turmas, t => {
+      let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
         if (this.turmaForm.periodo != t.periodo) {
           return false;
         }
@@ -674,7 +664,7 @@ export default {
     },
 
     checkHorarioDocente1820(horario, docente) {
-      let conflitos = _.filter(this.$store.state.turma.Turmas, t => {
+      let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
         if (this.turmaForm.periodo != t.periodo) {
           return false;
         }
@@ -732,7 +722,7 @@ export default {
     },
 
     checkHorarioDocente1921(horario, docente) {
-      let conflitos = _.filter(this.$store.state.turma.Turmas, t => {
+      let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
         if (this.turmaForm.periodo != t.periodo) {
           return false;
         }
@@ -786,7 +776,7 @@ export default {
     },
 
     checkHorarioDocenteGeral(horario, docente) {
-      let conflitos = _.filter(this.$store.state.turma.Turmas, t => {
+      let conflitos = _.filter(this.$store.state.turma.Turmas, (t) => {
         if (this.turmaForm.periodo != t.periodo) {
           return false;
         }
@@ -915,11 +905,11 @@ export default {
         horario === 1
           ? _.find(this.$store.state.horario.Horarios, [
               "id",
-              this.turmaForm.Horario1
+              this.turmaForm.Horario1,
             ])
           : _.find(this.$store.state.horario.Horarios, [
               "id",
-              this.turmaForm.Horario2
+              this.turmaForm.Horario2,
             ]);
       let s =
         sala === 1
@@ -931,7 +921,7 @@ export default {
         group: "general",
         title: "Erro",
         text: text,
-        type: "error"
+        type: "error",
       });
     },
 
@@ -941,7 +931,7 @@ export default {
           this.$store.state.turma.Turmas,
           this.$store.state.turmaExterna.Turmas
         ),
-        t => {
+        (t) => {
           if (this.turmaForm.periodo != t.periodo) {
             return false;
           }
@@ -1001,7 +991,7 @@ export default {
           this.$store.state.turma.Turmas,
           this.$store.state.turmaExterna.Turmas
         ),
-        t => {
+        (t) => {
           if (this.turmaForm.periodo != t.periodo) {
             return false;
           }
@@ -1065,7 +1055,7 @@ export default {
           this.$store.state.turma.Turmas,
           this.$store.state.turmaExterna.Turmas
         ),
-        t => {
+        (t) => {
           if (this.turmaForm.periodo != t.periodo) {
             return false;
           }
@@ -1129,7 +1119,7 @@ export default {
           this.$store.state.turma.Turmas,
           this.$store.state.turmaExterna.Turmas
         ),
-        t => {
+        (t) => {
           if (this.turmaForm.periodo != t.periodo) {
             return false;
           }
@@ -1189,7 +1179,7 @@ export default {
           this.$store.state.turma.Turmas,
           this.$store.state.turmaExterna.Turmas
         ),
-        t => {
+        (t) => {
           if (this.turmaForm.periodo != t.periodo) {
             return false;
           }
@@ -1250,7 +1240,7 @@ export default {
           group: "general",
           title: "Erro",
           text: "O semestre deve ser 1 ou 3",
-          type: "error"
+          type: "error",
         });
         return;
       }
@@ -1271,16 +1261,16 @@ export default {
 
       turmaService
         .update(this.turma.id, this.turmaForm)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Turma ${response.Turma.letra} foi atualizada!`,
-            type: "success"
+            type: "success",
           });
           this.currentData = _.clone(this.turmaForm);
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao atualizar Turma</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -1290,7 +1280,7 @@ export default {
     },
     checkDelete(turma) {
       this.$store.commit("checkDelete", { Turma: turma });
-    }
+    },
   },
   computed: {
     Cursos() {
@@ -1346,7 +1336,7 @@ export default {
 
     Disciplina() {
       return _.find(this.$store.state.disciplina.Disciplinas, {
-        id: this.turma.Disciplina
+        id: this.turma.Disciplina,
       });
     },
 
@@ -1364,8 +1354,8 @@ export default {
 
     Perfis() {
       return _.orderBy(this.$store.state.perfil.Perfis, "nome");
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -1395,7 +1385,7 @@ input[type="text"] {
   margin-top: 4px !important;
   margin-bottom: auto !important;
   height: 25px;
-  width: 18px;
+  width: 20px;
   text-align: center !important;
 }
 input[type="checkbox"] {

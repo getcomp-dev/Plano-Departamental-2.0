@@ -14,13 +14,13 @@
           class="form-group col-xl-10 col-lg-10 col-md-10 col-sm-10 col-9 mb-0 p-0"
           style="justify-content: flex-end !important;"
         >
-          <b-button
+          <!-- <b-button
             v-b-modal.modalValidacao
             title="Validação"
             class="cancelbtn"
           >
             <i class="far fa-calendar-check"></i>
-          </b-button>
+          </b-button> -->
           <b-button v-b-modal.modalFiltros title="Filtros" class="cancelbtn">
             <i class="fas fa-list-ul"></i>
           </b-button>
@@ -505,8 +505,7 @@
       size="lg"
       title="Validações"
     >
-      <div class="col m-0 p-0 max-content" style="height: 450px !important;">
-        <!-- TABLE Validações -->
+      <!-- <div class="col m-0 p-0 max-content" style="height: 450px !important;">
         <table
           class="table table-sm modal-table table-bordered"
           style="height: 450px !important;"
@@ -604,11 +603,6 @@
               </div>
             </tr>
           </thead>
-          <!-- id: turma.id,
-            disciplina_nome: disciplina_encontrada.nome,
-            disciplina_codigo: disciplina_encontrada.codigo,
-            periodo: turma.periodo,
-            letra: turma.letra, -->
           <tbody style="text-transform: uppercase">
             <template v-for="(turma, index) in Turmas_validacoes_filtred">
               <tr
@@ -682,7 +676,7 @@
             </template>
           </tbody>
         </table>
-      </div>
+      </div> -->
 
       <div slot="modal-footer" class="w-100 m-0" style="display: flex;"></div>
     </b-modal>
@@ -1021,11 +1015,14 @@ export default {
     },
 
     inPerfil: function(perfil, turmas, disciplinas) {
-      return turmas.filter(function(turma) {
+      return turmas.filter((turma) => {
         if (_.isNull(turma.Disciplina)) return false;
-        var disciplina = _.find(disciplinas, function(disc) {
-          return disc.id === turma.Disciplina;
-        });
+
+        var disciplina = _.find(
+          disciplinas,
+          (disc) => disc.id === turma.Disciplina
+        );
+
         return disciplina.Perfil === perfil.id;
       });
     },
@@ -1113,14 +1110,7 @@ export default {
       if (cond != undefined) return true;
       else return false;
     },
-    checkVagasSalas(turma_sala, turma_id) {
-      let pedidosTotais = 0;
-      let pedidos = this.$store.state.pedido.Pedidos[turma_id];
-      for (let p = 0; p < pedidos.length; p++) {
-        pedidosTotais += parseInt(pedidos[p].vagasPeriodizadas, 10);
-        pedidosTotais += parseInt(pedidos[p].vagasNaoPeriodizadas, 10);
-      }
-
+    checkVagasSalas(turma_sala, pedidosTotais) {
       let sala_encontrada = _.find(this.Salas, (sala) => turma_sala == sala.id);
 
       if (
@@ -1129,14 +1119,6 @@ export default {
         pedidosTotais != undefined
       ) {
         if (sala_encontrada.lotacao_maxima < pedidosTotais) {
-          // console.log(
-          //   "sala: " +
-          //     sala_encontrada.nome +
-          //     "lotacao: " +
-          //     sala_encontrada.lotacao_maxima +
-          //     "pedidos: " +
-          //     pedidosTotais
-          // );
           return {
             lotacao: sala_encontrada.lotacao_maxima,
             vagastotais: pedidosTotais,
@@ -1144,6 +1126,15 @@ export default {
         }
       }
       return null;
+    },
+    totalPedidos(turma_id) {
+      let result = 0;
+      let pedidos = this.$store.state.pedido.Pedidos[turma_id];
+      for (let p = 0; p < pedidos.length; p++) {
+        result += parseInt(pedidos[p].vagasPeriodizadas, 10);
+        result += parseInt(pedidos[p].vagasNaoPeriodizadas, 10);
+      }
+      return result;
     },
   },
 
@@ -1185,8 +1176,6 @@ export default {
     },
     //Verifica validações das turmas
     Turmas_validacoes() {
-      console.log("Turmas", this.Turmas[0]);
-      console.log("Disciplina", this.Disciplinas[0]);
       let result = [];
       this.Turmas.forEach((turma) => {
         //Encontra a disciplina da turma
@@ -1211,6 +1200,8 @@ export default {
               return true;
             }
           });
+          let turmaPedidosTotais = this.totalPedidos(obj.id);
+
           //Verifica letra
           if (!turma.letra.match(/[A-Z]/i)) {
             obj.erros.push({ mensagem: "Letra da turma invalida" });
@@ -1220,14 +1211,14 @@ export default {
             obj.erros.push({ mensagem: "Turno Invalido" });
           }
           //Compatibilidade do turno com disciplina
-          if (!turma.ead && turma.turno1 == "EAD") {
+          if (!disciplina_encontrada.ead && turma.turno1 == "EAD") {
             obj.erros.push({
               mensagem:
                 "Disciplina não cadastrada como EAD, porem o turno esta alocado como tal",
             });
           }
           //Verifica Horarios
-          if (!turma.ead || !turma.turno1 == "EAD") {
+          if (!disciplina_encontrada.ead || !turma.turno1 == "EAD") {
             if (turma.Horario1 == null) {
               obj.erros.push({ mensagem: "Primeiro Horario invalido" });
             }
@@ -1236,29 +1227,28 @@ export default {
             }
           }
           //Verifica Docente
-          if (turma.Docente1 == null) {
-            obj.erros.push({ mensagem: "Primeiro Docente invalido" });
+          if (turma.Docente1 == null && turma.Docente2 == null) {
+            obj.erros.push({ mensagem: "Docente invalido" });
           }
           //Verifica alocação de Lab e salas
           if (turma.Sala1 != null || turma.Sala2 != null) {
             //Verifica se possui lab alocado
             if (
-              turma.cargaPratica > 0 &&
+              disciplina_encontrada.laboratorio > 0 &&
               !(this.checkIsLab(turma.Sala1) || this.checkIsLab(turma.Sala2))
             ) {
               obj.erros.push({
                 mensagem:
-                  "Turma possui carga pratica porem não possui laboratorio alocado",
+                  "Disciplina marcada como laboratorio porem não possui laboratorio alocado",
               });
             }
-
             let vagasInSala1 =
               turma.Sala1 != null
-                ? this.checkVagasSalas(turma.Sala1, turma.id)
+                ? this.checkVagasSalas(turma.Sala1, turmaPedidosTotais)
                 : null;
             let vagasInSala2 =
               turma.Sala2 != null
-                ? this.checkVagasSalas(turma.Sala1, turma.id)
+                ? this.checkVagasSalas(turma.Sala1, turmaPedidosTotais)
                 : null;
             //Se excedeu o limite da sala 1
             if (vagasInSala1 != null) {
@@ -1283,6 +1273,17 @@ export default {
               });
             }
           }
+
+          if (turmaPedidosTotais == 0) {
+            obj.erros.push({
+              mensagem: "Turma não possui nenhuma vaga alocada",
+            });
+          } else if (turmaPedidosTotais <= 4) {
+            obj.erros.push({
+              mensagem: "Turma possui apenas 4 vagas alocadas",
+            });
+          }
+
           if (obj.erros.length) {
             result.push(obj);
           }

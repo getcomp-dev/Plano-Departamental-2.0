@@ -15,11 +15,11 @@
         >
           <div class="input-group m-0 mr-3 ml-auto p-0">
             <div class="input-group-prepend">
-              <label class="input-group-text">Ano</label>
+              <label class="input-group-text input-group-top">Ano</label>
             </div>
             <select
-              v-model="novoAno"
-              class="form-control"
+              v-model="novo_ano"
+              class="form-control form-control-top"
               v-on:change="runNovoAno()"
             >
               <option
@@ -31,7 +31,7 @@
             </select>
           </div>
           <div class="d-flex">
-            <b-button v-b-modal.modalFiltros title="Cursos" class="cancelbtn">
+            <b-button v-b-modal.modalFiltros title="Filtros" class="cancelbtn">
               <i class="fas fa-list-ul"></i>
             </b-button>
             <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
@@ -60,11 +60,9 @@
                   <i
                     style="font-size: 0.6rem; text-align: right;"
                     :class="
-                      ordemMainTablePerfis.order == 'perfil_nome'
-                        ? ordemMainTablePerfis.type == 'asc'
-                          ? 'fas fa-arrow-down fa-sm'
-                          : 'fas fa-arrow-up fa-sm'
-                        : 'fas fa-arrow-down fa-sm low-opacity'
+                      main_oredm_perfis.type == 'asc'
+                        ? 'fas fa-arrow-down fa-sm'
+                        : 'fas fa-arrow-up fa-sm'
                     "
                   ></i>
                 </p>
@@ -79,8 +77,8 @@
                   <i
                     style="font-size: 0.6rem; text-align: right;"
                     :class="
-                      ordemMainTable.order == 'codigo'
-                        ? ordemMainTable.type == 'asc'
+                      main_ordem.order == 'codigo'
+                        ? main_ordem.type == 'asc'
                           ? 'fas fa-arrow-down fa-sm'
                           : 'fas fa-arrow-up fa-sm'
                         : 'fas fa-arrow-down fa-sm low-opacity'
@@ -98,8 +96,8 @@
                   <i
                     style="font-size: 0.6rem; text-align: right;"
                     :class="
-                      ordemMainTable.order == 'nome'
-                        ? ordemMainTable.type == 'asc'
+                      main_ordem.order == 'nome'
+                        ? main_ordem.type == 'asc'
                           ? 'fas fa-arrow-down fa-sm'
                           : 'fas fa-arrow-up fa-sm'
                         : 'fas fa-arrow-down fa-sm low-opacity'
@@ -147,7 +145,7 @@
           </tr>
         </thead>
         <tbody>
-          <template v-for="disciplina in Disciplinas_Filtred">
+          <template v-for="disciplina in Disciplinas_Main_Table_Ordered">
             <tr :key="disciplina.id">
               <div class="max-content">
                 <td v-bind:style="{ backgroundColor: disciplina.cor }">
@@ -168,18 +166,22 @@
                 <td v-if="activeSI">
                   <p style="width: 140px">
                     <template
-                      v-if="disciplinasGrades[disciplina.id][2][0].length !== 0"
+                      v-if="
+                        disciplinas_grades[disciplina.id][2][0].length !== 0
+                      "
                     >
                       <template
-                        v-for="d in disciplinasGrades[disciplina.id][2][0]"
+                        v-for="d in disciplinas_grades[disciplina.id][2][0]"
                         >1º Semestre: {{ d }}º Período</template
                       >
                     </template>
                     <template
-                      v-if="disciplinasGrades[disciplina.id][2][1].length !== 0"
+                      v-if="
+                        disciplinas_grades[disciplina.id][2][1].length !== 0
+                      "
                     >
                       <template
-                        v-for="d in disciplinasGrades[disciplina.id][2][1]"
+                        v-for="d in disciplinas_grades[disciplina.id][2][1]"
                         >2º Semestre: {{ d }}º Período</template
                       >
                     </template>
@@ -189,18 +191,22 @@
                 <td v-if="activeCCN">
                   <p style="width: 140px">
                     <template
-                      v-if="disciplinasGrades[disciplina.id][0][0].length !== 0"
+                      v-if="
+                        disciplinas_grades[disciplina.id][0][0].length !== 0
+                      "
                     >
                       <template
-                        v-for="d in disciplinasGrades[disciplina.id][0][0]"
+                        v-for="d in disciplinas_grades[disciplina.id][0][0]"
                         >1º Semestre: {{ d }}º Período</template
                       >
                     </template>
                     <template
-                      v-if="disciplinasGrades[disciplina.id][0][1].length !== 0"
+                      v-if="
+                        disciplinas_grades[disciplina.id][0][1].length !== 0
+                      "
                     >
                       <template
-                        v-for="d in disciplinasGrades[disciplina.id][0][1]"
+                        v-for="d in disciplinas_grades[disciplina.id][0][1]"
                         >2º Semestre: {{ d }}º Período</template
                       >
                     </template>
@@ -210,18 +216,22 @@
                 <td v-if="activeCCD">
                   <p style="width: 140px">
                     <template
-                      v-if="disciplinasGrades[disciplina.id][3][0].length !== 0"
+                      v-if="
+                        disciplinas_grades[disciplina.id][3][0].length !== 0
+                      "
                     >
                       <template
-                        v-for="d in disciplinasGrades[disciplina.id][3][0]"
+                        v-for="d in disciplinas_grades[disciplina.id][3][0]"
                         >1º Semestre: {{ d }}º Período</template
                       >
                     </template>
                     <template
-                      v-if="disciplinasGrades[disciplina.id][3][1].length !== 0"
+                      v-if="
+                        disciplinas_grades[disciplina.id][3][1].length !== 0
+                      "
                     >
                       <template
-                        v-for="d in disciplinasGrades[disciplina.id][3][1]"
+                        v-for="d in disciplinas_grades[disciplina.id][3][1]"
                         >2º Semestre: {{ d }}º Período</template
                       >
                     </template>
@@ -231,18 +241,22 @@
                 <td v-if="activeEC">
                   <p style="width: 140px">
                     <template
-                      v-if="disciplinasGrades[disciplina.id][1][0].length !== 0"
+                      v-if="
+                        disciplinas_grades[disciplina.id][1][0].length !== 0
+                      "
                     >
                       <template
-                        v-for="d in disciplinasGrades[disciplina.id][1][0]"
+                        v-for="d in disciplinas_grades[disciplina.id][1][0]"
                         >1º Semestre: {{ d }}º Período</template
                       >
                     </template>
                     <template
-                      v-if="disciplinasGrades[disciplina.id][1][1].length !== 0"
+                      v-if="
+                        disciplinas_grades[disciplina.id][1][1].length !== 0
+                      "
                     >
                       <template
-                        v-for="d in disciplinasGrades[disciplina.id][1][1]"
+                        v-for="d in disciplinas_grades[disciplina.id][1][1]"
                         >2º Semestre: {{ d }}º Período</template
                       >
                     </template>
@@ -273,11 +287,20 @@
               class="nav-link border border-right-0"
               :class="[
                 {
-                  active: nav_ativo == 'perfis'
+                  active: nav_ativo === 'perfis',
                 },
-                'clickable'
+                'clickable',
               ]"
               >Perfis</a
+            >
+          </li>
+          <li class="nav-item" @click="nav_ativo = 'disciplinas'">
+            <a
+              class="nav-link border border-right-0"
+              :class="{
+                active: nav_ativo === 'disciplinas',
+              }"
+              >Disciplinas</a
             >
           </li>
           <li class="nav-item" @click="nav_ativo = 'cursos'">
@@ -285,9 +308,9 @@
               class="nav-link border"
               :class="[
                 {
-                  active: nav_ativo == 'cursos'
+                  active: nav_ativo === 'cursos',
                 },
-                'clickable'
+                'clickable',
               ]"
               >Cursos</a
             >
@@ -320,7 +343,7 @@
                     <i
                       style="font-size: 0.6rem; text-align: right;"
                       :class="
-                        ordemPerfis.type == 'asc'
+                        modal_ordem_perfis.type == 'asc'
                           ? 'fas fa-arrow-down fa-sm'
                           : 'fas fa-arrow-up fa-sm'
                       "
@@ -332,7 +355,7 @@
           </thead>
           <tbody>
             <tr
-              v-for="perfil in Perfis_Modal_Filtred"
+              v-for="perfil in Perfis_Modal_Ordered"
               :key="'perfil-id' + perfil.id"
             >
               <div style="width: max-content;">
@@ -340,7 +363,7 @@
                   <div style="width: 25px; height: inherit;" class="px-1">
                     <input
                       type="checkbox"
-                      v-model="PerfisSelecionados"
+                      v-model="perfis_ativados"
                       :value="perfil"
                       class="form-check-input position-static m-0"
                     />
@@ -349,6 +372,155 @@
                 <td>
                   <p style="width: 435px; text-align: start;">
                     {{ perfil.nome }}
+                  </p>
+                </td>
+              </div>
+            </tr>
+          </tbody>
+        </table>
+        <!-- TABLE DISCIPLINAS -->
+        <table
+          v-else-if="nav_ativo == 'disciplinas'"
+          class="table table-sm modal-table table-bordered table-hover"
+          style="max-height: 450px !important; overflow-y: auto !important;"
+        >
+          <thead class="thead-light ">
+            <tr class="sticky">
+              <div style="font-size: 11px !important;" class="max-content">
+                <th>
+                  <div
+                    class="m-0 input-group"
+                    style="
+                      width: 462px;
+                      height: 35px;
+                      padding-left: 4px;
+                      padding-right: 20px;
+                      padding-top: 4px;
+                    "
+                  >
+                    <input
+                      type="text"
+                      class="form-control search-form-control"
+                      style="border-right: none;"
+                      placeholder="Pesquise nome ou codigo de uma disciplina..."
+                      v-model="search_disciplinas"
+                    />
+                    <div
+                      class="input-group-append"
+                      @click="search_disciplinas = null"
+                    >
+                      <span
+                        class="input-group-text search-text"
+                        style="height: 25px; font-size: 18px; cursor: pointer;"
+                        >&times;</span
+                      >
+                    </div>
+                  </div>
+                </th>
+              </div>
+            </tr>
+
+            <tr>
+              <div style="font-size: 11px !important;" class="max-content">
+                <th>
+                  <p
+                    style="width: 25px; text-align: center;"
+                    class="p-header"
+                  ></p>
+                </th>
+                <th>
+                  <p
+                    class="p-header clickable"
+                    style="width: 70px; text-align: start;"
+                    @click="toggleOrdDiscip('codigo')"
+                    title="Clique para ordenar por código"
+                  >
+                    Cód.
+                    <i
+                      style="font-size: 0.6rem; text-align: right;"
+                      :class="
+                        modal_ordem_discip.order == 'codigo'
+                          ? modal_ordem_discip.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : 'fas fa-arrow-down fa-sm low-opacity'
+                      "
+                    ></i>
+                  </p>
+                </th>
+                <th>
+                  <p
+                    class="p-header clickable"
+                    style="width: 280px; text-align: start;"
+                    @click="toggleOrdDiscip('nome')"
+                    title="Clique para ordenar por nome"
+                  >
+                    Nome
+                    <i
+                      style="font-size: 0.6rem; text-align: right;"
+                      :class="
+                        modal_ordem_discip.order == 'nome'
+                          ? modal_ordem_discip.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : 'fas fa-arrow-down fa-sm low-opacity'
+                      "
+                    ></i>
+                  </p>
+                </th>
+                <th>
+                  <p
+                    class="p-header clickable"
+                    style="width: 85px; text-align: start;"
+                    @click="toggleOrdDiscip('perfil_nome')"
+                    title="Clique para ordenar por nome"
+                  >
+                    Perfil
+                    <i
+                      style="font-size: 0.6rem; text-align: right;"
+                      :class="
+                        modal_ordem_discip.order == 'perfil_nome'
+                          ? modal_ordem_discip.type == 'asc'
+                            ? 'fas fa-arrow-down fa-sm'
+                            : 'fas fa-arrow-up fa-sm'
+                          : 'fas fa-arrow-down fa-sm low-opacity'
+                      "
+                    ></i>
+                  </p>
+                </th>
+              </div>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="disciplina in Disciplinas_Modal_Ordered"
+              :key="'disciplina' + disciplina.id"
+              value="disciplina.id"
+            >
+              <div class="max-content">
+                <td>
+                  <div style="width: 25px; height: inherit;" class="px-1">
+                    <input
+                      type="checkbox"
+                      class="form-check-input position-static m-0"
+                      v-model="disciplinas_selecionados"
+                      :value="disciplina"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <p style="width: 70px; text-align: start;">
+                    {{ disciplina.codigo }}
+                  </p>
+                </td>
+                <td>
+                  <p style="width: 280px; text-align: start;">
+                    {{ disciplina.nome }}
+                  </p>
+                </td>
+                <td>
+                  <p style="width: 85px; text-align: start;">
+                    {{ disciplina.perfil_nome }}
                   </p>
                 </td>
               </div>
@@ -377,8 +549,8 @@
                     <i
                       style="font-size: 0.6rem; text-align: right;"
                       :class="
-                        ordemCursos.order == 'codigo'
-                          ? ordemCursos.type == 'asc'
+                        moda_ordem_curso.order == 'codigo'
+                          ? moda_ordem_curso.type == 'asc'
                             ? 'fas fa-arrow-down fa-sm'
                             : 'fas fa-arrow-up fa-sm'
                           : ''
@@ -396,8 +568,8 @@
                     <i
                       style="font-size: 0.6rem; text-align: right;"
                       :class="
-                        ordemCursos.order == 'nome'
-                          ? ordemCursos.type == 'asc'
+                        moda_ordem_curso.order == 'nome'
+                          ? moda_ordem_curso.type == 'asc'
                             ? 'fas fa-arrow-down fa-sm'
                             : 'fas fa-arrow-up fa-sm'
                           : ''
@@ -410,7 +582,7 @@
           </thead>
           <tbody>
             <tr
-              v-for="curso in Cursos_Modal_Filtred"
+              v-for="curso in Cursos_Modal_Ordered"
               :key="'curso-id-' + curso.value"
             >
               <div style="width: max-content; height: 22px !important;">
@@ -419,7 +591,7 @@
                     <input
                       type="checkbox"
                       :value="curso.value"
-                      v-model="cursosSelecionados"
+                      v-model="cursos_selecionados"
                       class="form-check-input position-static m-0"
                     />
                   </div>
@@ -442,7 +614,21 @@
 
       <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
         <div class="w-100">
-          <template v-if="nav_ativo == 'perfis'">
+          <template v-if="nav_ativo == 'disciplinas'">
+            <b-button
+              class="btn-azul btn-df mr-2 btn-custom"
+              variant="success"
+              @click="selectAllDisciplinas()"
+              >Selecionar Todos</b-button
+            >
+            <b-button
+              class="btn-cinza btn-df mr-2 btn-custom"
+              variant="secondary"
+              @click="selectNoneDisciplinas()"
+              >Desmarcar Todos</b-button
+            >
+          </template>
+          <template v-else-if="nav_ativo == 'perfis'">
             <b-button
               class="btn-azul btn-df mr-2"
               variant="success"
@@ -517,132 +703,155 @@ export default {
     return {
       error: undefined,
       ano: undefined,
-      novoAno: undefined,
-      disciplinasGrades: {},
+      novo_ano: undefined,
+      disciplinas_grades: {},
       grades: {
         1: undefined, //CCN
         2: undefined, //EC
         3: undefined, //SI
-        4: undefined //CCD
+        4: undefined, //CCD
       },
       gradesAtivas: {
         1: [], //CCN
         2: [], //EC
         3: [], //SI
-        4: [] //CCD
+        4: [], //CCD
       },
-      PerfisSelecionados: [],
-      PerfisAtivados: [],
-      cursosSelecionados: [],
-      cursosAtivados: [],
-      options_Cursos: [
+      perfis_ativados: [],
+      disciplinas_selecionados: [],
+      disciplinas_ativados: [],
+      cursos_selecionados: [1, 2, 3, 4, 5],
+      cursos_ativados: [],
+      options_cursos: [
         {
           nome: "SISTEMAS DE INFORMAÇÃO",
           value: 3,
-          codigo: "76A"
+          codigo: "76A",
         },
         {
           nome: "CIÊNCIA DA COMPUTAÇÃO NOTURNO",
           value: 2,
-          codigo: "35A"
+          codigo: "35A",
         },
         {
           nome: "CIÊNCIA DA COMPUTAÇÃO DIURNO",
           value: 1,
-          codigo: "65C"
+          codigo: "65C",
         },
         {
           nome: "ENGENHARIA DA COMPUTAÇÃO",
           value: 4,
-          codigo: "65B"
-        }
+          codigo: "65B",
+        },
       ],
-      showCurso: undefined,
       nav_ativo: "perfis",
-      ordemPerfis: { order: "nome", type: "asc" },
-      ordemCursos: { order: "codigo", type: "asc" },
-      ordemMainTable: { order: "codigo", type: "asc" },
-      ordemMainTablePerfis: { order: "perfil_nome", type: "asc" }
+      search_disciplinas: null,
+      modal_ordem_perfis: { order: "nome", type: "asc" },
+      modal_ordem_discip: { order: "codigo", type: "asc" },
+      moda_ordem_curso: { order: "codigo", type: "asc" },
+      main_ordem: { order: "codigo", type: "asc" },
+      main_oredm_perfis: { type: "asc" },
     };
   },
 
   beforeMount: function() {
     this.ano = this.$store.state.plano.Plano[0].ano;
-    this.novoAno = this.ano;
+    this.novo_ano = this.ano;
     this.runAll();
   },
 
   methods: {
     btnOK() {
-      //Somente atualiza perfis ativados quando o botão OK for clickado
-      this.PerfisAtivados = [...this.PerfisSelecionados];
+      this.disciplinas_ativados = [...this.disciplinas_selecionados];
       //Somente atualiza cursos se alterar
-      this.cursosAtivados = [...this.cursosSelecionados];
+      this.cursos_ativados = [...this.cursos_selecionados];
       this.nav_ativo = "perfis";
       this.$refs.modalFiltros.hide();
     },
+    toggleOrdDiscip(ord) {
+      if (this.modal_ordem_discip.order != ord) {
+        this.modal_ordem_discip.order = ord;
+        this.modal_ordem_discip.type = "asc";
+      } else {
+        this.modal_ordem_discip.type =
+          this.modal_ordem_discip.type == "asc" ? "desc" : "asc";
+      }
+    },
     toggleOrdMainPerfis() {
-      this.ordemMainTablePerfis.type =
-        this.ordemMainTablePerfis.type == "asc" ? "desc" : "asc";
+      this.main_oredm_perfis.type =
+        this.main_oredm_perfis.type == "asc" ? "desc" : "asc";
     },
     toggleOrdPerfis() {
-      this.ordemPerfis.type = this.ordemPerfis.type == "asc" ? "desc" : "asc";
+      this.modal_ordem_perfis.type =
+        this.modal_ordem_perfis.type == "asc" ? "desc" : "asc";
     },
     toggleOrdCursos(ord) {
-      if (this.ordemCursos.order != ord) {
-        this.ordemCursos.order = ord;
-        this.ordemCursos.type = "asc";
+      if (this.moda_ordem_curso.order != ord) {
+        this.moda_ordem_curso.order = ord;
+        this.moda_ordem_curso.type = "asc";
       } else {
-        this.ordemCursos.type = this.ordemCursos.type == "asc" ? "desc" : "asc";
+        this.moda_ordem_curso.type =
+          this.moda_ordem_curso.type == "asc" ? "desc" : "asc";
       }
     },
     toggleOrdMain(ord) {
-      if (this.ordemMainTable.order != ord) {
-        this.ordemMainTable.order = ord;
-        this.ordemMainTable.type = "asc";
+      if (this.main_ordem.order != ord) {
+        this.main_ordem.order = ord;
+        this.main_ordem.type = "asc";
       } else {
-        this.ordemMainTable.type =
-          this.ordemMainTable.type == "asc" ? "desc" : "asc";
+        this.main_ordem.type = this.main_ordem.type == "asc" ? "desc" : "asc";
       }
     },
+
     //PERFIS SELECTIONS
     selectAllPerfis() {
-      if (this.PerfisSelecionados != []) this.PerfisSelecionados = [];
+      if (this.perfis_ativados != []) this.perfis_ativados = [];
       for (var i = 0; i < this.$store.state.perfil.Perfis.length; i++)
-        this.PerfisSelecionados.push(this.$store.state.perfil.Perfis[i]);
+        this.perfis_ativados.push(this.$store.state.perfil.Perfis[i]);
     },
     selectNonePerfis() {
-      this.PerfisSelecionados = [];
+      this.perfis_ativados = [];
     },
     //CURSOS SELECTIONS
     selectNoneCursos() {
-      if (this.cursosSelecionados.length !== 0) {
-        this.cursosSelecionados = [];
+      if (this.cursos_selecionados.length !== 0) {
+        this.cursos_selecionados = [];
       }
     },
     selectAllCursos() {
-      if (this.cursosSelecionados.length !== 5)
-        this.cursosSelecionados = [1, 2, 3, 4, 5];
+      if (this.cursos_selecionados.length !== 5)
+        this.cursos_selecionados = [1, 2, 3, 4, 5];
+    },
+    selectAllDisciplinas() {
+      if (this.disciplinas_selecionados != [])
+        this.disciplinas_selecionados = [];
+      for (var i = 0; i < this.$store.state.disciplina.Disciplinas.length; i++)
+        this.disciplinas_selecionados.push(
+          this.$store.state.disciplina.Disciplinas[i]
+        );
+    },
+    selectNoneDisciplinas() {
+      this.disciplinas_selecionados = [];
     },
 
     runNovoAno: function() {
       //executa runAll, modificando o ano
-      if (this.ano != this.novoAno) {
-        this.ano = this.novoAno;
+      if (this.ano != this.novo_ano) {
+        this.ano = this.novo_ano;
         this.runAll();
-        this.novoAno = 0;
-        this.novoAno = this.ano;
+        this.novo_ano = 0;
+        this.novo_ano = this.ano;
       }
     },
 
     runAll: function() {
       //cria objeto para armazenar os períodos das disciplinas e chama as funções que a populam
-      this.$store.state.disciplina.Disciplinas.forEach(d => {
-        this.disciplinasGrades[d.id] = [
+      this.$store.state.disciplina.Disciplinas.forEach((d) => {
+        this.disciplinas_grades[d.id] = [
           [[], []],
           [[], []],
           [[], []],
-          [[], []]
+          [[], []],
         ]; //inisializa os períodos em 0 [Primeiro Semestre, Segundo Semestre]
       });
       this.getGrades();
@@ -664,16 +873,16 @@ export default {
     get1Periodo: function() {
       //Armazena os períodos de cada disciplina no primeiro semestre
       //retorna lista com os ids das disciplinas
-      let disciplinas = Object.keys(this.disciplinasGrades);
+      let disciplinas = Object.keys(this.disciplinas_grades);
       //marca o último período em que uma grade é válida
       this.gradesAtivas = {
         1: [], //CCN
         2: [], //EC
         3: [], //SI
-        4: [] //CCD
+        4: [], //CCD
       };
       for (let i = 1; i <= 4; i++) {
-        this.grades[i].forEach(g => {
+        this.grades[i].forEach((g) => {
           let fim =
             1 +
             2 * (this.ano - parseInt(g.periodoInicio.slice(0, 4), 10)) +
@@ -688,7 +897,7 @@ export default {
         }
       }
 
-      disciplinas.forEach(d => {
+      disciplinas.forEach((d) => {
         for (let i = 1; i <= 4; i++) {
           //ids dos cursos de computação
           let gradedisciplina;
@@ -699,7 +908,7 @@ export default {
               this.$store.state.disciplinaGrade.DisciplinaGrades,
               {
                 Disciplina: parseInt(d, 10),
-                Grade: this.gradesAtivas[i][j].grade.id
+                Grade: this.gradesAtivas[i][j].grade.id,
               }
             ); //Encontra a disciplina nas grades da computação, começando pela mais recente. Caso não encontre, retorna undefined
             if (gradedisciplina !== undefined) {
@@ -725,7 +934,7 @@ export default {
               gradedisciplina.periodo % 2 === 1
             )
               //tem entrada de alunos no 1º semestre ou no 3º semestre -> terá períodos ímpares no primeiro semestre
-              this.disciplinasGrades[parseInt(d, 10)][i - 1][0].push(
+              this.disciplinas_grades[parseInt(d, 10)][i - 1][0].push(
                 gradedisciplina.periodo
               );
             if (
@@ -733,27 +942,26 @@ export default {
               gradedisciplina.periodo % 2 === 0
             )
               //tem entrada de alunos no 2º semestre ou no 3º semestre -> terá períodos pares no primeiro semestre
-              this.disciplinasGrades[parseInt(d, 10)][i - 1][0].push(
+              this.disciplinas_grades[parseInt(d, 10)][i - 1][0].push(
                 gradedisciplina.periodo
               );
           }
         }
       });
     },
-
     get2Periodo: function() {
       //Armazena os períodos de cada disciplina no segundo semestre
       //retorna lista com os ids das disciplinas
-      let disciplinas = Object.keys(this.disciplinasGrades);
+      let disciplinas = Object.keys(this.disciplinas_grades);
       //marca o último período em que uma grade é válida
       this.gradesAtivas = {
         1: [], //CCN
         2: [], //EC
         3: [], //SI
-        4: [] //CCD
+        4: [], //CCD
       };
       for (let i = 1; i <= 4; i++) {
-        this.grades[i].forEach(g => {
+        this.grades[i].forEach((g) => {
           let fim =
             1 +
             2 * (this.ano - parseInt(g.periodoInicio.slice(0, 4), 10)) +
@@ -768,7 +976,7 @@ export default {
         }
       }
 
-      disciplinas.forEach(d => {
+      disciplinas.forEach((d) => {
         for (let i = 1; i <= 4; i++) {
           //ids dos cursos de computação
           let gradedisciplina;
@@ -779,7 +987,7 @@ export default {
               this.$store.state.disciplinaGrade.DisciplinaGrades,
               {
                 Disciplina: parseInt(d, 10),
-                Grade: this.gradesAtivas[i][j].grade.id
+                Grade: this.gradesAtivas[i][j].grade.id,
               }
             ); //Encontra a disciplina nas grades da computação, começando pela mais recente. Caso não encontre, retorna undefined
             if (gradedisciplina !== undefined) {
@@ -805,7 +1013,7 @@ export default {
               gradedisciplina.periodo % 2 === 0
             )
               //tem entrada de alunos no 1º semestre ou no 3º semestre -> terá períodos pares no segundo semestre
-              this.disciplinasGrades[parseInt(d, 10)][i - 1][1].push(
+              this.disciplinas_grades[parseInt(d, 10)][i - 1][1].push(
                 gradedisciplina.periodo
               );
             if (
@@ -813,101 +1021,79 @@ export default {
               gradedisciplina.periodo % 2 === 1
             )
               //tem entrada de alunos no 2º semestre ou no 3º semestre -> terá períodos ímpares no segundo semestre
-              this.disciplinasGrades[parseInt(d, 10)][i - 1][1].push(
+              this.disciplinas_grades[parseInt(d, 10)][i - 1][1].push(
                 gradedisciplina.periodo
               );
           }
         }
       });
     },
-    inPerfil: function(perfil, todasDisciplinas) {
-      //Verifica se uma disciplina faz parte de um perfil
-      return todasDisciplinas.filter(disciplina => {
-        return disciplina.Perfil === perfil.id;
-      });
-    },
-    DisciplinaComPerfil() {
-      // let result = this.Disciplinas;
-      // this.PerfisAtivados.forEach((perfil) => {
-      //   result.filter((disciplina) => {
-      //     if (disciplina.Perfil === perfil.id) {
-      //       disciplinas.perfil_nome = perfil.nome;
-      //       return true;
-      //     }
-      //     return false;
-      //   });
-      // });
-      // return result;
-    }
   },
   computed: {
-    Disciplinas_Filtred() {
-      let result = [];
-
-      this.PerfisAtivados.forEach(perfil => {
-        result = this.Disciplinas;
-        result.filter(disciplina => {
+    Disciplinas() {
+      //Todas disciplinas não só do DCC, com perfil_nome e cor
+      let result = this.$store.state.disciplina.Disciplinas;
+      result.forEach((disciplina) => {
+        _.find(this.$store.state.perfil.Perfis, (perfil) => {
           if (disciplina.Perfil === perfil.id) {
             disciplina.perfil_nome = perfil.abreviacao;
             disciplina.cor = perfil.cor;
             return true;
           }
-          return false;
         });
       });
+      return result;
+    },
+    Disciplinas_Main_Table_Ordered() {
       return _.orderBy(
-        result,
-        [this.ordemMainTablePerfis.order, this.ordemMainTable.order],
-        [this.ordemMainTablePerfis.type, this.ordemMainTable.type]
+        this.disciplinas_ativados,
+        ["perfil_nome", this.main_ordem.order],
+        [this.main_oredm_perfis.type, this.main_ordem.type]
       );
     },
+    Disciplinas_Modal_Search() {
+      let result = this.Disciplinas;
+      if (this.search_disciplinas != null) {
+        let searchUpperCase = this.search_disciplinas
+          .toUpperCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
 
-    Cursos_Modal_Filtred() {
+        return result.filter((disci) => {
+          return (
+            disci.nome
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .match(searchUpperCase) ||
+            disci.nome.match(searchUpperCase) ||
+            disci.codigo.match(searchUpperCase)
+          );
+        });
+      } else return result;
+    },
+    Disciplinas_Modal_Ordered() {
       return _.orderBy(
-        this.options_Cursos,
-        this.ordemCursos.order,
-        this.ordemCursos.type
+        this.Disciplinas_Modal_Search,
+        this.modal_ordem_discip.order,
+        this.modal_ordem_discip.type
       );
     },
-    Perfis_Modal_Filtred() {
+    Cursos_Modal_Ordered() {
+      return _.orderBy(
+        this.options_cursos,
+        this.moda_ordem_curso.order,
+        this.moda_ordem_curso.type
+      );
+    },
+    Perfis_Modal_Ordered() {
       return _.orderBy(
         this.$store.state.perfil.Perfis,
-        this.ordemPerfis.order,
-        this.ordemPerfis.type
+        this.modal_ordem_perfis.order,
+        this.modal_ordem_perfis.type
       );
     },
     Perfis() {
       return _.orderBy(this.$store.state.perfil.Perfis, "nome");
-    },
-    activeCCD() {
-      return _.indexOf(this.cursosAtivados, 1) > -1;
-    },
-
-    activeCCN() {
-      return _.indexOf(this.cursosAtivados, 2) > -1;
-    },
-
-    activeSI() {
-      return _.indexOf(this.cursosAtivados, 3) > -1;
-    },
-
-    activeEC() {
-      return _.indexOf(this.cursosAtivados, 4) > -1;
-    },
-    Cursos() {
-      return _.orderBy(this.$store.state.curso.Cursos, "posicao");
-    },
-    CursosAtivos() {
-      return this.$store.state.curso.Ativos;
-    },
-
-    Disciplinas() {
-      // return _.orderBy(
-      //   this.$store.state.disciplina.Disciplinas,
-      //   this.ordemMainTable.order,
-      //   this.ordemMainTable.type
-      // );
-      return this.$store.state.disciplina.Disciplinas;
     },
     Docentes() {
       return _.orderBy(
@@ -915,15 +1101,12 @@ export default {
         "apelido"
       );
     },
-
     Horarios() {
       return _.orderBy(this.$store.state.horario.Horarios, "horario");
     },
-
     Salas() {
       return _.orderBy(this.$store.state.sala.Salas, "nome");
     },
-
     Turmas() {
       return _.orderBy(
         _.orderBy(
@@ -935,32 +1118,54 @@ export default {
         "Disciplina"
       );
     },
-
     Deletar() {
       return this.$store.state.turma.Deletar;
     },
-
     Pedidos() {
       return this.$store.state.pedido.Pedidos;
     },
-
+    Cursos() {
+      return _.orderBy(this.$store.state.curso.Cursos, "nome");
+    },
+    CursosAtivos() {
+      return this.$store.state.curso.Ativos;
+    },
     isLoading() {
       return this.$store.state.isLoading;
     },
-
     AnoAtual() {
       return this.$store.state.plano.Plano[0].ano;
-    }
+    },
+    activeCCD() {
+      return _.indexOf(this.cursos_ativados, 1) > -1;
+    },
+    activeCCN() {
+      return _.indexOf(this.cursos_ativados, 2) > -1;
+    },
+    activeSI() {
+      return _.indexOf(this.cursos_ativados, 3) > -1;
+    },
+    activeEC() {
+      return _.indexOf(this.cursos_ativados, 4) > -1;
+    },
   },
   watch: {
-    CursosSelecionados: function() {
-      if (this.cursos.length === 5) {
-        this.selectAll = true;
-      } else {
-        this.selectAll = false;
-      }
-    }
-  }
+    perfis_ativados(newValue, oldValue) {
+      //Apaga todas disciplinas selecionadas sempre que um novo perfil é selecionado
+      this.disciplinas_selecionados = [];
+
+      this.perfis_ativados.forEach((perfil) => {
+        this.Disciplinas.forEach((discip) => {
+          if (
+            discip.Perfil == perfil.id &&
+            !this.disciplinas_selecionados.includes(discip)
+          ) {
+            this.disciplinas_selecionados.push(discip);
+          }
+        });
+      });
+    },
+  },
 };
 </script>
 <style scoped>
@@ -1047,7 +1252,7 @@ tbody {
 }
 /* ============================================ */
 /* Formularios no topo da tela */
-.input-group-text {
+.input-group-top {
   display: -ms-flexbox;
   display: -webkit-box;
   display: -webkit-flex;
@@ -1072,9 +1277,7 @@ tbody {
   padding-left: 15px;
   font-size: 12px !important;
 }
-.form-inline .input-group {
-  width: auto;
-}
+
 .form-group {
   display: -ms-flexbox;
   display: flex;
@@ -1086,7 +1289,7 @@ tbody {
   align-items: center;
   margin-bottom: 0;
 }
-.form-control {
+.form-control-top {
   height: 25px !important;
   font-size: 12px !important;
   padding: 2px 5px 0px 5px !important;
@@ -1094,6 +1297,7 @@ tbody {
   text-align: center;
 }
 /* =========================== */
+
 .listas {
   line-height: 30px;
   font-size: 12px;
@@ -1104,6 +1308,86 @@ tbody {
 strong {
   color: #007bff;
 }
+
+/* ==== MODAL TABLE ==== */
+.modal-table {
+  display: block !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  font-size: 10px !important;
+  font-weight: normal !important;
+  background-color: white;
+  margin: 0 !important;
+}
+.modal-table tr thead {
+  display: block;
+}
+.modal-table th {
+  padding: 0 !important;
+  text-align: center !important;
+  height: 18px !important;
+}
+
+.modal-table .p-header {
+  padding: 0px 5px 0px 5px !important;
+  margin: 0 !important;
+  text-align: start;
+  height: 18px !important;
+}
+.modal-table tbody {
+  max-height: 100%;
+  width: 100%;
+}
+.modal-table td {
+  border-top: 0;
+  text-align: center;
+  vertical-align: middle !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  /* height: 22px !important; */
+}
+.modal-table p {
+  margin: 0 !important;
+  text-align: center;
+  padding: 0 !important;
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+}
+.modal-table input[type="checkbox"] {
+  margin-left: 0 !important;
+  margin-top: 4px !important;
+  margin-bottom: auto !important;
+  height: 13px !important;
+}
+/* FIM MODAL TABLE */
+.search-form-control {
+  height: 25px !important;
+  font-size: 12px !important;
+  padding: 2px 5px 2px 5px !important;
+  text-align: start;
+}
+.search-text:hover {
+  color: rgb(102, 102, 102);
+  background-color: #dddddd;
+}
+.search-text {
+  background-color: #ffffff;
+  border-left: none;
+}
+.nav-link {
+  color: #007bff !important;
+  cursor: pointer;
+}
+.nav-link:hover {
+  text-decoration: underline;
+}
+.active {
+  background-color: #e9ecef !important;
+  color: #495057 !important;
+  cursor: default;
+  text-decoration: none !important;
+}
+
 /* ====== BOTÕES ====== */
 button {
   padding: 0;
@@ -1214,72 +1498,6 @@ i.far {
   -webkit-text-stroke-width: 1px;
   -webkit-text-stroke-color: #ada89a;
 }
-
-/* ==== MODAL TABLE ==== */
-.modal-table {
-  display: block !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  font-size: 10px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-}
-.modal-table tr thead {
-  display: block;
-}
-.modal-table th {
-  padding: 0 !important;
-  text-align: center !important;
-  height: 18px !important;
-}
-
-.modal-table .p-header {
-  padding: 0px 5px 0px 5px !important;
-  margin: 0 !important;
-  text-align: start;
-  height: 18px !important;
-}
-.modal-table tbody {
-  max-height: 100%;
-  width: 100%;
-}
-.modal-table td {
-  border-top: 0;
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  /* height: 22px !important; */
-}
-.modal-table p {
-  margin: 0 !important;
-  text-align: center;
-  padding: 0 !important;
-  padding-right: 5px !important;
-  padding-left: 5px !important;
-}
-.modal-table input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-  margin-bottom: auto !important;
-  height: 13px !important;
-}
-/* FIM MODAL TABLE */
-.nav-link {
-  color: #007bff !important;
-  cursor: pointer;
-}
-.nav-link:hover {
-  text-decoration: underline;
-}
-.active {
-  background-color: #e9ecef !important;
-  color: #495057 !important;
-  cursor: default;
-  text-decoration: none !important;
-}
-
 @media screen and (max-width: 519px) {
   .div-titulo {
     height: 70px !important;

@@ -738,56 +738,6 @@ export default {
       });
     },
 
-    creditosGraduacao(docente){
-      let turmas = _.filter(this.$store.state.turma.Turmas, (t) => {
-        return (t.Docente1 === docente.id || t.Docente2 === docente.id)
-      })
-
-      let cargaTotalDocente = 0
-
-      for(let i = 0; i < turmas.length; i++){
-        let disciplina = _.find(this.$store.state.disciplina.Disciplinas, {id: turmas[i].Disciplina})
-        let cargaTotalDisciplina = disciplina.cargaTeorica + disciplina.cargaPratica
-        if(turmas[i].Docente1 != null && turmas[i].Docente2 != null){
-          if(turmas[i].Docente1 !== turmas[i].Docente2){
-            cargaTotalDisciplina = cargaTotalDisciplina/2.0
-          }
-        }
-        cargaTotalDocente = cargaTotalDocente + cargaTotalDisciplina
-      }
-
-      return cargaTotalDocente
-    },
-
-    creditosPos(docente){
-      let turmas = _.filter(this.$store.state.cargaPos.Cargas, (t) => {
-        return t.Docente === docente.id
-      })
-
-      let cargaTotalDocente = 0
-
-      for(let i = 0; i < turmas.length; i++){
-        cargaTotalDocente = cargaTotalDocente + turmas[i].creditos
-      }
-
-      return cargaTotalDocente
-    },
-
-    verificaDocentes(){
-      let erros = []
-      let docentesAtivos = _.orderBy(_.filter(this.$store.state.docente.Docentes, (d) => {return d.ativo === true}), 'nome')
-      docentesAtivos.forEach((d) => {
-        let cargaGraduacao = this.creditosGraduacao(d)
-        let cargaPos = this.creditosPos(d)
-        if(cargaGraduacao < 8.0){
-          erros.push([d.nome, `Apenas ${cargaGraduacao} créditos na graduação`])
-        }
-        if((cargaGraduacao + cargaPos) < 16.0){
-          erros.push([d.nome, `Apenas ${cargaGraduacao + cargaPos} créditos, ${cargaGraduacao}  na graduação e ${cargaPos} na pós`])
-        }
-      })
-      console.log(erros)
-    },
   },
 
   computed: {

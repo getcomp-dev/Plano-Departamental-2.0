@@ -135,6 +135,15 @@
                     <i class="fas fa-clipboard"></i> Creditação Pós
                   </router-link>
                 </li>
+                <li v-if="Admin" @click="show = false" class="nav-item">
+                  <router-link
+                    :to="{ name: 'validacoes' }"
+                    class="nav-link"
+                    v-on:click="loadPage"
+                  >
+                    <i class="fas fa-calendar-check"></i> Validações do Plano
+                  </router-link>
+                </li>
               </ul>
               <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">
                 Relatórios
@@ -258,7 +267,7 @@
     >
       <p
         v-for="value in files"
-        :key="'1' + value"
+        :key="'1--' + value"
         v-on:click="selectFile(value)"
       >
         {{ value }}
@@ -341,7 +350,7 @@
     <b-modal id="modal-load" ref="modalLoad" title="Selecione um Arquivo">
       <p
         v-for="value in files"
-        :key="'2' + value"
+        :key="'2--' + value"
         v-on:click="selectFile(value)"
       >
         {{ value }}
@@ -360,7 +369,7 @@
     >
       <p
         v-for="value in files"
-        :key="'3' + value"
+        :key="'3--' + value"
         v-on:click="selectFile(value)"
       >
         {{ value }}

@@ -87,7 +87,7 @@
                 <p style="width: 30px" class="p-header">EAD</p>
               </th>
               <th scope="col">
-                <p style="width: 30px" class="p-header">Lab</p>
+                <p style="width: 70px" class="p-header">Lab</p>
               </th>
             </div>
           </tr>
@@ -142,17 +142,7 @@
                   </div>
                 </td>
                 <td>
-                  <div style="width: 30px;">
-                    <input
-                            type="checkbox"
-                            class="form-check-input position-static noHover"
-                            v-model="disciplina.laboratorio"
-                            v-on:click.prevent="
-                        showDisciplina(disciplina), clickada(disciplina.nome)
-                      "
-                            value
-                    />
-                  </div>
+                  <p style="width: 70px">{{ textoLab(disciplina.laboratorio) }}</p>
                 </td>
               </div>
             </tr>
@@ -273,17 +263,19 @@
               </div>
             </div>
 
-            <div class="row mb-2 mt-3 mx-0">
-              <div class="form-check form-check-inline col m-0 px-0 pl-1">
-                <input
-                        type="checkbox"
+            <div class="row mb-2 mx-0">
+              <div class="form-group col m-0 px-0">
+                <label for="laboratorio" class="col-form-label">Laboratório</label>
+                <select
+                        type="text"
+                        class="form-control form-control-sm selectMenor"
                         id="laboratorio"
-                        value="1"
-                        class="form-check-input"
-                        style="margin-top: 2px"
                         v-model="disciplinaForm.laboratorio"
-                />
-                <label for="laboratorio" class="form-check-label">Lab</label>
+                >
+                  <option value=0>Não</option>
+                  <option value=2>Opcional</option>
+                  <option value=1>Obrigatório</option>
+                </select>
               </div>
             </div>
 
@@ -529,6 +521,12 @@ export default {
       this.cleanDisciplina();
       this.disciplinaForm = _.clone(disciplina);
     },
+
+    textoLab(lab) {
+      if (lab == 0) return 'Não'
+      if (lab == 1) return 'Obrigatório'
+      if (lab == 2) return 'Opcional'
+    }
   },
 
   computed: {

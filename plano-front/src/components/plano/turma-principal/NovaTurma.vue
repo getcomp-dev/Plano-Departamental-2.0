@@ -69,9 +69,10 @@
       <div style="width: 40px">
         <input
           type="text"
-          style="width: 20px"
+          style="text-transform: uppercase"
           id="turma"
           v-model="turmaForm.letra"
+          @keypress="onlyA_Z"
         />
       </div>
     </td>
@@ -233,7 +234,7 @@ const emptyTurma = {
   Horario1: undefined,
   Horario2: undefined,
   Sala1: undefined,
-  Sala2: undefined
+  Sala2: undefined,
 };
 export default {
   name: "NovaTurma",
@@ -242,7 +243,7 @@ export default {
     return {
       turmaForm: _.clone(emptyTurma),
       semestre: 1,
-      error: undefined
+      error: undefined,
     };
   },
   mounted() {
@@ -256,11 +257,9 @@ export default {
     EventBus.$off("addTurma");
   },
   methods: {
-    onlyNumber($event) {
-      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
-      if (keyCode < 48 || keyCode > 57) {
-        $event.preventDefault();
-      }
+    onlyA_Z($event) {
+      let key = $event.key ? $event.key.toUpperCase() : $event.which;
+      if (!key.match(/[A-Z]/i)) $event.preventDefault();
     },
     adjustTurno1: function() {
       if (
@@ -334,7 +333,7 @@ export default {
           group: "general",
           title: `Erro`,
           text: `O semestre deve ser 1 ou 3`,
-          type: "error"
+          type: "error",
         });
         return;
       }
@@ -351,15 +350,15 @@ export default {
     editTurma(turma) {
       turmaService
         .update(turma.id, turma)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Turma ${response.Turma.letra} foi atualizada!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao atualizar Turma</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -372,7 +371,7 @@ export default {
       this.turmaForm.periodo = this.semestre;
       this.turmaForm.letra = "A";
       this.error = undefined;
-    }
+    },
   },
   computed: {
     Disciplinas() {
@@ -395,8 +394,8 @@ export default {
     },
     Perfis() {
       return this.$store.state.perfil.Perfis;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -417,8 +416,8 @@ input[type="text"] {
   margin-left: 0 !important;
   margin-top: 4px !important;
   margin-bottom: auto !important;
-  height: 18px;
-  width: 18px;
+  height: 25px;
+  width: 20px;
   text-align: center !important;
 }
 select {
