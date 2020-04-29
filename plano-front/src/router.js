@@ -10,7 +10,7 @@ import DashboardHome from "@/components/Dashboard/Home";
 import DashboardPedidos from "@/components/plano/turma-principal/DashboardPrototipo";
 import DashboardTurmasExternas from "@/components/plano/turma-externa/TurmasExternas";
 import DashboardCargaPos from "@/components/plano/carga-pos/CargaPos";
-import DashboardValidacoes from "@/components/plano/Validacoes";
+import DashboardValidacoes from "@/components/plano/validacoes/Validacoes";
 // Relatorios
 import DashboardHorarios from "@/components/relatorios/horarios-curso/Horarios";
 import DashboardCargaProfessores from "@/components/relatorios/CargaProfessores";

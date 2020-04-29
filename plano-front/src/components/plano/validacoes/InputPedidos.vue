@@ -1,11 +1,11 @@
 <template>
-  <div style="width:32px;">
+  <div id="InputPedidos" style="width:70px;">
     <input
       :disabled="Admin ? false : true"
       v-if="pedidoForm.vagasPeriodizadas == 0"
       type="text"
       v-model="pedidoForm.vagasPeriodizadas"
-      style="margin-top:1px; color:#DADADA;"
+      style="margin:1.5px 2px; color:#DADADA;"
       v-on:change="editPedido(pedido)"
       v-on:focus="focusPedido"
       v-on:blur="blurPedido"
@@ -15,7 +15,7 @@
       v-else
       type="text"
       v-model="pedidoForm.vagasPeriodizadas"
-      style="margin-top:1px; background-color: #e7e7e7;"
+      style="margin:1.5px 2px; background-color: #e7e7e7;"
       v-on:change="editPedido(pedido)"
       v-on:focus="focusPedido"
       v-on:blur="blurPedido"
@@ -25,7 +25,7 @@
       v-if="pedidoForm.vagasNaoPeriodizadas == 0"
       type="text"
       v-model="pedidoForm.vagasNaoPeriodizadas"
-      style=" color:#DADADA;"
+      style="margin:1.5px 2px; color:#DADADA;"
       v-on:change="editPedido(pedido)"
       v-on:focus="focusPedido"
       v-on:blur="blurPedido"
@@ -35,7 +35,7 @@
       v-else
       type="text"
       v-model="pedidoForm.vagasNaoPeriodizadas"
-      style="background-color: #e7e7e7;"
+      style="margin:1.5px 2px; background-color: #e7e7e7;"
       v-on:change="editPedido(pedido)"
       v-on:focus="focusPedido"
       v-on:blur="blurPedido"
@@ -54,7 +54,7 @@ const emptyPedido = {
 };
 
 export default {
-  name: "TurmaPedido",
+  name: "InputPedidos",
 
   props: {
     turma: Object,
@@ -148,20 +148,6 @@ input {
   width: 28px !important;
   height: 20px !important;
   text-align: center !important;
-  margin-bottom: 1px;
+  border: 1px rgb(51, 51, 51) solid;
 }
-/*
-    @-moz-document url-prefix() {
-        input{
-            width: 28px!important;
-            height: 20px!important;
-            text-align:center;
-            box-sizing: border-box;
-            
-            line-height: 8px;
-            border: 0.5px solid rgb(160, 160, 160);
-            border-radius: 2px;
-            background-color:rgb(245, 245, 245);
-        }
-    }*/
 </style>

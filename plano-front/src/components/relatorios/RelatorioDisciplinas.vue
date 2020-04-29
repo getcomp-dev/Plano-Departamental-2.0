@@ -23,14 +23,14 @@
           </b-button>
 
           <div class="d-flex">
-            <button
+            <b-button
+              v-b-modal.modalRelatorio
               type="button"
               class="relatbtn btn-custom"
               title="Relatório"
-              v-on:click.prevent="pdf"
             >
               <i class="far fa-file-alt"></i>
-            </button>
+            </b-button>
 
             <b-button
               v-b-modal.modalAjuda
@@ -320,8 +320,8 @@
               class="far fa-file-alt relatbtn px-1"
               style="font-size: 12px;"
             ></i>
-            e aguarde para fazer
-            <font style="font-style: italic;">download</font> do mesmo.
+            e selecione se deseja o relatório completo, com todas as disciplinas,
+            ou apenas o relatório parcial, com as disciplinas selecionadas.
           </li>
           <li class="list-group-item">
             <strong>Para alterar ordenação:</strong> Clique em Cod. no cabeçalho
@@ -909,6 +909,23 @@
       </div>
       <div slot="modal-footer" class="w-100 m-0" style="display: flex;"></div>
     </b-modal>
+
+    <!-- Modal para escolher relatório parcial ou completo-->
+    <!-- MODAL DE AJUDA -->
+    <b-modal id="modalRelatorio" ref="relatorioModal" scrollable title="Relatório">
+      <div class="modal-body">
+        <ul class="listas list-group">
+          <li class="list-group-item clickable" v-on:click="pdf(1)">
+            <strong>Relatório Parcial</strong>
+          </li>
+          <li class="list-group-item clickable" v-on:click="pdf(2)">
+            <strong>Relatório Completo</strong>
+          </li>
+        </ul>
+      </div>
+
+      <div slot="modal-footer" style="display: none;"></div>
+    </b-modal>
   </div>
 </template>
 
@@ -1014,10 +1031,18 @@ export default {
       this.DisciplinasSelecionados = [];
     },
 
-    pdf() {
-      pdfs.pdfRelatorioDisciplinas({
-        disciplinasSelecionadas: this.DisciplinasAtivados,
-      });
+    pdf(opt) {
+      if(opt === 1){
+        pdfs.pdfRelatorioDisciplinas({
+          disciplinasSelecionadas: this.DisciplinasAtivados,
+        });
+      }
+      if(opt === 2){
+
+        pdfs.pdfRelatorioDisciplinas({
+          disciplinasSelecionadas: this.Disciplinas,
+        });
+      }
     },
     vagasTurma(turma, semestre) {
       if (
@@ -1344,12 +1369,6 @@ export default {
   margin: 0 !important;
   text-align: center;
   height: 18px !important;
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none;
 }
 .main-table tbody {
   max-height: 100%;

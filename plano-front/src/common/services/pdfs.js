@@ -1099,7 +1099,7 @@ export default {
                     } else if (horario1 === undefined) {
                         horarioTotal = horario2.horario
                     }else{
-                        horarioTotal = horario1.horario + '/' + horario2.horario
+                        horarioTotal = horario1.horario + '\n' + horario2.horario
                     }
                     let sala1 = _.find(store.state.sala.Salas, {'id': turmasDisc[j].Sala1})
                     let sala2 = _.find(store.state.sala.Salas, {'id': turmasDisc[j].Sala2})
@@ -1111,13 +1111,13 @@ export default {
                     } else if (sala1 === undefined) {
                         salaTotal = sala2.nome
                     }else{
-                        salaTotal = sala1.nome + '/' + sala2.nome
+                        salaTotal = sala1.nome + '\n' + sala2.nome
                     }
 
                     tables.push({
                         style: 'tableExample',
                         table: {
-                            widths: [40, 35, '*', 62, 110, 65, ],
+                            widths: [40, 35, '*', 18, 44, 28, 82, 65, ],
                             headerRows: 1,
                             color: '#426',
                             body: [
@@ -1125,8 +1125,10 @@ export default {
                                     {text: 'Turma: ' + turmasDisc[j].letra, alignment: 'left', fontSize: 8, bold: true},
                                     {text: 'Docentes: ', alignment: 'left', fontSize: 8, bold: true},
                                     {text: docentes, alignment: 'left', fontSize: 8, bold: true},
-                                    {text: 'Sala: ' + salaTotal, alignment: 'left', fontSize: 8, bold: true},
-                                    {text: 'Horário: ' + horarioTotal, alignment: 'left', fontSize: 8, bold: true},
+                                    {text: 'Sala: ', alignment: 'left', fontSize: 8, bold: true},
+                                    {text: salaTotal, alignment: 'left', fontSize: 8, bold: true},
+                                    {text: 'Horário: ', alignment: 'left', fontSize: 8, bold: true},
+                                    {text: horarioTotal, alignment: 'left', fontSize: 8, bold: true},
                                     {text: 'Vagas: ' + this.vagasTurma(turmasDisc[j], 1), alignment: 'left', fontSize: 8, bold: true}]
                             ]
                         },
@@ -1227,7 +1229,7 @@ export default {
                     } else if (horario1 === undefined) {
                         horarioTotal = horario2.horario
                     }else{
-                        horarioTotal = horario1.horario + '/' + horario2.horario
+                        horarioTotal = horario1.horario + '\n' + horario2.horario
                     }
                     let sala1 = _.find(store.state.sala.Salas, {'id': turmasDisc[j].Sala1})
                     let sala2 = _.find(store.state.sala.Salas, {'id': turmasDisc[j].Sala2})
@@ -1239,13 +1241,13 @@ export default {
                     } else if (sala1 === undefined) {
                         salaTotal = sala2.nome
                     }else{
-                        salaTotal = sala1.nome + '/' + sala2.nome
+                        salaTotal = sala1.nome + '\n' + sala2.nome
                     }
 
                     tables.push({
                         style: 'tableExample',
                         table: {
-                            widths: [40, 35,  '*', 62, 110, 65, ],
+                            widths: [40, 35, '*', 18, 44, 28, 82, 65, ],
                             headerRows: 1,
                             color: '#426',
                             body: [
@@ -1253,8 +1255,10 @@ export default {
                                     {text: 'Turma: ' + turmasDisc[j].letra, alignment: 'left', fontSize: 8, bold: true},
                                     {text: 'Docentes: ', alignment: 'left', fontSize: 8, bold: true},
                                     {text: docentes, alignment: 'left', fontSize: 8, bold: true},
-                                    {text: 'Sala: ' + salaTotal, alignment: 'left', fontSize: 8, bold: true},
-                                    {text: 'Horário: ' + horarioTotal, alignment: 'left', fontSize: 8, bold: true},
+                                    {text: 'Sala: ', alignment: 'left', fontSize: 8, bold: true},
+                                    {text: salaTotal, alignment: 'left', fontSize: 8, bold: true},
+                                    {text: 'Horário: ', alignment: 'left', fontSize: 8, bold: true},
+                                    {text: horarioTotal, alignment: 'left', fontSize: 8, bold: true},
                                     {text: 'Vagas: ' + this.vagasTurma(turmasDisc[j], 2), alignment: 'left', fontSize: 8, bold: true}]
                             ]
                         },
