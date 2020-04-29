@@ -142,7 +142,9 @@
                   </div>
                 </td>
                 <td>
-                  <p style="width: 70px">{{ textoLab(disciplina.laboratorio) }}</p>
+                  <p style="width: 70px">
+                    {{ textoLab(disciplina.laboratorio) }}
+                  </p>
                 </td>
               </div>
             </tr>
@@ -265,16 +267,18 @@
 
             <div class="row mb-2 mx-0">
               <div class="form-group col m-0 px-0">
-                <label for="laboratorio" class="col-form-label">Laboratório</label>
-                <select
-                        type="text"
-                        class="form-control form-control-sm selectMenor"
-                        id="laboratorio"
-                        v-model="disciplinaForm.laboratorio"
+                <label for="laboratorio" class="col-form-label"
+                  >Laboratório</label
                 >
-                  <option value=0>Não</option>
-                  <option value=2>Desejável</option>
-                  <option value=1>Obrigatório</option>
+                <select
+                  type="text"
+                  class="form-control form-control-sm selectMenor"
+                  id="laboratorio"
+                  v-model="disciplinaForm.laboratorio"
+                >
+                  <option value="0">Não</option>
+                  <option value="1">Obrigatório</option>
+                  <option value="2">Desejável</option>
                 </select>
               </div>
             </div>
@@ -387,7 +391,7 @@ const emptyDisciplina = {
   cargaPratica: undefined,
   Perfil: undefined,
   ead: undefined,
-  laboratorio: undefined
+  laboratorio: undefined,
 };
 
 export default {
@@ -523,10 +527,10 @@ export default {
     },
 
     textoLab(lab) {
-      if (lab == 0) return 'Não'
-      if (lab == 1) return 'Obrigatório'
-      if (lab == 2) return 'Desejável'
-    }
+      if (lab == 0) return "Não";
+      if (lab == 1) return "Obrigatório";
+      if (lab == 2) return "Opcional";
+    },
   },
 
   computed: {
@@ -673,8 +677,8 @@ tbody {
   text-align: center;
 }
 .selectMenor {
-  min-width: 80px;
-  max-width: 80px;
+  min-width: 100px;
+  max-width: 100px;
   text-align: start !important;
 }
 .selectMaior {

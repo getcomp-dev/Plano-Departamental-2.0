@@ -17,7 +17,7 @@
           <b-button
             v-b-modal.modalFiltros
             title="Disciplinas"
-            class="cancelbtn btn-custom"
+            class="cancelbtn btn-icon"
           >
             <i class="fas fa-list-ul"></i>
           </b-button>
@@ -26,7 +26,7 @@
             <b-button
               v-b-modal.modalRelatorio
               type="button"
-              class="relatbtn btn-custom"
+              class="relatbtn btn-icon"
               title="Relatório"
             >
               <i class="far fa-file-alt"></i>
@@ -35,7 +35,7 @@
             <b-button
               v-b-modal.modalAjuda
               title="Ajuda"
-              class="relatbtn btn-custom"
+              class="relatbtn btn-icon"
             >
               <i class="fas fa-question"></i>
             </b-button>
@@ -646,13 +646,13 @@
         <div class="w-100">
           <template v-if="nav_ativo == 'disciplinas'">
             <b-button
-              class="btn-azul btn-df mr-2 btn-custom"
+              class="btn-azul btn-df mr-2 btn-icon"
               variant="success"
               @click="selectAllDisciplinas()"
               >Selecionar Todos</b-button
             >
             <b-button
-              class="btn-cinza btn-df mr-2 btn-custom"
+              class="btn-cinza btn-df mr-2 btn-icon"
               variant="secondary"
               @click="selectNoneDisciplinas()"
               >Desmarcar Todos</b-button
@@ -660,13 +660,13 @@
           </template>
           <template v-else-if="nav_ativo == 'perfis'">
             <b-button
-              class="btn-azul btn-df mr-2 btn-custom"
+              class="btn-azul btn-df mr-2 btn-icon"
               variant="success"
               @click="selectAllPerfis()"
               >Selecionar Todos</b-button
             >
             <b-button
-              class="btn-cinza btn-df mr-2 btn-custom"
+              class="btn-cinza btn-df mr-2 btn-icon"
               variant="secondary"
               @click="selectNonePerfis()"
               >Desmarcar Todos</b-button
@@ -674,13 +674,13 @@
           </template>
           <template v-else>
             <b-button
-              class="btn-azul btn-df mr-2 btn-custom"
+              class="btn-azul btn-df mr-2 btn-icon"
               variant="success"
               @click="selectAllSemestre()"
               >Selecionar Todos</b-button
             >
             <b-button
-              class="btn-cinza btn-df mr-2 btn-custom"
+              class="btn-cinza btn-df mr-2 btn-icon"
               variant="secondary"
               @click="selectNoneSemestre()"
               >Desmarcar Todos</b-button
@@ -690,7 +690,7 @@
         <b-button
           variant="success"
           @click="btnOK()"
-          class="btn-verde btn-df mr-2 btn-custom"
+          class="btn-verde btn-df mr-2 btn-icon"
           style="padding-right: 15px !important; padding-left: 15px !important;"
           >OK</b-button
         >
@@ -1426,7 +1426,7 @@ strong {
   text-transform: uppercase;
 }
 /* Botoes */
-.btn-custom {
+.btn-icon {
   padding: 0;
   border: none;
   background: none;
@@ -1525,11 +1525,6 @@ i.far {
   box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
 }
 
-i.fas,
-i.far {
-  font-size: 25px;
-}
-
 .cancelbtn {
   background-color: white;
   color: #cfcfc4;
@@ -1562,11 +1557,7 @@ i.far {
   align-items: center;
   margin-bottom: 0;
 }
-@media screen and (max-width: 378px) {
-  .div-titulo {
-    height: 70px !important;
-  }
-}
+
 .col-form-label {
   padding-left: 25px;
   font-size: 14px !important;
@@ -1577,58 +1568,6 @@ i.far {
   padding: 2px 5px 2px 5px !important;
   text-align: start;
 }
-
-/* ==== MODAL TABLE ==== */
-.modal-table {
-  display: block !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  font-size: 10px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-}
-.modal-table tr thead {
-  display: block;
-}
-.modal-table th {
-  padding: 0 !important;
-  text-align: center !important;
-  height: 18px !important;
-}
-
-.modal-table .p-header {
-  padding: 0px 5px 0px 5px !important;
-  margin: 0 !important;
-  text-align: start;
-  height: 18px !important;
-}
-.modal-table tbody {
-  max-height: 100%;
-  width: 100%;
-}
-.modal-table td {
-  border-top: 0;
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  /* height: 22px !important; */
-}
-.modal-table p {
-  margin: 0 !important;
-  text-align: center;
-  padding: 0 !important;
-  padding-right: 5px !important;
-  padding-left: 5px !important;
-}
-.modal-table input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-  margin-bottom: auto !important;
-  height: 13px !important;
-}
-/* FIM MODAL TABLE */
 
 /* searchDisciplinas */
 .search-text:hover {
@@ -1658,20 +1597,15 @@ i.far {
   text-decoration: underline;
 }
 
-.sidebar-animated {
-  -webkit-animation-duration: 0.2s;
-  -moz-animation-duration: 0.2s;
-  -o-animation-duration: 0.2s;
-  animation-duration: 0.2s;
-  -webkit-animation-fill-mode: both;
-  -moz-animation-fill-mode: both;
-  -o-animation-fill-mode: both;
-  animation-fill-mode: both;
-}
 .disable-link {
   color: #495057 !important;
 }
 .modal-content .modal-header {
   padding: 0 !important;
+}
+@media screen and (max-width: 378px) {
+  .div-titulo {
+    height: 70px !important;
+  }
 }
 </style>

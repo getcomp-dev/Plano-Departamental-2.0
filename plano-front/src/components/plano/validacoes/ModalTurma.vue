@@ -1398,7 +1398,6 @@ export default {
   vertical-align: middle !important;
   padding: 0 !important;
   margin: 0 !important;
-  /* height: 22px !important; */
 }
 .modal-table p {
   margin: 0 !important;

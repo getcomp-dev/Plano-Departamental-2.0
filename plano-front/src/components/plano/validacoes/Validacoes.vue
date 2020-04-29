@@ -14,9 +14,13 @@
           class="form-group col-xl-6 col-lg-6 col-md-5 col-sm-5 col-4 mb-0 p-0"
           style="justify-content: flex-end !important;"
         >
-          <!-- <b-button title="Filtros" class="btn-icon cancelbtn">
+          <b-button
+            v-b-modal.modalFiltros
+            title="Filtros"
+            class="cancelbtn btn-custom"
+          >
             <i class="fas fa-list-ul"></i>
-          </b-button> -->
+          </b-button>
         </div>
       </div>
     </div>
@@ -28,22 +32,22 @@
         class="nav nav-tabs card-header-tabs m-0"
         style="font-size: 11px !important; height: 30px;"
       >
-        <li class="nav-item" @click="nav_table = 'docentes'">
-          <a
-            class="nav-link border border-right-0"
-            :class="{
-              active: nav_table === 'docentes',
-            }"
-            >Docentes</a
-          >
-        </li>
         <li class="nav-item" @click="nav_table = 'turmas'">
           <a
-            class="nav-link border"
+            class="nav-link border border-right-0"
             :class="{
               active: nav_table === 'turmas',
             }"
             >Disciplinas</a
+          >
+        </li>
+        <li class="nav-item" @click="nav_table = 'docentes'">
+          <a
+            class="nav-link border "
+            :class="{
+              active: nav_table === 'docentes',
+            }"
+            >Docentes</a
           >
         </li>
       </ul>
@@ -76,7 +80,7 @@
                 </p>
               </th>
               <th>
-                <p style="width: 350px; text-align: start;" class="p-header">
+                <p style="width: 400px; text-align: start;" class="p-header">
                   Conflito
                 </p>
               </th>
@@ -97,7 +101,7 @@
                 </td>
 
                 <td>
-                  <p style="width: 350px; text-align: start;"></p>
+                  <p style="width: 400px; text-align: start;"></p>
                 </td>
               </div>
             </tr>
@@ -111,7 +115,7 @@
                 </td>
 
                 <td>
-                  <p v-html="erro" style="width: 350px; text-align: start;">
+                  <p v-html="erro" style="width: 400px; text-align: start;">
                     <!-- {{ erro.msg }} -->
                   </p>
                 </td>
@@ -217,7 +221,7 @@
               </th>
 
               <th>
-                <p style="width: 350px; text-align: start;" class="p-header">
+                <p style="width: 400px; text-align: start;" class="p-header">
                   Conflito
                 </p>
               </th>
@@ -268,13 +272,14 @@
                 </td>
 
                 <td>
-                  <p style="width: 350px; text-align: start;"></p>
+                  <p style="width: 400px; text-align: start;"></p>
                 </td>
                 <td>
                   <p
                     style="width: 50px; text-align: center;"
                     @click="openModalEditTurma(validacao.turma)"
                     class="clickable"
+                    title="Editar turma"
                   >
                     <button
                       class="btn btn-info btn-small btn-table"
@@ -282,7 +287,6 @@
                     >
                       EDIT
                     </button>
-                    <!-- <i class="fas fa-edit addbtn" style="font-size:1rem"></i> -->
                   </p>
                 </td>
               </div>
@@ -314,9 +318,10 @@
                 </td>
 
                 <td>
-                  <p v-html="erro.msg" style="width: 350px; text-align: start;">
-                    <!-- {{ erro.msg }}  -->
-                  </p>
+                  <p
+                    v-html="erro.msg"
+                    style="width: 400px; text-align: start;"
+                  ></p>
                 </td>
                 <td>
                   <p style="width:50px; " class="py-auto">
@@ -324,16 +329,255 @@
                       v-if="isCritical(erro.type)"
                       style=" background-color: inherit; font-size: 14px;"
                       class="fas fa-exclamation-circle delbtn my-auto"
+                      title="Conflito critico!"
                     ></i>
                   </p>
                 </td>
               </div>
             </tr>
           </template>
+          <!-- <template v-for="validacao in vetorDeValidacoes">
+            <tr
+              :key="
+                'validacoes-' + validacao.turma_id + validacao.disciplina_codigo
+              "
+              style="background-color:rgba(0, 0, 0, 0.089);"
+            >
+              <div class="max-content">
+                <td>
+                  <p style="width: 35px; text-align: center;">
+                    {{ validacao.turma_periodo }}
+                  </p>
+                </td>
+                <td>
+                  <p style="width: 70px; text-align: start;">
+                    {{ validacao.disciplina_perfil }}
+                  </p>
+                </td>
+                <td>
+                  <p style="width: 70px; text-align: start;">
+                    {{ validacao.disciplina_codigo }}
+                  </p>
+                </td>
+                <td>
+                  <p style="width: 300px; text-align: start;">
+                    {{ validacao.disciplina_nome }}
+                  </p>
+                </td>
+                <td>
+                  <p style="width: 35px; text-align: center;">
+                    {{ validacao.turma_letra }}
+                  </p>
+                </td>
+                <td>
+                  <p style="width: 130px; text-align: center;">
+                    {{ validacao.turma_docente1 }}
+                    <br />
+                    {{ validacao.turma_docente2 }}
+                  </p>
+                </td>
+
+                <td>
+                  <p style="width: 400px; text-align: start;">
+                    {{ validacao.msg }}
+                  </p>
+                </td>
+                <td>
+                  <p
+                    style="width: 50px; text-align: center;"
+                    @click="openModalEditTurma(validacao.turma)"
+                    class="clickable"
+                    title="Editar turma"
+                  >
+                    <button
+                      class="btn btn-info btn-small btn-table"
+                      style="font-size:11px"
+                    >
+                      EDIT
+                    </button>
+                  </p>
+                </td>
+              </div>
+            </tr>
+          </template> -->
         </tbody>
       </table>
     </div>
+    <!-- Modal Filtros -->
+    <b-modal id="modalFiltros" ref="modalFiltros" scrollable title="Filtros">
+      <div class="p-0 m-0" style="height: 30px; width: 465px;">
+        <ul
+          class="nav nav-tabs card-header-tabs m-0"
+          style="font-size: 11px !important; height: 30px;"
+        >
+          <li class="nav-item" @click="modal_navtab = 'conflito'">
+            <a
+              class="nav-link border border-right-0 clickable"
+              :class="{
+                active: modal_navtab == 'conflito',
+              }"
+              >Conflito</a
+            >
+          </li>
+          <li class="nav-item" @click="modal_navtab = 'semestre'">
+            <a
+              class="nav-link border clickable"
+              :class="{
+                active: modal_navtab == 'semestre',
+              }"
+              >Semestre</a
+            >
+          </li>
+        </ul>
+      </div>
+      <div
+        class="col m-0 p-0"
+        style="width: max-content; height: 450px !important;"
+      >
+        <!-- TABLE SEMESTRE -->
+        <table
+          v-if="modal_navtab === 'semestre'"
+          class="table table-bordered table-sm modal-table"
+          style="max-height: 392px !important;"
+        >
+          <thead class="thead-light ">
+            <tr class="sticky">
+              <div style="font-size: 11px !important;" class="max-content">
+                <th>
+                  <p style="width: 25px;" class="p-header"></p>
+                </th>
+                <th>
+                  <p class="p-header" style="width: 435px; text-align: start;">
+                    Semestre Letivo
+                  </p>
+                </th>
+              </div>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <div style="width: max-content;">
+                <td>
+                  <div style="width: 25px; height: inherit;" class="px-1">
+                    <input
+                      type="checkbox"
+                      class="form-check-input position-static m-0"
+                      v-model="semestre_1Ativo"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <p style="width: 435px; text-align: start;">PRIMEIRO</p>
+                </td>
+              </div>
+            </tr>
+            <tr>
+              <div style="width: max-content;">
+                <td>
+                  <div style="width: 25px; height: inherit;" class="px-1">
+                    <input
+                      type="checkbox"
+                      class="form-check-input position-static m-0"
+                      v-model="semestre_2Ativo"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <p style="width: 435px; text-align: start;">SEGUNDO</p>
+                </td>
+              </div>
+            </tr>
+          </tbody>
+        </table>
+        <!-- TABLE MODAL CONFLITOS -->
+        <table
+          v-else
+          class="table table-bordered table-sm modal-table"
+          style="max-height: 450px !important;"
+        >
+          <thead class="thead-light ">
+            <tr class="sticky">
+              <div style="font-size: 11px !important;" class="max-content">
+                <th>
+                  <p style="width: 25px;" class="p-header"></p>
+                </th>
+                <th>
+                  <p class="p-header" style="width: 435px; text-align: start;">
+                    Conflito
+                  </p>
+                </th>
+              </div>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="conflito in Conflitos"
+              :key="conflito.id"
+              style="text-transform:uppercase"
+            >
+              <div style="width: max-content;">
+                <td>
+                  <div style="width: 25px; height: inherit;" class="px-1">
+                    <input
+                      type="checkbox"
+                      class="form-check-input position-static m-0"
+                      v-model="ConflitosSelected"
+                      :value="conflito.type"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <p style="width: 435px; text-align: start;">
+                    {{ conflito.msg }}
+                  </p>
+                </td>
+              </div>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
+      <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
+        <div class="w-100">
+          <template v-if="modal_navtab === 'semestre'">
+            <b-button
+              class="btn-custom btn-azul btn-df mr-2"
+              variant="success"
+              @click="selectAllSemestre()"
+              >Selecionar Todos</b-button
+            >
+            <b-button
+              class="btn-custom btn-cinza btn-df mr-2"
+              variant="secondary"
+              @click="selectNoneSemestre()"
+              >Desmarcar Todos</b-button
+            >
+          </template>
+          <template v-else-if="modal_navtab === 'conflito'">
+            <b-button
+              class="btn-azul btn-df mr-2 btn-custom "
+              variant="success"
+              @click="selectAllConflitos()"
+              >Selecionar Todos</b-button
+            >
+            <b-button
+              class="btn-cinza btn-df mr-2 btn-custom "
+              variant="secondary"
+              @click="selectNoneConflitos()"
+              >Desmarcar Todos</b-button
+            >
+          </template>
+        </div>
+        <b-button
+          variant="success"
+          @click="btnOK()"
+          class="btn-custom btn-verde btn-df mr-2"
+          style="padding-right: 15px !important; padding-left: 15px !important;"
+          >OK</b-button
+        >
+      </div>
+    </b-modal>
+    <!-- modal turma edit -->
     <b-modal
       id="modalTurma"
       ref="modalTurma"
@@ -355,15 +599,68 @@ export default {
   name: "Validacoes",
   data() {
     return {
+      modal_navtab: "conflito",
+      ConflitosSelected: [],
+      ConflitosAtivados: [],
+      semestreAtual: 3,
+      semestre_1Ativo: true,
+      semestre_2Ativo: true,
       turma_clickada: null,
       nav_table: "turmas",
       ordemTurmas: { order: "turma_periodo", type: "asc" },
       ordemDocentes: "asc",
-      semestreAtual: 1,
       ordemDocentes: "asc",
-      grades1semestre: {CCD: [], CCN: [], EC:[], SI:[]},
-      grades2semestre: {CCD: [], CCN: [], EC:[], SI:[]}
-
+      evenCCN: "false",
+      evenCCD: "false",
+      evenEC: "false",
+      evenSI: "false",
+      ativos1: {
+        CCD: [[], [], [], [], [], [], [], [], [], []],
+        CCN: [[], [], [], [], [], [], [], [], [], []],
+        EC: [[], [], [], [], [], [], [], [], [], []],
+        SI: [[], [], [], [], [], [], [], [], [], []],
+        Eletivas: [],
+      },
+      ativos2: {
+        CCD: [[], [], [], [], [], [], [], [], [], []],
+        CCN: [[], [], [], [], [], [], [], [], [], []],
+        EC: [[], [], [], [], [], [], [], [], [], []],
+        SI: [[], [], [], [], [], [], [], [], [], []],
+        Eletivas: [],
+      },
+      Conflitos: [
+        { type: 1, msg: "Nenhum Turno alocado" },
+        {
+          type: 2,
+          msg: "Incompatbilidade entre turno e cadastro EAD da disciplina",
+        },
+        {
+          type: 3,
+          msg: "Horarios incompletos ou invalidos",
+        },
+        { type: 4, msg: "Nenhum Docente alocado" },
+        {
+          type: 5.1,
+          msg:
+            "Disciplina de laborátorio, porêm não possui laboratorio alocado",
+        },
+        {
+          type: 5.2,
+          msg:
+            "Disciplina desejável laborátorio, porêm não possui laboratorio alocado",
+        },
+        {
+          type: 6,
+          msg: "Limite de lotação das sala",
+        },
+        {
+          type: 7,
+          msg: "Apenas 4 ou menos vagas foram alocadas!",
+        },
+        { type: 8, msg: "Turma é EAD e com sala alocada" },
+      ],
+      grades1semestre: { CCD: [], CCN: [], EC: [], SI: [] },
+      grades2semestre: { CCD: [], CCN: [], EC: [], SI: [] },
     };
   },
   components: {
@@ -371,106 +668,186 @@ export default {
   },
   mounted() {
     //define grades ativas por periodo
-    let g
-    let periodoInicial, periodoFinal
-    let ano = this.$store.state.plano.Plano[0].ano
+    let g;
+    let periodoInicial, periodoFinal;
+    let ano = this.$store.state.plano.Plano[0].ano;
     //CCD
     g = _.filter(this.$store.state.grade.Grades, ["Curso", 4]);
     g = _.orderBy(g, "periodoInicio", "desc");
-    periodoFinal = 0
-    for(let i = 0; i < g.length; i++){
-      periodoInicial = periodoFinal + 1
-      periodoFinal = 1 + 2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
-              (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
-      this.grades1semestre.CCD.push({id:g[i].id, inicio: periodoInicial, fim:periodoFinal})
-      if(periodoFinal > 9) {
+    periodoFinal = 0;
+    for (let i = 0; i < g.length; i++) {
+      periodoInicial = periodoFinal + 1;
+      periodoFinal =
+        1 +
+        2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+        (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
+      this.grades1semestre.CCD.push({
+        id: g[i].id,
+        inicio: periodoInicial,
+        fim: periodoFinal,
+      });
+      if (periodoFinal > 9) {
         break;
       }
     }
-    periodoFinal = 0
-    for(let i = 0; i < g.length; i++){
-      periodoInicial = periodoFinal + 1
-      periodoFinal = 1 + 2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
-              (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
-      this.grades2semestre.CCD.push({id:g[i].id, inicio: periodoInicial, fim:periodoFinal})
-      if(periodoFinal > 9) {
+    periodoFinal = 0;
+    for (let i = 0; i < g.length; i++) {
+      periodoInicial = periodoFinal + 1;
+      periodoFinal =
+        1 +
+        2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+        (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
+      this.grades2semestre.CCD.push({
+        id: g[i].id,
+        inicio: periodoInicial,
+        fim: periodoFinal,
+      });
+      if (periodoFinal > 9) {
         break;
       }
     }
     //CCN
     g = _.filter(this.$store.state.grade.Grades, ["Curso", 1]);
     g = _.orderBy(g, "periodoInicio", "desc");
-    periodoFinal = 0
-    for(let i = 0; i < g.length; i++){
-      periodoInicial = periodoFinal + 1
-      periodoFinal = 1 + 2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
-              (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
-      this.grades1semestre.CCN.push({id:g[i].id, inicio: periodoInicial, fim:periodoFinal})
-      if(periodoFinal > 9) {
+    periodoFinal = 0;
+    for (let i = 0; i < g.length; i++) {
+      periodoInicial = periodoFinal + 1;
+      periodoFinal =
+        1 +
+        2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+        (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
+      this.grades1semestre.CCN.push({
+        id: g[i].id,
+        inicio: periodoInicial,
+        fim: periodoFinal,
+      });
+      if (periodoFinal > 9) {
         break;
       }
     }
-    periodoFinal = 0
-    for(let i = 0; i < g.length; i++){
-      periodoInicial = periodoFinal + 1
-      periodoFinal = 1 + 2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
-              (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
-      this.grades2semestre.CCN.push({id:g[i].id, inicio: periodoInicial, fim:periodoFinal})
-      if(periodoFinal > 9) {
+    periodoFinal = 0;
+    for (let i = 0; i < g.length; i++) {
+      periodoInicial = periodoFinal + 1;
+      periodoFinal =
+        1 +
+        2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+        (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
+      this.grades2semestre.CCN.push({
+        id: g[i].id,
+        inicio: periodoInicial,
+        fim: periodoFinal,
+      });
+      if (periodoFinal > 9) {
         break;
       }
     }
     //SI
     g = _.filter(this.$store.state.grade.Grades, ["Curso", 3]);
     g = _.orderBy(g, "periodoInicio", "desc");
-    periodoFinal = 0
-    for(let i = 0; i < g.length; i++){
-      periodoInicial = periodoFinal + 1
-      periodoFinal = 1 + 2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
-              (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
-      this.grades1semestre.SI.push({id:g[i].id, inicio: periodoInicial, fim:periodoFinal})
-      if(periodoFinal > 9) {
+    periodoFinal = 0;
+    for (let i = 0; i < g.length; i++) {
+      periodoInicial = periodoFinal + 1;
+      periodoFinal =
+        1 +
+        2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+        (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
+      this.grades1semestre.SI.push({
+        id: g[i].id,
+        inicio: periodoInicial,
+        fim: periodoFinal,
+      });
+      if (periodoFinal > 9) {
         break;
       }
     }
-    periodoFinal = 0
-    for(let i = 0; i < g.length; i++){
-      periodoInicial = periodoFinal + 1
-      periodoFinal = 1 + 2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
-              (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
-      this.grades2semestre.SI.push({id:g[i].id, inicio: periodoInicial, fim:periodoFinal})
-      if(periodoFinal > 9) {
+    periodoFinal = 0;
+    for (let i = 0; i < g.length; i++) {
+      periodoInicial = periodoFinal + 1;
+      periodoFinal =
+        1 +
+        2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+        (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
+      this.grades2semestre.SI.push({
+        id: g[i].id,
+        inicio: periodoInicial,
+        fim: periodoFinal,
+      });
+      if (periodoFinal > 9) {
         break;
       }
     }
     //EC
     g = _.filter(this.$store.state.grade.Grades, ["Curso", 2]);
     g = _.orderBy(g, "periodoInicio", "desc");
-    periodoFinal = 0
-    for(let i = 0; i < g.length; i++){
-      periodoInicial = periodoFinal + 1
-      periodoFinal = 1 + 2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
-              (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
-      this.grades1semestre.EC.push({id:g[i].id, inicio: periodoInicial, fim:periodoFinal})
-      if(periodoFinal > 9) {
+    periodoFinal = 0;
+    for (let i = 0; i < g.length; i++) {
+      periodoInicial = periodoFinal + 1;
+      periodoFinal =
+        1 +
+        2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+        (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
+      this.grades1semestre.EC.push({
+        id: g[i].id,
+        inicio: periodoInicial,
+        fim: periodoFinal,
+      });
+      if (periodoFinal > 9) {
         break;
       }
     }
-    periodoFinal = 0
-    for(let i = 0; i < g.length; i++){
-      periodoInicial = periodoFinal + 1
-      periodoFinal = 1 + 2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
-              (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
-      this.grades2semestre.EC.push({id:g[i].id, inicio: periodoInicial, fim:periodoFinal})
-      if(periodoFinal > 9) {
+    periodoFinal = 0;
+    for (let i = 0; i < g.length; i++) {
+      periodoInicial = periodoFinal + 1;
+      periodoFinal =
+        1 +
+        2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+        (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
+      this.grades2semestre.EC.push({
+        id: g[i].id,
+        inicio: periodoInicial,
+        fim: periodoFinal,
+      });
+      if (periodoFinal > 9) {
         break;
       }
     }
-    console.log(this.grades1semestre)
-    console.log(this.grades2semestre)
+    console.log(this.grades1semestre);
+    console.log(this.grades2semestre);
   },
 
   methods: {
+    btnOK() {
+      this.btnOkSemestre();
+      this.ConflitosAtivados = [...this.ConflitosSelected];
+      this.$refs.modalFiltros.hide();
+    },
+    btnOkSemestre() {
+      if (this.semestre_1Ativo && !this.semestre_2Ativo) {
+        this.semestreAtual = 1;
+      } else if (this.semestre_2Ativo && !this.semestre_1Ativo) {
+        this.semestreAtual = 2;
+      } else if (this.semestre_1Ativo && this.semestre_1Ativo) {
+        this.semestreAtual = 3;
+      } else {
+        this.semestreAtual = 3;
+      }
+    },
+    selectAllSemestre() {
+      this.semestre_1Ativo = true;
+      this.semestre_2Ativo = true;
+    },
+    selectNoneSemestre() {
+      this.semestre_1Ativo = false;
+      this.semestre_2Ativo = false;
+    },
+    selectAllConflitos() {
+      if (this.ConflitosSelected != []) this.ConflitosSelected = [];
+      for (var i = 0; i < this.Conflitos.length; i++)
+        this.ConflitosSelected.push(this.Conflitos[i].type);
+    },
+    selectNoneConflitos() {
+      this.ConflitosSelected = [];
+    },
     openModalEditTurma(turma) {
       this.turma_clickada = turma;
       this.$bvModal.show("modalTurma");
@@ -514,7 +891,7 @@ export default {
       return result;
     },
     isCritical(tipo) {
-      return tipo == 1 || tipo == 2 || tipo == 3 || tipo == 4 || tipo == 5
+      return tipo == 1 || tipo == 2 || tipo == 3 || tipo == 4 || tipo == 5.1
         ? true
         : false;
     },
@@ -537,7 +914,7 @@ export default {
         disciplina_nome: disciplina.nome,
         disciplina_codigo: disciplina.codigo,
         disciplina_ead: disciplina.ead,
-        disciplina_laboratorio: disciplina.laboratorio == 1,
+        disciplina_laboratorio: disciplina.laboratorio,
         disciplina_perfil: this.findPerfilById(disciplina.Perfil).abreviacao,
         conflitos: [],
       };
@@ -547,12 +924,14 @@ export default {
       //Turno
       check = this.checkTurno(validacao.turma_turno1);
       if (check) validacao.conflitos.push(check);
+
       //Compatibilidade do turno com disciplina
       check = this.checkTurnoEAD(
         validacao.disciplina_ead,
         validacao.turma_turno1
       );
       if (check) validacao.conflitos.push(check);
+
       //Horarios
       check = this.checkHorarios(
         validacao.disciplina_ead,
@@ -560,14 +939,16 @@ export default {
         validacao.turma_Horario2
       );
       if (check) validacao.conflitos.push(check);
+
       //Docente
       check = this.checkDocentes(
         validacao.turma_docente1,
         validacao.turma_docente2
       );
       if (check) validacao.conflitos.push(check);
+
       //Salas
-      check = this.checkSalas(
+      check = this.checkSalasLab(
         validacao.disciplina_laboratorio,
         validacao.turma_sala1,
         validacao.turma_sala2
@@ -589,16 +970,18 @@ export default {
         );
         if (check) validacao.conflitos.push(check);
       }
-      // check = this.checkVagasSalas(
-      //   validacao.turma_sala1,
-      //   validacao.turma_sala2,
-      //   validacao.pedidos_totais
-      // );
 
-      //Pedidos
+      // Pedidos - 7
       check = this.checkPedidos(validacao.pedidos_totais);
       if (check) validacao.conflitos.push(check);
-
+      // EAD com salas - 8
+      check = this.checkSalasInEAD(
+        validacao.disciplina_ead,
+        validacao.turma_sala1,
+        validacao.turma_sala2
+      );
+      if (check) validacao.conflitos.push(check);
+      //Periodo curso
       check = this.checkPeriodoCursos(validacao.turma);
       if (check) validacao.conflitos.push(check);
     },
@@ -632,14 +1015,28 @@ export default {
         ? { type: 4, msg: "Nenhum Docente alocado" }
         : false;
     },
-    checkSalas(isLab, sala1, sala2) {
-      return isLab && !this.isLab(sala1) && !this.isLab(sala2)
-        ? {
-            type: 5,
-            msg:
-              "Disciplina de laborátorio, porêm não possui laboratorio alocado",
-          }
-        : false;
+    checkSalasLab(isLab, sala1, sala2) {
+      //Não lab
+      if (isLab == 0) return false;
+      //Obrigatorio
+      else if (isLab == 1) {
+        return !this.isLab(sala1) && !this.isLab(sala2)
+          ? {
+              type: 5.1,
+              msg:
+                "Disciplina de laborátorio, porêm não possui laboratorio alocado",
+            }
+          : false;
+        //Desejavel
+      } else if (isLab == 2) {
+        return !this.isLab(sala1) && !this.isLab(sala2)
+          ? {
+              type: 5.2,
+              msg:
+                "Disciplina desejável laborátorio, porêm não possui laboratorio alocado",
+            }
+          : false;
+      }
     },
     checkVagaSala(sala_id, pedidos_totais) {
       let sala;
@@ -654,40 +1051,6 @@ export default {
         }
       }
     },
-    checkVagasSalas(sala1_id, sala2_id, pedidos_totais) {
-      let sala1, sala2;
-      if (sala1_id != null) sala1 = _.find(this.Salas, (s) => sala1_id == s.id);
-      if (sala2_id != null && sala2_id != sala1_id)
-        sala2 = _.find(this.Salas, (s) => sala2_id == s.id);
-      let result = { type: 6, msg: "" };
-
-      if (sala1 != undefined) {
-        if (sala1.lotacao_maxima < pedidos_totais) {
-          result.msg +=
-            "Limite da sala " +
-            sala1.nome +
-            " excedido!" +
-            "<br>Vagas: " +
-            pedidos_totais +
-            " - Lotaçao: " +
-            sala1.lotacao_maxima +
-            "<br/>";
-        }
-      }
-      if (sala2 != undefined) {
-        if (sala2.lotacao_maxima < pedidos_totais) {
-          result.msg +=
-            "Limite da sala " +
-            sala2.nome +
-            " excedido!" +
-            "<br>Vagas: " +
-            pedidos_totais +
-            " - Lotaçao: " +
-            sala2.lotacao_maxima;
-        }
-      }
-      return result.msg != "" ? result : false;
-    },
     checkPedidos(pedidos_totais) {
       return pedidos_totais <= 4
         ? {
@@ -695,6 +1058,14 @@ export default {
             msg: "Apenas 4 ou menos vagas foram alocadas!",
           }
         : false;
+    },
+    checkSalasInEAD(isEAD, sala1, sala2) {
+      if (isEAD) {
+        return sala1 != null || sala2 != null
+          ? { type: 8, msg: "Turma é EAD e com sala alocada" }
+          : false;
+      }
+      return false;
     },
     isLab(id) {
       let cond = _.find(
@@ -705,122 +1076,241 @@ export default {
       else return false;
     },
 
-    checkPeriodoCursos(turma){
-      if(turma.Horario1 === null && turma.Horario2 === null){
-        return false
+    checkPeriodoCursos(turma) {
+      if (turma.Horario1 === null && turma.Horario2 === null) {
+        return false;
       }
-      let msg = ''
-      let pedidos = this.$store.state.pedido.Pedidos[turma.id]
-      let grades
-      if(turma.periodo === 1 || turma.periodo === 2){
-        grades = this.grades1semestre
-      }else{
-        grades = this.grades2semestre
+      let msg = "";
+      let pedidos = this.$store.state.pedido.Pedidos[turma.id];
+      let grades;
+      if (turma.periodo === 1 || turma.periodo === 2) {
+        grades = this.grades1semestre;
+      } else {
+        grades = this.grades2semestre;
       }
-      let conflitos = false
-      if(_.find(pedidos, {Curso: 4}).vagasPeriodizadas > 0){
-        for(let i = 0; i < grades.CCD.length; i++){
-          let disciplinaGrade = _.find(this.$store.state.disciplinaGrade.DisciplinaGrades, {Grade:grades.CCD[i].id, Disciplina: turma.Disciplina})
-          if((disciplinaGrade !== undefined) && (disciplinaGrade.periodo >= grades.CCD[i].inicio) && (disciplinaGrade.periodo <= grades.CCD[i].fim)){
-            let disciplinasPeriodo = _.filter(this.$store.state.disciplinaGrade.DisciplinaGrades, {Grade:grades.CCD[i].id, periodo:disciplinaGrade.periodo})
-            for(let d = 0; d < disciplinasPeriodo.length; d++){
-              if(disciplinasPeriodo[d].Disciplina === turma.Disciplina){
-                continue
+      let conflitos = false;
+      if (_.find(pedidos, { Curso: 4 }).vagasPeriodizadas > 0) {
+        for (let i = 0; i < grades.CCD.length; i++) {
+          let disciplinaGrade = _.find(
+            this.$store.state.disciplinaGrade.DisciplinaGrades,
+            { Grade: grades.CCD[i].id, Disciplina: turma.Disciplina }
+          );
+          if (
+            disciplinaGrade !== undefined &&
+            disciplinaGrade.periodo >= grades.CCD[i].inicio &&
+            disciplinaGrade.periodo <= grades.CCD[i].fim
+          ) {
+            let disciplinasPeriodo = _.filter(
+              this.$store.state.disciplinaGrade.DisciplinaGrades,
+              { Grade: grades.CCD[i].id, periodo: disciplinaGrade.periodo }
+            );
+            for (let d = 0; d < disciplinasPeriodo.length; d++) {
+              if (disciplinasPeriodo[d].Disciplina === turma.Disciplina) {
+                continue;
               }
-              let turmasDisciplina = _.filter(this.$store.state.turma.Turmas, (t) => {
-                let pedido = _.find(this.$store.state.pedido.Pedidos[t.id], {Curso:4})
-                return ((t.periodo == turma.periodo) && (t.Disciplina === disciplinasPeriodo[d].Disciplina) && (pedido.vagasPeriodizadas > 0))
-              })
-              for(let t = 0; t < turmasDisciplina.length; t++){
-                if((turma.Horario1!==null && ((turma.Horario1 === turmasDisciplina[t].Horario1) || (turma.Horario1 === turmasDisciplina[t].Horario2)))
-                  || (turma.Horario2!==null && ((turma.Horario2 === turmasDisciplina[t].Horario1) || (turma.Horario2 === turmasDisciplina[t].Horario2)))){
-                  let disciplinaConflito = _.find(this.$store.state.disciplina.Disciplinas, {id:disciplinasPeriodo[d].Disciplina})
-                  conflitos = true
-                  msg = msg + `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Ciência da Computação - Diurno`
+              let turmasDisciplina = _.filter(
+                this.$store.state.turma.Turmas,
+                (t) => {
+                  let pedido = _.find(this.$store.state.pedido.Pedidos[t.id], {
+                    Curso: 4,
+                  });
+                  return (
+                    t.periodo == turma.periodo &&
+                    t.Disciplina === disciplinasPeriodo[d].Disciplina &&
+                    pedido.vagasPeriodizadas > 0
+                  );
+                }
+              );
+              for (let t = 0; t < turmasDisciplina.length; t++) {
+                if (
+                  (turma.Horario1 !== null &&
+                    (turma.Horario1 === turmasDisciplina[t].Horario1 ||
+                      turma.Horario1 === turmasDisciplina[t].Horario2)) ||
+                  (turma.Horario2 !== null &&
+                    (turma.Horario2 === turmasDisciplina[t].Horario1 ||
+                      turma.Horario2 === turmasDisciplina[t].Horario2))
+                ) {
+                  let disciplinaConflito = _.find(
+                    this.$store.state.disciplina.Disciplinas,
+                    { id: disciplinasPeriodo[d].Disciplina }
+                  );
+                  conflitos = true;
+                  msg =
+                    msg +
+                    `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Ciência da Computação - Diurno`;
                 }
               }
             }
           }
         }
       }
-      if(_.find(pedidos, {Curso: 1}).vagasPeriodizadas > 0){
-        for(let i = 0; i < grades.CCN.length; i++){
-          let disciplinaGrade = _.find(this.$store.state.disciplinaGrade.DisciplinaGrades, {Grade:grades.CCN[i].id, Disciplina: turma.Disciplina})
-          if((disciplinaGrade !== undefined) && (disciplinaGrade.periodo >= grades.CCN[i].inicio) && (disciplinaGrade.periodo <= grades.CCN[i].fim)){
-            let disciplinasPeriodo = _.filter(this.$store.state.disciplinaGrade.DisciplinaGrades, {Grade:grades.CCN[i].id, periodo:disciplinaGrade.periodo})
-            for(let d = 0; d < disciplinasPeriodo.length; d++){
-              if(disciplinasPeriodo[d].Disciplina === turma.Disciplina){
-                continue
+      if (_.find(pedidos, { Curso: 1 }).vagasPeriodizadas > 0) {
+        for (let i = 0; i < grades.CCN.length; i++) {
+          let disciplinaGrade = _.find(
+            this.$store.state.disciplinaGrade.DisciplinaGrades,
+            { Grade: grades.CCN[i].id, Disciplina: turma.Disciplina }
+          );
+          if (
+            disciplinaGrade !== undefined &&
+            disciplinaGrade.periodo >= grades.CCN[i].inicio &&
+            disciplinaGrade.periodo <= grades.CCN[i].fim
+          ) {
+            let disciplinasPeriodo = _.filter(
+              this.$store.state.disciplinaGrade.DisciplinaGrades,
+              { Grade: grades.CCN[i].id, periodo: disciplinaGrade.periodo }
+            );
+            for (let d = 0; d < disciplinasPeriodo.length; d++) {
+              if (disciplinasPeriodo[d].Disciplina === turma.Disciplina) {
+                continue;
               }
-              let turmasDisciplina = _.filter(this.$store.state.turma.Turmas, (t) => {
-                let pedido = _.find(this.$store.state.pedido.Pedidos[t.id], {Curso:1})
-                return ((t.periodo == turma.periodo) && (t.Disciplina === disciplinasPeriodo[d].Disciplina) && (pedido.vagasPeriodizadas > 0))
-              })
-              for(let t = 0; t < turmasDisciplina.length; t++){
-                if((turma.Horario1!==null && ((turma.Horario1 === turmasDisciplina[t].Horario1) || (turma.Horario1 === turmasDisciplina[t].Horario2)))
-                        || (turma.Horario2!==null && ((turma.Horario2 === turmasDisciplina[t].Horario1) || (turma.Horario2 === turmasDisciplina[t].Horario2)))){
-                  let disciplinaConflito = _.find(this.$store.state.disciplina.Disciplinas, {id:disciplinasPeriodo[d].Disciplina})
-                  conflitos = true
-                  msg = msg + `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Ciência da Computação - Noturno`
+              let turmasDisciplina = _.filter(
+                this.$store.state.turma.Turmas,
+                (t) => {
+                  let pedido = _.find(this.$store.state.pedido.Pedidos[t.id], {
+                    Curso: 1,
+                  });
+                  return (
+                    t.periodo == turma.periodo &&
+                    t.Disciplina === disciplinasPeriodo[d].Disciplina &&
+                    pedido.vagasPeriodizadas > 0
+                  );
+                }
+              );
+              for (let t = 0; t < turmasDisciplina.length; t++) {
+                if (
+                  (turma.Horario1 !== null &&
+                    (turma.Horario1 === turmasDisciplina[t].Horario1 ||
+                      turma.Horario1 === turmasDisciplina[t].Horario2)) ||
+                  (turma.Horario2 !== null &&
+                    (turma.Horario2 === turmasDisciplina[t].Horario1 ||
+                      turma.Horario2 === turmasDisciplina[t].Horario2))
+                ) {
+                  let disciplinaConflito = _.find(
+                    this.$store.state.disciplina.Disciplinas,
+                    { id: disciplinasPeriodo[d].Disciplina }
+                  );
+                  conflitos = true;
+                  msg =
+                    msg +
+                    `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Ciência da Computação - Noturno`;
                 }
               }
             }
           }
         }
       }
-      if(_.find(pedidos, {Curso: 3}).vagasPeriodizadas > 0){
-        for(let i = 0; i < grades.SI.length; i++){
-          let disciplinaGrade = _.find(this.$store.state.disciplinaGrade.DisciplinaGrades, {Grade:grades.SI[i].id, Disciplina: turma.Disciplina})
-          if((disciplinaGrade !== undefined) && (disciplinaGrade.periodo >= grades.SI[i].inicio) && (disciplinaGrade.periodo <= grades.SI[i].fim)){
-            let disciplinasPeriodo = _.filter(this.$store.state.disciplinaGrade.DisciplinaGrades, {Grade:grades.SI[i].id, periodo:disciplinaGrade.periodo})
-            for(let d = 0; d < disciplinasPeriodo.length; d++){
-              if(disciplinasPeriodo[d].Disciplina === turma.Disciplina){
-                continue
+      if (_.find(pedidos, { Curso: 3 }).vagasPeriodizadas > 0) {
+        for (let i = 0; i < grades.SI.length; i++) {
+          let disciplinaGrade = _.find(
+            this.$store.state.disciplinaGrade.DisciplinaGrades,
+            { Grade: grades.SI[i].id, Disciplina: turma.Disciplina }
+          );
+          if (
+            disciplinaGrade !== undefined &&
+            disciplinaGrade.periodo >= grades.SI[i].inicio &&
+            disciplinaGrade.periodo <= grades.SI[i].fim
+          ) {
+            let disciplinasPeriodo = _.filter(
+              this.$store.state.disciplinaGrade.DisciplinaGrades,
+              { Grade: grades.SI[i].id, periodo: disciplinaGrade.periodo }
+            );
+            for (let d = 0; d < disciplinasPeriodo.length; d++) {
+              if (disciplinasPeriodo[d].Disciplina === turma.Disciplina) {
+                continue;
               }
-              let turmasDisciplina = _.filter(this.$store.state.turma.Turmas, (t) => {
-                let pedido = _.find(this.$store.state.pedido.Pedidos[t.id], {Curso:3})
-                return ((t.periodo == turma.periodo) && (t.Disciplina === disciplinasPeriodo[d].Disciplina) && (pedido.vagasPeriodizadas > 0))
-              })
-              for(let t = 0; t < turmasDisciplina.length; t++){
-                if((turma.Horario1!==null && ((turma.Horario1 === turmasDisciplina[t].Horario1) || (turma.Horario1 === turmasDisciplina[t].Horario2)))
-                        || (turma.Horario2!==null && ((turma.Horario2 === turmasDisciplina[t].Horario1) || (turma.Horario2 === turmasDisciplina[t].Horario2)))){
-                  let disciplinaConflito = _.find(this.$store.state.disciplina.Disciplinas, {id:disciplinasPeriodo[d].Disciplina})
-                  conflitos = true
-                  msg = msg + `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Sistemas de Informação`
+              let turmasDisciplina = _.filter(
+                this.$store.state.turma.Turmas,
+                (t) => {
+                  let pedido = _.find(this.$store.state.pedido.Pedidos[t.id], {
+                    Curso: 3,
+                  });
+                  return (
+                    t.periodo == turma.periodo &&
+                    t.Disciplina === disciplinasPeriodo[d].Disciplina &&
+                    pedido.vagasPeriodizadas > 0
+                  );
+                }
+              );
+              for (let t = 0; t < turmasDisciplina.length; t++) {
+                if (
+                  (turma.Horario1 !== null &&
+                    (turma.Horario1 === turmasDisciplina[t].Horario1 ||
+                      turma.Horario1 === turmasDisciplina[t].Horario2)) ||
+                  (turma.Horario2 !== null &&
+                    (turma.Horario2 === turmasDisciplina[t].Horario1 ||
+                      turma.Horario2 === turmasDisciplina[t].Horario2))
+                ) {
+                  let disciplinaConflito = _.find(
+                    this.$store.state.disciplina.Disciplinas,
+                    { id: disciplinasPeriodo[d].Disciplina }
+                  );
+                  conflitos = true;
+                  msg =
+                    msg +
+                    `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Sistemas de Informação`;
                 }
               }
             }
           }
         }
       }
-      if(_.find(pedidos, {Curso: 2}).vagasPeriodizadas > 0){
-        for(let i = 0; i < grades.EC.length; i++){
-          let disciplinaGrade = _.find(this.$store.state.disciplinaGrade.DisciplinaGrades, {Grade:grades.EC[i].id, Disciplina: turma.Disciplina})
-          if((disciplinaGrade !== undefined) && (disciplinaGrade.periodo >= grades.EC[i].inicio) && (disciplinaGrade.periodo <= grades.EC[i].fim)){
-            let disciplinasPeriodo = _.filter(this.$store.state.disciplinaGrade.DisciplinaGrades, {Grade:grades.EC[i].id, periodo:disciplinaGrade.periodo})
-            for(let d = 0; d < disciplinasPeriodo.length; d++){
-              if(disciplinasPeriodo[d].Disciplina === turma.Disciplina){
-                continue
+      if (_.find(pedidos, { Curso: 2 }).vagasPeriodizadas > 0) {
+        for (let i = 0; i < grades.EC.length; i++) {
+          let disciplinaGrade = _.find(
+            this.$store.state.disciplinaGrade.DisciplinaGrades,
+            { Grade: grades.EC[i].id, Disciplina: turma.Disciplina }
+          );
+          if (
+            disciplinaGrade !== undefined &&
+            disciplinaGrade.periodo >= grades.EC[i].inicio &&
+            disciplinaGrade.periodo <= grades.EC[i].fim
+          ) {
+            let disciplinasPeriodo = _.filter(
+              this.$store.state.disciplinaGrade.DisciplinaGrades,
+              { Grade: grades.EC[i].id, periodo: disciplinaGrade.periodo }
+            );
+            for (let d = 0; d < disciplinasPeriodo.length; d++) {
+              if (disciplinasPeriodo[d].Disciplina === turma.Disciplina) {
+                continue;
               }
-              let turmasDisciplina = _.filter(this.$store.state.turma.Turmas, (t) => {
-                let pedido = _.find(this.$store.state.pedido.Pedidos[t.id], {Curso:2})
-                return ((t.periodo == turma.periodo) && (t.Disciplina === disciplinasPeriodo[d].Disciplina) && (pedido.vagasPeriodizadas > 0))
-              })
-              for(let t = 0; t < turmasDisciplina.length; t++){
-                if((turma.Horario1!==null && ((turma.Horario1 === turmasDisciplina[t].Horario1) || (turma.Horario1 === turmasDisciplina[t].Horario2)))
-                        || (turma.Horario2!==null && ((turma.Horario2 === turmasDisciplina[t].Horario1) || (turma.Horario2 === turmasDisciplina[t].Horario2)))){
-                  let disciplinaConflito = _.find(this.$store.state.disciplina.Disciplinas, {id:disciplinasPeriodo[d].Disciplina})
-                  conflitos = true
-                  msg = msg + `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Engenharia Computacional`
+              let turmasDisciplina = _.filter(
+                this.$store.state.turma.Turmas,
+                (t) => {
+                  let pedido = _.find(this.$store.state.pedido.Pedidos[t.id], {
+                    Curso: 2,
+                  });
+                  return (
+                    t.periodo == turma.periodo &&
+                    t.Disciplina === disciplinasPeriodo[d].Disciplina &&
+                    pedido.vagasPeriodizadas > 0
+                  );
+                }
+              );
+              for (let t = 0; t < turmasDisciplina.length; t++) {
+                if (
+                  (turma.Horario1 !== null &&
+                    (turma.Horario1 === turmasDisciplina[t].Horario1 ||
+                      turma.Horario1 === turmasDisciplina[t].Horario2)) ||
+                  (turma.Horario2 !== null &&
+                    (turma.Horario2 === turmasDisciplina[t].Horario1 ||
+                      turma.Horario2 === turmasDisciplina[t].Horario2))
+                ) {
+                  let disciplinaConflito = _.find(
+                    this.$store.state.disciplina.Disciplinas,
+                    { id: disciplinasPeriodo[d].Disciplina }
+                  );
+                  conflitos = true;
+                  msg =
+                    msg +
+                    `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Engenharia Computacional`;
                 }
               }
             }
           }
         }
       }
-      if(conflitos) return {type: 8, msg: msg}
-      else return false
-
+      if (conflitos) return { type: 8, msg: msg };
+      else return false;
     },
 
     creditosGraduacao(docente) {
@@ -860,13 +1350,34 @@ export default {
 
       return cargaTotalDocente;
     },
-
   },
   computed: {
+    vetorDeValidacoes() {
+      let result = [];
+
+      this.Turmas.forEach((turma) => {
+        let disciplina = this.findDisciplinaById(turma.Disciplina);
+        if (disciplina) {
+          let validacao = this.createValidacao(turma, disciplina);
+          if (
+            validacao.turma_turno1 === null ||
+            validacao.turma_turno1 === undefined
+          ) {
+            result.push({ type: 1, msg: "Nenhum Turno alocado", ...validacao });
+          }
+        }
+      });
+      return result;
+    },
     //Turmas validacoes ordenadas
     Turmas_Validacoes_Ordered() {
       return _.orderBy(
-        this.Turmas_Validacoes,
+        _.filter(this.Turmas_Validacoes, (valid) => {
+          if (this.semestreAtual === 1) return valid.turma_periodo == 1;
+          else if (this.semestreAtual === 2) return valid.turma_periodo == 1;
+
+          return true;
+        }),
         this.ordemTurmas.order,
         this.ordemTurmas.type
       );
@@ -882,10 +1393,22 @@ export default {
           let validacao = this.createValidacao(turma, disciplina);
           this.checkAllValidations(validacao);
 
+          validacao.conflitos = _.filter(validacao.conflitos, (c) =>
+            _.find(this.ConflitosAtivados, (id) => c.type == id)
+          );
           if (validacao.conflitos.length) turmas_resultante.push(validacao);
         }
       });
+
       return turmas_resultante;
+      // .filter((valid) => {
+      //   valid.conflitos = _.filter(valid.conflitos, (c) =>
+      //     _.find(this.ConflitosAtivados, (id) => c.type == id)
+      //   );
+
+      //   if (valid.conflitos.length != 0) return true;
+      //   return false;
+      // });
     },
 
     Docentes_validacoes() {
@@ -1027,7 +1550,7 @@ tbody {
   padding: 0 0.25rem !important;
 }
 /* Botoes */
-.btn-icon {
+.btn-custom {
   padding: 0;
   border: none;
   background: none;
@@ -1048,35 +1571,18 @@ i.fas,
 i.far {
   font-size: 25px;
 }
-
-.cancelbtn {
-  background-color: white !important;
-  color: #cfcfc4;
+.btn-df {
+  font-size: 12px;
+  height: 25px;
+  min-width: -webkit-max-content;
+  min-width: -moz-max-content;
+  min-width: max-content;
+  max-width: -webkit-max-content;
+  max-width: -moz-max-content;
+  max-width: max-content;
+  padding: 0 5px 0 5px;
 }
 
-.cancelbtn:hover {
-  background-color: white;
-  color: #b8b4a8;
-}
-
-.cancelbtn:focus {
-  color: #b8b8a8;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #ada89a;
-}
-.addbtn {
-  color: #7cd17c;
-}
-
-.addbtn:hover {
-  color: #77dd77;
-}
-
-.addbtn:focus {
-  color: #77dd77;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #2fbf53;
-}
 .nav-link {
   color: #007bff !important;
   cursor: pointer;
@@ -1089,17 +1595,5 @@ i.far {
   color: #495057 !important;
   cursor: default;
   text-decoration: none !important;
-}
-.delbtn {
-  background-color: white;
-  color: #ff817b;
-}
-.delbtn:hover {
-  color: #ff5f48;
-}
-.delbtn:focus {
-  color: #ff5f48;
-  -webkit-text-stroke-width: 2px;
-  -webkit-text-stroke-color: #ff4e34;
 }
 </style>
