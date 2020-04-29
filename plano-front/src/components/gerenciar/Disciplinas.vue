@@ -273,7 +273,7 @@
                         v-model="disciplinaForm.laboratorio"
                 >
                   <option value=0>Não</option>
-                  <option value=2>Opcional</option>
+                  <option value=2>Desejável</option>
                   <option value=1>Obrigatório</option>
                 </select>
               </div>
@@ -525,7 +525,7 @@ export default {
     textoLab(lab) {
       if (lab == 0) return 'Não'
       if (lab == 1) return 'Obrigatório'
-      if (lab == 2) return 'Opcional'
+      if (lab == 2) return 'Desejável'
     }
   },
 
