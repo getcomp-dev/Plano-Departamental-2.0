@@ -911,7 +911,6 @@
     </b-modal>
 
     <!-- Modal para escolher relatório parcial ou completo-->
-    <!-- MODAL DE AJUDA -->
     <b-modal id="modalRelatorio" ref="relatorioModal" scrollable title="Relatório">
       <div class="modal-body">
         <ul class="listas list-group">
@@ -1038,7 +1037,6 @@ export default {
         });
       }
       if(opt === 2){
-
         pdfs.pdfRelatorioDisciplinas({
           disciplinasSelecionadas: this.Disciplinas,
         });

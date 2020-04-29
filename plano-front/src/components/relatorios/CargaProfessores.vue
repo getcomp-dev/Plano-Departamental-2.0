@@ -11,7 +11,7 @@
       style="height: 38px;"
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="titulo col-8 col-sm-5 col-md-4 col-lg-3 col-xl-3" v-on:click="verificaDocentes">
+        <h1 class="titulo col-8 col-sm-5 col-md-4 col-lg-3 col-xl-3">
           Carga Professores
         </h1>
 
@@ -24,14 +24,14 @@
               <i class="fas fa-list-ul"></i>
             </b-button>
 
-            <button
+            <b-button
+                    v-b-modal.modalRelatorio
               type="button"
               class="relatbtn"
               title="Relatório"
-              v-on:click.prevent="pdf"
             >
               <i class="far fa-file-alt"></i>
-            </button>
+            </b-button>
 
             <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
               <i class="fas fa-question"></i>
@@ -404,8 +404,8 @@
               class="far fa-file-alt relatbtn px-1"
               style="font-size: 12px;"
             ></i>
-            e aguarde para fazer
-            <font style="font-style: italic;">download</font> do mesmo.
+            e selecione se deseja o relatório completo, com todos os docentess,
+            ou apenas o relatório parcial, com os docentes selecionados.
           </li>
         </ul>
       </div>
@@ -459,7 +459,7 @@
                       placeholder="Pesquise o nome de um docente..."
                       v-model="searchProf"
                     />
-                    <div class="input-group-append" @click="searchProf = null">
+                    <div class="input-group-append" @click="clearSearchProf()">
                       <span
                         class="input-group-text"
                         style="height: 25px; font-size: 18px; cursor: pointer;"
@@ -565,6 +565,22 @@
       </div>
     </b-modal>
 
+    <!-- Modal para escolher relatório parcial ou completo-->
+    <b-modal id="modalRelatorio" ref="relatorioModal" scrollable title="Relatório">
+      <div class="modal-body">
+        <ul class="listas list-group">
+          <li class="list-group-item clickable" v-on:click="pdf(1)">
+            <strong>Relatório Parcial</strong>
+          </li>
+          <li class="list-group-item clickable" v-on:click="pdf(2)">
+            <strong>Relatório Completo</strong>
+          </li>
+        </ul>
+      </div>
+
+      <div slot="modal-footer" style="display: none;"></div>
+    </b-modal>
+
   </div>
 </template>
 
@@ -596,8 +612,19 @@ export default {
     }, 300);
   },
   methods: {
-    pdf() {
-      pdfs.pdfCargaProfessores();
+    pdf(opt) {
+      if(opt === 1){
+        pdfs.pdfCargaProfessores({
+          Docentes: this.DocentesAtivados,
+          SemAlocacao: this.SemAlocacao
+        });
+      }
+      if(opt === 2){
+        pdfs.pdfCargaProfessores({
+          Docentes: this.Docentes,
+          SemAlocacao: true
+        });
+      }
     },
     toggleOrdProf_Modal() {
       if (this.ordemProf_Modal.type == "asc") {
@@ -737,6 +764,10 @@ export default {
         return carga.Docente === prof_id;
       });
     },
+
+    clearSearchProf() {
+      this.searchProf = null
+    }
 
   },
 

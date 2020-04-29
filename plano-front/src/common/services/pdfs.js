@@ -594,7 +594,7 @@ export default {
         return c
     },
 
-    pdfCargaProfessores() {
+    pdfCargaProfessores(data) {
 
         var pdfMake = require('pdfmake/build/pdfmake.js')
         if (pdfMake.vfs == undefined){
@@ -620,7 +620,7 @@ export default {
                 }
             ]
         })
-        let professores = _.orderBy(_.filter(store.state.docente.Docentes, ['ativo', true]), 'nome')
+        let professores = _.orderBy(_.filter(data.Docentes, ['ativo', true]), 'nome')
         let turmasProf
         let posProf
         for(let i = 0; i < professores.length; i++){
@@ -811,7 +811,7 @@ export default {
         }
 
         let turmasSemAlocacao = this.turmasSemAlocacao()
-        if(turmasSemAlocacao.length > 0){
+        if(data.SemAlocacao && turmasSemAlocacao.length > 0){
             tables.push({
                 style: 'tableExample',
                 table: {
