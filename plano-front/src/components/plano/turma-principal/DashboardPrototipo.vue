@@ -356,7 +356,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="curso in Cursos_filtred" :key="'cursoMd' + curso.id">
+            <tr v-for="curso in CursosOrdered" :key="'cursoMd' + curso.id">
               <div class="max-content">
                 <td>
                   <div style="width: 25px; height: inherit;" class="px-1">
@@ -1140,14 +1140,14 @@ export default {
 
   computed: {
     //Todos Cursos
-    Cursos() {
-      let result = this.$store.state.curso.Cursos;
-
-      //Filtro search
+    CursosFiltred() {
       if (this.searchCursos != null) {
-        let searchUpperCase = this.searchCursos.toUpperCase();
+        let searchUpperCase = this.searchCursos
+          .toUpperCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
 
-        return this.$store.state.curso.Cursos.filter((curso) => {
+        return _.filter(this.$store.state.curso.Cursos, (curso) => {
           return (
             curso.nome
               .normalize("NFD")
@@ -1156,12 +1156,12 @@ export default {
           );
         });
       }
-      return result;
+      return this.$store.state.curso.Cursos;
     },
     //Cursos Ordenados
-    Cursos_filtred() {
+    CursosOrdered() {
       return _.orderBy(
-        this.Cursos,
+        this.CursosFiltred,
         this.ordenacaoCurso.order,
         this.ordenacaoCurso.type
       );

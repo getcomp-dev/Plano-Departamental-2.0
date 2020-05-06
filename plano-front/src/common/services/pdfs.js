@@ -621,16 +621,26 @@ export default {
             ]
         })
         let professores = _.orderBy(_.filter(data.Docentes, ['ativo', true]), 'nome')
-        let turmasProf
-        let posProf
+        let turmasProf1, turmasProf2
+        let posProf1, posProf2
         for(let i = 0; i < professores.length; i++){
-            turmasProf = this.turmas(professores[i])
-            posProf = this.pos(professores[i])
-            if(turmasProf.length > 0 || posProf.length > 0){
+            turmasProf1 = _.filter(this.turmas(professores[i]), function (t) {
+                return t.periodo == 1 || t.periodo == 2
+            })
+            turmasProf2 = _.filter(this.turmas(professores[i]), function (t) {
+                return t.periodo == 3 || t.periodo == 4
+            })
+            posProf1 = _.filter(this.pos(professores[i]), function (p) {
+                return p.trimestre == 1 || p.trimestre == 2
+            })
+            posProf2 = _.filter(this.pos(professores[i]), function (p) {
+                return p.trimestre == 3 || p.trimestre == 4
+            })
+            if(turmasProf1.length > 0 || turmasProf2.length > 0 || posProf1.length > 0 || posProf2.length > 0){
                 tables.push({
                     style: 'tableExample',
                     table: {
-                        widths: ['*', 32, 32],
+                        widths: ['*', 75],
                         headerRows: 1,
                         color: '#426',
                         body: [
@@ -641,17 +651,12 @@ export default {
                                 bold: true
                             },
                             {
-                                text: 'C1:' + this.creditos1(professores[i]),
+                                text: 'Carga Total:' + (this.creditos1(professores[i]) + this.creditos2(professores[i])),
                                 alignment: 'center',
                                 fontSize: 9,
                                 bold: true
                             },
-                            {
-                                text: 'C2:' + this.creditos2(professores[i]),
-                                alignment: 'center',
-                                fontSize: 9,
-                                bold: true
-                            }],
+                            ],
                         ]
                     },
                     layout: {
@@ -683,36 +688,36 @@ export default {
                         fontSize: 8,
                         bold: true
                     }, {
-                        text: 'C1',
+                        text: 'CS1',
                         alignment: 'center',
                         fontSize: 8,
                         bold: true
                     }, {
-                        text: 'C2',
+                        text: 'CS2',
                         alignment: 'center',
                         fontSize: 8,
                         bold: true
                     }],
                 ]
-                for (var j = 0; j < turmasProf.length; j++) {
+                for (var j = 0; j < turmasProf1.length; j++) {
                     var disciplina = undefined
                     var horario1 = undefined
                     var horario2 = undefined
                     var c1 = 0
                     var c2 = 0
                     for (var k = 0; k < store.state.disciplina.Disciplinas.length; k++) {
-                        if (turmasProf[j].Disciplina === store.state.disciplina.Disciplinas[k].id) {
+                        if (turmasProf1[j].Disciplina === store.state.disciplina.Disciplinas[k].id) {
                             disciplina = store.state.disciplina.Disciplinas[k]
                         }
                     }
                     for (var l = 0; l < store.state.horario.Horarios.length; l++) {
-                        if (turmasProf[j].Horario1 === store.state.horario.Horarios[l].id) {
+                        if (turmasProf1[j].Horario1 === store.state.horario.Horarios[l].id) {
                             horario1 = store.state.horario.Horarios[l]
                         }
                     }
 
                     for (var m = 0; m < store.state.horario.Horarios.length; m++) {
-                        if (turmasProf[j].Horario2 === store.state.horario.Horarios[m].id) {
+                        if (turmasProf1[j].Horario2 === store.state.horario.Horarios[m].id) {
                             horario2 = store.state.horario.Horarios[m]
                         }
                     }
@@ -725,20 +730,20 @@ export default {
                     }else{
                         var horarioTotal = horario1.horario + '/' + horario2.horario
                     }
-                    if (turmasProf[j].periodo == 1) {
-                        if((turmasProf[j].Docente1 > 0) && (turmasProf[j].Docente2 > 0))
+                    if (turmasProf1[j].periodo == 1) {
+                        if((turmasProf1[j].Docente1 > 0) && (turmasProf1[j].Docente2 > 0))
                             c1 = (disciplina.cargaTeorica + disciplina.cargaPratica)/2
                         else
                             c1 = disciplina.cargaTeorica + disciplina.cargaPratica
                     } else {
-                        if((turmasProf[j].Docente1 > 0) && (turmasProf[j].Docente2 > 0))
+                        if((turmasProf1[j].Docente1 > 0) && (turmasProf1[j].Docente2 > 0))
                             c2 = (disciplina.cargaTeorica + disciplina.cargaPratica)/2
                         else
                             c2 = disciplina.cargaTeorica + disciplina.cargaPratica
                     }
                     tableDocenteBody.push([
                     '', {
-                        text:turmasProf[j].periodo,
+                        text:turmasProf1[j].periodo,
                         fontSize: 6,
                         alignment: 'left'
                     }, {
@@ -750,7 +755,7 @@ export default {
                         fontSize: 6,
                         alignment: 'left'
                     }, {
-                        text: turmasProf[j].letra,
+                        text: turmasProf1[j].letra,
                         fontSize: 6,
                         alignment: 'center'
                     }, {
@@ -758,41 +763,152 @@ export default {
                         fontSize: 6,
                         alignment: 'center'
                     }, {
-                        text:c1,
+                        text:(c1 === 0 ? '' : c1),
                         fontSize: 6,
                         alignment: 'center'
                     }, {
-                        text:c2,
+                        text:(c2 === 0 ? '' : c2),
                         fontSize: 6,
                         alignment: 'center'}])
                 }
-                for (var n = 0; n < posProf.length; n++) {
+                for (var n = 0; n < posProf1.length; n++) {
                     var c1 = 0
                     var c2 = 0
-                    if (posProf[n].trimestre === 1 || posProf[n].trimestre === 2) {
-                        c1 = posProf[n].creditos
+                    if (posProf1[n].trimestre === 1 || posProf1[n].trimestre === 2) {
+                        c1 = posProf1[n].creditos
                     } else {
-                        c2 = posProf[n].creditos
+                        c2 = posProf1[n].creditos
                     }
                     tableDocenteBody.push([
                     '', {
-                        text:posProf[n].trimestre,
+                        text:posProf1[n].trimestre,
                         fontSize: 6,
                         alignment: 'left'
                     }, '', {
-                        text: 'Disciplina do ' + posProf[n].programa,
+                        text: 'Disciplina do ' + posProf1[n].programa,
                         fontSize: 6,
                         alignment: 'left'
                     }, '', '', {
-                        text:c1,
+                        text:(c1 === 0 ? '' : c1),
                         fontSize: 6,
                         alignment: 'center'
                     }, {
-                        text:c2,
+                        text:(c2 === 0 ? '' : c2),
                         fontSize: 6,
                         alignment: 'center'
                     }])
                 }
+                for (var j = 0; j < turmasProf2.length; j++) {
+                    var disciplina = undefined
+                    var horario1 = undefined
+                    var horario2 = undefined
+                    var c1 = 0
+                    var c2 = 0
+                    for (var k = 0; k < store.state.disciplina.Disciplinas.length; k++) {
+                        if (turmasProf2[j].Disciplina === store.state.disciplina.Disciplinas[k].id) {
+                            disciplina = store.state.disciplina.Disciplinas[k]
+                        }
+                    }
+                    for (var l = 0; l < store.state.horario.Horarios.length; l++) {
+                        if (turmasProf2[j].Horario1 === store.state.horario.Horarios[l].id) {
+                            horario1 = store.state.horario.Horarios[l]
+                        }
+                    }
+
+                    for (var m = 0; m < store.state.horario.Horarios.length; m++) {
+                        if (turmasProf2[j].Horario2 === store.state.horario.Horarios[m].id) {
+                            horario2 = store.state.horario.Horarios[m]
+                        }
+                    }
+                    if(horario1===undefined && horario2===undefined){
+                        horarioTotal = ''
+                    }else if (horario2 === undefined) {
+                        var horarioTotal = horario1.horario
+                    } else if (horario1 === undefined) {
+                        var horarioTotal = horario2.horario
+                    }else{
+                        var horarioTotal = horario1.horario + '/' + horario2.horario
+                    }
+                    if (turmasProf2[j].periodo == 1) {
+                        if((turmasProf2[j].Docente1 > 0) && (turmasProf2[j].Docente2 > 0))
+                            c1 = (disciplina.cargaTeorica + disciplina.cargaPratica)/2
+                        else
+                            c1 = disciplina.cargaTeorica + disciplina.cargaPratica
+                    } else {
+                        if((turmasProf2[j].Docente1 > 0) && (turmasProf2[j].Docente2 > 0))
+                            c2 = (disciplina.cargaTeorica + disciplina.cargaPratica)/2
+                        else
+                            c2 = disciplina.cargaTeorica + disciplina.cargaPratica
+                    }
+                    tableDocenteBody.push([
+                        '', {
+                            text:turmasProf2[j].periodo,
+                            fontSize: 6,
+                            alignment: 'left'
+                        }, {
+                            text: disciplina.codigo,
+                            fontSize: 6,
+                            alignment: 'left'
+                        }, {
+                            text: disciplina.nome,
+                            fontSize: 6,
+                            alignment: 'left'
+                        }, {
+                            text: turmasProf2[j].letra,
+                            fontSize: 6,
+                            alignment: 'center'
+                        }, {
+                            text: horarioTotal,
+                            fontSize: 6,
+                            alignment: 'center'
+                        }, {
+                            text:(c1 === 0 ? '' : c1),
+                            fontSize: 6,
+                            alignment: 'center'
+                        }, {
+                            text:(c2 === 0 ? '' : c2),
+                            fontSize: 6,
+                            alignment: 'center'}])
+                }
+                for (var n = 0; n < posProf2.length; n++) {
+                    var c1 = 0
+                    var c2 = 0
+                    if (posProf2[n].trimestre === 1 || posProf2[n].trimestre === 2) {
+                        c1 = posProf2[n].creditos
+                    } else {
+                        c2 = posProf2[n].creditos
+                    }
+                    tableDocenteBody.push([
+                        '', {
+                            text:posProf2[n].trimestre,
+                            fontSize: 6,
+                            alignment: 'left'
+                        }, '', {
+                            text: 'Disciplina do ' + posProf2[n].programa,
+                            fontSize: 6,
+                            alignment: 'left'
+                        }, '', '', {
+                            text:(c1 === 0 ? '' : c1),
+                            fontSize: 6,
+                            alignment: 'center'
+                        }, {
+                            text:(c2 === 0 ? '' : c2),
+                            fontSize: 6,
+                            alignment: 'center'
+                        }])
+                }
+                tableDocenteBody.push([
+                    '', '', '', '', '', '', {
+                        text:this.creditos1(professores[i]),
+                        fontSize: 8,
+                        alignment: 'center',
+                        bold: true
+                    }, {
+                        text:this.creditos2(professores[i]),
+                        fontSize: 8,
+                        alignment: 'center',
+                        bold: true
+                    }])
                 tables.push({
                     style: 'tableExample',
                     table: {
@@ -931,11 +1047,11 @@ export default {
                         fontSize: 6,
                         alignment: 'center'
                     }, {
-                        text:c1,
+                        text:(c1 === 0 ? '' : c1),
                         fontSize: 6,
                         alignment: 'center'
                     }, {
-                        text:c2,
+                        text:(c2 === 0 ? '' : c2),
                         fontSize: 6,
                         alignment: 'center'}])
                 tables.push({
@@ -1117,7 +1233,7 @@ export default {
                     tables.push({
                         style: 'tableExample',
                         table: {
-                            widths: [40, 35, '*', 18, 44, 28, 82, 65, ],
+                            widths: [40, 35, '*', 18, 44, 28, 42, 65, ],
                             headerRows: 1,
                             color: '#426',
                             body: [
@@ -1247,7 +1363,7 @@ export default {
                     tables.push({
                         style: 'tableExample',
                         table: {
-                            widths: [40, 35, '*', 18, 44, 28, 82, 65, ],
+                            widths: [40, 35, '*', 18, 44, 28, 42, 65, ],
                             headerRows: 1,
                             color: '#426',
                             body: [

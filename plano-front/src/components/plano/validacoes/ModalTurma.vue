@@ -1,25 +1,25 @@
 <template>
   <div id="ModalTurma" class="modal-turma">
-    <h3 class="modal-title p-0 m-0 mb-2 col-12">
-      {{
-        turmaForm.Disciplina
-          ? findDisciplinaById(turmaForm.Disciplina).codigo
-          : ""
-      }}
-      -
-      {{
-        turmaForm.Disciplina
-          ? findDisciplinaById(turmaForm.Disciplina).nome
-          : ""
-      }}
-    </h3>
-
-    <hr class="m-0" />
+    <div class="form-row w-100 m-0 pr-1">
+      <p class="modal-title col p-0 m-0 ">
+        {{
+          disciplinaAtual
+            ? disciplinaAtual.codigo + " - " + disciplinaAtual.nome
+            : ""
+        }}
+      </p>
+      <span
+        class="col-4 modal-title p-0 m-0 text-right"
+        style="font-weight:normal"
+        >Créditos: {{ CreditosDaDisciplina }}</span
+      >
+    </div>
+    <hr class="my-2" />
     <!-- TURMA INFOS -->
     <div class="form-container row m-0 p-0 w-100">
-      <!-- Periodo e Creditos -->
+      <!-- Semestre, Turma e Creditos -->
       <div class="form-row w-100">
-        <div class="form-group col-md-6">
+        <div class="form-group col">
           <label for="selectSemestre">Semestre:</label>
           <select
             type="email"
@@ -33,21 +33,80 @@
             <option value="3">3</option>
           </select>
         </div>
-        <div class="form-group col-md-6">
-          <label for="inputCarga">Créditos:</label>
+        <div class="form-group col">
+          <label for="inputLetra">Turma:</label>
           <input
-            readonly
             type="text"
             class="form-control"
-            id="inputCredito"
-            style="max-width:50px;"
-            v-model="CreditosDaDisciplina"
+            id="inputLetra"
+            style="text-transform: uppercase;max-width: 50px; text-align:center "
+            v-model="turmaForm.letra"
+            @keypress="onlyA_Z"
+            v-on:blur="editTurma(turma)"
           />
         </div>
+        <div class="form-group col">
+          <label for="SelectTurno">Turno:</label>
+          <select
+            type="text"
+            style="max-width: 90px"
+            id="SelectTurno"
+            class="form-control"
+            v-model="turmaForm.turno1"
+            v-on:change="editTurma(turma)"
+          >
+            <option value=""></option>
+            <option value="Diurno">Diurno</option>
+            <option value="Noturno">Noturno</option>
+            <option value="EAD">EAD</option>
+          </select>
+        </div>
       </div>
-      <!-- Salas e Horarios -->
+      <!-- Docente, Salas e Horarios -->
       <div class="form-row w-100">
-        <div class="form-group col-md-6">
+        <div class="form-group col">
+          <label for="SelectDocente1">Docentes:</label>
+          <select
+            type="text"
+            class="form-control"
+            style="max-width:130px;"
+            id="SelectDocente1"
+            v-model="turmaForm.Docente1"
+            v-on:change="checkDocente()"
+          >
+            <option v-if="Docentes.length === 0" type="text" value=""
+              >Nenhum Docente Encontrado</option
+            >
+            <option v-else type="text" value=""></option>
+            <option
+              v-for="docente in Docentes"
+              :key="'1-docente-id' + docente.id"
+              :value="docente.id"
+              >{{ docente.apelido }}</option
+            >
+          </select>
+          <select
+            :disabled="Admin ? false : true"
+            type="text"
+            class="form-control mt-1"
+            style="max-width:130px;"
+            id="docente2"
+            v-model="turmaForm.Docente2"
+            v-on:change="checkDocente()"
+          >
+            <option v-if="Docentes.length === 0" type="text" value=""
+              >Nenhum Docente Encontrado</option
+            >
+            <option v-else type="text" value=""></option>
+            <option
+              v-for="docente in Docentes"
+              :key="'2-docente-id' + docente.id"
+              :value="docente.id"
+              >{{ docente.apelido }}</option
+            >
+          </select>
+        </div>
+        <div class="form-group col">
           <label for="sala1">Salas:</label>
           <select
             type="text"
@@ -89,8 +148,7 @@
             >
           </select>
         </div>
-
-        <div class="form-group col-md-6">
+        <div class="form-group col">
           <label for="horario1">Horarios:</label>
           <select
             type="text"
@@ -187,102 +245,139 @@
           </select>
         </div>
       </div>
-      <!-- Turno e Letra -->
-      <div class="form-row w-100">
-        <div class="form-group col-md-6">
-          <label for="inputLetra">Turma:</label>
-          <input
-            type="text"
-            class="form-control"
-            id="inputLetra"
-            style="text-transform: uppercase;max-width: 50px; text-align:center "
-            v-model="turmaForm.letra"
-            @keypress="onlyA_Z"
-            v-on:blur="editTurma(turma)"
-          />
-        </div>
-        <div class="form-group col-md-6">
-          <label for="SelectTurno">Turno:</label>
-          <select
-            type="text"
-            style="max-width: 90px"
-            id="SelectTurno"
-            class="form-control"
-            v-model="turmaForm.turno1"
-            v-on:change="editTurma(turma)"
-          >
-            <option value=""></option>
-            <option value="Diurno">Diurno</option>
-            <option value="Noturno">Noturno</option>
-            <option value="EAD">EAD</option>
-          </select>
-        </div>
-      </div>
-      <!-- Docentes e Vagas -->
-      <div class="form-row w-100">
-        <div class="form-group col-md-6">
-          <label for="SelectDocente1">Docentes:</label>
-          <select
-            type="text"
-            class="form-control"
-            style="max-width:130px;"
-            id="SelectDocente1"
-            v-model="turmaForm.Docente1"
-            v-on:change="checkDocente()"
-          >
-            <option v-if="Docentes.length === 0" type="text" value=""
-              >Nenhum Docente Encontrado</option
-            >
-            <option v-else type="text" value=""></option>
-            <option
-              v-for="docente in Docentes"
-              :key="'1-docente-id' + docente.id"
-              :value="docente.id"
-              >{{ docente.apelido }}</option
-            >
-          </select>
-          <select
-            :disabled="Admin ? false : true"
-            type="text"
-            class="form-control mt-1"
-            style="max-width:130px;"
-            id="docente2"
-            v-model="turmaForm.Docente2"
-            v-on:change="checkDocente()"
-          >
-            <option v-if="Docentes.length === 0" type="text" value=""
-              >Nenhum Docente Encontrado</option
-            >
-            <option v-else type="text" value=""></option>
-            <option
-              v-for="docente in Docentes"
-              :key="'2-docente-id' + docente.id"
-              :value="docente.id"
-              >{{ docente.apelido }}</option
-            >
-          </select>
-        </div>
-
-        <div class="form-group col-md-6">
-          <label for="">Vagas:</label>
-          <p class="my-1">Total: {{ totalPedidos() }}</p>
-          <p class="my-1">Periodizadas: {{ totalPedidosPeriodizados() }}</p>
-          <p class="my-1">
-            Não periodizadas: {{ totalPedidosNaoPeriodizados() }}
-          </p>
-        </div>
-      </div>
     </div>
-    <hr class="m-0" />
+    <hr class="my-2 w-100" />
     <!-- TURMA VAGAS -->
-    <h3 class="modal-title p-0 m-0 mr-4 mt-2 col-12">VAGAS:</h3>
-    <TableVagas :turma="turma"></TableVagas>
+    <div class="form-row w-100 my-2 mb-2 mx-0 pr-1">
+      <h3 class="modal-title col p-0 m-0">VAGAS</h3>
+
+      <p
+        class="col-4 modal-title p-0 m-0 text-right"
+        style="font-weight:normal"
+      >
+        Total: {{ totalPedidos() }}
+      </p>
+    </div>
+    <TableModal :tableHeight="350" :hasSearchBar="true">
+      <template #thead-search>
+        <th>
+          <div
+            class="m-0 input-group"
+            style=" width: 442px; height: 35px; padding:4px 10px 4px 5px;"
+          >
+            <input
+              type="text"
+              class="form-control"
+              style="border-right: none;"
+              placeholder="Pesquise nome ou codigo de um curso..."
+              v-model="searchCursos"
+            />
+            <div class="input-group-append" @click="searchCursos = null">
+              <span
+                class="input-group-text"
+                style="height: 25px; font-size: 18px; cursor: pointer;"
+                >&times;</span
+              >
+            </div>
+          </div>
+        </th>
+      </template>
+      <template#thead>
+        <th>
+          <p
+            class="p-header clickable"
+            style="width: 50px; text-align: start;"
+            @click="toggleOrdVagas('codigo')"
+            title="Clique para ordenar por código"
+          >
+            Cód.
+            <i
+              :class="
+                ordemVagas.order === 'codigo'
+                  ? ordemVagas.type == 'asc'
+                    ? 'fas fa-arrow-down fa-sm'
+                    : 'fas fa-arrow-up fa-sm'
+                  : 'fas fa-arrow-down fa-sm low-opacity'
+              "
+              style="font-size: 0.6rem; text-align: right;"
+            ></i>
+          </p>
+        </th>
+        <th>
+          <p
+            class="p-header clickable"
+            v-on:click="toggleOrdVagas('nome')"
+            title="Clique para ordenar por nome"
+            style="width: 320px; text-align: start;"
+          >
+            Nome
+            <i
+              :class="
+                ordemVagas.order === 'nome'
+                  ? ordemVagas.type == 'asc'
+                    ? 'fas fa-arrow-down fa-sm'
+                    : 'fas fa-arrow-up fa-sm'
+                  : 'fas fa-arrow-down fa-sm low-opacity'
+              "
+              style="font-size: 0.6rem; text-align: right;"
+            ></i>
+          </p>
+        </th>
+
+        <th>
+          <p
+            class="p-header clickable"
+            style="width: 70px; text-align: center;"
+            title="Vagas periodizadas / Não periodizadas"
+            @click="toggleOrdVagas('VagasTotais', 'desc')"
+          >
+            Vagas
+            <i
+              :class="
+                ordemVagas.order === 'VagasTotais'
+                  ? ordemVagas.type == 'asc'
+                    ? 'fas fa-arrow-down fa-sm'
+                    : 'fas fa-arrow-up fa-sm'
+                  : 'fas fa-arrow-down fa-sm low-opacity'
+              "
+              style="font-size: 0.6rem; text-align: right;"
+            ></i>
+          </p>
+        </th>
+      </template#thead>
+      <template#tbody>
+        <tr
+          v-for="curso in CursosTableOrdered"
+          :key="'vaga' + curso.id + '-CursosVagas'"
+        >
+          <div style="width: max-content !important;">
+            <td>
+              <p style="width: 50px; text-align: start;">
+                {{ curso.codigo }}
+              </p>
+            </td>
+            <td>
+              <p style="width: 320px; text-align: start;">
+                {{ curso.nome }}
+              </p>
+            </td>
+            <td>
+              <InputPedidos
+                v-bind:index="curso.indiceVaga"
+                v-bind:turma="turma"
+              ></InputPedidos>
+            </td>
+          </div>
+        </tr>
+      </template#tbody>
+    </TableModal>
   </div>
 </template>
 <script>
-import turmaService from "@/common/services/turma";
-import TableVagas from "./TableVagas.vue";
 import _ from "lodash";
+import turmaService from "@/common/services/turma";
+import TableModal from "./TableModal.vue";
+import InputPedidos from "./InputPedidos.vue";
 
 const emptyTurma = {
   id: undefined,
@@ -300,27 +395,40 @@ const emptyTurma = {
 };
 
 export default {
-  name: "ModalTurma",
-
+  name: "BodyModalEditTurmas",
+  components: { TableModal, InputPedidos },
   props: {
     turma: Object,
   },
-  components: { TableVagas },
   data() {
     return {
+      searchCursos: null,
       ativo: false,
       valorAtual: undefined,
       turmaForm: _.clone(emptyTurma),
       currentData: undefined,
+      disciplinaAtual: null,
+      ordemVagas: { order: "codigo", type: "asc" },
     };
   },
-
-  mounted: function() {
+  mounted() {
     this.turmaForm = _.clone(this.turma);
     this.currentData = _.clone(this.turmaForm);
+    this.disciplinaAtual = this.findDisciplinaById(this.turmaForm.Disciplina);
   },
-
   methods: {
+    toggleOrdVagas(ord, type = "asc") {
+      if (this.ordemVagas.order != ord) {
+        this.ordemVagas.order = ord;
+        this.ordemVagas.type = type;
+      } else {
+        this.ordemVagas.type = this.ordemVagas.type == "asc" ? "desc" : "asc";
+      }
+    },
+    curso(pedido) {
+      return _.find(this.$store.state.curso.Cursos, { id: pedido.Curso });
+    },
+
     findDisciplinaById(id) {
       let disciplina = _.find(this.Disciplinas, (d) => d.id == id);
       return disciplina != undefined ? disciplina : null;
@@ -1245,11 +1353,42 @@ export default {
           }
         });
     },
-    checkDelete(turma) {
-      this.$store.commit("checkDelete", { Turma: turma });
-    },
   },
   computed: {
+    CursosTableOrdered() {
+      let result = this.CursosFiltred;
+      result.forEach((curso) => {
+        for (let index = 0; index < this.Pedidos.length; index++) {
+          if (this.Pedidos[index].Curso === curso.id) {
+            curso.VagasTotais =
+              this.Pedidos[index].vagasPeriodizadas +
+              this.Pedidos[index].vagasNaoPeriodizadas;
+            curso.indiceVaga = index;
+            break;
+          }
+        }
+      });
+      return _.orderBy(result, this.ordemVagas.order, this.ordemVagas.type);
+    },
+    CursosFiltred() {
+      if (this.searchCursos != null) {
+        let searchUpperCase = this.searchCursos
+          .toUpperCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "");
+
+        return _.filter(this.$store.state.curso.Cursos, (curso) => {
+          return (
+            curso.nome
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .match(searchUpperCase) || curso.codigo.match(searchUpperCase)
+          );
+        });
+      }
+
+      return this.$store.state.curso.Cursos;
+    },
     CreditosDaDisciplina() {
       let disciplina = _.find(
         this.Disciplinas,
@@ -1262,26 +1401,18 @@ export default {
     Cursos() {
       return _.orderBy(this.$store.state.curso.Cursos, "posicao");
     },
-
-    CursosAtivos() {
-      return this.$store.state.curso.Ativos;
-    },
-
     Disciplinas() {
       return _.orderBy(this.$store.state.disciplina.Disciplinas, "nome");
     },
-
     Docentes() {
       return _.orderBy(
         _.filter(this.$store.state.docente.Docentes, ["ativo", true]),
         "apelido"
       );
     },
-
     Horarios() {
       return _.orderBy(this.$store.state.horario.Horarios, "horario");
     },
-
     HorariosDiurnos() {
       return _.orderBy(
         _.filter(this.$store.state.horario.Horarios, function(h) {
@@ -1291,7 +1422,6 @@ export default {
         "horario"
       );
     },
-
     HorariosNoturnos() {
       return _.orderBy(
         _.filter(this.$store.state.horario.Horarios, function(h) {
@@ -1301,21 +1431,17 @@ export default {
         "horario"
       );
     },
-
     HorariosEAD() {
       return _.filter(this.$store.state.horario.Horarios, { id: 31 });
     },
-
     Pedidos() {
       return this.$store.state.pedido.Pedidos[this.turma.id];
     },
-
     Disciplina() {
       return _.find(this.$store.state.disciplina.Disciplinas, {
         id: this.turma.Disciplina,
       });
     },
-
     Admin() {
       if (this.$store.state.auth.Usuario.admin === 1) {
         return true;
@@ -1323,13 +1449,8 @@ export default {
         return false;
       }
     },
-
     Salas() {
       return _.orderBy(this.$store.state.sala.Salas, "nome");
-    },
-
-    Perfis() {
-      return _.orderBy(this.$store.state.perfil.Perfis, "nome");
     },
   },
 };
@@ -1341,13 +1462,15 @@ export default {
   width: 100%;
   height: 100%;
 }
+.table-turma {
+  max-height: 350px;
+}
 .form-container {
   font-size: 12px;
 }
 .form-group {
   margin: 5px auto;
 }
-
 .form-control,
 .form-control-plaintext {
   height: 25px !important;

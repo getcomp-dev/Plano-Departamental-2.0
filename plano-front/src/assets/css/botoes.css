@@ -1,15 +1,66 @@
+.btn-custom {
+  padding: 0 !important;
+  border: none !important;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  line-height: 50% !important;
+  margin: 0;
+  transition: all 0.3s ease 0s !important;
+  cursor: pointer !important;
+  text-align: center !important;
+}
+.btn-icon {
+  outline: none !important;
+  width: 32px !important;
+  margin: 0 4px !important;
+  background: none !important;
+}
+.btn-modal {
+  font-size: 12px !important;
+  height: 25px !important;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  padding: 0 5px !important;
+}
+.btn-modal + .btn-modal {
+  margin-left: 10px !important;
+}
+.btn-icon i {
+  font-size: 25px;
+}
+/* deletar dps de padronizar */
+button i.fas,
+button i.far {
+  font-size: 25px;
+}
+.addbtn {
+  background-color: white !important;
+  color: #a0e7a0 !important;
+}
+.addbtn:hover {
+  background-color: white !important;
+  color: #77dd77 !important;
+}
+.addbtn:focus {
+  color: #77dd77 !important;
+  background-color: white !important;
+  -webkit-text-stroke-width: 1px !important;
+  -webkit-text-stroke-color: #2fbf53 !important;
+}
 .relatbtn {
-  background-color: white;
+  background-color: white !important;
   color: #9ab3ff !important;
 }
 .relatbtn:hover {
   color: #82a0ff !important;
-  background-color: white;
+  background-color: white !important;
 }
 .relatbtn:focus {
-  color: #82a0ff;
-  background-color: white;
-  -webkit-text-stroke-width: 0.5px;
+  color: #82a0ff !important;
+  background-color: white !important;
+  -webkit-text-stroke-width: 0.5px !important;
   -webkit-text-stroke-color: #698dff;
 }
 
@@ -56,29 +107,29 @@
 }
 
 .cancelbtn {
-  background-color: white;
-  color: #cfcfc4;
+  background-color: white !important;
+  color: #cfcfc4 !important;
 }
 .cancelbtn:hover {
-  background-color: white;
-  color: #b8b4a8;
+  background-color: white !important;
+  color: #b8b4a8 !important;
 }
 .cancelbtn:focus {
-  background-color: white;
-  color: #b8b8a8;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #ada89a;
+  background-color: white !important;
+  color: #b8b8a8 !important;
+  -webkit-text-stroke-width: 1px !important;
+  -webkit-text-stroke-color: #ada89a !important;
 }
 
 .delbtn {
-  background-color: white;
-  color: #ff817b;
+  background-color: white !important;
+  color: #ff817b !important;
 }
 .delbtn:hover {
-  color: #ff5f48;
+  color: #ff5f48 !important;
 }
 .delbtn:focus {
-  color: #ff5f48;
-  -webkit-text-stroke-width: 2px;
-  -webkit-text-stroke-color: #ff4e34;
+  color: #ff5f48 !important;
+  -webkit-text-stroke-width: 2px !important;
+  -webkit-text-stroke-color: #ff4e34 !important;
 }

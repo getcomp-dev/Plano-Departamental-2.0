@@ -15,7 +15,11 @@
           style="justify-content: flex-end!important;"
         >
           <div class="d-flex p-0 m-0">
-            <b-button v-b-modal.modalFiltros title="Filtros" class="cancelbtn">
+            <b-button
+              v-b-modal.modalFiltros
+              title="Filtros"
+              class="cancelbtn btn-icon"
+            >
               <i class="fas fa-list-ul"></i>
             </b-button>
             <button
@@ -158,7 +162,7 @@
         >
           <div class="row m-0">
             <p
-              class="col p-0 alert-p m-0 border border-right-0"
+              class="p-0 alert-p m-0 border border-right-0"
               style="font-weight: bold; width: 187px;"
             >
               PGCC
@@ -267,7 +271,7 @@
         >
           <div class="row m-0">
             <p
-              class="col p-0 alert-p m-0 border border-right-0"
+              class="p-0 alert-p m-0 border border-right-0"
               style="font-weight: bold; width: 187px;"
             >
               PGEM
@@ -1071,29 +1075,22 @@ export default {
   overflow: hidden;
   margin: 0;
 }
-.titulo {
-  font-size: 25px;
-  font-weight: normal !important;
-  padding-left: 0 !important;
-  margin: 0 !important;
+.main-table {
+  height: -webkit-calc(100vh - 110px);
+  height: -moz-calc(100vh - 110px);
+  height: calc(100vh - 110px);
 }
-.p-header {
-  padding: 0px 0 0px 0;
-  margin: 0;
-  font-size: 11px;
-  text-align: center;
-  height: 18px;
-}
+
+/* main-table */
 .divTable {
   overflow: hidden;
-  border: rgba(0, 0, 0, 0.125) solid 1px;
   height: -webkit-max-content;
   height: -moz-max-content;
   height: max-content;
   width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
-  font-size: 11px;
+  font-size: 11px !important;
 }
 .main-table {
   display: block !important;
@@ -1103,26 +1100,31 @@ export default {
   font-weight: normal !important;
   background-color: white;
   margin: 0 !important;
-  height: -webkit-calc(100vh - 110px);
-  height: -moz-calc(100vh - 110px);
-  height: calc(100vh - 110px);
+  height: -webkit-calc(100vh - 115px);
+  height: -moz-calc(100vh - 115px);
+  height: calc(100vh - 115px);
 }
-.main-table tbody {
-  max-height: 100%;
-  width: 100%;
+.main-table .p-header {
+  height: 18px;
+}
+.main-table p {
+  padding: 0 5px 0 5px !important;
+  margin: 0 !important;
+  font-size: 11px !important;
+  text-align: center;
+}
+tbody {
+  max-height: 100% !important;
+  width: 100% !important;
 }
 .main-table td {
   text-align: center;
-  vertical-align: middle;
+  vertical-align: middle !important;
   padding: 0 !important;
-  height: 25px;
-}
-.main-table p {
-  margin-bottom: 0;
-  text-align: center;
+  height: 22px !important;
 }
 .main-table tr thead {
-  display: block;
+  display: block !important;
 }
 .main-table thead th {
   padding: 0 !important;
@@ -1130,21 +1132,7 @@ export default {
   text-align: center;
   height: 18px !important;
 }
-.main-table select {
-  height: 18px !important;
-  text-align: left;
-}
-.main-table input {
-  height: 18px !important;
-  text-align: center !important;
-}
-.isAdd {
-  background-color: rgba(0, 0, 0, 0.125);
-}
-.isAdd:hover {
-  background-color: rgba(0, 0, 0, 0.2);
-}
-
+/* fim table */
 /* ====== CARD ====== */
 .div-card {
   margin-left: auto;
@@ -1196,40 +1184,6 @@ select {
   min-width: 50px;
   text-align: center;
 }
-
-/* APENAS NO FIREFOX */
-@-moz-document url-prefix() {
-  table select {
-    height: 18px !important;
-    text-align: left;
-    box-sizing: border-box;
-    line-height: 8px;
-    border: 0.5px solid rgb(133, 133, 133);
-    border-radius: 2px;
-    background-color: rgb(245, 245, 245);
-  }
-  table input {
-    height: 18px !important;
-    text-align: center;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    line-height: 8px;
-    border: 0.5px solid rgb(92, 92, 92);
-    -moz-border-radius: 2px;
-    border-radius: 2px;
-    background-color: rgb(245, 245, 245);
-  }
-}
-.sticky {
-  display: block !important;
-  overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 0 !important;
-  display: block !important;
-  overflow: hidden !important;
-  z-index: 3;
-}
 .listas {
   line-height: 30px;
   font-size: 12px;
@@ -1268,126 +1222,10 @@ button {
   max-width: max-content;
   padding: 0 5px 0 5px;
 }
-i.fas,
-i.far {
-  font-size: 25px;
-}
-.addbtn {
-  background-color: white;
-  color: #a0e7a0;
-}
-.addbtn:hover {
-  background-color: white;
-  color: #77dd77;
-}
-.addbtn:focus {
-  color: #77dd77;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #2fbf53;
-}
-.cancelbtn {
-  background-color: white !important;
-  color: #cfcfc4;
-}
-.cancelbtn:hover {
-  color: #b8b4a8;
-}
-.cancelbtn:focus {
-  color: #b8b8a8;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #ada89a;
-}
-.delbtn {
-  background-color: white;
-  color: #ff817b;
-}
-.delbtn:hover {
-  color: #ff5f48;
-}
-.delbtn:focus {
-  color: #ff5f48;
-  -webkit-text-stroke-width: 2px;
-  -webkit-text-stroke-color: #ff4e34;
-}
-.relatbtn {
-  background-color: white;
-  color: #9ab3ff !important;
-}
-.relatbtn:hover {
-  color: #82a0ff !important;
-  background-color: white;
-}
-
-.relatbtn:focus {
-  color: #82a0ff;
-  background-color: white;
-  -webkit-text-stroke-width: 0.5px;
-  -webkit-text-stroke-color: #698dff;
-}
-
-.btn-azul {
-  background-color: #718de0 !important;
-  border-color: #9ab3ff !important;
-}
-
-.btn-azul:hover {
-  background-color: rgb(74, 101, 190) !important;
-  border-color: #82a0ff !important;
-}
-
-.btn-azul:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(122, 128, 124, 0.5) !important;
-  -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-  box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-}
-
-.btn-cinza {
-  background-color: #999999 !important;
-  border-color: #c3c3c3 !important;
-}
-
-.btn-cinza:hover {
-  background-color: #747474 !important;
-  border-color: #aaaaaa !important;
-}
-
-.btn-cinza:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
-  -moz-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
-  box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
-}
-
-.btn-verde {
-  background-color: #70b670 !important;
-  border-color: #a0e7a0 !important;
-}
-
-.btn-verde:hover {
-  background-color: #4c8a4c !important;
-  border-color: #77dd77 !important;
-}
-
-.btn-verde:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-  -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-  box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-}
-
-i.fas,
-i.far {
-  font-size: 25px;
-}
 
 .alert {
   background-color: #e9ecef !important;
   border: none;
-}
-
-.bg-custom {
-  background-color: #c8c8c8;
-}
-.bg-custom:hover {
-  background-color: #c8c8c8;
 }
 
 .form-inline,
@@ -1395,60 +1233,6 @@ i.far {
   width: auto;
 }
 
-/* ==== MODAL TABLE ==== */
-.modal-table {
-  display: block !important;
-  overflow: auto !important;
-  font-size: 10px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-}
-.modal-table tr thead {
-  display: block;
-}
-.modal-table th {
-  padding: 0 !important;
-  text-align: center !important;
-  height: 18px !important;
-  border-bottom: 0 !important;
-  border-top: 0 !important;
-}
-.modal-table .p-header {
-  padding: 0px 5px 0px 5px !important;
-  margin: 0 !important;
-  text-align: start;
-  height: 18px !important;
-}
-.modal-table tbody {
-  max-height: 100%;
-  width: 100%;
-}
-.modal-table td {
-  border-bottom: 0;
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  /* height: 22px !important; */
-}
-.modal-table p {
-  margin: 0 !important;
-  text-align: center;
-  padding: 0 !important;
-  padding-right: 5px !important;
-  padding-left: 5px !important;
-}
-.modal-table input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-  margin-bottom: auto !important;
-}
-.active {
-  background-color: #e9ecef !important;
-  color: #495057 !important;
-  cursor: default;
-}
 /* FIM MODAL TABLE */
 /* =========================== */
 @media screen and (max-width: 439px) {

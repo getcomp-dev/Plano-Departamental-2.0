@@ -27,51 +27,6 @@ body {
   height: 100%;
 }
 
-.vue-notification {
-  padding: 10px;
-  margin-top: 15px;
-  margin-right: 15px;
-
-  font-size: 12px;
-
-  color: #ffffff;
-  background: #44a4fc;
-  border-left: 5px solid #187fe7;
-}
-
-.vue-notification .warn {
-  background: #ffb648;
-  border-left-color: #f48a06;
-}
-
-.vue-notification .error {
-  background: #e54d42;
-  border-left-color: #b82e24;
-}
-
-.vue-notification .success {
-  background: #68cd86;
-  border-left-color: #42a85f;
-}
-.max-content {
-  width: -webkit-max-content !important;
-  width: -moz-max-content !important;
-  width: max-content !important;
-}
-.clickable {
-  cursor: pointer;
-}
-.p-header {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none;
-}
-.low-opacity {
-  opacity: 0.4;
-}
 .sticky-thead {
   display: block !important;
   overflow: hidden !important;
@@ -80,57 +35,6 @@ body {
   top: 0 !important;
   z-index: 3;
 }
-/* ==== MODAL TABLE ==== */
-.modal-table {
-  display: block !important;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  font-size: 10px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-}
-.modal-table tr thead {
-  display: block !important;
-}
-.modal-table th {
-  padding: 0 !important;
-  text-align: center !important;
-  height: 18px !important;
-}
-
-.modal-table .p-header {
-  padding: 0px 5px 0px 5px !important;
-  margin: 0 !important;
-  text-align: start;
-  height: 18px !important;
-}
-.modal-table tbody {
-  max-height: 100%;
-  width: 100%;
-}
-.modal-table td {
-  border-top: 0 !important;
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  /* height: 22px !important; */
-}
-.modal-table p {
-  margin: 0 !important;
-  text-align: center;
-  padding: 0 !important;
-  padding-right: 5px !important;
-  padding-left: 5px !important;
-}
-.modal-table input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-  margin-bottom: auto !important;
-  height: 13px !important;
-}
-/* FIM MODAL TABLE */
 
 .cube1,
 .cube2 {

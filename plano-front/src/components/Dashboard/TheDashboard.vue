@@ -8,33 +8,26 @@
 
     <nav class="navbar navbar-dark bg-dark fixed-top shadow">
       <div class="row w-100 m-0">
-        <router-link
-          :to="{ name: 'dashboard' }"
-          class="navbar-brand col-sm-3 col-md-2 col-2 mr-0"
-          style="text-align: center;"
-          >Plano Departamental</router-link
-        >
-        <transition name="custom-classes-transition" mode="out-in">
-          <button
-            v-if="show"
-            @click="show = !show"
-            key="save"
-            type="button"
-            class="btn-navbar"
-          >
-            <i key="save" class="fas fa-times"></i>
-          </button>
+        <div @click="closeSideBar()" class="navbar-brand">
+          <router-link
+            :to="{ name: 'dashboard' }"
+            class="brand-text"
+            style="text-align: center;"
+            >Plano Departamental
+          </router-link>
+        </div>
 
-          <button
-            v-else
-            @click="show = !show"
-            key="edit"
-            type="button"
-            class="btn-navbar"
-          >
-            <i class="fas fa-bars"></i>
-          </button>
-        </transition>
+        <button
+          @click="toggleSideBar = !toggleSideBar"
+          key="openAndClose"
+          type="button"
+          class="btn-navbar"
+        >
+          <i
+            key="openAndClose"
+            :class="toggleSideBar ? 'fas fa-times' : 'fas fa-bars'"
+          ></i>
+        </button>
 
         <ul class="navbar-nav listaNavbarTop" style="flex-direction:row;">
           <li class="nav-item">
@@ -85,167 +78,14 @@
           enter-active-class="animated slideInLeft sidebar-animated"
           leave-active-class="animated slideOutLeft sidebar-animated"
         >
-          <nav
-            v-if="show"
-            class="sidebar col-5 col-sm-4 col-md-3 col-lg-2 col-xl-2 d-block d-md-block bg-light"
-          >
-            <div class="sidebar-sticky">
-              <ul class="nav flex-column">
-                <li @click="show = false" class="nav-item">
-                  <router-link :to="{ name: 'dashboard' }" class="nav-link">
-                    <i class="fas fa-home"></i> Dashboard
-                  </router-link>
-                </li>
-              </ul>
-
-              <h6
-                class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted"
-              >
-                <span>Plano</span>
-                <a class="d-flex align-items-center" href="#">
-                  <i class="far fa-calendar-alt mr-1"></i>
-                  {{ year }}
-                </a>
-              </h6>
-              <ul class="nav flex-column mb-2" v-if="Admin">
-                <li @click="show = false" class="nav-item">
-                  <router-link
-                    :to="{ name: 'pedidos' }"
-                    class="nav-link"
-                    v-on:click="loadPage"
-                  >
-                    <i class="fas fa-clipboard"></i> Tabela
-                  </router-link>
-                </li>
-                <li v-if="Admin" @click="show = false" class="nav-item">
-                  <router-link
-                    :to="{ name: 'turmasExternas' }"
-                    class="nav-link"
-                    v-on:click="loadPage"
-                  >
-                    <i class="fas fa-clipboard"></i> Tabela Externa
-                  </router-link>
-                </li>
-                <li v-if="Admin" @click="show = false" class="nav-item">
-                  <router-link
-                    :to="{ name: 'cargaPos' }"
-                    class="nav-link"
-                    v-on:click="loadPage"
-                  >
-                    <i class="fas fa-clipboard"></i> Creditação Pós
-                  </router-link>
-                </li>
-                <li v-if="Admin" @click="show = false" class="nav-item">
-                  <router-link
-                    :to="{ name: 'validacoes' }"
-                    class="nav-link"
-                    v-on:click="loadPage"
-                  >
-                    <i class="fas fa-calendar-check"></i> Validações do Plano
-                  </router-link>
-                </li>
-              </ul>
-              <h6 class="sidebar-heading px-3 mt-4 mb-1 text-muted">
-                Relatórios
-              </h6>
-              <ul class="nav flex-column">
-                <li @click="show = false" class="nav-item">
-                  <router-link
-                    :to="{ name: 'cargaProfessores' }"
-                    class="nav-link"
-                  >
-                    <i class="fas fa-clipboard"></i> Carga Professores
-                  </router-link>
-                </li>
-                <li @click="show = false" class="nav-item">
-                  <router-link
-                    :to="{ name: 'relatorioDisciplinas' }"
-                    class="nav-link"
-                  >
-                    <i class="fas fa-clipboard"></i> Plano Departamental
-                  </router-link>
-                </li>
-                <!-- <li @click="show=false" class="nav-item">
-                  <router-link :to="{ name: 'horariosResumo' }" class="nav-link">
-                    <i class="fas fa-clipboard"></i> Horários - Resumo
-                  </router-link>
-                </li>-->
-                <li @click="show = false" class="nav-item">
-                  <router-link
-                    :to="{ name: 'gradeDisciplinas' }"
-                    class="nav-link"
-                  >
-                    <i class="fas fa-clipboard"></i> Grades Disciplinas
-                  </router-link>
-                </li>
-                <li @click="show = false" class="nav-item">
-                  <router-link :to="{ name: 'horarios' }" class="nav-link">
-                    <i class="fas fa-calendar-alt"></i> Horários - Cursos
-                  </router-link>
-                </li>
-                <li @click="show = false" class="nav-item">
-                  <router-link
-                    :to="{ name: 'laboratoriosAlocacao' }"
-                    class="nav-link"
-                  >
-                    <i class="fas fa-calendar-alt"></i> Horários - Laboratórios
-                  </router-link>
-                </li>
-              </ul>
-              <h6
-                class="sidebar-heading px-3 mt-4 mb-1 text-muted"
-                v-if="Admin"
-              >
-                Gerenciar
-              </h6>
-              <ul class="nav flex-column mb-4" v-if="Admin">
-                <li @click="show = false" class="nav-item">
-                  <router-link :to="{ name: 'cursos' }" class="nav-link">
-                    <i class="fas fa-graduation-cap"></i> Cursos
-                  </router-link>
-                </li>
-                <li @click="show = false" class="nav-item">
-                  <router-link :to="{ name: 'docentes' }" class="nav-link">
-                    <i class="fas fa-users"></i> Docentes
-                  </router-link>
-                </li>
-                <li @click="show = false" class="nav-item">
-                  <router-link :to="{ name: 'grades' }" class="nav-link">
-                    <i class="fas fa-sitemap"></i> Grades
-                  </router-link>
-                </li>
-                <li @click="show = false" class="nav-item">
-                  <router-link :to="{ name: 'gradeEdit' }" class="nav-link">
-                    <i class="fas fa-sitemap"></i> Disciplinas na Grade
-                  </router-link>
-                </li>
-                <li @click="show = false" class="nav-item">
-                  <router-link :to="{ name: 'perfis' }" class="nav-link">
-                    <i class="fas fa-th"></i> Perfis
-                  </router-link>
-                </li>
-                <li @click="show = false" class="nav-item">
-                  <router-link :to="{ name: 'disciplinas' }" class="nav-link">
-                    <i class="fas fa-table"></i>Disciplina
-                  </router-link>
-                </li>
-                <li @click="show = false" class="nav-item">
-                  <router-link :to="{ name: 'salas' }" class="nav-link">
-                    <i class="fas fa-clipboard"></i>Salas
-                  </router-link>
-                </li>
-                <li @click="show = false" class="nav-item">
-                  <router-link :to="{ name: 'history' }" class="nav-link">
-                    <i class="fas fa-clipboard"></i>Logs
-                  </router-link>
-                </li>
-              </ul>
-            </div>
-          </nav>
+          <Navbar
+            v-if="toggleSideBar"
+            v-on:toggle="closeSideBar()"
+            :year="year"
+          ></Navbar>
         </transition>
-
         <main
-          @click="show = false"
+          @click="closeSideBar()"
           role="main"
           class="col-12 pl-2 pr-0 pt-0 pl-0"
           v-if="!isLoading"
@@ -440,6 +280,7 @@ import xlsxService from "@/common/services/xlsx";
 import novoPlanoService from "@/common/services/novoPlano";
 import planoService from "@/common/services/plano";
 import { saveAs } from "file-saver";
+import Navbar from "./Navbar.vue";
 
 const emptyUser = {
   nome: undefined,
@@ -455,6 +296,7 @@ const emptyPlano = {
 
 export default {
   name: "TheDashboard",
+  components: { Navbar },
 
   data: function() {
     return {
@@ -465,14 +307,15 @@ export default {
       userForm: _.clone(emptyUser),
       downloadState: 0,
       planoForm: _.clone(emptyPlano),
-      show: false,
+      toggleSideBar: false,
     };
   },
-
+  mounted() {
+    this.$on("toggle", () => {
+      this.toggleSideBar = !this.toggleSideBar;
+    });
+  },
   computed: {
-    falso() {
-      return !this.show;
-    },
     year() {
       if (!_.isEmpty(this.$store.state.plano.Plano)) {
         if (typeof this.$store.state.plano.Plano[0].ano === "string")
@@ -489,14 +332,6 @@ export default {
 
     isLoading() {
       return this.$store.state.isLoading;
-    },
-
-    Admin() {
-      if (this.$store.state.auth.Usuario.admin === 1) {
-        return true;
-      } else {
-        return false;
-      }
     },
   },
 
@@ -521,11 +356,8 @@ export default {
   },
 
   methods: {
-    loadPage() {
-      this.$store.commit(COMPONENT_LOADING);
-    },
-    toggleNavbar() {
-      this.show = !this.show;
+    closeSideBar() {
+      this.toggleSideBar = false;
     },
     bddump: function(filename) {
       bddumpService
@@ -725,7 +557,6 @@ export default {
 </script>
 
 <style scoped>
-/* prefixed */
 .TheDashboard {
   max-width: 100% !important;
   height: 100%;
@@ -735,141 +566,8 @@ export default {
 .loading {
   cursor: progress;
 }
-/*=== side bar ===*/
-.sidebar {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 100; /* Behind the navbar */
-  margin-top: 30px; /* Height of navbar */
-  padding-right: 0px;
-  padding-left: 0px;
-  max-width: 200px;
-  -webkit-box-shadow: 0px 0px 75px 0px rgba(0, 0, 0, 0.75);
-  -moz-box-shadow: 0px 0px 75px 0px rgba(0, 0, 0, 0.75);
-  box-shadow: 0px 0px 75px 0px rgba(0, 0, 0, 0.75);
-  font-size: 0.875rem;
-}
-.nav li a i {
-  padding-left: 0.3em;
-}
-.nav li {
-  border-top: rgb(248, 249, 250) solid 0.1px;
-  border-bottom: rgb(248, 249, 250) solid 0.1px;
-}
-.nav li:hover {
-  background-color: #0079fa;
-  color: white;
-}
-.sidebar .nav-link:hover {
-  color: white;
-}
-.sidebar .nav-link.active:hover {
-  background-color: #0055af;
-}
-/* pagina ativa */
-.sidebar .nav-link.active {
-  background-color: #0055af;
-  color: white;
-  border-left: #0079fa 10px solid;
-}
-.nav-link {
-  font-size: 12px;
-  height: 30px;
-  padding: 5px !important;
-}
-.sidebar-sticky {
-  position: relative;
-  top: 0;
-  padding-top: 0.5rem;
-  height: -webkit-calc(100vh - 30px);
-  height: -moz-calc(100vh - 30px);
-  height: calc(100vh - 30px);
-  padding-bottom: 1rem;
-  overflow-x: hidden;
-  overflow-y: auto !important; /* Scrollable contents if viewport is shorter than content. */
-}
-@supports ((position: -webkit-sticky) or (position: sticky)) {
-  .sidebar-sticky {
-    position: -webkit-sticky;
-    position: sticky;
-  }
-}
-.sidebar .nav-link {
-  font-weight: 500;
-  color: #333;
-}
-.sidebar .nav-link .fas {
-  margin-right: 4px;
-  color: #999;
-}
-.sidebar .nav-link:hover .fas,
-.sidebar .nav-link.active .fas {
-  color: inherit;
-}
-.sidebar-heading {
-  font-weight: bold;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-}
-/* SCROLL BAR CUSTOM */
-.sidebar-sticky ::-webkit-scrollbar-track {
-  background-color: #f4f4f4 !important;
-}
-.sidebar-sticky::-webkit-scrollbar {
-  width: 6px !important;
-  background: #f4f4f4 !important;
-}
-.sidebar-sticky::-webkit-scrollbar-thumb {
-  background: #666 !important;
-}
-/* ========================== */
-[role="main"]::-webkit-scrollbar-track {
-  background-color: #f4f4f4 !important;
-}
-[role="main"]::-webkit-scrollbar {
-  width: 6px !important;
-  background: #f4f4f4 !important;
-}
-[role="main"]::-webkit-scrollbar-thumb {
-  background: #666 !important;
-}
+/* navbar top */
 
-.container-fluid {
-  max-width: 100%;
-  margin: 0px;
-  padding-right: 0px;
-  padding-left: 0px;
-}
-[role="main"] {
-  margin-top: 32px; /* Space for fixed navbar */
-  overflow-y: auto !important;
-  height: -webkit-calc(100vh - 32px);
-  height: -moz-calc(100vh - 32px);
-  height: calc(100vh - 32px);
-}
-
-.navbar-brand {
-  height: 30px;
-  color: rgb(224, 224, 224) !important;
-  font-size: 15px;
-  padding: 3px 12px 5px 10px;
-  min-width: -webkit-max-content;
-  min-width: -moz-max-content;
-  min-width: max-content;
-  max-width: -webkit-max-content;
-  max-width: -moz-max-content;
-  max-width: max-content;
-  cursor: pointer;
-  background-color: rgba(0, 0, 0, 0.25);
-  -webkit-box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25);
-  -moz-box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25);
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.25);
-}
-.navbar-brand:hover {
-  color: rgb(255, 255, 255) !important;
-}
 .navbar {
   padding: 0;
   margin: 0;
@@ -879,6 +577,48 @@ export default {
   -moz-border-radius: 0;
   border-radius: 0;
 }
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 160px !important;
+  margin: 0;
+  min-width: max-content;
+  padding: 0 5px;
+  cursor: pointer;
+  background-color: #00000040;
+  -webkit-box-shadow: inset -1px 0 0 #00000040;
+  -moz-box-shadow: inset -1px 0 0 #00000040;
+  box-shadow: inset -1px 0 0 #00000040;
+}
+.brand-text {
+  text-decoration: none;
+  font-weight: 500;
+  text-align: center;
+  font-size: 15px;
+  color: #e0e0e0 !important;
+}
+.brand-text:hover {
+  color: #ffffff !important;
+}
+.btn-navbar {
+  outline: none;
+  width: 40px !important;
+  padding: 0 6px 0 6px !important;
+  height: 30px !important;
+  margin-left: 0px !important;
+  color: rgb(205, 206, 208) !important;
+  background-color: rgba(0, 0, 0, 0.25) !important;
+  font-size: 20px !important;
+  border: 1px !important;
+}
+.btn-navbar i.fas {
+  font-size: 20px !important;
+}
+.btn-navbar:hover,
+:focus {
+  color: white !important;
+}
 .listaNavbarTop {
   margin-left: auto;
   padding: 0;
@@ -887,12 +627,30 @@ export default {
   margin-right: 5px;
   margin-left: 0px;
 }
-
 .navbar-nav > .nav-item > .nav-link:hover {
   cursor: pointer;
 }
 .navbar-nav {
   height: 30px;
+}
+.nav-link {
+  font-size: 12px;
+  height: 30px;
+  padding: 5px !important;
+}
+/* main */
+.container-fluid {
+  max-width: 100%;
+  margin: 0px;
+  padding-right: 0px;
+  padding-left: 0px;
+}
+[role="main"] {
+  margin-top: 30px; /* Space for fixed navbar */
+  overflow-y: auto !important;
+  height: -webkit-calc(100vh - 30px);
+  height: -moz-calc(100vh - 30px);
+  height: calc(100vh - 30px);
 }
 
 /*Download Files Loading*/
@@ -943,25 +701,8 @@ export default {
   margin-top: -32px;
   z-index: 99999;
 }
-.btn-navbar {
-  width: 40px;
-  padding: 0 6px 0 6px;
-  height: 30px;
-  margin-left: 0px;
-  color: rgb(205, 206, 208);
-  background-color: rgba(0, 0, 0, 0.25);
-  font-size: 20px;
-  border: 1px;
-}
-.btn-navbar:hover {
-  color: white;
-}
 
-.aplicaCor {
-  background-color: rgb(226, 226, 226);
-  color: rgba(0, 0, 0, 0.753);
-}
-
+/* ANIMATION */
 .sidebar-animated {
   -webkit-animation-duration: 0.28s;
   -moz-animation-duration: 0.28s;

@@ -17,9 +17,16 @@
           <b-button
             v-b-modal.modalFiltros
             title="Filtros"
-            class="cancelbtn btn-custom"
+            class="cancelbtn btn-custom btn-title"
           >
             <i class="fas fa-list-ul"></i>
+          </b-button>
+          <b-button
+            v-b-modal.modalAjuda
+            title="Ajuda"
+            class="relatbtn btn-custom btn-title"
+          >
+            <i class="fas fa-question"></i>
           </b-button>
         </div>
       </div>
@@ -87,7 +94,7 @@
             </div>
           </tr>
         </thead>
-        <tbody style="text-transform: uppercase">
+        <tbody>
           <template v-for="validacao in Docentes_validacoes">
             <tr
               :key="'validacoes-' + validacao.nome"
@@ -219,17 +226,11 @@
                   Docentes
                 </p>
               </th>
-
-              <th>
-                <p style="width: 400px; text-align: start;" class="p-header">
-                  Conflito
-                </p>
-              </th>
-              <th><p class="p-header" style="width:50px">Tipo</p></th>
+              <th><p class="p-header" style="width:50px">Editar</p></th>
             </div>
           </tr>
         </thead>
-        <tbody style="text-transform: uppercase">
+        <tbody>
           <template v-for="validacao in Turmas_Validacoes_Ordered">
             <tr
               :key="
@@ -270,23 +271,17 @@
                     {{ validacao.turma_docente2 }}
                   </p>
                 </td>
-
-                <td>
-                  <p style="width: 400px; text-align: start;"></p>
-                </td>
                 <td>
                   <p
                     style="width: 50px; text-align: center;"
-                    @click="openModalEditTurma(validacao.turma)"
+                    @click="openModalEditTurma(validacao.turma_id)"
                     class="clickable"
                     title="Editar turma"
                   >
-                    <button
-                      class="btn btn-info btn-small btn-table"
-                      style="font-size:11px"
-                    >
-                      EDIT
-                    </button>
+                    <i
+                      class="fas fa-edit btn-table"
+                      style="font-size:12px;margin:3px!important;"
+                    ></i>
                   </p>
                 </td>
               </div>
@@ -294,112 +289,26 @@
             <tr
               v-for="(erro, index) in validacao.conflitos"
               :key="
-                index + 'validacao-conflitos-' + validacao.turma_id + erro.type
+                index + 'validacao-conflitos' + validacao.turma_id + erro.type
               "
             >
               <div class="max-content">
                 <td>
-                  <p style="width: 35px; text-align: center;"></p>
-                </td>
-                <td>
-                  <p style="width: 70px; text-align: start;"></p>
-                </td>
-                <td>
-                  <p style="width: 70px; text-align: center;"></p>
-                </td>
-                <td>
-                  <p style="width: 300px; text-align: start;"></p>
-                </td>
-                <td>
-                  <p style="width: 35px; text-align: center;"></p>
-                </td>
-                <td>
-                  <p style="width: 130px; text-align: center;"></p>
-                </td>
-
-                <td>
-                  <p
-                    v-html="erro.msg"
-                    style="width: 400px; text-align: start;"
-                  ></p>
-                </td>
-                <td>
-                  <p style="width:50px; " class="py-auto">
+                  <p style="width: 35px; text-align: center;">
                     <i
                       v-if="isCritical(erro.type)"
-                      style=" background-color: inherit; font-size: 14px;"
-                      class="fas fa-exclamation-circle delbtn my-auto"
+                      style=" background-color: inherit; font-size: 13px; margin:3px!important;"
+                      class="fas fa-exclamation-circle delbtn"
                       title="Conflito critico!"
                     ></i>
                   </p>
                 </td>
+                <td>
+                  <p style="width: 660px; text-align: start;">{{ erro.msg }}</p>
+                </td>
               </div>
             </tr>
           </template>
-          <!-- <template v-for="validacao in vetorDeValidacoes">
-            <tr
-              :key="
-                'validacoes-' + validacao.turma_id + validacao.disciplina_codigo
-              "
-              style="background-color:rgba(0, 0, 0, 0.089);"
-            >
-              <div class="max-content">
-                <td>
-                  <p style="width: 35px; text-align: center;">
-                    {{ validacao.turma_periodo }}
-                  </p>
-                </td>
-                <td>
-                  <p style="width: 70px; text-align: start;">
-                    {{ validacao.disciplina_perfil }}
-                  </p>
-                </td>
-                <td>
-                  <p style="width: 70px; text-align: start;">
-                    {{ validacao.disciplina_codigo }}
-                  </p>
-                </td>
-                <td>
-                  <p style="width: 300px; text-align: start;">
-                    {{ validacao.disciplina_nome }}
-                  </p>
-                </td>
-                <td>
-                  <p style="width: 35px; text-align: center;">
-                    {{ validacao.turma_letra }}
-                  </p>
-                </td>
-                <td>
-                  <p style="width: 130px; text-align: center;">
-                    {{ validacao.turma_docente1 }}
-                    <br />
-                    {{ validacao.turma_docente2 }}
-                  </p>
-                </td>
-
-                <td>
-                  <p style="width: 400px; text-align: start;">
-                    {{ validacao.msg }}
-                  </p>
-                </td>
-                <td>
-                  <p
-                    style="width: 50px; text-align: center;"
-                    @click="openModalEditTurma(validacao.turma)"
-                    class="clickable"
-                    title="Editar turma"
-                  >
-                    <button
-                      class="btn btn-info btn-small btn-table"
-                      style="font-size:11px"
-                    >
-                      EDIT
-                    </button>
-                  </p>
-                </td>
-              </div>
-            </tr>
-          </template> -->
         </tbody>
       </table>
     </div>
@@ -541,13 +450,13 @@
         <div class="w-100">
           <template v-if="modal_navtab === 'semestre'">
             <b-button
-              class="btn-custom btn-azul btn-df mr-2"
+              class="btn-custom btn-modal  btn-azul btn-df mr-2"
               variant="success"
               @click="selectAllSemestre()"
               >Selecionar Todos</b-button
             >
             <b-button
-              class="btn-custom btn-cinza btn-df mr-2"
+              class="btn-custom btn-modal btn-cinza btn-df mr-2"
               variant="secondary"
               @click="selectNoneSemestre()"
               >Desmarcar Todos</b-button
@@ -555,13 +464,13 @@
           </template>
           <template v-else-if="modal_navtab === 'conflito'">
             <b-button
-              class="btn-azul btn-df mr-2 btn-custom "
+              class="btn-azul btn-df mr-2 btn-custom btn-modal "
               variant="success"
               @click="selectAllConflitos()"
               >Selecionar Todos</b-button
             >
             <b-button
-              class="btn-cinza btn-df mr-2 btn-custom "
+              class="btn-cinza btn-df mr-2 btn-custom btn-modal "
               variant="secondary"
               @click="selectNoneConflitos()"
               >Desmarcar Todos</b-button
@@ -571,7 +480,7 @@
         <b-button
           variant="success"
           @click="btnOK()"
-          class="btn-custom btn-verde btn-df mr-2"
+          class="btn-custom btn-modal btn-verde btn-df mr-2"
           style="padding-right: 15px !important; padding-left: 15px !important;"
           >OK</b-button
         >
@@ -584,9 +493,35 @@
       scrollable
       title="Edição de Turma"
       size="md"
+      hide-footer
     >
       <ModalTurma :turma="turma_clickada"></ModalTurma>
       <div slot="modal-footer" class="d-none"></div>
+    </b-modal>
+    <!-- MODAL AJUDA -->
+    <b-modal id="modalAjuda" scrollable title="Ajuda">
+      <div class="modal-body">
+        <ul class="listas list-group">
+          <li class="list-group-item">
+            <strong>Para selecionar um tipo de conflito:</strong> Clique em
+            Adicionar
+            <i class="fas fa-plus addbtn px-1" style="font-size: 12px;"></i>
+            , em seguida, marque os conflitos que pretende visualizar, escolha o
+            semestre mudando de aba, e por fim clique em Salvar
+            <i class="fas fa-check addbtn px-1" style="font-size: 12px;"></i>
+            ou em Cancelar
+            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px;"></i>
+            .
+          </li>
+
+          <li class="list-group-item">
+            <strong>Para editar turma da tabela:</strong> clique no icone
+            presente na coluna "Editar".
+          </li>
+        </ul>
+      </div>
+
+      <div slot="modal-footer" style="display: none;"></div>
     </b-modal>
   </div>
 </template>
@@ -629,35 +564,36 @@ export default {
         Eletivas: [],
       },
       Conflitos: [
-        { type: 1, msg: "Nenhum Turno alocado" },
+        { type: 1, msg: "Nenhum turno alocado" },
         {
           type: 2,
-          msg: "Incompatbilidade entre turno e cadastro EAD da disciplina",
+          msg: "Incompatibilidade entre turno e cadastro EAD da disciplina",
         },
         {
           type: 3,
           msg: "Horarios incompletos ou invalidos",
         },
-        { type: 4, msg: "Nenhum Docente alocado" },
+        { type: 4, msg: "Nenhum docente alocado" },
         {
-          type: 5.1,
+          type: 5,
           msg:
             "Disciplina de laborátorio, porêm não possui laboratorio alocado",
         },
         {
-          type: 5.2,
+          type: 6,
           msg:
             "Disciplina desejável laborátorio, porêm não possui laboratorio alocado",
         },
         {
-          type: 6,
+          type: 7,
           msg: "Limite de lotação das sala",
         },
         {
-          type: 7,
+          type: 8,
           msg: "Apenas 4 ou menos vagas foram alocadas!",
         },
-        { type: 8, msg: "Turma é EAD e com sala alocada" },
+        { type: 9, msg: "Turma EAD e possui sala alocada" },
+        { type: 10, msg: "Conflito de horarios na grade" },
       ],
       grades1semestre: { CCD: [], CCN: [], EC: [], SI: [] },
       grades2semestre: { CCD: [], CCN: [], EC: [], SI: [] },
@@ -841,15 +777,15 @@ export default {
       this.semestre_2Ativo = false;
     },
     selectAllConflitos() {
-      if (this.ConflitosSelected != []) this.ConflitosSelected = [];
-      for (var i = 0; i < this.Conflitos.length; i++)
-        this.ConflitosSelected.push(this.Conflitos[i].type);
+      this.ConflitosSelected = [
+        ...this.Conflitos.map((conflito) => conflito.type),
+      ];
     },
     selectNoneConflitos() {
       this.ConflitosSelected = [];
     },
-    openModalEditTurma(turma) {
-      this.turma_clickada = turma;
+    openModalEditTurma(id) {
+      this.turma_clickada = this.findTurmaById(id);
       this.$bvModal.show("modalTurma");
     },
     toggleOrdTurmas(ord) {
@@ -880,6 +816,10 @@ export default {
     findDisciplinaById(id) {
       let disciplina = _.find(this.Disciplinas, (d) => d.id == id);
       return disciplina != undefined ? disciplina : null;
+    },
+    findTurmaById(id) {
+      let result = _.find(this.Turmas, (turma) => turma.id == id);
+      return result != undefined ? result : null;
     },
     totalPedidos(turma_id) {
       let result = 0;
@@ -986,34 +926,24 @@ export default {
       if (check) validacao.conflitos.push(check);
     },
     checkTurno(turno) {
-      return turno === null || turno === undefined
-        ? { type: 1, msg: "Nenhum Turno alocado" }
-        : null;
+      return turno === null || turno === undefined ? this.Conflitos[0] : null;
     },
     checkTurnoEAD(isEAD, turno) {
       return (isEAD && turno !== "EAD") || (!isEAD && turno == "EAD")
-        ? {
-            type: 2,
-            msg: "Incompatbilidade entre turno e cadastro EAD da disciplina",
-          }
+        ? this.Conflitos[1]
         : false;
     },
     checkHorarios(isEAD, horario1, horario2) {
       if (!isEAD) {
         return (horario1 === null || horario1 === undefined) &&
           (horario2 === null || horario2 === undefined)
-          ? {
-              type: 3,
-              msg: "Horarios incompletos ou invalidos",
-            }
+          ? this.Conflitos[2]
           : false;
       }
       return false;
     },
     checkDocentes(docente1, docente2) {
-      return docente1 === null && docente2 == null
-        ? { type: 4, msg: "Nenhum Docente alocado" }
-        : false;
+      return docente1 === null && docente2 == null ? this.Conflitos[3] : false;
     },
     checkSalasLab(isLab, sala1, sala2) {
       //Não lab
@@ -1021,20 +951,12 @@ export default {
       //Obrigatorio
       else if (isLab == 1) {
         return !this.isLab(sala1) && !this.isLab(sala2)
-          ? {
-              type: 5.1,
-              msg:
-                "Disciplina de laborátorio, porêm não possui laboratorio alocado",
-            }
+          ? this.Conflitos[4]
           : false;
         //Desejavel
       } else if (isLab == 2) {
         return !this.isLab(sala1) && !this.isLab(sala2)
-          ? {
-              type: 5.2,
-              msg:
-                "Disciplina desejável laborátorio, porêm não possui laboratorio alocado",
-            }
+          ? this.Conflitos[5]
           : false;
       }
     },
@@ -1045,37 +967,21 @@ export default {
       if (sala != undefined) {
         if (sala.lotacao_maxima < pedidos_totais) {
           return {
-            type: 6,
-            msg: `Limite da sala ${sala.nome} execedido!<br>Vagas: ${pedidos_totais} - Lotação: ${sala.lotacao_maxima} `,
+            type: 7,
+            msg: `Limite da sala ${sala.nome} execedido! Vagas: ${pedidos_totais} - Lotação: ${sala.lotacao_maxima} `,
           };
         }
       }
     },
     checkPedidos(pedidos_totais) {
-      return pedidos_totais <= 4
-        ? {
-            type: 7,
-            msg: "Apenas 4 ou menos vagas foram alocadas!",
-          }
-        : false;
+      return pedidos_totais <= 4 ? this.Conflitos[7] : false;
     },
     checkSalasInEAD(isEAD, sala1, sala2) {
       if (isEAD) {
-        return sala1 != null || sala2 != null
-          ? { type: 8, msg: "Turma é EAD e com sala alocada" }
-          : false;
+        return sala1 != null || sala2 != null ? this.Conflitos[8] : false;
       }
       return false;
     },
-    isLab(id) {
-      let cond = _.find(
-        this.Salas,
-        (sala) => id == sala.id && sala.laboratorio
-      );
-      if (cond !== undefined) return true;
-      else return false;
-    },
-
     checkPeriodoCursos(turma) {
       if (turma.Horario1 === null && turma.Horario2 === null) {
         return false;
@@ -1309,7 +1215,15 @@ export default {
           }
         }
       }
-      if (conflitos) return { type: 8, msg: msg };
+      if (conflitos) return { type: 10, msg: msg };
+      else return false;
+    },
+    isLab(id) {
+      let cond = _.find(
+        this.Salas,
+        (sala) => id == sala.id && sala.laboratorio
+      );
+      if (cond !== undefined) return true;
       else return false;
     },
 

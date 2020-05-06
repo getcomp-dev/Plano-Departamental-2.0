@@ -1,16 +1,8 @@
 <template>
   <div class="DashboardHome row pr-2">
-    <!-- Titulo -->
-    <div
-      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
-      style="height:38px;"
-    >
-      <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-12 titulo">Dashboard</h1>
-      </div>
-    </div>
-    <div class="w-100 mb-2 border-bottom"></div>
+    <PageTitle :title="'Dashboard'" :asideClass="'col-0'"> </PageTitle>
 
+    <div class="w-100 mb-2 border-bottom"></div>
     <!-- alert -->
     <div class="alert alert-light alerta mt-1" role="alert">
       <p style="font-size:12px">
@@ -28,7 +20,9 @@
           <ul class="listas list-group">
             <li class="list-group-item">
               <strong>
-                <router-link :to="{ name: 'pedidos' }">Tabela:</router-link>
+                <router-link :to="{ name: 'pedidos' }"
+                  >Tabela Interna:</router-link
+                >
               </strong>
               Página onde encontra-se o cadastro de todas as turmas de todas as
               disciplinas oferecidas pelo DCC. Permite a alteração de vagas,
@@ -40,19 +34,27 @@
                   >Tabela Externa:</router-link
                 >
               </strong>
-              Similar a Tabela principal, onde encontra-se o cadastro de todas
-              as turmas de disciplinas oferecidas por outros departamentos
+              Similar a Tabela Interna, onde encontra-se o cadastro de todas as
+              turmas de disciplinas oferecidas por outros departamentos
               (externos ao DCC), e que fazem parte da grade dos cursos
               cadastrados.
             </li>
             <li class="list-group-item">
               <strong>
                 <router-link :to="{ name: 'cargaPos' }"
-                  >Creditação Pós:</router-link
+                  >Tabela Pós:</router-link
                 >
               </strong>
               Tela onde localiza-se uma tabela com as cargas horárias de cada
               docente encarregado das bolsas de pós-graduação.
+            </li>
+            <li class="list-group-item">
+              <strong>
+                <router-link :to="{ name: 'validacoes' }"
+                  >Validacões:</router-link
+                >
+              </strong>
+              Tela onde localiza-se as validações do Plano Departamental.
             </li>
           </ul>
         </div>
@@ -80,6 +82,16 @@
             </li>
             <li class="list-group-item">
               <strong>
+                <router-link :to="{ name: 'gradeDisciplinas' }"
+                  >Grades Disciplinas:</router-link
+                >
+              </strong>
+              Listagem das disciplinas do DCC, divididas de acordo com seus
+              perfis. Mostra, além disso, quais semestres e períodos cada uma é
+              ofertada nas grades dos cursos.
+            </li>
+            <li class="list-group-item">
+              <strong>
                 <router-link :to="{ name: 'horarios' }"
                   >Horários - Cursos:</router-link
                 >
@@ -88,11 +100,6 @@
               filtragem por semestres e cursos.
             </li>
 
-            <!-- <li class="list-group-item">
-              <strong>
-                <router-link :to="{ name: 'horariosResumo' }">Horários - Resumo:</router-link>
-              </strong> Listagem resumida dos horários de todos os cursos do DCC.
-            </li> -->
             <li class="list-group-item">
               <strong>
                 <router-link :to="{ name: 'laboratoriosAlocacao' }"
@@ -100,16 +107,6 @@
                 >
               </strong>
               Lista as alocações dos laboratórios em ambos os semestres.
-            </li>
-            <li class="list-group-item">
-              <strong>
-                <router-link :to="{ name: 'gradeDisciplinas' }"
-                  >Grades Disciplinas:</router-link
-                >
-              </strong>
-              Listagem das disciplinas do DCC, divididas de acordo com seus
-              perfis. Mostra, além disso, quais semestres e períodos cada uma é
-              ofertada nas grades dos cursos.
             </li>
           </ul>
         </div>
@@ -192,9 +189,11 @@
 
 <script>
 import { mapGetters } from "vuex";
+import PageTitle from "@/components/PageTitle";
 
 export default {
   name: "DashboardHome",
+  components: { PageTitle },
   created() {
     console.log(this.$store);
   },
@@ -207,8 +206,8 @@ export default {
         return false;
       }
     },
-    ...mapGetters(["getUsuarioFirstName"])
-  }
+    ...mapGetters(["getUsuarioFirstName"]),
+  },
 };
 </script>
 
@@ -217,12 +216,6 @@ export default {
   max-width: 100%;
   overflow: hidden;
   margin: 0;
-}
-.titulo {
-  font-size: 25px;
-  font-weight: normal;
-  padding-left: 0;
-  margin: 0 !important;
 }
 
 .alerta {

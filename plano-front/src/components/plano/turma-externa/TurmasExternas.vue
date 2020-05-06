@@ -398,7 +398,7 @@
       </template>
     </b-modal>
     <!-- MODAL AJUDA -->
-    <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+    <b-modal id="modalAjuda" scrollable title="Ajuda">
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
@@ -565,18 +565,18 @@ const emptyTurma = {
   Horario1: undefined,
   Horario2: undefined,
   Sala1: undefined,
-  Sala2: undefined
+  Sala2: undefined,
 };
 const emptyPedido = {
   vagasPeriodizadas: 0,
   vagasNaoPeriodizadas: 0,
   Curso: undefined,
-  Turma: undefined
+  Turma: undefined,
 };
 export default {
   name: "DashboardTurmasExternas",
   components: {
-    turmadata
+    turmadata,
   },
   data() {
     return {
@@ -587,7 +587,7 @@ export default {
       semestre_1Ativo: true,
       semestre_2Ativo: true,
       semestreAtual: 3,
-      onLoading: true
+      onLoading: true,
     };
   },
 
@@ -706,7 +706,7 @@ export default {
     addTurma() {
       turmaExternaService
         .create(this.turmaForm)
-        .then(response => {
+        .then((response) => {
           this.semestre = response.Turma.periodo;
           for (var i = 0; i < 4; i++) {
             var pedido = _.clone(emptyPedido);
@@ -714,10 +714,10 @@ export default {
             pedido.Turma = response.Turma.id;
             pedidoExternoService
               .create(pedido)
-              .then(response => {
+              .then((response) => {
                 // console.log(response.Pedido);
               })
-              .catch(error => {
+              .catch((error) => {
                 // console.log("erro ao criar pedido: " + error);
               });
           }
@@ -726,10 +726,10 @@ export default {
             group: "general",
             title: `Sucesso!`,
             text: `A Turma ${response.Turma.letra} foi criada!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao criar Turma</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -740,15 +740,15 @@ export default {
     editTurma(turma) {
       turmaExternaService
         .update(turma.id, turma)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Turma ${response.Turma.letra} foi atualizada!`,
-            type: "success"
+            type: "success",
           });
         })
-        .catch(error => {
+        .catch((error) => {
           this.error = "<b>Erro ao atualizar Turma</b>";
           if (error.response.data.fullMessage) {
             this.error +=
@@ -759,12 +759,12 @@ export default {
     deleteTurma(turma) {
       turmaExternaService
         .delete(turma.id, turma)
-        .then(response => {
+        .then((response) => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `A Turma ${response.Turma.letra} foi excluída!`,
-            type: "success"
+            type: "success",
           });
         })
         .catch(() => {
@@ -780,13 +780,13 @@ export default {
     toggleAdd() {
       this.cleanTurma();
       this.isAdd = !this.isAdd;
-    }
+    },
   },
   computed: {
     Turmas_filtred() {
       return _.orderBy(
-        this.Turmas.filter(turma => {
-          let discip = _.find(this.Disciplinas, d => {
+        this.Turmas.filter((turma) => {
+          let discip = _.find(this.Disciplinas, (d) => {
             if (d.id === turma.Disciplina) {
               //Adiciona os atributos codigo e nome para serem usados na ordenação
               turma.disciplina_codigo = d.codigo;
@@ -840,8 +840,8 @@ export default {
       } else {
         return false;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -1122,54 +1122,6 @@ strong {
   width: auto;
 }
 
-/* ==== MODAL TABLE ==== */
-.modal-table {
-  display: block !important;
-  overflow: auto !important;
-  font-size: 10px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-}
-.modal-table tr thead {
-  display: block;
-}
-.modal-table th {
-  padding: 0 !important;
-  text-align: center !important;
-  height: 18px !important;
-  border-bottom: 0 !important;
-  border-top: 0 !important;
-}
-.modal-table .p-header {
-  padding: 0px 5px 0px 5px !important;
-  margin: 0 !important;
-  text-align: start;
-  height: 18px !important;
-}
-.modal-table tbody {
-  max-height: 100%;
-  width: 100%;
-}
-.modal-table td {
-  border-bottom: 0;
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  /* height: 22px !important; */
-}
-.modal-table p {
-  margin: 0 !important;
-  text-align: center;
-  padding: 0 !important;
-  padding-right: 5px !important;
-  padding-left: 5px !important;
-}
-.modal-table input[type="checkbox"] {
-  margin: 0 !important;
-  margin-top: 4px !important;
-}
 .active {
   background-color: #e9ecef !important;
   color: #495057 !important;

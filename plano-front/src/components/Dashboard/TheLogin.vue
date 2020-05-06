@@ -1,12 +1,14 @@
 <template>
   <div id="loginForm" class="text-center">
-    <div class="card ml-auto mr-auto"> 
-        <div class="card-header">
-          <h1 class="card-title">Login</h1>
-        </div>
+    <div class="card ml-auto mr-auto">
+      <div class="card-header">
+        <h1 class="card-title">Login</h1>
+      </div>
       <div class="card-body">
         <form class="form-signin" v-on:submit.prevent="doLogin">
-          <b-alert :show="Boolean(error)" variant="danger" dismissible>{{error}}</b-alert>
+          <b-alert :show="Boolean(error)" variant="danger" dismissible>{{
+            error
+          }}</b-alert>
           <label for="login" class="sr-only">Usuário</label>
           <input
             v-focus
@@ -24,7 +26,9 @@
             placeholder="Senha"
             v-model.trim="form.senha"
           />
-          <button class="btn btn-sm btn-block mt-3" type="submit">Entrar</button>
+          <button class="btn btn-sm btn-block mt-3" type="submit">
+            Entrar
+          </button>
         </form>
       </div>
     </div>
@@ -34,14 +38,13 @@
 <script>
 export default {
   name: "TheLogin",
-
   data() {
     return {
       form: {
         login: undefined,
-        senha: undefined
+        senha: undefined,
       },
-      error: undefined
+      error: undefined,
     };
   },
 
@@ -49,8 +52,8 @@ export default {
     focus: {
       inserted: function(el) {
         el.focus();
-      }
-    }
+      },
+    },
   },
 
   methods: {
@@ -64,14 +67,14 @@ export default {
             this.$router.replace("/dashboard");
           }
         })
-        .catch(error => {
+        .catch((error) => {
           if (error.response) {
             this.error = error.response.data.message;
           } else {
             this.error = "Erro na requisição! Tente novamente.";
           }
         });
-    }
+    },
   },
 
   beforeCreate() {
@@ -81,7 +84,7 @@ export default {
         this.$router.replace("/dashboard");
       })
       .catch(() => {});
-  }
+  },
 };
 </script>
 
@@ -133,41 +136,41 @@ export default {
 .form-signin input[type="password"] {
   margin-bottom: 10px;
 }
-input{
+input {
   height: 28px !important;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.07);
 }
-.card{
+.card {
   border: none;
-  box-shadow: 0 10px 20px rgba(49, 68, 177, 0.19), 0 6px 6px rgba(0,0,0,0.23);
+  box-shadow: 0 10px 20px rgba(49, 68, 177, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
   border-radius: 5px;
 }
-.card-header{
+.card-header {
   min-height: 50px;
   max-height: 50px;
-  background-color:#DCDCDC;
+  background-color: #dcdcdc;
   border-color: rgb(209, 209, 209);
 }
-.card-title{
+.card-title {
   font-size: 22px;
   font-weight: 300;
   text-transform: uppercase;
 }
-.card-body{
-  background-color:#faf8f8;
+.card-body {
+  background-color: #faf8f8;
 }
-.btn{
-  background-color:#C0C0C0;
+.btn {
+  background-color: #c0c0c0;
   border-radius: 15px;
   color: #262626;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease 0s;
   cursor: pointer;
   outline: none;
-} 
-.btn:hover{
-  background-color:#808080;
-  border-color:#808080;
+}
+.btn:hover {
+  background-color: #808080;
+  border-color: #808080;
   box-shadow: 0px 15px 20px rgba(68, 83, 102, 0.4);
   transform: translateY(-3px);
 }

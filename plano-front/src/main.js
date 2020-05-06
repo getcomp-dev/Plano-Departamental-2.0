@@ -10,14 +10,18 @@ sync(store, router);
 import axios from "./common/services/axios";
 
 axios(Vue, store);
-
+// css
+import "./assets/css/botoes.css";
+import "./assets/css/tables.css";
+import "./assets/css/index.css";
+// bootstrap
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
 import "./assets/css/fontawesome-all.css";
 
 Vue.use(BootstrapVue);
-import "./assets/css/botoes.css";
+
 //==================================================
 import PortalVue from "portal-vue";
 Vue.use(PortalVue);

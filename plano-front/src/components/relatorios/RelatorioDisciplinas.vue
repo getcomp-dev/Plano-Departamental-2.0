@@ -16,8 +16,8 @@
         >
           <b-button
             v-b-modal.modalFiltros
-            title="Disciplinas"
-            class="cancelbtn btn-icon"
+            title="Filtros"
+            class="cancelbtn btn-title btn-custom"
           >
             <i class="fas fa-list-ul"></i>
           </b-button>
@@ -26,7 +26,7 @@
             <b-button
               v-b-modal.modalRelatorio
               type="button"
-              class="relatbtn btn-icon"
+              class="relatbtn btn-title btn-custom"
               title="Relatório"
             >
               <i class="far fa-file-alt"></i>
@@ -35,7 +35,7 @@
             <b-button
               v-b-modal.modalAjuda
               title="Ajuda"
-              class="relatbtn btn-icon"
+              class="relatbtn btn-title btn-custom"
             >
               <i class="fas fa-question"></i>
             </b-button>
@@ -150,163 +150,161 @@
           </tr>
         </thead>
         <tbody>
-          <template v-if="Disciplinas.length > 0">
-            <template v-for="disciplina in Disciplinas_Main_Table">
-              <template v-if="turmas(disciplina, semestreAtual).length > 0">
-                <tr class="disc-tr" :key="disciplina.codigo">
-                  <div class="max-content">
+          <template v-for="disciplina in Disciplinas_Main_Table">
+            <template v-if="turmas(disciplina, semestreAtual).length > 0">
+              <tr class="disciplina-tr" :key="disciplina.codigo">
+                <div class="max-content">
+                  <td>
+                    <p style="width: 80px;">{{ disciplina.codigo }}</p>
+                  </td>
+                  <td>
+                    <p style="width: 350px;">{{ disciplina.nome }}</p>
+                  </td>
+                  <td>
+                    <p style="width: 65px;">{{ perfil(disciplina) }}</p>
+                  </td>
+                  <td>
+                    <p style="width: 24px;"></p>
+                  </td>
+                  <td>
+                    <p style="width: 24px;"></p>
+                  </td>
+                  <td>
+                    <p style="width: 200px;"></p>
+                  </td>
+                  <td>
+                    <p style="width: 180px;"></p>
+                  </td>
+                  <td v-if="semestreAtual == 1">
+                    <p style="width: 50px;">
+                      {{ vagasDisciplina(disciplina, 1) }}
+                    </p>
+                  </td>
+                  <td v-if="semestreAtual == 2">
+                    <p style="width: 50px;">
+                      {{ vagasDisciplina(disciplina, 2) }}
+                    </p>
+                  </td>
+                  <td v-if="semestreAtual == 3">
+                    <p style="width: 50px;">
+                      {{
+                        vagasDisciplina(disciplina, 2) +
+                          vagasDisciplina(disciplina, 1)
+                      }}
+                    </p>
+                  </td>
+                </div>
+              </tr>
+            </template>
+
+            <template v-for="turma in turmas(disciplina, semestreAtual)">
+              <tr :key="'turma-id:' + turma.id">
+                <template>
+                  <div class="linhas max-content">
                     <td>
-                      <p style="width: 80px;">{{ disciplina.codigo }}</p>
+                      <p style="width: 80px;"></p>
                     </td>
                     <td>
-                      <p style="width: 350px;">{{ disciplina.nome }}</p>
+                      <p style="width: 350px;"></p>
                     </td>
                     <td>
-                      <p style="width: 65px;">{{ perfil(disciplina) }}</p>
+                      <p style="width: 65px;"></p>
                     </td>
                     <td>
-                      <p style="width: 24px;"></p>
+                      <p style="width: 24px;">{{ turma.periodo }}</p>
                     </td>
                     <td>
-                      <p style="width: 24px;"></p>
+                      <p style="width: 24px;">{{ turma.letra }}</p>
                     </td>
                     <td>
-                      <p style="width: 200px;"></p>
+                      <p style="width: 200px;">{{ docentes(turma) }}</p>
                     </td>
+
                     <td>
-                      <p style="width: 180px;"></p>
+                      <div style="width: 180px;">
+                        <template v-for="horario in Horarios">
+                          <p
+                            :key="horario.id"
+                            v-if="horario.id === turma.Horario1"
+                          >
+                            {{ horario.horario }}
+                            <template v-for="horario in Horarios">
+                              <span
+                                :key="horario.id"
+                                v-if="horario.id === turma.Horario2"
+                                >/ {{ horario.horario }}</span
+                              >
+                            </template>
+                          </p>
+                        </template>
+                      </div>
                     </td>
-                    <td v-if="semestreAtual == 1">
-                      <p style="width: 50px;">
-                        {{ vagasDisciplina(disciplina, 1) }}
+                    <td
+                      v-if="semestreAtual == 1"
+                      v-on:click="selecionaTurma(turma)"
+                      class="clickable"
+                    >
+                      <p
+                        v-if="turma.periodo == 1 || turma.periodo == 2"
+                        style="width: 50px;"
+                        class="p-vagas"
+                      >
+                        {{ vagasTurma(turma, 1) }}
                       </p>
                     </td>
-                    <td v-if="semestreAtual == 2">
-                      <p style="width: 50px;">
-                        {{ vagasDisciplina(disciplina, 2) }}
+                    <td
+                      v-if="semestreAtual == 2"
+                      v-on:click="selecionaTurma(turma)"
+                      class="clickable"
+                    >
+                      <p
+                        v-if="turma.periodo == 3 || turma.periodo == 4"
+                        style="width: 50px;"
+                        class="p-vagas"
+                      >
+                        {{ vagasTurma(turma, 2) }}
                       </p>
                     </td>
-                    <td v-if="semestreAtual == 3">
-                      <p style="width: 50px;">
-                        {{
-                          vagasDisciplina(disciplina, 2) +
-                            vagasDisciplina(disciplina, 1)
-                        }}
+                    <td
+                      v-if="semestreAtual == 3"
+                      v-on:click="selecionaTurma(turma)"
+                      class="clickable"
+                    >
+                      <p
+                        v-if="turma.periodo == 1 || turma.periodo == 2"
+                        style="width: 50px;"
+                        class="p-vagas"
+                      >
+                        {{ vagasTurma(turma, 1) }}
+                      </p>
+                      <p v-else style="width: 50px;" class="p-vagas">
+                        {{ vagasTurma(turma, 2) }}
                       </p>
                     </td>
                   </div>
-                </tr>
-              </template>
-
-              <template v-for="turma in turmas(disciplina, semestreAtual)">
-                <tr :key="'turma-id:' + turma.id">
-                  <template>
-                    <div class="linhas max-content">
-                      <td>
-                        <p style="width: 80px;"></p>
-                      </td>
-                      <td>
-                        <p style="width: 350px;"></p>
-                      </td>
-                      <td>
-                        <p style="width: 65px;"></p>
-                      </td>
-                      <td>
-                        <p style="width: 24px;">{{ turma.periodo }}</p>
-                      </td>
-                      <td>
-                        <p style="width: 24px;">{{ turma.letra }}</p>
-                      </td>
-                      <td>
-                        <p style="width: 200px;">{{ docentes(turma) }}</p>
-                      </td>
-
-                      <td>
-                        <div style="width: 180px;">
-                          <template v-for="horario in Horarios">
-                            <p
-                              :key="horario.id"
-                              v-if="horario.id === turma.Horario1"
-                            >
-                              {{ horario.horario }}
-                              <template v-for="horario in Horarios">
-                                <span
-                                  :key="horario.id"
-                                  v-if="horario.id === turma.Horario2"
-                                  >/ {{ horario.horario }}</span
-                                >
-                              </template>
-                            </p>
-                          </template>
-                        </div>
-                      </td>
-                      <td
-                        v-if="semestreAtual == 1"
-                        v-on:click="selecionaTurma(turma)"
-                        class="clickable"
-                      >
-                        <p
-                          v-if="turma.periodo == 1 || turma.periodo == 2"
-                          style="width: 50px;"
-                          class="p-vagas"
-                        >
-                          {{ vagasTurma(turma, 1) }}
-                        </p>
-                      </td>
-                      <td
-                        v-if="semestreAtual == 2"
-                        v-on:click="selecionaTurma(turma)"
-                        class="clickable"
-                      >
-                        <p
-                          v-if="turma.periodo == 3 || turma.periodo == 4"
-                          style="width: 50px;"
-                          class="p-vagas"
-                        >
-                          {{ vagasTurma(turma, 2) }}
-                        </p>
-                      </td>
-                      <td
-                        v-if="semestreAtual == 3"
-                        v-on:click="selecionaTurma(turma)"
-                        class="clickable"
-                      >
-                        <p
-                          v-if="turma.periodo == 1 || turma.periodo == 2"
-                          style="width: 50px;"
-                          class="p-vagas"
-                        >
-                          {{ vagasTurma(turma, 1) }}
-                        </p>
-                        <p v-else style="width: 50px;" class="p-vagas">
-                          {{ vagasTurma(turma, 2) }}
-                        </p>
-                      </td>
-                    </div>
-                  </template>
-                </tr>
-              </template>
+                </template>
+              </tr>
             </template>
-          </template>
-          <template v-else>
-            <tr>
-              <td colspan="2" class="text-center">
-                <i class="fas fa-exclamation-triangle"></i> Nenhuma Disciplina
-                encontrado!
-              </td>
-            </tr>
           </template>
         </tbody>
       </table>
     </div>
 
     <!-- MODAL DE AJUDA -->
-    <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+    <b-modal
+      class="modal-ajuda"
+      id="modalAjuda"
+      ref="ajudaModal"
+      scrollable
+      title="Ajuda"
+    >
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
-            <strong>Para exibir conteúdo na Tabela:</strong> Clique em
-            Disciplinas
+            <strong class="ajuda-strong"
+              >Para exibir conteúdo na Tabela:</strong
+            >
+            Clique em Disciplinas
             <i
               class="fas fa-list-ul cancelbtn px-1"
               style="font-size: 12px;"
@@ -315,23 +313,28 @@
             em OK. Caso queira ver todas basta clicar em Selecionar Todos.
           </li>
           <li class="list-group-item">
-            <strong>Para gerar relatório:</strong> Clique no botão Relatório
+            <strong class="ajuda-strong">Para gerar relatório:</strong> Clique
+            no botão Relatório
             <i
               class="far fa-file-alt relatbtn px-1"
               style="font-size: 12px;"
             ></i>
-            e selecione se deseja o relatório completo, com todas as disciplinas,
-            ou apenas o relatório parcial, com as disciplinas selecionadas.
+            e selecione se deseja o relatório completo, com todas as
+            disciplinas, ou apenas o relatório parcial, com as disciplinas
+            selecionadas.
           </li>
           <li class="list-group-item">
-            <strong>Para alterar ordenação:</strong> Clique em Cod. no cabeçalho
-            da tabela para ordenar por código, ou em Nome para ordenar por ordem
-            alfabética, ou em Perfil para ordenar por perfil.
+            <strong class="ajuda-strong">Para alterar ordenação:</strong> Clique
+            em Cod. no cabeçalho da tabela para ordenar por código, ou em Nome
+            para ordenar por ordem alfabética, ou em Perfil para ordenar por
+            perfil.
           </li>
           <li class="list-group-item">
-            <strong>Para visualizar divisões de vagas:</strong> Clique no número
-            de vagas de uma turma para visualizar a alocação das vagas por
-            cursos.
+            <strong class="ajuda-strong"
+              >Para visualizar divisões de vagas:</strong
+            >
+            Clique no número de vagas de uma turma para visualizar a alocação
+            das vagas por cursos.
           </li>
         </ul>
       </div>
@@ -355,7 +358,7 @@
             <a
               class="nav-link border border-right-0"
               :class="{
-                active: nav_ativo == 'perfis',
+                active: nav_ativo === 'perfis',
               }"
               >Perfis</a
             >
@@ -364,7 +367,7 @@
             <a
               class="nav-link border border-right-0"
               :class="{
-                active: nav_ativo == 'disciplinas',
+                active: nav_ativo === 'disciplinas',
               }"
               >Disciplinas</a
             >
@@ -373,7 +376,7 @@
             <a
               class="nav-link border"
               :class="{
-                active: nav_ativo == 'semestre',
+                active: nav_ativo === 'semestre',
               }"
               >Semestre</a
             >
@@ -382,15 +385,37 @@
       </div>
 
       <div class="col m-0 p-0 max-content" style="height: 450px !important;">
-        <!-- TABLE PERFIS -->
-        <table
-          v-if="nav_ativo == 'perfis'"
-          class="table table-sm modal-table table-bordered"
-          style="max-height: 450px !important;"
-        >
+        <table class="table table-sm modal-table table-bordered">
           <thead class="thead-light">
-            <tr class="sticky">
+            <!-- search bar disciplinas -->
+            <tr class="sticky" v-if="nav_ativo === 'disciplinas'">
               <div style="font-size: 11px !important;" class="max-content">
+                <th>
+                  <div class="m-0 input-group input-group-search">
+                    <input
+                      type="text"
+                      class="form-control"
+                      style="border-right: none;"
+                      placeholder="Pesquise nome ou codigo de uma disciplina..."
+                      v-model="searchDisciplinas"
+                    />
+                    <div
+                      class="input-group-append"
+                      @click="searchDisciplinas = null"
+                    >
+                      <span
+                        class="input-group-text search-text"
+                        style="height: 25px; font-size: 18px; cursor: pointer;"
+                        >&times;</span
+                      >
+                    </div>
+                  </div>
+                </th>
+              </div>
+            </tr>
+            <!-- perfis -->
+            <tr v-if="nav_ativo === 'perfis'" class="sticky">
+              <div class="max-content">
                 <th>
                   <p style="width: 25px;" class="p-header"></p>
                 </th>
@@ -413,73 +438,9 @@
                 </th>
               </div>
             </tr>
-          </thead>
-          <tbody>
-            <tr v-for="perfil in Perfis_Modal" :key="'perfil-id' + perfil.id">
+            <!-- disciplinas -->
+            <tr v-else-if="nav_ativo === 'disciplinas'" class="sticky2">
               <div class="max-content">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      v-model="PerfisAtivados"
-                      :value="perfil"
-                      class="form-check-input position-static m-0"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p style="width: 435px; text-align: start;">
-                    {{ perfil.nome }}
-                  </p>
-                </td>
-              </div>
-            </tr>
-          </tbody>
-        </table>
-        <!-- TABLE DISCIPLINAS -->
-        <table
-          v-else-if="nav_ativo == 'disciplinas'"
-          class="table table-sm modal-table table-bordered table-hover"
-          style="max-height: 450px !important; overflow-y: auto !important;"
-        >
-          <thead class="thead-light ">
-            <tr class="sticky">
-              <div style="font-size: 11px !important;" class="max-content">
-                <th>
-                  <div
-                    class="m-0 input-group"
-                    style="
-                      width: 462px;
-                      height: 35px;
-                      padding-left: 4px;
-                      padding-right: 20px;
-                      padding-top: 4px;
-                    "
-                  >
-                    <input
-                      type="text"
-                      class="form-control"
-                      style="border-right: none;"
-                      placeholder="Pesquise nome ou codigo de uma disciplina..."
-                      v-model="searchDisciplinas"
-                    />
-                    <div
-                      class="input-group-append"
-                      @click="searchDisciplinas = null"
-                    >
-                      <span
-                        class="input-group-text search-text"
-                        style="height: 25px; font-size: 18px; cursor: pointer;"
-                        >&times;</span
-                      >
-                    </div>
-                  </div>
-                </th>
-              </div>
-            </tr>
-
-            <tr>
-              <div style="font-size: 11px !important;" class="max-content">
                 <th>
                   <p
                     style="width: 25px; text-align: center;"
@@ -548,8 +509,42 @@
                 </th>
               </div>
             </tr>
+            <!-- semestre -->
+            <tr v-else class="sticky">
+              <div class="max-content">
+                <th>
+                  <p style="width: 25px;" class="p-header"></p>
+                </th>
+                <th>
+                  <p class="p-header" style="width: 435px; text-align: start;">
+                    Semestre Letivo
+                  </p>
+                </th>
+              </div>
+            </tr>
           </thead>
-          <tbody>
+          <tbody v-if="nav_ativo === 'perfis'">
+            <tr v-for="perfil in Perfis_Modal" :key="'perfil-id' + perfil.id">
+              <div class="max-content">
+                <td>
+                  <div style="width: 25px; height: inherit;" class="px-1">
+                    <input
+                      type="checkbox"
+                      v-model="PerfisAtivados"
+                      :value="perfil"
+                      class="form-check-input position-static m-0"
+                    />
+                  </div>
+                </td>
+                <td>
+                  <p style="width: 435px; text-align: start;">
+                    {{ perfil.nome }}
+                  </p>
+                </td>
+              </div>
+            </tr>
+          </tbody>
+          <tbody v-else-if="nav_ativo === 'disciplinas'">
             <tr
               v-for="disciplina in Disciplinas_Filtred"
               :key="'disciplina' + disciplina.id"
@@ -584,28 +579,7 @@
               </div>
             </tr>
           </tbody>
-        </table>
-        <!-- TABLE SEMESTRE -->
-        <table
-          v-else
-          class="table table-bordered table-sm modal-table"
-          style="max-height: 392px !important;"
-        >
-          <thead class="thead-light ">
-            <tr class="sticky">
-              <div style="font-size: 11px !important;" class="max-content">
-                <th>
-                  <p style="width: 25px;" class="p-header"></p>
-                </th>
-                <th>
-                  <p class="p-header" style="width: 435px; text-align: start;">
-                    Semestre Letivo
-                  </p>
-                </th>
-              </div>
-            </tr>
-          </thead>
-          <tbody>
+          <tbody v-else>
             <tr>
               <div style="width: max-content;">
                 <td>
@@ -642,17 +616,17 @@
         </table>
       </div>
 
-      <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
+      <div slot="modal-footer" class="w-100 m-0 p-0 d-flex">
         <div class="w-100">
           <template v-if="nav_ativo == 'disciplinas'">
             <b-button
-              class="btn-azul btn-df mr-2 btn-icon"
+              class="btn-azul btn-modal btn-custom"
               variant="success"
               @click="selectAllDisciplinas()"
               >Selecionar Todos</b-button
             >
             <b-button
-              class="btn-cinza btn-df mr-2 btn-icon"
+              class="btn-cinza btn-modal btn-custom"
               variant="secondary"
               @click="selectNoneDisciplinas()"
               >Desmarcar Todos</b-button
@@ -660,13 +634,13 @@
           </template>
           <template v-else-if="nav_ativo == 'perfis'">
             <b-button
-              class="btn-azul btn-df mr-2 btn-icon"
+              class="btn-azul btn-modal btn-custom"
               variant="success"
               @click="selectAllPerfis()"
               >Selecionar Todos</b-button
             >
             <b-button
-              class="btn-cinza btn-df mr-2 btn-icon"
+              class="btn-cinza btn-modal btn-custom"
               variant="secondary"
               @click="selectNonePerfis()"
               >Desmarcar Todos</b-button
@@ -674,13 +648,13 @@
           </template>
           <template v-else>
             <b-button
-              class="btn-azul btn-df mr-2 btn-icon"
+              class="btn-azul btn-modal btn-custom"
               variant="success"
               @click="selectAllSemestre()"
               >Selecionar Todos</b-button
             >
             <b-button
-              class="btn-cinza btn-df mr-2 btn-icon"
+              class="btn-cinza btn-modal btn-custom"
               variant="secondary"
               @click="selectNoneSemestre()"
               >Desmarcar Todos</b-button
@@ -690,7 +664,7 @@
         <b-button
           variant="success"
           @click="btnOK()"
-          class="btn-verde btn-df mr-2 btn-icon"
+          class="btn-verde btn-modal btn-custom"
           style="padding-right: 15px !important; padding-left: 15px !important;"
           >OK</b-button
         >
@@ -911,14 +885,19 @@
     </b-modal>
 
     <!-- Modal para escolher relatório parcial ou completo-->
-    <b-modal id="modalRelatorio" ref="relatorioModal" scrollable title="Relatório">
+    <b-modal
+      id="modalRelatorio"
+      ref="relatorioModal"
+      scrollable
+      title="Relatório"
+    >
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item clickable" v-on:click="pdf(1)">
-            <strong>Relatório Parcial</strong>
+            <strong class="ajuda-strong">Parcial</strong>
           </li>
           <li class="list-group-item clickable" v-on:click="pdf(2)">
-            <strong>Relatório Completo</strong>
+            <strong class="ajuda-strong">Completo</strong>
           </li>
         </ul>
       </div>
@@ -1031,12 +1010,12 @@ export default {
     },
 
     pdf(opt) {
-      if(opt === 1){
+      if (opt === 1) {
         pdfs.pdfRelatorioDisciplinas({
           disciplinasSelecionadas: this.DisciplinasAtivados,
         });
       }
-      if(opt === 2){
+      if (opt === 2) {
         pdfs.pdfRelatorioDisciplinas({
           disciplinasSelecionadas: this.Disciplinas,
         });
@@ -1336,13 +1315,18 @@ export default {
 </script>
 
 <style scoped>
-/* prefixed */
-
 .DashboardRelatorioDisciplinas {
   max-width: 100%;
   overflow: hidden;
   margin: 0;
 }
+.titulo {
+  font-size: 25px;
+  font-weight: normal;
+  padding-left: 0;
+  margin: 0 !important;
+}
+/* main-table */
 .divTable {
   overflow: hidden;
   height: -webkit-max-content;
@@ -1353,64 +1337,46 @@ export default {
   width: max-content;
 }
 .main-table {
-  display: block;
-  overflow-y: scroll;
-  height: -webkit-calc(100vh - 100px);
-  height: -moz-calc(100vh - 100px);
-  height: calc(100vh - 100px);
-  font-size: 11px;
+  display: block !important;
+  overflow-y: scroll !important;
+  overflow-x: auto !important;
+  font-size: 11px !important;
+  font-weight: normal !important;
   background-color: white;
-  margin: 0;
+  margin: 0 !important;
+  height: -webkit-calc(100vh - 95px);
+  height: -moz-calc(100vh - 95px);
+  height: calc(100vh - 95px);
 }
 .main-table .p-header {
-  padding: 0px 5px 0px 5px !important;
-  margin: 0 !important;
-  text-align: center;
-  height: 18px !important;
+  height: 18px;
 }
-.main-table tbody {
-  max-height: 100%;
-  width: 100%;
+.main-table p {
+  padding: 0 5px 0 5px !important;
+  margin: 0 !important;
+  font-size: 11px !important;
+  text-align: center;
+}
+tbody {
+  max-height: 100% !important;
+  width: 100% !important;
 }
 .main-table td {
   text-align: center;
   vertical-align: middle !important;
   padding: 0 !important;
-  margin: 0 !important;
-  height: 18px !important;
-}
-.main-table p {
-  margin: 0 !important;
-  text-align: center;
-  padding-right: 5px !important;
-  padding-left: 5px !important;
+  height: 22px !important;
 }
 .main-table tr thead {
-  display: block;
+  display: block !important;
 }
 .main-table thead th {
   padding: 0 !important;
+  font-size: 14px;
   text-align: center;
   height: 18px !important;
 }
-
-.sticky {
-  display: block !important;
-  overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 0 !important;
-  display: block !important;
-  overflow: hidden !important;
-  z-index: 3;
-}
-
-.titulo {
-  font-size: 25px;
-  font-weight: normal;
-  padding-left: 0;
-  margin: 0 !important;
-}
+/* fim table */
 .listas {
   line-height: 30px;
   font-size: 12px;
@@ -1418,128 +1384,14 @@ export default {
   line-height: inherit;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
-strong {
+.ajuda-strong {
   color: #007bff;
 }
-/* texto maiusculo */
-.toUpperCase {
-  text-transform: uppercase;
-}
-/* Botoes */
-.btn-icon {
-  padding: 0;
-  border: none;
-  background: none;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-  width: 32px !important;
-  margin-left: 4px;
-  margin-right: 4px;
-  margin-top: 0px;
-  line-height: 50%;
-  margin-bottom: 0px;
-  transition: all 0.3s ease 0s;
-  cursor: pointer;
-  text-align: center !important;
-}
-i.fas,
-i.far {
-  font-size: 25px;
-}
-.relatbtn {
-  background-color: white;
-  color: #9ab3ff !important;
-}
-
-.relatbtn:hover {
-  color: #82a0ff !important;
-  background-color: white;
-}
-
-.relatbtn:focus {
-  color: #82a0ff;
-  background-color: white;
-  -webkit-text-stroke-width: 0.5px;
-  -webkit-text-stroke-color: #698dff;
-}
-
-.disc-tr {
+.disciplina-tr {
   background-color: rgba(0, 0, 0, 0.089);
   color: black;
 }
 
-.btn-df {
-  font-size: 12px;
-  height: 25px;
-  min-width: -webkit-max-content;
-  min-width: -moz-max-content;
-  min-width: max-content;
-  max-width: -webkit-max-content;
-  max-width: -moz-max-content;
-  max-width: max-content;
-  padding: 0 5px 0 5px;
-}
-
-.btn-azul {
-  background-color: #718de0 !important;
-  border-color: #9ab3ff !important;
-}
-.btn-azul:hover {
-  background-color: rgb(74, 101, 190) !important;
-  border-color: #82a0ff !important;
-}
-
-.btn-azul:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(122, 128, 124, 0.5) !important;
-  -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-  box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-}
-
-.btn-cinza {
-  background-color: #999999 !important;
-  border-color: #c3c3c3 !important;
-}
-.btn-cinza:hover {
-  background-color: #747474 !important;
-  border-color: #aaaaaa !important;
-}
-
-.btn-cinza:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
-  -moz-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
-  box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
-}
-.btn-verde {
-  background-color: #70b670 !important;
-  border-color: #a0e7a0 !important;
-}
-.btn-verde:hover {
-  background-color: #4c8a4c !important;
-  border-color: #77dd77 !important;
-}
-
-.btn-verde:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-  -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-  box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-}
-
-.cancelbtn {
-  background-color: white;
-  color: #cfcfc4;
-}
-.cancelbtn:hover {
-  background-color: white;
-  color: #b8b4a8;
-}
-
-.cancelbtn:focus {
-  background-color: white;
-  color: #b8b8a8;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #ada89a;
-}
 /* Formularios no topo da tela */
 .form-inline .input-group,
 .form-inline {
@@ -1569,37 +1421,11 @@ i.far {
   text-align: start;
 }
 
-/* searchDisciplinas */
-.search-text:hover {
-  color: rgb(102, 102, 102);
-  background-color: #dddddd;
-}
-.search-text {
-  background-color: #ffffff;
-  border-left: none;
-}
-.nav-link {
-  color: #007bff !important;
-  cursor: pointer;
-}
-.nav-link:hover {
-  text-decoration: underline;
-}
-.active {
-  background-color: #e9ecef !important;
-  color: #495057 !important;
-  cursor: default;
-  text-decoration: none !important;
-}
-
 .p-vagas:hover {
   color: #007bff;
   text-decoration: underline;
 }
 
-.disable-link {
-  color: #495057 !important;
-}
 .modal-content .modal-header {
   padding: 0 !important;
 }
