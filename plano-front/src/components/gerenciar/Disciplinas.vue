@@ -611,10 +611,6 @@ strong {
 @media screen and (max-width: 1223px) {
   .div-card {
     margin-left: 0px !important;
-    top: 0 !important;
-  }
-  .card {
-    margin-left: 0px !important;
   }
 }
 </style>

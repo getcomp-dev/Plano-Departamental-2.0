@@ -629,14 +629,8 @@ strong {
   color: #007bff;
 }
 
-@media screen and (max-width: 858px) {
+@media screen and (max-width: 879px) {
   .div-card {
-    margin-left: 0px !important;
-    margin-right: 50px !important;
-    margin-top: 20px !important;
-    top: 0 !important;
-  }
-  .card {
     margin-left: 0px !important;
   }
 }

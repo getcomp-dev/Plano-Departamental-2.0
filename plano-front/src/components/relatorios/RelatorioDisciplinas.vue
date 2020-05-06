@@ -17,7 +17,7 @@
           <b-button
             v-b-modal.modalFiltros
             title="Filtros"
-            class="cancelbtn btn-title btn-custom"
+            class="cancelbtn btn-icon btn-custom"
           >
             <i class="fas fa-list-ul"></i>
           </b-button>
@@ -26,7 +26,7 @@
             <b-button
               v-b-modal.modalRelatorio
               type="button"
-              class="relatbtn btn-title btn-custom"
+              class="relatbtn btn-icon btn-custom"
               title="Relatório"
             >
               <i class="far fa-file-alt"></i>
@@ -35,7 +35,7 @@
             <b-button
               v-b-modal.modalAjuda
               title="Ajuda"
-              class="relatbtn btn-title btn-custom"
+              class="relatbtn btn-icon btn-custom"
             >
               <i class="fas fa-question"></i>
             </b-button>
@@ -890,19 +890,17 @@
       ref="relatorioModal"
       scrollable
       title="Relatório"
+      hide-footer
+      size="sm"
     >
-      <div class="modal-body">
-        <ul class="listas list-group">
-          <li class="list-group-item clickable" v-on:click="pdf(1)">
-            <strong class="ajuda-strong">Parcial</strong>
-          </li>
-          <li class="list-group-item clickable" v-on:click="pdf(2)">
-            <strong class="ajuda-strong">Completo</strong>
-          </li>
-        </ul>
-      </div>
-
-      <div slot="modal-footer" style="display: none;"></div>
+      <ul class="listas list-group">
+        <li class="list-group-item clickable" v-on:click="pdf(1)">
+          <strong class="ajuda-strong">Parcial</strong>
+        </li>
+        <li class="list-group-item clickable" v-on:click="pdf(2)">
+          <strong class="ajuda-strong">Completo</strong>
+        </li>
+      </ul>
     </b-modal>
   </div>
 </template>

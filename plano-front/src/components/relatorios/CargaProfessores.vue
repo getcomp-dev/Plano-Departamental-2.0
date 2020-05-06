@@ -25,7 +25,7 @@
             </b-button>
 
             <b-button
-                    v-b-modal.modalRelatorio
+              v-b-modal.modalRelatorio
               type="button"
               class="relatbtn"
               title="Relatório"
@@ -247,9 +247,9 @@
                   <td>
                     <p style="width: 32px;">
                       {{
-                      carga.trimestre == 1 || carga.trimestre == 2
-                      ? carga.creditos
-                      : ""
+                        carga.trimestre == 1 || carga.trimestre == 2
+                          ? carga.creditos
+                          : ""
                       }}
                     </p>
                   </td>
@@ -257,9 +257,9 @@
                   <td>
                     <p style="width: 32px;">
                       {{
-                      carga.trimestre == 3 || carga.trimestre == 4
-                      ? carga.creditos
-                      : ""
+                        carga.trimestre == 3 || carga.trimestre == 4
+                          ? carga.creditos
+                          : ""
                       }}
                     </p>
                   </td>
@@ -320,7 +320,7 @@
                   <td>
                     <p style="width:32px">
                       <span v-if="turma.periodo === 3"
-                      >{{
+                        >{{
                           turma.Docente1 > 0 && turma.Docente2 > 0
                             ? (turma.disciplina_cargaTeorica +
                                 turma.disciplina_cargaPratica) /
@@ -366,9 +366,9 @@
                   <td>
                     <p style="width: 32px;">
                       {{
-                      carga.trimestre == 1 || carga.trimestre == 2
-                      ? carga.creditos
-                      : ""
+                        carga.trimestre == 1 || carga.trimestre == 2
+                          ? carga.creditos
+                          : ""
                       }}
                     </p>
                   </td>
@@ -376,9 +376,9 @@
                   <td>
                     <p style="width: 32px;">
                       {{
-                      carga.trimestre == 3 || carga.trimestre == 4
-                      ? carga.creditos
-                      : ""
+                        carga.trimestre == 3 || carga.trimestre == 4
+                          ? carga.creditos
+                          : ""
                       }}
                     </p>
                   </td>
@@ -685,21 +685,23 @@
     </b-modal>
 
     <!-- Modal para escolher relatório parcial ou completo-->
-    <b-modal id="modalRelatorio" ref="relatorioModal" scrollable title="Relatório">
-      <div class="modal-body">
-        <ul class="listas list-group">
-          <li class="list-group-item clickable" v-on:click="pdf(1)">
-            <strong>Parcial</strong>
-          </li>
-          <li class="list-group-item clickable" v-on:click="pdf(2)">
-            <strong>Completo</strong>
-          </li>
-        </ul>
-      </div>
-
-      <div slot="modal-footer" style="display: none;"></div>
+    <b-modal
+      id="modalRelatorio"
+      ref="relatorioModal"
+      size="sm"
+      scrollable
+      title="Relatório"
+      hide-footer
+    >
+      <ul class="listas list-group">
+        <li class="list-group-item clickable" v-on:click="pdf(1)">
+          <strong>Parcial</strong>
+        </li>
+        <li class="list-group-item clickable" v-on:click="pdf(2)">
+          <strong>Completo</strong>
+        </li>
+      </ul>
     </b-modal>
-
   </div>
 </template>
 
@@ -732,16 +734,16 @@ export default {
   },
   methods: {
     pdf(opt) {
-      if(opt === 1){
+      if (opt === 1) {
         pdfs.pdfCargaProfessores({
           Docentes: this.DocentesAtivados,
-          SemAlocacao: this.SemAlocacao
+          SemAlocacao: this.SemAlocacao,
         });
       }
-      if(opt === 2){
+      if (opt === 2) {
         pdfs.pdfCargaProfessores({
           Docentes: this.Docentes,
-          SemAlocacao: true
+          SemAlocacao: true,
         });
       }
     },
@@ -797,16 +799,16 @@ export default {
       );
     },
 
-    turmasInProf1(professor){
-      return _.filter(this.turmasInProf(professor), function (t) {
-        return t.periodo == 1 || t.periodo == 2
-      })
+    turmasInProf1(professor) {
+      return _.filter(this.turmasInProf(professor), function(t) {
+        return t.periodo == 1 || t.periodo == 2;
+      });
     },
 
-    turmasInProf2(professor){
-      return _.filter(this.turmasInProf(professor), function (t) {
-        return t.periodo == 3 || t.periodo == 4
-      })
+    turmasInProf2(professor) {
+      return _.filter(this.turmasInProf(professor), function(t) {
+        return t.periodo == 3 || t.periodo == 4;
+      });
     },
 
     turmasSemAlocacao() {
@@ -897,22 +899,21 @@ export default {
       });
     },
 
-    cargasPos1(prof_id){
-      return _.filter(this.CargasPosFiltred(prof_id), function (c) {
-        return c.trimestre == 1 || c.trimestre == 2
-      })
+    cargasPos1(prof_id) {
+      return _.filter(this.CargasPosFiltred(prof_id), function(c) {
+        return c.trimestre == 1 || c.trimestre == 2;
+      });
     },
 
-    cargasPos2(prof_id){
-      return _.filter(this.CargasPosFiltred(prof_id), function (c) {
-        return c.trimestre == 3 || c.trimestre == 4
-      })
+    cargasPos2(prof_id) {
+      return _.filter(this.CargasPosFiltred(prof_id), function(c) {
+        return c.trimestre == 3 || c.trimestre == 4;
+      });
     },
 
     clearSearchProf() {
-      this.searchProf = null
-    }
-
+      this.searchProf = null;
+    },
   },
 
   computed: {
@@ -1343,7 +1344,8 @@ i.far {
     background-color: rgb(245, 245, 245);
   }
 }
-.clickable {
-  cursor: pointer !important;
+.list-group-item:hover {
+  text-decoration: underline;
+  background-color: #ebebeb;
 }
 </style>

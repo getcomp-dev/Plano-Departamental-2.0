@@ -1,109 +1,95 @@
 <template>
   <div class="DashboardDocentes row pr-2" v-if="Admin">
-    <!-- Titulo -->
-    <div
-      class="col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
-      style="height: 38px;"
-    >
-      <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="col-xl-2 col-md-4 col-sm-5 col-9 px-0 pr-1 titulo">
-          Lista Docentes
-        </h1>
-
-        <div
-          class="form-group form-group-top col-xl-10 col-md-8 col-sm-7 col-3 mb-0 p-0"
-          style="justify-content: flex-end !important;"
+    <PageTitle :title="'Docentes'">
+      <template #aside>
+        <b-button
+          v-b-modal.modalAjuda
+          title="Ajuda"
+          class="btn-custom btn-icon relatbtn"
         >
-          <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
-            <i class="fas fa-question"></i>
-          </b-button>
-        </div>
-      </div>
-    </div>
+          <i class="fas fa-question"></i>
+        </b-button>
+      </template>
+    </PageTitle>
     <div class="w-100 mb-2 border-bottom"></div>
-    <!-- Fim do Titulo -->
+
     <div class="p-0 divTable">
       <!-- Inicio da Tabela -->
-      <table class="main-table table table-sm table-hover table-bordered">
-        <thead class="thead-light sticky">
-          <tr>
-            <div style="font-size: 11px;" class=" max-content">
-              <th scope="col">
-                <p
-                  class="p-header clickable"
-                  @click="toggleOrdMain('nome')"
-                  title="Clique para ordenar por nome"
-                  style="width: 240px; text-align: start;"
-                >
-                  Nome
-                  <i
-                    style="font-size: 0.6rem; text-align:right"
-                    :class="
-                      ordenacao.order == 'nome'
-                        ? ordenacao.type == 'asc'
-                          ? 'fas fa-arrow-down fa-sm'
-                          : 'fas fa-arrow-up fa-sm'
-                        : 'fas fa-arrow-down fa-sm low-opacity'
-                    "
-                  ></i>
-                </p>
-              </th>
-              <th scope="col">
-                <p
-                  class="p-header clickable"
-                  @click="toggleOrdMain('apelido')"
-                  title="Clique para ordenar por apelido"
-                  style="width: 120px; text-align:start"
-                >
-                  Apelido
-                  <i
-                    style="font-size: 0.6rem;"
-                    :class="
-                      ordenacao.order == 'apelido'
-                        ? ordenacao.type == 'asc'
-                          ? 'fas fa-arrow-down fa-sm'
-                          : 'fas fa-arrow-up fa-sm'
-                        : 'fas fa-arrow-down fa-sm low-opacity'
-                    "
-                  ></i>
-                </p>
-              </th>
-              <th scope="col">
-                <p class="p-header" style="width:45px">Ativo</p>
-              </th>
-            </div>
-          </tr>
-        </thead>
-        <tbody>
+      <TableMain>
+        <template #thead>
+          <th
+            class="clickable t-start"
+            @click="toggleOrdMain('nome')"
+            title="Clique para ordenar por nome"
+            style="width: 240px;"
+          >
+            Nome
+            <i
+              style="font-size: 0.6rem; text-align:right"
+              :class="
+                ordenacao.order == 'nome'
+                  ? ordenacao.type == 'asc'
+                    ? 'fas fa-arrow-down fa-sm'
+                    : 'fas fa-arrow-up fa-sm'
+                  : 'fas fa-arrow-down fa-sm low-opacity'
+              "
+            ></i>
+          </th>
+          <th
+            class="clickable t-start"
+            @click="toggleOrdMain('apelido')"
+            title="Clique para ordenar por apelido"
+            style="width: 120px;"
+          >
+            Apelido
+            <i
+              style="font-size: 0.6rem;"
+              :class="
+                ordenacao.order == 'apelido'
+                  ? ordenacao.type == 'asc'
+                    ? 'fas fa-arrow-down fa-sm'
+                    : 'fas fa-arrow-up fa-sm'
+                  : 'fas fa-arrow-down fa-sm low-opacity'
+              "
+            ></i>
+          </th>
+          <th
+            style="width:50px"
+            class="clickable t-center"
+            @click="toggleOrdMain('ativo')"
+          >
+            Ativo
+            <i
+              style="font-size: 0.6rem;"
+              :class="
+                ordenacao.order == 'ativo'
+                  ? ordenacao.type == 'asc'
+                    ? 'fas fa-arrow-down fa-sm'
+                    : 'fas fa-arrow-up fa-sm'
+                  : 'fas fa-arrow-down fa-sm low-opacity'
+              "
+            ></i>
+          </th>
+        </template>
+        <template #tbody>
           <template v-for="docente in Docentes">
             <tr
               :key="'docente-id' + docente.id"
-              v-on:click.prevent="showDocentes(docente, DocentePerfis)"
+              v-on:click.prevent="handleClickInDocente(docente, DocentePerfis)"
               :class="[
-                { 'bg-custom': docenteClickado == docente.nome },
+                { 'bg-custom': docenteClickado == docente.id },
                 'clickable',
               ]"
             >
               <div class="max-content">
-                <td>
-                  <p style="width:240px; text-align:start">
-                    {{ docente.nome }}
-                  </p>
+                <td style="width:240px;" class="t-start">
+                  {{ docente.nome }}
                 </td>
-                <td>
-                  <p style="width:120px; text-align:start">
-                    {{ docente.apelido }}
-                  </p>
+                <td style="width:120px;" class="t-start">
+                  {{ docente.apelido }}
                 </td>
-                <td>
-                  <div style="width:45px!important" class="p-0 m-0">
-                    <input
-                      type="checkbox"
-                      class="form-check-input position-static noHover"
-                      v-model="docente.ativo"
-                      v-on:click.prevent="showDocentes(docente, DocentePerfis)"
-                    />
-                  </div>
+                <td style="width:50px">
+                  {{ textoAtivo(docente.ativo) }}
                 </td>
               </div>
             </tr>
@@ -116,15 +102,11 @@
               </td>
             </tr>
           </template>
-        </tbody>
-      </table>
-
-      <!-- Fim da Tabela -->
+        </template>
+      </TableMain>
     </div>
 
-    <!-- Fim do Grid Esquerdo -->
-    <!-- Grid Direito -->
-    <div class="div-card p-0 mt-0 mb-4 col-auto">
+    <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
       <div class="card mr-3 ml-auto">
         <div class="card-header">
           <h1 class="card-title">Docente</h1>
@@ -191,10 +173,10 @@
                   >
                     <tr class="thead-light sticky">
                       <div class="max-content" style="font-size:11px!important">
-                        <th scope="col">
+                        <th>
                           <p class="p-header" style="width: 25px;"></p>
                         </th>
-                        <th scope="col">
+                        <th>
                           <p
                             class="p-header"
                             style="width: 275px; text-align: start;"
@@ -243,7 +225,7 @@
                   <button
                     type="button"
                     title="Salvar"
-                    class="addbtn"
+                    class="btn-custom btn-modal addbtn"
                     v-on:click.prevent="editDocente"
                     :key="1"
                   >
@@ -252,7 +234,7 @@
                   <button
                     type="button"
                     title="Deletar"
-                    class="delbtn"
+                    class="btn-custom btn-modal delbtn"
                     v-on:click.prevent="deleteDocente"
                     :key="2"
                   >
@@ -261,7 +243,7 @@
                   <button
                     type="button"
                     title="Cancelar"
-                    class="cancelbtn"
+                    class="btn-custom btn-modal cancelbtn"
                     v-on:click="clearClick(), cleanDocente()"
                     :key="3"
                   >
@@ -274,7 +256,7 @@
                   <button
                     type="button"
                     title="Adicionar"
-                    class="addbtn"
+                    class="btn-custom btn-modal addbtn"
                     v-on:click.prevent="addDocente"
                     :key="1"
                   >
@@ -283,7 +265,7 @@
                   <button
                     type="button"
                     title="Cancelar"
-                    class="cancelbtn"
+                    class="btn-custom btn-modal cancelbtn"
                     v-on:click.prevent="cleanDocente"
                     :key="3"
                   >
@@ -299,7 +281,13 @@
 
     <!-- Fim do Grid Direito -->
     <!-- MODAL DE AJUDA -->
-    <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+    <b-modal
+      id="modalAjuda"
+      ref="ajudaModal"
+      scrollable
+      title="Ajuda"
+      hide-footer
+    >
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
@@ -329,8 +317,6 @@
           </li>
         </ul>
       </div>
-
-      <div slot="modal-footer" style="display: none;"></div>
     </b-modal>
   </div>
 </template>
@@ -339,6 +325,8 @@
 import _ from "lodash";
 import docenteService from "@/common/services/docente";
 import docentePerfilService from "@/common/services/docentePerfil";
+import PageTitle from "@/components/PageTitle";
+import TableMain from "@/components/TableMain";
 
 const emptyDocente = {
   id: undefined,
@@ -355,7 +343,7 @@ const emptyPerfil = {
 
 export default {
   name: "DashboardDocente",
-
+  components: { PageTitle, TableMain },
   data() {
     return {
       docenteForm: _.clone(emptyDocente),
@@ -366,7 +354,6 @@ export default {
       ordenacao: { order: "nome", type: "asc" },
     };
   },
-
   methods: {
     clearClick() {
       this.docenteClickado = "";
@@ -405,7 +392,6 @@ export default {
           });
         });
     },
-
     editDocente() {
       docenteService
         .update(this.docenteForm.id, this.docenteForm)
@@ -431,7 +417,6 @@ export default {
           });
         });
     },
-
     deleteDocente() {
       docenteService
         .delete(this.docenteForm.id, this.docenteForm)
@@ -454,24 +439,24 @@ export default {
           });
         });
     },
-
     cleanDocente() {
       this.docenteForm = _.clone(emptyDocente);
       this.error = undefined;
     },
-
-    showDocentes(docente, docentes) {
-      this.docenteClickado = docente.nome;
+    handleClickInDocente(docente, docentePerfis) {
+      this.docenteClickado = docente.id;
+      this.showDocentes(docente, docentePerfis);
+    },
+    showDocentes(docente, docentePerfis) {
       this.cleanDocente();
       this.docenteForm = _.clone(docente);
       this.perfisAssociados = [];
-      for (var i = 0; i < docentes.length; i++) {
-        if (docentes[i].DocenteId === docente.id) {
-          this.perfisAssociados.push(docentes[i].Perfil);
+      for (var i = 0; i < docentePerfis.length; i++) {
+        if (docentePerfis[i].DocenteId === docente.id) {
+          this.perfisAssociados.push(docentePerfis[i].Perfil);
         }
       }
     },
-
     addPerfil(perfil) {
       this.docentePerfil.Docente = this.docenteForm.id;
       this.docentePerfil.Perfil = perfil;
@@ -500,7 +485,6 @@ export default {
           });
         });
     },
-
     deletePerfil(perfil) {
       let perfilData = _.find(this.$store.state.perfil.Perfis, ["id", perfil]);
       docentePerfilService
@@ -523,13 +507,15 @@ export default {
           });
         });
     },
-
     managePerfil(perfil) {
       if (_.indexOf(this.perfisAssociados, perfil) === -1) {
         this.deletePerfil(perfil);
       } else {
         this.addPerfil(perfil);
       }
+    },
+    textoAtivo(docenteIsAtivo) {
+      return docenteIsAtivo ? "Sim" : "-";
     },
   },
 
@@ -573,87 +559,11 @@ export default {
   overflow: hidden;
   margin: 0;
 }
-.titulo {
-  font-size: 25px;
-  font-weight: normal;
-  padding-left: 0;
-  margin: 0 !important;
-}
-
-/* main-table */
-.divTable {
-  overflow: hidden;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-}
-.main-table {
-  display: block !important;
-  overflow-y: scroll !important;
-  overflow-x: auto !important;
-  font-size: 11px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-  height: -webkit-calc(100vh - 95px);
-  height: -moz-calc(100vh - 95px);
-  height: calc(100vh - 95px);
-}
-.main-table .p-header {
-  height: 18px;
-}
-.main-table p {
-  padding: 0 5px 0 5px !important;
-  margin: 0 !important;
-  font-size: 11px !important;
-  text-align: center;
-}
-tbody {
-  max-height: 100% !important;
-  width: 100% !important;
-}
-.main-table td {
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  height: 22px !important;
-}
-.main-table tr thead {
-  display: block !important;
-}
-.main-table thead th {
-  padding: 0 !important;
-  font-size: 14px;
-  text-align: center;
-  height: 18px !important;
-}
-.main-table input[type="checkbox"] {
-  width: 13px !important;
-  height: 13px !important;
-  text-align: center !important;
-  margin: 0 !important;
-  margin-top: 4px !important;
-}
-/* fim table */
-
-.sticky {
-  display: block !important;
-  overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 0 !important;
-  display: block !important;
-  overflow: hidden !important;
-  z-index: 3;
-}
 
 /* ====== CARD ====== */
-
-.div-card {
-  margin-left: auto;
+.card {
+  width: max-content;
+  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
 }
 .card-title {
   font-size: 16px;
@@ -662,12 +572,9 @@ tbody {
   margin: 0;
   text-align: center;
 }
-.card {
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
-  margin-left: auto;
+.card-body {
+  font-size: 12px !important;
+  padding-top: 15px;
 }
 .card-body {
   font-size: 12px;
@@ -762,10 +669,6 @@ tbody {
 .bg-custom:hover {
   background-color: #c8c8c8;
 }
-.noHover {
-  pointer-events: none;
-}
-
 .listas {
   line-height: 30px;
   font-size: 12px;
@@ -776,110 +679,8 @@ tbody {
 strong {
   color: #007bff;
 }
-
-/* Botoes */
-button {
-  padding: 0;
-  border: none;
-  background: none;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-  width: 32px !important;
-  margin-left: 4px;
-  margin-right: 4px;
-  margin-top: 0px;
-  line-height: 50%;
-  margin-bottom: 0px;
-  transition: all 0.3s ease 0s;
-  cursor: pointer;
-  text-align: center !important;
-}
-i.fas,
-i.far {
-  font-size: 25px;
-}
-.addbtn {
-  background-color: white;
-  color: #a0e7a0;
-}
-.addbtn:hover {
-  background-color: white;
-  color: #77dd77;
-}
-.addbtn:focus {
-  color: #77dd77;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #2fbf53;
-}
-.cancelbtn {
-  color: #cfcfc4;
-}
-.cancelbtn:hover {
-  color: #b8b4a8;
-}
-.cancelbtn:focus {
-  color: #b8b8a8;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #ada89a;
-}
-
-.delbtn {
-  background-color: white;
-  color: #ff817b;
-}
-.delbtn:hover {
-  color: #ff5f48;
-}
-.delbtn:focus {
-  color: #ff5f48;
-  -webkit-text-stroke-width: 2px;
-  -webkit-text-stroke-color: #ff4e34;
-}
-
-.relatbtn {
-  background-color: white;
-  color: #9ab3ff !important;
-}
-
-.relatbtn:hover {
-  color: #82a0ff !important;
-  background-color: white;
-}
-
-.relatbtn:focus {
-  color: #82a0ff;
-  background-color: white;
-  -webkit-text-stroke-width: 0.5px;
-  -webkit-text-stroke-color: #698dff;
-}
-
-.form-group-top {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex: 0 0 auto;
-  flex: 0 0 auto;
-  -ms-flex-flow: row wrap;
-  flex-flow: row wrap;
-  -ms-flex-align: center;
-  align-items: center;
-  margin-bottom: 0;
-}
-
-.form-inline .input-group,
-.form-inline {
-  width: auto;
-}
-@media screen and (max-width: 825px) {
-  .divTable {
-    margin-right: 100px !important;
-  }
+@media screen and (max-width: 695px) {
   .div-card {
-    margin-left: 0px !important;
-    margin-top: 20px !important;
-    top: 0 !important;
-  }
-  .card {
     margin-left: 0px !important;
   }
 }

@@ -11,7 +11,7 @@
 
       <div
         :class="asideClass"
-        class="form-group mb-0 p-0"
+        class="form-group mb-0 p-0 d-flex"
         style="justify-content: flex-end !important;"
       >
         <slot name="aside"></slot>
@@ -30,7 +30,7 @@ export default {
     },
     asideClass: {
       type: String,
-      default: "col-xl-6 col-lg-6 col-md-5 col-sm-5 col-4",
+      default: "col-xl-8 col-lg-8 col-md-8 col-sm-4 col-2",
     },
   },
 };
@@ -40,4 +40,15 @@ export default {
 .form-inline {
   width: auto;
 }
+/* .form-group-top {
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  -ms-flex-flow: row wrap;
+  flex-flow: row wrap;
+  -ms-flex-align: center;
+  align-items: center;
+  margin-bottom: 0;
+} */
 </style>
