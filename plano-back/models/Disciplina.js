@@ -19,13 +19,12 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false
     },
     ead: {
-      type: DataTypes.BOOLEAN,
-      allowNull: true
+      type: DataTypes.INTEGER,
+      allowNull: false
     },
     laboratorio: {
       type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: false
+      allowNull: false
     },
   }, {
     freezeTableName: true,
