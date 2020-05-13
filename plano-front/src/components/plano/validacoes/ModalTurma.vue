@@ -55,10 +55,13 @@
             v-model="turmaForm.turno1"
             v-on:change="editTurma(turma)"
           >
-            <option value=""></option>
-            <option value="Diurno">Diurno</option>
-            <option value="Noturno">Noturno</option>
-            <option value="EAD">EAD</option>
+            <template v-if="disciplinaAtual ? disciplinaAtual.ead : false">
+              <option value="EAD">EAD</option>
+            </template>
+            <template v-else>
+              <option value="Diurno">Diurno</option>
+              <option value="Noturno">Noturno</option>
+            </template>
           </select>
         </div>
       </div>
@@ -86,7 +89,7 @@
             >
           </select>
           <select
-            :disabled="Admin ? false : true"
+            v-if="hasMoreThan4Creditos"
             type="text"
             class="form-control mt-1"
             style="max-width:130px;"
@@ -128,7 +131,7 @@
             >
           </select>
           <select
-            v-if="Disciplina.cargaTeorica + Disciplina.cargaPratica >= 4"
+            v-if="hasMoreThan4Creditos"
             type="text"
             class="form-control"
             style="max-width: 100px"
@@ -156,7 +159,7 @@
             style="max-width: 100px"
             id="horario1"
             v-model="turmaForm.Horario1"
-            v-on:change="checkHorario(1)"
+            v-on:change="checkHorario(1), setTurnoByHorario(1)"
           >
             <option v-if="Horarios.length === 0" type="text" value=""
               >Nenhum Horário Encontrado</option
@@ -197,14 +200,14 @@
           </select>
 
           <select
-            v-if="Disciplina.cargaTeorica + Disciplina.cargaPratica >= 4"
-            :disabled="Admin ? false : true"
+            v-if="hasMoreThan4Creditos"
             type="text"
-            class="form-control mt-1"
+            class="form-control
+            mt-1"
             style="max-width: 100px"
             id="horario2"
             v-model="turmaForm.Horario2"
-            v-on:change="checkHorario(2)"
+            v-on:change="checkHorario(2), setTurnoByHorario(2)"
           >
             <option v-if="Horarios.length === 0" type="text" value=""
               >Nenhum Horário Encontrado</option
@@ -408,7 +411,7 @@ export default {
       turmaForm: _.clone(emptyTurma),
       currentData: undefined,
       disciplinaAtual: null,
-      ordemVagas: { order: "codigo", type: "asc" },
+      ordemVagas: { order: "VagasTotais", type: "desc" },
     };
   },
   mounted() {
@@ -417,6 +420,41 @@ export default {
     this.disciplinaAtual = this.findDisciplinaById(this.turmaForm.Disciplina);
   },
   methods: {
+    setTurnoByHorario(horarioAtual) {
+      console.log(this.turmaForm.Horario1);
+      if (horarioAtual === 1) this.adjustTurno(this.turmaForm.Horario1);
+      else this.adjustTurno(this.turmaForm.Horario2);
+    },
+    adjustTurno(horario) {
+      if (
+        horario == 1 ||
+        horario == 2 ||
+        horario == 7 ||
+        horario == 8 ||
+        horario == 13 ||
+        horario == 14 ||
+        horario == 19 ||
+        horario == 20 ||
+        horario == 25 ||
+        horario == 26 ||
+        horario == 3 ||
+        horario == 4 ||
+        horario == 9 ||
+        horario == 10 ||
+        horario == 15 ||
+        horario == 16 ||
+        horario == 21 ||
+        horario == 22 ||
+        horario == 27 ||
+        horario == 28
+      ) {
+        this.turmaForm.turno1 = "Diurno";
+      } else if (horario == 31) {
+        this.turmaForm.turno1 = "EAD";
+      } else {
+        this.turmaForm.turno1 = "Noturno";
+      }
+    },
     toggleOrdVagas(ord, type = "asc") {
       if (this.ordemVagas.order != ord) {
         this.ordemVagas.order = ord;
@@ -1355,14 +1393,25 @@ export default {
     },
   },
   computed: {
+    hasMoreThan4Creditos() {
+      if (this.disciplinaAtual == undefined) return false;
+      else if (
+        this.disciplinaAtual.cargaTeorica + this.disciplinaAtual.cargaPratica >=
+        4
+      )
+        return true;
+    },
+    disciplinaAtualIsEad() {
+      return this.disciplinaAtual != undefined && this.disciplinaAtual.ead;
+    },
     CursosTableOrdered() {
       let result = this.CursosFiltred;
       result.forEach((curso) => {
         for (let index = 0; index < this.Pedidos.length; index++) {
           if (this.Pedidos[index].Curso === curso.id) {
             curso.VagasTotais =
-              this.Pedidos[index].vagasPeriodizadas +
-              this.Pedidos[index].vagasNaoPeriodizadas;
+              parseInt(this.Pedidos[index].vagasPeriodizadas, 10) * 1000; //peso para priorizar vagas periodizadas +
+            parseInt(this.Pedidos[index].vagasNaoPeriodizadas, 10);
             curso.indiceVaga = index;
             break;
           }

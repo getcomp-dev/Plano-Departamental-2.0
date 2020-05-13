@@ -31,10 +31,10 @@
         </div>
       </div>
     </div>
-
     <div class="w-100 mb-2 border-bottom"></div>
 
-    <div class="p-0 m-0" style="height: 30px;">
+    <!-- tabs -->
+    <div class="p-0 m-0 w-100" style="height: 30px;">
       <ul
         class="nav nav-tabs card-header-tabs m-0"
         style="font-size: 11px !important; height: 30px;"
@@ -59,9 +59,9 @@
         </li>
       </ul>
     </div>
-    <div class="w-100"></div>
-    <!-- TABLE DOCENTES -->
+
     <div class="pl-0 divTable">
+      <!-- TABLE DOCENTES -->
       <table
         v-if="nav_table === 'docentes'"
         class="table main-table table-hover table-sm table-bordered"
@@ -71,7 +71,7 @@
             <div style="font-size: 11px !important;" class=" max-content">
               <th>
                 <p
-                  style="width: 615px; text-align: start;"
+                  style="width: 696px; text-align: start;"
                   class="p-header clickable"
                   @click="toggleOrdDocentes"
                 >
@@ -86,29 +86,17 @@
                   ></i>
                 </p>
               </th>
-              <th>
-                <p style="width: 400px; text-align: start;" class="p-header">
-                  Conflito
-                </p>
-              </th>
             </div>
           </tr>
         </thead>
         <tbody>
           <template v-for="validacao in Docentes_validacoes">
-            <tr
-              :key="'validacoes-' + validacao.nome"
-              style="background-color:rgba(0, 0, 0, 0.089);"
-            >
+            <tr :key="'validacoes-' + validacao.nome" class="tr-bg">
               <div class="max-content">
                 <td>
-                  <p style="width: 615px;  text-align: start;">
+                  <p style="width: 696px;  text-align: start;">
                     {{ validacao.nome }}
                   </p>
-                </td>
-
-                <td>
-                  <p style="width: 400px; text-align: start;"></p>
                 </td>
               </div>
             </tr>
@@ -118,12 +106,18 @@
             >
               <div class="max-content">
                 <td>
-                  <p style="width: 615px; text-align: center;"></p>
+                  <p style="width: 35px; text-align: center;">
+                    <i
+                      style=" background-color: inherit; font-size: 13px; margin:3px!important;"
+                      class="fas fa-exclamation-circle delbtn"
+                      title="Conflito critico!"
+                    ></i>
+                  </p>
                 </td>
 
                 <td>
-                  <p v-html="erro" style="width: 400px; text-align: start;">
-                    <!-- {{ erro.msg }} -->
+                  <p style="width: 660px; text-align: start;">
+                    {{ erro }}
                   </p>
                 </td>
               </div>
@@ -233,15 +227,13 @@
         <tbody>
           <template v-for="validacao in Turmas_Validacoes_Ordered">
             <tr
-              :key="
-                'validacoes-' + validacao.turma_id + validacao.disciplina_codigo
-              "
-              style="background-color:rgba(0, 0, 0, 0.089);"
+              :key="'validacoes-' + validacao.id + validacao.disciplina_codigo"
+              class="tr-bg"
             >
               <div class="max-content">
                 <td>
                   <p style="width: 35px; text-align: center;">
-                    {{ validacao.turma_periodo }}
+                    {{ validacao.periodo }}
                   </p>
                 </td>
                 <td>
@@ -261,20 +253,20 @@
                 </td>
                 <td>
                   <p style="width: 35px; text-align: center;">
-                    {{ validacao.turma_letra }}
+                    {{ validacao.letra }}
                   </p>
                 </td>
                 <td>
                   <p style="width: 130px; text-align: center;">
-                    {{ validacao.turma_docente1 }}
+                    {{ validacao.docente1_apelido }}
                     <br />
-                    {{ validacao.turma_docente2 }}
+                    {{ validacao.docente2_apelido }}
                   </p>
                 </td>
                 <td>
                   <p
                     style="width: 50px; text-align: center;"
-                    @click="openModalEditTurma(validacao.turma_id)"
+                    @click="openModalEditTurma(validacao.id)"
                     class="clickable"
                     title="Editar turma"
                   >
@@ -288,9 +280,7 @@
             </tr>
             <tr
               v-for="(erro, index) in validacao.conflitos"
-              :key="
-                index + 'validacao-conflitos' + validacao.turma_id + erro.type
-              "
+              :key="index + 'validacao-conflitos' + validacao.id + erro.type"
             >
               <div class="max-content">
                 <td>
@@ -312,6 +302,7 @@
         </tbody>
       </table>
     </div>
+
     <!-- Modal Filtros -->
     <b-modal id="modalFiltros" ref="modalFiltros" scrollable title="Filtros">
       <div class="p-0 m-0" style="height: 30px; width: 465px;">
@@ -319,11 +310,11 @@
           class="nav nav-tabs card-header-tabs m-0"
           style="font-size: 11px !important; height: 30px;"
         >
-          <li class="nav-item" @click="modal_navtab = 'conflito'">
+          <li class="nav-item" @click="modal_navtab = 'conflitos'">
             <a
               class="nav-link border border-right-0 clickable"
               :class="{
-                active: modal_navtab == 'conflito',
+                active: modal_navtab == 'conflitos',
               }"
               >Conflito</a
             >
@@ -462,7 +453,7 @@
               >Desmarcar Todos</b-button
             >
           </template>
-          <template v-else-if="modal_navtab === 'conflito'">
+          <template v-else-if="modal_navtab === 'conflitos'">
             <b-button
               class="btn-azul btn-df mr-2 btn-custom btn-modal "
               variant="success"
@@ -496,7 +487,6 @@
       hide-footer
     >
       <ModalTurma :turma="turma_clickada"></ModalTurma>
-      <div slot="modal-footer" class="d-none"></div>
     </b-modal>
     <!-- MODAL AJUDA -->
     <b-modal id="modalAjuda" scrollable title="Ajuda">
@@ -530,19 +520,54 @@
 import _ from "lodash";
 import ModalTurma from "./ModalTurma.vue";
 
+const AllConflitosTurmas = [
+  { type: 1, msg: "Nenhum turno alocado" },
+  {
+    type: 2,
+    msg: "Disciplina da EAD deve ter turno EAD associado.",
+  },
+  // dividor em 2.5 para :disciplinas presenciais com turno ead
+  {
+    type: 3,
+    msg: "Horarios incompletos ou invalidos",
+  },
+  { type: 4, msg: "Nenhum docente alocado" },
+  {
+    type: 5,
+    msg: "Disciplina de laborátorio, porêm não possui laboratorio alocado",
+  },
+  {
+    type: 6,
+    msg:
+      "Disciplina desejável laborátorio, porêm não possui laboratorio alocado",
+  },
+  {
+    type: 7,
+    msg: "Limite de lotação das sala",
+  },
+  {
+    type: 8,
+    msg: "Apenas 4 ou menos vagas foram alocadas!",
+  },
+  { type: 9, msg: "Turma EAD e possui sala alocada" },
+  { type: 10, msg: "Conflito de horarios na grade" },
+];
 export default {
   name: "Validacoes",
+  components: {
+    ModalTurma,
+  },
   data() {
     return {
-      modal_navtab: "conflito",
+      modal_navtab: "conflitos",
       ConflitosSelected: [],
       ConflitosAtivados: [],
       semestreAtual: 3,
       semestre_1Ativo: true,
-      semestre_2Ativo: true,
+      semestre_2Ativo: false,
       turma_clickada: null,
       nav_table: "turmas",
-      ordemTurmas: { order: "turma_periodo", type: "asc" },
+      ordemTurmas: { order: "periodo", type: "asc" },
       ordemDocentes: "asc",
       ordemDocentes: "asc",
       evenCCN: "false",
@@ -563,44 +588,10 @@ export default {
         SI: [[], [], [], [], [], [], [], [], [], []],
         Eletivas: [],
       },
-      Conflitos: [
-        { type: 1, msg: "Nenhum turno alocado" },
-        {
-          type: 2,
-          msg: "Incompatibilidade entre turno e cadastro EAD da disciplina",
-        },
-        {
-          type: 3,
-          msg: "Horarios incompletos ou invalidos",
-        },
-        { type: 4, msg: "Nenhum docente alocado" },
-        {
-          type: 5,
-          msg:
-            "Disciplina de laborátorio, porêm não possui laboratorio alocado",
-        },
-        {
-          type: 6,
-          msg:
-            "Disciplina desejável laborátorio, porêm não possui laboratorio alocado",
-        },
-        {
-          type: 7,
-          msg: "Limite de lotação das sala",
-        },
-        {
-          type: 8,
-          msg: "Apenas 4 ou menos vagas foram alocadas!",
-        },
-        { type: 9, msg: "Turma EAD e possui sala alocada" },
-        { type: 10, msg: "Conflito de horarios na grade" },
-      ],
+      Conflitos: _.clone(AllConflitosTurmas),
       grades1semestre: { CCD: [], CCN: [], EC: [], SI: [] },
       grades2semestre: { CCD: [], CCN: [], EC: [], SI: [] },
     };
-  },
-  components: {
-    ModalTurma,
   },
   mounted() {
     //define grades ativas por periodo
@@ -750,8 +741,15 @@ export default {
     console.log(this.grades1semestre);
     console.log(this.grades2semestre);
   },
-
   methods: {
+    selectAll() {
+      if (this.modal_navtab == "Semestre") this.selectAllSemestre();
+      else this.selectAllConflitos();
+    },
+    selectNone() {
+      if (this.modal_navtab == "Semestre") this.selectNoneSemestre();
+      else this.selectNoneConflitos();
+    },
     btnOK() {
       this.btnOkSemestre();
       this.ConflitosAtivados = [...this.ConflitosSelected];
@@ -838,17 +836,9 @@ export default {
     createValidacao(turma, disciplina) {
       return {
         //Turmas
-        turma: { ...turma },
-        turma_id: turma.id,
-        turma_periodo: turma.periodo,
-        turma_letra: turma.letra,
-        turma_turno1: turma.turno1,
-        turma_Horario1: turma.Horario1,
-        turma_Horario2: turma.Horario2,
-        turma_sala1: turma.Sala1,
-        turma_sala2: turma.Sala2,
-        turma_docente1: this.findDocenteById(turma.Docente1),
-        turma_docente2: this.findDocenteById(turma.Docente2),
+        ...turma,
+        docente1_apelido: this.findDocenteById(turma.Docente1),
+        docente2_apelido: this.findDocenteById(turma.Docente2),
         pedidos_totais: this.totalPedidos(turma.id),
         //Disciplinas
         disciplina_nome: disciplina.nome,
@@ -862,52 +852,43 @@ export default {
     checkAllValidations(validacao) {
       let check;
       //Turno
-      check = this.checkTurno(validacao.turma_turno1);
+      check = this.checkTurno(validacao.turno1);
       if (check) validacao.conflitos.push(check);
 
       //Compatibilidade do turno com disciplina
-      check = this.checkTurnoEAD(
-        validacao.disciplina_ead,
-        validacao.turma_turno1
-      );
+      check = this.checkTurnoEAD(validacao.disciplina_ead, validacao.turno1);
       if (check) validacao.conflitos.push(check);
 
       //Horarios
       check = this.checkHorarios(
         validacao.disciplina_ead,
-        validacao.turma_Horario1,
-        validacao.turma_Horario2
+        validacao.Horario1,
+        validacao.Horario2
       );
       if (check) validacao.conflitos.push(check);
 
       //Docente
       check = this.checkDocentes(
-        validacao.turma_docente1,
-        validacao.turma_docente2
+        validacao.docente1_apelido,
+        validacao.docente2_apelido
       );
       if (check) validacao.conflitos.push(check);
 
       //Salas
       check = this.checkSalasLab(
         validacao.disciplina_laboratorio,
-        validacao.turma_sala1,
-        validacao.turma_sala2
+        validacao.sala1,
+        validacao.sala2
       );
       if (check) validacao.conflitos.push(check);
 
       //Lotação das salas
       // sala 1
-      check = this.checkVagaSala(
-        validacao.turma_sala1,
-        validacao.pedidos_totais
-      );
+      check = this.checkVagaSala(validacao.sala1, validacao.pedidos_totais);
       if (check) validacao.conflitos.push(check);
       // sala 2
-      if (validacao.turma_sala1 != validacao.turma_sala2) {
-        check = this.checkVagaSala(
-          validacao.turma_sala2,
-          validacao.pedidos_totais
-        );
+      if (validacao.sala1 != validacao.sala2) {
+        check = this.checkVagaSala(validacao.sala2, validacao.pedidos_totais);
         if (check) validacao.conflitos.push(check);
       }
 
@@ -917,13 +898,15 @@ export default {
       // EAD com salas - 8
       check = this.checkSalasInEAD(
         validacao.disciplina_ead,
-        validacao.turma_sala1,
-        validacao.turma_sala2
+        validacao.sala1,
+        validacao.sala2
       );
       if (check) validacao.conflitos.push(check);
       //Periodo curso
-      check = this.checkPeriodoCursos(validacao.turma);
+      check = this.checkPeriodoCursos(validacao);
       if (check) validacao.conflitos.push(check);
+
+      check = null;
     },
     checkTurno(turno) {
       return turno === null || turno === undefined ? this.Conflitos[0] : null;
@@ -1014,10 +997,15 @@ export default {
               if (disciplinasPeriodo[d].Disciplina === turma.Disciplina) {
                 continue;
               }
+              let disciplinaConflito = _.find(
+                      this.$store.state.disciplina.Disciplinas,
+                      { id: disciplinasPeriodo[d].Disciplina }
+              );
+              let externa = disciplinaConflito.Perfil == 13 || disciplinaConflito.Perfil == 15
               let turmasDisciplina = _.filter(
-                this.$store.state.turma.Turmas,
+                      (externa ? this.$store.state.turmaExterna.Turmas : this.$store.state.turma.Turmas),
                 (t) => {
-                  let pedido = _.find(this.$store.state.pedido.Pedidos[t.id], {
+                  let pedido = _.find((externa ? this.$store.state.pedidoExterno.Pedidos[t.id] : this.$store.state.pedido.Pedidos[t.id]), {
                     Curso: 4,
                   });
                   return (
@@ -1036,10 +1024,7 @@ export default {
                     (turma.Horario2 === turmasDisciplina[t].Horario1 ||
                       turma.Horario2 === turmasDisciplina[t].Horario2))
                 ) {
-                  let disciplinaConflito = _.find(
-                    this.$store.state.disciplina.Disciplinas,
-                    { id: disciplinasPeriodo[d].Disciplina }
-                  );
+
                   conflitos = true;
                   msg =
                     msg +
@@ -1069,10 +1054,15 @@ export default {
               if (disciplinasPeriodo[d].Disciplina === turma.Disciplina) {
                 continue;
               }
+              let disciplinaConflito = _.find(
+                      this.$store.state.disciplina.Disciplinas,
+                      { id: disciplinasPeriodo[d].Disciplina }
+              );
+              let externa = disciplinaConflito.Perfil == 13 || disciplinaConflito.Perfil == 15
               let turmasDisciplina = _.filter(
-                this.$store.state.turma.Turmas,
-                (t) => {
-                  let pedido = _.find(this.$store.state.pedido.Pedidos[t.id], {
+                      (externa ? this.$store.state.turmaExterna.Turmas : this.$store.state.turma.Turmas),
+                      (t) => {
+                        let pedido = _.find((externa ? this.$store.state.pedidoExterno.Pedidos[t.id] : this.$store.state.pedido.Pedidos[t.id]), {
                     Curso: 1,
                   });
                   return (
@@ -1091,10 +1081,6 @@ export default {
                     (turma.Horario2 === turmasDisciplina[t].Horario1 ||
                       turma.Horario2 === turmasDisciplina[t].Horario2))
                 ) {
-                  let disciplinaConflito = _.find(
-                    this.$store.state.disciplina.Disciplinas,
-                    { id: disciplinasPeriodo[d].Disciplina }
-                  );
                   conflitos = true;
                   msg =
                     msg +
@@ -1124,10 +1110,15 @@ export default {
               if (disciplinasPeriodo[d].Disciplina === turma.Disciplina) {
                 continue;
               }
+              let disciplinaConflito = _.find(
+                      this.$store.state.disciplina.Disciplinas,
+                      { id: disciplinasPeriodo[d].Disciplina }
+              );
+              let externa = disciplinaConflito.Perfil == 13 || disciplinaConflito.Perfil == 15
               let turmasDisciplina = _.filter(
-                this.$store.state.turma.Turmas,
-                (t) => {
-                  let pedido = _.find(this.$store.state.pedido.Pedidos[t.id], {
+                      (externa ? this.$store.state.turmaExterna.Turmas : this.$store.state.turma.Turmas),
+                      (t) => {
+                        let pedido = _.find((externa ? this.$store.state.pedidoExterno.Pedidos[t.id] : this.$store.state.pedido.Pedidos[t.id]), {
                     Curso: 3,
                   });
                   return (
@@ -1146,10 +1137,6 @@ export default {
                     (turma.Horario2 === turmasDisciplina[t].Horario1 ||
                       turma.Horario2 === turmasDisciplina[t].Horario2))
                 ) {
-                  let disciplinaConflito = _.find(
-                    this.$store.state.disciplina.Disciplinas,
-                    { id: disciplinasPeriodo[d].Disciplina }
-                  );
                   conflitos = true;
                   msg =
                     msg +
@@ -1179,10 +1166,15 @@ export default {
               if (disciplinasPeriodo[d].Disciplina === turma.Disciplina) {
                 continue;
               }
+              let disciplinaConflito = _.find(
+                      this.$store.state.disciplina.Disciplinas,
+                      { id: disciplinasPeriodo[d].Disciplina }
+              );
+              let externa = disciplinaConflito.Perfil == 13 || disciplinaConflito.Perfil == 15
               let turmasDisciplina = _.filter(
-                this.$store.state.turma.Turmas,
-                (t) => {
-                  let pedido = _.find(this.$store.state.pedido.Pedidos[t.id], {
+                      (externa ? this.$store.state.turmaExterna.Turmas : this.$store.state.turma.Turmas),
+                      (t) => {
+                        let pedido = _.find((externa ? this.$store.state.pedidoExterno.Pedidos[t.id] : this.$store.state.pedido.Pedidos[t.id]), {
                     Curso: 2,
                   });
                   return (
@@ -1201,10 +1193,6 @@ export default {
                     (turma.Horario2 === turmasDisciplina[t].Horario1 ||
                       turma.Horario2 === turmasDisciplina[t].Horario2))
                 ) {
-                  let disciplinaConflito = _.find(
-                    this.$store.state.disciplina.Disciplinas,
-                    { id: disciplinasPeriodo[d].Disciplina }
-                  );
                   conflitos = true;
                   msg =
                     msg +
@@ -1226,7 +1214,6 @@ export default {
       if (cond !== undefined) return true;
       else return false;
     },
-
     creditosGraduacao(docente) {
       let turmas = _.filter(this.$store.state.turma.Turmas, (t) => {
         return t.Docente1 === docente.id || t.Docente2 === docente.id;
@@ -1250,7 +1237,6 @@ export default {
 
       return cargaTotalDocente;
     },
-
     creditosPos(docente) {
       let turmas = _.filter(this.$store.state.cargaPos.Cargas, (t) => {
         return t.Docente === docente.id;
@@ -1266,29 +1252,12 @@ export default {
     },
   },
   computed: {
-    vetorDeValidacoes() {
-      let result = [];
-
-      this.Turmas.forEach((turma) => {
-        let disciplina = this.findDisciplinaById(turma.Disciplina);
-        if (disciplina) {
-          let validacao = this.createValidacao(turma, disciplina);
-          if (
-            validacao.turma_turno1 === null ||
-            validacao.turma_turno1 === undefined
-          ) {
-            result.push({ type: 1, msg: "Nenhum Turno alocado", ...validacao });
-          }
-        }
-      });
-      return result;
-    },
     //Turmas validacoes ordenadas
     Turmas_Validacoes_Ordered() {
       return _.orderBy(
         _.filter(this.Turmas_Validacoes, (valid) => {
-          if (this.semestreAtual === 1) return valid.turma_periodo == 1;
-          else if (this.semestreAtual === 2) return valid.turma_periodo == 1;
+          if (this.semestreAtual === 1) return valid.periodo == 1;
+          else if (this.semestreAtual === 2) return valid.periodo == 1;
 
           return true;
         }),
@@ -1324,7 +1293,6 @@ export default {
       //   return false;
       // });
     },
-
     Docentes_validacoes() {
       let docentes_resultantes = [];
 
@@ -1351,7 +1319,6 @@ export default {
 
       return docentes_resultantes;
     },
-
     Turmas() {
       return _.orderBy(this.$store.state.turma.Turmas, ["letra", "Disciplina"]);
     },
@@ -1374,7 +1341,6 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .DashboardValidacoes {
   max-width: 100%;

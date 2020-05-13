@@ -11,275 +11,281 @@
         </b-button>
       </template>
     </PageTitle>
-    <div class="w-100 mb-2 border-bottom"></div>
 
-    <div class="p-0 divTable">
-      <!-- Inicio da Tabela -->
-      <TableMain>
-        <template #thead>
-          <th
-            class="clickable t-start"
-            @click="toggleOrdMain('nome')"
-            title="Clique para ordenar por nome"
-            style="width: 240px;"
-          >
-            Nome
-            <i
-              style="font-size: 0.6rem; text-align:right"
-              :class="
-                ordenacao.order == 'nome'
-                  ? ordenacao.type == 'asc'
-                    ? 'fas fa-arrow-down fa-sm'
-                    : 'fas fa-arrow-up fa-sm'
-                  : 'fas fa-arrow-down fa-sm low-opacity'
-              "
-            ></i>
-          </th>
-          <th
-            class="clickable t-start"
-            @click="toggleOrdMain('apelido')"
-            title="Clique para ordenar por apelido"
-            style="width: 120px;"
-          >
-            Apelido
-            <i
-              style="font-size: 0.6rem;"
-              :class="
-                ordenacao.order == 'apelido'
-                  ? ordenacao.type == 'asc'
-                    ? 'fas fa-arrow-down fa-sm'
-                    : 'fas fa-arrow-up fa-sm'
-                  : 'fas fa-arrow-down fa-sm low-opacity'
-              "
-            ></i>
-          </th>
-          <th
-            style="width:50px"
-            class="clickable t-center"
-            @click="toggleOrdMain('ativo')"
-          >
-            Ativo
-            <i
-              style="font-size: 0.6rem;"
-              :class="
-                ordenacao.order == 'ativo'
-                  ? ordenacao.type == 'asc'
-                    ? 'fas fa-arrow-down fa-sm'
-                    : 'fas fa-arrow-up fa-sm'
-                  : 'fas fa-arrow-down fa-sm low-opacity'
-              "
-            ></i>
-          </th>
-        </template>
-        <template #tbody>
-          <template v-for="docente in Docentes">
-            <tr
-              :key="'docente-id' + docente.id"
-              v-on:click.prevent="handleClickInDocente(docente, DocentePerfis)"
-              :class="[
-                { 'bg-custom': docenteClickado == docente.id },
-                'clickable',
-              ]"
+    <div class="row w-100 m-0">
+      <div class="p-0 divTable">
+        <TableMain>
+          <template #thead>
+            <th
+              class="clickable t-start"
+              @click="toggleOrdMain('nome')"
+              title="Clique para ordenar por nome"
+              style="width: 240px;"
             >
-              <div class="max-content">
-                <td style="width:240px;" class="t-start">
-                  {{ docente.nome }}
+              Nome
+              <i
+                style="font-size: 0.6rem; text-align:right"
+                :class="
+                  ordenacao.order == 'nome'
+                    ? ordenacao.type == 'asc'
+                      ? 'fas fa-arrow-down fa-sm'
+                      : 'fas fa-arrow-up fa-sm'
+                    : 'fas fa-arrow-down fa-sm low-opacity'
+                "
+              ></i>
+            </th>
+            <th
+              class="clickable t-start"
+              @click="toggleOrdMain('apelido')"
+              title="Clique para ordenar por apelido"
+              style="width: 120px;"
+            >
+              Apelido
+              <i
+                style="font-size: 0.6rem;"
+                :class="
+                  ordenacao.order == 'apelido'
+                    ? ordenacao.type == 'asc'
+                      ? 'fas fa-arrow-down fa-sm'
+                      : 'fas fa-arrow-up fa-sm'
+                    : 'fas fa-arrow-down fa-sm low-opacity'
+                "
+              ></i>
+            </th>
+            <th
+              style="width:50px"
+              class="clickable t-center"
+              @click="toggleOrdMain('ativo')"
+            >
+              Ativo
+              <i
+                style="font-size: 0.6rem;"
+                :class="
+                  ordenacao.order == 'ativo'
+                    ? ordenacao.type == 'asc'
+                      ? 'fas fa-arrow-down fa-sm'
+                      : 'fas fa-arrow-up fa-sm'
+                    : 'fas fa-arrow-down fa-sm low-opacity'
+                "
+              ></i>
+            </th>
+          </template>
+          <template #tbody>
+            <template v-for="docente in Docentes">
+              <tr
+                :key="'docente-id' + docente.id"
+                v-on:click.prevent="
+                  handleClickInDocente(docente, DocentePerfis)
+                "
+                :class="[
+                  { 'bg-custom': docenteClickado == docente.id },
+                  'clickable',
+                ]"
+              >
+                <div class="max-content">
+                  <td style="width:240px;" class="t-start">
+                    {{ docente.nome }}
+                  </td>
+                  <td style="width:120px;" class="t-start">
+                    {{ docente.apelido }}
+                  </td>
+                  <td style="width:50px">
+                    {{ textoAtivo(docente.ativo) }}
+                  </td>
+                </div>
+              </tr>
+            </template>
+            <template v-if="Docentes.length == 0">
+              <tr>
+                <td colspan="2" class="text-center">
+                  <i class="fas fa-exclamation-triangle"></i> Nenhum docente
+                  encontrado!
                 </td>
-                <td style="width:120px;" class="t-start">
-                  {{ docente.apelido }}
-                </td>
-                <td style="width:50px">
-                  {{ textoAtivo(docente.ativo) }}
-                </td>
+              </tr>
+            </template>
+          </template>
+        </TableMain>
+      </div>
+
+      <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
+        <div class="card mr-3 ml-auto">
+          <div class="card-header">
+            <h1 class="card-title">Docente</h1>
+          </div>
+
+          <div class="card-body">
+            <form>
+              <div class="row mb-2 mx-0">
+                <div class="form-group col m-0 px-0">
+                  <label for="nome" class="col-form-label">Nome</label>
+                  <template v-if="!isEdit">
+                    <input
+                      type="text"
+                      :class="{ inputMaior: isEdit }"
+                      class="form-control form-control-sm"
+                      id="nome"
+                      v-model="docenteForm.nome"
+                    />
+                  </template>
+                  <template v-else>
+                    <input
+                      type="text"
+                      class="form-control form-control-sm"
+                      id="nome"
+                      v-model="docenteForm.nome"
+                    />
+                  </template>
+                </div>
               </div>
-            </tr>
-          </template>
-          <template v-if="Docentes.length == 0">
-            <tr>
-              <td colspan="2" class="text-center">
-                <i class="fas fa-exclamation-triangle"></i> Nenhum docente
-                encontrado!
-              </td>
-            </tr>
-          </template>
-        </template>
-      </TableMain>
-    </div>
 
-    <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
-      <div class="card mr-3 ml-auto">
-        <div class="card-header">
-          <h1 class="card-title">Docente</h1>
-        </div>
-
-        <div class="card-body">
-          <form>
-            <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 px-0">
-                <label for="nome" class="col-form-label">Nome</label>
-                <template v-if="!isEdit">
+              <div class="row mb-2 mx-0">
+                <div class="form-group col m-0 mr-4 px-0">
+                  <label for="apelido" class="col-form-label">Apelido</label>
                   <input
                     type="text"
-                    :class="{ inputMaior: isEdit }"
+                    id="apelido"
+                    v-model="docenteForm.apelido"
                     class="form-control form-control-sm"
-                    id="nome"
-                    v-model="docenteForm.nome"
+                    style="width: 120px !important;"
                   />
-                </template>
-                <template v-else>
+                </div>
+
+                <!-- <div class="form-group col m-0  px-0"> -->
+                <div
+                  class="form-check form-check-inline col m-0 mr-4 mt-4 px-0"
+                >
                   <input
-                    type="text"
-                    class="form-control form-control-sm"
-                    id="nome"
-                    v-model="docenteForm.nome"
+                    type="checkbox"
+                    id="ativo"
+                    value="1"
+                    v-model="docenteForm.ativo"
+                    class="form-check-input my-auto"
                   />
-                </template>
+                  <label for="ativo" class="form-check-label">Ativo</label>
+                </div>
+                <!-- </div> -->
               </div>
-            </div>
-
-            <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 mr-4 px-0">
-                <label for="apelido" class="col-form-label">Apelido</label>
-                <input
-                  type="text"
-                  id="apelido"
-                  v-model="docenteForm.apelido"
-                  class="form-control form-control-sm"
-                  style="width: 120px !important;"
-                />
-              </div>
-
-              <!-- <div class="form-group col m-0  px-0"> -->
-              <div class="form-check form-check-inline col m-0 mr-4 mt-4 px-0">
-                <input
-                  type="checkbox"
-                  id="ativo"
-                  value="1"
-                  v-model="docenteForm.ativo"
-                  class="form-check-input my-auto"
-                />
-                <label for="ativo" class="form-check-label">Ativo</label>
-              </div>
-              <!-- </div> -->
-            </div>
-            <template v-if="isEdit">
-              <div class="border-bottom mt-2 mb-1"></div>
-              <small>Perfis Associados ao docente</small>
-              <div class="row mb-3 mx-0">
-                <div class="form-group col m-0 px-0" style="height: 300px;">
-                  <table
-                    class="modal-table table table-bordered table-sm"
-                    style="max-height: 300px !important; overflow: auto;"
-                  >
-                    <tr class="thead-light sticky">
-                      <div class="max-content" style="font-size:11px!important">
-                        <th>
-                          <p class="p-header" style="width: 25px;"></p>
-                        </th>
-                        <th>
-                          <p
-                            class="p-header"
-                            style="width: 275px; text-align: start;"
-                          >
-                            Perfis
-                          </p>
-                        </th>
-                      </div>
-                    </tr>
-                    <tbody>
-                      <tr
-                        v-for="perfil in Perfis"
-                        :key="'perfil-id' + perfil.id"
-                      >
-                        <div class="max-content">
-                          <td>
-                            <div
-                              style="width: 25px; height: inherit;"
-                              class="px-1"
+              <template v-if="isEdit">
+                <div class="border-bottom mt-2 mb-1"></div>
+                <small>Perfis Associados ao docente</small>
+                <div class="row mb-3 mx-0">
+                  <div class="form-group col m-0 px-0" style="height: 300px;">
+                    <table
+                      class="modal-table table table-bordered table-sm"
+                      style="max-height: 300px !important; overflow: auto;"
+                    >
+                      <tr class="thead-light sticky">
+                        <div
+                          class="max-content"
+                          style="font-size:11px!important"
+                        >
+                          <th>
+                            <p class="p-header" style="width: 25px;"></p>
+                          </th>
+                          <th>
+                            <p
+                              class="p-header"
+                              style="width: 275px; text-align: start;"
                             >
-                              <input
-                                type="checkbox"
-                                :value="perfil.id"
-                                v-model="perfisAssociados"
-                                v-on:change="managePerfil(perfil.id)"
-                                class="form-check-input position-static m-0"
-                              />
-                            </div>
-                          </td>
-                          <td>
-                            <p style="width: 275px; text-align: start;">
-                              {{ perfil.nome }}
+                              Perfis
                             </p>
-                          </td>
+                          </th>
                         </div>
                       </tr>
-                    </tbody>
-                  </table>
+                      <tbody>
+                        <tr
+                          v-for="perfil in Perfis"
+                          :key="'perfil-id' + perfil.id"
+                        >
+                          <div class="max-content">
+                            <td>
+                              <div
+                                style="width: 25px; height: inherit;"
+                                class="px-1"
+                              >
+                                <input
+                                  type="checkbox"
+                                  :value="perfil.id"
+                                  v-model="perfisAssociados"
+                                  v-on:change="managePerfil(perfil.id)"
+                                  class="form-check-input position-static m-0"
+                                />
+                              </div>
+                            </td>
+                            <td>
+                              <p style="width: 275px; text-align: start;">
+                                {{ perfil.nome }}
+                              </p>
+                            </td>
+                          </div>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
-            </template>
+              </template>
 
-            <div class="row mb-0 mt-3 mx-0">
-              <template v-if="isEdit">
-                <div class="d-flex mr-0 ml-auto">
-                  <button
-                    type="button"
-                    title="Salvar"
-                    class="btn-custom btn-modal addbtn"
-                    v-on:click.prevent="editDocente"
-                    :key="1"
-                  >
-                    <i class="fas fa-check"></i>
-                  </button>
-                  <button
-                    type="button"
-                    title="Deletar"
-                    class="btn-custom btn-modal delbtn"
-                    v-on:click.prevent="deleteDocente"
-                    :key="2"
-                  >
-                    <i class="far fa-trash-alt"></i>
-                  </button>
-                  <button
-                    type="button"
-                    title="Cancelar"
-                    class="btn-custom btn-modal cancelbtn"
-                    v-on:click="clearClick(), cleanDocente()"
-                    :key="3"
-                  >
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-              </template>
-              <template v-else>
-                <div class="d-flex mr-0 ml-auto">
-                  <button
-                    type="button"
-                    title="Adicionar"
-                    class="btn-custom btn-modal addbtn"
-                    v-on:click.prevent="addDocente"
-                    :key="1"
-                  >
-                    <i class="fas fa-plus"></i>
-                  </button>
-                  <button
-                    type="button"
-                    title="Cancelar"
-                    class="btn-custom btn-modal cancelbtn"
-                    v-on:click.prevent="cleanDocente"
-                    :key="3"
-                  >
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-              </template>
-            </div>
-          </form>
+              <div class="row mb-0 mt-3 mx-0">
+                <template v-if="isEdit">
+                  <div class="d-flex mr-0 ml-auto">
+                    <button
+                      type="button"
+                      title="Salvar"
+                      class="btn-custom btn-modal addbtn"
+                      v-on:click.prevent="editDocente"
+                      :key="1"
+                    >
+                      <i class="fas fa-check"></i>
+                    </button>
+                    <button
+                      type="button"
+                      title="Deletar"
+                      class="btn-custom btn-modal delbtn"
+                      v-on:click.prevent="deleteDocente"
+                      :key="2"
+                    >
+                      <i class="far fa-trash-alt"></i>
+                    </button>
+                    <button
+                      type="button"
+                      title="Cancelar"
+                      class="btn-custom btn-modal cancelbtn"
+                      v-on:click="clearClick(), cleanDocente()"
+                      :key="3"
+                    >
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </template>
+                <template v-else>
+                  <div class="d-flex mr-0 ml-auto">
+                    <button
+                      type="button"
+                      title="Adicionar"
+                      class="btn-custom btn-modal addbtn"
+                      v-on:click.prevent="addDocente"
+                      :key="1"
+                    >
+                      <i class="fas fa-plus"></i>
+                    </button>
+                    <button
+                      type="button"
+                      title="Cancelar"
+                      class="btn-custom btn-modal cancelbtn"
+                      v-on:click.prevent="cleanDocente"
+                      :key="3"
+                    >
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </template>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Fim do Grid Direito -->
     <!-- MODAL DE AJUDA -->
     <b-modal
       id="modalAjuda"

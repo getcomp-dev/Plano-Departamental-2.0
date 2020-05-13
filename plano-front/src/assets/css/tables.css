@@ -41,8 +41,8 @@
 .bg-custom:hover {
   background-color: #c8c8c8;
 }
-.noHover {
-  pointer-events: none;
+.tr-bg {
+  background-color: #00000017;
 }
 /* fim main-table */
 

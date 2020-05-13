@@ -126,25 +126,6 @@
         </select>
       </div>
     </td>
-
-    <td>
-      <div style="width: 75px;">
-        <select
-          :disabled="Admin ? false : true"
-          type="text"
-          style="width: 70px"
-          id="turno1"
-          v-model="turmaForm.turno1"
-          v-on:change="editTurma(turma)"
-        >
-          <option value=""></option>
-          <option value="Diurno">Diurno</option>
-          <option value="Noturno">Noturno</option>
-          <option value="EAD">EAD</option>
-        </select>
-      </div>
-    </td>
-
     <td>
       <div style="width:80px">
         <select
@@ -238,6 +219,23 @@
               >{{ horario.horario }}</option
             >
           </template>
+        </select>
+      </div>
+    </td>
+    <td>
+      <div style="width: 80px;">
+        <select
+          :disabled="Admin ? false : true"
+          type="text"
+          style="width: 75px"
+          id="turno1"
+          v-model="turmaForm.turno1"
+          v-on:change="editTurma(turma)"
+        >
+          <option value=""></option>
+          <option value="Diurno">Diurno</option>
+          <option value="Noturno">Noturno</option>
+          <option value="EAD">EAD</option>
         </select>
       </div>
     </td>

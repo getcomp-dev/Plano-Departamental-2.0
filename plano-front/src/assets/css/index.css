@@ -26,7 +26,7 @@
   color: #495057 !important;
   cursor: default !important;
   text-decoration: none !important;
-  transition: background-color 0.7s ease;
+  transition: background-color 200ms;
 }
 /* searchDisciplinas */
 .search-text:hover {

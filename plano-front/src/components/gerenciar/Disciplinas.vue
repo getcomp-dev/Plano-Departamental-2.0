@@ -1,9 +1,6 @@
 <template>
   <div class="DashboardDisciplinas row pr-2" v-if="Admin">
-    <PageTitle
-      :title="'Disciplinas'"
-      :asideClass="'col-xl-10 col-md-8 col-sm-7 col-2'"
-    >
+    <PageTitle :title="'Disciplinas'">
       <template #aside>
         <button
           type="button"
@@ -126,179 +123,166 @@
       </div>
 
       <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
-        <div class="card mr-3 ml-auto">
-          <div class="card-header">
-            <h2 class="card-title">Disciplina</h2>
-          </div>
+        <Card title="Disciplina">
+          <template #form-group>
+            <div class="row mb-2 mx-0">
+              <div class="form-group m-0 col px-0">
+                <label for="nome" class="col-form-label">Nome</label>
+                <input
+                  type="text"
+                  id="nome"
+                  class="form-control form-control-sm input-maior"
+                  v-model="disciplinaForm.nome"
+                />
+              </div>
+            </div>
 
-          <div class="card-body">
-            <form>
-              <div class="row mb-2 mx-0">
-                <div class="form-group m-0 col px-0">
-                  <label for="nome" class="col-form-label">Nome</label>
-                  <input
-                    type="text"
-                    id="nome"
-                    class="form-control form-control-sm"
-                    style="width: 288px"
-                    v-model="disciplinaForm.nome"
-                  />
-                </div>
+            <div class="row mb-2 mx-0">
+              <div class="form-group m-0 col px-0">
+                <label for="codigo" class="col-form-label">Código</label>
+                <input
+                  type="text"
+                  id="codigo"
+                  class="form-control form-control-sm input-menor"
+                  v-model="disciplinaForm.codigo"
+                />
+              </div>
+            </div>
+            <div class="row mb-2 mx-0">
+              <div class="form-group m-0 col px-0">
+                <label for="cargaTeorica" class="col-form-label"
+                  >Carga Teórica</label
+                >
+                <input
+                  type="text"
+                  id="cargaTeorica"
+                  class="form-control form-control-sm input-menor"
+                  @keypress="onlyNumber"
+                  v-model="disciplinaForm.cargaTeorica"
+                />
               </div>
 
-              <div class="row mb-2 mx-0">
-                <div class="form-group m-0 col px-0">
-                  <label for="codigo" class="col-form-label">Código</label>
-                  <input
-                    type="text"
-                    id="codigo"
-                    class="form-control form-control-sm"
-                    style="width: 85px!important; text-align:center!important"
-                    v-model="disciplinaForm.codigo"
-                  />
-                </div>
+              <div class="form-group m-0 col px-0">
+                <label for="cargaPratica" class="col-form-label"
+                  >Carga Prática</label
+                >
+                <input
+                  type="text"
+                  id="cargaPratica"
+                  class="form-control form-control-sm input-menor"
+                  @keypress="onlyNumber"
+                  v-model="disciplinaForm.cargaPratica"
+                />
               </div>
-              <div class="row mb-2 mx-0">
-                <div class="form-group m-0 col px-0">
-                  <label for="cargaTeorica" class="col-form-label"
-                    >Carga Teórica</label
+            </div>
+            <div class="row mb-2 mx-0">
+              <div class="form-group m-0 col px-0">
+                <label for="perfil" class="col-form-label">Perfil</label>
+                <select
+                  type="text"
+                  id="perfil"
+                  class="form-control form-control-sm input-maior"
+                  v-model="disciplinaForm.Perfil"
+                >
+                  <option v-if="Perfis.length === 0" type="text" value
+                    >Nenhum Perfil Encontrado</option
                   >
-                  <input
-                    type="text"
-                    id="cargaTeorica"
-                    class="form-control form-control-sm"
-                    style="width: 70px!important; text-align:center!important"
-                    @keypress="onlyNumber"
-                    v-model="disciplinaForm.cargaTeorica"
-                  />
-                </div>
-
-                <div class="form-group m-0 col px-0">
-                  <label for="cargaPratica" class="col-form-label"
-                    >Carga Prática</label
+                  <option
+                    v-for="perfil in Perfis"
+                    :key="perfil.id"
+                    :value="perfil.id"
+                    >{{ perfil.nome }}</option
                   >
-                  <input
-                    type="text"
-                    id="cargaPratica"
-                    class="form-control form-control-sm"
-                    style="width: 70px!important; text-align:center!important"
-                    @keypress="onlyNumber"
-                    v-model="disciplinaForm.cargaPratica"
-                  />
-                </div>
+                </select>
               </div>
-              <div class="row mb-2 mx-0">
-                <div class="form-group m-0 col px-0">
-                  <label for="perfil" class="col-form-label">Perfil</label>
-                  <select
-                    type="text"
-                    id="perfil"
-                    class="form-control form-control-sm"
-                    style="width: 288px!important; text-align: start"
-                    v-model="disciplinaForm.Perfil"
-                  >
-                    <option v-if="Perfis.length === 0" type="text" value
-                      >Nenhum Perfil Encontrado</option
-                    >
-                    <option
-                      v-for="perfil in Perfis"
-                      :key="perfil.id"
-                      :value="perfil.id"
-                      >{{ perfil.nome }}</option
-                    >
-                  </select>
-                </div>
-              </div>
+            </div>
 
-              <div class="row mb-2 mt-3 mx-0">
-                <div class="form-check form-check-inline col m-0 px-0 pl-1">
-                  <input
-                    type="checkbox"
-                    id="ead"
-                    value="1"
-                    class="form-check-input"
-                    style="margin-top: 2px"
-                    v-model="disciplinaForm.ead"
-                  />
-                  <label for="ead" class="form-check-label">EAD</label>
-                </div>
+            <div class="row mb-2 mt-3 mx-0">
+              <div class="form-group col m-0 px-0">
+                <label for="laboratorio" class="col-form-label"
+                  >Laboratório</label
+                >
+                <select
+                  type="text"
+                  class="form-control form-control-sm input-medio"
+                  id="laboratorio"
+                  v-model="disciplinaForm.laboratorio"
+                >
+                  <option value="0">Não</option>
+                  <option value="1">Sim</option>
+                  <option value="2">Desejável</option>
+                </select>
               </div>
-
-              <div class="row mb-2 mx-0">
-                <div class="form-group col m-0 px-0">
-                  <label for="laboratorio" class="col-form-label"
-                    >Laboratório</label
-                  >
-                  <select
-                    type="text"
-                    class="form-control form-control-sm selectMenor"
-                    id="laboratorio"
-                    v-model="disciplinaForm.laboratorio"
-                  >
-                    <option value="0">Não</option>
-                    <option value="1">Sim</option>
-                    <option value="2">Desejável</option>
-                  </select>
-                </div>
+              <div class="form-group col m-0 px-0">
+                <label for="ead" class="col-form-label"
+                >EAD</label
+                >
+                <select
+                        type="text"
+                        class="form-control form-control-sm input-medio"
+                        id="ead"
+                        v-model="disciplinaForm.ead"
+                >
+                  <option value="0">Não</option>
+                  <option value="1">Integral</option>
+                  <option value="2">Parcial</option>
+                </select>
               </div>
+            </div>
+          </template>
+          <template #botoes>
+            <template v-if="isEdit">
+              <button
+                class="btn-custom btn-icon addbtn"
+                v-on:click.prevent="editDisciplina"
+                title="Salvar"
+                type="button"
+                :key="1"
+              >
+                <i class="fas fa-check"></i>
+              </button>
+              <button
+                v-on:click.prevent="deleteDisciplina"
+                class="btn-custom btn-icon delbtn"
+                title="Deletar"
+                type="button"
+                :key="2"
+              >
+                <i class="far fa-trash-alt"></i>
+              </button>
+              <button
+                class="btn-custom btn-icon cancelbtn"
+                v-on:click.prevent="cleanDisciplina"
+                title="Cancelar"
+                type="button"
+                :key="3"
+              >
+                <i class="fas fa-times"></i>
+              </button>
+            </template>
 
-              <div class="row mb-0 mt-3 mx-0">
-                <div class="d-flex mr-0 ml-auto">
-                  <template v-if="isEdit">
-                    <button
-                      class="btn-custom btn-icon addbtn"
-                      v-on:click.prevent="editDisciplina"
-                      title="Salvar"
-                      type="button"
-                      :key="1"
-                    >
-                      <i class="fas fa-check"></i>
-                    </button>
-                    <button
-                      v-on:click.prevent="deleteDisciplina"
-                      class="btn-custom btn-icon delbtn"
-                      title="Deletar"
-                      type="button"
-                      :key="2"
-                    >
-                      <i class="far fa-trash-alt"></i>
-                    </button>
-                    <button
-                      class="btn-custom btn-icon cancelbtn"
-                      v-on:click.prevent="cleanDisciplina"
-                      title="Cancelar"
-                      type="button"
-                      :key="3"
-                    >
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </template>
-
-                  <template v-else>
-                    <button
-                      class="btn-custom btn-icon addbtn"
-                      v-on:click.prevent="addDisciplina"
-                      title="Adicionar"
-                      type="button"
-                      :key="1"
-                    >
-                      <i class="fas fa-plus"></i>
-                    </button>
-                    <button
-                      class="btn-custom btn-icon cancelbtn"
-                      v-on:click.prevent="cleanDisciplina"
-                      title="Cancelar"
-                      type="button"
-                      :key="3"
-                    >
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </template>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
+            <template v-else>
+              <button
+                class="btn-custom btn-icon addbtn"
+                v-on:click.prevent="addDisciplina"
+                title="Adicionar"
+                type="button"
+                :key="1"
+              >
+                <i class="fas fa-plus"></i>
+              </button>
+              <button
+                class="btn-custom btn-icon cancelbtn"
+                v-on:click.prevent="cleanDisciplina"
+                title="Cancelar"
+                type="button"
+                :key="3"
+              >
+                <i class="fas fa-times"></i>
+              </button>
+            </template>
+          </template>
+        </Card>
       </div>
     </div>
 
@@ -344,6 +328,7 @@ import _ from "lodash";
 import disciplinaService from "@/common/services/disciplina";
 import PageTitle from "@/components/PageTitle";
 import TableMain from "@/components/TableMain";
+import Card from "@/components/Card";
 
 const emptyDisciplina = {
   id: undefined,
@@ -358,7 +343,7 @@ const emptyDisciplina = {
 
 export default {
   name: "DashboardDisciplina",
-  components: { PageTitle, TableMain },
+  components: { PageTitle, TableMain, Card },
 
   data() {
     return {
@@ -498,8 +483,9 @@ export default {
     },
 
     textoEad(ead) {
-      if (ead) return "Sim";
-      else return "-";
+      if (ead == 0) return "-";
+      if (ead == 1) return "Integral";
+      if (ead == 2) return "Parcial";
     },
   },
 
@@ -537,67 +523,17 @@ export default {
   overflow: hidden;
   margin: 0;
 }
-/* ====== CARD ====== */
-.card-title {
-  font-size: 16px;
-  font-weight: normal;
-  padding-left: 0;
-  margin: 0;
-  text-align: center;
-}
-.card {
-  width: 342px;
-  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
-}
-.card-body {
-  font-size: 12px;
-  padding-top: 15px;
-}
-.card label {
-  line-height: 1.2;
-  font-size: 12px;
-  text-align: start;
-  padding-top: 0 !important;
-}
-.card select {
-  height: 25px !important;
-  font-size: 11px !important;
-  padding: 0px 5px 0px 5px !important;
-  text-align: center;
-}
-.card .selectMenor {
-  min-width: 100px;
-  max-width: 100px;
-  text-align: start !important;
-}
-.card .selectMaior {
-  min-width: 200px;
-  max-width: 200px;
-  text-align: start !important;
-}
-.card input {
-  height: 25px !important;
-  padding: 0px 5px 0px 5px !important;
-  font-size: 11px !important;
-  text-align: start;
-}
-.card .inputMenor {
-  max-width: 60px;
-  min-width: 60px;
-  text-align: center;
-}
-.card .inputMenor2 {
-  max-width: 40px;
-  min-width: 40px;
-  margin-right: 10px;
-  text-align: center;
-}
-.card .selectMaior2 {
-  max-width: 300px;
-  min-width: 300px;
-  text-align: start;
-}
 
+.card .input-maior {
+  width: 280px;
+}
+.card .input-medio {
+  width: 100px;
+}
+.card .input-menor {
+  width: 80px;
+  text-align: center !important;
+}
 .listas {
   line-height: 30px;
   font-size: 12px;

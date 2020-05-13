@@ -651,7 +651,7 @@ export default {
                                 bold: true
                             },
                             {
-                                text: 'Carga Total:' + (this.creditos1(professores[i]) + this.creditos2(professores[i])),
+                                text: 'Carga total: ' + (this.creditos1(professores[i]) + this.creditos2(professores[i])),
                                 alignment: 'center',
                                 fontSize: 9,
                                 bold: true
@@ -785,7 +785,7 @@ export default {
                         fontSize: 6,
                         alignment: 'left'
                     }, '', {
-                        text: 'Disciplina do ' + posProf1[n].programa,
+                        text: 'DISCIPLINA DO ' + posProf1[n].programa,
                         fontSize: 6,
                         alignment: 'left'
                     }, '', '', {
@@ -884,7 +884,7 @@ export default {
                             fontSize: 6,
                             alignment: 'left'
                         }, '', {
-                            text: 'Disciplina do ' + posProf2[n].programa,
+                            text: 'DISCIPLINA DO ' + posProf2[n].programa,
                             fontSize: 6,
                             alignment: 'left'
                         }, '', '', {
@@ -898,16 +898,25 @@ export default {
                         }])
                 }
                 tableDocenteBody.push([
-                    '', '', '', '', '', '', {
+                    '', '', '', '', '',
+                    {
+                        text:"CARGA POR SEMESTRE:",
+                        fontSize: 6,
+                        alignment: 'right',
+                        bold: true,
+                        margin: [0, 5, 0, 0]
+                    }, {
                         text:this.creditos1(professores[i]),
-                        fontSize: 8,
+                        fontSize: 6,
                         alignment: 'center',
-                        bold: true
+                        bold: true,
+                        margin: [0, 5, 0, 0]
                     }, {
                         text:this.creditos2(professores[i]),
-                        fontSize: 8,
+                        fontSize: 6,
                         alignment: 'center',
-                        bold: true
+                        bold: true,
+                        margin: [0, 5, 0, 0]
                     }])
                 tables.push({
                     style: 'tableExample',

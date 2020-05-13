@@ -1,9 +1,6 @@
 <template>
   <div class="DashboardCursos row pr-2" v-if="Admin">
-    <PageTitle
-      :title="'Cursos'"
-      :asideClass="'col-xl-10 col-md-8 col-sm-7 col-2'"
-    >
+    <PageTitle :title="'Cursos'">
       <template #aside>
         <button
           type="button"
@@ -15,9 +12,7 @@
         </button>
       </template>
     </PageTitle>
-    <!--  -->
-    <div class="w-100 mb-2 border-bottom"></div>
-    <!--  -->
+
     <div class="row w-100 m-0">
       <div class="divTable p-0">
         <!-- Inicio Tabela -->
@@ -154,139 +149,127 @@
       </div>
 
       <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
-        <div class="card mr-3 ml-auto">
-          <div class="card-header">
-            <h1 class="card-title">Curso</h1>
-          </div>
+        <Card title="Curso">
+          <template #form-group>
+            <div class="row mb-2 mx-0">
+              <div class="form-group col m-0 px-0">
+                <label for="nome" class="col-form-label">Nome</label>
+                <input
+                  type="text"
+                  class="card-input-maior form-control form-control-sm"
+                  id="nome"
+                  v-model="cursoForm.nome"
+                />
+              </div>
+            </div>
 
-          <div class="card-body">
-            <form>
-              <div class="row mb-2 mx-0">
-                <div class="form-group col m-0 px-0">
-                  <label for="nome" class="col-form-label">Nome</label>
-                  <input
-                    type="text"
-                    class="inputMaior form-control form-control-sm"
-                    id="nome"
-                    v-model="cursoForm.nome"
-                  />
-                </div>
+            <div class="row mb-2 mx-0">
+              <div class="form-group col m-0 px-0">
+                <label for="codigo" class="col-form-label">Código</label>
+                <input
+                  type="text"
+                  class="form-control form-control-sm card-input-menor"
+                  id="codigo"
+                  v-model="cursoForm.codigo"
+                />
+              </div>
+              <div class="form-group col m-0 px-0">
+                <label for="turno" class="col-form-label">Turno</label>
+                <select
+                  type="text"
+                  class="form-control form-control-sm card-input-medio"
+                  id="turno"
+                  v-model="cursoForm.turno"
+                >
+                  <option value="Diurno">Diurno</option>
+                  <option value="Noturno">Noturno</option>
+                  <option value="Integral">Integral</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row mb-2 mx-0">
+              <div class="form-group col m-0 px-0">
+                <label for="alunosEntrada" class="col-form-label"
+                  >Alunos 1º Sem.</label
+                >
+                <input
+                  type="text"
+                  class="form-control form-control-sm card-input-menor"
+                  id="alunosEnrada"
+                  @keypress="onlyNumber"
+                  v-model="cursoForm.alunosEntrada"
+                />
               </div>
 
-              <div class="row mb-2 mx-0">
-                <div class="form-group col m-0 px-0">
-                  <label for="codigo" class="col-form-label">Código</label>
-                  <input
-                    type="text"
-                    class="form-control form-control-sm inputMenor"
-                    id="codigo"
-                    v-model="cursoForm.codigo"
-                  />
-                </div>
-                <div class="form-group col m-0 px-0">
-                  <label for="turno" class="col-form-label">Turno</label>
-                  <select
-                    type="text"
-                    class="form-control form-control-sm selectMenor"
-                    id="turno"
-                    v-model="cursoForm.turno"
-                  >
-                    <option value="Diurno">Diurno</option>
-                    <option value="Noturno">Noturno</option>
-                    <option value="Integral">Integral</option>
-                  </select>
-                </div>
+              <div class="form-group col m-0 px-0">
+                <label for="alunosEntrada" class="col-form-label"
+                  >Alunos 2º Sem.</label
+                >
+                <input
+                  type="text"
+                  class="form-control form-control-sm card-input-menor"
+                  id="alunosEnrada"
+                  @keypress="onlyNumber"
+                  v-model="cursoForm.alunosEntrada2"
+                />
               </div>
+            </div>
+          </template>
+          <template #botoes>
+            <template v-if="isEdit">
+              <button
+                type="button"
+                v-on:click.prevent="editCurso"
+                class="btn-custom btn-icon addbtn"
+                title="Salvar"
+                :key="1"
+              >
+                <i class="fas fa-check"></i>
+              </button>
 
-              <div class="row mb-2 mx-0">
-                <div class="form-group col m-0 px-0">
-                  <label for="alunosEntrada" class="col-form-label"
-                    >Alunos 1º Sem.</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control form-control-sm inputMenor"
-                    id="alunosEnrada"
-                    @keypress="onlyNumber"
-                    v-model="cursoForm.alunosEntrada"
-                  />
-                </div>
-                <!-- </div> -->
-                <div class="form-group col m-0 px-0">
-                  <label for="alunosEntrada" class="col-form-label"
-                    >Alunos 2º Sem.</label
-                  >
-                  <input
-                    type="text"
-                    class="form-control form-control-sm inputMenor"
-                    id="alunosEnrada"
-                    @keypress="onlyNumber"
-                    v-model="cursoForm.alunosEntrada2"
-                  />
-                </div>
-              </div>
-              <div class="row mb-0 mt-3 mx-0">
-                <div class="d-flex mr-0 ml-auto">
-                  <template v-if="isEdit">
-                    <!-- Editar -->
-                    <button
-                      type="button"
-                      v-on:click.prevent="editCurso"
-                      class="btn-custom btn-icon addbtn"
-                      title="Salvar"
-                      :key="1"
-                    >
-                      <i class="fas fa-check"></i>
-                    </button>
-                    <!-- Excluir -->
-                    <button
-                      type="button"
-                      v-on:click.prevent="deleteCurso"
-                      class="btn-custom btn-icon delbtn"
-                      title="Deletar"
-                      :key="2"
-                    >
-                      <i class="far fa-trash-alt"></i>
-                    </button>
-                    <!-- Cancelar -->
-                    <button
-                      type="button"
-                      v-on:click.prevent="cleanCurso"
-                      class="btn-custom btn-icon cancelbtn"
-                      title="Cancelar"
-                      :key="3"
-                    >
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </template>
+              <button
+                type="button"
+                v-on:click.prevent="deleteCurso"
+                class="btn-custom btn-icon delbtn"
+                title="Deletar"
+                :key="2"
+              >
+                <i class="far fa-trash-alt"></i>
+              </button>
 
-                  <template v-else>
-                    <!-- Adicionar -->
-                    <button
-                      type="button"
-                      v-on:click.prevent="addCurso"
-                      class="btn-custom btn-icon addbtn"
-                      title="Adicionar"
-                      :key="1"
-                    >
-                      <i class="fas fa-plus"></i>
-                    </button>
-                    <!-- Resetar -->
-                    <button
-                      type="button"
-                      v-on:click.prevent="cleanCurso"
-                      class="btn-custom btn-icon cancelbtn"
-                      title="Cancelar"
-                      :key="2"
-                    >
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </template>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
+              <button
+                type="button"
+                v-on:click.prevent="cleanCurso"
+                class="btn-custom btn-icon cancelbtn"
+                title="Cancelar"
+                :key="3"
+              >
+                <i class="fas fa-times"></i>
+              </button>
+            </template>
+            <template v-else>
+              <button
+                type="button"
+                v-on:click.prevent="addCurso"
+                class="btn-custom btn-icon addbtn"
+                title="Adicionar"
+                :key="1"
+              >
+                <i class="fas fa-plus"></i>
+              </button>
+              <button
+                type="button"
+                v-on:click.prevent="cleanCurso"
+                class="btn-custom btn-icon cancelbtn"
+                title="Cancelar"
+                :key="2"
+              >
+                <i class="fas fa-times"></i>
+              </button>
+            </template>
+          </template>
+        </Card>
       </div>
     </div>
 
@@ -338,6 +321,7 @@ import cursoService from "@/common/services/curso";
 import pedidoService from "@/common/services/pedido";
 import PageTitle from "@/components/PageTitle";
 import TableMain from "@/components/TableMain";
+import Card from "@/components/Card";
 
 const emptyCurso = {
   id: undefined,
@@ -359,7 +343,7 @@ const emptyPedido = {
 };
 export default {
   name: "DashboardCursos",
-  components: { PageTitle, TableMain },
+  components: { PageTitle, TableMain, Card },
 
   data() {
     return {
@@ -545,15 +529,15 @@ export default {
         this.ordenacao.type
       );
     },
-    isEdit() {
-      return this.cursoForm.id !== undefined;
-    },
     Admin() {
       if (this.$store.state.auth.Usuario.admin === 1) {
         return true;
       } else {
         return false;
       }
+    },
+    isEdit() {
+      return this.cursoForm.id !== undefined;
     },
   },
 };
@@ -565,59 +549,16 @@ export default {
   overflow: auto;
   margin: 0;
 }
-/* ====== CARD ====== */
-.card {
-  width: 300px;
-  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+.card-input-maior {
+  width: 250px;
 }
-.card-title {
-  font-size: 16px;
-  font-weight: normal;
-  padding-left: 0;
-  margin: 0;
-  text-align: center;
+.card-input-menor {
+  width: 60px;
+  text-align: center !important;
 }
-.card-body {
-  font-size: 12px !important;
-  padding-top: 15px;
+.card-input-medio {
+  width: 100px;
 }
-.card label {
-  line-height: 1.2;
-  font-size: 12px;
-  text-align: start;
-  padding-top: 0 !important;
-}
-.card select {
-  height: 25px !important;
-  font-size: 11px !important;
-  padding: 0px 5px 0px 5px !important;
-  min-width: 100px;
-  max-width: 100px;
-  text-align: center;
-}
-.card input {
-  height: 25px !important;
-  padding: 0px 5px 0px 5px !important;
-  font-size: 11px !important;
-  text-align: start;
-}
-.card .inputMaior {
-  min-width: 250px;
-  max-width: 250px;
-  text-align: start !important;
-}
-.card .inputMenor {
-  max-width: 60px;
-  min-width: 60px;
-  text-align: center;
-}
-.card .selectMenor {
-  min-width: 100px;
-  max-width: 100px;
-  text-align: start !important;
-}
-/* =================== */
-
 .listas {
   line-height: 30px;
   font-size: 12px;
@@ -628,8 +569,7 @@ export default {
 strong {
   color: #007bff;
 }
-
-@media screen and (max-width: 879px) {
+@media screen and (max-width: 886px) {
   .div-card {
     margin-left: 0px !important;
   }

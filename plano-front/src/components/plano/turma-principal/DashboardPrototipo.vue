@@ -1,76 +1,48 @@
 <template>
   <div class="DashboardPrototipo row pr-2">
-    <!-- Titulo -->
-    <div
-      class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
-      style="height: 38px;"
-    >
-      <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="titulo col-xl-2 col-lg-2 col-md-2 col-sm-2 col-3 px-0 pr-1">
-          Tabela
-        </h1>
+    <PageTitle title="Tabela Interna">
+      <template #aside>
+        <b-button v-b-modal.modalFiltros title="Filtros" class="cancelbtn">
+          <i class="fas fa-list-ul"></i>
+        </b-button>
 
-        <div
-          class="form-group col-xl-10 col-lg-10 col-md-10 col-sm-10 col-9 mb-0 p-0"
-          style="justify-content: flex-end !important;"
-        >
-          <!-- <b-button
-            v-b-modal.modalValidacao
-            title="Validação"
-            class="cancelbtn"
-          >
-            <i class="far fa-calendar-check"></i>
-          </b-button> -->
-          <b-button v-b-modal.modalFiltros title="Filtros" class="cancelbtn">
-            <i class="fas fa-list-ul"></i>
+        <template v-if="isAdd">
+          <b-button title="Salvar" class="addbtn" v-on:click.prevent="addTurma">
+            <i class="fas fa-check"></i>
           </b-button>
+          <b-button
+            title="Cancelar"
+            class="cancelbtn"
+            v-on:click.prevent="toggleAdd"
+          >
+            <i class="fas fa-times"></i>
+          </b-button>
+        </template>
 
-          <div class="d-flex">
-            <template v-if="isAdd">
-              <b-button
-                title="Salvar"
-                class="addbtn"
-                v-on:click.prevent="addTurma"
-              >
-                <i class="fas fa-check"></i>
-              </b-button>
-              <b-button
-                title="Cancelar"
-                class="cancelbtn"
-                v-on:click.prevent="toggleAdd"
-              >
-                <i class="fas fa-times"></i>
-              </b-button>
-            </template>
-
-            <template v-else>
-              <b-button
-                title="Adicionar"
-                class="addbtn"
-                v-on:click.prevent="toggleAdd"
-              >
-                <i class="fas fa-plus"></i>
-              </b-button>
-              <b-button title="Deletar" class="delbtn" v-b-modal.modalConfirma>
-                <i class="far fa-trash-alt"></i>
-              </b-button>
-            </template>
-            <b-button
-              title="XLSX"
-              class="relatbtn"
-              v-on:click.prevent="xlsx(Pedidos)"
-            >
-              <i class="far fa-file-alt"></i>
-            </b-button>
-            <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
-              <i class="fas fa-question"></i>
-            </b-button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="w-100 mb-2 border-bottom"></div>
+        <template v-else>
+          <b-button
+            title="Adicionar"
+            class="addbtn"
+            v-on:click.prevent="toggleAdd"
+          >
+            <i class="fas fa-plus"></i>
+          </b-button>
+          <b-button title="Deletar" class="delbtn" v-b-modal.modalConfirma>
+            <i class="far fa-trash-alt"></i>
+          </b-button>
+        </template>
+        <b-button
+          title="XLSX"
+          class="relatbtn"
+          v-on:click.prevent="xlsx(Pedidos)"
+        >
+          <i class="far fa-file-alt"></i>
+        </b-button>
+        <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
+          <i class="fas fa-question"></i>
+        </b-button>
+      </template>
+    </PageTitle>
 
     <div id="loading" v-if="isLoading">
       <div class="cube1"></div>
@@ -762,6 +734,7 @@ import turmaService from "@/common/services/turma";
 import pedidoService from "@/common/services/pedido";
 import turmaheader from "./TurmaHeader.vue";
 import turmadata from "./TurmaRow.vue";
+import PageTitle from "@/components/PageTitle.vue";
 import novaturma from "./NovaTurma.vue";
 
 const emptyTurma = {
@@ -781,7 +754,12 @@ const emptyTurma = {
 
 export default {
   name: "DashboardPrototipo",
-
+  components: {
+    turmadata,
+    turmaheader,
+    novaturma,
+    PageTitle,
+  },
   data() {
     return {
       turmaForm: _.clone(emptyTurma),
@@ -802,12 +780,6 @@ export default {
       ordenacaoPerfis: { order: "nome", type: "asc" },
       ordemValidacao: { order: "periodo", type: "asc" },
     };
-  },
-
-  components: {
-    turmadata,
-    turmaheader,
-    novaturma,
   },
 
   mounted: function() {

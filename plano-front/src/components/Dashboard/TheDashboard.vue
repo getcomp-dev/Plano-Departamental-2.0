@@ -80,7 +80,7 @@
         >
           <Navbar
             v-if="toggleSideBar"
-            v-on:toggle="closeSideBar()"
+            v-on:close-sidebar="closeSideBar()"
             :year="year"
           ></Navbar>
         </transition>
@@ -310,31 +310,6 @@ export default {
       toggleSideBar: false,
     };
   },
-  mounted() {
-    this.$on("toggle", () => {
-      this.toggleSideBar = !this.toggleSideBar;
-    });
-  },
-  computed: {
-    year() {
-      if (!_.isEmpty(this.$store.state.plano.Plano)) {
-        if (typeof this.$store.state.plano.Plano[0].ano === "string")
-          this.planoForm.ano =
-            parseInt(this.$store.state.plano.Plano[0].ano) + 1;
-        else this.planoForm.ano = this.$store.state.plano.Plano[0].ano + 1;
-        return this.$store.state.plano.Plano[0].ano;
-      } else return 2019;
-    },
-
-    httpRequestCount() {
-      return this.$store.state.httpRequestCount;
-    },
-
-    isLoading() {
-      return this.$store.state.isLoading;
-    },
-  },
-
   created() {
     this.$store.commit(COMPONENT_LOADING);
     this.$store
@@ -350,11 +325,9 @@ export default {
 
     this.$store.commit("setYear", 2019);
   },
-
   beforeDestroy() {
     this.$socket.close();
   },
-
   methods: {
     closeSideBar() {
       this.toggleSideBar = false;
@@ -551,6 +524,25 @@ export default {
 
     cancelMode() {
       this.userModalMode = 0;
+    },
+  },
+  computed: {
+    year() {
+      if (!_.isEmpty(this.$store.state.plano.Plano)) {
+        if (typeof this.$store.state.plano.Plano[0].ano === "string")
+          this.planoForm.ano =
+            parseInt(this.$store.state.plano.Plano[0].ano) + 1;
+        else this.planoForm.ano = this.$store.state.plano.Plano[0].ano + 1;
+        return this.$store.state.plano.Plano[0].ano;
+      } else return 2019;
+    },
+
+    httpRequestCount() {
+      return this.$store.state.httpRequestCount;
+    },
+
+    isLoading() {
+      return this.$store.state.isLoading;
     },
   },
 };

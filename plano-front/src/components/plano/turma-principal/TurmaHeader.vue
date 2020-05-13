@@ -22,10 +22,10 @@
       <p style="width:130px !important;">Docente</p>
     </th>
     <th scope="col">
-      <p style="width:75px !important;">Turno</p>
+      <p style="width:80px !important;">Horário</p>
     </th>
     <th scope="col">
-      <p style="width:80px !important;">Horário</p>
+      <p style="width:80px !important;">Turno</p>
     </th>
     <th scope="col">
       <p style="width:98px !important;">Sala</p>
@@ -84,15 +84,15 @@ export default {
   name: "TurmaHeader",
 
   props: {
-    cursos: Array
+    cursos: Array,
   },
 
   methods: {
     big(nome) {
       if (nome.length > 4) return true;
       else return false;
-    }
-  }
+    },
+  },
 };
 </script>
 

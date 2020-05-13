@@ -7,7 +7,7 @@
     >
       <div class="form-inline col-12 pl-0 mb-1 pr-1">
         <h1 class="titulo col-xl-2 col-md-3 col-sm-4 col-5 px-0 pr-1">
-          Creditação Pós
+          Tabela Pós
         </h1>
 
         <div
