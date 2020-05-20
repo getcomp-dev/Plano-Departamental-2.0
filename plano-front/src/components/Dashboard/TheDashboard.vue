@@ -36,13 +36,13 @@
               <span class="text-nav-top">Usuário</span>
             </div>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="Admin">
             <div class="div-nav-top nav-link" v-on:click="showModalNovoPlano">
               <i class="icons-top mr-1 fas fa-plus-square"></i>
               <span class="text-nav-top">Novo</span>
             </div>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="Admin">
             <div class="div-nav-top nav-link" v-on:click="showModalLoad">
               <i class="icons-top mr-1 fas fa-folder-open"></i>
               <span class="text-nav-top">Carregar</span>
@@ -87,7 +87,7 @@
         <main
           @click="closeSideBar()"
           role="main"
-          class="col-12 pl-2 pr-0 pt-0 pl-0"
+          class="col-12 p-0 px-2"
           v-if="!isLoading"
         >
           <router-view></router-view>
@@ -527,6 +527,13 @@ export default {
     },
   },
   computed: {
+    Admin() {
+      if (this.$store.state.auth.Usuario.admin === 1) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     year() {
       if (!_.isEmpty(this.$store.state.plano.Plano)) {
         if (typeof this.$store.state.plano.Plano[0].ano === "string")

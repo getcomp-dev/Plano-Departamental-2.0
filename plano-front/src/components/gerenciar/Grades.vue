@@ -1,5 +1,5 @@
 <template>
-  <div class="DashboardGrades row pr-2" v-if="Admin">
+  <div class="main-component row" v-if="Admin">
     <PageTitle :title="'Grades'">
       <template #aside>
         <b-button
@@ -14,26 +14,22 @@
 
     <div class="row w-100 m-0">
       <div class="p-0 divTable">
-        <table class="main-table table table-sm table-hover table-bordered">
-          <thead class="thead-light">
-            <tr>
-              <th scope="col">
-                <p class="p-header" style="width: 220px">Cursos</p>
-              </th>
-              <th scope="col">
-                <p class="p-header" style="width: 100px">Grades</p>
-              </th>
-            </tr>
-          </thead>
+        <TableMain>
+          <template #thead>
+            <th style="width: 220px">
+              Cursos
+            </th>
+            <th style="width: 100px">
+              Grades
+            </th>
+          </template>
 
-          <tbody>
-            <tr class="bg-custom-tr">
-              <td>
-                <p style="width: 220px">Ciência da Computação Diurno</p>
+          <template #tbody>
+            <tr class="bg-custom">
+              <td style="width: 220px">
+                Ciência da Computação Diurno
               </td>
-              <td>
-                <div style="width:100px"></div>
-              </td>
+              <td style="width:100px"></td>
             </tr>
             <template v-for="grade in Grades_CCDiurno">
               <tr
@@ -41,25 +37,21 @@
                 :key="'grade-id' + grade.id"
                 :class="[
                   'clickable',
-                  { 'bg-custom': gradeForm.id == grade.id },
+                  { 'bg-selected': gradeForm.id == grade.id },
                 ]"
               >
-                <td>
-                  <p style="width: 220px"></p>
-                </td>
-                <td>
-                  <p style="width: 100px">{{ grade.nome }}</p>
+                <td style="width: 220px"></td>
+                <td style="width: 100px">
+                  {{ grade.nome }}
                 </td>
               </tr>
             </template>
 
-            <tr class="bg-custom-tr">
-              <td>
-                <p style="width: 220px">Ciência da Computação Noturno</p>
+            <tr class="bg-custom">
+              <td style="width: 220px">
+                Ciência da Computação Noturno
               </td>
-              <td>
-                <div style="width:100px"></div>
-              </td>
+              <td style="width:100px"></td>
             </tr>
             <template v-for="grade in Grades_CCNoturno">
               <tr
@@ -67,25 +59,21 @@
                 :key="'grade-id' + grade.id"
                 :class="[
                   'clickable',
-                  { 'bg-custom': gradeForm.id == grade.id },
+                  { 'bg-selected': gradeForm.id == grade.id },
                 ]"
               >
-                <td>
-                  <p style="width: 220px"></p>
-                </td>
-                <td>
-                  <p style="width: 100px">{{ grade.nome }}</p>
+                <td style="width: 220px"></td>
+                <td style="width: 100px">
+                  {{ grade.nome }}
                 </td>
               </tr>
             </template>
 
-            <tr class="bg-custom-tr">
-              <td>
-                <p style="width: 220px">Sistemas de informação</p>
+            <tr class="bg-custom">
+              <td style="width: 220px">
+                Sistemas de informação
               </td>
-              <td>
-                <div style="width:100px"></div>
-              </td>
+              <td style="width:100px"></td>
             </tr>
             <template v-for="grade in Grades_SI">
               <tr
@@ -93,25 +81,21 @@
                 :key="'grade-id' + grade.id"
                 :class="[
                   'clickable',
-                  { 'bg-custom': gradeForm.id == grade.id },
+                  { 'bg-selected': gradeForm.id == grade.id },
                 ]"
               >
-                <td>
-                  <p style="width: 220px"></p>
-                </td>
-                <td>
-                  <p style="width: 100px">{{ grade.nome }}</p>
+                <td style="width: 220px"></td>
+                <td style="width: 100px">
+                  {{ grade.nome }}
                 </td>
               </tr>
             </template>
 
-            <tr class="bg-custom-tr">
-              <td>
-                <p style="width: 220px">Engenharia da Computação</p>
+            <tr class="bg-custom">
+              <td style="width: 220px">
+                Engenharia da Computação
               </td>
-              <td>
-                <div style="width:100px"></div>
-              </td>
+              <td style="width:100px"></td>
             </tr>
             <template v-for="grade in Grade_EC">
               <tr
@@ -119,19 +103,17 @@
                 :key="'grade-id' + grade.id"
                 :class="[
                   'clickable',
-                  { 'bg-custom': gradeForm.id == grade.id },
+                  { 'bg-selected': gradeForm.id == grade.id },
                 ]"
               >
-                <td>
-                  <p style="width: 220px"></p>
-                </td>
-                <td>
-                  <p style="width: 100px">{{ grade.nome }}</p>
+                <td style="width: 220px"></td>
+                <td style="width: 100px">
+                  {{ grade.nome }}
                 </td>
               </tr>
             </template>
-          </tbody>
-        </table>
+          </template>
+        </TableMain>
       </div>
 
       <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
@@ -180,7 +162,7 @@
               </div>
             </div>
           </template>
-          <template #botoes>
+          <template #footer>
             <template v-if="currentGrade != undefined">
               <button
                 type="button"
@@ -232,7 +214,7 @@
     </div>
 
     <!-- MODAL DE AJUDA -->
-    <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+    <b-modal id="modalAjuda" title="Ajuda" scrollable hide-footer>
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
@@ -256,8 +238,6 @@
           </li>
         </ul>
       </div>
-
-      <div slot="modal-footer" style="display: none"></div>
     </b-modal>
   </div>
 </template>
@@ -266,8 +246,9 @@
 import _ from "lodash";
 import gradeService from "@/common/services/grade";
 import disciplinaGradeService from "@/common/services/disciplinaGrade";
-import PageTitle from "@/components/PageTitle";
 import Card from "@/components/Card";
+import PageTitle from "@/components/PageTitle";
+import TableMain from "@/components/TableMain";
 
 const emptyGrade = {
   id: undefined,
@@ -282,7 +263,7 @@ const emptyDisciplinaGrade = {
 };
 export default {
   name: "DashboardGrade",
-  components: { PageTitle, Card },
+  components: { PageTitle, Card, TableMain },
   data() {
     return {
       error: undefined,
@@ -432,10 +413,11 @@ export default {
 </script>
 
 <style scoped>
-.DashboardGrades {
-  max-width: 100%;
-  overflow: hidden;
-  margin: 0;
+.main-table {
+  overflow: auto !important;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
 }
 .card-input-maior {
   width: 210px;
@@ -443,139 +425,8 @@ export default {
 .card-input-menor {
   width: 70px;
 }
-.listas {
-  line-height: 30px;
-  font-size: 12px;
-  text-align: justify;
-  line-height: inherit;
-  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
-}
-strong {
-  color: #007bff;
-}
-
-.modal-header {
-  background-color: rgba(0, 0, 0, 0.03);
-  text-align: center;
-}
-
-header {
-  text-align: center;
-}
-
-.modal-title {
-  font-size: 16px;
-  font-weight: normal;
-  padding-left: 0;
-  margin: 0;
-  text-align: center;
-}
-
-/* main-table */
-.divTable {
-  overflow: hidden;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-}
-.main-table {
-  display: block !important;
-  overflow: auto !important;
-  font-size: 11px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-}
-.main-table .p-header {
-  height: 18px;
-}
-.main-table p {
-  padding: 0 5px 0 5px !important;
-  margin: 0 !important;
-  font-size: 11px !important;
-  text-align: center;
-}
-tbody {
-  max-height: 100% !important;
-  width: 100% !important;
-}
-.main-table td {
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  height: 22px !important;
-}
-.main-table tr thead {
-  display: block !important;
-}
-.main-table thead th {
-  padding: 0 !important;
-  font-size: 14px;
-  text-align: center;
-  height: 18px !important;
-}
-.main-table input[type="checkbox"] {
-  width: 13px !important;
-  height: 13px !important;
-  text-align: center !important;
-  margin: 0 !important;
-  margin-top: 4px !important;
-}
-/* fim table */
-
-.clickable {
-  cursor: pointer;
-}
-
-.bg-custom {
-  background-color: #c8c8c8;
-}
-.bg-custom:hover {
-  background-color: #c8c8c8;
-}
-.bg-custom-tr {
-  background-color: rgba(0, 0, 0, 0.089);
-  color: black;
-}
-.listas {
-  line-height: 30px;
-  font-size: 12px;
-  text-align: justify;
-  line-height: inherit;
-  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
-}
-
-.form-group-top {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex: 0 0 auto;
-  flex: 0 0 auto;
-  -ms-flex-flow: row wrap;
-  flex-flow: row wrap;
-  -ms-flex-align: center;
-  align-items: center;
-  margin-bottom: 0;
-}
-
-.form-inline .input-group,
-.form-inline {
-  width: auto;
-}
-@media screen and (max-width: 625px) {
+@media screen and (max-width: 606px) {
   .div-card {
-    margin-left: 0px !important;
-    margin-right: 50px !important;
-    margin-top: 20px !important;
-    top: 0 !important;
-  }
-
-  .card {
     margin-left: 0px !important;
   }
 }

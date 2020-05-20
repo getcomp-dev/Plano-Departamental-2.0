@@ -80,17 +80,17 @@ export default {
     return {
       linksPlano: [
         {
-          title: "Tabela Interna",
+          title: "Graduação - DCC",
           routerName: "pedidos",
           icon: "fa-clipboard",
         },
         {
-          title: "Tabela Externa",
+          title: "Graduação - Outros",
           routerName: "turmasExternas",
           icon: "fa-clipboard",
         },
         {
-          title: "Tabela Pós",
+          title: "Pós Graduação",
           routerName: "cargaPos",
           icon: "fa-clipboard",
         },
@@ -104,42 +104,46 @@ export default {
         {
           title: "Carga Professores",
           routerName: "cargaProfessores",
-          icon: "fa-clipboard",
+          icon: "fa-file-alt",
         },
         {
           title: "Grades Disciplinass",
           routerName: "gradeDisciplinas",
-          icon: "fa-clipboard",
+          icon: "fa-file-alt",
         },
         {
           title: "Horários - Cursos",
           routerName: "horarios",
-          icon: "fa-calendar-alt",
+          icon: "fa-file-alt",
         },
         {
           title: "Horários - Laboratórios",
           routerName: "laboratoriosAlocacao",
-          icon: "fa-calendar-alt",
+          icon: "fa-file-alt",
         },
         {
           title: "Plano Departamental",
           routerName: "relatorioDisciplinas",
-          icon: "fa-clipboard",
+          icon: "fa-file-alt",
         },
       ],
       linksGenrenciar: [
         { title: "Cursos ", routerName: "cursos", icon: "fa-graduation-cap" },
-        { title: "Disciplinas ", routerName: "disciplinas", icon: "fa-table" },
+        {
+          title: "Disciplinas ",
+          routerName: "disciplinas",
+          icon: "fa-calendar-alt",
+        },
         {
           title: "Disciplinas na Grade ",
           routerName: "gradeEdit",
-          icon: "fa-sitemap",
+          icon: "fa-table",
         },
         { title: "Docentes ", routerName: "docentes", icon: "fa-users" },
         { title: "Grades ", routerName: "grades", icon: "fa-sitemap" },
-        { title: "Perfis ", routerName: "perfis", icon: "fa-th" },
-        { title: "Salas ", routerName: "salas", icon: "fa-clipboard" },
-        { title: "Log ", routerName: "history", icon: "fa-clipboard" },
+        { title: "Log ", routerName: "history", icon: "fa-history" },
+        { title: "Perfis ", routerName: "perfis", icon: "fa-th-list" },
+        { title: "Salas ", routerName: "salas", icon: "fa-university" },
       ],
     };
   },

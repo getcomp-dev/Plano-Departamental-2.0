@@ -1,5 +1,5 @@
 <template>
-  <div class="turmarow" v-bind:style="{ backgroundColor: perfil.cor }">
+  <div class="turmarow" v-bind:style="{ 'background-color': perfil.cor }">
     <td>
       <div style="width: 25px;">
         <input
@@ -16,6 +16,7 @@
     <td>
       <div style="width: 40px;">
         <select
+          :disabled="Admin ? false : true"
           id="2periodo"
           style="width: 35px;"
           v-model="turmaForm.periodo"
@@ -28,46 +29,26 @@
     </td>
     <td>
       <div style="width:70px;">
-        <template v-for="disciplina in Disciplinas">
-          <template v-if="disciplina.id === turma.Disciplina">
-            <p :key="'1-disciplina-id' + disciplina.id" style="width:70px">
-              {{ disciplina.codigo }}
-            </p>
-          </template>
-        </template>
+        <p style="width:70px">
+          {{ currentDisciplina.codigo }}
+        </p>
       </div>
     </td>
     <td>
       <div style="width: 330px;">
-        <select
-          :disabled="Admin ? false : true"
+        <input
+          :disabled="true"
           type="text"
-          style="width:325px;"
-          id="disciplina"
-          v-model="turmaForm.Disciplina"
-          v-on:change="editTurma(turma)"
-        >
-          <option v-if="Disciplinas.length === 0" type="text" value=""
-            >Nenhuma Disciplina Encontrada</option
-          >
-          <option
-            v-for="disciplina in Disciplinas"
-            :key="'2-disciplina-id' + disciplina.id"
-            :value="disciplina.id"
-          >
-            {{ disciplina.nome }}
-          </option>
-        </select>
+          class="input-disabled"
+          style="width:320px;"
+          v-model="currentDisciplina.nome"
+        />
       </div>
     </td>
     <td>
       <div style="width: 18px;">
         <p style="width:18px;">
-          <template v-for="disciplina in Disciplinas">
-            <template v-if="disciplina.id === turma.Disciplina">
-              {{ disciplina.cargaPratica + disciplina.cargaTeorica }}
-            </template>
-          </template>
+          {{ totalCarga }}
         </p>
       </div>
     </td>
@@ -76,6 +57,7 @@
         <input
           :disabled="Admin ? false : true"
           type="text"
+          class="input-letra"
           style="text-transform: uppercase"
           v-model="turmaForm.letra"
           @keypress="onlyA_Z"
@@ -88,7 +70,7 @@
         <select
           :disabled="Admin ? false : true"
           type="text"
-          style="width:125px"
+          style="width:125px; margin-bottom:1px;"
           id="docente1"
           v-model="turmaForm.Docente1"
           v-on:change="checkDocente()"
@@ -106,9 +88,10 @@
         </select>
 
         <select
+          v-if="hasMoreThan4Creditos"
           :disabled="Admin ? false : true"
           type="text"
-          style="width:125px;"
+          style="width:125px"
           id="docente2"
           v-model="turmaForm.Docente2"
           v-on:change="checkDocente()"
@@ -127,6 +110,26 @@
       </div>
     </td>
     <td>
+      <div style="width: 80px;">
+        <select
+          :disabled="Admin ? false : true"
+          type="text"
+          style="width: 75px"
+          id="SelectTurno"
+          v-model="turmaForm.turno1"
+          v-on:change="editTurma(turma)"
+        >
+          <template v-if="disciplinaIsIntegralEAD">
+            <option value="EAD">EAD</option>
+          </template>
+          <template v-else>
+            <option value="Diurno">Diurno</option>
+            <option value="Noturno">Noturno</option>
+          </template>
+        </select>
+      </div>
+    </td>
+    <td>
       <div style="width:80px">
         <select
           :disabled="Admin ? false : true"
@@ -136,46 +139,17 @@
           v-model="turmaForm.Horario1"
           v-on:change="checkHorario(1)"
         >
-          <option v-if="Horarios.length === 0" type="text" value=""
-            >Nenhum Horário Encontrado</option
+          <option v-if="!disciplinaIsIntegralEAD" type="text" value=""></option>
+          <option
+            v-for="horario in HorariosFiltredByTurno"
+            :key="'1-horarioEAD-id' + horario.id"
+            :value="horario.id"
+            >{{ horario.horario }}</option
           >
-          <option v-else value=""></option>
-          <template v-if="turmaForm.turno1 === 'Diurno'">
-            <option
-              v-for="horario in HorariosDiurnos"
-              :key="'1-horariodiurno-id' + horario.id"
-              :value="horario.id"
-              >{{ horario.horario }}</option
-            >
-          </template>
-          <template v-else-if="turmaForm.turno1 === 'Noturno'">
-            <option
-              v-for="horario in HorariosNoturnos"
-              :key="'1-horarionoturno-id' + horario.id"
-              :value="horario.id"
-              >{{ horario.horario }}</option
-            >
-          </template>
-          <template v-else-if="turmaForm.turno1 === 'EAD'">
-            <option
-              v-for="horario in HorariosEAD"
-              :key="'1-horarioEAD-id' + horario.id"
-              :value="horario.id"
-              >{{ horario.horario }}</option
-            >
-          </template>
-          <template v-else>
-            <option
-              v-for="horario in Horarios"
-              :key="'1-horario-id' + horario.id"
-              :value="horario.id"
-              >{{ horario.horario }}</option
-            >
-          </template>
         </select>
 
         <select
-          v-if="Disciplina.cargaTeorica + Disciplina.cargaPratica >= 4"
+          v-if="hasMoreThan4Creditos"
           :disabled="Admin ? false : true"
           type="text"
           style="width: 75px"
@@ -183,27 +157,9 @@
           v-model="turmaForm.Horario2"
           v-on:change="checkHorario(2)"
         >
-          <option v-if="Horarios.length === 0" type="text" value=""
-            >Nenhum Horário Encontrado</option
-          >
-          <option v-else value=""></option>
-          <template v-if="turmaForm.turno1 === 'Diurno'">
-            <option
-              v-for="horario in HorariosDiurnos"
-              :key="'2-horariodiurno-id' + horario.id"
-              :value="horario.id"
-              >{{ horario.horario }}</option
-            >
-          </template>
-          <template v-else-if="turmaForm.turno1 === 'Noturno'">
-            <option
-              v-for="horario in HorariosNoturnos"
-              :key="'2-horarionoturno-id' + horario.id"
-              :value="horario.id"
-              >{{ horario.horario }}</option
-            >
-          </template>
-          <template v-else-if="turmaForm.turno1 === 'EAD'">
+          <option v-if="!disciplinaIsIntegralEAD" type="text" value=""></option>
+
+          <template v-if="isParcialEAD">
             <option
               v-for="horario in HorariosEAD"
               :key="'2-horarioEAD-id' + horario.id"
@@ -213,8 +169,8 @@
           </template>
           <template v-else>
             <option
-              v-for="horario in Horarios"
-              :key="'2-horario-id' + horario.id"
+              v-for="horario in HorariosFiltredByTurno"
+              :key="'1-horarioEAD-id' + horario.id"
               :value="horario.id"
               >{{ horario.horario }}</option
             >
@@ -222,64 +178,50 @@
         </select>
       </div>
     </td>
+
     <td>
-      <div style="width: 80px;">
-        <select
-          :disabled="Admin ? false : true"
-          type="text"
-          style="width: 75px"
-          id="turno1"
-          v-model="turmaForm.turno1"
-          v-on:change="editTurma(turma)"
-        >
-          <option value=""></option>
-          <option value="Diurno">Diurno</option>
-          <option value="Noturno">Noturno</option>
-          <option value="EAD">EAD</option>
-        </select>
-      </div>
-    </td>
-    <td>
-      <div style="width: 98px">
-        <select
-          :disabled="Admin ? false : true"
-          type="text"
-          style="width:92px; margin-bottom:1px;"
-          id="sala1"
-          v-model="turmaForm.Sala1"
-          v-on:change="checkSala()"
-        >
-          <option v-if="Salas.length === 0" type="text" value=""
-            >Nenhuma Sala Encontrada</option
+      <div style="width: 100px">
+        <template v-if="!disciplinaIsIntegralEAD">
+          <select
+            :disabled="Admin ? false : true"
+            type="text"
+            style="width:95px; margin-bottom:1px;"
+            id="sala1"
+            v-model="turmaForm.Sala1"
+            v-on:change="checkSala()"
           >
-          <option v-else value=""></option>
-          <option
-            v-for="sala in Salas"
-            :key="'1-sala-id' + sala.id"
-            :value="sala.id"
-            >{{ sala.nome }}</option
+            <option v-if="Salas.length === 0" type="text" value=""
+              >Nenhuma Sala Encontrada</option
+            >
+            <option v-else value=""></option>
+            <option
+              v-for="sala in Salas"
+              :key="'1-sala-id' + sala.id"
+              :value="sala.id"
+              >{{ sala.nome }}</option
+            >
+          </select>
+          <select
+            v-if="hasMoreThan4Creditos && currentDisciplina.ead === 0"
+            :disabled="Admin ? false : true"
+            type="text"
+            style="width: 95px"
+            id="sala2"
+            v-model="turmaForm.Sala2"
+            v-on:change="checkSala()"
           >
-        </select>
-        <select
-          v-if="Disciplina.cargaTeorica + Disciplina.cargaPratica >= 4"
-          :disabled="Admin ? false : true"
-          type="text"
-          style="width: 92px"
-          id="sala2"
-          v-model="turmaForm.Sala2"
-          v-on:change="checkSala()"
-        >
-          <option v-if="Salas.length === 0" type="text" value=""
-            >Nenhuma Sala Encontrada</option
-          >
-          <option v-else value=""></option>
-          <option
-            v-for="sala in Salas"
-            :key="'2-sala-id' + sala.id"
-            :value="sala.id"
-            >{{ sala.nome }}</option
-          >
-        </select>
+            <option v-if="Salas.length === 0" type="text" value=""
+              >Nenhuma Sala Encontrada</option
+            >
+            <option v-else value=""></option>
+            <option
+              v-for="sala in Salas"
+              :key="'2-sala-id' + sala.id"
+              :value="sala.id"
+              >{{ sala.nome }}</option
+            >
+          </select>
+        </template>
       </div>
     </td>
 
@@ -294,7 +236,7 @@
       </div>
     </td>
 
-    <template v-for="curso in cursos">
+    <template v-for="curso in cursosSelecteds">
       <td :key="'1-id-curso' + curso.id">
         <template v-for="(pedido, index) in Pedidos">
           <template v-if="pedido.Curso === curso.id">
@@ -315,18 +257,18 @@ import turmaPedido from "./TurmaPedido.vue";
 import _ from "lodash";
 
 const emptyTurma = {
-  id: undefined,
-  periodo: undefined,
-  letra: undefined,
-  turno1: undefined,
-  turno2: undefined,
-  Disciplina: undefined,
-  Docente1: undefined,
-  Docente2: undefined,
-  Horario1: undefined,
-  Horario2: undefined,
-  Sala1: undefined,
-  Sala2: undefined,
+  id: null,
+  periodo: null,
+  letra: null,
+  turno1: null,
+  turno2: null,
+  Disciplina: null,
+  Docente1: null,
+  Docente2: null,
+  Horario1: null,
+  Horario2: null,
+  Sala1: null,
+  Sala2: null,
 };
 
 export default {
@@ -334,7 +276,7 @@ export default {
   props: {
     turma: Object,
     perfil: Object,
-    cursos: Array,
+    cursosSelecteds: Array,
   },
 
   data() {
@@ -350,12 +292,34 @@ export default {
     turmaPedido,
   },
 
-  mounted: function() {
+  mounted() {
     this.turmaForm = _.clone(this.turma);
     this.currentData = _.clone(this.turmaForm);
   },
 
   methods: {
+    checkDisciplina() {
+      this.setInfos();
+    },
+    clearInputs() {
+      this.turmaForm.turno1 = null;
+      this.turmaForm.Horario1 = null;
+      this.turmaForm.Horario2 = null;
+      this.turmaForm.Docente1 = null;
+      this.turmaForm.Docente2 = null;
+    },
+    setInfos(disciplina) {
+      if (this.currentDisciplina.ead === 1) {
+        this.turmaForm.turno1 = "EAD";
+        this.turmaForm.Horario1 = 31;
+        this.turmaForm.Horario2 = 31;
+      } else if (this.currentDisciplina.ead === 2) {
+        this.turmaForm.Horario2 = 31;
+      }
+    },
+    findDisciplinaById(id) {
+      return _.find(this.Disciplinas, (d) => d.id == id);
+    },
     onlyA_Z($event) {
       let key = $event.key ? $event.key : $event.which;
       if (!key.match(/[A-Z]/i)) $event.preventDefault();
@@ -1230,32 +1194,20 @@ export default {
       }
       return false;
     },
-
+    isEmpty(value) {
+      return value === null || value === undefined || value === "";
+    },
+    changeTurmaEmptyStringToNull(turma) {
+      if (turma.Docente1 === "") turma.Docente1 = null;
+      if (turma.Docente2 === "") turma.Docente2 = null;
+      if (turma.Horario1 === "") turma.Horario1 = null;
+      if (turma.Horario2 === "") turma.Horario2 = null;
+      if (turma.Sala1 === "") turma.Sala111 = null;
+      if (turma.Sala2 === "") turma.Sala2 = null;
+      if (turma.turno1 === "") turma.turno1 = null;
+    },
     editTurma() {
-      if (this.turmaForm.periodo != 1 && this.turmaForm.periodo != 3) {
-        this.turmaForm.periodo = this.turma.periodo;
-        this.$notify({
-          group: "general",
-          title: "Erro",
-          text: "O semestre deve ser 1 ou 3",
-          type: "error",
-        });
-        return;
-      }
-
-      if (this.turmaForm.Docente1 === "") this.turmaForm.Docente1 = null;
-
-      if (this.turmaForm.Docente2 === "") this.turmaForm.Docente2 = null;
-
-      if (this.turmaForm.Horario1 === "") this.turmaForm.Horario1 = null;
-
-      if (this.turmaForm.Horario2 === "") this.turmaForm.Horario2 = null;
-
-      if (this.turmaForm.Sala1 === "") this.turmaForm.Sala111 = null;
-
-      if (this.turmaForm.Sala2 === "") this.turmaForm.Sala2 = null;
-
-      if (this.turmaForm.turno1 === "") this.turmaForm.turno1 = null;
+      this.changeTurmaEmptyStringToNull(this.turmaForm);
 
       turmaService
         .update(this.turma.id, this.turmaForm)
@@ -1270,6 +1222,15 @@ export default {
         })
         .catch((error) => {
           this.error = "<b>Erro ao atualizar Turma</b>";
+          //Erro frequente!!
+
+          // this.$notify({
+          //   group: "general",
+          //   title: "Erro!",
+          //   text:
+          //     "Erro ao atualizar Turma, verifique se ja não existe uma turma com a mesma letra alocada",
+          //   type: "error",
+          // });
           if (error.response.data.fullMessage) {
             this.error +=
               "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
@@ -1280,13 +1241,30 @@ export default {
       this.$store.commit("checkDelete", { Turma: turma });
     },
   },
+
   computed: {
-    Cursos() {
-      return _.orderBy(this.$store.state.curso.Cursos, "posicao");
+    disciplinaIsIntegralEAD() {
+      return this.currentDisciplina ? this.currentDisciplina.ead === 1 : false;
+    },
+    currentDisciplina() {
+      return _.find(this.$store.state.disciplina.Disciplinas, {
+        id: this.turma.Disciplina,
+      });
     },
 
-    CursosAtivos() {
-      return this.$store.state.curso.Ativos;
+    totalCarga() {
+      return (
+        parseInt(this.currentDisciplina.cargaTeorica) +
+        parseInt(this.currentDisciplina.cargaPratica)
+      );
+    },
+
+    hasMoreThan4Creditos() {
+      return this.totalCarga >= 4;
+    },
+
+    isParcialEAD() {
+      return this.currentDisciplina.ead === 2;
     },
 
     Disciplinas() {
@@ -1299,43 +1277,72 @@ export default {
         "apelido"
       );
     },
+    //filtro do cadastro EAD da disciplina
+    HorariosFiltredByCadastroEAD() {
+      let horariosResultante = this.Horarios;
 
-    Horarios() {
-      return _.orderBy(this.$store.state.horario.Horarios, "horario");
+      if (this.currentDisciplina != undefined) {
+        const cadastroEAD = this.currentDisciplina.ead;
+        if (cadastroEAD === 1) {
+          horariosResultante = _.filter(horariosResultante, { id: 31 });
+        } else if (cadastroEAD !== 2) {
+          horariosResultante = _.filter(
+            horariosResultante,
+            (horario) => horario.id != 31
+          );
+        }
+      }
+      return horariosResultante;
     },
+    HorariosFiltredByTurno() {
+      const turnoSelected = this.turmaForm.turno1;
+      let horarioResultante = this.HorariosFiltredByCadastroEAD;
 
-    HorariosDiurnos() {
-      return _.orderBy(
-        _.filter(this.$store.state.horario.Horarios, function(h) {
+      if (turnoSelected === "EAD") {
+        horarioResultante = _.filter(horarioResultante, { id: 31 });
+      } else if (turnoSelected === "Diurno") {
+        horarioResultante = _.filter(horarioResultante, function(h) {
           if (parseInt(h.horario.slice(3, 5)) < 17) return true;
           if (h.id === 31) return true;
-        }),
-        "horario"
-      );
-    },
-
-    HorariosNoturnos() {
-      return _.orderBy(
-        _.filter(this.$store.state.horario.Horarios, function(h) {
+        });
+      } else if (turnoSelected === "Noturno") {
+        horarioResultante = _.filter(horarioResultante, function(h) {
           if (parseInt(h.horario.slice(3, 5)) >= 17) return true;
           if (h.id === 31) return true;
-        }),
-        "horario"
-      );
+        });
+      }
+      return _.orderBy(horarioResultante, "horario");
+    },
+    Horarios() {
+      return _.orderBy(this.$store.state.horario.Horarios, "horario");
     },
 
     HorariosEAD() {
       return _.filter(this.$store.state.horario.Horarios, { id: 31 });
     },
 
+    // HorariosDiurnos() {
+    //   return _.orderBy(
+    //     _.filter(this.$store.state.horario.Horarios, function(h) {
+    //       if (parseInt(h.horario.slice(3, 5)) < 17) return true;
+    //       if (h.id === 31) return true;
+    //     }),
+    //     "horario"
+    //   );
+    // },
+
+    // HorariosNoturnos() {
+    //   return _.orderBy(
+    //     _.filter(this.$store.state.horario.Horarios, function(h) {
+    //       if (parseInt(h.horario.slice(3, 5)) >= 17) return true;
+    //       if (h.id === 31) return true;
+    //     }),
+    //     "horario"
+    //   );
+    // },
+
     Pedidos() {
       return this.$store.state.pedido.Pedidos[this.turma.id];
-    },
-
-    Disciplina() {
-      return _.find(this.$store.state.disciplina.Disciplinas, {
-        id: this.turma.Disciplina,
-      });
     },
 
     Admin() {
@@ -1378,7 +1385,7 @@ select {
   height: 18px;
 }
 
-input[type="text"] {
+.input-letra {
   margin-left: 0 !important;
   margin-top: 4px !important;
   margin-bottom: auto !important;
@@ -1393,7 +1400,12 @@ input[type="checkbox"] {
   height: 15px;
   width: 15px;
 }
-
+.input-turno {
+  height: 18px;
+  text-align: center;
+  padding: 0 2px;
+  cursor: default;
+}
 @-moz-document url-prefix() {
   select {
     height: 18px !important;
@@ -1417,5 +1429,13 @@ input[type="checkbox"] {
     border-radius: 2px;
     background-color: rgb(245, 245, 245);
   }
+}
+.input-disabled {
+  cursor: text;
+  color: black;
+  padding: auto 5px !important;
+  background-color: #fff !important;
+  padding: 0 5px !important;
+  border: 1px solid rgb(63, 63, 63) !important;
 }
 </style>

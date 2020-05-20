@@ -1,37 +1,23 @@
 <template>
-  <div id="Validacoes" class="DashboardValidacoes row pr-2">
-    <!-- Titulo -->
-    <div
-      class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
-      style="height: 38px;"
-    >
-      <div class="form-inline col-12 pl-0 mb-1 pr-1">
-        <h1 class="titulo col-xl-6 col-lg-6 col-md-7 col-sm-7 col-8 px-0 pr-1">
-          Validações do Plano
-        </h1>
-
-        <div
-          class="form-group col-xl-6 col-lg-6 col-md-5 col-sm-5 col-4 mb-0 p-0"
-          style="justify-content: flex-end !important;"
+  <div id="Validacoes" class="DashboardValidacoes row">
+    <PageTitle :title="'Validações do Plano'">
+      <template #aside>
+        <b-button
+          v-b-modal.modalFiltros
+          title="Filtros"
+          class="cancelbtn btn-custom btn-icon"
         >
-          <b-button
-            v-b-modal.modalFiltros
-            title="Filtros"
-            class="cancelbtn btn-custom btn-title"
-          >
-            <i class="fas fa-list-ul"></i>
-          </b-button>
-          <b-button
-            v-b-modal.modalAjuda
-            title="Ajuda"
-            class="relatbtn btn-custom btn-title"
-          >
-            <i class="fas fa-question"></i>
-          </b-button>
-        </div>
-      </div>
-    </div>
-    <div class="w-100 mb-2 border-bottom"></div>
+          <i class="fas fa-list-ul"></i>
+        </b-button>
+        <b-button
+          v-b-modal.modalAjuda
+          title="Ajuda"
+          class="relatbtn btn-custom btn-icon"
+        >
+          <i class="fas fa-question"></i>
+        </b-button>
+      </template>
+    </PageTitle>
 
     <!-- tabs -->
     <div class="p-0 m-0 w-100" style="height: 30px;">
@@ -73,16 +59,12 @@
                 <p
                   style="width: 696px; text-align: start;"
                   class="p-header clickable"
-                  @click="toggleOrdDocentes"
+                  @click="toggleOrder(ordemDocentes, 'nome')"
                 >
                   Nome
                   <i
                     style="font-size: 0.6rem; text-align: right;"
-                    :class="
-                      ordemDocentes == 'asc'
-                        ? 'fas fa-arrow-down fa-sm'
-                        : 'fas fa-arrow-up fa-sm'
-                    "
+                    :class="setIconByOrder(ordemDocentes, 'nome')"
                   ></i>
                 </p>
               </th>
@@ -90,8 +72,8 @@
           </tr>
         </thead>
         <tbody>
-          <template v-for="validacao in Docentes_validacoes">
-            <tr :key="'validacoes-' + validacao.nome" class="tr-bg">
+          <template v-for="validacao in DocentesValidacoesOrdered">
+            <tr :key="'validacoes-' + validacao.nome" class="bg-custom">
               <div class="max-content">
                 <td>
                   <p style="width: 696px;  text-align: start;">
@@ -138,18 +120,12 @@
                 <p
                   style="width: 35px; text-align: center;"
                   class="p-header clickable"
-                  @click="toggleOrdTurmas('turma_periodo')"
+                  @click="toggleOrder(ordemTurmas, 'periodo')"
                 >
                   S.
                   <i
                     style="font-size: 0.6rem; text-align: right;"
-                    :class="
-                      ordemTurmas.order == 'turma_periodo'
-                        ? ordemTurmas.type == 'asc'
-                          ? 'fas fa-arrow-down fa-sm'
-                          : 'fas fa-arrow-up fa-sm'
-                        : 'fas fa-arrow-down fa-sm low-opacity'
-                    "
+                    :class="setIconByOrder(ordemTurmas, 'periodo')"
                   ></i>
                 </p>
               </th>
@@ -157,18 +133,12 @@
                 <p
                   style="width: 70px; text-align: start;"
                   class="p-header clickable"
-                  @click="toggleOrdTurmas('disciplina_perfil')"
+                  @click="toggleOrder(ordemTurmas, 'disciplina_perfil')"
                 >
                   Perfil
                   <i
                     style="font-size: 0.6rem; text-align: right;"
-                    :class="
-                      ordemTurmas.order == 'disciplina_perfil'
-                        ? ordemTurmas.type == 'asc'
-                          ? 'fas fa-arrow-down fa-sm'
-                          : 'fas fa-arrow-up fa-sm'
-                        : 'fas fa-arrow-down fa-sm low-opacity'
-                    "
+                    :class="setIconByOrder(ordemTurmas, 'disciplina_perfil')"
                   ></i>
                 </p>
               </th>
@@ -176,18 +146,12 @@
                 <p
                   style="width: 70px; text-align: start;"
                   class="p-header clickable"
-                  @click="toggleOrdTurmas('disciplina_codigo')"
+                  @click="toggleOrder(ordemTurmas, 'disciplina_codigo')"
                 >
                   Cód.
                   <i
                     style="font-size: 0.6rem; text-align: right;"
-                    :class="
-                      ordemTurmas.order == 'disciplina_codigo'
-                        ? ordemTurmas.type == 'asc'
-                          ? 'fas fa-arrow-down fa-sm'
-                          : 'fas fa-arrow-up fa-sm'
-                        : 'fas fa-arrow-down fa-sm low-opacity'
-                    "
+                    :class="setIconByOrder(ordemTurmas, 'disciplina_codigo')"
                   ></i>
                 </p>
               </th>
@@ -195,18 +159,12 @@
                 <p
                   style="width: 300px; text-align: start;"
                   class="p-header clickable"
-                  @click="toggleOrdTurmas('disciplina_nome')"
+                  @click="toggleOrder(ordemTurmas, 'disciplina_nome')"
                 >
                   Disciplina
                   <i
                     style="font-size: 0.6rem; text-align: right;"
-                    :class="
-                      ordemTurmas.order == 'disciplina_nome'
-                        ? ordemTurmas.type == 'asc'
-                          ? 'fas fa-arrow-down fa-sm'
-                          : 'fas fa-arrow-up fa-sm'
-                        : 'fas fa-arrow-down fa-sm low-opacity'
-                    "
+                    :class="setIconByOrder(ordemTurmas, 'disciplina_nome')"
                   ></i>
                 </p>
               </th>
@@ -225,10 +183,10 @@
           </tr>
         </thead>
         <tbody>
-          <template v-for="validacao in Turmas_Validacoes_Ordered">
+          <template v-for="validacao in TurmasValidacoesOrdered">
             <tr
               :key="'validacoes-' + validacao.id + validacao.disciplina_codigo"
-              class="tr-bg"
+              class="bg-custom"
             >
               <div class="max-content">
                 <td>
@@ -411,7 +369,7 @@
           </thead>
           <tbody>
             <tr
-              v-for="conflito in Conflitos"
+              v-for="conflito in ConflitosOrdered"
               :key="conflito.id"
               style="text-transform:uppercase"
             >
@@ -441,13 +399,13 @@
         <div class="w-100">
           <template v-if="modal_navtab === 'semestre'">
             <b-button
-              class="btn-custom btn-modal  btn-azul btn-df mr-2"
+              class="btn-custom btn-modal btn-azul"
               variant="success"
               @click="selectAllSemestre()"
               >Selecionar Todos</b-button
             >
             <b-button
-              class="btn-custom btn-modal btn-cinza btn-df mr-2"
+              class="btn-custom btn-modal btn-cinza"
               variant="secondary"
               @click="selectNoneSemestre()"
               >Desmarcar Todos</b-button
@@ -455,13 +413,13 @@
           </template>
           <template v-else-if="modal_navtab === 'conflitos'">
             <b-button
-              class="btn-azul btn-df mr-2 btn-custom btn-modal "
+              class="btn-custom btn-modal btn-azul"
               variant="success"
               @click="selectAllConflitos()"
               >Selecionar Todos</b-button
             >
             <b-button
-              class="btn-cinza btn-df mr-2 btn-custom btn-modal "
+              class="btn-custom btn-modal btn-cinza"
               variant="secondary"
               @click="selectNoneConflitos()"
               >Desmarcar Todos</b-button
@@ -471,25 +429,18 @@
         <b-button
           variant="success"
           @click="btnOK()"
-          class="btn-custom btn-modal btn-verde btn-df mr-2"
+          class="btn-custom btn-modal btn-verde"
           style="padding-right: 15px !important; padding-left: 15px !important;"
           >OK</b-button
         >
       </div>
     </b-modal>
     <!-- modal turma edit -->
-    <b-modal
-      id="modalTurma"
-      ref="modalTurma"
-      scrollable
-      title="Edição de Turma"
-      size="md"
-      hide-footer
-    >
+    <b-modal id="modalTurma" scrollable title="Edição de Turma" hide-footer>
       <ModalTurma :turma="turma_clickada"></ModalTurma>
     </b-modal>
     <!-- MODAL AJUDA -->
-    <b-modal id="modalAjuda" scrollable title="Ajuda">
+    <b-modal id="modalAjuda" title="Ajuda" scrollable hide-footer>
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
@@ -510,8 +461,6 @@
           </li>
         </ul>
       </div>
-
-      <div slot="modal-footer" style="display: none;"></div>
     </b-modal>
   </div>
 </template>
@@ -519,6 +468,8 @@
 <script>
 import _ from "lodash";
 import ModalTurma from "./ModalTurma.vue";
+import PageTitle from "@/components/PageTitle";
+import { EventBus } from "@/event-bus.js";
 
 const AllConflitosTurmas = [
   { type: 1, msg: "Nenhum turno alocado" },
@@ -526,15 +477,14 @@ const AllConflitosTurmas = [
     type: 2,
     msg: "Disciplina da EAD deve ter turno EAD associado.",
   },
-  // dividor em 2.5 para :disciplinas presenciais com turno ead
   {
     type: 3,
-    msg: "Horarios incompletos ou invalidos",
+    msg: "Horários incompletos ou inválidos",
   },
   { type: 4, msg: "Nenhum docente alocado" },
   {
     type: 5,
-    msg: "Disciplina de laborátorio, porêm não possui laboratorio alocado",
+    msg: "Disciplina prática deve ter laboratorio alocado",
   },
   {
     type: 6,
@@ -543,33 +493,34 @@ const AllConflitosTurmas = [
   },
   {
     type: 7,
-    msg: "Limite de lotação das sala",
+    msg: "Limite de lotação da sala ultrapassado",
   },
   {
     type: 8,
-    msg: "Apenas 4 ou menos vagas foram alocadas!",
+    msg: "Apenas 4 ou menos vagas foram alocadas",
   },
-  { type: 9, msg: "Turma EAD e possui sala alocada" },
+  { type: 9, msg: "Turma EAD não deve ter sala alocada" },
   { type: 10, msg: "Conflito de horarios na grade" },
+  { type: 11, msg: "Disciplina de curso presencial não pode ter turno EAD" },
 ];
 export default {
   name: "Validacoes",
   components: {
     ModalTurma,
+    PageTitle,
   },
   data() {
     return {
       modal_navtab: "conflitos",
       ConflitosSelected: [],
       ConflitosAtivados: [],
-      semestreAtual: 3,
+      semestreAtual: undefined,
       semestre_1Ativo: true,
-      semestre_2Ativo: false,
+      semestre_2Ativo: true,
       turma_clickada: null,
       nav_table: "turmas",
       ordemTurmas: { order: "periodo", type: "asc" },
-      ordemDocentes: "asc",
-      ordemDocentes: "asc",
+      ordemDocentes: { order: "nome", type: "asc" },
       evenCCN: "false",
       evenCCD: "false",
       evenEC: "false",
@@ -593,7 +544,14 @@ export default {
       grades2semestre: { CCD: [], CCN: [], EC: [], SI: [] },
     };
   },
+  beforeDestroy() {
+    EventBus.$off("close-modal-turma");
+  },
   mounted() {
+    EventBus.$on("close-modal-turma", () => {
+      this.$bvModal.hide("modalTurma");
+    });
+
     //define grades ativas por periodo
     let g;
     let periodoInicial, periodoFinal;
@@ -738,18 +696,8 @@ export default {
         break;
       }
     }
-    console.log(this.grades1semestre);
-    console.log(this.grades2semestre);
   },
   methods: {
-    selectAll() {
-      if (this.modal_navtab == "Semestre") this.selectAllSemestre();
-      else this.selectAllConflitos();
-    },
-    selectNone() {
-      if (this.modal_navtab == "Semestre") this.selectNoneSemestre();
-      else this.selectNoneConflitos();
-    },
     btnOK() {
       this.btnOkSemestre();
       this.ConflitosAtivados = [...this.ConflitosSelected];
@@ -758,17 +706,25 @@ export default {
     btnOkSemestre() {
       if (this.semestre_1Ativo && !this.semestre_2Ativo) {
         this.semestreAtual = 1;
-      } else if (this.semestre_2Ativo && !this.semestre_1Ativo) {
+      } else if (!this.semestre_1Ativo && this.semestre_2Ativo) {
         this.semestreAtual = 2;
       } else if (this.semestre_1Ativo && this.semestre_1Ativo) {
         this.semestreAtual = 3;
       } else {
-        this.semestreAtual = 3;
+        this.semestreAtual = undefined;
       }
     },
     selectAllSemestre() {
       this.semestre_1Ativo = true;
       this.semestre_2Ativo = true;
+    },
+    selectAll() {
+      if (this.modal_navtab === "Semestre") this.selectAllSemestre();
+      else this.selectAllConflitos();
+    },
+    selectNone() {
+      if (this.modal_navtab == "Semestre") this.selectNoneSemestre();
+      else this.selectNoneConflitos();
     },
     selectNoneSemestre() {
       this.semestre_1Ativo = false;
@@ -786,20 +742,21 @@ export default {
       this.turma_clickada = this.findTurmaById(id);
       this.$bvModal.show("modalTurma");
     },
-    toggleOrdTurmas(ord) {
-      if (this.ordemTurmas.order != ord) {
-        this.ordemTurmas.order = ord;
-        this.ordemTurmas.type = "asc";
+    toggleOrder(currentOrder, newOrder, type = "asc") {
+      if (currentOrder.order != newOrder) {
+        currentOrder.order = newOrder;
+        currentOrder.type = type;
       } else {
-        this.ordemTurmas.type =
-          this.ordemTurmas.type === "asc" ? "desc" : "asc";
+        currentOrder.type = currentOrder.type == "asc" ? "desc" : "asc";
       }
     },
-    toggleOrdDocentes() {
-      if (this.ordemDocentes === "asc") {
-        this.ordemDocentes = "desc";
+    setIconByOrder(currentOrder, orderToCheck) {
+      if (currentOrder.order === orderToCheck) {
+        return currentOrder.type == "asc"
+          ? "fas fa-arrow-down fa-sm"
+          : "fas fa-arrow-up fa-sm";
       } else {
-        this.ordemDocentes = "asc";
+        return "fas fa-arrow-down fa-sm low-opacity";
       }
     },
     findPerfilById(id) {
@@ -842,6 +799,9 @@ export default {
         pedidos_totais: this.totalPedidos(turma.id),
         //Disciplinas
         disciplina_nome: disciplina.nome,
+        disciplina_creditoTotal:
+          parseInt(disciplina.cargaTeorica, 10) +
+          parseInt(disciplina.cargaPratica, 10),
         disciplina_codigo: disciplina.codigo,
         disciplina_ead: disciplina.ead,
         disciplina_laboratorio: disciplina.laboratorio,
@@ -854,41 +814,38 @@ export default {
       //Turno
       check = this.checkTurno(validacao.turno1);
       if (check) validacao.conflitos.push(check);
-
       //Compatibilidade do turno com disciplina
       check = this.checkTurnoEAD(validacao.disciplina_ead, validacao.turno1);
       if (check) validacao.conflitos.push(check);
-
       //Horarios
       check = this.checkHorarios(
         validacao.disciplina_ead,
+        validacao.disciplina_creditoTotal,
         validacao.Horario1,
         validacao.Horario2
       );
       if (check) validacao.conflitos.push(check);
-
       //Docente
       check = this.checkDocentes(
         validacao.docente1_apelido,
         validacao.docente2_apelido
       );
       if (check) validacao.conflitos.push(check);
-
       //Salas
       check = this.checkSalasLab(
         validacao.disciplina_laboratorio,
-        validacao.sala1,
-        validacao.sala2
+        validacao.Sala1,
+        validacao.Sala2
       );
       if (check) validacao.conflitos.push(check);
 
       //Lotação das salas
       // sala 1
-      check = this.checkVagaSala(validacao.sala1, validacao.pedidos_totais);
+      check = this.checkVagaSala(validacao.Sala1, validacao.pedidos_totais);
       if (check) validacao.conflitos.push(check);
       // sala 2
-      if (validacao.sala1 != validacao.sala2) {
-        check = this.checkVagaSala(validacao.sala2, validacao.pedidos_totais);
+      if (validacao.Sala1 != validacao.Sala2) {
+        check = this.checkVagaSala(validacao.Sala2, validacao.pedidos_totais);
         if (check) validacao.conflitos.push(check);
       }
 
@@ -898,8 +855,8 @@ export default {
       // EAD com salas - 8
       check = this.checkSalasInEAD(
         validacao.disciplina_ead,
-        validacao.sala1,
-        validacao.sala2
+        validacao.Sala1,
+        validacao.Sala2
       );
       if (check) validacao.conflitos.push(check);
       //Periodo curso
@@ -909,19 +866,29 @@ export default {
       check = null;
     },
     checkTurno(turno) {
-      return turno === null || turno === undefined ? this.Conflitos[0] : null;
+      return turno === null || turno === undefined || turno === ""
+        ? this.Conflitos[0]
+        : null;
+    },
+    isEmpty(value) {
+      return value === null || value === undefined || value === "";
     },
     checkTurnoEAD(isEAD, turno) {
-      return (isEAD && turno !== "EAD") || (!isEAD && turno == "EAD")
+      return (isEAD == 1 && turno !== "EAD") || (isEAD != 1 && turno == "EAD")
         ? this.Conflitos[1]
         : false;
     },
-    checkHorarios(isEAD, horario1, horario2) {
-      if (!isEAD) {
-        return (horario1 === null || horario1 === undefined) &&
-          (horario2 === null || horario2 === undefined)
-          ? this.Conflitos[2]
-          : false;
+    checkHorarios(isEAD, creditoTotal, horario1, horario2) {
+      if (isEAD != 1) {
+        if (creditoTotal <= 2) {
+          return horario1 == null && horario2 == null
+            ? this.Conflitos[2]
+            : false;
+        } else {
+          return horario1 == null || horario2 == null
+            ? this.Conflitos[2]
+            : false;
+        }
       }
       return false;
     },
@@ -960,7 +927,7 @@ export default {
       return pedidos_totais <= 4 ? this.Conflitos[7] : false;
     },
     checkSalasInEAD(isEAD, sala1, sala2) {
-      if (isEAD) {
+      if (isEAD == 1) {
         return sala1 != null || sala2 != null ? this.Conflitos[8] : false;
       }
       return false;
@@ -998,16 +965,25 @@ export default {
                 continue;
               }
               let disciplinaConflito = _.find(
-                      this.$store.state.disciplina.Disciplinas,
-                      { id: disciplinasPeriodo[d].Disciplina }
+                this.$store.state.disciplina.Disciplinas,
+                { id: disciplinasPeriodo[d].Disciplina }
               );
-              let externa = disciplinaConflito.Perfil == 13 || disciplinaConflito.Perfil == 15
+              let externa =
+                disciplinaConflito.Perfil == 13 ||
+                disciplinaConflito.Perfil == 15;
               let turmasDisciplina = _.filter(
-                      (externa ? this.$store.state.turmaExterna.Turmas : this.$store.state.turma.Turmas),
+                externa
+                  ? this.$store.state.turmaExterna.Turmas
+                  : this.$store.state.turma.Turmas,
                 (t) => {
-                  let pedido = _.find((externa ? this.$store.state.pedidoExterno.Pedidos[t.id] : this.$store.state.pedido.Pedidos[t.id]), {
-                    Curso: 4,
-                  });
+                  let pedido = _.find(
+                    externa
+                      ? this.$store.state.pedidoExterno.Pedidos[t.id]
+                      : this.$store.state.pedido.Pedidos[t.id],
+                    {
+                      Curso: 4,
+                    }
+                  );
                   return (
                     t.periodo == turma.periodo &&
                     t.Disciplina === disciplinasPeriodo[d].Disciplina &&
@@ -1024,7 +1000,6 @@ export default {
                     (turma.Horario2 === turmasDisciplina[t].Horario1 ||
                       turma.Horario2 === turmasDisciplina[t].Horario2))
                 ) {
-
                   conflitos = true;
                   msg =
                     msg +
@@ -1055,16 +1030,25 @@ export default {
                 continue;
               }
               let disciplinaConflito = _.find(
-                      this.$store.state.disciplina.Disciplinas,
-                      { id: disciplinasPeriodo[d].Disciplina }
+                this.$store.state.disciplina.Disciplinas,
+                { id: disciplinasPeriodo[d].Disciplina }
               );
-              let externa = disciplinaConflito.Perfil == 13 || disciplinaConflito.Perfil == 15
+              let externa =
+                disciplinaConflito.Perfil == 13 ||
+                disciplinaConflito.Perfil == 15;
               let turmasDisciplina = _.filter(
-                      (externa ? this.$store.state.turmaExterna.Turmas : this.$store.state.turma.Turmas),
-                      (t) => {
-                        let pedido = _.find((externa ? this.$store.state.pedidoExterno.Pedidos[t.id] : this.$store.state.pedido.Pedidos[t.id]), {
-                    Curso: 1,
-                  });
+                externa
+                  ? this.$store.state.turmaExterna.Turmas
+                  : this.$store.state.turma.Turmas,
+                (t) => {
+                  let pedido = _.find(
+                    externa
+                      ? this.$store.state.pedidoExterno.Pedidos[t.id]
+                      : this.$store.state.pedido.Pedidos[t.id],
+                    {
+                      Curso: 1,
+                    }
+                  );
                   return (
                     t.periodo == turma.periodo &&
                     t.Disciplina === disciplinasPeriodo[d].Disciplina &&
@@ -1111,16 +1095,25 @@ export default {
                 continue;
               }
               let disciplinaConflito = _.find(
-                      this.$store.state.disciplina.Disciplinas,
-                      { id: disciplinasPeriodo[d].Disciplina }
+                this.$store.state.disciplina.Disciplinas,
+                { id: disciplinasPeriodo[d].Disciplina }
               );
-              let externa = disciplinaConflito.Perfil == 13 || disciplinaConflito.Perfil == 15
+              let externa =
+                disciplinaConflito.Perfil == 13 ||
+                disciplinaConflito.Perfil == 15;
               let turmasDisciplina = _.filter(
-                      (externa ? this.$store.state.turmaExterna.Turmas : this.$store.state.turma.Turmas),
-                      (t) => {
-                        let pedido = _.find((externa ? this.$store.state.pedidoExterno.Pedidos[t.id] : this.$store.state.pedido.Pedidos[t.id]), {
-                    Curso: 3,
-                  });
+                externa
+                  ? this.$store.state.turmaExterna.Turmas
+                  : this.$store.state.turma.Turmas,
+                (t) => {
+                  let pedido = _.find(
+                    externa
+                      ? this.$store.state.pedidoExterno.Pedidos[t.id]
+                      : this.$store.state.pedido.Pedidos[t.id],
+                    {
+                      Curso: 3,
+                    }
+                  );
                   return (
                     t.periodo == turma.periodo &&
                     t.Disciplina === disciplinasPeriodo[d].Disciplina &&
@@ -1167,16 +1160,25 @@ export default {
                 continue;
               }
               let disciplinaConflito = _.find(
-                      this.$store.state.disciplina.Disciplinas,
-                      { id: disciplinasPeriodo[d].Disciplina }
+                this.$store.state.disciplina.Disciplinas,
+                { id: disciplinasPeriodo[d].Disciplina }
               );
-              let externa = disciplinaConflito.Perfil == 13 || disciplinaConflito.Perfil == 15
+              let externa =
+                disciplinaConflito.Perfil == 13 ||
+                disciplinaConflito.Perfil == 15;
               let turmasDisciplina = _.filter(
-                      (externa ? this.$store.state.turmaExterna.Turmas : this.$store.state.turma.Turmas),
-                      (t) => {
-                        let pedido = _.find((externa ? this.$store.state.pedidoExterno.Pedidos[t.id] : this.$store.state.pedido.Pedidos[t.id]), {
-                    Curso: 2,
-                  });
+                externa
+                  ? this.$store.state.turmaExterna.Turmas
+                  : this.$store.state.turma.Turmas,
+                (t) => {
+                  let pedido = _.find(
+                    externa
+                      ? this.$store.state.pedidoExterno.Pedidos[t.id]
+                      : this.$store.state.pedido.Pedidos[t.id],
+                    {
+                      Curso: 2,
+                    }
+                  );
                   return (
                     t.periodo == turma.periodo &&
                     t.Disciplina === disciplinasPeriodo[d].Disciplina &&
@@ -1206,12 +1208,12 @@ export default {
       if (conflitos) return { type: 10, msg: msg };
       else return false;
     },
-    isLab(id) {
-      let cond = _.find(
+    isLab(salaId) {
+      let salaResultante = _.find(
         this.Salas,
-        (sala) => id == sala.id && sala.laboratorio
+        (sala) => salaId == sala.id && sala.laboratorio
       );
-      if (cond !== undefined) return true;
+      if (salaResultante !== undefined) return true;
       else return false;
     },
     creditosGraduacao(docente) {
@@ -1252,21 +1254,27 @@ export default {
     },
   },
   computed: {
-    //Turmas validacoes ordenadas
-    Turmas_Validacoes_Ordered() {
+    ConflitosOrdered() {
+      return _.orderBy(AllConflitosTurmas, "msg");
+    },
+    TurmasValidacoesOrdered() {
       return _.orderBy(
-        _.filter(this.Turmas_Validacoes, (valid) => {
-          if (this.semestreAtual === 1) return valid.periodo == 1;
-          else if (this.semestreAtual === 2) return valid.periodo == 1;
-
-          return true;
-        }),
+        this.TurmasValidacoesFiltredByPeriodo,
         this.ordemTurmas.order,
         this.ordemTurmas.type
       );
     },
+
+    TurmasValidacoesFiltredByPeriodo() {
+      return _.filter(this.TurmasValidacoes, (validacao) => {
+        if (this.semestreAtual === 1) return validacao.periodo === 1;
+        else if (this.semestreAtual === 2) return validacao.periodo === 3;
+        else if (this.semestreAtual === 3) return true;
+        else return false;
+      });
+    },
     //Verifica validações das turmas
-    Turmas_Validacoes() {
+    TurmasValidacoes() {
       let turmas_resultante = [];
 
       this.Turmas.forEach((turma) => {
@@ -1284,16 +1292,15 @@ export default {
       });
 
       return turmas_resultante;
-      // .filter((valid) => {
-      //   valid.conflitos = _.filter(valid.conflitos, (c) =>
-      //     _.find(this.ConflitosAtivados, (id) => c.type == id)
-      //   );
-
-      //   if (valid.conflitos.length != 0) return true;
-      //   return false;
-      // });
     },
-    Docentes_validacoes() {
+    DocentesValidacoesOrdered() {
+      return _.orderBy(
+        this.DocentesValidacoes,
+        this.ordemDocentes.order,
+        this.ordemDocentes.type
+      );
+    },
+    DocentesValidacoes() {
       let docentes_resultantes = [];
 
       this.Docentes.forEach((docente) => {
@@ -1332,11 +1339,7 @@ export default {
       return _.orderBy(this.$store.state.sala.Salas, "nome");
     },
     Docentes() {
-      return _.orderBy(
-        _.filter(this.$store.state.docente.Docentes, ["ativo", true]),
-        "nome",
-        this.ordemDocentes
-      );
+      return _.filter(this.$store.state.docente.Docentes, ["ativo", true]);
     },
   },
 };
@@ -1428,39 +1431,6 @@ tbody {
 }
 .btn-table {
   padding: 0 0.25rem !important;
-}
-/* Botoes */
-.btn-custom {
-  padding: 0;
-  border: none;
-  background: none;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-  width: 32px !important;
-  margin-left: 4px;
-  margin-right: 4px;
-  margin-top: 0px;
-  line-height: 50%;
-  margin-bottom: 0px;
-  transition: all 0.3s ease 0s;
-  cursor: pointer;
-  text-align: center !important;
-}
-i.fas,
-i.far {
-  font-size: 25px;
-}
-.btn-df {
-  font-size: 12px;
-  height: 25px;
-  min-width: -webkit-max-content;
-  min-width: -moz-max-content;
-  min-width: max-content;
-  max-width: -webkit-max-content;
-  max-width: -moz-max-content;
-  max-width: max-content;
-  padding: 0 5px 0 5px;
 }
 
 .nav-link {

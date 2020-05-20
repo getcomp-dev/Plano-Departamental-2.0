@@ -68,11 +68,9 @@ export default {
   -webkit-justify-content: center;
   -moz-box-pack: center;
   justify-content: center;
-  margin-bottom: 0;
-  /*===*/
-  max-width: 50px;
-  min-width: 50px;
+  width: 50px;
   height: 25px !important;
+  margin-bottom: 0;
   margin-left: -5px;
   padding-left: 15px;
   font-size: 12px !important;
@@ -81,8 +79,7 @@ export default {
   height: 25px !important;
   font-size: 12px !important;
   padding: 2px 5px !important;
-  width: 60px !important;
-  max-width: 60px !important;
+  width: 60px;
   text-align: center;
 }
 </style>

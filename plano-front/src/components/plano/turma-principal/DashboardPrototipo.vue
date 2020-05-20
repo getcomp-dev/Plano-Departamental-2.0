@@ -1,44 +1,61 @@
 <template>
-  <div class="DashboardPrototipo row pr-2">
-    <PageTitle title="Tabela Interna">
+  <div class="main-component row">
+    <PageTitle :title="'Graduação - DCC'">
       <template #aside>
-        <b-button v-b-modal.modalFiltros title="Filtros" class="cancelbtn">
+        <b-button
+          v-b-modal.modalFiltros
+          title="Filtros"
+          class="btn-custom btn-icon cancelbtn"
+        >
           <i class="fas fa-list-ul"></i>
         </b-button>
 
-        <template v-if="isAdd">
-          <b-button title="Salvar" class="addbtn" v-on:click.prevent="addTurma">
+        <template v-if="isAdd && Admin">
+          <b-button
+            title="Salvar"
+            class="btn-custom btn-icon addbtn"
+            v-on:click.prevent="addTurma"
+          >
             <i class="fas fa-check"></i>
           </b-button>
           <b-button
             title="Cancelar"
-            class="cancelbtn"
+            class="btn-custom btn-icon cancelbtn"
             v-on:click.prevent="toggleAdd"
           >
             <i class="fas fa-times"></i>
           </b-button>
         </template>
 
-        <template v-else>
+        <template v-else-if="Admin">
           <b-button
             title="Adicionar"
-            class="addbtn"
+            class="btn-custom btn-icon addbtn"
             v-on:click.prevent="toggleAdd"
           >
             <i class="fas fa-plus"></i>
           </b-button>
-          <b-button title="Deletar" class="delbtn" v-b-modal.modalConfirma>
+          <b-button
+            title="Deletar"
+            class="btn-custom btn-icon delbtn"
+            v-b-modal.modalConfirma
+          >
             <i class="far fa-trash-alt"></i>
           </b-button>
         </template>
+
         <b-button
           title="XLSX"
-          class="relatbtn"
+          class="btn-custom btn-icon relatbtn"
           v-on:click.prevent="xlsx(Pedidos)"
         >
           <i class="far fa-file-alt"></i>
         </b-button>
-        <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">
+        <b-button
+          v-b-modal.modalAjuda
+          title="Ajuda"
+          class="btn-custom btn-icon relatbtn"
+        >
           <i class="fas fa-question"></i>
         </b-button>
       </template>
@@ -416,13 +433,13 @@
         <div class="w-100">
           <template v-if="nav_ativo == 'semestre'">
             <b-button
-              class="btn-azul btn-df mr-2"
+              class="btn-azul btn-custom btn-modal"
               variant="success"
               @click="selectAllSemestre()"
               >Selecionar Todos</b-button
             >
             <b-button
-              class="btn-cinza btn-df mr-2"
+              class="btn-cinza btn-custom btn-modal"
               variant="secondary"
               @click="selectNoneSemestre()"
               >Desmarcar Todos</b-button
@@ -431,13 +448,13 @@
 
           <template v-else-if="nav_ativo == 'perfis'">
             <b-button
-              class="btn-azul btn-df mr-2"
+              class="btn-azul btn-custom btn-modal"
               variant="success"
               @click="selectAllPerfis()"
               >Selecionar Todos</b-button
             >
             <b-button
-              class="btn-cinza btn-df mr-2"
+              class="btn-cinza btn-custom btn-modal"
               variant="secondary"
               @click="selectNonePerfis()"
               >Desmarcar Todos</b-button
@@ -446,13 +463,13 @@
 
           <template v-else>
             <b-button
-              class="btn-azul btn-df mr-2"
+              class="btn-azul btn-custom btn-modal"
               variant="success"
               @click="selectAllCursos()"
               >Selecionar Todos</b-button
             >
             <b-button
-              class="btn-cinza btn-df mr-2"
+              class="btn-cinza btn-custom btn-modal"
               variant="secondary"
               @click="selectNoneCursos()"
               >Desmarcar Todos</b-button
@@ -462,199 +479,21 @@
         <b-button
           variant="success"
           @click="btnOK()"
-          class="btn-verde btn-df mr-2"
+          class="btn-verde btn-custom btn-modal"
           style="padding-right: 15px !important; padding-left: 15px !important;"
           >OK</b-button
         >
       </div>
     </b-modal>
 
-    <!-- MODAL FILTROS -->
-    <b-modal
-      id="modalValidacao"
-      ref="modalValidacao"
-      scrollable
-      size="lg"
-      title="Validações"
-    >
-      <!-- <div class="col m-0 p-0 max-content" style="height: 450px !important;">
-        <table
-          class="table table-sm modal-table table-bordered"
-          style="height: 450px !important;"
-        >
-          <thead class="thead-light sticky">
-            <tr>
-              <div style="font-size: 11px !important;" class=" max-content">
-                <th>
-                  <p
-                    style="width: 35px; text-align: center;"
-                    class="p-header clickable"
-                    @click="toggleOrdValidacoes('periodo')"
-                  >
-                    S.
-                    <i
-                      style="font-size: 0.6rem; text-align: right;"
-                      :class="
-                        ordemValidacao.order == 'periodo'
-                          ? ordemValidacao.type == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : 'fas fa-arrow-down fa-sm low-opacity'
-                      "
-                    ></i>
-                  </p>
-                </th>
-                <th>
-                  <p
-                    style="width: 70px; text-align: start;"
-                    class="p-header clickable"
-                    @click="toggleOrdValidacoes('perfil')"
-                  >
-                    Perfil
-                    <i
-                      style="font-size: 0.6rem; text-align: right;"
-                      :class="
-                        ordemValidacao.order == 'perfil'
-                          ? ordemValidacao.type == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : 'fas fa-arrow-down fa-sm low-opacity'
-                      "
-                    ></i>
-                  </p>
-                </th>
-                <th>
-                  <p
-                    style="width: 70px; text-align: start;"
-                    class="p-header clickable"
-                    @click="toggleOrdValidacoes('disciplina_codigo')"
-                  >
-                    Cód.
-                    <i
-                      style="font-size: 0.6rem; text-align: right;"
-                      :class="
-                        ordemValidacao.order == 'disciplina_codigo'
-                          ? ordemValidacao.type == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : 'fas fa-arrow-down fa-sm low-opacity'
-                      "
-                    ></i>
-                  </p>
-                </th>
-                <th>
-                  <p
-                    style="width: 240px; text-align: start;"
-                    class="p-header clickable"
-                    @click="toggleOrdValidacoes('disciplina_nome')"
-                  >
-                    Disciplina
-                    <i
-                      style="font-size: 0.6rem; text-align: right;"
-                      :class="
-                        ordemValidacao.order == 'disciplina_nome'
-                          ? ordemValidacao.type == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : 'fas fa-arrow-down fa-sm low-opacity'
-                      "
-                    ></i>
-                  </p>
-                </th>
-                <th>
-                  <p style="width: 35px; text-align: start;" class="p-header">
-                    Letra
-                  </p>
-                </th>
-
-                <th>
-                  <p style="width: 290px; text-align: start;" class="p-header">
-                    Conflito
-                  </p>
-                </th>
-              </div>
-            </tr>
-          </thead>
-          <tbody style="text-transform: uppercase">
-            <template v-for="(turma, index) in Turmas_validacoes_filtred">
-              <tr
-                :key="
-                  index + '-' + turma.id + turma.Disciplina + 'modal-validacoes'
-                "
-                style="background-color:rgba(0, 0, 0, 0.089);"
-              >
-                <div class="max-content">
-                  <td>
-                    <p style="width: 35px; text-align: center;">
-                      {{ turma.periodo }}
-                    </p>
-                  </td>
-                  <td>
-                    <p style="width: 70px; text-align: start;">
-                      {{ turma.perfil }}
-                    </p>
-                  </td>
-                  <td>
-                    <p style="width: 70px; text-align: start;">
-                      {{ turma.disciplina_codigo }}
-                    </p>
-                  </td>
-                  <td>
-                    <p style="width: 240px; text-align: start;">
-                      {{ turma.disciplina_nome }}
-                    </p>
-                  </td>
-                  <td>
-                    <p style="width: 35px; text-align: center;">
-                      {{ turma.letra }}
-                    </p>
-                  </td>
-
-                  <td>
-                    <p style="width: 290px; text-align: start;">
-                      {{ turma.mensagem }}
-                    </p>
-                  </td>
-                </div>
-              </tr>
-              <tr
-                v-for="erro in turma.erros"
-                :key="turma.id + turma.disciplina_codigo + erro.mensagem"
-              >
-                <div class="max-content">
-                  <td>
-                    <p style="width: 35px; text-align: center;"></p>
-                  </td>
-                  <td>
-                    <p style="width: 70px; text-align: start;"></p>
-                  </td>
-                  <td>
-                    <p style="width: 70px; text-align: center;"></p>
-                  </td>
-                  <td>
-                    <p style="width: 240px; text-align: start;"></p>
-                  </td>
-                  <td>
-                    <p style="width: 35px; text-align: center;"></p>
-                  </td>
-
-                  <td>
-                    <p style="width: 290px; text-align: start;">
-                      {{ erro.mensagem }}
-                    </p>
-                  </td>
-                </div>
-              </tr>
-            </template>
-          </tbody>
-        </table>
-      </div> -->
-
-      <div slot="modal-footer" class="w-100 m-0" style="display: flex;"></div>
-    </b-modal>
-
     <!-- Modal de Ajuda -->
-    <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+    <b-modal
+      id="modalAjuda"
+      ref="ajudaModal"
+      scrollable
+      title="Ajuda"
+      hide-footer
+    >
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
@@ -714,11 +553,6 @@
           </li>
         </ul>
       </div>
-
-      <div
-        slot="modal-footer"
-        style="display: none; margin-right: 10px !important;"
-      ></div>
     </b-modal>
   </div>
 </template>
@@ -737,21 +571,6 @@ import turmadata from "./TurmaRow.vue";
 import PageTitle from "@/components/PageTitle.vue";
 import novaturma from "./NovaTurma.vue";
 
-const emptyTurma = {
-  id: undefined,
-  periodo: undefined,
-  letra: undefined,
-  turno1: undefined,
-  turno2: undefined,
-  Disciplina: undefined,
-  Docente1: undefined,
-  Docente2: undefined,
-  Horario1: undefined,
-  Horario2: undefined,
-  Sala1: undefined,
-  Sala2: undefined,
-};
-
 export default {
   name: "DashboardPrototipo",
   components: {
@@ -762,10 +581,8 @@ export default {
   },
   data() {
     return {
-      turmaForm: _.clone(emptyTurma),
       error: undefined,
       isAdd: false,
-      atual: undefined,
       semestre: 1,
       PerfisSelecionados: [],
       CursosSelecionados: [],
@@ -773,16 +590,15 @@ export default {
       CursosAtivados: [],
       semestre_1Ativo: true,
       semestre_2Ativo: true,
-      semestreAtual: 3,
+      semestreAtual: undefined,
       nav_ativo: "perfis",
       searchCursos: null,
       ordenacaoCurso: { order: "codigo", type: "asc" },
       ordenacaoPerfis: { order: "nome", type: "asc" },
-      ordemValidacao: { order: "periodo", type: "asc" },
     };
   },
 
-  mounted: function() {
+  mounted() {
     ls.set("toggle", -1);
     ls.on("toggle", () => {
       var val = ls.get("toggle");
@@ -801,7 +617,7 @@ export default {
     }
   },
 
-  beforeDestroy: function() {
+  beforeDestroy() {
     ls.off("toggle");
     for (var c = 0; c < this.$store.state.curso.Cursos.length; c++) {
       let id = this.$store.state.curso.Cursos[c].id;
@@ -856,17 +672,6 @@ export default {
           this.ordenacaoCurso.type == "asc" ? "desc" : "asc";
       }
     },
-    // Ordem Validacoes
-    toggleOrdValidacoes(ord) {
-      if (this.ordemValidacao.order != ord) {
-        this.ordemValidacao.order = ord;
-        this.ordemValidacao.type = "asc";
-      } else {
-        this.ordemValidacao.type =
-          this.ordemValidacao.type == "asc" ? "desc" : "asc";
-      }
-    },
-
     //Select Perfis
     selectAllPerfis() {
       if (this.PerfisSelecionados != []) this.PerfisSelecionados = [];
@@ -897,7 +702,7 @@ export default {
       this.semestre_2Ativo = false;
     },
 
-    xlsx: function(pedidos) {
+    xlsx(pedidos) {
       xlsx
         .downloadTable({
           pedidos: pedidos,
@@ -916,77 +721,16 @@ export default {
         .catch((error) => console.log(error));
     },
 
-    adjustTurno1: function() {
-      if (
-        this.turmaForm.Horario1 == 1 ||
-        this.turmaForm.Horario1 == 2 ||
-        this.turmaForm.Horario1 == 7 ||
-        this.turmaForm.Horario1 == 8 ||
-        this.turmaForm.Horario1 == 13 ||
-        this.turmaForm.Horario1 == 14 ||
-        this.turmaForm.Horario1 == 19 ||
-        this.turmaForm.Horario1 == 20 ||
-        this.turmaForm.Horario1 == 25 ||
-        this.turmaForm.Horario1 == 26 ||
-        this.turmaForm.Horario1 == 3 ||
-        this.turmaForm.Horario1 == 4 ||
-        this.turmaForm.Horario1 == 9 ||
-        this.turmaForm.Horario1 == 10 ||
-        this.turmaForm.Horario1 == 15 ||
-        this.turmaForm.Horario1 == 16 ||
-        this.turmaForm.Horario1 == 21 ||
-        this.turmaForm.Horario1 == 22 ||
-        this.turmaForm.Horario1 == 27 ||
-        this.turmaForm.Horario1 == 28
-      ) {
-        this.turmaForm.turno1 = "Diurno";
-      } else if (this.turmaForm.Horario1 == 31) {
-        this.turmaForm.turno1 = "EAD";
-      } else {
-        this.turmaForm.turno1 = "Noturno";
-      }
-    },
-
-    adjustTurno2: function() {
-      if (
-        this.turmaForm.Horario2 == 1 ||
-        this.turmaForm.Horario2 == 2 ||
-        this.turmaForm.Horario2 == 7 ||
-        this.turmaForm.Horario2 == 8 ||
-        this.turmaForm.Horario2 == 13 ||
-        this.turmaForm.Horario2 == 14 ||
-        this.turmaForm.Horario2 == 19 ||
-        this.turmaForm.Horario2 == 20 ||
-        this.turmaForm.Horario2 == 25 ||
-        this.turmaForm.Horario2 == 26 ||
-        this.turmaForm.Horario2 == 3 ||
-        this.turmaForm.Horario2 == 4 ||
-        this.turmaForm.Horario2 == 9 ||
-        this.turmaForm.Horario2 == 10 ||
-        this.turmaForm.Horario2 == 15 ||
-        this.turmaForm.Horario2 == 16 ||
-        this.turmaForm.Horario2 == 21 ||
-        this.turmaForm.Horario2 == 22 ||
-        this.turmaForm.Horario2 == 27 ||
-        this.turmaForm.Horario2 == 28
-      ) {
-        this.turmaForm.turno1 = "Diurno";
-      } else if (this.turmaForm.Horario2 == 31) {
-        this.turmaForm.turno1 = "EAD";
-      } else {
-        this.turmaForm.turno1 = "Noturno";
-      }
-    },
-
-    deleteSelected: function() {
-      var turmas = this.$store.state.turma.Deletar;
-      for (var i = 0; i < turmas.length; i++) {
-        this.deleteTurma(turmas[i]);
+    deleteSelected() {
+      let turmas = this.$store.state.turma.Deletar;
+      for (let i = 0; i < turmas.length; i++) {
+        this.deleteTurma(_.clone(turmas[i]));
+        //Necessario _.clone para não passar um objeto reativo como parametro onde será editado
       }
       this.$store.commit("emptyDelete");
     },
 
-    inPerfil: function(perfil, turmas, disciplinas) {
+    inPerfil(perfil, turmas, disciplinas) {
       return turmas.filter((turma) => {
         if (_.isNull(turma.Disciplina)) return false;
 
@@ -1011,7 +755,7 @@ export default {
             group: "general",
             title: `Sucesso!`,
             text: `A Turma ${response.Turma.letra} foi atualizada!`,
-            type: "success",
+            type: "warn",
           });
         })
         .catch((error) => {
@@ -1035,12 +779,11 @@ export default {
       turma.Horario2 = null;
       turma.Sala1 = null;
       turma.Sala2 = null;
-      console.log(turma);
 
       this.editTurma(turma);
 
-      var pedidos = this.$store.state.pedido.Pedidos[turma.id];
-      for (var i = 0; i < pedidos.length; i++) {
+      let pedidos = this.$store.state.pedido.Pedidos[turma.id];
+      for (let i = 0; i < pedidos.length; i++) {
         if (
           !(
             pedidos[i].vagasPeriodizadas === 0 &&
@@ -1056,7 +799,8 @@ export default {
                 group: "general",
                 title: `Sucesso!`,
                 text: `O pedido foi atualizado!`,
-                type: "success",
+                type: "warn",
+                position: "bottom right",
               });
             })
             .catch((error) => {
@@ -1074,44 +818,9 @@ export default {
     toggleAdd() {
       this.isAdd = !this.isAdd;
     },
-    checkIsLab(turma_sala) {
-      let cond = _.find(
-        this.Salas,
-        (sala) => turma_sala == sala.id && sala.laboratorio
-      );
-      if (cond != undefined) return true;
-      else return false;
-    },
-    checkVagasSalas(turma_sala, pedidosTotais) {
-      let sala_encontrada = _.find(this.Salas, (sala) => turma_sala == sala.id);
-
-      if (
-        sala_encontrada != undefined &&
-        sala_encontrada.lotacao_maxima != 0 &&
-        pedidosTotais != undefined
-      ) {
-        if (sala_encontrada.lotacao_maxima < pedidosTotais) {
-          return {
-            lotacao: sala_encontrada.lotacao_maxima,
-            vagastotais: pedidosTotais,
-          };
-        }
-      }
-      return null;
-    },
-    totalPedidos(turma_id) {
-      let result = 0;
-      let pedidos = this.$store.state.pedido.Pedidos[turma_id];
-      for (let p = 0; p < pedidos.length; p++) {
-        result += parseInt(pedidos[p].vagasPeriodizadas, 10);
-        result += parseInt(pedidos[p].vagasNaoPeriodizadas, 10);
-      }
-      return result;
-    },
   },
 
   computed: {
-    //Todos Cursos
     CursosFiltred() {
       if (this.searchCursos != null) {
         let searchUpperCase = this.searchCursos
@@ -1138,149 +847,8 @@ export default {
         this.ordenacaoCurso.type
       );
     },
-    //Turmas validacoes ordenadas
-    Turmas_validacoes_filtred() {
-      return _.orderBy(
-        this.Turmas_validacoes,
-        this.ordemValidacao.order,
-        this.ordemValidacao.type
-      );
-    },
-    //Verifica validações das turmas
-    Turmas_validacoes() {
-      let result = [];
-      this.Turmas.forEach((turma) => {
-        //Encontra a disciplina da turma
-        let disciplina_encontrada = _.find(
-          this.Disciplinas,
-          (disciplina) => disciplina.id == turma.Disciplina
-        );
-
-        if (disciplina_encontrada && turma.periodo == 1) {
-          let obj = {
-            id: turma.id,
-            disciplina_nome: disciplina_encontrada.nome,
-            disciplina_codigo: disciplina_encontrada.codigo,
-            periodo: turma.periodo,
-            letra: turma.letra,
-            erros: [],
-          };
-          //Encontra o nome do perfil pelo ID
-          _.find(this.Perfis, (perfil) => {
-            if (perfil.id == disciplina_encontrada.Perfil) {
-              obj.perfil = perfil.abreviacao;
-              return true;
-            }
-          });
-          let turmaPedidosTotais = this.totalPedidos(obj.id);
-
-          //Verifica letra
-          if (!turma.letra.match(/[A-Z]/i)) {
-            obj.erros.push({ mensagem: "Letra da turma invalida" });
-          }
-          //Verifica turno
-          if (turma.turno1 == null) {
-            obj.erros.push({ mensagem: "Turno Invalido" });
-          }
-          //Compatibilidade do turno com disciplina
-          if (!disciplina_encontrada.ead && turma.turno1 == "EAD") {
-            obj.erros.push({
-              mensagem:
-                "Disciplina não cadastrada como EAD, porem o turno esta alocado como tal",
-            });
-          }
-          //Verifica Horarios
-          if (!disciplina_encontrada.ead || !turma.turno1 == "EAD") {
-            if (turma.Horario1 == null) {
-              obj.erros.push({ mensagem: "Primeiro Horario invalido" });
-            }
-            if (turma.cargaTeorica > 2 && turma.Horario2 == null) {
-              obj.erros.push({ mensagem: "Segundo Horario invalido" });
-            }
-          }
-          //Verifica Docente
-          if (turma.Docente1 == null && turma.Docente2 == null) {
-            obj.erros.push({ mensagem: "Docente invalido" });
-          }
-          //Verifica alocação de Lab e salas
-          if (turma.Sala1 != null || turma.Sala2 != null) {
-            //Verifica se possui lab alocado
-            if (
-              disciplina_encontrada.laboratorio > 0 &&
-              !(this.checkIsLab(turma.Sala1) || this.checkIsLab(turma.Sala2))
-            ) {
-              obj.erros.push({
-                mensagem:
-                  "Disciplina marcada como laboratorio porem não possui laboratorio alocado",
-              });
-            }
-            let vagasInSala1 =
-              turma.Sala1 != null
-                ? this.checkVagasSalas(turma.Sala1, turmaPedidosTotais)
-                : null;
-            let vagasInSala2 =
-              turma.Sala2 != null
-                ? this.checkVagasSalas(turma.Sala1, turmaPedidosTotais)
-                : null;
-            //Se excedeu o limite da sala 1
-            if (vagasInSala1 != null) {
-              obj.erros.push({
-                mensagem:
-                  "Limite de sala excedido: Sala 1 possui limite de " +
-                  vagasInSala1.lotacao +
-                  " e um total de " +
-                  vagasInSala1.vagastotais +
-                  " vagas alocadas!",
-              });
-            }
-            //Se excedeu o limite da sala 2
-            if (vagasInSala2 != null) {
-              obj.erros.push({
-                mensagem:
-                  "Limite de sala excedido: Sala 2 possui limite de " +
-                  vagasInSala1.lotacao +
-                  " e um total de " +
-                  vagasInSala1.vagastotais +
-                  " vagas alocadas!",
-              });
-            }
-          }
-
-          if (turmaPedidosTotais == 0) {
-            obj.erros.push({
-              mensagem: "Turma não possui nenhuma vaga alocada",
-            });
-          } else if (turmaPedidosTotais <= 4) {
-            obj.erros.push({
-              mensagem: "Turma possui apenas 4 vagas alocadas",
-            });
-          }
-
-          if (obj.erros.length) {
-            result.push(obj);
-          }
-        }
-      });
-
-      return result;
-    },
     Disciplinas() {
       return _.orderBy(this.$store.state.disciplina.Disciplinas, "nome");
-    },
-
-    Docentes() {
-      return _.orderBy(
-        _.filter(this.$store.state.docente.Docentes, ["ativo", true]),
-        "apelido"
-      );
-    },
-
-    Horarios() {
-      return _.orderBy(this.$store.state.horario.Horarios, "horario");
-    },
-
-    Salas() {
-      return _.orderBy(this.$store.state.sala.Salas, "nome");
     },
 
     Perfis() {
@@ -1317,39 +885,11 @@ export default {
         return false;
       }
     },
-    //Juntando o vetor com turmas num unico vetor
-    //   turmasFiltradas() {
-    //     let result_1 = [];
-    //     this.PerfisAtivados.forEach(perfil => {
-    //       this.inPerfil(perfil, this.Turmas, this.Disciplinas).forEach(turma => {
-    //         let obj = {
-    //           perfil: perfil,
-    //           turma: turma,
-    //           periodo_ord: parseInt(turma.periodo)
-    //         };
-    //         result_1.push(obj);
-    //       });
-    //     });
-    //     return _.orderBy(result_1, "periodo_ord");
-    //   }
   },
 };
 </script>
 
 <style scoped>
-/* prefixed by https://autoprefixer.github.io (PostCSS: v7.0.23, autoprefixer: v9.7.3) */
-
-.DashboardPrototipo {
-  max-width: 100%;
-  overflow: hidden;
-  margin: 0;
-}
-.titulo {
-  font-size: 25px;
-  font-weight: normal;
-  padding-left: 0;
-  margin: 0 !important;
-}
 .divTable {
   overflow-x: hidden;
   overflow-y: auto;
@@ -1360,7 +900,6 @@ export default {
   width: -moz-max-content;
   width: max-content;
 }
-
 .main-table {
   display: block !important;
   overflow-y: scroll !important;
@@ -1405,181 +944,6 @@ strong {
   color: #007bff;
 }
 
-/* .modal-footer {
-  display: flex !important;
-  justify-content: start !important;
-} */
-
-/* Botoes */
-button {
-  padding: 0;
-  border: none;
-  background: none;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-  width: 32px !important;
-  margin-left: 4px;
-  margin-right: 4px;
-  margin-top: 0px;
-  line-height: 50%;
-  margin-bottom: 0px;
-  transition: all 0.3s ease 0s;
-  cursor: pointer;
-  text-align: center !important;
-}
-i.fas,
-i.far {
-  font-size: 25px;
-}
-.addbtn {
-  background-color: white !important;
-  color: #a0e7a0;
-}
-
-.addbtn:hover {
-  background-color: white;
-  color: #77dd77;
-}
-
-.addbtn:focus {
-  color: #77dd77;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #2fbf53;
-}
-
-.cancelbtn {
-  background-color: white !important;
-  color: #cfcfc4;
-}
-
-.cancelbtn:hover {
-  background-color: white;
-  color: #b8b4a8;
-}
-
-.cancelbtn:focus {
-  background-color: white;
-  color: #b8b8a8;
-  -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #ada89a;
-}
-
-.delbtn {
-  background-color: white !important;
-  color: #ff817b;
-}
-
-.delbtn:hover {
-  color: #ff5f48;
-}
-
-.delbtn:focus {
-  color: #ff5f48;
-  -webkit-text-stroke-width: 2px;
-  -webkit-text-stroke-color: #ff4e34;
-}
-
-.relatbtn {
-  background-color: white !important;
-  color: #9ab3ff !important;
-}
-
-.relatbtn:hover {
-  color: #82a0ff !important;
-  background-color: white;
-}
-
-.relatbtn:focus {
-  color: #82a0ff;
-  background-color: white;
-  -webkit-text-stroke-width: 0.5px;
-  -webkit-text-stroke-color: #698dff;
-}
-
-.btn-df {
-  font-size: 12px;
-  height: 25px;
-  min-width: -webkit-max-content;
-  min-width: -moz-max-content;
-  min-width: max-content;
-  max-width: -webkit-max-content;
-  max-width: -moz-max-content;
-  max-width: max-content;
-  padding: 0 5px 0 5px;
-}
-
-.btn-azul {
-  background-color: #718de0 !important;
-  border-color: #9ab3ff !important;
-}
-
-.btn-azul:hover {
-  background-color: rgb(74, 101, 190) !important;
-  border-color: #82a0ff !important;
-}
-
-.btn-azul:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(122, 128, 124, 0.5) !important;
-  -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-  box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-}
-
-.btn-cinza {
-  background-color: #999999 !important;
-  border-color: #c3c3c3 !important;
-}
-
-.btn-cinza:hover {
-  background-color: #747474 !important;
-  border-color: #aaaaaa !important;
-}
-
-.btn-cinza:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
-  -moz-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
-  box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
-}
-
-.btn-verde {
-  background-color: #70b670 !important;
-  border-color: #a0e7a0 !important;
-}
-
-.btn-verde:hover {
-  background-color: #4c8a4c !important;
-  border-color: #77dd77 !important;
-}
-
-.btn-verde:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-  -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-  box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-}
-.form-inline {
-  width: auto;
-}
-.form-group {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex: 0 0 auto;
-  flex: 0 0 auto;
-  -ms-flex-flow: row wrap;
-  flex-flow: row wrap;
-  -ms-flex-align: center;
-  align-items: center;
-  margin-bottom: 0;
-}
-.sticky {
-  display: block !important;
-  overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 0 !important;
-  display: block !important;
-  overflow: hidden !important;
-  z-index: 3;
-}
 .stickyAdd {
   display: block !important;
   overflow: hidden !important;
@@ -1590,16 +954,6 @@ i.far {
   overflow: hidden !important;
   z-index: 3;
 }
-/* .sticky-bottom {
-  display: block !important;
-  overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 38px !important;
-  display: block !important;
-  overflow: hidden !important;
-  z-index: 3;
-} */
 /* ==== MODAL TABLE ==== */
 .modal-table {
   display: block !important;
@@ -1658,6 +1012,7 @@ i.far {
   width: 100% !important;
 }
 /* FIM MODAL TABLE */
+
 /* search */
 .input-group-text:hover {
   color: rgb(102, 102, 102);
@@ -1668,31 +1023,6 @@ i.far {
   border-left: none;
 }
 
-.nav-link {
-  color: #007bff !important;
-  cursor: pointer;
-}
-.nav-link:hover {
-  text-decoration: underline;
-}
-.active {
-  background-color: #e9ecef !important;
-  color: #495057 !important;
-  cursor: default;
-  text-decoration: none !important;
-}
-.modal-title {
-  text-align: center !important;
-  width: 100%;
-}
-.max-content {
-  width: -webkit-max-content !important;
-  width: -moz-max-content !important;
-  width: max-content !important;
-}
-.clickable {
-  cursor: pointer;
-}
 @media screen and (max-width: 536px) {
   .div-titulo {
     height: 70px !important;

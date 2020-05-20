@@ -1,25 +1,27 @@
 <template>
   <table
-    id="MainTable"
+    id="TableMain"
     ref="refMainTable"
-    class="main-table table table-hover table-sm table-bordered"
+    class="main-table table table-sm table-bordered"
   >
     <thead class="thead-light">
-      <tr class="sticky">
-        <div class="max-content">
+      <tr>
+        <div class="max-content sticky">
           <slot name="thead"></slot>
         </div>
       </tr>
     </thead>
     <tbody>
-      <slot name="tbody"> </slot>
+      <div class="max-content">
+        <slot name="tbody"> </slot>
+      </div>
     </tbody>
   </table>
 </template>
 
 <script>
 export default {
-  name: "MainTable",
+  name: "TableMain",
 };
 </script>
 
@@ -33,52 +35,44 @@ export default {
   background-color: white;
   margin: 0 !important;
   margin-bottom: 20px !important;
-  /* ou - 100px */
-  height: -webkit-calc(100vh - 110px);
-  height: -moz-calc(100vh - 110px);
-  height: calc(100vh - 110px);
-}
-.tab-table {
-  height: -webkit-calc(100vh - 125px);
-  height: -moz-calc(100vh - 125px);
-  height: calc(100vh - 125px);
+  height: -webkit-calc(100vh - 100px); /* ou - 100px */
+  height: -moz-calc(100vh - 100px);
+  height: calc(100vh - 100px);
 }
 .main-table tr thead {
   display: block !important;
 }
-.main-table thead tr th {
-  height: 18px;
-  padding: 0 5px !important;
-  margin: 0 !important;
-  font-size: 11px !important;
-  text-align: center;
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none;
-}
-.main-table thead tr th i {
-  font-size: 0.575rem;
-}
-.main-table td {
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 5px !important;
-  margin: 0 !important;
-  height: 20px !important;
-}
-tbody {
+
+.main-table tbody {
   max-height: 100% !important;
   width: 100% !important;
 }
 
-.main-table thead th {
-  padding: 0 !important;
-  font-size: 14px;
+.main-table thead th,
+.main-table tbody td {
+  word-break: break-word;
+  vertical-align: middle !important;
   text-align: center;
+  margin: 0 !important;
+  padding: 0 5px !important;
+}
+
+.main-table thead tr th {
+  word-wrap: none !important;
   height: 18px !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.main-table tbody td {
+  height: 20px !important;
+}
+.main-table thead tr th i {
+  font-size: 0.575rem;
 }
 .main-table input[type="checkbox"] {
   width: 13px !important;
@@ -87,11 +81,43 @@ tbody {
   margin: 0 !important;
   margin-top: 4px !important;
 }
-.bg-custom {
-  /* ou 17 no final */
-  background-color: #00000015;
+
+.sticky {
+  display: block !important;
+  overflow: hidden !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 0px !important;
+  overflow: hidden !important;
+  z-index: 3;
 }
-.tr-bg-gray {
-  background-color: #00000015;
+.sticky2 {
+  display: block !important;
+  overflow: hidden !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 38px !important;
+  overflow: hidden !important;
+  z-index: 3;
+}
+table tbody tr:hover {
+  background-color: #dbdbdb;
+}
+.bg-custom {
+  background-color: #f1f1f1;
+}
+.bg-selected,
+.bg-selected:hover {
+  background-color: #787878 !important;
+  color: #fff !important;
+  cursor: default;
+}
+@-moz-document url-prefix() {
+  .main-table tbody select {
+    height: 20px !important;
+  }
+  .main-table tbody input[type="text"] {
+    margin-top: 0px !important;
+  }
 }
 </style>

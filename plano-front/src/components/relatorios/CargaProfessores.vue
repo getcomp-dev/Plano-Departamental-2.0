@@ -30,7 +30,7 @@
               class="relatbtn"
               title="Relatório"
             >
-              <i class="far fa-file-alt"></i>
+              <i class="far fa-file-pdf"></i>
             </b-button>
 
             <b-button v-b-modal.modalAjuda title="Ajuda" class="relatbtn">

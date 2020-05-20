@@ -1,5 +1,5 @@
 <template>
-  <div class="DashboardCursos row pr-2" v-if="Admin">
+  <div class="main-component row" v-if="Admin">
     <PageTitle :title="'Cursos'">
       <template #aside>
         <button
@@ -15,92 +15,51 @@
 
     <div class="row w-100 m-0">
       <div class="divTable p-0">
-        <!-- Inicio Tabela -->
         <TableMain>
           <template #thead>
             <th
-              @click="toggleOrd('nome')"
+              @click="toggleOrder('nome')"
               title="Clique para ordenar por nome"
-              class="clickable"
-              style="width:300px!important; text-align:start!important;"
+              class="clickable t-start"
+              style="width:300px"
             >
               Nome
-              <i
-                :class="
-                  ordenacao.order == 'nome'
-                    ? ordenacao.type == 'asc'
-                      ? 'fas fa-arrow-down fa-sm'
-                      : 'fas fa-arrow-up fa-sm'
-                    : 'fas fa-arrow-down fa-sm low-opacity'
-                "
-              ></i>
+              <i :class="setIconByOrder('nome')"></i>
             </th>
             <th
-              @click="toggleOrd('codigo')"
+              @click="toggleOrder('codigo')"
               title="Clique para ordenar por nome"
-              class="clickable"
-              style="width: 60px !important;text-align:start"
+              class="clickable t-start"
+              style="width: 65px"
             >
               Código
-              <i
-                :class="
-                  ordenacao.order == 'codigo'
-                    ? ordenacao.type == 'asc'
-                      ? 'fas fa-arrow-down fa-sm'
-                      : 'fas fa-arrow-up fa-sm'
-                    : 'fas fa-arrow-down fa-sm low-opacity'
-                "
-              ></i>
+              <i :class="setIconByOrder('codigo')"></i>
             </th>
             <th
               class="clickable"
-              style="width:55px!important; text-align:start"
-              @click="toggleOrd('turno')"
+              style="width:65px"
+              @click="toggleOrder('turno')"
             >
               Turno
-              <i
-                :class="
-                  ordenacao.order == 'turno'
-                    ? ordenacao.type == 'asc'
-                      ? 'fas fa-arrow-down fa-sm'
-                      : 'fas fa-arrow-up fa-sm'
-                    : 'fas fa-arrow-down fa-sm low-opacity'
-                "
-              ></i>
+              <i :class="setIconByOrder('turno')"></i>
             </th>
             <th
               class="clickable"
-              style="width: 65px !important;"
+              style="width: 70px"
               title="Entrada de alunos 1º Semestre"
-              @click="toggleOrd('alunosEntrada', 'desc')"
+              @click="toggleOrder('alunosEntrada', 'desc')"
             >
               1º Sem.
-              <i
-                :class="
-                  ordenacao.order == 'alunosEntrada'
-                    ? ordenacao.type == 'asc'
-                      ? 'fas fa-arrow-down fa-sm'
-                      : 'fas fa-arrow-up fa-sm'
-                    : 'fas fa-arrow-down fa-sm low-opacity'
-                "
-              ></i>
+              <i :class="setIconByOrder('alunosEntrada')"></i>
             </th>
             <th
               class="clickable"
-              style="width: 65px !important;"
+              style="width: 70px"
               title="Entrada de alunos 2º Semestre"
-              @click="toggleOrd('alunosEntrada2', 'desc')"
+              @click="toggleOrder('alunosEntrada2', 'desc')"
             >
               2º Sem.
-              <i
-                :class="
-                  ordenacao.order == 'alunosEntrada2'
-                    ? ordenacao.type == 'asc'
-                      ? 'fas fa-arrow-down fa-sm'
-                      : 'fas fa-arrow-up fa-sm'
-                    : 'fas fa-arrow-down fa-sm low-opacity'
-                "
-              ></i>
+              <i :class="setIconByOrder('alunosEntrada2')"></i>
             </th>
           </template>
           <template #tbody>
@@ -112,27 +71,25 @@
                   showCurso(curso), handleClickInCurso(curso.codigo)
                 "
                 :class="[
-                  { 'bg-custom': cursoClickado === curso.codigo },
+                  { 'bg-selected': cursoClickado === curso.codigo },
                   'clickable',
                 ]"
               >
-                <div class="max-content">
-                  <td style="width: 300px; text-align: start;">
-                    {{ curso.nome }}
-                  </td>
-                  <td style="width: 60px; text-align:start">
-                    {{ curso.codigo }}
-                  </td>
-                  <td style="width: 55px;text-align:start">
-                    {{ curso.turno }}
-                  </td>
-                  <td style="width: 65px;">
-                    {{ curso.alunosEntrada }}
-                  </td>
-                  <td style="width: 65px;">
-                    {{ curso.alunosEntrada2 }}
-                  </td>
-                </div>
+                <td style="width: 300px" class="t-start">
+                  {{ curso.nome }}
+                </td>
+                <td style="width: 65px" class="t-start">
+                  {{ curso.codigo }}
+                </td>
+                <td style="width: 65px">
+                  {{ curso.turno }}
+                </td>
+                <td style="width: 70px;">
+                  {{ curso.alunosEntrada }}
+                </td>
+                <td style="width: 70px;">
+                  {{ curso.alunosEntrada2 }}
+                </td>
               </tr>
             </template>
             <template v-else>
@@ -145,18 +102,18 @@
             </template>
           </template>
         </TableMain>
-        <!-- Fim Tabela -->
       </div>
 
       <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
-        <Card title="Curso">
+        <Card :title="'Curso'">
           <template #form-group>
             <div class="row mb-2 mx-0">
               <div class="form-group col m-0 px-0">
                 <label for="nome" class="col-form-label">Nome</label>
                 <input
                   type="text"
-                  class="card-input-maior form-control form-control-sm"
+                  class="input-maior form-control
+                form-control-sm"
                   id="nome"
                   v-model="cursoForm.nome"
                 />
@@ -168,7 +125,7 @@
                 <label for="codigo" class="col-form-label">Código</label>
                 <input
                   type="text"
-                  class="form-control form-control-sm card-input-menor"
+                  class="form-control form-control-sm input-menor"
                   id="codigo"
                   v-model="cursoForm.codigo"
                 />
@@ -177,7 +134,7 @@
                 <label for="turno" class="col-form-label">Turno</label>
                 <select
                   type="text"
-                  class="form-control form-control-sm card-input-medio"
+                  class="form-control form-control-sm input-medio"
                   id="turno"
                   v-model="cursoForm.turno"
                 >
@@ -195,7 +152,7 @@
                 >
                 <input
                   type="text"
-                  class="form-control form-control-sm card-input-menor"
+                  class="form-control form-control-sm input-menor"
                   id="alunosEnrada"
                   @keypress="onlyNumber"
                   v-model="cursoForm.alunosEntrada"
@@ -208,7 +165,7 @@
                 >
                 <input
                   type="text"
-                  class="form-control form-control-sm card-input-menor"
+                  class="form-control form-control-sm input-menor"
                   id="alunosEnrada"
                   @keypress="onlyNumber"
                   v-model="cursoForm.alunosEntrada2"
@@ -216,7 +173,7 @@
               </div>
             </div>
           </template>
-          <template #botoes>
+          <template #footer>
             <template v-if="isEdit">
               <button
                 type="button"
@@ -274,7 +231,7 @@
     </div>
 
     <!-- MODAL DE AJUDA -->
-    <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+    <b-modal id="modalAjuda" scrollable title="Ajuda" hide-footer>
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
@@ -308,8 +265,6 @@
           </li>
         </ul>
       </div>
-
-      <div slot="modal-footer" style="display: none;"></div>
     </b-modal>
   </div>
 </template>
@@ -366,9 +321,18 @@ export default {
         $event.preventDefault();
       }
     },
-    toggleOrd(ord, type = "asc") {
-      if (this.ordenacao.order != ord) {
-        this.ordenacao.order = ord;
+    setIconByOrder(orderToCheck) {
+      if (this.ordenacao.order === orderToCheck) {
+        return this.ordenacao.type == "asc"
+          ? "fas fa-arrow-down fa-sm"
+          : "fas fa-arrow-up fa-sm";
+      } else {
+        return "fas fa-arrow-down fa-sm low-opacity";
+      }
+    },
+    toggleOrder(newOrder, type = "asc") {
+      if (this.ordenacao.order != newOrder) {
+        this.ordenacao.order = newOrder;
         this.ordenacao.type = type;
       } else {
         this.ordenacao.type = this.ordenacao.type == "asc" ? "desc" : "asc";
@@ -544,30 +508,15 @@ export default {
 </script>
 
 <style scoped>
-.DashboardCursos {
-  max-width: 100%;
-  overflow: auto;
-  margin: 0;
-}
-.card-input-maior {
+.card .input-maior {
   width: 250px;
 }
-.card-input-menor {
+.card .input-menor {
   width: 60px;
   text-align: center !important;
 }
-.card-input-medio {
+.card .input-medio {
   width: 100px;
-}
-.listas {
-  line-height: 30px;
-  font-size: 12px;
-  text-align: justify;
-  line-height: inherit;
-  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
-}
-strong {
-  color: #007bff;
 }
 @media screen and (max-width: 886px) {
   .div-card {

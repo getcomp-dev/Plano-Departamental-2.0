@@ -6,8 +6,9 @@
     <div class="card-body">
       <form>
         <slot name="form-group"></slot>
+
         <div class="row m-0 mt-3 d-flex justify-content-end">
-          <slot name="botoes"></slot>
+          <slot name="footer"></slot>
         </div>
       </form>
     </div>

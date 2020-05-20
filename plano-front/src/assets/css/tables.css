@@ -4,7 +4,6 @@
   position: sticky !important;
   position: -webkit-sticky !important;
   top: 0 !important;
-  display: block !important;
   overflow: hidden !important;
   z-index: 3;
 }
@@ -14,7 +13,6 @@
   position: sticky !important;
   position: -webkit-sticky !important;
   top: 38px !important;
-  display: block !important;
   overflow: hidden !important;
   z-index: 3;
 }
@@ -36,14 +34,17 @@
   user-select: none;
 }
 .bg-custom {
-  background-color: #c8c8c8;
+  background-color: #00000015;
 }
 .bg-custom:hover {
-  background-color: #c8c8c8;
+  background-color: #00000015;
 }
-.tr-bg {
-  background-color: #00000017;
+.bg-selected,
+.bg-selected:hover {
+  background-color: #787878 !important;
+  color: #fff !important;
 }
+
 /* fim main-table */
 
 /* ==== MODAL TABLE ==== */
@@ -101,3 +102,12 @@
   padding-top: 4px !important;
 }
 /* FIM MODAL TABLE */
+
+@-moz-document url-prefix() {
+  .main-table tbody select {
+    height: 20px !important;
+  }
+  .main-table tbody input[type="text"] {
+    margin-top: 0px !important;
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-  <div class="DashboardHorarios row pr-2">
+  <div class="main-component row">
     <!-- Titulo -->
     <div
       class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
@@ -4729,13 +4729,6 @@ export default {
 </script>
 
 <style scoped>
-/* prefixed by https://autoprefixer.github.io (PostCSS: v7.0.23, autoprefixer: v9.7.3) */
-
-.DashboardHorarios {
-  max-width: 100%;
-  overflow: hidden;
-  margin: 0;
-}
 .titulo {
   font-size: 25px;
   font-weight: normal;

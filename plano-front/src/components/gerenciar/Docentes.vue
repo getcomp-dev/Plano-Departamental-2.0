@@ -1,5 +1,5 @@
 <template>
-  <div class="DashboardDocentes row pr-2" v-if="Admin">
+  <div class="main-component row" v-if="Admin">
     <PageTitle :title="'Docentes'">
       <template #aside>
         <b-button
@@ -18,56 +18,29 @@
           <template #thead>
             <th
               class="clickable t-start"
-              @click="toggleOrdMain('nome')"
+              @click="toggleOrder('nome')"
               title="Clique para ordenar por nome"
               style="width: 240px;"
             >
               Nome
-              <i
-                style="font-size: 0.6rem; text-align:right"
-                :class="
-                  ordenacao.order == 'nome'
-                    ? ordenacao.type == 'asc'
-                      ? 'fas fa-arrow-down fa-sm'
-                      : 'fas fa-arrow-up fa-sm'
-                    : 'fas fa-arrow-down fa-sm low-opacity'
-                "
-              ></i>
+              <i :class="setIconByOrder('nome')"></i>
             </th>
             <th
               class="clickable t-start"
-              @click="toggleOrdMain('apelido')"
+              @click="toggleOrder('apelido')"
               title="Clique para ordenar por apelido"
               style="width: 120px;"
             >
               Apelido
-              <i
-                style="font-size: 0.6rem;"
-                :class="
-                  ordenacao.order == 'apelido'
-                    ? ordenacao.type == 'asc'
-                      ? 'fas fa-arrow-down fa-sm'
-                      : 'fas fa-arrow-up fa-sm'
-                    : 'fas fa-arrow-down fa-sm low-opacity'
-                "
-              ></i>
+              <i :class="setIconByOrder('apelido')"></i>
             </th>
             <th
-              style="width:50px"
+              style="width:65px"
               class="clickable t-center"
-              @click="toggleOrdMain('ativo')"
+              @click="toggleOrder('ativo', 'desc')"
             >
               Ativo
-              <i
-                style="font-size: 0.6rem;"
-                :class="
-                  ordenacao.order == 'ativo'
-                    ? ordenacao.type == 'asc'
-                      ? 'fas fa-arrow-down fa-sm'
-                      : 'fas fa-arrow-up fa-sm'
-                    : 'fas fa-arrow-down fa-sm low-opacity'
-                "
-              ></i>
+              <i :class="setIconByOrder('ativo')"></i>
             </th>
           </template>
           <template #tbody>
@@ -78,21 +51,19 @@
                   handleClickInDocente(docente, DocentePerfis)
                 "
                 :class="[
-                  { 'bg-custom': docenteClickado == docente.id },
+                  { 'bg-selected': docenteClickado == docente.id },
                   'clickable',
                 ]"
               >
-                <div class="max-content">
-                  <td style="width:240px;" class="t-start">
-                    {{ docente.nome }}
-                  </td>
-                  <td style="width:120px;" class="t-start">
-                    {{ docente.apelido }}
-                  </td>
-                  <td style="width:50px">
-                    {{ textoAtivo(docente.ativo) }}
-                  </td>
-                </div>
+                <td style="width:240px;" class="t-start">
+                  {{ docente.nome }}
+                </td>
+                <td style="width:120px;" class="t-start">
+                  {{ docente.apelido }}
+                </td>
+                <td style="width:65px">
+                  {{ booleanToText(docente.ativo) }}
+                </td>
               </tr>
             </template>
             <template v-if="Docentes.length == 0">
@@ -108,192 +79,158 @@
       </div>
 
       <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
-        <div class="card mr-3 ml-auto">
-          <div class="card-header">
-            <h1 class="card-title">Docente</h1>
-          </div>
+        <Card :title="'Docente'">
+          <template #form-group>
+            <div class="row mb-2 mx-0">
+              <div class="form-group col m-0 px-0">
+                <label for="nome" class="col-form-label">Nome</label>
 
-          <div class="card-body">
-            <form>
-              <div class="row mb-2 mx-0">
-                <div class="form-group col m-0 px-0">
-                  <label for="nome" class="col-form-label">Nome</label>
-                  <template v-if="!isEdit">
-                    <input
-                      type="text"
-                      :class="{ inputMaior: isEdit }"
-                      class="form-control form-control-sm"
-                      id="nome"
-                      v-model="docenteForm.nome"
-                    />
-                  </template>
-                  <template v-else>
-                    <input
-                      type="text"
-                      class="form-control form-control-sm"
-                      id="nome"
-                      v-model="docenteForm.nome"
-                    />
-                  </template>
-                </div>
+                <input
+                  type="text"
+                  class="form-control form-control-sm input-maior"
+                  id="nome"
+                  v-model="docenteForm.nome"
+                />
+              </div>
+            </div>
+
+            <div class="row mb-2 mx-0">
+              <div class="form-group col m-0 mr-4 px-0">
+                <label for="apelido" class="col-form-label">Apelido</label>
+                <input
+                  type="text"
+                  id="apelido"
+                  v-model="docenteForm.apelido"
+                  class="form-control form-control-sm input-medio"
+                />
               </div>
 
-              <div class="row mb-2 mx-0">
-                <div class="form-group col m-0 mr-4 px-0">
-                  <label for="apelido" class="col-form-label">Apelido</label>
-                  <input
-                    type="text"
-                    id="apelido"
-                    v-model="docenteForm.apelido"
-                    class="form-control form-control-sm"
-                    style="width: 120px !important;"
-                  />
-                </div>
-
-                <!-- <div class="form-group col m-0  px-0"> -->
-                <div
-                  class="form-check form-check-inline col m-0 mr-4 mt-4 px-0"
-                >
-                  <input
-                    type="checkbox"
-                    id="ativo"
-                    value="1"
-                    v-model="docenteForm.ativo"
-                    class="form-check-input my-auto"
-                  />
-                  <label for="ativo" class="form-check-label">Ativo</label>
-                </div>
-                <!-- </div> -->
+              <div class="form-check form-check-inline col m-0 mr-4 mt-4 px-0">
+                <input
+                  type="checkbox"
+                  id="ativo"
+                  value="1"
+                  v-model="docenteForm.ativo"
+                  class="form-check-input my-auto"
+                />
+                <label for="ativo" class="form-check-label">Ativo</label>
               </div>
-              <template v-if="isEdit">
-                <div class="border-bottom mt-2 mb-1"></div>
-                <small>Perfis Associados ao docente</small>
-                <div class="row mb-3 mx-0">
-                  <div class="form-group col m-0 px-0" style="height: 300px;">
-                    <table
-                      class="modal-table table table-bordered table-sm"
-                      style="max-height: 300px !important; overflow: auto;"
-                    >
-                      <tr class="thead-light sticky">
-                        <div
-                          class="max-content"
-                          style="font-size:11px!important"
-                        >
-                          <th>
-                            <p class="p-header" style="width: 25px;"></p>
-                          </th>
-                          <th>
-                            <p
-                              class="p-header"
-                              style="width: 275px; text-align: start;"
-                            >
-                              Perfis
+            </div>
+            <template v-if="isEdit">
+              <div class="border-bottom mt-2 mb-1"></div>
+              <small>Perfis Associados ao docente</small>
+              <div class="row mb-3 mx-0">
+                <div class="form-group col m-0 px-0" style="height: 300px;">
+                  <table
+                    class="modal-table table table-bordered table-sm"
+                    style="max-height: 300px !important; overflow: auto;"
+                  >
+                    <tr class="thead-light sticky">
+                      <div class="max-content" style="font-size:11px!important">
+                        <th>
+                          <p class="p-header" style="width: 25px;"></p>
+                        </th>
+                        <th>
+                          <p
+                            class="p-header"
+                            style="width: 225px; text-align: start;"
+                          >
+                            Perfis
+                          </p>
+                        </th>
+                      </div>
+                    </tr>
+                    <tbody>
+                      <tr
+                        v-for="perfil in Perfis"
+                        :key="'perfil-id' + perfil.id"
+                      >
+                        <div class="max-content">
+                          <td>
+                            <div style="width: 25px; height: inherit;">
+                              <input
+                                type="checkbox"
+                                :value="perfil.id"
+                                v-model="perfisAssociados"
+                                v-on:change="managePerfil(perfil.id)"
+                                class="form-check-input position-static m-0"
+                              />
+                            </div>
+                          </td>
+                          <td>
+                            <p style="width: 225px; text-align: start;">
+                              {{ perfil.nome }}
                             </p>
-                          </th>
+                          </td>
                         </div>
                       </tr>
-                      <tbody>
-                        <tr
-                          v-for="perfil in Perfis"
-                          :key="'perfil-id' + perfil.id"
-                        >
-                          <div class="max-content">
-                            <td>
-                              <div
-                                style="width: 25px; height: inherit;"
-                                class="px-1"
-                              >
-                                <input
-                                  type="checkbox"
-                                  :value="perfil.id"
-                                  v-model="perfisAssociados"
-                                  v-on:change="managePerfil(perfil.id)"
-                                  class="form-check-input position-static m-0"
-                                />
-                              </div>
-                            </td>
-                            <td>
-                              <p style="width: 275px; text-align: start;">
-                                {{ perfil.nome }}
-                              </p>
-                            </td>
-                          </div>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                    </tbody>
+                  </table>
                 </div>
-              </template>
-
-              <div class="row mb-0 mt-3 mx-0">
-                <template v-if="isEdit">
-                  <div class="d-flex mr-0 ml-auto">
-                    <button
-                      type="button"
-                      title="Salvar"
-                      class="btn-custom btn-modal addbtn"
-                      v-on:click.prevent="editDocente"
-                      :key="1"
-                    >
-                      <i class="fas fa-check"></i>
-                    </button>
-                    <button
-                      type="button"
-                      title="Deletar"
-                      class="btn-custom btn-modal delbtn"
-                      v-on:click.prevent="deleteDocente"
-                      :key="2"
-                    >
-                      <i class="far fa-trash-alt"></i>
-                    </button>
-                    <button
-                      type="button"
-                      title="Cancelar"
-                      class="btn-custom btn-modal cancelbtn"
-                      v-on:click="clearClick(), cleanDocente()"
-                      :key="3"
-                    >
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </div>
-                </template>
-                <template v-else>
-                  <div class="d-flex mr-0 ml-auto">
-                    <button
-                      type="button"
-                      title="Adicionar"
-                      class="btn-custom btn-modal addbtn"
-                      v-on:click.prevent="addDocente"
-                      :key="1"
-                    >
-                      <i class="fas fa-plus"></i>
-                    </button>
-                    <button
-                      type="button"
-                      title="Cancelar"
-                      class="btn-custom btn-modal cancelbtn"
-                      v-on:click.prevent="cleanDocente"
-                      :key="3"
-                    >
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </div>
-                </template>
               </div>
-            </form>
-          </div>
-        </div>
+            </template>
+          </template>
+          <template #footer>
+            <template v-if="isEdit">
+              <div class="d-flex mr-0 ml-auto">
+                <button
+                  type="button"
+                  title="Salvar"
+                  class="btn-custom btn-modal addbtn"
+                  v-on:click.prevent="editDocente"
+                  :key="1"
+                >
+                  <i class="fas fa-check"></i>
+                </button>
+                <button
+                  type="button"
+                  title="Deletar"
+                  class="btn-custom btn-modal delbtn"
+                  v-on:click.prevent="deleteDocente"
+                  :key="2"
+                >
+                  <i class="far fa-trash-alt"></i>
+                </button>
+                <button
+                  type="button"
+                  title="Cancelar"
+                  class="btn-custom btn-modal cancelbtn"
+                  v-on:click="clearClick(), cleanDocente()"
+                  :key="3"
+                >
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </template>
+            <template v-else>
+              <div class="d-flex mr-0 ml-auto">
+                <button
+                  type="button"
+                  title="Adicionar"
+                  class="btn-custom btn-modal addbtn"
+                  v-on:click.prevent="addDocente"
+                  :key="1"
+                >
+                  <i class="fas fa-plus"></i>
+                </button>
+                <button
+                  type="button"
+                  title="Cancelar"
+                  class="btn-custom btn-modal cancelbtn"
+                  v-on:click.prevent="cleanDocente"
+                  :key="3"
+                >
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </template>
+          </template>
+        </Card>
       </div>
     </div>
 
     <!-- MODAL DE AJUDA -->
-    <b-modal
-      id="modalAjuda"
-      ref="ajudaModal"
-      scrollable
-      title="Ajuda"
-      hide-footer
-    >
+    <b-modal id="modalAjuda" scrollable title="Ajuda" hide-footer>
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
@@ -333,6 +270,7 @@ import docenteService from "@/common/services/docente";
 import docentePerfilService from "@/common/services/docentePerfil";
 import PageTitle from "@/components/PageTitle";
 import TableMain from "@/components/TableMain";
+import Card from "@/components/Card";
 
 const emptyDocente = {
   id: undefined,
@@ -349,7 +287,7 @@ const emptyPerfil = {
 
 export default {
   name: "DashboardDocente",
-  components: { PageTitle, TableMain },
+  components: { PageTitle, TableMain, Card },
   data() {
     return {
       docenteForm: _.clone(emptyDocente),
@@ -364,10 +302,19 @@ export default {
     clearClick() {
       this.docenteClickado = "";
     },
-    toggleOrdMain(ord) {
-      if (this.ordenacao.order != ord) {
-        this.ordenacao.order = ord;
-        this.ordenacao.type = "asc";
+    setIconByOrder(orderToCheck) {
+      if (this.ordenacao.order === orderToCheck) {
+        return this.ordenacao.type == "asc"
+          ? "fas fa-arrow-down fa-sm"
+          : "fas fa-arrow-up fa-sm";
+      } else {
+        return "fas fa-arrow-down fa-sm low-opacity";
+      }
+    },
+    toggleOrder(newOrder, type = "asc") {
+      if (this.ordenacao.order != newOrder) {
+        this.ordenacao.order = newOrder;
+        this.ordenacao.type = type;
       } else {
         this.ordenacao.type = this.ordenacao.type == "asc" ? "desc" : "asc";
       }
@@ -520,7 +467,7 @@ export default {
         this.addPerfil(perfil);
       }
     },
-    textoAtivo(docenteIsAtivo) {
+    booleanToText(docenteIsAtivo) {
       return docenteIsAtivo ? "Sim" : "-";
     },
   },
@@ -558,134 +505,13 @@ export default {
 </script>
 
 <style scoped>
-/* prefixed by https://autoprefixer.github.io (PostCSS: v7.0.23, autoprefixer: v9.7.3) */
-
-.DashboardDocentes {
-  max-width: 100%;
-  overflow: hidden;
-  margin: 0;
-}
-
-/* ====== CARD ====== */
-.card {
-  width: max-content;
-  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
-}
-.card-title {
-  font-size: 16px;
-  font-weight: normal;
-  padding-left: 0;
-  margin: 0;
-  text-align: center;
-}
-.card-body {
-  font-size: 12px !important;
-  padding-top: 15px;
-}
-.card-body {
-  font-size: 12px;
-  padding-top: 15px;
-}
-.card label {
-  line-height: 1.2;
-  font-size: 12px;
-  text-align: start;
-  padding-top: 0 !important;
-}
-.selectMaior2 {
-  width: 300px;
-  text-align: start;
-}
-.card input {
-  height: 25px !important;
-  padding: 0px 5px 0px 5px !important;
-  font-size: 11px !important;
-  text-align: start;
-}
-.inputMenor {
-  width: 60px;
-  text-align: center;
-}
-.inputMenor2 {
-  width: 40px;
-  margin-right: 10px;
-  text-align: center;
-}
-.inputMaior {
+.card .input-maior {
   width: 250px;
-  text-align: start;
 }
-
-/* ==== MODAL TABLE ==== */
-.modal-table {
-  display: block !important;
-  overflow-y: scroll !important;
-  overflow-x: hidden !important;
-  font-size: 10px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
+.card .input-medio {
+  width: 120px;
 }
-.modal-table tr thead {
-  display: block;
-}
-.modal-table th {
-  padding: 0 !important;
-  text-align: center !important;
-  height: 18px !important;
-}
-
-.modal-table .p-header {
-  padding: 0px 5px 0px 5px !important;
-  margin: 0 !important;
-  text-align: start;
-  height: 18px !important;
-}
-.modal-table tbody {
-  max-height: 100%;
-  width: 100%;
-}
-.modal-table td {
-  border-top: 0;
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  /* height: 22px !important; */
-}
-.modal-table p {
-  margin: 0 !important;
-  text-align: center;
-  padding: 0 !important;
-  padding-right: 5px !important;
-  padding-left: 5px !important;
-}
-.modal-table input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-  margin-bottom: auto !important;
-  height: 13px !important;
-}
-/* FIM MODAL TABLE */
-/* =================== */
-
-.bg-custom {
-  background-color: #c8c8c8;
-}
-.bg-custom:hover {
-  background-color: #c8c8c8;
-}
-.listas {
-  line-height: 30px;
-  font-size: 12px;
-  text-align: justify;
-  line-height: inherit;
-  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
-}
-strong {
-  color: #007bff;
-}
-@media screen and (max-width: 695px) {
+@media screen and (max-width: 771px) {
   .div-card {
     margin-left: 0px !important;
   }
