@@ -1,3 +1,6 @@
+button {
+  transition: all 200ms ease;
+}
 .btn-custom {
   padding: 0 !important;
   border: none !important;
@@ -9,6 +12,7 @@
   transition: all 0.3s ease 0s !important;
   cursor: pointer !important;
   text-align: center !important;
+  transition: all 200ms ease;
 }
 .btn-icon {
   outline: none !important;
@@ -72,11 +76,6 @@ button i.far {
   background-color: rgb(74, 101, 190) !important;
   border-color: #82a0ff !important;
 }
-.btn-azul:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(122, 128, 124, 0.5) !important;
-  -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-  box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-}
 
 .btn-cinza {
   background-color: #999999 !important;
@@ -86,11 +85,6 @@ button i.far {
   background-color: #747474 !important;
   border-color: #aaaaaa !important;
 }
-.btn-cinza:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
-  -moz-box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
-  box-shadow: 0 0 0 0.2rem rgba(116, 124, 119, 0.74) !important;
-}
 
 .btn-verde {
   background-color: #70b670 !important;
@@ -99,11 +93,6 @@ button i.far {
 .btn-verde:hover {
   background-color: #4c8a4c !important;
   border-color: #77dd77 !important;
-}
-.btn-verde:focus {
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-  -moz-box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
-  box-shadow: 0 0 0 0.2rem rgba(108, 166, 127, 0.5) !important;
 }
 
 .cancelbtn {

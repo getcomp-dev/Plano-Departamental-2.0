@@ -125,21 +125,26 @@
                     class="modal-table table table-bordered table-sm"
                     style="max-height: 300px !important; overflow: auto;"
                   >
-                    <tr class="thead-light sticky">
-                      <div class="max-content" style="font-size:11px!important">
-                        <th>
-                          <p class="p-header" style="width: 25px;"></p>
-                        </th>
-                        <th>
-                          <p
-                            class="p-header"
-                            style="width: 225px; text-align: start;"
-                          >
-                            Perfis
-                          </p>
-                        </th>
-                      </div>
-                    </tr>
+                    <thead class="thead-light sticky">
+                      <tr>
+                        <div
+                          class="max-content sticky"
+                          style="font-size:11px!important"
+                        >
+                          <th>
+                            <p class="p-header" style="width: 25px;"></p>
+                          </th>
+                          <th>
+                            <p
+                              class="p-header"
+                              style="width: 225px; text-align: start;"
+                            >
+                              Perfis
+                            </p>
+                          </th>
+                        </div>
+                      </tr>
+                    </thead>
                     <tbody>
                       <tr
                         v-for="perfil in Perfis"

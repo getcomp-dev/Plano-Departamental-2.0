@@ -52,9 +52,9 @@
         v-if="nav_table === 'docentes'"
         class="table main-table table-hover table-sm table-bordered"
       >
-        <thead class="thead-light ">
-          <tr class="sticky">
-            <div style="font-size: 11px !important;" class=" max-content">
+        <thead class="thead-light sticky">
+          <tr>
+            <div style="font-size: 11px !important;" class="max-content sticky">
               <th>
                 <p
                   style="width: 696px; text-align: start;"
@@ -113,9 +113,9 @@
         v-else-if="nav_table === 'turmas'"
         class="table main-table table-hover table-sm table-bordered"
       >
-        <thead class="thead-light ">
-          <tr class="sticky">
-            <div style="font-size: 11px !important;" class=" max-content">
+        <thead class="thead-light sticky">
+          <tr>
+            <div style="font-size: 11px !important;" class="max-content sticky">
               <th>
                 <p
                   style="width: 35px; text-align: center;"
@@ -298,9 +298,12 @@
           class="table table-bordered table-sm modal-table"
           style="max-height: 392px !important;"
         >
-          <thead class="thead-light ">
-            <tr class="sticky">
-              <div style="font-size: 11px !important;" class="max-content">
+          <thead class="thead-light sticky">
+            <tr>
+              <div
+                style="font-size: 11px !important;"
+                class="max-content sticky"
+              >
                 <th>
                   <p style="width: 25px;" class="p-header"></p>
                 </th>
@@ -353,9 +356,12 @@
           class="table table-bordered table-sm modal-table"
           style="max-height: 450px !important;"
         >
-          <thead class="thead-light ">
-            <tr class="sticky">
-              <div style="font-size: 11px !important;" class="max-content">
+          <thead class="thead-light sticky">
+            <tr>
+              <div
+                style="font-size: 11px !important;"
+                class="max-content sticky"
+              >
                 <th>
                   <p style="width: 25px;" class="p-header"></p>
                 </th>
@@ -470,7 +476,6 @@ import _ from "lodash";
 import ModalTurma from "./ModalTurma.vue";
 import PageTitle from "@/components/PageTitle";
 import { EventBus } from "@/event-bus.js";
-
 const AllConflitosTurmas = [
   { type: 1, msg: "Nenhum turno alocado" },
   {

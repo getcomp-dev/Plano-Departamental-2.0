@@ -18,15 +18,6 @@
         <TableMain>
           <template #thead>
             <th
-              @click="toggleOrder('nome')"
-              style="width: 300px; text-align:start"
-              class="clickable"
-              title="Clique para ordenar por nome"
-            >
-              Nome
-              <i :class="setIconByOrder('nome')"></i>
-            </th>
-            <th
               style="width: 82px; text-align:start"
               @click="toggleOrder('codigo')"
               class="clickable"
@@ -34,6 +25,15 @@
             >
               Código
               <i :class="setIconByOrder('codigo')"></i>
+            </th>
+            <th
+              @click="toggleOrder('nome')"
+              style="width: 300px; text-align:start"
+              class="clickable"
+              title="Clique para ordenar por nome"
+            >
+              Nome
+              <i :class="setIconByOrder('nome')"></i>
             </th>
             <th style="width: 40px" title="Carga Teórica">
               C.T.
@@ -76,11 +76,11 @@
                   'clickable',
                 ]"
               >
-                <td style="width: 300px" class="t-start">
-                  {{ disciplina.nome }}
-                </td>
                 <td style="width: 82px" class="t-start">
                   {{ disciplina.codigo }}
+                </td>
+                <td style="width: 300px" class="t-start">
+                  {{ disciplina.nome }}
                 </td>
                 <td style="width: 40px">
                   {{ disciplina.cargaTeorica }}
@@ -328,7 +328,7 @@ export default {
       disciplinaForm: _.clone(emptyDisciplina),
       error: undefined,
       disciplinaClickada: "",
-      ordenacao: { order: "nome", type: "asc" },
+      ordenacao: { order: "codigo", type: "asc" },
     };
   },
   methods: {
@@ -338,9 +338,9 @@ export default {
         $event.preventDefault();
       }
     },
-    toggleOrder(ord, type = "asc") {
-      if (this.ordenacao.order != ord) {
-        this.ordenacao.order = ord;
+    toggleOrder(newOrder, type = "asc") {
+      if (this.ordenacao.order != newOrder) {
+        this.ordenacao.order = newOrder;
         this.ordenacao.type = type;
       } else {
         this.ordenacao.type = this.ordenacao.type == "asc" ? "desc" : "asc";

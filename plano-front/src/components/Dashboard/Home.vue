@@ -1,9 +1,7 @@
 <template>
-  <div class="DashboardHome row pr-2">
-    <PageTitle :title="'Dashboard'" :asideClass="'col-0'"> </PageTitle>
+  <div class="DashboardHome row p-0">
+    <PageTitle :title="'Dashboard'" />
 
-    <div class="w-100 mb-2 border-bottom"></div>
-    <!-- alert -->
     <div class="alert alert-light alerta mt-1" role="alert">
       <p style="font-size:12px">
         Olá {{ getUsuarioFirstName }}! Este é o sistema de gerenciamento de
@@ -21,7 +19,7 @@
             <li class="list-group-item">
               <strong>
                 <router-link :to="{ name: 'pedidos' }"
-                  >Tabela Interna:</router-link
+                  >Graduação - DCC:</router-link
                 >
               </strong>
               Página onde encontra-se o cadastro de todas as turmas de todas as
@@ -31,7 +29,7 @@
             <li class="list-group-item">
               <strong>
                 <router-link :to="{ name: 'turmasExternas' }"
-                  >Tabela Externa:</router-link
+                  >Graduação - Outros:</router-link
                 >
               </strong>
               Similar a Tabela Interna, onde encontra-se o cadastro de todas as
@@ -42,7 +40,7 @@
             <li class="list-group-item">
               <strong>
                 <router-link :to="{ name: 'cargaPos' }"
-                  >Tabela Pós:</router-link
+                  >Pós Graduação:</router-link
                 >
               </strong>
               Tela onde localiza-se uma tabela com as cargas horárias de cada

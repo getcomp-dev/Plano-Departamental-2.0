@@ -3,9 +3,7 @@
     <div class="cube1"></div>
     <div class="cube2"></div>
   </div>
-  <div v-else class="DashboardCargaProfessores row pr-2">
-    <!--  -->
-    <!-- Titulo -->
+  <div v-else class="main-component row p-0">
     <div
       class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
       style="height: 38px;"
@@ -44,9 +42,9 @@
 
     <div class="divTable p-0" ref="carga">
       <table class="main-table table table-bordered table-hover table-sm">
-        <thead class="thead-light ">
-          <tr class="sticky">
-            <div style="font-size: 11px !important;" class="max-content">
+        <thead class="thead-light sticky">
+          <tr>
+            <div style="font-size: 11px !important;" class="max-content sticky">
               <th scope="col">
                 <p
                   class="p-header clickable"
@@ -505,7 +503,13 @@
       </table>
     </div>
 
-    <b-modal id="modalAjuda" ref="ajudaModal" scrollable title="Ajuda">
+    <b-modal
+      id="modalAjuda"
+      ref="ajudaModal"
+      scrollable
+      title="Ajuda"
+      hide-footer
+    >
       <div class="modal-body">
         <ul class="listas list-group">
           <li class="list-group-item">
@@ -520,7 +524,7 @@
           <li class="list-group-item">
             <strong>Para gerar relatório:</strong> Clique no botão Relatório
             <i
-              class="far fa-file-alt relatbtn px-1"
+              class="far fa-file-pdf relatbtn px-1"
               style="font-size: 12px;"
             ></i>
             e selecione se deseja o relatório completo, com todos os docentess,
@@ -528,8 +532,6 @@
           </li>
         </ul>
       </div>
-
-      <div slot="modal-footer" style="display: none;"></div>
     </b-modal>
 
     <!-- Modals do botão para escolher docentes -->
@@ -557,9 +559,12 @@
           class="table table-sm modal-table table-bordered"
           style="max-height: 450px !important;"
         >
-          <thead class="thead-light ">
-            <tr class="sticky">
-              <div style="font-size: 11px !important;" class="max-content ">
+          <thead class="thead-light sticky">
+            <tr>
+              <div
+                style="font-size: 11px !important;"
+                class="max-content sticky"
+              >
                 <th>
                   <div
                     class="m-0 input-group"
@@ -707,12 +712,10 @@
 
 <script>
 import _ from "lodash";
-import jsPDF from "jspdf";
 import pdfs from "@/common/services/pdfs";
-import html2canvas from "html2canvas";
+
 export default {
   name: "DashboardCargaProfessores",
-
   data() {
     return {
       DocentesSelecionados: [],
@@ -727,10 +730,10 @@ export default {
       onLoading: true,
     };
   },
-  beforeCreate() {
+  created() {
     setTimeout(() => {
       this.onLoading = false;
-    }, 300);
+    }, 100);
   },
   methods: {
     pdf(opt) {
@@ -785,10 +788,12 @@ export default {
           ) {
             _.find(this.Disciplinas, (disciplina) => {
               if (turma.Disciplina === disciplina.id) {
-                turma.disciplina_nome = disciplina.nome;
-                turma.disciplina_codigo = disciplina.codigo;
-                turma.disciplina_cargaTeorica = disciplina.cargaTeorica;
-                turma.disciplina_cargaPratica = disciplina.cargaPratica;
+                const { nome, codigo, cargaTeorica, cargaPratica } = disciplina;
+                turma.disciplina_nome = nome;
+                turma.disciplina_codigo = codigo;
+                turma.disciplina_cargaTeorica = cargaTeorica;
+                turma.disciplina_cargaPratica = cargaPratica;
+                return true;
               }
             });
             return true;
@@ -979,21 +984,6 @@ export default {
 </script>
 
 <style scoped>
-/* prefixed */
-.inLoading {
-  background-color: #e6e6e6;
-  color: white;
-  font-size: 32px;
-  padding-top: 10vh;
-  height: 100vh;
-  text-align: center;
-  z-index: 5;
-}
-.DashboardCargaProfessores {
-  max-width: 100%;
-  overflow: hidden;
-  margin: 0;
-}
 .main-table .p-header {
   padding: 0 5px 0 5px !important;
   margin: 0 !important;
@@ -1078,17 +1068,7 @@ tbody {
   padding-left: 0;
   margin: 0 !important;
 }
-.listas {
-  line-height: 30px;
-  font-size: 12px;
-  text-align: justify;
-  line-height: inherit;
-  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
-}
-strong {
-  color: #007bff;
-}
-/* texto maiusculo */
+
 .toUpperCase {
   text-transform: uppercase;
 }
@@ -1307,16 +1287,7 @@ i.far {
     height: 70px !important;
   }
 }
-.active {
-  background-color: #e9ecef !important;
-  color: #495057 !important;
-  cursor: default;
-}
-.max-content {
-  width: -webkit-max-content !important;
-  width: -moz-max-content !important;
-  width: max-content !important;
-}
+
 /* APENAS NO FIREFOX */
 @-moz-document url-prefix() {
   .main-table select {

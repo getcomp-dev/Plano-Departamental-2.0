@@ -5,16 +5,6 @@
       <slot name="aside"></slot>
     </div>
   </div>
-  <!-- exemplo de selected    
-    <div class="input-group mx-2 p-0">
-          <div class="input-group-prepend">
-            <label class="input-group-text">Ano</label>
-          </div>
-          <select class="form-control form-control-top">
-            <option value="1">teste</option>
-            <option value="2">teste</option>
-          </select>
-        </div> -->
 </template>
 
 <script>
@@ -30,6 +20,13 @@ export default {
 </script>
 
 <style scoped>
+#PageTitle {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
 .titulo {
   font-size: 25px;
   font-weight: normal;
@@ -37,13 +34,6 @@ export default {
 }
 .form-inline {
   width: auto;
-}
-#PageTitle {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
 }
 .aside {
   display: flex !important;

@@ -144,11 +144,6 @@
             v-model="turmaForm.Horario2"
             v-on:change="checkHorario(2)"
           >
-            <option
-              v-if="!disciplinaIsIntegralEAD"
-              type="text"
-              value=""
-            ></option>
             <template v-if="disciplinaIsParcialEAD">
               <option
                 v-for="horario in HorariosEAD"
@@ -158,6 +153,11 @@
               >
             </template>
             <template v-else>
+              <option
+                v-if="!disciplinaIsIntegralEAD"
+                type="text"
+                value=""
+              ></option>
               <option
                 v-for="horario in HorariosFiltredByTurno"
                 :key="'2-horario-id' + horario.id"
@@ -211,6 +211,21 @@
             </select>
           </template>
         </div>
+      </div>
+      <!-- Botoes -->
+      <div class="form-row w-100 m-0 mt-2">
+        <b-button
+          class="btn-custom btn-modal btn-verde px-3"
+          @click="editTurma()"
+        >
+          Salvar
+        </b-button>
+        <b-button
+          class="btn-custom btn-modal btn-cinza px-3"
+          @click="resetInputs()"
+        >
+          Reset
+        </b-button>
       </div>
     </div>
     <hr class="my-2 w-100" />
@@ -325,39 +340,22 @@
               </p>
             </td>
             <td>
-              <InputPedidos
+              <PedidosTableModal
                 v-bind:index="curso.indiceVaga"
                 v-bind:turma="turma"
-              ></InputPedidos>
+              ></PedidosTableModal>
             </td>
           </div>
         </tr>
       </template#tbody>
     </TableModal>
-
-    <div
-      class="custom-footer m-0 mt-2 border-top pt-2 w-100  pl-1 pr-2 d-flex justify-content-between"
-    >
-      <button
-        @click="closeModalTurma('close-modal-turma')"
-        class="btn btn-success btn-custom btn-modal btn-cinza"
-      >
-        Cancelar
-      </button>
-      <button
-        class="btn btn-success btn-custom btn-modal btn-azul"
-        @click="editTurma()"
-      >
-        Salvar
-      </button>
-    </div>
   </div>
 </template>
 <script>
 import _ from "lodash";
 import turmaService from "@/common/services/turma";
-import TableModal from "./TableModal.vue";
-import InputPedidos from "./InputPedidos.vue";
+import TableModal from "@/components/TableModal.vue";
+import PedidosTableModal from "@/components/PedidosTableModal.vue";
 import { EventBus } from "@/event-bus.js";
 
 const emptyTurma = {
@@ -377,7 +375,7 @@ const emptyTurma = {
 
 export default {
   name: "ModalTurma",
-  components: { TableModal, InputPedidos },
+  components: { TableModal, PedidosTableModal },
   props: {
     turma: Object,
     editarTurma: Function,
@@ -397,9 +395,10 @@ export default {
     this.currentData = _.clone(this.turmaForm);
   },
   methods: {
-    isEmpty(value) {
-      return value === null || value === undefined || value === "";
+    resetInputs() {
+      this.turmaForm = _.clone(this.turma);
     },
+
     closeModalTurma(eventName) {
       EventBus.$emit(eventName);
     },
@@ -1352,8 +1351,8 @@ export default {
         for (let index = 0; index < this.Pedidos.length; index++) {
           if (this.Pedidos[index].Curso === curso.id) {
             curso.VagasTotais =
-              parseInt(this.Pedidos[index].vagasPeriodizadas, 10) * 1000 //peso para priorizar vagas periodizadas
-            +parseInt(this.Pedidos[index].vagasNaoPeriodizadas, 10);
+              parseInt(this.Pedidos[index].vagasPeriodizadas, 10) * 1000 + //peso para priorizar vagas periodizadas
+              parseInt(this.Pedidos[index].vagasNaoPeriodizadas, 10);
             curso.indiceVaga = index;
             break;
           }
@@ -1409,7 +1408,7 @@ export default {
         const cadastroEAD = this.currentDisciplina.ead;
         if (cadastroEAD === 1) {
           horariosResultante = _.filter(horariosResultante, { id: 31 });
-        } else if (cadastroEAD !== 2) {
+        } else {
           horariosResultante = _.filter(
             horariosResultante,
             (horario) => horario.id != 31
@@ -1498,13 +1497,9 @@ export default {
 </script>
 
 <style scoped>
-/* prefixed by https://autoprefixer.github.io (PostCSS: v7.0.23, autoprefixer: v9.7.3) */
 .modal-turma {
   width: 100%;
   height: 100%;
-}
-.table-turma {
-  max-height: 350px;
 }
 .form-container {
   font-size: 12px;

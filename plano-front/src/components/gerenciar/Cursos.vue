@@ -18,15 +18,6 @@
         <TableMain>
           <template #thead>
             <th
-              @click="toggleOrder('nome')"
-              title="Clique para ordenar por nome"
-              class="clickable t-start"
-              style="width:300px"
-            >
-              Nome
-              <i :class="setIconByOrder('nome')"></i>
-            </th>
-            <th
               @click="toggleOrder('codigo')"
               title="Clique para ordenar por nome"
               class="clickable t-start"
@@ -34,6 +25,15 @@
             >
               Código
               <i :class="setIconByOrder('codigo')"></i>
+            </th>
+            <th
+              @click="toggleOrder('nome')"
+              title="Clique para ordenar por nome"
+              class="clickable t-start"
+              style="width:300px"
+            >
+              Nome
+              <i :class="setIconByOrder('nome')"></i>
             </th>
             <th
               class="clickable"
@@ -75,11 +75,11 @@
                   'clickable',
                 ]"
               >
-                <td style="width: 300px" class="t-start">
-                  {{ curso.nome }}
-                </td>
                 <td style="width: 65px" class="t-start">
                   {{ curso.codigo }}
+                </td>
+                <td style="width: 300px" class="t-start">
+                  {{ curso.nome }}
                 </td>
                 <td style="width: 65px">
                   {{ curso.turno }}
@@ -305,7 +305,7 @@ export default {
       cursoForm: _.clone(emptyCurso),
       error: undefined,
       cursoClickado: "",
-      ordenacao: { order: "nome", type: "asc" },
+      ordenacao: { order: "codigo", type: "asc" },
     };
   },
   created() {

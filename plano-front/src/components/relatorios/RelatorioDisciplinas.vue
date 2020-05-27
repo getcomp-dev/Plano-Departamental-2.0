@@ -1,5 +1,5 @@
 <template>
-  <div class="DashboardRelatorioDisciplinas row pr-2">
+  <div class="DashboardRelatorioDisciplinas row p-0">
     <!-- Titulo -->
     <div
       class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
@@ -29,7 +29,7 @@
               class="relatbtn btn-icon btn-custom"
               title="Relatório"
             >
-              <i class="far fa-file-alt"></i>
+              <i class="far fa-file-pdf"></i>
             </b-button>
 
             <b-button
@@ -48,9 +48,9 @@
 
     <div class="divTable p-0" ref="carga">
       <table class="main-table table table-bordered table-hover table-sm">
-        <thead class="thead-light">
-          <tr class="sticky">
-            <div style="font-size: 11px !important;" class="max-content">
+        <thead class="thead-light sticky">
+          <tr>
+            <div style="font-size: 11px !important;" class="max-content sticky">
               <th scope="col">
                 <p
                   class="p-header clickable"
@@ -316,7 +316,7 @@
             <strong class="ajuda-strong">Para gerar relatório:</strong> Clique
             no botão Relatório
             <i
-              class="far fa-file-alt relatbtn px-1"
+              class="far fa-file-pdf relatbtn px-1"
               style="font-size: 12px;"
             ></i>
             e selecione se deseja o relatório completo, com todas as
@@ -386,10 +386,13 @@
 
       <div class="col m-0 p-0 max-content" style="height: 450px !important;">
         <table class="table table-sm modal-table table-bordered">
-          <thead class="thead-light">
+          <thead class="thead-light sticky">
             <!-- search bar disciplinas -->
-            <tr class="sticky" v-if="nav_ativo === 'disciplinas'">
-              <div style="font-size: 11px !important;" class="max-content">
+            <tr v-if="nav_ativo === 'disciplinas'">
+              <div
+                style="font-size: 11px !important;"
+                class="max-content sticky"
+              >
                 <th>
                   <div class="m-0 input-group input-group-search">
                     <input
@@ -737,9 +740,12 @@
           class="table table-sm modal-table table-bordered"
           style="max-height: 450px !important;"
         >
-          <thead class="thead-light ">
-            <tr class="sticky">
-              <div style="font-size: 11px !important;" class=" max-content">
+          <thead class="thead-light sticky">
+            <tr>
+              <div
+                style="font-size: 11px !important;"
+                class="max-content sticky"
+              >
                 <th>
                   <p
                     class="p-header clickable"

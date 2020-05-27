@@ -1,14 +1,12 @@
 .sticky {
-  display: block !important;
   overflow: hidden !important;
   position: sticky !important;
   position: -webkit-sticky !important;
   top: 0 !important;
   overflow: hidden !important;
-  z-index: 3;
+  z-index: 5;
 }
 .sticky2 {
-  display: block !important;
   overflow: hidden !important;
   position: sticky !important;
   position: -webkit-sticky !important;

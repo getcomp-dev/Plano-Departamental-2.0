@@ -1,5 +1,5 @@
 <template>
-  <div class="GradesDisciplinas row pr-2">
+  <div class="GradesDisciplinas row p-0">
     <!-- Titulo -->
     <div
       class="div-titulo col-12 d-flex center-content-between flex-wrap flex-md-nowrap p-0 mb-0"
@@ -46,9 +46,9 @@
 
     <div class="divTable p-0">
       <table class="main-table table table-sm table-hover table-bordered">
-        <thead class="thead-light">
-          <tr class="sticky">
-            <div style="font-size:11px!important" class="max-content">
+        <thead class="thead-light sticky">
+          <tr>
+            <div style="font-size:11px!important" class="max-content sticky">
               <th scope="col">
                 <p
                   class="p-header clickable"
@@ -327,9 +327,12 @@
           class="table table-sm modal-table table-bordered"
           style="max-height: 450px !important;"
         >
-          <thead class="thead-light">
-            <tr class="sticky">
-              <div style="font-size: 11px !important;" class=" max-content">
+          <thead class="thead-light sticky">
+            <tr>
+              <div
+                style="font-size: 11px !important;"
+                class=" max-content sticky"
+              >
                 <th>
                   <p style="width: 25px;" class="p-header"></p>
                 </th>
@@ -384,9 +387,12 @@
           class="table table-sm modal-table table-bordered table-hover"
           style="max-height: 450px !important; overflow-y: auto !important;"
         >
-          <thead class="thead-light ">
-            <tr class="sticky">
-              <div style="font-size: 11px !important;" class="max-content">
+          <thead class="thead-light sticky">
+            <tr>
+              <div
+                style="font-size: 11px !important;"
+                class="max-content sticky"
+              >
                 <th>
                   <div
                     class="m-0 input-group"
@@ -533,9 +539,12 @@
           class="table table-sm modal-table table-bordered"
           style="max-height: 450px !important;"
         >
-          <thead class="thead-light">
-            <tr class="sticky">
-              <div style="font-size: 11px !important;" class=" max-content">
+          <thead class="thead-light sticky">
+            <tr>
+              <div
+                style="font-size: 11px !important;"
+                class="max-content sticky"
+              >
                 <th>
                   <p style="width: 25px;" class="p-header"></p>
                 </th>

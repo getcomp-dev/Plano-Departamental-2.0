@@ -7,17 +7,16 @@ import Login from "@/components/Dashboard/TheLogin";
 import Dashboard from "@/components/Dashboard/TheDashboard";
 import DashboardHome from "@/components/Dashboard/Home";
 // Plano
-import DashboardPedidos from "@/components/plano/turma-principal/DashboardPrototipo";
-import DashboardTurmasExternas from "@/components/plano/turma-externa/TurmasExternas";
-import DashboardCargaPos from "@/components/plano/carga-pos/CargaPos";
+import DashboardTurmasDCC from "@/components/plano/turmas-dcc/TurmasDCC";
+import DashboardTurmasExternas from "@/components/plano/turmas-externas/TurmasExternas";
+import DashboardCargaPos from "@/components/plano/turmas-pos/CargaPos";
 import DashboardValidacoes from "@/components/plano/validacoes/Validacoes";
 // Relatorios
-import DashboardHorarios from "@/components/relatorios/horarios-curso/Horarios";
 import DashboardCargaProfessores from "@/components/relatorios/CargaProfessores";
-import DashboardRelatorioDisciplinas from "@/components/relatorios/RelatorioDisciplinas";
 import DashboardGradeDisciplinas from "@/components/relatorios/GradeDisciplinas";
-import DashboardLaboratoriosAlocacao from "@/components/relatorios/LaboratoriosAlocacao";
-
+import DashboardHorarios from "@/components/relatorios/horarios-cursos/Horarios";
+import DashboardHorariosLaboratorios from "@/components/relatorios/horarios-labs/HorariosLabs";
+import DashboardRelatorioDisciplinas from "@/components/relatorios/RelatorioDisciplinas";
 // Gerenciar
 import DashboardCursos from "@/components/gerenciar/Cursos";
 import DashboardDocentes from "@/components/gerenciar/Docentes";
@@ -64,7 +63,7 @@ const routes = [
     beforeEnter: requireAuth,
     children: [
       { path: "", name: "dashboard", component: DashboardHome },
-      { path: "pedidos", name: "pedidos", component: DashboardPedidos },
+      { path: "pedidos", name: "pedidos", component: DashboardTurmasDCC },
 
       {
         path: "turmasExternas",
@@ -95,7 +94,7 @@ const routes = [
       {
         path: "laboratoriosAlocacao",
         name: "laboratoriosAlocacao",
-        component: DashboardLaboratoriosAlocacao,
+        component: DashboardHorariosLaboratorios,
       },
       { path: "cargaPos", name: "cargaPos", component: DashboardCargaPos },
       { path: "salas", name: "salas", component: DashboardSalas },

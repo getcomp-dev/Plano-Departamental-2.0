@@ -94,7 +94,7 @@
                 </select>
               </div>
 
-              <div class="form-group m-0 col px-0">
+              <div class="form-group m-0 px-0">
                 <label for="gradeSelect" class="col-form-label">Grade</label>
                 <template v-if="hasCursoSelected">
                   <select
@@ -590,8 +590,7 @@ export default {
 
 <style scoped>
 .card .input-maior {
-  min-width: 200px;
-  max-width: 200px;
+  width: 100%;
   text-align: start !important;
 }
 .card .input-maior2 {
@@ -600,8 +599,7 @@ export default {
   text-align: start;
 }
 .card .input-menor {
-  min-width: 80px;
-  max-width: 80px;
+  width: 80px;
   text-align: start !important;
 }
 .card .input-menor2 {
