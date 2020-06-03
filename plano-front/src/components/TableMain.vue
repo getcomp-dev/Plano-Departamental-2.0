@@ -4,7 +4,7 @@
     ref="refMainTable"
     class="main-table table table-sm table-bordered"
   >
-    <thead class="thead-light sticky">
+    <thead class="thead-light max-content sticky">
       <tr>
         <div class="max-content sticky">
           <slot name="thead"></slot>

@@ -47,7 +47,7 @@
 
 /* ==== MODAL TABLE ==== */
 .modal-table {
-  display: block !important;
+  display: block;
   overflow-y: auto !important;
   overflow-x: hidden !important;
   font-size: 10px !important;

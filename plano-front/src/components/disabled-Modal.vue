@@ -47,11 +47,7 @@
               Desmarcar Todos
             </button>
           </div>
-          <button
-            @click="$emit('btn-ok')"
-            class="btn btn-modal btn-verde"
-            style="padding-right: 15px !important; padding-left: 15px !important;"
-          >
+          <button @click="$emit('btn-ok')" class="btn btn-modal btn-verde px-3">
             OK
           </button>
 

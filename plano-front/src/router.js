@@ -3,39 +3,29 @@ import VueRouter from "vue-router";
 import store from "./vuex/store";
 
 // Dashboard
-import Login from "@/components/Dashboard/TheLogin";
-import Dashboard from "@/components/Dashboard/TheDashboard";
-import DashboardHome from "@/components/Dashboard/Home";
+import Login from "@/pages/dashboard/TheLogin";
+import Dashboard from "@/pages/dashboard/TheDashboard";
+import DashboardHome from "@/pages/home/Home";
 // Plano
-import DashboardTurmasDCC from "@/components/plano/turmas-dcc/TurmasDCC";
-import DashboardTurmasExternas from "@/components/plano/turmas-externas/TurmasExternas";
-import DashboardCargaPos from "@/components/plano/turmas-pos/CargaPos";
-import DashboardValidacoes from "@/components/plano/validacoes/Validacoes";
+import DashboardTurmasDCC from "@/pages/plano/turmas-dcc/TurmasDCC";
+import DashboardTurmasExternas from "@/pages/plano/turmas-externas/TurmasExternas";
+import DashboardCargaPos from "@/pages/plano/turmas-pos/CargaPos";
+import DashboardValidacoes from "@/pages/plano/validacoes/Validacoes";
 // Relatorios
-import DashboardCargaProfessores from "@/components/relatorios/CargaProfessores";
-import DashboardGradeDisciplinas from "@/components/relatorios/GradeDisciplinas";
-import DashboardHorarios from "@/components/relatorios/horarios-cursos/Horarios";
-import DashboardHorariosLaboratorios from "@/components/relatorios/horarios-labs/HorariosLabs";
-import DashboardRelatorioDisciplinas from "@/components/relatorios/RelatorioDisciplinas";
+import DashboardCargaProfessores from "@/pages/relatorios/CargaProfessores";
+import DashboardGradeDisciplinas from "@/pages/relatorios/GradeDisciplinas";
+import DashboardHorarios from "@/pages/relatorios/horarios-cursos/Horarios";
+import DashboardHorariosLaboratorios from "@/pages/relatorios/horarios-labs/HorariosLabs";
+import DashboardRelatorioDisciplinas from "@/pages/relatorios/RelatorioDisciplinas";
 // Gerenciar
-import DashboardCursos from "@/components/gerenciar/Cursos";
-import DashboardDocentes from "@/components/gerenciar/Docentes";
-import DashboardGradesEdit from "@/components/gerenciar/GradesEdit";
-import DashboardGrades from "@/components/gerenciar/Grades";
-import DashboardPerfis from "@/components/gerenciar/Perfis";
-import DashboardDisciplinas from "@/components/gerenciar/Disciplinas";
-import DashboardSalas from "@/components/gerenciar/Salas";
-import DashboardHistory from "@/components/gerenciar/History";
-
-/*
-//Componentes desabilitados 
-import DashboardRelatorios from "@/components/Relatorios";
- { path: "relatorios", name: "relatorios",  component: DashboardRelatorios},
-import DashboardHorariosResumo from "./components/Dashboard/horarios-curso/HorariosResumo";
- { path: "horariosResumo", name: "horariosResumo", component: DashboardHorariosResumo},
-import DashboardTurmas from "./components/Dashboard/Turmas";
- { path: "turmas", name: "turmas", component: DashboardTurmas },
-*/
+import DashboardCursos from "@/pages/gerenciar/Cursos";
+import DashboardDocentes from "@/pages/gerenciar/Docentes";
+import DashboardGradesEdit from "@/pages/gerenciar/GradesEdit";
+import DashboardGrades from "@/pages/gerenciar/Grades";
+import DashboardPerfis from "@/pages/gerenciar/Perfis";
+import DashboardDisciplinas from "@/pages/gerenciar/Disciplinas";
+import DashboardSalas from "@/pages/gerenciar/Salas";
+import DashboardHistory from "@/pages/gerenciar/History";
 
 import { USER_LOGGED_OUT } from "./vuex/mutation-types";
 Vue.use(VueRouter);
@@ -116,7 +106,7 @@ const routes = [
   {
     path: "/logout",
     name: "logout",
-    beforeEnter: function(to, from, next) {
+    beforeEnter: function (to, from, next) {
       store.commit(USER_LOGGED_OUT);
       next("/login");
     },

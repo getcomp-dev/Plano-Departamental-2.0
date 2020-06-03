@@ -4,7 +4,7 @@
     class="table table-bordered table-sm modal-table max-content"
     :style="heightClass"
   >
-    <thead class="thead-light sticky">
+    <thead class="thead-light max-content sticky">
       <template v-if="hasSearchBar">
         <tr>
           <div class="max-content sticky">

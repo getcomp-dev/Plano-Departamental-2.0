@@ -10,7 +10,7 @@
       classes="vue-notification"
     />
     <notifications
-      group="general-2"
+      group="second"
       position="bottom right"
       :duration="5000"
       classes="vue-notification"
