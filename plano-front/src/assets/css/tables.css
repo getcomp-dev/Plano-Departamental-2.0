@@ -1,20 +1,22 @@
 .sticky {
+  display: block !important;
   overflow: hidden !important;
   position: sticky !important;
   position: -webkit-sticky !important;
   top: 0 !important;
   overflow: hidden !important;
-  z-index: 5;
+  z-index: 5 !important;
 }
 .sticky2 {
+  display: block !important;
   overflow: hidden !important;
   position: sticky !important;
   position: -webkit-sticky !important;
-  top: 38px !important;
+  top: 37px !important;
   overflow: hidden !important;
-  z-index: 3;
+  z-index: 5;
 }
-.divTable {
+.div-table {
   overflow: hidden;
   height: -webkit-max-content;
   height: -moz-max-content;
@@ -22,13 +24,9 @@
   width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
+  padding: 0;
 }
 .p-header {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
   user-select: none;
 }
 .bg-custom {
@@ -43,69 +41,11 @@
   color: #fff !important;
 }
 
-/* fim main-table */
-
-/* ==== MODAL TABLE ==== */
-.modal-table {
-  display: block;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  font-size: 10px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-  max-height: 450px !important;
-}
-.modal-table tr thead {
-  display: block !important;
-}
-.modal-table th {
-  padding: 0 !important;
-  text-align: center !important;
-  height: 18px !important;
-}
-.modal-table .p-header {
-  text-align: start;
-  height: 18px !important;
-  font-size: 11px !important;
-}
-.modal-table p {
-  margin: 0 !important;
-  text-align: center;
-  padding: 0px 5px !important;
-}
-.modal-table tbody {
-  max-height: 100%;
-  width: 100%;
-}
-.modal-table td {
-  border-top: 0 !important;
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  /* height: 22px !important; */
-}
-.modal-table input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-  margin-bottom: auto !important;
-  height: 13px !important;
-}
-.input-group-search {
-  width: 462px !important;
-  height: 35px !important;
-  padding-left: 4px !important;
-  padding-right: 20px !important;
-  padding-top: 4px !important;
-}
-/* FIM MODAL TABLE */
-
 @-moz-document url-prefix() {
-  .main-table tbody select {
+  /* .main-table tbody select {
     height: 20px !important;
   }
   .main-table tbody input[type="text"] {
     margin-top: 0px !important;
-  }
+  } */
 }

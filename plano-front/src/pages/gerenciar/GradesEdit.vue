@@ -13,8 +13,8 @@
     </PageTitle>
 
     <div class="row w-100 m-0 p-0">
-      <div class="p-0 divTable">
-        <TableMain>
+      <div class="p-0 div-table">
+        <BaseTable>
           <template #thead>
             <th
               style="width:35px"
@@ -42,34 +42,37 @@
             </th>
           </template>
           <template #tbody>
-            <template v-if="hasGradeSelected">
-              <template v-for="disciplinaGrade in DisciplinaGradesOrdered">
-                <tr
-                  @click.prevent="handleClickInDisciplina(disciplinaGrade)"
-                  :key="disciplinaGrade.Disciplina"
-                  :class="[
-                    'clickable',
-                    { 'bg-custom': isEven(disciplinaGrade.periodo) },
-                    {
-                      'bg-selected':
-                        disciplinaSelectedId === disciplinaGrade.Disciplina,
-                    },
-                  ]"
-                >
-                  <td style="width:35px">
-                    {{ disciplinaGrade.periodo }}
-                  </td>
-                  <td style="width:75px">
-                    {{ disciplinaGrade.disciplina_codigo }}
-                  </td>
-                  <td style="width:400px" class="t-start">
-                    {{ disciplinaGrade.disciplina_nome }}
-                  </td>
-                </tr>
-              </template>
+            <template v-for="disciplinaGrade in DisciplinaGradesOrdered">
+              <tr
+                @click.prevent="handleClickInDisciplina(disciplinaGrade)"
+                :key="disciplinaGrade.Disciplina"
+                :class="[
+                  'clickable',
+                  { 'bg-custom': isEven(disciplinaGrade.periodo) },
+                  {
+                    'bg-selected':
+                      disciplinaSelectedId === disciplinaGrade.Disciplina,
+                  },
+                ]"
+              >
+                <td style="width:35px">
+                  {{ disciplinaGrade.periodo }}
+                </td>
+                <td style="width:75px">
+                  {{ disciplinaGrade.disciplina_codigo }}
+                </td>
+                <td style="width:400px" class="t-start">
+                  {{ disciplinaGrade.disciplina_nome }}
+                </td>
+              </tr>
             </template>
+            <tr v-show="!hasGradeSelected">
+              <td style="width:510px">
+                <b>Nenhuma disciplina encontrada</b>, selecione uma grade.
+              </td>
+            </tr>
           </template>
-        </TableMain>
+        </BaseTable>
       </div>
 
       <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
@@ -275,7 +278,7 @@ import gradeService from "@/common/services/grade";
 import disciplinaGradeService from "@/common/services/disciplinaGrade";
 import PageTitle from "@/components/PageTitle.vue";
 import Card from "@/components/Card.vue";
-import TableMain from "@/components/TableMain.vue";
+import BaseTable from "@/components/BaseTable.vue";
 
 const emptyGrade = {
   id: undefined,
@@ -292,7 +295,7 @@ export default {
   name: "DashboardGradeEdit",
   components: {
     PageTitle,
-    TableMain,
+    BaseTable,
     Card,
   },
   data() {
@@ -310,7 +313,7 @@ export default {
   created() {
     if (!this.Admin) {
       this.$notify({
-        group: "second",
+        group: "general",
         title: "Erro",
         text:
           "Acesso negado! Usuário não possui permissão para acessar esta página!",
@@ -464,7 +467,9 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Disciplina <b>${nome_disciplina}</b> foi adicionada à Grade <b>${this.gradeForm.nome}</b>!`,
+            text: `A Disciplina <b>${nome_disciplina}</b> foi adicionada à Grade <b>${
+              this.gradeForm.nome
+            }</b>!`,
             type: "success",
           });
           // this.disciplinaGradeForm.Disciplina = undefined; //Limpa campo de disciplina apos adicionar
@@ -490,7 +495,9 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Disciplina <b>${this.nomeDisciplinaAtual}</b> foi atualizada!`,
+            text: `A Disciplina <b>${
+              this.nomeDisciplinaAtual
+            }</b> foi atualizada!`,
             type: "success",
           });
         })
@@ -515,7 +522,9 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Disciplina <b>${this.nomeDisciplinaAtual}</b> foi excluída!`,
+            text: `A Disciplina <b>${
+              this.nomeDisciplinaAtual
+            }</b> foi excluída!`,
             type: "warn",
           });
         })

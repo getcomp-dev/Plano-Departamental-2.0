@@ -47,7 +47,10 @@
               Desmarcar Todos
             </button>
           </div>
-          <button @click="$emit('btn-ok')" class="btn btn-modal btn-verde px-3">
+          <button
+            @click="$emit('btn-ok')"
+            class="btn btn-modal btn-verde btn-ok-modal"
+          >
             OK
           </button>
 

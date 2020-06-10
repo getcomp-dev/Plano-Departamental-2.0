@@ -19,6 +19,7 @@ button {
   width: 32px !important;
   margin: 0 4px;
   background: none !important;
+  box-shadow: none !important;
 }
 .btn-modal {
   font-size: 12px !important;
@@ -27,6 +28,10 @@ button {
   width: -moz-max-content;
   width: max-content;
   padding: 0 5px !important;
+}
+.btn-ok-modal {
+  padding-right: 15px !important;
+  padding-left: 15px !important;
 }
 .btn-modal + .btn-modal {
   margin-left: 10px !important;
@@ -58,7 +63,7 @@ button i.far {
   color: #9ab3ff !important;
 }
 .relatbtn:hover {
-  color: #82a0ff !important;
+  color: #728bdd !important;
   background-color: white !important;
 }
 .relatbtn:focus {
@@ -100,14 +105,8 @@ button i.far {
   color: #cfcfc4 !important;
 }
 .cancelbtn:hover {
+  color: #a1a09b !important;
   background-color: white !important;
-  color: #b8b4a8 !important;
-}
-.cancelbtn:focus {
-  background-color: white !important;
-  color: #b8b8a8 !important;
-  -webkit-text-stroke-width: 1px !important;
-  -webkit-text-stroke-color: #ada89a !important;
 }
 
 .delbtn {

@@ -13,8 +13,8 @@
     </PageTitle>
 
     <div class="row w-100 m-0">
-      <div class="p-0 divTable">
-        <TableMain>
+      <div class="p-0 div-table">
+        <BaseTable :tableHeight="'max-content'">
           <template #thead>
             <th style="width: 220px">
               Cursos
@@ -113,7 +113,7 @@
               </tr>
             </template>
           </template>
-        </TableMain>
+        </BaseTable>
       </div>
 
       <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
@@ -247,7 +247,7 @@ import _ from "lodash";
 import gradeService from "@/common/services/grade";
 import Card from "@/components/Card";
 import PageTitle from "@/components/PageTitle";
-import TableMain from "@/components/TableMain";
+import BaseTable from "@/components/BaseTable";
 
 const emptyGrade = {
   id: undefined,
@@ -262,7 +262,7 @@ const emptyDisciplinaGrade = {
 };
 export default {
   name: "DashboardGrade",
-  components: { PageTitle, Card, TableMain },
+  components: { PageTitle, Card, BaseTable },
   data() {
     return {
       error: undefined,
@@ -274,7 +274,7 @@ export default {
   created() {
     if (!this.Admin) {
       this.$notify({
-        group: "second",
+        group: "general",
         title: "Erro",
         text:
           "Acesso negado! Usuário não possui permissão para acessar esta página!",
@@ -424,12 +424,6 @@ export default {
 </script>
 
 <style scoped>
-.main-table {
-  overflow: auto !important;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-}
 .card-input-maior {
   width: 210px;
 }

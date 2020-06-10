@@ -20,408 +20,276 @@
     </PageTitle>
 
     <NavTab
-      :currentTab="modalTabAtiva"
+      :currentTab="tabAtivaMain"
       :allTabs="['Turmas', 'Docentes']"
-      @change-tab="modalTabAtiva = $event"
+      @change-tab="tabAtivaMain = $event"
     />
 
-    <div class="pl-0 divTable">
-      <!-- TABLE DOCENTES -->
-      <table
-        v-show="modalTabAtiva === 'Docentes'"
-        class="table main-table table-hover table-sm table-bordered"
+    <div class="div-table" v-if="!isLoading">
+      <BaseTable
+        v-show="tabAtivaMain === 'Turmas'"
+        :tableHeight="'height: calc(100vh - 130px)'"
       >
-        <thead class="thead-light max-content sticky">
-          <tr>
-            <div class="max-content sticky">
-              <th>
-                <p
-                  style="width: 696px; text-align: start;"
-                  class="p-header clickable"
-                  @click="toggleOrder(ordemDocentes, 'nome')"
-                >
-                  Nome
-                  <i
-                    style="font-size: 0.6rem; text-align: right;"
-                    :class="setIconByOrder(ordemDocentes, 'nome')"
-                  ></i>
-                </p>
-              </th>
-            </div>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-for="validacao in DocentesValidacoesOrdered">
-            <tr :key="'validacoes-' + validacao.nome" class="bg-custom">
-              <div class="max-content">
-                <td>
-                  <p style="width: 696px;  text-align: start;">
-                    {{ validacao.nome }}
-                  </p>
-                </td>
-              </div>
+        <template #thead>
+          <th
+            @click="toggleOrder(ordemTurmas, 'periodo')"
+            class="clickable"
+            style="width: 35px"
+            title="Semestre"
+          >
+            S.
+            <i :class="setIconByOrder(ordemTurmas, 'periodo')"></i>
+          </th>
+          <th
+            @click="toggleOrder(ordemTurmas, 'disciplinaPerfil')"
+            class="t-start clickable"
+            style="width: 70px"
+          >
+            Perfil
+            <i :class="setIconByOrder(ordemTurmas, 'disciplinaPerfil')"></i>
+          </th>
+          <th
+            @click="toggleOrder(ordemTurmas, 'disciplinaCodigo')"
+            class="t-start clickable"
+            style="width: 70px"
+            title="Código"
+          >
+            Cód.
+            <i :class="setIconByOrder(ordemTurmas, 'disciplinaCodigo')"></i>
+          </th>
+          <th
+            @click="toggleOrder(ordemTurmas, 'disciplinaNome')"
+            class="t-start clickable"
+            style="width: 300px"
+          >
+            Disciplina
+            <i :class="setIconByOrder(ordemTurmas, 'disciplinaNome')"></i>
+          </th>
+          <th style="width: 35px" class="t-staty" title="Turma">
+            T.
+          </th>
+          <th style="width: 130px" class="s-start">
+            Docentes
+          </th>
+          <th style="width:50px">Editar</th>
+        </template>
+        <template #tbody>
+          <template v-for="validacaoTurma in TurmasValidacoesOrdered">
+            <tr :key="'turmaId' + validacaoTurma.id" class="bg-custom">
+              <td style="width: 35px;">
+                {{ validacaoTurma.periodo }}
+              </td>
+              <td style="width: 70px;" class="t-start">
+                {{ validacaoTurma.disciplinaPerfil }}
+              </td>
+              <td style="width: 70px;" class="t-start">
+                {{ validacaoTurma.disciplinaCodigo }}
+              </td>
+              <td style="width: 300px;" class="t-start">
+                {{ validacaoTurma.disciplinaNome }}
+              </td>
+              <td style="width: 35px">
+                {{ validacaoTurma.letra }}
+              </td>
+              <td style="width: 130px">
+                {{ validacaoTurma.docente1Apelido }}
+                <br />
+                {{ validacaoTurma.docente2Apelido }}
+              </td>
+              <td
+                style="width: 50px"
+                class="clickable"
+                title="Editar turma"
+                @click.stop="openModalEditTurma(validacaoTurma)"
+              >
+                <i class="fas fa-edit btn-table"></i>
+              </td>
             </tr>
             <tr
-              v-for="(erro, index) in validacao.erros"
-              :key="'validacao-conflitos-' + validacao.nome + '-' + index"
+              v-for="(conflito, i) in validacaoTurma.conflitos"
+              :key="'conflito' + i + validacaoTurma.id + conflito.type"
             >
-              <div class="max-content">
-                <td>
-                  <p style="width: 35px; text-align: center;">
-                    <i
-                      style=" background-color: inherit; font-size: 13px; margin:3px!important;"
-                      class="fas fa-exclamation-circle delbtn"
-                      title="Conflito critico!"
-                    ></i>
-                  </p>
-                </td>
-
-                <td>
-                  <p style="width: 660px; text-align: start;">
-                    {{ erro }}
-                  </p>
-                </td>
-              </div>
+              <td style="width: 35px;">
+                <i
+                  v-if="isCritical(conflito.type)"
+                  style="background-color: inherit; font-size: 13px; margin:3px!important;"
+                  class="fas fa-exclamation-circle delbtn"
+                  title="Conflito critico!"
+                ></i>
+              </td>
+              <td colspan="6" style="width:655px" class="t-start">
+                {{ conflito.msg }}
+              </td>
             </tr>
           </template>
-        </tbody>
-      </table>
-
-      <!-- TABLE TURMAS -->
-      <table
-        v-show="modalTabAtiva === 'Turmas'"
-        class="table main-table table-hover table-sm table-bordered"
-      >
-        <thead class="thead-light max-content sticky">
-          <tr>
-            <div class="max-content sticky">
-              <th>
-                <p
-                  style="width: 35px; text-align: center;"
-                  class="p-header clickable"
-                  @click="toggleOrder(ordemTurmas, 'periodo')"
-                >
-                  S.
-                  <i
-                    style="font-size: 0.6rem; text-align: right;"
-                    :class="setIconByOrder(ordemTurmas, 'periodo')"
-                  ></i>
-                </p>
-              </th>
-              <th>
-                <p
-                  style="width: 70px; text-align: start;"
-                  class="p-header clickable"
-                  @click="toggleOrder(ordemTurmas, 'disciplina_perfil')"
-                >
-                  Perfil
-                  <i
-                    style="font-size: 0.6rem; text-align: right;"
-                    :class="setIconByOrder(ordemTurmas, 'disciplina_perfil')"
-                  ></i>
-                </p>
-              </th>
-              <th>
-                <p
-                  style="width: 70px; text-align: start;"
-                  class="p-header clickable"
-                  @click="toggleOrder(ordemTurmas, 'disciplina_codigo')"
-                >
-                  Cód.
-                  <i
-                    style="font-size: 0.6rem; text-align: right;"
-                    :class="setIconByOrder(ordemTurmas, 'disciplina_codigo')"
-                  ></i>
-                </p>
-              </th>
-              <th>
-                <p
-                  style="width: 300px; text-align: start;"
-                  class="p-header clickable"
-                  @click="toggleOrder(ordemTurmas, 'disciplina_nome')"
-                >
-                  Disciplina
-                  <i
-                    style="font-size: 0.6rem; text-align: right;"
-                    :class="setIconByOrder(ordemTurmas, 'disciplina_nome')"
-                  ></i>
-                </p>
-              </th>
-              <th>
-                <p style="width: 35px; text-align: start;" class="p-header">
-                  Turma
-                </p>
-              </th>
-              <th>
-                <p style="width: 130px; text-align: center;" class="p-header">
-                  Docentes
-                </p>
-              </th>
-              <th><p class="p-header" style="width:50px">Editar</p></th>
-            </div>
+          <tr v-show="TurmasValidacoesOrdered.length === 0">
+            <td style="width:690px">
+              <b>Nenhum conflito encontrado</b>, clique no botão de filtros para
+              seleciona-los.
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          <template v-for="validacao in TurmasValidacoesOrdered">
-            <tr
-              :key="'validacoes-' + validacao.id + validacao.disciplina_codigo"
-              class="bg-custom"
-            >
-              <div class="max-content">
-                <td>
-                  <p style="width: 35px; text-align: center;">
-                    {{ validacao.periodo }}
-                  </p>
-                </td>
-                <td>
-                  <p style="width: 70px; text-align: start;">
-                    {{ validacao.disciplina_perfil }}
-                  </p>
-                </td>
-                <td>
-                  <p style="width: 70px; text-align: start;">
-                    {{ validacao.disciplina_codigo }}
-                  </p>
-                </td>
-                <td>
-                  <p style="width: 300px; text-align: start;">
-                    {{ validacao.disciplina_nome }}
-                  </p>
-                </td>
-                <td>
-                  <p style="width: 35px; text-align: center;">
-                    {{ validacao.letra }}
-                  </p>
-                </td>
-                <td>
-                  <p style="width: 130px; text-align: center;">
-                    {{ validacao.docente1_apelido }}
-                    <br />
-                    {{ validacao.docente2_apelido }}
-                  </p>
-                </td>
-                <td>
-                  <p
-                    style="width: 50px; text-align: center;"
-                    @click="openModalEditTurma(validacao.id)"
-                    class="clickable"
-                    title="Editar turma"
-                  >
-                    <i
-                      class="fas fa-edit btn-table"
-                      style="font-size:12px;margin:3px!important;"
-                    ></i>
-                  </p>
-                </td>
-              </div>
+        </template>
+      </BaseTable>
+
+      <BaseTable
+        v-show="tabAtivaMain === 'Docentes'"
+        :tableHeight="'height: calc(100vh - 130px)'"
+      >
+        <template #thead>
+          <th
+            colspan="2"
+            @click="toggleOrder(ordemDocentes, 'nome')"
+            style="width: 690px"
+            class="t-start clickable"
+          >
+            Nome
+            <i :class="setIconByOrder(ordemDocentes, 'nome')"></i>
+          </th>
+        </template>
+        <template #tbody>
+          <template v-for="validacaoDocente in DocentesValidacoesOrdered">
+            <tr :key="'docenteId' + validacaoDocente.id" class="bg-custom">
+              <td colspan="2" style="width: 690px;" class="t-start">
+                {{ validacaoDocente.nome }}
+              </td>
             </tr>
             <tr
-              v-for="(erro, index) in validacao.conflitos"
-              :key="index + 'validacao-conflitos' + validacao.id + erro.type"
+              v-for="conflito in validacaoDocente.conflitos"
+              :key="'conflitos' + validacaoDocente.id + conflito"
             >
-              <div class="max-content">
-                <td>
-                  <p style="width: 35px; text-align: center;">
-                    <i
-                      v-if="isCritical(erro.type)"
-                      style=" background-color: inherit; font-size: 13px; margin:3px!important;"
-                      class="fas fa-exclamation-circle delbtn"
-                      title="Conflito critico!"
-                    ></i>
-                  </p>
-                </td>
-                <td>
-                  <p style="width: 660px; text-align: start;">{{ erro.msg }}</p>
-                </td>
-              </div>
+              <td style="width: 35px">
+                <i
+                  style="background-color: inherit; font-size: 13px; margin:3px!important;"
+                  class="fas fa-exclamation-circle delbtn"
+                  title="Conflito critico!"
+                ></i>
+              </td>
+
+              <td style="width: 655px;" class="t-start">
+                {{ conflito }}
+              </td>
             </tr>
           </template>
-        </tbody>
-      </table>
+        </template>
+      </BaseTable>
     </div>
 
     <!-- Modal Filtros -->
     <b-modal id="modalFiltros" ref="modalFiltros" scrollable title="Filtros">
-      <div class="p-0 m-0" style="height: 30px; width: 465px;">
-        <ul
-          class="nav nav-tabs card-header-tabs m-0"
-          style="font-size: 11px !important; height: 30px;"
+      <NavTab
+        :currentTab="tabAtivaModal"
+        :allTabs="['Conflitos', 'Semestres']"
+        @change-tab="tabAtivaModal = $event"
+      />
+      <div class="col m-0 p-0">
+        <BaseTable
+          v-show="tabAtivaModal === 'Conflitos'"
+          :tableType="'modal-table'"
         >
-          <li class="nav-item" @click="modal_navtab = 'conflitos'">
-            <a
-              class="nav-link border border-right-0 clickable"
-              :class="{
-                active: modal_navtab == 'conflitos',
-              }"
-              >Conflito</a
-            >
-          </li>
-          <li class="nav-item" @click="modal_navtab = 'semestre'">
-            <a
-              class="nav-link border clickable"
-              :class="{
-                active: modal_navtab == 'semestre',
-              }"
-              >Semestre</a
-            >
-          </li>
-        </ul>
-      </div>
-      <div
-        class="col m-0 p-0"
-        style="width: max-content; height: 450px !important;"
-      >
-        <!-- TABLE SEMESTRE -->
-        <table
-          v-if="modal_navtab === 'semestre'"
-          class="table table-bordered table-sm modal-table"
-          style="max-height: 392px !important;"
-        >
-          <thead class="thead-light sticky">
-            <tr>
-              <div
-                style="font-size: 11px !important;"
-                class="max-content sticky"
-              >
-                <th>
-                  <p style="width: 25px;" class="p-header"></p>
-                </th>
-                <th>
-                  <p class="p-header" style="width: 435px; text-align: start;">
-                    Semestre Letivo
-                  </p>
-                </th>
-              </div>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <div style="width: max-content;">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      class="form-check-input position-static m-0"
-                      v-model="semestre_1Ativo"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p style="width: 435px; text-align: start;">PRIMEIRO</p>
-                </td>
-              </div>
-            </tr>
-            <tr>
-              <div style="width: max-content;">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      class="form-check-input position-static m-0"
-                      v-model="semestre_2Ativo"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p style="width: 435px; text-align: start;">SEGUNDO</p>
-                </td>
-              </div>
-            </tr>
-          </tbody>
-        </table>
-        <!-- TABLE MODAL CONFLITOS -->
-        <table
-          v-else
-          class="table table-bordered table-sm modal-table"
-          style="max-height: 450px !important;"
-        >
-          <thead class="thead-light sticky">
-            <tr>
-              <div
-                style="font-size: 11px !important;"
-                class="max-content sticky"
-              >
-                <th>
-                  <p style="width: 25px;" class="p-header"></p>
-                </th>
-                <th>
-                  <p class="p-header" style="width: 435px; text-align: start;">
-                    Conflito
-                  </p>
-                </th>
-              </div>
-            </tr>
-          </thead>
-          <tbody>
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th style="width: 425px" class="t-start">
+              Conflito
+            </th>
+          </template>
+          <template #tbody>
             <tr
               v-for="conflito in ConflitosOrdered"
-              :key="conflito.id"
-              style="text-transform:uppercase"
+              :key="'conflitosModal' + conflito.type"
+              @click="
+                addOrRemoveItem(conflito.type, filtroConflitos.selecionados)
+              "
+              style="text-transform: uppercase"
             >
-              <div style="width: max-content;">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      class="form-check-input position-static m-0"
-                      v-model="ConflitosSelected"
-                      :value="conflito.type"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p style="width: 435px; text-align: start;">
-                    {{ conflito.msg }}
-                  </p>
-                </td>
-              </div>
+              <td style="width: 25px;">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroConflitos.selecionados"
+                  :value="conflito.type"
+                />
+              </td>
+              <td style="width: 425px" class="t-start">
+                {{ conflito.msg }}
+              </td>
             </tr>
-          </tbody>
-        </table>
+          </template>
+        </BaseTable>
+
+        <BaseTable
+          v-show="tabAtivaModal === 'Semestres'"
+          :tableType="'modal-table'"
+        >
+          <template #thead>
+            <th style="width: 25px;"></th>
+            <th style="width: 425px;" class="t-start">
+              Semestre Letivo
+            </th>
+          </template>
+          <template #tbody>
+            <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroSemestres.primeiro"
+                />
+              </td>
+              <td style="width: 425px" class="t-start">
+                PRIMEIRO
+              </td>
+            </tr>
+            <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroSemestres.segundo"
+                />
+              </td>
+              <td style="width: 425px" class="t-start">SEGUNDO</td>
+            </tr>
+          </template>
+        </BaseTable>
       </div>
 
       <div slot="modal-footer" class="w-100 m-0 d-flex">
         <div class="w-100">
-          <template v-if="modal_navtab === 'semestre'">
-            <b-button
-              class="btn-custom btn-modal btn-azul"
-              variant="success"
-              @click="selectAllSemestre()"
-              >Selecionar Todos</b-button
-            >
-            <b-button
-              class="btn-custom btn-modal btn-cinza"
-              variant="secondary"
-              @click="selectNoneSemestre()"
-              >Desmarcar Todos</b-button
-            >
-          </template>
-          <template v-else-if="modal_navtab === 'conflitos'">
-            <b-button
-              class="btn-custom btn-modal btn-azul"
-              variant="success"
-              @click="selectAllConflitos()"
-              >Selecionar Todos</b-button
-            >
-            <b-button
-              class="btn-custom btn-modal btn-cinza"
-              variant="secondary"
-              @click="selectNoneConflitos()"
-              >Desmarcar Todos</b-button
-            >
-          </template>
+          <b-button
+            class="btn-custom btn-modal btn-azul"
+            variant="success"
+            @click="modalSelectAll[tabAtivaModal]"
+            >Selecionar Todos</b-button
+          >
+          <b-button
+            class="btn-custom btn-modal btn-cinza"
+            variant="secondary"
+            @click="modalSelectNone[tabAtivaModal]"
+            >Desmarcar Todos</b-button
+          >
         </div>
         <b-button
           variant="success"
-          @click="btnOK()"
-          class="btn-custom btn-modal btn-verde px-3"
+          @click="btnOkFiltros()"
+          class="btn-custom btn-modal btn-verde btn-ok-modal"
           >OK</b-button
         >
       </div>
     </b-modal>
     <!-- modal turma edit -->
-    <b-modal id="modalTurma" scrollable title="Edição de Turma" hide-footer>
-      <ModalTurma :turma="turma_clickada"></ModalTurma>
+    <b-modal
+      id="modalEditTurma"
+      ref="modalEditTurma"
+      scrollable
+      title="Edição de Turma"
+      hide-footer
+    >
+      <template v-if="turmaClickada !== null">
+        <ModalTurma
+          :key="turmaClickada.id + 'modalTurma'"
+          :turma="turmaClickada"
+        ></ModalTurma
+      ></template>
     </b-modal>
     <!-- MODAL AJUDA -->
     <b-modal id="modalAjuda" title="Ajuda" scrollable hide-footer>
@@ -451,10 +319,12 @@
 
 <script>
 import _ from "lodash";
-import ModalTurma from "./ModalTurma.vue";
+import { EventBus } from "@/event-bus.js";
+import ordenacaoMixin from "@/ordenacao-mixin";
 import PageTitle from "@/components/PageTitle";
 import NavTab from "@/components/NavTab";
-import { EventBus } from "@/event-bus.js";
+import ModalTurma from "./ModalTurma.vue";
+import BaseTable from "@/components/BaseTable";
 
 const AllConflitosTurmas = [
   { type: 1, msg: "Nenhum turno alocado" },
@@ -488,52 +358,61 @@ const AllConflitosTurmas = [
   { type: 10, msg: "Conflito de horarios na grade" },
   { type: 11, msg: "Disciplina de curso presencial não pode ter turno EAD" },
 ];
+
 export default {
   name: "Validacoes",
+  mixins: [ordenacaoMixin],
   components: {
     ModalTurma,
     PageTitle,
     NavTab,
+    BaseTable,
   },
   data() {
     return {
-      modal_navtab: "conflitos",
-      ConflitosSelected: [],
-      ConflitosAtivados: [],
-      semestreAtual: undefined,
-      semestre_1Ativo: true,
-      semestre_2Ativo: true,
-      turma_clickada: null,
-      modalTabAtiva: "Turmas",
+      tabAtivaMain: "Turmas",
+      allConflitos: _.clone(AllConflitosTurmas),
+      grades1Semestre: { CCD: [], CCN: [], EC: [], SI: [] },
+      grades2Semestre: { CCD: [], CCN: [], EC: [], SI: [] },
+      turmaClickada: null,
+      tabAtivaModal: "Conflitos",
       ordemTurmas: { order: "periodo", type: "asc" },
       ordemDocentes: { order: "nome", type: "asc" },
-      evenCCN: "false",
-      evenCCD: "false",
-      evenEC: "false",
-      evenSI: "false",
-      ativos1: {
-        CCD: [[], [], [], [], [], [], [], [], [], []],
-        CCN: [[], [], [], [], [], [], [], [], [], []],
-        EC: [[], [], [], [], [], [], [], [], [], []],
-        SI: [[], [], [], [], [], [], [], [], [], []],
-        Eletivas: [],
+      filtroConflitos: {
+        ativados: [],
+        selecionados: [],
       },
-      ativos2: {
-        CCD: [[], [], [], [], [], [], [], [], [], []],
-        CCN: [[], [], [], [], [], [], [], [], [], []],
-        EC: [[], [], [], [], [], [], [], [], [], []],
-        SI: [[], [], [], [], [], [], [], [], [], []],
-        Eletivas: [],
+      filtroSemestres: {
+        primeiro: true,
+        segundo: true,
+        ativo: 3,
       },
-      Conflitos: _.clone(AllConflitosTurmas),
-      grades1semestre: { CCD: [], CCN: [], EC: [], SI: [] },
-      grades2semestre: { CCD: [], CCN: [], EC: [], SI: [] },
+      modalSelectAll: {
+        Conflitos: () => {
+          this.filtroConflitos.selecionados = [
+            ...this.allConflitos.map((conflito) => conflito.type),
+          ];
+        },
+        Semestres: () => {
+          this.filtroSemestres.primeiro = true;
+          this.filtroSemestres.segundo = true;
+        },
+      },
+      modalSelectNone: {
+        Conflitos: () => {
+          this.filtroConflitos.selecionados = [];
+        },
+        Semestres: () => {
+          this.filtroSemestres.primeiro = false;
+          this.filtroSemestres.segundo = false;
+        },
+      },
     };
   },
   created() {
     if (!this.Admin) {
       this.$notify({
-        group: "second",
+        group: "general",
         title: "Erro",
         text:
           "Acesso negado! Usuário não possui permissão para acessar esta página!",
@@ -544,9 +423,8 @@ export default {
   },
   mounted() {
     EventBus.$on("close-modal-turma", () => {
-      this.$bvModal.hide("modalTurma");
+      this.$refs.modalEditTurma.hide();
     });
-
     //define grades ativas por periodo
     let g;
     let periodoInicial, periodoFinal;
@@ -561,7 +439,7 @@ export default {
         1 +
         2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
         (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
-      this.grades1semestre.CCD.push({
+      this.grades1Semestre.CCD.push({
         id: g[i].id,
         inicio: periodoInicial,
         fim: periodoFinal,
@@ -577,7 +455,7 @@ export default {
         1 +
         2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
         (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
-      this.grades2semestre.CCD.push({
+      this.grades2Semestre.CCD.push({
         id: g[i].id,
         inicio: periodoInicial,
         fim: periodoFinal,
@@ -596,7 +474,7 @@ export default {
         1 +
         2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
         (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
-      this.grades1semestre.CCN.push({
+      this.grades1Semestre.CCN.push({
         id: g[i].id,
         inicio: periodoInicial,
         fim: periodoFinal,
@@ -612,7 +490,7 @@ export default {
         1 +
         2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
         (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
-      this.grades2semestre.CCN.push({
+      this.grades2Semestre.CCN.push({
         id: g[i].id,
         inicio: periodoInicial,
         fim: periodoFinal,
@@ -631,7 +509,7 @@ export default {
         1 +
         2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
         (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
-      this.grades1semestre.SI.push({
+      this.grades1Semestre.SI.push({
         id: g[i].id,
         inicio: periodoInicial,
         fim: periodoFinal,
@@ -647,7 +525,7 @@ export default {
         1 +
         2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
         (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
-      this.grades2semestre.SI.push({
+      this.grades2Semestre.SI.push({
         id: g[i].id,
         inicio: periodoInicial,
         fim: periodoFinal,
@@ -666,7 +544,7 @@ export default {
         1 +
         2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
         (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
-      this.grades1semestre.EC.push({
+      this.grades1Semestre.EC.push({
         id: g[i].id,
         inicio: periodoInicial,
         fim: periodoFinal,
@@ -682,7 +560,7 @@ export default {
         1 +
         2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
         (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
-      this.grades2semestre.EC.push({
+      this.grades2Semestre.EC.push({
         id: g[i].id,
         inicio: periodoInicial,
         fim: periodoFinal,
@@ -696,73 +574,35 @@ export default {
     EventBus.$off("close-modal-turma");
   },
   methods: {
-    btnOK() {
+    addOrRemoveItem(item, array) {
+      const index = array.indexOf(item);
+      if (index === -1) array.push(item);
+      else array.splice(index, 1);
+    },
+    btnOkFiltros() {
       this.btnOkSemestre();
-      this.ConflitosAtivados = [...this.ConflitosSelected];
+      this.filtroConflitos.ativados = [...this.filtroConflitos.selecionados];
+      this.tabAtivaModal = "Conflitos";
       this.$refs.modalFiltros.hide();
     },
     btnOkSemestre() {
-      if (this.semestre_1Ativo && !this.semestre_2Ativo) {
-        this.semestreAtual = 1;
-      } else if (!this.semestre_1Ativo && this.semestre_2Ativo) {
-        this.semestreAtual = 2;
-      } else if (this.semestre_1Ativo && this.semestre_1Ativo) {
-        this.semestreAtual = 3;
-      } else {
-        this.semestreAtual = undefined;
-      }
+      if (this.filtroSemestres.primeiro && !this.filtroSemestres.segundo)
+        this.filtroSemestres.ativo = 1;
+      else if (!this.filtroSemestres.primeiro && this.filtroSemestres.segundo)
+        this.filtroSemestres.ativo = 2;
+      else if (this.filtroSemestres.primeiro && this.filtroSemestres.primeiro)
+        this.filtroSemestres.ativo = 3;
+      else this.filtroSemestres.ativo = undefined;
     },
-    selectAllSemestre() {
-      this.semestre_1Ativo = true;
-      this.semestre_2Ativo = true;
-    },
-    selectAll() {
-      if (this.modal_navtab === "Semestre") this.selectAllSemestre();
-      else this.selectAllConflitos();
-    },
-    selectNone() {
-      if (this.modal_navtab == "Semestre") this.selectNoneSemestre();
-      else this.selectNoneConflitos();
-    },
-    selectNoneSemestre() {
-      this.semestre_1Ativo = false;
-      this.semestre_2Ativo = false;
-    },
-    selectAllConflitos() {
-      this.ConflitosSelected = [
-        ...this.Conflitos.map((conflito) => conflito.type),
-      ];
-    },
-    selectNoneConflitos() {
-      this.ConflitosSelected = [];
-    },
-    openModalEditTurma(id) {
-      this.turma_clickada = this.findTurmaById(id);
-      this.$bvModal.show("modalTurma");
-    },
-    toggleOrder(currentOrder, newOrder, type = "asc") {
-      if (currentOrder.order != newOrder) {
-        currentOrder.order = newOrder;
-        currentOrder.type = type;
-      } else {
-        currentOrder.type = currentOrder.type == "asc" ? "desc" : "asc";
-      }
-    },
-    setIconByOrder(currentOrder, orderToCheck) {
-      if (currentOrder.order === orderToCheck) {
-        return currentOrder.type == "asc"
-          ? "fas fa-arrow-down fa-sm"
-          : "fas fa-arrow-up fa-sm";
-      } else {
-        return "fas fa-arrow-down fa-sm low-opacity";
-      }
+    openModalEditTurma(turma) {
+      this.turmaClickada = { ...turma };
+      this.$refs.modalEditTurma.show();
     },
     findPerfilById(id) {
       let perfil = _.find(this.Perfis, (p) => p.id == id);
       return perfil != undefined ? perfil : null;
     },
-    //return apelido
-    findDocenteById(id) {
+    findDocenteApelidoById(id) {
       let docente = _.find(this.Docentes, (d) => d.id == id);
       return docente != undefined ? docente.apelido : null;
     },
@@ -770,9 +610,9 @@ export default {
       let disciplina = _.find(this.Disciplinas, (d) => d.id == id);
       return disciplina != undefined ? disciplina : null;
     },
-    findTurmaById(id) {
-      let result = _.find(this.Turmas, (turma) => turma.id == id);
-      return result != undefined ? result : null;
+    findTurmaById(turmaId) {
+      let turmaFounded = _.find(this.Turmas, (turma) => turma.id == turmaId);
+      return turmaFounded != undefined ? turmaFounded : null;
     },
     totalPedidos(turma_id) {
       let result = 0;
@@ -792,18 +632,18 @@ export default {
       return {
         //Turmas
         ...turma,
-        docente1_apelido: this.findDocenteById(turma.Docente1),
-        docente2_apelido: this.findDocenteById(turma.Docente2),
-        pedidos_totais: this.totalPedidos(turma.id),
+        docente1Apelido: this.findDocenteApelidoById(turma.Docente1),
+        docente2Apelido: this.findDocenteApelidoById(turma.Docente2),
+        pedidosTotais: this.totalPedidos(turma.id),
         //Disciplinas
-        disciplina_nome: disciplina.nome,
-        disciplina_creditoTotal:
+        disciplinaNome: disciplina.nome,
+        disciplinaCodigo: disciplina.codigo,
+        disciplinaEad: disciplina.ead,
+        disciplinaLaboratorio: disciplina.laboratorio,
+        disciplinaCreditoTotal:
           parseInt(disciplina.cargaTeorica, 10) +
           parseInt(disciplina.cargaPratica, 10),
-        disciplina_codigo: disciplina.codigo,
-        disciplina_ead: disciplina.ead,
-        disciplina_laboratorio: disciplina.laboratorio,
-        disciplina_perfil: this.findPerfilById(disciplina.Perfil).abreviacao,
+        disciplinaPerfil: this.findPerfilById(disciplina.Perfil).abreviacao,
         conflitos: [],
       };
     },
@@ -813,25 +653,25 @@ export default {
       check = this.checkTurno(validacao.turno1);
       if (check) validacao.conflitos.push(check);
       //Compatibilidade do turno com disciplina
-      check = this.checkTurnoEAD(validacao.disciplina_ead, validacao.turno1);
+      check = this.checkTurnoEAD(validacao.disciplinaEad, validacao.turno1);
       if (check) validacao.conflitos.push(check);
       //Horarios
       check = this.checkHorarios(
-        validacao.disciplina_ead,
-        validacao.disciplina_creditoTotal,
+        validacao.disciplinaEad,
+        validacao.disciplinaCreditoTotal,
         validacao.Horario1,
         validacao.Horario2
       );
       if (check) validacao.conflitos.push(check);
       //Docente
       check = this.checkDocentes(
-        validacao.docente1_apelido,
-        validacao.docente2_apelido
+        validacao.docente1Apelido,
+        validacao.docente2Apelido
       );
       if (check) validacao.conflitos.push(check);
       //Salas
       check = this.checkSalasLab(
-        validacao.disciplina_laboratorio,
+        validacao.disciplinaLaboratorio,
         validacao.Sala1,
         validacao.Sala2
       );
@@ -839,20 +679,20 @@ export default {
 
       //Lotação das salas
       // sala 1
-      check = this.checkVagaSala(validacao.Sala1, validacao.pedidos_totais);
+      check = this.checkVagaSala(validacao.Sala1, validacao.pedidosTotais);
       if (check) validacao.conflitos.push(check);
       // sala 2
       if (validacao.Sala1 != validacao.Sala2) {
-        check = this.checkVagaSala(validacao.Sala2, validacao.pedidos_totais);
+        check = this.checkVagaSala(validacao.Sala2, validacao.pedidosTotais);
         if (check) validacao.conflitos.push(check);
       }
 
       // Pedidos - 7
-      check = this.checkPedidos(validacao.pedidos_totais);
+      check = this.checkPedidos(validacao.pedidosTotais);
       if (check) validacao.conflitos.push(check);
       // EAD com salas - 8
       check = this.checkSalasInEAD(
-        validacao.disciplina_ead,
+        validacao.disciplinaEad,
         validacao.Sala1,
         validacao.Sala2
       );
@@ -865,7 +705,7 @@ export default {
     },
     checkTurno(turno) {
       return turno === null || turno === undefined || turno === ""
-        ? this.Conflitos[0]
+        ? this.allConflitos[0]
         : null;
     },
     isEmpty(value) {
@@ -873,25 +713,27 @@ export default {
     },
     checkTurnoEAD(isEAD, turno) {
       return (isEAD == 1 && turno !== "EAD") || (isEAD != 1 && turno == "EAD")
-        ? this.Conflitos[1]
+        ? this.allConflitos[1]
         : false;
     },
     checkHorarios(isEAD, creditoTotal, horario1, horario2) {
       if (isEAD != 1) {
         if (creditoTotal <= 2) {
           return horario1 == null && horario2 == null
-            ? this.Conflitos[2]
+            ? this.allConflitos[2]
             : false;
         } else {
           return horario1 == null || horario2 == null
-            ? this.Conflitos[2]
+            ? this.allConflitos[2]
             : false;
         }
       }
       return false;
     },
     checkDocentes(docente1, docente2) {
-      return docente1 === null && docente2 == null ? this.Conflitos[3] : false;
+      return docente1 === null && docente2 == null
+        ? this.allConflitos[3]
+        : false;
     },
     checkSalasLab(isLab, sala1, sala2) {
       //Não lab
@@ -899,34 +741,38 @@ export default {
       //Obrigatorio
       else if (isLab == 1) {
         return !this.isLab(sala1) && !this.isLab(sala2)
-          ? this.Conflitos[4]
+          ? this.allConflitos[4]
           : false;
         //Desejavel
       } else if (isLab == 2) {
         return !this.isLab(sala1) && !this.isLab(sala2)
-          ? this.Conflitos[5]
+          ? this.allConflitos[5]
           : false;
       }
     },
-    checkVagaSala(sala_id, pedidos_totais) {
+    checkVagaSala(sala_id, pedidosTotais) {
       let sala;
       if (sala_id != null) sala = _.find(this.Salas, (s) => sala_id == s.id);
 
       if (sala != undefined) {
-        if (sala.lotacao_maxima < pedidos_totais) {
+        if (sala.lotacao_maxima < pedidosTotais) {
           return {
             type: 7,
-            msg: `Limite da sala ${sala.nome} execedido! Vagas: ${pedidos_totais} - Lotação: ${sala.lotacao_maxima} `,
+            msg: `Limite da sala ${
+              sala.nome
+            } execedido. Vagas: ${pedidosTotais} - Lotação: ${
+              sala.lotacao_maxima
+            } `,
           };
         }
       }
     },
-    checkPedidos(pedidos_totais) {
-      return pedidos_totais <= 4 ? this.Conflitos[7] : false;
+    checkPedidos(pedidosTotais) {
+      return pedidosTotais <= 4 ? this.allConflitos[7] : false;
     },
     checkSalasInEAD(isEAD, sala1, sala2) {
       if (isEAD == 1) {
-        return sala1 != null || sala2 != null ? this.Conflitos[8] : false;
+        return sala1 != null || sala2 != null ? this.allConflitos[8] : false;
       }
       return false;
     },
@@ -938,9 +784,9 @@ export default {
       let pedidos = this.$store.state.pedido.Pedidos[turma.id];
       let grades;
       if (turma.periodo === 1 || turma.periodo === 2) {
-        grades = this.grades1semestre;
+        grades = this.grades1Semestre;
       } else {
-        grades = this.grades2semestre;
+        grades = this.grades2Semestre;
       }
       let conflitos = false;
       if (_.find(pedidos, { Curso: 4 }).vagasPeriodizadas > 0) {
@@ -1001,7 +847,11 @@ export default {
                   conflitos = true;
                   msg =
                     msg +
-                    `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Ciência da Computação - Diurno`;
+                    `\nConflito de Horário com a turma ${
+                      disciplinaConflito.codigo
+                    }${turmasDisciplina[t].letra} no ${
+                      disciplinaGrade.periodo
+                    }º período da grade de Ciência da Computação - Diurno`;
                 }
               }
             }
@@ -1066,7 +916,11 @@ export default {
                   conflitos = true;
                   msg =
                     msg +
-                    `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Ciência da Computação - Noturno`;
+                    `\nConflito de Horário com a turma ${
+                      disciplinaConflito.codigo
+                    }${turmasDisciplina[t].letra} no ${
+                      disciplinaGrade.periodo
+                    }º período da grade de Ciência da Computação - Noturno`;
                 }
               }
             }
@@ -1131,7 +985,11 @@ export default {
                   conflitos = true;
                   msg =
                     msg +
-                    `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Sistemas de Informação`;
+                    `\nConflito de Horário com a turma ${
+                      disciplinaConflito.codigo
+                    }${turmasDisciplina[t].letra} no ${
+                      disciplinaGrade.periodo
+                    }º período da grade de Sistemas de Informação`;
                 }
               }
             }
@@ -1196,7 +1054,11 @@ export default {
                   conflitos = true;
                   msg =
                     msg +
-                    `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Engenharia Computacional`;
+                    `\nConflito de Horário com a turma ${
+                      disciplinaConflito.codigo
+                    }${turmasDisciplina[t].letra} no ${
+                      disciplinaGrade.periodo
+                    }º período da grade de Engenharia Computacional`;
                 }
               }
             }
@@ -1250,6 +1112,20 @@ export default {
 
       return cargaTotalDocente;
     },
+    filterBySemestre(semestre) {
+      if (this.filtroSemestres.ativo === 1) return semestre === 1;
+      else if (this.filtroSemestres.ativo === 2) return semestre === 3;
+      else if (this.filtroSemestres.ativo === 3) return true;
+      else return false;
+    },
+    filterByConflitos(arrayConflitos) {
+      const conflitosResultantes = _.filter(
+        arrayConflitos,
+        (conflito) =>
+          this.filtroConflitos.ativados.indexOf(conflito.type) !== -1
+      );
+      return conflitosResultantes;
+    },
   },
   computed: {
     ConflitosOrdered() {
@@ -1257,39 +1133,38 @@ export default {
     },
     TurmasValidacoesOrdered() {
       return _.orderBy(
-        this.TurmasValidacoesFiltredByPeriodo,
+        this.TurmasValidacoesFiltred,
         this.ordemTurmas.order,
         this.ordemTurmas.type
       );
     },
+    TurmasValidacoesFiltred() {
+      const turmasResultantes = [];
 
-    TurmasValidacoesFiltredByPeriodo() {
-      return _.filter(this.TurmasValidacoes, (validacao) => {
-        if (this.semestreAtual === 1) return validacao.periodo === 1;
-        else if (this.semestreAtual === 2) return validacao.periodo === 3;
-        else if (this.semestreAtual === 3) return true;
-        else return false;
+      _.forEach(this.TurmasValidacoes, (turma) => {
+        const filtredConflitos = this.filterByConflitos(turma.conflitos);
+        const filtredSemestre = this.filterBySemestre(turma.periodo);
+
+        if (filtredConflitos.length && filtredSemestre)
+          turmasResultantes.push({ ...turma, conflitos: filtredConflitos });
       });
+
+      return turmasResultantes;
     },
-    //Verifica validações das turmas
     TurmasValidacoes() {
-      let turmas_resultante = [];
+      let turmasResultantes = [];
 
       this.Turmas.forEach((turma) => {
-        let disciplina = this.findDisciplinaById(turma.Disciplina);
+        let disciplinaFounded = this.findDisciplinaById(turma.Disciplina);
 
-        if (disciplina) {
-          let validacao = this.createValidacao(turma, disciplina);
+        if (disciplinaFounded) {
+          let validacao = this.createValidacao(turma, disciplinaFounded);
           this.checkAllValidations(validacao);
 
-          validacao.conflitos = _.filter(validacao.conflitos, (c) =>
-            _.find(this.ConflitosAtivados, (id) => c.type == id)
-          );
-          if (validacao.conflitos.length) turmas_resultante.push(validacao);
+          if (validacao.conflitos.length) turmasResultantes.push(validacao);
         }
       });
-
-      return turmas_resultante;
+      return turmasResultantes;
     },
     DocentesValidacoesOrdered() {
       return _.orderBy(
@@ -1299,30 +1174,31 @@ export default {
       );
     },
     DocentesValidacoes() {
-      let docentes_resultantes = [];
+      let docentesResultantes = [];
 
       this.Docentes.forEach((docente) => {
-        let validacao = { nome: docente.nome, erros: [] };
-        let cargaGraduacao = this.creditosGraduacao(docente);
-        let cargaPos = this.creditosPos(docente);
+        let validacao = { nome: docente.nome, id: docente.id, conflitos: [] };
+
+        const cargaGraduacao = this.creditosGraduacao(docente);
+        const cargaPos = this.creditosPos(docente);
+
         if (cargaGraduacao < 8.0) {
-          validacao.erros.push(
+          validacao.conflitos.push(
             `Apenas ${cargaGraduacao} créditos na graduação`
           );
         }
+
         if (cargaGraduacao + cargaPos < 16.0) {
-          validacao.erros.push(
+          validacao.conflitos.push(
             `Apenas ${cargaGraduacao +
               cargaPos} créditos, ${cargaGraduacao}  na graduação e ${cargaPos} na pós`
           );
         }
 
-        if (validacao.erros.length > 0) {
-          docentes_resultantes.push(validacao);
-        }
+        if (validacao.conflitos.length) docentesResultantes.push(validacao);
       });
 
-      return docentes_resultantes;
+      return docentesResultantes;
     },
     Turmas() {
       return _.orderBy(this.$store.state.turma.Turmas, ["letra", "Disciplina"]);
@@ -1339,116 +1215,20 @@ export default {
     Docentes() {
       return _.filter(this.$store.state.docente.Docentes, ["ativo", true]);
     },
+    isLoading() {
+      return this.$store.state.isLoading;
+    },
     Admin() {
-      if (this.$store.state.auth.Usuario.admin === 1) {
-        return true;
-      } else {
-        return false;
-      }
+      if (this.$store.state.auth.Usuario.admin === 1) return true;
+      else return false;
     },
   },
 };
 </script>
 <style scoped>
-.DashboardValidacoes {
-  max-width: 100%;
-  overflow: hidden;
-  margin: 0;
-}
-.titulo {
-  font-size: 25px;
-  font-weight: normal;
-  padding-left: 0;
-  margin: 0 !important;
-}
-
-/* main-table */
-.divTable {
-  overflow: hidden;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-}
-.main-table {
-  display: block;
-  overflow-y: scroll !important;
-  font-size: 11px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-  height: -webkit-calc(100vh - 125px);
-  height: -moz-calc(100vh - 125px);
-  height: calc(100vh - 125px);
-}
-
-.main-table .p-header {
-  padding: 0px 5px 0px 5px !important;
-  margin: 0 !important;
-  text-align: center;
-  height: 18px !important;
-}
-.main-table p {
-  padding: 0 5px 0 5px !important;
-  margin: 0 !important;
-  font-size: 11px !important;
-  text-align: center;
-}
-tbody {
-  max-height: 100% !important;
-  width: 100% !important;
-}
-.main-table td {
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  height: 22px !important;
-}
-.main-table tr thead {
-  display: block !important;
-}
-.main-table thead th {
-  padding: 0 !important;
-  font-size: 14px;
-  text-align: center;
-  height: 18px !important;
-}
-.main-table input[type="checkbox"] {
-  width: 13px !important;
-  height: 13px !important;
-  text-align: center !important;
-  margin: 0 !important;
-  margin-top: 4px !important;
-}
-/* fim table */
-
-.sticky {
-  display: block !important;
-  overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 0 !important;
-  display: block !important;
-  overflow: hidden !important;
-  z-index: 3;
-}
 .btn-table {
   padding: 0 0.25rem !important;
-}
-
-.nav-link {
-  color: #007bff !important;
-  cursor: pointer;
-}
-.nav-link:hover {
-  text-decoration: underline;
-}
-.active {
-  background-color: #e9ecef !important;
-  color: #495057 !important;
-  cursor: default;
-  text-decoration: none !important;
+  font-size: 12px;
+  margin: 3px !important;
 }
 </style>

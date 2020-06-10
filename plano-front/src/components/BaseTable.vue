@@ -1,19 +1,22 @@
 <template>
-  <table class="table table-bordered table-sm modal-table max-content">
+  <table
+    class="table-custom table table-sm table-bordered"
+    :class="[tableType, customClass]"
+    :style="tableType === 'main-table' ? tableHeight : ''"
+  >
     <thead class="thead-light max-content sticky">
       <template v-if="hasSearchBar">
         <div class="div-search p-1 pb-2 sticky">
           <slot name="thead-search"></slot>
         </div>
       </template>
-
-      <tr :class="hasSearchBar ? 'sticky2' : 'sticky'">
-        <div class="max-content" :class="hasSearchBar ? 'sticky2' : 'sticky'">
+      <tr>
+        <div :class="hasSearchBar ? 'sticky2' : 'sticky'" class="max-content">
           <slot name="thead"></slot>
         </div>
       </tr>
     </thead>
-    <tbody :style="maxHeight">
+    <tbody>
       <div class="max-content">
         <slot name="tbody"></slot>
       </div>
@@ -23,61 +26,77 @@
 
 <script>
 export default {
-  name: "TableModal",
+  name: "BaseTable",
   props: {
-    tableHeight: {
-      type: Number,
-      default: 450,
-    },
+    tableType: { type: String, default: "main-table" },
+    tableHeight: { type: String, default: "height: calc(100vh - 100px)" },
     hasSearchBar: { type: Boolean, default: false },
-  },
-  computed: {
-    maxHeight() {
-      return "max-height: " + this.tableHeight + "px!important";
-    },
+    customClass: { type: String, default: "" },
   },
 };
 </script>
 
 <style scoped>
-.modal-table {
-  /* overflow: hidden !important; */
-  font-weight: normal !important;
-  background-color: #e9ecef !important;
-  margin: 0 !important;
-}
-.modal-table thead {
-  background-color: #e9ecef !important;
-  display: block !important;
-}
-.modal-table tbody {
+.table-custom {
   display: block;
-  width: 100%;
-  max-height: 450px;
-  min-height: 18px;
   overflow-y: scroll;
+  margin: 0 !important;
+  font-weight: normal !important;
+  background-color: #fff !important;
+}
+.main-table {
+  overflow-x: auto !important;
+  font-size: 11px !important;
+  margin-bottom: 10px !important;
+}
+.modal-table {
+  max-height: 450px !important;
+  overflow-x: hidden !important;
+  font-size: 10px !important;
+  background-color: #e9ecef !important;
+}
+.table-custom thead {
+  display: block !important;
+  background-color: #e9ecef !important;
+}
+.table-custom tbody {
+  display: block !important;
+  width: max-content;
   background-color: #fff;
 }
-
-.modal-table td,
-.modal-table th {
-  text-align: center;
+.table-custom thead th,
+.table-custom tbody td {
+  word-break: break-word;
   vertical-align: middle !important;
+  text-align: center;
   margin: 0 !important;
-  padding: 0 5px !important;
+  padding: 0 5px;
 }
-.modal-table th {
-  background-color: #e9ecef !important;
-  font-size: 11px !important;
+.table-custom thead tr th {
+  word-wrap: none !important;
   height: 18px !important;
   user-select: none;
 }
-.modal-table td {
-  font-size: 10px !important;
-  border-top: 0 !important;
-  /* height: 22px !important; */
+.modal-table thead tr th {
+  /* background-color: #e9ecef !important; */
+  font-size: 11px !important;
 }
-.modal-table input[type="checkbox"] {
+.main-table tbody tr td {
+  height: 20px !important;
+}
+.modal-table tbody tr td {
+  cursor: default;
+  min-height: 21px !important;
+}
+.main-table tbody tr input[type="checkbox"] {
+  width: 14px !important;
+  height: 14px !important;
+  text-align: center !important;
+  margin: 0;
+  margin-top: 5px !important;
+  margin-bottom: auto !important;
+}
+.modal-table tbody tr input[type="checkbox"] {
   position: relative !important;
   border-width: 1px !important ;
   margin-left: 0 !important;
@@ -89,7 +108,22 @@ export default {
   -moz-box-shadow: 0px 0px 0px 0.005px #555;
   box-shadow: 0px 0px 0px 0.005px #555;
 }
-
+.table-custom tbody tr:hover {
+  background-color: #dbdbdb;
+}
+.table-custom thead tr th i {
+  font-size: 9px;
+}
+.bg-custom {
+  background-color: #f1f1f1;
+}
+.bg-selected,
+.bg-selected:hover {
+  background-color: #787878 !important;
+  color: #fff !important;
+  cursor: default;
+}
+/* searchBar */
 .modal-table thead .div-search {
   display: flex !important;
   justify-content: flex-start !important;
@@ -127,5 +161,14 @@ export default {
 }
 .modal-table thead .btn-search:hover {
   background-color: #e9ecef;
+}
+
+@-moz-document url-prefix() {
+  .main-table tbody select {
+    height: 20px !important;
+  }
+  .main-table tbody input[type="text"] {
+    margin-top: 0px !important;
+  }
 }
 </style>

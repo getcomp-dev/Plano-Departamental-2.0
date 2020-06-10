@@ -13,8 +13,8 @@
     </PageTitle>
 
     <div class="row w-100 m-0 p-0">
-      <div class="divTable p-0">
-        <TableMain>
+      <div class="div-table p-0">
+        <BaseTable>
           <template #thead>
             <th
               style="width: 82px"
@@ -64,7 +64,7 @@
               </tr>
             </template>
           </template>
-        </TableMain>
+        </BaseTable>
       </div>
 
       <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
@@ -208,7 +208,7 @@
 import _ from "lodash";
 import salaService from "@/common/services/sala";
 import PageTitle from "@/components/PageTitle";
-import TableMain from "@/components/TableMain";
+import BaseTable from "@/components/BaseTable";
 import Card from "@/components/Card";
 
 const emptySala = {
@@ -222,7 +222,7 @@ export default {
   name: "DashboardSalas",
   components: {
     PageTitle,
-    TableMain,
+    BaseTable,
     Card,
   },
   data() {
@@ -236,7 +236,7 @@ export default {
   created() {
     if (!this.Admin) {
       this.$notify({
-        group: "second",
+        group: "general",
         title: "Erro",
         text:
           "Acesso negado! Usuário não possui permissão para acessar esta página!",

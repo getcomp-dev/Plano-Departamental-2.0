@@ -559,17 +559,6 @@ export default {
   animation-fill-mode: both;
 }
 
-[role="main"]::-webkit-scrollbar-track {
-  background-color: #f4f4f4 !important;
-}
-[role="main"]::-webkit-scrollbar {
-  width: 6px !important;
-  background: #f4f4f4 !important;
-}
-[role="main"]::-webkit-scrollbar-thumb {
-  background: #666 !important;
-}
-
 @-moz-keyframes ellipsis {
   to {
     width: 1.25em;

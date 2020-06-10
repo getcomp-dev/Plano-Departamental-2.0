@@ -1,121 +1,106 @@
 <template>
-  <div class="max-content sticky">
-    <th scope="col">
-      <p style="width:25px" class="p-header"></p>
-    </th>
-    <th scope="col">
-      <p style="width:40px" class="p-header">Editar</p>
-    </th>
-    <th class="clickable" @click="$emit('toggle-order', 'periodo')">
-      <p style="width:50px" class="p-header" title="Semestre">
-        S.
-        <i :class="setIconByOrder(currentOrder, 'periodo')"></i>
-      </p>
+  <div class="turma-header max-content sticky">
+    <th style="width:25px"></th>
+    <th style="width:40px" class="p-0">Editar</th>
+    <th style="width:55px" title="Semestre">
+      S.
     </th>
     <th
-      class="clickable"
       @click.stop="$emit('toggle-order-perfil', setOrderPerfil)"
+      style="width: 75px"
+      class="clickable t-center"
     >
-      <p
-        style="width: 80px"
-        class="t-start d-flex justify-content-between align-items-center"
-      >
+      <div class="d-flex justify-content-between align-items-center">
         <i
           class="fas fa-thumbtack"
           :class="currentOrderPerfil.order === null ? 'low-opacity' : ''"
         ></i>
-        Perfil
-        <i :class="setIconByOrder(currentOrderPerfil, 'perfilNome')"></i>
-      </p>
-    </th>
-    <th class="clickable" @click="$emit('toggle-order', 'disciplinaCodigo')">
-      <p style="width:70px" class="p-header" title="Código">
-        Cód.
-        <i :class="setIconByOrder(currentOrder, 'disciplinaCodigo')"></i>
-      </p>
-    </th>
-    <th class="clickable" @click="$emit('toggle-order', 'disciplinaNome')">
-      <p class="p-header t-start" style="width:330px">
-        Disciplina
-        <i :class="setIconByOrder(currentOrder, 'disciplinaNome')"></i>
-      </p>
-    </th>
-    <th scope="col">
-      <p class="p-header" style="width:18px" title="Créditos">C.</p>
-    </th>
-    <th scope="col">
-      <p class="p-header" style="width:40px">Turma</p>
-    </th>
-    <th scope="col">
-      <p class="p-header" style="width:130px">Docente</p>
-    </th>
-    <th scope="col">
-      <p class="p-header" style="width:80px">Turno</p>
-    </th>
-    <th scope="col">
-      <p class="p-header" style="width:80px">Horário</p>
-    </th>
+        <span>
+          Perfil
+        </span>
 
-    <th scope="col">
-      <p class="p-header" style="width:100px">Sala</p>
+        <i :class="setIconByOrder(currentOrderPerfil, 'perfilNome')"></i>
+      </div>
     </th>
-    <th scope="col">
-      <p class="p-header" style="width:40px" title="Total de vagas">Total</p>
+    <th
+      class="clickable"
+      @click="$emit('toggle-order', 'disciplinaCodigo')"
+      style="width:70px"
+      title="Código"
+    >
+      Cód.
+      <i :class="setIconByOrder(currentOrder, 'disciplinaCodigo')"></i>
     </th>
-    <template v-for="curso in cursosSelecteds">
-      <th :key="'1-' + curso.id" :id="'curso' + curso.id">
-        <p
+    <th
+      class="clickable t-start"
+      style="width:330px"
+      @click="$emit('toggle-order', 'disciplinaNome')"
+    >
+      Disciplina
+      <i :class="setIconByOrder(currentOrder, 'disciplinaNome')"></i>
+    </th>
+    <th style="width:25px" title="Créditos">
+      C.
+    </th>
+    <th style="width:35px" class="p-0" title="Turma">T.</th>
+    <th style="width:130px">Docente</th>
+    <th style="width:80px">Turno</th>
+    <th style="width:85px">Horário</th>
+    <th style="width:95px">Sala</th>
+    <th style="width:45px" title="Total de vagas">
+      Total
+    </th>
+    <template v-for="curso in cursosAtivados">
+      <th
+        class="p-0"
+        style="width: 35px"
+        :key="'1-' + curso.id"
+        :id="'curso' + curso.id"
+      >
+        <span
           v-bind:class="{ cursoGrande: nameIsBig(curso.codigo) }"
-          style="width: 32px"
           v-on.prevent:mouseover
         >
           {{ curso.codigo }}
-        </p>
+        </span>
       </th>
 
       <b-popover
-        :key="
-          'alunos-entrada' +
-            curso.alunosEntrada +
-            curso.id +
-            curso.semestreInicial
-        "
+        :key="'popover' + curso.id"
         :target="'curso' + curso.id"
         placement="bottom"
         triggers="hover focus"
       >
+        <span class="w-100 text-center" style="font-size: 11px!important;">
+          <b>{{ curso.nome }}</b>
+        </span>
+
         <p
-          class="p-0 m-0"
-          style="text-align:center; font-size: 11px!important;"
+          class="p-0 m-0 text-center"
+          style="font-size: 11px!important;"
           v-if="curso.semestreInicial == 1 || curso.semestreInicial == 3"
         >
           1º - {{ curso.alunosEntrada }}
         </p>
         <p
-          class="p-0 m-0"
-          style="text-align:center; font-size: 11px!important;"
+          class="p-0 m-0 text-center"
+          style="font-size: 11px!important;"
           v-if="curso.semestreInicial == 2 || curso.semestreInicial == 3"
         >
           2º - {{ curso.alunosEntrada2 }}
-        </p>
-        <p
-          class="p-0 m-0"
-          style="text-align:center; font-size: 11px!important;"
-        >
-          <b>{{ curso.nome }}</b>
         </p>
       </b-popover>
     </template>
   </div>
 </template>
+
 <script>
 export default {
   name: "TurmaHeader",
-
   props: {
-    cursosSelecteds: Array,
-    currentOrder: Object,
-    currentOrderPerfil: Object,
+    cursosAtivados: { type: Array, required: true },
+    currentOrder: { type: Object, required: true },
+    currentOrderPerfil: { type: Object, required: true },
   },
 
   methods: {
@@ -146,36 +131,23 @@ export default {
 </script>
 
 <style scoped>
+.turma-header {
+  font-size: 11px !important;
+}
+.turma-header th {
+  margin: 0 !important;
+  padding: 0 5px;
+  height: 18px !important;
+  vertical-align: middle !important;
+  text-align: center;
+  word-wrap: none;
+  word-break: break-word;
+  user-select: none;
+}
 .cursoGrande {
   font-size: 7px !important;
 }
-.sticky {
-  display: block !important;
-  overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 0 !important;
-  display: block !important;
-  overflow: hidden !important;
-  z-index: 5;
-}
-p {
+.turma-header p {
   margin: 0;
-  font-size: 11px;
-  text-align: center;
-  height: 18px;
-  padding: 0 5px !important;
-}
-th {
-  padding: 0 !important;
-  font-size: 10px;
-  text-align: center;
-  height: 16px !important;
-  user-select: none;
-}
-.max-content {
-  width: -webkit-max-content !important;
-  width: -moz-max-content !important;
-  width: max-content !important;
 }
 </style>

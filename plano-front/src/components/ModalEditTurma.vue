@@ -251,13 +251,13 @@
       <!-- Botoes -->
       <div class="form-row w-100 m-0 mt-2">
         <b-button
-          class="btn-custom btn-modal btn-verde px-3"
+          class="btn-custom btn-modal btn-verde btn-ok-modal"
           @click="editTurma()"
         >
           Salvar
         </b-button>
         <b-button
-          class="btn-custom btn-modal btn-cinza px-3"
+          class="btn-custom btn-modal btn-cinza btn-ok-modal"
           @click="resetInputsValues()"
         >
           Cancelar
@@ -276,61 +276,47 @@
         Total: {{ totalPedidos() }}
       </p>
     </div>
+
     <TableModal :tableHeight="350" :hasSearchBar="true">
       <template #thead-search>
-        <th>
-          <div
-            class="m-0 input-group"
-            style=" width: 442px; height: 35px; padding:4px 10px 4px 5px;"
-          >
-            <input
-              type="text"
-              class="form-control"
-              style="border-right: none;"
-              placeholder="Pesquise nome ou codigo de um curso..."
-              v-model="searchCursos"
-            />
-            <div class="input-group-append" @click="searchCursos = null">
-              <span class="input-group-text search-btn">&times;</span>
-            </div>
-          </div>
-        </th>
+        <input
+          type="text"
+          class="form-control input-search"
+          placeholder="Pesquise nome ou codigo de um curso..."
+          v-model="searchCursos"
+        />
+        <button @click="searchCursos = null" class="btn btn-search">
+          &times;
+        </button>
       </template>
       <template#thead>
-        <th>
-          <p
-            class="p-header clickable"
-            style="width: 50px; text-align: start;"
-            @click="toggleOrder(ordemVagas, 'codigo')"
-            title="Clique para ordenar por código"
-          >
-            Cód.
-            <i :class="setIconByOrder(ordemVagas, 'codigo')"></i>
-          </p>
+        <th
+          @click="toggleOrder(ordemVagas, 'codigo')"
+          class="clickable t-start"
+          style="width: 50px"
+          title="Clique para ordenar por código"
+        >
+          Cód.
+          <i :class="setIconByOrder(ordemVagas, 'codigo')"></i>
         </th>
-        <th>
-          <p
-            class="p-header clickable"
-            v-on:click="toggleOrder(ordemVagas, 'nome')"
-            title="Clique para ordenar por nome"
-            style="width: 320px; text-align: start;"
-          >
-            Nome
-
-            <i :class="setIconByOrder(ordemVagas, 'nome')"></i>
-          </p>
+        <th
+          @click="toggleOrder(ordemVagas, 'nome')"
+          class="clickable t-start"
+          style="width: 320px"
+          title="Clique para ordenar por nome"
+        >
+          Nome
+          <i :class="setIconByOrder(ordemVagas, 'nome')"></i>
         </th>
 
-        <th>
-          <p
-            class="p-header clickable"
-            style="width: 70px; text-align: center;"
-            title="Vagas periodizadas / Não periodizadas"
-            @click="toggleOrder(ordemVagas, 'VagasTotais', 'desc')"
-          >
-            Vagas
-            <i :class="setIconByOrder(ordemVagas, 'VagasTotais')"></i>
-          </p>
+        <th
+          @click="toggleOrder(ordemVagas, 'VagasTotais', 'desc')"
+          class="clickable"
+          style="width: 75px"
+          title="Vagas periodizadas / Não periodizadas"
+        >
+          Vagas
+          <i :class="setIconByOrder(ordemVagas, 'VagasTotais')"></i>
         </th>
       </template#thead>
       <template#tbody>
@@ -338,24 +324,18 @@
           v-for="curso in CursosTableOrdered"
           :key="'vaga' + curso.id + '-CursosVagas'"
         >
-          <div style="width: content !important;">
-            <td>
-              <p style="width: 50px; text-align: start;">
-                {{ curso.codigo }}
-              </p>
-            </td>
-            <td>
-              <p style="width: 320px; text-align: start;">
-                {{ curso.nome }}
-              </p>
-            </td>
-            <td>
-              <PedidosTableModal
-                v-bind:index="curso.indiceVaga"
-                v-bind:turma="turma"
-              ></PedidosTableModal>
-            </td>
-          </div>
+          <td style="width: 50px" class="t-start">
+            {{ curso.codigo }}
+          </td>
+          <td style="width: 320px" class="t-start">
+            {{ curso.nome }}
+          </td>
+          <td style="width: 75px">
+            <PedidosTableModal
+              v-bind:index="curso.indiceVaga"
+              v-bind:turma="turma"
+            ></PedidosTableModal>
+          </td>
         </tr>
       </template#tbody>
     </TableModal>
@@ -369,18 +349,18 @@ import PedidosTableModal from "@/components/PedidosTableModal.vue";
 import { EventBus } from "@/event-bus.js";
 
 const emptyTurma = {
-  id: "",
-  periodo: "",
-  letra: "",
-  turno1: "",
-  turno2: "",
-  Disciplina: "",
-  Docente1: "",
-  Docente2: "",
-  Horario1: "",
-  Horario2: "",
-  Sala1: "",
-  Sala2: "",
+  id: null,
+  periodo: null,
+  letra: null,
+  turno1: null,
+  turno2: null,
+  Disciplina: null,
+  Docente1: null,
+  Docente2: null,
+  Horario1: null,
+  Horario2: null,
+  Sala1: null,
+  Sala2: null,
 };
 
 export default {
@@ -692,7 +672,7 @@ export default {
 
       let text = `Conflito no horário ${h.horario} com o docente ${d.apelido}`;
       this.$notify({
-        group: "second",
+        group: "general",
         title: "Erro",
         text: text,
         type: "error",
@@ -1066,7 +1046,7 @@ export default {
 
       let text = `Conflito no horário ${h.horario} com a sala ${s.nome}`;
       this.$notify({
-        group: "second",
+        group: "general",
         title: "Erro",
         text: text,
         type: "error",
@@ -1396,7 +1376,7 @@ export default {
       this.convertEmptyToNull(this.turmaForm);
       if (this.turmaForm.turno1 === null) {
         this.$notify({
-          group: "second",
+          group: "general",
           title: "Erro",
           text: "Nenhum turno alocado!",
           type: "error",
@@ -1408,7 +1388,7 @@ export default {
         .update(this.turma.id, this.turmaForm)
         .then((response) => {
           this.$notify({
-            group: "second",
+            group: "general",
             title: `Sucesso!`,
             text: `A Turma ${response.Turma.letra} foi atualizada!`,
             type: "success",
@@ -1575,11 +1555,10 @@ export default {
 .form-group {
   margin: 5px auto;
 }
-.form-control,
-.form-control-plaintext {
+.form-control {
   height: 25px !important;
   font-size: 12px !important;
-  padding: 2px 7px !important;
+  padding: 2px 5px !important;
   text-align: start;
 }
 .form-container label {
@@ -1590,63 +1569,5 @@ export default {
   font-size: 14px;
   text-align: start;
   font-weight: bold;
-}
-/* modal-table */
-.modal-table {
-  display: block !important;
-  overflow: auto !important;
-  font-size: 10px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-}
-.modal-table tr thead {
-  display: block;
-}
-.modal-table th {
-  padding: 0 !important;
-  text-align: center !important;
-  height: 18px !important;
-}
-
-.modal-table .p-header {
-  padding: 0px 5px 0px 5px !important;
-  margin: 0 !important;
-  text-align: center;
-  height: 18px !important;
-}
-.modal-table tbody {
-  max-height: 100%;
-  width: 100%;
-}
-.modal-table td {
-  border-top: 0;
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  margin: 0 !important;
-}
-.modal-table p {
-  margin: 0 !important;
-  text-align: center;
-  padding: 0 !important;
-  padding-right: 5px !important;
-  padding-left: 5px !important;
-}
-.modal-table input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-  margin-bottom: auto !important;
-  height: 13px !important;
-}
-.sticky {
-  display: block !important;
-  overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 0 !important;
-  display: block !important;
-  overflow: hidden !important;
-  z-index: 3;
 }
 </style>

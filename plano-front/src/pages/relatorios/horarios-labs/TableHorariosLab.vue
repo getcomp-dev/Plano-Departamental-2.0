@@ -1003,8 +1003,6 @@ export default {
   border-collapse: collapse;
   border-spacing: 0;
   border-color: #ccc;
-  margin-right: 5px !important;
-  margin-bottom: 20px !important;
 }
 .tg td {
   font-family: Arial, sans-serif;

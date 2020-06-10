@@ -1,61 +1,55 @@
 <template>
-  <div style="width:32px!important">
+  <div style="width:100%">
     <input
       v-if="pedidoForm.vagasPeriodizadas == 0"
       type="text"
       v-model="pedidoForm.vagasPeriodizadas"
-      style="margin-top:1px; color:#DADADA"
+      style="color:#DADADA;"
       v-on:change="editPedido(pedido)"
       v-on:focus="focusPedido"
       v-on:blur="blurPedido"
-      @keypress="onlyNumber"
     />
     <input
       v-else
       type="text"
       v-model="pedidoForm.vagasPeriodizadas"
-      style="margin-top:1px; font-weight: bold;  background-color: #DCDCDC"
+      style="background-color: #e7e7e7;"
       v-on:change="editPedido(pedido)"
       v-on:focus="focusPedido"
       v-on:blur="blurPedido"
-      @keypress="onlyNumber"
     />
     <input
       v-if="pedidoForm.vagasNaoPeriodizadas == 0"
       type="text"
       v-model="pedidoForm.vagasNaoPeriodizadas"
-      style="color:#DADADA"
+      style="color:#DADADA;"
       v-on:change="editPedido(pedido)"
       v-on:focus="focusPedido"
       v-on:blur="blurPedido"
-      @keypress="onlyNumber"
     />
     <input
       v-else
       type="text"
       v-model="pedidoForm.vagasNaoPeriodizadas"
-      style="font-weight: bold; background-color: #DCDCDC"
+      style="background-color: #e7e7e7;"
       v-on:change="editPedido(pedido)"
       v-on:focus="focusPedido"
       v-on:blur="blurPedido"
-      @keypress="onlyNumber"
     />
   </div>
 </template>
-
 <script>
-import pedidoExternoService from "@/common/services/pedidoExterno";
+import pedidoService from "@/common/services/pedido";
 import _ from "lodash";
-
 const emptyPedido = {
   vagasPeriodizadas: 0,
   vagasNaoPeriodizadas: 0,
   Curso: undefined,
   Turma: undefined,
 };
-export default {
-  name: "TurmaExternaPedido",
 
+export default {
+  name: "TurmaPedidos",
   props: {
     turma: Object,
     index: Number,
@@ -70,23 +64,18 @@ export default {
   },
   mounted: function() {
     this.pedidoForm = _.clone(
-      this.$store.state.pedidoExterno.Pedidos[this.turma.id][this.index]
+      this.$store.state.pedido.Pedidos[this.turma.id][this.index]
     );
   },
 
   methods: {
-    onlyNumber($event) {
-      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
-      if (keyCode < 48 || keyCode > 57) {
-        $event.preventDefault();
-      }
-    },
     editPedido() {
+      // console.log(this.$store.state.pedido.Pedidos[this.turma.id][this.index]);
       if (this.pedidoForm.vagasPeriodizadas == "")
         this.pedidoForm.vagasPeriodizadas = 0;
       if (this.pedidoForm.vagasNaoPeriodizadas == "")
         this.pedidoForm.vagasNaoPeriodizadas = 0;
-      pedidoExternoService
+      pedidoService
         .update(this.pedidoForm.Curso, this.pedidoForm.Turma, this.pedidoForm)
         .then((response) => {
           this.$notify({
@@ -95,9 +84,9 @@ export default {
             text: `O pedido foi atualizado!`,
             type: "success",
           });
-          console.log(
-            this.$store.state.pedido.Pedidos[this.turma.id][this.index]
-          );
+          // console.log(
+          //   this.$store.state.pedido.Pedidos[this.turma.id][this.index]
+          // );
         })
         .catch((error) => {
           this.error = "<b>Erro ao atualizar Pedido</b>";
@@ -127,14 +116,22 @@ export default {
 
   computed: {
     pedido() {
-      return this.$store.state.pedidoExterno.Pedidos[this.turma.id][this.index];
+      return this.$store.state.pedido.Pedidos[this.turma.id][this.index];
+    },
+
+    Admin() {
+      if (this.$store.state.auth.Usuario.admin === 1) {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
 
   watch: {
     pedido: function() {
       this.pedidoForm = _.clone(
-        this.$store.state.pedidoExterno.Pedidos[this.turma.id][this.index]
+        this.$store.state.pedido.Pedidos[this.turma.id][this.index]
       );
     },
   },
@@ -142,23 +139,9 @@ export default {
 </script>
 <style scoped>
 input {
-  width: 28px !important;
+  width: 90% !important;
   height: 20px !important;
   text-align: center !important;
-  margin-bottom: 1px;
+  margin-top: 1px;
 }
-/*
-    @-moz-document url-prefix() {
-        input{
-            width: 28px!important;
-            height: 20px!important;
-            text-align:center;
-            box-sizing: border-box;
-            
-            line-height: 8px;
-            border: 0.5px solid rgb(160, 160, 160);
-            border-radius: 2px;
-            background-color:rgb(245, 245, 245);
-        }
-    }*/
 </style>

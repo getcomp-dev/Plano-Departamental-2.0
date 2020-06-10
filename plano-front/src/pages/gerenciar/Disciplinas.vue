@@ -14,8 +14,8 @@
     </PageTitle>
 
     <div class="row w-100 m-0">
-      <div class="divTable p-0">
-        <TableMain>
+      <div class="div-table p-0">
+        <BaseTable>
           <template #thead>
             <th
               style="width: 82px; text-align:start"
@@ -101,7 +101,7 @@
               </tr>
             </template>
           </template>
-        </TableMain>
+        </BaseTable>
       </div>
 
       <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
@@ -305,7 +305,7 @@
 import _ from "lodash";
 import disciplinaService from "@/common/services/disciplina";
 import PageTitle from "@/components/PageTitle";
-import TableMain from "@/components/TableMain";
+import BaseTable from "@/components/BaseTable";
 import Card from "@/components/Card";
 
 const emptyDisciplina = {
@@ -321,7 +321,7 @@ const emptyDisciplina = {
 
 export default {
   name: "DashboardDisciplina",
-  components: { PageTitle, TableMain, Card },
+  components: { PageTitle, BaseTable, Card },
 
   data() {
     return {
@@ -334,7 +334,7 @@ export default {
   created() {
     if (!this.Admin) {
       this.$notify({
-        group: "second",
+        group: "general",
         title: "Erro",
         text:
           "Acesso negado! Usuário não possui permissão para acessar esta página!",

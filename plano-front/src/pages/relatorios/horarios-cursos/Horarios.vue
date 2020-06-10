@@ -81,13 +81,13 @@
     <!-- MODAL FILTROS -->
     <b-modal id="modalFiltros" ref="modalFiltros" scrollable title="Filtros">
       <NavTab
-        :currentTab="modalTabAtiva"
+        :currentTab="tabAtivaModal"
         :allTabs="['Cursos', 'Semestre']"
-        v-on:change-tab="modalTabAtiva = $event"
+        v-on:change-tab="tabAtivaModal = $event"
       />
       <div class="col m-0 p-0 max-content" style="height: 450px !important;">
         <table
-          v-show="modalTabAtiva === 'Semestre'"
+          v-show="tabAtivaModal === 'Semestre'"
           class="table table-bordered table-sm modal-table"
         >
           <thead class="thead-light sticky">
@@ -148,7 +148,7 @@
         </table>
         <!-- TABLE CURSOS -->
         <table
-          v-show="modalTabAtiva === 'Cursos'"
+          v-show="tabAtivaModal === 'Cursos'"
           class="table table-sm modal-table table-bordered"
         >
           <thead class="thead-light sticky">
@@ -232,7 +232,7 @@
 
       <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
         <div class="w-100">
-          <template v-if="modalTabAtiva == 'Semestre'">
+          <template v-if="tabAtivaModal == 'Semestre'">
             <b-button
               class="btn-azul btn-custom btn-modal"
               variant="success"
@@ -265,7 +265,7 @@
         <b-button
           variant="success"
           @click="btnOK()"
-          class="btn-verde btn-custom btn-modal px-3"
+          class="btn-verde btn-custom btn-modal btn-ok-modal"
           >OK</b-button
         >
       </div>
@@ -311,7 +311,7 @@ export default {
       error: undefined,
       cursosAtivados: [],
       cursosSelecionados: [],
-      modalTabAtiva: "Cursos",
+      tabAtivaModal: "Cursos",
       ordemCursos: { order: "codigo", type: "asc" },
       evenCCN: "false",
       evenCCD: "false",
@@ -371,7 +371,7 @@ export default {
     btnOK() {
       this.btnOKSemestre();
       this.cursosAtivados = [...this.cursosSelecionados];
-      this.modalTabAtiva = "Cursos";
+      this.tabAtivaModal = "Cursos";
       this.$refs.modalFiltros.hide();
     },
     btnOKSemestre() {
@@ -4641,13 +4641,10 @@ export default {
   font-size: 12px;
   font-weight: normal;
 }
-
 ::v-deep .container-horarios .div-table .tg {
   border-collapse: collapse;
   border-spacing: 0;
   border-color: #ccc;
-  margin-right: 5px !important;
-  margin-bottom: 20px !important;
 }
 ::v-deep .container-horarios .div-table .tg td {
   font-family: Arial, sans-serif;
@@ -4687,4 +4684,56 @@ export default {
   padding-left: 1px !important;
   margin: 0 !important;
 }
+
+/* ==== MODAL TABLE ==== */
+.modal-table {
+  display: block;
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+  font-size: 10px !important;
+  font-weight: normal !important;
+  background-color: white;
+  margin: 0 !important;
+}
+.modal-table tr thead {
+  display: block;
+}
+.modal-table th {
+  padding: 0 !important;
+  text-align: center !important;
+  height: 18px !important;
+}
+
+.modal-table .p-header {
+  padding: 0px 5px 0px 5px !important;
+  margin: 0 !important;
+  text-align: start;
+  height: 18px !important;
+}
+.modal-table tbody {
+  max-height: 100%;
+  width: 100%;
+}
+.modal-table td {
+  border-top: 0;
+  text-align: center;
+  vertical-align: middle !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  /* height: 22px !important; */
+}
+.modal-table p {
+  margin: 0 !important;
+  text-align: center;
+  padding: 0 !important;
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+}
+.modal-table input[type="checkbox"] {
+  margin-left: 0 !important;
+  margin-top: 4px !important;
+  margin-bottom: auto !important;
+  height: 13px !important;
+}
+/* FIM MODAL TABLE */
 </style>

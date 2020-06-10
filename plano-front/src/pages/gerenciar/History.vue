@@ -25,8 +25,8 @@
     </PageTitle>
 
     <div class="row w-100 m-0 p-0">
-      <div class="divTable p-0">
-        <TableMain>
+      <div class="div-table p-0">
+        <BaseTable>
           <template #thead>
             <th style="width: 110px;">Tabela Modificada</th>
             <th style="width: 120px">Campo Modificado</th>
@@ -67,7 +67,7 @@
               </tr>
             </template>
           </template>
-        </TableMain>
+        </BaseTable>
       </div>
     </div>
 
@@ -161,13 +161,13 @@
 <script>
 import _ from "lodash";
 import PageTitle from "@/components/PageTitle";
-import TableMain from "@/components/TableMain";
+import BaseTable from "@/components/BaseTable";
 
 export default {
   name: "DashboardHistory",
   components: {
     PageTitle,
-    TableMain,
+    BaseTable,
   },
 
   data() {
@@ -195,7 +195,7 @@ export default {
   created() {
     if (!this.Admin) {
       this.$notify({
-        group: "second",
+        group: "general",
         title: "Erro",
         text:
           "Acesso negado! Usuário não possui permissão para acessar esta página!",

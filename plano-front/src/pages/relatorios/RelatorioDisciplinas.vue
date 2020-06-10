@@ -1,5 +1,5 @@
 <template>
-  <div class="DashboardRelatorioDisciplinas row p-0">
+  <div class="main-component row p-0">
     <PageTitle :title="'Plano Departamental'">
       <template #aside>
         <b-button
@@ -29,7 +29,7 @@
       </template>
     </PageTitle>
 
-    <div class="divTable p-0">
+    <div class="div-table p-0">
       <table class="main-table table table-bordered table-hover table-sm">
         <thead class="thead-light max-content sticky">
           <tr>
@@ -371,17 +371,14 @@
         <table class="table table-sm modal-table table-bordered">
           <thead class="thead-light sticky">
             <!-- search bar disciplinas -->
-            <tr v-show="nav_ativo === 'disciplinas'">
-              <div
-                style="font-size: 11px !important;"
-                class="max-content sticky"
-              >
-                <th>
-                  <div class="m-0 input-group input-group-search">
+            <tr v-if="nav_ativo === 'disciplinas'">
+              <th>
+                <div class="max-content">
+                  <div class="m-0  input-group input-group-search">
                     <input
                       type="text"
-                      class="form-control"
-                      style="border-right: none;"
+                      class="form-control search-form-control"
+                      style="border-right: none; width:300px!important;"
                       placeholder="Pesquise nome ou codigo de uma disciplina..."
                       v-model="searchDisciplinas"
                     />
@@ -396,11 +393,11 @@
                       >
                     </div>
                   </div>
-                </th>
-              </div>
+                </div>
+              </th>
             </tr>
             <!-- perfis -->
-            <tr v-show="nav_ativo === 'perfis'" class="sticky">
+            <tr v-if="nav_ativo === 'perfis'" class="sticky">
               <div class="max-content">
                 <th>
                   <p style="width: 25px;" class="p-header"></p>
@@ -425,7 +422,7 @@
               </div>
             </tr>
             <!-- disciplinas -->
-            <tr v-show="nav_ativo === 'disciplinas'" class="sticky2">
+            <tr v-if="nav_ativo === 'disciplinas'" class="sticky2">
               <div class="max-content">
                 <th>
                   <p
@@ -496,7 +493,7 @@
               </div>
             </tr>
             <!-- semestre -->
-            <tr v-show="nav_ativo === 'semestre'" class="sticky">
+            <tr v-if="nav_ativo === 'semestre'" class="sticky">
               <div class="max-content">
                 <th>
                   <p style="width: 25px;" class="p-header"></p>
@@ -509,7 +506,7 @@
               </div>
             </tr>
           </thead>
-          <tbody v-show="nav_ativo === 'perfis'">
+          <tbody v-if="nav_ativo === 'perfis'">
             <tr v-for="perfil in Perfis_Modal" :key="'perfil-id' + perfil.id">
               <div class="max-content">
                 <td>
@@ -530,7 +527,7 @@
               </div>
             </tr>
           </tbody>
-          <tbody v-show="nav_ativo === 'disciplinas'">
+          <tbody v-if="nav_ativo === 'disciplinas'">
             <tr
               v-for="disciplina in Disciplinas_Filtred"
               :key="'disciplina' + disciplina.id"
@@ -565,7 +562,7 @@
               </div>
             </tr>
           </tbody>
-          <tbody v-show="nav_ativo === 'semestre'">
+          <tbody v-if="nav_ativo === 'semestre'">
             <tr>
               <div style="width: max-content;">
                 <td>
@@ -650,7 +647,7 @@
         <b-button
           variant="success"
           @click="btnOK()"
-          class="btn-verde btn-modal btn-custom px-3"
+          class="btn-verde btn-modal btn-custom btn-ok-modal"
           >OK</b-button
         >
       </div>
@@ -1303,26 +1300,26 @@ export default {
 </script>
 
 <style scoped>
-.DashboardRelatorioDisciplinas {
-  max-width: 100%;
-  overflow: hidden;
-  margin: 0;
+.input-group-search {
+  width: 450px !important;
+  height: 35px !important;
+  padding-left: 4px !important;
+  padding-right: 20px !important;
+  padding-top: 4px !important;
 }
-.titulo {
-  font-size: 25px;
-  font-weight: normal;
-  padding-left: 0;
-  margin: 0 !important;
+.input-group-search .search-form-control {
+  height: 25px !important;
+  font-size: 12px !important;
+  padding: 2px 5px 2px 5px !important;
+  text-align: start;
 }
-/* main-table */
-.divTable {
-  overflow: hidden;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
+.search-text:hover {
+  color: rgb(102, 102, 102);
+  background-color: #dddddd;
+}
+.search-text {
+  background-color: #ffffff;
+  border-left: none;
 }
 .main-table {
   display: block !important;
@@ -1398,6 +1395,9 @@ tbody {
   margin-bottom: 0;
 }
 
+.input-search {
+  width: 100% !important;
+}
 .col-form-label {
   padding-left: 25px;
   font-size: 14px !important;
@@ -1417,4 +1417,57 @@ tbody {
 .modal-content .modal-header {
   padding: 0 !important;
 }
+
+/* ==== MODAL TABLE ==== */
+.modal-table {
+  max-height: 450px !important;
+  display: block;
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+  font-size: 10px !important;
+  font-weight: normal !important;
+  background-color: white;
+  margin: 0 !important;
+}
+.modal-table tr thead {
+  display: block;
+}
+.modal-table th {
+  padding: 0 !important;
+  text-align: center !important;
+  height: 18px !important;
+}
+
+.modal-table .p-header {
+  padding: 0px 5px 0px 5px !important;
+  margin: 0 !important;
+  text-align: start;
+  height: 18px !important;
+}
+.modal-table tbody {
+  max-height: 100%;
+  width: 100%;
+}
+.modal-table td {
+  border-top: 0;
+  text-align: center;
+  vertical-align: middle !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  /* height: 22px !important; */
+}
+.modal-table p {
+  margin: 0 !important;
+  text-align: center;
+  padding: 0 !important;
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+}
+.modal-table input[type="checkbox"] {
+  margin-left: 0 !important;
+  margin-top: 4px !important;
+  margin-bottom: auto !important;
+  height: 13px !important;
+}
+/* FIM MODAL TABLE */
 </style>

@@ -12,20 +12,20 @@
       </template>
     </PageTitle>
     <div class="row w-100 m-0 p-0">
-      <div class="divTable">
-        <TableMain>
+      <div class="div-table">
+        <BaseTable :tableHeight="'max-content'">
           <template #thead>
             <th
-              style="width: 350px"
               @click="toggleOrder('nome')"
+              style="width: 350px"
               class="clickable t-start"
             >
               Nome
               <i :class="setIconByOrder('nome')"></i>
             </th>
             <th
-              style="width: 90px;"
               @click="toggleOrder('abreviacao')"
+              style="width: 90px;"
               class="clickable"
             >
               Abreviação
@@ -56,13 +56,13 @@
                 <td style="width: 60px">
                   <div
                     :style="{ 'background-color': perfil.cor }"
-                    style="width: 50px; height: 15px; border: 1px black solid"
+                    style="width: 49px; height: 80%; border: 1px black solid"
                   ></div>
                 </td>
               </tr>
             </template>
           </template>
-        </TableMain>
+        </BaseTable>
       </div>
 
       <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
@@ -205,7 +205,7 @@
 import _ from "lodash";
 import perfilService from "@/common/services/perfil";
 import PageTitle from "@/components/PageTitle";
-import TableMain from "@/components/TableMain";
+import BaseTable from "@/components/BaseTable";
 import Card from "@/components/Card";
 
 const emptyPerfil = {
@@ -219,7 +219,7 @@ export default {
   name: "DashboardPerfis",
   components: {
     PageTitle,
-    TableMain,
+    BaseTable,
     Card,
   },
   data() {
@@ -233,7 +233,7 @@ export default {
   created() {
     if (!this.Admin) {
       this.$notify({
-        group: "second",
+        group: "general",
         title: "Erro",
         text:
           "Acesso negado! Usuário não possui permissão para acessar esta página!",
@@ -382,12 +382,6 @@ export default {
 </script>
 
 <style scoped>
-.main-table {
-  overflow: auto !important;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-}
 .card .input-menor {
   width: 60px;
   text-align: center;

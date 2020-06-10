@@ -37,7 +37,7 @@
     </PageTitle>
 
     <div class="row w-100 m-0 p-0">
-      <div class="divTable p-0">
+      <div class="div-table p-0">
         <table class="main-table table table-sm table-hover table-bordered">
           <thead class="thead-light max-content sticky">
             <tr>
@@ -183,12 +183,16 @@
                     <p style="width: 140px">
                       {{
                         disciplina.gradeSI.semestre1.length !== 0
-                          ? `${disciplina.gradeSI.semestre1}º Período: 1º Semestre`
+                          ? `${
+                              disciplina.gradeSI.semestre1
+                            }º Período: 1º Semestre`
                           : ""
                       }}
                       {{
                         disciplina.gradeSI.semestre2.length !== 0
-                          ? `${disciplina.gradeSI.semestre2}º Período: 2º Semestre`
+                          ? `${
+                              disciplina.gradeSI.semestre2
+                            }º Período: 2º Semestre`
                           : ""
                       }}
                     </p>
@@ -198,12 +202,16 @@
                     <p style="width: 140px">
                       {{
                         disciplina.gradeCCN.semestre1.length !== 0
-                          ? `${disciplina.gradeCCN.semestre1}º Período: 1º Semestre`
+                          ? `${
+                              disciplina.gradeCCN.semestre1
+                            }º Período: 1º Semestre`
                           : ""
                       }}
                       {{
                         disciplina.gradeCCN.semestre2.length !== 0
-                          ? `${disciplina.gradeCCN.semestre2}º Período: 2º Semestre`
+                          ? `${
+                              disciplina.gradeCCN.semestre2
+                            }º Período: 2º Semestre`
                           : ""
                       }}
                     </p>
@@ -213,12 +221,16 @@
                     <p style="width: 140px">
                       {{
                         disciplina.gradeCCD.semestre1.length !== 0
-                          ? `${disciplina.gradeCCD.semestre1}º Período: 1º Semestre`
+                          ? `${
+                              disciplina.gradeCCD.semestre1
+                            }º Período: 1º Semestre`
                           : ""
                       }}
                       {{
                         disciplina.gradeCCD.semestre2.length !== 0
-                          ? `${disciplina.gradeCCD.semestre2}º Período: 2º Semestre`
+                          ? `${
+                              disciplina.gradeCCD.semestre2
+                            }º Período: 2º Semestre`
                           : ""
                       }}
                     </p>
@@ -228,12 +240,16 @@
                     <p style="width: 140px">
                       {{
                         disciplina.gradeEC.semestre1.length !== 0
-                          ? `${disciplina.gradeEC.semestre1}º Período: 1º Semestre`
+                          ? `${
+                              disciplina.gradeEC.semestre1
+                            }º Período: 1º Semestre`
                           : ""
                       }}
                       {{
                         disciplina.gradeEC.semestre2.length !== 0
-                          ? `${disciplina.gradeEC.semestre2}º Período: 2º Semestre`
+                          ? `${
+                              disciplina.gradeEC.semestre2
+                            }º Período: 2º Semestre`
                           : ""
                       }}
                     </p>
@@ -255,9 +271,9 @@
       title="Filtros"
     >
       <NavTab
-        :currentTab="modalTabAtiva"
+        :currentTab="tabAtivaModal"
         :allTabs="['Perfis', 'Disciplinas', 'Cursos']"
-        @change-tab="modalTabAtiva = $event"
+        @change-tab="tabAtivaModal = $event"
       />
       <div
         class="col m-0 p-0"
@@ -265,7 +281,7 @@
       >
         <!-- TABLE PERFIS -->
         <table
-          v-show="modalTabAtiva === 'Perfis'"
+          v-show="tabAtivaModal === 'Perfis'"
           class="table table-sm modal-table table-bordered"
           style="max-height: 450px !important;"
         >
@@ -320,7 +336,7 @@
         </table>
         <!-- TABLE DISCIPLINAS -->
         <table
-          v-show="modalTabAtiva === 'Disciplinas'"
+          v-show="tabAtivaModal === 'Disciplinas'"
           class="table table-sm modal-table table-bordered table-hover"
           style="max-height: 450px !important; overflow-y: auto !important;"
         >
@@ -454,7 +470,7 @@
         </table>
         <!-- TABLE CURSOS -->
         <table
-          v-show="modalTabAtiva === 'Cursos'"
+          v-show="tabAtivaModal === 'Cursos'"
           class="table table-sm modal-table table-bordered"
           style="max-height: 450px !important;"
         >
@@ -525,7 +541,7 @@
 
       <div slot="modal-footer" class="w-100 m-0 d-flex">
         <div class="w-100">
-          <template v-if="modalTabAtiva === 'Disciplinas'">
+          <template v-if="tabAtivaModal === 'Disciplinas'">
             <b-button
               class="btn-azul btn-custom btn-modal"
               variant="success"
@@ -539,7 +555,7 @@
               >Desmarcar Todos</b-button
             >
           </template>
-          <template v-else-if="modalTabAtiva === 'Perfis'">
+          <template v-else-if="tabAtivaModal === 'Perfis'">
             <b-button
               class="btn-azul btn-custom btn-modal"
               variant="success"
@@ -571,7 +587,7 @@
         <b-button
           variant="success"
           v-on:click="btnOK()"
-          class="btn-verde btn-custom btn-modal px-3"
+          class="btn-verde btn-custom btn-modal btn-ok-modal"
           >OK</b-button
         >
       </div>
@@ -656,7 +672,7 @@ export default {
           codigo: "65B",
         },
       ],
-      modalTabAtiva: "Perfis",
+      tabAtivaModal: "Perfis",
       searchDisciplinas: null,
       ordenacaoPerfisModal: { order: "nome", type: "asc" },
       modalOrdenacaoDisciplinas: { order: "codigo", type: "asc" },
@@ -680,7 +696,7 @@ export default {
     btnOK() {
       this.disciplinasAtivadas = [...this.disciplinasSelecionadas];
       this.cursosAtivados = [...this.cursosSelecionados];
-      this.modalTabAtiva = "Perfis";
+      this.tabAtivaModal = "Perfis";
       this.$refs.modalFiltros.hide();
     },
     setFixedOrderPerfil() {
@@ -738,12 +754,7 @@ export default {
     runAll() {
       //cria objeto para armazenar os períodos das disciplinas e chama as funções que a populam
       this.$store.state.disciplina.Disciplinas.forEach((d) => {
-        this.disciplinasGrades[d.id] = [
-          [[], []],
-          [[], []],
-          [[], []],
-          [[], []],
-        ]; //inisializa os períodos em 0 [Primeiro Semestre, Segundo Semestre]
+        this.disciplinasGrades[d.id] = [[[], []], [[], []], [[], []], [[], []]]; //inisializa os períodos em 0 [Primeiro Semestre, Segundo Semestre]
       });
       this.getGrades();
       this.get1Periodo();
@@ -1092,7 +1103,7 @@ export default {
 };
 </script>
 <style scoped>
-.divTable {
+.div-table {
   overflow: hidden;
   height: -webkit-max-content;
   height: -moz-max-content;
@@ -1151,7 +1162,7 @@ tbody {
 /* ==== MODAL TABLE ==== */
 .modal-table {
   display: block;
-  overflow-y: auto !important;
+  overflow-y: scroll !important;
   overflow-x: hidden !important;
   font-size: 10px !important;
   font-weight: normal !important;

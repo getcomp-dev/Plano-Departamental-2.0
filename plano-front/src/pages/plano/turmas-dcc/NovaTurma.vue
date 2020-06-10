@@ -1,256 +1,214 @@
 <template>
-  <div
-    class="novaturma max-content stickyAdd"
-    style="background-color:#e9e9e9;"
-  >
-    <td>
-      <div style="width: 25px;"></div>
-    </td>
-    <td>
-      <div style="width: 40px;"></div>
-    </td>
-    <td>
-      <div style="width: 50px;">
-        <select style="width: 40px; height: 20px" v-model="turmaForm.periodo">
-          <option value="1">1</option>
-          <option value="3">3</option>
-        </select>
-      </div>
+  <div class="novaturma stickyAdd">
+    <td style="width: 25px"></td>
+    <td style="width: 40px;"></td>
+    <td style="width: 55px;" class="less-padding">
+      <select v-model="turmaForm.periodo">
+        <option value="1">1</option>
+        <option value="3">3</option>
+      </select>
     </td>
     <td
+      style="width: 75px"
       :style="{
         'background-color': currentDisciplina
           ? currentDisciplina.perfilCor
           : '',
       }"
     >
-      <p style="width: 80px">
-        {{ currentDisciplina ? currentDisciplina.perfilAbreviacao : "" }}
-      </p>
+      {{ currentDisciplina ? currentDisciplina.perfilAbreviacao : "" }}
     </td>
-    <td>
-      <div style="width:70px">
-        <select
-          type="text"
-          style="width:65px;"
-          id="disciplinaCod"
-          v-model="turmaForm.Disciplina"
-          @change="handleChangeDisciplina()"
+    <td style="width:70px" class="less-padding">
+      <select
+        type="text"
+        style="width:100%;"
+        id="disciplinaCod"
+        v-model="turmaForm.Disciplina"
+        @change="handleChangeDisciplina()"
+      >
+        <option v-if="DisciplinasOrederedByCod.length === 0" type="text" value
+          >Nenhuma Disciplina Encontrada</option
         >
-          <option v-if="DisciplinasOrederedByCod.length === 0" type="text" value
-            >Nenhuma Disciplina Encontrada</option
-          >
-          <option
-            v-for="disciplina in DisciplinasOrederedByCod"
-            :key="'1-' + disciplina.id"
-            :value="disciplina.id"
-            >{{ disciplina.codigo }}</option
-          >
-        </select>
-      </div>
+        <option
+          v-for="disciplina in DisciplinasOrederedByCod"
+          :key="'1-' + disciplina.id"
+          :value="disciplina.id"
+          >{{ disciplina.codigo }}</option
+        >
+      </select>
     </td>
 
-    <td>
-      <div style="width: 330px;">
-        <select
-          type="text"
-          style="width:325px;"
-          id="disciplina"
-          v-model="turmaForm.Disciplina"
-          @change="handleChangeDisciplina()"
+    <td style="width: 330px;" class="less-padding">
+      <select
+        type="text"
+        style="width:100%;"
+        id="disciplina"
+        v-model="turmaForm.Disciplina"
+        @change="handleChangeDisciplina()"
+      >
+        <option v-if="Disciplinas.length === 0" type="text" value
+          >Nenhuma Disciplina Encontrada</option
         >
-          <option v-if="Disciplinas.length === 0" type="text" value
-            >Nenhuma Disciplina Encontrada</option
-          >
-          <option
-            v-for="disciplina in Disciplinas"
-            :key="'2-' + disciplina.id"
-            :value="disciplina.id"
-            >{{ disciplina.nome }}</option
-          >
-        </select>
-      </div>
+        <option
+          v-for="disciplina in Disciplinas"
+          :key="'2-' + disciplina.id"
+          :value="disciplina.id"
+          >{{ disciplina.nome }}</option
+        >
+      </select>
     </td>
-    <td>
-      <div style="width: 18px">
-        <p style="width:18px">
-          <template v-if="currentDisciplina">
-            {{
-              currentDisciplina.cargaPratica + currentDisciplina.cargaTeorica
-            }}
+    <td style="width: 25px">
+      <template v-if="currentDisciplina">
+        {{ currentDisciplina.cargaPratica + currentDisciplina.cargaTeorica }}
+      </template>
+    </td>
+    <td style="width: 35px">
+      <input
+        class="input-letra"
+        type="text"
+        style="text-transform: uppercase"
+        id="turma"
+        v-model="turmaForm.letra"
+        @keypress="onlyA_Z"
+      />
+    </td>
+    <td style="width:130px" class="less-padding">
+      <select
+        type="text"
+        style="margin-bottom:1px;"
+        id="docente1"
+        v-model="turmaForm.Docente1"
+      >
+        <option type="text" value=""></option>
+        <option
+          v-for="docente in Docentes"
+          :key="'1-' + docente.id"
+          :value="docente.id"
+          >{{ docente.apelido }}</option
+        >
+      </select>
+
+      <select
+        type="text"
+        style="width:100%;"
+        id="docente2"
+        v-model="turmaForm.Docente2"
+      >
+        <option type="text" value=""></option>
+        <option
+          v-for="docente in Docentes"
+          :key="'2-' + docente.id"
+          :value="docente.id"
+          >{{ docente.apelido }}</option
+        >
+      </select>
+    </td>
+    <td style="width:80px">
+      <template v-if="currentDisciplina">
+        <select type="text" id="SelectTurno" v-model="turmaForm.turno1">
+          <template v-if="disciplinaIsIntegralEAD">
+            <option value="EAD">EAD</option>
           </template>
-        </p>
-      </div>
+          <template v-else>
+            <option value="Diurno">Diurno</option>
+            <option value="Noturno">Noturno</option>
+          </template>
+        </select>
+      </template>
     </td>
-    <td>
-      <div style="width: 40px">
-        <input
-          class="input-letra"
-          type="text"
-          style="text-transform: uppercase"
-          id="turma"
-          v-model="turmaForm.letra"
-          @keypress="onlyA_Z"
-        />
-      </div>
-    </td>
-    <td>
-      <div style="width:130px">
+    <td style="width: 85px" class="less-padding">
+      <template v-if="currentDisciplina != undefined">
         <select
           type="text"
-          style="width:125px; margin-bottom:1px;"
-          id="docente1"
-          v-model="turmaForm.Docente1"
+          style="; margin-bottom:1px"
+          id="horario1"
+          v-model="turmaForm.Horario1"
+          v-on:change="setTurnoByHorario(1)"
         >
-          <option type="text" value=""></option>
+          <option v-if="!disciplinaIsIntegralEAD" type="text" value=""></option>
           <option
-            v-for="docente in Docentes"
-            :key="'1-' + docente.id"
-            :value="docente.id"
-            >{{ docente.apelido }}</option
+            v-for="horario in HorariosFiltredByTurno"
+            :key="'1-horarioEAD-id' + horario.id"
+            :value="horario.id"
+            >{{ horario.horario }}</option
           >
         </select>
+        <br />
 
         <select
+          v-if="hasMoreThan4Creditos"
           type="text"
-          style="width:125px;"
-          id="docente2"
-          v-model="turmaForm.Docente2"
+          id="horario2"
+          v-model="turmaForm.Horario2"
+          v-on:change="setTurnoByHorario(2)"
         >
-          <option type="text" value=""></option>
           <option
-            v-for="docente in Docentes"
-            :key="'2-' + docente.id"
-            :value="docente.id"
-            >{{ docente.apelido }}</option
-          >
-        </select>
-      </div>
-    </td>
-    <td>
-      <div style="width:80px">
-        <template v-if="currentDisciplina">
-          <select
+            v-if="!disciplinaIsIntegralEAD && !disciplinaIsParcialEAD"
             type="text"
-            style="width: 75px"
-            id="SelectTurno"
-            v-model="turmaForm.turno1"
-          >
-            <template v-if="disciplinaIsIntegralEAD">
-              <option value="EAD">EAD</option>
-            </template>
-            <template v-else>
-              <option value="Diurno">Diurno</option>
-              <option value="Noturno">Noturno</option>
-            </template>
-          </select>
-        </template>
-      </div>
-    </td>
-    <td>
-      <div style="width: 80px">
-        <template v-if="currentDisciplina != undefined">
-          <select
-            type="text"
-            style="width: 75px; margin-bottom:1px"
-            id="horario1"
-            v-model="turmaForm.Horario1"
-            v-on:change="setTurnoByHorario(1)"
-          >
+            value=""
+          ></option>
+          <template v-if="disciplinaIsParcialEAD">
             <option
-              v-if="!disciplinaIsIntegralEAD"
-              type="text"
-              value=""
-            ></option>
+              v-for="horario in HorariosEAD"
+              :key="'2-horarioEAD-id' + horario.id"
+              :value="horario.id"
+              >{{ horario.horario }}</option
+            >
+          </template>
+          <template v-else>
             <option
               v-for="horario in HorariosFiltredByTurno"
               :key="'1-horarioEAD-id' + horario.id"
               :value="horario.id"
               >{{ horario.horario }}</option
             >
-          </select>
-          <br />
-
-          <select
-            v-if="hasMoreThan4Creditos"
-            type="text"
-            style="width: 75px"
-            id="horario2"
-            v-model="turmaForm.Horario2"
-            v-on:change="setTurnoByHorario(2)"
-          >
-            <option
-              v-if="!disciplinaIsIntegralEAD && !disciplinaIsParcialEAD"
-              type="text"
-              value=""
-            ></option>
-            <template v-if="disciplinaIsParcialEAD">
-              <option
-                v-for="horario in HorariosEAD"
-                :key="'2-horarioEAD-id' + horario.id"
-                :value="horario.id"
-                >{{ horario.horario }}</option
-              >
-            </template>
-            <template v-else>
-              <option
-                v-for="horario in HorariosFiltredByTurno"
-                :key="'1-horarioEAD-id' + horario.id"
-                :value="horario.id"
-                >{{ horario.horario }}</option
-              >
-            </template>
-          </select>
-        </template>
-      </div>
+          </template>
+        </select>
+      </template>
     </td>
 
-    <td>
-      <div style="width: 100px">
-        <template v-if="!disciplinaIsIntegralEAD && currentDisciplina">
-          <select
-            type="text"
-            style="width:95px; margin-bottom:1px"
-            id="sala1"
-            v-model="turmaForm.Sala1"
+    <td style="width: 95px" class="less-padding">
+      <template v-if="!disciplinaIsIntegralEAD && currentDisciplina">
+        <select
+          type="text"
+          style="margin-bottom:1px"
+          id="sala1"
+          v-model="turmaForm.Sala1"
+        >
+          <option type="text" value=""></option>
+          <option
+            v-for="sala in Salas"
+            :key="'3-' + sala.id"
+            :value="sala.id"
+            >{{ sala.nome }}</option
           >
-            <option type="text" value=""></option>
-            <option
-              v-for="sala in Salas"
-              :key="'3-' + sala.id"
-              :value="sala.id"
-              >{{ sala.nome }}</option
-            >
-          </select>
-          <br />
-          <select
-            v-if="hasMoreThan4Creditos && currentDisciplina.ead != 2"
-            type="text"
-            style="width: 95px;"
-            id="sala2"
-            v-model="turmaForm.Sala2"
+        </select>
+        <br />
+        <select
+          v-if="hasMoreThan4Creditos && currentDisciplina.ead != 2"
+          type="text"
+          id="sala2"
+          v-model="turmaForm.Sala2"
+        >
+          <option type="text" value=""></option>
+          <option
+            v-for="sala in Salas"
+            :key="'4-' + sala.id"
+            :value="sala.id"
+            >{{ sala.nome }}</option
           >
-            <option type="text" value=""></option>
-            <option
-              v-for="sala in Salas"
-              :key="'4-' + sala.id"
-              :value="sala.id"
-              >{{ sala.nome }}</option
-            >
-          </select>
-        </template>
-      </div>
+        </select>
+      </template>
     </td>
-    <td>
-      <div style="width:40px"></div>
-    </td>
+    <td style="width:45px"><div style="height: 43px;"></div></td>
     <template v-for="c in cursosLength">
-      <td :key="c + 'cursos-ativados'">
-        <div style="width:32px">{{ c.codigo }}</div>
+      <td style="width:35px" :key="c + 'cursos-ativados'">
+        <!-- <div >{{ c.codigo }}</div> -->
       </td>
     </template>
   </div>
 </template>
+
 <script>
 import _ from "lodash";
 import turmaService from "@/common/services/turma";
@@ -316,16 +274,15 @@ export default {
       }
     },
     checkNewTurmaInputsValue(turma) {
-      let campoInvalido = false;
-      if (turma.Disciplina === null) campoInvalido = "disciplina";
-      else if (turma.letra === null) campoInvalido = "letra";
-      else if (turma.turno1 === null) campoInvalido = "turno";
-
-      if (campoInvalido) {
+      if (
+        turma.Disciplina === null ||
+        turma.letra === null ||
+        turma.turno1 === null
+      ) {
         this.$notify({
           group: "general",
-          title: "Erro!",
-          text: "Cadastro de " + campoInvalido + " invalido",
+          title: "Cadastro da turma inválido ou incompleto.",
+          text: "Disciplina, turno e letra da turma são obrigatório",
           type: "error",
         });
         return false;
@@ -403,7 +360,9 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Turma ${response.Turma.letra} da disciplina ${disciplinaNome} foi adicionada!`,
+            text: `A Turma ${
+              response.Turma.letra
+            } da disciplina ${disciplinaNome} foi adicionada!`,
             type: "success",
           });
           console.log("Nova turma adiciona:", turma);
@@ -525,48 +484,46 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .novaturma {
-  width: -webkit-max-content !important;
-  width: -moz-max-content !important;
-  width: max-content !important;
-  font-size: 11px;
+  font-size: 11px !important;
+  background-color: #e9e9e9;
 }
-td {
-  text-align: center !important;
+.novaturma td {
+  margin: 0 !important;
+  padding: 0 5px;
+  height: 43px !important;
   vertical-align: middle !important;
-  padding: 0 !important;
-  height: 40px !important;
+  text-align: center;
+  word-break: break-word;
 }
-p {
-  margin-bottom: 0 !important;
-  text-align: center !important;
+.novaturma .less-padding {
+  padding: 0 2px;
 }
-
-.input-letra {
+.novaturma select {
+  width: 100% !important;
+  height: 18px !important;
+}
+.novaturma p {
+  margin: 0 !important;
+  text-align: center;
+}
+.novaturma .input-letra {
   margin-left: 0 !important;
   margin-top: 4px !important;
   margin-bottom: auto !important;
-  height: 25px;
+  height: 25px !important;
   width: 20px;
   text-align: center !important;
 }
-.input-turno {
-  height: 18px;
-  text-align: center;
-  padding: 0 2px;
-  cursor: default;
-}
-
-.novaturma select {
-  height: 18px !important;
-}
 .stickyAdd {
+  display: block;
   overflow: hidden !important;
   position: sticky !important;
   position: -webkit-sticky !important;
-  top: 21px !important;
+  top: 19px !important;
   overflow: hidden !important;
-  z-index: 4;
+  z-index: 5 !important;
 }
 </style>

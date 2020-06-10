@@ -937,12 +937,13 @@ export default {
 <style scoped>
 .container-horarios {
   width: 100% !important;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 1fr);
+  justify-content: space-between;
+  grid-gap: 5px;
+  grid-row-gap: 20px;
+  margin-bottom: 20px;
   max-width: 1550px !important;
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  flex-direction: row !important;
-  flex-wrap: wrap !important;
 }
 .container-horarios .div-table {
   min-width: max-content;

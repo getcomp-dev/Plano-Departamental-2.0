@@ -61,31 +61,23 @@ export default {
 <style scoped>
 .container-horarios {
   width: 100% !important;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 301px);
+  justify-content: space-between;
+  grid-gap: 5px;
+  grid-row-gap: 20px;
+  margin-bottom: 20px;
   max-width: 1550px !important;
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
-  flex-direction: row !important;
-  flex-wrap: wrap !important;
-}
-.container-horarios .div-table {
-  min-width: max-content;
 }
 
-/* Para quebrar de 2 em 2 */
-@media screen and (max-width: 1250px) and (min-width: 1106px) {
+@media screen and (max-width: 1273px) {
   .container-horarios {
-    padding-right: 25% !important;
+    grid-template-columns: repeat(2, 1fr);
   }
 }
-@media screen and (max-width: 1150px) and (min-width: 1100px) {
+@media screen and (max-width: 642px) {
   .container-horarios {
-    padding-right: 20% !important;
-  }
-}
-@media screen and (max-width: 1100px) and (min-width: 944px) {
-  .container-horarios {
-    padding-right: 15% !important;
+    grid-template-columns: 1fr;
   }
 }
 </style>

@@ -13,7 +13,7 @@
           <b-button
             title="Cancelar"
             class="btn-custom btn-icon cancelbtn"
-            v-on:click.prevent="toggleAdd"
+            v-on:click.prevent="toggleAddTurma"
           >
             <i class="fas fa-times"></i>
           </b-button>
@@ -22,14 +22,14 @@
           <b-button
             title="Adicionar"
             class="btn-custom btn-icon addbtn"
-            v-on:click.prevent="toggleAdd"
+            v-on:click.prevent="toggleAddTurma"
           >
             <i class="fas fa-plus"></i>
           </b-button>
           <b-button
             title="Deletar"
             class="btn-custom btn-icon delbtn"
-            v-b-modal.modalConfirma
+            @click="openModalConfirma()"
           >
             <i class="far fa-trash-alt"></i>
           </b-button>
@@ -60,40 +60,42 @@
       </template>
     </PageTitle>
 
-    <div class="divTable" v-if="!isLoading">
-      <table class="table main-table table-hover table-sm table-bordered">
-        <thead class="thead-light max-content sticky">
-          <tr>
-            <TurmaHeader
-              :cursosSelecteds="filtroCursos.ativados"
-              :currentOrder="ordenacaoTurmasMain"
-              :currentOrderPerfil="ordenacaoPerfisMain"
-              v-on:toggle-order="toggleOrder(ordenacaoTurmasMain, $event)"
-              v-on:toggle-order-perfil="
-                toggleOrder(ordenacaoPerfisMain, $event)
-              "
-            />
-          </tr>
-
-          <tr v-show="turmaAddIsVisible">
+    <div class="div-table" v-if="!isLoading">
+      <BaseTable>
+        <template #thead>
+          <TurmaHeader
+            :cursosAtivados="filtroCursos.ativados"
+            :currentOrder="ordenacaoTurmasMain"
+            :currentOrderPerfil="ordenacaoPerfisMain"
+            @toggle-order="toggleOrder(ordenacaoTurmasMain, $event)"
+            @toggle-order-perfil="toggleOrder(ordenacaoPerfisMain, $event)"
+          />
+        </template>
+        <template #tbody>
+          <tr v-show="turmaAddIsVisible" class="stickyAdd">
             <NovaTurma :cursosLength="filtroCursos.ativados.length" />
           </tr>
-        </thead>
-        <tbody>
+
           <tr
-            v-for="turma in TurmasInPerfilOrdered"
+            v-for="turma in TurmasOrdered"
             :key="'turma id' + turma.id"
-            v-bind:style="{ 'background-color': turma.perfilCor }"
+            :style="{ 'background-color': turma.perfilCor }"
           >
             <TurmaRow
-              ref="turma"
-              v-on:handle-click-in-edit="handleClickInEdit($event)"
-              v-bind:turma="turma"
-              v-bind:cursosSelecteds="filtroCursos.ativados"
+              :key="turma.id + 'turmarow'"
+              :turma="turma"
+              :cursosSelecteds="filtroCursos.ativados"
+              @handle-click-in-edit="handleClickInEdit($event)"
             />
           </tr>
-        </tbody>
-      </table>
+          <tr v-if="TurmasOrdered.length === 0">
+            <td style="width:1090px">
+              <b>Nenhuma turma encontrada</b>, clique no botão de filtros para
+              seleciona-las.
+            </td>
+          </tr>
+        </template>
+      </BaseTable>
     </div>
 
     <!-- MODAL FILTROS -->
@@ -105,256 +107,170 @@
       title="Filtros"
     >
       <NavTab
-        :currentTab="modalTabAtiva"
-        :allTabs="['Perfis', 'Cursos', 'Semestre']"
-        @change-tab="modalTabAtiva = $event"
+        :currentTab="tabAtivaModal"
+        :allTabs="['Perfis', 'Cursos', 'Semestres']"
+        @change-tab="tabAtivaModal = $event"
       />
-      <div class="col m-0 p-0 max-content" style="height: 450px !important;">
-        <table
-          v-show="modalTabAtiva === 'Perfis'"
-          class="table table-sm modal-table table-bordered"
-          style="max-height: 450px !important;"
-        >
-          <thead class="thead-light sticky">
-            <tr>
-              <div class="max-content sticky">
-                <th>
-                  <p style="width: 25px;" class="p-header"></p>
-                </th>
-                <th>
-                  <p
-                    class="p-header clickable t-start"
-                    @click="toggleOrder(ordenacaoPerfisModal, 'nome')"
-                    style="width: 436px"
-                  >
-                    Nome
-                    <i
-                      :class="setIconByOrder(ordenacaoPerfisModal, 'nome')"
-                    ></i>
-                  </p>
-                </th>
-              </div>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="perfil in PerfisOrdered" :key="'perfilId' + perfil.id">
-              <div class="max-content">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      v-model="filtroPerfis.selecionados"
-                      :value="perfil"
-                      class="form-check-input position-static m-0"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p style="width: 436px; text-align: start;">
-                    {{ perfil.nome }}
-                  </p>
-                </td>
-              </div>
-            </tr>
-          </tbody>
-        </table>
 
-        <table
-          v-show="modalTabAtiva === 'Cursos'"
-          class="table table-sm modal-table table-bordered"
-          style="height: 450px !important;"
+      <div class="div-table">
+        <BaseTable
+          :tableType="'modal-table'"
+          v-show="tabAtivaModal === 'Perfis'"
         >
-          <thead class="thead-light sticky">
-            <tr>
-              <div class="max-content sticky">
-                <th>
-                  <div class="m-0 input-group input-group-search">
-                    <input
-                      type="text"
-                      class="form-control"
-                      style="border-right: none;"
-                      placeholder="Pesquise nome ou codigo de uma disciplina..."
-                      v-model="searchCursosModal"
-                    />
-                    <div
-                      class="input-group-append"
-                      @click="clearsearchCursosModal()"
-                    >
-                      <span
-                        class="input-group-text search-text"
-                        style="height: 25px; font-size: 18px; cursor: pointer;"
-                        >&times;</span
-                      >
-                    </div>
-                  </div>
-                </th>
-              </div>
+          <template #thead>
+            <th style="width: 25px;"></th>
+            <th
+              @click="toggleOrder(ordenacaoPerfisModal, 'nome')"
+              class="clickable t-start"
+              style="width: 425px"
+            >
+              Nome
+              <i :class="setIconByOrder(ordenacaoPerfisModal, 'nome')"></i>
+            </th>
+          </template>
+          <template #tbody>
+            <tr
+              v-for="perfil in PerfisOrdered"
+              :key="'perfilId' + perfil.id"
+              @click="addOrRemoveItem(perfil, filtroPerfis.selecionados)"
+            >
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  v-model="filtroPerfis.selecionados"
+                  :value="perfil"
+                  class="form-check-input position-static m-0"
+                />
+              </td>
+              <td style="width: 425px" class="t-start">
+                {{ perfil.nome }}
+              </td>
             </tr>
-            <tr>
-              <div class="max-content sticky2">
-                <th>
-                  <p style="width: 25px;" class="p-header"></p>
-                </th>
-                <th
-                  class="clickable t-center"
-                  @click="toggleOrder(ordenacaoCursosModal, 'codigo')"
-                >
-                  <p style="width: 50px; text-align: start;" class="p-header">
-                    Cód.
-                    <i
-                      :class="setIconByOrder(ordenacaoCursosModal, 'codigo')"
-                    ></i>
-                  </p>
-                </th>
-                <th
-                  class="clickable"
-                  @click="toggleOrder(ordenacaoCursosModal, 'nome')"
-                >
-                  <p style="width: 385px; text-align: start;" class="p-header">
-                    Nome
-                    <i
-                      :class="setIconByOrder(ordenacaoCursosModal, 'nome')"
-                    ></i>
-                  </p>
-                </th>
-              </div>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="curso in ModalCursosOrdered" :key="'cursoMd' + curso.id">
-              <div class="max-content">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      v-model="filtroCursos.selecionados"
-                      :value="curso"
-                      class="form-check-input position-static m-0"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p style="width: 50px; text-align: start;">
-                    {{ curso.codigo }}
-                  </p>
-                </td>
-                <td>
-                  <p style="width: 385px; text-align: start;">
-                    {{ curso.nome }}
-                  </p>
-                </td>
-              </div>
-            </tr>
-          </tbody>
-        </table>
+          </template>
+        </BaseTable>
 
-        <table
-          v-show="modalTabAtiva === 'Semestre'"
-          class="table table-bordered table-sm modal-table"
-          style="max-height: 392px !important;"
+        <BaseTable
+          v-show="tabAtivaModal === 'Cursos'"
+          :tableType="'modal-table'"
+          :hasSearchBar="true"
         >
-          <thead class="thead-light sticky">
-            <tr>
-              <div class="max-content sticky">
-                <th>
-                  <p style="width: 25px;" class="p-header"></p>
-                </th>
-                <th>
-                  <p class="p-header" style="width: 435px; text-align: start;">
-                    Semestre Letivo
-                  </p>
-                </th>
-              </div>
+          <template #thead-search>
+            <input
+              type="text"
+              class="form-control input-search"
+              placeholder="Pesquise nome ou codigo de uma disciplina..."
+              v-model="searchCursosModal"
+            />
+            <button @click="clearsearchCursosModal()" class="btn btn-search">
+              &times;
+            </button>
+          </template>
+          <template #thead>
+            <th style="width: 25px;"></th>
+            <th
+              @click="toggleOrder(ordenacaoCursosModal, 'codigo')"
+              class="clickable"
+              style="width: 50px;"
+            >
+              Cód.
+              <i :class="setIconByOrder(ordenacaoCursosModal, 'codigo')"></i>
+            </th>
+            <th
+              @click="toggleOrder(ordenacaoCursosModal, 'nome')"
+              class="clickable t-start"
+              style="width: 375px"
+            >
+              Nome
+              <i :class="setIconByOrder(ordenacaoCursosModal, 'nome')"></i>
+            </th>
+          </template>
+          <template #tbody>
+            <tr
+              v-for="curso in ModalCursosOrdered"
+              :key="'cursoMd' + curso.id"
+              @click="addOrRemoveItem(curso, filtroCursos.selecionados)"
+            >
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  v-model="filtroCursos.selecionados"
+                  :value="curso"
+                  class="form-check-input position-static m-0"
+                />
+              </td>
+              <td style="width: 50px;">
+                {{ curso.codigo }}
+              </td>
+              <td style="width: 375px" class="t-start">
+                {{ curso.nome }}
+              </td>
             </tr>
-          </thead>
-          <tbody>
+            <tr v-show="ModalCursosOrdered.length === 0">
+              <td colspan="3" style="width:450px">
+                NENHUM CURSO ENCONTRADO.
+              </td>
+            </tr>
+          </template>
+        </BaseTable>
+
+        <BaseTable
+          v-show="tabAtivaModal === 'Semestres'"
+          :tableType="'modal-table'"
+        >
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th style="width: 425px" class="t-start">
+              Semestre Letivo
+            </th>
+          </template>
+          <template #tbody>
             <tr>
-              <div class="max-content">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      class="form-check-input position-static m-0"
-                      v-model="filtroSemestres.primeiro"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p style="width: 435px; text-align: start;">PRIMEIRO</p>
-                </td>
-              </div>
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroSemestres.primeiro"
+                />
+              </td>
+              <td style="width: 425px" class="t-start">
+                PRIMEIRO
+              </td>
             </tr>
             <tr>
-              <div style="width: max-content;">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      class="form-check-input position-static m-0"
-                      v-model="filtroSemestres.segundo"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p style="width: 435px; text-align: start;">SEGUNDO</p>
-                </td>
-              </div>
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroSemestres.segundo"
+                />
+              </td>
+              <td style="width: 425px" class="t-start">
+                SEGUNDO
+              </td>
             </tr>
-          </tbody>
-        </table>
+          </template>
+        </BaseTable>
       </div>
 
       <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
         <div class="w-100">
-          <template v-if="modalTabAtiva === 'Semestre'">
-            <b-button
-              class="btn-azul btn-custom btn-modal"
-              variant="success"
-              @click="selectAllSemestre()"
-              >Selecionar Todos</b-button
-            >
-            <b-button
-              class="btn-cinza btn-custom btn-modal"
-              variant="secondary"
-              @click="selectNoneSemestre()"
-              >Desmarcar Todos</b-button
-            >
-          </template>
-
-          <template v-else-if="modalTabAtiva === 'Perfis'">
-            <b-button
-              class="btn-azul btn-custom btn-modal"
-              variant="success"
-              @click="selectAllPerfis()"
-              >Selecionar Todos</b-button
-            >
-            <b-button
-              class="btn-cinza btn-custom btn-modal"
-              variant="secondary"
-              @click="selectNonePerfis()"
-              >Desmarcar Todos</b-button
-            >
-          </template>
-
-          <template v-else>
-            <b-button
-              class="btn-azul btn-custom btn-modal"
-              variant="success"
-              @click="selectAllCursos()"
-              >Selecionar Todos</b-button
-            >
-            <b-button
-              class="btn-cinza btn-custom btn-modal"
-              variant="secondary"
-              @click="selectNoneCursos()"
-              >Desmarcar Todos</b-button
-            >
-          </template>
+          <b-button
+            class="btn-azul btn-custom btn-modal"
+            variant="success"
+            @click="modalSelectAll[tabAtivaModal]"
+            >Selecionar Todos</b-button
+          >
+          <b-button
+            class="btn-cinza btn-custom btn-modal"
+            variant="secondary"
+            @click="modalSelectNone[tabAtivaModal]"
+            >Desmarcar Todos</b-button
+          >
         </div>
         <b-button
           variant="success"
           @click="btnOkFiltros()"
-          class="btn-verde btn-custom btn-modal px-3"
+          class="btn-verde btn-custom btn-modal btn-ok-modal"
           >OK</b-button
         >
       </div>
@@ -362,17 +278,27 @@
 
     <!-- MODAL TURMA -->
     <b-modal
-      id="modalEditTurma"
-      ref="modalEditTurma"
+      id="modalTurma"
+      ref="modalTurma"
       scrollable
       title="Edição de Turma"
       hide-footer
     >
-      <ModalEditTurma :turma="turmaSelected" />
+      <template v-if="turmaClickada !== null">
+        <ModalEditTurma
+          :key="turmaClickada.id + 'modalTurma'"
+          :turma="turmaClickada"
+        />
+      </template>
     </b-modal>
 
     <!-- MODAL DELETAR -->
-    <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
+    <b-modal
+      id="modalConfirma"
+      ref="modalConfirma"
+      title="Confirmar Seleção"
+      @ok="deleteSelected"
+    >
       <p class="my-4">Tem certeza que deseja deletar as turmas selecionadas?</p>
       <template v-if="Deletar.length > 0">
         <template v-for="turma in Deletar">
@@ -472,6 +398,7 @@ import _ from "lodash";
 import xlsx from "@/common/services/xlsx";
 import ls from "local-storage";
 import { EventBus } from "@/event-bus.js";
+import ordenacaoMixin from "@/ordenacao-mixin";
 import { saveAs } from "file-saver";
 import turmaService from "@/common/services/turma";
 import pedidoService from "@/common/services/pedido";
@@ -480,10 +407,12 @@ import NovaTurma from "./NovaTurma.vue";
 import TurmaRow from "./TurmaRow.vue";
 import NavTab from "@/components/NavTab.vue";
 import PageTitle from "@/components/PageTitle.vue";
+import BaseTable from "@/components/BaseTable.vue";
 import ModalEditTurma from "@/components/ModalEditTurma.vue";
 
 export default {
   name: "DashboardPrototipo",
+  mixins: [ordenacaoMixin],
   components: {
     TurmaRow,
     TurmaHeader,
@@ -491,14 +420,19 @@ export default {
     PageTitle,
     ModalEditTurma,
     NavTab,
+    BaseTable,
   },
   data() {
     return {
       error: undefined,
-      turmaSelected: null,
+      turmaClickada: null,
       turmaAddIsVisible: false,
-      ordenacaoTurmasMain: { order: "periodo", type: "asc" },
+      ordenacaoTurmasMain: { order: "disciplinaCodigo", type: "asc" },
       ordenacaoPerfisMain: { order: "perfilNome", type: "asc" },
+      tabAtivaModal: "Perfis",
+      searchCursosModal: "",
+      ordenacaoCursosModal: { order: "codigo", type: "asc" },
+      ordenacaoPerfisModal: { order: "nome", type: "asc" },
       filtroPerfis: {
         ativados: [],
         selecionados: [],
@@ -512,16 +446,37 @@ export default {
         segundo: true,
         ativo: 3,
       },
-      modalTabAtiva: "Perfis",
-      searchCursosModal: null,
-      ordenacaoCursosModal: { order: "codigo", type: "asc" },
-      ordenacaoPerfisModal: { order: "nome", type: "asc" },
+      modalSelectAll: {
+        Perfis: () => {
+          this.filtroPerfis.selecionados = [...this.Perfis];
+        },
+        Cursos: () => {
+          this.filtroCursos.selecionados = [...this.Cursos];
+        },
+        Semestres: () => {
+          this.filtroSemestres.primeiro = true;
+          this.filtroSemestres.segundo = true;
+        },
+      },
+      modalSelectNone: {
+        Perfis: () => {
+          this.filtroPerfis.selecionados = [];
+        },
+        Cursos: () => {
+          this.filtroCursos.selecionados = [];
+        },
+        Semestres: () => {
+          this.filtroSemestres.primeiro = false;
+          this.filtroSemestres.segundo = false;
+        },
+      },
     };
   },
+
   created() {
     if (!this.Admin) {
       this.$notify({
-        group: "second",
+        group: "general",
         title: "Erro",
         text:
           "Acesso negado! Usuário não possui permissão para acessar esta página!",
@@ -557,73 +512,44 @@ export default {
   },
 
   methods: {
-    toggleOrder(currentOrder, newOrder, type = "asc") {
-      if (currentOrder.order != newOrder) {
-        currentOrder.order = newOrder;
-        currentOrder.type = type;
-      } else {
-        currentOrder.type = currentOrder.type == "asc" ? "desc" : "asc";
-      }
-    },
-    setIconByOrder(currentOrder, orderToCheck) {
-      if (currentOrder.order === orderToCheck) {
-        return currentOrder.type === "asc"
-          ? "fas fa-arrow-down fa-sm"
-          : "fas fa-arrow-up fa-sm";
-      } else {
-        return "fas fa-arrow-down fa-sm low-opacity";
-      }
+    addOrRemoveItem(item, array) {
+      const index = array.indexOf(item);
+      if (index === -1) array.push(item);
+      else array.splice(index, 1);
     },
     handleClickInEdit(turmaClicked) {
-      this.turmaSelected = turmaClicked;
-      this.$refs.modalEditTurma.show();
+      this.turmaClickada = turmaClicked;
+      this.$refs.modalTurma.show();
     },
     btnOkFiltros() {
       this.setSemestreAtivo();
       this.filtroPerfis.ativados = [...this.filtroPerfis.selecionados];
       this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
       this.clearsearchCursosModal();
+      this.tabAtivaModal = "Perfis";
       this.$refs.modalFiltros.hide();
     },
-    selectAllPerfis() {
-      this.filtroPerfis.selecionados = [...this.Perfis];
-    },
-    selectNonePerfis() {
-      this.filtroPerfis.selecionados = [];
-    },
-    selectAllCursos() {
-      this.filtroCursos.selecionados = [...this.Cursos];
-    },
-    selectNoneCursos() {
-      this.filtroCursos.selecionados = [];
-    },
-    selectAllSemestre() {
-      this.filtroSemestres.primeiro = true;
-      this.filtroSemestres.segundo = true;
-    },
-    selectNoneSemestre() {
-      this.filtroSemestres.primeiro = false;
-      this.filtroSemestres.segundo = false;
-    },
     clearsearchCursosModal() {
-      this.searchCursosModal = null;
+      this.searchCursosModal = "";
     },
     setSemestreAtivo() {
-      if (this.filtroSemestres.primeiro && !this.filtroSemestres.segundo) {
+      if (this.filtroSemestres.primeiro && !this.filtroSemestres.segundo)
         this.filtroSemestres.ativo = 1;
-      } else if (
-        this.filtroSemestres.segundo &&
-        !this.filtroSemestres.primeiro
-      ) {
+      else if (this.filtroSemestres.segundo && !this.filtroSemestres.primeiro)
         this.filtroSemestres.ativo = 2;
-      } else if (
-        this.filtroSemestres.primeiro &&
-        this.filtroSemestres.primeiro
-      ) {
+      else if (this.filtroSemestres.primeiro && this.filtroSemestres.primeiro)
         this.filtroSemestres.ativo = 3;
-      } else {
-        this.filtroSemestres.ativo = undefined;
-      }
+      else this.filtroSemestres.ativo = undefined;
+    },
+    openModalConfirma() {
+      if (this.Deletar.length) this.$refs.modalConfirma.show();
+      else
+        this.$notify({
+          group: "general",
+          title: `Erro!`,
+          text: `Nenhuma turma selecionada para exclusão`,
+          type: "error",
+        });
     },
     xlsx(pedidos) {
       xlsx
@@ -726,7 +652,7 @@ export default {
         }
       }
     },
-    toggleAdd() {
+    toggleAddTurma() {
       this.turmaAddIsVisible = !this.turmaAddIsVisible;
     },
     normalizeText(text) {
@@ -736,69 +662,89 @@ export default {
         .replace(/[\u0300-\u036f]/g, "");
     },
   },
-
   computed: {
-    TurmasInPerfilOrdered() {
+    TurmasOrdered() {
+      let turmasResult = _.orderBy(
+        this.TurmasFiltredByPerfis,
+        [this.ordenacaoTurmasMain.order, "letra"],
+        [this.ordenacaoTurmasMain.type, "asc"]
+      );
+
       if (this.ordenacaoPerfisMain.order !== null) {
-        return _.orderBy(
-          this.TurmasInPerfilFiltred,
-          [
-            this.ordenacaoPerfisMain.order,
-            this.ordenacaoTurmasMain.order,
-            "letra",
-          ],
-          [this.ordenacaoPerfisMain.type, this.ordenacaoTurmasMain.type, "asc"]
+        turmasResult = _.orderBy(
+          turmasResult,
+          this.ordenacaoPerfisMain.order,
+          this.ordenacaoPerfisMain.type
         );
       }
-      return _.orderBy(
-        this.TurmasInPerfilFiltred,
-        [this.ordenacaoTurmasMain.order, "periodo", "letra"],
-        [this.ordenacaoTurmasMain.type, "asc", "asc"]
+
+      return _.orderBy(turmasResult, "periodo");
+    },
+    TurmasFiltredByPerfis() {
+      return _.filter(this.TurmasFiltredBySemestres, (turma) =>
+        _.find(
+          this.filtroPerfis.ativados,
+          (perfil) => perfil.id === turma.disciplinaPerfil
+        )
       );
     },
-    TurmasInPerfilFiltred() {
-      return _.filter(this.TurmasInPerfil, (turma) => {
-        if (this.filtroSemestres.ativo === 1) return turma.periodo === 1;
-        else if (this.filtroSemestres.ativo === 2) return turma.periodo === 3;
-        else if (this.filtroSemestres.ativo === 3) return true;
-        else return false;
+    TurmasFiltredBySemestres() {
+      return _.filter(this.TurmasInDisciplinas, (turma) => {
+        switch (this.filtroSemestres.ativo) {
+          case 1:
+            return turma.periodo === 1;
+          case 2:
+            return turma.periodo === 3;
+          case 3:
+            return true;
+          default:
+            return false;
+        }
       });
     },
-    TurmasInPerfil() {
+    TurmasInDisciplinas() {
       let turmasResultantes = [];
 
-      this.filtroPerfis.ativados.forEach((perfil) => {
-        turmasResultantes = turmasResultantes.concat(
-          this.Turmas.filter((turma) => {
-            if (_.isNull(turma.Disciplina)) return false;
-
-            let disciplinaFounded = _.find(
-              this.Disciplinas,
-              (disciplina) => disciplina.id === turma.Disciplina
-            );
-
-            if (disciplinaFounded.Perfil === perfil.id) {
-              turma.perfilCor = perfil.cor;
-              turma.perfilNome = perfil.nome;
-              turma.perfilAbreviacao = perfil.abreviacao;
-              turma.disciplinaCodigo = disciplinaFounded.codigo;
-              turma.disciplinaNome = disciplinaFounded.nome;
-              return true;
-            }
-            return false;
-          })
+      _.forEach(this.Turmas, (turma) => {
+        const disciplinaEcontrada = _.find(
+          this.Disciplinas,
+          (disciplina) => disciplina.id === turma.Disciplina
         );
+
+        const perfilEncontrado = _.find(
+          this.Perfis,
+          (perfil) => perfil.id === disciplinaEcontrada.Perfil
+        );
+
+        if (disciplinaEcontrada && perfilEncontrado) {
+          turmasResultantes.push({
+            ...turma,
+            disciplinaNome: disciplinaEcontrada.nome,
+            disciplinaCodigo: disciplinaEcontrada.codigo,
+            disciplinaPerfil: disciplinaEcontrada.Perfil,
+            perfilCor: perfilEncontrado.cor,
+            perfilNome: perfilEncontrado.nome,
+            perfilAbreviacao: perfilEncontrado.abreviacao,
+          });
+        }
       });
       return turmasResultantes;
     },
-    Cursos() {
-      return this.$store.state.curso.Cursos;
+
+    ModalCursosOrdered() {
+      return _.orderBy(
+        this.ModalCursosFiltred,
+        this.ordenacaoCursosModal.order,
+        this.ordenacaoCursosModal.type
+      );
     },
     ModalCursosFiltred() {
-      if (this.searchCursosModal != null || this.searchCursosModal == "") {
+      let cursosResultantes = this.Cursos;
+
+      if (this.searchCursosModal !== "") {
         const searchNormalized = this.normalizeText(this.searchCursosModal);
 
-        return _.filter(this.Cursos, (curso) => {
+        cursosResultantes = _.filter(cursosResultantes, (curso) => {
           const cursoNome = this.normalizeText(curso.nome);
           const cursoCodigo = this.normalizeText(curso.codigo);
 
@@ -808,14 +754,7 @@ export default {
           );
         });
       }
-      return this.Cursos;
-    },
-    ModalCursosOrdered() {
-      return _.orderBy(
-        this.ModalCursosFiltred,
-        this.ordenacaoCursosModal.order,
-        this.ordenacaoCursosModal.type
-      );
+      return cursosResultantes;
     },
     PerfisOrdered() {
       return _.orderBy(
@@ -824,16 +763,20 @@ export default {
         this.ordenacaoPerfisModal.type
       );
     },
+
+    Cursos() {
+      return this.$store.state.curso.Cursos;
+    },
     Perfis() {
       return this.$store.state.perfil.Perfis;
     },
     Disciplinas() {
-      return _.orderBy(this.$store.state.disciplina.Disciplinas, "nome");
+      return this.$store.state.disciplina.Disciplinas;
     },
     Turmas() {
-      return _.orderBy(
-        _.orderBy(this.$store.state.turma.Turmas, "letra"),
-        "Disciplina"
+      return _.filter(
+        this.$store.state.turma.Turmas,
+        (turma) => !_.isNull(turma.Disciplina)
       );
     },
     Deletar() {
@@ -846,134 +789,21 @@ export default {
       return this.$store.state.isLoading;
     },
     Admin() {
-      if (this.$store.state.auth.Usuario.admin === 1) {
-        return true;
-      } else {
-        return false;
-      }
+      return this.$store.state.auth.Usuario.admin === 1;
     },
   },
 };
 </script>
 
 <style scoped>
-.divTable {
-  overflow-x: hidden;
-  overflow-y: auto;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
-}
-.main-table {
-  display: block !important;
-  overflow-y: scroll !important;
-  overflow-x: auto !important;
-  font-size: 11px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-  height: -webkit-calc(100vh - 95px);
-  height: -moz-calc(100vh - 95px);
-  height: calc(100vh - 95px);
-}
-.main-table tbody {
-  max-height: 100%;
-  width: 100%;
-}
-.main-table tr thead {
-  display: block;
-}
-.main-table th {
-  padding: 0 !important;
-  font-size: 14px;
-  text-align: center !important;
-  height: 18px !important;
-}
-.main-table .p-header {
-  padding: 0 5px 0 5px !important;
-  margin: 0 !important;
-  font-size: 11px !important;
-  text-align: center;
-  height: 18px;
-  display: block !important;
-  overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-
-  display: block !important;
-  overflow: hidden !important;
-  z-index: 30;
-}
 .stickyAdd {
+  background-color: #e9e9e9;
+  display: block;
   overflow: hidden !important;
   position: sticky !important;
   position: -webkit-sticky !important;
-  top: 21px !important;
+  top: 19px !important;
   overflow: hidden !important;
-  z-index: 4;
-}
-/* ==== MODAL TABLE ==== */
-.modal-table {
-  display: block;
-  overflow-y: auto !important;
-  overflow-x: hidden !important;
-  font-size: 10px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-}
-.modal-table tr thead {
-  display: block;
-}
-.modal-table th {
-  padding: 0 !important;
-  text-align: center !important;
-  height: 18px !important;
-}
-
-.modal-table .p-header {
-  padding: 0px 5px 0px 5px !important;
-  margin: 0 !important;
-  text-align: start;
-  height: 18px !important;
-}
-.modal-table tbody {
-  max-height: 100%;
-  width: 100%;
-}
-.modal-table td {
-  border-top: 0;
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  /* height: 22px !important; */
-}
-.modal-table p {
-  margin: 0 !important;
-  text-align: center;
-  padding: 0 !important;
-  padding-right: 5px !important;
-  padding-left: 5px !important;
-}
-.modal-table input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-  margin-bottom: auto !important;
-  height: 13px !important;
-}
-.form-control {
-  height: 25px !important;
-  font-size: 12px !important;
-  padding: 2px 5px 2px 5px !important;
-  text-align: start;
-}
-/* FIM MODAL TABLE */
-/* search */
-.form-inline .input-group {
-  width: auto;
+  z-index: 5 !important;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div id="InputPedidos" style="width:70px;">
+  <div class="InputPedidos">
     <input
       :disabled="Admin ? false : true"
       v-if="pedidoForm.vagasPeriodizadas == 0"
@@ -140,6 +140,9 @@ export default {
 </script>
 
 <style scoped>
+.InputPedidos {
+  display: flex;
+}
 input {
   width: 28px !important;
   height: 20px !important;

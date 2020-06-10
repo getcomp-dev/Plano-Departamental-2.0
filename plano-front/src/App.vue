@@ -7,12 +7,8 @@
     <notifications
       group="general"
       position="bottom right"
-      classes="vue-notification"
-    />
-    <notifications
-      group="second"
-      position="bottom right"
       :duration="5000"
+      :closeOnClick="false"
       classes="vue-notification"
     />
   </div>
@@ -28,6 +24,7 @@ export default {
 html,
 body {
   height: 100%;
+  padding: 0 !important;
 }
 #app {
   height: 100%;

@@ -1,151 +1,143 @@
 <template>
-  <div class="turmarow max-content">
-    <td>
-      <div style="width: 25px;">
-        <input
-          :disabled="Admin ? false : true"
-          type="checkbox"
-          class="form-check-input position-static m-0"
-          name="ativa"
-          value="true"
-          v-model="ativo"
-          v-on:click="checkDelete(turma)"
-        />
-      </div>
+  <div v-if="Admin" class="turmarow max-content">
+    <td style="width: 25px;">
+      <input
+        type="checkbox"
+        class="form-check-input position-static m-0"
+        name="ativa"
+        value="true"
+        v-model="ativo"
+        v-on:click="checkDelete(turma)"
+      />
     </td>
-    <td>
-      <div style="width:40px" class="div-btn">
-        <i
-          v-if="Admin"
-          @click="$emit('handle-click-in-edit', turma)"
-          class="fas fa-edit btn-table clickable"
-        ></i>
-      </div>
+    <td style="width:40px">
+      <i
+        v-if="Admin"
+        @click.stop="$emit('handle-click-in-edit', turma)"
+        class="fas fa-edit btn-table clickable"
+      ></i>
     </td>
-    <td>
-      <div style="width: 50px;">
-        <select
-          :disabled="Admin ? false : true"
-          id="2periodo"
-          style="width: 45px;"
-          v-model="turmaForm.periodo"
-          v-on:change="checkHorariosPeriodo()"
+    <td style="width: 55px;" class="less-padding">
+      <select
+        id="2periodo"
+        style=";"
+        v-model="turmaForm.periodo"
+        v-on:change="checkHorariosPeriodo()"
+      >
+        <option value="1">1</option>
+        <option value="3">3</option>
+      </select>
+    </td>
+    <td style="width: 75px">
+      {{ turma.perfilAbreviacao }}
+    </td>
+    <td style="width:70px;">
+      {{ currentDisciplina.codigo }}
+    </td>
+    <td style="width: 330px;" class="t-start">
+      {{ currentDisciplina.nome }}
+    </td>
+    <td style="width: 25px;">
+      {{ totalCarga }}
+    </td>
+    <td style="width: 35px">
+      <input
+        type="text"
+        class="input-letra"
+        style="text-transform: uppercase"
+        v-model="turmaForm.letra"
+        @keypress="onlyA_Z"
+        v-on:blur="editTurma(turma)"
+      />
+    </td>
+    <td style="width: 130px;" class="less-padding">
+      <select
+        type="text"
+        style="margin-bottom:1px;"
+        id="docente1"
+        v-model="turmaForm.Docente1"
+        v-on:change="checkDocente()"
+      >
+        <option v-if="Docentes.length === 0" type="text" value=""
+          >Nenhum Docente Encontrado</option
         >
-          <option value="1">1</option>
-          <option value="3">3</option>
-        </select>
-      </div>
-    </td>
-    <td>
-      <p style="width: 80px">
-        {{ turma.perfilAbreviacao }}
-      </p>
-    </td>
-    <td>
-      <div style="width:70px;">
-        <p style="width:70px">
-          {{ currentDisciplina.codigo }}
-        </p>
-      </div>
-    </td>
-    <td>
-      <p style="width: 330px;" class="t-start">
-        {{ currentDisciplina.nome }}
-      </p>
-    </td>
-    <td>
-      <div style="width: 18px;">
-        <p style="width:18px;">
-          {{ totalCarga }}
-        </p>
-      </div>
-    </td>
-    <td>
-      <div style="width: 40px">
-        <input
-          :disabled="Admin ? false : true"
-          type="text"
-          class="input-letra"
-          style="text-transform: uppercase"
-          v-model="turmaForm.letra"
-          @keypress="onlyA_Z"
-          v-on:blur="editTurma(turma)"
-        />
-      </div>
-    </td>
-    <td>
-      <div style="width: 130px;">
-        <select
-          :disabled="Admin ? false : true"
-          type="text"
-          style="width:125px; margin-bottom:1px;"
-          id="docente1"
-          v-model="turmaForm.Docente1"
-          v-on:change="checkDocente()"
+        <option v-else type="text" value=""></option>
+        <option
+          v-for="docente in Docentes"
+          :key="'1-docente-id' + docente.id"
+          :value="docente.id"
+          >{{ docente.apelido }}</option
         >
-          <option v-if="Docentes.length === 0" type="text" value=""
-            >Nenhum Docente Encontrado</option
-          >
-          <option v-else type="text" value=""></option>
-          <option
-            v-for="docente in Docentes"
-            :key="'1-docente-id' + docente.id"
-            :value="docente.id"
-            >{{ docente.apelido }}</option
-          >
-        </select>
+      </select>
 
-        <select
-          :disabled="Admin ? false : true"
-          type="text"
-          style="width:125px"
-          id="docente2"
-          v-model="turmaForm.Docente2"
-          v-on:change="checkDocente()"
+      <select
+        type="text"
+        id="docente2"
+        v-model="turmaForm.Docente2"
+        v-on:change="checkDocente()"
+      >
+        <option v-if="Docentes.length === 0" type="text" value=""
+          >Nenhum Docente Encontrado</option
         >
-          <option v-if="Docentes.length === 0" type="text" value=""
-            >Nenhum Docente Encontrado</option
-          >
-          <option v-else type="text" value=""></option>
+        <option v-else type="text" value=""></option>
+        <option
+          v-for="docente in Docentes"
+          :key="'2-docente-id' + docente.id"
+          :value="docente.id"
+          >{{ docente.apelido }}</option
+        >
+      </select>
+    </td>
+    <td style="width: 80px;" class="less-padding">
+      <select
+        type="text"
+        id="SelectTurno"
+        v-model="turmaForm.turno1"
+        v-on:change="editTurma(turma)"
+      >
+        <template v-if="disciplinaIsIntegralEAD">
+          <option value="EAD">EAD</option>
+        </template>
+        <template v-else>
+          <option value="Diurno">Diurno</option>
+          <option value="Noturno">Noturno</option>
+        </template>
+      </select>
+    </td>
+    <td style="width:85px" class="less-padding">
+      <select
+        type="text"
+        style="; margin-bottom:1px"
+        id="horario1"
+        v-model="turmaForm.Horario1"
+        v-on:change="checkHorario(1)"
+      >
+        <option v-if="!disciplinaIsIntegralEAD" type="text" value=""></option>
+
+        <option
+          v-for="horario in HorariosFiltredByTurno"
+          :key="'1-horarioEAD-id' + horario.id"
+          :value="horario.id"
+          >{{ horario.horario }}</option
+        >
+      </select>
+
+      <select
+        v-if="hasMoreThan4Creditos"
+        type="text"
+        id="horario2"
+        v-model="turmaForm.Horario2"
+        v-on:change="checkHorario(2)"
+      >
+        <template v-if="disciplinaIsParcialEAD">
           <option
-            v-for="docente in Docentes"
-            :key="'2-docente-id' + docente.id"
-            :value="docente.id"
-            >{{ docente.apelido }}</option
+            v-for="horario in HorariosEAD"
+            :key="'2-horarioEAD-id' + horario.id"
+            :value="horario.id"
+            >{{ horario.horario }}</option
           >
-        </select>
-      </div>
-    </td>
-    <td>
-      <div style="width: 80px;">
-        <select
-          :disabled="Admin ? false : true"
-          type="text"
-          style="width: 75px"
-          id="SelectTurno"
-          v-model="turmaForm.turno1"
-          v-on:change="editTurma(turma)"
-        >
-          <template v-if="disciplinaIsIntegralEAD">
-            <option value="EAD">EAD</option>
-          </template>
-          <template v-else>
-            <option value="Diurno">Diurno</option>
-            <option value="Noturno">Noturno</option>
-          </template>
-        </select>
-      </div>
-    </td>
-    <td>
-      <div style="width:80px">
-        <select
-          :disabled="Admin ? false : true"
-          type="text"
-          style="width: 75px; margin-bottom:1px"
-          id="horario1"
-          v-model="turmaForm.Horario1"
-          v-on:change="checkHorario(1)"
-        >
+        </template>
+        <template v-else>
           <option v-if="!disciplinaIsIntegralEAD" type="text" value=""></option>
 
           <option
@@ -154,118 +146,80 @@
             :value="horario.id"
             >{{ horario.horario }}</option
           >
-        </select>
-
-        <select
-          v-if="hasMoreThan4Creditos"
-          :disabled="Admin ? false : true"
-          type="text"
-          style="width: 75px"
-          id="horario2"
-          v-model="turmaForm.Horario2"
-          v-on:change="checkHorario(2)"
-        >
-          <template v-if="isParcialEAD">
-            <option
-              v-for="horario in HorariosEAD"
-              :key="'2-horarioEAD-id' + horario.id"
-              :value="horario.id"
-              >{{ horario.horario }}</option
-            >
-          </template>
-          <template v-else>
-            <option
-              v-if="!disciplinaIsIntegralEAD"
-              type="text"
-              value=""
-            ></option>
-
-            <option
-              v-for="horario in HorariosFiltredByTurno"
-              :key="'1-horarioEAD-id' + horario.id"
-              :value="horario.id"
-              >{{ horario.horario }}</option
-            >
-          </template>
-        </select>
-      </div>
-    </td>
-
-    <td>
-      <div style="width: 100px">
-        <template v-if="!disciplinaIsIntegralEAD">
-          <select
-            :disabled="Admin ? false : true"
-            type="text"
-            style="width:95px; margin-bottom:1px;"
-            id="sala1"
-            v-model="turmaForm.Sala1"
-            v-on:change="checkSala()"
-          >
-            <option v-if="Salas.length === 0" type="text" value=""
-              >Nenhuma Sala Encontrada</option
-            >
-            <option v-else value=""></option>
-            <option
-              v-for="sala in Salas"
-              :key="'1-sala-id' + sala.id"
-              :value="sala.id"
-              >{{ sala.nome }}</option
-            >
-          </select>
-          <select
-            v-if="hasMoreThan4Creditos && currentDisciplina.ead === 0"
-            :disabled="Admin ? false : true"
-            type="text"
-            style="width: 95px"
-            id="sala2"
-            v-model="turmaForm.Sala2"
-            v-on:change="checkSala()"
-          >
-            <option v-if="Salas.length === 0" type="text" value=""
-              >Nenhuma Sala Encontrada</option
-            >
-            <option v-else value=""></option>
-            <option
-              v-for="sala in Salas"
-              :key="'2-sala-id' + sala.id"
-              :value="sala.id"
-              >{{ sala.nome }}</option
-            >
-          </select>
         </template>
-      </div>
+      </select>
     </td>
 
-    <td>
-      <div style="width:40px; height:43px">
-        <p style="width: 40px; font-weight: bold;" class="py-1">
-          {{ totalPedidos() }}
-        </p>
-        <p style="width: 40px;">
+    <td style="width: 95px" class="less-padding">
+      <template v-if="!disciplinaIsIntegralEAD">
+        <select
+          type="text"
+          style="; margin-bottom:1px;"
+          id="sala1"
+          v-model="turmaForm.Sala1"
+          v-on:change="checkSala()"
+        >
+          <option v-if="Salas.length === 0" type="text" value=""
+            >Nenhuma Sala Encontrada</option
+          >
+          <option v-else value=""></option>
+          <option
+            v-for="sala in Salas"
+            :key="'1-sala-id' + sala.id"
+            :value="sala.id"
+            >{{ sala.nome }}</option
+          >
+        </select>
+        <select
+          v-if="hasMoreThan4Creditos && currentDisciplina.ead === 0"
+          type="text"
+          id="sala2"
+          v-model="turmaForm.Sala2"
+          v-on:change="checkSala()"
+        >
+          <option v-if="Salas.length === 0" type="text" value=""
+            >Nenhuma Sala Encontrada</option
+          >
+          <option v-else value=""></option>
+          <option
+            v-for="sala in Salas"
+            :key="'2-sala-id' + sala.id"
+            :value="sala.id"
+            >{{ sala.nome }}</option
+          >
+        </select>
+      </template>
+    </td>
+
+    <td style="width:45px" class="less-padding">
+      <div style="height: 43px;" class="py-1">
+        <span style="font-weight:bold"> {{ totalPedidos() }}</span>
+        <br />
+        <p class="mt-1">
           {{ totalPedidosPeriodizados }}+{{ totalPedidosNaoPeriodizados }}
         </p>
       </div>
     </td>
 
     <template v-for="curso in cursosSelecteds">
-      <td :key="'1-id-curso' + curso.id">
+      <td class="p-0" style="width:35px;" :key="'1-id-curso' + curso.id">
         <template v-for="(pedido, index) in Pedidos">
           <template v-if="pedido.Curso === curso.id">
-            <turmaPedido
+            <turmaPedidos
               :key="'index' + index"
               v-bind:index="index"
               v-bind:turma="turma"
-            ></turmaPedido>
+            ></turmaPedidos>
           </template>
         </template>
       </td>
     </template>
   </div>
 </template>
+
 <script>
 import turmaService from "@/common/services/turma";
-import turmaPedido from "./TurmaPedido.vue";
+import turmaPedidos from "./TurmaPedidos.vue";
 import _ from "lodash";
 
 const emptyTurma = {
@@ -293,21 +247,21 @@ export default {
     return {
       ativo: false,
       valorAtual: undefined,
-      turmaForm: _.clone(emptyTurma),
       currentData: undefined,
+      turmaForm: _.clone(emptyTurma),
     };
   },
   components: {
-    turmaPedido,
+    turmaPedidos,
   },
   mounted() {
     this.turmaForm = _.clone(this.turma);
     this.currentData = _.clone(this.turmaForm);
-    this.autoSetInputs();
+    this.setInputs();
   },
 
   methods: {
-    autoSetInputs() {
+    setInputs() {
       if (this.currentDisciplina.ead === 1) {
         this.turmaForm.turno1 = "EAD";
         this.turmaForm.Horario1 = 31;
@@ -1248,6 +1202,9 @@ export default {
     disciplinaIsIntegralEAD() {
       return this.currentDisciplina ? this.currentDisciplina.ead === 1 : false;
     },
+    disciplinaIsParcialEAD() {
+      return this.currentDisciplina ? this.currentDisciplina.ead === 2 : false;
+    },
     currentDisciplina() {
       return _.find(this.$store.state.disciplina.Disciplinas, {
         id: this.turma.Disciplina,
@@ -1263,10 +1220,6 @@ export default {
 
     hasMoreThan4Creditos() {
       return this.totalCarga >= 4;
-    },
-
-    isParcialEAD() {
-      return this.currentDisciplina.ead === 2;
     },
 
     Disciplinas() {
@@ -1367,44 +1320,40 @@ export default {
 </script>
 <style scoped>
 .turmarow {
-  font-size: 11px;
+  font-size: 11px !important;
 }
-td {
-  text-align: center !important;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  height: 40px !important;
-}
-p {
-  margin-bottom: 0 !important;
-  text-align: center;
+.turmarow td {
+  margin: 0 !important;
   padding: 0 5px;
+  /* height: 43px !important; */
+  vertical-align: middle !important;
+  text-align: center;
+  word-break: break-word;
 }
-select {
+.turmarow tbody tr input[type="checkbox"] {
+  width: 14px !important;
+  height: 14px !important;
+  text-align: center !important;
+  margin: 0;
+  margin-top: 5px !important;
+  margin-bottom: auto !important;
+}
+.turmarow .less-padding {
+  padding: 0 2px;
+}
+.turmarow select {
+  width: 100% !important;
   height: 18px;
 }
-
 .input-letra {
   margin-left: 0 !important;
   margin-top: 4px !important;
   margin-bottom: auto !important;
-  height: 25px;
+  height: 25px !important;
   width: 20px;
   text-align: center !important;
 }
-input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-  margin-bottom: auto !important;
-  height: 15px;
-  width: 15px;
-}
-.input-turno {
-  height: 18px;
-  text-align: center;
-  padding: 0 2px;
-  cursor: default;
-}
+
 .div-btn {
   display: flex;
   justify-content: center;
