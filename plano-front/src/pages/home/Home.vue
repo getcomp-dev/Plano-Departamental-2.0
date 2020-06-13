@@ -9,7 +9,7 @@
         <br />Abaixo segue um resumo das funcionalidade de cada tela:
       </p>
       <div class="row">
-        <LinksList v-if="Admin" :title="'PlANO'" :pages="linksPlanoOrdered" />
+        <LinksList v-if="Admin" :title="'PLANO'" :pages="linksPlanoOrdered" />
         <LinksList :title="'RELATÓRIOS'" :pages="linksRelatoriosOrdered" />
         <LinksList
           v-if="Admin"
@@ -93,52 +93,52 @@ export default {
       ],
       linksGenrenciar: [
         {
-          title: "Cursos ",
+          title: "Cursos",
           routerName: "cursos",
           description: `Lista todos os cursos presentes no sistemas (além dos externos ao
             DCC), e permite a adição e alteração das informações dos cursos.`,
         },
         {
-          title: "Disciplinas ",
+          title: "Disciplinas",
           routerName: "disciplinas",
           description: `Listagem de disciplinas de todos os departamentos cadastrados no
             sistema. Permite a alteração de nome, código, carga teórica e
             pratica, perfis e também define se é EAD ou não.`,
         },
         {
-          title: "Disciplinas na Grade ",
+          title: "Disciplinas na Grade",
           routerName: "gradeEdit",
           description: `Onde encontram-se as disciplinas de cada grade do DCC atuais e
             antigas que ainda estão em atividade, e permite a alteração ou
             adição de novas disciplinas.`,
         },
         {
-          title: "Docentes ",
+          title: "Docentes",
           routerName: "docentes",
           description: `Listagem de todos os docentes ativo e inativos do DCC, além de
             permitir a alteração de seus perfis.`,
         },
         {
-          title: "Grades ",
+          title: "Grades",
           routerName: "grades",
           description: `Onde encontram-se as grades dos cursos do DCC atuais e antigas que
             ainda estão em atividade, e permite a adição de novas grades.`,
         },
         {
-          title: "Log ",
+          title: "Log",
           routerName: "history",
           description: `Listagem de todas as modificações feitas pelos usuários no
             sistema.`,
         },
         {
-          title: "Perfis ",
+          title: "Perfis",
           routerName: "perfis",
           description: `Onde encontram-se os perfis definidos para cada disciplina nas
             tabelas, permitindo também a adição e alteração de perfis, seus
             nomes e as cores destinadas a eles.`,
         },
         {
-          title: "Salas ",
+          title: "Salas",
           routerName: "salas",
           description: `Listagem de todas as salas registradas no sistema. Permite a
             adição de novas salas e laboratórios.`,

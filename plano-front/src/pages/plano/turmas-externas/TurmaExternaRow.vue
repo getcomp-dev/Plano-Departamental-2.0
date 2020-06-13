@@ -1,5 +1,5 @@
 <template>
-  <div class="turmarow">
+  <tr class="turmarow">
     <td style="width:25px">
       <input
         type="checkbox"
@@ -148,7 +148,7 @@
     >
       <TurmaExternaPedidos :index="indice" :turma="turma" />
     </td>
-  </div>
+  </tr>
 </template>
 <script>
 import _ from "lodash";

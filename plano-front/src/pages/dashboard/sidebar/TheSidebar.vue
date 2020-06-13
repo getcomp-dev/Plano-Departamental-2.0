@@ -1,5 +1,5 @@
 <template>
-  <nav class="sidebar d-block d-md-block bg-light col">
+  <nav class="sidebar bg-light col">
     <SidebarMenu :menuPages="linkDashboard" />
 
     <SidebarMenu

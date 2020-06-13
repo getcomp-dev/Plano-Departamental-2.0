@@ -63,36 +63,125 @@
     <div class="div-table" v-if="!isLoading">
       <BaseTable>
         <template #thead>
-          <TurmaHeader
-            :cursosAtivados="filtroCursos.ativados"
-            :currentOrder="ordenacaoTurmasMain"
-            :currentOrderPerfil="ordenacaoPerfisMain"
-            @toggle-order="toggleOrder(ordenacaoTurmasMain, $event)"
-            @toggle-order-perfil="toggleOrder(ordenacaoPerfisMain, $event)"
-          />
+          <th style="width:25px"></th>
+          <th style="width:40px" class="p-0">Editar</th>
+          <th style="width:55px" title="Semestre">S.</th>
+          <th
+            @click="toggleOrder(ordenacaoPerfisMain, setFixedOrderPerfil)"
+            style="width: 75px"
+            class="clickable t-center"
+          >
+            <div class="d-flex justify-content-between align-items-center">
+              <i
+                class="fas fa-thumbtack"
+                :class="ordenacaoPerfisMain.order === null ? 'low-opacity' : ''"
+              ></i>
+              <span>
+                Perfil
+              </span>
+
+              <i :class="setIconByOrder(ordenacaoPerfisMain, 'perfilNome')"></i>
+            </div>
+          </th>
+          <th
+            class="clickable"
+            @click="toggleOrder(ordenacaoTurmasMain, 'disciplinaCodigo')"
+            style="width:70px"
+            title="Código"
+          >
+            Cód.
+            <i
+              :class="setIconByOrder(ordenacaoTurmasMain, 'disciplinaCodigo')"
+            ></i>
+          </th>
+          <th
+            class="clickable t-start"
+            style="width:330px"
+            @click="toggleOrder(ordenacaoTurmasMain, 'disciplinaNome')"
+          >
+            Disciplina
+            <i
+              :class="setIconByOrder(ordenacaoTurmasMain, 'disciplinaNome')"
+            ></i>
+          </th>
+          <th style="width:25px" title="Créditos">
+            C.
+          </th>
+          <th style="width:35px" class="p-0" title="Turma">T.</th>
+          <th style="width:130px">Docente</th>
+          <th style="width:80px">Turno</th>
+          <th style="width:85px">Horário</th>
+          <th style="width:95px">Sala</th>
+          <th style="width:45px" title="Total de vagas">
+            Total
+          </th>
+          <template v-for="curso in filtroCursos.ativados">
+            <th
+              class="p-0"
+              style="width: 35px"
+              :key="'1-' + curso.id"
+              :id="'curso' + curso.id"
+            >
+              <span
+                v-bind:class="{ cursoGrande: nameIsBig(curso.codigo) }"
+                v-on.prevent:mouseover
+              >
+                {{ curso.codigo }}
+              </span>
+            </th>
+
+            <b-popover
+              :key="'popover' + curso.id"
+              :target="'curso' + curso.id"
+              placement="bottom"
+              triggers="hover focus"
+            >
+              <span
+                class="w-100 text-center"
+                style="font-size: 11px!important;"
+              >
+                <b>{{ curso.nome }}</b>
+              </span>
+
+              <p
+                class="p-0 m-0 text-center"
+                style="font-size: 11px!important;"
+                v-if="curso.semestreInicial == 1 || curso.semestreInicial == 3"
+              >
+                1º - {{ curso.alunosEntrada }}
+              </p>
+              <p
+                class="p-0 m-0 text-center"
+                style="font-size: 11px!important;"
+                v-if="curso.semestreInicial == 2 || curso.semestreInicial == 3"
+              >
+                2º - {{ curso.alunosEntrada2 }}
+              </p>
+            </b-popover>
+          </template>
         </template>
         <template #tbody>
-          <tr v-show="turmaAddIsVisible" class="stickyAdd">
-            <NovaTurma :cursosLength="filtroCursos.ativados.length" />
-          </tr>
+          <NovaTurma
+            v-show="turmaAddIsVisible"
+            :cursosAtivadosLength="filtroCursos.ativados.length"
+          />
 
-          <tr
+          <TurmaRow
             v-for="turma in TurmasOrdered"
-            :key="'turma id' + turma.id"
-            :style="{ 'background-color': turma.perfilCor }"
-          >
-            <TurmaRow
-              :key="turma.id + 'turmarow'"
-              :turma="turma"
-              :cursosSelecteds="filtroCursos.ativados"
-              @handle-click-in-edit="handleClickInEdit($event)"
-            />
-          </tr>
+            :key="'turmaRow' + turma.id + turma.disciplinaCodigo + turma.letra"
+            :turma="turma"
+            :cursosAtivados="filtroCursos.ativados"
+            @handle-click-in-edit="handleClickInEdit($event)"
+          />
           <tr v-if="TurmasOrdered.length === 0">
             <td style="width:1090px">
-              <b>Nenhuma turma encontrada</b>, clique no botão de filtros para
-              seleciona-las.
+              <b>Nenhuma turma encontrada.</b> Clique no botão de filtros
+              <i class="fas fa-list-ul mx-1"></i> para selecioná-las.
             </td>
+            <td
+              v-if="filtroCursos.ativados.length"
+              :style="`width: ${35 * filtroCursos.ativados.length}px`"
+            ></td>
           </tr>
         </template>
       </BaseTable>
@@ -132,7 +221,7 @@
             <tr
               v-for="perfil in PerfisOrdered"
               :key="'perfilId' + perfil.id"
-              @click="addOrRemoveItem(perfil, filtroPerfis.selecionados)"
+              @click="toggleItemInArray(perfil, filtroPerfis.selecionados)"
             >
               <td style="width: 25px">
                 <input
@@ -188,7 +277,7 @@
             <tr
               v-for="curso in ModalCursosOrdered"
               :key="'cursoMd' + curso.id"
-              @click="addOrRemoveItem(curso, filtroCursos.selecionados)"
+              @click="toggleItemInArray(curso, filtroCursos.selecionados)"
             >
               <td style="width: 25px">
                 <input
@@ -224,7 +313,7 @@
             </th>
           </template>
           <template #tbody>
-            <tr>
+            <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
               <td style="width: 25px">
                 <input
                   type="checkbox"
@@ -236,7 +325,7 @@
                 PRIMEIRO
               </td>
             </tr>
-            <tr>
+            <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
               <td style="width: 25px">
                 <input
                   type="checkbox"
@@ -385,37 +474,33 @@
         </ul>
       </div>
     </b-modal>
-
-    <div id="loading" v-if="isLoading">
-      <div class="cube1"></div>
-      <div class="cube2"></div>
-    </div>
   </div>
 </template>
 
 <script>
 import _ from "lodash";
-import xlsx from "@/common/services/xlsx";
-import ls from "local-storage";
+import {
+  PageTitle,
+  BaseTable,
+  NavTab,
+  ModalEditTurma,
+} from "@/components/index.js";
+import toggleOrdinationMixin from "@/mixins/toggleOrdination.js";
+import toggleItemInArrayMixin from "@/mixins/toggleItemInArray.js";
 import { EventBus } from "@/event-bus.js";
-import ordenacaoMixin from "@/ordenacao-mixin";
 import { saveAs } from "file-saver";
+import ls from "local-storage";
+import xlsx from "@/common/services/xlsx";
 import turmaService from "@/common/services/turma";
 import pedidoService from "@/common/services/pedido";
-import TurmaHeader from "./TurmaHeader.vue";
 import NovaTurma from "./NovaTurma.vue";
 import TurmaRow from "./TurmaRow.vue";
-import NavTab from "@/components/NavTab.vue";
-import PageTitle from "@/components/PageTitle.vue";
-import BaseTable from "@/components/BaseTable.vue";
-import ModalEditTurma from "@/components/ModalEditTurma.vue";
 
 export default {
   name: "DashboardPrototipo",
-  mixins: [ordenacaoMixin],
+  mixins: [toggleOrdinationMixin, toggleItemInArrayMixin],
   components: {
     TurmaRow,
-    TurmaHeader,
     NovaTurma,
     PageTitle,
     ModalEditTurma,
@@ -512,11 +597,6 @@ export default {
   },
 
   methods: {
-    addOrRemoveItem(item, array) {
-      const index = array.indexOf(item);
-      if (index === -1) array.push(item);
-      else array.splice(index, 1);
-    },
     handleClickInEdit(turmaClicked) {
       this.turmaClickada = turmaClicked;
       this.$refs.modalTurma.show();
@@ -578,8 +658,7 @@ export default {
     deleteSelected() {
       let turmas = this.$store.state.turma.Deletar;
       for (let i = 0; i < turmas.length; i++) {
-        this.deleteTurma(_.clone(turmas[i]));
-        //Necessario _.clone para não passar um objeto reativo como parametro onde será editado
+        this.deleteTurma(turmas[i]);
       }
       this.$store.commit("emptyDelete");
     },
@@ -606,21 +685,22 @@ export default {
         });
     },
     deleteTurma(turma) {
-      turma.periodo = null;
-      turma.letra = null;
-      turma.turno1 = null;
-      turma.turno2 = null;
-      turma.Disciplina = null;
-      turma.Docente1 = null;
-      turma.Docente2 = null;
-      turma.Horario1 = null;
-      turma.Horario2 = null;
-      turma.Sala1 = null;
-      turma.Sala2 = null;
+      const turmaToDelete = _.clone(turma);
+      turmaToDelete.periodo = null;
+      turmaToDelete.letra = null;
+      turmaToDelete.turno1 = null;
+      turmaToDelete.turno2 = null;
+      turmaToDelete.Disciplina = null;
+      turmaToDelete.Docente1 = null;
+      turmaToDelete.Docente2 = null;
+      turmaToDelete.Horario1 = null;
+      turmaToDelete.Horario2 = null;
+      turmaToDelete.Sala1 = null;
+      turmaToDelete.Sala2 = null;
 
-      this.editTurma(turma);
+      this.editTurma(turmaToDelete);
 
-      let pedidos = this.$store.state.pedido.Pedidos[turma.id];
+      let pedidos = _.clone(this.$store.state.pedido.Pedidos[turmaToDelete.id]);
       for (let i = 0; i < pedidos.length; i++) {
         if (
           !(
@@ -632,15 +712,7 @@ export default {
           pedidos[i].vagasNaoPeriodizadas = 0;
           pedidoService
             .update(pedidos[i].Curso, pedidos[i].Turma, pedidos[i])
-            .then(() => {
-              this.$notify({
-                group: "general",
-                title: `Sucesso!`,
-                text: `O pedido foi atualizado!`,
-                type: "warn",
-                position: "bottom right",
-              });
-            })
+            .then(() => {})
             .catch((error) => {
               this.error = "<b>Erro ao atualizar Pedido</b>";
               if (error.response.data.fullMessage) {
@@ -660,6 +732,10 @@ export default {
         .toUpperCase()
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "");
+    },
+    nameIsBig(nome) {
+      if (nome.length > 4) return true;
+      else return false;
     },
   },
   computed: {
@@ -756,6 +832,13 @@ export default {
       }
       return cursosResultantes;
     },
+    setFixedOrderPerfil() {
+      if (this.ordenacaoPerfisMain.type === "desc") {
+        return null;
+      } else {
+        return "perfilNome";
+      }
+    },
     PerfisOrdered() {
       return _.orderBy(
         this.Perfis,
@@ -763,7 +846,6 @@ export default {
         this.ordenacaoPerfisModal.type
       );
     },
-
     Cursos() {
       return this.$store.state.curso.Cursos;
     },
@@ -805,5 +887,25 @@ export default {
   top: 19px !important;
   overflow: hidden !important;
   z-index: 5 !important;
+}
+
+.turma-header {
+  font-size: 11px !important;
+}
+.turma-header th {
+  margin: 0 !important;
+  padding: 0 5px;
+  height: 18px !important;
+  vertical-align: middle !important;
+  text-align: center;
+  word-wrap: none;
+  word-break: break-word;
+  user-select: none;
+}
+.cursoGrande {
+  font-size: 7px !important;
+}
+.turma-header p {
+  margin: 0;
 }
 </style>

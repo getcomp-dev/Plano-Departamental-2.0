@@ -16,27 +16,39 @@
     </div>
 
     <ul class="navbar-nav">
-      <li v-if="Admin" class="nav-link" v-on:click="$emit('show-modal-user')">
+      <li
+        v-if="Admin"
+        class="nav-link"
+        v-on:click="$emit('show-modal', 'user')"
+      >
         <i class="fas fa-user"></i>
         <span>Usuário</span>
       </li>
       <li
         v-if="Admin"
         class="nav-link"
-        v-on:click="$emit('show-modal-novo-plano')"
+        v-on:click="$emit('show-modal', 'novoPlano')"
       >
         <i class="fas fa-plus-square"></i>
         <span>Novo</span>
       </li>
-      <li class="nav-link" v-on:click="$emit('show-modal-load')" v-if="Admin">
+      <li
+        class="nav-link"
+        v-on:click="$emit('show-modal', 'load')"
+        v-if="Admin"
+      >
         <i class="fas fa-folder-open"></i>
         <span>Carregar</span>
       </li>
-      <li class="nav-link" v-on:click="$emit('show-modal-save')" v-if="Admin">
+      <li
+        class="nav-link"
+        v-on:click="$emit('show-modal', 'save')"
+        v-if="Admin"
+      >
         <i class="fas fa-file"></i>
         <span>Salvar</span>
       </li>
-      <li class="nav-link" v-on:click="$emit('show-modal-download')">
+      <li class="nav-link" v-on:click="$emit('show-modal', 'download')">
         <i class="fas fa-save"></i>
         <span>Download</span>
       </li>
@@ -66,11 +78,7 @@ export default {
   },
   computed: {
     Admin() {
-      if (this.$store.state.auth.Usuario.admin === 1) {
-        return true;
-      } else {
-        return false;
-      }
+      return this.$store.state.auth.Usuario.admin === 1;
     },
   },
 };

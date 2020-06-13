@@ -1,13 +1,10 @@
 <template>
   <div class="TheDashboard" v-bind:class="{ loading: isLoadingFile }">
     <TheNavbar
+      v-show="!isLoading"
       :sidebarVisibility="sidebarVisibility"
-      v-on:toggle-sidebar="toggleSidebar"
-      v-on:show-modal-download="showModalDownload"
-      v-on:show-modal-save="showModalSave"
-      v-on:show-modal-load="showModalLoad"
-      v-on:show-modal-novo-plano="showModalNovoPlano"
-      v-on:show-modal-user="showModalUser"
+      @toggle-sidebar="toggleSidebar"
+      @show-modal="showModal[$event]()"
     />
 
     <div class="container-fluid">
@@ -16,8 +13,9 @@
         enter-active-class="animated slideInLeft sidebar-animation"
         leave-active-class="animated slideOutLeft sidebar-animation"
       >
-        <TheSidebar v-if="sidebarVisibility" :year="year" />
+        <TheSidebar v-show="sidebarVisibility" :year="year" />
       </transition>
+
       <main
         @click="closeSideBar()"
         role="main"
@@ -26,10 +24,14 @@
       >
         <router-view></router-view>
       </main>
+    </div>
 
-      <div id="loading" v-if="isLoading">
-        <div class="cube1"></div>
-        <div class="cube2"></div>
+    <div class="container-loading" v-if="isLoading">
+      <div class="lds-ring">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
     </div>
 
@@ -247,6 +249,29 @@ export default {
       downloadState: 0,
       planoForm: _.clone(emptyPlano),
       sidebarVisibility: false,
+      onLoad: false,
+      showModal: {
+        load: () => {
+          this.filename = "";
+          this.returnFiles();
+          this.$refs.modalLoad.show();
+        },
+        novoPlano: () => {
+          this.$refs.modalNovoPlano.show();
+        },
+        download: () => {
+          this.$refs.modalDownloadAll.show();
+          this.startDownload();
+        },
+        save: () => {
+          this.filename = "";
+          this.returnFiles();
+          this.$refs.modalSave.show();
+        },
+        user: () => {
+          this.$refs.modalUser.show();
+        },
+      },
     };
   },
   created() {
@@ -275,10 +300,12 @@ export default {
     toggleSidebar() {
       this.sidebarVisibility = !this.sidebarVisibility;
     },
+
     closeSideBar() {
       this.sidebarVisibility = false;
     },
-    bddump: function(filename) {
+
+    bddump(filename) {
       bddumpService
         .createDump({ filename: filename })
         .then(() => {
@@ -312,7 +339,7 @@ export default {
       });
     },
 
-    restorebd: function(filename) {
+    restorebd(filename) {
       this.isLoadingFile = true;
       bddumpService
         .restoredump(filename)
@@ -340,7 +367,7 @@ export default {
         });
     },
 
-    download: async function() {
+    async download() {
       return new Promise((resolve) => {
         this.downloadState = 0;
         let pedidos = this.$store.state.pedido.Pedidos;
@@ -381,11 +408,11 @@ export default {
       });
     },
 
-    startDownload: async function() {
+    async startDownload() {
       await this.download();
     },
 
-    returnFiles: function() {
+    returnFiles() {
       bddumpService.returnFiles().then((response) => {
         this.files = response.Files.filter(function(elm) {
           return elm.match(/.*\.(sql)/gi);
@@ -414,31 +441,6 @@ export default {
           this.hideModalUser();
           this.userModalMode = 0;
         });
-    },
-
-    showModalNovoPlano() {
-      this.$refs.modalNovoPlano.show();
-    },
-
-    showModalLoad() {
-      this.filename = "";
-      this.returnFiles();
-      this.$refs.modalLoad.show();
-    },
-
-    showModalDownload() {
-      this.$refs.modalDownloadAll.show();
-      this.startDownload();
-    },
-
-    showModalSave() {
-      this.filename = "";
-      this.returnFiles();
-      this.$refs.modalSave.show();
-    },
-
-    showModalUser() {
-      this.$refs.modalUser.show();
     },
 
     hideModalLoad() {
@@ -521,9 +523,66 @@ export default {
   height: calc(100vh - var(--navbar-height));
   transition: all 200ms ease;
 }
-.loading {
-  cursor: progress;
+.sidebar-animation {
+  -webkit-animation-duration: 0.3s;
+  -moz-animation-duration: 0.3s;
+  -o-animation-duration: 0.3s;
+  animation-duration: 0.3s;
+  -webkit-animation-fill-mode: both;
+  -moz-animation-fill-mode: both;
+  -o-animation-fill-mode: both;
+  animation-fill-mode: both;
 }
+
+/* Loading page animation */
+.container-loading {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+  background-color: #343a40;
+  z-index: 2005;
+  cursor: progress;
+  transition: all 300ms ease;
+}
+.lds-ring {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.lds-ring div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border: 8px solid #fff;
+  border-radius: 50%;
+  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #fff transparent transparent transparent;
+}
+.lds-ring div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.lds-ring div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.lds-ring div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes lds-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 /*Download Files Loading*/
 .loadingEllipsis:after {
   overflow: hidden;
@@ -536,29 +595,6 @@ export default {
   content: "\2026"; /* ascii code for the ellipsis character */
   width: 0px;
 }
-
-#loading {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 64px;
-  height: 64px;
-  margin-left: -32px;
-  margin-top: -32px;
-  z-index: 99999;
-}
-
-.sidebar-animation {
-  -webkit-animation-duration: 0.3s;
-  -moz-animation-duration: 0.3s;
-  -o-animation-duration: 0.3s;
-  animation-duration: 0.3s;
-  -webkit-animation-fill-mode: both;
-  -moz-animation-fill-mode: both;
-  -o-animation-fill-mode: both;
-  animation-fill-mode: both;
-}
-
 @-moz-keyframes ellipsis {
   to {
     width: 1.25em;

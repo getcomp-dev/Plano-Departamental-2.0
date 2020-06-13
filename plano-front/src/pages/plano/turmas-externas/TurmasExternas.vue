@@ -3,7 +3,7 @@
     <PageTitle :title="'Graduação - Outros'">
       <template #aside>
         <button
-          v-show="isAdd"
+          v-show="turmaAddIsVisible"
           type="button"
           title="Salvar"
           class="btn-custom btn-icon addbtn"
@@ -12,7 +12,7 @@
           <i class="fas fa-check"></i>
         </button>
         <button
-          v-show="isAdd"
+          v-show="turmaAddIsVisible"
           type="button"
           title="Cancelar"
           class="btn-custom btn-icon cancelbtn"
@@ -22,7 +22,7 @@
         </button>
 
         <button
-          v-show="!isAdd"
+          v-show="!turmaAddIsVisible"
           type="button"
           title="Adicionar"
           class="btn-custom btn-icon addbtn"
@@ -31,7 +31,7 @@
           <i class="fas fa-plus"></i>
         </button>
         <button
-          v-show="!isAdd"
+          v-show="!turmaAddIsVisible"
           type="button"
           title="Deletar"
           class="btn-custom btn-icon delbtn"
@@ -142,140 +142,145 @@
           </template>
         </template>
         <template #tbody>
-          <tr v-show="isAdd" class="stickyAdd">
-            <div class="max-content novaturma stickyAdd">
-              <td style="width: 25px"></td>
-              <td style="width: 55px" class="less-padding">
-                <select id="2periodo" v-model="turmaForm.periodo">
-                  <option value="1">1</option>
-                  <option value="3">3</option>
-                </select>
-              </td>
-              <td style="width: 70px" class="less-padding">
-                <select
-                  type="text"
-                  id="disciplina"
-                  v-model="turmaForm.Disciplina"
+          <tr v-show="turmaAddIsVisible" class="novaturma stickyAdd">
+            <td style="width: 25px"></td>
+            <td style="width: 55px" class="less-padding">
+              <select id="2periodo" v-model="turmaForm.periodo">
+                <option value="1">1</option>
+                <option value="3">3</option>
+              </select>
+            </td>
+            <td style="width: 70px" class="less-padding">
+              <select
+                type="text"
+                id="disciplina"
+                v-model="turmaForm.Disciplina"
+              >
+                <option
+                  v-for="disciplina in DisciplinasExternasOrderByCodigo"
+                  :key="'1-disciplina-id' + disciplina.id"
+                  :value="disciplina.id"
+                  >{{ disciplina.codigo }}</option
                 >
-                  <option
-                    v-for="disciplina in DisciplinasExternasOrderByCodigo"
-                    :key="'1-disciplina-id' + disciplina.id"
-                    :value="disciplina.id"
-                    >{{ disciplina.codigo }}</option
-                  >
-                </select>
-              </td>
-              <td style="width: 330px" class="less-padding">
-                <select
-                  type="text"
-                  id="disciplina"
-                  v-model="turmaForm.Disciplina"
+              </select>
+            </td>
+            <td style="width: 330px" class="less-padding">
+              <select
+                type="text"
+                id="disciplina"
+                v-model="turmaForm.Disciplina"
+              >
+                <option
+                  v-for="disciplina in DisciplinasExternas"
+                  :key="'2-disciplina-id' + disciplina.id"
+                  :value="disciplina.id"
+                  >{{ disciplina.nome }}</option
                 >
-                  <option
-                    v-for="disciplina in DisciplinasExternas"
-                    :key="'2-disciplina-id' + disciplina.id"
-                    :value="disciplina.id"
-                    >{{ disciplina.nome }}</option
-                  >
-                </select>
-              </td>
-              <td style="width: 25px">
-                <template v-for="disciplina in DisciplinasExternas">
-                  <template v-if="disciplina.id === turmaForm.Disciplina">{{
-                    disciplina.cargaPratica + disciplina.cargaTeorica
-                  }}</template>
-                </template>
-              </td>
-              <td style="width: 35px;">
-                <input
-                  type="text"
-                  class="input-letra"
-                  id="turma"
-                  v-model="turmaForm.letra"
-                />
-              </td>
-              <td style="width: 80px;">
-                <select
-                  type="text"
-                  id="turno1"
-                  v-model="turmaForm.turno1"
-                  v-on:change="setEad"
+              </select>
+            </td>
+            <td style="width: 25px">
+              <template v-for="disciplina in DisciplinasExternas">
+                <template v-if="disciplina.id === turmaForm.Disciplina">{{
+                  disciplina.cargaPratica + disciplina.cargaTeorica
+                }}</template>
+              </template>
+            </td>
+            <td style="width: 35px;">
+              <input
+                type="text"
+                class="input-letra"
+                id="turma"
+                v-model="turmaForm.letra"
+              />
+            </td>
+            <td style="width: 80px;">
+              <select
+                type="text"
+                id="turno1"
+                v-model="turmaForm.turno1"
+                v-on:change="setEad"
+              >
+                <option value="Diurno">Diurno</option>
+                <option value="Noturno">Noturno</option>
+                <option value="EAD">EAD</option>
+              </select>
+            </td>
+            <td style="width: 85px;" class="less-padding">
+              <select
+                type="text"
+                style="margin-bottom: 1px;"
+                id="horario1"
+                v-model="turmaForm.Horario1"
+                v-on:change="adjustTurno1"
+              >
+                <option
+                  v-for="horario in HorariosOrdered"
+                  :key="'1-horario-id' + horario.id"
+                  :value="horario.id"
+                  >{{ horario.horario }}</option
                 >
-                  <option value="Diurno">Diurno</option>
-                  <option value="Noturno">Noturno</option>
-                  <option value="EAD">EAD</option>
-                </select>
-              </td>
-              <td style="width: 85px;" class="less-padding">
-                <select
-                  type="text"
-                  style="margin-bottom: 1px;"
-                  id="horario1"
-                  v-model="turmaForm.Horario1"
-                  v-on:change="adjustTurno1"
+              </select>
+              <select
+                type="text"
+                id="horario2"
+                v-model="turmaForm.Horario2"
+                v-on:change="adjustTurno2"
+              >
+                <option
+                  v-for="horario in HorariosOrdered"
+                  :key="'2-horario-id' + horario.id"
+                  :value="horario.id"
+                  >{{ horario.horario }}</option
                 >
-                  <option
-                    v-for="horario in HorariosOrdered"
-                    :key="'1-horario-id' + horario.id"
-                    :value="horario.id"
-                    >{{ horario.horario }}</option
-                  >
-                </select>
-                <select
-                  type="text"
-                  id="horario2"
-                  v-model="turmaForm.Horario2"
-                  v-on:change="adjustTurno2"
+              </select>
+            </td>
+            <td style="width: 95px;" class="less-padding">
+              <select
+                type="text"
+                style="margin-bottom: 1px"
+                id="sala1"
+                v-model="turmaForm.Sala1"
+              >
+                <option
+                  v-for="sala in SalasOrdered"
+                  :key="'1-sala-id' + sala.id"
+                  :value="sala.id"
+                  >{{ sala.nome }}</option
                 >
-                  <option
-                    v-for="horario in HorariosOrdered"
-                    :key="'2-horario-id' + horario.id"
-                    :value="horario.id"
-                    >{{ horario.horario }}</option
-                  >
-                </select>
-              </td>
-              <td style="width: 95px;" class="less-padding">
-                <select
-                  type="text"
-                  style="margin-bottom: 1px"
-                  id="sala1"
-                  v-model="turmaForm.Sala1"
+              </select>
+              <select type="text" id="sala2" v-model="turmaForm.Sala2">
+                <option
+                  v-for="sala in SalasOrdered"
+                  :key="'2-sala-id' + sala.id"
+                  :value="sala.id"
+                  >{{ sala.nome }}</option
                 >
-                  <option
-                    v-for="sala in SalasOrdered"
-                    :key="'1-sala-id' + sala.id"
-                    :value="sala.id"
-                    >{{ sala.nome }}</option
-                  >
-                </select>
-                <select type="text" id="sala2" v-model="turmaForm.Sala2">
-                  <option
-                    v-for="sala in SalasOrdered"
-                    :key="'2-sala-id' + sala.id"
-                    :value="sala.id"
-                    >{{ sala.nome }}</option
-                  >
-                </select>
-              </td>
-              <td style="width: 40px">
-                <div style="height: 43px;" class="py-1"></div>
-              </td>
-              <td
-                style="width: 35px;"
-                v-for="cursoSpace in 4"
-                :key="cursoSpace"
-              ></td>
-            </div>
+              </select>
+            </td>
+            <td style="width: 40px">
+              <div style="height: 43px;" class="py-1"></div>
+            </td>
+            <td
+              style="width: 35px;"
+              v-for="cursoSpace in 4"
+              :key="cursoSpace"
+            ></td>
           </tr>
-          <tr v-for="turma in TurmasExternasOrdered" :key="'turma' + turma.id">
-            <TurmaExternaRow
-              :turma="turma"
-              :options="{
-                CursosDCC: CursosDCC,
-                DisciplinasExternas: DisciplinasExternas,
-              }"
-            />
+
+          <TurmaExternaRow
+            v-for="turma in TurmasExternasOrdered"
+            :key="'turma' + turma.id"
+            :turma="turma"
+            :options="{
+              CursosDCC: CursosDCC,
+              DisciplinasExternas: DisciplinasExternas,
+            }"
+          />
+          <tr v-if="TurmasExternasOrdered.length === 0">
+            <td style="width:980px">
+              <b>Nenhuma turma encontrada.</b> Clique no botão de filtros
+              <i class="fas fa-list-ul mx-1"></i> para selecioná-las.
+            </td>
           </tr>
         </template>
       </BaseTable>
@@ -298,6 +303,144 @@
           </template>
         </template>
       </template>
+    </b-modal>
+
+    <!-- MODAL FILTROS -->
+    <b-modal id="modalFiltros" ref="modalFiltros" scrollable title="Filtros">
+      <NavTab
+        :currentTab="modalTabAtiva"
+        :allTabs="['Disciplinas', 'Semestres']"
+        @change-tab="modalTabAtiva = $event"
+      />
+
+      <div class="div-table">
+        <BaseTable
+          v-show="modalTabAtiva === 'Semestres'"
+          :tableType="'modal-table'"
+        >
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th class="t-start" style="width: 425px">
+              Semestre Letivo
+            </th>
+          </template>
+          <template #tbody>
+            <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroSemestres.primeiro"
+                />
+              </td>
+              <td style="width: 425px" class="t-start">PRIMEIRO</td>
+            </tr>
+            <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroSemestres.segundo"
+                />
+              </td>
+              <td style="width: 425px" class="t-start">SEGUNDO</td>
+            </tr>
+          </template>
+        </BaseTable>
+        <BaseTable
+          v-show="modalTabAtiva === 'Disciplinas'"
+          :tableType="'modal-table'"
+          :hasSearchBar="true"
+        >
+          <template #thead-search>
+            <input
+              type="text"
+              class="form-control input-search"
+              placeholder="Pesquise nome ou codigo de uma disciplina..."
+              v-model="searchDisciplinasModal"
+            />
+            <button
+              @click="clearsearchDisciplinasModal()"
+              class="btn btn-search"
+            >
+              &times;
+            </button>
+          </template>
+          <template #thead>
+            <th style="width: 25px;"></th>
+            <th
+              @click="toggleOrder(ordenacaoDisciplinasModal, 'codigo')"
+              class="clickable"
+              style="width: 70px;"
+            >
+              Cód.
+              <i
+                :class="setIconByOrder(ordenacaoDisciplinasModal, 'codigo')"
+              ></i>
+            </th>
+            <th
+              @click="toggleOrder(ordenacaoDisciplinasModal, 'nome')"
+              class="clickable t-start"
+              style="width: 355px"
+            >
+              Nome
+              <i :class="setIconByOrder(ordenacaoDisciplinasModal, 'nome')"></i>
+            </th>
+          </template>
+          <template #tbody>
+            <tr
+              v-for="disciplina in DisciplinasExternasOrderedModal"
+              :key="'disciplina' + disciplina.id"
+              @click="
+                toggleItemInArray(disciplina, filtroDisciplinas.selecionadas)
+              "
+            >
+              <td style="width: 25px;">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroDisciplinas.selecionadas"
+                  :value="disciplina"
+                />
+              </td>
+              <td style="width: 70px;">
+                {{ disciplina.codigo }}
+              </td>
+              <td style="width: 355px" class="t-start">
+                {{ disciplina.nome }}
+              </td>
+            </tr>
+            <tr v-show="DisciplinasExternasOrderedModal.length === 0">
+              <td colspan="3" style="width:450px">
+                NENHUMA DISCIPLINA ENCONTRADA.
+              </td>
+            </tr>
+          </template>
+        </BaseTable>
+      </div>
+
+      <div slot="modal-footer" class="w-100 m-0 d-flex">
+        <div class="w-100">
+          <b-button
+            class="btn-azul btn-custom btn-modal"
+            variant="success"
+            @click="modalSelectAll[modalTabAtiva]"
+            >Selecionar Todos</b-button
+          >
+          <b-button
+            class="btn-cinza btn-custom btn-modal"
+            variant="secondary"
+            @click="modalSelectNone[modalTabAtiva]"
+            >Desmarcar Todos</b-button
+          >
+        </div>
+        <b-button
+          variant="success"
+          @click="btnOkFiltros()"
+          class="btn-verde btn-custom btn-modal btn-ok-modal"
+          >OK</b-button
+        >
+      </div>
     </b-modal>
     <!-- MODAL AJUDA -->
     <b-modal id="modalAjuda" scrollable title="Ajuda">
@@ -342,161 +485,19 @@
 
       <div slot="modal-footer" style="display: none;"></div>
     </b-modal>
-    <!-- MODAL FILTROS -->
-    <b-modal id="modalFiltros" ref="modalFiltros" scrollable title="Filtros">
-      <NavTab
-        :currentTab="modalTabAtiva"
-        :allTabs="['Semestres']"
-        @change-tab="modalTabAtiva = $event"
-      />
-
-      <div class="div-table">
-        <BaseTable
-          v-show="modalTabAtiva === 'Semestres'"
-          :tableType="'modal-table'"
-        >
-          <template #thead>
-            <th style="width: 25px"></th>
-            <th class="t-start" style="width: 425px">
-              Semestre Letivo
-            </th>
-          </template>
-          <template #tbody>
-            <tr>
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  v-model="filtroSemestres.primeiro"
-                />
-              </td>
-              <td style="width: 425px" class="t-start">PRIMEIRO</td>
-            </tr>
-            <tr>
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  v-model="filtroSemestres.segundo"
-                />
-              </td>
-              <td style="width: 425px" class="t-start">SEGUNDO</td>
-            </tr>
-          </template>
-        </BaseTable>
-        <!-- <BaseTable
-          v-show="tabAtivaModal === 'Disciplinas'"
-          :tableType="'modal-table'"
-          :hasSearchBar="true"
-        >
-          <template #thead-search>
-            <input
-              type="text"
-              class="form-control input-search"
-              placeholder="Pesquise nome ou codigo de uma disciplina..."
-              v-model="searchDisciplinaModal"
-            />
-            <button
-              @click="clearsearchDisciplinaModal()"
-              class="btn btn-search"
-            >
-              &times;
-            </button>
-          </template>
-          <template #thead>
-            <th style="width: 25px;"></th>
-            <th
-              @click="toggleOrder(ordenacaoDisciplinaModal, 'codigo')"
-              class="clickable"
-              style="width: 50px;"
-            >
-              Cód.
-              <i
-                :class="setIconByOrder(ordenacaoDisciplinaModal, 'codigo')"
-              ></i>
-            </th>
-            <th
-              @click="toggleOrder(ordenacaoDisciplinaModal, 'nome')"
-              class="clickable t-start"
-              style="width: 375px"
-            >
-              Nome
-              <i :class="setIconByOrder(ordenacaoDisciplinaModal, 'nome')"></i>
-            </th>
-            <th
-              class="clickable t-start"
-              style="width:85px"
-              @click="toggleOrder(ordenacaoDisciplinaModal, 'perfilNome')"
-            >
-              Perfil
-              <i :class="setIconByOrder(ordenacaoDisciplinaModal, 'nome')"></i>
-            </th>
-          </template>
-          <template #tbody>
-            <tr
-              v-for="curso in ModalCursosOrdered"
-              :key="'cursoMd' + curso.id"
-              @click="addOrRemoveItem(curso, filtroCursos.selecionados)"
-            >
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  v-model="filtroCursos.selecionados"
-                  :value="curso"
-                  class="form-check-input position-static m-0"
-                />
-              </td>
-              <td style="width: 50px;">
-                {{ curso.codigo }}
-              </td>
-              <td style="width: 375px" class="t-start">
-                {{ curso.nome }}
-              </td>
-            </tr>
-            <tr v-show="ModalCursosOrdered.length === 0">
-              <td colspan="3" style="width:450px">
-                NENHUM CURSO ENCONTRADO.
-              </td>
-            </tr>
-          </template>
-        </BaseTable> -->
-      </div>
-
-      <div slot="modal-footer" class="w-100 m-0 d-flex">
-        <div class="w-100">
-          <b-button
-            class="btn-azul btn-custom btn-modal"
-            variant="success"
-            @click="modalSelectAll[modalTabAtiva]"
-            >Selecionar Todos</b-button
-          >
-          <b-button
-            class="btn-cinza btn-custom btn-modal"
-            variant="secondary"
-            @click="modalSelectNone[modalTabAtiva]"
-            >Desmarcar Todos</b-button
-          >
-        </div>
-        <b-button
-          variant="success"
-          @click="btnOkFiltros()"
-          class="btn-verde btn-custom btn-modal btn-ok-modal"
-          >OK</b-button
-        >
-      </div>
-    </b-modal>
   </div>
 </template>
 
 <script>
 import _ from "lodash";
+import toggleOrdinationMixin from "@/mixins/toggleOrdination.js";
+import toggleItemInArrayMixin from "@/mixins/toggleItemInArray.js";
 import turmaExternaService from "@/common/services/turmaExterna";
 import pedidoExternoService from "@/common/services/pedidoExterno";
 import PageTitle from "@/components/PageTitle.vue";
 import BaseTable from "@/components/BaseTable.vue";
 import NavTab from "@/components/NavTab.vue";
 import TurmaExternaRow from "./TurmaExternaRow.vue";
-import ordenacaoMixin from "@/ordenacao-mixin";
 
 const emptyTurma = {
   id: null,
@@ -518,7 +519,7 @@ const emptyPedido = {
 };
 export default {
   name: "DashboardTurmasExternas",
-  mixins: [ordenacaoMixin],
+  mixins: [toggleOrdinationMixin, toggleItemInArrayMixin],
   components: {
     TurmaExternaRow,
     PageTitle,
@@ -530,21 +531,33 @@ export default {
       error: undefined,
       ordenacaoTurmasMain: { order: "disciplinaCodigo", type: "asc" },
       turmaForm: _.clone(emptyTurma),
-      isAdd: false,
+      turmaAddIsVisible: false,
       semestre: 1,
+      searchDisciplinasModal: "",
       filtroSemestres: {
         primeiro: true,
         segundo: true,
         ativo: 3,
       },
-      modalTabAtiva: "Semestres",
+      filtroDisciplinas: {
+        ativadas: [],
+        selecionadas: [],
+      },
+      modalTabAtiva: "Disciplinas",
+      ordenacaoDisciplinasModal: { order: "codigo", type: "asc" },
       modalSelectAll: {
+        Disciplinas: () => {
+          this.filtroDisciplinas.selecionadas = [...this.DisciplinasExternas];
+        },
         Semestres: () => {
           this.filtroSemestres.primeiro = true;
           this.filtroSemestres.segundo = true;
         },
       },
       modalSelectNone: {
+        Disciplinas: () => {
+          this.filtroDisciplinas.selecionadas = [];
+        },
         Semestres: () => {
           this.filtroSemestres.primeiro = false;
           this.filtroSemestres.segundo = false;
@@ -572,6 +585,9 @@ export default {
 
   methods: {
     btnOkFiltros() {
+      this.filtroDisciplinas.ativadas = [
+        ...this.filtroDisciplinas.selecionadas,
+      ];
       this.setSemestreAtivo();
       this.$refs.modalFiltros.hide();
     },
@@ -670,7 +686,7 @@ export default {
     isEmpty(value) {
       return value === "" || value === undefined ? true : false;
     },
-    convertEmptyToNull(turma) {
+    setEmptyKeysToNull(turma) {
       Object.keys(turma).forEach((key) => {
         if (this.isEmpty(turma[key])) turma[key] = null;
       });
@@ -690,7 +706,7 @@ export default {
     addTurma() {
       const newTurma = _.clone(this.turmaForm);
 
-      this.convertEmptyToNull(newTurma);
+      this.setEmptyKeysToNull(newTurma);
       if (!this.validateTurma(newTurma)) return;
 
       turmaExternaService
@@ -776,19 +792,38 @@ export default {
       this.error = undefined;
     },
     toggleAdd() {
-      this.isAdd = !this.isAdd;
+      this.turmaAddIsVisible = !this.turmaAddIsVisible;
+    },
+    normalizeText(text) {
+      return text
+        .toUpperCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+    },
+    clearsearchDisciplinasModal() {
+      this.searchDisciplinasModal = "";
     },
   },
   computed: {
     TurmasExternasOrdered() {
       return _.orderBy(
-        this.TurmasExternarFiltredBySemestres,
+        this.TurmasExternarFiltredByDisciplinas,
         ["periodo", this.ordenacaoTurmasMain.order],
         ["asc", this.ordenacaoTurmasMain.type]
       );
     },
+    TurmasExternarFiltredByDisciplinas() {
+      return _.filter(
+        this.TurmasExternarFiltredBySemestres,
+        (turma) =>
+          _.findIndex(
+            this.filtroDisciplinas.ativadas,
+            (disciplina) => disciplina.id === turma.Disciplina
+          ) !== -1
+      );
+    },
     TurmasExternarFiltredBySemestres() {
-      return _.filter(this.TurmasExternas, (turma) => {
+      return _.filter(this.TurmasExternasInDisciplinas, (turma) => {
         switch (this.filtroSemestres.ativo) {
           case 1:
             return turma.periodo === 1;
@@ -801,7 +836,7 @@ export default {
         }
       });
     },
-    TurmasExternas() {
+    TurmasExternasInDisciplinas() {
       const turmasResultantes = [];
 
       _.forEach(this.$store.state.turmaExterna.Turmas, (turma) => {
@@ -827,6 +862,28 @@ export default {
     DisciplinasExternasOrderByCodigo() {
       return _.orderBy(this.DisciplinasExternas, "codigo");
     },
+    DisciplinasExternasFiltredModal() {
+      if (this.searchCursosModal === "") return this.DisciplinasExternas;
+
+      const searchNormalized = this.normalizeText(this.searchDisciplinasModal);
+
+      return _.filter(this.DisciplinasExternas, (disciplina) => {
+        const disciplinaNome = this.normalizeText(disciplina.nome);
+        const disciplinaCodigo = this.normalizeText(disciplina.codigo);
+
+        return (
+          disciplinaNome.match(searchNormalized) ||
+          disciplinaCodigo.match(searchNormalized)
+        );
+      });
+    },
+    DisciplinasExternasOrderedModal() {
+      return _.orderBy(
+        this.DisciplinasExternasFiltredModal,
+        this.ordenacaoDisciplinasModal.order,
+        this.ordenacaoDisciplinasModal.type
+      );
+    },
     DisciplinasExternas() {
       return _.filter(this.$store.state.disciplina.Disciplinas, function(
         disciplina
@@ -847,11 +904,7 @@ export default {
       return this.$store.state.isLoading;
     },
     Admin() {
-      if (this.$store.state.auth.Usuario.admin === 1) {
-        return true;
-      } else {
-        return false;
-      }
+      return this.$store.state.auth.Usuario.admin === 1;
     },
   },
 };

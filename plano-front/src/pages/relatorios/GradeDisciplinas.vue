@@ -366,7 +366,7 @@
                     />
                     <div
                       class="input-group-append"
-                      @click="searchDisciplinas = null"
+                      @click="searchDisciplinas = ''"
                     >
                       <span
                         class="input-group-text search-text"
@@ -465,6 +465,11 @@
                   </p>
                 </td>
               </div>
+            </tr>
+            <tr v-if="DisciplinasOrderedModal.length === 0">
+              <td colspan="3" style="width:465px">
+                NENHUMA DISCIPLINA ENCONTRADA.
+              </td>
             </tr>
           </tbody>
         </table>
@@ -673,7 +678,7 @@ export default {
         },
       ],
       tabAtivaModal: "Perfis",
-      searchDisciplinas: null,
+      searchDisciplinas: "",
       ordenacaoPerfisModal: { order: "nome", type: "asc" },
       modalOrdenacaoDisciplinas: { order: "codigo", type: "asc" },
       modalOrdenacaoCursos: { order: "codigo", type: "asc" },
@@ -1009,7 +1014,7 @@ export default {
     },
     DisciplinasFiltredModal() {
       let result = this.DisciplinasComPerfil;
-      if (this.searchDisciplinas != null) {
+      if (this.searchDisciplinas != "") {
         let searchUpperCase = this.searchDisciplinas
           .toUpperCase()
           .normalize("NFD")

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Admin" class="turmarow max-content">
+  <tr v-if="Admin" class="turmarow max-content" :style="{ 'background-color': turma.perfilCor }">
     <td style="width: 25px;">
       <input
         type="checkbox"
@@ -201,7 +201,7 @@
       </div>
     </td>
 
-    <template v-for="curso in cursosSelecteds">
+    <template v-for="curso in cursosAtivados">
       <td class="p-0" style="width:35px;" :key="'1-id-curso' + curso.id">
         <template v-for="(pedido, index) in Pedidos">
           <template v-if="pedido.Curso === curso.id">
@@ -214,7 +214,7 @@
         </template>
       </td>
     </template>
-  </div>
+  </tr>
 </template>
 
 <script>
@@ -241,7 +241,7 @@ export default {
   name: "TurmaRow",
   props: {
     turma: Object,
-    cursosSelecteds: Array,
+    cursosAtivados: Array,
   },
   data() {
     return {

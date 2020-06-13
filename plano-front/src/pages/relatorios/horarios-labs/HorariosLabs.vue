@@ -268,13 +268,13 @@
 import _ from "lodash";
 import pdfs from "@/common/services/pdfs";
 import TableHorariosLab from "./TableHorariosLab";
-import ordenacaoMixin from "@/ordenacao-mixin";
+import toggleOrdinationMixin from "@/mixins/toggleOrdination.js";
 import PageTitle from "@/components/PageTitle";
 import NavTab from "@/components/NavTab";
 
 export default {
   name: "DashboardLaboratoriosAlocacao",
-  mixins: [ordenacaoMixin],
+  mixins: [toggleOrdinationMixin],
   components: {
     PageTitle,
     NavTab,

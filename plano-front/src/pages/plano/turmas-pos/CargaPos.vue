@@ -3,18 +3,10 @@
     <PageTitle :title="'Pós Graduação'">
       <template #aside>
         <b-button
-          v-b-modal.modalFiltros
-          title="Filtros"
-          class="btn-custom btn-icon cancelbtn"
-        >
-          <i class="fas fa-list-ul"></i>
-        </b-button>
-        <!--  -->
-        <b-button
           v-show="isAdding"
           title="Salvar"
           class="btn-custom btn-icon addbtn"
-          @click.prevent="toggleAdd"
+          @click.prevent="addNovaCarga()"
         >
           <i class="fas fa-check"></i>
         </b-button>
@@ -47,7 +39,13 @@
         >
           <i class="far fa-trash-alt"></i>
         </button>
-
+        <b-button
+          v-b-modal.modalFiltros
+          title="Filtros"
+          class="btn-custom btn-icon cancelbtn"
+        >
+          <i class="fas fa-list-ul"></i>
+        </b-button>
         <b-button
           v-b-modal.modalAjuda
           title="Ajuda"
@@ -58,338 +56,66 @@
       </template>
     </PageTitle>
 
-    <div class="row w-100 m-0">
-      <div class="div-table">
-        <BaseTable>
-          <template #thead>
-            <th style="width:70px" class="p-0">Programa</th>
-            <th style="width:25px"></th>
-            <th style="width:55px" title="Trimestre">T.</th>
-            <th style="width:145px" class="t-start">Docente</th>
-            <th style="width:50px" title="Carga">C.</th>
+    <div class="div-table" v-if="!isLoading">
+      <BaseTable>
+        <template #thead>
+          <th style="width:70px" class="p-0">Programa</th>
+          <th style="width:25px"></th>
+          <th style="width:55px" title="Trimestre">
+            T.
+          </th>
+          <th
+            @click="toggleOrder(ordenacaoCargaPos, 'docenteApelido')"
+            class="t-start clickable"
+            style="width:145px"
+          >
+            Docente
+            <i :class="setIconByOrder(ordenacaoCargaPos, 'docenteApelido')"></i>
+          </th>
+          <th
+            @click="toggleOrder(ordenacaoCargaPos, 'creditos', 'desc')"
+            class="clickable"
+            style="width:50px"
+            title="Carga"
+          >
+            C.
+            <i :class="setIconByOrder(ordenacaoCargaPos, 'creditos')"></i>
+          </th>
+        </template>
+
+        <template #tbody>
+          <CargaPosNovaRow v-show="isAdding" />
+
+          <template v-for="programa in ProgramasInCargaPosOrdered">
+            <tr class="bg-custom" :key="programa.nome">
+              <div class="max-content">
+                <td style="width:70px">{{ programa.nome }}</td>
+                <td style="width:225px"></td>
+                <td style="width:50px" title="Total de carga">
+                  {{ allCreditosCarga(programa.carga) }}
+                </td>
+              </div>
+            </tr>
+            <tr
+              v-for="carga in programa.carga"
+              :key="carga.id + programa.nome + carga.trimestre"
+            >
+              <CargaPosRow
+                :key="'cargaRow' + carga.id + carga.Docente + carga.trimestre"
+                :carga="carga"
+              />
+            </tr>
           </template>
-
-          <template #tbody>
-            <tr v-show="isAdding" class="novaturma stickyAdd ">
-              <div class="max-content stickyAdd">
-                <td style="width:70px" class="less-padding">
-                  <select
-                    type="text"
-                    id="programa"
-                    v-model="cargaPosForm.programa"
-                  >
-                    <option type="text" value="PGMC">PGMC</option>
-                    <option type="text" value="PGCC">PGCC</option>
-                    <option type="text" value="PGEM">PGEM</option>
-                  </select>
-                </td>
-                <td style="width:25px"><div style="height:30px"></div></td>
-                <td style="width:55px" class="less-padding">
-                  <select
-                    type="text"
-                    id="programa"
-                    v-model="cargaPosForm.trimestre"
-                  >
-                    <option type="text" value="1">1</option>
-                    <option type="text" value="2">2</option>
-                    <option type="text" value="3">3</option>
-                  </select>
-                </td>
-                <td style="width:145px" class="less-padding">
-                  <select
-                    type="text"
-                    id="docente1"
-                    v-model="cargaPosForm.Docente"
-                  >
-                    <option v-if="Docentes.length === 0" type="text" value
-                      >Nenhum Docente Encontrado</option
-                    >
-                    <option
-                      v-for="docente in Docentes"
-                      :key="'id docente' + docente.id"
-                      :value="docente.id"
-                      >{{ docente.apelido }}</option
-                    >
-                  </select>
-                </td>
-                <td style="width:50px" class="less-padding">
-                  <input
-                    type="text"
-                    id="creditos"
-                    v-model="cargaPosForm.creditos"
-                    @keypress="onlyNumber"
-                  />
-                </td>
-              </div>
-            </tr>
-
-            <tr class="bg-custom">
-              <div class="max-content">
-                <td style="width:70px">PGMC</td>
-                <td style="width:275px" class="t-start"></td>
-              </div>
-            </tr>
-            <template v-for="t in vetorPeriodosPGMC">
-              <template v-for="docente in Docentes">
-                <template v-for="carga in CargasPGMC">
-                  <tr
-                    v-if="checkPGMC(carga, docente, t)"
-                    :key="'MC-docente' + docente.id + 'carga' + carga.id + t"
-                    v-on:click="handleClickInTurma(carga, docente.apelido)"
-                    :class="{ 'bg-custom': linhaClickada == carga.id }"
-                  >
-                    <template
-                      v-if="
-                        (carga.trimestre == 1 || carga.trimestre == 2) &&
-                          (filtroSemestres.ativo == 1 ||
-                            filtroSemestres.ativo == 3)
-                      "
-                    >
-                      <CargaPosRow
-                        :key="'1-MC' + docente.id + 'carga' + carga.id"
-                        v-bind:carga="carga"
-                      ></CargaPosRow>
-                    </template>
-                    <template
-                      v-if="
-                        (carga.trimestre == 3 || carga.trimestre == 4) &&
-                          (filtroSemestres.ativo == 2 ||
-                            filtroSemestres.ativo == 3)
-                      "
-                    >
-                      <CargaPosRow
-                        :key="'2-MC' + docente.id + 'carga' + carga.id"
-                        v-bind:carga="carga"
-                      ></CargaPosRow>
-                    </template>
-                  </tr>
-                </template>
-              </template>
-            </template>
-
-            <tr class="bg-custom">
-              <div class="max-content">
-                <td style="width:70px">PGCC</td>
-                <td style="width:275px"></td>
-              </div>
-            </tr>
-            <template v-for="t in vetorPeriodosPGCC">
-              <template v-for="docente in Docentes">
-                <template v-for="carga in CargasPGCC">
-                  <tr
-                    v-if="checkPGCC(carga, docente, t)"
-                    :key="'CC-docente' + docente.id + 'carga' + carga.id + t"
-                    v-on:click="handleClickInTurma(carga, docente.apelido)"
-                    :class="{ 'bg-custom': linhaClickada == carga.id }"
-                  >
-                    <template
-                      v-if="
-                        (carga.trimestre == 1 || carga.trimestre == 2) &&
-                          (filtroSemestres.ativo == 1 ||
-                            filtroSemestres.ativo == 3)
-                      "
-                    >
-                      <CargaPosRow
-                        :key="'CC-docente' + docente.id + 'carga' + carga.id"
-                        v-bind:carga="carga"
-                      ></CargaPosRow>
-                    </template>
-                    <template
-                      v-if="
-                        (carga.trimestre == 3 || carga.trimestre == 4) &&
-                          (filtroSemestres.ativo == 2 ||
-                            filtroSemestres.ativo == 3)
-                      "
-                    >
-                      <CargaPosRow
-                        :key="'CC-docente' + docente.id + 'carga' + carga.id"
-                        v-bind:carga="carga"
-                      ></CargaPosRow>
-                    </template>
-                  </tr>
-                </template>
-              </template>
-            </template>
-
-            <tr class="bg-custom">
-              <div class="max-content">
-                <td style="width:70px">PGEM</td>
-                <td style="width:275px"></td>
-              </div>
-            </tr>
-            <template v-for="t in vetorPeriodosPGEM">
-              <template v-for="docente in Docentes">
-                <template v-for="carga in CargasPGEM">
-                  <tr
-                    v-if="checkPGEM(carga, docente, t)"
-                    :key="'EM-docente' + docente.id + 'carga' + carga.id + t"
-                    v-on:click="handleClickInTurma(carga, docente.apelido)"
-                    :class="{ 'bg-custom': linhaClickada == carga.id }"
-                  >
-                    <template
-                      v-if="
-                        (carga.trimestre == 1 || carga.trimestre == 2) &&
-                          (filtroSemestres.ativo == 1 ||
-                            filtroSemestres.ativo == 3)
-                      "
-                    >
-                      <CargaPosRow
-                        :key="'EM-docente' + docente.id + 'carga' + carga.id"
-                        v-bind:carga="carga"
-                      ></CargaPosRow>
-                    </template>
-                    <template
-                      v-if="
-                        (carga.trimestre == 3 || carga.trimestre == 4) &&
-                          (filtroSemestres.ativo == 2 ||
-                            filtroSemestres.ativo == 3)
-                      "
-                    >
-                      <CargaPosRow
-                        :key="'EM-docente' + docente.id + 'carga' + carga.id"
-                        v-bind:carga="carga"
-                      ></CargaPosRow>
-                    </template>
-                  </tr>
-                </template>
-              </template>
-            </template>
-          </template>
-        </BaseTable>
-      </div>
-
-      <!-- Card -->
-      <div class="div-card p-0 mt-0 mb-2 col-auto">
-        <div class="card mr-3 ml-auto">
-          <div class="card-header">
-            <h2 class="card-title">Creditação Pós</h2>
-          </div>
-          <div class="card-body">
-            <form>
-              <div class="row mb-2 mx-0">
-                <div class="form-group col-4 m-0 px-0">
-                  <label for="trimestre" class="col-form-label"
-                    >Trimestre</label
-                  >
-                  <input
-                    type="text"
-                    class="inputMenor form-control form-control-sm"
-                    id="trimestre"
-                    v-model="cargaPosForm.trimestre"
-                    @keypress="onlyNumber"
-                  />
-                </div>
-
-                <div class="form-group col-8 m-0 px-0">
-                  <label for="docente" class="col-form-label">Docente</label>
-                  <select
-                    type="text"
-                    class="form-control form-control-sm selectMenor"
-                    id="docente1"
-                    v-model="cargaPosForm.Docente"
-                  >
-                    <option v-if="Docentes.length === 0" type="text" value
-                      >Nenhum Docente Encontrado</option
-                    >
-                    <option
-                      v-for="docente in Docentes"
-                      :key="'id docente' + docente.id"
-                      :value="docente.id"
-                      >{{ docente.apelido }}</option
-                    >
-                  </select>
-                </div>
-              </div>
-
-              <div class="row mb-2 mx-0">
-                <div class="form-group col-4 m-0 px-0">
-                  <label for="creditos" class="col-form-label">Créditos</label>
-                  <input
-                    type="text"
-                    class="form-control form-control-sm inputMenor"
-                    id="creditos"
-                    v-model="cargaPosForm.creditos"
-                    @keypress="onlyNumber"
-                  />
-                </div>
-
-                <div class="form-group col-8 m-0 px-0">
-                  <label for="programa" class="col-form-label">Programa</label>
-                  <select
-                    type="text"
-                    class="form-control form-control-sm"
-                    id="programa"
-                    v-model="cargaPosForm.programa"
-                  >
-                    <option type="text" value="PGMC">PGMC</option>
-                    <option type="text" value="PGCC">PGCC</option>
-                    <option type="text" value="PGEM">PGEM</option>
-                  </select>
-                </div>
-              </div>
-
-              <!-- Botões -->
-              <div class="row mb-0 mt-3 mx-0">
-                <div class="d-flex mr-0 ml-auto">
-                  <template v-if="isEditing">
-                    <button
-                      type="button"
-                      title="Salvar"
-                      class="btn-custom btn-icon addbtn"
-                      v-on:click.prevent="editCarga(cargaPosForm)"
-                      style="max-width:80px;"
-                    >
-                      <i class="fas fa-check"></i>
-                    </button>
-                    <button
-                      type="button"
-                      title="Deletar"
-                      class="btn-custom btn-icon delbtn"
-                      v-b-modal.modalConfirma2
-                      style="max-width:80px;"
-                    >
-                      <i class="far fa-trash-alt"></i>
-                    </button>
-                    <button
-                      type="button"
-                      title="Cancelar"
-                      class="btn-custom btn-icon cancelbtn"
-                      v-on:click.prevent="cleanCarga"
-                      style="max-width:80px;"
-                    >
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </template>
-
-                  <template v-else>
-                    <button
-                      type="button"
-                      title="Adicionar"
-                      class="btn-custom btn-icon addbtn"
-                      v-on:click.prevent="addCarga"
-                      style="max-width:80px;"
-                    >
-                      <i class="fas fa-plus"></i>
-                    </button>
-                    <button
-                      type="button"
-                      title="Cancelar"
-                      class="btn-custom btn-icon cancelbtn"
-                      v-on:click.prevent="cleanCarga"
-                      style="max-width:80px;"
-                    >
-                      <i class="fas fa-times"></i>
-                    </button>
-                  </template>
-                </div>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+          <tr v-if="ProgramasInCargaPosOrdered.length === 0">
+            <td style="width:345px">
+              <b>Nenhuma carga encontrada.</b> Clique no botão de filtros
+              <i class="fas fa-list-ul mx-1"></i> para selecioná-las.
+            </td>
+          </tr>
+        </template>
+      </BaseTable>
     </div>
 
-    <!-- MODAL CONFIRMA de varias carga  -->
     <b-modal id="modalConfirma" title="Confirmar Seleção" @ok="deleteSelected">
       <template v-if="Deletar.length === 0">
         <p class="my-4">Nenhuma carga selecionada!</p>
@@ -414,27 +140,11 @@
       </template>
     </b-modal>
 
-    <!-- MODAL CONFIRMA de uma carga  -->
-    <b-modal
-      id="modalConfirma2"
-      title="Confirmar Seleção"
-      @ok="deleteCarga(cargaPosForm)"
-    >
-      <p class="my-4">Tem certeza que deseja deletar esta carga ?</p>
-      <p>
-        Docente:{{ apelidoDocenteClikado }}
-        <br />
-        Programa:{{ cargaPosForm.programa }}
-        <br />
-        Trimestre:{{ cargaPosForm.trimestre }}
-      </p>
-    </b-modal>
-
-    <!-- MODAL SEMESTRE -->
+    <!-- MODAL FILTROS -->
     <b-modal id="modalFiltros" ref="modalFiltros" scrollable title="Filtros">
       <NavTab
         :currentTab="modalTabAtiva"
-        :allTabs="['Semestres']"
+        :allTabs="['Programas', 'Semestres']"
         @change-tab="modalTabAtiva = $event"
       />
 
@@ -450,7 +160,7 @@
             </th>
           </template>
           <template #tbody>
-            <tr>
+            <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
               <td style="width: 25px">
                 <input
                   type="checkbox"
@@ -460,7 +170,7 @@
               </td>
               <td style="width: 425px" class="t-start">PRIMEIRO</td>
             </tr>
-            <tr>
+            <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
               <td style="width: 25px">
                 <input
                   type="checkbox"
@@ -469,6 +179,35 @@
                 />
               </td>
               <td style="width: 425px" class="t-start">SEGUNDO</td>
+            </tr>
+          </template>
+        </BaseTable>
+
+        <BaseTable
+          v-show="modalTabAtiva === 'Programas'"
+          :tableType="'modal-table'"
+        >
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th style="width: 425px" class="t-start">Programa</th>
+          </template>
+          <template #tbody>
+            <tr
+              v-for="programaPos in AllProgramasPosOrdered"
+              :key="programaPos"
+              @click="
+                toggleItemInArray(programaPos, filtroProgramas.selecionados)
+              "
+            >
+              <td style="width:25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  :value="programaPos"
+                  v-model="filtroProgramas.selecionados"
+                />
+              </td>
+              <td style="width:425px" class="t-start">{{ programaPos }}</td>
             </tr>
           </template>
         </BaseTable>
@@ -545,59 +284,56 @@
 
 <script>
 import _ from "lodash";
+import toggleOrdinationMixin from "@/mixins/toggleOrdination.js";
+import toggleItemInArrayMixin from "@/mixins/toggleItemInArray.js";
+import notificationMixin from "@/mixins/notification.js";
+import { PageTitle, BaseTable, NavTab, Card } from "@/components/index.js";
+import { EventBus } from "@/event-bus.js";
 import cargaPosService from "@/common/services/cargaPos";
+import CargaPosNovaRow from "./CargaPosNovaRow.vue";
 import CargaPosRow from "./CargaPosRow.vue";
-import PageTitle from "@/components/PageTitle.vue";
-import BaseTable from "@/components/BaseTable.vue";
-import NavTab from "@/components/NavTab.vue";
 
-const emptyCarga = {
-  id: undefined,
-  trimestre: undefined,
-  Docente: undefined,
-  programa: undefined,
-  creditos: undefined,
-};
+const allProgramasPos = ["PGCC", "PGMC", "PGEM"];
 
 export default {
   name: "DashboardCargaPos",
+  mixins: [toggleOrdinationMixin, notificationMixin, toggleItemInArrayMixin],
   components: {
     CargaPosRow,
+    CargaPosNovaRow,
     PageTitle,
     BaseTable,
     NavTab,
+    Card,
   },
   data() {
     return {
       isAdding: false,
-      cargaPosForm: _.clone(emptyCarga),
       error: undefined,
-      atual: undefined,
-      trimestre: 1,
-      programa: "PGCC",
-      vetorPeriodosPGMC: [1, 2, 3, 4],
-      vetorPeriodosPGCC: [1, 2, 3, 4],
-      vetorPeriodosPGEM: [1, 2, 3, 4],
-      ordenacaoAtualPGMC: "periodo",
-      ordenacaoAtualPGCC: "periodo",
-      ordenacaoAtualPGEM: "periodo",
-      scrollSize: undefined,
-      isEditing: false,
-      linhaClickada: null,
-      apelidoDocenteClikado: null,
+      filtroProgramas: {
+        ativados: [],
+        selecionados: [],
+      },
       filtroSemestres: {
         primeiro: true,
         segundo: true,
         ativo: 3,
       },
-      modalTabAtiva: "Semestres",
+      ordenacaoCargaPos: { order: "docenteApelido", type: "asc" },
+      modalTabAtiva: "Programas",
       modalSelectAll: {
+        Programas: () => {
+          this.filtroProgramas.selecionados = [...this.AllProgramasPosOrdered];
+        },
         Semestres: () => {
           this.filtroSemestres.primeiro = true;
           this.filtroSemestres.segundo = true;
         },
       },
       modalSelectNone: {
+        Programas: () => {
+          this.filtroProgramas.selecionados = [];
+        },
         Semestres: () => {
           this.filtroSemestres.primeiro = false;
           this.filtroSemestres.segundo = false;
@@ -619,11 +355,16 @@ export default {
   },
 
   methods: {
+    addNovaCarga() {
+      EventBus.$emit("add-carga-pos");
+    },
     toggleAdd() {
       this.isAdding = !this.isAdding;
     },
     btnOkFiltros() {
       this.setSemestreAtivo();
+      this.filtroProgramas.ativados = [...this.filtroProgramas.selecionados];
+      this.modalTabAtiva = "Programas";
       this.$refs.modalFiltros.hide();
     },
     setSemestreAtivo() {
@@ -635,352 +376,139 @@ export default {
         this.filtroSemestres.ativo = 3;
       else this.filtroSemestres.ativo = undefined;
     },
-    onlyNumber($event) {
-      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
-      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
-        $event.preventDefault();
-      }
-    },
-    clearClick() {
-      this.isEditing = false;
-      this.linhaClickada = null;
-    },
-    handleClickInTurma(carga, apelido) {
-      this.cleanCarga();
-
-      this.isEditing = true;
-      this.linhaClickada = carga.id;
-      this.apelidoDocenteClikado = apelido;
-      this.cargaPosForm = _.clone(carga);
-    },
-
-    toggleOrdenacaoPGMC(ordenacao) {
-      if (ordenacao === "nome") {
-        this.ordenacaoAtualPGMC = "nome";
-        this.vetorPeriodosPGMC = [1];
-      } else {
-        this.ordenacaoAtualPGMC = "periodo";
-        this.vetorPeriodosPGMC = [1, 2, 3, 4];
-      }
-    },
-    toggleOrdenacaoPGCC(ordenacao) {
-      if (ordenacao === "nome") {
-        this.ordenacaoAtualPGCC = "nome";
-        this.vetorPeriodosPGCC = [1];
-      } else {
-        this.ordenacaoAtualPGCC = "periodo";
-        this.vetorPeriodosPGCC = [1, 2, 3, 4];
-      }
-    },
-    toggleOrdenacaoPGEM(ordenacao) {
-      if (ordenacao === "nome") {
-        this.ordenacaoAtualPGEM = "nome";
-        this.vetorPeriodosPGEM = [1];
-      } else {
-        this.ordenacaoAtualPGEM = "periodo";
-        this.vetorPeriodosPGEM = [1, 2, 3, 4];
-      }
-    },
-
-    checkPGMC(carga, docente, t) {
-      if (this.ordenacaoAtualPGMC === "periodo")
-        return carga.Docente === docente.id && carga.trimestre == t;
-      else return carga.Docente === docente.id;
-    },
-
-    checkPGCC(carga, docente, t) {
-      if (this.ordenacaoAtualPGCC === "periodo")
-        return carga.Docente === docente.id && carga.trimestre == t;
-      else return carga.Docente === docente.id;
-    },
-
-    checkPGEM(carga, docente, t) {
-      if (this.ordenacaoAtualPGEM === "periodo")
-        return carga.Docente === docente.id && carga.trimestre == t;
-      else return carga.Docente === docente.id;
-    },
-
-    editCarga(carga) {
+    deleteCarga(cargaId) {
       cargaPosService
-        .update(carga.id, this.cargaPosForm)
+        .delete(cargaId)
         .then((response) => {
-          this.$notify({
-            group: "general",
-            title: `Sucesso!`,
-            text: `A Carga ${response.CargaPos.programa} foi atualizada!`,
+          this.showNotication({
             type: "success",
+            message: `A carga ${response.CargaPos.programa} foi excluída!`,
           });
         })
         .catch((error) => {
-          this.error = "<b>Erro ao atualizar Carga</b>";
-          if (error.response.data.fullMessage) {
-            this.error +=
-              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-          }
-        });
-    },
-
-    deleteCarga(carga) {
-      cargaPosService
-        .delete(carga.id)
-        .then((response) => {
-          this.$notify({
-            group: "general",
-            title: `Sucesso!`,
-            text: `A Carga ${response.CargaPos.programa} foi excluída!`,
-            type: "success",
+          this.showNotication({
+            type: "error",
+            title: "Error ao deletar carga!",
+            message: error,
           });
-          this.cleanCarga();
-        })
-        .catch(() => {
-          this.error = "<b>Erro ao excluir Carga</b>";
         });
     },
-
-    deleteSelected: function() {
-      var cargas = this.$store.state.cargaPos.Deletar;
-      for (var i = 0; i < cargas.length; i++) {
-        this.deleteCarga(cargas[i]);
+    deleteSelected() {
+      let cargas = this.$store.state.cargaPos.Deletar;
+      for (let i = 0; i < cargas.length; i++) {
+        this.deleteCarga(cargas[i].id);
       }
       this.$store.commit("emptyDeleteCarga");
     },
+    addDocenteIncargaPos(programaNome) {
+      const cargasResultantes = [];
 
-    addCarga() {
-      cargaPosService
-        .create(this.cargaPosForm)
-        .then((response) => {
-          this.trimestre = response.CargaPos.trimestre;
-          this.programa = response.CargaPos.programa;
-          this.cleanCarga();
-          this.$notify({
-            group: "general",
-            title: `Sucesso!`,
-            text: `A Carga ${response.CargaPos.programa} foi criada!`,
-            type: "success",
+      _.forEach(this.CargasPos, (carga) => {
+        const docenteFounded = _.find(
+          this.Docentes,
+          (docente) => docente.id === carga.Docente
+        );
+
+        if (docenteFounded && programaNome === carga.programa) {
+          cargasResultantes.push({
+            ...carga,
+            docenteApelido: docenteFounded.apelido,
           });
-        })
-        .catch((error) => {
-          this.error = "<b>Erro ao criar Carga</b>";
-          if (error.response.data.fullMessage) {
-            this.error +=
-              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-          }
-        });
+        }
+      });
+
+      return cargasResultantes;
     },
-    cleanCarga() {
-      this.clearClick();
-      this.cargaPosForm = _.clone(emptyCarga);
-      this.cargaPosForm.trimestre = "";
-      this.cargaPosForm.id = "";
-      this.cargaPosForm.programa = "";
-      this.error = undefined;
+    allCreditosCarga(cargas) {
+      return _.reduce(cargas, (acc, carga) => acc + carga.creditos, 0);
     },
   },
 
   computed: {
-    CreditoTotal_PGMC: function() {
-      let total = 0;
+    ProgramasInCargaPos() {
+      const programasResutantes = [];
 
-      for (var t = 1; t <= 4; t++) {
-        for (let k = 0; k < this.Docentes.length; k++) {
-          for (let i = 0; i < this.CargasPGMC.length; i++) {
-            if (this.filtroSemestres.ativo == 1) {
-              if (
-                this.CargasPGMC[i].Docente === this.Docentes[k].id &&
-                this.CargasPGMC[i].trimestre == t &&
-                (this.CargasPGMC[i].trimestre == 1 ||
-                  this.CargasPGMC[i].trimestre == 2)
-              ) {
-                total += this.CargasPGMC[i].creditos;
-              }
-            } else if (this.filtroSemestres.ativo == 2) {
-              if (
-                this.CargasPGMC[i].Docente === this.Docentes[k].id &&
-                this.CargasPGMC[i].trimestre == t &&
-                this.CargasPGMC[i].trimestre == 3
-              ) {
-                total += this.CargasPGMC[i].creditos;
-              }
-            } else if (this.filtroSemestres.ativo == 3) {
-              if (
-                this.CargasPGMC[i].Docente === this.Docentes[k].id &&
-                this.CargasPGMC[i].trimestre == t &&
-                (this.CargasPGCC[i].trimestre == 1 ||
-                  this.CargasPGCC[i].trimestre == 2 ||
-                  this.CargasPGCC[i].trimestre == 3)
-              ) {
-                total += this.CargasPGMC[i].creditos;
-              }
-            }
-          }
-        }
-      }
-      return total;
+      _.forEach(this.AllProgramasPosOrdered, (programaNome) => {
+        programasResutantes.push({
+          nome: programaNome,
+          carga: this.addDocenteIncargaPos(programaNome),
+        });
+      });
+
+      return programasResutantes;
     },
-    CreditoTotal_PGCC: function() {
-      let total = 0;
-
-      for (var t = 1; t <= 4; t++) {
-        for (let k = 0; k < this.Docentes.length; k++) {
-          for (let i = 0; i < this.CargasPGCC.length; i++) {
-            if (this.filtroSemestres.ativo == 1) {
-              if (
-                this.CargasPGCC[i].Docente === this.Docentes[k].id &&
-                this.CargasPGCC[i].trimestre == t &&
-                (this.CargasPGCC[i].trimestre == 1 ||
-                  this.CargasPGCC[i].trimestre == 2)
-              ) {
-                total += this.CargasPGCC[i].creditos;
-              }
-            } else if (this.filtroSemestres.ativo == 2) {
-              if (
-                this.CargasPGCC[i].Docente === this.Docentes[k].id &&
-                this.CargasPGCC[i].trimestre == t &&
-                this.CargasPGCC[i].trimestre == 3
-              ) {
-                total += this.CargasPGCC[i].creditos;
-              }
-            } else if (this.filtroSemestres.ativo == 3) {
-              if (
-                this.CargasPGCC[i].Docente === this.Docentes[k].id &&
-                this.CargasPGCC[i].trimestre == t &&
-                (this.CargasPGCC[i].trimestre == 1 ||
-                  this.CargasPGCC[i].trimestre == 2 ||
-                  this.CargasPGCC[i].trimestre == 3)
-              ) {
-                total += this.CargasPGCC[i].creditos;
-              }
-            }
-          }
-        }
-      }
-      return total;
-    },
-    CreditoTotal_PGEM: function() {
-      let total = 0;
-
-      for (var t = 1; t <= 4; t++) {
-        for (let k = 0; k < this.Docentes.length; k++) {
-          for (let i = 0; i < this.CargasPGEM.length; i++) {
-            if (this.filtroSemestres.ativo == 1) {
-              if (
-                this.CargasPGEM[i].Docente === this.Docentes[k].id &&
-                this.CargasPGEM[i].trimestre == t &&
-                (this.CargasPGEM[i].trimestre == 1 ||
-                  this.CargasPGEM[i].trimestre == 2)
-              ) {
-                total += this.CargasPGEM[i].creditos;
-              }
-            } else if (this.filtroSemestres.ativo == 2) {
-              if (
-                this.CargasPGEM[i].Docente === this.Docentes[k].id &&
-                this.CargasPGEM[i].trimestre == t &&
-                this.CargasPGEM[i].trimestre == 3
-              ) {
-                total += this.CargasPGEM[i].creditos;
-              }
-            } else if (this.filtroSemestres.ativo == 3) {
-              if (
-                this.CargasPGEM[i].Docente === this.Docentes[k].id &&
-                this.CargasPGEM[i].trimestre == t &&
-                (this.CargasPGCC[i].trimestre == 1 ||
-                  this.CargasPGCC[i].trimestre == 2 ||
-                  this.CargasPGCC[i].trimestre == 3)
-              ) {
-                total += this.CargasPGEM[i].creditos;
-              }
-            }
-          }
-        }
-      }
-      return total;
-    },
-
-    Docentes() {
-      return _.orderBy(
-        _.filter(this.$store.state.docente.Docentes, ["ativo", true]),
-        "apelido"
+    ProgramasInCargaPosFiltredByPrograma() {
+      return _.filter(
+        this.ProgramasInCargaPos,
+        (programa) =>
+          _.findIndex(
+            this.filtroProgramas.ativados,
+            (programaNome) => programaNome === programa.nome
+          ) !== -1
       );
     },
+    ProgramasInCargaPosFiltredByTrimestre() {
+      const programasResutantes = [];
 
+      _.forEach(this.ProgramasInCargaPosFiltredByPrograma, (programa) => {
+        programasResutantes.push({
+          nome: programa.nome,
+          carga: _.filter(programa.carga, (carga) => {
+            switch (this.filtroSemestres.ativo) {
+              case 1:
+                return carga.trimestre === 1 || carga.trimestre === 2;
+              case 2:
+                return carga.trimestre === 3 || carga.trimestre === 4;
+              case 3:
+                return true;
+
+              default:
+                return false;
+            }
+          }),
+        });
+      });
+
+      return programasResutantes;
+    },
+    ProgramasInCargaPosOrdered() {
+      const programasResutantes = [];
+      _.forEach(this.ProgramasInCargaPosFiltredByTrimestre, (programa) => {
+        programasResutantes.push({
+          nome: programa.nome,
+          carga: _.orderBy(
+            programa.carga,
+            ["trimestre", this.ordenacaoCargaPos.order],
+            ["asc", this.ordenacaoCargaPos.type]
+          ),
+        });
+      });
+
+      return programasResutantes;
+    },
+    AllProgramasPosOrdered() {
+      return _.orderBy(allProgramasPos, String, "asc");
+    },
+    CargasPos() {
+      return this.$store.state.cargaPos.Cargas;
+    },
+    Docentes() {
+      return _.filter(this.$store.state.docente.Docentes, ["ativo", true]);
+    },
     Deletar() {
       return this.$store.state.cargaPos.Deletar;
     },
-
-    CargasPGCC() {
-      return _.orderBy(
-        _.filter(this.$store.state.cargaPos.Cargas, ["programa", "PGCC"]),
-        "trimestre"
-      );
-    },
-
-    CargasPGMC() {
-      return _.orderBy(
-        _.filter(this.$store.state.cargaPos.Cargas, ["programa", "PGMC"]),
-        "trimestre"
-      );
-    },
-
-    CargasPGEM() {
-      return _.orderBy(
-        _.filter(this.$store.state.cargaPos.Cargas, ["programa", "PGEM"]),
-        "trimestre"
-      );
-    },
-
     isLoading() {
       return this.$store.state.isLoading;
     },
-
     Admin() {
-      if (this.$store.state.auth.Usuario.admin === 1) {
-        return true;
-      } else {
-        return false;
-      }
+      return this.$store.state.auth.Usuario.admin === 1;
     },
   },
 };
 </script>
 
 <style scoped>
-.novaturma {
-  font-size: 11px !important;
-  background-color: #cecece;
-}
-.novaturma td {
-  margin: 0 !important;
-  padding: 0 5px;
-  vertical-align: middle !important;
-  text-align: center;
-  word-break: break-word;
-}
-.novaturma .less-padding {
-  padding: 0 2px;
-}
-.novaturma select {
-  padding: 0 0 !important;
-  font-size: 11px !important;
-  width: 100% !important;
-  height: 18px !important;
-}
-.novaturma input[type="text"] {
-  font-size: 11px !important;
-  width: 100% !important;
-  height: 18px !important;
-  text-align: center !important;
-}
-.stickyAdd {
-  background-color: #cecece;
-  display: block;
-  overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 19px !important;
-  overflow: hidden !important;
-  z-index: 5 !important;
-}
-
 .div-card {
   margin-left: auto;
 }

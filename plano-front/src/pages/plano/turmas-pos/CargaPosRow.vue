@@ -1,5 +1,5 @@
 <template>
-  <div class="turmarow max-content ">
+  <div class="cargaPos-row max-content ">
     <td style="width:70px"><div style="height:30px"></div></td>
     <td style="width: 25px">
       <input
@@ -11,7 +11,11 @@
       />
     </td>
     <td style="width: 55px">
-      <select type="text" id="programa" v-model="carga.trimestre">
+      <select
+        type="text"
+        v-model="cargaPosForm.trimestre"
+        v-on:change="editCargaPos()"
+      >
         <option type="text" value="1">1</option>
         <option type="text" value="2">2</option>
         <option type="text" value="3">3</option>
@@ -19,7 +23,11 @@
     </td>
 
     <td style="width: 145px">
-      <select type="text" id="docente1" v-model="carga.Docente">
+      <select
+        type="text"
+        v-model="cargaPosForm.Docente"
+        v-on:change="editCargaPos()"
+      >
         <option v-if="Docentes.length === 0" type="text" value
           >Nenhum Docente Encontrado</option
         >
@@ -31,33 +39,97 @@
         >
       </select>
     </td>
+
     <td style="width: 50px">
       <input
         type="text"
-        id="creditos"
-        v-model="carga.creditos"
+        v-model.number="cargaPosForm.creditos"
         @keypress="onlyNumber"
+        v-on:change="editCargaPos()"
       />
     </td>
   </div>
 </template>
+
 <script>
 import _ from "lodash";
+import cargaPosService from "@/common/services/cargaPos";
+import notificationMixin from "@/mixins/notification.js";
+
+const emptyCarga = {
+  id: null,
+  trimestre: null,
+  Docente: null,
+  programa: null,
+  creditos: null,
+};
 
 export default {
   name: "CargaPosRow",
+  mixins: [notificationMixin],
   props: {
     carga: Object,
   },
-
   data() {
     return {
       ativo: false,
-      search: "",
+      cargaPosForm: _.clone(emptyCarga),
     };
   },
-
+  mounted() {
+    this.cargaPosForm = _.clone(this.carga);
+  },
   methods: {
+    isEmpty(value) {
+      return value === "" || value === undefined ? true : false;
+    },
+    setEmptyKeysToNull(object) {
+      Object.keys(object).forEach((key) => {
+        if (this.isEmpty(object[key])) object[key] = null;
+      });
+    },
+    validateCargaPos(cargaPos) {
+      if (
+        cargaPos.trimestre === null ||
+        cargaPos.Docente === null ||
+        cargaPos.programa === null ||
+        cargaPos.creditos === null
+      ) {
+        this.showNotication({
+          type: "error",
+          title: "Erro!",
+          message: "Cadastro da carga inválido ou incompleto.",
+        });
+        return false;
+      }
+
+      return true;
+    },
+    editCargaPos() {
+      const newCargaPos = _.clone(this.cargaPosForm);
+
+      this.setEmptyKeysToNull(newCargaPos);
+      if (!this.validateCargaPos(newCargaPos)) {
+        this.cargaPosForm = _.clone(this.carga);
+        return;
+      }
+
+      cargaPosService
+        .update(newCargaPos.id, newCargaPos)
+        .then((response) => {
+          this.showNotication({
+            type: "success",
+            message: `A carga ${response.CargaPos.programa} foi atualizada!`,
+          });
+        })
+        .catch((error) => {
+          this.showNotication({
+            type: "error",
+            title: "Erro ao atualizar Carga!",
+            message: error,
+          });
+        });
+    },
     onlyNumber($event) {
       let keyCode = $event.keyCode ? $event.keyCode : $event.which;
       if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
@@ -66,7 +138,6 @@ export default {
     },
     checkDelete(carga) {
       this.$store.commit("checkDeleteCarga", { CargaPos: carga });
-      console.log(this.$store.state.cargaPos.Deletar);
     },
   },
   computed: {
@@ -81,22 +152,22 @@ export default {
 </script>
 
 <style scoped>
-.turmarow {
+.cargaPos-row {
   font-size: 11px !important;
 }
-.turmarow select {
+.cargaPos-row select {
   padding: 0 0 !important;
   font-size: 11px !important;
   width: 100% !important;
   height: 18px !important;
 }
-.turmarow input[type="text"] {
+.cargaPos-row input[type="text"] {
   font-size: 11px !important;
   width: 100% !important;
   height: 18px !important;
   text-align: center !important;
 }
-.turmarow td {
+.cargaPos-row td {
   margin: 0 !important;
   padding: 0 5px;
   vertical-align: middle !important;
@@ -104,7 +175,7 @@ export default {
   word-break: break-word;
 }
 
-.turmarow input[type="checkbox"] {
+.cargaPos-row input[type="checkbox"] {
   width: 13px !important;
   height: 13px !important;
   text-align: center !important;

@@ -461,9 +461,6 @@ export default {
       } else if (horario !== null && horario !== "" && horario !== undefined)
         this.turmaForm.turno1 = "Noturno";
     },
-    closeModalTurma(eventName) {
-      EventBus.$emit(eventName);
-    },
     toggleOrder(currentOrder, newOrder, type = "asc") {
       if (currentOrder.order != newOrder) {
         currentOrder.order = newOrder;

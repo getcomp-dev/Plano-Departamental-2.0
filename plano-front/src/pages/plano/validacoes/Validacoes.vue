@@ -124,8 +124,8 @@
           </template>
           <tr v-show="TurmasValidacoesOrdered.length === 0">
             <td style="width:690px">
-              <b>Nenhum conflito encontrado</b>, clique no botão de filtros para
-              seleciona-los.
+              <b>Nenhum conflito encontrado.</b> Clique no botão de filtros
+              <i class="fas fa-list-ul mx-1"></i> para selecioná-los.
             </td>
           </tr>
         </template>
@@ -197,7 +197,7 @@
               v-for="conflito in ConflitosOrdered"
               :key="'conflitosModal' + conflito.type"
               @click="
-                addOrRemoveItem(conflito.type, filtroConflitos.selecionados)
+                toggleItemInArray(conflito.type, filtroConflitos.selecionados)
               "
               style="text-transform: uppercase"
             >
@@ -320,7 +320,8 @@
 <script>
 import _ from "lodash";
 import { EventBus } from "@/event-bus.js";
-import ordenacaoMixin from "@/ordenacao-mixin";
+import toggleOrdinationMixin from "@/mixins/toggleOrdination.js";
+import toggleItemInArrayMixin from "@/mixins/toggleItemInArray.js";
 import PageTitle from "@/components/PageTitle";
 import NavTab from "@/components/NavTab";
 import ModalTurma from "./ModalTurma.vue";
@@ -361,7 +362,7 @@ const AllConflitosTurmas = [
 
 export default {
   name: "Validacoes",
-  mixins: [ordenacaoMixin],
+  mixins: [toggleOrdinationMixin, toggleItemInArrayMixin],
   components: {
     ModalTurma,
     PageTitle,
@@ -574,11 +575,6 @@ export default {
     EventBus.$off("close-modal-turma");
   },
   methods: {
-    addOrRemoveItem(item, array) {
-      const index = array.indexOf(item);
-      if (index === -1) array.push(item);
-      else array.splice(index, 1);
-    },
     btnOkFiltros() {
       this.btnOkSemestre();
       this.filtroConflitos.ativados = [...this.filtroConflitos.selecionados];

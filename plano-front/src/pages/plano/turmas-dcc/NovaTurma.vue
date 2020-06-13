@@ -1,5 +1,6 @@
 <template>
-  <div class="novaturma stickyAdd">
+  <tr class="novaturma stickyAdd">
+    <!-- div class="stickyAdd" -->
     <td style="width: 25px"></td>
     <td style="width: 40px;"></td>
     <td style="width: 55px;" class="less-padding">
@@ -26,9 +27,6 @@
         v-model="turmaForm.Disciplina"
         @change="handleChangeDisciplina()"
       >
-        <option v-if="DisciplinasOrederedByCod.length === 0" type="text" value
-          >Nenhuma Disciplina Encontrada</option
-        >
         <option
           v-for="disciplina in DisciplinasOrederedByCod"
           :key="'1-' + disciplina.id"
@@ -201,12 +199,11 @@
       </template>
     </td>
     <td style="width:45px"><div style="height: 43px;"></div></td>
-    <template v-for="c in cursosLength">
-      <td style="width:35px" :key="c + 'cursos-ativados'">
-        <!-- <div >{{ c.codigo }}</div> -->
-      </td>
-    </template>
-  </div>
+    <td
+      v-if="cursosAtivadosLength"
+      :style="`width: ${35 * cursosAtivadosLength}px`"
+    ></td>
+  </tr>
 </template>
 
 <script>
@@ -230,7 +227,7 @@ const emptyTurma = {
 };
 export default {
   name: "NovaTurma",
-  props: { cursosLength: Number, default: 0 },
+  props: { cursosAtivadosLength: Number, default: 0 },
 
   data() {
     return {
