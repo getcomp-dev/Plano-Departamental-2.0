@@ -1,37 +1,25 @@
 <template>
   <transition name="modal-fade">
-    <div id="Modal" class="modal-custom " ref="draggableContainer">
-      <header
-        class="modal-custom-header w-100 pr-0"
-        ref="refHeader"
-        @mousedown="dragMouseDown"
-      >
+    <div class="modal-custom">
+      <header class="modal-custom-header w-100">
         <h2 class="title">
-          <slot name="title">
-            Nenhum titulo passado para o componente!
-          </slot>
+          {{ modalOptions.title }}
         </h2>
         <button
           type="button"
-          class="btn-custom"
-          style=" font-size:25px;height:30px!important; width:80px; text-align:center"
-          @click="close"
+          class="btn-custom btn-close"
+          @click="close()"
           aria-label="Close modal"
         >
           &times;
         </button>
       </header>
 
-      <section class="modal-custom-body">
-        <!-- <div
-          class="col m-0 p-0"
-          style="width: max-content; height: 450px !important;"
-        >
-        </div> -->
-        <slot name="body"> </slot>
-      </section>
+      <main class="modal-custom-body">
+        <slot name="modal-body">Modal Body</slot>
+      </main>
 
-      <footer class="modal-custom-footer w-100">
+      <footer v-if="hasFooter" class="modal-custom-footer w-100">
         <slot name="footer">
           <div class="div">
             <button
@@ -48,20 +36,11 @@
             </button>
           </div>
           <button
-            @click="$emit('btn-ok')"
+            @click="$emit('btn-ok'), close()"
             class="btn btn-modal btn-verde btn-ok-modal"
           >
             OK
           </button>
-
-          <!-- <button
-          type="button"
-          class="btn btn-green"
-          @click="close"
-          aria-label="Close modal"
-        >
-          Close me!
-        </button> -->
         </slot>
       </footer>
     </div>
@@ -69,22 +48,31 @@
 </template>
 
 <script>
+import { EventBus } from "@/event-bus.js";
+
 export default {
-  name: "Modal",
-  components: {},
-  data() {
-    return {
-      positions: {
-        clientX: undefined,
-        clientY: undefined,
-        movementX: 0,
-        movementY: 0,
-      },
-    };
+  name: "BaseModal",
+  props: {
+    modalOptions: { type: Object, required: true },
+    hasFooter: { type: Boolean, default: false },
   },
+  data() {
+    return {};
+  },
+  mounted() {
+    EventBus.$emit("toggle-bg-modal", true);
+    EventBus.$on("close-modal", () => {
+      this.close();
+    });
+  },
+  beforeDestroy() {
+    EventBus.$emit("toggle-bg-modal", false);
+    EventBus.$off("close-modal");
+  },
+  computed: {},
   methods: {
     close() {
-      this.$emit("close");
+      this.modalOptions.visibility = false;
     },
     dragMouseDown(event) {
       event.preventDefault();
@@ -147,18 +135,6 @@ export default {
 </script>
 
 <style scoped>
-.modal-backdrop {
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.3);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1050;
-}
-
 .modal-custom {
   z-index: 1050;
   position: absolute;
@@ -170,48 +146,68 @@ export default {
   overflow-x: auto;
   display: flex;
   flex-direction: column;
+  justify-content: flex-start;
+  max-width: 500px;
+  min-height: 800px;
+  border-radius: 5px;
 }
 .modal-custom-header,
 .modal-custom-footer {
-  padding: 15px;
   display: flex;
+  justify-content: flex-start;
   align-items: center;
-  justify-content: space-between;
 }
 
 .modal-custom-header {
-  cursor: all-scroll;
   border-bottom: 1px solid #eeeeee;
-  color: #4aae9b;
+  color: #000000;
+  min-height: 56px;
 }
-
+.modal-custom-body {
+  padding: 20px 15px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
 .modal-custom-footer {
+  justify-content: space-between;
+  margin-top: auto;
+  padding: 15px;
   border-top: 1px solid #eeeeee;
   align-items: center;
 }
-.modal-custom-body {
-  position: relative;
-  padding: 20px 10px;
-}
 
-/* .btn {
-  color: white;
-  background: #4aae9b;
-  border: 1px solid #4aae9b;
-  border-radius: 2px;
-} */
 .title {
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 5px;
   margin: 0;
   font-size: 20px;
 }
 .btn-close {
-  border: none;
-  font-size: 20px;
+  height: 100% !important;
+  min-height: 55px;
+  width: 70px;
+  font-size: 22px;
   padding: 20px;
-  cursor: pointer;
-  font-weight: bold;
+  border: none;
   color: #2d2e2e;
-  background: transparent;
+  font-weight: bold;
+  text-align: center;
+  background: none;
+  cursor: pointer;
+}
+.btn-close:hover {
+  background-color: rgba(192, 192, 192, 0.335);
+}
+
+.btn {
+  color: white;
+}
+.btn:hover {
+  color: white;
 }
 
 .modal-fade-enter,

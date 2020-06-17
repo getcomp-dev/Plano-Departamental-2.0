@@ -40,6 +40,7 @@ Vue.use(
 Vue.config.productionTip = false;
 
 var vm = new Vue({
+  data: { onLoad: false },
   router,
   store,
   render: (h) => h(App),

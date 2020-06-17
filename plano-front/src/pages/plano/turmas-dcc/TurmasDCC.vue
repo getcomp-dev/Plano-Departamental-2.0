@@ -374,7 +374,7 @@
       hide-footer
     >
       <template v-if="turmaClickada !== null">
-        <ModalEditTurma
+        <BodyModalEditTurma
           :key="turmaClickada.id + 'modalTurma'"
           :turma="turmaClickada"
         />
@@ -483,7 +483,7 @@ import {
   PageTitle,
   BaseTable,
   NavTab,
-  ModalEditTurma,
+  BodyModalEditTurma,
 } from "@/components/index.js";
 import toggleOrdinationMixin from "@/mixins/toggleOrdination.js";
 import toggleItemInArrayMixin from "@/mixins/toggleItemInArray.js";
@@ -503,7 +503,7 @@ export default {
     TurmaRow,
     NovaTurma,
     PageTitle,
-    ModalEditTurma,
+    BodyModalEditTurma,
     NavTab,
     BaseTable,
   },

@@ -1,7 +1,6 @@
 <template>
   <div class="main-component row p-0">
     <PageTitle :title="'Dashboard'" />
-
     <div class="alert alert-light mt-1" role="alert">
       <p class="user-paragraph" style="">
         Olá {{ getUsuarioFirstName }}! Este é o sistema de gerenciamento de
@@ -26,7 +25,6 @@ import _ from "lodash";
 import { mapGetters } from "vuex";
 import PageTitle from "@/components/PageTitle";
 import LinksList from "./LinksList";
-
 export default {
   name: "DashboardHome",
   components: { PageTitle, LinksList },
@@ -145,9 +143,6 @@ export default {
         },
       ],
     };
-  },
-  created() {
-    // console.log(this.$store);
   },
   computed: {
     linksPlanoOrdered() {

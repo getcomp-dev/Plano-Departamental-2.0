@@ -25,16 +25,12 @@
         <router-view></router-view>
       </main>
     </div>
-
-    <div class="container-loading" v-if="isLoading">
-      <div class="lds-ring">
-        <div></div>
-        <div></div>
-        <div></div>
-        <div></div>
-      </div>
-    </div>
-
+    <LoadingPage v-if="isLoading || $root.onLoad" />
+    <div
+      class="bg-base-modal"
+      v-if="hasModalOpen"
+      @click.stop="closeModal()"
+    ></div>
     <b-modal
       id="modal-download"
       ref="modalDownload"
@@ -202,11 +198,6 @@
         </div>
       </template>
     </b-modal>
-    <link
-      href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1"
-      rel="stylesheet"
-      type="text/css"
-    />
   </div>
 </template>
 
@@ -223,6 +214,7 @@ import { saveAs } from "file-saver";
 import { EventBus } from "@/event-bus.js";
 import TheNavbar from "./TheNavbar.vue";
 import TheSidebar from "./sidebar/TheSidebar.vue";
+import LoadingPage from "@/components/LoadingPage.vue";
 
 const emptyUser = {
   nome: undefined,
@@ -237,10 +229,11 @@ const emptyPlano = {
 
 export default {
   name: "TheDashboard",
-  components: { TheSidebar, TheNavbar },
+  components: { TheSidebar, TheNavbar, LoadingPage },
 
   data: function() {
     return {
+      hasModalOpen: false,
       files: [],
       filename: "",
       isLoadingFile: false,
@@ -249,7 +242,6 @@ export default {
       downloadState: 0,
       planoForm: _.clone(emptyPlano),
       sidebarVisibility: false,
-      onLoad: false,
       showModal: {
         load: () => {
           this.filename = "";
@@ -291,12 +283,19 @@ export default {
   },
   mounted() {
     EventBus.$on("close-sidebar", this.closeSideBar);
+    EventBus.$on("toggle-bg-modal", (newVisibility) => {
+      this.hasModalOpen = newVisibility;
+    });
   },
   beforeDestroy() {
     EventBus.$off("close-sidebar");
+    EventBus.$off("toggle-bg-modal");
     this.$socket.close();
   },
   methods: {
+    closeModal() {
+      EventBus.$emit("close-modal");
+    },
     toggleSidebar() {
       this.sidebarVisibility = !this.sidebarVisibility;
     },
@@ -496,6 +495,13 @@ export default {
 </script>
 
 <style scoped>
+.bg-base-modal {
+  position: absolute;
+  z-index: 100;
+  height: 100vh !important;
+  width: 100% !important;
+  background-color: rgba(58, 58, 58, 0.239);
+}
 .TheDashboard {
   width: 100% !important;
   height: 100%;
@@ -534,56 +540,7 @@ export default {
   animation-fill-mode: both;
 }
 
-/* Loading page animation */
-.container-loading {
-  position: absolute;
-  width: 100%;
-  height: 100vh;
-  background-color: #343a40;
-  z-index: 2005;
-  cursor: progress;
-  transition: all 300ms ease;
-}
-.lds-ring {
-  display: inline-block;
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-.lds-ring div {
-  box-sizing: border-box;
-  display: block;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 64px;
-  height: 64px;
-  margin: 8px;
-  border: 8px solid #fff;
-  border-radius: 50%;
-  animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: #fff transparent transparent transparent;
-}
-.lds-ring div:nth-child(1) {
-  animation-delay: -0.45s;
-}
-.lds-ring div:nth-child(2) {
-  animation-delay: -0.3s;
-}
-.lds-ring div:nth-child(3) {
-  animation-delay: -0.15s;
-}
-@keyframes lds-ring {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/*Download Files Loading*/
+/*Download Files Loading animation*/
 .loadingEllipsis:after {
   overflow: hidden;
   display: inline-block;

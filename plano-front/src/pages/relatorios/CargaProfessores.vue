@@ -1,5 +1,5 @@
 <template>
-  <div class="main-component row p-0">
+  <div class="main-component row p-0" v-if="!$root.onLoad">
     <PageTitle :title="'Carga Professores'">
       <template #aside>
         <b-button
@@ -522,11 +522,12 @@ import PageTitle from "@/components/PageTitle";
 import NavTab from "@/components/NavTab";
 import BaseTable from "@/components/BaseTable";
 import toggleOrdinationMixin from "@/mixins/toggleOrdination.js";
+import loadingHooks from "@/mixins/loadingHooks.js";
 
 export default {
   name: "DashboardCargaProfessores",
   components: { PageTitle, BaseTable, NavTab },
-  mixins: [toggleOrdinationMixin],
+  mixins: [toggleOrdinationMixin, loadingHooks],
   data() {
     return {
       tabAtivaModal: "Docentes",

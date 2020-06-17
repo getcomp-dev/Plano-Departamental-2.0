@@ -2,7 +2,7 @@
   <div id="ModalEditTurma" class="modal-turma">
     <div class="form-container row m-0 p-0 w-100">
       <!-- Disciplina e Codigo -->
-      <div class="form-row w-100">
+      <div v-if="hasEditDisciplina" class="form-row w-100">
         <div class="form-group col">
           <label for="SelectDisciplinaName">Disciplina:</label>
           <select
@@ -45,18 +45,22 @@
             >
           </select>
         </div>
-        <!-- Creditos -->
-        <!-- <div class="form-group col">
-          <label for="SelectDisciplinaName"> Créditos:</label>
-          <input
-            type="text"
-            class="form-control"
-            disabled
-            style="width:50px; text-align:center"
-            :value="CreditosDaDisciplina"
-          />
-        </div> -->
       </div>
+      <div v-else class="form-row w-100 m-0 mb-2 pr-1">
+        <p class="modal-title col p-0 m-0 ">
+          {{
+            currentDisciplina
+              ? currentDisciplina.codigo + " - " + currentDisciplina.nome
+              : ""
+          }}
+        </p>
+        <span
+          class="col-4 modal-title p-0 m-0 text-right"
+          style="font-weight:normal"
+          >Créditos: {{ CreditosDaDisciplina }}</span
+        >
+      </div>
+      <!-- <hr class="my-2 w-100" /> -->
       <!-- Semestre, Turma e Creditos -->
       <div class="form-row w-100">
         <div class="form-group col">
@@ -276,77 +280,86 @@
         Total: {{ totalPedidos() }}
       </p>
     </div>
+    <div class="div-table">
+      <BaseTable
+        :tableType="'modal-table'"
+        :tableHeight="'height:350px'"
+        :hasSearchBar="true"
+      >
+        <template #thead-search>
+          <input
+            type="text"
+            class="form-control input-search"
+            placeholder="Pesquise nome ou codigo de um curso..."
+            v-model="searchCursos"
+          />
+          <button @click="searchCursos = null" class="btn btn-search">
+            &times;
+          </button>
+        </template>
+        <template#thead>
+          <th
+            @click="toggleOrder(ordemVagas, 'codigo')"
+            class="clickable t-start"
+            style="width: 50px"
+            title="Clique para ordenar por código"
+          >
+            Cód.
+            <i :class="setIconByOrder(ordemVagas, 'codigo')"></i>
+          </th>
+          <th
+            @click="toggleOrder(ordemVagas, 'nome')"
+            class="clickable t-start"
+            style="width: 320px"
+            title="Clique para ordenar por nome"
+          >
+            Nome
+            <i :class="setIconByOrder(ordemVagas, 'nome')"></i>
+          </th>
 
-    <TableModal :tableHeight="350" :hasSearchBar="true">
-      <template #thead-search>
-        <input
-          type="text"
-          class="form-control input-search"
-          placeholder="Pesquise nome ou codigo de um curso..."
-          v-model="searchCursos"
-        />
-        <button @click="searchCursos = null" class="btn btn-search">
-          &times;
-        </button>
-      </template>
-      <template#thead>
-        <th
-          @click="toggleOrder(ordemVagas, 'codigo')"
-          class="clickable t-start"
-          style="width: 50px"
-          title="Clique para ordenar por código"
-        >
-          Cód.
-          <i :class="setIconByOrder(ordemVagas, 'codigo')"></i>
-        </th>
-        <th
-          @click="toggleOrder(ordemVagas, 'nome')"
-          class="clickable t-start"
-          style="width: 320px"
-          title="Clique para ordenar por nome"
-        >
-          Nome
-          <i :class="setIconByOrder(ordemVagas, 'nome')"></i>
-        </th>
-
-        <th
-          @click="toggleOrder(ordemVagas, 'VagasTotais', 'desc')"
-          class="clickable"
-          style="width: 75px"
-          title="Vagas periodizadas / Não periodizadas"
-        >
-          Vagas
-          <i :class="setIconByOrder(ordemVagas, 'VagasTotais')"></i>
-        </th>
-      </template#thead>
-      <template#tbody>
-        <tr
-          v-for="curso in CursosTableOrdered"
-          :key="'vaga' + curso.id + '-CursosVagas'"
-        >
-          <td style="width: 50px" class="t-start">
-            {{ curso.codigo }}
-          </td>
-          <td style="width: 320px" class="t-start">
-            {{ curso.nome }}
-          </td>
-          <td style="width: 75px">
-            <PedidosTableModal
-              v-bind:index="curso.indiceVaga"
-              v-bind:turma="turma"
-            ></PedidosTableModal>
-          </td>
-        </tr>
-      </template#tbody>
-    </TableModal>
+          <th
+            @click="toggleOrder(ordemVagas, 'VagasTotais', 'desc')"
+            class="clickable"
+            style="width: 80px"
+            title="Vagas periodizadas / Não periodizadas"
+          >
+            Vagas
+            <i :class="setIconByOrder(ordemVagas, 'VagasTotais')"></i>
+          </th>
+        </template#thead>
+        <template#tbody>
+          <tr
+            v-for="curso in CursosTableOrdered"
+            :key="'vaga' + curso.id + '-CursosVagas'"
+          >
+            <td style="width: 50px" class="t-start">
+              {{ curso.codigo }}
+            </td>
+            <td style="width: 320px" class="t-start">
+              {{ curso.nome }}
+            </td>
+            <td style="width: 80px">
+              <PedidosTableModal
+                v-bind:index="curso.indiceVaga"
+                v-bind:turma="turma"
+              ></PedidosTableModal>
+            </td>
+          </tr>
+          <tr v-if="!CursosTableOrdered.length">
+            <td colspan="3" style="width:450px">
+              NENHUM CURSO ENCONTRADO.
+            </td>
+          </tr>
+        </template#tbody>
+      </BaseTable>
+    </div>
   </div>
 </template>
 <script>
 import _ from "lodash";
 import turmaService from "@/common/services/turma";
-import TableModal from "@/components/TableModal.vue";
+import BaseTable from "@/components/BaseTable.vue";
 import PedidosTableModal from "@/components/PedidosTableModal.vue";
-import { EventBus } from "@/event-bus.js";
 
 const emptyTurma = {
   id: null,
@@ -364,17 +377,16 @@ const emptyTurma = {
 };
 
 export default {
-  name: "ModalEditTurma",
-  components: { TableModal, PedidosTableModal },
+  name: "BodyModalEditTurma",
+  components: { BaseTable, PedidosTableModal },
   props: {
-    turma: Object,
-    editarTurma: Function,
+    turma: { type: Object, required: true },
+    hasEditDisciplina: { type: Boolean, default: true },
   },
   data() {
     return {
       searchCursos: null,
       ativo: false,
-      valorAtual: undefined,
       turmaForm: _.clone(emptyTurma),
       currentData: undefined,
       initialDisciplina: undefined,

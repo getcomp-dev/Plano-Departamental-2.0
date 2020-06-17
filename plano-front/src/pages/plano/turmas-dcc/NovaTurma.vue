@@ -348,7 +348,6 @@ export default {
       this.turmaForm.id = turmasLivres[0].id;
       this.editTurma(this.turmaForm, this.currentDisciplina.nome);
       this.semestre = this.turmaForm.periodo;
-      this.cleanTurmaForm();
     },
     editTurma(turma, disciplinaNome) {
       turmaService
@@ -363,13 +362,16 @@ export default {
             type: "success",
           });
           console.log("Nova turma adiciona:", turma);
+          this.cleanTurmaForm()
         })
         .catch((error) => {
-          this.error = "<b>Erro ao atualizar Turma</b>";
-          if (error.response.data.fullMessage) {
-            this.error +=
-              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-          }
+          let errormsg = (_.find(error.response.data.errors, {field: 'unique_name'}) ? 'A combinação de disciplina, semestre e turma deve ser única':'')
+          this.$notify({
+            group: "general",
+            title: `Erro ao atualizar Turma`,
+            text: errormsg,
+            type: "error",
+          });
         });
     },
     cleanTurmaForm() {

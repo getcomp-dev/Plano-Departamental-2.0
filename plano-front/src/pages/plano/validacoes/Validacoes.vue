@@ -1,5 +1,5 @@
 <template>
-  <div v-if="Admin" class="main-component row">
+  <div v-if="Admin && !$root.onLoad" class="main-component row">
     <PageTitle :title="'Validações do Plano'">
       <template #aside>
         <b-button
@@ -277,20 +277,19 @@
       </div>
     </b-modal>
     <!-- modal turma edit -->
-    <b-modal
-      id="modalEditTurma"
-      ref="modalEditTurma"
-      scrollable
-      title="Edição de Turma"
-      hide-footer
+    <BaseModal
+      v-if="optionsModalEditTurma.visibility"
+      :modalOptions="optionsModalEditTurma"
     >
-      <template v-if="turmaClickada !== null">
-        <ModalTurma
+      <template #modal-body>
+        <BodyModalEditTurma
+          :hasEditDisciplina="false"
           :key="turmaClickada.id + 'modalTurma'"
           :turma="turmaClickada"
-        ></ModalTurma
-      ></template>
-    </b-modal>
+        />
+      </template>
+    </BaseModal>
+
     <!-- MODAL AJUDA -->
     <b-modal id="modalAjuda" title="Ajuda" scrollable hide-footer>
       <div class="modal-body">
@@ -319,13 +318,16 @@
 
 <script>
 import _ from "lodash";
-import { EventBus } from "@/event-bus.js";
+import loadingHooks from "@/mixins/loadingHooks.js";
 import toggleOrdinationMixin from "@/mixins/toggleOrdination.js";
 import toggleItemInArrayMixin from "@/mixins/toggleItemInArray.js";
-import PageTitle from "@/components/PageTitle";
-import NavTab from "@/components/NavTab";
-import ModalTurma from "./ModalTurma.vue";
-import BaseTable from "@/components/BaseTable";
+import {
+  PageTitle,
+  BaseTable,
+  NavTab,
+  BodyModalEditTurma,
+  BaseModal,
+} from "@/components/index.js";
 
 const AllConflitosTurmas = [
   { type: 1, msg: "Nenhum turno alocado" },
@@ -362,15 +364,17 @@ const AllConflitosTurmas = [
 
 export default {
   name: "Validacoes",
-  mixins: [toggleOrdinationMixin, toggleItemInArrayMixin],
+  mixins: [toggleOrdinationMixin, toggleItemInArrayMixin, loadingHooks],
   components: {
-    ModalTurma,
+    BodyModalEditTurma,
     PageTitle,
     NavTab,
     BaseTable,
+    BaseModal,
   },
   data() {
     return {
+      optionsModalEditTurma: { visibility: false, title: "Edição de Turma" },
       tabAtivaMain: "Turmas",
       allConflitos: _.clone(AllConflitosTurmas),
       grades1Semestre: { CCD: [], CCN: [], EC: [], SI: [] },
@@ -423,9 +427,6 @@ export default {
     }
   },
   mounted() {
-    EventBus.$on("close-modal-turma", () => {
-      this.$refs.modalEditTurma.hide();
-    });
     //define grades ativas por periodo
     let g;
     let periodoInicial, periodoFinal;
@@ -571,9 +572,6 @@ export default {
       }
     }
   },
-  beforeDestroy() {
-    EventBus.$off("close-modal-turma");
-  },
   methods: {
     btnOkFiltros() {
       this.btnOkSemestre();
@@ -592,7 +590,7 @@ export default {
     },
     openModalEditTurma(turma) {
       this.turmaClickada = { ...turma };
-      this.$refs.modalEditTurma.show();
+      this.optionsModalEditTurma.visibility = true;
     },
     findPerfilById(id) {
       let perfil = _.find(this.Perfis, (p) => p.id == id);
@@ -1221,6 +1219,7 @@ export default {
   },
 };
 </script>
+
 <style scoped>
 .btn-table {
   padding: 0 0.25rem !important;

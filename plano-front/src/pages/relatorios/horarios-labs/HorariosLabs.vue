@@ -10,14 +10,14 @@
           <i class="fas fa-list-ul"></i>
         </b-button>
 
-        <button
-          type="button"
-          class="btn-custom btn-icon relatbtn"
-          title="Relatório"
-          v-on:click.prevent="pdf"
+        <b-button
+                v-b-modal.modalRelatorio
+                type="button"
+                class="btn-custom btn-icon relatbtn"
+                title="Relatório"
         >
           <i class="far fa-file-pdf"></i>
-        </button>
+        </b-button>
 
         <b-button
           v-b-modal.modalAjuda
@@ -261,6 +261,24 @@
         </ul>
       </div>
     </b-modal>
+    <!-- MODAL RELATORIO-->
+    <b-modal
+            id="modalRelatorio"
+            ref="relatorioModal"
+            size="sm"
+            scrollable
+            title="Relatório"
+            hide-footer
+    >
+      <ul class="listas list-group">
+        <li class="list-group-item clickable" v-on:click="pdf(1)">
+          <strong>Parcial</strong>
+        </li>
+        <li class="list-group-item clickable" v-on:click="pdf(2)">
+          <strong>Completo</strong>
+        </li>
+      </ul>
+    </b-modal>
   </div>
 </template>
 
@@ -345,8 +363,17 @@ export default {
     selectNoneLabs() {
       this.filtroLaboratorios.selecionados = [];
     },
-    pdf() {
-      pdfs.pdfAlocacaoLabs();
+    pdf(opt) {
+      if (opt === 1) {
+        pdfs.pdfAlocacaoLabs({
+          laboratorios: this.filtroLaboratorios.ativados
+        });
+      }
+      if (opt === 2) {
+        pdfs.pdfAlocacaoLabs({
+          laboratorios: this.Laboratorios
+        });
+      }
     },
   },
   computed: {

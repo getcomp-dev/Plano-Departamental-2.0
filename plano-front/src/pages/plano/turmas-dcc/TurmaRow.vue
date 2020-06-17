@@ -1156,20 +1156,14 @@ export default {
           this.currentData = _.clone(this.turmaForm);
         })
         .catch((error) => {
-          this.error = "<b>Erro ao atualizar Turma</b>";
-          //Erro frequente!!
-
-          // this.$notify({
-          //   group: "general",
-          //   title: "Erro!",
-          //   text:
-          //     "Erro ao atualizar Turma, verifique se ja não existe uma turma com a mesma letra alocada",
-          //   type: "error",
-          // });
-          if (error.response.data.fullMessage) {
-            this.error +=
-              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-          }
+          let errormsg = (_.find(error.response.data.errors, {field: 'unique_name'}) ? 'A combinação de disciplina, semestre e turma deve ser única':'')
+          this.$notify({
+            group: "general",
+            title: `Erro ao atualizar Turma`,
+            text: errormsg,
+            type: "error",
+          });
+          this.turmaForm = this.turma
         });
     },
     checkDelete(turma) {

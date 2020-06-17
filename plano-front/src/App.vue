@@ -11,6 +11,11 @@
       :closeOnClick="false"
       classes="vue-notification"
     />
+    <link
+      href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1"
+      rel="stylesheet"
+      type="text/css"
+    />
   </div>
 </template>
 
