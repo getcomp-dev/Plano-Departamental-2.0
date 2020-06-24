@@ -149,8 +149,7 @@ export default {
   height: 25px !important;
   width: 10% !important;
   padding: 0 5px !important;
-  font-size: 15px !important;
-  color: black;
+  color: rgb(75, 75, 75);
   background-color: #fff;
   border: 1px solid #ced4da;
   border-left: none;
@@ -161,6 +160,9 @@ export default {
 }
 .modal-table thead .btn-search:hover {
   background-color: #e9ecef;
+}
+.modal-table thead .btn-search i {
+  font-size: 11px;
 }
 
 @-moz-document url-prefix() {

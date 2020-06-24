@@ -25,7 +25,7 @@
 
       <footer v-if="modalOptions.hasFooter" class="modal-custom-footer w-100">
         <slot name="modal-footer">
-          <div class="div">
+          <div class="w-100">
             <button
               class="btn btn-custom btn-modal btn-azul"
               @click="emitSelectAll()"
@@ -75,7 +75,9 @@ export default {
       positions: {
         right: "top: 5vh; right: 10px;z-index: 900;",
         center:
-          "top: 50px;left:50%; transform: translateX(-50%); z-index: 1000;",
+          "top: 5px;left:50%; transform: translateX(-50%); z-index: 1000;",
+        centerNavbar:
+          "top: 40px;left:50%; transform: translateX(-50%); z-index: 1000;",
       },
       visibility: false,
     };
@@ -127,13 +129,17 @@ export default {
       // modal type overwrite the position prop
       switch (type) {
         case "editTurma":
-          styles = this.positions.center + "max-width:510px;min-height: 800px;";
+          styles = this.positions.center + "max-width:510px;height: auto;";
           break;
         case "filtros":
-          styles = this.positions.right + "max-width:510px; min-height:510px;";
+          styles = this.positions.right + "width:510px; height:610px;";
           break;
         case "ajuda":
           styles = this.positions.right + "max-width:510px; height:auto;";
+          break;
+        case "fromNavbar":
+          styles +=
+            this.positions.centerNavbar + "max-width:510px; height:auto;";
           break;
         default:
           styles += "max-width:510px; height:auto;";
@@ -147,7 +153,11 @@ export default {
         visibility: false,
         title: "Nenhum titulo recebido!",
         position: "center",
-        hasBackground: this.modalOptions.type === "editTurma" ? true : false,
+        hasBackground:
+          this.modalOptions.type === "editTurma" ||
+          this.modalOptions.type === "fromNavbar"
+            ? true
+            : false,
         ...this.modalOptions,
       };
     },
@@ -177,51 +187,32 @@ export default {
 <style scoped>
 .modal-custom {
   position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  max-height: calc(100% - 3.5rem);
   background: #ffffff;
   box-shadow: 2px 2px 20px 1px;
-  overflow-x: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
   border-radius: 5px;
 }
-.modal-custom-header,
-.modal-custom-footer {
+/* header */
+.modal-custom-header {
+  position: relative;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-}
-
-.modal-custom-header {
   border-bottom: 1px solid #eeeeee;
   color: #000000;
-  min-height: 56px;
+  height: 55px;
 }
-.modal-custom-body {
-  width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding: 15px 20px;
-}
-.modal-custom-footer {
-  justify-content: space-between;
-  margin-top: auto;
-  padding: 10px 20px;
-  border-top: 1px solid #eeeeee;
-  align-items: center;
-}
-
-.title {
+.modal-custom-header .title {
   width: 100%;
   padding-left: 20px;
   padding-right: 5px;
   margin: 0;
   font-size: 20px;
 }
-.btn-close {
+.modal-custom-header .btn-close {
   height: 100% !important;
   min-height: 55px;
   width: 70px;
@@ -233,22 +224,35 @@ export default {
   background: none;
   cursor: pointer;
 }
-.btn-close:hover {
+.modal-custom-header .btn-close:hover {
   background-color: rgba(192, 192, 192, 0.335);
 }
-
-.btn {
-  color: white;
+/* body */
+.modal-custom-body {
+  position: relative;
+  display: block !important;
+  width: 100%;
+  overflow-y: auto !important;
+  padding: 15px 20px;
 }
-.btn:hover {
-  color: white;
+/* footer */
+.modal-custom-footer {
+  border-top: 1px solid #eeeeee;
+  flex-shrink: 0;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding: 0 20px;
+  height: 45px;
 }
 
+/* open/close transition */
 .modal-fade-enter,
 .modal-fade-leave-active {
   opacity: 0;
 }
-
 .modal-fade-enter-active,
 .modal-fade-leave-active {
   transition: opacity 0.3s ease;

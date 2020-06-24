@@ -183,7 +183,6 @@
         hasFooter: true,
       }"
       :hasFooter="true"
-      @on-close="tabAtivaModal = 'Conflitos'"
       @btn-ok="btnOkFiltros()"
       @select-all="modalSelectAll[tabAtivaModal]"
       @select-none="modalSelectNone[tabAtivaModal]"
@@ -294,7 +293,7 @@
       }"
     >
       <template #modal-body>
-        <ul class="list-ajuda list-group ">
+        <ul class="list-ajuda list-group">
           <li class="list-group-item">
             <b>Para selecionar um conflito:</b> clique no ícone de filtros
             <i class="fas fa-list-ul"></i>
@@ -326,9 +325,11 @@
 
 <script>
 import _ from "lodash";
-import loadingHooks from "@/mixins/loadingHooks.js";
-import toggleOrdinationMixin from "@/mixins/toggleOrdination.js";
-import toggleItemInArrayMixin from "@/mixins/toggleItemInArray.js";
+import {
+  toggleOrdination,
+  toggleItemInArray,
+  loadingHooks,
+} from "@/mixins/index.js";
 import {
   PageTitle,
   BaseTable,
@@ -372,7 +373,7 @@ const AllConflitosTurmas = [
 
 export default {
   name: "Validacoes",
-  mixins: [toggleOrdinationMixin, toggleItemInArrayMixin, loadingHooks],
+  mixins: [toggleOrdination, toggleItemInArray, loadingHooks],
   components: {
     BodyModalEditTurma,
     PageTitle,

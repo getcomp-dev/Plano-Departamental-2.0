@@ -2,30 +2,30 @@
   <div class="main-component row p-0" v-if="!$root.onLoad">
     <PageTitle :title="'Carga Professores'">
       <template #aside>
-        <b-button
-          v-b-modal.modalFiltros
+        <button
+          @click="openHeaderModal('filtros')"
           title="Filtros"
           class="btn-custom btn-icon cancelbtn"
         >
           <i class="fas fa-list-ul"></i>
-        </b-button>
+        </button>
 
-        <b-button
-          v-b-modal.modalRelatorio
+        <button
+          @click="$refs.modalRelatorio.toggle()"
           type="button"
           class="btn-custom btn-icon relatbtn"
           title="Relatório"
         >
           <i class="far fa-file-pdf"></i>
-        </b-button>
+        </button>
 
-        <b-button
-          v-b-modal.modalAjuda
+        <button
+          @click="openHeaderModal('ajuda')"
           title="Ajuda"
           class="btn-custom btn-icon relatbtn"
         >
           <i class="fas fa-question"></i>
-        </b-button>
+        </button>
       </template>
     </PageTitle>
 
@@ -363,117 +363,134 @@
     </div>
 
     <!-- MODAL FILTROS -->
-    <b-modal
-      id="modalFiltros"
+    <BaseModal
       ref="modalFiltros"
-      scrollable
-      size="md"
-      title="Filtros"
+      :modalOptions="{
+        type: 'filtros',
+        title: 'Filtros',
+        hasFooter: true,
+      }"
+      @btn-ok="btnOkFiltros()"
+      @select-all="modalSelectAll[tabAtivaModal]"
+      @select-none="modalSelectNone[tabAtivaModal]"
     >
-      <NavTab
-        :currentTab="tabAtivaModal"
-        :allTabs="['Docentes']"
-        @change-tab="tabAtivaModal = $event"
-      />
+      <template #modal-body>
+        <NavTab
+          :currentTab="tabAtivaModal"
+          :allTabs="['Docentes']"
+          @change-tab="tabAtivaModal = $event"
+        />
 
-      <div class="div-table">
-        <BaseTable
-          v-show="tabAtivaModal === 'Docentes'"
-          :tableType="'modal-table'"
-          :hasSearchBar="true"
-        >
-          <template #thead-search>
-            <input
-              type="text"
-              class="form-control input-search"
-              style=""
-              placeholder="Pesquise o nome de um docente..."
-              v-model="searchDocentes"
-            />
-            <button @click="clearSearchDocentes()" class="btn btn-search">
-              &times;
-            </button>
-          </template>
-          <template #thead>
-            <th style="width: 25px"></th>
-            <th
-              class="clickable t-start"
-              style="width: 425px"
-              @click="toggleOrder(ordenacaoDocentesModal, 'apelido')"
-            >
-              Nome
-              <i :class="setIconByOrder(ordenacaoDocentesModal, 'apelido')"></i>
-            </th>
-          </template>
-          <template #tbody>
-            <tr
-              v-for="docente in DocentesOrderedModal"
-              :key="'docenteModal' + docente.id"
-            >
-              <td style="width: 25px;">
-                <input
-                  type="checkbox"
-                  v-model="filtroDocentes.selecionados"
-                  :value="docente"
-                  class="form-check-input position-static m-0"
-                />
-              </td>
-              <td style="width: 425px;" class="t-start">
-                {{ docente.apelido }}
-              </td>
-            </tr>
-            <tr>
-              <td style="width: 25px;">
-                <input
-                  type="checkbox"
-                  v-model="docenteSemAlocacao.selecionado"
-                  class="form-check-input position-static m-0"
-                />
-              </td>
-              <td style="width: 425px;" class="t-start">
-                SEM ALOCAÇÃO
-              </td>
-            </tr>
-          </template>
-        </BaseTable>
-      </div>
-
-      <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
-        <div class="w-100">
-          <b-button
-            class="btn-azul btn-custom btn-modal"
-            variant="primary"
-            @click="modalSelectAll[tabAtivaModal]"
-            >Selecionar Todos</b-button
+        <div class="div-table">
+          <BaseTable
+            v-show="tabAtivaModal === 'Docentes'"
+            :tableType="'modal-table'"
+            :hasSearchBar="true"
           >
-          <b-button
-            class="btn-cinza btn-custom btn-modal"
-            variant="secondary"
-            @click="modalSelectNone[tabAtivaModal]"
-            >Desmarcar Todos</b-button
-          >
+            <template #thead-search>
+              <input
+                type="text"
+                class="form-control input-search"
+                style=""
+                placeholder="Pesquise o nome de um docente..."
+                v-model="searchDocentes"
+              />
+              <button @click="clearSearchDocentes()" class="btn btn-search">
+                &times;
+              </button>
+            </template>
+            <template #thead>
+              <th style="width: 25px"></th>
+              <th
+                class="clickable t-start"
+                style="width: 425px"
+                @click="toggleOrder(ordenacaoDocentesModal, 'apelido')"
+              >
+                Nome
+                <i
+                  :class="setIconByOrder(ordenacaoDocentesModal, 'apelido')"
+                ></i>
+              </th>
+            </template>
+            <template #tbody>
+              <tr
+                v-for="docente in DocentesOrderedModal"
+                :key="'docenteModal' + docente.id"
+                @click="toggleItemInArray(docente, filtroDocentes.selecionados)"
+              >
+                <td style="width: 25px;">
+                  <input
+                    type="checkbox"
+                    v-model="filtroDocentes.selecionados"
+                    :value="docente"
+                    class="form-check-input position-static m-0"
+                  />
+                </td>
+                <td style="width: 425px;" class="t-start">
+                  {{ docente.apelido }}
+                </td>
+              </tr>
+              <tr
+                @click="
+                  docenteSemAlocacao.selecionado = !docenteSemAlocacao.selecionado
+                "
+              >
+                <td style="width: 25px;">
+                  <input
+                    type="checkbox"
+                    v-model="docenteSemAlocacao.selecionado"
+                    class="form-check-input position-static m-0"
+                  />
+                </td>
+                <td style="width: 425px;" class="t-start">
+                  SEM ALOCAÇÃO
+                </td>
+              </tr>
+            </template>
+          </BaseTable>
         </div>
-        <b-button
-          variant="success"
-          @click="btnOkFiltros()"
-          class="btn-verde btn-custom btn-modal btn-ok-modal"
-          >OK</b-button
-        >
-      </div>
-    </b-modal>
+      </template>
+    </BaseModal>
+
+    <BaseModal
+      ref="modalRelatorio"
+      :customStyles="'width:370px'"
+      :modalOptions="{
+        title: 'Relátorio',
+        position: 'center',
+        hasBackground: true,
+      }"
+    >
+      <template #modal-body>
+        <ul class="list-relatorio list-group flex-row w-100 border-0">
+          <li
+            class="list-group-item clickable text-center m-0 rounded-0 col py-2"
+            v-on:click="pdf(1)"
+          >
+            <b>Parcial</b>
+          </li>
+          <li
+            class="list-group-item clickable text-center m-0 rounded-0 col py-2"
+            v-on:click="pdf(2)"
+          >
+            <b>Completo</b>
+          </li>
+        </ul>
+      </template>
+    </BaseModal>
 
     <!-- MODAL AJUDA -->
-    <b-modal
-      id="modalAjuda"
-      ref="ajudaModal"
-      scrollable
-      title="Ajuda"
-      hide-footer
+    <BaseModal
+      ref="modalAjuda"
+      :modalOptions="{
+        type: 'ajuda',
+        title: 'Ajuda',
+      }"
     >
-      <div class="modal-body">
-        <ul class="listas list-group">
+      <template #modal-body>
+        <ul class="list-ajuda list-group">
           <li class="list-group-item">
-            <strong>Para exibir conteúdo na Tabela:</strong> Clique em Docentes
+            <b>Para exibir conteúdo na Tabela:</b> Clique em Docentes
             <i
               class="fas fa-list-ul cancelbtn px-1"
               style="font-size: 12px;"
@@ -482,7 +499,7 @@
             em OK. Caso queira ver todos basta clicar em Selecionar Todos.
           </li>
           <li class="list-group-item">
-            <strong>Para gerar relatório:</strong> Clique no botão Relatório
+            <b>Para gerar relatório:</b> Clique no botão Relatório
             <i
               class="far fa-file-pdf relatbtn px-1"
               style="font-size: 12px;"
@@ -491,43 +508,25 @@
             ou apenas o relatório parcial, com os docentes selecionados.
           </li>
         </ul>
-      </div>
-    </b-modal>
-
-    <!-- MODAL RELATORIO-->
-    <b-modal
-      id="modalRelatorio"
-      ref="relatorioModal"
-      size="sm"
-      scrollable
-      title="Relatório"
-      hide-footer
-    >
-      <ul class="listas list-group">
-        <li class="list-group-item clickable" v-on:click="pdf(1)">
-          <strong>Parcial</strong>
-        </li>
-        <li class="list-group-item clickable" v-on:click="pdf(2)">
-          <strong>Completo</strong>
-        </li>
-      </ul>
-    </b-modal>
+      </template>
+    </BaseModal>
   </div>
 </template>
 
 <script>
 import _ from "lodash";
 import pdfs from "@/common/services/pdfs";
-import PageTitle from "@/components/PageTitle";
-import NavTab from "@/components/NavTab";
-import BaseTable from "@/components/BaseTable";
-import toggleOrdinationMixin from "@/mixins/toggleOrdination.js";
-import loadingHooks from "@/mixins/loadingHooks.js";
+import {
+  toggleOrdination,
+  toggleItemInArray,
+  loadingHooks,
+} from "@/mixins/index.js";
+import { PageTitle, BaseTable, NavTab, BaseModal } from "@/components/index.js";
 
 export default {
   name: "DashboardCargaProfessores",
-  components: { PageTitle, BaseTable, NavTab },
-  mixins: [toggleOrdinationMixin, loadingHooks],
+  components: { PageTitle, BaseTable, NavTab, BaseModal },
+  mixins: [toggleOrdination, toggleItemInArray, loadingHooks],
   data() {
     return {
       tabAtivaModal: "Docentes",
@@ -560,6 +559,15 @@ export default {
     this.activeAllFiltros();
   },
   methods: {
+    openHeaderModal(modalName) {
+      if (modalName === "filtros") {
+        this.$refs.modalFiltros.toggle();
+        this.$refs.modalAjuda.close();
+      } else if (modalName === "ajuda") {
+        this.$refs.modalAjuda.toggle();
+        this.$refs.modalFiltros.close();
+      }
+    },
     activeAllFiltros() {
       this.modalSelectAll.Docentes();
       this.filtroDocentes.ativados = [...this.filtroDocentes.selecionados];
@@ -582,7 +590,6 @@ export default {
     btnOkFiltros() {
       this.filtroDocentes.ativados = [...this.filtroDocentes.selecionados];
       this.docenteSemAlocacao.ativado = this.docenteSemAlocacao.selecionado;
-      this.$refs.modalFiltros.hide();
       this.clearSearchDocentes();
     },
     turmaInDocentes(docente) {
@@ -817,7 +824,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.089);
   color: black;
 }
-.list-group-item:hover {
+.list-relatorio .list-group-item:hover {
   text-decoration: underline;
   background-color: #ebebeb;
 }

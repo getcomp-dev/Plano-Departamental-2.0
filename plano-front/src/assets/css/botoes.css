@@ -26,6 +26,7 @@ button {
 }
 .btn-modal {
   border-radius: 0.25rem;
+  border: none !important;
   font-size: 12px !important;
   height: 25px !important;
   width: -webkit-max-content;

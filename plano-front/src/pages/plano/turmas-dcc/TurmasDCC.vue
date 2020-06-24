@@ -3,60 +3,60 @@
     <PageTitle :title="'Graduação - DCC'">
       <template #aside>
         <template v-if="turmaAddIsVisible">
-          <b-button
+          <button
             title="Salvar"
             class="btn-custom btn-icon addbtn"
             v-on:click.prevent="addTurma"
           >
             <i class="fas fa-check"></i>
-          </b-button>
-          <b-button
+          </button>
+          <button
             title="Cancelar"
             class="btn-custom btn-icon cancelbtn"
             v-on:click.prevent="toggleAddTurma"
           >
             <i class="fas fa-times"></i>
-          </b-button>
+          </button>
         </template>
         <template v-else>
-          <b-button
+          <button
             title="Adicionar"
             class="btn-custom btn-icon addbtn"
             v-on:click.prevent="toggleAddTurma"
           >
             <i class="fas fa-plus"></i>
-          </b-button>
-          <b-button
+          </button>
+          <button
             title="Deletar"
             class="btn-custom btn-icon delbtn"
             @click="openModalConfirma()"
           >
             <i class="far fa-trash-alt"></i>
-          </b-button>
+          </button>
         </template>
 
-        <b-button
-          v-b-modal.modalFiltros
+        <button
+          @click="openSideModal('filtros')"
           title="Filtros"
           class="btn-custom btn-icon cancelbtn"
         >
           <i class="fas fa-list-ul"></i>
-        </b-button>
+        </button>
 
-        <b-button
+        <button
           title="XLSX"
           class="btn-custom btn-icon relatbtn"
           v-on:click.prevent="xlsx(Pedidos)"
         >
           <i class="far fa-file-pdf"></i>
-        </b-button>
-        <b-button
-          v-b-modal.modalAjuda
+        </button>
+        <button
+          @click="openSideModal('ajuda')"
           title="Ajuda"
           class="btn-custom btn-icon relatbtn"
         >
           <i class="fas fa-question"></i>
-        </b-button>
+        </button>
       </template>
     </PageTitle>
 
@@ -80,7 +80,9 @@
                 Perfil
               </span>
 
-              <i :class="setIconByOrder(ordenacaoPerfisMain, 'perfilNome')"></i>
+              <i
+                :class="setIconByOrder(ordenacaoPerfisMain, 'perfilAbreviacao')"
+              ></i>
             </div>
           </th>
           <th
@@ -188,182 +190,267 @@
     </div>
 
     <!-- MODAL FILTROS -->
-    <b-modal
-      id="modalFiltros"
+    <BaseModal
       ref="modalFiltros"
-      scrollable
-      size="md"
-      title="Filtros"
+      :modalOptions="{
+        type: 'filtros',
+        title: 'Filtros',
+        hasFooter: true,
+      }"
+      :hasFooter="true"
+      @btn-ok="btnOkFiltros()"
+      @select-all="modalSelectAll[tabAtivaModal]"
+      @select-none="modalSelectNone[tabAtivaModal]"
     >
-      <NavTab
-        :currentTab="tabAtivaModal"
-        :allTabs="['Perfis', 'Cursos', 'Semestres']"
-        @change-tab="tabAtivaModal = $event"
-      />
+      <template #modal-body>
+        <NavTab
+          :currentTab="tabAtivaModal"
+          :allTabs="['Perfis', 'Disciplinas', 'Cursos', 'Semestres']"
+          @change-tab="tabAtivaModal = $event"
+        />
 
-      <div class="div-table">
-        <BaseTable
-          :tableType="'modal-table'"
-          v-show="tabAtivaModal === 'Perfis'"
-        >
-          <template #thead>
-            <th style="width: 25px;"></th>
-            <th
-              @click="toggleOrder(ordenacaoPerfisModal, 'nome')"
-              class="clickable t-start"
-              style="width: 425px"
-            >
-              Nome
-              <i :class="setIconByOrder(ordenacaoPerfisModal, 'nome')"></i>
-            </th>
-          </template>
-          <template #tbody>
-            <tr
-              v-for="perfil in PerfisOrdered"
-              :key="'perfilId' + perfil.id"
-              @click="toggleItemInArray(perfil, filtroPerfis.selecionados)"
-            >
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  v-model="filtroPerfis.selecionados"
-                  :value="perfil"
-                  class="form-check-input position-static m-0"
-                />
-              </td>
-              <td style="width: 425px" class="t-start">
-                {{ perfil.nome }}
-              </td>
-            </tr>
-          </template>
-        </BaseTable>
-
-        <BaseTable
-          v-show="tabAtivaModal === 'Cursos'"
-          :tableType="'modal-table'"
-          :hasSearchBar="true"
-        >
-          <template #thead-search>
-            <input
-              type="text"
-              class="form-control input-search"
-              placeholder="Pesquise nome ou codigo de uma disciplina..."
-              v-model="searchCursosModal"
-            />
-            <button @click="clearsearchCursosModal()" class="btn btn-search">
-              &times;
-            </button>
-          </template>
-          <template #thead>
-            <th style="width: 25px;"></th>
-            <th
-              @click="toggleOrder(ordenacaoCursosModal, 'codigo')"
-              class="clickable"
-              style="width: 50px;"
-            >
-              Cód.
-              <i :class="setIconByOrder(ordenacaoCursosModal, 'codigo')"></i>
-            </th>
-            <th
-              @click="toggleOrder(ordenacaoCursosModal, 'nome')"
-              class="clickable t-start"
-              style="width: 375px"
-            >
-              Nome
-              <i :class="setIconByOrder(ordenacaoCursosModal, 'nome')"></i>
-            </th>
-          </template>
-          <template #tbody>
-            <tr
-              v-for="curso in ModalCursosOrdered"
-              :key="'cursoMd' + curso.id"
-              @click="toggleItemInArray(curso, filtroCursos.selecionados)"
-            >
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  v-model="filtroCursos.selecionados"
-                  :value="curso"
-                  class="form-check-input position-static m-0"
-                />
-              </td>
-              <td style="width: 50px;">
-                {{ curso.codigo }}
-              </td>
-              <td style="width: 375px" class="t-start">
-                {{ curso.nome }}
-              </td>
-            </tr>
-            <tr v-show="ModalCursosOrdered.length === 0">
-              <td colspan="3" style="width:450px">
-                NENHUM CURSO ENCONTRADO.
-              </td>
-            </tr>
-          </template>
-        </BaseTable>
-
-        <BaseTable
-          v-show="tabAtivaModal === 'Semestres'"
-          :tableType="'modal-table'"
-        >
-          <template #thead>
-            <th style="width: 25px"></th>
-            <th style="width: 425px" class="t-start">
-              Semestre Letivo
-            </th>
-          </template>
-          <template #tbody>
-            <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  v-model="filtroSemestres.primeiro"
-                />
-              </td>
-              <td style="width: 425px" class="t-start">
-                PRIMEIRO
-              </td>
-            </tr>
-            <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  v-model="filtroSemestres.segundo"
-                />
-              </td>
-              <td style="width: 425px" class="t-start">
-                SEGUNDO
-              </td>
-            </tr>
-          </template>
-        </BaseTable>
-      </div>
-
-      <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
-        <div class="w-100">
-          <b-button
-            class="btn-azul btn-custom btn-modal"
-            variant="success"
-            @click="modalSelectAll[tabAtivaModal]"
-            >Selecionar Todos</b-button
+        <div class="div-table">
+          <BaseTable
+            :tableType="'modal-table'"
+            v-show="tabAtivaModal === 'Perfis'"
           >
-          <b-button
-            class="btn-cinza btn-custom btn-modal"
-            variant="secondary"
-            @click="modalSelectNone[tabAtivaModal]"
-            >Desmarcar Todos</b-button
+            <template #thead>
+              <th style="width: 25px;"></th>
+              <th
+                @click="toggleOrder(ordenacaoPerfisModal, 'nome')"
+                class="clickable t-start"
+                style="width: 425px"
+              >
+                Nome
+                <i :class="setIconByOrder(ordenacaoPerfisModal, 'nome')"></i>
+              </th>
+            </template>
+            <template #tbody>
+              <tr
+                v-for="perfil in PerfisOrdered"
+                :key="'perfilId' + perfil.id"
+                @click="toggleItemInArray(perfil, filtroPerfis.selecionados)"
+              >
+                <td style="width: 25px">
+                  <input
+                    type="checkbox"
+                    v-model="filtroPerfis.selecionados"
+                    :value="perfil"
+                    class="form-check-input position-static m-0"
+                  />
+                </td>
+                <td style="width: 425px" class="t-start">
+                  {{ perfil.nome }}
+                </td>
+              </tr>
+            </template>
+          </BaseTable>
+          <!-- Disciplinas -->
+          <BaseTable
+            v-show="tabAtivaModal === 'Disciplinas'"
+            :tableType="'modal-table'"
+            :hasSearchBar="true"
           >
+            <template #thead-search>
+              <input
+                type="text"
+                class="form-control input-search"
+                placeholder="Pesquise nome ou codigo de uma disciplina..."
+                v-model="searchDisciplinasModal"
+              />
+              <button
+                @click="clearSearch('searchDisciplinasModal')"
+                class="btn btn-search"
+                style="font-weight: bold "
+              >
+                <i class="fas fa-times"></i>
+              </button>
+            </template>
+            <template #thead>
+              <th style="width: 25px"></th>
+              <th
+                title="Código"
+                class="t-start clickable"
+                style="width: 70px"
+                @click="toggleOrder(ordenacaoDisciplinasModal, 'codigo')"
+              >
+                Cód.
+                <i
+                  :class="setIconByOrder(ordenacaoDisciplinasModal, 'codigo')"
+                ></i>
+              </th>
+              <th
+                class="t-start clickable"
+                style="width: 270px"
+                @click="toggleOrder(ordenacaoDisciplinasModal, 'nome')"
+              >
+                Nome
+                <i
+                  :class="setIconByOrder(ordenacaoDisciplinasModal, 'nome')"
+                ></i>
+              </th>
+              <th
+                class="t-start clickable"
+                style="width: 85px"
+                @click="
+                  toggleOrder(ordenacaoDisciplinasModal, 'perfilAbreviacao')
+                "
+              >
+                Perfil
+                <i
+                  :class="
+                    setIconByOrder(
+                      ordenacaoDisciplinasModal,
+                      'perfilAbreviacao'
+                    )
+                  "
+                ></i>
+              </th>
+            </template>
+            <template #tbody>
+              <tr
+                v-for="disciplina in DisciplinasOrderedModal"
+                :key="'MdDisciplina' + disciplina.id"
+                @click="
+                  toggleItemInArray(
+                    disciplina.id,
+                    filtroDisciplinas.selecionadas
+                  )
+                "
+              >
+                <td style="width: 25px">
+                  <input
+                    type="checkbox"
+                    class="form-check-input position-static m-0"
+                    v-model="filtroDisciplinas.selecionadas"
+                    :value="disciplina.id"
+                  />
+                </td>
+                <td style="width: 70px" class="t-start">
+                  {{ disciplina.codigo }}
+                </td>
+                <td style="width: 270px" class="t-start">
+                  {{ disciplina.nome }}
+                </td>
+                <td style="width: 85px" class="t-start">
+                  {{ disciplina.perfilAbreviacao }}
+                </td>
+              </tr>
+              <tr v-if="DisciplinasOrderedModal.length === 0">
+                <td colspan="3" style="width:450px">
+                  NENHUMA DISCIPLINA ENCONTRADA.
+                </td>
+              </tr>
+            </template>
+          </BaseTable>
+
+          <BaseTable
+            v-show="tabAtivaModal === 'Cursos'"
+            :tableType="'modal-table'"
+            :hasSearchBar="true"
+          >
+            <template #thead-search>
+              <input
+                type="text"
+                class="form-control input-search"
+                placeholder="Pesquise nome ou codigo de uma disciplina..."
+                v-model="searchCursosModal"
+              />
+              <button
+                @click="clearSearch('searchCursosModal')"
+                class="btn btn-search"
+              >
+                <i class="fas fa-times"></i>
+              </button>
+            </template>
+            <template #thead>
+              <th style="width: 25px;"></th>
+              <th
+                @click="toggleOrder(ordenacaoCursosModal, 'codigo')"
+                class="clickable"
+                style="width: 50px;"
+              >
+                Cód.
+                <i :class="setIconByOrder(ordenacaoCursosModal, 'codigo')"></i>
+              </th>
+              <th
+                @click="toggleOrder(ordenacaoCursosModal, 'nome')"
+                class="clickable t-start"
+                style="width: 375px"
+              >
+                Nome
+                <i :class="setIconByOrder(ordenacaoCursosModal, 'nome')"></i>
+              </th>
+            </template>
+            <template #tbody>
+              <tr
+                v-for="curso in ModalCursosOrdered"
+                :key="'cursoMd' + curso.id"
+                @click="toggleItemInArray(curso, filtroCursos.selecionados)"
+              >
+                <td style="width: 25px">
+                  <input
+                    type="checkbox"
+                    v-model="filtroCursos.selecionados"
+                    :value="curso"
+                    class="form-check-input position-static m-0"
+                  />
+                </td>
+                <td style="width: 50px;">
+                  {{ curso.codigo }}
+                </td>
+                <td style="width: 375px" class="t-start">
+                  {{ curso.nome }}
+                </td>
+              </tr>
+              <tr v-show="ModalCursosOrdered.length === 0">
+                <td colspan="3" style="width:450px">
+                  NENHUM CURSO ENCONTRADO.
+                </td>
+              </tr>
+            </template>
+          </BaseTable>
+
+          <BaseTable
+            v-show="tabAtivaModal === 'Semestres'"
+            :tableType="'modal-table'"
+          >
+            <template #thead>
+              <th style="width: 25px"></th>
+              <th style="width: 425px" class="t-start">
+                Semestre Letivo
+              </th>
+            </template>
+            <template #tbody>
+              <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
+                <td style="width: 25px">
+                  <input
+                    type="checkbox"
+                    class="form-check-input position-static m-0"
+                    v-model="filtroSemestres.primeiro"
+                  />
+                </td>
+                <td style="width: 425px" class="t-start">
+                  PRIMEIRO
+                </td>
+              </tr>
+              <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
+                <td style="width: 25px">
+                  <input
+                    type="checkbox"
+                    class="form-check-input position-static m-0"
+                    v-model="filtroSemestres.segundo"
+                  />
+                </td>
+                <td style="width: 425px" class="t-start">
+                  SEGUNDO
+                </td>
+              </tr>
+            </template>
+          </BaseTable>
         </div>
-        <b-button
-          variant="success"
-          @click="btnOkFiltros()"
-          class="btn-verde btn-custom btn-modal btn-ok-modal"
-          >OK</b-button
-        >
-      </div>
-    </b-modal>
+      </template>
+    </BaseModal>
 
     <!-- MODAL TURMA -->
     <b-modal
@@ -407,73 +494,57 @@
       </template>
     </b-modal>
     <!-- MODAL AJUDA -->
-    <b-modal
-      id="modalAjuda"
-      ref="ajudaModal"
-      scrollable
-      title="Ajuda"
-      hide-footer
+    <BaseModal
+      ref="modalAjuda"
+      :modalOptions="{
+        type: 'ajuda',
+        title: 'Ajuda',
+      }"
     >
-      <div class="modal-body">
-        <ul class="listas list-group">
+      <template #modal-body>
+        <ul class="list-ajuda list-group">
           <li class="list-group-item">
-            <strong>Para exibir conteúdo na Tabela:</strong> Comece selecionando
-            o(s) semestre(s) desejado(s). Em seguida, clique em Perfil
-            <i
-              class="fas fa-list-ul cancelbtn px-1"
-              style="font-size: 12px;"
-            ></i>
-            e marque quais deseja mostrar, depois clique em OK. Logo após,
-            escolha os Cursos
-            <i
-              class="fas fa-graduation-cap cancelbtn px-1"
-              style="font-size: 12px;"
-            ></i>
-            que quer ver, confirmando a seleção em OK.
+            <b>Para exibir conteúdo na Tabela:</b> Clique no icone de filtros
+            <i class="fas fa-list-ul cancelbtn"></i> Utilize as abas acima da
+            tabela para alternar entre os tipos de filtros e marque quais deseja
+            visualizar, depois clique em OK.
           </li>
           <li class="list-group-item">
-            <strong>Para adicionar disciplinas à Tabela:</strong> Clique em
-            Adicionar
-            <i class="fas fa-plus addbtn px-1" style="font-size: 12px;"></i>
+            <b>Para adicionar disciplinas à Tabela:</b> Clique em Adicionar
+            <i class="fas fa-plus addbtn"></i>
             , em seguida, preencha a nova linha que surgirá na tabela. Após
             concluído, clique em Salvar
-            <i class="fas fa-check addbtn px-1" style="font-size: 12px;"></i>
+            <i class="fas fa-check addbtn"></i>
             ou em Cancelar
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px;"></i>
+            <i class="fas fa-times cancelbtn"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para editar disciplinas da Tabela:</strong> Faça as
-            alterações necessárias diretamente na tabela e o sistema irá salvar
+            <b>Para editar disciplinas da Tabela:</b> Faça as alterações
+            necessárias diretamente na tabela e o sistema irá salvar
             automaticamente.
           </li>
           <li class="list-group-item">
-            <strong>Para deletar disciplinas da Tabela:</strong> Marque a(s)
-            disciplina(s) que deseja deletar através da caixa de seleção à
-            esquerda e em seguida clique em Deletar
-            <i
-              class="far fa-trash-alt delbtn px-1"
-              style="font-size: 12px;"
-            ></i>
+            <b>Para deletar disciplinas da Tabela:</b> Marque a(s) disciplina(s)
+            que deseja deletar através da caixa de seleção à esquerda e em
+            seguida clique em Deletar
+            <i class="far fa-trash-alt delbtn"></i>
             e confirme no botão OK.
           </li>
           <li class="list-group-item">
-            <strong>Para gerar relatório:</strong> Clique no botão XLSX
-            <i
-              class="far fa-file-pdf relatbtn px-1"
-              style="font-size: 12px;"
-            ></i>
+            <b>Para gerar relatório:</b> Clique no botão XLSX
+            <i class="far fa-file-pdf relatbtn"></i>
             e aguarde para fazer
             <font style="font-style: italic;">download</font> do relatório.
           </li>
           <li class="list-group-item">
-            <strong>Observações:</strong> Em cada coluna de cursos a disciplina
-            adicionada permite a inclusão em dois espaços, sendo acima destinado
-            para alunos na grade, e abaixo para alunos repetentes.
+            <b>Observações:</b> Em cada coluna de cursos a disciplina adicionada
+            permite a inclusão em dois espaços, sendo acima destinado para
+            alunos na grade, e abaixo para alunos repetentes.
           </li>
         </ul>
-      </div>
-    </b-modal>
+      </template>
+    </BaseModal>
   </div>
 </template>
 
@@ -482,6 +553,7 @@ import _ from "lodash";
 import {
   PageTitle,
   BaseTable,
+  BaseModal,
   NavTab,
   BodyModalEditTurma,
 } from "@/components/index.js";
@@ -506,6 +578,7 @@ export default {
     BodyModalEditTurma,
     NavTab,
     BaseTable,
+    BaseModal,
   },
   data() {
     return {
@@ -516,11 +589,16 @@ export default {
       ordenacaoPerfisMain: { order: "perfilNome", type: "asc" },
       tabAtivaModal: "Perfis",
       searchCursosModal: "",
+      searchDisciplinasModal: "",
       ordenacaoCursosModal: { order: "codigo", type: "asc" },
       ordenacaoPerfisModal: { order: "nome", type: "asc" },
+      ordenacaoDisciplinasModal: { order: "codigo", type: "asc" },
       filtroPerfis: {
-        ativados: [],
         selecionados: [],
+      },
+      filtroDisciplinas: {
+        selecionadas: [],
+        ativadas: [],
       },
       filtroCursos: {
         ativados: [],
@@ -535,6 +613,9 @@ export default {
         Perfis: () => {
           this.filtroPerfis.selecionados = [...this.Perfis];
         },
+        Disciplinas: () => {
+          this.filtroDisciplinas.selecionadas = [...this.DisciplinasId];
+        },
         Cursos: () => {
           this.filtroCursos.selecionados = [...this.Cursos];
         },
@@ -546,6 +627,9 @@ export default {
       modalSelectNone: {
         Perfis: () => {
           this.filtroPerfis.selecionados = [];
+        },
+        Disciplinas: () => {
+          this.filtroDisciplinas.selecionadas = [];
         },
         Cursos: () => {
           this.filtroCursos.selecionados = [];
@@ -597,21 +681,33 @@ export default {
   },
 
   methods: {
+    openSideModal(modalName) {
+      if (modalName === "filtros") {
+        this.$refs.modalFiltros.toggle();
+        this.$refs.modalAjuda.close();
+      } else if (modalName === "ajuda") {
+        this.$refs.modalAjuda.toggle();
+        this.$refs.modalFiltros.close();
+      }
+    },
     handleClickInEdit(turmaClicked) {
       this.turmaClickada = turmaClicked;
       this.$refs.modalTurma.show();
     },
     btnOkFiltros() {
       this.setSemestreAtivo();
-      this.filtroPerfis.ativados = [...this.filtroPerfis.selecionados];
+      this.filtroDisciplinas.ativadas = [
+        ...this.filtroDisciplinas.selecionadas,
+      ];
       this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
-      this.clearsearchCursosModal();
+      this.clearSearch("searchCursosModal");
+      this.clearSearch("searchDisciplinasModal");
       this.tabAtivaModal = "Perfis";
-      this.$refs.modalFiltros.hide();
     },
-    clearsearchCursosModal() {
-      this.searchCursosModal = "";
+    clearSearch(searchName) {
+      this[searchName] = "";
     },
+
     setSemestreAtivo() {
       if (this.filtroSemestres.primeiro && !this.filtroSemestres.segundo)
         this.filtroSemestres.ativo = 1;
@@ -741,7 +837,7 @@ export default {
   computed: {
     TurmasOrdered() {
       let turmasResult = _.orderBy(
-        this.TurmasFiltredByPerfis,
+        this.TurmasFiltredByDisciplinas,
         [this.ordenacaoTurmasMain.order, "letra"],
         [this.ordenacaoTurmasMain.type, "asc"]
       );
@@ -756,11 +852,11 @@ export default {
 
       return _.orderBy(turmasResult, "periodo");
     },
-    TurmasFiltredByPerfis() {
+    TurmasFiltredByDisciplinas() {
       return _.filter(this.TurmasFiltredBySemestres, (turma) =>
         _.find(
-          this.filtroPerfis.ativados,
-          (perfil) => perfil.id === turma.disciplinaPerfil
+          this.filtroDisciplinas.ativadas,
+          (disciplinaId) => disciplinaId === turma.Disciplina
         )
       );
     },
@@ -807,6 +903,48 @@ export default {
       return turmasResultantes;
     },
 
+    DisciplinasOrderedModal() {
+      return _.orderBy(
+        this.DisciplinasFiltredModal,
+        this.ordenacaoDisciplinasModal.order,
+        this.ordenacaoDisciplinasModal.type
+      );
+    },
+    DisciplinasFiltredModal() {
+      if (this.searchDisciplinasModal === "") return this.DisciplinasInPerfis;
+
+      const searchNormalized = this.normalizeText(this.searchDisciplinasModal);
+
+      return _.filter(this.DisciplinasInPerfis, (disciplina) => {
+        const disciplinaNome = this.normalizeText(disciplina.nome);
+        const disciplinaCodigo = this.normalizeText(disciplina.codigo);
+
+        return (
+          disciplinaNome.match(searchNormalized) ||
+          disciplinaCodigo.match(searchNormalized)
+        );
+      });
+    },
+    DisciplinasInPerfis() {
+      const disciplinasResultantes = [];
+
+      this.Disciplinas.forEach((disciplina) => {
+        const perfilFounded = _.find(
+          this.Perfis,
+          (perfil) => perfil.id === disciplina.Perfil
+        );
+
+        if (perfilFounded) {
+          disciplinasResultantes.push({
+            ...disciplina,
+            perfilAbreviacao: perfilFounded.abreviacao,
+            perfilCor: perfilFounded.cor,
+          });
+        }
+      });
+      return disciplinasResultantes;
+    },
+
     ModalCursosOrdered() {
       return _.orderBy(
         this.ModalCursosFiltred,
@@ -832,11 +970,12 @@ export default {
       }
       return cursosResultantes;
     },
+
     setFixedOrderPerfil() {
       if (this.ordenacaoPerfisMain.type === "desc") {
         return null;
       } else {
-        return "perfilNome";
+        return "perfilAbreviacao";
       }
     },
     PerfisOrdered() {
@@ -855,6 +994,9 @@ export default {
     Disciplinas() {
       return this.$store.state.disciplina.Disciplinas;
     },
+    DisciplinasId() {
+      return _.map(this.Disciplinas, (disciplina) => disciplina.id);
+    },
     Turmas() {
       return _.filter(
         this.$store.state.turma.Turmas,
@@ -872,6 +1014,25 @@ export default {
     },
     Admin() {
       return this.$store.state.auth.Usuario.admin === 1;
+    },
+  },
+  watch: {
+    filtroPerfis: {
+      handler(perfis) {
+        this.modalSelectNone.Disciplinas();
+        const disciplinasResultantes = [];
+
+        this.Disciplinas.forEach((disciplina) => {
+          const perfilFounded = _.find(
+            perfis.selecionados,
+            (perfil) => perfil.id === disciplina.Perfil
+          );
+
+          if (perfilFounded) disciplinasResultantes.push(disciplina.id);
+        });
+        this.filtroDisciplinas.selecionadas = [...disciplinasResultantes];
+      },
+      deep: true,
     },
   },
 };

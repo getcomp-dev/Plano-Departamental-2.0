@@ -4,9 +4,8 @@
     :customStyles="'width:370px;'"
     @on-close="resetForm()"
     :modalOptions="{
+      type: 'fromNavbar',
       title: 'Usuário',
-      position: 'center',
-      hasBackground: true,
     }"
   >
     <template #modal-body>

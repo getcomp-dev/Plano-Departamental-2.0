@@ -5,8 +5,7 @@
     @on-close="resetOnClose()"
     :modalOptions="{
       title: 'Download',
-      position: 'center',
-      hasBackground: true,
+      type: 'fromNavbar',
     }"
   >
     <template #modal-body>
