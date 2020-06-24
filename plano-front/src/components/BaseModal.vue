@@ -1,6 +1,10 @@
 <template>
   <transition name="modal-fade">
-    <div class="modal-custom">
+    <div
+      v-if="visibility"
+      :class="modalClass"
+      :style="modalStyle + customStyles"
+    >
       <header class="modal-custom-header w-100">
         <h2 class="title">
           {{ modalOptions.title }}
@@ -19,24 +23,24 @@
         <slot name="modal-body">Modal Body</slot>
       </main>
 
-      <footer v-if="hasFooter" class="modal-custom-footer w-100">
-        <slot name="footer">
+      <footer v-if="modalOptions.hasFooter" class="modal-custom-footer w-100">
+        <slot name="modal-footer">
           <div class="div">
             <button
               class="btn btn-custom btn-modal btn-azul"
-              @click="$emit('select-all')"
+              @click="emitSelectAll()"
             >
               Selecionar Todos
             </button>
             <button
               class="btn btn-custom btn-modal btn-cinza"
-              @click="$emit('select-none')"
+              @click="emitSelectNone()"
             >
               Desmarcar Todos
             </button>
           </div>
           <button
-            @click="$emit('btn-ok'), close()"
+            @click="emitOk()"
             class="btn btn-modal btn-verde btn-ok-modal"
           >
             OK
@@ -53,82 +57,118 @@ import { EventBus } from "@/event-bus.js";
 export default {
   name: "BaseModal",
   props: {
-    modalOptions: { type: Object, required: true },
-    hasFooter: { type: Boolean, default: false },
+    modalOptions: {
+      type: Object,
+      required: true,
+    },
+    classes: {
+      type: [String, Array],
+      default: () => [],
+    },
+    customStyles: {
+      type: String,
+      default: "",
+    },
   },
   data() {
-    return {};
+    return {
+      positions: {
+        right: "top: 5vh; right: 10px;z-index: 900;",
+        center:
+          "top: 50px;left:50%; transform: translateX(-50%); z-index: 1000;",
+      },
+      visibility: false,
+    };
   },
   mounted() {
-    EventBus.$emit("toggle-bg-modal", true);
-    EventBus.$on("close-modal", () => {
-      this.close();
-    });
+    window.addEventListener("keyup", this.onEscKeyUp);
   },
   beforeDestroy() {
     EventBus.$emit("toggle-bg-modal", false);
-    EventBus.$off("close-modal");
+    this.$off("on-close");
+    window.removeEventListener("keyup", this.onEscKeyUp);
   },
-  computed: {},
   methods: {
     close() {
-      this.modalOptions.visibility = false;
+      this.visibility = false;
     },
-    dragMouseDown(event) {
-      event.preventDefault();
-
-      // get the mouse cursor position at startup:
-      this.positions.clientX = event.clientX;
-      this.positions.clientY = event.clientY;
-      document.onmousemove = this.elementDrag;
-      document.onmouseup = this.closeDragElement;
+    open() {
+      this.visibility = true;
     },
-    elementDrag(event) {
-      this.$refs.draggableContainer.style.cursor = "all-scroll";
-      event.preventDefault();
-      this.positions.movementX = this.positions.clientX - event.clientX;
-      this.positions.movementY = this.positions.clientY - event.clientY;
-      this.positions.clientX = event.clientX;
-      this.positions.clientY = event.clientY;
+    toggle() {
+      this.visibility = !this.visibility;
+    },
+    emitSelectAll() {
+      this.$emit("select-all");
+    },
+    emitSelectNone() {
+      this.$emit("select-none");
+    },
+    emitOk() {
+      this.$emit("btn-ok");
+    },
+    onEscKeyUp(event) {
+      const { code } = event;
+      const { type } = this.modalOptions;
 
-      let top = this.$refs.draggableContainer.offsetTop;
-      let bottom = top + this.$refs.draggableContainer.offsetHeight;
-      // console.log("bottom", bottom);
-      // console.log("top", top);
-      // console.log(event.clientY);
+      if (code === "Escape") {
+        this.close();
+      } else if (type === "filtros" && code === "Backquote") {
+        this.emitSelectAll();
+      }
+    },
+  },
+  computed: {
+    modalStyle() {
+      const { position, type } = this.modalConfigs;
+      let styles = "";
 
-      let right =
-        this.$refs.draggableContainer.offsetLeft +
-        this.$refs.draggableContainer.offsetWidth;
-      console.log(event.clientX);
-      if (top <= 310 && event.clientY < 100) {
-        this.positions.movementY = 0;
-      } else if (bottom >= 1230 && event.clientY > 300) {
-        this.positions.movementY = 0;
+      styles += this.positions ? this.positions[position] : "";
+      // modal type overwrite the position prop
+      switch (type) {
+        case "editTurma":
+          styles = this.positions.center + "max-width:510px;min-height: 800px;";
+          break;
+        case "filtros":
+          styles = this.positions.right + "max-width:510px; min-height:510px;";
+          break;
+        case "ajuda":
+          styles = this.positions.right + "max-width:510px; height:auto;";
+          break;
+        default:
+          styles += "max-width:510px; height:auto;";
+          break;
       }
 
-      // if (right >= 2155 && event.clientX >= 1425) {
-      //   this.positions.movementX = 0;
-      // }
-
-      this.$refs.draggableContainer.style.top =
-        this.$refs.draggableContainer.offsetTop -
-        this.positions.movementY +
-        "px";
-      if (right >= 2150) {
-        this.$refs.draggableContainer.style.left =
-          this.$refs.draggableContainer.offsetLeft - 1 + "px";
+      return styles;
+    },
+    modalConfigs() {
+      return {
+        visibility: false,
+        title: "Nenhum titulo recebido!",
+        position: "center",
+        hasBackground: this.modalOptions.type === "editTurma" ? true : false,
+        ...this.modalOptions,
+      };
+    },
+    modalClass() {
+      return ["modal-custom", this.classes];
+    },
+  },
+  watch: {
+    visibility(newValue) {
+      if (newValue) {
+        if (this.modalConfigs.hasBackground) {
+          EventBus.$emit("toggle-bg-modal", true);
+          EventBus.$on("close-modal", this.close);
+        }
       } else {
-        this.$refs.draggableContainer.style.left =
-          this.$refs.draggableContainer.offsetLeft -
-          this.positions.movementX +
-          "px";
+        if (this.modalConfigs.hasBackground) {
+          EventBus.$emit("toggle-bg-modal", false);
+          EventBus.$off("close-modal");
+        }
+        this.$emit("on-close");
       }
-    },
-    closeDragElement() {
-      this.$refs.draggableContainer.style.cursor = "default";
-      document.onmouseup = null;
-      document.onmousemove = null;
     },
   },
 };
@@ -136,19 +176,13 @@ export default {
 
 <style scoped>
 .modal-custom {
-  z-index: 1050;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   background: #ffffff;
   box-shadow: 2px 2px 20px 1px;
   overflow-x: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  max-width: 500px;
-  min-height: 800px;
   border-radius: 5px;
 }
 .modal-custom-header,
@@ -164,24 +198,25 @@ export default {
   min-height: 56px;
 }
 .modal-custom-body {
-  padding: 20px 15px;
-  height: 100%;
+  width: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   justify-content: flex-start;
+  align-items: flex-start;
+  padding: 15px 20px;
 }
 .modal-custom-footer {
   justify-content: space-between;
   margin-top: auto;
-  padding: 15px;
+  padding: 10px 20px;
   border-top: 1px solid #eeeeee;
   align-items: center;
 }
 
 .title {
   width: 100%;
-  padding-left: 15px;
+  padding-left: 20px;
   padding-right: 5px;
   margin: 0;
   font-size: 20px;
@@ -191,7 +226,6 @@ export default {
   min-height: 55px;
   width: 70px;
   font-size: 22px;
-  padding: 20px;
   border: none;
   color: #2d2e2e;
   font-weight: bold;

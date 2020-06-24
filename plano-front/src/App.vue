@@ -28,9 +28,11 @@ export default {
 <style>
 html,
 body {
+  font-family: arial !important;
   height: 100%;
   padding: 0 !important;
 }
+
 #app {
   height: 100%;
 }

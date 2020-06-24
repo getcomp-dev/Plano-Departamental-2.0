@@ -26,11 +26,13 @@
       </main>
     </div>
     <LoadingPage v-if="isLoading || $root.onLoad" />
+
     <div
       class="bg-base-modal"
       v-if="hasModalOpen"
       @click.stop="closeModal()"
     ></div>
+
     <b-modal
       id="modal-download"
       ref="modalDownload"
@@ -86,38 +88,8 @@
         <!-- variant "success"-->
       </div>
     </b-modal>
-    <b-modal
-      id="modal-download-all"
-      ref="modalDownloadAll"
-      title="Download iniciado"
-    >
-      <p
-        v-if="downloadState >= 0"
-        v-bind:class="{ loadingEllipsis: downloadState === 0 }"
-      >
-        Preparando arquivos
-      </p>
-      <p
-        v-if="downloadState >= 1"
-        v-bind:class="{ loadingEllipsis: downloadState === 1 }"
-      >
-        Tabelas criadas
-      </p>
-      <p
-        v-if="downloadState >= 2"
-        v-bind:class="{ loadingEllipsis: downloadState === 2 }"
-      >
-        Relatórios criados
-      </p>
-      <p
-        v-if="downloadState >= 3"
-        v-bind:class="{ loadingEllipsis: downloadState === 3 }"
-      >
-        Arquivo .zip criado
-      </p>
-      <p v-if="downloadState >= 4">Download concluído</p>
-      <div slot="modal-footer"></div>
-    </b-modal>
+    <!--  -->
+    <!-- Carregar -->
     <b-modal id="modal-load" ref="modalLoad" title="Selecione um Arquivo">
       <p
         v-for="value in files"
@@ -133,6 +105,8 @@
         >
       </div>
     </b-modal>
+    <!--  -->
+    <!-- Salvar -->
     <b-modal
       id="modal-save"
       ref="modalSave"
@@ -152,76 +126,26 @@
         >
       </div>
     </b-modal>
-    <b-modal
-      id="modal-user"
-      ref="modalUser"
-      title="Usuário"
-      ok-only
-      ok-title="Cancelar"
-      ok-variant="secondary"
-    >
-      <template v-if="userModalMode === 0">
-        <b-button v-on:click="createMode()">Criar Usuário</b-button>
-        <br />
-        <br />
-        <b-button v-on:click="editMode()">Editar Usuário</b-button>
-      </template>
-      <template v-if="userModalMode === 1">
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" v-model="userForm.nome" />
-        <br />
-        <label for="login">Login:</label>
-        <input type="text" id="login" v-model="userForm.login" />
-        <br />
-        <label for="senha">Senha:</label>
-        <input type="text" id="senha" v-model="userForm.senha" />
-        <div slot="modal-footer">
-          <b-button variant="success" v-on:click="createUser()">Criar</b-button>
-          <b-button v-on:click="cancelMode()">Cancelar</b-button>
-        </div>
-      </template>
-      <template v-if="userModalMode === 2">
-        <label for="nome">Nome:</label>
-        <input type="text" id="nome" v-model="userForm.nome" />
-        <br />
-        <label for="login">Login:</label>
-        <input type="text" id="login" v-model="userForm.login" />
-        <br />
-        <label for="senhaAtual">Senha Atual:</label>
-        <input type="text" id="senhaAtual" v-model="userForm.senhaAtual" />
-        <br />
-        <label for="senha">Senha:</label>
-        <input type="text" id="senha" v-model="userForm.senha" />
-        <div slot="modal-footer">
-          <b-button variant="success" v-on:click="editUser()">Editar</b-button>
-          <b-button v-on:click="cancelMode()">Cancelar</b-button>
-        </div>
-      </template>
-    </b-modal>
+
+    <ModalUser ref="modalUser" />
+    <ModalDownload ref="modalDownload" />
   </div>
 </template>
 
 <script>
 import _ from "lodash";
+import { EventBus } from "@/event-bus.js";
 import { COMPONENT_LOADING, COMPONENT_LOADED } from "@/vuex/mutation-types";
 import bddumpService from "@/common/services/bddump";
-import userService from "@/common/services/usuario";
-import downloadService from "@/common/services/download";
-import xlsxService from "@/common/services/xlsx";
 import novoPlanoService from "@/common/services/novoPlano";
 import planoService from "@/common/services/plano";
-import { saveAs } from "file-saver";
-import { EventBus } from "@/event-bus.js";
 import TheNavbar from "./TheNavbar.vue";
 import TheSidebar from "./sidebar/TheSidebar.vue";
-import LoadingPage from "@/components/LoadingPage.vue";
+import ModalUser from "./modais/ModalUser.vue";
+import ModalDownload from "./modais/ModalDownload.vue";
+import { BaseModal, LoadingPage } from "@/components/index.js";
+import { notification } from "@/mixins/index.js";
 
-const emptyUser = {
-  nome: undefined,
-  login: undefined,
-  senha: undefined,
-  senhaAtual: undefined,
-};
 const emptyPlano = {
   ano: undefined,
   obs: undefined,
@@ -229,17 +153,21 @@ const emptyPlano = {
 
 export default {
   name: "TheDashboard",
-  components: { TheSidebar, TheNavbar, LoadingPage },
-
+  components: {
+    TheSidebar,
+    TheNavbar,
+    LoadingPage,
+    BaseModal,
+    ModalUser,
+    ModalDownload,
+  },
+  mixins: [notification],
   data: function() {
     return {
       hasModalOpen: false,
       files: [],
       filename: "",
       isLoadingFile: false,
-      userModalMode: 0,
-      userForm: _.clone(emptyUser),
-      downloadState: 0,
       planoForm: _.clone(emptyPlano),
       sidebarVisibility: false,
       showModal: {
@@ -252,8 +180,7 @@ export default {
           this.$refs.modalNovoPlano.show();
         },
         download: () => {
-          this.$refs.modalDownloadAll.show();
-          this.startDownload();
+          this.$refs.modalDownload.openModal();
         },
         save: () => {
           this.filename = "";
@@ -261,7 +188,7 @@ export default {
           this.$refs.modalSave.show();
         },
         user: () => {
-          this.$refs.modalUser.show();
+          this.$refs.modalUser.openModal();
         },
       },
     };
@@ -366,51 +293,6 @@ export default {
         });
     },
 
-    async download() {
-      return new Promise((resolve) => {
-        this.downloadState = 0;
-        let pedidos = this.$store.state.pedido.Pedidos;
-        xlsxService
-          .downloadTable({ pedidos: pedidos })
-          .then(() => {
-            console.log("Tabela Gerada");
-            this.downloadState++;
-            downloadService
-              .generatePdf()
-              .then(() => {
-                console.log("PDFs Gerados");
-                this.downloadState++;
-                downloadService
-                  .download()
-                  .then(() => {
-                    console.log("done");
-                    this.downloadState++;
-                    fetch("http://200.131.219.57:3000/api/download/all", {
-                      method: "GET",
-                      headers: {
-                        Authorization: `Bearer ${this.$store.state.auth.token}`,
-                      },
-                    })
-                      .then((r) => r.blob())
-                      .then((blob) => {
-                        saveAs(blob, "data.zip");
-                        this.downloadState++;
-                        resolve();
-                      })
-                      .catch((e) => console.log(e));
-                  })
-                  .catch((e) => console.log(e));
-              })
-              .catch((e) => console.log(e));
-          })
-          .catch((e) => console.log(e));
-      });
-    },
-
-    async startDownload() {
-      await this.download();
-    },
-
     returnFiles() {
       bddumpService.returnFiles().then((response) => {
         this.files = response.Files.filter(function(elm) {
@@ -424,24 +306,6 @@ export default {
       });
     },
 
-    createUser() {
-      userService.create(this.userForm).then(() => {
-        console.log("usuário criado");
-        this.hideModalUser();
-        this.userModalMode = 0;
-      });
-    },
-
-    editUser() {
-      userService
-        .update(this.$store.state.auth.Usuario.id, this.userForm)
-        .then(() => {
-          console.log("usuário editado");
-          this.hideModalUser();
-          this.userModalMode = 0;
-        });
-    },
-
     hideModalLoad() {
       this.$refs.modalLoad.hide();
     },
@@ -450,27 +314,8 @@ export default {
       this.$refs.modalSave.hide();
     },
 
-    hideModalUser() {
-      this.$refs.modalUser.hide();
-    },
-
     selectFile(filename) {
       this.filename = filename;
-    },
-
-    createMode() {
-      this.userModalMode = 1;
-    },
-
-    editMode() {
-      console.log(this.$store.state.auth.Usuario);
-      this.userForm.nome = this.$store.state.auth.Usuario.nome;
-      this.userForm.login = this.$store.state.auth.Usuario.login;
-      this.userModalMode = 2;
-    },
-
-    cancelMode() {
-      this.userModalMode = 0;
     },
   },
   computed: {
@@ -497,10 +342,10 @@ export default {
 <style scoped>
 .bg-base-modal {
   position: absolute;
-  z-index: 100;
+  z-index: 950;
   height: 100vh !important;
   width: 100% !important;
-  background-color: rgba(58, 58, 58, 0.239);
+  background-color: rgba(0, 0, 0, 0.3);
 }
 .TheDashboard {
   width: 100% !important;
@@ -538,38 +383,5 @@ export default {
   -moz-animation-fill-mode: both;
   -o-animation-fill-mode: both;
   animation-fill-mode: both;
-}
-
-/*Download Files Loading animation*/
-.loadingEllipsis:after {
-  overflow: hidden;
-  display: inline-block;
-  vertical-align: bottom;
-  -webkit-animation: ellipsis steps(4, end) 900ms infinite;
-  -moz-animation: ellipsis steps(4, end) 900ms infinite;
-  -o-animation: ellipsis steps(4, end) 900ms infinite;
-  animation: ellipsis steps(4, end) 900ms infinite;
-  content: "\2026"; /* ascii code for the ellipsis character */
-  width: 0px;
-}
-@-moz-keyframes ellipsis {
-  to {
-    width: 1.25em;
-  }
-}
-@-o-keyframes ellipsis {
-  to {
-    width: 1.25em;
-  }
-}
-@keyframes ellipsis {
-  to {
-    width: 1.25em;
-  }
-}
-@-webkit-keyframes ellipsis {
-  to {
-    width: 1.25em;
-  }
 }
 </style>

@@ -11,10 +11,10 @@
         </b-button>
 
         <b-button
-                v-b-modal.modalRelatorio
-                type="button"
-                class="btn-custom btn-icon relatbtn"
-                title="Relatório"
+          v-b-modal.modalRelatorio
+          type="button"
+          class="btn-custom btn-icon relatbtn"
+          title="Relatório"
         >
           <i class="far fa-file-pdf"></i>
         </b-button>
@@ -147,13 +147,8 @@
                   <p style="width: 25px !important;" class="p-header"></p>
                 </th>
                 <th>
-                  <p
-                    class="p-header clickable"
-                    @click="toggleOrder(ordenacaoLabs, 'nome')"
-                    style="width: 435px; text-align: start;"
-                  >
+                  <p class="p-header t-start" style="width: 435px">
                     Nome
-                    <i :class="setIconByOrder(ordenacaoLabs, 'nome')"></i>
                   </p>
                 </th>
               </div>
@@ -161,7 +156,7 @@
           </thead>
           <tbody>
             <tr
-              v-for="laboratorio in Laboratorios"
+              v-for="laboratorio in LaboratoriosOrdered"
               :key="`laboratorio${laboratorio.id}`"
             >
               <div style="width: max-content;">
@@ -263,12 +258,12 @@
     </b-modal>
     <!-- MODAL RELATORIO-->
     <b-modal
-            id="modalRelatorio"
-            ref="relatorioModal"
-            size="sm"
-            scrollable
-            title="Relatório"
-            hide-footer
+      id="modalRelatorio"
+      ref="relatorioModal"
+      size="sm"
+      scrollable
+      title="Relatório"
+      hide-footer
     >
       <ul class="listas list-group">
         <li class="list-group-item clickable" v-on:click="pdf(1)">
@@ -316,7 +311,7 @@ export default {
   beforeMount() {
     this.selectAllLabs();
     this.filtroLaboratorios.ativados = [
-      ..._.orderBy(this.filtroLaboratorios.selecionados, "nome"),
+      ...this.filtroLaboratorios.selecionados,
     ];
   },
   methods: {
@@ -348,17 +343,13 @@ export default {
     btnOK() {
       this.setSemestreAtivo();
       this.filtroLaboratorios.ativados = [
-        ..._.orderBy(this.filtroLaboratorios.selecionados, "nome"),
+        ...this.filtroLaboratorios.selecionados,
       ];
       this.tabAtivaModal = "Laborátorios";
       this.$refs.modalFiltros.hide();
     },
     selectAllLabs() {
-      const allLaboratorios = _.filter(this.$store.state.sala.Salas, [
-        "laboratorio",
-        true,
-      ]);
-      this.filtroLaboratorios.selecionados = [...allLaboratorios];
+      this.filtroLaboratorios.selecionados = [...this.LaboratoriosOrdered];
     },
     selectNoneLabs() {
       this.filtroLaboratorios.selecionados = [];
@@ -366,23 +357,36 @@ export default {
     pdf(opt) {
       if (opt === 1) {
         pdfs.pdfAlocacaoLabs({
-          laboratorios: this.filtroLaboratorios.ativados
+          laboratorios: this.filtroLaboratorios.ativados,
         });
       }
       if (opt === 2) {
         pdfs.pdfAlocacaoLabs({
-          laboratorios: this.Laboratorios
+          laboratorios: this.LaboratoriosOrdered,
         });
       }
     },
   },
   computed: {
-    Laboratorios() {
-      return _.orderBy(
-        _.filter(this.$store.state.sala.Salas, ["laboratorio", true]),
-        this.ordenacaoLabs.order,
-        this.ordenacaoLabs.type
+    LaboratoriosOrdered() {
+      const laboratoriosResultantes = [];
+      laboratoriosResultantes.push(_.find(this.Laboratorios, ["nome", "L107"]));
+      laboratoriosResultantes.push(_.find(this.Laboratorios, ["nome", "L205"]));
+      laboratoriosResultantes.push(_.find(this.Laboratorios, ["nome", "LAB4"]));
+      laboratoriosResultantes.push(_.find(this.Laboratorios, ["nome", "LAB3"]));
+      laboratoriosResultantes.push(
+        _.find(this.Laboratorios, ["nome", "LABENG1"])
       );
+      laboratoriosResultantes.push(
+        _.find(this.Laboratorios, ["nome", "LABENG2"])
+      );
+      laboratoriosResultantes.push(
+        _.find(this.Laboratorios, ["nome", "LAB EST 2"])
+      );
+      return laboratoriosResultantes;
+    },
+    Laboratorios() {
+      return _.filter(this.$store.state.sala.Salas, ["laboratorio", true]);
     },
     Turmas1() {
       return _.concat(

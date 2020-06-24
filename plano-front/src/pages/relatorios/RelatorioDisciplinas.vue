@@ -1362,16 +1362,6 @@ tbody {
   height: 18px !important;
 }
 /* fim table */
-.listas {
-  line-height: 30px;
-  font-size: 12px;
-  text-align: justify;
-  line-height: inherit;
-  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
-}
-.ajuda-strong {
-  color: #007bff;
-}
 .disciplina-tr {
   background-color: rgba(0, 0, 0, 0.089);
   color: black;
@@ -1470,4 +1460,19 @@ tbody {
   height: 13px !important;
 }
 /* FIM MODAL TABLE */
+/* nav-tab */
+.nav-tabs .nav-link {
+  color: #0079fa !important;
+  cursor: pointer;
+}
+.nav-tabs .nav-link:hover {
+  text-decoration: underline;
+}
+.nav-tabs .active {
+  background-color: #e9ecef !important;
+  color: #495057 !important;
+  cursor: default !important;
+  text-decoration: none !important;
+  transition: background-color 200ms;
+}
 </style>

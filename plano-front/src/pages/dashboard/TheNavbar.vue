@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-dark bg-dark fixed-top shadow">
+  <nav class="navbar navbar-dark bg-dark shadow">
     <div class="brand">
       <div @click="emitCloseSidebar()" class="navbar-brand">
         <router-link :to="{ name: 'dashboard' }" class="brand-title"
@@ -24,14 +24,7 @@
         <i class="fas fa-user"></i>
         <span>Usuário</span>
       </li>
-      <li
-        v-if="Admin"
-        class="nav-link"
-        v-on:click="$emit('show-modal', 'novoPlano')"
-      >
-        <i class="fas fa-plus-square"></i>
-        <span>Novo</span>
-      </li>
+
       <li
         class="nav-link"
         v-on:click="$emit('show-modal', 'load')"
@@ -95,6 +88,11 @@ export default {
   -moz-border-radius: 0;
   border-radius: 0;
   transition: all 300ms ease;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 800;
 }
 .brand {
   width: max-content;

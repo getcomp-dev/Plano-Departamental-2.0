@@ -3,16 +3,16 @@
     <PageTitle :title="'Validações do Plano'">
       <template #aside>
         <b-button
-          v-b-modal.modalFiltros
+          @click.stop="$refs.modalFiltros.toggle()"
           title="Filtros"
           class="cancelbtn btn-custom btn-icon"
         >
           <i class="fas fa-list-ul"></i>
         </b-button>
         <b-button
-          v-b-modal.modalAjuda
           title="Ajuda"
           class="relatbtn btn-custom btn-icon"
+          @click="$refs.modalAjuda.toggle()"
         >
           <i class="fas fa-question"></i>
         </b-button>
@@ -43,7 +43,7 @@
           <th
             @click="toggleOrder(ordemTurmas, 'disciplinaPerfil')"
             class="t-start clickable"
-            style="width: 70px"
+            style="width: 75px"
           >
             Perfil
             <i :class="setIconByOrder(ordemTurmas, 'disciplinaPerfil')"></i>
@@ -79,7 +79,7 @@
               <td style="width: 35px;">
                 {{ validacaoTurma.periodo }}
               </td>
-              <td style="width: 70px;" class="t-start">
+              <td style="width: 75px;" class="t-start">
                 {{ validacaoTurma.disciplinaPerfil }}
               </td>
               <td style="width: 70px;" class="t-start">
@@ -96,13 +96,13 @@
                 <br />
                 {{ validacaoTurma.docente2Apelido }}
               </td>
-              <td
-                style="width: 50px"
-                class="clickable"
-                title="Editar turma"
-                @click.stop="openModalEditTurma(validacaoTurma)"
-              >
-                <i class="fas fa-edit btn-table"></i>
+              <td style="width: 50px" class="clickable" title="Editar turma">
+                <button
+                  class="btn-table"
+                  @click.stop="openModalEditTurma(validacaoTurma)"
+                >
+                  <i class="fas fa-edit btn-table-icon"></i>
+                </button>
               </td>
             </tr>
             <tr
@@ -123,7 +123,7 @@
             </tr>
           </template>
           <tr v-show="TurmasValidacoesOrdered.length === 0">
-            <td style="width:690px">
+            <td style="width:695px">
               <b>Nenhum conflito encontrado.</b> Clique no botão de filtros
               <i class="fas fa-list-ul mx-1"></i> para selecioná-los.
             </td>
@@ -175,114 +175,110 @@
     </div>
 
     <!-- Modal Filtros -->
-    <b-modal id="modalFiltros" ref="modalFiltros" scrollable title="Filtros">
-      <NavTab
-        :currentTab="tabAtivaModal"
-        :allTabs="['Conflitos', 'Semestres']"
-        @change-tab="tabAtivaModal = $event"
-      />
-      <div class="col m-0 p-0">
-        <BaseTable
-          v-show="tabAtivaModal === 'Conflitos'"
-          :tableType="'modal-table'"
-        >
-          <template #thead>
-            <th style="width: 25px"></th>
-            <th style="width: 425px" class="t-start">
-              Conflito
-            </th>
-          </template>
-          <template #tbody>
-            <tr
-              v-for="conflito in ConflitosOrdered"
-              :key="'conflitosModal' + conflito.type"
-              @click="
-                toggleItemInArray(conflito.type, filtroConflitos.selecionados)
-              "
-              style="text-transform: uppercase"
-            >
-              <td style="width: 25px;">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  v-model="filtroConflitos.selecionados"
-                  :value="conflito.type"
-                />
-              </td>
-              <td style="width: 425px" class="t-start">
-                {{ conflito.msg }}
-              </td>
-            </tr>
-          </template>
-        </BaseTable>
-
-        <BaseTable
-          v-show="tabAtivaModal === 'Semestres'"
-          :tableType="'modal-table'"
-        >
-          <template #thead>
-            <th style="width: 25px;"></th>
-            <th style="width: 425px;" class="t-start">
-              Semestre Letivo
-            </th>
-          </template>
-          <template #tbody>
-            <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  v-model="filtroSemestres.primeiro"
-                />
-              </td>
-              <td style="width: 425px" class="t-start">
-                PRIMEIRO
-              </td>
-            </tr>
-            <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  v-model="filtroSemestres.segundo"
-                />
-              </td>
-              <td style="width: 425px" class="t-start">SEGUNDO</td>
-            </tr>
-          </template>
-        </BaseTable>
-      </div>
-
-      <div slot="modal-footer" class="w-100 m-0 d-flex">
-        <div class="w-100">
-          <b-button
-            class="btn-custom btn-modal btn-azul"
-            variant="success"
-            @click="modalSelectAll[tabAtivaModal]"
-            >Selecionar Todos</b-button
+    <BaseModal
+      ref="modalFiltros"
+      :modalOptions="{
+        type: 'filtros',
+        title: 'Filtros',
+        hasFooter: true,
+      }"
+      :hasFooter="true"
+      @on-close="tabAtivaModal = 'Conflitos'"
+      @btn-ok="btnOkFiltros()"
+      @select-all="modalSelectAll[tabAtivaModal]"
+      @select-none="modalSelectNone[tabAtivaModal]"
+    >
+      <template #modal-body>
+        <NavTab
+          :currentTab="tabAtivaModal"
+          :allTabs="['Conflitos', 'Semestres']"
+          @change-tab="tabAtivaModal = $event"
+        />
+        <div class="div-table">
+          <BaseTable
+            v-show="tabAtivaModal === 'Conflitos'"
+            :tableType="'modal-table'"
           >
-          <b-button
-            class="btn-custom btn-modal btn-cinza"
-            variant="secondary"
-            @click="modalSelectNone[tabAtivaModal]"
-            >Desmarcar Todos</b-button
+            <template #thead>
+              <th style="width: 25px"></th>
+              <th style="width: 425px" class="t-start">
+                Conflito
+              </th>
+            </template>
+            <template #tbody>
+              <tr
+                v-for="conflito in ConflitosOrdered"
+                :key="'conflitosModal' + conflito.type"
+                @click="
+                  toggleItemInArray(conflito.type, filtroConflitos.selecionados)
+                "
+                style="text-transform: uppercase"
+              >
+                <td style="width: 25px;">
+                  <input
+                    type="checkbox"
+                    class="form-check-input position-static m-0"
+                    v-model="filtroConflitos.selecionados"
+                    :value="conflito.type"
+                  />
+                </td>
+                <td style="width: 425px" class="t-start">
+                  {{ conflito.msg }}
+                </td>
+              </tr>
+            </template>
+          </BaseTable>
+
+          <BaseTable
+            v-show="tabAtivaModal === 'Semestres'"
+            :tableType="'modal-table'"
           >
+            <template #thead>
+              <th style="width: 25px;"></th>
+              <th style="width: 425px;" class="t-start">
+                Semestre Letivo
+              </th>
+            </template>
+            <template #tbody>
+              <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
+                <td style="width: 25px">
+                  <input
+                    type="checkbox"
+                    class="form-check-input position-static m-0"
+                    v-model="filtroSemestres.primeiro"
+                  />
+                </td>
+                <td style="width: 425px" class="t-start">
+                  PRIMEIRO
+                </td>
+              </tr>
+              <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
+                <td style="width: 25px">
+                  <input
+                    type="checkbox"
+                    class="form-check-input position-static m-0"
+                    v-model="filtroSemestres.segundo"
+                  />
+                </td>
+                <td style="width: 425px" class="t-start">SEGUNDO</td>
+              </tr>
+            </template>
+          </BaseTable>
         </div>
-        <b-button
-          variant="success"
-          @click="btnOkFiltros()"
-          class="btn-custom btn-modal btn-verde btn-ok-modal"
-          >OK</b-button
-        >
-      </div>
-    </b-modal>
+      </template>
+    </BaseModal>
+
     <!-- modal turma edit -->
     <BaseModal
-      v-if="optionsModalEditTurma.visibility"
-      :modalOptions="optionsModalEditTurma"
+      ref="modalEditTurma"
+      :modalOptions="{
+        type: 'editTurma',
+        title: 'Edição de Turma',
+      }"
     >
       <template #modal-body>
         <BodyModalEditTurma
+          v-if="turmaClickada != null"
           :hasEditDisciplina="false"
           :key="turmaClickada.id + 'modalTurma'"
           :turma="turmaClickada"
@@ -290,29 +286,41 @@
       </template>
     </BaseModal>
 
-    <!-- MODAL AJUDA -->
-    <b-modal id="modalAjuda" title="Ajuda" scrollable hide-footer>
-      <div class="modal-body">
-        <ul class="listas list-group">
+    <BaseModal
+      ref="modalAjuda"
+      :modalOptions="{
+        type: 'ajuda',
+        title: 'Ajuda',
+      }"
+    >
+      <template #modal-body>
+        <ul class="list-ajuda list-group ">
           <li class="list-group-item">
-            <strong>Para selecionar um tipo de conflito:</strong> Clique em
-            Adicionar
-            <i class="fas fa-plus addbtn px-1" style="font-size: 12px;"></i>
-            , em seguida, marque os conflitos que pretende visualizar, escolha o
-            semestre mudando de aba, e por fim clique em Salvar
-            <i class="fas fa-check addbtn px-1" style="font-size: 12px;"></i>
-            ou em Cancelar
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px;"></i>
-            .
+            <b>Para selecionar um conflito:</b> clique no ícone de filtros
+            <i class="fas fa-list-ul"></i>
+            , em seguida marque os tipos de conflitos que pretende visualizar,
+            escolha o semestre mudando de aba e por fim clique Ok para
+            ativa-los.
           </li>
-
           <li class="list-group-item">
-            <strong>Para editar turma da tabela:</strong> clique no icone
-            presente na coluna "Editar".
+            <b>Para editar uma turma da tabela:</b> clique no ícone editar
+            <i class="fas fa-edit"></i> presente na coluna de mesmo nome da
+            tabela de turmas.
+          </li>
+          <li class="list-group-item">
+            <b>Editando uma turma:</b> ao editar uma turma as alterações feitas
+            na parte superior do formulario só serão efetivadas ao clickar no
+            botão salvar, porém as alterações feitas na tabela de vagas serão
+            atualizadas automaticamente.
+          </li>
+          <li class="list-group-item">
+            <b>Cancelando edição de uma turma:</b> ao clickar no botão cancelar
+            no formulário de edição de turmas as informações voltaram para os
+            valores inciais de quando a janela foi aberta pela primeira vez.
           </li>
         </ul>
-      </div>
-    </b-modal>
+      </template>
+    </BaseModal>
   </div>
 </template>
 
@@ -374,15 +382,14 @@ export default {
   },
   data() {
     return {
-      optionsModalEditTurma: { visibility: false, title: "Edição de Turma" },
-      tabAtivaMain: "Turmas",
       allConflitos: _.clone(AllConflitosTurmas),
       grades1Semestre: { CCD: [], CCN: [], EC: [], SI: [] },
       grades2Semestre: { CCD: [], CCN: [], EC: [], SI: [] },
-      turmaClickada: null,
-      tabAtivaModal: "Conflitos",
       ordemTurmas: { order: "periodo", type: "asc" },
       ordemDocentes: { order: "nome", type: "asc" },
+      turmaClickada: null,
+      tabAtivaMain: "Turmas",
+      tabAtivaModal: "Conflitos",
       filtroConflitos: {
         ativados: [],
         selecionados: [],
@@ -576,8 +583,6 @@ export default {
     btnOkFiltros() {
       this.btnOkSemestre();
       this.filtroConflitos.ativados = [...this.filtroConflitos.selecionados];
-      this.tabAtivaModal = "Conflitos";
-      this.$refs.modalFiltros.hide();
     },
     btnOkSemestre() {
       if (this.filtroSemestres.primeiro && !this.filtroSemestres.segundo)
@@ -590,7 +595,7 @@ export default {
     },
     openModalEditTurma(turma) {
       this.turmaClickada = { ...turma };
-      this.optionsModalEditTurma.visibility = true;
+      this.$refs.modalEditTurma.open();
     },
     findPerfilById(id) {
       let perfil = _.find(this.Perfis, (p) => p.id == id);
@@ -1222,8 +1227,19 @@ export default {
 
 <style scoped>
 .btn-table {
-  padding: 0 0.25rem !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: none;
+}
+.btn-table-icon {
   font-size: 12px;
-  margin: 3px !important;
+}
+.btn-table-icon:focus {
+  outline-offset: -1px !important;
+  outline: 1px solid #9ec0f7 !important;
 }
 </style>

@@ -25,7 +25,7 @@
     </PageTitle>
 
     <div class="row w-100 m-0 p-0">
-      <div class="div-table p-0">
+      <div class="div-table">
         <BaseTable>
           <template #thead>
             <th style="width: 110px;">Tabela Modificada</th>
@@ -78,17 +78,8 @@
       size="md"
       scrollable
     >
-      <div class="p-0 m-0" style="height: 30px; width: 465px;">
-        <ul
-          class="nav nav-tabs card-header-tabs m-0"
-          style="font-size: 11px !important; height: 30px;"
-        >
-          <li class="nav-item">
-            <a class="nav-link border active">Perfis</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col m-0 p-0 max-content" style="height: 450px !important;">
+      <NavTab :currentTab="'Perfis'" :allTabs="['Perfis']" />
+      <div class="div-table">
         <table
           class="table table-sm modal-table table-bordered"
           style="max-height: 450px !important;"
@@ -160,16 +151,15 @@
 
 <script>
 import _ from "lodash";
-import PageTitle from "@/components/PageTitle";
-import BaseTable from "@/components/BaseTable";
+import { PageTitle, BaseTable, NavTab } from "@/components/index.js";
 
 export default {
   name: "DashboardHistory",
   components: {
     PageTitle,
     BaseTable,
+    NavTab,
   },
-
   data() {
     return {
       options: [

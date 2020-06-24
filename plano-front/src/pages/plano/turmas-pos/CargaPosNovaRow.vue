@@ -3,14 +3,14 @@
     <div class="max-content stickyAdd">
       <td style="width:70px" class="less-padding">
         <select type="text" v-model="cargaPosForm.programa">
-          <option type="text" value="PGMC">PGMC</option>
           <option type="text" value="PGCC">PGCC</option>
           <option type="text" value="PGEM">PGEM</option>
+          <option type="text" value="PGMC">PGMC</option>
         </select>
       </td>
       <td style="width:25px"><div style="height:30px"></div></td>
       <td style="width:55px" class="less-padding">
-        <select type="text" v-model="cargaPosForm.trimestre">
+        <select type="text" v-model.number="cargaPosForm.trimestre">
           <option type="text" value="1">1</option>
           <option type="text" value="2">2</option>
           <option type="text" value="3">3</option>

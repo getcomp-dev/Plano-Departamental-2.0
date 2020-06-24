@@ -75,7 +75,7 @@
               <p>Somatório dos créditos no 2º semestre</p>
             </b-popover>
           </th>
-          <th style="width: 45px" id="creditostotal">
+          <th style="width: 50px" id="creditostotal">
             CTotal
             <b-popover
               :target="'creditostotal'"
@@ -301,7 +301,7 @@
               <td style="width: 180px"></td>
               <td style="width: 35px"></td>
               <td style="width: 35px"></td>
-              <td style="width: 45px"></td>
+              <td style="width: 50px"></td>
             </tr>
             <tr
               v-for="turma in turmasSemAlocacao()"
@@ -355,7 +355,7 @@
                 </span>
               </td>
 
-              <td style="width: 45px"></td>
+              <td style="width: 50px"></td>
             </tr>
           </template>
         </template>

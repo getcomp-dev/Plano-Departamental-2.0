@@ -60,6 +60,6 @@ export default {
   color: #495057 !important;
   cursor: default !important;
   text-decoration: none !important;
-  transition: background-color 200ms;
+  transition: background-color 100ms;
 }
 </style>

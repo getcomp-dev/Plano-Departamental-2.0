@@ -5,6 +5,7 @@ import PageTitle from "./PageTitle.vue";
 import BodyModalEditTurma from "./BodyModalEditTurma.vue";
 import PedidosTableModal from "./PedidosTableModal.vue";
 import BaseModal from "./BaseModal.vue";
+import LoadingPage from "./LoadingPage.vue";
 
 export {
   BaseTable,
@@ -14,4 +15,5 @@ export {
   BodyModalEditTurma,
   PedidosTableModal,
   BaseModal,
+  LoadingPage,
 };

@@ -151,7 +151,7 @@ nav.sidebar {
   padding: 0.5rem 0;
   overflow-x: hidden !important;
   overflow-y: auto !important;
-  z-index: 100;
+  z-index: 1000;
   font-size: 0.875rem;
   -webkit-box-shadow: 0px 0px 75px 0px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 0px 75px 0px rgba(0, 0, 0, 0.75);

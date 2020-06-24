@@ -1,6 +1,8 @@
 export default {
   methods: {
-    showNotication({ message, title = "Sucesso!", type = "success" }) {
+    showNotication({ message, title, type = "success" }) {
+      if (!title) title = type === "error" ? "Error!" : "Sucesso!";
+
       this.$notify({
         title: title,
         text: `${message}`,

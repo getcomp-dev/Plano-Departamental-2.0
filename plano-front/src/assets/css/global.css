@@ -1,5 +1,8 @@
 :root {
   --navbar-height: 30px;
+  --dark-blue: #0055af;
+  --light-blue: #0079fa;
+  --light-gray: #dee2e6;
 }
 @media screen and (max-width: 470px) {
   :root {
@@ -29,21 +32,6 @@
   text-align: center !important;
 }
 
-/* nav-tab */
-.nav-tabs .nav-link {
-  color: #0079fa !important;
-  cursor: pointer;
-}
-.nav-tabs .nav-link:hover {
-  text-decoration: underline;
-}
-.nav-tabs .active {
-  background-color: #e9ecef !important;
-  color: #495057 !important;
-  cursor: default !important;
-  text-decoration: none !important;
-  transition: background-color 200ms;
-}
 /* searchDisciplinas */
 .search-text:hover {
   color: rgb(102, 102, 102) !important;
@@ -72,15 +60,24 @@
   width: max-content !important;
 }
 
-#modalAjuda strong {
-  color: #007bff;
-}
-#modalAjuda .listas {
+.modal-custom .list-group,
+#modalAjuda .list-group {
   line-height: 30px;
   font-size: 12px;
-  text-align: justify;
-  line-height: inherit;
-  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+  text-align: start;
+  line-height: 1.5;
+}
+.modal-custom .list-ajuda i {
+  font-size: 12px !important;
+  margin: 0 1px;
+  color: #585858;
+}
+#modalAjuda .list-group .list-group-item strong,
+.list-ajuda .list-group-item b:first-of-type {
+  color: var(--light-blue);
+}
+.modal-custom .list-ajuda i:hover {
+  color: #2a2a2a;
 }
 
 /* notification */
