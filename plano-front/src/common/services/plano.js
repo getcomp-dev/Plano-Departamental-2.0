@@ -7,7 +7,13 @@ export default {
             .catch((error) => Promise.reject(error))
     },
 
-       update (ano, config = {}) {
+    create (payload, config = {}) {
+        return Vue.axios.post('/plano', payload, config)
+            .then((response) => Promise.resolve(response.data))
+            .catch((error) => Promise.reject(error))
+    },
+
+    update (ano, config = {}) {
         return Vue.axios.post(`/plano/${ano}`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))

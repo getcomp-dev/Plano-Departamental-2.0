@@ -102,6 +102,7 @@ export default {
       return true;
     },
     addCarga() {
+      this.cargaPosForm.Plano = localStorage.getItem('Plano')
       const newCarga = _.clone(this.cargaPosForm);
 
       this.setEmptyKeysToNull(newCarga);

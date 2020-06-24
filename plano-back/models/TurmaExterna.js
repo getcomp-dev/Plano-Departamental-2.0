@@ -20,7 +20,13 @@ module.exports = function (sequelize, DataTypes) {
         }
     }, {
         freezeTableName: true,
-        timestamps: false
+        timestamps: false,
+        indexes:[
+            {
+                unique:true,
+                fields:['letra', 'periodo', 'Disciplina', 'Plano']
+            }
+        ]
     })
 
     TurmaExterna.associate = function (models) {

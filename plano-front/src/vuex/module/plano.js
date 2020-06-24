@@ -1,14 +1,18 @@
 import Vue from 'vue'
 import planoService from '../../common/services/plano'
-import { PLANO_FETCHED, SOCKET_PLANO_UPDATED } from '../mutation-types'
+import {PLANO_FETCHED, SOCKET_PLANO_CREATED, SOCKET_PLANO_UPDATED} from '../mutation-types'
 
 const state = {
-    Plano: {}
+    Plano: []
 }
 
 const mutations = {
     [PLANO_FETCHED] (state, data) {
         state.Plano = data.Plano
+    },
+
+    [SOCKET_PLANO_CREATED] (state, data) {
+        state.Plano.push(data.Plano)
     },
 
     [SOCKET_PLANO_UPDATED] (state, data) {
