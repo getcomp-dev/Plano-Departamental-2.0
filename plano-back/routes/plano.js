@@ -16,25 +16,6 @@ router.get('/', function (req, res, next) {
     })
 })
 
-router.post('/', function (req, res, next) {
-    console.log('\nRequest de '+req.usuario.nome+'\n')
-    models.Plano.create({
-        ano: req.body.ano,
-        obs: req.body.obs
-    }).then(function (plano) {
-        ioBroadcast(SM.PLANO_CREATED, {'msg': 'Plano criado!', 'Plano': plano})
-        console.log('\nRequest de '+req.usuario.nome+'\n')
-
-        res.send({
-            success: true,
-            message: 'Plano criado!',
-            Plano: plano
-        })
-    }).catch(function (err) {
-        return next(err, req, res)
-    })
-})
-
 router.post('/:ano([0-9]+)', function (req, res, next) {
     console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Plano.findOne({

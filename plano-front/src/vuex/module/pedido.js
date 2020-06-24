@@ -48,18 +48,7 @@ const actions = {
                 reject(error)
             })
         })
-    },
-
-    fetchAllPedidos ({commit}) {
-        return new Promise((resolve, reject) => {
-            pedidoService.fetchAll().then(response => {
-                commit(PEDIDO_FETCHED, response)
-                resolve()
-            }).catch(error => {
-                reject(error)
-            })
-        })
-    },
+    }
 }
 
 const getters = {}

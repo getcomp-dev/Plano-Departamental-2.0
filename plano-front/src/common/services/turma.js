@@ -1,8 +1,8 @@
 import Vue from 'vue'
 
 export default {
-    fetchAll (PlanoId, config = {}) {
-        return Vue.axios.get(`/turma/Plano/${PlanoId}`, config)
+    fetchAll (config = {}) {
+        return Vue.axios.get(`/turma`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     },

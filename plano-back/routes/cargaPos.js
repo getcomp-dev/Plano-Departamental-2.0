@@ -24,8 +24,7 @@ router.post('/', function (req, res, next) {
         trimestre: req.body.trimestre,
         programa: req.body.programa,
         Docente: req.body.Docente,
-        creditos: req.body.creditos,
-        Plano: req.body.Plano
+        creditos: req.body.creditos
 
     }).then(function (cargaPos) {
         ioBroadcast(SM.CARGA_POS_CREATED, {'msg': 'Carga registrada!', 'CargaPos': cargaPos})
@@ -43,8 +42,8 @@ router.post('/', function (req, res, next) {
     })
 })
 
-router.get('/Plano/:id([0-9]+)', function (req, res, next) {
-    models.CargaPos.findAll({where:{Plano:req.params.id}}).then(function (cargasPos) {
+router.get('/', function (req, res, next) {
+    models.CargaPos.findAll().then(function (cargasPos) {
         res.send({
             success: true,
             message: 'Cargas listadas',

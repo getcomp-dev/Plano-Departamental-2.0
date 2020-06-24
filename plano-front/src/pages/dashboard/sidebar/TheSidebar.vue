@@ -10,9 +10,7 @@
       <template #aside-title>
         <a class="d-flex align-items-center" href="#">
           <i class=" far fa-calendar-alt mr-1"></i>
-          <select type="text" v-model="Plano" v-on:change="changePlano()">
-            <option v-for="plano in Planos" :value="plano.id" :key="plano.id">{{plano.ano}}</option>
-          </select>
+          <span>{{ year }}</span>
         </a>
       </template>
     </SidebarMenu>
@@ -43,7 +41,6 @@ export default {
   },
   data() {
     return {
-      Plano: undefined,
       linkDashboard: [
         { routerName: "dashboard", icon: "fa-home", title: "Dashboard" },
       ],
@@ -116,26 +113,6 @@ export default {
       ],
     };
   },
-  created: function() {
-    this.Plano = parseInt(localStorage.getItem('Plano'), 10)
-  },
-
-  methods: {
-    changePlano(){
-      localStorage.setItem('Plano', this.Plano)
-      this.$store
-              .dispatch("fetchAll")
-              .then(() => {
-                this.$socket.open();
-                this.$store.commit(COMPONENT_LOADED);
-              })
-              .catch((response) => {
-                console.log("ERRORRR");
-                console.log(response);
-              });
-    }
-  },
-
   computed: {
     linksPlanoOrdered() {
       return this.linksPlano;
@@ -147,10 +124,6 @@ export default {
 
     linksGerenciarOrdered() {
       return _.orderBy(this.linksGerenciar, "title");
-    },
-
-    Planos() {
-      return _.orderBy(this.$store.state.plano.Plano, 'ano')
     },
 
     Admin() {

@@ -12,32 +12,5 @@ module.exports = function (sequelize, DataTypes) {
         freezeTableName: true,
         timestamps: false
     })
-
-    Plano.associate = function (models) {
-        Plano.hasMany(models.Turma, {
-            foreignKey: {
-                name: 'Plano',
-                allowNull: true
-            },
-            onDelete: 'CASCADE'
-        })
-
-        Plano.hasMany(models.TurmaExterna, {
-            foreignKey: {
-                name: 'Plano',
-                allowNull: true
-            },
-            onDelete: 'CASCADE'
-        })
-
-        Plano.hasMany(models.CargaPos, {
-            foreignKey: {
-                name: 'Plano',
-                allowNull: true
-            },
-            onDelete: 'CASCADE'
-        })
-    }
-
-        return Plano
+    return Plano
 }
