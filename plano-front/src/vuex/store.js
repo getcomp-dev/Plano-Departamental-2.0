@@ -18,6 +18,7 @@ import horario from './module/horario'
 import vaga from './module/vaga'
 import cargaPos from './module/cargaPos'
 import plano from './module/plano'
+import usuario from './module/usuario'
 import history from './module/history'
 
 import {
@@ -90,6 +91,7 @@ export default new Vuex.Store({
     vaga,
     cargaPos,
     plano,
+    usuario,
     history
   },
 
