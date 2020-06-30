@@ -7,7 +7,8 @@ router.post('/', function (req, res, next) {
   models.Usuario.create({
     nome: req.body.nome,
     login: req.body.login,
-    senha: passwordHash.generate(req.body.senha)
+    senha: passwordHash.generate(req.body.senha),
+    admin: req.body.admin
   }).then(function (usuario) {
     res.send({
       success: true,
@@ -36,6 +37,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
             nome: req.body.nome,
             login: req.body.login,
             senha:  passwordHash.generate(req.body.senha),
+            admin: req.body.admin
         })
     }).then(function (usuario) {
         res.send({
