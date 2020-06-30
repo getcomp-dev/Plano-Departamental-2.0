@@ -13,6 +13,7 @@ router.post('/', function (req, res, next) {
     senha: passwordHash.generate(req.body.senha),
     admin: req.body.admin
   }).then(function (usuario) {
+    ioBroadcast(SM.USUARIO_CREATED, {'msg': 'Usuário criado!', 'Usuario': usuario})
     res.send({
       success: true,
       message: 'Usuário cadastrado',
@@ -55,6 +56,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
             admin: req.body.admin
         })
     }).then(function (usuario) {
+        ioBroadcast(SM.USUARIO_UPDATED, {'msg': 'Usu[ario atualizado!', 'Usuario': usuario})
         res.send({
             success: true,
             message: 'Usuário atualizado',
