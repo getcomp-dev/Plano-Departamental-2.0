@@ -242,6 +242,11 @@ import pedidoService from "@/common/services/pedido";
 import turmaExternaService from "@/common/services/turmaExterna";
 import pedidoExternoService from "@/common/services/pedidoExterno";
 
+const emptyPlano = {
+  ano: undefined,
+  obs: undefined,
+};
+
 export default {
   name: "TheDashboard",
   components: {
@@ -258,6 +263,7 @@ export default {
       hasModalOpen: false,
       sidebarVisibility: false,
       plano: undefined,
+      planoForm: _.clone(emptyPlano),
       disciplinasNovoPlanoSelecionadas: [],
       grades1semestre: { CCD: [], CCN: [], EC: [], SI: [] },
       grades2semestre: { CCD: [], CCN: [], EC: [], SI: [] },
