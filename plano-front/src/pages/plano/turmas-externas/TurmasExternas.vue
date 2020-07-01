@@ -736,8 +736,10 @@ export default {
       return true;
     },
     addTurma() {
+
       this.setEmptyKeysToNull(this.turmaForm);
       if (!this.validateTurma(this.turmaForm)) return;
+      this.turmaForm.Plano = localStorage.getItem('Plano')
 
       console.log(this.turmaForm);
 
@@ -745,22 +747,7 @@ export default {
         .create(this.turmaForm)
         .then((response) => {
           this.semestre = response.Turma.periodo;
-          for (let i = 0; i < 4; i++) {
-            let pedido = _.clone(emptyPedido);
-            pedido.Curso = this.$store.state.curso.CursosDCC[i].id;
-            pedido.Turma = response.Turma.id;
-            pedidoExternoService
-              .create(pedido)
-              .then()
-              .catch((error) => {
-                this.$notify({
-                  group: "general",
-                  type: "error",
-                  title: "Erro!",
-                  text: `Erro ao criar pedido:<br>${error}`,
-                });
-              });
-          }
+          this.$store.dispatch('fetchAllPedidosExternos')
           this.cleanTurmaForm();
 
           this.$notify({

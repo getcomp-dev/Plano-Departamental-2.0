@@ -31,7 +31,8 @@ router.post('/', function (req, res, next) {
         Horario1: req.body.Horario1,
         Horario2: req.body.Horario2,
         Sala1: req.body.Sala1,
-        Sala2: req.body.Sala2
+        Sala2: req.body.Sala2,
+        Plano: req.body.Plano
 
     }).then(function (turma) {
         ioBroadcast(SM.TURMA_CREATED, {'msg': 'Turma criada!', 'Turma': turma})
@@ -49,8 +50,8 @@ router.post('/', function (req, res, next) {
     })
 })
 
-router.get('/', function (req, res, next) {
-    models.Turma.findAll().then(function (turmas) {
+router.get('/Plano/:id([0-9]+)', function (req, res, next) {
+    models.Turma.findAll({where:{Plano:req.params.id}}).then(function (turmas) {
         res.send({
             success: true,
             message: 'Turmas listadas',

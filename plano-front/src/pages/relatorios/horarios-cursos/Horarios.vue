@@ -512,7 +512,7 @@ export default {
       var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades;
       var turmas = _.filter(this.$store.state.turma.Turmas, ["periodo", 1]);
       var turmasExternas = this.$store.state.turmaExterna.Turmas;
-      var anoAtual = this.$store.state.plano.Plano[0].ano;
+      var anoAtual = _.find(this.$store.state.plano.Plano, {id: parseInt(localStorage.getItem('Plano'), 10)}).ano;
       var currentSemestres = 1;
 
       if (this.$store.state.curso.Cursos[0].semestreInicial == 1) {
@@ -929,7 +929,7 @@ export default {
       var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades;
       var turmas = _.filter(this.$store.state.turma.Turmas, ["periodo", 3]);
       var turmasExternas = this.$store.state.turmaExterna.Turmas;
-      var anoAtual = this.$store.state.plano.Plano[0].ano;
+      var anoAtual = _.find(this.$store.state.plano.Plano, {id: parseInt(localStorage.getItem('Plano'), 10)}).ano;
       var currentSemestres = 1;
 
       if (this.$store.state.curso.Cursos[0].semestreInicial == 1) {

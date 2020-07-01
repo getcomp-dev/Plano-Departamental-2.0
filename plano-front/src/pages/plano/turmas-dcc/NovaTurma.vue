@@ -332,13 +332,25 @@ export default {
       this.convertEmptyToNull(this.turmaForm);
       if (!this.checkNewTurmaInputsValue(this.turmaForm)) return;
 
-      let turmasLivres = _.filter(
-        this.$store.state.turma.Turmas,
-        (turma) => turma.Disciplina === null
-      );
-
-      this.turmaForm.id = turmasLivres[0].id;
-      this.editTurma(this.turmaForm, this.currentDisciplina.nome);
+      this.turmaForm.Plano = parseInt(localStorage.getItem('Plano'), 10)
+      console.log(this.turmaForm)
+      turmaService.create(this.turmaForm)
+              .then((response) => {
+                this.$store.dispatch('fetchAllPedidos')
+                this.$notify({
+                  group: "general",
+                  title: `Sucesso!`,
+                  text: `A Turma ${response.Turma.letra} foi criada!`,
+                  type: "success",
+                });
+              })
+              .catch((error) => {
+                this.error = "<b>Erro ao criar Turma</b>";
+                if (error.response.data.fullMessage) {
+                  this.error +=
+                          "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+                }
+              });
       this.semestre = this.turmaForm.periodo;
     },
     editTurma(turma, disciplinaNome) {

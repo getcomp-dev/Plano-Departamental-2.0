@@ -50,7 +50,18 @@ const actions = {
                 reject(error)
             })
         })
-    }
+    },
+
+    fetchAllPedidosExternos ({commit}) {
+        return new Promise((resolve, reject) => {
+            pedidoExternoService.fetchAll().then(response => {
+                commit(PEDIDO_EXTERNO_FETCHED, response)
+                resolve()
+            }).catch(error => {
+                reject(error)
+            })
+        })
+    },
 }
 
 const getters = {}

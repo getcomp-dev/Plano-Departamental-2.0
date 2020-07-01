@@ -43,7 +43,7 @@ const mutations = {
 const actions = {
     fetchAll ({commit}) {
         return new Promise((resolve, reject) => {
-            cargaPosService.fetchAll().then(response => {
+            cargaPosService.fetchAll(localStorage.getItem('Plano')).then(response => {
                 commit(CARGA_POS_FETCHED, response)
                 resolve()
             }).catch(error => {

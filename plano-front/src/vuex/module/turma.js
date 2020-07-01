@@ -55,7 +55,7 @@ const mutations = {
 const actions = {
     fetchAll ({commit}) {
         return new Promise((resolve, reject) => {
-            turmaService.fetchAll().then(response => {
+            turmaService.fetchAll(localStorage.getItem('Plano')).then(response => {
                 commit(TURMA_FETCHED, response)
                 resolve()
             }).catch(error => {

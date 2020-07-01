@@ -1,8 +1,8 @@
 import Vue from 'vue'
 
 export default {
-    fetchAll (config = {}) {
-        return Vue.axios.get(`/cargaPos`, config)
+    fetchAll (PlanoId, config = {}) {
+        return Vue.axios.get(`/cargaPos/Plano/${PlanoId}`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     },
