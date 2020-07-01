@@ -113,13 +113,10 @@ button i.far {
 
 .cancelbtn {
   background-color: white !important;
-  color: #c3c3c3 !important;
+  color: #8a8a8a !important;
 }
 .cancelbtn:hover {
-  color: #8a8a8a !important;
-}
-.cancelbtn:focus {
-  color: #8a8a8a !important;
+  color: #707070 !important;
 }
 
 .delbtn {

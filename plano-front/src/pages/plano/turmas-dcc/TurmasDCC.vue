@@ -12,7 +12,7 @@
             <i class="fas fa-check"></i>
           </BaseButton>
           <BaseButton
-            title="Adicionar"
+            title="Cancelar"
             :type="'icon'"
             :color="'red'"
             @click="toggleIsAdding()"
@@ -22,14 +22,13 @@
         </template>
         <template v-else>
           <BaseButton
-            title="Cancelar"
+            title="Adicionar"
             :type="'icon'"
             :color="'green'"
             @click="toggleIsAdding()"
           >
             <i class="fas fa-plus"></i>
           </BaseButton>
-
           <BaseButton
             title="Deletar selecionados"
             :type="'icon'"
@@ -52,7 +51,7 @@
         <BaseButton
           title="Relátorio"
           :type="'icon'"
-          :color="'lightblue'"
+          :color="'gray'"
           @click="xlsx(Pedidos)"
         >
           <i class="fas fa-file-alt"></i>
@@ -369,7 +368,7 @@
               <input
                 type="text"
                 class="form-control input-search"
-                placeholder="Pesquise nome ou codigo de uma disciplina..."
+                placeholder="Pesquise nome ou codigo de um curso..."
                 v-model="searchCursosModal"
               />
               <button
@@ -551,43 +550,47 @@
       <template #modal-body>
         <ul class="list-ajuda list-group">
           <li class="list-group-item">
-            <b>Para exibir conteúdo na Tabela:</b> Clique no icone de filtros
-            <i class="fas fa-list-ul cancelbtn"></i> Utilize as abas acima da
-            tabela para alternar entre os tipos de filtros e marque quais deseja
-            visualizar, depois clique em OK.
+            <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
+            <i class="fas fa-list-ul cancelbtn"></i> e na janela que será aberta
+            utilize as abas para navegar entre os tipos de filtros. Marque em
+            suas respectivas tabelas quais informações deseja visualizar, e para
+            finalizar clique no botão OK.
           </li>
           <li class="list-group-item">
-            <b>Para adicionar disciplinas à Tabela:</b> Clique em Adicionar
-            <i class="fas fa-plus addbtn"></i>
-            , em seguida, preencha a nova linha que surgirá na tabela. Após
-            concluído, clique em Salvar
+            <b>Para adicionar uma turma à tabela:</b> Clique no ícone adicionar
+            <i class="fas fa-plus addbtn"></i> , em seguida preencha a nova
+            linha que irá aparecer no inicio da tabela. Note que, disciplina,
+            turno e letra da turma são campos obrigátorios. Após preencher os
+            campos, clique no ícone salvar
             <i class="fas fa-check addbtn"></i>
-            ou em Cancelar
-            <i class="fas fa-times cancelbtn"></i>
+            ou em cancelar
+            <i class="fas fa-times delbtn"></i>
             .
           </li>
           <li class="list-group-item">
-            <b>Para editar disciplinas da Tabela:</b> Faça as alterações
-            necessárias diretamente na tabela e o sistema irá salvar
-            automaticamente.
+            <b>Para editar turma da Tabela:</b> Exitem duas formas de fazer
+            alterações numa turma, a primeira é modificando diretamente os
+            campos tabela e o sistema irá salvar automaticamente. <br />
+            A outra forma é clickando no icone
+            <i class="fas fa-edit"></i> presente na coluna editar da tabela, e
+            na janela que será aberta no formulario superior poderá ser feito
+            alterações que somente serão enviadas ao cliclar no botão salvar.
+            Porém note que, as alterações na tabela de vagas na parte inferior
+            serão salvas automaticamente.
           </li>
           <li class="list-group-item">
-            <b>Para deletar disciplinas da Tabela:</b> Marque a(s) disciplina(s)
-            que deseja deletar através da caixa de seleção à esquerda e em
-            seguida clique em Deletar
+            <b>Para deletar turmas da tabela:</b> Marque a(s) turma(s) que
+            deseja deletar através da caixa de seleção na primeira coluna à
+            esquerda na tabela e em seguida clique no ícone deletar
             <i class="fas fa-trash delbtn"></i>
             e confirme no botão OK.
           </li>
           <li class="list-group-item">
-            <b>Para gerar relatório:</b> Clique no botão XLSX
-            <i class="far fa-file-pdf relatbtn"></i>
-            e aguarde para fazer
-            <font style="font-style: italic;">download</font> do relatório.
-          </li>
-          <li class="list-group-item">
-            <b>Observações:</b> Em cada coluna de cursos a disciplina adicionada
-            permite a inclusão em dois espaços, sendo acima destinado para
-            alunos na grade, e abaixo para alunos repetentes.
+            <b>Para gerar relatório (.xlsx) das turmas:</b> Clique no ícone
+            relátorio
+            <i class="far fa-file-alt"></i>
+            e aguarde o
+            <i style="font-style: italic;">download</i> iniciar.
           </li>
         </ul>
       </template>

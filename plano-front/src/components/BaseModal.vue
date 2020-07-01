@@ -215,7 +215,7 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  max-height: calc(100% - 3.5rem);
+  max-height: calc(100% - 6rem);
   background: #ffffff;
   box-shadow: 0 2px 10px 0;
   border-radius: 5px;

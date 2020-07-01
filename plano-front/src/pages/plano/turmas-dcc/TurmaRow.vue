@@ -1169,6 +1169,7 @@ export default {
   },
   computed: {
     totalPedidosPeriodizados() {
+      if (!this.Pedidos) return 0;
       let total = 0;
       for (var p = 0; p < this.Pedidos.length; p++) {
         total += parseInt(this.Pedidos[p].vagasPeriodizadas, 10);
@@ -1176,6 +1177,7 @@ export default {
       return total;
     },
     totalPedidosNaoPeriodizados() {
+      if (!this.Pedidos) return 0;
       let total = 0;
       for (var p = 0; p < this.Pedidos.length; p++) {
         total += parseInt(this.Pedidos[p].vagasNaoPeriodizadas, 10);

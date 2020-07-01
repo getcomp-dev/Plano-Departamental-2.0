@@ -36,183 +36,127 @@
     ></div>
     <!-- Modal Novo Plano -->
     <b-modal
-            id="modal-novo-plano"
-            ref="modalNovoPlano"
-            title="Informe o ano do novo plano"
+      id="modal-novo-plano"
+      ref="modalNovoPlano"
+      title="Informe o ano do novo plano"
     >
       <b-form-group
-              label="Ano"
-              label-for="NovoAno"
-              label-cols-sm="4"
-              label-cols-lg="3"
+        label="Ano"
+        label-for="NovoAno"
+        label-cols-sm="4"
+        label-cols-lg="3"
       >
         <b-form-input
-                id="NovoAno"
-                type="text"
-                v-model="planoForm.ano"
-                style="margin-right: 10px; width: 60px;"
+          id="NovoAno"
+          type="text"
+          v-model="planoForm.ano"
+          style="margin-right: 10px; width: 60px; height:30px"
         ></b-form-input>
       </b-form-group>
       <b-form-group
-              label="Observações"
-              label-for="ObsNovoPlano"
-              label-cols-sm="4"
-              label-cols-lg="3"
+        label="Observações"
+        label-for="ObsNovoPlano"
+        label-cols-sm="4"
+        label-cols-lg="3"
       >
         <b-form-textarea
-                id="ObsNovoPlano"
-                type="text"
-                v-model="planoForm.obs"
-                style="margin-right: 10px;"
+          id="ObsNovoPlano"
+          type="text"
+          v-model="planoForm.obs"
+          style="margin-right: 10px; margin-bottom:15px"
         ></b-form-textarea>
-        <!-- TABLE DISCIPLINAS -->
-        <table
-                class="table table-sm modal-table table-bordered table-hover"
-                style="max-height: 450px !important; overflow-y: auto !important;"
-        >
-          <thead class="thead-light ">
-          <tr class="sticky">
-            <div style="font-size: 11px !important;" class="max-content">
-              <th>
-                <div
-                        class="m-0 input-group"
-                        style="
-                      width: 462px;
-                      height: 35px;
-                      padding-left: 4px;
-                      padding-right: 20px;
-                      padding-top: 4px;
-                    "
-                >
-                  <input
-                          type="text"
-                          class="form-control search-form-control"
-                          style="border-right: none;"
-                          placeholder="Pesquise nome ou codigo de uma disciplina..."
-                          v-model="search_disciplinas"
-                  />
-                  <div
-                          class="input-group-append"
-                          @click="search_disciplinas = null"
-                  >
-                      <span
-                              class="input-group-text search-text"
-                              style="height: 25px; font-size: 18px; cursor: pointer;"
-                      >&times;</span
-                      >
-                  </div>
-                </div>
-              </th>
-            </div>
-          </tr>
 
-          <tr>
-            <div style="font-size: 11px !important;" class="max-content">
-              <th>
-                <p
-                        style="width: 25px; text-align: center;"
-                        class="p-header"
-                ></p>
-              </th>
-              <th>
-                <p
-                        class="p-header clickable"
-                        style="width: 70px; text-align: start;"
-                        @click="toggleOrdDiscip('codigo')"
-                        title="Clique para ordenar por código"
-                >
-                  Cód.
-                  <i
-                          style="font-size: 0.6rem; text-align: right;"
-                          :class="
-                        modal_ordem_discip.order == 'codigo'
-                          ? modal_ordem_discip.type == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : 'fas fa-arrow-down fa-sm low-opacity'
-                      "
-                  ></i>
-                </p>
-              </th>
-              <th>
-                <p
-                        class="p-header clickable"
-                        style="width: 280px; text-align: start;"
-                        @click="toggleOrdDiscip('nome')"
-                        title="Clique para ordenar por nome"
-                >
-                  Nome
-                  <i
-                          style="font-size: 0.6rem; text-align: right;"
-                          :class="
-                        modal_ordem_discip.order == 'nome'
-                          ? modal_ordem_discip.type == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : 'fas fa-arrow-down fa-sm low-opacity'
-                      "
-                  ></i>
-                </p>
-              </th>
-              <th>
-                <p
-                        class="p-header clickable"
-                        style="width: 85px; text-align: start;"
-                        @click="toggleOrdDiscip('perfil_nome')"
-                        title="Clique para ordenar por nome"
-                >
-                  Perfil
-                  <i
-                          style="font-size: 0.6rem; text-align: right;"
-                          :class="
-                        modal_ordem_discip.order == 'perfil_nome'
-                          ? modal_ordem_discip.type == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : 'fas fa-arrow-down fa-sm low-opacity'
-                      "
-                  ></i>
-                </p>
-              </th>
-            </div>
-          </tr>
-          </thead>
-          <tbody>
-          <tr
-                  v-for="disciplina in Disciplinas_Modal_Ordered"
-                  :key="'disciplina' + disciplina.id"
-                  value="disciplina.id"
-          >
-            <div class="max-content">
-              <td>
-                <div style="width: 25px; height: inherit;" class="px-1">
-                  <input
-                          type="checkbox"
-                          class="form-check-input position-static m-0"
-                          v-model="disciplinasNovoPlanoSelecionadas"
-                          :value="disciplina"
-                  />
-                </div>
+        <!-- TABLE DISCIPLINAS -->
+        <BaseTable :tableType="'modal-table'" :hasSearchBar="true">
+          <template #thead-search>
+            <input
+              type="text"
+              class="form-control input-search"
+              placeholder="Pesquise nome ou codigo de uma disciplina..."
+              v-model="searchDisciplinasModal"
+            />
+            <button
+              @click="searchDisciplinasModal = ''"
+              class="btn btn-search"
+              style="font-weight: bold "
+            >
+              <i class="fas fa-times"></i>
+            </button>
+          </template>
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th
+              title="Código"
+              class="t-start clickable"
+              style="width: 70px"
+              @click="toggleOrder(ordenacaoModal.disciplinas, 'codigo')"
+            >
+              Cód.
+              <i
+                :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"
+              ></i>
+            </th>
+            <th
+              class="t-start clickable"
+              style="width: 270px"
+              @click="toggleOrder(ordenacaoModal.disciplinas, 'nome')"
+            >
+              Nome
+              <i
+                :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"
+              ></i>
+            </th>
+            <th
+              class="t-start clickable"
+              style="width: 85px"
+              @click="
+                toggleOrder(ordenacaoModal.disciplinas, 'perfilAbreviacao')
+              "
+            >
+              Perfil
+              <i
+                :class="
+                  setIconByOrder(ordenacaoModal.disciplinas, 'perfilAbreviacao')
+                "
+              ></i>
+            </th>
+          </template>
+          <template #tbody>
+            <tr
+              v-for="disciplina in DisciplinasOrderedModal"
+              :key="'MdDisciplina' + disciplina.id"
+              @click="
+                toggleItemInArray(
+                  disciplina.id,
+                  disciplinasNovoPlanoSelecionadas
+                )
+              "
+            >
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="disciplinasNovoPlanoSelecionadas"
+                  :value="disciplina.id"
+                />
               </td>
-              <td>
-                <p style="width: 70px; text-align: start;">
-                  {{ disciplina.codigo }}
-                </p>
+              <td style="width: 70px" class="t-start">
+                {{ disciplina.codigo }}
               </td>
-              <td>
-                <p style="width: 280px; text-align: start;">
-                  {{ disciplina.nome }}
-                </p>
+              <td style="width: 270px" class="t-start">
+                {{ disciplina.nome }}
               </td>
-              <td>
-                <p style="width: 85px; text-align: start;">
-                  {{ disciplina.perfil_nome }}
-                </p>
+              <td style="width: 85px" class="t-start">
+                {{ disciplina.perfilAbreviacao }}
               </td>
-            </div>
-          </tr>
-          </tbody>
-        </table>
+            </tr>
+            <tr v-if="DisciplinasOrderedModal.length === 0">
+              <td colspan="3" style="width:450px">
+                NENHUMA DISCIPLINA ENCONTRADA.
+              </td>
+            </tr>
+          </template>
+        </BaseTable>
       </b-form-group>
       <div slot="modal-footer">
         <b-button v-on:click="novoPlano()">Criar Plano</b-button>
@@ -234,8 +178,12 @@ import TheNavbar from "./TheNavbar.vue";
 import TheSidebar from "./sidebar/TheSidebar.vue";
 import ModalUser from "./modais/ModalUser.vue";
 import ModalDownload from "./modais/ModalDownload.vue";
-import { BaseModal, LoadingPage } from "@/components/index.js";
-import { notification } from "@/mixins/index.js";
+import { BaseModal, BaseTable, LoadingPage } from "@/components/index.js";
+import {
+  toggleOrdination,
+  toggleItemInArray,
+  notification,
+} from "@/mixins/index.js";
 import planoService from "@/common/services/plano";
 import turmaService from "@/common/services/turma";
 import pedidoService from "@/common/services/pedido";
@@ -254,21 +202,25 @@ export default {
     TheNavbar,
     LoadingPage,
     BaseModal,
+    BaseTable,
     ModalUser,
     ModalDownload,
+    BaseTable,
   },
-  mixins: [notification],
+  mixins: [toggleOrdination, toggleItemInArray, notification],
   data() {
     return {
       hasModalOpen: false,
       sidebarVisibility: false,
       plano: undefined,
       planoForm: _.clone(emptyPlano),
+      searchDisciplinasModal: "",
       disciplinasNovoPlanoSelecionadas: [],
       grades1semestre: { CCD: [], CCN: [], EC: [], SI: [] },
       grades2semestre: { CCD: [], CCN: [], EC: [], SI: [] },
-      search_disciplinas: null,
-      modal_ordem_discip: { order: "codigo", type: "asc" },
+      ordenacaoModal: {
+        disciplinas: { order: "codigo", type: "asc" },
+      },
       showModal: {
         download: () => {
           this.$refs.modalDownload.openModal();
@@ -278,14 +230,14 @@ export default {
         },
         novoPlano: () => {
           this.$refs.modalNovoPlano.show();
-        }
+        },
       },
     };
   },
   created() {
     this.$store.commit(COMPONENT_LOADING);
-    if(!localStorage.getItem('Plano')){
-      localStorage.setItem('Plano', '1')
+    if (!localStorage.getItem("Plano")) {
+      localStorage.setItem("Plano", "1");
     }
     this.$store
       .dispatch("fetchAll")
@@ -299,7 +251,7 @@ export default {
       });
 
     this.$store.commit("setYear", 2019);
-    this.plano = localStorage.getItem('Plano')
+    this.plano = localStorage.getItem("Plano");
   },
   mounted() {
     EventBus.$on("close-sidebar", this.closeSideBar);
@@ -323,17 +275,7 @@ export default {
       this.sidebarVisibility = false;
     },
 
-    toggleOrdDiscip(ord) {
-      if (this.modal_ordem_discip.order != ord) {
-        this.modal_ordem_discip.order = ord;
-        this.modal_ordem_discip.type = "asc";
-      } else {
-        this.modal_ordem_discip.type =
-                this.modal_ordem_discip.type == "asc" ? "desc" : "asc";
-      }
-    },
-
-    gradesAtivas(ano){
+    gradesAtivas(ano) {
       //define grades ativas por periodo
       let g;
       let periodoInicial, periodoFinal;
@@ -344,9 +286,10 @@ export default {
       for (let i = 0; i < g.length; i++) {
         periodoInicial = periodoFinal + 1;
         periodoFinal =
-                1 +
-                2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
-                (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
+          1 +
+          2 *
+            (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+          (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
         this.grades1semestre.CCD.push({
           id: g[i].id,
           inicio: periodoInicial,
@@ -360,9 +303,10 @@ export default {
       for (let i = 0; i < g.length; i++) {
         periodoInicial = periodoFinal + 1;
         periodoFinal =
-                1 +
-                2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
-                (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
+          1 +
+          2 *
+            (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+          (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
         this.grades2semestre.CCD.push({
           id: g[i].id,
           inicio: periodoInicial,
@@ -379,9 +323,10 @@ export default {
       for (let i = 0; i < g.length; i++) {
         periodoInicial = periodoFinal + 1;
         periodoFinal =
-                1 +
-                2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
-                (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
+          1 +
+          2 *
+            (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+          (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
         this.grades1semestre.CCN.push({
           id: g[i].id,
           inicio: periodoInicial,
@@ -395,9 +340,10 @@ export default {
       for (let i = 0; i < g.length; i++) {
         periodoInicial = periodoFinal + 1;
         periodoFinal =
-                1 +
-                2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
-                (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
+          1 +
+          2 *
+            (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+          (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
         this.grades2semestre.CCN.push({
           id: g[i].id,
           inicio: periodoInicial,
@@ -414,9 +360,10 @@ export default {
       for (let i = 0; i < g.length; i++) {
         periodoInicial = periodoFinal + 1;
         periodoFinal =
-                1 +
-                2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
-                (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
+          1 +
+          2 *
+            (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+          (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
         this.grades1semestre.SI.push({
           id: g[i].id,
           inicio: periodoInicial,
@@ -430,9 +377,10 @@ export default {
       for (let i = 0; i < g.length; i++) {
         periodoInicial = periodoFinal + 1;
         periodoFinal =
-                1 +
-                2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
-                (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
+          1 +
+          2 *
+            (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+          (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
         this.grades2semestre.SI.push({
           id: g[i].id,
           inicio: periodoInicial,
@@ -449,9 +397,10 @@ export default {
       for (let i = 0; i < g.length; i++) {
         periodoInicial = periodoFinal + 1;
         periodoFinal =
-                1 +
-                2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
-                (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
+          1 +
+          2 *
+            (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+          (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
         this.grades1semestre.EC.push({
           id: g[i].id,
           inicio: periodoInicial,
@@ -465,9 +414,10 @@ export default {
       for (let i = 0; i < g.length; i++) {
         periodoInicial = periodoFinal + 1;
         periodoFinal =
-                1 +
-                2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
-                (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
+          1 +
+          2 *
+            (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+          (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
         this.grades2semestre.EC.push({
           id: g[i].id,
           inicio: periodoInicial,
@@ -480,232 +430,519 @@ export default {
     },
 
     novoPlano: function() {
-      this.gradesAtivas(this.planoForm.ano)
-      let disciplinasNovoPlano1Semestre = []
-      let disciplinasNovoPlano2Semestre = []
-      for(let i = 0; i < this.grades1semestre.CCD.length; i++){
-        let disciplinasGrade = _.filter(this.$store.state.disciplinaGrade.DisciplinaGrades, {Grade: this.grades1semestre.CCD[i].id})
+      this.gradesAtivas(this.planoForm.ano);
+      let disciplinasNovoPlano1Semestre = [];
+      let disciplinasNovoPlano2Semestre = [];
+      for (let i = 0; i < this.grades1semestre.CCD.length; i++) {
+        let disciplinasGrade = _.filter(
+          this.$store.state.disciplinaGrade.DisciplinaGrades,
+          { Grade: this.grades1semestre.CCD[i].id }
+        );
         disciplinasGrade.forEach((disciplina) => {
-          if(disciplina.periodo%2===1){
-            if((disciplina.periodo >= this.grades1semestre.CCD[i].inicio) && (disciplina.periodo <= this.grades1semestre.CCD[i].fim)){
-              let t = _.find(disciplinasNovoPlano1Semestre, {Disciplina:disciplina.Disciplina})
-              if(t === undefined){
-                disciplinasNovoPlano1Semestre.push({Disciplina:disciplina.Disciplina, CCD:true, EC:false, CCN:false, SI:false, periodo:1})
-              }else{
-                t.CCD = true
+          if (disciplina.periodo % 2 === 1) {
+            if (
+              disciplina.periodo >= this.grades1semestre.CCD[i].inicio &&
+              disciplina.periodo <= this.grades1semestre.CCD[i].fim
+            ) {
+              let t = _.find(disciplinasNovoPlano1Semestre, {
+                Disciplina: disciplina.Disciplina,
+              });
+              if (t === undefined) {
+                disciplinasNovoPlano1Semestre.push({
+                  Disciplina: disciplina.Disciplina,
+                  CCD: true,
+                  EC: false,
+                  CCN: false,
+                  SI: false,
+                  periodo: 1,
+                });
+              } else {
+                t.CCD = true;
               }
             }
           }
-        })
+        });
       }
-      for(let i = 0; i < this.grades1semestre.EC.length; i++){
-        let disciplinasGrade = _.filter(this.$store.state.disciplinaGrade.DisciplinaGrades, {Grade: this.grades1semestre.EC[i].id})
+      for (let i = 0; i < this.grades1semestre.EC.length; i++) {
+        let disciplinasGrade = _.filter(
+          this.$store.state.disciplinaGrade.DisciplinaGrades,
+          { Grade: this.grades1semestre.EC[i].id }
+        );
         disciplinasGrade.forEach((disciplina) => {
-          if(disciplina.periodo%2===1){
-            if((disciplina.periodo >= this.grades1semestre.EC[i].inicio) && (disciplina.periodo <= this.grades1semestre.EC[i].fim)){
-              let t = _.find(disciplinasNovoPlano1Semestre, {Disciplina:disciplina.Disciplina})
-              if(t === undefined){
-                disciplinasNovoPlano1Semestre.push({Disciplina:disciplina.Disciplina, CCD:false, EC:true, CCN:false, SI:false, periodo:1})
-              }else{
-                t.EC = true
+          if (disciplina.periodo % 2 === 1) {
+            if (
+              disciplina.periodo >= this.grades1semestre.EC[i].inicio &&
+              disciplina.periodo <= this.grades1semestre.EC[i].fim
+            ) {
+              let t = _.find(disciplinasNovoPlano1Semestre, {
+                Disciplina: disciplina.Disciplina,
+              });
+              if (t === undefined) {
+                disciplinasNovoPlano1Semestre.push({
+                  Disciplina: disciplina.Disciplina,
+                  CCD: false,
+                  EC: true,
+                  CCN: false,
+                  SI: false,
+                  periodo: 1,
+                });
+              } else {
+                t.EC = true;
               }
             }
           }
-        })
+        });
       }
-      for(let i = 0; i < this.grades1semestre.CCN.length; i++){
-        let disciplinasGrade = _.filter(this.$store.state.disciplinaGrade.DisciplinaGrades, {Grade: this.grades1semestre.CCN[i].id})
+      for (let i = 0; i < this.grades1semestre.CCN.length; i++) {
+        let disciplinasGrade = _.filter(
+          this.$store.state.disciplinaGrade.DisciplinaGrades,
+          { Grade: this.grades1semestre.CCN[i].id }
+        );
         disciplinasGrade.forEach((disciplina) => {
-          if(disciplina.periodo%2===0){
-            if((disciplina.periodo >= this.grades1semestre.CCN[i].inicio) && (disciplina.periodo <= this.grades1semestre.CCN[i].fim)){
-              let t = _.find(disciplinasNovoPlano1Semestre, {Disciplina:disciplina.Disciplina})
-              if(t === undefined){
-                disciplinasNovoPlano1Semestre.push({Disciplina:disciplina.Disciplina, CCD:false, EC:false, CCN:true, SI:false, periodo:1})
-              }else{
-                t.CCN = true
+          if (disciplina.periodo % 2 === 0) {
+            if (
+              disciplina.periodo >= this.grades1semestre.CCN[i].inicio &&
+              disciplina.periodo <= this.grades1semestre.CCN[i].fim
+            ) {
+              let t = _.find(disciplinasNovoPlano1Semestre, {
+                Disciplina: disciplina.Disciplina,
+              });
+              if (t === undefined) {
+                disciplinasNovoPlano1Semestre.push({
+                  Disciplina: disciplina.Disciplina,
+                  CCD: false,
+                  EC: false,
+                  CCN: true,
+                  SI: false,
+                  periodo: 1,
+                });
+              } else {
+                t.CCN = true;
               }
             }
           }
-        })
+        });
       }
-      for(let i = 0; i < this.grades1semestre.SI.length; i++){
-        let disciplinasGrade = _.filter(this.$store.state.disciplinaGrade.DisciplinaGrades, {Grade: this.grades1semestre.SI[i].id})
+      for (let i = 0; i < this.grades1semestre.SI.length; i++) {
+        let disciplinasGrade = _.filter(
+          this.$store.state.disciplinaGrade.DisciplinaGrades,
+          { Grade: this.grades1semestre.SI[i].id }
+        );
         disciplinasGrade.forEach((disciplina) => {
-          if(disciplina.periodo%2===0){
-            if((disciplina.periodo >= this.grades1semestre.SI[i].inicio) && (disciplina.periodo <= this.grades1semestre.SI[i].fim)){
-              let t = _.find(disciplinasNovoPlano1Semestre, {Disciplina:disciplina.Disciplina})
-              if(t === undefined){
-                disciplinasNovoPlano1Semestre.push({Disciplina:disciplina.Disciplina, CCD:false, EC:false, CCN:false, SI:true, periodo:1})
-              }else{
-                t.SI = true
+          if (disciplina.periodo % 2 === 0) {
+            if (
+              disciplina.periodo >= this.grades1semestre.SI[i].inicio &&
+              disciplina.periodo <= this.grades1semestre.SI[i].fim
+            ) {
+              let t = _.find(disciplinasNovoPlano1Semestre, {
+                Disciplina: disciplina.Disciplina,
+              });
+              if (t === undefined) {
+                disciplinasNovoPlano1Semestre.push({
+                  Disciplina: disciplina.Disciplina,
+                  CCD: false,
+                  EC: false,
+                  CCN: false,
+                  SI: true,
+                  periodo: 1,
+                });
+              } else {
+                t.SI = true;
               }
             }
           }
-        })
+        });
       }
 
-      for(let i = 0; i < this.grades2semestre.CCD.length; i++){
-        let disciplinasGrade = _.filter(this.$store.state.disciplinaGrade.DisciplinaGrades, {Grade: this.grades2semestre.CCD[i].id})
+      for (let i = 0; i < this.grades2semestre.CCD.length; i++) {
+        let disciplinasGrade = _.filter(
+          this.$store.state.disciplinaGrade.DisciplinaGrades,
+          { Grade: this.grades2semestre.CCD[i].id }
+        );
         disciplinasGrade.forEach((disciplina) => {
-          if(disciplina.periodo%2===0){
-            if((disciplina.periodo >= this.grades2semestre.CCD[i].inicio) && (disciplina.periodo <= this.grades2semestre.CCD[i].fim)){
-              let t = _.find(disciplinasNovoPlano2Semestre, {Disciplina:disciplina.Disciplina})
-              if(t === undefined){
-                disciplinasNovoPlano2Semestre.push({Disciplina:disciplina.Disciplina, CCD:true, EC:false, CCN:false, SI:false, periodo:3})
-              }else{
-                t.CCD = true
+          if (disciplina.periodo % 2 === 0) {
+            if (
+              disciplina.periodo >= this.grades2semestre.CCD[i].inicio &&
+              disciplina.periodo <= this.grades2semestre.CCD[i].fim
+            ) {
+              let t = _.find(disciplinasNovoPlano2Semestre, {
+                Disciplina: disciplina.Disciplina,
+              });
+              if (t === undefined) {
+                disciplinasNovoPlano2Semestre.push({
+                  Disciplina: disciplina.Disciplina,
+                  CCD: true,
+                  EC: false,
+                  CCN: false,
+                  SI: false,
+                  periodo: 3,
+                });
+              } else {
+                t.CCD = true;
               }
             }
           }
-        })
+        });
       }
-      for(let i = 0; i < this.grades2semestre.EC.length; i++){
-        let disciplinasGrade = _.filter(this.$store.state.disciplinaGrade.DisciplinaGrades, {Grade: this.grades2semestre.EC[i].id})
+      for (let i = 0; i < this.grades2semestre.EC.length; i++) {
+        let disciplinasGrade = _.filter(
+          this.$store.state.disciplinaGrade.DisciplinaGrades,
+          { Grade: this.grades2semestre.EC[i].id }
+        );
         disciplinasGrade.forEach((disciplina) => {
-          if(disciplina.periodo%2===0){
-            if((disciplina.periodo >= this.grades2semestre.EC[i].inicio) && (disciplina.periodo <= this.grades2semestre.EC[i].fim)){
-              let t = _.find(disciplinasNovoPlano2Semestre, {Disciplina:disciplina.Disciplina})
-              if(t === undefined){
-                disciplinasNovoPlano2Semestre.push({Disciplina:disciplina.Disciplina, CCD:false, EC:true, CCN:false, SI:false, periodo:3})
-              }else{
-                t.EC = true
+          if (disciplina.periodo % 2 === 0) {
+            if (
+              disciplina.periodo >= this.grades2semestre.EC[i].inicio &&
+              disciplina.periodo <= this.grades2semestre.EC[i].fim
+            ) {
+              let t = _.find(disciplinasNovoPlano2Semestre, {
+                Disciplina: disciplina.Disciplina,
+              });
+              if (t === undefined) {
+                disciplinasNovoPlano2Semestre.push({
+                  Disciplina: disciplina.Disciplina,
+                  CCD: false,
+                  EC: true,
+                  CCN: false,
+                  SI: false,
+                  periodo: 3,
+                });
+              } else {
+                t.EC = true;
               }
             }
           }
-        })
+        });
       }
-      for(let i = 0; i < this.grades2semestre.CCN.length; i++){
-        let disciplinasGrade = _.filter(this.$store.state.disciplinaGrade.DisciplinaGrades, {Grade: this.grades2semestre.CCN[i].id})
+      for (let i = 0; i < this.grades2semestre.CCN.length; i++) {
+        let disciplinasGrade = _.filter(
+          this.$store.state.disciplinaGrade.DisciplinaGrades,
+          { Grade: this.grades2semestre.CCN[i].id }
+        );
         disciplinasGrade.forEach((disciplina) => {
-          if(disciplina.periodo%2===1){
-            if((disciplina.periodo >= this.grades2semestre.CCN[i].inicio) && (disciplina.periodo <= this.grades2semestre.CCN[i].fim)){
-              let t = _.find(disciplinasNovoPlano2Semestre, {Disciplina:disciplina.Disciplina})
-              if(t === undefined){
-                disciplinasNovoPlano2Semestre.push({Disciplina:disciplina.Disciplina, CCD:false, EC:false, CCN:true, SI:false, periodo:3})
-              }else{
-                t.CCN = true
+          if (disciplina.periodo % 2 === 1) {
+            if (
+              disciplina.periodo >= this.grades2semestre.CCN[i].inicio &&
+              disciplina.periodo <= this.grades2semestre.CCN[i].fim
+            ) {
+              let t = _.find(disciplinasNovoPlano2Semestre, {
+                Disciplina: disciplina.Disciplina,
+              });
+              if (t === undefined) {
+                disciplinasNovoPlano2Semestre.push({
+                  Disciplina: disciplina.Disciplina,
+                  CCD: false,
+                  EC: false,
+                  CCN: true,
+                  SI: false,
+                  periodo: 3,
+                });
+              } else {
+                t.CCN = true;
               }
             }
           }
-        })
+        });
       }
-      for(let i = 0; i < this.grades2semestre.SI.length; i++){
-        let disciplinasGrade = _.filter(this.$store.state.disciplinaGrade.DisciplinaGrades, {Grade: this.grades2semestre.SI[i].id})
+      for (let i = 0; i < this.grades2semestre.SI.length; i++) {
+        let disciplinasGrade = _.filter(
+          this.$store.state.disciplinaGrade.DisciplinaGrades,
+          { Grade: this.grades2semestre.SI[i].id }
+        );
         disciplinasGrade.forEach((disciplina) => {
-          if(disciplina.periodo%2===1){
-            if((disciplina.periodo >= this.grades2semestre.SI[i].inicio) && (disciplina.periodo <= this.grades2semestre.SI[i].fim)){
-              let t = _.find(disciplinasNovoPlano2Semestre, {Disciplina:disciplina.Disciplina})
-              if(t === undefined){
-                disciplinasNovoPlano2Semestre.push({Disciplina:disciplina.Disciplina, CCD:false, EC:false, CCN:false, SI:true, periodo:3})
-              }else{
-                t.SI = true
+          if (disciplina.periodo % 2 === 1) {
+            if (
+              disciplina.periodo >= this.grades2semestre.SI[i].inicio &&
+              disciplina.periodo <= this.grades2semestre.SI[i].fim
+            ) {
+              let t = _.find(disciplinasNovoPlano2Semestre, {
+                Disciplina: disciplina.Disciplina,
+              });
+              if (t === undefined) {
+                disciplinasNovoPlano2Semestre.push({
+                  Disciplina: disciplina.Disciplina,
+                  CCD: false,
+                  EC: false,
+                  CCN: false,
+                  SI: true,
+                  periodo: 3,
+                });
+              } else {
+                t.SI = true;
               }
             }
           }
-        })
+        });
       }
-      disciplinasNovoPlano1Semestre = _.filter(disciplinasNovoPlano1Semestre, (d) => {
-        let perfil = _.find(this.$store.state.disciplina.Disciplinas, {id:d.Disciplina}).Perfil
-        return (perfil !== 13) && (perfil !== 15)
-      })
+      disciplinasNovoPlano1Semestre = _.filter(
+        disciplinasNovoPlano1Semestre,
+        (d) => {
+          let perfil = _.find(this.$store.state.disciplina.Disciplinas, {
+            id: d.Disciplina,
+          }).Perfil;
+          return perfil !== 13 && perfil !== 15;
+        }
+      );
 
-      disciplinasNovoPlano2Semestre = _.filter(disciplinasNovoPlano2Semestre, (d) => {
-        let perfil = _.find(this.$store.state.disciplina.Disciplinas, {id:d.Disciplina}).Perfil
-        return (perfil !== 13) && (perfil !== 15)
-      })
+      disciplinasNovoPlano2Semestre = _.filter(
+        disciplinasNovoPlano2Semestre,
+        (d) => {
+          let perfil = _.find(this.$store.state.disciplina.Disciplinas, {
+            id: d.Disciplina,
+          }).Perfil;
+          return perfil !== 13 && perfil !== 15;
+        }
+      );
 
-      let turmasNovoPlano = []
+      let turmasNovoPlano = [];
       disciplinasNovoPlano1Semestre.forEach((d) => {
-        if(!(_.find(this.disciplinasNovoPlanoSelecionadas, {id:d.Disciplina}))){
-          if((d.CCD || d.EC) && (d.CCN || d.SI)){
-            turmasNovoPlano.push({semestre:1, Disciplina:d.Disciplina, turno:"Diurno", letra:"A", CCD:d.CCD, EC:d.EC})
-            turmasNovoPlano.push({semestre:1, Disciplina:d.Disciplina, turno:"Noturno", letra:"B", CCN:d.CCN, SI:d.SI})
-          }else if(d.CCD || d.EC){
-            turmasNovoPlano.push({semestre:1, Disciplina:d.Disciplina, turno:"Diurno", letra:"A", CCD:d.CCD, EC:d.EC})
-          }else if(d.CCN || d.SI){
-            turmasNovoPlano.push({semestre:1, Disciplina:d.Disciplina, turno:"Noturno", letra:"A", CCN:d.CCN, SI:d.SI})
+        if (
+          !_.find(this.disciplinasNovoPlanoSelecionadas, { id: d.Disciplina })
+        ) {
+          if ((d.CCD || d.EC) && (d.CCN || d.SI)) {
+            turmasNovoPlano.push({
+              semestre: 1,
+              Disciplina: d.Disciplina,
+              turno: "Diurno",
+              letra: "A",
+              CCD: d.CCD,
+              EC: d.EC,
+            });
+            turmasNovoPlano.push({
+              semestre: 1,
+              Disciplina: d.Disciplina,
+              turno: "Noturno",
+              letra: "B",
+              CCN: d.CCN,
+              SI: d.SI,
+            });
+          } else if (d.CCD || d.EC) {
+            turmasNovoPlano.push({
+              semestre: 1,
+              Disciplina: d.Disciplina,
+              turno: "Diurno",
+              letra: "A",
+              CCD: d.CCD,
+              EC: d.EC,
+            });
+          } else if (d.CCN || d.SI) {
+            turmasNovoPlano.push({
+              semestre: 1,
+              Disciplina: d.Disciplina,
+              turno: "Noturno",
+              letra: "A",
+              CCN: d.CCN,
+              SI: d.SI,
+            });
           }
         }
-      })
+      });
 
       disciplinasNovoPlano2Semestre.forEach((d) => {
-        if(!(_.find(this.disciplinasNovoPlanoSelecionadas, {id:d.Disciplina}))){
-          if((d.CCD || d.EC) && (d.CCN || d.SI)){
-            turmasNovoPlano.push({semestre:3, Disciplina:d.Disciplina, turno:"Diurno", letra:"A", CCD:d.CCD, EC:d.EC})
-            turmasNovoPlano.push({semestre:3, Disciplina:d.Disciplina, turno:"Noturno", letra:"B", CCN:d.CCN, SI:d.SI})
-          }else if(d.CCD || d.EC){
-            turmasNovoPlano.push({semestre:3, Disciplina:d.Disciplina, turno:"Diurno", letra:"A", CCD:d.CCD, EC:d.EC})
-          }else if(d.CCN || d.SI){
-            turmasNovoPlano.push({semestre:3, Disciplina:d.Disciplina, turno:"Noturno", letra:"A", CCN:d.CCN, SI:d.SI})
+        if (
+          !_.find(this.disciplinasNovoPlanoSelecionadas, { id: d.Disciplina })
+        ) {
+          if ((d.CCD || d.EC) && (d.CCN || d.SI)) {
+            turmasNovoPlano.push({
+              semestre: 3,
+              Disciplina: d.Disciplina,
+              turno: "Diurno",
+              letra: "A",
+              CCD: d.CCD,
+              EC: d.EC,
+            });
+            turmasNovoPlano.push({
+              semestre: 3,
+              Disciplina: d.Disciplina,
+              turno: "Noturno",
+              letra: "B",
+              CCN: d.CCN,
+              SI: d.SI,
+            });
+          } else if (d.CCD || d.EC) {
+            turmasNovoPlano.push({
+              semestre: 3,
+              Disciplina: d.Disciplina,
+              turno: "Diurno",
+              letra: "A",
+              CCD: d.CCD,
+              EC: d.EC,
+            });
+          } else if (d.CCN || d.SI) {
+            turmasNovoPlano.push({
+              semestre: 3,
+              Disciplina: d.Disciplina,
+              turno: "Noturno",
+              letra: "A",
+              CCN: d.CCN,
+              SI: d.SI,
+            });
           }
         }
-      })
+      });
 
       //{Disciplina:id, CCD:true/false, EC:true/false, CCN:true/false, SI:true/false, periodo:1/3}
 
-      console.log(turmasNovoPlano)
+      console.log(turmasNovoPlano);
 
       planoService.create(this.planoForm).then((plano) => {
-        localStorage.setItem('Plano', plano.Plano.id)
+        localStorage.setItem("Plano", plano.Plano.id);
         turmasNovoPlano.forEach((t) => {
-          turmaService.create({id:undefined, periodo:t.semestre, letra:t.letra, turno1:t.turno, turno2:undefined, Disciplina:t.Disciplina, Docente1:undefined, Docente2:undefined, Horario1:undefined, Horario2:undefined, Sala1:undefined, Sala2:undefined, Plano:plano.Plano.id})
-                  .then((turma) => {
-                    if(t.CCN){
-                      pedidoService.update(1, turma.Turma.id, {Turma:turma.Turma.id, Curso:1, vagasPeriodizadas: 1, vagasNaoPeriodizadas: 0})
-                              .then((response) => {})
-                              .catch((error) => {console.log("erro ao atualizar pedido: " + error);})
-                    }
-                    if(t.EC){
-                      pedidoService.update(2, turma.Turma.id, {Turma:turma.Turma.id, Curso:2, vagasPeriodizadas: 1, vagasNaoPeriodizadas: 0})
-                              .then((response) => {})
-                              .catch((error) => {console.log("erro ao atualizar pedido: " + error);})
-                    }
-                    if(t.SI){
-                      pedidoService.update(3, turma.Turma.id, {Turma:turma.Turma.id, Curso:3, vagasPeriodizadas: 1, vagasNaoPeriodizadas: 0})
-                              .then((response) => {})
-                              .catch((error) => {console.log("erro ao atualizar pedido: " + error);})
-                    }
-                    if(t.CCD){
-                      pedidoService.update(4, turma.Turma.id, {Turma:turma.Turma.id, Curso:4, vagasPeriodizadas: 1, vagasNaoPeriodizadas: 0})
-                              .then((response) => {})
-                              .catch((error) => {console.log("erro ao atualizar pedido: " + error);})
-                    }
+          turmaService
+            .create({
+              id: undefined,
+              periodo: t.semestre,
+              letra: t.letra,
+              turno1: t.turno,
+              turno2: undefined,
+              Disciplina: t.Disciplina,
+              Docente1: undefined,
+              Docente2: undefined,
+              Horario1: undefined,
+              Horario2: undefined,
+              Sala1: undefined,
+              Sala2: undefined,
+              Plano: plano.Plano.id,
+            })
+            .then((turma) => {
+              if (t.CCN) {
+                pedidoService
+                  .update(1, turma.Turma.id, {
+                    Turma: turma.Turma.id,
+                    Curso: 1,
+                    vagasPeriodizadas: 1,
+                    vagasNaoPeriodizadas: 0,
                   })
-                  .catch((error) => {console.log("erro ao criar turma: " + error);})
-        })
+                  .then((response) => {})
+                  .catch((error) => {
+                    console.log("erro ao atualizar pedido: " + error);
+                  });
+              }
+              if (t.EC) {
+                pedidoService
+                  .update(2, turma.Turma.id, {
+                    Turma: turma.Turma.id,
+                    Curso: 2,
+                    vagasPeriodizadas: 1,
+                    vagasNaoPeriodizadas: 0,
+                  })
+                  .then((response) => {})
+                  .catch((error) => {
+                    console.log("erro ao atualizar pedido: " + error);
+                  });
+              }
+              if (t.SI) {
+                pedidoService
+                  .update(3, turma.Turma.id, {
+                    Turma: turma.Turma.id,
+                    Curso: 3,
+                    vagasPeriodizadas: 1,
+                    vagasNaoPeriodizadas: 0,
+                  })
+                  .then((response) => {})
+                  .catch((error) => {
+                    console.log("erro ao atualizar pedido: " + error);
+                  });
+              }
+              if (t.CCD) {
+                pedidoService
+                  .update(4, turma.Turma.id, {
+                    Turma: turma.Turma.id,
+                    Curso: 4,
+                    vagasPeriodizadas: 1,
+                    vagasNaoPeriodizadas: 0,
+                  })
+                  .then((response) => {})
+                  .catch((error) => {
+                    console.log("erro ao atualizar pedido: " + error);
+                  });
+              }
+            })
+            .catch((error) => {
+              console.log("erro ao criar turma: " + error);
+            });
+        });
         let turmasCopiar = _.filter(this.$store.state.turma.Turmas, (t) => {
-          let disciplina = _.find(this.disciplinasNovoPlanoSelecionadas, {id:t.Disciplina})
-          if(disciplina) return true
-          else return false
-        })
+          let disciplina = _.includes(
+            this.disciplinasNovoPlanoSelecionadas,
+            t.Disciplina
+          );
+          if (disciplina) return true;
+          else return false;
+        });
         turmasCopiar.forEach((t) => {
-          turmaService.create({id:undefined, periodo:t.periodo, letra:t.letra, turno1:t.turno1, turno2:undefined, Disciplina:t.Disciplina, Horario1:t.Horario1, Horario2:t.Horario2, Sala1:undefined, Sala2:undefined, Plano:plano.Plano.id})
-                  .then((turma) => {
-                    let pedidos = this.$store.state.pedido.Pedidos[t.id]
-                    pedidos.forEach((p) => {
-                      pedidoService.update(p.Curso, turma.Turma.id, {Turma:turma.Turma.id, Curso:p.Curso, vagasPeriodizadas: p.vagasPeriodizadas, vagasNaoPeriodizadas: 0})
-                              .then((response) => {})
-                              .catch((error) => {console.log("erro ao atualizar pedido: " + error);})
-                    })
+          turmaService
+            .create({
+              id: undefined,
+              periodo: t.periodo,
+              letra: t.letra,
+              turno1: t.turno1,
+              turno2: undefined,
+              Disciplina: t.Disciplina,
+              Horario1: t.Horario1,
+              Horario2: t.Horario2,
+              Sala1: undefined,
+              Sala2: undefined,
+              Plano: plano.Plano.id,
+            })
+            .then((turma) => {
+              let pedidos = this.$store.state.pedido.Pedidos[t.id];
+              pedidos.forEach((p) => {
+                pedidoService
+                  .update(p.Curso, turma.Turma.id, {
+                    Turma: turma.Turma.id,
+                    Curso: p.Curso,
+                    vagasPeriodizadas: p.vagasPeriodizadas,
+                    vagasNaoPeriodizadas: 0,
                   })
-                  .catch((error) => {console.log("erro ao criar turma externa: " + error);})
-        })
+                  .then((response) => {})
+                  .catch((error) => {
+                    console.log("erro ao atualizar pedido: " + error);
+                  });
+              });
+            })
+            .catch((error) => {
+              console.log("erro ao criar turma externa: " + error);
+            });
+        });
         this.$store.state.turmaExterna.Turmas.forEach((t) => {
-          turmaExternaService.create({id:undefined, periodo:t.periodo, letra:t.letra, turno1:t.turno1, turno2:undefined, Disciplina:t.Disciplina, Horario1:t.Horario1, Horario2:t.Horario2, Sala1:undefined, Sala2:undefined, Plano:plano.Plano.id})
-                  .then((turma) => {
-                    let pedidos = this.$store.state.pedidoExterno.Pedidos[t.id]
-                    pedidos.forEach((p) => {
-                      pedidoExternoService.update(p.Curso, turma.Turma.id, {Turma:turma.Turma.id, Curso:p.Curso, vagasPeriodizadas: p.vagasPeriodizadas, vagasNaoPeriodizadas: p.vagasNaoPeriodizadas})
-                              .then((response) => {})
-                              .catch((error) => {console.log("erro ao atualizar pedido externo: " + error);})
-                    })
+          turmaExternaService
+            .create({
+              id: undefined,
+              periodo: t.periodo,
+              letra: t.letra,
+              turno1: t.turno1,
+              turno2: undefined,
+              Disciplina: t.Disciplina,
+              Horario1: t.Horario1,
+              Horario2: t.Horario2,
+              Sala1: undefined,
+              Sala2: undefined,
+              Plano: plano.Plano.id,
+            })
+            .then((turma) => {
+              let pedidos = this.$store.state.pedidoExterno.Pedidos[t.id];
+              pedidos.forEach((p) => {
+                pedidoExternoService
+                  .update(p.Curso, turma.Turma.id, {
+                    Turma: turma.Turma.id,
+                    Curso: p.Curso,
+                    vagasPeriodizadas: p.vagasPeriodizadas,
+                    vagasNaoPeriodizadas: p.vagasNaoPeriodizadas,
                   })
-                  .catch((error) => {console.log("erro ao criar turma externa: " + error);})
-        })
+                  .then((response) => {})
+                  .catch((error) => {
+                    console.log("erro ao atualizar pedido externo: " + error);
+                  });
+              });
+            })
+            .catch((error) => {
+              console.log("erro ao criar turma externa: " + error);
+            });
+        });
         this.$store.dispatch("fetchAll");
         this.$refs.modalNovoPlano.hide();
       });
-
     },
 
     returnFiles() {
@@ -720,12 +957,19 @@ export default {
         //console.log(this.files.filter( function( elm ) {return elm.match(/.*\.(sql)/ig)}))
       });
     },
-
+    normalizeText(text) {
+      return text
+        .toUpperCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+    },
   },
   computed: {
     year() {
-      let p = _.find(this.$store.state.plano.Plano, {id:parseInt(this.plano, 10)})
-      return (p ? parseInt(p.ano, 10) : 0)
+      let p = _.find(this.$store.state.plano.Plano, {
+        id: parseInt(this.plano, 10),
+      });
+      return p ? parseInt(p.ano, 10) : 0;
     },
     httpRequestCount() {
       return this.$store.state.httpRequestCount;
@@ -735,35 +979,50 @@ export default {
     },
 
     Disciplinas() {
-      return _.orderBy(this.$store.state.disciplina.Disciplinas,'nome')
+      return _.orderBy(this.$store.state.disciplina.Disciplinas, "nome");
     },
+    DisciplinasInPerfis() {
+      const disciplinasResultantes = [];
 
-    Disciplinas_Modal_Search() {
-      let result = this.Disciplinas;
-      if (this.search_disciplinas != null) {
-        let searchUpperCase = this.search_disciplinas
-                .toUpperCase()
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "");
+      this.Disciplinas.forEach((disciplina) => {
+        const perfilFounded = _.find(
+          this.Perfis,
+          (perfil) => perfil.id === disciplina.Perfil
+        );
 
-        return result.filter((disci) => {
-          return (
-                  disci.nome
-                          .normalize("NFD")
-                          .replace(/[\u0300-\u036f]/g, "")
-                          .match(searchUpperCase) ||
-                  disci.nome.match(searchUpperCase) ||
-                  disci.codigo.match(searchUpperCase)
-          );
-        });
-      } else return result;
+        if (perfilFounded) {
+          disciplinasResultantes.push({
+            ...disciplina,
+            perfilNome: perfilFounded.nome,
+            perfilAbreviacao: perfilFounded.abreviacao,
+          });
+        }
+      });
+      return disciplinasResultantes;
     },
+    Perfis() {
+      return this.$store.state.perfil.Perfis;
+    },
+    DisciplinasFiltredModal() {
+      if (this.searchDisciplinasModal === "") return this.DisciplinasInPerfis;
 
-    Disciplinas_Modal_Ordered() {
+      const searchNormalized = this.normalizeText(this.searchDisciplinasModal);
+
+      return _.filter(this.DisciplinasInPerfis, (disciplina) => {
+        const disciplinaNome = this.normalizeText(disciplina.nome);
+        const disciplinaCodigo = this.normalizeText(disciplina.codigo);
+
+        return (
+          disciplinaNome.match(searchNormalized) ||
+          disciplinaCodigo.match(searchNormalized)
+        );
+      });
+    },
+    DisciplinasOrderedModal() {
       return _.orderBy(
-              this.Disciplinas_Modal_Search,
-              this.modal_ordem_discip.order,
-              this.modal_ordem_discip.type
+        this.DisciplinasFiltredModal,
+        this.ordenacaoModal.disciplinas.order,
+        this.ordenacaoModal.disciplinas.type
       );
     },
   },

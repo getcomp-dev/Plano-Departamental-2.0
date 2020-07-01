@@ -108,9 +108,6 @@ export default {
   color: #747474 !important;
 }
 
-.icon-orange {
-  color: #6e80e4;
-}
 .icon-red {
   background-color: inherit !important;
   color: #ff817b !important;
