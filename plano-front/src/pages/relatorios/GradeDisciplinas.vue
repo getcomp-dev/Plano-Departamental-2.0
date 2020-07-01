@@ -525,7 +525,7 @@ export default {
     };
   },
   mounted() {
-    this.ano = this.$store.state.plano.Plano[0].ano;
+    this.ano = _.find(this.$store.state.plano.Plano, {id: parseInt(localStorage.getItem('Plano'), 10)}).ano;
     this.novoAno = this.ano;
     this.runAll();
     //ativa todos filtros
@@ -563,11 +563,12 @@ export default {
     runAll() {
       //cria objeto para armazenar os períodos das disciplinas e chama as funções que a populam
       this.$store.state.disciplina.Disciplinas.forEach((d) => {
-        this.disciplinasGrades[d.id] = [[[], []], [[], []], [[], []], [[], []]]; //inisializa os períodos em 0 [Primeiro Semestre, Segundo Semestre]
+        this.disciplinasGrades[d.id] = [[[], []], [[], []], [[], []], [[], []]]; //inicializa os períodos em 0 [Primeiro Semestre, Segundo Semestre]
       });
       this.getGrades();
       this.get1Periodo();
       this.get2Periodo();
+      this.disciplinasGrades = Object.assign({}, this.disciplinasGrades)
     },
     getGrades() {
       //popula as grades disponíveis de cada curso em um objeto
@@ -868,7 +869,7 @@ export default {
       return _.orderBy(this.$store.state.horario.Horarios, "horario");
     },
     AnoAtual() {
-      return this.$store.state.plano.Plano[0].ano;
+      return _.find(this.$store.state.plano.Plano, {id: parseInt(localStorage.getItem('Plano'), 10)}).ano;
     },
     activeCCD() {
       return (
