@@ -2,7 +2,7 @@
 import _ from 'lodash'
 import authService from '../../common/services/auth'
 
-import {AUTHENTICATE, USER_FETCHED, USER_LOGGED_OUT} from '../mutation-types'
+import {AUTHENTICATE, USER_FETCHED, USER_LOGGED_OUT, SOCKET_USUARIO_UPDATED} from '../mutation-types'
 
 const state = {
   token: localStorage.getItem('token'),
@@ -14,6 +14,15 @@ const mutations = {
     state.token = data.token
     localStorage.setItem('token', state.token)
     state.Usuario = data.Usuario
+  },
+
+  [SOCKET_USUARIO_UPDATED] (state, data) {
+    if(state.Usuario.id === data.Usuario.id){
+      state.Usuario = data.Usuario
+      if(data.Usuario.admin === true){
+        state.Usuario.admin = 1
+      }
+    }
   },
 
   [USER_FETCHED] (state, data) {

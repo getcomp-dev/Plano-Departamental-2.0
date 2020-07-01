@@ -1,0 +1,93 @@
+/* from right */
+.right-modal-enter-active {
+  animation-name: customSlideInRight;
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+}
+.right-modal-leave-active {
+  animation-name: customSlideOutRight;
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+}
+@keyframes customSlideInRight {
+  0% {
+    opacity: 0;
+    right: -10%;
+  }
+  100% {
+    opacity: 1;
+    right: 20px;
+  }
+}
+@keyframes customSlideOutRight {
+  0% {
+    opacity: 1;
+    right: 20px;
+  }
+  100% {
+    opacity: 0;
+    right: -10%;
+  }
+}
+/* from center */
+.center-modal-enter-active {
+  animation-name: slideInCenter;
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+}
+.center-modal-leave-active {
+  animation-name: slideOutCenter;
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+}
+@keyframes slideInCenter {
+  0% {
+    opacity: 0;
+    top: -7%;
+  }
+  100% {
+    opacity: 1;
+    top: 25px;
+  }
+}
+@keyframes slideOutCenter {
+  0% {
+    opacity: 1;
+    top: 25px;
+  }
+  100% {
+    opacity: 0;
+    top: -7%;
+  }
+}
+/* from navbar */
+.fromNavbar-modal-enter-active {
+  animation-name: slideInFromNavbar;
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+}
+.fromNavbar-modal-leave-active {
+  animation-name: slideOutFromNavbar;
+  animation-duration: 0.4s;
+  animation-fill-mode: both;
+}
+@keyframes slideInFromNavbar {
+  0% {
+    opacity: 0;
+    top: -7%;
+  }
+  100% {
+    opacity: 1;
+    top: 40px;
+  }
+}
+@keyframes slideOutFromNavbar {
+  0% {
+    opacity: 1;
+    top: 40px;
+  }
+  100% {
+    opacity: 0;
+    top: -7%;
+  }
+}

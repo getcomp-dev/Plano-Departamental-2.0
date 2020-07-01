@@ -26,6 +26,7 @@ import DashboardPerfis from "@/pages/gerenciar/Perfis";
 import DashboardDisciplinas from "@/pages/gerenciar/Disciplinas";
 import DashboardSalas from "@/pages/gerenciar/Salas";
 import DashboardHistory from "@/pages/gerenciar/History";
+import DashboardUsuarios from "@/pages/gerenciar/Usuarios";
 
 import { USER_LOGGED_OUT } from "./vuex/mutation-types";
 Vue.use(VueRouter);
@@ -96,6 +97,7 @@ const routes = [
       },
       { path: "gradeEdit", name: "gradeEdit", component: DashboardGradesEdit },
       { path: "history", name: "history", component: DashboardHistory },
+      { path: "usuarios", name: "usuarios", component: DashboardUsuarios },
       {
         path: "validacoes",
         name: "validacoes",
@@ -106,7 +108,7 @@ const routes = [
   {
     path: "/logout",
     name: "logout",
-    beforeEnter: function (to, from, next) {
+    beforeEnter: function(to, from, next) {
       store.commit(USER_LOGGED_OUT);
       next("/login");
     },

@@ -9,13 +9,22 @@
     --navbar-height: 60px;
   }
 }
-.main-component {
+*:focus {
+  border-color: #80bdff !important;
+  outline: 0 !important;
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+}
+main .main-component {
   width: 100%;
   overflow: hidden !important;
   margin: 0 !important;
   padding: 0 !important;
 }
 
+.less-padding {
+  padding: 0 2px !important;
+}
 .form-inline .titulo {
   font-size: 25px;
   font-weight: normal !important;
@@ -69,7 +78,7 @@
 }
 .modal-custom .list-ajuda i {
   font-size: 12px !important;
-  margin: 0 1px;
+  margin: 0 1px !important;
   color: #585858;
 }
 #modalAjuda .list-group .list-group-item strong,
@@ -80,6 +89,13 @@
   color: #2a2a2a;
 }
 
+.list-deletar .list-group-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  word-wrap: break-word;
+}
 /* notification */
 .vue-notification {
   padding: 10px;

@@ -16,7 +16,7 @@
             },
           ]"
         >
-          {{ tab }}</a
+          {{ normalizeText(tab) }}</a
         >
       </li>
     </ul>
@@ -29,6 +29,12 @@ export default {
   props: {
     currentTab: { type: String, required: true },
     allTabs: { type: Array, required: true },
+  },
+  methods: {
+    normalizeText(tabText) {
+      if (tabText === "Laboratorios") return "Laborátorios";
+      return tabText;
+    },
   },
 };
 </script>

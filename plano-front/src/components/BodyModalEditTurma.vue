@@ -54,9 +54,7 @@
               : ""
           }}
         </p>
-        <span
-          class="col-4 modal-title p-0 m-0 text-right"
-          style="font-weight:normal"
+        <span class="modal-title p-0 m-0 text-right" style="font-weight:normal"
           >Créditos: {{ CreditosDaDisciplina }}</span
         >
       </div>

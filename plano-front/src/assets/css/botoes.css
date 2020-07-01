@@ -15,7 +15,9 @@ button {
   transition: all 200ms ease;
 }
 .btn-custom:focus {
-  box-shadow: 0 0 1pt 2pt #9ec0f7 !important;
+  outline: 0 !important;
+  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.4) !important;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.4) !important;
 }
 .btn-icon {
   outline: none !important;
@@ -45,7 +47,6 @@ button {
 .btn-icon i {
   font-size: 25px;
 }
-/* deletar dps de padronizar */
 button i.fas,
 button i.far {
   font-size: 25px;

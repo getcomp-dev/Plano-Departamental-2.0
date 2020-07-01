@@ -2,30 +2,31 @@
   <div class="main-component row p-0">
     <PageTitle :title="'Horários - Laborátorios'">
       <template #aside>
-        <b-button
-          v-b-modal.modalFiltros
+        <BaseButton
           title="Filtros"
-          class="btn-custom btn-icon cancelbtn"
+          :type="'icon'"
+          :color="'gray'"
+          @click="openAsideModal('modalFiltros')"
         >
           <i class="fas fa-list-ul"></i>
-        </b-button>
+        </BaseButton>
 
-        <b-button
-          v-b-modal.modalRelatorio
-          type="button"
-          class="btn-custom btn-icon relatbtn"
-          title="Relatório"
+        <BaseButton
+          title="Relátorio"
+          :type="'icon'"
+          :color="'lightblue'"
+          @click="openAsideModal('modalRelatorio')"
         >
-          <i class="far fa-file-pdf"></i>
-        </b-button>
+          <i class="far fa-file-alt"></i>
+        </BaseButton>
 
-        <b-button
-          v-b-modal.modalAjuda
-          title="Ajuda"
-          class="btn-custom btn-icon relatbtn"
+        <BaseButton
+          :type="'icon'"
+          :color="'lightblue'"
+          @click="openAsideModal('modalAjuda')"
         >
           <i class="fas fa-question"></i>
-        </b-button>
+        </BaseButton>
       </template>
     </PageTitle>
 
@@ -66,177 +67,113 @@
       </div>
     </div>
 
-    <b-modal id="modalFiltros" ref="modalFiltros" scrollable title="Filtros">
-      <NavTab
-        :currentTab="tabAtivaModal"
-        :allTabs="['Laborátorios', 'Semestre']"
-        @change-tab="tabAtivaModal = $event"
-      />
+    <BaseModal
+      ref="modalFiltros"
+      :modalOptions="{
+        type: 'filtros',
+        title: 'Filtros',
+        hasFooter: true,
+      }"
+      :hasFooter="true"
+      @btn-ok="btnOkFiltros()"
+      @select-all="modalSelectAll[tabAtivaModal]"
+      @select-none="modalSelectNone[tabAtivaModal]"
+    >
+      <template #modal-body>
+        <NavTab
+          :currentTab="tabAtivaModal"
+          :allTabs="['Laboratorios', 'Semestres']"
+          @change-tab="tabAtivaModal = $event"
+        />
 
-      <div
-        class="col m-0 p-0"
-        style="width: max-content; height: 450px !important;"
-      >
-        <table
-          v-show="tabAtivaModal === 'Semestre'"
-          class="modal-table table table-bordered table-sm"
-          style="max-height: 392px !important;"
-        >
-          <thead class="thead-light sticky">
-            <tr>
-              <div style="font-size: 11px !important" class="max-content">
-                <th>
-                  <p style="width: 25px;" class="p-header"></p>
-                </th>
-                <th>
-                  <p
-                    class="p-header clickable-header"
-                    style="width: 435px; text-align: start;"
-                  >
-                    Semestre Letivo
-                  </p>
-                </th>
-              </div>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <div style="width: max-content;">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      class="form-check-input position-static m-0"
-                      v-model="filtroSemestres.primeiro"
-                    />
-                  </div>
+        <div class="div-table">
+          <BaseTable
+            v-show="tabAtivaModal === 'Laboratorios'"
+            :tableType="'modal-table'"
+          >
+            <template #thead>
+              <th style="width: 25px" class="t-start"></th>
+              <th style="width: 425px" class="t-start">
+                Nome
+              </th>
+            </template>
+            <template #tbody>
+              <tr
+                v-for="laboratorio in LaboratoriosOrdered"
+                :key="`MdLabs${laboratorio.id}`"
+                @click="
+                  toggleItemInArray(
+                    laboratorio,
+                    filtroLaboratorios.selecionados
+                  )
+                "
+              >
+                <td style="width: 25px">
+                  <input
+                    type="checkbox"
+                    v-model="filtroLaboratorios.selecionados"
+                    :value="laboratorio"
+                    class="form-check-input position-static m-0"
+                  />
                 </td>
-                <td>
-                  <p style="width: 435px; text-align: start;">PRIMEIRO</p>
+                <td style="width: 425px" class="t-start">
+                  {{ laboratorio.nome }}
                 </td>
-              </div>
-            </tr>
-            <tr>
-              <div style="width: max-content;">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      class="form-check-input position-static m-0"
-                      v-model="filtroSemestres.segundo"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p style="width: 435px; text-align: start;">SEGUNDO</p>
-                </td>
-              </div>
-            </tr>
-          </tbody>
-        </table>
-        <!-- TABLE LABS -->
-        <table
-          v-show="tabAtivaModal === 'Laborátorios'"
-          class="modal-table table table-sm table-bordered"
-          style="max-height: 392px !important;"
-        >
-          <thead class="thead-light sticky">
-            <tr>
-              <div style="font-size: 11px !important" class="max-content">
-                <th>
-                  <p style="width: 25px !important;" class="p-header"></p>
-                </th>
-                <th>
-                  <p class="p-header t-start" style="width: 435px">
-                    Nome
-                  </p>
-                </th>
-              </div>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="laboratorio in LaboratoriosOrdered"
-              :key="`laboratorio${laboratorio.id}`"
-            >
-              <div style="width: max-content;">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      v-model="filtroLaboratorios.selecionados"
-                      :value="laboratorio"
-                      class="form-check-input position-static m-0"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p
-                    class="center-row"
-                    style="width: 435px; text-align: start;"
-                  >
-                    {{ laboratorio.nome }}
-                  </p>
-                </td>
-              </div>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+              </tr>
+            </template>
+          </BaseTable>
 
-      <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
-        <div class="w-100">
-          <template v-if="tabAtivaModal == 'Semestre'">
-            <b-button
-              class="btn-azul btn-custom btn-modal"
-              variant="success"
-              @click="selectAllSemestre()"
-              >Selecionar Todos</b-button
-            >
-            <b-button
-              class="btn-cinza btn-custom btn-modal"
-              variant="secondary"
-              @click="selectNoneSemestre()"
-              >Desmarcar Todos</b-button
-            >
-          </template>
-          <template v-else>
-            <b-button
-              class="btn-azul btn-custom btn-modal"
-              variant="success"
-              @click="selectAllLabs()"
-              >Selecionar Todos</b-button
-            >
-            <b-button
-              class="btn-cinza btn-custom btn-modal"
-              variant="secondary"
-              @click="selectNoneLabs()"
-              >Desmarcar Todos</b-button
-            >
-          </template>
+          <BaseTable
+            v-show="tabAtivaModal === 'Semestres'"
+            :tableType="'modal-table'"
+          >
+            <template #thead>
+              <th style="width: 25px"></th>
+              <th class="t-start clickable" style="width: 425px">
+                Semestre Letivo
+              </th>
+            </template>
+            <template #tbody>
+              <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
+                <td style="width: 25px">
+                  <input
+                    type="checkbox"
+                    class="form-check-input position-static m-0"
+                    v-model="filtroSemestres.primeiro"
+                  />
+                </td>
+                <td style="width: 425px" class="t-start">
+                  PRIMEIRO
+                </td>
+              </tr>
+              <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
+                <td style="width: 25px">
+                  <input
+                    type="checkbox"
+                    class="form-check-input position-static m-0"
+                    v-model="filtroSemestres.segundo"
+                  />
+                </td>
+                <td style="width: 425px" class="t-start">SEGUNDO</td>
+              </tr>
+            </template>
+          </BaseTable>
         </div>
-        <b-button
-          variant="success"
-          @click="btnOK()"
-          class="btn-verde btn-custom btn-modal btn-ok-modal"
-          >OK</b-button
-        >
-      </div>
-    </b-modal>
+      </template>
+    </BaseModal>
 
     <!-- MODAL DE AJUDA -->
-    <b-modal
-      id="modalAjuda"
-      ref="ajudaModal"
-      scrollable
-      title="Ajuda"
-      hide-footer
+    <BaseModal
+      ref="modalAjuda"
+      :modalOptions="{
+        type: 'ajuda',
+        title: 'Ajuda',
+      }"
     >
-      <div class="modal-body">
-        <ul class="listas list-group">
+      <template #modal-body>
+        <ul class="list-ajuda list-group">
           <li class="list-group-item">
-            <strong>Para exibir conteúdo na tela:</strong> Clique em
-            Laboratórios
+            <b>Para exibir conteúdo na tela:</b> Clique em Laboratórios
             <i
               class="fas fa-list-ul cancelbtn px-1"
               style="font-size: 12px;"
@@ -245,7 +182,7 @@
             em OK. Caso queira ver todos basta clicar em Selecionar Todos.
           </li>
           <li class="list-group-item">
-            <strong>Para gerar relatório:</strong> Clique no botão Relatório
+            <b>Para gerar relatório:</b> Clique no botão Relatório
             <i
               class="far fa-file-pdf relatbtn px-1"
               style="font-size: 12px;"
@@ -254,47 +191,44 @@
             <font style="font-style: italic;">download</font> do mesmo.
           </li>
         </ul>
-      </div>
-    </b-modal>
+      </template>
+    </BaseModal>
+
     <!-- MODAL RELATORIO-->
-    <b-modal
-      id="modalRelatorio"
-      ref="relatorioModal"
-      size="sm"
-      scrollable
-      title="Relatório"
-      hide-footer
-    >
-      <ul class="listas list-group">
-        <li class="list-group-item clickable" v-on:click="pdf(1)">
-          <strong>Parcial</strong>
-        </li>
-        <li class="list-group-item clickable" v-on:click="pdf(2)">
-          <strong>Completo</strong>
-        </li>
-      </ul>
-    </b-modal>
+    <ModalRelatorio ref="modalRelatorio" @selection-option="pdf($event)" />
   </div>
 </template>
 
 <script>
 import _ from "lodash";
 import pdfs from "@/common/services/pdfs";
+import { toggleItemInArray } from "@/mixins/index.js";
+import {
+  BaseButton,
+  BaseModal,
+  BaseTable,
+  PageTitle,
+  NavTab,
+  ModalRelatorio,
+} from "@/components/index.js";
 import TableHorariosLab from "./TableHorariosLab";
-import toggleOrdinationMixin from "@/mixins/toggleOrdination.js";
-import PageTitle from "@/components/PageTitle";
-import NavTab from "@/components/NavTab";
 
 export default {
   name: "DashboardLaboratoriosAlocacao",
-  mixins: [toggleOrdinationMixin],
+  mixins: [toggleItemInArray],
   components: {
+    BaseTable,
     PageTitle,
     NavTab,
     TableHorariosLab,
+    BaseButton,
+    BaseModal,
+    ModalRelatorio,
   },
   data() {
     return {
+      tabAtivaModal: "Laboratorios",
+      asideModaisRefs: ["modalFiltros", "modalAjuda", "modalRelatorio"],
       filtroLaboratorios: {
         ativados: [],
         selecionados: [],
@@ -304,65 +238,59 @@ export default {
         segundo: true,
         ativo: 3,
       },
-      tabAtivaModal: "Laborátorios",
-      ordenacaoLabs: { order: "nome", type: "asc" },
+      modalSelectAll: {
+        Laboratorios: () => {
+          this.filtroLaboratorios.selecionados = [...this.LaboratoriosOrdered];
+        },
+        Semestres: () => {
+          this.filtroSemestres.primeiro = true;
+          this.filtroSemestres.segundo = true;
+        },
+      },
+      modalSelectNone: {
+        Laboratorios: () => {
+          this.filtroLaboratorios.selecionados = [];
+        },
+        Semestres: () => {
+          this.filtroSemestres.primeiro = false;
+          this.filtroSemestres.segundo = false;
+        },
+      },
     };
   },
-  beforeMount() {
-    this.selectAllLabs();
-    this.filtroLaboratorios.ativados = [
-      ...this.filtroLaboratorios.selecionados,
-    ];
+  mounted() {
+    this.modalSelectAll.Laboratorios();
+    this.btnOkFiltros();
   },
   methods: {
-    setSemestreAtivo() {
-      if (this.filtroSemestres.primeiro && !this.filtroSemestres.segundo) {
-        this.filtroSemestres.ativo = 1;
-      } else if (
-        this.filtroSemestres.segundo &&
-        !this.filtroSemestres.primeiro
-      ) {
-        this.filtroSemestres.ativo = 2;
-      } else if (
-        this.filtroSemestres.primeiro &&
-        this.filtroSemestres.primeiro
-      ) {
-        this.filtroSemestres.ativo = 3;
-      } else {
-        this.filtroSemestres.ativo = undefined;
-      }
+    openAsideModal(modalRef) {
+      this.asideModaisRefs.forEach((ref) => {
+        if (modalRef === ref) this.$refs[ref].toggle();
+        else this.$refs[ref].close();
+      });
     },
-    selectAllSemestre() {
-      this.filtroSemestres.primeiro = true;
-      this.filtroSemestres.segundo = true;
-    },
-    selectNoneSemestre() {
-      this.filtroSemestres.primeiro = false;
-      this.filtroSemestres.segundo = false;
-    },
-    btnOK() {
+    btnOkFiltros() {
       this.setSemestreAtivo();
       this.filtroLaboratorios.ativados = [
         ...this.filtroLaboratorios.selecionados,
       ];
-      this.tabAtivaModal = "Laborátorios";
-      this.$refs.modalFiltros.hide();
     },
-    selectAllLabs() {
-      this.filtroLaboratorios.selecionados = [...this.LaboratoriosOrdered];
-    },
-    selectNoneLabs() {
-      this.filtroLaboratorios.selecionados = [];
+    setSemestreAtivo() {
+      const { primeiro, segundo } = this.filtroSemestres;
+
+      if (primeiro && !segundo) this.filtroSemestres.ativo = 1;
+      else if (!primeiro && segundo) this.filtroSemestres.ativo = 2;
+      else if (primeiro && segundo) this.filtroSemestres.ativo = 3;
+      else this.filtroSemestres.ativo = undefined;
     },
     pdf(opt) {
-      if (opt === 1) {
-        pdfs.pdfAlocacaoLabs({
-          laboratorios: this.filtroLaboratorios.ativados,
-        });
-      }
-      if (opt === 2) {
+      if (opt) {
         pdfs.pdfAlocacaoLabs({
           laboratorios: this.LaboratoriosOrdered,
+        });
+      } else {
+        pdfs.pdfAlocacaoLabs({
+          laboratorios: this.filtroLaboratorios.ativados,
         });
       }
     },
@@ -420,7 +348,7 @@ export default {
 <style scoped>
 .semestre-title {
   width: 100%;
-  font-size: 18px !important;
+  font-size: 16px !important;
   font-weight: bold;
   text-align: start;
 }
@@ -439,56 +367,4 @@ export default {
   grid-row-gap: 20px;
   margin-bottom: 20px;
 }
-
-/* ==== MODAL TABLE ==== */
-.modal-table {
-  display: block;
-  overflow-y: scroll !important;
-  overflow-x: hidden !important;
-  font-size: 10px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-}
-.modal-table tr thead {
-  display: block;
-}
-.modal-table th {
-  padding: 0 !important;
-  text-align: center !important;
-  height: 18px !important;
-}
-
-.modal-table .p-header {
-  padding: 0px 5px 0px 5px !important;
-  margin: 0 !important;
-  text-align: start;
-  height: 18px !important;
-}
-.modal-table tbody {
-  max-height: 100%;
-  width: 100%;
-}
-.modal-table td {
-  border-top: 0;
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  /* height: 22px !important; */
-}
-.modal-table p {
-  margin: 0 !important;
-  text-align: center;
-  padding: 0 !important;
-  padding-right: 5px !important;
-  padding-left: 5px !important;
-}
-.modal-table input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-  margin-bottom: auto !important;
-  height: 13px !important;
-}
-/* FIM MODAL TABLE */
 </style>

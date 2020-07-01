@@ -2,14 +2,14 @@
   <div v-if="Admin" class="main-component row">
     <PageTitle :title="'Disciplinas'">
       <template #aside>
-        <button
-          type="button"
-          v-b-modal.modalAjuda
+        <BaseButton
           title="Ajuda"
-          class="btn-custom btn-icon relatbtn"
+          :type="'icon'"
+          :color="'lightblue'"
+          @click="$refs.modalAjuda.toggle()"
         >
           <i class="fas fa-question"></i>
-        </button>
+        </BaseButton>
       </template>
     </PageTitle>
 
@@ -19,21 +19,23 @@
           <template #thead>
             <th
               style="width: 82px; text-align:start"
-              @click="toggleOrder('codigo')"
+              @click="toggleOrder(ordenacaoDisciplinasMain, 'codigo')"
               class="clickable"
               title="Clique para ordenar por código"
             >
               Código
-              <i :class="setIconByOrder('codigo')"></i>
+              <i
+                :class="setIconByOrder(ordenacaoDisciplinasMain, 'codigo')"
+              ></i>
             </th>
             <th
-              @click="toggleOrder('nome')"
+              @click="toggleOrder(ordenacaoDisciplinasMain, 'nome')"
               style="width: 300px; text-align:start"
               class="clickable"
               title="Clique para ordenar por nome"
             >
               Nome
-              <i :class="setIconByOrder('nome')"></i>
+              <i :class="setIconByOrder(ordenacaoDisciplinasMain, 'nome')"></i>
             </th>
             <th style="width: 40px" title="Carga Teórica">
               C.T.
@@ -44,26 +46,32 @@
             <th
               style="width: 230px"
               class="clickable t-start"
-              @click="toggleOrder('perfil_nome')"
+              @click="toggleOrder(ordenacaoDisciplinasMain, 'perfil_nome')"
             >
               Perfil
-              <i :class="setIconByOrder('perfil_nome')"></i>
+              <i
+                :class="setIconByOrder(ordenacaoDisciplinasMain, 'perfil_nome')"
+              ></i>
             </th>
             <th
               style="width: 70px"
               class="clickable"
-              @click="toggleOrder('ead', 'desc')"
+              @click="toggleOrder(ordenacaoDisciplinasMain, 'ead', 'desc')"
             >
               EAD
-              <i :class="setIconByOrder('ead')"></i>
+              <i :class="setIconByOrder(ordenacaoDisciplinasMain, 'ead')"></i>
             </th>
             <th
               style="width: 70px"
               class="clickable"
-              @click="toggleOrder('laboratorio', 'desc')"
+              @click="
+                toggleOrder(ordenacaoDisciplinasMain, 'laboratorio', 'desc')
+              "
             >
               Lab
-              <i :class="setIconByOrder('laboratorio')"></i>
+              <i
+                :class="setIconByOrder(ordenacaoDisciplinasMain, 'laboratorio')"
+              ></i>
             </th>
           </template>
           <template #tbody>
@@ -266,47 +274,58 @@
       </div>
     </div>
 
-    <!-- MODAL DE AJUDA -->
-    <b-modal id="modalAjuda" scrollable title="Ajuda" hide-footer>
-      <div class="modal-body">
-        <ul class="listas list-group">
+    <!-- MODAL AJUDA -->
+    <BaseModal
+      ref="modalAjuda"
+      :modalOptions="{
+        type: 'ajuda',
+        title: 'Ajuda',
+      }"
+    >
+      <template #modal-body>
+        <ul class="list-ajuda list-group">
           <li class="list-group-item">
-            <strong>Para adicionar disciplinas:</strong> Com o cartão à direita
-            em branco, preencha-o. Em seguida, clique em Adicionar
+            <b>Para adicionar disciplinas:</b> Com o cartão à direita em branco,
+            preencha-o. Em seguida, clique em Adicionar
             <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para editar ou deletar uma disciplina:</strong>Na tabela,
-            clique na disciplina que deseja alterar. Logo após, no cartão à
-            direita, altere as informações que desejar e clique em Salvar
+            <b>Para editar ou deletar uma disciplina:</b>Na tabela, clique na
+            disciplina que deseja alterar. Logo após, no cartão à direita,
+            altere as informações que desejar e clique em Salvar
             <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
             ou, para excluí-lo, clique em Deletar
             <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à
-            direita, clique em Cancelar
+            <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
+            em Cancelar
             <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para alterar a ordenação:</strong> Clique em Nome ou Código
-            no cabeçalho da tabela para ordenação alfabética do mesmo.
+            <b>Para alterar a ordenação:</b> Clique em Nome ou Código no
+            cabeçalho da tabela para ordenação alfabética do mesmo.
           </li>
         </ul>
-      </div>
-    </b-modal>
+      </template>
+    </BaseModal>
   </div>
 </template>
 
 <script>
 import _ from "lodash";
 import disciplinaService from "@/common/services/disciplina";
-import PageTitle from "@/components/PageTitle";
-import BaseTable from "@/components/BaseTable";
-import Card from "@/components/Card";
+import { toggleOrdination, redirectNotAdmin } from "@/mixins/index.js";
+import {
+  PageTitle,
+  BaseTable,
+  BaseButton,
+  BaseModal,
+  Card,
+} from "@/components/index.js";
 
 const emptyDisciplina = {
   id: undefined,
@@ -321,50 +340,21 @@ const emptyDisciplina = {
 
 export default {
   name: "DashboardDisciplina",
-  components: { PageTitle, BaseTable, Card },
-
+  mixins: [toggleOrdination, redirectNotAdmin],
+  components: { PageTitle, BaseTable, Card, BaseButton, BaseModal },
   data() {
     return {
       disciplinaForm: _.clone(emptyDisciplina),
       error: undefined,
       disciplinaClickada: "",
-      ordenacao: { order: "codigo", type: "asc" },
+      ordenacaoDisciplinasMain: { order: "codigo", type: "asc" },
     };
-  },
-  created() {
-    if (!this.Admin) {
-      this.$notify({
-        group: "general",
-        title: "Erro",
-        text:
-          "Acesso negado! Usuário não possui permissão para acessar esta página!",
-        type: "error",
-      });
-      this.$router.push({ name: "dashboard" });
-    }
   },
   methods: {
     onlyNumber($event) {
       let keyCode = $event.keyCode ? $event.keyCode : $event.which;
       if (keyCode < 48 || keyCode > 57) {
         $event.preventDefault();
-      }
-    },
-    toggleOrder(newOrder, type = "asc") {
-      if (this.ordenacao.order != newOrder) {
-        this.ordenacao.order = newOrder;
-        this.ordenacao.type = type;
-      } else {
-        this.ordenacao.type = this.ordenacao.type == "asc" ? "desc" : "asc";
-      }
-    },
-    setIconByOrder(order) {
-      if (this.ordenacao.order === order) {
-        return this.ordenacao.type == "asc"
-          ? "fas fa-arrow-down fa-sm"
-          : "fas fa-arrow-up fa-sm";
-      } else {
-        return "fas fa-arrow-down fa-sm low-opacity";
       }
     },
     handleClickInDisciplina(disciplina) {
@@ -500,8 +490,8 @@ export default {
     DisciplinasOrdered() {
       return _.orderBy(
         this.DisciplinasComPerfil,
-        this.ordenacao.order,
-        this.ordenacao.type
+        this.ordenacaoDisciplinasMain.order,
+        this.ordenacaoDisciplinasMain.type
       );
     },
 
@@ -536,7 +526,7 @@ export default {
   text-align: center !important;
 }
 
-@media screen and (max-width: 1223px) {
+@media screen and (max-width: 1203px) {
   .div-card {
     margin-left: 0px !important;
   }

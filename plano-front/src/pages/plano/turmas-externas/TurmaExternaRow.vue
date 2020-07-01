@@ -695,16 +695,20 @@ export default {
 
   computed: {
     totalPedidosPeriodizados() {
+      if (!this.Pedidos) return 0;
+
       let total = 0;
-      for (let p = 0; p < this.Pedidos.length; p++) {
-        total += parseInt(this.Pedidos[p].vagasPeriodizadas, 10);
+      for (let i = 0; i < this.Pedidos.length; i++) {
+        total += parseInt(this.Pedidos[i].vagasPeriodizadas, 10);
       }
       return total;
     },
     totalPedidosNaoPeriodizados() {
+      if (!this.Pedidos) return 0;
+
       let total = 0;
-      for (let p = 0; p < this.Pedidos.length; p++) {
-        total += parseInt(this.Pedidos[p].vagasNaoPeriodizadas, 10);
+      for (let i = 0; i < this.Pedidos.length; i++) {
+        total += parseInt(this.Pedidos[i].vagasNaoPeriodizadas, 10);
       }
       return total;
     },
@@ -782,6 +786,7 @@ export default {
       return indicesResultantes;
     },
     Pedidos() {
+      if (!this.turma) return [];
       return this.$store.state.pedidoExterno.Pedidos[this.turma.id];
     },
     Salas() {

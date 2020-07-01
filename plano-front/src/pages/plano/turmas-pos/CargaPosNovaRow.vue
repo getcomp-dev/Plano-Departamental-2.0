@@ -91,7 +91,7 @@ export default {
         carga.programa === null ||
         carga.creditos === null
       ) {
-        this.showNotication({
+        this.showNotification({
           type: "error",
           title: "Erro!",
           message: "Cadastro da nova carga inválido ou incompleto.",
@@ -112,13 +112,13 @@ export default {
         .then((response) => {
           this.cleanCarga();
 
-          this.showNotication({
+          this.showNotification({
             type: "success",
             message: `A carga ${response.CargaPos.programa} foi criada!`,
           });
         })
         .catch((error) => {
-          this.showNotication({
+          this.showNotification({
             type: "error",
             title: "Erro ao criar nova carga!",
             message: error,

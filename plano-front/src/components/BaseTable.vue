@@ -146,23 +146,27 @@ export default {
   border-top-right-radius: 0 !important;
 }
 .modal-table thead .btn-search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 25px !important;
   width: 10% !important;
   padding: 0 5px !important;
   color: rgb(75, 75, 75);
   background-color: #fff;
   border: 1px solid #ced4da;
-  border-left: none;
-  cursor: pointer;
+  border-left-color: transparent;
   box-shadow: none !important;
   border-bottom-left-radius: 0 !important;
   border-top-left-radius: 0 !important;
 }
 .modal-table thead .btn-search:hover {
+  cursor: pointer;
   background-color: #e9ecef;
 }
 .modal-table thead .btn-search i {
-  font-size: 11px;
+  margin: 0;
+  font-size: 11px !important;
 }
 
 @-moz-document url-prefix() {

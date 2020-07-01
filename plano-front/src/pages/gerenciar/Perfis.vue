@@ -2,34 +2,36 @@
   <div v-if="Admin" class="main-component row">
     <PageTitle :title="'Perfis'">
       <template #aside>
-        <b-button
-          v-b-modal.modalAjuda
+        <BaseButton
           title="Ajuda"
-          class="btn-custom btn-icon relatbtn"
+          :type="'icon'"
+          :color="'lightblue'"
+          @click="$refs.modalAjuda.toggle()"
         >
           <i class="fas fa-question"></i>
-        </b-button>
+        </BaseButton>
       </template>
     </PageTitle>
+
     <div class="row w-100 m-0 p-0">
       <div class="div-table">
         <BaseTable :tableHeight="'max-content'">
           <template #thead>
             <th
-              @click="toggleOrder('nome')"
+              @click="toggleOrder(ordenacaoPerfisMain, 'nome')"
               style="width: 350px"
               class="clickable t-start"
             >
               Nome
-              <i :class="setIconByOrder('nome')"></i>
+              <i :class="setIconByOrder(ordenacaoPerfisMain, 'nome')"></i>
             </th>
             <th
-              @click="toggleOrder('abreviacao')"
+              @click="toggleOrder(ordenacaoPerfisMain, 'abreviacao')"
               style="width: 90px;"
               class="clickable"
             >
               Abreviação
-              <i :class="setIconByOrder('abreviacao')"></i>
+              <i :class="setIconByOrder(ordenacaoPerfisMain, 'abreviacao')"></i>
             </th>
             <th style="width: 60px;">
               Cor
@@ -159,54 +161,58 @@
       </div>
     </div>
 
-    <!-- MODAL DE AJUDA -->
-    <b-modal
-      id="modalAjuda"
-      ref="ajudaModal"
-      title="Ajuda"
-      scrollable
-      hide-footer
+    <!-- MODAL AJUDA -->
+    <BaseModal
+      ref="modalAjuda"
+      :modalOptions="{
+        type: 'ajuda',
+        title: 'Ajuda',
+      }"
     >
-      <div class="modal-body">
-        <ul class="listas list-group">
+      <template #modal-body>
+        <ul class="list-ajuda list-group">
           <li class="list-group-item">
-            <strong>Para adicionar perfis: </strong> Com o cartão à direita em
-            branco, preencha-o. Em seguida, clique em Adicionar
+            <b>Para adicionar perfis: </b> Com o cartão à direita em branco,
+            preencha-o. Em seguida, clique em Adicionar
             <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para editar ou deletar um perfil: </strong>Na tabela, clique
-            no perfil que deseja alterar. Logo após, no cartão à direita, altere
-            as informações que desejar e clique em Salvar
+            <b>Para editar ou deletar um perfil: </b>Na tabela, clique no perfil
+            que deseja alterar. Logo após, no cartão à direita, altere as
+            informações que desejar e clique em Salvar
             <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
             ou, para excluí-lo, clique em Deletar
             <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à
-            direita, clique em Cancelar
+            <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
+            em Cancelar
             <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para alterar a ordenação:</strong> Clique em Nome ou
-            Abreviação no cabeçalho da tabela para ordenação alfabética do
-            mesmo.
+            <b>Para alterar a ordenação:</b> Clique em Nome ou Abreviação no
+            cabeçalho da tabela para ordenação alfabética do mesmo.
           </li>
         </ul>
-      </div>
-    </b-modal>
+      </template>
+    </BaseModal>
   </div>
 </template>
 
 <script>
 import _ from "lodash";
 import perfilService from "@/common/services/perfil";
-import PageTitle from "@/components/PageTitle";
-import BaseTable from "@/components/BaseTable";
-import Card from "@/components/Card";
+import { toggleOrdination, redirectNotAdmin } from "@/mixins/index.js";
+import {
+  PageTitle,
+  BaseTable,
+  BaseButton,
+  Card,
+  BaseModal,
+} from "@/components/index.js";
 
 const emptyPerfil = {
   id: undefined,
@@ -217,55 +223,30 @@ const emptyPerfil = {
 
 export default {
   name: "DashboardPerfis",
+  mixins: [toggleOrdination, redirectNotAdmin],
   components: {
     PageTitle,
     BaseTable,
     Card,
+    BaseButton,
+    BaseModal,
   },
   data() {
     return {
       perfilForm: _.clone(emptyPerfil),
       error: undefined,
       perfilSelectedId: "",
-      ordenacao: { order: "nome", type: "asc" },
+      ordenacaoPerfisMain: { order: "nome", type: "asc" },
     };
   },
-  created() {
-    if (!this.Admin) {
-      this.$notify({
-        group: "general",
-        title: "Erro",
-        text:
-          "Acesso negado! Usuário não possui permissão para acessar esta página!",
-        type: "error",
-      });
-      this.$router.push({ name: "dashboard" });
-    }
-  },
   methods: {
-    setIconByOrder(orderToCheck) {
-      if (this.ordenacao.order === orderToCheck) {
-        return this.ordenacao.type == "asc"
-          ? "fas fa-arrow-down fa-sm"
-          : "fas fa-arrow-up fa-sm";
-      } else {
-        return "fas fa-arrow-down fa-sm low-opacity";
-      }
-    },
     handleClickInPerfil(perfil) {
       console.log(perfil.id);
       this.perfilSelectedId = perfil.id;
       console.log(this.perfilSelectedId);
       this.showPerfil(perfil);
     },
-    toggleOrder(newOrder, type = "asc") {
-      if (this.ordenacao.order != newOrder) {
-        this.ordenacao.order = newOrder;
-        this.ordenacao.type = type;
-      } else {
-        this.ordenacao.type = this.ordenacao.type == "asc" ? "desc" : "asc";
-      }
-    },
+
     clearClick() {
       this.perfilSelectedId = "";
     },
@@ -363,8 +344,8 @@ export default {
     Perfis() {
       return _.orderBy(
         this.$store.state.perfil.Perfis,
-        this.ordenacao.order,
-        this.ordenacao.type
+        this.ordenacaoPerfisMain.order,
+        this.ordenacaoPerfisMain.type
       );
     },
     isEdit() {

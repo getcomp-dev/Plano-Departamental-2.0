@@ -2,7 +2,7 @@
   <div v-if="Admin" class="main-component row">
     <PageTitle :title="'Logs'">
       <template #aside>
-        <div class="input-group mx-2 p-0">
+        <div class="input-group d-flex align-items-center mx-2 p-0">
           <div class="input-group-prepend">
             <label class="input-group-text">Operação</label>
           </div>
@@ -14,13 +14,14 @@
           </select>
         </div>
 
-        <b-button
-          v-b-modal.modalFiltros
-          title="Tabelas"
-          class="btn-custom btn-icon cancelbtn ml-2"
+        <BaseButton
+          title="Filtros"
+          :type="'icon'"
+          :color="'lightblue'"
+          @click="$refs.modalFiltros.toggle()"
         >
           <i class="fas fa-list-ul"></i>
-        </b-button>
+        </BaseButton>
       </template>
     </PageTitle>
 
@@ -43,25 +44,25 @@
                 <td style="width: 110px">
                   {{ h.tabelaModificada }}
                 </td>
-                <td style="width: 120px">
+                <td style="width: 120px" class="less-padding">
                   {{ h.campoModificado }}
                 </td>
-                <td style="width: 200px">
+                <td style="width: 200px" class="less-padding">
                   {{ linhaModificada(h) }}
                 </td>
-                <td style="width: 120px">
+                <td style="width: 120px" class="less-padding">
                   {{ valorAnterior(h) }}
                 </td>
-                <td style="width: 120px">
+                <td style="width: 120px" class="less-padding">
                   {{ valorNovo(h) }}
                 </td>
-                <td style="width: 65px">
+                <td style="width: 65px" class="less-padding">
                   {{ h.tipoOperacao }}
                 </td>
-                <td style="width: 80px">
+                <td style="width: 80px" class="less-padding">
                   {{ h.usuario }}
                 </td>
-                <td style="width: 160px">
+                <td style="width: 160px" class="less-padding">
                   {{ h.createdAt }}
                 </td>
               </tr>
@@ -70,98 +71,102 @@
         </BaseTable>
       </div>
     </div>
-
-    <b-modal
-      id="modalFiltros"
+    <!-- ModalFiltros -->
+    <BaseModal
       ref="modalFiltros"
-      title="Filtros"
-      size="md"
-      scrollable
+      :modalOptions="{
+        type: 'filtros',
+        title: 'Filtros',
+        hasFooter: true,
+      }"
+      :hasFooter="true"
+      @btn-ok="btnOkFiltros()"
+      @select-all="modalSelectAll[tabAtivaModal]"
+      @select-none="modalSelectNone[tabAtivaModal]"
     >
-      <NavTab :currentTab="'Perfis'" :allTabs="['Perfis']" />
-      <div class="div-table">
-        <table
-          class="table table-sm modal-table table-bordered"
-          style="max-height: 450px !important;"
-        >
-          <thead class="thead-light sticky">
-            <tr>
-              <div style="font-size: 11px;" class=" max-content">
-                <th>
-                  <p style="width:25px" class="p-header"></p>
-                </th>
-                <th>
-                  <p class="p-header" style="width: 436px; text-align:start">
-                    Tabelas
-                  </p>
-                </th>
-              </div>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="o in options" :key="`tabeka${o.value}`">
-              <div class="max-content">
-                <td>
-                  <div style="width:25px;">
+      <template #modal-body>
+        <NavTab :currentTab="'Tabelas'" :allTabs="['Tabelas']" />
+
+        <div class="div-table">
+          <BaseTable
+            v-show="tabAtivaModal === 'Tabelas'"
+            :tableType="'modal-table'"
+          >
+            <template #thead>
+              <th>
+                <p style="width:25px"></p>
+              </th>
+              <th>
+                <p class="t-start" style="width: 425px">
+                  Nome
+                </p>
+              </th>
+            </template>
+            <template #tbody>
+              <tr
+                v-for="option in options"
+                :key="`MdTabelas${option.value}`"
+                @click="toggleItemInArray(option.value, TabelasSelecionadas)"
+              >
+                <div class="max-content">
+                  <td style="width:25px">
                     <input
                       type="checkbox"
                       v-model="TabelasSelecionadas"
-                      :value="o.value"
+                      :value="option.value"
                       class="form-check-input position-static m-0"
                     />
-                  </div>
-                </td>
-                <td>
-                  <p style="width:436px; text-align:start;">
-                    {{ o.text }}
-                  </p>
-                </td>
-              </div>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div slot="modal-footer" class="w-100 m-0" style="display: flex;">
-        <div class="w-100 d-flex">
-          <b-button
-            class="btn-azul btn-custom btn-modal"
-            variant="success"
-            @click="selectAll()"
-            >Selecionar Todos</b-button
-          >
-          <b-button
-            class="btn-cinza btn-custom btn-modal"
-            variant="secondary"
-            @click="selectNone()"
-            >Desmarcar Todos</b-button
-          >
+                  </td>
+                  <td style="width:436px" class="t-start">
+                    {{ option.text }}
+                  </td>
+                </div>
+              </tr>
+            </template>
+          </BaseTable>
         </div>
-        <b-button
-          variant="success"
-          @click="btnOK()"
-          class="btn-verde btn-custom btn-modal"
-          style="padding-right:15px!important; padding-left:15px!important;"
-          >OK</b-button
-        >
-      </div>
-    </b-modal>
+      </template>
+    </BaseModal>
   </div>
 </template>
 
 <script>
 import _ from "lodash";
-import { PageTitle, BaseTable, NavTab } from "@/components/index.js";
+import { redirectNotAdmin, toggleItemInArray } from "@/mixins/index.js";
+import {
+  PageTitle,
+  NavTab,
+  BaseTable,
+  BaseButton,
+  BaseModal,
+} from "@/components/index.js";
 
 export default {
   name: "DashboardHistory",
+  mixins: [redirectNotAdmin, toggleItemInArray],
   components: {
+    BaseModal,
     PageTitle,
     BaseTable,
     NavTab,
+    BaseButton,
   },
   data() {
     return {
+      tabAtivaModal: "Tabelas",
+      TabelasSelecionadas: [],
+      TabelasAtivadas: [],
+      operacoes: "Todos",
+      modalSelectAll: {
+        Tabelas: () => {
+          this.TabelasSelecionadas = [..._.map(this.options, "value")];
+        },
+      },
+      modalSelectNone: {
+        Tabelas: () => {
+          this.TabelasSelecionadas = [];
+        },
+      },
       options: [
         { text: "CARGA PÓS", value: "CargaPos" },
         { text: "CURSO", value: "Curso" },
@@ -177,38 +182,11 @@ export default {
         { text: "TURMA", value: "Turma" },
         { text: "TURMA EXTERNA", value: "TurmaExterna" },
       ],
-      TabelasSelecionadas: [],
-      TabelasAtivadas: [],
-      operacoes: "Todos",
     };
   },
-  created() {
-    if (!this.Admin) {
-      this.$notify({
-        group: "general",
-        title: "Erro",
-        text:
-          "Acesso negado! Usuário não possui permissão para acessar esta página!",
-        type: "error",
-      });
-      this.$router.push({ name: "dashboard" });
-    }
-  },
   methods: {
-    btnOK() {
-      //Somente atualiza o vetor de perfis ativados quando o botão OK for clickado
+    btnOkFiltros() {
       this.TabelasAtivadas = [...this.TabelasSelecionadas];
-      this.$refs.modalFiltros.hide();
-    },
-
-    selectAll() {
-      if (this.TabelasSelecionadas != []) this.TabelasSelecionadas = [];
-      for (var i = 0; i < this.options.length; i++)
-        this.TabelasSelecionadas.push(this.options[i].value);
-    },
-
-    selectNone() {
-      this.TabelasSelecionadas = [];
     },
 
     linhaModificada(h) {
@@ -347,7 +325,6 @@ export default {
       }
       return linha;
     },
-
     valorAnterior(h) {
       let v = h.valorAnterior;
       switch (h.campoModificado) {
@@ -421,7 +398,6 @@ export default {
 
       return v;
     },
-
     valorNovo(h) {
       let v = h.valorNovo;
       switch (h.campoModificado) {
@@ -523,13 +499,8 @@ export default {
         ["desc"]
       );
     },
-
     Admin() {
-      if (this.$store.state.auth.Usuario.admin === 1) {
-        return true;
-      } else {
-        return false;
-      }
+      return this.$store.state.auth.Usuario.admin === 1;
     },
   },
 };

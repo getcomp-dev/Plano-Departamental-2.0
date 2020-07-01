@@ -2,114 +2,127 @@
   <div v-if="Admin" class="main-component row">
     <PageTitle :title="'Graduação - DCC'">
       <template #aside>
-        <template v-if="turmaAddIsVisible">
-          <button
+        <template v-if="isAdding">
+          <BaseButton
             title="Salvar"
-            class="btn-custom btn-icon addbtn"
-            v-on:click.prevent="addTurma"
+            :type="'icon'"
+            :color="'green'"
+            @click="addTurma()"
           >
             <i class="fas fa-check"></i>
-          </button>
-          <button
-            title="Cancelar"
-            class="btn-custom btn-icon cancelbtn"
-            v-on:click.prevent="toggleAddTurma"
+          </BaseButton>
+          <BaseButton
+            title="Adicionar"
+            :type="'icon'"
+            :color="'red'"
+            @click="toggleIsAdding()"
           >
             <i class="fas fa-times"></i>
-          </button>
+          </BaseButton>
         </template>
         <template v-else>
-          <button
-            title="Adicionar"
-            class="btn-custom btn-icon addbtn"
-            v-on:click.prevent="toggleAddTurma"
+          <BaseButton
+            title="Cancelar"
+            :type="'icon'"
+            :color="'green'"
+            @click="toggleIsAdding()"
           >
             <i class="fas fa-plus"></i>
-          </button>
-          <button
-            title="Deletar"
-            class="btn-custom btn-icon delbtn"
-            @click="openModalConfirma()"
+          </BaseButton>
+
+          <BaseButton
+            title="Deletar selecionados"
+            :type="'icon'"
+            :color="'red'"
+            @click="$refs.modalDelete.open()"
           >
-            <i class="far fa-trash-alt"></i>
-          </button>
+            <i class="fas fa-trash"></i>
+          </BaseButton>
         </template>
 
-        <button
-          @click="openSideModal('filtros')"
+        <BaseButton
           title="Filtros"
-          class="btn-custom btn-icon cancelbtn"
+          :type="'icon'"
+          :color="'gray'"
+          @click="openAsideModal('filtros')"
         >
           <i class="fas fa-list-ul"></i>
-        </button>
+        </BaseButton>
 
-        <button
-          title="XLSX"
-          class="btn-custom btn-icon relatbtn"
-          v-on:click.prevent="xlsx(Pedidos)"
+        <BaseButton
+          title="Relátorio"
+          :type="'icon'"
+          :color="'lightblue'"
+          @click="xlsx(Pedidos)"
         >
-          <i class="far fa-file-pdf"></i>
-        </button>
-        <button
-          @click="openSideModal('ajuda')"
+          <i class="fas fa-file-alt"></i>
+        </BaseButton>
+
+        <BaseButton
           title="Ajuda"
-          class="btn-custom btn-icon relatbtn"
+          :type="'icon'"
+          :color="'lightblue'"
+          @click="openAsideModal('ajuda')"
         >
           <i class="fas fa-question"></i>
-        </button>
+        </BaseButton>
       </template>
     </PageTitle>
 
-    <div class="div-table" v-if="!isLoading">
+    <div class="div-table">
       <BaseTable>
         <template #thead>
           <th style="width:25px"></th>
           <th style="width:40px" class="p-0">Editar</th>
           <th style="width:55px" title="Semestre">S.</th>
           <th
-            @click="toggleOrder(ordenacaoPerfisMain, setFixedOrderPerfil)"
-            style="width: 75px"
+            @click="toggleOrder(ordenacaoMain.perfis, setFixedOrderPerfil)"
+            style="width: 80px"
             class="clickable t-center"
           >
             <div class="d-flex justify-content-between align-items-center">
               <i
                 class="fas fa-thumbtack"
-                :class="ordenacaoPerfisMain.order === null ? 'low-opacity' : ''"
+                :class="
+                  ordenacaoMain.perfis.order === null ? 'low-opacity' : ''
+                "
               ></i>
               <span>
                 Perfil
               </span>
 
               <i
-                :class="setIconByOrder(ordenacaoPerfisMain, 'perfilAbreviacao')"
+                :class="
+                  setIconByOrder(ordenacaoMain.perfis, 'perfilAbreviacao')
+                "
               ></i>
             </div>
           </th>
           <th
             class="clickable"
-            @click="toggleOrder(ordenacaoTurmasMain, 'disciplinaCodigo')"
-            style="width:70px"
+            @click="toggleOrder(ordenacaoMain.turmas, 'disciplinaCodigo')"
+            style="width:80px"
             title="Código"
           >
             Cód.
             <i
-              :class="setIconByOrder(ordenacaoTurmasMain, 'disciplinaCodigo')"
+              :class="setIconByOrder(ordenacaoMain.turmas, 'disciplinaCodigo')"
             ></i>
           </th>
           <th
             class="clickable t-start"
             style="width:330px"
-            @click="toggleOrder(ordenacaoTurmasMain, 'disciplinaNome')"
+            @click="toggleOrder(ordenacaoMain.turmas, 'disciplinaNome')"
           >
             Disciplina
             <i
-              :class="setIconByOrder(ordenacaoTurmasMain, 'disciplinaNome')"
+              :class="setIconByOrder(ordenacaoMain.turmas, 'disciplinaNome')"
             ></i>
           </th>
           <th style="width:25px" title="Créditos">
             C.
           </th>
-          <th style="width:35px" class="p-0" title="Turma">T.</th>
+          <th style="width:45px" class="p-0" title="Turma">T.</th>
           <th style="width:130px">Docente</th>
           <th style="width:80px">Turno</th>
           <th style="width:85px">Horário</th>
@@ -164,19 +177,22 @@
         </template>
         <template #tbody>
           <NovaTurma
-            v-show="turmaAddIsVisible"
+            v-show="isAdding"
             :cursosAtivadosLength="filtroCursos.ativados.length"
           />
+          <template v-if="tableIsReady">
+            <TurmaRow
+              v-cloak
+              v-for="turma in TurmasOrdered"
+              :key="turma.id + turma.disciplinaCodigo + turma.letra"
+              :turma="turma"
+              :cursosAtivados="filtroCursos.ativados"
+              @handle-click-in-edit="handleClickInEdit($event)"
+            />
+          </template>
 
-          <TurmaRow
-            v-for="turma in TurmasOrdered"
-            :key="'turmaRow' + turma.id + turma.disciplinaCodigo + turma.letra"
-            :turma="turma"
-            :cursosAtivados="filtroCursos.ativados"
-            @handle-click-in-edit="handleClickInEdit($event)"
-          />
-          <tr v-if="TurmasOrdered.length === 0">
-            <td style="width:1090px">
+          <tr v-show="TurmasOrdered.length === 0">
+            <td style="width:1115px">
               <b>Nenhuma turma encontrada.</b> Clique no botão de filtros
               <i class="fas fa-list-ul mx-1"></i> para selecioná-las.
             </td>
@@ -217,17 +233,17 @@
             <template #thead>
               <th style="width: 25px;"></th>
               <th
-                @click="toggleOrder(ordenacaoPerfisModal, 'nome')"
+                @click="toggleOrder(ordenacaoModal.perfis, 'nome')"
                 class="clickable t-start"
                 style="width: 425px"
               >
                 Nome
-                <i :class="setIconByOrder(ordenacaoPerfisModal, 'nome')"></i>
+                <i :class="setIconByOrder(ordenacaoModal.perfis, 'nome')"></i>
               </th>
             </template>
             <template #tbody>
               <tr
-                v-for="perfil in PerfisOrdered"
+                v-for="perfil in PerfisOrderedModal"
                 :key="'perfilId' + perfil.id"
                 @click="toggleItemInArray(perfil, filtroPerfis.selecionados)"
               >
@@ -272,35 +288,35 @@
                 title="Código"
                 class="t-start clickable"
                 style="width: 70px"
-                @click="toggleOrder(ordenacaoDisciplinasModal, 'codigo')"
+                @click="toggleOrder(ordenacaoModal.disciplinas, 'codigo')"
               >
                 Cód.
                 <i
-                  :class="setIconByOrder(ordenacaoDisciplinasModal, 'codigo')"
+                  :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"
                 ></i>
               </th>
               <th
                 class="t-start clickable"
                 style="width: 270px"
-                @click="toggleOrder(ordenacaoDisciplinasModal, 'nome')"
+                @click="toggleOrder(ordenacaoModal.disciplinas, 'nome')"
               >
                 Nome
                 <i
-                  :class="setIconByOrder(ordenacaoDisciplinasModal, 'nome')"
+                  :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"
                 ></i>
               </th>
               <th
                 class="t-start clickable"
                 style="width: 85px"
                 @click="
-                  toggleOrder(ordenacaoDisciplinasModal, 'perfilAbreviacao')
+                  toggleOrder(ordenacaoModal.disciplinas, 'perfilAbreviacao')
                 "
               >
                 Perfil
                 <i
                   :class="
                     setIconByOrder(
-                      ordenacaoDisciplinasModal,
+                      ordenacaoModal.disciplinas,
                       'perfilAbreviacao'
                     )
                   "
@@ -314,7 +330,7 @@
                 @click="
                   toggleItemInArray(
                     disciplina.id,
-                    filtroDisciplinas.selecionadas
+                    filtroDisciplinas.selecionados
                   )
                 "
               >
@@ -322,7 +338,7 @@
                   <input
                     type="checkbox"
                     class="form-check-input position-static m-0"
-                    v-model="filtroDisciplinas.selecionadas"
+                    v-model="filtroDisciplinas.selecionados"
                     :value="disciplina.id"
                   />
                 </td>
@@ -366,20 +382,20 @@
             <template #thead>
               <th style="width: 25px;"></th>
               <th
-                @click="toggleOrder(ordenacaoCursosModal, 'codigo')"
-                class="clickable"
+                @click="toggleOrder(ordenacaoModal.cursos, 'codigo')"
+                class="clickable t-start"
                 style="width: 50px;"
               >
                 Cód.
-                <i :class="setIconByOrder(ordenacaoCursosModal, 'codigo')"></i>
+                <i :class="setIconByOrder(ordenacaoModal.cursos, 'codigo')"></i>
               </th>
               <th
-                @click="toggleOrder(ordenacaoCursosModal, 'nome')"
+                @click="toggleOrder(ordenacaoModal.cursos, 'nome')"
                 class="clickable t-start"
                 style="width: 375px"
               >
                 Nome
-                <i :class="setIconByOrder(ordenacaoCursosModal, 'nome')"></i>
+                <i :class="setIconByOrder(ordenacaoModal.cursos, 'nome')"></i>
               </th>
             </template>
             <template #tbody>
@@ -396,7 +412,7 @@
                     class="form-check-input position-static m-0"
                   />
                 </td>
-                <td style="width: 50px;">
+                <td style="width: 50px;" class="t-start">
                   {{ curso.codigo }}
                 </td>
                 <td style="width: 375px" class="t-start">
@@ -453,46 +469,77 @@
     </BaseModal>
 
     <!-- MODAL TURMA -->
-    <b-modal
-      id="modalTurma"
-      ref="modalTurma"
-      scrollable
-      title="Edição de Turma"
-      hide-footer
+    <BaseModal
+      ref="modalEditTurma"
+      :modalOptions="{
+        type: 'editTurma',
+        title: 'Edição de Turma',
+      }"
     >
-      <template v-if="turmaClickada !== null">
-        <BodyModalEditTurma
-          :key="turmaClickada.id + 'modalTurma'"
-          :turma="turmaClickada"
-        />
-      </template>
-    </b-modal>
-
-    <!-- MODAL DELETAR -->
-    <b-modal
-      id="modalConfirma"
-      ref="modalConfirma"
-      title="Confirmar Seleção"
-      @ok="deleteSelected"
-    >
-      <p class="my-4">Tem certeza que deseja deletar as turmas selecionadas?</p>
-      <template v-if="Deletar.length > 0">
-        <template v-for="turma in Deletar">
-          <template v-for="disciplina in Disciplinas">
-            <template v-if="disciplina.id === turma.Disciplina">
-              <p
-                :key="'disciplina' + disciplina.id + 'turma' + turma.id"
-                style="width: 80px;"
-              >
-                Disciplina:{{ disciplina.codigo }}
-                <br />
-                Turma:{{ turma.letra }}
-              </p>
-            </template>
-          </template>
+      <template #modal-body>
+        <template v-if="turmaClickada !== null">
+          <BodyModalEditTurma
+            :key="turmaClickada.id + 'modalTurma'"
+            :turma="turmaClickada"
+          />
         </template>
       </template>
-    </b-modal>
+    </BaseModal>
+
+    <!-- MODAL DELETAR -->
+    <BaseModal
+      ref="modalDelete"
+      :modalOptions="{
+        title: 'Confirmar seleção',
+        position: 'center',
+        hasBackground: true,
+        hasFooter: true,
+      }"
+      :customStyles="'width:400px'"
+    >
+      <template #modal-body>
+        <p class="w-100 mb-2" style="font-size:14px">
+          {{
+            Deletar.length
+              ? "Tem certeza que deseja deletar as turmas selecionados?"
+              : "Nenhuma turma selecionada!"
+          }}
+        </p>
+        <template v-if="Deletar.length">
+          <ul class="list-group list-deletar w-100">
+            <template v-for="turma in Deletar">
+              <li class="list-group-item" :key="'deletarTurma' + turma.id">
+                <span class="mr-1">
+                  <b> Semestre: </b>{{ turma.periodo }}
+                </span>
+                <span class="mr-1"
+                  ><b> Disciplina: </b>{{ turma.disciplinaNome }} -
+                  <b>{{ turma.letra }}</b>
+                </span>
+              </li>
+            </template>
+          </ul>
+        </template>
+      </template>
+      <template #modal-footer>
+        <div class="w-100">
+          <button
+            class="btn-custom btn-modal btn-cinza btn-ok-modal"
+            @click="$refs.modalDelete.close()"
+          >
+            Fechar
+          </button>
+        </div>
+        <button
+          v-if="Deletar.length"
+          class="btn-custom btn-modal btn-vermelho btn-ok-modal"
+          @click="deleteSelectedTurma()"
+        >
+          Deletar
+        </button>
+      </template>
+    </BaseModal>
+
     <!-- MODAL AJUDA -->
     <BaseModal
       ref="modalAjuda"
@@ -528,7 +575,7 @@
             <b>Para deletar disciplinas da Tabela:</b> Marque a(s) disciplina(s)
             que deseja deletar através da caixa de seleção à esquerda e em
             seguida clique em Deletar
-            <i class="far fa-trash-alt delbtn"></i>
+            <i class="fas fa-trash delbtn"></i>
             e confirme no botão OK.
           </li>
           <li class="list-group-item">
@@ -550,27 +597,33 @@
 
 <script>
 import _ from "lodash";
-import {
-  PageTitle,
-  BaseTable,
-  BaseModal,
-  NavTab,
-  BodyModalEditTurma,
-} from "@/components/index.js";
-import toggleOrdinationMixin from "@/mixins/toggleOrdination.js";
-import toggleItemInArrayMixin from "@/mixins/toggleItemInArray.js";
 import { EventBus } from "@/event-bus.js";
 import { saveAs } from "file-saver";
 import ls from "local-storage";
 import xlsx from "@/common/services/xlsx";
 import turmaService from "@/common/services/turma";
 import pedidoService from "@/common/services/pedido";
+import {
+  toggleOrdination,
+  toggleItemInArray,
+  redirectNotAdmin,
+  notification,
+} from "@/mixins/index.js";
+import {
+  PageTitle,
+  BaseTable,
+  BaseModal,
+  NavTab,
+  BodyModalEditTurma,
+  LoadingPage,
+  BaseButton,
+} from "@/components/index.js";
 import NovaTurma from "./NovaTurma.vue";
 import TurmaRow from "./TurmaRow.vue";
 
 export default {
   name: "DashboardPrototipo",
-  mixins: [toggleOrdinationMixin, toggleItemInArrayMixin],
+  mixins: [toggleOrdination, toggleItemInArray, redirectNotAdmin, notification],
   components: {
     TurmaRow,
     NovaTurma,
@@ -579,25 +632,22 @@ export default {
     NavTab,
     BaseTable,
     BaseModal,
+    LoadingPage,
+    BaseButton,
   },
   data() {
     return {
-      error: undefined,
+      tableIsReady: true,
       turmaClickada: null,
-      turmaAddIsVisible: false,
-      ordenacaoTurmasMain: { order: "disciplinaCodigo", type: "asc" },
-      ordenacaoPerfisMain: { order: "perfilNome", type: "asc" },
+      isAdding: false,
       tabAtivaModal: "Perfis",
       searchCursosModal: "",
       searchDisciplinasModal: "",
-      ordenacaoCursosModal: { order: "codigo", type: "asc" },
-      ordenacaoPerfisModal: { order: "nome", type: "asc" },
-      ordenacaoDisciplinasModal: { order: "codigo", type: "asc" },
       filtroPerfis: {
         selecionados: [],
       },
       filtroDisciplinas: {
-        selecionadas: [],
+        selecionados: [],
         ativadas: [],
       },
       filtroCursos: {
@@ -614,7 +664,7 @@ export default {
           this.filtroPerfis.selecionados = [...this.Perfis];
         },
         Disciplinas: () => {
-          this.filtroDisciplinas.selecionadas = [...this.DisciplinasId];
+          this.filtroDisciplinas.selecionados = [...this.DisciplinasId];
         },
         Cursos: () => {
           this.filtroCursos.selecionados = [...this.Cursos];
@@ -629,7 +679,7 @@ export default {
           this.filtroPerfis.selecionados = [];
         },
         Disciplinas: () => {
-          this.filtroDisciplinas.selecionadas = [];
+          this.filtroDisciplinas.selecionados = [];
         },
         Cursos: () => {
           this.filtroCursos.selecionados = [];
@@ -639,20 +689,16 @@ export default {
           this.filtroSemestres.segundo = false;
         },
       },
+      ordenacaoModal: {
+        cursos: { order: "codigo", type: "asc" },
+        disciplinas: { order: "codigo", type: "asc" },
+        perfis: { order: "nome", type: "asc" },
+      },
+      ordenacaoMain: {
+        turmas: { order: "disciplinaCodigo", type: "asc" },
+        perfis: { order: "perfilAbreviacao", type: "asc" },
+      },
     };
-  },
-
-  created() {
-    if (!this.Admin) {
-      this.$notify({
-        group: "general",
-        title: "Erro",
-        text:
-          "Acesso negado! Usuário não possui permissão para acessar esta página!",
-        type: "error",
-      });
-      this.$router.push({ name: "dashboard" });
-    }
   },
   mounted() {
     ls.set("toggle", -1);
@@ -681,7 +727,7 @@ export default {
   },
 
   methods: {
-    openSideModal(modalName) {
+    openAsideModal(modalName) {
       if (modalName === "filtros") {
         this.$refs.modalFiltros.toggle();
         this.$refs.modalAjuda.close();
@@ -692,22 +738,27 @@ export default {
     },
     handleClickInEdit(turmaClicked) {
       this.turmaClickada = turmaClicked;
-      this.$refs.modalTurma.show();
+      this.$refs.modalEditTurma.open();
     },
     btnOkFiltros() {
+      this.tableIsReady = false;
       this.setSemestreAtivo();
       this.filtroDisciplinas.ativadas = [
-        ...this.filtroDisciplinas.selecionadas,
+        ...this.filtroDisciplinas.selecionados,
       ];
       this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
       this.clearSearch("searchCursosModal");
       this.clearSearch("searchDisciplinasModal");
-      this.tabAtivaModal = "Perfis";
+
+      this.$nextTick(() => {
+        setTimeout(() => {
+          this.tableIsReady = true;
+        }, 500);
+      });
     },
     clearSearch(searchName) {
       this[searchName] = "";
     },
-
     setSemestreAtivo() {
       if (this.filtroSemestres.primeiro && !this.filtroSemestres.segundo)
         this.filtroSemestres.ativo = 1;
@@ -717,68 +768,40 @@ export default {
         this.filtroSemestres.ativo = 3;
       else this.filtroSemestres.ativo = undefined;
     },
-    openModalConfirma() {
-      if (this.Deletar.length) this.$refs.modalConfirma.show();
-      else
-        this.$notify({
-          group: "general",
-          title: `Erro!`,
-          text: `Nenhuma turma selecionada para exclusão`,
-          type: "error",
-        });
-    },
-    xlsx(pedidos) {
-      xlsx
-        .downloadTable({
-          pedidos: pedidos,
-        })
-        .then(() => {
-          fetch("http://200.131.219.57:3000/api/xlsx/download", {
+    async xlsx(pedidos) {
+      try {
+        this.$root.onLoad = true;
+
+        await xlsx.downloadTable({ pedidos: pedidos });
+        const tableData = await fetch(
+          "http://200.131.219.57:3000/api/xlsx/download",
+          {
             method: "GET",
             headers: {
               Authorization: `Bearer ${this.$store.state.auth.token}`,
             },
-          })
-            .then((r) => r.blob())
-            .then((blob) => saveAs(blob, "tabela.xlsx"));
-        })
-        .catch((error) => {
-          this.$notify({
-            group: "general",
-            title: `Erro!`,
-            text: `Erro ao gerar a tabela!\n ${error}`,
-            type: "error",
-          });
+          }
+        );
+        const tableDataBlobed = await tableData.blob();
+        await saveAs(tableDataBlobed, "tabela.xlsx");
+        this.$root.onLoad = false;
+      } catch (error) {
+        this.$notify({
+          group: "general",
+          title: `Erro!`,
+          text: `Erro ao gerar a tabela!\n ${error}`,
+          type: "error",
         });
-    },
-    deleteSelected() {
-      let turmas = this.$store.state.turma.Deletar;
-      for (let i = 0; i < turmas.length; i++) {
-        this.deleteTurma(turmas[i]);
       }
+    },
+    clearDelete() {
       this.$store.commit("emptyDelete");
     },
-    addTurma() {
-      EventBus.$emit("addTurma");
-    },
-    editTurma(turma) {
-      turmaService
-        .update(turma.id, turma)
-        .then((response) => {
-          this.$notify({
-            group: "general",
-            title: `Sucesso!`,
-            text: `A Turma ${response.Turma.letra} foi atualizada!`,
-            type: "warn",
-          });
-        })
-        .catch((error) => {
-          this.error = "<b>Erro ao atualizar Turma</b>";
-          if (error.response.data.fullMessage) {
-            this.error +=
-              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-          }
-        });
+    deleteSelectedTurma() {
+      for (let i = 0; i < this.Deletar.length; i++) {
+        this.deleteTurma(this.Deletar[i]);
+      }
+      this.clearDelete();
     },
     deleteTurma(turma) {
       const turmaToDelete = _.clone(turma);
@@ -810,18 +833,35 @@ export default {
             .update(pedidos[i].Curso, pedidos[i].Turma, pedidos[i])
             .then(() => {})
             .catch((error) => {
-              this.error = "<b>Erro ao atualizar Pedido</b>";
-              if (error.response.data.fullMessage) {
-                this.error +=
-                  "<br/>" +
-                  error.response.data.fullMessage.replace("\n", "<br/>");
-              }
+              this.showNotification({
+                type: "error",
+                message: error,
+              });
             });
         }
       }
     },
-    toggleAddTurma() {
-      this.turmaAddIsVisible = !this.turmaAddIsVisible;
+    addTurma() {
+      EventBus.$emit("addTurma");
+    },
+    editTurma(turma) {
+      turmaService
+        .update(turma.id, turma)
+        .then((response) => {
+          this.showNotification({
+            type: "success",
+            message: response.message,
+          });
+        })
+        .catch((error) => {
+          this.showNotification({
+            type: "error",
+            message: error,
+          });
+        });
+    },
+    toggleIsAdding() {
+      this.isAdding = !this.isAdding;
     },
     normalizeText(text) {
       return text
@@ -838,15 +878,15 @@ export default {
     TurmasOrdered() {
       let turmasResult = _.orderBy(
         this.TurmasFiltredByDisciplinas,
-        [this.ordenacaoTurmasMain.order, "letra"],
-        [this.ordenacaoTurmasMain.type, "asc"]
+        [this.ordenacaoMain.turmas.order, "letra"],
+        [this.ordenacaoMain.turmas.type, "asc"]
       );
 
-      if (this.ordenacaoPerfisMain.order !== null) {
+      if (this.ordenacaoMain.perfis.order !== null) {
         turmasResult = _.orderBy(
           turmasResult,
-          this.ordenacaoPerfisMain.order,
-          this.ordenacaoPerfisMain.type
+          this.ordenacaoMain.perfis.order,
+          this.ordenacaoMain.perfis.type
         );
       }
 
@@ -878,25 +918,20 @@ export default {
       let turmasResultantes = [];
 
       _.forEach(this.Turmas, (turma) => {
-        const disciplinaEcontrada = _.find(
-          this.Disciplinas,
+        const disciplinaInPerfilFounded = _.find(
+          this.DisciplinasInPerfis,
           (disciplina) => disciplina.id === turma.Disciplina
         );
 
-        const perfilEncontrado = _.find(
-          this.Perfis,
-          (perfil) => perfil.id === disciplinaEcontrada.Perfil
-        );
-
-        if (disciplinaEcontrada && perfilEncontrado) {
+        if (disciplinaInPerfilFounded) {
           turmasResultantes.push({
             ...turma,
-            disciplinaNome: disciplinaEcontrada.nome,
-            disciplinaCodigo: disciplinaEcontrada.codigo,
-            disciplinaPerfil: disciplinaEcontrada.Perfil,
-            perfilCor: perfilEncontrado.cor,
-            perfilNome: perfilEncontrado.nome,
-            perfilAbreviacao: perfilEncontrado.abreviacao,
+            disciplinaNome: disciplinaInPerfilFounded.nome,
+            disciplinaCodigo: disciplinaInPerfilFounded.codigo,
+            disciplinaPerfil: disciplinaInPerfilFounded.Perfil,
+            perfilCor: disciplinaInPerfilFounded.perfilCor,
+            perfilNome: disciplinaInPerfilFounded.perfilNome,
+            perfilAbreviacao: disciplinaInPerfilFounded.perfilAbreviacao,
           });
         }
       });
@@ -906,8 +941,8 @@ export default {
     DisciplinasOrderedModal() {
       return _.orderBy(
         this.DisciplinasFiltredModal,
-        this.ordenacaoDisciplinasModal.order,
-        this.ordenacaoDisciplinasModal.type
+        this.ordenacaoModal.disciplinas.order,
+        this.ordenacaoModal.disciplinas.type
       );
     },
     DisciplinasFiltredModal() {
@@ -925,6 +960,18 @@ export default {
         );
       });
     },
+    Perfis() {
+      return _.filter(
+        this.$store.state.perfil.Perfis,
+        (perfil) => perfil.id !== 13 && perfil.id !== 15
+      );
+    },
+    Disciplinas() {
+      return _.filter(
+        this.$store.state.disciplina.Disciplinas,
+        (disciplina) => disciplina.Perfil !== 13 && disciplina.Perfil !== 15
+      );
+    },
     DisciplinasInPerfis() {
       const disciplinasResultantes = [];
 
@@ -937,6 +984,7 @@ export default {
         if (perfilFounded) {
           disciplinasResultantes.push({
             ...disciplina,
+            perfilNome: perfilFounded.nome,
             perfilAbreviacao: perfilFounded.abreviacao,
             perfilCor: perfilFounded.cor,
           });
@@ -944,12 +992,11 @@ export default {
       });
       return disciplinasResultantes;
     },
-
     ModalCursosOrdered() {
       return _.orderBy(
         this.ModalCursosFiltred,
-        this.ordenacaoCursosModal.order,
-        this.ordenacaoCursosModal.type
+        this.ordenacaoModal.cursos.order,
+        this.ordenacaoModal.cursos.type
       );
     },
     ModalCursosFiltred() {
@@ -970,29 +1017,19 @@ export default {
       }
       return cursosResultantes;
     },
-
     setFixedOrderPerfil() {
-      if (this.ordenacaoPerfisMain.type === "desc") {
-        return null;
-      } else {
-        return "perfilAbreviacao";
-      }
+      if (this.ordenacaoMain.perfis.type === "desc") return null;
+      else return "perfilAbreviacao";
     },
-    PerfisOrdered() {
+    PerfisOrderedModal() {
       return _.orderBy(
         this.Perfis,
-        this.ordenacaoPerfisModal.order,
-        this.ordenacaoPerfisModal.type
+        this.ordenacaoModal.perfis.order,
+        this.ordenacaoModal.perfis.type
       );
     },
     Cursos() {
       return this.$store.state.curso.Cursos;
-    },
-    Perfis() {
-      return this.$store.state.perfil.Perfis;
-    },
-    Disciplinas() {
-      return this.$store.state.disciplina.Disciplinas;
     },
     DisciplinasId() {
       return _.map(this.Disciplinas, (disciplina) => disciplina.id);
@@ -1017,6 +1054,9 @@ export default {
     },
   },
   watch: {
+    tableIsReady(newValue) {
+      this.$root.onLoad = !newValue;
+    },
     filtroPerfis: {
       handler(perfis) {
         this.modalSelectNone.Disciplinas();
@@ -1030,7 +1070,7 @@ export default {
 
           if (perfilFounded) disciplinasResultantes.push(disciplina.id);
         });
-        this.filtroDisciplinas.selecionadas = [...disciplinasResultantes];
+        this.filtroDisciplinas.selecionados = [...disciplinasResultantes];
       },
       deep: true,
     },
@@ -1039,6 +1079,9 @@ export default {
 </script>
 
 <style scoped>
+[v-cloak] {
+  display: none !important;
+}
 .stickyAdd {
   background-color: #e9e9e9;
   display: block;

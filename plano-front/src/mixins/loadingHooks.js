@@ -5,6 +5,6 @@ export default {
   mounted() {
     setTimeout(() => {
       this.$root.onLoad = false;
-    }, 100);
+    }, 300);
   },
 };

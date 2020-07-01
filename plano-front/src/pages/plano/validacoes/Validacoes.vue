@@ -2,20 +2,21 @@
   <div v-if="Admin && !$root.onLoad" class="main-component row">
     <PageTitle :title="'Validações do Plano'">
       <template #aside>
-        <b-button
-          @click.stop="$refs.modalFiltros.toggle()"
+        <BaseButton
           title="Filtros"
-          class="cancelbtn btn-custom btn-icon"
+          :type="'icon'"
+          :color="'gray'"
+          @click="openAsideModal('filtros')"
         >
           <i class="fas fa-list-ul"></i>
-        </b-button>
-        <b-button
-          title="Ajuda"
-          class="relatbtn btn-custom btn-icon"
-          @click="$refs.modalAjuda.toggle()"
+        </BaseButton>
+        <BaseButton
+          :type="'icon'"
+          :color="'lightblue'"
+          @click="openAsideModal('ajuda')"
         >
           <i class="fas fa-question"></i>
-        </b-button>
+        </BaseButton>
       </template>
     </PageTitle>
 
@@ -139,7 +140,7 @@
           <th
             colspan="2"
             @click="toggleOrder(ordemDocentes, 'nome')"
-            style="width: 690px"
+            style="width: 695px"
             class="t-start clickable"
           >
             Nome
@@ -149,7 +150,7 @@
         <template #tbody>
           <template v-for="validacaoDocente in DocentesValidacoesOrdered">
             <tr :key="'docenteId' + validacaoDocente.id" class="bg-custom">
-              <td colspan="2" style="width: 690px;" class="t-start">
+              <td colspan="2" style="width: 695px;" class="t-start">
                 {{ validacaoDocente.nome }}
               </td>
             </tr>
@@ -329,10 +330,12 @@ import {
   toggleOrdination,
   toggleItemInArray,
   loadingHooks,
+  redirectNotAdmin,
 } from "@/mixins/index.js";
 import {
   PageTitle,
   BaseTable,
+  BaseButton,
   NavTab,
   BodyModalEditTurma,
   BaseModal,
@@ -373,8 +376,9 @@ const AllConflitosTurmas = [
 
 export default {
   name: "Validacoes",
-  mixins: [toggleOrdination, toggleItemInArray, loadingHooks],
+  mixins: [toggleOrdination, toggleItemInArray, loadingHooks, redirectNotAdmin],
   components: {
+    BaseButton,
     BodyModalEditTurma,
     PageTitle,
     NavTab,
@@ -421,18 +425,6 @@ export default {
         },
       },
     };
-  },
-  created() {
-    if (!this.Admin) {
-      this.$notify({
-        group: "general",
-        title: "Erro",
-        text:
-          "Acesso negado! Usuário não possui permissão para acessar esta página!",
-        type: "error",
-      });
-      this.$router.push({ name: "dashboard" });
-    }
   },
   mounted() {
     //define grades ativas por periodo
@@ -581,6 +573,15 @@ export default {
     }
   },
   methods: {
+    openAsideModal(modalName) {
+      if (modalName === "filtros") {
+        this.$refs.modalFiltros.toggle();
+        this.$refs.modalAjuda.close();
+      } else if (modalName === "ajuda") {
+        this.$refs.modalAjuda.toggle();
+        this.$refs.modalFiltros.close();
+      }
+    },
     btnOkFiltros() {
       this.btnOkSemestre();
       this.filtroConflitos.ativados = [...this.filtroConflitos.selecionados];

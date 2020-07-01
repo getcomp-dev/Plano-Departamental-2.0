@@ -1,25 +1,17 @@
 <template>
   <tr class="novaturma stickyAdd">
-    <!-- div class="stickyAdd" -->
     <td style="width: 25px"></td>
-    <td style="width: 40px;"></td>
-    <td style="width: 55px;" class="less-padding">
+    <td style="width: 40px"></td>
+    <td style="width: 55px" class="less-padding">
       <select v-model="turmaForm.periodo">
         <option value="1">1</option>
         <option value="3">3</option>
       </select>
     </td>
-    <td
-      style="width: 75px"
-      :style="{
-        'background-color': currentDisciplina
-          ? currentDisciplina.perfilCor
-          : '',
-      }"
-    >
+    <td style="width: 80px" class="less-padding" :style="perfilBackgroundColor">
       {{ currentDisciplina ? currentDisciplina.perfilAbreviacao : "" }}
     </td>
-    <td style="width:70px" class="less-padding">
+    <td style="width:80px" class="less-padding">
       <select
         type="text"
         style="width:100%;"
@@ -362,10 +354,14 @@ export default {
             type: "success",
           });
           console.log("Nova turma adiciona:", turma);
-          this.cleanTurmaForm()
+          this.cleanTurmaForm();
         })
         .catch((error) => {
-          let errormsg = (_.find(error.response.data.errors, {field: 'unique_name'}) ? 'A combinação de disciplina, semestre e turma deve ser única':'')
+          let errormsg = _.find(error.response.data.errors, {
+            field: "unique_name",
+          })
+            ? "A combinação de disciplina, semestre e turma deve ser única"
+            : "";
           this.$notify({
             group: "general",
             title: `Erro ao atualizar Turma`,
@@ -386,6 +382,11 @@ export default {
     },
   },
   computed: {
+    perfilBackgroundColor() {
+      return this.currentDisciplina
+        ? `background-color: ${this.currentDisciplina.perfilCor}`
+        : ``;
+    },
     currentDisciplina() {
       let disciplinaFounded = _.find(this.$store.state.disciplina.Disciplinas, {
         id: this.turmaForm.Disciplina,

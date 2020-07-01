@@ -5,7 +5,7 @@
         <h1 class="card-title">Login</h1>
       </div>
       <div class="card-body">
-        <form class="form-signin" v-on:submit.prevent="doLogin">
+        <form class="form-signin" @submit.prevent="doLogin">
           <b-alert :show="Boolean(error)" variant="danger" dismissible>{{
             error
           }}</b-alert>
@@ -41,8 +41,8 @@ export default {
   data() {
     return {
       form: {
-        login: undefined,
-        senha: undefined,
+        login: "",
+        senha: "",
       },
       error: undefined,
     };
@@ -89,8 +89,6 @@ export default {
 </script>
 
 <style scoped>
-/* prefixed by https://autoprefixer.github.io (PostCSS: v7.0.23, autoprefixer: v9.7.3) */
-
 #loginForm {
   display: -ms-flexbox;
   display: -webkit-box;

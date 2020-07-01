@@ -95,7 +95,7 @@ export default {
         cargaPos.programa === null ||
         cargaPos.creditos === null
       ) {
-        this.showNotication({
+        this.showNotification({
           type: "error",
           title: "Erro!",
           message: "Cadastro da carga inválido ou incompleto.",
@@ -117,13 +117,13 @@ export default {
       cargaPosService
         .update(newCargaPos.id, newCargaPos)
         .then((response) => {
-          this.showNotication({
+          this.showNotification({
             type: "success",
             message: `A carga ${response.CargaPos.programa} foi atualizada!`,
           });
         })
         .catch((error) => {
-          this.showNotication({
+          this.showNotification({
             type: "error",
             title: "Erro ao atualizar Carga!",
             message: error,

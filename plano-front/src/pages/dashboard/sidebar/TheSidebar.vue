@@ -1,5 +1,5 @@
 <template>
-  <nav class="sidebar bg-light col">
+  <nav class="sidebar bg-light col" @click.stop="">
     <SidebarMenu :menuPages="linkDashboard" />
 
     <SidebarMenu
@@ -8,10 +8,10 @@
       :menuPages="linksPlanoOrdered"
     >
       <template #aside-title>
-        <a class="d-flex align-items-center" href="#">
-          <i class=" far fa-calendar-alt mr-1"></i>
+        <div class="aside-title d-flex align-items-center">
+          <i class="far fa-calendar-alt mr-1"></i>
           <span>{{ year }}</span>
-        </a>
+        </div>
       </template>
     </SidebarMenu>
 
@@ -94,6 +94,11 @@ export default {
         },
       ],
       linksGerenciar: [
+        {
+          title: "Usuarios",
+          routerName: "usuarios",
+          icon: "fa-user",
+        },
         { title: "Cursos ", routerName: "cursos", icon: "fa-graduation-cap" },
         {
           title: "Disciplinas ",
@@ -151,7 +156,7 @@ nav.sidebar {
   padding: 0.5rem 0;
   overflow-x: hidden !important;
   overflow-y: auto !important;
-  z-index: 1000;
+  z-index: 940;
   font-size: 0.875rem;
   -webkit-box-shadow: 0px 0px 75px 0px rgba(0, 0, 0, 0.75);
   -moz-box-shadow: 0px 0px 75px 0px rgba(0, 0, 0, 0.75);
@@ -165,6 +170,9 @@ nav.sidebar .title {
   font-weight: bold;
   font-size: 0.75rem;
   text-transform: uppercase;
+}
+nav.sidebar .aside-title {
+  color: var(--light-blue);
 }
 nav.sidebar .nav li {
   color: #333;

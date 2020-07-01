@@ -2,30 +2,31 @@
   <div class="main-component row p-0" v-if="!$root.onLoad">
     <PageTitle :title="'Carga Professores'">
       <template #aside>
-        <button
-          @click="openHeaderModal('filtros')"
+        <BaseButton
           title="Filtros"
-          class="btn-custom btn-icon cancelbtn"
+          :type="'icon'"
+          :color="'gray'"
+          @click="openAsideModal('filtros')"
         >
           <i class="fas fa-list-ul"></i>
-        </button>
+        </BaseButton>
 
-        <button
-          @click="$refs.modalRelatorio.toggle()"
-          type="button"
-          class="btn-custom btn-icon relatbtn"
+        <BaseButton
           title="Relatório"
+          :type="'icon'"
+          :color="'lightblue'"
+          @click="$refs.modalRelatorio.toggle()"
         >
-          <i class="far fa-file-pdf"></i>
-        </button>
+          <i class="fas fa-file-alt"></i>
+        </BaseButton>
 
-        <button
-          @click="openHeaderModal('ajuda')"
-          title="Ajuda"
-          class="btn-custom btn-icon relatbtn"
+        <BaseButton
+          :type="'icon'"
+          :color="'lightblue'"
+          @click="openAsideModal('ajuda')"
         >
           <i class="fas fa-question"></i>
-        </button>
+        </BaseButton>
       </template>
     </PageTitle>
 
@@ -103,7 +104,7 @@
               <td style="width: 35px">
                 {{ docente.cred2 }}
               </td>
-              <td style="width: 45px">
+              <td style="width: 50px">
                 {{ docente.cred1 + docente.cred2 }}
               </td>
             </tr>
@@ -160,7 +161,7 @@
                 </span>
               </td>
 
-              <td style="width: 45px"></td>
+              <td style="width: 50px"></td>
             </tr>
 
             <tr
@@ -194,7 +195,7 @@
                 }}
               </td>
 
-              <td style="width: 45px"></td>
+              <td style="width: 50px"></td>
             </tr>
 
             <tr
@@ -249,7 +250,7 @@
                 </span>
               </td>
 
-              <td style="width: 45px"></td>
+              <td style="width: 50px"></td>
             </tr>
 
             <tr
@@ -283,7 +284,7 @@
                 }}
               </td>
 
-              <td style="width: 45px"></td>
+              <td style="width: 50px"></td>
             </tr>
           </template>
 
@@ -391,12 +392,11 @@
               <input
                 type="text"
                 class="form-control input-search"
-                style=""
                 placeholder="Pesquise o nome de um docente..."
                 v-model="searchDocentes"
               />
               <button @click="clearSearchDocentes()" class="btn btn-search">
-                &times;
+                <i class="fas fa-times"></i>
               </button>
             </template>
             <template #thead>
@@ -521,12 +521,18 @@ import {
   toggleItemInArray,
   loadingHooks,
 } from "@/mixins/index.js";
-import { PageTitle, BaseTable, NavTab, BaseModal } from "@/components/index.js";
+import {
+  PageTitle,
+  BaseTable,
+  NavTab,
+  BaseModal,
+  BaseButton,
+} from "@/components/index.js";
 
 export default {
   name: "DashboardCargaProfessores",
-  components: { PageTitle, BaseTable, NavTab, BaseModal },
   mixins: [toggleOrdination, toggleItemInArray, loadingHooks],
+  components: { PageTitle, BaseTable, NavTab, BaseModal, BaseButton },
   data() {
     return {
       tabAtivaModal: "Docentes",
@@ -543,7 +549,7 @@ export default {
       },
       modalSelectAll: {
         Docentes: () => {
-          this.filtroDocentes.selecionados = [...this.DocentesModal];
+          this.filtroDocentes.selecionados = [...this.Docentes];
           this.docenteSemAlocacao.selecionado = true;
         },
       },
@@ -555,11 +561,11 @@ export default {
       },
     };
   },
-  beforeMount() {
+  mounted() {
     this.activeAllFiltros();
   },
   methods: {
-    openHeaderModal(modalName) {
+    openAsideModal(modalName) {
       if (modalName === "filtros") {
         this.$refs.modalFiltros.toggle();
         this.$refs.modalAjuda.close();
@@ -737,7 +743,6 @@ export default {
         .replace(/[\u0300-\u036f]/g, "");
     },
   },
-
   computed: {
     DocentesOrderedMain() {
       return _.orderBy(
@@ -764,21 +769,15 @@ export default {
       );
     },
     DocentesFiltredModal() {
-      if (this.searchDocentes === "") return this.DocentesModal;
+      if (this.searchDocentes === "") return this.Docentes;
 
       const searchNormalized = this.normalizeText(this.searchDocentes);
 
-      return this.DocentesModal.filter((docente) => {
+      return this.Docentes.filter((docente) => {
         const docenteApelido = this.normalizeText(docente.apelido);
 
         return docenteApelido.match(searchNormalized);
       });
-    },
-    DocentesModal() {
-      return _.map(this.Docentes, (docente) => ({
-        apelido: docente.apelido,
-        id: docente.id,
-      }));
     },
     DocentesInCreditos() {
       return this.Docentes.map((docente) => {

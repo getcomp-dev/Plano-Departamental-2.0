@@ -24,23 +24,6 @@
         <i class="fas fa-user"></i>
         <span>Usuário</span>
       </li>
-
-      <li
-        class="nav-link"
-        v-on:click="$emit('show-modal', 'load')"
-        v-if="Admin"
-      >
-        <i class="fas fa-folder-open"></i>
-        <span>Carregar</span>
-      </li>
-      <li
-        class="nav-link"
-        v-on:click="$emit('show-modal', 'save')"
-        v-if="Admin"
-      >
-        <i class="fas fa-file"></i>
-        <span>Salvar</span>
-      </li>
       <li class="nav-link" v-on:click="$emit('show-modal', 'download')">
         <i class="fas fa-save"></i>
         <span>Download</span>
@@ -125,6 +108,7 @@ export default {
   font-size: 15px;
   color: #cdced0 !important;
 }
+
 .brand .btn-navbar {
   width: 40px !important;
   height: 30px;
@@ -132,8 +116,6 @@ export default {
   margin: 0px !important;
   height: 30px !important;
   border: none;
-  -webkit-box-shadow: inset -1px 0 0 #00000040;
-  box-shadow: inset -1px 0 0 #00000040;
   outline: none;
   color: #cdced0 !important;
   background-color: #00000040 !important;
@@ -142,6 +124,7 @@ export default {
 .brand .btn-navbar i.fas {
   font-size: 20px !important;
 }
+
 .brand .navbar-brand .brand-title:hover,
 .brand .btn-navbar:hover {
   color: #ffffff !important;

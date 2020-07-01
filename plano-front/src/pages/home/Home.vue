@@ -1,5 +1,5 @@
 <template>
-  <div class="main-component row p-0">
+  <div v-if="!$root.onLoad" class="main-component row p-0">
     <PageTitle :title="'Dashboard'" />
     <div class="alert alert-light mt-1" role="alert">
       <p class="user-paragraph" style="">
@@ -23,10 +23,13 @@
 <script>
 import _ from "lodash";
 import { mapGetters } from "vuex";
-import PageTitle from "@/components/PageTitle";
+import { loadingHooks } from "@/mixins/index.js";
+import { PageTitle } from "@/components/index.js";
 import LinksList from "./LinksList";
+
 export default {
   name: "DashboardHome",
+  mixins: [loadingHooks],
   components: { PageTitle, LinksList },
   data() {
     return {

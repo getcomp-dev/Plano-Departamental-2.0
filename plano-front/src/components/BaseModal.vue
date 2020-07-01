@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal-fade">
+  <transition :name="customAnimatedClass + '-modal'">
     <div
       v-if="visibility"
       :class="modalClass"
@@ -73,9 +73,9 @@ export default {
   data() {
     return {
       positions: {
-        right: "top: 5vh; right: 10px;z-index: 900;",
+        right: "top: 80px; right: 20px; z-index: 900;",
         center:
-          "top: 5px;left:50%; transform: translateX(-50%); z-index: 1000;",
+          "top: 25px; left:50%; transform: translateX(-50%); z-index: 1000;",
         centerNavbar:
           "top: 40px;left:50%; transform: translateX(-50%); z-index: 1000;",
       },
@@ -122,7 +122,7 @@ export default {
   },
   computed: {
     modalStyle() {
-      const { position, type } = this.modalConfigs;
+      const { position, type, hasBackground } = this.modalConfigs;
       let styles = "";
 
       styles += this.positions ? this.positions[position] : "";
@@ -130,6 +130,11 @@ export default {
       switch (type) {
         case "editTurma":
           styles = this.positions.center + "max-width:510px;height: auto;";
+          break;
+        case "editVagas":
+          styles =
+            this.positions.center +
+            "width:580px;min-height: auto; z-index: 1000;";
           break;
         case "filtros":
           styles = this.positions.right + "width:510px; height:610px;";
@@ -142,7 +147,9 @@ export default {
             this.positions.centerNavbar + "max-width:510px; height:auto;";
           break;
         default:
-          styles += "max-width:510px; height:auto;";
+          styles += `max-width:510px; height:auto; z-index:${
+            hasBackground ? "955" : "750"
+          };`;
           break;
       }
 
@@ -155,7 +162,8 @@ export default {
         position: "center",
         hasBackground:
           this.modalOptions.type === "editTurma" ||
-          this.modalOptions.type === "fromNavbar"
+          this.modalOptions.type === "fromNavbar" ||
+          this.modalOptions.type === "editVagas"
             ? true
             : false,
         ...this.modalOptions,
@@ -163,6 +171,21 @@ export default {
     },
     modalClass() {
       return ["modal-custom", this.classes];
+    },
+    customAnimatedClass() {
+      const { position, type } = this.modalConfigs;
+      switch (type) {
+        case "editTurma":
+        case "editVagas":
+          return "center";
+        case "filtros":
+        case "ajuda":
+          return "right";
+        case "fromNavbar":
+          return "fromNavbar";
+        default:
+          return position;
+      }
     },
   },
   watch: {
@@ -185,6 +208,8 @@ export default {
 </script>
 
 <style scoped>
+@import "../assets/css/base-modal-animations.css";
+
 .modal-custom {
   position: absolute;
   display: flex;
@@ -192,7 +217,7 @@ export default {
   justify-content: flex-start;
   max-height: calc(100% - 3.5rem);
   background: #ffffff;
-  box-shadow: 2px 2px 20px 1px;
+  box-shadow: 0 2px 10px 0;
   border-radius: 5px;
 }
 /* header */
@@ -246,15 +271,5 @@ export default {
   margin-top: auto;
   padding: 0 20px;
   height: 45px;
-}
-
-/* open/close transition */
-.modal-fade-enter,
-.modal-fade-leave-active {
-  opacity: 0;
-}
-.modal-fade-enter-active,
-.modal-fade-leave-active {
-  transition: opacity 0.3s ease;
 }
 </style>

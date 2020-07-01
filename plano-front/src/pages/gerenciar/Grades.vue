@@ -2,13 +2,14 @@
   <div v-if="Admin" class="main-component row">
     <PageTitle :title="'Grades'">
       <template #aside>
-        <b-button
-          v-b-modal.modalAjuda
+        <BaseButton
           title="Ajuda"
-          class="btn-custom btn-icon relatbtn"
+          :type="'icon'"
+          :color="'lightblue'"
+          @click="$refs.modalAjuda.toggle()"
         >
           <i class="fas fa-question"></i>
-        </b-button>
+        </BaseButton>
       </template>
     </PageTitle>
 
@@ -213,41 +214,52 @@
       </div>
     </div>
 
-    <!-- MODAL DE AJUDA -->
-    <b-modal id="modalAjuda" title="Ajuda" scrollable hide-footer>
-      <div class="modal-body">
-        <ul class="listas list-group">
+    <!-- MODAL AJUDA -->
+    <BaseModal
+      ref="modalAjuda"
+      :modalOptions="{
+        type: 'ajuda',
+        title: 'Ajuda',
+      }"
+    >
+      <template #modal-body>
+        <ul class="list-ajuda list-group">
           <li class="list-group-item">
-            <strong>Para adicionar grades:</strong> Com o cartão a direita em
-            branco, preencha-o. Em seguida, clique em Adicionar
+            <b>Para adicionar grades:</b> Com o cartão a direita em branco,
+            preencha-o. Em seguida, clique em Adicionar
             <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>.
           </li>
           <li class="list-group-item">
-            <strong>Para editar ou deletar uma grade:</strong> Na tabela, clique
-            na grade que deseja alterar. Logo após, no cartão à direita, altere
-            as informações que desejar e clique em Salvar
+            <b>Para editar ou deletar uma grade:</b> Na tabela, clique na grade
+            que deseja alterar. Logo após, no cartão à direita, altere as
+            informações que desejar e clique em Salvar
             <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
             ou, para excluí-la, clique em Deletar
             <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
             .
           </li>
           <li class="list-group-item">
-            <strong>Para deixar o cartão em branco:</strong> No cartão, à
-            direita, clique em Cancelar
+            <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
+            em Cancelar
             <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>.
           </li>
         </ul>
-      </div>
-    </b-modal>
+      </template>
+    </BaseModal>
   </div>
 </template>
 
 <script>
 import _ from "lodash";
 import gradeService from "@/common/services/grade";
-import Card from "@/components/Card";
-import PageTitle from "@/components/PageTitle";
-import BaseTable from "@/components/BaseTable";
+import { redirectNotAdmin } from "@/mixins/index.js";
+import {
+  PageTitle,
+  BaseTable,
+  BaseButton,
+  BaseModal,
+  Card,
+} from "@/components/index.js";
 
 const emptyGrade = {
   id: undefined,
@@ -262,7 +274,8 @@ const emptyDisciplinaGrade = {
 };
 export default {
   name: "DashboardGrade",
-  components: { PageTitle, Card, BaseTable },
+  mixins: [redirectNotAdmin],
+  components: { PageTitle, Card, BaseTable, BaseModal, BaseButton },
   data() {
     return {
       error: undefined,
@@ -270,18 +283,6 @@ export default {
       disciplinaGradeForm: _.clone(emptyDisciplinaGrade),
       currentGrade: undefined,
     };
-  },
-  created() {
-    if (!this.Admin) {
-      this.$notify({
-        group: "general",
-        title: "Erro",
-        text:
-          "Acesso negado! Usuário não possui permissão para acessar esta página!",
-        type: "error",
-      });
-      this.$router.push({ name: "dashboard" });
-    }
   },
   methods: {
     addGrade() {
@@ -430,7 +431,7 @@ export default {
 .card-input-menor {
   width: 70px;
 }
-@media screen and (max-width: 606px) {
+@media screen and (max-width: 621px) {
   .div-card {
     margin-left: 0px !important;
   }

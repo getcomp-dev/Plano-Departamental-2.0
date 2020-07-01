@@ -2,291 +2,191 @@
   <div class="main-component row p-0">
     <PageTitle :title="'Plano Departamental'">
       <template #aside>
-        <b-button
-          v-b-modal.modalFiltros
+        <BaseButton
           title="Filtros"
-          class="cancelbtn btn-icon btn-custom"
+          :type="'icon'"
+          :color="'gray'"
+          @click="openAsideModal('modalFiltros')"
         >
           <i class="fas fa-list-ul"></i>
-        </b-button>
+        </BaseButton>
 
-        <b-button
-          v-b-modal.modalRelatorio
-          type="button"
-          class="relatbtn btn-icon btn-custom"
-          title="Relatório"
+        <BaseButton
+          title="Relátorio"
+          :type="'icon'"
+          :color="'lightblue'"
+          @click="openAsideModal('modalRelatorio')"
         >
-          <i class="far fa-file-pdf"></i>
-        </b-button>
+          <i class="far fa-file-alt"></i>
+        </BaseButton>
 
-        <b-button
-          v-b-modal.modalAjuda
-          title="Ajuda"
-          class="relatbtn btn-icon btn-custom"
+        <BaseButton
+          :type="'icon'"
+          :color="'lightblue'"
+          @click="openAsideModal('modalAjuda')"
         >
           <i class="fas fa-question"></i>
-        </b-button>
+        </BaseButton>
       </template>
     </PageTitle>
 
-    <div class="div-table p-0">
-      <table class="main-table table table-bordered table-hover table-sm">
-        <thead class="thead-light max-content sticky">
-          <tr>
-            <div style="font-size: 11px !important;" class="max-content sticky">
-              <th scope="col">
-                <p
-                  class="p-header clickable"
-                  style="width: 80px;"
-                  @click="toggleOrdDiscip('codigo')"
-                  title="Clique para ordenar por código"
-                >
-                  Cód.
-                  <i
-                    style="font-size: 0.6rem; text-align: right;"
-                    :class="
-                      ordemDiscip.order == 'codigo'
-                        ? ordemDiscip.type == 'asc'
-                          ? 'fas fa-arrow-down fa-sm'
-                          : 'fas fa-arrow-up fa-sm'
-                        : 'fas fa-arrow-down fa-sm low-opacity'
-                    "
-                  ></i>
-                </p>
-              </th>
-              <th scope="col">
-                <p
-                  class="p-header clickable"
-                  style="width: 350px;"
-                  @click="toggleOrdDiscip('nome')"
-                  title="Clique para ordenar por nome"
-                >
-                  Nome
-                  <i
-                    style="font-size: 0.6rem; text-align: right;"
-                    :class="
-                      ordemDiscip.order == 'nome'
-                        ? ordemDiscip.type == 'asc'
-                          ? 'fas fa-arrow-down fa-sm'
-                          : 'fas fa-arrow-up fa-sm'
-                        : 'fas fa-arrow-down fa-sm low-opacity'
-                    "
-                  ></i>
-                </p>
-              </th>
+    <div class="div-table">
+      <BaseTable>
+        <template #thead>
+          <th
+            class="clickable"
+            style="width: 80px"
+            @click="toggleOrder(ordenacaoMain.disciplinas, 'codigo')"
+          >
+            Cód.
+            <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'codigo')"></i>
+          </th>
+          <th
+            class="t-start clickable"
+            style="width: 350px;"
+            @click="toggleOrder(ordenacaoMain.disciplinas, 'nome')"
+          >
+            Nome
+            <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'nome')"></i>
+          </th>
+          <th
+            class="clickable"
+            style="width: 80px"
+            @click="toggleOrder(ordenacaoMain.disciplinas, 'perfilAbreviacao')"
+          >
+            Perfil
+            <i
+              :class="
+                setIconByOrder(ordenacaoMain.disciplinas, 'perfilAbreviacao')
+              "
+            ></i>
+          </th>
+          <th style="width: 24px">
+            S.
+          </th>
+          <th style="width: 30px">
+            T.
+          </th>
+          <th style="width: 200px">
+            Docentes
+          </th>
+          <th style="width: 180px">
+            Horário
+          </th>
 
-              <th scope="col">
-                <p
-                  class="p-header clickable"
-                  style="width: 65px;"
-                  @click="toggleOrdDiscip('perfil')"
-                  title="Clique para ordenar por nome"
-                >
-                  Perfil
-                  <i
-                    style="font-size: 0.6rem; text-align: right;"
-                    :class="
-                      ordemDiscip.order == 'perfil'
-                        ? ordemDiscip.type == 'asc'
-                          ? 'fas fa-arrow-down fa-sm'
-                          : 'fas fa-arrow-up fa-sm'
-                        : 'fas fa-arrow-down fa-sm low-opacity'
-                    "
-                  ></i>
-                </p>
-              </th>
-              <th scope="col">
-                <p class="p-header" style="width: 24px;">S.</p>
-              </th>
-              <th scope="col">
-                <p class="p-header" style="width: 24px;">T.</p>
-              </th>
-              <th scope="col">
-                <p class="p-header" style="width: 200px;">Docentes</p>
-              </th>
-              <th scope="col">
-                <p class="p-header" style="width: 180px;">Horário</p>
-              </th>
-
-              <th
-                scope="col"
-                v-if="semestreAtual === 1"
-                title="Vagas do 1º semestre"
+          <th :title="currentThTitle" style="width: 50px">
+            Vagas
+          </th>
+        </template>
+        <template #tbody>
+          <template v-for="disciplina in DisciplinasOrderedMain">
+            <template
+              v-for="(turma, index) in getTurmasByDisciplina(
+                disciplina,
+                filtroSemestres.ativo
+              )"
+            >
+              <tr
+                v-if="index === 0"
+                class="bg-custom"
+                :key="'disciplina' + turma.id + disciplina.id"
               >
-                <p class="p-header" style="width: 50px;">Vagas</p>
-              </th>
-              <th
-                scope="col"
-                v-if="semestreAtual === 2"
-                title="Vagas do 2º semestre"
-              >
-                <p class="p-header" style="width: 50px;">Vagas</p>
-              </th>
-              <th
-                scope="col"
-                v-if="semestreAtual === 3"
-                title="Vagas do 1º e 2º semestre"
-              >
-                <p class="p-header" style="width: 50px;">Vagas</p>
-              </th>
-            </div>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-for="disciplina in Disciplinas_Main_Table">
-            <template v-if="turmas(disciplina, semestreAtual).length > 0">
-              <tr class="disciplina-tr" :key="disciplina.codigo">
-                <div class="max-content">
-                  <td>
-                    <p style="width: 80px;">{{ disciplina.codigo }}</p>
-                  </td>
-                  <td>
-                    <p style="width: 350px;">{{ disciplina.nome }}</p>
-                  </td>
-                  <td>
-                    <p style="width: 65px;">{{ perfil(disciplina) }}</p>
-                  </td>
-                  <td>
-                    <p style="width: 24px;"></p>
-                  </td>
-                  <td>
-                    <p style="width: 24px;"></p>
-                  </td>
-                  <td>
-                    <p style="width: 200px;"></p>
-                  </td>
-                  <td>
-                    <p style="width: 180px;"></p>
-                  </td>
-                  <td v-if="semestreAtual == 1">
-                    <p style="width: 50px;">
-                      {{ vagasDisciplina(disciplina, 1) }}
-                    </p>
-                  </td>
-                  <td v-if="semestreAtual == 2">
-                    <p style="width: 50px;">
-                      {{ vagasDisciplina(disciplina, 2) }}
-                    </p>
-                  </td>
-                  <td v-if="semestreAtual == 3">
-                    <p style="width: 50px;">
-                      {{
-                        vagasDisciplina(disciplina, 2) +
-                          vagasDisciplina(disciplina, 1)
-                      }}
-                    </p>
-                  </td>
-                </div>
+                <td style="width: 80px">
+                  {{ disciplina.codigo }}
+                </td>
+                <td style="width: 350px" class="t-start">
+                  {{ disciplina.nome }}
+                </td>
+                <td style="width: 80px" class="less-padding">
+                  {{ disciplina.perfilAbreviacao }}
+                </td>
+                <td style="width: 24px"></td>
+                <td style="width: 30px"></td>
+                <td style="width: 200px"></td>
+                <td style="width: 180px"></td>
+                <td style="width: 50px">
+                  {{ getDisciplinaVagasInCurrentSemestres(disciplina) }}
+                </td>
               </tr>
-            </template>
+              <!--  -->
+              <tr :key="'turmasTr' + turma.id">
+                <td style="width: 80px"></td>
+                <td style="width: 350px"></td>
+                <td style="width: 80px"></td>
+                <td style="width: 24px">
+                  {{ turma.periodo }}
+                </td>
+                <td style="width: 30px" class="less-padding">
+                  {{ turma.letra }}
+                </td>
+                <td style="width: 200px">
+                  {{ docentes(turma) }}
+                </td>
 
-            <template v-for="turma in turmas(disciplina, semestreAtual)">
-              <tr :key="'turma-id:' + turma.id">
-                <template>
-                  <div class="linhas max-content">
-                    <td>
-                      <p style="width: 80px;"></p>
-                    </td>
-                    <td>
-                      <p style="width: 350px;"></p>
-                    </td>
-                    <td>
-                      <p style="width: 65px;"></p>
-                    </td>
-                    <td>
-                      <p style="width: 24px;">{{ turma.periodo }}</p>
-                    </td>
-                    <td>
-                      <p style="width: 24px;">{{ turma.letra }}</p>
-                    </td>
-                    <td>
-                      <p style="width: 200px;">{{ docentes(turma) }}</p>
-                    </td>
+                <td style="width: 180px">
+                  {{ getHorarioById(turma.Horario1) }}
 
-                    <td>
-                      <div style="width: 180px;">
-                        <template v-for="horario in Horarios">
-                          <p
-                            :key="horario.id"
-                            v-if="horario.id === turma.Horario1"
-                          >
-                            {{ horario.horario }}
-                            <template v-for="horario in Horarios">
-                              <span
-                                :key="horario.id"
-                                v-if="horario.id === turma.Horario2"
-                                >/ {{ horario.horario }}</span
-                              >
-                            </template>
-                          </p>
-                        </template>
-                      </div>
-                    </td>
-                    <td
-                      v-if="semestreAtual == 1"
-                      v-on:click="selecionaTurma(turma)"
-                      class="clickable"
-                    >
-                      <p
-                        v-if="turma.periodo == 1 || turma.periodo == 2"
-                        style="width: 50px;"
-                        class="p-vagas"
-                      >
-                        {{ vagasTurma(turma, 1) }}
-                      </p>
-                    </td>
-                    <td
-                      v-if="semestreAtual == 2"
-                      v-on:click="selecionaTurma(turma)"
-                      class="clickable"
-                    >
-                      <p
-                        v-if="turma.periodo == 3 || turma.periodo == 4"
-                        style="width: 50px;"
-                        class="p-vagas"
-                      >
-                        {{ vagasTurma(turma, 2) }}
-                      </p>
-                    </td>
-                    <td
-                      v-if="semestreAtual == 3"
-                      v-on:click="selecionaTurma(turma)"
-                      class="clickable"
-                    >
-                      <p
-                        v-if="turma.periodo == 1 || turma.periodo == 2"
-                        style="width: 50px;"
-                        class="p-vagas"
-                      >
-                        {{ vagasTurma(turma, 1) }}
-                      </p>
-                      <p v-else style="width: 50px;" class="p-vagas">
-                        {{ vagasTurma(turma, 2) }}
-                      </p>
-                    </td>
-                  </div>
-                </template>
+                  {{
+                    getHorarioById(turma.Horario2)
+                      ? ` / ${getHorarioById(turma.Horario2)}`
+                      : ""
+                  }}
+                </td>
+
+                <td
+                  v-if="
+                    filtroSemestres.ativo == 1 &&
+                      (turma.periodo == 1 || turma.periodo == 2)
+                  "
+                  @click="selecionaTurma(turma)"
+                  class="clickable p-vagas"
+                  style="width: 50px"
+                >
+                  {{ vagasTurma(turma, 1) }}
+                </td>
+                <td
+                  v-if="
+                    filtroSemestres.ativo == 2 &&
+                      (turma.periodo == 3 || turma.periodo == 4)
+                  "
+                  @click="selecionaTurma(turma)"
+                  class="clickable p-vagas"
+                  style="width: 50px"
+                >
+                  {{ vagasTurma(turma, 2) }}
+                </td>
+                <td
+                  v-if="filtroSemestres.ativo == 3"
+                  @click="selecionaTurma(turma)"
+                  class="clickable p-vagas"
+                  style="width: 50px"
+                >
+                  <template v-if="turma.periodo == 1 || turma.periodo == 2">
+                    {{ vagasTurma(turma, 1) }}
+                  </template>
+                  <template v-else>
+                    {{ vagasTurma(turma, 2) }}
+                  </template>
+                </td>
               </tr>
             </template>
           </template>
-        </tbody>
-      </table>
+        </template>
+      </BaseTable>
     </div>
 
     <!-- MODAL DE AJUDA -->
-    <b-modal
-      class="modal-ajuda"
-      id="modalAjuda"
-      ref="ajudaModal"
-      scrollable
-      title="Ajuda"
+    <BaseModal
+      ref="modalAjuda"
+      :modalOptions="{
+        type: 'ajuda',
+        title: 'Ajuda',
+      }"
     >
-      <div class="modal-body">
-        <ul class="listas list-group">
+      <template #modal-body>
+        <ul class="list-ajuda list-group">
           <li class="list-group-item">
-            <strong class="ajuda-strong"
-              >Para exibir conteúdo na Tabela:</strong
-            >
+            <b class="ajuda-b">Para exibir conteúdo na Tabela:</b>
             Clique em Disciplinas
             <i
               class="fas fa-list-ul cancelbtn px-1"
@@ -296,8 +196,8 @@
             em OK. Caso queira ver todas basta clicar em Selecionar Todos.
           </li>
           <li class="list-group-item">
-            <strong class="ajuda-strong">Para gerar relatório:</strong> Clique
-            no botão Relatório
+            <b class="ajuda-b">Para gerar relatório:</b> Clique no botão
+            Relatório
             <i
               class="far fa-file-pdf relatbtn px-1"
               style="font-size: 12px;"
@@ -307,702 +207,471 @@
             selecionadas.
           </li>
           <li class="list-group-item">
-            <strong class="ajuda-strong">Para alterar ordenação:</strong> Clique
-            em Cod. no cabeçalho da tabela para ordenar por código, ou em Nome
-            para ordenar por ordem alfabética, ou em Perfil para ordenar por
-            perfil.
+            <b class="ajuda-b">Para alterar ordenação:</b> Clique em Cod. no
+            cabeçalho da tabela para ordenar por código, ou em Nome para ordenar
+            por ordem alfabética, ou em Perfil para ordenar por perfil.
           </li>
           <li class="list-group-item">
-            <strong class="ajuda-strong"
-              >Para visualizar divisões de vagas:</strong
-            >
+            <b class="ajuda-b">Para visualizar divisões de vagas:</b>
             Clique no número de vagas de uma turma para visualizar a alocação
             das vagas por cursos.
           </li>
         </ul>
-      </div>
+      </template>
+    </BaseModal>
 
-      <div slot="modal-footer" style="display: none;"></div>
-    </b-modal>
     <!-- Modals FILTROS -->
-    <b-modal
-      id="modalFiltros"
+    <BaseModal
       ref="modalFiltros"
-      scrollable
-      size="md"
-      title="Filtros"
+      :modalOptions="{
+        type: 'filtros',
+        title: 'Filtros',
+        hasFooter: true,
+      }"
+      :hasFooter="true"
+      @btn-ok="btnOkFiltros()"
+      @select-all="modalSelectAll[tabAtivaModal]"
+      @select-none="modalSelectNone[tabAtivaModal]"
     >
-      <div class="p-0 m-0" style="height: 30px; width: 465px;">
-        <ul
-          class="nav nav-tabs card-header-tabs m-0"
-          style="font-size: 11px !important; height: 30px;"
-        >
-          <li class="nav-item" @click="changeTab('perfis')">
-            <a
-              class="nav-link border border-right-0"
-              :class="{
-                active: nav_ativo === 'perfis',
-              }"
-              >Perfis</a
-            >
-          </li>
-          <li class="nav-item" @click="changeTab('disciplinas')">
-            <a
-              class="nav-link border border-right-0"
-              :class="{
-                active: nav_ativo === 'disciplinas',
-              }"
-              >Disciplinas</a
-            >
-          </li>
-          <li class="nav-item" @click="changeTab('semestre')">
-            <a
-              class="nav-link border"
-              :class="{
-                active: nav_ativo === 'semestre',
-              }"
-              >Semestre</a
-            >
-          </li>
-        </ul>
-      </div>
+      <template #modal-body>
+        <NavTab
+          :currentTab="tabAtivaModal"
+          :allTabs="['Perfis', 'Disciplinas', 'Semestres']"
+          @change-tab="tabAtivaModal = $event"
+        />
 
-      <div class="col m-0 p-0 max-content" style="height: 450px !important;">
-        <table class="table table-sm modal-table table-bordered">
-          <thead class="thead-light sticky">
-            <!-- search bar disciplinas -->
-            <tr v-if="nav_ativo === 'disciplinas'">
-              <th>
-                <div class="max-content">
-                  <div class="m-0  input-group input-group-search">
-                    <input
-                      type="text"
-                      class="form-control search-form-control"
-                      style="border-right: none; width:300px!important;"
-                      placeholder="Pesquise nome ou codigo de uma disciplina..."
-                      v-model="searchDisciplinas"
-                    />
-                    <div
-                      class="input-group-append"
-                      @click="searchDisciplinas = null"
-                    >
-                      <span
-                        class="input-group-text search-text"
-                        style="height: 25px; font-size: 18px; cursor: pointer;"
-                        >&times;</span
-                      >
-                    </div>
-                  </div>
-                </div>
+        <div class="div-table">
+          <BaseTable
+            v-show="tabAtivaModal === 'Disciplinas'"
+            :tableType="'modal-table'"
+            :hasSearchBar="true"
+          >
+            <template #thead-search>
+              <input
+                type="text"
+                class="form-control input-search"
+                placeholder="Pesquise o nome ou código de uma disciplina..."
+                v-model="searchDisciplinas"
+              />
+              <button @click="searchDisciplinas = ''" class="btn btn-search">
+                <i class="fas fa-times"></i>
+              </button>
+            </template>
+            <template #thead>
+              <th style="width: 25px"></th>
+              <th
+                title="Clique para ordenar por código"
+                class="t-start clickable"
+                style="width: 70px"
+                @click="toggleOrder(ordenacaoModal.disciplinas, 'codigo')"
+              >
+                Cód.
+                <i
+                  :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"
+                ></i>
               </th>
-            </tr>
-            <!-- perfis -->
-            <tr v-if="nav_ativo === 'perfis'" class="sticky">
-              <div class="max-content">
-                <th>
-                  <p style="width: 25px;" class="p-header"></p>
-                </th>
-                <th>
-                  <p
-                    class="p-header clickable"
-                    style="width: 435px; text-align: start;"
-                    @click="toggleOrdPerfis()"
-                  >
-                    Nome
-                    <i
-                      style="font-size: 0.6rem; text-align: right;"
-                      :class="
-                        ordemPerfis.type == 'asc'
-                          ? 'fas fa-arrow-down fa-sm'
-                          : 'fas fa-arrow-up fa-sm'
-                      "
-                    ></i>
-                  </p>
-                </th>
-              </div>
-            </tr>
-            <!-- disciplinas -->
-            <tr v-if="nav_ativo === 'disciplinas'" class="sticky2">
-              <div class="max-content">
-                <th>
-                  <p
-                    style="width: 25px; text-align: center;"
-                    class="p-header"
-                  ></p>
-                </th>
-                <th>
-                  <p
-                    class="p-header clickable"
-                    style="width: 70px; text-align: start;"
-                    @click="toggleOrdDiscip('codigo')"
-                    title="Clique para ordenar por código"
-                  >
-                    Cód.
-                    <i
-                      style="font-size: 0.6rem; text-align: right;"
-                      :class="
-                        ordemDiscip.order == 'codigo'
-                          ? ordemDiscip.type == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : 'fas fa-arrow-down fa-sm low-opacity'
-                      "
-                    ></i>
-                  </p>
-                </th>
-                <th>
-                  <p
-                    class="p-header clickable"
-                    style="width: 280px; text-align: start;"
-                    @click="toggleOrdDiscip('nome')"
-                    title="Clique para ordenar por nome"
-                  >
-                    Nome
-                    <i
-                      style="font-size: 0.6rem; text-align: right;"
-                      :class="
-                        ordemDiscip.order == 'nome'
-                          ? ordemDiscip.type == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : 'fas fa-arrow-down fa-sm low-opacity'
-                      "
-                    ></i>
-                  </p>
-                </th>
-                <th>
-                  <p
-                    class="p-header clickable"
-                    style="width: 85px; text-align: start;"
-                    @click="toggleOrdDiscip('perfil')"
-                    title="Clique para ordenar por nome"
-                  >
-                    Perfil
-                    <i
-                      style="font-size: 0.6rem; text-align: right;"
-                      :class="
-                        ordemDiscip.order == 'perfil'
-                          ? ordemDiscip.type == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : 'fas fa-arrow-down fa-sm low-opacity'
-                      "
-                    ></i>
-                  </p>
-                </th>
-              </div>
-            </tr>
-            <!-- semestre -->
-            <tr v-if="nav_ativo === 'semestre'" class="sticky">
-              <div class="max-content">
-                <th>
-                  <p style="width: 25px;" class="p-header"></p>
-                </th>
-                <th>
-                  <p class="p-header" style="width: 435px; text-align: start;">
-                    Semestre Letivo
-                  </p>
-                </th>
-              </div>
-            </tr>
-          </thead>
-          <tbody v-if="nav_ativo === 'perfis'">
-            <tr v-for="perfil in Perfis_Modal" :key="'perfil-id' + perfil.id">
-              <div class="max-content">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      v-model="PerfisAtivados"
-                      :value="perfil"
-                      class="form-check-input position-static m-0"
-                    />
-                  </div>
+              <th
+                title="Clique para ordenar por nome"
+                class="t-start clickable"
+                style="width: 270px"
+                @click="toggleOrder(ordenacaoModal.disciplinas, 'nome')"
+              >
+                Nome
+                <i
+                  :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"
+                ></i>
+              </th>
+              <th
+                title="Clique para ordenar por nome"
+                class="t-start clickable"
+                style="width: 85px"
+                @click="
+                  toggleOrder(ordenacaoModal.disciplinas, 'perfilAbreviacao')
+                "
+              >
+                Perfil
+                <i
+                  :class="
+                    setIconByOrder(
+                      ordenacaoModal.disciplinas,
+                      'perfilAbreviacao'
+                    )
+                  "
+                ></i>
+              </th>
+            </template>
+            <template #tbody>
+              <tr
+                v-for="disciplina in DisciplinasOrderedModal"
+                :key="'MdDisciplinas' + disciplina.id"
+                @click="
+                  toggleItemInArray(disciplina, filtroDisciplinas.selecionados)
+                "
+              >
+                <td style="width: 25px">
+                  <input
+                    type="checkbox"
+                    class="form-check-input position-static m-0"
+                    v-model="filtroDisciplinas.selecionados"
+                    :value="disciplina"
+                  />
                 </td>
-                <td>
-                  <p style="width: 435px; text-align: start;">
-                    {{ perfil.nome }}
-                  </p>
+                <td style="width: 70px" class="t-start">
+                  {{ disciplina.codigo }}
                 </td>
-              </div>
-            </tr>
-          </tbody>
-          <tbody v-if="nav_ativo === 'disciplinas'">
-            <tr
-              v-for="disciplina in Disciplinas_Filtred"
-              :key="'disciplina' + disciplina.id"
-              value="disciplina.id"
-            >
-              <div class="max-content">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      class="form-check-input position-static m-0"
-                      v-model="DisciplinasSelecionados"
-                      :value="disciplina"
-                    />
-                  </div>
+                <td style="width: 270px" class="t-start">
+                  {{ disciplina.nome }}
                 </td>
-                <td>
-                  <p style="width: 70px; text-align: start;">
-                    {{ disciplina.codigo }}
-                  </p>
+                <td style="width: 85px" class="t-start">
+                  {{ disciplina.perfilAbreviacao }}
                 </td>
-                <td>
-                  <p style="width: 280px; text-align: start;">
-                    {{ disciplina.nome }}
-                  </p>
+              </tr>
+              <tr v-show="!DisciplinasOrderedModal.length">
+                <td style="width:450px">
+                  NENHUMA DISCIPLINA ENCONTRADA.
                 </td>
-                <td>
-                  <p style="width: 85px; text-align: start;">
-                    {{ perfil(disciplina) }}
-                  </p>
-                </td>
-              </div>
-            </tr>
-          </tbody>
-          <tbody v-if="nav_ativo === 'semestre'">
-            <tr>
-              <div style="width: max-content;">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      class="form-check-input position-static m-0"
-                      v-model="semestre_1Ativo"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p style="width: 435px; text-align: start;">PRIMEIRO</p>
-                </td>
-              </div>
-            </tr>
-            <tr>
-              <div style="width: max-content;">
-                <td>
-                  <div style="width: 25px; height: inherit;" class="px-1">
-                    <input
-                      type="checkbox"
-                      class="form-check-input position-static m-0"
-                      v-model="semestre_2Ativo"
-                    />
-                  </div>
-                </td>
-                <td>
-                  <p style="width: 435px; text-align: start;">SEGUNDO</p>
-                </td>
-              </div>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+              </tr>
+            </template>
+          </BaseTable>
 
-      <div slot="modal-footer" class="w-100 m-0 p-0 d-flex">
-        <div class="w-100">
-          <template v-if="nav_ativo === 'disciplinas'">
-            <b-button
-              class="btn-azul btn-modal btn-custom"
-              variant="success"
-              @click="selectAllDisciplinas()"
-              >Selecionar Todos</b-button
-            >
-            <b-button
-              class="btn-cinza btn-modal btn-custom"
-              variant="secondary"
-              @click="selectNoneDisciplinas()"
-              >Desmarcar Todos</b-button
-            >
-          </template>
-          <template v-else-if="nav_ativo === 'perfis'">
-            <b-button
-              class="btn-azul btn-modal btn-custom"
-              variant="success"
-              @click="selectAllPerfis()"
-              >Selecionar Todos</b-button
-            >
-            <b-button
-              class="btn-cinza btn-modal btn-custom"
-              variant="secondary"
-              @click="selectNonePerfis()"
-              >Desmarcar Todos</b-button
-            >
-          </template>
-          <template v-else>
-            <b-button
-              class="btn-azul btn-modal btn-custom"
-              variant="success"
-              @click="selectAllSemestre()"
-              >Selecionar Todos</b-button
-            >
-            <b-button
-              class="btn-cinza btn-modal btn-custom"
-              variant="secondary"
-              @click="selectNoneSemestre()"
-              >Desmarcar Todos</b-button
-            >
-          </template>
+          <BaseTable
+            v-show="tabAtivaModal === 'Semestres'"
+            :tableType="'modal-table'"
+          >
+            <template #thead>
+              <th style="width: 25px"></th>
+              <th class="t-start clickable" style="width: 425px">
+                Semestre Letivo
+              </th>
+            </template>
+            <template #tbody>
+              <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
+                <td style="width: 25px">
+                  <input
+                    type="checkbox"
+                    class="form-check-input position-static m-0"
+                    v-model="filtroSemestres.primeiro"
+                  />
+                </td>
+                <td style="width: 425px" class="t-start">
+                  PRIMEIRO
+                </td>
+              </tr>
+              <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
+                <td style="width: 25px">
+                  <input
+                    type="checkbox"
+                    class="form-check-input position-static m-0"
+                    v-model="filtroSemestres.segundo"
+                  />
+                </td>
+                <td style="width: 425px" class="t-start">SEGUNDO</td>
+              </tr>
+            </template>
+          </BaseTable>
+
+          <BaseTable
+            :tableType="'modal-table'"
+            v-show="tabAtivaModal === 'Perfis'"
+          >
+            <template #thead>
+              <th style="width: 25px;"></th>
+              <th
+                @click="toggleOrder(ordenacaoModal.perfis, 'nome')"
+                class="clickable t-start"
+                style="width: 425px"
+              >
+                Nome
+                <i :class="setIconByOrder(ordenacaoModal.perfis, 'nome')"></i>
+              </th>
+            </template>
+            <template #tbody>
+              <tr
+                v-for="perfil in PerfisOrderedModal"
+                :key="'perfilId' + perfil.id"
+                @click="toggleItemInArray(perfil, filtroPerfis.selecionados)"
+              >
+                <td style="width: 25px">
+                  <input
+                    type="checkbox"
+                    v-model="filtroPerfis.selecionados"
+                    :value="perfil"
+                    class="form-check-input position-static m-0"
+                  />
+                </td>
+                <td style="width: 425px" class="t-start">
+                  {{ perfil.nome }}
+                </td>
+              </tr>
+            </template>
+          </BaseTable>
         </div>
-        <b-button
-          variant="success"
-          @click="btnOK()"
-          class="btn-verde btn-modal btn-custom btn-ok-modal"
-          >OK</b-button
-        >
-      </div>
-    </b-modal>
+      </template>
+    </BaseModal>
 
-    <!-- Modals para ver divisões de vagas por curso -->
-    <b-modal
-      size="md"
-      id="modalVagas"
-      class="modalVagas modal-vagas"
-      ref="VagasModal"
-      scrollable
+    <BaseModal
+      ref="modalVagas"
+      :modalOptions="{
+        type: 'editVagas',
+        title: 'Vagas',
+      }"
     >
-      <div slot="modal-header" class="row w-100 m-0 p-0">
-        <div class="col-11 form-group p-0">
-          <div class="form-row p-0 m-0">
-            <h6 class="p-0 m-0 mr-4 col-12">
+      <template #modal-body>
+        <template v-if="turmaSelecionada">
+          <div class="vagas-header">
+            <h6 class="vagas-title">
               {{
-                turmaSelecionada !== undefined
-                  ? disciplina(turmaSelecionada).codigo +
-                    " - " +
-                    disciplina(turmaSelecionada).nome
-                  : "Nenhuma Turma Selecionada"
+                disciplina(turmaSelecionada).codigo +
+                  " - " +
+                  disciplina(turmaSelecionada).nome
               }}
             </h6>
+            <div class="input-form">
+              <label for="selectTurma" class="mr-2">Turma: </label>
+              <select
+                id="selectTurma"
+                class="form-control"
+                style="width: 50px !important;"
+                v-model="turmaSelecionada"
+              >
+                <option
+                  v-for="turma in getTurmasByDisciplina(
+                    disciplina(turmaSelecionada),
+                    turmaSelecionada.periodo === 1 ||
+                      turmaSelecionada.periodo === 2
+                      ? 1
+                      : 2
+                  )"
+                  :key="'selectModalVagas' + turma.id"
+                  :value="turma"
+                  >{{ turma.letra }}</option
+                >
+              </select>
+            </div>
           </div>
-          <div class="d-flex col-12 p-0 mt-2" style="margin-bottom: -15px;">
-            <label for="selectTurma" class="mr-2">Turma: </label>
-            <select
-              id="selectTurma"
-              class="form-control"
-              style="width: 50px !important;"
-              v-model="turmaSelecionada"
-            >
-              <option
-                v-for="turma in turmaSelecionada !== undefined
-                  ? turmas(
-                      disciplina(turmaSelecionada),
-                      turmaSelecionada.periodo === 1 ||
-                        turmaSelecionada.periodo === 2
-                        ? 1
-                        : 2
+          <div class="div-table">
+            <BaseTable :tableType="'modal-table'">
+              <template #thead>
+                <th
+                  class="clickable t-start"
+                  style="width: 55px"
+                  title="Código"
+                  @click="toggleOrder(ordenacaoModal.vagas, 'codigo')"
+                >
+                  Cód.
+                  <i
+                    :class="setIconByOrder(ordenacaoModal.vagas, 'codigo')"
+                  ></i>
+                </th>
+                <th
+                  class="clickable t-start"
+                  style="width: 300px"
+                  @click="toggleOrder(ordenacaoModal.vagas, 'nome')"
+                >
+                  Nome
+                  <i :class="setIconByOrder(ordenacaoModal.vagas, 'nome')"></i>
+                </th>
+
+                <th
+                  class="clickable t-start less-padding"
+                  style="width: 55px"
+                  @click="
+                    toggleOrder(
+                      ordenacaoModal.vagas,
+                      'vagasPeriodizadas',
+                      'desc'
                     )
-                  : []"
-                :key="'selectModalVagas' + turma.id"
-                :value="turma"
-                >{{ turma.letra }}</option
-              >
-            </select>
-          </div>
-        </div>
-
-        <div class="col-1 m-0 p-0">
-          <button
-            type="button"
-            class="close float-right"
-            style="padding-bottom: 4px;"
-            v-on:click="closeModalVagas()"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-      </div>
-
-      <div class="col m-0 p-0 max-content">
-        <!-- Table vagas -->
-        <table
-          class="table table-sm modal-table table-bordered"
-          style="max-height: 450px !important;"
-        >
-          <thead class="thead-light sticky">
-            <tr>
-              <div
-                style="font-size: 11px !important;"
-                class="max-content sticky"
-              >
-                <th>
-                  <p
-                    class="p-header clickable"
-                    style="width: 50px; text-align: start;"
-                    v-on:click="toggleOrdVagas('codigo')"
-                    title="Clique para ordenar por código"
-                  >
-                    Cód.
-                    <i
-                      :class="
-                        ordemVagas.order === 'codigo'
-                          ? ordemVagas.type == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : 'fas fa-arrow-down fa-sm low-opacity'
-                      "
-                      style="font-size: 0.6rem; text-align: right;"
-                    ></i>
-                  </p>
+                  "
+                  title="Clique para ordenar por vagas da grade"
+                >
+                  Grade
+                  <i
+                    :class="
+                      setIconByOrder(ordenacaoModal.vagas, 'vagasPeriodizadas')
+                    "
+                  ></i>
                 </th>
-                <th>
-                  <p
-                    class="p-header clickable"
-                    style="width: 250px; text-align: start;"
-                    v-on:click="toggleOrdVagas('nome')"
-                    title="Clique para ordenar por nome"
-                  >
-                    Nome
-                    <i
-                      :class="
-                        ordemVagas.order === 'nome'
-                          ? ordemVagas.type == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : 'fas fa-arrow-down fa-sm low-opacity'
-                      "
-                      style="font-size: 0.6rem; text-align: right;"
-                    ></i>
-                  </p>
+                <th
+                  class="clickable t-start less-padding"
+                  style="width: 55px"
+                  @click="
+                    toggleOrder(
+                      ordenacaoModal.vagas,
+                      'vagasNaoPeriodizadas',
+                      'desc'
+                    )
+                  "
+                  title="Clique para ordenar por vagas extras"
+                >
+                  Extra
+                  <i
+                    :class="
+                      setIconByOrder(
+                        ordenacaoModal.vagas,
+                        'vagasNaoPeriodizadas'
+                      )
+                    "
+                  ></i>
                 </th>
-
-                <th>
-                  <p
-                    class="p-header clickable"
-                    style="width: 55px; text-align: start;"
-                    v-on:click="toggleOrdVagas('vagasPeriodizadas')"
-                    title="Clique para ordenar por vagas da grade"
-                  >
-                    Grade
-                    <i
-                      :class="
-                        ordemVagas.order === 'vagasPeriodizadas'
-                          ? ordemVagas.type == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : 'fas fa-arrow-down fa-sm low-opacity'
-                      "
-                      style="font-size: 0.6rem; text-align: right;"
-                    ></i>
-                  </p>
+                <th
+                  class="clickable t-start less-padding"
+                  style="width: 55px"
+                  @click="
+                    toggleOrder(ordenacaoModal.vagas, 'vagasTotais', 'desc')
+                  "
+                  title="Clique para ordenar por vagas extras"
+                >
+                  Total
+                  <i
+                    :class="setIconByOrder(ordenacaoModal.vagas, 'vagasTotais')"
+                  ></i>
                 </th>
-                <th>
-                  <p
-                    class="p-header clickable"
-                    style="width: 55px; text-align: start;"
-                    v-on:click="toggleOrdVagas('vagasNaoPeriodizadas')"
-                    title="Clique para ordenar por vagas extras"
-                  >
-                    Extra
-                    <i
-                      :class="
-                        ordemVagas.order === 'vagasNaoPeriodizadas'
-                          ? ordemVagas.type == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : 'fas fa-arrow-down fa-sm low-opacity'
-                      "
-                      style="font-size: 0.6rem; text-align: right;"
-                    ></i>
-                  </p>
-                </th>
-                <th>
-                  <p
-                    class="p-header clickable"
-                    style="width: 50px; text-align: start;"
-                    v-on:click="toggleOrdVagas('vagasTotais')"
-                    title="Clique para ordenar por vagas extras"
-                  >
-                    Total
-                    <i
-                      :class="
-                        ordemVagas.order === 'vagasTotais'
-                          ? ordemVagas.type == 'asc'
-                            ? 'fas fa-arrow-down fa-sm'
-                            : 'fas fa-arrow-up fa-sm'
-                          : 'fas fa-arrow-down fa-sm low-opacity'
-                      "
-                      style="font-size: 0.6rem; text-align: right;"
-                    ></i>
-                  </p>
-                </th>
-              </div>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr
-              v-for="p in VagasTurmaSelecionada"
-              :key="'vaga' + p.Curso + '-' + p.Turma"
-            >
-              <div style="width: max-content !important;">
-                <td>
-                  <p style="width: 50px; text-align: start;">
+              </template>
+              <template #tbody>
+                <tr
+                  v-for="p in VagasTurmaSelecionada"
+                  :key="'vaga' + p.Curso + '-' + p.Turma"
+                >
+                  <td style="width: 55px" class="t-start">
                     {{ curso(p).codigo }}
-                  </p>
-                </td>
-                <td>
-                  <p style="width: 250px; text-align: start;">
+                  </td>
+                  <td style="width: 300px" class="t-start">
                     {{ curso(p).nome }}
-                  </p>
-                </td>
-                <td>
-                  <p style="width: 55px; text-align: start;">
+                  </td>
+                  <td style="width: 55px">
                     {{ p.vagasPeriodizadas }}
-                  </p>
-                </td>
-                <td>
-                  <p style="width: 55px; text-align: start;">
+                  </td>
+                  <td style="width: 55px">
                     {{ p.vagasNaoPeriodizadas }}
-                  </p>
-                </td>
-                <td>
-                  <p style="width: 50px; text-align: start;">
+                  </td>
+                  <td style="width: 55px">
                     {{ p.vagasPeriodizadas + p.vagasNaoPeriodizadas }}
-                  </p>
-                </td>
-              </div>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div slot="modal-footer" class="w-100 m-0" style="display: flex;"></div>
-    </b-modal>
+                  </td>
+                </tr>
+              </template>
+            </BaseTable>
+          </div>
+        </template>
+      </template>
+    </BaseModal>
 
-    <!-- Modal para escolher relatório parcial ou completo-->
-    <b-modal
-      id="modalRelatorio"
-      ref="relatorioModal"
-      scrollable
-      title="Relatório"
-      hide-footer
-      size="sm"
-    >
-      <ul class="listas list-group">
-        <li class="list-group-item clickable" v-on:click="pdf(1)">
-          <strong class="ajuda-strong">Parcial</strong>
-        </li>
-        <li class="list-group-item clickable" v-on:click="pdf(2)">
-          <strong class="ajuda-strong">Completo</strong>
-        </li>
-      </ul>
-    </b-modal>
+    <ModalRelatorio ref="modalRelatorio" @selection-option="pdf($event)" />
   </div>
 </template>
 
 <script>
 import _ from "lodash";
 import pdfs from "@/common/services/pdfs";
-import PageTitle from "@/components/PageTitle";
+import { toggleItemInArray, toggleOrdination } from "@/mixins/index.js";
+import {
+  BaseButton,
+  BaseModal,
+  BaseTable,
+  PageTitle,
+  NavTab,
+  ModalRelatorio,
+} from "@/components/index.js";
 
 export default {
   name: "DashboardRelatorioDisciplinas",
-  components: { PageTitle },
+  mixins: [toggleItemInArray, toggleOrdination],
+  components: {
+    BaseModal,
+    BaseTable,
+    PageTitle,
+    NavTab,
+    BaseButton,
+    ModalRelatorio,
+  },
   data() {
     return {
-      PerfisAtivados: [],
-      DisciplinasSelecionados: [],
-      DisciplinasAtivados: [],
-      semestre_1Ativo: true,
-      semestre_2Ativo: true,
-      semestreAtual: 3,
       turmaSelecionada: undefined,
-      nav_ativo: "perfis",
-      searchDisciplinas: null,
-      ordemDiscip: { order: "codigo", type: "asc" },
-      ordemVagas: { order: "codigo", type: "asc" },
-      ordemPerfis: { order: "nome", type: "asc" },
+      tabAtivaModal: "Perfis",
+      searchDisciplinas: "",
+      filtroDisciplinas: {
+        ativados: [],
+        selecionados: [],
+      },
+      filtroPerfis: {
+        selecionados: [],
+      },
+      filtroSemestres: {
+        primeiro: true,
+        segundo: true,
+        ativo: 3,
+      },
+      modalSelectAll: {
+        Perfis: () => {
+          this.filtroPerfis.selecionados = [...this.Perfis];
+        },
+        Disciplinas: () => {
+          this.filtroDisciplinas.selecionados = [
+            ...this.DisciplinasDCCInPerfis,
+          ];
+        },
+        Semestres: () => {
+          this.filtroSemestres.primeiro = true;
+          this.filtroSemestres.segundo = true;
+        },
+      },
+      modalSelectNone: {
+        Perfis: () => {
+          this.filtroPerfis.selecionados = [];
+        },
+        Disciplinas: () => {
+          this.filtroDisciplinas.selecionados = [];
+        },
+        Semestres: () => {
+          this.filtroSemestres.primeiro = false;
+          this.filtroSemestres.segundo = false;
+        },
+      },
+      ordenacaoModal: {
+        perfis: { order: "nome", type: "asc" },
+        disciplinas: { order: "codigo", type: "asc" },
+        vagas: { order: "vagasTotais", type: "desc" },
+      },
+      ordenacaoMain: {
+        disciplinas: { order: "codigo", type: "asc" },
+      },
+      // ordenacaoModal.vagas: { order: "codigo", type: "asc" },
+      asideModaisRefs: ["modalFiltros", "modalAjuda", "modalRelatorio"],
     };
   },
-  beforeMount() {
-    this.selectAllDisciplinas();
-    this.DisciplinasAtivados = [...this.DisciplinasSelecionados];
+  mounted() {
+    this.modalSelectAll.Disciplinas();
+    this.modalSelectAll.Perfis();
+    this.btnOkFiltros();
   },
   methods: {
-    changeTab(tab) {
-      this.nav_ativo = tab;
+    openAsideModal(modalRef) {
+      this.asideModaisRefs.forEach((ref) => {
+        if (modalRef === ref) this.$refs[ref].toggle();
+        else this.$refs[ref].close();
+      });
+    },
+    btnOkFiltros() {
+      this.setSemestreAtivo();
+      this.filtroDisciplinas.ativados = [
+        ...this.filtroDisciplinas.selecionados,
+      ];
     },
     setSemestreAtivo() {
-      if (this.semestre_1Ativo && !this.semestre_2Ativo) this.semestreAtual = 1;
-      else if (this.semestre_2Ativo && !this.semestre_1Ativo)
-        this.semestreAtual = 2;
-      else if (this.semestre_1Ativo && this.semestre_1Ativo)
-        this.semestreAtual = 3;
-      else this.semestreAtual = undefined;
-    },
-    btnOK() {
-      this.setSemestreAtivo();
-      this.DisciplinasAtivados = [...this.DisciplinasSelecionados];
+      const { primeiro, segundo } = this.filtroSemestres;
 
-      this.$refs.modalFiltros.hide();
-      this.searchDisciplinas = null;
+      if (primeiro && !segundo) this.filtroSemestres.ativo = 1;
+      else if (!primeiro && segundo) this.filtroSemestres.ativo = 2;
+      else if (primeiro && segundo) this.filtroSemestres.ativo = 3;
+      else this.filtroSemestres.ativo = undefined;
     },
-    // Ordem disciplinas Main table
-    toggleOrdDiscip(ord) {
-      if (this.ordemDiscip.order != ord) {
-        this.ordemDiscip.order = ord;
-        this.ordemDiscip.type = "asc";
-      } else {
-        this.ordemDiscip.type = this.ordemDiscip.type == "asc" ? "desc" : "asc";
-      }
-    },
-
-    // Ordem Perfis Modal
-    toggleOrdPerfis() {
-      if (this.ordemPerfis.type == "asc") {
-        this.ordemPerfis.type = "desc";
-      } else {
-        this.ordemPerfis.type = "asc";
-      }
-    },
-    // Ordem Vagas Modal
-    toggleOrdVagas(ord) {
-      if (this.ordemVagas.order != ord) {
-        this.ordemVagas.order = ord;
-        this.ordemVagas.type = "asc";
-      } else {
-        this.ordemVagas.type = this.ordemVagas.type == "asc" ? "desc" : "asc";
-      }
-    },
-    //Select Semestre
-    selectAllSemestre() {
-      this.semestre_1Ativo = true;
-      this.semestre_2Ativo = true;
-    },
-    selectNoneSemestre() {
-      this.semestre_1Ativo = false;
-      this.semestre_2Ativo = false;
-    },
-    //Select Perfis
-    selectAllPerfis() {
-      if (this.PerfisAtivados != []) this.PerfisAtivados = [];
-      for (var i = 0; i < this.$store.state.perfil.Perfis.length; i++)
-        this.PerfisAtivados.push(this.$store.state.perfil.Perfis[i]);
-    },
-    selectNonePerfis() {
-      this.PerfisAtivados = [];
-    },
-    //select Disciplinas
-    selectAllDisciplinas() {
-      if (this.DisciplinasSelecionados != []) this.DisciplinasSelecionados = [];
-      for (var i = 0; i < this.$store.state.disciplina.Disciplinas.length; i++)
-        this.DisciplinasSelecionados.push(
-          this.$store.state.disciplina.Disciplinas[i]
-        );
-    },
-    selectNoneDisciplinas() {
-      this.DisciplinasSelecionados = [];
-    },
-
-    pdf(opt) {
-      if (opt === 1) {
+    pdf(completo) {
+      if (completo) {
         pdfs.pdfRelatorioDisciplinas({
-          disciplinasSelecionadas: this.DisciplinasAtivados,
+          disciplinasSelecionadas: this.DisciplinasDCC,
         });
-      }
-      if (opt === 2) {
+      } else {
         pdfs.pdfRelatorioDisciplinas({
-          disciplinasSelecionadas: this.Disciplinas,
+          disciplinasSelecionadas: this.filtroDisciplinas.ativados,
         });
       }
     },
@@ -1021,25 +690,29 @@ export default {
       });
       return vagasP + vagasNP;
     },
-
-    vagasDisciplina(disciplina, semestre) {
-      let turmas = _.filter(this.$store.state.turma.Turmas, {
+    getDisciplinaVagasInCurrentSemestres(disciplina) {
+      const turmasFounded = _.filter(this.$store.state.turma.Turmas, {
         Disciplina: disciplina.id,
       });
-      let vagas = 0;
-      turmas.forEach((t) => {
-        vagas += this.vagasTurma(t, semestre);
-      });
-      return vagas;
-    },
 
-    perfil(disciplina) {
-      let perfil = _.find(this.$store.state.perfil.Perfis, {
-        id: disciplina.Perfil,
-      });
-      return perfil.abreviacao;
+      return _.reduce(
+        turmasFounded,
+        (acc, turma) => {
+          return acc + this.vagasTurma(turma, this.filtroSemestres.ativo);
+        },
+        0
+      );
     },
-    turmas(disciplina, semestre) {
+    getHorarioById(horarioId) {
+      const horariosFounded = _.find(
+        this.Horarios,
+        (horario) => horario.id === horarioId
+      );
+
+      if (horariosFounded) return horariosFounded.horario;
+      else return "";
+    },
+    getTurmasByDisciplina(disciplina, semestre) {
       return _.orderBy(
         _.filter(this.$store.state.turma.Turmas, (turma) => {
           return (
@@ -1054,7 +727,6 @@ export default {
         ["periodo", "letra"]
       );
     },
-
     docentes(turma) {
       let d1 = _.find(this.$store.state.docente.Docentes, {
         id: turma.Docente1,
@@ -1072,169 +744,105 @@ export default {
         return `${d1.apelido} / ${d2.apelido}`;
       }
     },
-
     selecionaTurma(turma) {
       this.turmaSelecionada = turma;
-      this.$refs.VagasModal.show();
+      this.$refs.modalVagas.open();
+      // this.$refs.VagasModal.show();
     },
-
     curso(pedido) {
       return _.find(this.$store.state.curso.Cursos, { id: pedido.Curso });
     },
-
     disciplina(turma) {
       return _.find(this.$store.state.disciplina.Disciplinas, {
         id: turma.Disciplina,
       });
     },
-
     closeModalVagas() {
       this.$refs.VagasModal.hide();
+    },
+    normalizeText(text) {
+      return text
+        .toUpperCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
     },
   },
 
   computed: {
-    //Todas disciplinas do DCC
-    Disciplinas() {
-      let result = _.filter(this.$store.state.disciplina.Disciplinas, (d) => {
-        return d.Perfil !== 13 && d.Perfil !== 15;
-      });
-      //Filtro search
-      if (this.searchDisciplinas != null) {
-        let searchUpperCase = this.searchDisciplinas
-          .toUpperCase()
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "");
+    currentThTitle() {
+      const { ativo } = this.filtroSemestres;
 
-        return result.filter((disci) => {
-          return (
-            disci.nome
-              .normalize("NFD")
-              .replace(/[\u0300-\u036f]/g, "")
-              .match(searchUpperCase) ||
-            disci.nome.match(searchUpperCase) ||
-            disci.codigo.match(searchUpperCase)
-          );
-        });
-      } else return result;
+      if (ativo === 1) return "Vagas do 1º semestre";
+      else if (ativo === 2) return "Vagas do 2º semestre";
+      else return "Vagas do 1º e 2º semestres";
     },
-    //Disciplinas filtradas
-    Disciplinas_Filtred() {
-      if (this.ordemDiscip.order == "perfil") {
-        //Se for ordem pelo perfil, passa o vetor de ordem ["Perfil", "codigo"]
-        return _.orderBy(
-          this.Disciplinas,
-          (disciplina) => {
-            switch (disciplina.Perfil) {
-              case 1:
-                return "BÁSICO";
-              case 2:
-                return "AVANÇADO";
-              case 3:
-                return "ARQSO";
-              case 4:
-                return "BD";
-              case 5:
-                return "CG";
-              case 6:
-                return "ES";
-              case 7:
-                return "IAIC";
-              case 8:
-                return "NUM/OC";
-              case 9:
-                return "REDES";
-              case 10:
-                return "TEO";
-              case 11:
-                return "HUMEMPR";
-              case 12:
-                return "MULTI";
-              case 13:
-                return "ICE";
-              case 14:
-                return "SI";
-              case 15:
-                return "MAC";
-              case 16:
-                return "EAD";
-              case 17:
-                return "PUI";
-            }
-          },
-          [this.ordemDiscip.type, "asc"]
-        );
-      } else {
-        //Outros casos
-        return _.orderBy(
-          this.Disciplinas,
-          this.ordemDiscip.order,
-          this.ordemDiscip.type
-        );
-      }
-    },
-
     //Disciplinas da Main Table ordenadas
-    Disciplinas_Main_Table() {
-      if (this.ordemDiscip.order == "perfil") {
-        return _.orderBy(
-          this.DisciplinasAtivados,
-          (disciplina) => {
-            switch (disciplina.Perfil) {
-              case 1:
-                return "BÁSICO";
-              case 2:
-                return "AVANÇADO";
-              case 3:
-                return "ARQSO";
-              case 4:
-                return "BD";
-              case 5:
-                return "CG";
-              case 6:
-                return "ES";
-              case 7:
-                return "IAIC";
-              case 8:
-                return "NUM/OC";
-              case 9:
-                return "REDES";
-              case 10:
-                return "TEO";
-              case 11:
-                return "HUMEMPR";
-              case 12:
-                return "MULTI";
-              case 13:
-                return "ICE";
-              case 14:
-                return "SI";
-              case 15:
-                return "MAC";
-              case 16:
-                return "EAD";
-              case 17:
-                return "PUI";
-            }
-          },
-          [this.ordemDiscip.type, "asc"]
-        );
-      } else {
-        return _.orderBy(
-          this.DisciplinasAtivados,
-          this.ordemDiscip.order,
-          this.ordemDiscip.type
-        );
-      }
-    },
-    Perfis_Modal() {
+    DisciplinasOrderedMain() {
       return _.orderBy(
-        this.$store.state.perfil.Perfis,
-        this.ordemPerfis.order,
-        this.ordemPerfis.type
+        this.filtroDisciplinas.ativados,
+        this.ordenacaoMain.disciplinas.order,
+        this.ordenacaoMain.disciplinas.type
       );
     },
 
+    DisciplinasFiltredModal() {
+      if (this.searchDisciplinas === "") return this.DisciplinasDCCInPerfis;
+
+      const searchNormalized = this.normalizeText(this.searchDisciplinas);
+
+      return _.filter(this.DisciplinasDCCInPerfis, (disciplina) => {
+        const disciplinaNome = this.normalizeText(disciplina.nome);
+        const disciplinaCodigo = this.normalizeText(disciplina.codigo);
+
+        return (
+          disciplinaNome.match(searchNormalized) ||
+          disciplinaCodigo.match(searchNormalized)
+        );
+      });
+    },
+    DisciplinasOrderedModal() {
+      return _.orderBy(
+        this.DisciplinasFiltredModal,
+        this.ordenacaoModal.disciplinas.order,
+        this.ordenacaoModal.disciplinas.type
+      );
+    },
+    //Todas disciplinas do DCC
+    DisciplinasDCC() {
+      return _.filter(
+        this.$store.state.disciplina.Disciplinas,
+        (d) => d.Perfil !== 13 && d.Perfil !== 15
+      );
+    },
+    DisciplinasDCCInPerfis() {
+      let disciplinasResultantes = [];
+      // this.DisciplinasDCC
+      this.DisciplinasDCC.forEach((disciplina) => {
+        const perfilFounded = _.find(
+          this.Perfis,
+          (perfil) => perfil.id === disciplina.Perfil
+        );
+
+        if (perfilFounded) {
+          disciplinasResultantes.push({
+            ...disciplina,
+            perfilAbreviacao: perfilFounded.abreviacao,
+            perfilCor: perfilFounded.cor,
+          });
+        }
+      });
+      return disciplinasResultantes;
+    },
+    Perfis() {
+      return this.$store.state.perfil.Perfis;
+    },
+    PerfisOrderedModal() {
+      return _.orderBy(
+        this.Perfis,
+        this.ordenacaoModal.perfis.order,
+        this.ordenacaoModal.perfis.type
+      );
+    },
     VagasTurmaSelecionada() {
       if (this.turmaSelecionada === undefined) return [];
 
@@ -1246,7 +854,7 @@ export default {
           }
         ),
         (p) => {
-          switch (this.ordemVagas.order) {
+          switch (this.ordenacaoModal.vagas.order) {
             case "codigo":
               return this.curso(p).codigo;
             case "nome":
@@ -1261,110 +869,57 @@ export default {
               return this.curso(p).codigo;
           }
         },
-        this.ordemVagas.type
+        this.ordenacaoModal.vagas.type
       );
     },
-
     Horarios() {
       return this.$store.state.horario.Horarios;
     },
-    //Função para adicionar ao clickar no <tr>
-    // addInDisci(disciplina) {
-    //   let indice = this.DisciplinasSelecionados.indexOf(disciplina);
-
-    //   if (indice === -1) {
-    //     this.DisciplinasSelecionados.push(disciplina);
-    //   } else {
-    //     this.DisciplinasSelecionados.splice(indice, 1);
-    //   }
-    // },
   },
   watch: {
-    PerfisAtivados(newValue, oldValue) {
-      //Apaga todas disciplinas selecionadas sempre que um novo perfil é selecionado
-      this.DisciplinasSelecionados = [];
+    filtroPerfis: {
+      handler(perfis) {
+        this.modalSelectNone.Disciplinas();
+        const disciplinasResultantes = [];
 
-      this.Disciplinas.forEach((discip) => {
-        this.PerfisAtivados.forEach((perfil) => {
-          if (
-            discip.Perfil == perfil.id &&
-            !this.DisciplinasSelecionados.includes(discip)
-          ) {
-            this.DisciplinasSelecionados.push(discip);
-          }
+        this.DisciplinasDCCInPerfis.forEach((disciplina) => {
+          const perfilFounded = _.find(
+            perfis.selecionados,
+            (perfil) => perfil.id === disciplina.Perfil
+          );
+          if (perfilFounded) disciplinasResultantes.push(disciplina);
         });
-      });
+        this.filtroDisciplinas.selecionados = [...disciplinasResultantes];
+      },
+      deep: true,
     },
   },
 };
 </script>
 
 <style scoped>
-.input-group-search {
-  width: 450px !important;
-  height: 35px !important;
-  padding-left: 4px !important;
-  padding-right: 20px !important;
-  padding-top: 4px !important;
+.vagas-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
 }
-.input-group-search .search-form-control {
-  height: 25px !important;
-  font-size: 12px !important;
-  padding: 2px 5px 2px 5px !important;
-  text-align: start;
-}
-.search-text:hover {
-  color: rgb(102, 102, 102);
-  background-color: #dddddd;
-}
-.search-text {
-  background-color: #ffffff;
-  border-left: none;
-}
-.main-table {
-  display: block !important;
-  overflow-y: scroll !important;
-  overflow-x: auto !important;
-  font-size: 11px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-  height: -webkit-calc(100vh - 95px);
-  height: -moz-calc(100vh - 95px);
-  height: calc(100vh - 95px);
-}
-.main-table .p-header {
-  height: 18px;
-}
-.main-table p {
-  padding: 0 5px 0 5px !important;
-  margin: 0 !important;
-  font-size: 11px !important;
-  text-align: center;
-}
-tbody {
-  max-height: 100% !important;
-  width: 100% !important;
-}
-.main-table td {
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  height: 22px !important;
-}
-.main-table tr thead {
-  display: block !important;
-}
-.main-table thead th {
-  padding: 0 !important;
+.vagas-header .vagas-title {
+  margin: 0;
+  font-weight: bold;
   font-size: 14px;
-  text-align: center;
-  height: 18px !important;
+  width: 100%;
 }
-/* fim table */
-.disciplina-tr {
-  background-color: rgba(0, 0, 0, 0.089);
-  color: black;
+.vagas-header .input-form {
+  display: flex;
+  align-items: center;
+}
+.input-form label {
+  margin: 0;
+}
+.less-padding {
+  padding: 0 2px;
 }
 
 /* Formularios no topo da tela */
@@ -1372,7 +927,6 @@ tbody {
 .form-inline {
   width: auto;
 }
-
 .form-group {
   display: -ms-flexbox;
   display: flex;
@@ -1384,14 +938,6 @@ tbody {
   align-items: center;
   margin-bottom: 0;
 }
-
-.input-search {
-  width: 100% !important;
-}
-.col-form-label {
-  padding-left: 25px;
-  font-size: 14px !important;
-}
 .form-control {
   height: 25px !important;
   font-size: 12px !important;
@@ -1400,79 +946,11 @@ tbody {
 }
 
 .p-vagas:hover {
-  color: #007bff;
+  color: var(--light-blue);
   text-decoration: underline;
 }
 
 .modal-content .modal-header {
   padding: 0 !important;
-}
-
-/* ==== MODAL TABLE ==== */
-.modal-table {
-  max-height: 450px !important;
-  display: block;
-  overflow-y: scroll !important;
-  overflow-x: hidden !important;
-  font-size: 10px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-}
-.modal-table tr thead {
-  display: block;
-}
-.modal-table th {
-  padding: 0 !important;
-  text-align: center !important;
-  height: 18px !important;
-}
-
-.modal-table .p-header {
-  padding: 0px 5px 0px 5px !important;
-  margin: 0 !important;
-  text-align: start;
-  height: 18px !important;
-}
-.modal-table tbody {
-  max-height: 100%;
-  width: 100%;
-}
-.modal-table td {
-  border-top: 0;
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  /* height: 22px !important; */
-}
-.modal-table p {
-  margin: 0 !important;
-  text-align: center;
-  padding: 0 !important;
-  padding-right: 5px !important;
-  padding-left: 5px !important;
-}
-.modal-table input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-  margin-bottom: auto !important;
-  height: 13px !important;
-}
-/* FIM MODAL TABLE */
-/* nav-tab */
-.nav-tabs .nav-link {
-  color: #0079fa !important;
-  cursor: pointer;
-}
-.nav-tabs .nav-link:hover {
-  text-decoration: underline;
-}
-.nav-tabs .active {
-  background-color: #e9ecef !important;
-  color: #495057 !important;
-  cursor: default !important;
-  text-decoration: none !important;
-  transition: background-color 200ms;
 }
 </style>

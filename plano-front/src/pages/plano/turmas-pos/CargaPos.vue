@@ -2,57 +2,65 @@
   <div class="main-component row">
     <PageTitle :title="'Pós Graduação'">
       <template #aside>
-        <button
+        <BaseButton
           v-show="isAdding"
           title="Salvar"
-          class="btn-custom btn-icon addbtn"
-          @click.prevent="addNovaCarga()"
+          :type="'icon'"
+          :color="'green'"
+          @click="addNovaCarga()"
         >
           <i class="fas fa-check"></i>
-        </button>
-        <button
-          v-show="!isAdding"
-          title="Adicionar"
-          class="btn-custom btn-icon addbtn"
-          @click="toggleAdd"
-        >
-          <i class="fas fa-plus"></i>
-        </button>
-        <button
+        </BaseButton>
+        <BaseButton
           v-show="isAdding"
           title="Cancelar"
-          class="btn-custom btn-icon cancelbtn"
-          @click="toggleAdd"
+          :type="'icon'"
+          :color="'red'"
+          @click="toggleAdd()"
         >
           <i class="fas fa-times"></i>
-        </button>
-        <button
+        </BaseButton>
+
+        <BaseButton
+          v-show="!isAdding"
+          title="Adicionar"
+          :type="'icon'"
+          :color="'green'"
+          @click="toggleAdd()"
+        >
+          <i class="fas fa-plus"></i>
+        </BaseButton>
+        <BaseButton
           v-show="!isAdding"
           title="Deletar selecionados"
-          class="btn-custom btn-icon delbtn"
-          @click="$refs.modalConfirma.toggle()"
+          :type="'icon'"
+          :color="'red'"
+          @click="$refs.modalDelete.open()"
         >
-          <i class="far fa-trash-alt"></i>
-        </button>
-        <!--  -->
-        <button
-          @click="openHeaderModal('filtros')"
+          <i class="fas fa-trash"></i>
+        </BaseButton>
+
+        <BaseButton
           title="Filtros"
-          class="btn-custom btn-icon cancelbtn"
+          :type="'icon'"
+          :color="'gray'"
+          @click="openAsideModal('filtros')"
         >
           <i class="fas fa-list-ul"></i>
-        </button>
-        <button
-          @click="openHeaderModal('ajuda')"
+        </BaseButton>
+
+        <BaseButton
           title="Ajuda"
-          class="btn-custom btn-icon relatbtn"
+          :type="'icon'"
+          :color="'lightblue'"
+          @click="openAsideModal('ajuda')"
         >
           <i class="fas fa-question"></i>
-        </button>
+        </BaseButton>
       </template>
     </PageTitle>
 
-    <div class="div-table" v-if="!isLoading">
+    <div class="div-table">
       <BaseTable>
         <template #thead>
           <th style="width:70px" class="p-0">Programa</th>
@@ -78,7 +86,6 @@
             <i :class="setIconByOrder(ordenacaoCargaPos, 'creditos')"></i>
           </th>
         </template>
-
         <template #tbody>
           <CargaPosNovaRow v-show="isAdding" />
 
@@ -113,7 +120,7 @@
     </div>
 
     <BaseModal
-      ref="modalConfirma"
+      ref="modalDelete"
       :modalOptions="{
         title: 'Confirmar seleção',
         position: 'center',
@@ -157,14 +164,15 @@
       </template>
       <template #modal-footer>
         <button
-          class="btn-custom btn-modal btn-cinza"
-          @click="$refs.modalConfirma.close()"
+          class="btn-custom btn-modal btn-cinza btn-ok-modal"
+          @click="$refs.modalDelete.close()"
         >
           Cancelar
         </button>
         <button
+          v-if="Deletar.length"
           class="btn-custom btn-modal btn-vermelho btn-ok-modal"
-          @click="deleteSelectedTurmas()"
+          @click="deleteSelectedCargas()"
         >
           Deletar
         </button>
@@ -234,8 +242,8 @@
               <tr
                 v-for="trimestre in Trimestres"
                 :key="'MdTrimestre' + trimestre.valor"
-                @click="
-                  toggleItemInArray(trimestre, filtroTrimestres.selecionados)
+                @click.stop="
+                  selectTrimestre(trimestre, filtroTrimestres.selecionados)
                 "
               >
                 <td style="width: 25px">
@@ -243,6 +251,9 @@
                     type="checkbox"
                     class="form-check-input position-static m-0"
                     :value="trimestre"
+                    @click.stop="
+                      selectTrimestre(trimestre, filtroTrimestres.selecionados)
+                    "
                     v-model="filtroTrimestres.selecionados"
                   />
                 </td>
@@ -264,21 +275,23 @@
               </th>
             </template>
             <template #tbody>
-              <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
+              <tr @click.stop="selectSemestre('primeiro')">
                 <td style="width: 25px">
                   <input
                     type="checkbox"
                     class="form-check-input position-static m-0"
+                    @click.stop="selectSemestre('primeiro')"
                     v-model="filtroSemestres.primeiro"
                   />
                 </td>
                 <td style="width: 425px" class="t-start">PRIMEIRO</td>
               </tr>
-              <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
+              <tr @click.stop="selectSemestre('segundo')">
                 <td style="width: 25px">
                   <input
                     type="checkbox"
                     class="form-check-input position-static m-0"
+                    @click.stop="selectSemestre('segundo')"
                     v-model="filtroSemestres.segundo"
                   />
                 </td>
@@ -330,7 +343,7 @@
             <b>Para deletar uma turma:</b> Marque as turmas que deseja deletar
             através da caixa de seleção presente na primeira coluna da tabela e
             em seguida clique no incone de deletar selecionados
-            <i class="far fa-trash-alt delbtn"></i>
+            <i class="fas fa-trash delbtn"></i>
             e confirme no botão OK.
           </li>
         </ul>
@@ -349,33 +362,31 @@ import {
   toggleOrdination,
   toggleItemInArray,
   notification,
+  redirectNotAdmin,
 } from "@/mixins/index.js";
 import {
   PageTitle,
   BaseTable,
   BaseModal,
+  BaseButton,
   NavTab,
-  Card,
 } from "@/components/index.js";
-
-const allProgramasPos = ["PGCC", "PGMC", "PGEM"];
 
 export default {
   name: "DashboardCargaPos",
-  mixins: [toggleOrdination, toggleItemInArray, notification],
+  mixins: [toggleOrdination, toggleItemInArray, notification, redirectNotAdmin],
   components: {
     CargaPosRow,
     CargaPosNovaRow,
     PageTitle,
     BaseTable,
     NavTab,
-    Card,
+    BaseButton,
     BaseModal,
   },
   data() {
     return {
       isAdding: false,
-      error: undefined,
       filtroProgramas: {
         ativados: [],
         selecionados: [],
@@ -396,10 +407,12 @@ export default {
         },
         Trimestres: () => {
           this.filtroTrimestres.selecionados = [...this.Trimestres];
+          this.connectTrimestreInSemestre();
         },
         Semestres: () => {
           this.filtroSemestres.primeiro = true;
           this.filtroSemestres.segundo = true;
+          this.connectSemestreInTrimestre();
         },
       },
       modalSelectNone: {
@@ -408,32 +421,21 @@ export default {
         },
         Trimestres: () => {
           this.filtroTrimestres.selecionados = [];
+          this.connectTrimestreInSemestre();
         },
         Semestres: () => {
           this.filtroSemestres.primeiro = false;
           this.filtroSemestres.segundo = false;
+          this.connectSemestreInTrimestre();
         },
       },
     };
   },
-  created() {
-    if (!this.Admin) {
-      this.$notify({
-        group: "general",
-        title: "Erro",
-        text:
-          "Acesso negado! Usuário não possui permissão para acessar esta página!",
-        type: "error",
-      });
-      this.$router.push({ name: "dashboard" });
-    }
+  mounted() {
+    this.connectSemestreInTrimestre();
   },
-
   methods: {
-    addNovaCarga() {
-      EventBus.$emit("add-carga-pos");
-    },
-    openHeaderModal(modalName) {
+    openAsideModal(modalName) {
       if (modalName === "filtros") {
         this.$refs.modalFiltros.toggle();
         this.$refs.modalAjuda.close();
@@ -448,43 +450,36 @@ export default {
     btnOkFiltros() {
       this.filtroProgramas.ativados = [...this.filtroProgramas.selecionados];
       this.filtroTrimestres.ativados = [...this.filtroTrimestres.selecionados];
-      this.tabAtivaModal = "Programas";
     },
-
     deleteCarga(cargaId) {
       cargaPosService
         .delete(cargaId)
         .then((response) => {
-          this.showNotication({
+          this.showNotification({
             type: "success",
             message: `A carga ${response.CargaPos.programa} foi excluída!`,
           });
         })
         .catch((error) => {
-          this.showNotication({
+          this.showNotification({
             type: "error",
             title: "Error ao deletar carga!",
             message: error,
           });
         });
     },
-    deleteSelectedTurmas() {
+    deleteSelectedCargas() {
       let cargas = this.$store.state.cargaPos.Deletar;
-      if (!cargas.length) {
-        this.showNotication({
-          type: "error",
-          title: "Erro!",
-          message: "Nenhuma turma selecionada.",
-        });
-        return;
-      }
 
       for (let i = 0; i < cargas.length; i++) {
         this.deleteCarga(cargas[i].id);
       }
       this.$store.commit("emptyDeleteCarga");
     },
-    addDocenteIncargaPos(programaNome) {
+    addNovaCarga() {
+      EventBus.$emit("add-carga-pos");
+    },
+    cargaPosInDocente(programaNome) {
       const cargasResultantes = [];
 
       _.forEach(this.CargasPos, (carga) => {
@@ -506,6 +501,51 @@ export default {
     allCreditosCarga(cargas) {
       return _.reduce(cargas, (acc, carga) => acc + carga.creditos, 0);
     },
+
+    selectSemestre(semestre) {
+      this.filtroSemestres[semestre] = !this.filtroSemestres[semestre];
+      this.connectSemestreInTrimestre();
+    },
+    connectSemestreInTrimestre() {
+      const findTrimestre = (array, trimestreValor) =>
+        _.find(array, (item) => item.valor === trimestreValor);
+
+      const allTrimestres = this.Trimestres;
+      this.filtroTrimestres.selecionados = [];
+
+      if (this.filtroSemestres.primeiro) {
+        this.filtroTrimestres.selecionados.push(
+          findTrimestre(allTrimestres, 1),
+          findTrimestre(allTrimestres, 2)
+        );
+      }
+
+      if (this.filtroSemestres.segundo) {
+        this.filtroTrimestres.selecionados.push(
+          findTrimestre(allTrimestres, 3),
+          findTrimestre(allTrimestres, 4)
+        );
+      }
+    },
+
+    selectTrimestre(newItem, array) {
+      this.toggleItemInArray(newItem, array);
+      this.connectTrimestreInSemestre();
+    },
+    connectTrimestreInSemestre() {
+      const findTrimestre = (array, trimestreValor) =>
+        _.find(array, (item) => item.valor === trimestreValor);
+
+      const { selecionados } = this.filtroTrimestres;
+
+      if (findTrimestre(selecionados, 1) && findTrimestre(selecionados, 2))
+        this.filtroSemestres.primeiro = true;
+      else this.filtroSemestres.primeiro = false;
+
+      if (findTrimestre(selecionados, 3) && findTrimestre(selecionados, 4))
+        this.filtroSemestres.segundo = true;
+      else this.filtroSemestres.segundo = false;
+    },
   },
 
   computed: {
@@ -515,7 +555,7 @@ export default {
       _.forEach(this.AllProgramasPosOrdered, (programaNome) => {
         programasResutantes.push({
           nome: programaNome,
-          carga: this.addDocenteIncargaPos(programaNome),
+          carga: this.cargaPosInDocente(programaNome),
         });
       });
 
@@ -566,7 +606,7 @@ export default {
       return programasResutantes;
     },
     AllProgramasPosOrdered() {
-      return _.orderBy(allProgramasPos, String, "asc");
+      return _.orderBy(["PGCC", "PGMC", "PGEM"], String, "asc");
     },
     Trimestres() {
       return [
@@ -585,30 +625,8 @@ export default {
     Deletar() {
       return this.$store.state.cargaPos.Deletar;
     },
-    isLoading() {
-      return this.$store.state.isLoading;
-    },
     Admin() {
       return this.$store.state.auth.Usuario.admin === 1;
-    },
-  },
-  watch: {
-    filtroSemestres: {
-      handler(semestre) {
-        let filtro = [];
-        this.filtroTrimestres.selecionados = [...this.Trimestres];
-
-        if (semestre.primeiro && !semestre.segundo) filtro = [1, 2];
-        else if (!semestre.primeiro && semestre.segundo) filtro = [3, 4];
-        else if (semestre.primeiro && semestre.primeiro) filtro = [1, 2, 3, 4];
-
-        this.filtroTrimestres.selecionados = _.filter(
-          this.filtroTrimestres.selecionados,
-          (trimestre) => _.find(filtro, (valor) => valor === trimestre.valor)
-        );
-      },
-      deep: true,
-      immediate: true,
     },
   },
 };
