@@ -276,6 +276,9 @@ export default {
         user: () => {
           this.$refs.modalUser.openModal();
         },
+        novoPlano: () => {
+          this.$refs.modalNovoPlano.show();
+        }
       },
     };
   },
