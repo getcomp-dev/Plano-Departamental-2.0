@@ -128,7 +128,7 @@ export default {
       }
       let tableLabsBody = [
         [
-          { text: "Hora", alignment: "center", bold: true, fontSize: 8 },
+          { text: "Horário", alignment: "center", bold: true, fontSize: 8 },
           {
             text: "Segunda",
             alignment: "center",
@@ -596,7 +596,7 @@ export default {
       }
       let tableLabsBody = [
         [
-          { text: "Hora", alignment: "center", bold: true, fontSize: 8 },
+          { text: "Horário", alignment: "center", bold: true, fontSize: 8 },
           {
             text: "Segunda",
             alignment: "center",

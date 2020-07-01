@@ -284,6 +284,9 @@ export default {
   },
   created() {
     this.$store.commit(COMPONENT_LOADING);
+    if(!localStorage.getItem('Plano')){
+      localStorage.setItem('Plano', '1')
+    }
     this.$store
       .dispatch("fetchAll")
       .then(() => {

@@ -1367,7 +1367,7 @@ export default {
           [
             {
               text:
-                "Horários dos cursos do departamento de ciência da computação",
+                "Horários dos cursos do departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -1392,7 +1392,7 @@ export default {
       });
       if (_.find(this.filtroCursos.ativados, { codigo: "65C" }) || completo) {
         tables.push({
-          text: "Ciência da Computação Diurno",
+          text: "Ciência da Computação diurno",
           bold: true,
           margin: [0, 10, 0, 5],
           fontSize: 10,
@@ -1411,7 +1411,7 @@ export default {
             let tableHorariosBody = [
               [
                 {
-                  text: "Hora",
+                  text: "Horário",
                   alignment: "center",
                   fontSize: 8,
                   bold: true,
@@ -1747,7 +1747,7 @@ export default {
           [
             {
               text:
-                "Horários dos cursos do departamento de ciência da computação",
+                "Horários dos cursos do departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -1775,7 +1775,7 @@ export default {
 
       if (_.find(this.filtroCursos.ativados, { codigo: "35A" }) || completo) {
         tables.push({
-          text: "Ciência da Computação Noturno",
+          text: "Ciência da Computação noturno",
           bold: true,
           margin: [0, 10, 0, 5],
           fontSize: 10,
@@ -1794,7 +1794,7 @@ export default {
             let tableHorariosBody = [
               [
                 {
-                  text: "Hora",
+                  text: "Horário",
                   alignment: "center",
                   fontSize: 8,
                   bold: true,
@@ -2130,7 +2130,7 @@ export default {
           [
             {
               text:
-                "Horários dos cursos do departamento de ciência da computação",
+                "Horários dos cursos do departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -2177,7 +2177,7 @@ export default {
             let tableHorariosBody = [
               [
                 {
-                  text: "Hora",
+                  text: "Horário",
                   alignment: "center",
                   fontSize: 8,
                   bold: true,
@@ -2513,7 +2513,7 @@ export default {
           [
             {
               text:
-                "Horários dos cursos do departamento de ciência da computação",
+                "Horários dos cursos do departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -2560,7 +2560,7 @@ export default {
             let tableHorariosBody = [
               [
                 {
-                  text: "Hora",
+                  text: "Horário",
                   alignment: "center",
                   fontSize: 8,
                   bold: true,
@@ -2896,7 +2896,7 @@ export default {
           [
             {
               text:
-                "Horários dos cursos do departamento de ciência da computação",
+                "Horários dos cursos do departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -2936,7 +2936,7 @@ export default {
           let tableHorariosBody = [
             [
               {
-                text: "Hora",
+                text: "Horário",
                 alignment: "center",
                 fontSize: 8,
                 bold: true,
@@ -3354,7 +3354,7 @@ export default {
           [
             {
               text:
-                "Horários dos cursos do departamento de ciência da computação",
+                "Horários dos cursos do departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -3382,7 +3382,7 @@ export default {
 
       if (_.find(this.filtroCursos.ativados, { codigo: "65C" }) || completo) {
         tables.push({
-          text: "Ciência da Computação Diurno",
+          text: "Ciência da Computação diurno",
           bold: true,
           margin: [0, 10, 0, 5],
           fontSize: 10,
@@ -3401,7 +3401,7 @@ export default {
             let tableHorariosBody = [
               [
                 {
-                  text: "Hora",
+                  text: "Horário",
                   alignment: "center",
                   fontSize: 8,
                   bold: true,
@@ -3737,7 +3737,7 @@ export default {
           [
             {
               text:
-                "Horários dos cursos do departamento de ciência da computação",
+                "Horários dos cursos do departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -3765,7 +3765,7 @@ export default {
 
       if (_.find(this.filtroCursos.ativados, { codigo: "35A" }) || completo) {
         tables.push({
-          text: "Ciência da Computação Noturno",
+          text: "Ciência da Computação noturno",
           bold: true,
           margin: [0, 10, 0, 5],
           fontSize: 10,
@@ -3784,7 +3784,7 @@ export default {
             let tableHorariosBody = [
               [
                 {
-                  text: "Hora",
+                  text: "Horário",
                   alignment: "center",
                   fontSize: 8,
                   bold: true,
@@ -4120,7 +4120,7 @@ export default {
           [
             {
               text:
-                "Horários dos cursos do departamento de ciência da computação",
+                "Horários dos cursos do departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -4167,7 +4167,7 @@ export default {
             let tableHorariosBody = [
               [
                 {
-                  text: "Hora",
+                  text: "Horário",
                   alignment: "center",
                   fontSize: 8,
                   bold: true,
@@ -4503,7 +4503,7 @@ export default {
           [
             {
               text:
-                "Horários dos cursos do departamento de ciência da computação",
+                "Horários dos cursos do departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -4550,7 +4550,7 @@ export default {
             let tableHorariosBody = [
               [
                 {
-                  text: "Hora",
+                  text: "Horário",
                   alignment: "center",
                   fontSize: 8,
                   bold: true,
@@ -4886,7 +4886,7 @@ export default {
           [
             {
               text:
-                "Horários dos cursos do departamento de ciência da computação",
+                "Horários dos cursos do departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -4926,7 +4926,7 @@ export default {
           let tableHorariosBody = [
             [
               {
-                text: "Hora",
+                text: "Horário",
                 alignment: "center",
                 fontSize: 8,
                 bold: true,
@@ -5389,7 +5389,7 @@ export default {
             this.filtroCursos.ativados,
             (curso) => curso.codigo === "65C"
           ),
-          nome: "Ciência da computação Diurno",
+          nome: "Ciência da Computação diurno",
           turno: "Diurno",
           codigo: "65C",
           value: 1,
@@ -5401,7 +5401,7 @@ export default {
             this.filtroCursos.ativados,
             (curso) => curso.codigo === "35A"
           ),
-          nome: "Ciência da computação Noturno",
+          nome: "Ciência da Computação noturno",
           codigo: "35A",
           value: 2,
           turno: "Noturno",
