@@ -15,7 +15,7 @@
 
     <div class="page-content">
       <div class="p-0 div-table">
-        <BaseTable :tableHeight="'max-content'">
+        <BaseTable :styles="'height:max-content'">
           <template #thead>
             <th style="width: 220px">
               Cursos

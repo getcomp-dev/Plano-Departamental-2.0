@@ -31,7 +31,7 @@
       </template>
     </PageTitle>
 
-    <div class="div-table" v-if="!isLoading">
+    <div class="div-table">
       <BaseTable>
         <template #thead>
           <th
@@ -42,50 +42,29 @@
             Nome
             <i :class="setIconByOrder(orednacaoDocentesMain, 'apelido')"></i>
           </th>
-          <th style="width: 25px">
+          <th style="width: 25px" title="Semestre">
             S.
           </th>
-          <th style="width: 80px">
+          <th style="width: 80px" title="Código" class="t-start">
             Cód.
           </th>
           <th style="width: 300px" class="t-start">
             Disciplina
           </th>
-          <th style="width: 25px">
+          <th style="width: 35px" title="Turma">
             T.
           </th>
           <th style="width: 180px">
             Horário
           </th>
-          <th style="width: 35px" id="IDcreditos1">
+          <th style="width: 35px" title="Somatório dos créditos no 1º semestre">
             CS1
-            <b-popover
-              :target="'IDcreditos1'"
-              placement="bottom"
-              triggers="hover focus"
-            >
-              <p>Somatório dos créditos no 1º semestre</p>
-            </b-popover>
           </th>
-          <th style="width: 35px" id="IDcreditos2">
+          <th style="width: 35px" title="Somatório dos créditos no 2º semestre">
             CS2
-            <b-popover
-              :target="'IDcreditos2'"
-              placement="bottom"
-              triggers="hover focus"
-            >
-              <p>Somatório dos créditos no 2º semestre</p>
-            </b-popover>
           </th>
-          <th style="width: 50px" id="creditostotal">
+          <th style="width: 50px" title="Somatório total dos créditos">
             CTotal
-            <b-popover
-              :target="'creditostotal'"
-              placement="bottom"
-              triggers="hover focus"
-            >
-              <p>Somatório total dos créditos</p>
-            </b-popover>
           </th>
         </template>
         <template #tbody>
@@ -118,13 +97,13 @@
               <td style="width: 25px">
                 {{ turma.periodo }}
               </td>
-              <td style="width: 80px">
+              <td style="width: 80px" class="t-start">
                 {{ turma.disciplinaCodigo }}
               </td>
               <td style="width: 300px" class="t-start">
                 {{ turma.disciplinaNome }}
               </td>
-              <td style="width: 25px">
+              <td style="width: 35px">
                 {{ turma.letra }}
               </td>
               <td style="width: 180px">
@@ -177,7 +156,7 @@
               <td style="width: 300px" class="t-start toUpperCase">
                 Disciplina do {{ carga.programa }}
               </td>
-              <td style="width: 25px"></td>
+              <td style="width: 35px"></td>
               <td style="width: 180px"></td>
 
               <td style="width: 35px">
@@ -207,13 +186,13 @@
               <td style="width: 25px">
                 {{ turma.periodo }}
               </td>
-              <td style="width: 80px">
+              <td style="width: 80px" class="t-start">
                 {{ turma.disciplinaCodigo }}
               </td>
               <td style="width: 300px" class="t-start">
                 {{ turma.disciplinaNome }}
               </td>
-              <td style="width: 25px">
+              <td style="width: 35px">
                 {{ turma.letra }}
               </td>
               <td style="width: 180px">
@@ -266,7 +245,7 @@
               <td style="width: 300px" class="t-start toUpperCase">
                 Disciplina do {{ carga.programa }}
               </td>
-              <td style="width: 25px"></td>
+              <td style="width: 35px"></td>
               <td style="width: 180px"></td>
 
               <td style="width: 32px">
@@ -290,7 +269,7 @@
           </template>
 
           <template
-            v-if="turmasSemAlocacao().length > 0 && docenteSemAlocacao.ativado"
+            v-if="turmasSemAlocacao().length && docenteSemAlocacao.ativado"
           >
             <tr class="bg-custom">
               <td style="width: 130px" class="t-start">
@@ -299,7 +278,7 @@
               <td style="width: 25px"></td>
               <td style="width: 80px"></td>
               <td style="width: 300px"></td>
-              <td style="width: 25px"></td>
+              <td style="width: 35px"></td>
               <td style="width: 180px"></td>
               <td style="width: 35px"></td>
               <td style="width: 35px"></td>
@@ -319,7 +298,7 @@
               <td style="width: 300px" class="t-start">
                 {{ turma.disciplinaNome }}
               </td>
-              <td style="width: 25px">
+              <td style="width: 35px">
                 {{ turma.letra }}
               </td>
               <td style="width:180px">
@@ -360,6 +339,14 @@
               <td style="width: 50px"></td>
             </tr>
           </template>
+          <tr
+            v-show="!docenteSemAlocacao.ativado && !DocentesOrderedMain.length"
+          >
+            <td colspan="9" style="width:870px">
+              <b>Nenhum docente encontrado.</b> Clique no botão de filtros
+              <i class="fas fa-list-ul mx-1"></i> para selecioná-los.
+            </td>
+          </tr>
         </template>
       </BaseTable>
     </div>
@@ -386,7 +373,7 @@
         <div class="div-table">
           <BaseTable
             v-show="tabAtivaModal === 'Docentes'"
-            :tableType="'modal-table'"
+            :type="'modal'"
             :hasSearchBar="true"
           >
             <template #thead-search>
@@ -491,22 +478,17 @@
       <template #modal-body>
         <ul class="list-ajuda list-group">
           <li class="list-group-item">
-            <b>Para exibir conteúdo na Tabela:</b> Clique em Docentes
-            <i
-              class="fas fa-list-ul cancelbtn px-1"
-              style="font-size: 12px;"
-            ></i>
-            e selecione o(s) professor(es) que deseja ver, em seguida confirme
-            em OK. Caso queira ver todos basta clicar em Selecionar Todos.
+            <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
+            <i class="fas fa-list-ul cancelbtn"></i> no cabeçalho da página e na
+            janela que será aberta utilize as abas para navegar entre os tipos
+            de filtros. Marque em suas respectivas tabelas quais informações
+            deseja visualizar, e para finalizar clique no botão OK.
           </li>
           <li class="list-group-item">
-            <b>Para gerar relatório:</b> Clique no botão Relatório
-            <i
-              class="far fa-file-pdf relatbtn px-1"
-              style="font-size: 12px;"
-            ></i>
-            e selecione se deseja o relatório completo, com todos os docentess,
-            ou apenas o relatório parcial, com os docentes selecionados.
+            <b>Para gerar relatório dos docentes:</b> Clique no ícone relatório
+            <i class="fas fa-file-alt cancelbtn"></i>, selecione se deseja gerar
+            o relatório completo com todos os docentes, ou apenas o relatório
+            parcial com os docentes que estão selecionados no momento.
           </li>
         </ul>
       </template>
@@ -808,9 +790,6 @@ export default {
     },
     Horarios() {
       return this.$store.state.horario.Horarios;
-    },
-    isLoading() {
-      return this.$store.state.isLoading;
     },
   },
 };

@@ -14,7 +14,7 @@
           <BaseButton
             title="Cancelar"
             :type="'icon'"
-            :color="'red'"
+            :color="'gray'"
             @click="toggleIsAdding()"
           >
             <i class="fas fa-times"></i>
@@ -221,10 +221,7 @@
         />
 
         <div class="div-table">
-          <BaseTable
-            v-show="tabAtivaModal === 'Perfis'"
-            :tableType="'modal-table'"
-          >
+          <BaseTable v-show="tabAtivaModal === 'Perfis'" :type="'modal'">
             <template #thead>
               <th style="width:25px"></th>
               <th
@@ -259,7 +256,7 @@
           <!-- Disciplinas -->
           <BaseTable
             v-show="tabAtivaModal === 'Disciplinas'"
-            :tableType="'modal-table'"
+            :type="'modal'"
             :hasSearchBar="true"
           >
             <template #thead-search>
@@ -357,7 +354,7 @@
 
           <BaseTable
             v-show="tabAtivaModal === 'Cursos'"
-            :tableType="'modal-table'"
+            :type="'modal'"
             :hasSearchBar="true"
           >
             <template #thead-search>
@@ -422,10 +419,7 @@
             </template>
           </BaseTable>
 
-          <BaseTable
-            v-show="tabAtivaModal === 'Semestres'"
-            :tableType="'modal-table'"
-          >
+          <BaseTable v-show="tabAtivaModal === 'Semestres'" :type="'modal'">
             <template #thead>
               <th style="width: 25px"></th>
               <th style="width: 425px" class="t-start">
@@ -520,41 +514,39 @@
     <BaseModal
       ref="modalDelete"
       :modalOptions="{
-        title: 'Confirmar seleção',
+        title: 'Deletar turma',
         position: 'center',
         hasBackground: true,
         hasFooter: true,
       }"
-      :customStyles="'width:400px'"
+      :customStyles="'width:450px; font-size:14px'"
     >
       <template #modal-body>
-        <p class="w-100 mb-2" style="font-size:14px">
+        <p class="w-100 m-0">
           {{
             Deletar.length
-              ? "Tem certeza que deseja deletar as turmas selecionados?"
+              ? "Tem certeza que deseja deletar a(s) turma(s) selecionadas?"
               : "Nenhuma turma selecionada!"
           }}
         </p>
-        <template v-if="Deletar.length">
-          <ul class="list-group list-deletar w-100">
-            <template v-for="turma in Deletar">
-              <li class="list-group-item" :key="'deletarTurma' + turma.id">
-                <span class="mr-1">
-                  <b> Semestre: </b>{{ turma.periodo }}
-                </span>
-                <span class="mr-1"
-                  ><b> Disciplina: </b>{{ turma.disciplinaNome }} -
-                  <b>{{ turma.letra }}</b>
-                </span>
-              </li>
-            </template>
-          </ul>
-        </template>
+        <ul v-if="Deletar.length" class="list-group list-deletar w-100 mt-2">
+          <li
+            v-for="turma in Deletar"
+            class="list-group-item"
+            :key="'deletarTurma' + turma.id"
+          >
+            <span class="mr-1"> <b> Semestre: </b>{{ turma.periodo }} </span>
+            <span class="mr-1">
+              <b> Disciplina: </b>{{ turma.disciplinaNome }}
+            </span>
+            <span class="mr-1"><b> Turma: </b> {{ turma.letra }} </span>
+          </li>
+        </ul>
       </template>
       <template #modal-footer>
         <div class="w-100">
           <button
-            class="btn-custom btn-modal btn-cinza btn-ok-modal"
+            class="btn-custom btn-modal btn-cinza paddingX-20"
             @click="$refs.modalDelete.close()"
           >
             Cancelar
@@ -562,7 +554,7 @@
         </div>
         <button
           v-if="Deletar.length"
-          class="btn-custom btn-modal btn-vermelho btn-ok-modal"
+          class="btn-custom btn-modal btn-vermelho paddingX-20"
           @click="deleteSelectedTurma()"
         >
           Deletar
@@ -591,15 +583,22 @@
             <b>Para adicionar uma turma à tabela:</b> Clique no ícone adicionar
             <i class="fas fa-plus addbtn"></i> no cabeçalho da página em seguida
             preencha a nova linha que irá aparecer no início da tabela. E note
-            que, disciplina, turno e letra da turma são campos obrigatórios.
+            que, os campos disciplina, turno e letra da turma são obrigatórios.
             Após preencher os campos clique no ícone salvar
             <i class="fas fa-check addbtn"></i>
             ou em cancelar
-            <i class="fas fa-times delbtn"></i>
+            <i class="fas fa-times cancelbtn"></i>
             .
           </li>
           <li class="list-group-item">
-            <b>Para editar turma da Tabela:</b> Existem duas formas de fazer
+            <b>Para deletar turmas da tabela:</b> Marque a(s) turma(s) que
+            deseja deletar através da caixa de seleção presente na primeira
+            coluna à esquerda na tabela, em seguida clique no ícone deletar
+            <i class="fas fa-trash delbtn"></i> no cabeçalho da página e na
+            janela que será aberta confirme clicando botão OK.
+          </li>
+          <li class="list-group-item">
+            <b>Para editar turma da tabela:</b> Existem duas formas de fazer
             alterações numa turma, a <b>primeira</b> é modificando diretamente
             os campos tabela e o sistema irá salvar automaticamente. <br />
             A <b>segunda</b> forma é clicando no ícone
@@ -610,18 +609,18 @@
             alterações serão salvas automaticamente.
           </li>
           <li class="list-group-item">
-            <b>Para deletar turmas da tabela:</b> Marque a(s) turma(s) que
-            deseja deletar através da caixa de seleção presente na primeira
-            coluna à esquerda na tabela, em seguida clique no ícone deletar
-            <i class="fas fa-trash delbtn"></i> no cabeçalho da página e na
-            janela que será aberta confirme clicando botão OK.
+            <b>Para gerar relatório das turmas:</b> Clique no ícone relatório
+            <i class="fas fa-file-alt cancelbtn"></i>
+            e aguarde o
+            <i style="font-style: italic">download</i> do arquivo (.xlsx)
+            iniciar.
           </li>
           <li class="list-group-item">
-            <b>Para gerar relatório (.xlsx) das turmas:</b> Clique no ícone
-            relatório
-            <i class="fas fa-file-alt"></i>
-            e aguarde o
-            <i style="font-style: italic">download</i> iniciar.
+            <b>Observações:</b> Em cada coluna de um curso existem dois campos
+            de vagas, sendo o decima destinado para alunos na grade e debaixo
+            para alunos repetentes. Para que uma turma apareça na tela
+            <b>Horários</b> de um determinado curso é preciso que pelo menos uma
+            vaga para alunos na grade seja destinada ao mesmo.
           </li>
         </ul>
       </template>
@@ -904,7 +903,8 @@ export default {
       return text
         .toUpperCase()
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s/g, "");
     },
     nameIsBig(nome) {
       if (nome.length > 4) return true;
@@ -1092,9 +1092,6 @@ export default {
     },
     Pedidos() {
       return this.$store.state.pedido.Pedidos;
-    },
-    isLoading() {
-      return this.$store.state.isLoading;
     },
     Admin() {
       return this.$store.state.auth.Usuario.admin === 1;

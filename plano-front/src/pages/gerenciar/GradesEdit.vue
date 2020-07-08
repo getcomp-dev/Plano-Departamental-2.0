@@ -28,8 +28,8 @@
               ></i>
             </th>
             <th
-              style="width:75px"
-              class="clickable"
+              style="width:80px"
+              class="clickable t-start"
               @click="
                 toggleOrder(ordenacaoDisciplinasMain, 'disciplina_codigo')
               "
@@ -71,7 +71,7 @@
                 <td style="width:35px">
                   {{ disciplinaGrade.periodo }}
                 </td>
-                <td style="width:75px">
+                <td style="width:80px" class="t-start">
                   {{ disciplinaGrade.disciplina_codigo }}
                 </td>
                 <td style="width:400px" class="t-start">

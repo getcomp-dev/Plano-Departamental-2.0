@@ -1,8 +1,8 @@
 <template>
   <table
     class="table-custom table table-sm table-bordered"
-    :class="[tableType, customClass]"
-    :style="tableType === 'main-table' ? tableHeight : ''"
+    :class="[tableType, classes]"
+    :style="styles"
   >
     <thead class="thead-light max-content sticky">
       <template v-if="hasSearchBar">
@@ -28,10 +28,15 @@
 export default {
   name: "BaseTable",
   props: {
-    tableType: { type: String, default: "main-table" },
-    tableHeight: { type: String, default: "height: calc(100vh - 100px)" },
+    type: { type: String, default: "main" },
     hasSearchBar: { type: Boolean, default: false },
-    customClass: { type: String, default: "" },
+    styles: { type: String, default: "" },
+    classes: { type: String | Array, default: "" },
+  },
+  computed: {
+    tableType() {
+      return `${this.type}-table`;
+    },
   },
 };
 </script>
@@ -48,6 +53,7 @@ export default {
   overflow-x: auto !important;
   font-size: 11px !important;
   margin-bottom: 10px !important;
+  height: calc(100vh - 100px);
 }
 .modal-table {
   max-height: 450px !important;

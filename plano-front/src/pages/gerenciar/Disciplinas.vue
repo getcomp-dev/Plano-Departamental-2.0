@@ -191,7 +191,7 @@
                 id="cargaTeorica"
                 class="form-control form-control-sm input-medio t-center"
                 @keypress="onlyNumber"
-                v-model="disciplinaForm.cargaTeorica"
+                v-model.number="disciplinaForm.cargaTeorica"
               />
             </div>
 

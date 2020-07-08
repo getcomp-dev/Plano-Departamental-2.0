@@ -14,6 +14,7 @@
           <option type="text" value="1">1</option>
           <option type="text" value="2">2</option>
           <option type="text" value="3">3</option>
+          <option type="text" value="4">4</option>
         </select>
       </td>
       <td style="width:145px" class="less-padding">

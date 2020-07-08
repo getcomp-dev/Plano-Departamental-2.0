@@ -25,7 +25,7 @@
           v-show="isAdding"
           title="Cancelar"
           :type="'icon'"
-          :color="'red'"
+          :color="'gray'"
           @click="toggleAdd()"
         >
           <i class="fas fa-times"></i>
@@ -308,7 +308,7 @@
         <div class="div-table">
           <BaseTable
             v-show="tabAtivaModal === 'Disciplinas'"
-            :tableType="'modal-table'"
+            :type="'modal'"
             :hasSearchBar="true"
           >
             <template #thead-search>
@@ -378,10 +378,7 @@
               </tr>
             </template>
           </BaseTable>
-          <BaseTable
-            v-show="tabAtivaModal === 'Semestres'"
-            :tableType="'modal-table'"
-          >
+          <BaseTable v-show="tabAtivaModal === 'Semestres'" :type="'modal'">
             <template #thead>
               <th style="width: 25px"></th>
               <th class="t-start" style="width: 425px">
@@ -419,41 +416,39 @@
     <BaseModal
       ref="modalDelete"
       :modalOptions="{
-        title: 'Confirmar seleção',
+        title: 'Deletar turma',
         position: 'center',
         hasBackground: true,
         hasFooter: true,
       }"
-      :customStyles="'width:450px'"
+      :customStyles="'width:450px; font-size:14px'"
     >
       <template #modal-body>
-        <p class="w-100 mb-2" style="font-size:14px">
+        <p class="w-100 m-0">
           {{
             Deletar.length
-              ? "Tem certeza que deseja deletar as turmas selecionadas?"
+              ? "Tem certeza que deseja deletar a(s) turma(s) selecionadas?"
               : "Nenhuma turma selecionada!"
           }}
         </p>
-        <template v-if="Deletar.length">
-          <ul class="list-group list-deletar w-100">
-            <template v-for="turma in Deletar">
-              <li class="list-group-item" :key="'deletarTurma' + turma.id">
-                <span class="mr-1">
-                  <b> Semestre: </b>{{ turma.periodo }}
-                </span>
-                <span class="mr-1"
-                  ><b> Disciplina: </b>{{ turma.disciplinaNome }}
-                </span>
-                <span class="mr-1"><b> Turma: </b> {{ turma.letra }} </span>
-              </li>
-            </template>
-          </ul>
-        </template>
+        <ul v-if="Deletar.length" class="list-group list-deletar w-100 mt-2">
+          <li
+            v-for="turma in Deletar"
+            class="list-group-item"
+            :key="'deletarTurma' + turma.id"
+          >
+            <span class="mr-1"> <b> Semestre: </b>{{ turma.periodo }} </span>
+            <span class="mr-1"
+              ><b> Disciplina: </b>{{ turma.disciplinaNome }}
+            </span>
+            <span class="mr-1"><b> Turma: </b> {{ turma.letra }} </span>
+          </li>
+        </ul>
       </template>
       <template #modal-footer>
         <div class="w-100">
           <button
-            class="btn-custom btn-modal btn-cinza btn-ok-modal"
+            class="btn-custom btn-modal btn-cinza paddingX-20"
             @click="$refs.modalDelete.close()"
           >
             Cancelar
@@ -461,7 +456,7 @@
         </div>
         <button
           v-if="Deletar.length"
-          class="btn-custom btn-modal btn-vermelho btn-ok-modal"
+          class="btn-custom btn-modal btn-vermelho paddingX-20"
           @click="deleteSelectedTurma()"
         >
           Deletar
@@ -480,34 +475,41 @@
       <template #modal-body>
         <ul class="list-ajuda list-group">
           <li class="list-group-item">
-            <b>Para adicionar disciplinas à Tabela:</b> Clique em Adicionar
-            <i class="fas fa-plus addbtn px-1" style="font-size: 12px;"></i>
-            , em seguida, preencha a nova linha que surgirá na tabela. Após
-            concluído, clique em Salvar
-            <i class="fas fa-check addbtn px-1" style="font-size: 12px;"></i>
-            ou em Cancelar
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px;"></i>
+            <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
+            <i class="fas fa-list-ul cancelbtn"></i> no cabeçalho da página e na
+            janela que será aberta utilize as abas para navegar entre os tipos
+            de filtros. Marque em suas respectivas tabelas quais informações
+            deseja visualizar, e para finalizar clique no botão OK.
+          </li>
+          <li class="list-group-item">
+            <b>Para adicionar uma turma à tabela:</b> Clique no ícone adicionar
+            <i class="fas fa-plus addbtn"></i> no cabeçalho da página em seguida
+            preencha a nova linha que irá aparecer no início da tabela. E note
+            que, os campos disciplina e letra da turma são obrigatórios. Após
+            preencher os campos clique no ícone salvar
+            <i class="fas fa-check addbtn"></i>
+            ou em cancelar
+            <i class="fas fa-times cancelbtn"></i>
             .
           </li>
           <li class="list-group-item">
-            <b>Para deletar disciplinas da Tabela:</b> Marque a(s) disciplina(s)
-            que deseja deletar através da caixa de seleção à esquerda e em
-            seguida clique em Deletar
-            <i class="fas fa-trash delbtn px-1" style="font-size: 12px;"></i>
-            e confirme no botão OK.
+            <b>Para deletar turmas da tabela:</b> Marque a(s) turma(s) que
+            deseja deletar através da caixa de seleção presente na primeira
+            coluna à esquerda na tabela, em seguida clique no ícone deletar
+            <i class="fas fa-trash delbtn"></i> no cabeçalho da página e na
+            janela que será aberta confirme clicando botão OK.
           </li>
           <li class="list-group-item">
-            <b>Para editar disciplinas da Tabela:</b> Faça as alterações
-            necessárias diretamente na tabela e o sistema irá salvar
+            <b>Para editar turma da tabela:</b> Basta fazer as alterações
+            necessárias diretamente nos campos da tabela e o sistema irá salvar
             automaticamente.
           </li>
           <li class="list-group-item">
-            <b>Observações:</b> Em cada coluna de cursos a disciplina adicionada
-            permite a inclusão em dois espaços, sendo acima destinado para
-            alunos na grade, e abaixo para alunos repetentes. Para que uma
-            disciplina externa apareça em Horários de um determinado curso é
-            preciso que pelo menos uma vaga para alunos na grade seja destinada
-            ao mesmo.
+            <b>Observações:</b> Em cada coluna de cursos possui dois campos de
+            vagas, sendo acima destinado para alunos na grade, e abaixo para
+            alunos repetentes. Para que uma turma externa apareça em na tela
+            <b>Horários</b> de um determinado curso é preciso que pelo menos uma
+            vaga para alunos na grade seja destinada ao mesmo.
           </li>
         </ul>
       </template>

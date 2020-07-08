@@ -128,10 +128,7 @@
             <small>Perfis Associados ao docente</small>
             <div class="row mb-3 mx-0">
               <div class="div-table">
-                <BaseTable
-                  :tableType="'modal-table'"
-                  :customClass="'docente-table'"
-                >
+                <BaseTable :type="'modal'" :styles="'max-height: 300px'">
                   <template #thead>
                     <th style="width:25px"></th>
                     <th style="width:225px" class="t-start">
@@ -456,8 +453,5 @@ export default {
 }
 .card .input-medio {
   width: 150px;
-}
-.docente-table {
-  max-height: 300px !important;
 }
 </style>

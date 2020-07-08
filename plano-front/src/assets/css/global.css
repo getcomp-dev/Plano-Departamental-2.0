@@ -56,6 +56,10 @@ main .main-component {
 .upper-case {
   text-transform: uppercase;
 }
+.paddingX-20 {
+  padding-right: 20px !important;
+  padding-left: 20px !important;
+}
 
 /* searchDisciplinas */
 .search-text:hover {

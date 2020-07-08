@@ -88,10 +88,7 @@
         />
 
         <div class="div-table">
-          <BaseTable
-            v-show="tabAtivaModal === 'Laboratorios'"
-            :tableType="'modal-table'"
-          >
+          <BaseTable v-show="tabAtivaModal === 'Laboratorios'" :type="'modal'">
             <template #thead>
               <th style="width: 25px" class="t-start"></th>
               <th style="width: 425px" class="t-start">
@@ -124,10 +121,7 @@
             </template>
           </BaseTable>
 
-          <BaseTable
-            v-show="tabAtivaModal === 'Semestres'"
-            :tableType="'modal-table'"
-          >
+          <BaseTable v-show="tabAtivaModal === 'Semestres'" :type="'modal'">
             <template #thead>
               <th style="width: 25px"></th>
               <th class="t-start clickable" style="width: 425px">
@@ -174,22 +168,17 @@
       <template #modal-body>
         <ul class="list-ajuda list-group">
           <li class="list-group-item">
-            <b>Para exibir conteúdo na tela:</b> Clique em Laboratórios
-            <i
-              class="fas fa-list-ul cancelbtn px-1"
-              style="font-size: 12px;"
-            ></i>
-            e selecione o(s) laboratório(s) que deseja ver, em seguida confirme
-            em OK. Caso queira ver todos basta clicar em Selecionar Todos.
+            <b>Para exibir as tabelas de horários:</b> Clique no ícone filtros
+            <i class="fas fa-list-ul cancelbtn"></i> no cabeçalho da página e na
+            janela que será aberta utilize as abas para navegar entre os tipos
+            de filtros. Marque em suas respectivas tabelas quais informações
+            deseja visualizar, e para finalizar clique no botão OK.
           </li>
           <li class="list-group-item">
-            <b>Para gerar relatório:</b> Clique no botão Relatório
-            <i
-              class="far fa-file-pdf relatbtn px-1"
-              style="font-size: 12px;"
-            ></i>
-            e aguarde para fazer
-            <font style="font-style: italic;">download</font> do mesmo.
+            <b>Para gerar relatório dos horários:</b> Clique no ícone relatório
+            <i class="fas fa-file-alt cancelbtn"></i>, selecione se deseja gerar
+            o relatório completo com todos os horários, ou apenas o relatório
+            parcial com os horários que estão selecionados no momento.
           </li>
         </ul>
       </template>

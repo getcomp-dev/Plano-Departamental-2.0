@@ -204,15 +204,15 @@
     <BaseModal
       ref="modalDeleteUser"
       :modalOptions="{
-        title: 'Deletar Usuário',
+        title: 'Deletar usuário',
         position: 'center',
         hasBackground: true,
         hasFooter: true,
       }"
-      :hasFooter="true"
+      :customStyles="'width:450px; font-size:14px'"
     >
       <template #modal-body>
-        <p class="mb-2" style="font-size:14px">
+        <p class="w-100 m-0">
           <template v-if="isEdit">
             Tem certeza que deseja deletar o usuário
             <b>{{ userForm.nome }}</b> ?
@@ -224,14 +224,14 @@
       </template>
       <template #modal-footer>
         <button
-          class="btn-custom btn-modal btn-cinza btn-ok-modal"
+          class="btn-custom btn-modal btn-cinza paddingX-20"
           @click="closeModalDelete()"
         >
           Cancelar
         </button>
         <button
           v-if="isEdit"
-          class="btn-custom btn-modal btn-vermelho btn-ok-modal"
+          class="btn-custom btn-modal btn-vermelho paddingX-20"
           @click="deleteUser()"
         >
           Deletar

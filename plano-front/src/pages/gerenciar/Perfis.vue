@@ -15,7 +15,7 @@
 
     <div class="page-content">
       <div class="div-table">
-        <BaseTable :tableHeight="'max-content'">
+        <BaseTable :styles="'height:max-content'">
           <template #thead>
             <th
               @click="toggleOrder(ordenacaoPerfisMain, 'nome')"

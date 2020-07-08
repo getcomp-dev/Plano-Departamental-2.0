@@ -88,10 +88,7 @@
         <NavTab :currentTab="'Tabelas'" :allTabs="['Tabelas']" />
 
         <div class="div-table">
-          <BaseTable
-            v-show="tabAtivaModal === 'Tabelas'"
-            :tableType="'modal-table'"
-          >
+          <BaseTable v-show="tabAtivaModal === 'Tabelas'" :type="'modal'">
             <template #thead>
               <th style="width:25px"></th>
               <th style="width: 425px">

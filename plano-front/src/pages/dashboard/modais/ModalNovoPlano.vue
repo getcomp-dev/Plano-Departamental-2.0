@@ -28,15 +28,19 @@
           <textarea
             id="planoObs"
             cols="30"
-            rows="3"
+            rows="2"
             v-model="planoForm.obs"
             class="form-control"
           ></textarea>
         </div>
       </div>
+      <!-- TABLE DISCIPLINAS -->
       <div class="div-table">
-        <!-- TABLE DISCIPLINAS -->
-        <BaseTable :tableType="'modal-table'" :hasSearchBar="true">
+        <BaseTable
+          :type="'modal'"
+          :styles="'height: 400px;'"
+          :hasSearchBar="true"
+        >
           <template #thead-search>
             <input
               type="text"
@@ -208,7 +212,8 @@ export default {
       return text
         .toUpperCase()
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s/g, "");
     },
 
     gradesAtivas(ano) {
@@ -795,10 +800,7 @@ export default {
             });
         });
         let turmasCopiar = _.filter(this.$store.state.turma.Turmas, (t) => {
-          let disciplina = _.includes(
-            this.filtrosDisciplinas,
-            t.Disciplina
-          );
+          let disciplina = _.includes(this.filtrosDisciplinas, t.Disciplina);
           if (disciplina) return true;
           else return false;
         });
@@ -954,10 +956,10 @@ export default {
   align-items: flex-start;
   font-size: 14px;
 }
-input,
 select,
 textarea {
   font-size: 14px;
+  padding: 5px;
 }
 .form-container .form-row {
   position: relative;

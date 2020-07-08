@@ -15,7 +15,7 @@
           v-show="isAdding"
           title="Cancelar"
           :type="'icon'"
-          :color="'red'"
+          :color="'gray'"
           @click="toggleAdd()"
         >
           <i class="fas fa-times"></i>
@@ -109,7 +109,7 @@
               />
             </tr>
           </template>
-          <tr v-if="ProgramasInCargaPosOrdered.length === 0">
+          <tr v-show="ProgramasInCargaPosOrdered.length === 0">
             <td style="width:345px">
               <b>Nenhuma carga encontrada.</b> Clique no botão de filtros
               <i class="fas fa-list-ul mx-1"></i> para selecioná-las.
@@ -122,56 +122,45 @@
     <BaseModal
       ref="modalDelete"
       :modalOptions="{
-        title: 'Confirmar seleção',
+        title: 'Deletar carga',
         position: 'center',
         hasBackground: true,
         hasFooter: true,
       }"
-      :customStyles="'width:400px'"
+      :customStyles="'width:450px; font-size:14px'"
     >
       <template #modal-body>
-        <p v-if="Deletar.length === 0" class="w-100 m-0">
-          Nenhuma carga selecionada!
+        <p class="w-100 m-0">
+          {{
+            Deletar.length
+              ? "Tem certeza que deseja deletar a(s) carga(s) selecionadas?"
+              : "Nenhuma turma selecionada!"
+          }}
         </p>
-
-        <template v-else>
-          <p class="mb-2" style="font-size:14px">
-            Tem certeza que deseja deletar as cargas selecionadas?
-          </p>
-          <ul class="list-group w-100">
-            <template v-for="carga in Deletar">
-              <template v-for="docente in Docentes">
-                <template v-if="docente.id === carga.Docente">
-                  <li
-                    class="list-group-item px-3"
-                    :key="'carga id' + carga.id + 'docente' + docente.id"
-                  >
-                    <span class="mr-1">
-                      <b> Trimestre: </b>{{ carga.trimestre }}
-                    </span>
-                    <span class="mr-1"
-                      ><b> Docente: </b>{{ docente.apelido }}
-                    </span>
-                    <span class="mr-1"
-                      ><b> Programa: </b>{{ carga.programa }}
-                    </span>
-                  </li>
-                </template>
-              </template>
-            </template>
-          </ul>
-        </template>
+        <ul v-if="Deletar.length" class="list-group list-deletar w-100 mt-2">
+          <li
+            v-for="carga in Deletar"
+            :key="'carga id' + carga.id"
+            class="list-group-item"
+          >
+            <span class="mr-1"> <b> Trimestre: </b>{{ carga.trimestre }} </span>
+            <span class="mr-1"><b> Programa: </b>{{ carga.programa }} </span>
+            <span class="mr-1"
+              ><b> Docente: </b>{{ carga.docenteApelido }}
+            </span>
+          </li>
+        </ul>
       </template>
       <template #modal-footer>
         <button
-          class="btn-custom btn-modal btn-cinza btn-ok-modal"
+          class="btn-custom btn-modal btn-cinza paddingX-20"
           @click="$refs.modalDelete.close()"
         >
           Cancelar
         </button>
         <button
           v-if="Deletar.length"
-          class="btn-custom btn-modal btn-vermelho btn-ok-modal"
+          class="btn-custom btn-modal btn-vermelho paddingX-20"
           @click="deleteSelectedCargas()"
         >
           Deletar
@@ -199,10 +188,7 @@
         />
 
         <div class="div-table">
-          <BaseTable
-            v-show="tabAtivaModal === 'Programas'"
-            :tableType="'modal-table'"
-          >
+          <BaseTable v-show="tabAtivaModal === 'Programas'" :type="'modal'">
             <template #thead>
               <th style="width: 25px"></th>
               <th style="width: 425px" class="t-start">Programa</th>
@@ -228,10 +214,7 @@
             </template>
           </BaseTable>
 
-          <BaseTable
-            v-show="tabAtivaModal === 'Trimestres'"
-            :tableType="'modal-table'"
-          >
+          <BaseTable v-show="tabAtivaModal === 'Trimestres'" :type="'modal'">
             <template #thead>
               <th style="width: 25px"></th>
               <th class="t-start" style="width: 425px">
@@ -242,7 +225,7 @@
               <tr
                 v-for="trimestre in Trimestres"
                 :key="'MdTrimestre' + trimestre.valor"
-                @click.stop="
+                @click="
                   selectTrimestre(trimestre, filtroTrimestres.selecionados)
                 "
               >
@@ -264,10 +247,7 @@
             </template>
           </BaseTable>
 
-          <BaseTable
-            v-show="tabAtivaModal === 'Semestres'"
-            :tableType="'modal-table'"
-          >
+          <BaseTable v-show="tabAtivaModal === 'Semestres'" :type="'modal'">
             <template #thead>
               <th style="width: 25px"></th>
               <th class="t-start" style="width: 425px">
@@ -275,7 +255,7 @@
               </th>
             </template>
             <template #tbody>
-              <tr @click.stop="selectSemestre('primeiro')">
+              <tr @click="selectSemestre('primeiro')">
                 <td style="width: 25px">
                   <input
                     type="checkbox"
@@ -286,7 +266,7 @@
                 </td>
                 <td style="width: 425px" class="t-start">PRIMEIRO</td>
               </tr>
-              <tr @click.stop="selectSemestre('segundo')">
+              <tr @click="selectSemestre('segundo')">
                 <td style="width: 25px">
                   <input
                     type="checkbox"
@@ -313,38 +293,42 @@
       <template #modal-body>
         <ul class="list-ajuda list-group">
           <li class="list-group-item">
-            <b>Para selecionar uma turma:</b> clique no ícone de filtros
-            <i class="fas fa-list-ul"></i>
-            , em seguida marque os programas que pretende visualizar, escolha o
-            trimestres ou semestres mudando de aba e por fim clique Ok para
-            ativa-los.
+            <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
+            <i class="fas fa-list-ul cancelbtn"></i> no cabeçalho da página e na
+            janela que será aberta utilize as abas para navegar entre os tipos
+            de filtros. Marque em suas respectivas tabelas quais informações
+            deseja visualizar, e para finalizar clique no botão OK.
           </li>
           <li class="list-group-item">
-            <b>Diferença entre filtro de semestre e trimestre:</b> esses dois
-            filtros são interligados, onde ao marcar um semestre os trimestres
-            correspondetes tambem serão marcados. O primeiro semestre
-            corresponde ao primeir e segundo trimestre, e segundo semestre ao
-            terceiro e quarto. Então só é necessário utlizar um ou o outro.
-          </li>
-          <li class="list-group-item">
-            <b>Para adicionar uma nova turma:</b> clique no ícone de adicionar
-            <i class="fas fa-plus addbtn"></i> presente no cabeçalho da pagina.
-            Preencha a linha em branco que irá surgir na tabela, e por fim
-            clique no icone de salvar <i class="fas fa-check addbtn"></i> ou
-            cancelar
+            <b>Para adicionar uma carga à tabela:</b> Clique no ícone adicionar
+            <i class="fas fa-plus addbtn"></i> no cabeçalho da página em seguida
+            preencha a nova linha que irá aparecer no início da tabela. E note
+            que, todos os campos presentes são obrigatórios. Após preencher os
+            campos clique no ícone salvar
+            <i class="fas fa-check addbtn"></i>
+            ou em cancelar
             <i class="fas fa-times cancelbtn"></i>
             .
           </li>
           <li class="list-group-item">
-            <b>Para editar uma turma:</b> basta alterar algum dos valores
-            presente nas linhas que automaticamente será salvo com o novo valor.
+            <b>Para deletar carga da tabela:</b> Marque a(s) carga(s) que deseja
+            deletar através da caixa de seleção presente na segunda coluna à
+            esquerda na tabela, em seguida clique no ícone deletar
+            <i class="fas fa-trash delbtn"></i> no cabeçalho da página e na
+            janela que será aberta confirme clicando botão OK.
           </li>
           <li class="list-group-item">
-            <b>Para deletar uma turma:</b> Marque as turmas que deseja deletar
-            através da caixa de seleção presente na primeira coluna da tabela e
-            em seguida clique no incone de deletar selecionados
-            <i class="fas fa-trash delbtn"></i>
-            e confirme no botão OK.
+            <b>Para editar carga da tabela:</b> Basta fazer as alterações
+            necessárias diretamente nos campos da tabela e o sistema irá salvar
+            automaticamente.
+          </li>
+          <li class="list-group-item">
+            <b>Observações:</b> Note que os
+            <b>filtros semestres e trimestres são interligados</b> onde, ao
+            selecionar um semestre os trimestres correspondetes tambem serão
+            selecionados e vice versa. O primeiro semestre corresponde ao
+            primeiro e segundo trimestre, e segundo semestre ao terceiro e
+            quarto. Então só é necessário utlizar um ou o outro.
           </li>
         </ul>
       </template>
@@ -433,6 +417,7 @@ export default {
   },
   mounted() {
     this.connectSemestreInTrimestre();
+    this.$store.commit("emptyDelete");
   },
   methods: {
     openAsideModal(modalName) {
@@ -592,6 +577,7 @@ export default {
     },
     ProgramasInCargaPosOrdered() {
       const programasResutantes = [];
+
       _.forEach(this.ProgramasInCargaPosFiltredByTrimestre, (programa) => {
         programasResutantes.push({
           nome: programa.nome,
@@ -602,7 +588,7 @@ export default {
           ),
         });
       });
-
+      console.log(programasResutantes);
       return programasResutantes;
     },
     AllProgramasPosOrdered() {

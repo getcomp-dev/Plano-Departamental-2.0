@@ -37,10 +37,7 @@ button {
   padding: 0 5px !important;
   color: white !important;
 }
-.btn-ok-modal {
-  padding-right: 20px !important;
-  padding-left: 20px !important;
-}
+
 .btn-modal + .btn-modal {
   margin-left: 10px !important;
 }

@@ -35,7 +35,7 @@
       <BaseTable>
         <template #thead>
           <th
-            class="clickable"
+            class="clickable t-start"
             style="width: 80px"
             @click="toggleOrder(ordenacaoMain.disciplinas, 'codigo')"
           >
@@ -62,10 +62,10 @@
               "
             ></i>
           </th>
-          <th style="width: 24px">
+          <th style="width: 25px" title="Semestre">
             S.
           </th>
-          <th style="width: 30px">
+          <th style="width: 35px" title="Turma">
             T.
           </th>
           <th style="width: 200px">
@@ -92,17 +92,17 @@
                 class="bg-custom"
                 :key="'disciplina' + turma.id + disciplina.id"
               >
-                <td style="width: 80px">
+                <td style="width: 80px" class="t-start">
                   {{ disciplina.codigo }}
                 </td>
-                <td style="width: 350px" class="t-start">
+                <td style="width: 350px">
                   {{ disciplina.nome }}
                 </td>
                 <td style="width: 80px" class="less-padding">
                   {{ disciplina.perfilAbreviacao }}
                 </td>
-                <td style="width: 24px"></td>
-                <td style="width: 30px"></td>
+                <td style="width: 25px"></td>
+                <td style="width: 35px"></td>
                 <td style="width: 200px"></td>
                 <td style="width: 180px"></td>
                 <td style="width: 50px">
@@ -111,13 +111,13 @@
               </tr>
               <!--  -->
               <tr :key="'turmasTr' + turma.id">
-                <td style="width: 80px"></td>
+                <td style="width: 80px" class="t-start"></td>
                 <td style="width: 350px"></td>
                 <td style="width: 80px"></td>
-                <td style="width: 24px">
+                <td style="width: 25px">
                   {{ turma.periodo }}
                 </td>
-                <td style="width: 30px" class="less-padding">
+                <td style="width: 35px" class="less-padding">
                   {{ turma.letra }}
                 </td>
                 <td style="width: 200px">
@@ -172,6 +172,12 @@
               </tr>
             </template>
           </template>
+          <tr v-show="!DisciplinasOrderedMain.length">
+            <td colspan="8" style="width: 1000px">
+              <b>Nenhuma disciplina encontrada.</b> Clique no botão de filtros
+              <i class="fas fa-list-ul mx-1"></i> para selecioná-las.
+            </td>
+          </tr>
         </template>
       </BaseTable>
     </div>
@@ -187,30 +193,18 @@
       <template #modal-body>
         <ul class="list-ajuda list-group">
           <li class="list-group-item">
-            <b class="ajuda-b">Para exibir conteúdo na Tabela:</b>
-            Clique em Disciplinas
-            <i
-              class="fas fa-list-ul cancelbtn px-1"
-              style="font-size: 12px;"
-            ></i>
-            e selecione a(s) disciplina(s) que deseja ver, em seguida confirme
-            em OK. Caso queira ver todas basta clicar em Selecionar Todos.
+            <b>Para exibir as tabelas de horários:</b> Clique no ícone filtros
+            <i class="fas fa-list-ul cancelbtn"></i> no cabeçalho da página e na
+            janela que será aberta utilize as abas para navegar entre os tipos
+            de filtros. Marque em suas respectivas tabelas quais informações
+            deseja visualizar, e para finalizar clique no botão OK.
           </li>
           <li class="list-group-item">
-            <b class="ajuda-b">Para gerar relatório:</b> Clique no botão
-            Relatório
-            <i
-              class="far fa-file-pdf relatbtn px-1"
-              style="font-size: 12px;"
-            ></i>
-            e selecione se deseja o relatório completo, com todas as
-            disciplinas, ou apenas o relatório parcial, com as disciplinas
-            selecionadas.
-          </li>
-          <li class="list-group-item">
-            <b class="ajuda-b">Para alterar ordenação:</b> Clique em Cod. no
-            cabeçalho da tabela para ordenar por código, ou em Nome para ordenar
-            por ordem alfabética, ou em Perfil para ordenar por perfil.
+            <b>Para gerar relatório das disciplinas:</b> Clique no ícone
+            relatório <i class="fas fa-file-alt cancelbtn"></i>, selecione se
+            deseja gerar o relatório completo com todos as disciplinas, ou
+            apenas o relatório parcial com as disciplinas que estão selecionados
+            no momento.
           </li>
           <li class="list-group-item">
             <b class="ajuda-b">Para visualizar divisões de vagas:</b>
@@ -244,7 +238,7 @@
         <div class="div-table">
           <BaseTable
             v-show="tabAtivaModal === 'Disciplinas'"
-            :tableType="'modal-table'"
+            :type="'modal'"
             :hasSearchBar="true"
           >
             <template #thead-search>
@@ -335,10 +329,7 @@
             </template>
           </BaseTable>
 
-          <BaseTable
-            v-show="tabAtivaModal === 'Semestres'"
-            :tableType="'modal-table'"
-          >
+          <BaseTable v-show="tabAtivaModal === 'Semestres'" :type="'modal'">
             <template #thead>
               <th style="width: 25px"></th>
               <th class="t-start clickable" style="width: 425px">
@@ -371,10 +362,7 @@
             </template>
           </BaseTable>
 
-          <BaseTable
-            :tableType="'modal-table'"
-            v-show="tabAtivaModal === 'Perfis'"
-          >
+          <BaseTable :type="'modal'" v-show="tabAtivaModal === 'Perfis'">
             <template #thead>
               <th style="width: 25px;"></th>
               <th
@@ -452,7 +440,7 @@
             </div>
           </div>
           <div class="div-table">
-            <BaseTable :tableType="'modal-table'">
+            <BaseTable :type="'modal'">
               <template #thead>
                 <th
                   class="clickable t-start"

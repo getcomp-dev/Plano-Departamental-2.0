@@ -13,7 +13,7 @@
       >
         <template #aside-title>
           <div class="aside-title d-flex align-items-center">
-            <i class="far fa-calendar-alt mr-1"></i>
+            <i class="far fa-calendar-alt mr-1" title="Plano atual"></i>
             <select type="text" v-model="Plano" v-on:change="changePlano()">
               <option
                 v-for="plano in Planos"

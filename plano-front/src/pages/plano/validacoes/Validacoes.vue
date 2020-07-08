@@ -26,10 +26,10 @@
       @change-tab="tabAtivaMain = $event"
     />
 
-    <div class="div-table" v-if="!isLoading">
+    <div class="div-table">
       <BaseTable
         v-show="tabAtivaMain === 'Turmas'"
-        :tableHeight="'height: calc(100vh - 130px)'"
+        :styles="'height: calc(100vh - 130px)'"
       >
         <template #thead>
           <th
@@ -134,7 +134,7 @@
 
       <BaseTable
         v-show="tabAtivaMain === 'Docentes'"
-        :tableHeight="'height: calc(100vh - 130px)'"
+        :styles="'height: calc(100vh - 130px)'"
       >
         <template #thead>
           <th
@@ -195,10 +195,7 @@
           @change-tab="tabAtivaModal = $event"
         />
         <div class="div-table">
-          <BaseTable
-            v-show="tabAtivaModal === 'Conflitos'"
-            :tableType="'modal-table'"
-          >
+          <BaseTable v-show="tabAtivaModal === 'Conflitos'" :type="'modal'">
             <template #thead>
               <th style="width: 25px"></th>
               <th style="width: 425px" class="t-start">
@@ -229,10 +226,7 @@
             </template>
           </BaseTable>
 
-          <BaseTable
-            v-show="tabAtivaModal === 'Semestres'"
-            :tableType="'modal-table'"
-          >
+          <BaseTable v-show="tabAtivaModal === 'Semestres'" :type="'modal'">
             <template #thead>
               <th style="width: 25px;"></th>
               <th style="width: 425px;" class="t-start">
@@ -296,27 +290,24 @@
       <template #modal-body>
         <ul class="list-ajuda list-group">
           <li class="list-group-item">
-            <b>Para selecionar um conflito:</b> clique no ícone de filtros
-            <i class="fas fa-list-ul"></i>
-            , em seguida marque os tipos de conflitos que pretende visualizar,
-            escolha o semestre mudando de aba e por fim clique Ok para
-            ativa-los.
+            <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
+            <i class="fas fa-list-ul cancelbtn"></i> no cabeçalho da página e na
+            janela que será aberta utilize as abas para navegar entre os tipos
+            de filtros. Marque em suas respectivas tabelas quais informações
+            deseja visualizar, e para finalizar clique no botão OK.
           </li>
           <li class="list-group-item">
-            <b>Para editar uma turma da tabela:</b> clique no ícone editar
-            <i class="fas fa-edit"></i> presente na coluna de mesmo nome da
-            tabela de turmas.
+            <b>Para editar turma da tabela:</b> Clique no ícone
+            <i class="fas fa-edit"></i> presente na coluna editar da tabela, e
+            na janela que será aberta no formulário presente na parte superior
+            poderá ser feito alterações que somente serão enviadas ao clicar no
+            botão salvar. E na tabela de vagas na parte inferior da janela as
+            alterações serão salvas automaticamente.
           </li>
           <li class="list-group-item">
-            <b>Editando uma turma:</b> ao editar uma turma as alterações feitas
-            na parte superior do formulario só serão efetivadas ao clickar no
-            botão salvar, porém as alterações feitas na tabela de vagas serão
-            atualizadas automaticamente.
-          </li>
-          <li class="list-group-item">
-            <b>Cancelando edição de uma turma:</b> ao clickar no botão cancelar
-            no formulário de edição de turmas as informações voltaram para os
-            valores inciais de quando a janela foi aberta pela primeira vez.
+            <b>Conflitos críticos:</b> Note que em alguns conflitos possuem o
+            ícone <i class="fas fa-exclamation-circle delbtn"></i>, isso
+            significa que ele é crítico e deve ter prioridade para ser corrigido
           </li>
         </ul>
       </template>
@@ -616,8 +607,10 @@ export default {
       return turmaFounded != undefined ? turmaFounded : null;
     },
     totalPedidos(turma_id) {
+      const pedidos = this.$store.state.pedido.Pedidos[turma_id];
+      if (!pedidos.length) return 0;
+
       let result = 0;
-      let pedidos = this.$store.state.pedido.Pedidos[turma_id];
       for (let p = 0; p < pedidos.length; p++) {
         result += parseInt(pedidos[p].vagasPeriodizadas, 10);
         result += parseInt(pedidos[p].vagasNaoPeriodizadas, 10);
@@ -1215,9 +1208,6 @@ export default {
     },
     Docentes() {
       return _.filter(this.$store.state.docente.Docentes, ["ativo", true]);
-    },
-    isLoading() {
-      return this.$store.state.isLoading;
     },
     Admin() {
       if (this.$store.state.auth.Usuario.admin === 1) return true;
