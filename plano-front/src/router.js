@@ -27,6 +27,7 @@ import DashboardDisciplinas from "@/pages/gerenciar/Disciplinas";
 import DashboardSalas from "@/pages/gerenciar/Salas";
 import DashboardHistory from "@/pages/gerenciar/History";
 import DashboardUsuarios from "@/pages/gerenciar/Usuarios";
+import DashboardPlanos from "@/pages/gerenciar/Planos";
 
 import { USER_LOGGED_OUT } from "./vuex/mutation-types";
 Vue.use(VueRouter);
@@ -98,6 +99,7 @@ const routes = [
       { path: "gradeEdit", name: "gradeEdit", component: DashboardGradesEdit },
       { path: "history", name: "history", component: DashboardHistory },
       { path: "usuarios", name: "usuarios", component: DashboardUsuarios },
+      { path: "planos", name: "planos", component: DashboardPlanos },
       {
         path: "validacoes",
         name: "validacoes",

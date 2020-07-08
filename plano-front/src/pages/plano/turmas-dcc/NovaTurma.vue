@@ -63,12 +63,7 @@
       />
     </td>
     <td style="width:130px" class="less-padding">
-      <select
-        type="text"
-        style="margin-bottom:1px;"
-        id="docente1"
-        v-model="turmaForm.Docente1"
-      >
+      <select type="text" id="docente1" v-model="turmaForm.Docente1">
         <option type="text" value=""></option>
         <option
           v-for="docente in Docentes"
@@ -110,7 +105,6 @@
       <template v-if="currentDisciplina != undefined">
         <select
           type="text"
-          style="; margin-bottom:1px"
           id="horario1"
           v-model="turmaForm.Horario1"
           v-on:change="setTurnoByHorario(1)"
@@ -159,12 +153,7 @@
 
     <td style="width: 95px" class="less-padding">
       <template v-if="!disciplinaIsIntegralEAD && currentDisciplina">
-        <select
-          type="text"
-          style="margin-bottom:1px"
-          id="sala1"
-          v-model="turmaForm.Sala1"
-        >
+        <select type="text" id="sala1" v-model="turmaForm.Sala1">
           <option type="text" value=""></option>
           <option
             v-for="sala in Salas"
@@ -433,9 +422,12 @@ export default {
       return this.currentDisciplina ? this.currentDisciplina.ead === 2 : false;
     },
     DisciplinasDCC() {
-      return _.filter(
-        this.$store.state.disciplina.Disciplinas,
-        (disciplina) => disciplina.Perfil !== 13 && disciplina.Perfil !== 15
+      return _.orderBy(
+        _.filter(
+          this.$store.state.disciplina.Disciplinas,
+          (disciplina) => disciplina.Perfil !== 13 && disciplina.Perfil !== 15
+        ),
+        "nome"
       );
     },
     DisciplinasOrederedByCod() {
@@ -515,14 +507,28 @@ export default {
 .novaturma .less-padding {
   padding: 0 2px;
 }
+.novaturma select,
+.novaturma input {
+  font-size: 11px !important;
+  border: 1px solid #414141 !important;
+  color: #414141;
+  border-radius: 0px !important;
+}
 .novaturma select {
+  padding: 0 0 !important;
+  height: 18px !important;
+  width: 100% !important;
+  text-align: start;
+}
+.novaturma input[type="text"] {
   width: 100% !important;
   height: 18px !important;
-}
-.novaturma p {
-  margin: 0 !important;
   text-align: center;
 }
+.novaturma select + select {
+  margin-top: 2px !important;
+}
+
 .novaturma .input-letra {
   margin: 0;
   margin-top: 4px !important;

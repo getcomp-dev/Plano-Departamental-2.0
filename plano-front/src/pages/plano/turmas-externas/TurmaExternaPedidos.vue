@@ -1,44 +1,20 @@
 <template>
-  <div style="width:100%">
+  <div class="turma-pedidos">
     <input
-      v-if="pedidoForm.vagasPeriodizadas == 0"
       type="text"
-      v-model="pedidoForm.vagasPeriodizadas"
-      style="color:#DADADA"
-      v-on:change="editPedido(pedido)"
-      v-on:focus="focusPedido"
-      v-on:blur="blurPedido"
+      :class="{ 'pedido-empty': pedidoForm.vagasPeriodizadas == 0 }"
+      v-model.number="pedidoForm.vagasPeriodizadas"
+      v-focus-pedido
       @keypress="onlyNumber"
+      @change="editPedido(pedido)"
     />
     <input
-      v-else
       type="text"
-      v-model="pedidoForm.vagasPeriodizadas"
-      style="font-weight: bold;  background-color: #DCDCDC"
-      v-on:change="editPedido(pedido)"
-      v-on:focus="focusPedido"
-      v-on:blur="blurPedido"
+      :class="{ 'pedido-empty': pedidoForm.vagasNaoPeriodizadas == 0 }"
+      v-model.number="pedidoForm.vagasNaoPeriodizadas"
+      v-focus-pedido
       @keypress="onlyNumber"
-    />
-    <input
-      v-if="pedidoForm.vagasNaoPeriodizadas == 0"
-      type="text"
-      v-model="pedidoForm.vagasNaoPeriodizadas"
-      style="color:#DADADA"
-      v-on:change="editPedido(pedido)"
-      v-on:focus="focusPedido"
-      v-on:blur="blurPedido"
-      @keypress="onlyNumber"
-    />
-    <input
-      v-else
-      type="text"
-      v-model="pedidoForm.vagasNaoPeriodizadas"
-      style="font-weight: bold; background-color: #DCDCDC"
-      v-on:change="editPedido(pedido)"
-      v-on:focus="focusPedido"
-      v-on:blur="blurPedido"
-      @keypress="onlyNumber"
+      @change="editPedido(pedido)"
     />
   </div>
 </template>
@@ -55,12 +31,22 @@ const emptyPedido = {
 };
 export default {
   name: "TurmaExternaPedido",
-
   props: {
     turma: Object,
     index: Number,
   },
-
+  directives: {
+    focusPedido: {
+      bind(el) {
+        el.addEventListener("focus", () => {
+          if (el.value == 0) el.value = "";
+        });
+        el.addEventListener("blur", () => {
+          if (el.value == "") el.value = 0;
+        });
+      },
+    },
+  },
   data() {
     return {
       ativo: false,
@@ -81,47 +67,31 @@ export default {
         $event.preventDefault();
       }
     },
-    editPedido() {
-      if (this.pedidoForm.vagasPeriodizadas == "")
-        this.pedidoForm.vagasPeriodizadas = 0;
-      if (this.pedidoForm.vagasNaoPeriodizadas == "")
-        this.pedidoForm.vagasNaoPeriodizadas = 0;
-      pedidoExternoService
-        .update(this.pedidoForm.Curso, this.pedidoForm.Turma, this.pedidoForm)
-        .then((response) => {
-          this.$notify({
-            group: "general",
-            title: `Sucesso!`,
-            text: `O pedido foi atualizado!`,
-            type: "success",
-          });
-          console.log(
-            this.$store.state.pedido.Pedidos[this.turma.id][this.index]
-          );
-        })
-        .catch((error) => {
-          this.error = "<b>Erro ao atualizar Pedido</b>";
-          if (error.response.data.fullMessage) {
-            this.error +=
-              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-          }
+    validatePedido(pedido) {
+      if (pedido.vagasPeriodizadas == "") pedido.vagasPeriodizadas = 0;
+      if (pedido.vagasNaoPeriodizadas == "") pedido.vagasNaoPeriodizadas = 0;
+    },
+    async editPedido() {
+      const pedido = _.clone(this.pedidoForm);
+      this.validatePedido(pedido);
+
+      try {
+        await pedidoExternoService.update(pedido.Curso, pedido.Turma, pedido);
+        this.$notify({
+          group: "general",
+          title: `Sucesso!`,
+          text: `O pedido foi atualizado!`,
+          type: "success",
         });
-    },
-
-    focusPedido() {
-      if (this.pedidoForm.vagasPeriodizadas == 0)
-        this.pedidoForm.vagasPeriodizadas = "";
-
-      if (this.pedidoForm.vagasNaoPeriodizadas == 0)
-        this.pedidoForm.vagasNaoPeriodizadas = "";
-    },
-
-    blurPedido() {
-      if (this.pedidoForm.vagasPeriodizadas == "")
-        this.pedidoForm.vagasPeriodizadas = 0;
-
-      if (this.pedidoForm.vagasNaoPeriodizadas == "")
-        this.pedidoForm.vagasNaoPeriodizadas = 0;
+      } catch (error) {
+        this.$notify({
+          group: "general",
+          title: `Erro!`,
+          text: error,
+          type: "error",
+        });
+        this.error = "<b>Erro ao atualizar Pedido</b>";
+      }
     },
   },
 
@@ -141,10 +111,26 @@ export default {
 };
 </script>
 <style scoped>
-input {
-  width: 90% !important;
-  height: 20px !important;
-  text-align: center !important;
-  margin-top: 1px;
+.turma-pedidos {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 44px;
+  padding: 2.5px 2px;
+}
+.turma-pedidos input {
+  width: 100%;
+  height: 18px;
+  font-size: 11px;
+  text-align: center;
+  color: #414141 !important;
+  border: 1px solid #414141 !important;
+  background-color: #e7e7e7;
+}
+.turma-pedidos .pedido-empty {
+  color: #dadada;
+  background-color: #fff;
 }
 </style>

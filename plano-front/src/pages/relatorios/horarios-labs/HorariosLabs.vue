@@ -14,13 +14,14 @@
         <BaseButton
           title="Relátorio"
           :type="'icon'"
-          :color="'lightblue'"
+          :color="'gray'"
           @click="openAsideModal('modalRelatorio')"
         >
-          <i class="far fa-file-alt"></i>
+          <i class="fas fa-file-alt"></i>
         </BaseButton>
 
         <BaseButton
+          title="Ajuda"
           :type="'icon'"
           :color="'lightblue'"
           @click="openAsideModal('modalAjuda')"

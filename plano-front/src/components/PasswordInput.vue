@@ -11,6 +11,7 @@
     <i
       :class="'fas fa-' + currentPasswordIcon"
       class="input-icon"
+      :style="`font-size: ${iconSize ? iconSize : 13}px`"
       @click="changePasswordVisibility()"
     ></i>
   </div>
@@ -23,6 +24,7 @@ export default {
     value: { type: String, default: "" },
     inputId: { type: String, default: "passwordInpt" },
     isInvalid: { type: Boolean, default: false },
+    iconSize: { type: Number, default: null },
   },
   data() {
     return {
@@ -53,6 +55,7 @@ export default {
   width: 100%;
   position: relative;
 }
+
 .input-icon {
   cursor: pointer;
   position: absolute;

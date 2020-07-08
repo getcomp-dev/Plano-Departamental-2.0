@@ -13,8 +13,14 @@ export default {
             .catch((error) => Promise.reject(error))
     },
 
-    update (ano, config = {}) {
-        return Vue.axios.post(`/plano/${ano}`, config)
+    update (planoId, config = {}) {
+        return Vue.axios.post(`/plano/${planoId}`, config)
+            .then((response) => Promise.resolve(response.data))
+            .catch((error) => Promise.reject(error))
+    },
+
+    delete (planoId, config = {}) {
+        return Vue.axios.delete(`/plano/${planoId}`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
     }

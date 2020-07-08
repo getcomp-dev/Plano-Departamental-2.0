@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import planoService from '../../common/services/plano'
-import {PLANO_FETCHED, SOCKET_PLANO_CREATED, SOCKET_PLANO_UPDATED} from '../mutation-types'
+import {PLANO_FETCHED, SOCKET_PLANO_DELETED, SOCKET_PLANO_CREATED, SOCKET_PLANO_UPDATED} from '../mutation-types'
+import _ from "lodash";
 
 const state = {
     Plano: []
@@ -16,8 +17,14 @@ const mutations = {
     },
 
     [SOCKET_PLANO_UPDATED] (state, data) {
-        Vue.set(state.Plano, 0, data.Plano)
+        let index = _.findIndex(state.Plano, plano => plano.id === data.Plano.id);
+        Vue.set(state.Plano, index, data.Plano)
     },
+
+    [SOCKET_PLANO_DELETED] (state, data) {
+        let index = _.findIndex(state.Plano, plano => plano.id === data.Plano.id);
+        state.Plano.splice(index, 1)
+    }
 }
 
 const actions = {

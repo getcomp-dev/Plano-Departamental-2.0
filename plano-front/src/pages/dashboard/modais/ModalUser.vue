@@ -14,7 +14,9 @@
           <div class="d-flex align-items-center">
             <img class="user-img" src="@/assets/user.png" alt="user" />
             <div class="d-flex flex-column w-100">
-              <p class="mx-2"><b>Nome:</b> {{ getUsuarioFirstName }}</p>
+              <p class="mx-2">
+                <b>Nome:</b> {{ $store.state.auth.Usuario.nome }}
+              </p>
               <p class="mx-2"><b>Admin:</b> {{ Admin ? "Sim" : "Não" }}</p>
             </div>
           </div>
@@ -74,26 +76,50 @@
                 v-model="senhaAtual"
               ></PasswordInput>
             </div>
+            <!-- toggle edit senha -->
+            <div class="container-edit-senha">
+              <b>Editar senha</b>
 
-            <div class="form-row">
-              <label for="novaSenha"
-                >Nova senha <i title="Campo obrigatório">*</i></label
+              <button
+                type="button"
+                @click.prevent="toggleEditSenha()"
+                class="btn-edit-senha"
               >
-              <PasswordInput
-                :inputId="'novaSenha'"
-                v-model="userForm.senha"
-              ></PasswordInput>
+                <i
+                  class="fas fa-chevron-left"
+                  style="font-size:16px!important"
+                  :style="`transform: rotate(${isEditingSenha ? -90 : 0}deg)`"
+                ></i>
+              </button>
             </div>
 
-            <div class="form-row">
-              <label for="confirmaSenha"
-                >Confirmar nova senha <i title="Campo obrigatório">*</i></label
-              >
-              <PasswordInput
-                :isInvalid="confirmaSenha != userForm.senha"
-                :inputId="'confirmaSenha'"
-                v-model="confirmaSenha"
-              ></PasswordInput>
+            <template v-if="isEditingSenha">
+              <div class="form-row">
+                <label for="novaSenha"
+                  >Nova senha <i title="Campo obrigatório">*</i></label
+                >
+                <PasswordInput
+                  :inputId="'novaSenha'"
+                  v-model="userForm.senha"
+                ></PasswordInput>
+              </div>
+
+              <div class="form-row">
+                <label for="confirmaSenha"
+                  >Confirmar nova senha
+                  <i title="Campo obrigatório">*</i></label
+                >
+                <PasswordInput
+                  :isInvalid="confirmaSenha != userForm.senha"
+                  :inputId="'confirmaSenha'"
+                  v-model="confirmaSenha"
+                ></PasswordInput>
+              </div>
+            </template>
+
+            <div class="form-row d-flex align-items-center">
+              <label for="admin" class="m-0 mr-2">Admin</label>
+              <input type="checkbox" id="admin" v-model="userForm.admin" />
             </div>
 
             <div class="mt-3 mb-1 d-flex justify-content-end">
@@ -111,6 +137,7 @@
               </button>
             </div>
           </template>
+
           <template v-else-if="currentTab === 'create' && Admin">
             <div class="form-row">
               <label for="nome">Nome <i title="Campo obrigatório">*</i></label>
@@ -146,7 +173,6 @@
               <label for="admin" class="m-0 mr-2">Admin</label>
               <input type="checkbox" id="admin" v-model="userForm.admin" />
             </div>
-
             <div class="mt-3 mb-1 d-flex justify-content-end">
               <button
                 class="btn px-3 btn-secondary btn-custom btn-modal "
@@ -171,7 +197,6 @@
 <script>
 import _ from "lodash";
 import userService from "@/common/services/usuario";
-import { mapGetters } from "vuex";
 import { notification } from "@/mixins/index.js";
 import { BaseModal, PasswordInput } from "@/components/index.js";
 
@@ -191,13 +216,19 @@ export default {
       currentTab: "edit",
       confirmaSenha: "",
       senhaAtual: "",
+      isEditingSenha: false,
     };
   },
   mounted() {
     this.clearAllForm();
   },
   methods: {
-    openModal() {
+    toggleEditSenha() {
+      this.isEditingSenha = !this.isEditingSenha;
+      this.userForm.senha = "";
+      this.confirmaSenha = "";
+    },
+    open() {
       this.$refs.baseModalUser.open();
     },
     changeTab(newTab) {
@@ -223,7 +254,10 @@ export default {
       this.changeTab("edit");
     },
     validateEditUser(user) {
-      return this.confirmaSenha === user.senha && this.validateUser(user);
+      return (
+        (!this.isEditingSenha || this.confirmaSenha === user.senha) &&
+        this.validateUser(user)
+      );
     },
     validateUser(user) {
       for (const value of Object.values(user)) {
@@ -267,6 +301,8 @@ export default {
       user.senhaAtual = this.senhaAtual;
       user.admin = this.$store.state.auth.Usuario.admin;
 
+      if (!this.isEditingSenha) user.senha = this.senhaAtual;
+
       if (!this.validateEditUser(user)) {
         this.showNotification({
           type: "error",
@@ -295,7 +331,6 @@ export default {
     Admin() {
       return this.$store.state.auth.Usuario.admin === 1;
     },
-    ...mapGetters(["getUsuarioFirstName"]),
   },
 };
 </script>
@@ -337,7 +372,6 @@ export default {
   color: var(--light-blue);
   background-color: rgba(235, 235, 235, 0.733);
 }
-
 .tab-group .tab-link.tab-active::after {
   content: "";
   position: absolute;
@@ -347,6 +381,7 @@ export default {
   width: 100%;
   background-color: var(--light-blue);
 }
+
 .user-container .form-row {
   position: relative;
   margin: 0 !important;
@@ -369,6 +404,46 @@ export default {
   font-size: 10px !important;
   padding: 2px 8px !important;
   text-align: start !important;
+}
+
+.container-edit-senha {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin: 10px 0;
+  margin-top: 15px;
+  font-size: 14px;
+  padding: 8px 0;
+}
+.container-edit-senha::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  width: 100%;
+  border-top: 1px solid #dee2e6;
+}
+.container-edit-senha::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-bottom: 1px solid #dee2e6;
+}
+.btn-edit-senha {
+  padding: 0 5px !important;
+  background-color: transparent !important;
+  line-height: 50%;
+  border: none;
+  margin: 0;
+  background: none;
+}
+.btn-edit-senha i {
+  transition: all 0.25s ease !important;
+}
+.btn-edit-senha:focus {
+  box-shadow: 0 0 0 0.15rem #007bff40 !important;
 }
 .user-container p {
   margin: 0;

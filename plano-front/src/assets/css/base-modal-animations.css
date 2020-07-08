@@ -1,13 +1,36 @@
+/*
+* Prefixed by https://autoprefixer.github.io
+* PostCSS: v7.0.29,
+* Autoprefixer: v9.7.6
+* Browsers: last 50 version
+*/
+
 /* from right */
 .right-modal-enter-active {
+  -webkit-animation-name: customSlideInRight;
   animation-name: customSlideInRight;
+  -webkit-animation-duration: 0.4s;
   animation-duration: 0.4s;
+  -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
 .right-modal-leave-active {
+  -webkit-animation-name: customSlideOutRight;
   animation-name: customSlideOutRight;
+  -webkit-animation-duration: 0.4s;
   animation-duration: 0.4s;
+  -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
+}
+@-webkit-keyframes customSlideInRight {
+  0% {
+    opacity: 0;
+    right: -10%;
+  }
+  100% {
+    opacity: 1;
+    right: 20px;
+  }
 }
 @keyframes customSlideInRight {
   0% {
@@ -17,6 +40,16 @@
   100% {
     opacity: 1;
     right: 20px;
+  }
+}
+@-webkit-keyframes customSlideOutRight {
+  0% {
+    opacity: 1;
+    right: 20px;
+  }
+  100% {
+    opacity: 0;
+    right: -10%;
   }
 }
 @keyframes customSlideOutRight {
@@ -31,14 +64,30 @@
 }
 /* from center */
 .center-modal-enter-active {
+  -webkit-animation-name: slideInCenter;
   animation-name: slideInCenter;
+  -webkit-animation-duration: 0.4s;
   animation-duration: 0.4s;
+  -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
 .center-modal-leave-active {
+  -webkit-animation-name: slideOutCenter;
   animation-name: slideOutCenter;
+  -webkit-animation-duration: 0.4s;
   animation-duration: 0.4s;
+  -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
+}
+@-webkit-keyframes slideInCenter {
+  0% {
+    opacity: 0;
+    top: -7%;
+  }
+  100% {
+    opacity: 1;
+    top: 25px;
+  }
 }
 @keyframes slideInCenter {
   0% {
@@ -48,6 +97,16 @@
   100% {
     opacity: 1;
     top: 25px;
+  }
+}
+@-webkit-keyframes slideOutCenter {
+  0% {
+    opacity: 1;
+    top: 25px;
+  }
+  100% {
+    opacity: 0;
+    top: -7%;
   }
 }
 @keyframes slideOutCenter {
@@ -62,14 +121,30 @@
 }
 /* from navbar */
 .fromNavbar-modal-enter-active {
+  -webkit-animation-name: slideInFromNavbar;
   animation-name: slideInFromNavbar;
+  -webkit-animation-duration: 0.4s;
   animation-duration: 0.4s;
+  -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
 }
 .fromNavbar-modal-leave-active {
+  -webkit-animation-name: slideOutFromNavbar;
   animation-name: slideOutFromNavbar;
+  -webkit-animation-duration: 0.4s;
   animation-duration: 0.4s;
+  -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
+}
+@-webkit-keyframes slideInFromNavbar {
+  0% {
+    opacity: 0;
+    top: -7%;
+  }
+  100% {
+    opacity: 1;
+    top: 40px;
+  }
 }
 @keyframes slideInFromNavbar {
   0% {
@@ -79,6 +154,16 @@
   100% {
     opacity: 1;
     top: 40px;
+  }
+}
+@-webkit-keyframes slideOutFromNavbar {
+  0% {
+    opacity: 1;
+    top: 40px;
+  }
+  100% {
+    opacity: 0;
+    top: -7%;
   }
 }
 @keyframes slideOutFromNavbar {

@@ -14,13 +14,14 @@
         <BaseButton
           title="Relátorio"
           :type="'icon'"
-          :color="'lightblue'"
+          :color="'gray'"
           @click="openAsideModal('modalRelatorio')"
         >
-          <i class="far fa-file-alt"></i>
+          <i class="fas fa-file-alt"></i>
         </BaseButton>
 
         <BaseButton
+          title="Ajuda"
           :type="'icon'"
           :color="'lightblue'"
           @click="openAsideModal('modalAjuda')"
@@ -411,6 +412,7 @@
 
     <BaseModal
       ref="modalVagas"
+      :classes="'modal-vagas'"
       :modalOptions="{
         type: 'editVagas',
         title: 'Vagas',
@@ -492,7 +494,7 @@
                   ></i>
                 </th>
                 <th
-                  class="clickable t-start less-padding"
+                  class="clickable less-padding"
                   style="width: 55px"
                   @click="
                     toggleOrder(
@@ -910,6 +912,9 @@ export default {
   font-weight: bold;
   font-size: 14px;
   width: 100%;
+}
+.modal-vagas .modal-table tbody tr td {
+  height: 20px !important;
 }
 .vagas-header .input-form {
   display: flex;

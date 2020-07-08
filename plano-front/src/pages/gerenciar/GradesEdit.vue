@@ -13,8 +13,8 @@
       </template>
     </PageTitle>
 
-    <div class="row w-100 m-0 p-0">
-      <div class="p-0 div-table">
+    <div class="page-content">
+      <div class="div-table">
         <BaseTable>
           <template #thead>
             <th
@@ -88,167 +88,132 @@
         </BaseTable>
       </div>
 
-      <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
-        <Card :title="'Disciplinas'">
-          <template #form-group>
-            <div class="row mb-2 mx-0">
-              <div
-                class="form-group col m-0 px-0"
-                style="margin-right: 18px!important"
+      <Card :title="'Disciplinas'">
+        <template #form-group>
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0 mr-3">
+              <label for="cursoAtual" class="col-form-label">Curso</label>
+              <select
+                id="cursoAtual"
+                v-model="currentCursoId"
+                v-on:change="changeCurso()"
+                class="form-control form-control-sm input-maior"
               >
-                <label for="cursoAtual" class="col-form-label">Curso</label>
-                <select
-                  id="cursoAtual"
-                  v-model="currentCursoId"
-                  v-on:change="changeCurso()"
-                  class="form-control form-control-sm input-maior"
-                >
-                  <option value="4">Ciência da Computação Diurno</option>
-                  <option value="1">Ciência da Computação Noturno</option>
-                  <option value="3">Sistemas de Informação</option>
-                  <option value="2">Engenharia Computacional</option>
-                </select>
-              </div>
-
-              <div class="form-group m-0 px-0">
-                <label for="gradeSelect" class="col-form-label">Grade</label>
-                <template v-if="hasCursoSelected">
-                  <select
-                    id="gradeSelect"
-                    v-model="currentGradeId"
-                    v-on:change="changeGrade()"
-                    class="form-control form-control-sm input-menor"
-                  >
-                    <template v-for="grade in GradesFiltredByCurrentCurso">
-                      <option :key="'grade-id' + grade.id" :value="grade.id">{{
-                        grade.nome
-                      }}</option>
-                    </template>
-                  </select>
-                </template>
-                <template v-else>
-                  <select
-                    id="gradeSelect"
-                    disabled
-                    class="form-control form-control-sm input-menor"
-                  ></select>
-                </template>
-              </div>
+                <option value="4">Ciência da Computação Diurno</option>
+                <option value="1">Ciência da Computação Noturno</option>
+                <option value="3">Sistemas de Informação</option>
+                <option value="2">Engenharia Computacional</option>
+              </select>
             </div>
 
-            <div class="w-100 border mt-3 mb-2"></div>
-
-            <div class="row mb-2 mx-0">
-              <div class="form-group m-0 col px-0">
-                <label for="disciplina" class="col-form-label"
-                  >Disciplina</label
+            <div class="form-group m-0 px-0">
+              <label for="gradeSelect" class="col-form-label">Grade</label>
+              <select
+                :disabled="!hasCursoSelected"
+                id="gradeSelect"
+                v-model="currentGradeId"
+                @change="changeGrade()"
+                class="form-control form-control-sm input-menor"
+              >
+                <option
+                  v-for="grade in GradesFiltredByCurrentCurso"
+                  :key="'grade-id' + grade.id"
+                  :value="grade.id"
                 >
-                <select
+                  {{ grade.nome }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="w-100 border mt-3 mb-2"></div>
+
+          <div class="row mb-2 mx-0">
+            <div class="form-group m-0 col px-0">
+              <label for="disciplina" class="col-form-label">Disciplina</label>
+              <select
+                :disabled="!hasGradeSelected"
+                type="text"
+                class="form-control form-control-sm input-maior2"
+                id="disciplina"
+                v-model="disciplinaGradeForm.Disciplina"
+                @change="clearClick()"
+              >
+                <option v-if="Disciplinas.length === 0" type="text" value
+                  >Nenhuma Disciplina Encontrada</option
+                >
+                <option
+                  v-else
+                  v-for="disciplina in Disciplinas"
+                  :key="'2-grade-id' + disciplina.id"
+                  :value="disciplina.id"
+                  >{{ disciplina.nome }}</option
+                >
+              </select>
+            </div>
+          </div>
+
+          <div class="row mb-2 mx-0">
+            <div class="form-group m-0 col px-0">
+              <label for="periodoDisciplina" class="col-form-label pb-1">
+                Período
+              </label>
+              <div class="d-flex align-items-center">
+                <input
                   :disabled="!hasGradeSelected"
                   type="text"
-                  class="form-control form-control-sm input-maior2"
-                  id="disciplina"
-                  v-model="disciplinaGradeForm.Disciplina"
-                  v-on:change="clearClick()"
+                  id="periodoDisciplina"
+                  class="form-control form-control-sm input-menor2"
+                  v-model="disciplinaGradeForm.periodo"
+                  @keypress="onlyNumber"
+                />
+
+                <BaseButton
+                  :disabled="!hasGradeSelected"
+                  title="Salvar"
+                  :type="'icon'"
+                  :color="'green'"
+                  @click="editDisciplinaGrade()"
                 >
-                  <option v-if="Disciplinas.length === 0" type="text" value
-                    >Nenhuma Disciplina Encontrada</option
-                  >
-                  <option
-                    v-else
-                    v-for="disciplina in Disciplinas"
-                    :key="'2-grade-id' + disciplina.id"
-                    :value="disciplina.id"
-                    >{{ disciplina.nome }}</option
-                  >
-                </select>
+                  <i class="fas fa-check"></i>
+                </BaseButton>
               </div>
             </div>
+          </div>
+        </template>
+        <template #footer>
+          <BaseButton
+            :disabled="!hasGradeSelected"
+            v-show="isNotEditDisciplina"
+            title="Adicionar à Grade"
+            :type="'icon'"
+            :color="'green'"
+            @click="addDisciplinaGrade()"
+          >
+            <i class="fas fa-plus"></i>
+          </BaseButton>
 
-            <div class="row mb-2 mx-0">
-              <div class="form-group m-0 col px-0">
-                <label for="periodoDisciplina" class="col-form-label"
-                  >Período</label
-                >
-                <div class="d-flex">
-                  <input
-                    :disabled="!hasGradeSelected"
-                    type="text"
-                    class="form-control form-control-sm input-menor2"
-                    aria-describedby="button-edit-periodo"
-                    id="periodoDisciplina"
-                    @keypress="onlyNumber"
-                    v-model="disciplinaGradeForm.periodo"
-                  />
+          <BaseButton
+            :disabled="!hasGradeSelected"
+            title="Deletar Disciplina"
+            :type="'icon'"
+            :color="'red'"
+            @click="deleteDisciplinaGrade(), clearClick()"
+          >
+            <i class="fas fa-trash"></i>
+          </BaseButton>
 
-                  <button
-                    v-if="!hasGradeSelected"
-                    type="button"
-                    class="btn-custom btn-icon btn-disable"
-                  >
-                    <i class="fas fa-check"></i>
-                  </button>
-                  <button
-                    v-else
-                    type="button"
-                    title="Salvar"
-                    class="btn-custom btn-icon addbtn"
-                    v-on:click.prevent="editDisciplinaGrade"
-                  >
-                    <i class="fas fa-check"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </template>
-          <template #footer>
-            <template v-if="!hasGradeSelected">
-              <button type="button" class="btn-custom btn-icon btn-disable">
-                <i class="fas fa-plus"></i>
-              </button>
-
-              <button type="button" class="btn-custom btn-icon btn-disable">
-                <i class="far fa-trash-alt"></i>
-              </button>
-
-              <button type="button" class="btn-custom btn-icon btn-disable">
-                <i class="fas fa-times"></i>
-              </button>
-            </template>
-
-            <template v-else>
-              <button
-                v-show="isNotEditDisciplina"
-                type="button"
-                title="Adicionar à Grade"
-                class="btn-custom btn-icon addbtn"
-                v-on:click.prevent="addDisciplinaGrade"
-              >
-                <i class="fas fa-plus"></i>
-              </button>
-
-              <button
-                type="button"
-                v-show="!isNotEditDisciplina"
-                title="Deletar Disciplina"
-                class="btn-custom btn-icon delbtn"
-                v-on:click.prevent="deleteDisciplinaGrade(), clearClick()"
-              >
-                <i class="far fa-trash-alt"></i>
-              </button>
-
-              <button
-                type="button"
-                title="Cancelar"
-                class="btn-custom btn-icon cancelbtn"
-                v-on:click.prevent="cleanDisciplina()"
-              >
-                <i class="fas fa-times"></i>
-              </button>
-            </template>
-          </template>
-        </Card>
-      </div>
+          <BaseButton
+            :disabled="!hasGradeSelected"
+            title="Cancelar"
+            :type="'icon'"
+            :color="'gray'"
+            @click="cleanDisciplina()"
+          >
+            <i class="fas fa-times"></i>
+          </BaseButton>
+        </template>
+      </Card>
     </div>
 
     <!-- MODAL AJUDA -->
@@ -609,12 +574,11 @@ export default {
 
 <style scoped>
 .card .input-maior {
-  width: 100%;
+  width: 200px;
   text-align: start !important;
 }
 .card .input-maior2 {
-  max-width: 300px;
-  min-width: 300px;
+  width: 300px;
   text-align: start;
 }
 .card .input-menor {
@@ -622,8 +586,7 @@ export default {
   text-align: start !important;
 }
 .card .input-menor2 {
-  max-width: 40px;
-  min-width: 40px;
+  width: 40px;
   margin-right: 10px;
   text-align: center;
 }
@@ -632,19 +595,5 @@ export default {
 }
 .notEven {
   background-color: white;
-}
-.btn-disable {
-  background-color: white;
-  color: #cfcfc4;
-  cursor: default !important;
-  outline: none !important;
-}
-.btn-disable::-moz-focus-inner {
-  border: 0;
-}
-@media screen and (max-width: 893px) {
-  .div-card {
-    margin-left: 0px !important;
-  }
 }
 </style>

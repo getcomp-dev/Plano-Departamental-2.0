@@ -13,7 +13,7 @@
       </template>
     </PageTitle>
 
-    <div class="row w-100 m-0 p-0">
+    <div class="page-content">
       <div class="div-table">
         <BaseTable :tableHeight="'max-content'">
           <template #thead>
@@ -67,98 +67,51 @@
         </BaseTable>
       </div>
 
-      <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
-        <Card :title="'Perfil'">
-          <template #form-group>
-            <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 px-0">
-                <label for="nome" class="col-form-label">Nome</label>
-                <input
-                  type="text"
-                  class="input-maior form-control form-control-sm"
-                  id="nome"
-                  v-model="perfilForm.nome"
-                />
-              </div>
+      <Card
+        :title="'Perfil'"
+        :toggleFooter="isEdit"
+        @btn-salvar="editPerfil()"
+        @btn-delete="deletePerfil()"
+        @btn-add="addPerfil()"
+        @btn-clean="cleanPerfil()"
+      >
+        <template #form-group>
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0">
+              <label for="nome" class="col-form-label">Nome</label>
+              <input
+                type="text"
+                class="input-maior form-control form-control-sm upper-case"
+                id="nome"
+                v-model="perfilForm.nome"
+              />
             </div>
+          </div>
 
-            <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 mr-4 px-0">
-                <label for="abreviacao" class="col-form-label"
-                  >Abreviação</label
-                >
-                <input
-                  type="text"
-                  class="form-control form-control-sm"
-                  style="width:100px"
-                  id="abreviacao"
-                  v-model="perfilForm.abreviacao"
-                />
-              </div>
-              <div class="form-group col m-0 mr-4 px-0">
-                <label for="cor" class="col-form-label">Cor</label>
-                <input
-                  type="color"
-                  class="input-menor form-control form-control-sm"
-                  id="cor"
-                  v-model="perfilForm.cor"
-                />
-              </div>
+          <div class="row mb-2 mx-0">
+            <div class="form-group col-8 m-0 px-0">
+              <label for="abreviacao" class="col-form-label">Abreviação</label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                style="width:150px"
+                id="abreviacao"
+                v-model="perfilForm.abreviacao"
+              />
             </div>
-          </template>
-          <template #footer>
-            <template v-if="isEdit">
-              <button
-                type="button"
-                title="Salvar"
-                class="btn-custom btn-icon addbtn"
-                v-on:click.prevent="editPerfil"
-                :key="1"
-              >
-                <i class="fas fa-check"></i>
-              </button>
-              <button
-                type="button"
-                title="Deletar"
-                class="btn-custom btn-icon delbtn"
-                v-on:click.prevent="deletePerfil()"
-                :key="3"
-              >
-                <i class="far fa-trash-alt"></i>
-              </button>
-              <button
-                type="button"
-                title="Cancelar"
-                class="btn-custom btn-icon cancelbtn"
-                v-on:click.prevent="clearClick(), cleanPerfil()"
-                :key="2"
-              >
-                <i class="fas fa-times"></i>
-              </button>
-            </template>
-            <template v-else>
-              <button
-                type="button"
-                title="Adicionar"
-                class="btn-custom btn-icon addbtn"
-                v-on:click.prevent="addPerfil()"
-                :key="1"
-              >
-                <i class="fas fa-plus"></i>
-              </button>
-              <button
-                type="button"
-                title="Cancelar"
-                class="btn-custom btn-icon cancelbtn"
-                v-on:click.prevent="cleanPerfil()"
-                :key="2"
-              >
-                <i class="fas fa-times"></i>
-              </button>
-            </template>
-          </template>
-        </Card>
-      </div>
+            <div class="form-group col m-0 px-0">
+              <label for="cor" class="col-form-label">Cor</label>
+              <input
+                type="color"
+                style="width:100%"
+                class="form-control form-control-sm"
+                id="cor"
+                v-model="perfilForm.cor"
+              />
+            </div>
+          </div>
+        </template>
+      </Card>
     </div>
 
     <!-- MODAL AJUDA -->
@@ -241,14 +194,20 @@ export default {
   },
   methods: {
     handleClickInPerfil(perfil) {
-      console.log(perfil.id);
+      this.cleanPerfil();
       this.perfilSelectedId = perfil.id;
-      console.log(this.perfilSelectedId);
       this.showPerfil(perfil);
     },
-
     clearClick() {
       this.perfilSelectedId = "";
+    },
+    cleanPerfil() {
+      this.clearClick();
+      this.perfilForm = _.clone(emptyPerfil);
+      this.error = undefined;
+    },
+    showPerfil(perfil) {
+      this.perfilForm = _.clone(perfil);
     },
     addPerfil() {
       perfilService
@@ -323,22 +282,6 @@ export default {
           });
         });
     },
-    cleanPerfil() {
-      this.perfilForm = _.clone(emptyPerfil);
-      this.error = undefined;
-    },
-    showPerfil(perfil) {
-      this.cleanPerfil();
-      this.perfilForm = _.clone(perfil);
-      (function smoothscroll() {
-        var currentScroll =
-          document.documentElement.scrollTop || document.body.scrollTop;
-        if (currentScroll > 0) {
-          window.requestAnimationFrame(smoothscroll);
-          window.scrollTo(0, currentScroll - currentScroll / 5);
-        }
-      })();
-    },
   },
   computed: {
     Perfis() {
@@ -352,33 +295,15 @@ export default {
       return this.perfilForm.id !== undefined;
     },
     Admin() {
-      if (this.$store.state.auth.Usuario.admin === 1) {
-        return true;
-      } else {
-        return false;
-      }
+      return this.$store.state.auth.Usuario.admin === 1;
     },
   },
 };
 </script>
 
 <style scoped>
-.card .input-menor {
-  width: 60px;
-  text-align: center;
-}
-.card .input-menor2 {
-  width: 40px;
-  margin-right: 10px;
-  text-align: center;
-}
 .card .input-maior {
   width: 240px;
   text-align: start;
-}
-@media screen and (max-width: 849px) {
-  .div-card {
-    margin-left: 0px !important;
-  }
 }
 </style>

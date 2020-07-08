@@ -100,6 +100,11 @@ export default {
             DCC), e permite a adição e alteração das informações dos cursos.`,
         },
         {
+          title: "Usuários",
+          routerName: "usuarios",
+          description: `Lista todos os usuários presentes no sistemas, e permite a adição e alteração de usuários.`,
+        },
+        {
           title: "Disciplinas",
           routerName: "disciplinas",
           description: `Listagem de disciplinas de todos os departamentos cadastrados no

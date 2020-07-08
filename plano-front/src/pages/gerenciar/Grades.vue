@@ -13,7 +13,7 @@
       </template>
     </PageTitle>
 
-    <div class="row w-100 m-0">
+    <div class="page-content">
       <div class="p-0 div-table">
         <BaseTable :tableHeight="'max-content'">
           <template #thead>
@@ -117,101 +117,59 @@
         </BaseTable>
       </div>
 
-      <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
-        <Card :title="'Curso'">
-          <template #form-group>
-            <div class="row mb-2 mx-0">
-              <div class="form-group col-5 m-0 px-0">
-                <label for="nome" class="col-form-label">Nome</label>
-                <input
-                  type="text"
-                  class="card-input-menor form-control form-control-sm"
-                  id="nome"
-                  v-model="gradeForm.nome"
-                />
-              </div>
-
-              <div class="form-group col-7 m-0 px-0">
-                <label for="periodoInicio" class="col-form-label"
-                  >Período de Início</label
-                >
-                <input
-                  type="text"
-                  class="card-input-menor form-control form-control-sm col"
-                  id="periodoInicio"
-                  v-model="gradeForm.periodoInicio"
-                  @keypress="onlyNumber"
-                />
-              </div>
+      <Card
+        :title="'Curso'"
+        :toggleFooter="isEdit"
+        @btn-salvar="editGrade()"
+        @btn-delete="deleteGrade()"
+        @btn-add="addGrade()"
+        @btn-clean="cleanGrade()"
+      >
+        <template #form-group>
+          <div class="row mb-2 mx-0">
+            <div class="form-group col-5 m-0 px-0">
+              <label for="nome" class="col-form-label">Nome</label>
+              <input
+                type="text"
+                class="card-input-menor form-control form-control-sm"
+                id="nome"
+                v-model="gradeForm.nome"
+              />
             </div>
 
-            <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 px-0">
-                <label for="curso" class="col-form-label">Curso</label>
-                <select
-                  type="text"
-                  style="text-align:center;"
-                  class="form-control form-control-sm card-input-maior"
-                  id="curso"
-                  v-model="gradeForm.Curso"
-                >
-                  <option value="4">Ciência da Computação Diurno</option>
-                  <option value="1">Ciência da Computação Noturno</option>
-                  <option value="3">Sistemas de Informação</option>
-                  <option value="2">Engenharia Computacional</option>
-                </select>
-              </div>
+            <div class="form-group col-7 m-0 px-0">
+              <label for="periodoInicio" class="col-form-label"
+                >Período de Início</label
+              >
+              <input
+                type="text"
+                class="card-input-menor form-control form-control-sm col"
+                id="periodoInicio"
+                v-model="gradeForm.periodoInicio"
+                @keypress="onlyNumber"
+              />
             </div>
-          </template>
-          <template #footer>
-            <template v-if="currentGrade != undefined">
-              <button
-                type="button"
-                title="Salvar Grade"
-                class="btn-custom btn-icon addbtn"
-                v-on:click.prevent="editGrade()"
-              >
-                <i class="fas fa-check"></i>
-              </button>
-              <button
-                type="button"
-                title="Deletar Grade"
-                class="btn-custom btn-icon delbtn"
-                v-on:click.prevent="deleteGrade()"
-              >
-                <i class="far fa-trash-alt"></i>
-              </button>
-              <button
-                type="button"
-                title="Cancelar"
-                class="btn-custom btn-icon cancelbtn"
-                v-on:click.prevent="cleanGrade()"
-              >
-                <i class="fas fa-times"></i>
-              </button>
-            </template>
+          </div>
 
-            <template v-else>
-              <button
-                type="button"
-                title="Adicionar Grade"
-                class="btn-custom btn-icon addbtn"
-                v-on:click.prevent="addGrade()"
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0">
+              <label for="curso" class="col-form-label">Curso</label>
+              <select
+                type="text"
+                style="text-align:center;"
+                class="form-control form-control-sm card-input-maior"
+                id="curso"
+                v-model="gradeForm.Curso"
               >
-                <i class="fas fa-plus"></i>
-              </button>
-              <button
-                type="button"
-                title="Cancelar"
-                class="btn-custom btn-icon cancelbtn"
-                v-on:click.prevent="cleanGrade()"
-              >
-                <i class="fas fa-times"></i>
-              </button>
-            </template>
-          </template>
-        </Card>
-      </div>
+                <option value="4">Ciência da Computação Diurno</option>
+                <option value="1">Ciência da Computação Noturno</option>
+                <option value="3">Sistemas de Informação</option>
+                <option value="2">Engenharia Computacional</option>
+              </select>
+            </div>
+          </div>
+        </template>
+      </Card>
     </div>
 
     <!-- MODAL AJUDA -->
@@ -385,6 +343,9 @@ export default {
     },
   },
   computed: {
+    isEdit() {
+      return this.currentGrade != undefined;
+    },
     Grades() {
       return this.$store.state.grade.Grades;
     },
@@ -430,10 +391,5 @@ export default {
 }
 .card-input-menor {
   width: 70px;
-}
-@media screen and (max-width: 621px) {
-  .div-card {
-    margin-left: 0px !important;
-  }
 }
 </style>

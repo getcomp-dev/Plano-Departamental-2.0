@@ -5,9 +5,8 @@
       type="text/css"
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"
     />
-    <transition name="animate__zoomIn" mode="out-in">
-      <router-view></router-view>
-    </transition>
+
+    <router-view></router-view>
 
     <notifications
       group="general"
@@ -29,7 +28,7 @@ export default {
 html,
 body {
   overflow: hidden;
-  font-family: arial !important;
+  font-family: Arial, Helvetica, sans-serif !important;
   height: 100%;
   padding: 0 !important;
 }

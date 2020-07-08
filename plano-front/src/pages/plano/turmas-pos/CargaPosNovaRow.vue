@@ -1,5 +1,5 @@
 <template>
-  <tr class="novaturma stickyAdd ">
+  <tr class="novaturma stickyAdd">
     <div class="max-content stickyAdd">
       <td style="width:70px" class="less-padding">
         <select type="text" v-model="cargaPosForm.programa">
@@ -9,7 +9,7 @@
         </select>
       </td>
       <td style="width:25px"><div style="height:30px"></div></td>
-      <td style="width:55px" class="less-padding">
+      <td style="width:55px">
         <select type="text" v-model.number="cargaPosForm.trimestre">
           <option type="text" value="1">1</option>
           <option type="text" value="2">2</option>
@@ -102,7 +102,7 @@ export default {
       return true;
     },
     addCarga() {
-      this.cargaPosForm.Plano = localStorage.getItem('Plano')
+      this.cargaPosForm.Plano = localStorage.getItem("Plano");
       const newCarga = _.clone(this.cargaPosForm);
 
       this.setEmptyKeysToNull(newCarga);
@@ -156,17 +156,35 @@ export default {
 .novaturma .less-padding {
   padding: 0 2px;
 }
-.novaturma select {
-  padding: 0 0 !important;
+
+.novaturma select,
+.novaturma input {
   font-size: 11px !important;
-  width: 100% !important;
+  border: 1px solid #414141 !important;
+  color: #414141;
+  border-radius: 0px !important;
+}
+.novaturma select {
   height: 18px !important;
+  width: 100% !important;
+  padding: 0 0 !important;
+  text-align: start;
 }
 .novaturma input[type="text"] {
-  font-size: 11px !important;
   width: 100% !important;
   height: 18px !important;
+  text-align: center;
+}
+.novaturma select + select {
+  margin-top: 2px !important;
+}
+.novaturma input[type="checkbox"] {
+  width: 13px !important;
+  height: 13px !important;
   text-align: center !important;
+  margin: 0;
+  margin-top: 5px !important;
+  margin-bottom: auto !important;
 }
 .stickyAdd {
   background-color: #cecece;

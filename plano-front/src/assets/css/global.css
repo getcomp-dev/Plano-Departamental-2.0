@@ -12,8 +12,14 @@
 *:focus {
   border-color: #80bdff !important;
   outline: 0 !important;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+  -webkit-box-shadow: 0 0 0 0.2rem #007bff40 !important;
+  box-shadow: 0 0 0 0.2rem #007bff40 !important;
+}
+input[type="checkbox"]:focus {
+  border-color: #80bdff !important;
+  outline: 0 !important;
+  -webkit-box-shadow: 0 0 0 0.1rem #007bff40 !important;
+  box-shadow: 0 0 0 0.1rem #007bff40 !important;
 }
 main .main-component {
   width: 100%;
@@ -21,7 +27,14 @@ main .main-component {
   margin: 0 !important;
   padding: 0 !important;
 }
-
+.page-content {
+  display: flex;
+  justify-content: space-between;
+  justify-items: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  flex-wrap: wrap;
+}
 .less-padding {
   padding: 0 2px !important;
 }
@@ -39,6 +52,9 @@ main .main-component {
 }
 .t-center {
   text-align: center !important;
+}
+.upper-case {
+  text-transform: uppercase;
 }
 
 /* searchDisciplinas */
@@ -61,7 +77,7 @@ main .main-component {
 }
 
 .clickable {
-  cursor: pointer;
+  cursor: pointer !important;
 }
 .max-content {
   width: -webkit-max-content !important;

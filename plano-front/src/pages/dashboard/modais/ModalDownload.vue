@@ -63,7 +63,7 @@ export default {
     };
   },
   methods: {
-    openModal() {
+    open() {
       this.$refs.baseModalDownload.open();
     },
     resetDownloadState() {

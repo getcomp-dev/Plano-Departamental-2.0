@@ -155,18 +155,6 @@ export default {
 .cargaPos-row {
   font-size: 11px !important;
 }
-.cargaPos-row select {
-  padding: 0 0 !important;
-  font-size: 11px !important;
-  width: 100% !important;
-  height: 18px !important;
-}
-.cargaPos-row input[type="text"] {
-  font-size: 11px !important;
-  width: 100% !important;
-  height: 18px !important;
-  text-align: center !important;
-}
 .cargaPos-row td {
   margin: 0 !important;
   padding: 0 5px;
@@ -175,6 +163,27 @@ export default {
   word-break: break-word;
 }
 
+.cargaPos-row select,
+.cargaPos-row input {
+  font-size: 11px !important;
+  border: 1px solid #414141 !important;
+  color: #414141;
+  border-radius: 0px !important;
+}
+.cargaPos-row select {
+  padding: 0 0 !important;
+  height: 18px !important;
+  width: 100% !important;
+  text-align: start;
+}
+.cargaPos-row input[type="text"] {
+  width: 100% !important;
+  height: 18px !important;
+  text-align: center;
+}
+.cargaPos-row select + select {
+  margin-top: 2px !important;
+}
 .cargaPos-row input[type="checkbox"] {
   width: 13px !important;
   height: 13px !important;

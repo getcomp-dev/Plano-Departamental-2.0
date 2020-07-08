@@ -13,8 +13,8 @@
       </template>
     </PageTitle>
 
-    <div class="row w-100 m-0">
-      <div class="div-table p-0">
+    <div class="page-content">
+      <div class="div-table">
         <BaseTable>
           <template #thead>
             <th
@@ -71,12 +71,10 @@
           <template #tbody>
             <tr
               v-for="curso in Cursos"
-              :key="'table-cursos: cod-' + curso.codigo"
-              @click.prevent="
-                showCurso(curso), handleClickInCurso(curso.codigo)
-              "
+              :key="'cursos' + curso.id + curso.codigo"
+              @click.prevent="showCurso(curso), handleClickInCurso(curso.id)"
               :class="[
-                { 'bg-selected': cursoClickado === curso.codigo },
+                { 'bg-selected': cursoClickado === curso.id },
                 'clickable',
               ]"
             >
@@ -106,130 +104,82 @@
         </BaseTable>
       </div>
 
-      <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
-        <Card :title="'Curso'">
-          <template #form-group>
-            <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 px-0">
-                <label for="nome" class="col-form-label">Nome</label>
-                <input
-                  type="text"
-                  class="input-maior form-control
-                form-control-sm"
-                  id="nome"
-                  v-model="cursoForm.nome"
-                />
-              </div>
+      <Card
+        :title="'Curso'"
+        :toggleFooter="isEdit"
+        @btn-salvar="editCurso()"
+        @btn-delete="deleteCurso()"
+        @btn-add="addCurso()"
+        @btn-clean="cleanCurso()"
+      >
+        <template #form-group>
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0">
+              <label for="nome" class="col-form-label">Nome</label>
+              <input
+                type="text"
+                class="input-maior form-control
+                form-control-sm upper-case"
+                id="nome"
+                v-model="cursoForm.nome"
+              />
+            </div>
+          </div>
+
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0">
+              <label for="codigo" class="col-form-label">Código</label>
+              <input
+                type="text"
+                class="form-control form-control-sm input-menor upper-case"
+                id="codigo"
+                v-model="cursoForm.codigo"
+              />
+            </div>
+            <div class="form-group col m-0 px-0">
+              <label for="turno" class="col-form-label">Turno</label>
+              <select
+                type="text"
+                class="form-control form-control-sm input-medio"
+                id="turno"
+                v-model="cursoForm.turno"
+              >
+                <option value="Diurno">Diurno</option>
+                <option value="Noturno">Noturno</option>
+                <option value="Integral">Integral</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0">
+              <label for="alunosEntrada1" class="col-form-label"
+                >Alunos 1º Sem.</label
+              >
+              <input
+                type="text"
+                class="form-control form-control-sm input-menor"
+                id="alunosEnrada1"
+                @keypress="onlyNumber"
+                v-model="cursoForm.alunosEntrada"
+              />
             </div>
 
-            <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 px-0">
-                <label for="codigo" class="col-form-label">Código</label>
-                <input
-                  type="text"
-                  class="form-control form-control-sm input-menor"
-                  id="codigo"
-                  v-model="cursoForm.codigo"
-                />
-              </div>
-              <div class="form-group col m-0 px-0">
-                <label for="turno" class="col-form-label">Turno</label>
-                <select
-                  type="text"
-                  class="form-control form-control-sm input-medio"
-                  id="turno"
-                  v-model="cursoForm.turno"
-                >
-                  <option value="Diurno">Diurno</option>
-                  <option value="Noturno">Noturno</option>
-                  <option value="Integral">Integral</option>
-                </select>
-              </div>
+            <div class="form-group col m-0 px-0">
+              <label for="alunosEntrada2" class="col-form-label"
+                >Alunos 2º Sem.</label
+              >
+              <input
+                type="text"
+                class="form-control form-control-sm input-menor"
+                id="alunosEntrada2"
+                @keypress="onlyNumber"
+                v-model="cursoForm.alunosEntrada2"
+              />
             </div>
-
-            <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 px-0">
-                <label for="alunosEntrada" class="col-form-label"
-                  >Alunos 1º Sem.</label
-                >
-                <input
-                  type="text"
-                  class="form-control form-control-sm input-menor"
-                  id="alunosEnrada"
-                  @keypress="onlyNumber"
-                  v-model="cursoForm.alunosEntrada"
-                />
-              </div>
-
-              <div class="form-group col m-0 px-0">
-                <label for="alunosEntrada" class="col-form-label"
-                  >Alunos 2º Sem.</label
-                >
-                <input
-                  type="text"
-                  class="form-control form-control-sm input-menor"
-                  id="alunosEnrada"
-                  @keypress="onlyNumber"
-                  v-model="cursoForm.alunosEntrada2"
-                />
-              </div>
-            </div>
-          </template>
-          <template #footer>
-            <template v-if="isEdit">
-              <button
-                type="button"
-                v-on:click.prevent="editCurso"
-                class="btn-custom btn-icon addbtn"
-                title="Salvar"
-                :key="1"
-              >
-                <i class="fas fa-check"></i>
-              </button>
-
-              <button
-                type="button"
-                v-on:click.prevent="deleteCurso"
-                class="btn-custom btn-icon delbtn"
-                title="Deletar"
-                :key="2"
-              >
-                <i class="far fa-trash-alt"></i>
-              </button>
-
-              <button
-                type="button"
-                v-on:click.prevent="cleanCurso"
-                class="btn-custom btn-icon cancelbtn"
-                title="Cancelar"
-                :key="3"
-              >
-                <i class="fas fa-times"></i>
-              </button>
-            </template>
-            <template v-else>
-              <button
-                type="button"
-                v-on:click.prevent="addCurso"
-                class="btn-custom btn-icon addbtn"
-                title="Adicionar"
-                :key="1"
-              >
-                <i class="fas fa-plus"></i>
-              </button>
-              <button
-                type="button"
-                v-on:click.prevent="cleanCurso"
-                class="btn-custom btn-icon cancelbtn"
-                title="Cancelar"
-                :key="2"
-              >
-                <i class="fas fa-times"></i>
-              </button>
-            </template>
-          </template>
-        </Card>
-      </div>
+          </div>
+        </template>
+      </Card>
     </div>
 
     <!-- MODAL AJUDA -->
@@ -339,8 +289,8 @@ export default {
         $event.preventDefault();
       }
     },
-    handleClickInCurso(curso) {
-      this.cursoClickado = curso;
+    handleClickInCurso(cursoId) {
+      this.cursoClickado = cursoId;
     },
     clearClick() {
       this.cursoClickado = "";
@@ -409,7 +359,7 @@ export default {
             var pedido = _.clone(emptyPedido);
             pedido.Curso = response.Curso.id;
             pedido.Turma = this.$store.state.turma.Turmas[i].id;
-            console.log(pedido);
+
             pedidoService
               .create(pedido)
               .then(() => {})
@@ -525,15 +475,10 @@ export default {
   width: 250px;
 }
 .card .input-menor {
-  width: 60px;
+  width: 100px;
   text-align: center !important;
 }
 .card .input-medio {
-  width: 100px;
-}
-@media screen and (max-width: 886px) {
-  .div-card {
-    margin-left: 0px !important;
-  }
+  width: 100%;
 }
 </style>

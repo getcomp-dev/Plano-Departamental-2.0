@@ -1,5 +1,5 @@
 <template>
-  <div class="card mr-3 ml-auto">
+  <div class="card">
     <div class="card-header">
       <h1 class="card-title">{{ title }}</h1>
     </div>
@@ -8,7 +8,50 @@
         <slot name="form-group"></slot>
 
         <div class="row m-0 mt-3 d-flex justify-content-end">
-          <slot name="footer"></slot>
+          <slot name="footer">
+            <template v-if="toggleFooter">
+              <BaseButton
+                title="Salvar"
+                :type="'icon'"
+                :color="'green'"
+                @click="$emit('btn-salvar')"
+                :key="1"
+              >
+                <i class="fas fa-check"></i>
+              </BaseButton>
+              <BaseButton
+                title="Deletar"
+                :type="'icon'"
+                :color="'red'"
+                @click="$emit('btn-delete')"
+                :key="2"
+              >
+                <i class="fas fa-trash"></i>
+              </BaseButton>
+            </template>
+
+            <template v-else>
+              <BaseButton
+                title="Adicionar"
+                :type="'icon'"
+                :color="'green'"
+                @click="$emit('btn-add')"
+                :key="4"
+              >
+                <i class="fas fa-plus"></i>
+              </BaseButton>
+            </template>
+
+            <BaseButton
+              title="Cancelar"
+              :type="'icon'"
+              :color="'gray'"
+              @click="$emit('btn-clean')"
+              :key="3"
+            >
+              <i class="fas fa-times"></i>
+            </BaseButton>
+          </slot>
         </div>
       </form>
     </div>
@@ -16,21 +59,31 @@
 </template>
 
 <script>
+import BaseButton from "./BaseButton.vue";
+
 export default {
   name: "Card",
+  components: { BaseButton },
   props: {
     title: {
       type: String,
       default: "Nenhum titulo recebido!",
     },
+    toggleFooter: { type: Boolean, default: false },
   },
 };
 </script>
 
 <style scoped>
+.card .btn-icon {
+  margin-right: 0 !important;
+  margin-left: 5px !important;
+}
 .card {
   width: max-content;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+  margin-bottom: 10px;
+  margin-left: 5px;
 }
 .card-title {
   font-size: 16px !important;
@@ -56,14 +109,14 @@ export default {
 }
 .card select {
   height: 25px !important;
-  font-size: 11px !important;
+  font-size: 12px !important;
   padding: 0px 5px !important;
   text-align: start;
 }
 .card input {
   height: 25px !important;
   padding: 0px 5px !important;
-  font-size: 11px !important;
+  font-size: 12px !important;
   text-align: start;
 }
 </style>

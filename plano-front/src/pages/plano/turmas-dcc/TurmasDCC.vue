@@ -212,10 +212,6 @@
         title: 'Filtros',
         hasFooter: true,
       }"
-      :hasFooter="true"
-      @btn-ok="btnOkFiltros()"
-      @select-all="modalSelectAll[tabAtivaModal]"
-      @select-none="modalSelectNone[tabAtivaModal]"
     >
       <template #modal-body>
         <NavTab
@@ -226,11 +222,11 @@
 
         <div class="div-table">
           <BaseTable
-            :tableType="'modal-table'"
             v-show="tabAtivaModal === 'Perfis'"
+            :tableType="'modal-table'"
           >
             <template #thead>
-              <th style="width: 25px;"></th>
+              <th style="width:25px"></th>
               <th
                 @click="toggleOrder(ordenacaoModal.perfis, 'nome')"
                 class="clickable t-start"
@@ -281,8 +277,8 @@
                 <i class="fas fa-times"></i>
               </button>
             </template>
-            <template #thead>
-              <th style="width: 25px"></th>
+            <template #thead
+              ><th style="width:25px"></th>
               <th
                 title="Código"
                 class="t-start clickable"
@@ -378,8 +374,8 @@
                 <i class="fas fa-times"></i>
               </button>
             </template>
-            <template #thead>
-              <th style="width: 25px;"></th>
+            <template #thead
+              ><th style="width:25px"></th>
               <th
                 @click="toggleOrder(ordenacaoModal.cursos, 'codigo')"
                 class="clickable t-start"
@@ -465,6 +461,41 @@
           </BaseTable>
         </div>
       </template>
+
+      <template #modal-footer>
+        <div class="w-100">
+          <BaseButton
+            type="text"
+            color="lightblue"
+            @click="modalSelectAll[tabAtivaModal]()"
+          >
+            Selecionar Todos
+          </BaseButton>
+          <BaseButton
+            v-if="tabAtivaModal === 'Cursos'"
+            type="text"
+            color="lightblue"
+            @click="selectCursosDCC()"
+          >
+            Cursos DCC
+          </BaseButton>
+          <BaseButton
+            type="text"
+            color="gray"
+            @click="modalSelectNone[tabAtivaModal]()"
+          >
+            Desmarcar Todos
+          </BaseButton>
+        </div>
+        <BaseButton
+          class="px-4"
+          type="text"
+          color="green"
+          @click="btnOkFiltros()"
+        >
+          OK
+        </BaseButton>
+      </template>
     </BaseModal>
 
     <!-- MODAL TURMA -->
@@ -526,7 +557,7 @@
             class="btn-custom btn-modal btn-cinza btn-ok-modal"
             @click="$refs.modalDelete.close()"
           >
-            Fechar
+            Cancelar
           </button>
         </div>
         <button
@@ -551,46 +582,46 @@
         <ul class="list-ajuda list-group">
           <li class="list-group-item">
             <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
-            <i class="fas fa-list-ul cancelbtn"></i> e na janela que será aberta
-            utilize as abas para navegar entre os tipos de filtros. Marque em
-            suas respectivas tabelas quais informações deseja visualizar, e para
-            finalizar clique no botão OK.
+            <i class="fas fa-list-ul cancelbtn"></i> no cabeçalho da página e na
+            janela que será aberta utilize as abas para navegar entre os tipos
+            de filtros. Marque em suas respectivas tabelas quais informações
+            deseja visualizar, e para finalizar clique no botão OK.
           </li>
           <li class="list-group-item">
             <b>Para adicionar uma turma à tabela:</b> Clique no ícone adicionar
-            <i class="fas fa-plus addbtn"></i> , em seguida preencha a nova
-            linha que irá aparecer no inicio da tabela. Note que, disciplina,
-            turno e letra da turma são campos obrigátorios. Após preencher os
-            campos, clique no ícone salvar
+            <i class="fas fa-plus addbtn"></i> no cabeçalho da página em seguida
+            preencha a nova linha que irá aparecer no início da tabela. E note
+            que, disciplina, turno e letra da turma são campos obrigatórios.
+            Após preencher os campos clique no ícone salvar
             <i class="fas fa-check addbtn"></i>
             ou em cancelar
             <i class="fas fa-times delbtn"></i>
             .
           </li>
           <li class="list-group-item">
-            <b>Para editar turma da Tabela:</b> Exitem duas formas de fazer
-            alterações numa turma, a primeira é modificando diretamente os
-            campos tabela e o sistema irá salvar automaticamente. <br />
-            A outra forma é clickando no icone
+            <b>Para editar turma da Tabela:</b> Existem duas formas de fazer
+            alterações numa turma, a <b>primeira</b> é modificando diretamente
+            os campos tabela e o sistema irá salvar automaticamente. <br />
+            A <b>segunda</b> forma é clicando no ícone
             <i class="fas fa-edit"></i> presente na coluna editar da tabela, e
-            na janela que será aberta no formulario superior poderá ser feito
-            alterações que somente serão enviadas ao cliclar no botão salvar.
-            Porém note que, as alterações na tabela de vagas na parte inferior
-            serão salvas automaticamente.
+            na janela que será aberta no formulário presente na parte superior
+            poderá ser feito alterações que somente serão enviadas ao clicar no
+            botão salvar. E na tabela de vagas na parte inferior da janela as
+            alterações serão salvas automaticamente.
           </li>
           <li class="list-group-item">
             <b>Para deletar turmas da tabela:</b> Marque a(s) turma(s) que
-            deseja deletar através da caixa de seleção na primeira coluna à
-            esquerda na tabela e em seguida clique no ícone deletar
-            <i class="fas fa-trash delbtn"></i>
-            e confirme no botão OK.
+            deseja deletar através da caixa de seleção presente na primeira
+            coluna à esquerda na tabela, em seguida clique no ícone deletar
+            <i class="fas fa-trash delbtn"></i> no cabeçalho da página e na
+            janela que será aberta confirme clicando botão OK.
           </li>
           <li class="list-group-item">
             <b>Para gerar relatório (.xlsx) das turmas:</b> Clique no ícone
-            relátorio
-            <i class="far fa-file-alt"></i>
+            relatório
+            <i class="fas fa-file-alt"></i>
             e aguarde o
-            <i style="font-style: italic;">download</i> iniciar.
+            <i style="font-style: italic">download</i> iniciar.
           </li>
         </ul>
       </template>
@@ -759,6 +790,9 @@ export default {
         }, 500);
       });
     },
+    selectCursosDCC() {
+      this.filtroCursos.selecionados = [...this.CursosDCC];
+    },
     clearSearch(searchName) {
       this[searchName] = "";
     },
@@ -878,6 +912,16 @@ export default {
     },
   },
   computed: {
+    CursosDCC() {
+      const cursosResultantes = [];
+      cursosResultantes.push(
+        _.find(this.Cursos, ["nome", "CIÊNCIA DA COMPUTAÇÃO NOTURNO"]),
+        _.find(this.Cursos, ["nome", "CIÊNCIA DA COMPUTAÇÃO DIURNO"]),
+        _.find(this.Cursos, ["nome", "SISTEMAS DE INFORMAÇÃO"]),
+        _.find(this.Cursos, ["nome", "ENGENHARIA COMPUTACIONAL"])
+      );
+      return cursosResultantes;
+    },
     TurmasOrdered() {
       let turmasResult = _.orderBy(
         this.TurmasFiltredByDisciplinas,
@@ -1082,9 +1126,6 @@ export default {
 </script>
 
 <style scoped>
-[v-cloak] {
-  display: none !important;
-}
 .stickyAdd {
   background-color: #e9e9e9;
   display: block;

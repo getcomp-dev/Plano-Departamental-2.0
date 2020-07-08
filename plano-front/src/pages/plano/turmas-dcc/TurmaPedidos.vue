@@ -3,18 +3,18 @@
     <input
       type="text"
       :class="{ 'pedido-empty': pedidoForm.vagasPeriodizadas == 0 }"
-      v-focus-pedido
       v-model.number="pedidoForm.vagasPeriodizadas"
-      @keypress="onlyNumber()"
+      v-focus-pedido
+      @keypress="onlyNumber"
       @change="editPedido(pedido)"
     />
 
     <input
       type="text"
       :class="{ 'pedido-empty': pedidoForm.vagasNaoPeriodizadas == 0 }"
-      v-focus-pedido
       v-model.number="pedidoForm.vagasNaoPeriodizadas"
-      @keypress="onlyNumber()"
+      v-focus-pedido
+      @keypress="onlyNumber"
       @change="editPedido(pedido)"
     />
   </div>
@@ -43,6 +43,9 @@ export default {
       bind(el) {
         el.addEventListener("focus", () => {
           if (el.value == 0) el.value = "";
+        });
+        el.addEventListener("blur", () => {
+          if (el.value == "") el.value = 0;
         });
       },
     },
@@ -74,7 +77,6 @@ export default {
     async editPedido() {
       const pedido = _.clone(this.pedidoForm);
       this.validatePedido(pedido);
-      console.log(pedido);
 
       try {
         const responde = await pedidoService.update(
@@ -124,9 +126,9 @@ export default {
   height: 18px;
   font-size: 11px;
   text-align: center;
-  color: #414141;
+  color: #414141 !important;
+  border: 1px solid #414141 !important;
   background-color: #e7e7e7;
-  border: 1px solid #525252 !important;
 }
 .turma-pedidos .pedido-empty {
   color: #dadada;

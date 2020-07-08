@@ -1292,7 +1292,7 @@ export default {
 .turmarow select,
 .turmarow input {
   font-size: 11px !important;
-  border: 1px solid #525252 !important;
+  border: 1px solid #414141 !important;
   color: #414141;
   border-radius: 0px !important;
 }

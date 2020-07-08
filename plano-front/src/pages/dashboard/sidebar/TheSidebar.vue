@@ -1,38 +1,67 @@
 <template>
-  <nav class="sidebar bg-light col" @click.stop="">
-    <SidebarMenu :menuPages="linkDashboard" />
+  <transition
+    enter-active-class="animated animate__slideInLeft sidebar-animation"
+    leave-active-class="animated animate__slideOutLeft sidebar-animation"
+    mode="out-in"
+  >
+    <nav v-show="visibility" class="sidebar bg-light col" @click.stop="">
+      <SidebarMenu :menuPages="linkDashboard" />
 
-    <SidebarMenu
-      v-if="Admin"
-      :menuTitle="'Plano'"
-      :menuPages="linksPlanoOrdered"
-    >
-      <template #aside-title>
-        <div class="aside-title d-flex align-items-center">
-          <i class="far fa-calendar-alt mr-1"></i>
+      <SidebarMenu
+        :menuTitle="'Plano'"
+        :menuPages="Admin ? linksPlanoOrdered : []"
+      >
+        <template #aside-title>
+          <div class="aside-title d-flex align-items-center">
+            <i class="far fa-calendar-alt mr-1"></i>
             <select type="text" v-model="Plano" v-on:change="changePlano()">
-                <option v-for="plano in Planos" :value="plano.id" :key="plano.id">{{plano.ano}}</option>
+              <option
+                v-for="plano in Planos"
+                :value="plano.id"
+                :key="plano.id"
+                >{{ plano.ano }}</option
+              >
             </select>
-        </div>
-      </template>
-    </SidebarMenu>
+          </div>
+        </template>
+      </SidebarMenu>
 
-    <SidebarMenu
-      :menuTitle="'Relatórios'"
-      :menuPages="linksRelatoriosOrdered"
-    />
-    <SidebarMenu
-      v-if="Admin"
-      :menuTitle="'Gerenciar'"
-      :menuPages="linksGerenciarOrdered"
-    />
-  </nav>
+      <!-- <div class="sidebar-menu">
+        <h3
+          class="title pr-3 pl-2 mt-3 mb-0 text-muted d-flex justify-content-between align-items-center"
+        >
+          Plano
+          <div class="aside-title d-flex align-items-center">
+            <i class="far fa-calendar-alt mr-1"></i>
+            <select type="text" v-model="Plano" v-on:change="changePlano()">
+              <option
+                v-for="plano in Planos"
+                :value="plano.id"
+                :key="plano.id"
+                >{{ plano.ano }}</option
+              >
+            </select>
+          </div>
+        </h3>
+      </div> -->
+
+      <SidebarMenu
+        :menuTitle="'Relatórios'"
+        :menuPages="linksRelatoriosOrdered"
+      />
+      <SidebarMenu
+        v-if="Admin"
+        :menuTitle="'Gerenciar'"
+        :menuPages="linksGerenciarOrdered"
+      />
+    </nav>
+  </transition>
 </template>
 
 <script>
 import _ from "lodash";
 import SidebarMenu from "./SidebarMenu.vue";
-
+import { COMPONENT_LOADING, COMPONENT_LOADED } from "@/vuex/mutation-types";
 export default {
   name: "TheSidebar",
   components: {
@@ -40,6 +69,7 @@ export default {
   },
   props: {
     year: Number,
+    visibility: { type: Boolean, default: false },
   },
   data() {
     return {
@@ -117,28 +147,30 @@ export default {
         { title: "Grades ", routerName: "grades", icon: "fa-sitemap" },
         { title: "Log ", routerName: "history", icon: "fa-history" },
         { title: "Perfis ", routerName: "perfis", icon: "fa-th-list" },
+        { title: "Planos ", routerName: "planos", icon: "fa-calendar-alt" },
         { title: "Salas ", routerName: "salas", icon: "fa-university" },
       ],
     };
   },
-  created: function() {
-    this.Plano = parseInt(localStorage.getItem('Plano'), 10)
+  created() {
+    this.Plano = parseInt(localStorage.getItem("Plano"), 10);
   },
 
   methods: {
-    changePlano(){
-      localStorage.setItem('Plano', this.Plano)
-      this.$store
-              .dispatch("fetchAll")
-              .then(() => {
-                this.$socket.open();
-                this.$store.commit(COMPONENT_LOADED);
-              })
-              .catch((response) => {
-                console.log("ERRORRR");
-                console.log(response);
-              });
-    }
+    async changePlano() {
+      try {
+        this.$store.commit(COMPONENT_LOADING);
+
+        setTimeout(async () => {
+          await localStorage.setItem("Plano", this.Plano);
+          await this.$store.dispatch("fetchAll");
+          this.$socket.open();
+          this.$store.commit(COMPONENT_LOADED);
+        }, 300);
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 
   computed: {
@@ -155,15 +187,11 @@ export default {
     },
 
     Planos() {
-      return _.orderBy(this.$store.state.plano.Plano, 'ano')
+      return _.orderBy(this.$store.state.plano.Plano, "ano");
     },
 
     Admin() {
-      if (this.$store.state.auth.Usuario.admin === 1) {
-        return true;
-      } else {
-        return false;
-      }
+      return this.$store.state.auth.Usuario.admin === 1;
     },
   },
 };
@@ -193,42 +221,10 @@ nav.sidebar {
 nav.sidebar .sidebar-menu:last-of-type {
   margin-bottom: 2rem;
 }
-nav.sidebar .title {
+.sidebar-menu .title {
   font-weight: bold;
   font-size: 0.75rem;
   text-transform: uppercase;
-}
-nav.sidebar .aside-title {
-  color: var(--light-blue);
-}
-nav.sidebar .nav li {
-  color: #333;
-  border-top: rgb(248, 249, 250) solid 0.1px;
-  border-bottom: rgb(248, 249, 250) solid 0.1px;
-  transition: all 100ms ease;
-}
-nav.sidebar .nav li .nav-link {
-  color: inherit;
-  font-weight: 500;
-  font-size: 12px;
-  height: 30px;
-  padding: 5px;
-  padding-left: 8px;
-}
-nav.sidebar .nav li:hover {
-  background-color: #0079fa;
-  color: #fff !important;
-}
-nav.sidebar .nav li .nav-link.active {
-  background-color: #0055af;
-  color: white;
-  border-left: #0079fa 10px solid;
-}
-nav.sidebar .nav li .nav-link .icon-nav-link {
-  color: inherit;
-  width: 18px !important;
-  height: 18px !important;
-  text-align: start;
 }
 
 /* SCROLL BAR CUSTOM */
@@ -241,5 +237,13 @@ nav.sidebar.sidebar::-webkit-scrollbar {
 }
 nav.sidebar.sidebar::-webkit-scrollbar-thumb {
   background: #666 !important;
+}
+.sidebar-animation {
+  animation-duration: 0.25s;
+  animation-fill-mode: both;
+}
+.routerview-animation {
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
 }
 </style>

@@ -13,8 +13,8 @@
       </template>
     </PageTitle>
 
-    <div class="row w-100 m-0">
-      <div class="p-0 div-table">
+    <div class="page-content">
+      <div class="div-table">
         <BaseTable>
           <template #thead>
             <th
@@ -79,160 +79,95 @@
         </BaseTable>
       </div>
 
-      <div class="div-card p-0 mt-0 mb-4 ml-auto col-auto">
-        <Card :title="'Docente'">
-          <template #form-group>
-            <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 px-0">
-                <label for="nome" class="col-form-label">Nome</label>
+      <Card
+        :title="'Docente'"
+        :toggleFooter="isEdit"
+        @btn-salvar="editDocente()"
+        @btn-delete="deleteDocente()"
+        @btn-add="addDocente()"
+        @btn-clean="cleanDocente()"
+      >
+        <template #form-group>
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0">
+              <label for="nome" class="col-form-label">Nome</label>
 
-                <input
-                  type="text"
-                  class="form-control form-control-sm input-maior"
-                  id="nome"
-                  v-model="docenteForm.nome"
-                />
-              </div>
+              <input
+                type="text"
+                class="form-control form-control-sm input-maior upper-case"
+                id="nome"
+                v-model="docenteForm.nome"
+              />
+            </div>
+          </div>
+
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 mr-4 px-0">
+              <label for="apelido" class="col-form-label">Apelido</label>
+              <input
+                type="text"
+                id="apelido"
+                v-model="docenteForm.apelido"
+                class="form-control form-control-sm input-medio upper-case"
+              />
             </div>
 
-            <div class="row mb-2 mx-0">
-              <div class="form-group col m-0 mr-4 px-0">
-                <label for="apelido" class="col-form-label">Apelido</label>
-                <input
-                  type="text"
-                  id="apelido"
-                  v-model="docenteForm.apelido"
-                  class="form-control form-control-sm input-medio"
-                />
-              </div>
-
-              <div class="form-check form-check-inline col m-0 mr-4 mt-4 px-0">
-                <input
-                  type="checkbox"
-                  id="ativo"
-                  value="1"
-                  v-model="docenteForm.ativo"
-                  class="form-check-input my-auto"
-                />
-                <label for="ativo" class="form-check-label">Ativo</label>
+            <div class="form-check form-check-inline col m-0 mr-4 mt-4 px-0">
+              <input
+                type="checkbox"
+                id="ativo"
+                value="1"
+                v-model="docenteForm.ativo"
+                class="form-check-input my-auto"
+              />
+              <label for="ativo" class="form-check-label">Ativo</label>
+            </div>
+          </div>
+          <template v-if="isEdit">
+            <div class="border-bottom mt-2 mb-1"></div>
+            <small>Perfis Associados ao docente</small>
+            <div class="row mb-3 mx-0">
+              <div class="div-table">
+                <BaseTable
+                  :tableType="'modal-table'"
+                  :customClass="'docente-table'"
+                >
+                  <template #thead>
+                    <th style="width:25px"></th>
+                    <th style="width:225px" class="t-start">
+                      Perfis
+                    </th>
+                  </template>
+                  <template #tbody>
+                    <tr
+                      v-for="perfil in Perfis"
+                      :key="'perfil-id' + perfil.id"
+                      @click.stop="
+                        toggleItemInArray(perfil.id, perfisAssociados),
+                          managePerfil(perfil.id)
+                      "
+                    >
+                      <td style="width:25px">
+                        <input
+                          type="checkbox"
+                          v-model="perfisAssociados"
+                          :value="perfil.id"
+                          @click.stop=""
+                          class="form-check-input position-static m-0"
+                          @change="managePerfil(perfil.id)"
+                        />
+                      </td>
+                      <td style="width:225px" class="t-start">
+                        {{ perfil.nome }}
+                      </td>
+                    </tr>
+                  </template>
+                </BaseTable>
               </div>
             </div>
-            <template v-if="isEdit">
-              <div class="border-bottom mt-2 mb-1"></div>
-              <small>Perfis Associados ao docente</small>
-              <div class="row mb-3 mx-0">
-                <div class="form-group col m-0 px-0" style="height: 300px;">
-                  <table
-                    class="modal-table table table-bordered table-sm"
-                    style="max-height: 300px !important; overflow: auto;"
-                  >
-                    <thead class="thead-light sticky">
-                      <tr>
-                        <div
-                          class="max-content sticky"
-                          style="font-size:11px!important"
-                        >
-                          <th>
-                            <p class="p-header" style="width: 25px;"></p>
-                          </th>
-                          <th>
-                            <p
-                              class="p-header"
-                              style="width: 225px; text-align: start;"
-                            >
-                              Perfis
-                            </p>
-                          </th>
-                        </div>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr
-                        v-for="perfil in Perfis"
-                        :key="'perfil-id' + perfil.id"
-                      >
-                        <div class="max-content">
-                          <td>
-                            <div style="width: 25px; height: inherit;">
-                              <input
-                                type="checkbox"
-                                :value="perfil.id"
-                                v-model="perfisAssociados"
-                                v-on:change="managePerfil(perfil.id)"
-                                class="form-check-input position-static m-0"
-                              />
-                            </div>
-                          </td>
-                          <td>
-                            <p style="width: 225px; text-align: start;">
-                              {{ perfil.nome }}
-                            </p>
-                          </td>
-                        </div>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </template>
           </template>
-          <template #footer>
-            <template v-if="isEdit">
-              <div class="d-flex mr-0 ml-auto">
-                <button
-                  type="button"
-                  title="Salvar"
-                  class="btn-custom btn-modal addbtn"
-                  v-on:click.prevent="editDocente"
-                  :key="1"
-                >
-                  <i class="fas fa-check"></i>
-                </button>
-                <button
-                  type="button"
-                  title="Deletar"
-                  class="btn-custom btn-modal delbtn"
-                  v-on:click.prevent="deleteDocente"
-                  :key="2"
-                >
-                  <i class="far fa-trash-alt"></i>
-                </button>
-                <button
-                  type="button"
-                  title="Cancelar"
-                  class="btn-custom btn-modal cancelbtn"
-                  v-on:click="clearClick(), cleanDocente()"
-                  :key="3"
-                >
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-            </template>
-            <template v-else>
-              <div class="d-flex mr-0 ml-auto">
-                <button
-                  type="button"
-                  title="Adicionar"
-                  class="btn-custom btn-modal addbtn"
-                  v-on:click.prevent="addDocente"
-                  :key="1"
-                >
-                  <i class="fas fa-plus"></i>
-                </button>
-                <button
-                  type="button"
-                  title="Cancelar"
-                  class="btn-custom btn-modal cancelbtn"
-                  v-on:click.prevent="cleanDocente"
-                  :key="3"
-                >
-                  <i class="fas fa-times"></i>
-                </button>
-              </div>
-            </template>
-          </template>
-        </Card>
-      </div>
+        </template>
+      </Card>
     </div>
 
     <!-- MODAL AJUDA -->
@@ -280,7 +215,11 @@
 import _ from "lodash";
 import docenteService from "@/common/services/docente";
 import docentePerfilService from "@/common/services/docentePerfil";
-import { toggleOrdination, redirectNotAdmin } from "@/mixins/index.js";
+import {
+  toggleOrdination,
+  redirectNotAdmin,
+  toggleItemInArray,
+} from "@/mixins/index.js";
 import {
   PageTitle,
   BaseTable,
@@ -304,7 +243,7 @@ const emptyPerfil = {
 
 export default {
   name: "DashboardDocente",
-  mixins: [toggleOrdination, redirectNotAdmin],
+  mixins: [toggleOrdination, redirectNotAdmin, toggleItemInArray],
   components: { PageTitle, BaseTable, Card, BaseButton, BaseModal },
   data() {
     return {
@@ -317,8 +256,28 @@ export default {
     };
   },
   methods: {
+    handleClickInDocente(docente, docentePerfis) {
+      this.cleanDocente();
+      this.docenteClickado = docente.id;
+      this.showDocentes(docente, docentePerfis);
+    },
     clearClick() {
       this.docenteClickado = "";
+    },
+    cleanDocente() {
+      this.clearClick();
+      this.docenteForm = _.clone(emptyDocente);
+      this.error = undefined;
+    },
+
+    showDocentes(docente, docentePerfis) {
+      this.docenteForm = _.clone(docente);
+      this.perfisAssociados = [];
+      for (var i = 0; i < docentePerfis.length; i++) {
+        if (docentePerfis[i].DocenteId === docente.id) {
+          this.perfisAssociados.push(docentePerfis[i].Perfil);
+        }
+      }
     },
     addDocente() {
       docenteService
@@ -393,24 +352,7 @@ export default {
           });
         });
     },
-    cleanDocente() {
-      this.docenteForm = _.clone(emptyDocente);
-      this.error = undefined;
-    },
-    handleClickInDocente(docente, docentePerfis) {
-      this.docenteClickado = docente.id;
-      this.showDocentes(docente, docentePerfis);
-    },
-    showDocentes(docente, docentePerfis) {
-      this.cleanDocente();
-      this.docenteForm = _.clone(docente);
-      this.perfisAssociados = [];
-      for (var i = 0; i < docentePerfis.length; i++) {
-        if (docentePerfis[i].DocenteId === docente.id) {
-          this.perfisAssociados.push(docentePerfis[i].Perfil);
-        }
-      }
-    },
+
     addPerfil(perfil) {
       this.docentePerfil.Docente = this.docenteForm.id;
       this.docentePerfil.Perfil = perfil;
@@ -510,66 +452,12 @@ export default {
 
 <style scoped>
 .card .input-maior {
-  width: 250px;
+  width: 270px;
 }
 .card .input-medio {
-  width: 120px;
+  width: 150px;
 }
-@media screen and (max-width: 771px) {
-  .div-card {
-    margin-left: 0px !important;
-  }
+.docente-table {
+  max-height: 300px !important;
 }
-
-/* ==== MODAL TABLE ==== */
-.modal-table {
-  display: block;
-  overflow-y: scroll !important;
-  overflow-x: hidden !important;
-  font-size: 10px !important;
-  font-weight: normal !important;
-  background-color: white;
-  margin: 0 !important;
-}
-.modal-table tr thead {
-  display: block;
-}
-.modal-table th {
-  padding: 0 !important;
-  text-align: center !important;
-  height: 18px !important;
-}
-
-.modal-table .p-header {
-  padding: 0px 5px 0px 5px !important;
-  margin: 0 !important;
-  text-align: start;
-  height: 18px !important;
-}
-.modal-table tbody {
-  max-height: 100%;
-  width: 100%;
-}
-.modal-table td {
-  border-top: 0;
-  text-align: center;
-  vertical-align: middle !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  /* height: 22px !important; */
-}
-.modal-table p {
-  margin: 0 !important;
-  text-align: center;
-  padding: 0 !important;
-  padding-right: 5px !important;
-  padding-left: 5px !important;
-}
-.modal-table input[type="checkbox"] {
-  margin-left: 0 !important;
-  margin-top: 4px !important;
-  margin-bottom: auto !important;
-  height: 13px !important;
-}
-/* FIM MODAL TABLE */
 </style>

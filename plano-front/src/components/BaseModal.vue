@@ -1,7 +1,7 @@
 <template>
   <transition :name="customAnimatedClass + '-modal'">
     <div
-      v-if="visibility"
+      v-show="visibility"
       :class="modalClass"
       :style="modalStyle + customStyles"
     >
@@ -26,25 +26,29 @@
       <footer v-if="modalOptions.hasFooter" class="modal-custom-footer w-100">
         <slot name="modal-footer">
           <div class="w-100">
-            <button
-              class="btn btn-custom btn-modal btn-azul"
+            <BaseButton
+              :type="'text'"
+              :color="'lightblue'"
               @click="emitSelectAll()"
             >
               Selecionar Todos
-            </button>
-            <button
-              class="btn btn-custom btn-modal btn-cinza"
+            </BaseButton>
+            <BaseButton
+              :type="'text'"
+              :color="'gray'"
               @click="emitSelectNone()"
             >
               Desmarcar Todos
-            </button>
+            </BaseButton>
           </div>
-          <button
+          <BaseButton
+            class="px-4"
+            :type="'text'"
+            :color="'green'"
             @click="emitOk()"
-            class="btn btn-modal btn-verde btn-ok-modal"
           >
             OK
-          </button>
+          </BaseButton>
         </slot>
       </footer>
     </div>
@@ -53,9 +57,13 @@
 
 <script>
 import { EventBus } from "@/event-bus.js";
+import BaseButton from "./BaseButton.vue";
 
 export default {
   name: "BaseModal",
+  components: {
+    BaseButton,
+  },
   props: {
     modalOptions: {
       type: Object,
@@ -184,7 +192,7 @@ export default {
         case "fromNavbar":
           return "fromNavbar";
         default:
-          return position;
+          return position === "centerNavbar" ? "fromNavbar" : position;
       }
     },
   },
