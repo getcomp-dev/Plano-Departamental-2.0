@@ -49,11 +49,11 @@ router.post('/', function (req, res, next) {
     })
 })
 
-router.post('/:ano([0-9]+)', function (req, res, next) {
+router.post('/:id([0-9]+)', function (req, res, next) {
     console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Plano.findOne({
         where: {
-            ano: req.params.ano
+            id: req.params.id
         }
     }).then(function (plano) {
         if (!plano)
