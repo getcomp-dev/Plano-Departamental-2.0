@@ -666,7 +666,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
         ],
     });
     tables.push({
-        text: "2º Semestre " + store.state.plano.Plano[0].ano,
+        text: "2º Semestre " + this.Plano[0].ano,
         alignment: "center",
         bold: true,
         fontSize: 10,
