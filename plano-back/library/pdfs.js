@@ -197,8 +197,8 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
     });
     var laboratorios = _.filter(this.Salas, {laboratorio: true});
     var disciplinas = _.orderBy(this.Disciplinas, ["nome"]);
-    var turmas1 = _.filter(this.Turmas, {periodo: 1, Plano: 1]);
-    var turmas2 = _.filter(this.Turmas, {periodo: 3, Plano: 1]);
+    var turmas1 = _.filter(this.Turmas, {periodo: 1, Plano: 1});
+    var turmas2 = _.filter(this.Turmas, {periodo: 3, Plano: 1});
     var seg = "",
         ter = "",
         qua = "",
