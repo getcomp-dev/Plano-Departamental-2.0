@@ -24,7 +24,7 @@ router.post('/', function(req, res, next){
 router.post('/:filename([A-Za-z0-9_]+)', function(req, res, next){
    exec('mysql -u root plano_dev < drop_all.sql', (error, stdout, stderr) => {
        if(error == null){
-           exec('mysql -u root plano_dev < ' + req.params.filename + '.sql', (error, stdout, stderr) => {
+           exec('mysql -u root mult_planos < ' + req.params.filename + '.sql', (error, stdout, stderr) => {
                if(error==null){
                    res.send({
                        success:true,
