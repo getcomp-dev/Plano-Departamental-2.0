@@ -320,7 +320,7 @@ export default {
       }
 
       this.turmaForm.Plano = parseInt(localStorage.getItem("Plano"), 10);
-      console.log(this.turmaForm);
+
       turmaService
         .create(this.turmaForm)
         .then((response) => {

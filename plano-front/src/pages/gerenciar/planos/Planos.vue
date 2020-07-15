@@ -22,8 +22,16 @@
               class="t-start clickable"
               @click="toggleOrder(ordenacaoMainPlanos, 'ano')"
             >
-              Nome
+              Ano
               <i :class="setIconByOrder(ordenacaoMainPlanos, 'ano')"></i>
+            </th>
+            <th
+                    style="width: 70px"
+                    class="t-start clickable"
+                    @click="toggleOrder(ordenacaoMainPlanos, 'nome')"
+            >
+              Nome
+              <i :class="setIconByOrder(ordenacaoMainPlanos, 'nome')"></i>
             </th>
             <th
               style="width: 300px"
@@ -42,6 +50,7 @@
               :class="{ 'bg-selected': plano.id === planoSelected }"
             >
               <td style="width: 70px" class="t-start">{{ plano.ano }}</td>
+              <td style="width: 70px" class="t-start">{{ plano.nome }}</td>
               <td style="width: 300px" class="t-start">{{ plano.obs }}</td>
             </tr>
           </template>
@@ -53,13 +62,13 @@
         :toggleFooter="isEdit"
         @btn-salvar="editPlano()"
         @btn-delete="openModalDelete()"
-        @btn-add="createPlano()"
+        @btn-add="openModalNovoPlano()"
         @btn-clean="cleanPlano()"
       >
         <template #form-group>
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label for="ano">Ano <i title="Campo obrigatório">*</i></label>
+              <label required for="ano">Ano </label>
               <select
                 id="planoAno"
                 v-model.number="planoForm.ano"
@@ -77,6 +86,16 @@
           </div>
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
+              <label for="planoNome">Nome</label>
+              <input type="text"
+                      id="planoNome"
+                      v-model="planoForm.nome"
+                      class="form-control"
+              >
+            </div>
+          </div>
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0">
               <label for="planoObs">Observações</label>
               <textarea
                 id="planoObs"
@@ -90,6 +109,8 @@
         </template>
       </Card>
     </div>
+
+    <ModalNovoPlano ref="modalNovoPlano" :plano="planoForm" />
 
     <BaseModal
       ref="modalDeletePlano"
@@ -167,9 +188,11 @@ import {
   PasswordInput,
   Card,
 } from "@/components/index.js";
+import ModalNovoPlano from "./ModalNovoPlano";
 
 const emptyPlano = {
   ano: "",
+  nome: "",
   obs: "",
 };
 
@@ -183,11 +206,12 @@ export default {
     Card,
     PasswordInput,
     BaseModal,
+    ModalNovoPlano,
   },
   data() {
     return {
-      planoSelected: null,
       planoForm: _.clone(emptyPlano),
+      planoSelected: null,
       ordenacaoMainPlanos: { order: "ano", type: "asc" },
     };
   },
@@ -213,30 +237,15 @@ export default {
     validatePlano(plano) {
       return !(plano.ano === "" || plano.ano === null);
     },
-    async createPlano() {
-      const plano = _.clone(this.planoForm);
-
-      if (!this.validatePlano(plano)) {
+    openModalNovoPlano() {
+      if (!this.validatePlano(this.planoForm)) {
         this.showNotification({
           type: "error",
           message: `Campo ano inválido.`,
         });
         return;
       }
-
-      try {
-        await planoService.create(plano);
-        this.showNotification({
-          type: "success",
-          message: `Plano criado.`,
-        });
-        this.cleanPlano();
-      } catch (error) {
-        this.showNotification({
-          type: "error",
-          message: error,
-        });
-      }
+      this.$refs.modalNovoPlano.open();
     },
     async editPlano() {
       const plano = _.clone(this.planoForm);
@@ -283,20 +292,17 @@ export default {
   },
   computed: {
     Planos() {
-      return this.$store.state.plano.Plano;
+      // Plano 2099 de teste mostrado apenas no localhost
+      if (this.onDevelopmentMode) return this.$store.state.plano.Plano;
+      else
+        return _.filter(
+          this.$store.state.plano.Plano,
+          (plano) => plano.ano != 2099
+        );
     },
     PlanosOrdered() {
       const { order, type } = this.ordenacaoMainPlanos;
-      const planoSorter = (plano) => {
-        switch (order) {
-          case "obs":
-          case "ano":
-          default:
-            return plano[order];
-        }
-      };
-
-      return _.orderBy(this.Planos, planoSorter, type);
+      return _.orderBy(this.Planos, order, type);
     },
     Years() {
       let yearsArry = [];
@@ -308,6 +314,10 @@ export default {
         yearsArry.push(parseInt(firstYear, 10));
         firstYear++;
       }
+
+      // Plano de teste mostrado apenas no localhost
+      if (this.onDevelopmentMode) yearsArry.push(2099);
+
       return yearsArry;
     },
     Admin() {
@@ -315,6 +325,9 @@ export default {
     },
     isEdit() {
       return this.planoSelected != null;
+    },
+    onDevelopmentMode() {
+      return window.location.href.includes("localhost");
     },
   },
 };
@@ -336,50 +349,7 @@ export default {
   padding: 0px 5px !important;
 }
 textarea {
-  padding: 0px 5px !important;
+  padding: 5px !important;
   font-size: 12px !important;
-}
-.form-group label > i {
-  color: #f30000;
-}
-
-.container-edit-senha {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin: 10px 0;
-  margin-top: 12px;
-  font-size: 12x;
-  padding: 5px 0;
-}
-.container-edit-senha::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  width: 100%;
-  border-top: 1px solid #dee2e6;
-}
-.container-edit-senha::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  border-bottom: 1px solid #dee2e6;
-}
-.btn-edit-senha {
-  padding: 0 5px !important;
-  background-color: transparent !important;
-  line-height: 50%;
-  border: none;
-  margin: 0;
-  background: none;
-}
-.btn-edit-senha i {
-  transition: all 0.25s ease !important;
-}
-.btn-edit-senha:focus {
-  box-shadow: 0 0 0 0.15rem #007bff40 !important;
 }
 </style>

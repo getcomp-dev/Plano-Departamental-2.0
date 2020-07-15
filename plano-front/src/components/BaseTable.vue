@@ -6,13 +6,13 @@
   >
     <thead class="thead-light max-content sticky">
       <template v-if="hasSearchBar">
-        <div class="div-search p-1 pb-2 sticky">
+        <div class="div-search sticky">
           <slot name="thead-search"></slot>
         </div>
       </template>
       <tr>
         <div :class="hasSearchBar ? 'sticky2' : 'sticky'" class="max-content">
-          <slot name="thead"></slot>
+          <slot name="thead"> </slot>
         </div>
       </tr>
     </thead>
@@ -56,7 +56,7 @@ export default {
   height: calc(100vh - 100px);
 }
 .modal-table {
-  max-height: 450px !important;
+  max-height: 450px;
   overflow-x: hidden !important;
   font-size: 10px !important;
   background-color: #e9ecef !important;
@@ -139,6 +139,7 @@ td:hover {
   justify-content: flex-start !important;
   align-items: center !important;
   width: 100% !important;
+  padding: 5px;
   background-color: #e9ecef !important;
   border-right: 1px solid #dee2e6 !important;
   border-left: 1px solid #dee2e6 !important;
@@ -176,6 +177,7 @@ td:hover {
 }
 .modal-table thead .btn-search i {
   margin: 0;
+  margin-top: 2px;
   font-size: 11px !important;
 }
 

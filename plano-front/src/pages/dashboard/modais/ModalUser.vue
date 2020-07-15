@@ -1,8 +1,8 @@
 <template>
   <BaseModal
     ref="baseModalUser"
-    :customStyles="'width:370px;'"
-    @on-close="clearAllForm()"
+    :customStyles="'width:400px;'"
+    @on-close="clearEditUserForm()"
     :modalOptions="{
       type: 'fromNavbar',
       title: 'Usuário',
@@ -10,12 +10,15 @@
   >
     <template #modal-body>
       <div class="user-container w-100">
-        <div class="user-header border px-3 py-1  w-100">
-          <div class="d-flex align-items-center">
-            <img class="user-img" src="@/assets/user.png" alt="user" />
+        <div class="user-header border px-3 py-2  w-100">
+          <div class="d-flex w-100 align-items-center">
+            <img class="user-img" src="@/assets/user.png" alt="Usuário" />
             <div class="d-flex flex-column w-100">
               <p class="mx-2">
                 <b>Nome:</b> {{ $store.state.auth.Usuario.nome }}
+              </p>
+              <p class="mx-2">
+                <b>Login:</b> {{ $store.state.auth.Usuario.login }}
               </p>
               <p class="mx-2"><b>Admin:</b> {{ Admin ? "Sim" : "Não" }}</p>
             </div>
@@ -28,87 +31,64 @@
           </button>
         </div>
 
-        <div class="tab-group border">
-          <span
-            class="tab-link"
-            @click="changeTab('edit')"
-            :class="{ 'tab-active': currentTab === 'edit' }"
-            >Editar usuário</span
-          >
-          <span
-            v-if="Admin"
-            class="tab-link"
-            @click="changeTab('create')"
-            :class="{ 'tab-active': currentTab === 'create' }"
-            >Criar usuário</span
-          >
-        </div>
+        <div v-if="Admin" class="w-100 border  rounded-bottom py-2 px-3">
+          <div class="form-row">
+            <label required for="nome">Nome</label>
+            <input
+              class="form-control"
+              type="text"
+              id="nome"
+              v-model="userForm.nome"
+            />
+          </div>
+          <div class="form-row">
+            <label required for="login">Login</label>
+            <input
+              class="form-control"
+              type="text"
+              id="login"
+              v-model="userForm.login"
+            />
+          </div>
+          <div class="form-row">
+            <label required for="senhaAtual">Senha atual</label>
+            <PasswordInput
+              :isInvalid="false"
+              :inputId="'senhaAtual'"
+              v-model="senhaAtual"
+            ></PasswordInput>
+          </div>
+          <!-- toggle edit senha -->
+          <div class="container-edit-senha">
+            <b>Editar senha</b>
 
-        <div class="w-100 border  rounded-bottom py-2 px-3">
-          <template v-if="currentTab === 'edit'">
-            <div class="form-row">
-              <label for="nome">Nome <i title="Campo obrigatório">*</i></label>
-              <input
-                class="form-control"
-                type="text"
-                id="nome"
-                v-model="userForm.nome"
-              />
-            </div>
-            <div class="form-row">
-              <label for="login"
-                >Login <i title="Campo obrigatório">*</i></label
-              >
-              <input
-                class="form-control"
-                type="text"
-                id="login"
-                v-model="userForm.login"
-              />
-            </div>
-            <div class="form-row">
-              <label for="senhaAtual"
-                >Senha atual <i title="Campo obrigatório">*</i></label
-              >
-              <PasswordInput
-                :isInvalid="false"
-                :inputId="'senhaAtual'"
-                v-model="senhaAtual"
-              ></PasswordInput>
-            </div>
-            <!-- toggle edit senha -->
-            <div class="container-edit-senha">
-              <b>Editar senha</b>
+            <button
+              type="button"
+              @click.prevent="toggleEditSenha()"
+              class="btn-edit-senha"
+            >
+              <i
+                class="fas fa-chevron-left"
+                style="font-size:16px!important"
+                :style="`transform: rotate(${isEditingSenha ? -90 : 0}deg)`"
+              ></i>
+            </button>
+          </div>
 
-              <button
-                type="button"
-                @click.prevent="toggleEditSenha()"
-                class="btn-edit-senha"
-              >
-                <i
-                  class="fas fa-chevron-left"
-                  style="font-size:16px!important"
-                  :style="`transform: rotate(${isEditingSenha ? -90 : 0}deg)`"
-                ></i>
-              </button>
-            </div>
-
+          <transition-group name="slideY" mode="out-in">
             <template v-if="isEditingSenha">
-              <div class="form-row">
-                <label for="novaSenha"
-                  >Nova senha <i title="Campo obrigatório">*</i></label
-                >
+              <div :key="'newPass'" class="form-row">
+                <label required for="novaSenha">Nova senha</label>
                 <PasswordInput
                   :inputId="'novaSenha'"
                   v-model="userForm.senha"
                 ></PasswordInput>
               </div>
 
-              <div class="form-row">
-                <label for="confirmaSenha"
+              <div :key="'repeatPass'" class="form-row">
+                <label required for="confirmaSenha"
                   >Confirmar nova senha
-                  <i title="Campo obrigatório">*</i></label
-                >
+                </label>
                 <PasswordInput
                   :isInvalid="confirmaSenha != userForm.senha"
                   :inputId="'confirmaSenha'"
@@ -117,15 +97,10 @@
               </div>
             </template>
 
-            <div class="form-row d-flex align-items-center">
-              <label for="admin" class="m-0 mr-2">Admin</label>
-              <input type="checkbox" id="admin" v-model="userForm.admin" />
-            </div>
-
-            <div class="mt-3 mb-1 d-flex justify-content-end">
+            <div :key="'btns'" class="mt-3 mb-1 d-flex justify-content-end">
               <button
                 class="px-3 btn btn-secondary btn-custom btn-modal"
-                @click="clearEditUserForm()"
+                @click="close()"
               >
                 Cancelar
               </button>
@@ -136,58 +111,7 @@
                 Salvar
               </button>
             </div>
-          </template>
-
-          <template v-else-if="currentTab === 'create' && Admin">
-            <div class="form-row">
-              <label for="nome">Nome <i title="Campo obrigatório">*</i></label>
-              <input
-                class="form-control"
-                type="text"
-                id="nome"
-                v-model="userForm.nome"
-              />
-            </div>
-            <div class="form-row">
-              <label for="login"
-                >Login <i title="Campo obrigatório">*</i></label
-              >
-              <input
-                class="form-control"
-                type="text"
-                id="login"
-                v-model="userForm.login"
-              />
-            </div>
-            <div class="form-row">
-              <label for="senha"
-                >Senha <i title="Campo obrigatório">*</i></label
-              >
-              <PasswordInput
-                :isInvalid="false"
-                :inputId="'senha'"
-                v-model="userForm.senha"
-              ></PasswordInput>
-            </div>
-            <div class="form-row d-flex align-items-center">
-              <label for="admin" class="m-0 mr-2">Admin</label>
-              <input type="checkbox" id="admin" v-model="userForm.admin" />
-            </div>
-            <div class="mt-3 mb-1 d-flex justify-content-end">
-              <button
-                class="btn px-3 btn-secondary btn-custom btn-modal "
-                @click="clearCreateUserForm()"
-              >
-                Cancelar
-              </button>
-              <button
-                class="btn px-3 btn-success btn-custom btn-modal btn-verde"
-                @click="createUser()"
-              >
-                Criar
-              </button>
-            </div>
-          </template>
+          </transition-group>
         </div>
       </div>
     </template>
@@ -220,7 +144,7 @@ export default {
     };
   },
   mounted() {
-    this.clearAllForm();
+    this.clearEditUserForm();
   },
   methods: {
     toggleEditSenha() {
@@ -231,27 +155,17 @@ export default {
     open() {
       this.$refs.baseModalUser.open();
     },
-    changeTab(newTab) {
-      if (this.currentTab === newTab) return;
-
-      this.currentTab = newTab;
-      if (newTab === "edit") this.clearEditUserForm();
-      else if (newTab === "create") this.clearCreateUserForm();
-    },
-    clearCreateUserForm() {
-      this.userForm = _.clone(emptyUser);
+    close() {
+      this.$refs.baseModalUser.close();
     },
     clearEditUserForm() {
       this.userForm = _.clone(emptyUser);
+      this.isEditingSenha = false;
       this.userForm.nome = this.$store.state.auth.Usuario.nome;
       this.userForm.login = this.$store.state.auth.Usuario.login;
       this.userForm.admin = this.$store.state.auth.Usuario.admin;
       this.confirmaSenha = "";
       this.senhaAtual = "";
-    },
-    clearAllForm() {
-      this.clearEditUserForm();
-      this.changeTab("edit");
     },
     validateEditUser(user) {
       return (
@@ -264,37 +178,6 @@ export default {
         if (value === "" || value === null) return false;
       }
       return true;
-    },
-    routerLogout() {
-      this.$router.push({ name: "logout" });
-    },
-
-    async createUser() {
-      const user = _.clone(this.userForm);
-
-      if (!this.validateUser(user)) {
-        this.showNotification({
-          type: "error",
-          message: `Campos obrigátorios incompletos ou inválidos.`,
-        });
-        return;
-      }
-
-      try {
-        await userService.create(user);
-
-        this.showNotification({
-          type: "success",
-          message: `Usuário criado.`,
-        });
-        this.clearCreateUserForm();
-      } catch (error) {
-        this.showNotification({
-          type: "error",
-          title: "Erro ao criar usuário",
-          message: error,
-        });
-      }
     },
     async editUser() {
       const user = _.clone(this.userForm);
@@ -322,9 +205,12 @@ export default {
         this.showNotification({
           type: "error",
           title: "Erro ao editar usuário",
-          message: error,
+          message: "Senha atual incorreta.",
         });
       }
+    },
+    routerLogout() {
+      this.$router.push({ name: "logout" });
     },
   },
   computed: {
@@ -447,5 +333,36 @@ export default {
 }
 .user-container p {
   margin: 0;
+  word-break: break-all;
+}
+
+.slideY-enter-active {
+  animation: slideDown 0.2s ease;
+}
+.slideY-leave-active {
+  animation: slideUp 0.2s ease;
+}
+.slideY-move {
+  transition: transform 0.3s ease;
+}
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes slideUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-30%);
+  }
 }
 </style>

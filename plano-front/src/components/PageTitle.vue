@@ -32,9 +32,6 @@ export default {
   font-weight: normal;
   padding: 0 !important;
 }
-.form-inline {
-  width: auto;
-}
 .aside {
   display: flex !important;
   justify-content: flex-end !important;

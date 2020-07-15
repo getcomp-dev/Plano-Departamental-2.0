@@ -35,50 +35,60 @@
       <div v-show="semestre1IsActived" class="w-100">
         <h2
           v-show="CursosWithHorarios.length || EletivasIsSelected"
-          class="semestre-title w-100 px-1 bg-custom"
+          class="semestre-title"
         >
           1º SEMESTRE
         </h2>
 
         <template v-for="curso in CursosWithHorarios">
-          <h3 class="curso-title pl-1" :key="'s1-title' + curso.nome">
+          <h3 class="curso-title pl-1" :key="1 + curso.nome">
             {{ curso.nome }}
           </h3>
-          <TablesHorarios
-            :HorariosCurso="curso.horarios1Semestre"
-            :turno="curso.turno"
-            :key="'s1-table' + curso.nome"
+          <HorariosDoCurso
+            :key="1 + curso.codigo + curso.value"
+            :listaDePeriodos="listaDePeriodos"
+            :curso="{
+              nome: curso.nome,
+              turno: curso.turno,
+              horarios: curso.horarios1Semestre,
+            }"
           />
         </template>
 
-        <template v-if="EletivasIsSelected">
-          <h3 class="curso-title pl-1">Eletivas</h3>
-          <TableEletivas :Eletivas="horariosAtivos1.Eletivas" />
-        </template>
+        <h3 v-show="EletivasIsSelected" class="curso-title pl-1">Eletivas</h3>
+        <TableEletivas
+          v-show="EletivasIsSelected"
+          :Eletivas="horariosAtivos1.Eletivas"
+        />
       </div>
 
       <div v-show="semestre2IsActived" class="w-100">
         <h2
           v-show="CursosWithHorarios.length || EletivasIsSelected"
-          class="semestre-title w-100 px-1 bg-custom"
+          class="semestre-title"
         >
           2º SEMESTRE
         </h2>
-
         <template v-for="curso in CursosWithHorarios">
-          <h3 class="curso-title pl-1" :key="'s2-title' + curso.nome">
+          <h3 class="curso-title pl-1" :key="2 + curso.nome">
             {{ curso.nome }}
           </h3>
-          <TablesHorarios
-            :HorariosCurso="curso.horarios2Semestre"
-            :turno="curso.turno"
-            :key="'s2-table' + curso.nome"
+          <HorariosDoCurso
+            :key="2 + curso.codigo + curso.value"
+            :listaDePeriodos="listaDePeriodos"
+            :curso="{
+              nome: curso.nome,
+              turno: curso.turno,
+              horarios: curso.horarios2Semestre,
+            }"
           />
         </template>
-        <template v-if="EletivasIsSelected">
-          <h3 class="curso-title pl-1">Eletivas</h3>
-          <TableEletivas :Eletivas="horariosAtivos2.Eletivas" />
-        </template>
+
+        <h3 v-show="EletivasIsSelected" class="curso-title pl-1">Eletivas</h3>
+        <TableEletivas
+          v-show="EletivasIsSelected"
+          :Eletivas="horariosAtivos2.Eletivas"
+        />
       </div>
     </div>
 
@@ -227,9 +237,9 @@ import {
   ModalRelatorio,
 } from "@/components/index.js";
 import TableEletivas from "./TableEletivas.vue";
-import TablesHorarios from "./TablesHorarios.vue";
+import HorariosDoCurso from "./HorariosDoCurso.vue";
 import store from "@/vuex/store";
-
+import { mapGetters } from "vuex";
 const allCursosOptions = [
   {
     nome: "SISTEMAS DE INFORMAÇÃO",
@@ -244,7 +254,7 @@ const allCursosOptions = [
     codigo: "65C",
   },
   {
-    nome: "ENGENHARIA DA COMPUTAÇÃO",
+    nome: "ENGENHARIA COMPUTACIONAL",
     codigo: "65B",
   },
   {
@@ -257,7 +267,7 @@ export default {
   name: "DashboardHorarios",
   mixins: [toggleItemInArray, toggleOrdination],
   components: {
-    TablesHorarios,
+    HorariosDoCurso,
     TableEletivas,
     PageTitle,
     NavTab,
@@ -270,10 +280,7 @@ export default {
     return {
       tabAtivaModal: "Cursos",
       ordemCursos: { order: "codigo", type: "asc" },
-      evenCCN: "false",
-      evenCCD: "false",
-      evenEC: "false",
-      evenSI: "false",
+      listaDePeriodos: [],
       filtroCursos: {
         selecionados: [],
         ativados: [],
@@ -315,13 +322,16 @@ export default {
           this.filtroSemestres.segundo = false;
         },
       },
+      evenCCN: "false",
+      evenCCD: "false",
+      evenEC: "false",
+      evenSI: "false",
     };
   },
-
-  mounted() {
+  created() {
     this.createHorarios1();
     this.createHorarios2();
-
+    this.createListaDePeriodos();
     this.modalSelectAll.Cursos();
     this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
   },
@@ -382,54 +392,54 @@ export default {
     updateHorarios() {
       for (let i = 0; i < 10; i++) {
         for (let j = 0; j < this.horariosAtivos1.CCD[i].length; j++)
-          for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
             if (
               this.horariosAtivos1.CCD[i][j].id ==
-              this.$store.state.turma.Turmas[k].id
+              this.TurmasInDisciplinasPerfis[k].id
             ) {
               this.horariosAtivos1.CCD[i].splice(
                 j,
                 1,
-                this.$store.state.turma.Turmas[k]
+                this.TurmasInDisciplinasPerfis[k]
               );
             }
           }
         for (let j = 0; j < this.horariosAtivos1.CCN[i].length; j++)
-          for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
             if (
               this.horariosAtivos1.CCN[i][j].id ==
-              this.$store.state.turma.Turmas[k].id
+              this.TurmasInDisciplinasPerfis[k].id
             ) {
               this.horariosAtivos1.CCN[i].splice(
                 j,
                 1,
-                this.$store.state.turma.Turmas[k]
+                this.TurmasInDisciplinasPerfis[k]
               );
             }
           }
         for (let j = 0; j < this.horariosAtivos1.EC[i].length; j++)
-          for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
             if (
               this.horariosAtivos1.EC[i][j].id ==
-              this.$store.state.turma.Turmas[k].id
+              this.TurmasInDisciplinasPerfis[k].id
             ) {
               this.horariosAtivos1.EC[i].splice(
                 j,
                 1,
-                this.$store.state.turma.Turmas[k]
+                this.TurmasInDisciplinasPerfis[k]
               );
             }
           }
         for (let j = 0; j < this.horariosAtivos1.SI[i].length; j++)
-          for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
             if (
               this.horariosAtivos1.SI[i][j].id ==
-              this.$store.state.turma.Turmas[k].id
+              this.TurmasInDisciplinasPerfis[k].id
             ) {
               this.horariosAtivos1.SI[i].splice(
                 j,
                 1,
-                this.$store.state.turma.Turmas[k]
+                this.TurmasInDisciplinasPerfis[k]
               );
             }
           }
@@ -441,54 +451,54 @@ export default {
 
       for (let i = 0; i < 10; i++) {
         for (let j = 0; j < this.horariosAtivos2.CCD[i].length; j++)
-          for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
             if (
               this.horariosAtivos2.CCD[i][j].id ==
-              this.$store.state.turma.Turmas[k].id
+              this.TurmasInDisciplinasPerfis[k].id
             ) {
               this.horariosAtivos2.CCD[i].splice(
                 j,
                 1,
-                this.$store.state.turma.Turmas[k]
+                this.TurmasInDisciplinasPerfis[k]
               );
             }
           }
         for (let j = 0; j < this.horariosAtivos2.CCN[i].length; j++)
-          for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
             if (
               this.horariosAtivos2.CCN[i][j].id ==
-              this.$store.state.turma.Turmas[k].id
+              this.TurmasInDisciplinasPerfis[k].id
             ) {
               this.horariosAtivos2.CCN[i].splice(
                 j,
                 1,
-                this.$store.state.turma.Turmas[k]
+                this.TurmasInDisciplinasPerfis[k]
               );
             }
           }
         for (let j = 0; j < this.horariosAtivos2.EC[i].length; j++)
-          for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
             if (
               this.horariosAtivos2.EC[i][j].id ==
-              this.$store.state.turma.Turmas[k].id
+              this.TurmasInDisciplinasPerfis[k].id
             ) {
               this.horariosAtivos2.EC[i].splice(
                 j,
                 1,
-                this.$store.state.turma.Turmas[k]
+                this.TurmasInDisciplinasPerfis[k]
               );
             }
           }
         for (let j = 0; j < this.horariosAtivos2.SI[i].length; j++)
-          for (let k = 0; k < this.$store.state.turma.Turmas.length; k++) {
+          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
             if (
               this.horariosAtivos2.SI[i][j].id ==
-              this.$store.state.turma.Turmas[k].id
+              this.TurmasInDisciplinasPerfis[k].id
             ) {
               this.horariosAtivos2.SI[i].splice(
                 j,
                 1,
-                this.$store.state.turma.Turmas[k]
+                this.TurmasInDisciplinasPerfis[k]
               );
             }
           }
@@ -502,6 +512,14 @@ export default {
         Ativas: this.horariosAtivos2,
       });
     },
+    createListaDePeriodos() {
+      for (let i = 0; i < 10; i++) {
+        this.listaDePeriodos.push({
+          indice: i,
+          nome: `${i + 1}º Período`,
+        });
+      }
+    },
     createHorarios1() {
       var grade;
       var grades;
@@ -510,8 +528,9 @@ export default {
       var pedidos;
       var pedidosExternos;
       var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades;
-      var turmas = _.filter(this.$store.state.turma.Turmas, ["periodo", 1]);
-      var turmasExternas = this.$store.state.turmaExterna.Turmas;
+      var turmas = _.filter(this.TurmasInDisciplinasPerfis, ["periodo", 1]);
+      var turmasExternas = this.TurmasExternasInDisciplinas;
+
       var anoAtual = _.find(this.$store.state.plano.Plano, {
         id: parseInt(localStorage.getItem("Plano"), 10),
       }).ano;
@@ -929,8 +948,8 @@ export default {
       var pedidos;
       var pedidosExternos;
       var disciplinaGrades = this.$store.state.disciplinaGrade.DisciplinaGrades;
-      var turmas = _.filter(this.$store.state.turma.Turmas, ["periodo", 3]);
-      var turmasExternas = this.$store.state.turmaExterna.Turmas;
+      var turmas = _.filter(this.TurmasInDisciplinasPerfis, ["periodo", 3]);
+      var turmasExternas = this.TurmasExternasInDisciplinas;
       var anoAtual = _.find(this.$store.state.plano.Plano, {
         id: parseInt(localStorage.getItem("Plano"), 10),
       }).ano;
@@ -5354,6 +5373,7 @@ export default {
   },
 
   computed: {
+    ...mapGetters(["TurmasInDisciplinasPerfis", "TurmasExternasInDisciplinas"]),
     semestre1IsActived() {
       return (
         this.filtroSemestres.ativo === 1 || this.filtroSemestres.ativo === 3
@@ -5377,10 +5397,6 @@ export default {
 
     Cursos() {
       return this.$store.state.curso.Cursos;
-    },
-
-    Turmas() {
-      return this.$store.state.turma.Turmas;
     },
 
     Disciplinas() {
@@ -5462,14 +5478,13 @@ export default {
 
 <style scoped>
 .semestre-title {
-  clear: both;
-  display: block;
-  padding-top: 0px;
-  text-align: start !important;
-  font-weight: bold;
+  position: relative;
+  width: 100%;
   font-size: 16px;
-  padding-top: 5px !important;
-  padding-bottom: 5px !important;
+  padding: 5px;
+  background-color: var(--light-gray);
+  text-align: start;
+  font-weight: bold;
 }
 .curso-title {
   width: 100%;
@@ -5477,7 +5492,6 @@ export default {
   font-size: 12px !important;
   font-weight: bold !important;
 }
-
 ::v-deep .container-horarios .div-table .periodo-title {
   font-size: 12px;
   font-weight: normal;
@@ -5490,7 +5504,7 @@ export default {
 ::v-deep .container-horarios .div-table .tg td {
   font-family: Arial, sans-serif;
   font-size: 11px;
-  padding: 0px;
+  padding: 0px !important;
   border-style: solid;
   border-width: 1px;
   overflow: hidden;
@@ -5520,9 +5534,18 @@ export default {
   min-width: 50px !important;
 }
 ::v-deep .container-horarios td p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
   min-width: 48px !important;
-  padding-right: 1px !important;
-  padding-left: 1px !important;
+  padding: 0 1px !important;
   margin: 0 !important;
+}
+
+::v-deep .container-horarios td div:hover,
+::v-deep .container-horarios td p:hover {
+  cursor: default;
+  background-color: var(--light-gray) !important;
 }
 </style>

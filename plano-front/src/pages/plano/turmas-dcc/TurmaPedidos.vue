@@ -1,8 +1,8 @@
 <template>
-  <div class="turma-pedidos">
+  <div class="pedidos-container">
     <input
       type="text"
-      :class="{ 'pedido-empty': pedidoForm.vagasPeriodizadas == 0 }"
+      :class="['input-pedidos', { empty: pedidoForm.vagasPeriodizadas == 0 }]"
       v-model.number="pedidoForm.vagasPeriodizadas"
       v-focus-pedido
       @keypress="onlyNumber"
@@ -11,7 +11,10 @@
 
     <input
       type="text"
-      :class="{ 'pedido-empty': pedidoForm.vagasNaoPeriodizadas == 0 }"
+      :class="[
+        'input-pedidos',
+        { empty: pedidoForm.vagasNaoPeriodizadas == 0 },
+      ]"
       v-model.number="pedidoForm.vagasNaoPeriodizadas"
       v-focus-pedido
       @keypress="onlyNumber"
@@ -53,7 +56,6 @@ export default {
   data() {
     return {
       ativo: false,
-      valorAtual: undefined,
       pedidoForm: _.clone(emptyPedido),
     };
   },
@@ -112,26 +114,5 @@ export default {
 };
 </script>
 <style scoped>
-.turma-pedidos {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  height: 44px;
-  padding: 2.5px 2px;
-}
-.turma-pedidos input {
-  width: 100%;
-  height: 18px;
-  font-size: 11px;
-  text-align: center;
-  color: #414141 !important;
-  border: 1px solid #414141 !important;
-  background-color: #e7e7e7;
-}
-.turma-pedidos .pedido-empty {
-  color: #dadada;
-  background-color: #fff;
-}
+@import "../../../assets/css/input-pedidos.css";
 </style>

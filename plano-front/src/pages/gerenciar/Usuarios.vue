@@ -188,10 +188,12 @@
 
           <div class="row mb-2 mt-2 mx-0">
             <div class="form-check form-check-inline col m-0 px-0 pl-1">
-              <label class="form-check-label mr-2" for="isAdmin">Admin</label>
+              <label class="form-check-label mr-2" for="userIsAdmin"
+                >Admin</label
+              >
               <input
                 type="checkbox"
-                id="isAdmin"
+                id="userIsAdmin"
                 class="form-check-input"
                 v-model="userForm.admin"
               />

@@ -108,7 +108,7 @@
         :title="'Curso'"
         :toggleFooter="isEdit"
         @btn-salvar="editCurso()"
-        @btn-delete="deleteCurso()"
+        @btn-delete="checkDeleteCurso()"
         @btn-add="addCurso()"
         @btn-clean="cleanCurso()"
       >
@@ -181,6 +181,43 @@
         </template>
       </Card>
     </div>
+
+    <BaseModal
+            ref="modalDeleteCurso"
+            :modalOptions="{
+        title: 'Deletar curso',
+        position: 'center',
+        hasBackground: true,
+        hasFooter: true,
+      }"
+            :customStyles="'width:450px; font-size:14px'"
+    >
+      <template #modal-body>
+        <p class="w-100 m-0">
+          <template v-if="isEdit">
+            O curso <b>{{cursoForm.codigo}} - {{cursoForm.nome}}</b> possui vagas alocadas. Tem certeza que deseja excluí-lo?
+          </template>
+          <template v-else>
+            Nenhum curso selecionado!
+          </template>
+        </p>
+      </template>
+      <template #modal-footer>
+        <button
+                class="btn-custom btn-modal btn-cinza paddingX-20"
+                @click="closeModalDelete()"
+        >
+          Cancelar
+        </button>
+        <button
+                v-if="isEdit"
+                class="btn-custom btn-modal btn-vermelho paddingX-20"
+                @click="deleteCurso()"
+        >
+          Deletar
+        </button>
+      </template>
+    </BaseModal>
 
     <!-- MODAL AJUDA -->
     <BaseModal
@@ -355,18 +392,7 @@ export default {
       cursoService
         .create(this.cursoForm)
         .then((response) => {
-          for (var i = 0; i < this.$store.state.turma.Turmas.length; i++) {
-            var pedido = _.clone(emptyPedido);
-            pedido.Curso = response.Curso.id;
-            pedido.Turma = this.$store.state.turma.Turmas[i].id;
-
-            pedidoService
-              .create(pedido)
-              .then(() => {})
-              .catch((error) => {
-                console.log("erro ao criar pedido: " + error);
-              });
-          }
+          this.$store.dispatch("fetchAllPedidos");
           this.cleanCurso();
 
           this.$notify({
@@ -419,10 +445,43 @@ export default {
           });
         });
     },
+
+    openModalDelete() {
+      this.$refs.modalDeleteCurso.open();
+    },
+
+    closeModalDelete() {
+      this.$refs.modalDeleteCurso.close();
+    },
+
+    checkPedidos(){
+      for (let t in this.$store.state.pedido.Pedidos){
+        let pedido = _.find(this.$store.state.pedido.Pedidos[t], (p) => {
+          if(p.Curso === this.cursoForm.id){
+            if(parseInt(p.vagasPeriodizadas, 10) > 0 || parseInt(p.vagasNaoPeriodizadas, 10) > 0){
+              return true
+            }
+          }
+          return false
+        })
+        if(pedido) return true
+      }
+      return false
+    },
+
+    checkDeleteCurso() {
+      if(this.checkPedidos()){
+        this.openModalDelete()
+      }
+      else{
+        this.deleteCurso()
+      }
+    },
     deleteCurso() {
       cursoService
         .delete(this.cursoForm.id, this.cursoForm)
         .then((response) => {
+          this.closeModalDelete()
           this.cleanCurso();
           this.$notify({
             group: "general",

@@ -27,7 +27,7 @@ import DashboardDisciplinas from "@/pages/gerenciar/Disciplinas";
 import DashboardSalas from "@/pages/gerenciar/Salas";
 import DashboardHistory from "@/pages/gerenciar/History";
 import DashboardUsuarios from "@/pages/gerenciar/Usuarios";
-import DashboardPlanos from "@/pages/gerenciar/Planos";
+import DashboardPlanos from "@/pages/gerenciar/planos/Planos";
 
 import { USER_LOGGED_OUT } from "./vuex/mutation-types";
 Vue.use(VueRouter);

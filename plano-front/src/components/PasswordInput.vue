@@ -4,14 +4,15 @@
       :id="inputId"
       type="password"
       ref="inputPassword"
-      :class="['form-control', { 'input-invalid': isInvalid && isDirty }]"
+      :placeholder="placeholder"
+      :class="[classes, { 'input-invalid': isInvalid && isDirty }]"
       @input="updateValue($event)"
       :value="value"
     />
     <i
       :class="'fas fa-' + currentPasswordIcon"
       class="input-icon"
-      :style="`font-size: ${iconSize ? iconSize : 13}px`"
+      :style="`font-size: ${iconSize}px`"
       @click="changePasswordVisibility()"
     ></i>
   </div>
@@ -24,7 +25,9 @@ export default {
     value: { type: String, default: "" },
     inputId: { type: String, default: "passwordInpt" },
     isInvalid: { type: Boolean, default: false },
-    iconSize: { type: Number, default: null },
+    iconSize: { type: Number, default: 13 },
+    classes: { type: String, default: "form-control" },
+    placeholder: { type: String, default: "" },
   },
   data() {
     return {
@@ -55,7 +58,9 @@ export default {
   width: 100%;
   position: relative;
 }
-
+.input-container > input {
+  padding-right: 30px !important;
+}
 .input-icon {
   cursor: pointer;
   position: absolute;

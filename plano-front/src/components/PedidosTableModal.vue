@@ -1,44 +1,24 @@
 <template>
-  <div class="InputPedidos">
+  <div class="modal-pedidos-container">
     <input
-      :disabled="Admin ? false : true"
-      v-if="pedidoForm.vagasPeriodizadas == 0"
       type="text"
-      v-model="pedidoForm.vagasPeriodizadas"
-      style="margin:1.5px 2px; color:#DADADA;"
-      v-on:change="editPedido(pedido)"
-      v-on:focus="focusPedido"
-      v-on:blur="blurPedido"
+      :class="['input-pedidos', { empty: pedidoForm.vagasPeriodizadas == 0 }]"
+      v-model.number="pedidoForm.vagasPeriodizadas"
+      @change="editPedido(pedido)"
+      @focus="focusPedido"
+      @blur="blurPedido"
     />
+
     <input
-      :disabled="Admin ? false : true"
-      v-else
       type="text"
-      v-model="pedidoForm.vagasPeriodizadas"
-      style="margin:1.5px 2px; background-color: #e7e7e7;"
-      v-on:change="editPedido(pedido)"
-      v-on:focus="focusPedido"
-      v-on:blur="blurPedido"
-    />
-    <input
-      :disabled="Admin ? false : true"
-      v-if="pedidoForm.vagasNaoPeriodizadas == 0"
-      type="text"
+      :class="[
+        'input-pedidos',
+        { empty: pedidoForm.vagasNaoPeriodizadas == 0 },
+      ]"
       v-model="pedidoForm.vagasNaoPeriodizadas"
-      style="margin:1.5px 2px; color:#DADADA;"
-      v-on:change="editPedido(pedido)"
-      v-on:focus="focusPedido"
-      v-on:blur="blurPedido"
-    />
-    <input
-      :disabled="Admin ? false : true"
-      v-else
-      type="text"
-      v-model="pedidoForm.vagasNaoPeriodizadas"
-      style="margin:1.5px 2px; background-color: #e7e7e7;"
-      v-on:change="editPedido(pedido)"
-      v-on:focus="focusPedido"
-      v-on:blur="blurPedido"
+      @change="editPedido(pedido)"
+      @focus="focusPedido"
+      @blur="blurPedido"
     />
   </div>
 </template>
@@ -140,13 +120,20 @@ export default {
 </script>
 
 <style scoped>
-.InputPedidos {
+@import "../assets/css/input-pedidos.css";
+
+.modal-pedidos-container {
   display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  padding: 2.5px 0 !important;
 }
-input {
-  width: 28px !important;
-  height: 20px !important;
-  text-align: center !important;
-  border: 1px rgb(51, 51, 51) solid;
+.modal-pedidos-container > input {
+  width: 30px !important;
+  height: 18px !important;
+  text-align: center;
+  font-size: 11px;
+  border: 1px solid #414141 !important;
 }
 </style>

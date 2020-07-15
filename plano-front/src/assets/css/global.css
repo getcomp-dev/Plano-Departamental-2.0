@@ -2,13 +2,41 @@
   --navbar-height: 30px;
   --dark-blue: #0055af;
   --light-blue: #0079fa;
-  --light-gray: #dee2e6;
+  --light-gray: #e9ecef;
+  --dark-gray: #343a40;
 }
 @media screen and (max-width: 470px) {
   :root {
     --navbar-height: 60px;
   }
 }
+.div-table {
+  overflow: hidden;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  padding: 0;
+}
+.sticky {
+  display: block !important;
+  overflow: hidden !important;
+  position: sticky !important;
+  top: 0 !important;
+  overflow: hidden !important;
+  z-index: 5 !important;
+}
+.sticky2 {
+  display: block !important;
+  overflow: hidden !important;
+  position: sticky !important;
+  top: 37px !important;
+  overflow: hidden !important;
+  z-index: 5;
+}
+
 *:focus {
   border-color: #80bdff !important;
   outline: 0 !important;
@@ -35,14 +63,16 @@ main .main-component {
   width: 100%;
   flex-wrap: wrap;
 }
+.clickable {
+  cursor: pointer !important;
+}
+.max-content {
+  width: -webkit-max-content !important;
+  width: -moz-max-content !important;
+  width: max-content !important;
+}
 .less-padding {
   padding: 0 2px !important;
-}
-.form-inline .titulo {
-  font-size: 25px;
-  font-weight: normal !important;
-  padding-left: 0 !important;
-  margin: 0 !important;
 }
 .low-opacity {
   opacity: 0.4;
@@ -60,33 +90,37 @@ main .main-component {
   padding-right: 20px !important;
   padding-left: 20px !important;
 }
-
-/* searchDisciplinas */
-.search-text:hover {
-  color: rgb(102, 102, 102) !important;
-  background-color: #dddddd !important;
+.popover {
+  font-size: 11px !important;
 }
-.search-text {
-  background-color: #ffffff !important;
-  border-left: none !important;
+.popover .popover-header {
+  font-size: 11px !important;
+  /* padding-top: 5px;
+  padding-bottom: 5px; */
+  font-weight: bold;
 }
-.search-btn {
-  cursor: pointer;
-  height: 25px;
-  background-color: #fff;
-  font-size: 18px;
-}
-.search-btn :hover {
-  background-color: #fff;
+.popover .popover-body {
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 
-.clickable {
-  cursor: pointer !important;
+label[required] {
+  position: relative;
 }
-.max-content {
-  width: -webkit-max-content !important;
-  width: -moz-max-content !important;
-  width: max-content !important;
+label[required]:after {
+  content: "*";
+  position: absolute;
+  top: 0;
+  right: -10px;
+  font-size: 16px;
+  color: rgb(255, 0, 0);
+}
+
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
 }
 
 .modal-custom .list-group,
@@ -116,6 +150,7 @@ main .main-component {
   align-items: flex-start;
   word-wrap: break-word;
 }
+
 /* notification */
 .vue-notification {
   padding: 10px;

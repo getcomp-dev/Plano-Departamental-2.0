@@ -648,7 +648,6 @@ import {
   BaseModal,
   NavTab,
   BodyModalEditTurma,
-  LoadingPage,
   BaseButton,
 } from "@/components/index.js";
 import NovaTurma from "./NovaTurma.vue";
@@ -665,7 +664,6 @@ export default {
     NavTab,
     BaseTable,
     BaseModal,
-    LoadingPage,
     BaseButton,
   },
   data() {
@@ -840,42 +838,20 @@ export default {
       this.clearDelete();
     },
     deleteTurma(turma) {
-      const turmaToDelete = _.clone(turma);
-      turmaToDelete.periodo = null;
-      turmaToDelete.letra = null;
-      turmaToDelete.turno1 = null;
-      turmaToDelete.turno2 = null;
-      turmaToDelete.Disciplina = null;
-      turmaToDelete.Docente1 = null;
-      turmaToDelete.Docente2 = null;
-      turmaToDelete.Horario1 = null;
-      turmaToDelete.Horario2 = null;
-      turmaToDelete.Sala1 = null;
-      turmaToDelete.Sala2 = null;
-
-      this.editTurma(turmaToDelete);
-
-      let pedidos = _.clone(this.$store.state.pedido.Pedidos[turmaToDelete.id]);
-      for (let i = 0; i < pedidos.length; i++) {
-        if (
-          !(
-            pedidos[i].vagasPeriodizadas === 0 &&
-            pedidos[i].vagasNaoPeriodizadas === 0
-          )
-        ) {
-          pedidos[i].vagasPeriodizadas = 0;
-          pedidos[i].vagasNaoPeriodizadas = 0;
-          pedidoService
-            .update(pedidos[i].Curso, pedidos[i].Turma, pedidos[i])
-            .then(() => {})
-            .catch((error) => {
-              this.showNotification({
-                type: "error",
-                message: error,
-              });
-            });
-        }
-      }
+      turmaService
+        .delete(turma.id)
+        .then((response) => {
+          this.showNotification({
+            type: "success",
+            message: response.message,
+          });
+        })
+        .catch((error) => {
+          this.showNotification({
+            type: "error",
+            message: error,
+          });
+        });
     },
     addTurma() {
       EventBus.$emit("addTurma");

@@ -23,10 +23,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'1-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'1-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -44,10 +44,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'2-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'2-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -65,10 +65,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'3-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'3-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -86,10 +86,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'4-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'4-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -107,10 +107,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'5-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'5-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -132,10 +132,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'6-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'6-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -153,10 +153,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'7-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'7-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -174,10 +174,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'8-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'8-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -195,10 +195,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'9-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'9-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -216,10 +216,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'10-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'10-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -241,10 +241,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'11-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'11-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -262,10 +262,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'12-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'12-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -283,10 +283,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'13-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'13-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -304,10 +304,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'14-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'14-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -325,10 +325,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'15-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'15-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -350,10 +350,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'16-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'16-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -371,10 +371,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'17-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'17-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -392,10 +392,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'18-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'18-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -413,10 +413,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'19-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'19-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -434,10 +434,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'20-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'20-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -459,10 +459,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'21-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'21-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -480,10 +480,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'22-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'22-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -501,10 +501,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'23-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'23-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -522,10 +522,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'24-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'24-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -543,10 +543,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'25-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'25-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -568,10 +568,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'26-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'26-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -589,10 +589,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'27-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'27-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -610,10 +610,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'28-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'28-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -631,10 +631,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'29-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'29-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -652,10 +652,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'30-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'30-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -677,10 +677,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'31-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'31-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -698,10 +698,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'32-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'32-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -719,10 +719,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'33-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'33-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -740,10 +740,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'34-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'34-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -761,10 +761,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'35-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'35-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -786,10 +786,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'36-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'36-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -807,10 +807,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'37-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'37-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -828,10 +828,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'38-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'38-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -849,10 +849,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'39-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'39-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -870,10 +870,10 @@
                 v-if="turma.Disciplina === disciplina.id"
               >
                 <div
-                  :key="'40-' + turma.Disciplina + '-' + disciplina.id"
-                  v-b-popover.html.hover.top="{
-                    customClass: 'popoverText',
-                    content: disciplina.nome + ' <br> ' + professor(turma),
+                  :key="'40-' + turma.Disciplina + disciplina.id"
+                  v-b-popover.hover.right="{
+                    title: disciplina.nome,
+                    content: professor(turma),
                   }"
                 >
                   {{ disciplina.codigo }}
@@ -948,8 +948,10 @@ export default {
 .container-horarios .div-table {
   min-width: max-content;
 }
-.popoverText {
-  font-family: Arial, sans-serif !important;
-  font-size: 11px !important;
+.container-horarios td div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1px !important;
 }
 </style>

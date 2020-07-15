@@ -1,53 +1,63 @@
 <template>
-  <div id="loginForm" class="text-center">
+  <div class="login-container">
     <div class="card ml-auto mr-auto">
       <div class="card-header">
         <h1 class="card-title">Login</h1>
       </div>
-      <div class="card-body">
+      <div class="card-body" :class="{ 'pb-5': error != null }">
         <form class="form-signin" @submit.prevent="doLogin">
-          <b-alert :show="Boolean(error)" variant="danger" dismissible>{{
-            error
-          }}</b-alert>
-          <label for="login" class="sr-only">Usuário</label>
+          <label for="userLogin" class="sr-only">Usuário</label>
           <input
             v-focus
             type="text"
-            id="login"
+            id="userLogin"
             class="form-control"
             placeholder="Usuário"
-            v-model.trim="form.login"
+            v-model="form.login"
           />
-          <label for="senha" class="sr-only">Senha</label>
-          <input
-            type="password"
-            id="senha"
-            class="form-control"
-            placeholder="Senha"
-            v-model.trim="form.senha"
+
+          <label for="userSenha" class="sr-only">Senha</label>
+          <PasswordInput
+            :id="'userSenha'"
+            :placeholder="'Senha'"
+            :classes="'form-control'"
+            :iconSize="12"
+            v-model="form.senha"
           />
-          <button class="btn btn-sm btn-block mt-3" type="submit">
+          <button type="submit" class="btn btn-sm btn-block mt-4 mb-3">
             Entrar
           </button>
+
+          <b-alert
+            :show="Boolean(error) ? 3 : false"
+            @dismissed="error = null"
+            variant="danger"
+            dismissible
+            fade
+            >{{ error }}</b-alert
+          >
         </form>
       </div>
     </div>
+    <LoadingView :visibility="isLoading"></LoadingView>
   </div>
 </template>
 
 <script>
+import { LoadingView, PasswordInput } from "@/components";
+
 export default {
   name: "TheLogin",
+  components: { LoadingView, PasswordInput },
   data() {
     return {
       form: {
         login: "",
         senha: "",
       },
-      error: undefined,
+      error: null,
     };
   },
-
   directives: {
     focus: {
       inserted: function(el) {
@@ -55,28 +65,6 @@ export default {
       },
     },
   },
-
-  methods: {
-    doLogin() {
-      this.$store
-        .dispatch("authenticate", this.form)
-        .then(() => {
-          if (this.$store.state.route.query.redirect) {
-            this.$router.replace(this.$store.state.route.query.redirect);
-          } else {
-            this.$router.replace("/dashboard");
-          }
-        })
-        .catch((error) => {
-          if (error.response) {
-            this.error = error.response.data.message;
-          } else {
-            this.error = "Erro na requisição! Tente novamente.";
-          }
-        });
-    },
-  },
-
   beforeCreate() {
     this.$store
       .dispatch("fetchUsuario")
@@ -85,91 +73,96 @@ export default {
       })
       .catch(() => {});
   },
+  methods: {
+    async doLogin() {
+      try {
+        await this.$store.dispatch("authenticate", this.form);
+        this.$store.commit("COMPONENT_LOADING");
+
+        if (this.$store.state.route.query.redirect)
+          this.$router.replace(this.$store.state.route.query.redirect);
+        else this.$router.replace("/dashboard");
+      } catch (error) {
+        if (error.response) this.error = error.response.data.message;
+        else this.error = "Erro na requisição! Tente novamente.";
+      }
+    },
+  },
+  computed: {
+    isLoading() {
+      return this.$store.state.isLoading;
+    },
+  },
 };
 </script>
 
 <style scoped>
-#loginForm {
-  display: -ms-flexbox;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
-  display: flex;
-  -ms-flex-align: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -moz-box-align: center;
-  align-items: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
+.login-container {
+  position: relative;
   background-color: #f5f5f5;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
+  text-align: center;
+}
+.card {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -125px);
+  border: none;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19);
+}
+.card-header {
+  height: 50px;
+  background-color: #dcdcdc;
+}
+.card-title {
+  font-size: 22px;
+  font-weight: normal;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.card-body {
+  background-color: #faf8f8;
+  transition: all 0.3s;
 }
 
 .form-signin {
   width: 100%;
-  max-width: 330px;
-  padding: 15px;
+  width: 250px !important;
+  padding: 10px 20px;
   margin: auto;
-}
-
-.form-signin .form-control {
   position: relative;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  height: auto;
-  padding: 10px;
+}
+::v-deep .card-body > .form-signin .form-control {
+  width: 100%;
+  padding: 2px 10px;
   font-size: 14px;
-}
-
-.form-signin .form-control:focus {
-  z-index: 2;
-}
-
-.form-signin input[type="text"] {
   margin-bottom: 10px;
-}
-
-.form-signin input[type="password"] {
-  margin-bottom: 10px;
-}
-input {
-  height: 28px !important;
+  height: 30px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.07);
 }
-.card {
-  border: none;
-  box-shadow: 0 10px 20px rgba(49, 68, 177, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
-  border-radius: 5px;
-}
-.card-header {
-  min-height: 50px;
-  max-height: 50px;
-  background-color: #dcdcdc;
-  border-color: rgb(209, 209, 209);
-}
-.card-title {
-  font-size: 22px;
-  font-weight: 300;
-  text-transform: uppercase;
-}
-.card-body {
-  background-color: #faf8f8;
-}
+
 .btn {
-  background-color: #c0c0c0;
+  background-color: #adadad;
   border-radius: 15px;
   color: #262626;
   box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease 0s;
   cursor: pointer;
-  outline: none;
+  font-weight: bold;
 }
 .btn:hover {
-  background-color: #808080;
-  border-color: #808080;
-  box-shadow: 0px 15px 20px rgba(68, 83, 102, 0.4);
-  transform: translateY(-3px);
+  filter: brightness(80%);
+}
+.alert {
+  width: 200px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 12px;
+  text-align: center;
+  margin: 0 !important;
+  /* padding: 10px auto; */
 }
 </style>

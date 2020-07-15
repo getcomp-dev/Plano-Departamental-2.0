@@ -24,10 +24,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content:
-                '<b></b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -47,9 +46,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -69,9 +68,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -91,9 +90,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -113,9 +112,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -139,9 +138,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -161,9 +160,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -183,9 +182,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -205,9 +204,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -227,9 +226,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -253,9 +252,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -275,9 +274,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -297,9 +296,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -319,9 +318,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -341,9 +340,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -367,9 +366,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -389,9 +388,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -411,9 +410,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -433,9 +432,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -455,9 +454,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -481,9 +480,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -503,9 +502,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -525,9 +524,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -547,9 +546,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -569,9 +568,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -595,9 +594,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -617,9 +616,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -639,9 +638,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -661,9 +660,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -683,9 +682,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -709,9 +708,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -731,9 +730,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -753,9 +752,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -775,9 +774,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -797,9 +796,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -823,9 +822,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -845,9 +844,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -867,9 +866,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -889,9 +888,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -911,9 +910,9 @@
             v-for="disciplina in Disciplinas"
             v-if="turma.Disciplina === disciplina.id"
             :key="turma.letra + disciplina.id"
-            v-b-popover.html.hover.top="{
-              customClass: 'popoverText',
-              content: '<b>' + disciplina.nome + '</b> <br> ' + docente(turma),
+            v-b-popover.hover.right="{
+              title: disciplina.nome,
+              content: findDocenteInTurma(turma),
             }"
           >
             {{ disciplina.codigo }} {{ turma.letra }}
@@ -928,7 +927,7 @@
 import _ from "lodash";
 
 export default {
-  name: "TableHorarios000",
+  name: "TableHorariosLab",
   props: {
     Turmas: { type: Array, required: true, default: () => [] },
     laboratorio: { type: Object, required: true },
@@ -971,7 +970,7 @@ export default {
 
       return result;
     },
-    docente(turma) {
+    findDocenteInTurma(turma) {
       let d1 = undefined,
         d2 = undefined;
       if (!_.isNull(turma.Docente1))
@@ -1039,18 +1038,11 @@ export default {
 }
 .tg td p {
   min-width: 64px !important;
-  padding-right: 1px !important;
-  padding-left: 1px !important;
+  padding: 0 1px !important;
   margin: 0 !important;
 }
-.tg td div {
-  min-width: 62px !important;
-  padding-right: 1px !important;
-  padding-left: 1px !important;
-  margin: 0 !important;
-}
-.popoverText {
-  font-family: Arial, sans-serif !important;
-  font-size: 11px !important;
+.tg td p:hover {
+  cursor: default;
+  background-color: var(--light-gray) !important;
 }
 </style>

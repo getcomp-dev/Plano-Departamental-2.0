@@ -109,7 +109,6 @@
                   {{ getDisciplinaVagasInCurrentSemestres(disciplina) }}
                 </td>
               </tr>
-              <!--  -->
               <tr :key="'turmasTr' + turma.id">
                 <td style="width: 80px" class="t-start"></td>
                 <td style="width: 350px"></td>
@@ -172,6 +171,7 @@
               </tr>
             </template>
           </template>
+
           <tr v-show="!DisciplinasOrderedMain.length">
             <td colspan="8" style="width: 1000px">
               <b>Nenhuma disciplina encontrada.</b> Clique no botão de filtros
@@ -193,23 +193,23 @@
       <template #modal-body>
         <ul class="list-ajuda list-group">
           <li class="list-group-item">
-            <b>Para exibir as tabelas de horários:</b> Clique no ícone filtros
+            <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
             <i class="fas fa-list-ul cancelbtn"></i> no cabeçalho da página e na
             janela que será aberta utilize as abas para navegar entre os tipos
             de filtros. Marque em suas respectivas tabelas quais informações
             deseja visualizar, e para finalizar clique no botão OK.
           </li>
           <li class="list-group-item">
-            <b>Para gerar relatório das disciplinas:</b> Clique no ícone
-            relatório <i class="fas fa-file-alt cancelbtn"></i>, selecione se
-            deseja gerar o relatório completo com todos as disciplinas, ou
+            <b>Para gerar relatório de turmas das disciplinas:</b> Clique no
+            ícone relatório <i class="fas fa-file-alt cancelbtn"></i> selecione
+            se deseja gerar o relatório completo com todos as disciplinas, ou
             apenas o relatório parcial com as disciplinas que estão selecionados
             no momento.
           </li>
           <li class="list-group-item">
-            <b class="ajuda-b">Para visualizar divisões de vagas:</b>
-            Clique no número de vagas de uma turma para visualizar a alocação
-            das vagas por cursos.
+            <b>Para visualizar vagas das turma:</b>
+            Clique no número de vagas da turma, presente na ultima coluna da
+            tabela, para visualizar a alocação das vagas por cursos.
           </li>
         </ul>
       </template>
@@ -911,26 +911,7 @@ export default {
 .input-form label {
   margin: 0;
 }
-.less-padding {
-  padding: 0 2px;
-}
 
-/* Formularios no topo da tela */
-.form-inline .input-group,
-.form-inline {
-  width: auto;
-}
-.form-group {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex: 0 0 auto;
-  flex: 0 0 auto;
-  -ms-flex-flow: row wrap;
-  flex-flow: row wrap;
-  -ms-flex-align: center;
-  align-items: center;
-  margin-bottom: 0;
-}
 .form-control {
   height: 25px !important;
   font-size: 12px !important;

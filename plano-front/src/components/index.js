@@ -6,7 +6,7 @@ import BodyModalEditTurma from "./BodyModalEditTurma.vue";
 import PedidosTableModal from "./PedidosTableModal.vue";
 import BaseModal from "./BaseModal.vue";
 import BaseButton from "./BaseButton.vue";
-import LoadingPage from "./LoadingPage.vue";
+import LoadingView from "./LoadingView.vue";
 import PasswordInput from "./PasswordInput.vue";
 import ModalRelatorio from "./ModalRelatorio.vue";
 
@@ -19,7 +19,7 @@ export {
   BodyModalEditTurma,
   PedidosTableModal,
   BaseModal,
-  LoadingPage,
+  LoadingView,
   BaseButton,
   ModalRelatorio,
 };

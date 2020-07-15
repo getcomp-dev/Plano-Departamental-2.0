@@ -83,7 +83,7 @@ export default {
       positions: {
         right: "top: 80px; right: 20px; z-index: 900;",
         center:
-          "top: 25px; left:50%; transform: translateX(-50%); z-index: 1000;",
+          "top: 25px; left:50%; transform: translateX(-50%); z-index: 1000; max-height: calc(100% - 3rem);",
         centerNavbar:
           "top: 40px;left:50%; transform: translateX(-50%); z-index: 1000;",
       },
@@ -94,8 +94,8 @@ export default {
     window.addEventListener("keyup", this.onEscKeyUp);
   },
   beforeDestroy() {
-    EventBus.$emit("toggle-bg-modal", false);
     this.$off("on-close");
+    this.$store.commit("HIDE_MODAL_OVERLAY");
     window.removeEventListener("keyup", this.onEscKeyUp);
   },
   methods: {
@@ -200,15 +200,16 @@ export default {
     visibility(newValue) {
       if (newValue) {
         if (this.modalConfigs.hasBackground) {
-          EventBus.$emit("toggle-bg-modal", true);
+          this.$store.commit("SHOW_MODAL_OVERLAY");
           EventBus.$on("close-modal", this.close);
         }
       } else {
+        this.$emit("on-close");
+
         if (this.modalConfigs.hasBackground) {
-          EventBus.$emit("toggle-bg-modal", false);
+          this.$store.commit("HIDE_MODAL_OVERLAY");
           EventBus.$off("close-modal");
         }
-        this.$emit("on-close");
       }
     },
   },
@@ -219,7 +220,7 @@ export default {
 @import "../assets/css/base-modal-animations.css";
 
 .modal-custom {
-  position: absolute;
+  position: fixed;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
