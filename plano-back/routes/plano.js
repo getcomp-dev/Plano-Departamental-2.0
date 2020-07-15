@@ -34,6 +34,7 @@ router.post('/', function (req, res, next) {
     console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Plano.create({
         ano: req.body.ano,
+        obs: req.body.nome,
         obs: req.body.obs
     }).then(function (plano) {
         ioBroadcast(SM.PLANO_CREATED, {'msg': 'Plano criado!', 'Plano': plano})
@@ -61,6 +62,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
 
         return plano.updateAttributes({
             ano: req.body.ano,
+            obs: req.body.nome,
             obs: req.body.obs
         })
     }).then(function (plano) {

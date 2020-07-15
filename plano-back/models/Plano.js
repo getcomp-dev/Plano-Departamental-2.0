@@ -5,6 +5,9 @@ module.exports = function (sequelize, DataTypes) {
         ano: {
             type: DataTypes.INTEGER
         },
+        nome: {
+            type: DataTypes.STRING
+        },
         obs: {
             type: DataTypes.STRING
         }
