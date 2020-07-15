@@ -195,7 +195,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
         fontSize: 10,
         margin: [0, 0, 0, 5],
     });
-    var laboratorios = _.filter(this.Salas, {laboratorio: true};
+    var laboratorios = _.filter(this.Salas, {laboratorio: true});
     var disciplinas = _.orderBy(this.Disciplinas, ["nome"]);
     var turmas1 = _.filter(this.Turmas, ["periodo", 1]);
     var turmas2 = _.filter(this.Turmas, ["periodo", 3]);
@@ -1063,7 +1063,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
     labsStream.on("finish", resolve)
     pdfDocLabs.pipe(labsStream);
     pdfDocLabs.end();
-},)
+})
 
 function turmas(professor, turmas){
     return _.orderBy(_.filter(turmas,(turma) => {
