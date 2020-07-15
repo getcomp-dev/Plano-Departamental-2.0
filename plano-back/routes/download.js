@@ -47,7 +47,7 @@ router.get('/', function(req, res, next){
                     host: 'localhost',
                     user: 'root',
                     password: '',
-                    database: 'plano_dev',
+                    database: 'mult_planos',
                 },dumpToFile: './backup.sql',
             }
         ).then(() => {
