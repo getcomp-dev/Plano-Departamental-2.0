@@ -14,7 +14,7 @@
     "html2canvas": "^1.0.0-rc.3",
     "jspdf": "^1.4.1",
     "local-storage": "^1.4.2",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.19",
     "lodash.defaultsdeep": "4.6.1",
     "pdfmake": "^0.1.58",
     "portal-vue": "^2.1.6",
