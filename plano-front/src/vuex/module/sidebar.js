@@ -1,22 +1,29 @@
-import { OPEN_SIDEBAR, CLOSE_SIDEBAR, TOGGLE_SIDEBAR } from "../mutation-types";
+import { TOGGLE_SIDEBAR, SET_SIDEBAR_VISIBILITY } from "../mutation-types";
 
 const state = {
   sidebarVisibility: false,
 };
 
 const mutations = {
-  [OPEN_SIDEBAR](state) {
-    state.sidebarVisibility = true;
-  },
-  [CLOSE_SIDEBAR](state) {
-    state.sidebarVisibility = false;
+  [SET_SIDEBAR_VISIBILITY](state, data) {
+    state.sidebarVisibility = data;
   },
   [TOGGLE_SIDEBAR](state) {
     state.sidebarVisibility = !state.sidebarVisibility;
   },
 };
 
-const actions = {};
+const actions = {
+  openSidebar({ commit }) {
+    commit("SET_SIDEBAR_VISIBILITY", true);
+  },
+  closeSidebar({ commit }) {
+    commit("SET_SIDEBAR_VISIBILITY", false);
+  },
+  toggleSidebar({ commit }) {
+    commit("TOGGLE_SIDEBAR");
+  },
+};
 
 const getters = {
   sidebarVisibility(state) {

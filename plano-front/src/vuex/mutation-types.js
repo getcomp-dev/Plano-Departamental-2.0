@@ -130,6 +130,8 @@ export const SHOW_MODAL_OVERLAY = "SHOW_MODAL_OVERLAY";
 export const HIDE_MODAL_OVERLAY = "HIDE_MODAL_OVERLAY";
 
 //sidebar.js
-export const OPEN_SIDEBAR = "OPEN_SIDEBAR";
-export const CLOSE_SIDEBAR = "CLOSE_SIDEBAR";
+export const SET_SIDEBAR_VISIBILITY = "SET_SIDEBAR_VISIBILITY";
 export const TOGGLE_SIDEBAR = "TOGGLE_SIDEBAR";
+
+//loadingView.js
+export const SET_LOADING_STATE = "SET_LOADING_STATE";

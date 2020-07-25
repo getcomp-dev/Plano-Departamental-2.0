@@ -22,6 +22,8 @@ import usuario from "./module/usuario";
 import history from "./module/history";
 import sidebar from "./module/sidebar";
 import baseModalOverlay from "./module/baseModalOverlay";
+import loadingView from "./module/loadingView";
+import routesLists from "./module/routesLists";
 
 import {
   USER_LOGGED_OUT,
@@ -96,6 +98,8 @@ export default new Vuex.Store({
     history,
     sidebar,
     baseModalOverlay,
+    loadingView,
+    routesLists,
   },
 
   strict: process.env.NODE_ENV !== "production",

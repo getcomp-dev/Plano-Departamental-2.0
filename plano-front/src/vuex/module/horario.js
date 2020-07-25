@@ -55,7 +55,7 @@ const actions = {
 };
 
 const getters = {
-  Horarios(state) {
+  AllHorarios(state) {
     return _.orderBy(state.Horarios, "horario");
   },
   HorariosEAD(state) {
@@ -63,16 +63,17 @@ const getters = {
   },
   HorariosNoturno(state, getters) {
     return _.filter(
-      getters.Horarios,
+      getters.AllHorarios,
       (h) => parseInt(h.horario.slice(3, 5)) >= 17
     );
   },
   HorariosDiurno(state, getters) {
     return _.filter(
-      getters.Horarios,
+      getters.AllHorarios,
       (h) => parseInt(h.horario.slice(3, 5)) < 17
     );
   },
+  //Usado para as tabelas de horarios-cursos e horarios-labs
   ListaDeHorariosDiurno() {
     const listHorarios = [
       {

@@ -48,13 +48,11 @@ const mutations = {
     state.Ativas2 = data.Ativas;
   },
 
-  checkDelete(state, data) {
-    let index = _.findIndex(
-      state.Deletar,
-      (turma) => turma.id === data.Turma.id
-    );
-    if (index > -1) state.Deletar.splice(index, 1);
-    else state.Deletar.push(data.Turma);
+  checkDeleteTurma(state, turmaToDelete) {
+    let index = _.findIndex(state.Deletar, ["id", turmaToDelete.id]);
+
+    if (index !== -1) state.Deletar.splice(index, 1);
+    else state.Deletar.push(turmaToDelete);
   },
 
   emptyDelete(state) {

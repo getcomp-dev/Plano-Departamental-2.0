@@ -7,12 +7,17 @@
       title: 'Turmas do novo plano',
       hasFooter: true,
     }"
+    :btnOkText="'Criar plano'"
+    @select-all="selectAllDisciplinas"
+    @select-none="selectNoneDisciplinas"
+    @btn-ok="novoPlano"
+    @on-close="clearSearch"
   >
     <template #modal-body>
       <p class="alert alert-secondary  ">
-        Selecione as disciplinas para quais as turmas do
-        <b> plano atual {{ currentPlano.ano }}</b> serão copiadas para o novo
-        plano
+        Selecione as disciplinas para quais as turmas do plano atual
+        <b>{{ currentPlano.nome + " - " + currentPlano.ano }}</b>
+        serão copiadas para o novo plano
       </p>
       <div class="div-table">
         <BaseTable
@@ -23,10 +28,10 @@
           <template #thead-search>
             <input
               type="text"
-              ref="inputSearch"
               class="form-control input-search"
               placeholder="Pesquise nome ou codigo de uma disciplina..."
-              @input="handleInputSearch"
+              :value="searchDisciplinasModal"
+              @input="debounceInput($event, 'searchDisciplinasModal')"
             />
             <button @click="clearSearch" class="btn btn-search">
               <i class="fas fa-times"></i>
@@ -91,7 +96,7 @@
                 {{ disciplina.nome }}
               </td>
               <td style="width: 85px" class="t-start">
-                {{ disciplina.perfilAbreviacao }}
+                {{ disciplina.perfil.abreviacao }}
               </td>
             </tr>
             <tr v-if="DisciplinasOrderedModal.length === 0">
@@ -103,52 +108,28 @@
         </BaseTable>
       </div>
     </template>
-
-    <template #modal-footer>
-      <div>
-        <BaseButton
-          @click="selectAllDisciplinas()"
-          :type="'text'"
-          :color="'lightblue'"
-        >
-          Selecionar todos
-        </BaseButton>
-        <BaseButton
-          @click="selectNoneDisciplinas()"
-          :type="'text'"
-          :color="'gray'"
-        >
-          Desmarcar todos
-        </BaseButton>
-      </div>
-      <BaseButton
-        @click="novoPlano()"
-        class="ml-auto"
-        :type="'text'"
-        :color="'green'"
-      >
-        Criar Plano
-      </BaseButton>
-      <!-- <button class="btn btn-success ml-auto" ></button> -->
-    </template>
   </BaseModal>
 </template>
 
 <script>
 import _ from "lodash";
-import debounce from "@/utils/debounce.js";
+import { mapGetters } from "vuex";
+import { normalizeText } from "@/common/utils";
 import pedidoExternoService from "@/common/services/pedidoExterno";
+import turmaExternaService from "@/common/services/turmaExterna";
 import planoService from "@/common/services/plano";
 import turmaService from "@/common/services/turma";
 import pedidoService from "@/common/services/pedido";
-import turmaExternaService from "@/common/services/turmaExterna";
-import { COMPONENT_LOADING, COMPONENT_LOADED } from "@/vuex/mutation-types";
-import { toggleOrdination, toggleItemInArray } from "@/mixins/index.js";
-import { BaseModal, BaseTable, BaseButton } from "@/components/index.js";
+import {
+  toggleOrdination,
+  toggleItemInArray,
+  debounceInput,
+} from "@/common/mixins";
+import { BaseModal, BaseTable, BaseButton } from "@/components/ui";
 
 export default {
   name: "ModalNovoPlano",
-  mixins: [toggleItemInArray, toggleOrdination],
+  mixins: [toggleItemInArray, toggleOrdination, debounceInput],
   components: { BaseModal, BaseTable, BaseButton },
   props: {
     plano: { type: Object, required: true },
@@ -171,13 +152,7 @@ export default {
       this.$refs.baseModalNovoPlano.open();
     },
     clearSearch() {
-      this.$refs.inputSearch.value = "";
       this.searchDisciplinasModal = "";
-    },
-    handleInputSearch(e) {
-      debounce(() => {
-        this.searchDisciplinasModal = e.target.value;
-      }, 500);
     },
     selectAllDisciplinas() {
       this.filtrosDisciplinas = [
@@ -186,13 +161,6 @@ export default {
     },
     selectNoneDisciplinas() {
       this.filtrosDisciplinas = [];
-    },
-    normalizeText(text) {
-      return text
-        .toUpperCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/\s/g, "");
     },
     gradesAtivas(ano) {
       //define grades ativas por periodo
@@ -594,7 +562,7 @@ export default {
       disciplinasNovoPlano1Semestre = _.filter(
         disciplinasNovoPlano1Semestre,
         (d) => {
-          let perfil = _.find(this.Disciplinas, {
+          let perfil = _.find(this.AllDisciplinas, {
             id: d.Disciplina,
           }).Perfil;
           return perfil !== 13 && perfil !== 15;
@@ -603,7 +571,7 @@ export default {
       disciplinasNovoPlano2Semestre = _.filter(
         disciplinasNovoPlano2Semestre,
         (d) => {
-          let perfil = _.find(this.Disciplinas, {
+          let perfil = _.find(this.AllDisciplinas, {
             id: d.Disciplina,
           }).Perfil;
           return perfil !== 13 && perfil !== 15;
@@ -691,14 +659,13 @@ export default {
         }
       });
       //{Disciplina:id, CCD:true/false, EC:true/false, CCN:true/false, SI:true/false, periodo:1/3}
-      console.log(turmasNovoPlano[0]);
+
       return turmasNovoPlano;
     },
     novoPlano() {
-      this.$store.commit(COMPONENT_LOADING);
+      this.$store.commit("COMPONENT_LOADING");
 
       let turmasNovoPlano = this.generateTurmasNovoPlano();
-      console.log("TURMAS GENERATED");
 
       planoService.create(this.planoForm).then((plano) => {
         localStorage.setItem("Plano", plano.Plano.id);
@@ -782,7 +749,7 @@ export default {
           if (disciplina) return true;
           else return false;
         });
-        console.log(turmasCopiar)
+
         turmasCopiar.forEach((t) => {
           turmaService
             .create({
@@ -853,17 +820,18 @@ export default {
               console.log("erro ao criar turma externa: " + error);
             });
         });
-        console.log("PLANO GENERATED");
+
         this.$store.dispatch("fetchAll");
 
         setTimeout(() => {
-          console.log("END LOADING");
-          this.$store.commit(COMPONENT_LOADED);
+          this.$store.commit("COMPONENT_LOADED");
         }, 300);
       });
     },
   },
   computed: {
+    ...mapGetters(["allPlanos", "DisciplinasInPerfis", "AllDisciplinas"]),
+
     DisciplinasOrderedModal() {
       return _.orderBy(
         this.DisciplinasFiltredModal,
@@ -874,11 +842,11 @@ export default {
     DisciplinasFiltredModal() {
       if (this.searchDisciplinasModal === "") return this.DisciplinasInPerfis;
 
-      const searchNormalized = this.normalizeText(this.searchDisciplinasModal);
+      const searchNormalized = normalizeText(this.searchDisciplinasModal);
 
       return _.filter(this.DisciplinasInPerfis, (disciplina) => {
-        const disciplinaNome = this.normalizeText(disciplina.nome);
-        const disciplinaCodigo = this.normalizeText(disciplina.codigo);
+        const disciplinaNome = normalizeText(disciplina.nome);
+        const disciplinaCodigo = normalizeText(disciplina.codigo);
 
         return (
           disciplinaNome.match(searchNormalized) ||
@@ -886,55 +854,15 @@ export default {
         );
       });
     },
-    DisciplinasInPerfis() {
-      const disciplinasResultantes = [];
-
-      this.Disciplinas.forEach((disciplina) => {
-        const perfilFounded = _.find(
-          this.Perfis,
-          (perfil) => perfil.id === disciplina.Perfil
-        );
-
-        if (perfilFounded) {
-          disciplinasResultantes.push({
-            ...disciplina,
-            perfilNome: perfilFounded.nome,
-            perfilAbreviacao: perfilFounded.abreviacao,
-          });
-        }
-      });
-      return disciplinasResultantes;
-    },
-    Perfis() {
-      return this.$store.state.perfil.Perfis;
-    },
-    Disciplinas() {
-      return this.$store.state.disciplina.Disciplinas;
-    },
-    Years() {
-      const yearsArry = [];
-      let firstYear = 2019;
-      const currentYear = new Date().getFullYear();
-      const lastYear = currentYear + 5;
-
-      while (firstYear <= lastYear) {
-        yearsArry.push(parseInt(firstYear, 10));
-        firstYear++;
-      }
-      // Apenas em desenvolvimento
-      if (window.location.href.includes("localhost")) yearsArry.push(2099);
-
-      return yearsArry;
-    },
     currentPlano() {
       return _.find(
-        this.$store.state.plano.Plano,
+        this.allPlanos,
         (plano) => plano.id === parseInt(localStorage.getItem("Plano"), 10)
       );
     },
   },
   watch: {
-    plano: {
+    currentPlano: {
       handler(newValue) {
         this.planoForm = _.clone(newValue);
       },

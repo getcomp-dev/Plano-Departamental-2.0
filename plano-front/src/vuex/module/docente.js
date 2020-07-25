@@ -55,11 +55,11 @@ const actions = {
 };
 
 const getters = {
-  Docentes(state) {
+  AllDocentes(state) {
     return _.orderBy(state.Docentes, "nome");
   },
-  DocentesAtivos(state) {
-    return _.filter(state.Docentes, ["ativo", true]);
+  DocentesAtivos(state, getters) {
+    return _.filter(getters.AllDocentes, ["ativo", true]);
   },
 };
 

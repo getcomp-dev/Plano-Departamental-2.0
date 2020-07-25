@@ -3,31 +3,31 @@ import VueRouter from "vue-router";
 import store from "./vuex/store";
 
 // Dashboard
-import Login from "@/pages/dashboard/TheLogin";
-import Dashboard from "@/pages/dashboard/TheDashboard";
-import DashboardHome from "@/pages/home/Home";
+import Login from "@/pages/dashboard/Login";
+import Dashboard from "@/pages/dashboard/Dashboard";
+import DashboardHome from "@/pages/dashboard/Home";
 // Plano
-import DashboardTurmasDCC from "@/pages/plano/turmas-dcc/TurmasDCC";
-import DashboardTurmasExternas from "@/pages/plano/turmas-externas/TurmasExternas";
-import DashboardCargaPos from "@/pages/plano/turmas-pos/CargaPos";
-import DashboardValidacoes from "@/pages/plano/validacoes/Validacoes";
+import PlanoTurmasDCC from "@/pages/plano/TurmasDCC";
+import PlanoTurmasExternas from "@/pages/plano/TurmasExternas";
+import PlanoCargaPos from "@/pages/plano/CargaPos";
+import PlanoValidacoes from "@/pages/plano/Validacoes";
 // Relatorios
-import DashboardCargaProfessores from "@/pages/relatorios/CargaProfessores";
-import DashboardGradeDisciplinas from "@/pages/relatorios/GradeDisciplinas";
-import DashboardHorarios from "@/pages/relatorios/horarios-cursos/Horarios";
-import DashboardHorariosLaboratorios from "@/pages/relatorios/horarios-labs/HorariosLabs";
-import DashboardRelatorioDisciplinas from "@/pages/relatorios/RelatorioDisciplinas";
+import RelatoriosCargaProfessores from "@/pages/relatorios/CargaProfessores";
+import RelatoriosGradeDisciplinas from "@/pages/relatorios/GradeDisciplinas";
+import RelatoriosHorarios from "@/pages/relatorios/HorariosCursos";
+import RelatoriosHorariosLabs from "@/pages/relatorios/HorariosLabs";
+import RelatoriosPlanoDepartamental from "@/pages/relatorios/PlanoDepartamental";
 // Gerenciar
-import DashboardCursos from "@/pages/gerenciar/Cursos";
-import DashboardDocentes from "@/pages/gerenciar/Docentes";
-import DashboardGradesEdit from "@/pages/gerenciar/GradesEdit";
-import DashboardGrades from "@/pages/gerenciar/Grades";
-import DashboardPerfis from "@/pages/gerenciar/Perfis";
-import DashboardDisciplinas from "@/pages/gerenciar/Disciplinas";
-import DashboardSalas from "@/pages/gerenciar/Salas";
-import DashboardHistory from "@/pages/gerenciar/History";
-import DashboardUsuarios from "@/pages/gerenciar/Usuarios";
-import DashboardPlanos from "@/pages/gerenciar/planos/Planos";
+import GerenciarCursos from "@/pages/gerenciar/Cursos";
+import GerenciarDocentes from "@/pages/gerenciar/Docentes";
+import GerenciarGradesEdit from "@/pages/gerenciar/GradesEdit";
+import GerenciarGrades from "@/pages/gerenciar/Grades";
+import GerenciarPerfis from "@/pages/gerenciar/Perfis";
+import GerenciarDisciplinas from "@/pages/gerenciar/Disciplinas";
+import GerenciarSalas from "@/pages/gerenciar/Salas";
+import GerenciarHistory from "@/pages/gerenciar/History";
+import GerenciarUsuarios from "@/pages/gerenciar/Usuarios";
+import GerenciarPlanos from "@/pages/gerenciar/Planos";
 
 import { USER_LOGGED_OUT } from "./vuex/mutation-types";
 Vue.use(VueRouter);
@@ -46,6 +46,16 @@ function requireAuth(to, from, next) {
     });
 }
 
+function requireAdmin(to, from, next) {
+  if (!store.getters.Admin) next("/");
+  else next();
+}
+
+function requireSuperAdmin(to, from, next) {
+  if (!store.getters.SuperAdmin) next("/");
+  else next();
+}
+
 const routes = [
   { path: "/", name: "home", redirect: "/dashboard", beforeEnter: requireAuth },
   { path: "/login", name: "login", component: Login },
@@ -54,56 +64,122 @@ const routes = [
     component: Dashboard,
     beforeEnter: requireAuth,
     children: [
-      { path: "", name: "dashboard", component: DashboardHome },
-      { path: "pedidos", name: "pedidos", component: DashboardTurmasDCC },
+      { path: "", name: "dashboardHome", component: DashboardHome },
 
+      //plano
       {
-        path: "turmasExternas",
+        path: "plano/turmasDcc",
+        name: "turmasDcc",
+        component: PlanoTurmasDCC,
+        beforeEnter: requireAdmin,
+      },
+      {
+        path: "plano/turmasExternas",
         name: "turmasExternas",
-        component: DashboardTurmasExternas,
-      },
-
-      { path: "horarios", name: "horarios", component: DashboardHorarios },
-      { path: "cursos", name: "cursos", component: DashboardCursos },
-      { path: "docentes", name: "docentes", component: DashboardDocentes },
-      { path: "grades", name: "grades", component: DashboardGrades },
-      {
-        path: "gradeDisciplinas",
-        name: "gradeDisciplinas",
-        component: DashboardGradeDisciplinas,
+        component: PlanoTurmasExternas,
+        beforeEnter: requireAdmin,
       },
       {
-        path: "disciplinas",
-        name: "disciplinas",
-        component: DashboardDisciplinas,
-      },
-      { path: "perfis", name: "perfis", component: DashboardPerfis },
-      {
-        path: "cargaProfessores",
-        name: "cargaProfessores",
-        component: DashboardCargaProfessores,
+        path: "plano/cargaPos",
+        name: "cargaPos",
+        component: PlanoCargaPos,
+        beforeEnter: requireAdmin,
       },
       {
-        path: "laboratoriosAlocacao",
-        name: "laboratoriosAlocacao",
-        component: DashboardHorariosLaboratorios,
-      },
-      { path: "cargaPos", name: "cargaPos", component: DashboardCargaPos },
-      { path: "salas", name: "salas", component: DashboardSalas },
-
-      {
-        path: "relatorioDisciplinas",
-        name: "relatorioDisciplinas",
-        component: DashboardRelatorioDisciplinas,
-      },
-      { path: "gradeEdit", name: "gradeEdit", component: DashboardGradesEdit },
-      { path: "history", name: "history", component: DashboardHistory },
-      { path: "usuarios", name: "usuarios", component: DashboardUsuarios },
-      { path: "planos", name: "planos", component: DashboardPlanos },
-      {
-        path: "validacoes",
+        path: "plano/Validacoes",
         name: "validacoes",
-        component: DashboardValidacoes,
+        component: PlanoValidacoes,
+        beforeEnter: requireAdmin,
+      },
+
+      //relatorios
+      {
+        path: "relatorios/cargaProfessores",
+        name: "cargaProfessores",
+        component: RelatoriosCargaProfessores,
+      },
+      {
+        path: "relatorios/gradeDisciplinas",
+        name: "gradeDisciplinas",
+        component: RelatoriosGradeDisciplinas,
+      },
+      {
+        path: "relatorios/horariosCursos",
+        name: "horariosCursos",
+        component: RelatoriosHorarios,
+      },
+      {
+        path: "relatorios/horariosLaboratorios",
+        name: "horariosLaboratorios",
+        component: RelatoriosHorariosLabs,
+      },
+      {
+        path: "relatorios/relatorioDisciplinas",
+        name: "relatorioDisciplinas",
+        component: RelatoriosPlanoDepartamental,
+      },
+
+      //gerenciar
+      {
+        path: "gerenciar/cursos",
+        name: "cursos",
+        component: GerenciarCursos,
+        beforeEnter: requireSuperAdmin,
+      },
+      {
+        path: "gerenciar/disciplinas",
+        name: "disciplinas",
+        component: GerenciarDisciplinas,
+        beforeEnter: requireSuperAdmin,
+      },
+      {
+        path: "gerenciar/docentes",
+        name: "docentes",
+        component: GerenciarDocentes,
+        beforeEnter: requireSuperAdmin,
+      },
+      {
+        path: "gerenciar/grades",
+        name: "grades",
+        component: GerenciarGrades,
+        beforeEnter: requireSuperAdmin,
+      },
+
+      {
+        path: "gerenciar/perfis",
+        name: "perfis",
+        component: GerenciarPerfis,
+        beforeEnter: requireSuperAdmin,
+      },
+      {
+        path: "gerenciar/gradesEdit",
+        name: "gradesEdit",
+        component: GerenciarGradesEdit,
+        beforeEnter: requireSuperAdmin,
+      },
+      {
+        path: "gerenciar/history",
+        name: "history",
+        component: GerenciarHistory,
+        beforeEnter: requireSuperAdmin,
+      },
+      {
+        path: "gerenciar/Planos",
+        name: "planos",
+        component: GerenciarPlanos,
+        beforeEnter: requireSuperAdmin,
+      },
+      {
+        path: "gerenciar/salas",
+        name: "salas",
+        component: GerenciarSalas,
+        beforeEnter: requireSuperAdmin,
+      },
+      {
+        path: "gerenciar/usuarios",
+        name: "usuarios",
+        component: GerenciarUsuarios,
+        beforeEnter: requireSuperAdmin,
       },
     ],
   },
@@ -117,9 +193,21 @@ const routes = [
   },
   { path: "/*", redirect: "/" },
 ];
-export default new VueRouter({
+
+const router = new VueRouter({
   routes,
   mode: "history",
   linkExactActiveClass: "active",
   saveScrollPosition: true,
 });
+
+router.beforeEach((to, from, next) => {
+  store.commit("SET_LOADING_STATE", "partial");
+  next();
+});
+
+router.afterEach(() => {
+  setTimeout(() => store.commit("SET_LOADING_STATE", "completed"), 500);
+});
+
+export default router;

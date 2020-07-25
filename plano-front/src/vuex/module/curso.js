@@ -100,6 +100,9 @@ const actions = {
 };
 
 const getters = {
+  AllCursos(state) {
+    return _.orderBy(state.Cursos, ["nome"]);
+  },
   CursosDCC(state) {
     return _.filter(state.Cursos, (curso) => {
       switch (curso.codigo) {

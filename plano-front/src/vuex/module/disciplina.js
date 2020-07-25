@@ -55,36 +55,41 @@ const actions = {
 };
 
 const getters = {
-  DisciplinasDCC(state) {
-    return _.filter(
-      state.Disciplinas,
-      (disciplina) => disciplina.Perfil !== 13 && disciplina.Perfil !== 15
-    );
-  },
-  DisciplinasExternas(state) {
-    return _.filter(
-      state.Disciplinas,
-      (disciplina) => disciplina.Perfil === 13 || disciplina.Perfil === 15
-    );
+  AllDisciplinas(state) {
+    return _.orderBy(state.Disciplinas, ["codigo"]);
   },
   DisciplinasInPerfis(state, getters) {
     const disciplinasResults = [];
 
-    _.forEach(state.Disciplinas, (disciplina) => {
-      const perfilFounded = _.find(getters.PerfisDCC, [
+    _.forEach(getters.AllDisciplinas, (disciplina) => {
+      const perfilFounded = _.find(getters.allPerfis, [
         "id",
         disciplina.Perfil,
       ]);
       if (perfilFounded)
         disciplinasResults.push({
           ...disciplina,
-          perfilNome: perfilFounded.nome,
-          perfilAbreviacao: perfilFounded.abreviacao,
-          perfilCor: perfilFounded.cor,
+          perfil: {
+            nome: perfilFounded.nome,
+            abreviacao: perfilFounded.abreviacao,
+            cor: perfilFounded.cor,
+          },
         });
     });
 
     return disciplinasResults;
+  },
+  DisciplinasDCCInPerfis(state, getters) {
+    return _.filter(
+      getters.DisciplinasInPerfis,
+      (disciplina) => disciplina.Perfil !== 13 && disciplina.Perfil !== 15
+    );
+  },
+  DisciplinasExternasInPerfis(state, getters) {
+    return _.filter(
+      getters.DisciplinasInPerfis,
+      (disciplina) => disciplina.Perfil === 13 || disciplina.Perfil === 15
+    );
   },
 };
 

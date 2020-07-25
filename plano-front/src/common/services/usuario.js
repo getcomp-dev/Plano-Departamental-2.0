@@ -19,6 +19,12 @@ export default {
         .catch((error) => Promise.reject(error))
   },
 
+  updateSuper (userId, config = {}) {
+    return Vue.axios.post(`/usuario/super/${userId}`, config)
+        .then((response) => Promise.resolve(response.data))
+        .catch((error) => Promise.reject(error))
+  },
+
   delete (userId, config = {}) {
     return Vue.axios.delete(`/usuario/${userId}`, config)
         .then((response) => Promise.resolve(response.data))

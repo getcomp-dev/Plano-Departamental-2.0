@@ -49,7 +49,7 @@ const actions = {
 };
 
 const getters = {
-  Salas(state) {
+  AllSalas(state) {
     return _.orderBy(state.Salas, "nome");
   },
 };
