@@ -196,6 +196,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
         margin: [0, 0, 0, 5],
     });
     var laboratorios = _.filter(this.Salas, {laboratorio: true});
+    
     var disciplinas = _.orderBy(this.Disciplinas, 'nome');
     var turmas1 = _.filter(this.Turmas, {'periodo': 1, 'Plano': 1});
     var turmas2 = _.filter(this.Turmas, {'periodo': 3, 'Plano': 1});
@@ -1211,7 +1212,7 @@ const pdfCargaProfessores = () => new Promise((resolve, reject) => {
             },
         ],
     });
-    var professores = _.orderBy(_.filter(this.Docentes, ['ativo', true]), 'apelido')
+    var professores = _.orderBy(_.filter(this.Docentes, ['ativo', true]), 'nome')
     var turmasProf1, turmasProf2
     var posProf1, posProf2
     var horarioTotal = ''
