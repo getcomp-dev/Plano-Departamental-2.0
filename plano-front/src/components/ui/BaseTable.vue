@@ -120,6 +120,7 @@ td:hover {
 .table-custom tbody tr:hover {
   background-color: #dbdbdb;
 }
+.table-custom thead tr th i,
 .table-custom thead tr th svg {
   font-size: 9px;
 }
@@ -134,50 +135,13 @@ td:hover {
 }
 /* searchBar */
 .modal-table thead .div-search {
-  display: flex !important;
-  justify-content: flex-start !important;
-  align-items: center !important;
-  width: 100% !important;
-  padding: 5px;
-  background-color: #e9ecef !important;
-  border-right: 1px solid #dee2e6 !important;
-  border-left: 1px solid #dee2e6 !important;
-  border-top: 1px solid #dee2e6 !important;
-}
-.modal-table thead .input-search {
-  height: 25px !important;
-  width: 90% !important;
-  margin: 0 !important;
-  padding: 2px 5px !important;
-  font-size: 12px !important;
-  text-align: start;
-  box-shadow: none !important;
-  border-bottom-right-radius: 0 !important;
-  border-top-right-radius: 0 !important;
-}
-.modal-table thead .btn-search {
   display: flex;
   align-items: center;
-  justify-content: center;
-  height: 25px !important;
-  width: 10% !important;
-  padding: 0 5px !important;
-  color: rgb(75, 75, 75);
-  background-color: #fff;
-  border: 1px solid #ced4da;
-  border-left-color: transparent;
-  box-shadow: none !important;
-  border-bottom-left-radius: 0 !important;
-  border-top-left-radius: 0 !important;
-}
-.modal-table thead .btn-search:hover {
-  cursor: pointer;
+  width: 100%;
+  padding: 5px;
   background-color: #e9ecef;
-}
-.modal-table thead .btn-search svg {
-  margin: 0;
-  margin-top: 2px;
-  font-size: 11px !important;
+  border: 1px solid #dee2e6;
+  border-bottom: 0;
 }
 
 @-moz-document url-prefix() {

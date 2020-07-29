@@ -283,15 +283,10 @@
     <div class="div-table">
       <BaseTable :type="'modal'" :styles="'height:350px'" :hasSearchBar="true">
         <template #thead-search>
-          <input
-            type="text"
-            class="form-control input-search"
-            placeholder="Pesquise nome ou codigo de um curso..."
+          <InputSearch
             v-model="searchCursos"
+            placeholder="Pesquise nome ou codigo de um curso..."
           />
-          <button @click="searchCursos = null" class="btn btn-search">
-            &times;
-          </button>
         </template>
         <template#thead>
           <th
@@ -354,7 +349,9 @@
 <script>
 import _ from "lodash";
 import turmaService from "@/common/services/turma";
-import { BaseTable, BaseButton } from "@/components/ui";
+import BaseTable from "./BaseTable";
+import BaseButton from "./BaseButton";
+import InputSearch from "./InputSearch";
 import PedidosTableModal from "@/components/ui/PedidosTableModal.vue";
 
 const emptyTurma = {
@@ -374,7 +371,7 @@ const emptyTurma = {
 
 export default {
   name: "BodyModalEditTurma",
-  components: { BaseTable, PedidosTableModal, BaseButton },
+  components: { BaseTable, PedidosTableModal, BaseButton, InputSearch },
   props: {
     turma: { type: Object, required: true },
     hasEditDisciplina: { type: Boolean, default: true },

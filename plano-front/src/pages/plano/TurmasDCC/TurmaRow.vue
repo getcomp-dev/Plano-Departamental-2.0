@@ -47,7 +47,7 @@
         :value="turmaForm.letra"
         @input="turmaForm.letra = $event.target.value.toUpperCase()"
         @keypress="maskTurmaLetra"
-        @blur="editTurma(turma)"
+        @change="editTurma(turma)"
       />
     </td>
     <td style="width: 130px;" class="less-padding">
@@ -204,7 +204,7 @@
       style="width:35px"
     >
       <template v-for="(pedido, index) in currentTurmaPedidos">
-        <TurmaRowPedidos
+        <InputsPedidosDCC
           v-if="pedido.Curso === curso.id"
           :key="pedido.Turma + curso.Curso"
           v-bind:index="index"
@@ -217,11 +217,11 @@
 
 <script>
 import _ from "lodash";
-import { mapGetters } from "vuex";
-import { setEmptyValuesToNull, maskTurmaLetra } from "@/common/utils";
-import { notification } from "@/common/mixins";
+import { mapGetters, mapActions } from "vuex";
 import turmaService from "@/common/services/turma";
-import TurmaRowPedidos from "./TurmaRowPedidos.vue";
+import { setEmptyValuesToNull, validateObjectKeys } from "@/common/utils";
+import { notification, maskTurmaLetra } from "@/common/mixins";
+import InputsPedidosDCC from "./InputsPedidosDCC.vue";
 
 const emptyTurma = {
   id: null,
@@ -250,9 +250,9 @@ const emptyTurma = {
 
 export default {
   name: "TurmaRow",
-  mixins: [notification],
+  mixins: [notification, maskTurmaLetra],
   components: {
-    TurmaRowPedidos,
+    InputsPedidosDCC,
   },
   props: {
     turma: Object,
@@ -262,7 +262,6 @@ export default {
     return {
       currentData: undefined,
       turmaForm: _.clone(emptyTurma),
-      maskTurmaLetra: maskTurmaLetra,
     };
   },
 
@@ -272,6 +271,8 @@ export default {
     this.setDefaultHorarios();
   },
   methods: {
+    ...mapActions(["setLoadingState"]),
+
     selectToDelete(turma) {
       this.$store.commit("checkDeleteTurma", turma);
     },
@@ -1096,32 +1097,33 @@ export default {
       }
       return false;
     },
-    checkDelete(turma) {
-      this.$store.commit("checkDelete", { Turma: turma });
-    },
     async editTurma() {
-      const newTurma = _.cloneDeepWith(this.turmaForm, setEmptyValuesToNull);
-      if (newTurma.letra === null) newTurma.letra = this.currentData.letra;
-
-      console.log(newTurma);
       try {
+        this.setLoadingState("partial");
+
+        const newTurma = _.cloneDeepWith(this.turmaForm, setEmptyValuesToNull);
+        validateObjectKeys(newTurma, ["letra", "Disciplina"]);
+
         const response = await turmaService.update(newTurma.id, newTurma);
+        this.currentData = _.clone(newTurma);
+
         this.showNotification({
           type: "success",
           message: `A Turma ${response.Turma.letra} foi atualizada!`,
         });
-        this.currentData = _.clone(newTurma);
       } catch (error) {
-        const errormsg = _.find(error.response.data.errors, {
-          field: "unique_name",
-        })
+        this.turmaForm = _.cloneDeep(this.turma);
+
+        const erroMsg = error.response
           ? "A combinação de disciplina, semestre e turma deve ser única."
-          : "Erro ao atualizar Turma.";
+          : error.message;
         this.showNotification({
           type: "error",
-          message: errormsg,
+          title: "Erro ao atualizar turma!",
+          message: erroMsg,
         });
-        this.turmaForm = _.clone(this.turma);
+      } finally {
+        this.setLoadingState("completed");
       }
     },
   },

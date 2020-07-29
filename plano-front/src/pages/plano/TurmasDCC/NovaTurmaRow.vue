@@ -13,43 +13,28 @@
       class="less-padding"
       :style="
         `background-color:${
-          currentDisciplina ? currentDisciplina.perfil.cor : ''
+          turmaForm.disciplina ? turmaForm.disciplina.perfil.cor : ''
         }`
       "
     >
-      {{ currentDisciplina ? currentDisciplina.perfil.abreviacao : "" }}
+      {{ turmaForm.disciplina ? turmaForm.disciplina.perfil.abreviacao : "" }}
     </td>
     <td style="width:80px" class="less-padding">
-      <select
-        type="text"
-        v-model="turmaForm.Disciplina"
-        @change="handleChangeDisciplina()"
-      >
+      <select v-model="turmaForm.disciplina" @change="handleChangeDisciplina()">
         <option
           v-for="disciplina in DisciplinasDCCInPerfis"
           :key="disciplina.codigo + disciplina.id"
-          :value="disciplina.id"
+          :value="disciplina"
           >{{ disciplina.codigo }}</option
         >
       </select>
     </td>
     <td style="width: 330px;" class="less-padding">
-      <select
-        type="text"
-        v-model="turmaForm.Disciplina"
-        @change="handleChangeDisciplina()"
-      >
-        <option
-          v-if="!DisciplinasDCCInPerfisOrderedByNome.length"
-          type="text"
-          value=""
-        >
-          Nenhuma Disciplina Encontrada
-        </option>
+      <select v-model="turmaForm.disciplina" @change="handleChangeDisciplina()">
         <option
           v-for="disciplina in DisciplinasDCCInPerfisOrderedByNome"
           :key="disciplina.nome + disciplina.id"
-          :value="disciplina.id"
+          :value="disciplina"
           >{{ disciplina.nome }}</option
         >
       </select>
@@ -89,10 +74,9 @@
     </td>
     <td style="width:80px">
       <select
-        v-if="currentDisciplina"
-        type="text"
+        v-if="turmaForm.disciplina"
         v-model="turmaForm.turno1"
-        @change="clearHorarios()"
+        @change="handleChangeTurno()"
       >
         <option v-if="disciplinaIsIntegralEAD" value="EAD">EAD</option>
         <template v-else>
@@ -102,11 +86,11 @@
       </select>
     </td>
     <td style="width: 85px" class="less-padding">
-      <template v-if="currentDisciplina">
+      <template v-if="turmaForm.disciplina">
         <select
           type="text"
           v-model="turmaForm.Horario1"
-          @change="setTurnoByHorario(1)"
+          @change="handleChangeHorario(1)"
         >
           <option v-if="!disciplinaIsIntegralEAD" type="text" value=""></option>
           <option
@@ -118,10 +102,10 @@
         </select>
 
         <select
-          v-if="hasMoreThan4Creditos"
+          v-if="totalCarga >= 4"
           type="text"
           v-model="turmaForm.Horario2"
-          @change="setTurnoByHorario(2)"
+          @change="handleChangeHorario(2)"
         >
           <option
             v-if="!disciplinaIsIntegralEAD && !disciplinaIsParcialEAD"
@@ -148,8 +132,8 @@
       </template>
     </td>
     <td style="width: 95px" class="less-padding">
-      <template v-if="!disciplinaIsIntegralEAD && currentDisciplina">
-        <select type="text" v-model="turmaForm.Sala1">
+      <template v-if="!disciplinaIsIntegralEAD && turmaForm.disciplina">
+        <select v-model="turmaForm.Sala1">
           <option type="text" value=""></option>
           <option
             v-for="sala in AllSalas"
@@ -160,7 +144,7 @@
         </select>
 
         <select
-          v-if="hasMoreThan4Creditos && currentDisciplina.ead != 2"
+          v-if="totalCarga >= 4 && turmaForm.disciplina.ead != 2"
           type="text"
           v-model="turmaForm.Sala2"
         >
@@ -188,17 +172,13 @@
 import _ from "lodash";
 import { mapGetters, mapActions } from "vuex";
 import turmaService from "@/common/services/turma";
-import {
-  maskTurmaLetra,
-  setEmptyValuesToNull,
-  validateObjectKeys,
-} from "@/common/utils";
-import { notification } from "@/common/mixins";
+import { setEmptyValuesToNull, validateObjectKeys } from "@/common/utils";
+import { notification, maskTurmaLetra } from "@/common/mixins";
 
 const emptyTurma = {
   id: null,
-  periodo: null,
-  letra: null,
+  periodo: 1,
+  letra: "A",
   turno1: null,
   turno2: null,
   Disciplina: null,
@@ -208,70 +188,51 @@ const emptyTurma = {
   Horario2: null,
   Sala1: null,
   Sala2: null,
-  disciplina: {
-    id: null,
-    nome: null,
-    codigo: null,
-    cargaTeorica: null,
-    cargaPratica: null,
-    Perfil: null,
-    ead: null,
-    laboratorio: null,
-    perfil: {
-      cor: null,
-      nome: null,
-      abreviacao: null,
-    },
-  },
+  disciplina: null,
 };
 
 export default {
   name: "NovaTurmaRow",
-  mixins: [notification],
+  mixins: [notification, maskTurmaLetra],
   props: { cursosAtivadosLength: Number, default: 0 },
-
   data() {
     return {
-      turmaForm: null,
-      maskTurmaLetra: maskTurmaLetra,
+      turmaForm: _.clone(emptyTurma),
     };
-  },
-  beforeMount() {
-    this.turmaForm = _.clone(emptyTurma);
-    this.turmaForm.periodo = 1;
-    this.turmaForm.letra = "A";
   },
 
   methods: {
     ...mapActions(["setLoadingState"]),
 
-    clearHorarios() {
+    handleChangeTurno() {
       this.turmaForm.Horario1 = null;
       this.turmaForm.Horario2 = null;
     },
+
     handleChangeDisciplina() {
+      this.turmaForm.Disciplina = this.turmaForm.disciplina.id;
       this.turmaForm.turno1 = null;
       this.turmaForm.Horario1 = null;
       this.turmaForm.Horario2 = null;
       this.turmaForm.Docente1 = null;
       this.turmaForm.Docente2 = null;
-      this.setDefaultHorarios();
-    },
-    setDefaultHorarios() {
-      if (this.currentDisciplina.ead === 1) {
+
+      if (this.disciplinaIsIntegralEAD) {
         this.turmaForm.turno1 = "EAD";
         this.turmaForm.Horario1 = 31;
         this.turmaForm.Horario2 = 31;
-      } else if (this.currentDisciplina.ead === 2) {
+      } else if (this.disciplinaIsParcialEAD) {
         this.turmaForm.Horario2 = 31;
       }
     },
-    setTurnoByHorario(horarioAtual) {
-      if (horarioAtual === 1) this.adjustTurno(this.turmaForm.Horario1);
+
+    handleChangeHorario(horarioAtual) {
+      if (horarioAtual === 1) this.setTurnoByHorario(this.turmaForm.Horario1);
       else if (!this.disciplinaIsParcialEAD)
-        this.adjustTurno(this.turmaForm.Horario2);
+        this.setTurnoByHorario(this.turmaForm.Horario2);
     },
-    adjustTurno(horarioId) {
+
+    setTurnoByHorario(horarioId) {
       if (horarioId == 31 && this.disciplinaIsIntegralEAD)
         this.turmaForm.turno1 = "EAD";
       else if (_.some(this.HorariosNoturno, ["id", horarioId]))
@@ -279,15 +240,15 @@ export default {
       else if (_.some(this.HorariosDiurno, ["id", horarioId]))
         this.turmaForm.turno1 = "Diurno";
     },
+
     async addTurma() {
       try {
         this.setLoadingState("partial");
 
-        delete this.turmaForm.disciplina;
         const newTurma = _.cloneDeepWith(this.turmaForm, setEmptyValuesToNull);
         validateObjectKeys(newTurma, ["Disciplina", "letra", "turno1"]);
-
         newTurma.Plano = parseInt(localStorage.getItem("Plano"), 10);
+
         const response = await turmaService.create(newTurma);
         await this.$store.dispatch("fetchAllPedidos");
         this.showNotification({
@@ -296,7 +257,7 @@ export default {
         });
       } catch (error) {
         const erroMsg = error.response
-          ? "Turma já existe no mesmo plano e periodo."
+          ? "A combinação de disciplina, semestre e turma deve ser única."
           : error.message;
 
         this.showNotification({
@@ -320,34 +281,12 @@ export default {
       "AllSalas",
     ]),
 
-    currentDisciplina() {
-      return _.find(this.DisciplinasDCCInPerfis, [
-        "id",
-        this.turmaForm.Disciplina,
-      ]);
-    },
-    totalCarga() {
-      return this.currentDisciplina
-        ? parseInt(this.currentDisciplina.cargaTeorica) +
-            parseInt(this.currentDisciplina.cargaPratica)
-        : "";
-    },
-    hasMoreThan4Creditos() {
-      return this.totalCarga >= 4;
-    },
-    disciplinaIsIntegralEAD() {
-      return this.currentDisciplina ? this.currentDisciplina.ead === 1 : false;
-    },
-    disciplinaIsParcialEAD() {
-      return this.currentDisciplina ? this.currentDisciplina.ead === 2 : false;
-    },
     DisciplinasDCCInPerfisOrderedByNome() {
       return _.orderBy(this.DisciplinasDCCInPerfis, ["nome"]);
     },
+
     HorariosFiltredByTurno() {
-      //Se for EAD
-      if (this.currentDisciplina && this.currentDisciplina.ead === 1)
-        return this.HorariosEAD;
+      if (this.disciplinaIsIntegralEAD) return this.HorariosEAD;
 
       //Se não, verifica o turno selecionado
       switch (this.turmaForm.turno1) {
@@ -358,8 +297,27 @@ export default {
         case "EAD":
           return this.HorariosEAD;
         default:
-          return _.filter(this.AllHorarios, (horario) => horario.id != 31);
+          return _.filter(this.AllHorarios, (horario) => horario.id != 31); //Todos sem EAD
       }
+    },
+
+    totalCarga() {
+      return this.turmaForm.disciplina
+        ? parseInt(this.turmaForm.disciplina.cargaTeorica) +
+            parseInt(this.turmaForm.disciplina.cargaPratica)
+        : "";
+    },
+
+    disciplinaIsIntegralEAD() {
+      return this.turmaForm.disciplina
+        ? this.turmaForm.disciplina.ead === 1
+        : false;
+    },
+
+    disciplinaIsParcialEAD() {
+      return this.turmaForm.disciplina
+        ? this.turmaForm.disciplina.ead === 2
+        : false;
     },
   },
 };

@@ -66,7 +66,7 @@
         <template #form-group>
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label for="nome">Nome <i title="Campo obrigatório">*</i></label>
+              <label required for="nome">Nome </label>
               <input
                 class="form-control"
                 type="text"
@@ -77,9 +77,7 @@
           </div>
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label for="login"
-                >Login <i title="Campo obrigatório">*</i></label
-              >
+              <label required for="login">Login </label>
               <input
                 class="form-control"
                 type="text"
@@ -93,95 +91,75 @@
             <!-- senha -->
             <div class="row mb-2 mx-0">
               <div class="form-group col m-0 px-0">
-                <label for="novaSenha"
-                  >Senha<i title="Campo obrigatório">*</i></label
-                >
-                <PasswordInput
-                  :iconSize="11"
+                <label required for="novaSenha">Senha</label>
+                <InputPassword
+                  :iconSize="13"
                   :inputId="'novaSenha'"
                   v-model="userForm.senha"
-                ></PasswordInput>
+                />
               </div>
             </div>
             <!-- confirmar senha -->
             <div class="row mb-2 mx-0">
               <div class="form-group col m-0 px-0">
-                <label for="confirmaSenha">
-                  Confirmar senha <i title="Campo obrigatório">*</i></label
-                >
-                <PasswordInput
-                  :iconSize="11"
+                <label required for="confirmaSenha"> Confirmar senha </label>
+                <InputPassword
+                  :iconSize="13"
                   :isInvalid="confirmaSenha != userForm.senha"
                   :inputId="'confirmaSenha'"
                   v-model="confirmaSenha"
-                ></PasswordInput>
+                />
               </div>
             </div>
           </template>
           <!-- Edit -->
           <template v-else-if="isEdit">
-
             <!-- toggle edit senha -->
-            <div class="container-edit-senha">
-              <span>Editar senha</span>
-
-              <button
-                type="button"
-                @click.prevent="toggleEditSenha()"
-                class="btn-edit-senha"
-              >
-                <div
-                  :style="`transform: rotate(${isEditingSenha ? -90 : 0}deg)`"
-                >
-                  <i
-                    class="fas fa-chevron-left"
-                    style="font-size:15px!important"
-                  ></i>
-                </div>
-              </button>
-            </div>
+            <ButtonSlideSection
+              :isOpen="isEditingSenha"
+              @handel-click="toggleEditSenha"
+            />
 
             <!-- edit senha -->
-            <template v-if="isEditingSenha">
-              <div :key="'senha'" class="row mb-2 mx-0">
-                <div class="form-group col m-0 px-0">
-                  <label for="novaSenha">
-                    Nova senha <i title="Campo obrigatório">*</i>
-                  </label>
-                  <PasswordInput
-                    :iconSize="11"
-                    :inputId="'novaSenha'"
-                    v-model="novaSenha"
-                  ></PasswordInput>
-                  <!-- v-model="userForm.senha" -->
+            <transition-group name="slideY" mode="out-in">
+              <template v-if="isEditingSenha">
+                <div :key="'senha'" class="row mb-2 mx-0">
+                  <div class="form-group col m-0 px-0">
+                    <label required for="novaSenha">
+                      Nova senha
+                    </label>
+                    <InputPassword
+                      :iconSize="13"
+                      :inputId="'novaSenha'"
+                      v-model="novaSenha"
+                    />
+                  </div>
                 </div>
-              </div>
-              <!-- confirma nova senha -->
-              <div :key="'confirma'" class="row mb-2 mx-0">
-                <div class="form-group col m-0 px-0">
-                  <label for="confirmaSenha"
-                    >Confirmar nova senha
-                    <i title="Campo obrigatório">*</i></label
-                  >
-                  <PasswordInput
-                    :iconSize="11"
-                    :isInvalid="confirmaSenha != novaSenha"
-                    :inputId="'confirmaSenha'"
-                    v-model="confirmaSenha"
-                  ></PasswordInput>
+                <!-- confirma nova senha -->
+                <div :key="'confirma'" class="row mb-2 mx-0">
+                  <div class="form-group col m-0 px-0">
+                    <label required for="confirmaSenha"
+                      >Confirmar nova senha
+                    </label>
+                    <InputPassword
+                      :iconSize="13"
+                      :isInvalid="confirmaSenha != novaSenha"
+                      :inputId="'confirmaSenha'"
+                      v-model="confirmaSenha"
+                    />
+                  </div>
                 </div>
-              </div>
-            </template>
+              </template>
+            </transition-group>
           </template>
 
-          <div class="row mb-2 mt-2 mx-0">
-            <div class="form-check form-check-inline col m-0 px-0 pl-1">
-              <label for="Admin">Tipo <i title="Campo obrigatório">*</i></label>
-
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0">
+              <label for="userAdmin">Tipo </label>
               <select
-                      id="Admin"
-                      v-model.number="userForm.admin"
-                      class="form-control"
+                id="userAdmin"
+                v-model.number="userForm.admin"
+                class="form-control"
               >
                 <option value="0">Consulta</option>
                 <option value="1">Comissão</option>
@@ -265,8 +243,9 @@ import {
   BaseModal,
   PageHeader,
   BaseButton,
-  PasswordInput,
+  InputPassword,
   Card,
+  ButtonSlideSection,
 } from "@/components/ui";
 
 const emptyUser = {
@@ -284,8 +263,9 @@ export default {
     PageHeader,
     BaseButton,
     Card,
-    PasswordInput,
+    InputPassword,
     BaseModal,
+    ButtonSlideSection,
   },
   data() {
     return {
@@ -299,10 +279,13 @@ export default {
   },
   methods: {
     adminText(admin) {
-      switch (admin){
-        case 0: return "Consulta";
-        case 1: return "Comissão";
-        case 2: return "Administrador";
+      switch (admin) {
+        case 0:
+          return "Consulta";
+        case 1:
+          return "Comissão";
+        case 2:
+          return "Administrador";
       }
     },
     toggleEditSenha() {
@@ -338,7 +321,8 @@ export default {
     },
     validateUser(user) {
       for (const entry of Object.entries(user)) {
-        if ((entry[1] === "" || entry[1] === null) && entry[0] !== "senha") return false;
+        if ((entry[1] === "" || entry[1] === null) && entry[0] !== "senha")
+          return false;
       }
       return true;
     },
@@ -369,7 +353,7 @@ export default {
     },
     async editUser() {
       const user = _.clone(this.userForm);
-      user.senha = this.novaSenha
+      user.senha = this.novaSenha;
 
       if (!this.validateEditUser(user)) {
         this.showNotification({
@@ -448,66 +432,13 @@ export default {
 </script>
 
 <style scoped>
-::v-deep .card input[type="text"],
-::v-deep .card input[type="password"] {
-  width: 200px !important;
-  height: 25px !important;
-  padding: 0px 5px !important;
-  font-size: 12px !important;
-  text-align: start;
-}
-.form-group label > i {
-  color: #f30000;
-}
+@import url(../../../assets/css/slideY-section-animation.css);
 
-.container-edit-senha {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin: 10px 0;
-  margin-top: 12px;
-  font-size: 12x;
-  padding: 5px 0;
+.card {
+  font-size: 11px;
 }
-.container-edit-senha::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  width: 100%;
-  border-top: 1px solid #dee2e6;
-}
-.container-edit-senha::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  border-bottom: 1px solid #dee2e6;
-}
-.btn-edit-senha {
-  padding: 0 !important;
-  border: none !important;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
-  line-height: 50% !important;
-  margin: 0;
-  transition: all 0.3s ease 0s !important;
-  cursor: pointer !important;
-  text-align: center !important;
-  transition: all 200ms ease;
-  padding: 0 5px !important;
-  background-color: transparent !important;
-  line-height: 50%;
-  border: none;
-  margin: 0;
-  background: none;
-}
-.btn-edit-senha div {
-  transition: all 0.25s ease !important;
-}
-.btn-edit-senha:focus {
-  box-shadow: 0 0 0 0.15rem #007bff40 !important;
+.card input,
+.card select {
+  width: 200px !important;
 }
 </style>

@@ -375,15 +375,10 @@
             :hasSearchBar="true"
           >
             <template #thead-search>
-              <input
-                type="text"
-                class="form-control input-search"
-                placeholder="Pesquise o nome de um docente..."
+              <InputSearch
                 v-model="searchDocentes"
+                placeholder="Pesquise o nome de um docente..."
               />
-              <button @click="clearSearchDocentes()" class="btn btn-search">
-                <i class="fas fa-times"></i>
-              </button>
             </template>
             <template #thead>
               <th style="width: 25px"></th>
@@ -497,12 +492,9 @@
 <script>
 import _ from "lodash";
 import pdfs from "@/common/services/pdfs";
+import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
 import {
-  toggleOrdination,
-  toggleItemInArray,
-  loadingHooks,
-} from "@/common/mixins";
-import {
+  InputSearch,
   PageHeader,
   BaseTable,
   NavTab,
@@ -512,8 +504,15 @@ import {
 
 export default {
   name: "DashboardCargaProfessores",
-  mixins: [toggleOrdination, toggleItemInArray, loadingHooks],
-  components: { PageHeader, BaseTable, NavTab, BaseModal, BaseButton },
+  mixins: [toggleOrdination, toggleItemInArray],
+  components: {
+    PageHeader,
+    BaseTable,
+    NavTab,
+    BaseModal,
+    BaseButton,
+    InputSearch,
+  },
   data() {
     return {
       tabAtivaModal: "Docentes",

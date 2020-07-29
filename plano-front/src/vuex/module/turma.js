@@ -74,6 +74,9 @@ const actions = {
         });
     });
   },
+  clearDelete({ commit }) {
+    commit("emptyDelete");
+  },
 };
 
 const getters = {

@@ -138,13 +138,7 @@ label[required]:hover:before {
   z-index: 500;
 }
 
-img {
-  -webkit-user-drag: none;
-  -khtml-user-drag: none;
-  -moz-user-drag: none;
-  -o-user-drag: none;
-}
-
+/*Lists */
 .modal-custom .list-group {
   line-height: 30px;
   font-size: 12px;
@@ -163,14 +157,22 @@ img {
   color: #2a2a2a;
 }
 
-.list-deletar .list-group-item {
+.list-delete > .list-group-item {
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: flex-start;
   word-wrap: break-word;
+  padding: 5px 15px;
 }
 
+img {
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+}
 /* notification */
 .vue-notification {
   padding: 10px;

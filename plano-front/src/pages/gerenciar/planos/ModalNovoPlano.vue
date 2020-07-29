@@ -26,16 +26,10 @@
           :hasSearchBar="true"
         >
           <template #thead-search>
-            <input
-              type="text"
-              class="form-control input-search"
+            <InputSearch
+              v-model="searchDisciplinasModal"
               placeholder="Pesquise nome ou codigo de uma disciplina..."
-              :value="searchDisciplinasModal"
-              @input="debounceInput($event, 'searchDisciplinasModal')"
             />
-            <button @click="clearSearch" class="btn btn-search">
-              <i class="fas fa-times"></i>
-            </button>
           </template>
           <template #thead>
             <th style="width: 25px"></th>
@@ -120,17 +114,13 @@ import turmaExternaService from "@/common/services/turmaExterna";
 import planoService from "@/common/services/plano";
 import turmaService from "@/common/services/turma";
 import pedidoService from "@/common/services/pedido";
-import {
-  toggleOrdination,
-  toggleItemInArray,
-  debounceInput,
-} from "@/common/mixins";
-import { BaseModal, BaseTable, BaseButton } from "@/components/ui";
+import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
+import { BaseModal, InputSearch, BaseTable, BaseButton } from "@/components/ui";
 
 export default {
   name: "ModalNovoPlano",
-  mixins: [toggleItemInArray, toggleOrdination, debounceInput],
-  components: { BaseModal, BaseTable, BaseButton },
+  mixins: [toggleItemInArray, toggleOrdination],
+  components: { BaseModal, BaseTable, BaseButton, InputSearch },
   props: {
     plano: { type: Object, required: true },
   },

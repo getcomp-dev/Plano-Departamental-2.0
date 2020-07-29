@@ -240,15 +240,10 @@
             :hasSearchBar="true"
           >
             <template #thead-search>
-              <input
-                type="text"
-                class="form-control input-search"
-                placeholder="Pesquise o nome ou código de uma disciplina..."
+              <InputSearch
                 v-model="searchDisciplinas"
+                placeholder="Pesquise o nome ou código de uma disciplina..."
               />
-              <button @click="searchDisciplinas = ''" class="btn btn-search">
-                <i class="fas fa-times"></i>
-              </button>
             </template>
             <template #thead>
               <th style="width: 25px"></th>
@@ -552,6 +547,7 @@ import _ from "lodash";
 import pdfs from "@/common/services/pdfs";
 import { toggleItemInArray, toggleOrdination } from "@/common/mixins";
 import {
+  InputSearch,
   BaseButton,
   BaseModal,
   BaseTable,
@@ -564,6 +560,7 @@ export default {
   name: "PlanoDepartamental",
   mixins: [toggleItemInArray, toggleOrdination],
   components: {
+    InputSearch,
     BaseModal,
     BaseTable,
     PageHeader,
@@ -622,7 +619,6 @@ export default {
       ordenacaoMain: {
         disciplinas: { order: "codigo", type: "asc" },
       },
-      // ordenacaoModal.vagas: { order: "codigo", type: "asc" },
       asideModaisRefs: ["modalFiltros", "modalAjuda", "modalRelatorio"],
     };
   },

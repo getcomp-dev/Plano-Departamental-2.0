@@ -103,8 +103,8 @@ const getters = {
   AllCursos(state) {
     return _.orderBy(state.Cursos, ["nome"]);
   },
-  CursosDCC(state) {
-    return _.filter(state.Cursos, (curso) => {
+  CursosDCC(state, getters) {
+    return _.filter(getters.AllCursos, (curso) => {
       switch (curso.codigo) {
         case "35A":
         case "65C":

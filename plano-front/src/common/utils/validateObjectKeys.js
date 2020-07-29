@@ -1,5 +1,5 @@
 function generalError(message) {
-  this.name = "Erro";
+  this.name = "generalError";
   this.message = message || "";
 }
 function normalizeKeyName(str) {

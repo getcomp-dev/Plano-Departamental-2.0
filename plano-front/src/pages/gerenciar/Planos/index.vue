@@ -89,6 +89,7 @@
                 type="text"
                 id="planoNome"
                 v-model="planoForm.nome"
+                @keypress="limitNomeLength"
                 class="form-control"
               />
             </div>
@@ -125,7 +126,7 @@
         <p class="w-100 m-0">
           <template v-if="isEdit">
             Tem certeza que deseja deletar o plano
-            <b>{{ planoForm.ano }}</b> ?
+            <b>{{ planoForm.nome + " - " + planoForm.ano }}</b> ?
           </template>
           <template v-else>
             Nenhum plano selecionado!
@@ -184,7 +185,6 @@ import {
   BaseTable,
   BaseModal,
   BaseButton,
-  PasswordInput,
   Card,
 } from "@/components/ui";
 import ModalNovoPlano from "./ModalNovoPlano";
@@ -203,7 +203,6 @@ export default {
     PageHeader,
     BaseButton,
     Card,
-    PasswordInput,
     BaseModal,
     ModalNovoPlano,
   },
@@ -215,6 +214,9 @@ export default {
     };
   },
   methods: {
+    limitNomeLength($event) {
+      if ($event.target.value.length >= 10) $event.preventDefault();
+    },
     handleClickInPlano(plano) {
       this.cleanPlano();
       this.planoSelected = plano.id;

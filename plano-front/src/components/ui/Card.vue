@@ -74,7 +74,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .card .btn-icon {
   margin-right: 0 !important;
   margin-left: 5px !important;
@@ -107,15 +107,11 @@ export default {
   display: flex;
   align-items: center;
 }
+
+.card input,
 .card select {
-  height: 25px !important;
-  font-size: 12px !important;
-  padding: 0px 5px !important;
-  text-align: start;
-}
-.card input {
-  height: 25px !important;
-  padding: 0px 5px !important;
+  height: 28px !important;
+  padding: 5px !important;
   font-size: 12px !important;
   text-align: start;
 }

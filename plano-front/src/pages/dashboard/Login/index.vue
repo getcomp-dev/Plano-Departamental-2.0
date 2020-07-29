@@ -17,7 +17,7 @@
           />
 
           <label for="userSenha" class="sr-only">Senha</label>
-          <PasswordInput
+          <InputPassword
             :id="'userSenha'"
             :placeholder="'Senha'"
             :classes="'form-control'"
@@ -46,11 +46,11 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { TheLoadingView } from "@/components/layout";
-import { PasswordInput } from "@/components/ui";
+import { InputPassword } from "@/components/ui";
 
 export default {
   name: "TheLogin",
-  components: { TheLoadingView, PasswordInput },
+  components: { TheLoadingView, InputPassword },
   data() {
     return {
       form: {

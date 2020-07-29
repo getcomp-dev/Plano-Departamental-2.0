@@ -12,9 +12,12 @@ import "./assets/css/global.css";
 
 //fontawesome
 import { fas } from "@fortawesome/free-solid-svg-icons";
-import { library, dom } from "@fortawesome/fontawesome-svg-core";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fas);
-dom.watch();
+Vue.component("font-awesome-icon", FontAwesomeIcon);
+//Versão antiga
+import "./assets/font-awesome/fontawesome-all.css";
 
 // bootstrap
 import BootstrapVue from "bootstrap-vue";

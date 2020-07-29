@@ -1,5 +1,6 @@
 <template>
   <button
+    :key="generateUniqueKey()"
     :disabled="disabled"
     @click="$emit('click')"
     :class="['btn base-btn', buttonClasses]"
@@ -16,6 +17,11 @@ export default {
     type: { type: String, required: true },
     color: { type: String, default: "gray" },
     disabled: { type: Boolean, default: false },
+  },
+  methods: {
+    generateUniqueKey() {
+      return this.color + this.type + Math.random();
+    },
   },
   computed: {
     buttonClasses() {

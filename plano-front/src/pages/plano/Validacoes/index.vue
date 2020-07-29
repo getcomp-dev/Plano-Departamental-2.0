@@ -315,11 +315,7 @@
 
 <script>
 import _ from "lodash";
-import {
-  toggleOrdination,
-  toggleItemInArray,
-  loadingHooks,
-} from "@/common/mixins";
+import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
 import {
   PageHeader,
   BaseTable,
@@ -328,6 +324,7 @@ import {
   BodyModalEditTurma,
   BaseModal,
 } from "@/components/ui";
+import { mapActions } from "vuex";
 
 const AllConflitosTurmas = [
   { type: 1, msg: "Nenhum turno alocado" },
@@ -364,7 +361,7 @@ const AllConflitosTurmas = [
 
 export default {
   name: "Validacoes",
-  mixins: [toggleOrdination, toggleItemInArray, loadingHooks],
+  mixins: [toggleOrdination, toggleItemInArray],
   components: {
     BaseButton,
     BodyModalEditTurma,
@@ -418,6 +415,7 @@ export default {
     //define grades ativas por periodo
     let g;
     let periodoInicial, periodoFinal;
+
     let ano = this.$store.state.plano.Plano[0].ano;
     //CCD
     g = _.filter(this.$store.state.grade.Grades, ["Curso", 4]);
@@ -561,6 +559,8 @@ export default {
     }
   },
   methods: {
+    ...mapActions(["setLoadingState"]),
+
     openAsideModal(modalName) {
       if (modalName === "filtros") {
         this.$refs.modalFiltros.toggle();
@@ -571,8 +571,10 @@ export default {
       }
     },
     btnOkFiltros() {
+      this.setLoadingState("partial");
       this.btnOkSemestre();
       this.filtroConflitos.ativados = [...this.filtroConflitos.selecionados];
+      this.setLoadingState("completed");
     },
     btnOkSemestre() {
       if (this.filtroSemestres.primeiro && !this.filtroSemestres.segundo)
