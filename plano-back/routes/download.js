@@ -36,6 +36,14 @@ router.get('/', function(req, res, next){
         })
         zip.file("Horarios.pdf", horarios)
         console.log('pdf adicionado ao .zip')
+
+        let plano = fs.readFileSync('./Plano-departamental.pdf', (err, data) => {
+            if(err) throw err
+            return data
+        })
+        zip.file("Plano-departamental.pdf", plano)
+        console.log('pdf adicionado ao .zip')
+
         console.log('criando sql')
         fs.open('backup.sql', 'w', function (err, file) {
             if (err) throw err;
