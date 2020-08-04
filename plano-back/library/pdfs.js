@@ -196,7 +196,6 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
         margin: [0, 0, 0, 5],
     });
     var laboratorios = _.filter(this.Salas, {laboratorio: true});
-    
     var disciplinas = _.orderBy(this.Disciplinas, 'nome');
     var turmas1 = _.filter(this.Turmas, {'periodo': 1, 'Plano': 1});
     var turmas2 = _.filter(this.Turmas, {'periodo': 3, 'Plano': 1});
@@ -1076,7 +1075,7 @@ laboratorios
             return {
                 columns: [
                     {
-                        text: new Date(Date.now()).toLocaleString(),
+                        text: new Date(Date.now()).toLocaleString('en-GB'),
                         margin: [30, 10, 0, 0],
                         fontSize: 8,
                         alignment: `left`,
@@ -1791,7 +1790,24 @@ const pdfCargaProfessores = () => new Promise((resolve, reject) => {
     console.log("Criando Documento")
     let docDefinitionCargas = {
         content: tables,
-        header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
+        footer: function(currentPage, pageCount) {
+            return {
+                columns: [
+                    {
+                        text: new Date(Date.now()).toLocaleString('en-GB'),
+                        margin: [30, 10, 0, 0],
+                        fontSize: 8,
+                        alignment: `left`,
+                    },
+                    {
+                        text: currentPage.toString() + " de " + pageCount,
+                        alignment: "right",
+                        margin: [0, 10, 30, 0],
+                        fontSize: 8,
+                    },
+                ],
+            };
+        },
     }
 
     let printer = new PdfPrinter(fonts);
@@ -6349,7 +6365,24 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
     console.log("Criando Documento")
     let docDefinitionHorario = {
         content: tables,
-        header: {text:new Date(Date.now()).toLocaleString(), margin:[40, 20, 0, 0], fontSize:10}
+        footer: function(currentPage, pageCount) {
+            return {
+                columns: [
+                    {
+                        text: new Date(Date.now()).toLocaleString('en-GB'),
+                        margin: [30, 10, 0, 0],
+                        fontSize: 8,
+                        alignment: `left`,
+                    },
+                    {
+                        text: currentPage.toString() + " de " + pageCount,
+                        alignment: "right",
+                        margin: [0, 10, 30, 0],
+                        fontSize: 8,
+                    },
+                ],
+            };
+        },
     }
 
     let printer = new PdfPrinter(fonts);
