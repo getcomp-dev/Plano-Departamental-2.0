@@ -24,7 +24,6 @@
 </template>
 <script>
 import pedidoService from "@/common/services/pedido";
-import _ from "lodash";
 const emptyPedido = {
   vagasPeriodizadas: 0,
   vagasNaoPeriodizadas: 0,
@@ -43,11 +42,11 @@ export default {
     return {
       ativo: false,
       valorAtual: undefined,
-      pedidoForm: _.clone(emptyPedido),
+      pedidoForm: this.$_.clone(emptyPedido),
     };
   },
   mounted() {
-    this.pedidoForm = _.clone(
+    this.pedidoForm = this.$_.clone(
       this.$store.state.pedido.Pedidos[this.turma.id][this.index]
     );
   },
@@ -60,16 +59,13 @@ export default {
         this.pedidoForm.vagasNaoPeriodizadas = 0;
       pedidoService
         .update(this.pedidoForm.Curso, this.pedidoForm.Turma, this.pedidoForm)
-        .then((response) => {
+        .then(() => {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
             text: `O pedido foi atualizado!`,
             type: "success",
           });
-          console.log(
-            this.$store.state.pedido.Pedidos[this.turma.id][this.index]
-          );
         })
         .catch((error) => {
           this.error = "<b>Erro ao atualizar Pedido</b>";
@@ -111,7 +107,7 @@ export default {
   },
   watch: {
     pedido: function() {
-      this.pedidoForm = _.clone(
+      this.pedidoForm = this.$_.clone(
         this.$store.state.pedido.Pedidos[this.turma.id][this.index]
       );
     },

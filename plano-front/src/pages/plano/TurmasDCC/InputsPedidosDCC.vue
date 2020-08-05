@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import _ from "lodash";
 import pedidoService from "@/common/services/pedido";
 import { notification, maskOnlyNumber } from "@/common/mixins";
 const emptyPedido = {
@@ -55,11 +54,11 @@ export default {
   },
   data() {
     return {
-      pedidoForm: _.clone(emptyPedido),
+      pedidoForm: this.$_.clone(emptyPedido),
     };
   },
   mounted() {
-    this.pedidoForm = _.clone(this.currentTurmaPedidos);
+    this.pedidoForm = this.$_.clone(this.currentTurmaPedidos);
   },
 
   methods: {
@@ -68,7 +67,7 @@ export default {
       if (pedido.vagasNaoPeriodizadas == "") pedido.vagasNaoPeriodizadas = 0;
     },
     async editPedido() {
-      const pedido = _.clone(this.pedidoForm);
+      const pedido = this.$_.clone(this.pedidoForm);
       this.validatePedido(pedido);
 
       try {
@@ -97,7 +96,7 @@ export default {
   },
   watch: {
     currentTurmaPedidos(newValue) {
-      this.pedidoForm = _.clone(newValue);
+      this.pedidoForm = this.$_.clone(newValue);
     },
   },
 };

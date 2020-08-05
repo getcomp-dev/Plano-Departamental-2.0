@@ -21,43 +21,28 @@ import plano from "./module/plano";
 import usuario from "./module/usuario";
 import history from "./module/history";
 import sidebar from "./module/sidebar";
-import baseModalOverlay from "./module/baseModalOverlay";
+import modals from "./module/modals";
 import loadingView from "./module/loadingView";
 import routesLists from "./module/routesLists";
+import notifications from "./module/notifications";
 
 import {
-  USER_LOGGED_OUT,
-  COMPONENT_LOADING,
-  COMPONENT_LOADED,
   HTTP_REQUEST_INCREMENT,
   HTTP_REQUEST_DECREMENT,
 } from "./mutation-types";
 
 const state = {
   httpRequestCount: 0,
-  isLoading: false,
   year: 2019,
 };
 
 const mutations = {
-  [USER_LOGGED_OUT](state) {
-    state.isLoading = false;
-  },
-
   [HTTP_REQUEST_INCREMENT](state) {
     state.httpRequestCount += 1;
   },
 
   [HTTP_REQUEST_DECREMENT](state) {
     state.httpRequestCount -= 1;
-  },
-
-  [COMPONENT_LOADING](state) {
-    state.isLoading = true;
-  },
-
-  [COMPONENT_LOADED](state) {
-    state.isLoading = false;
   },
 
   setYear(year) {
@@ -97,9 +82,10 @@ export default new Vuex.Store({
     usuario,
     history,
     sidebar,
-    baseModalOverlay,
+    modals,
     loadingView,
     routesLists,
+    notifications,
   },
 
   strict: process.env.NODE_ENV !== "production",

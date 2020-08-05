@@ -17,8 +17,8 @@ export default {
   },
   watch: {
     tableIsLoading(newValue) {
-      if (newValue) this.$store.commit("SET_LOADING_STATE", "partial");
-      else this.$store.commit("SET_LOADING_STATE", "completed");
+      if (newValue) this.$store.commit("SET_PARTIAL_LOADING", true);
+      else this.$store.commit("SET_PARTIAL_LOADING", false);
     },
   },
 };

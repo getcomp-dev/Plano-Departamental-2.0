@@ -39,7 +39,7 @@
         </form>
       </div>
     </div>
-    <TheLoadingView :visibility="loadingState !== 'completed'" />
+    <TheLoadingView :visibility="onLoading.fetching || onLoading.partial" />
   </div>
 </template>
 
@@ -76,11 +76,12 @@ export default {
       .catch(() => {});
   },
   methods: {
-    ...mapActions(["setLoadingState"]),
+    ...mapActions(["setFetchingLoading"]),
 
     async handleLogin() {
       try {
-        this.setLoadingState("entire");
+        this.setFetchingLoading(true);
+
         await this.$store.dispatch("authenticate", this.form);
         if (this.$store.state.route.query.redirect)
           this.$router.replace(this.$store.state.route.query.redirect);
@@ -89,12 +90,12 @@ export default {
         if (error.response) this.error = error.response.data.message;
         else this.error = "Erro na requisição! Tente novamente.";
       } finally {
-        this.setLoadingState("completed");
+        this.setFetchingLoading(false);
       }
     },
   },
   computed: {
-    ...mapGetters(["loadingState"]),
+    ...mapGetters(["onLoading"]),
   },
 };
 </script>
@@ -169,5 +170,9 @@ export default {
   font-size: 11px;
   text-align: center;
   margin: 0 !important;
+}
+.page-animation {
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
 }
 </style>

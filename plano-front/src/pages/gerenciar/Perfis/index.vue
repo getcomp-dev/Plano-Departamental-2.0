@@ -127,22 +127,25 @@
           <li class="list-group-item">
             <b>Para adicionar perfis: </b> Com o cartão à direita em branco,
             preencha-o. Em seguida, clique em Adicionar
-            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
+            <i class="fas fa-plus icon-green px-1" style="font-size:12px"></i>
             .
           </li>
           <li class="list-group-item">
             <b>Para editar ou deletar um perfil: </b>Na tabela, clique no perfil
             que deseja alterar. Logo após, no cartão à direita, altere as
             informações que desejar e clique em Salvar
-            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+            <i class="fas fa-check icon-green px-1" style="font-size:12px"></i>
             ou, para excluí-lo, clique em Deletar
-            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
+            <i
+              class="far fa-trash-alt icon-red px-1"
+              style="font-size: 12px"
+            ></i>
             .
           </li>
           <li class="list-group-item">
             <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
             em Cancelar
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+            <i class="fas fa-times icon-gray px-1" style="font-size: 12px"></i>
             .
           </li>
           <li class="list-group-item">
@@ -156,16 +159,9 @@
 </template>
 
 <script>
-import _ from "lodash";
 import perfilService from "@/common/services/perfil";
 import { toggleOrdination } from "@/common/mixins";
-import {
-  PageHeader,
-  BaseTable,
-  BaseButton,
-  Card,
-  BaseModal,
-} from "@/components/ui";
+import { PageHeader, Card } from "@/components/ui";
 
 const emptyPerfil = {
   id: undefined,
@@ -179,14 +175,12 @@ export default {
   mixins: [toggleOrdination],
   components: {
     PageHeader,
-    BaseTable,
+
     Card,
-    BaseButton,
-    BaseModal,
   },
   data() {
     return {
-      perfilForm: _.clone(emptyPerfil),
+      perfilForm: this.$_.clone(emptyPerfil),
       error: undefined,
       perfilSelectedId: "",
       ordenacaoPerfisMain: { order: "nome", type: "asc" },
@@ -203,11 +197,11 @@ export default {
     },
     cleanPerfil() {
       this.clearClick();
-      this.perfilForm = _.clone(emptyPerfil);
+      this.perfilForm = this.$_.clone(emptyPerfil);
       this.error = undefined;
     },
     showPerfil(perfil) {
-      this.perfilForm = _.clone(perfil);
+      this.perfilForm = this.$_.clone(perfil);
     },
     addPerfil() {
       perfilService
@@ -285,7 +279,7 @@ export default {
   },
   computed: {
     Perfis() {
-      return _.orderBy(
+      return this.$_.orderBy(
         this.$store.state.perfil.Perfis,
         this.ordenacaoPerfisMain.order,
         this.ordenacaoPerfisMain.type

@@ -59,11 +59,8 @@
 </template>
 
 <script>
-import BaseButton from "./BaseButton.vue";
-
 export default {
   name: "Card",
-  components: { BaseButton },
   props: {
     title: {
       type: String,

@@ -45,7 +45,7 @@
               v-for="plano in PlanosOrdered"
               :key="plano.id"
               @click="handleClickInPlano(plano)"
-              :class="{ 'bg-selected': plano.id === planoSelected }"
+              :class="{ 'bg-selected': plano.id === planoSelectedId }"
             >
               <td style="width: 70px" class="t-start">{{ plano.ano }}</td>
               <td style="width: 70px" class="t-start">{{ plano.nome }}</td>
@@ -58,12 +58,25 @@
       <Card
         :title="'Plano'"
         :toggleFooter="isEdit"
-        @btn-salvar="editPlano()"
+        @btn-salvar="handleEditPlano()"
         @btn-delete="openModalDelete()"
         @btn-add="openModalNovoPlano()"
         @btn-clean="cleanPlano()"
       >
         <template #form-group>
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0">
+              <label required for="planoNome">Nome</label>
+              <input
+                type="text"
+                id="planoNome"
+                v-model="planoForm.nome"
+                @keypress="limitNomeLength"
+                class="form-control"
+              />
+            </div>
+          </div>
+
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
               <label required for="ano">Ano </label>
@@ -82,18 +95,7 @@
               </select>
             </div>
           </div>
-          <div class="row mb-2 mx-0">
-            <div class="form-group col m-0 px-0">
-              <label required for="planoNome">Nome</label>
-              <input
-                type="text"
-                id="planoNome"
-                v-model="planoForm.nome"
-                @keypress="limitNomeLength"
-                class="form-control"
-              />
-            </div>
-          </div>
+
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
               <label for="planoObs">Observações</label>
@@ -146,7 +148,7 @@
           class="paddingX-20"
           :type="'text'"
           :color="'red'"
-          @click="deletePlano"
+          @click="handleDeletePlano"
         >
           Deletar
         </BaseButton>
@@ -165,7 +167,7 @@
         <ul class="list-ajuda list-group">
           <li class="list-group-item">
             <b>Para excluir um plano:</b> clique no ícone de deletar
-            <i class="fas fa-times delbtn"></i> presente na tabela, em seguida
+            <i class="fas fa-times icon-red"></i> presente na tabela, em seguida
             confirme se é realmente o plano que deseja exluir e clique no botão
             deletar ou cancelar.
           </li>
@@ -176,17 +178,9 @@
 </template>
 
 <script>
-import _ from "lodash";
-import { mapGetters } from "vuex";
-import planoService from "@/common/services/plano";
-import { toggleOrdination, notification } from "@/common/mixins";
-import {
-  PageHeader,
-  BaseTable,
-  BaseModal,
-  BaseButton,
-  Card,
-} from "@/components/ui";
+import { mapGetters, mapActions } from "vuex";
+import { toggleOrdination } from "@/common/mixins";
+import { PageHeader, Card } from "@/components/ui";
 import ModalNovoPlano from "./ModalNovoPlano";
 
 const emptyPlano = {
@@ -197,98 +191,99 @@ const emptyPlano = {
 
 export default {
   name: "Planos",
-  mixins: [notification, toggleOrdination],
+  mixins: [toggleOrdination],
   components: {
-    BaseTable,
     PageHeader,
-    BaseButton,
+
     Card,
-    BaseModal,
+
     ModalNovoPlano,
   },
   data() {
     return {
-      planoForm: _.clone(emptyPlano),
-      planoSelected: null,
+      planoForm: this.$_.clone(emptyPlano),
+      planoSelectedId: null,
       ordenacaoMainPlanos: { order: "ano", type: "asc" },
     };
   },
   methods: {
+    ...mapActions([
+      "pushNotification",
+      "setPartialLoading",
+      "setCurrentPlanoId",
+      "deletePlano",
+      "editPlano",
+    ]),
+
     limitNomeLength($event) {
       if ($event.target.value.length >= 10) $event.preventDefault();
     },
+
     handleClickInPlano(plano) {
       this.cleanPlano();
-      this.planoSelected = plano.id;
-      this.showPlano(plano);
+      this.planoSelectedId = plano.id;
+      this.planoForm = this.$_.clone(plano);
     },
-    showPlano(plano) {
-      this.planoForm = _.clone(plano);
-    },
+
     cleanPlano() {
-      this.planoSelected = null;
-      this.planoForm = _.clone(emptyPlano);
+      this.planoSelectedId = null;
+      this.planoForm = this.$_.clone(emptyPlano);
     },
+
     openModalDelete() {
       this.$refs.modalDeletePlano.open();
     },
+
     closeModalDelete() {
       this.$refs.modalDeletePlano.close();
     },
-    validatePlano(plano) {
-      if (plano.ano === "" || plano.ano === null) {
-        this.showNotification({
-          type: "error",
-          message: `Campos obrigatórios inválidos ou incompletos.`,
-        });
-        return false;
-      } else return true;
-    },
+
     openModalNovoPlano() {
-      if (!this.validatePlano(this.planoForm)) return;
-
-      this.$refs.modalNovoPlano.open();
-    },
-    async editPlano() {
-      const plano = _.clone(this.planoForm);
-
-      if (!this.validatePlano(plano)) {
-        this.showNotification({
+      if (
+        this.planoForm.ano === "" ||
+        this.planoForm.ano === null ||
+        this.planoForm.nome === "" ||
+        this.planoForm.nome === null
+      )
+        this.pushNotification({
           type: "error",
-          message: `Campo ano inválido.`,
+          text: `Campos obrigatórios inválidos ou incompletos.`,
         });
-        return;
+      else {
+        this.$refs.modalNovoPlano.open();
       }
+    },
 
+    async handleEditPlano() {
       try {
-        await planoService.update(plano.id, plano);
-        this.showNotification({
-          type: "success",
-          message: `Plano atualizado.`,
-        });
+        this.setPartialLoading(true);
+        await this.editPlano(this.planoForm);
       } catch (error) {
-        this.showNotification({
+        this.pushNotification({
           type: "error",
-          message: "Erro ao atualizar plano",
+          title: "Erro ao atualizar plano",
+          text: error.message || "",
         });
+      } finally {
+        this.setPartialLoading(false);
       }
     },
-    async deletePlano() {
-      const plano = _.clone(this.planoForm);
 
+    async handleDeletePlano() {
       try {
-        await planoService.delete(plano.id, plano);
-        this.showNotification({
-          type: "success",
-          message: `Plano ${plano.ano} foi removido.`,
-        });
         this.closeModalDelete();
+        this.setPartialLoading(true);
+        await this.deletePlano(this.planoForm);
+
         this.cleanPlano();
       } catch (error) {
-        this.showNotification({
+        this.pushNotification({
           type: "error",
-          message: error,
+          title: "Erro ao deletar plano",
+          text: "Tente novamente",
         });
+      } finally {
+        this.setPartialLoading(false);
       }
     },
   },
@@ -297,10 +292,10 @@ export default {
 
     PlanosOrdered() {
       const { order, type } = this.ordenacaoMainPlanos;
-      return _.orderBy(this.allPlanos, order, type);
+      return this.$_.orderBy(this.allPlanos, order, type);
     },
     isEdit() {
-      return this.planoSelected != null;
+      return this.planoSelectedId != null;
     },
   },
 };

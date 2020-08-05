@@ -5,11 +5,77 @@
   --light-gray: #e9ecef;
   --dark-gray: #343a40;
 }
+
 @media screen and (max-width: 544px) {
   :root {
     --navbar-height: 60px;
   }
 }
+
+html,
+body {
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif !important;
+  height: 100%;
+  width: 100%;
+  padding: 0 !important;
+}
+#app {
+  width: 100%;
+  height: 100%;
+}
+main .main-component {
+  width: 100%;
+  overflow: hidden !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.page-content {
+  display: flex;
+  justify-content: space-between;
+  justify-items: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.router-view-animation-enter-active {
+  animation: fadeIn 0.3s;
+  animation-fill-mode: both;
+}
+.router-view-animation-leave-active {
+  animation: fadeOut 0.3s;
+  animation-fill-mode: both;
+}
+
+*:focus {
+  border-color: #80bdff !important;
+  outline: 0 !important;
+  -webkit-box-shadow: 0 0 0 0.2rem #007bff40 !important;
+  box-shadow: 0 0 0 0.2rem #007bff40 !important;
+}
+input[type="checkbox"]:focus {
+  border-color: #80bdff !important;
+  outline: 0 !important;
+  -webkit-box-shadow: 0 0 0 0.1rem #007bff40 !important;
+  box-shadow: 0 0 0 0.1rem #007bff40 !important;
+}
+
+.popover {
+  font-size: 11px !important;
+}
+.popover .popover-header {
+  font-size: 11px !important;
+  /* padding-top: 5px;
+  padding-bottom: 5px; */
+  font-weight: bold;
+}
+.popover .popover-body {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+/* Others */
 .div-table {
   overflow: hidden;
   height: -webkit-max-content;
@@ -20,6 +86,7 @@
   width: max-content;
   padding: 0;
 }
+
 .sticky {
   display: block !important;
   overflow: hidden !important;
@@ -37,71 +104,38 @@
   z-index: 5;
 }
 
-*:focus {
-  border-color: #80bdff !important;
-  outline: 0 !important;
-  -webkit-box-shadow: 0 0 0 0.2rem #007bff40 !important;
-  box-shadow: 0 0 0 0.2rem #007bff40 !important;
-}
-input[type="checkbox"]:focus {
-  border-color: #80bdff !important;
-  outline: 0 !important;
-  -webkit-box-shadow: 0 0 0 0.1rem #007bff40 !important;
-  box-shadow: 0 0 0 0.1rem #007bff40 !important;
-}
-main .main-component {
-  width: 100%;
-  overflow: hidden !important;
-  margin: 0 !important;
-  padding: 0 !important;
-}
-.page-content {
-  display: flex;
-  justify-content: space-between;
-  justify-items: flex-start;
-  align-items: flex-start;
-  width: 100%;
-  flex-wrap: wrap;
-}
 .clickable {
   cursor: pointer !important;
 }
+
 .max-content {
   width: -webkit-max-content !important;
   width: -moz-max-content !important;
   width: max-content !important;
 }
+
 .less-padding {
   padding: 0 2px !important;
 }
+
 .low-opacity {
   opacity: 0.4;
 }
+
 .t-start {
   text-align: start !important;
 }
 .t-center {
   text-align: center !important;
 }
+
 .upper-case {
   text-transform: uppercase;
 }
+
 .paddingX-20 {
   padding-right: 20px !important;
   padding-left: 20px !important;
-}
-.popover {
-  font-size: 11px !important;
-}
-.popover .popover-header {
-  font-size: 11px !important;
-  /* padding-top: 5px;
-  padding-bottom: 5px; */
-  font-weight: bold;
-}
-.popover .popover-body {
-  padding-top: 3px;
-  padding-bottom: 3px;
 }
 
 label[required] {
@@ -145,18 +179,19 @@ label[required]:hover:before {
   text-align: start;
   line-height: 1.5;
 }
-.modal-custom .list-ajuda svg {
+.modal-custom .list-ajuda svg,
+.modal-custom .list-ajuda i {
   font-size: 12px !important;
   margin: 0 1px !important;
   color: #585858;
 }
+
 .list-ajuda .list-group-item b:first-of-type {
   color: var(--light-blue);
 }
 .modal-custom .list-ajuda i:hover {
   color: #2a2a2a;
 }
-
 .list-delete > .list-group-item {
   width: 100%;
   display: flex;
@@ -172,26 +207,4 @@ img {
   -khtml-user-drag: none;
   -moz-user-drag: none;
   -o-user-drag: none;
-}
-/* notification */
-.vue-notification {
-  padding: 10px;
-  margin-top: 15px;
-  margin-right: 15px;
-  font-size: 12px;
-  color: #ffffff;
-  background: #44a4fc;
-  border-left: 5px solid #187fe7;
-}
-.vue-notification .warn {
-  background: #ffb648;
-  border-left-color: #f48a06;
-}
-.vue-notification .error {
-  background: #e54d42;
-  border-left-color: #b82e24;
-}
-.vue-notification .success {
-  background: #68cd86;
-  border-left-color: #42a85f;
 }

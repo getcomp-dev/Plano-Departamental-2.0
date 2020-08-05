@@ -924,8 +924,6 @@
 </template>
 
 <script>
-import _ from "lodash";
-
 export default {
   name: "TableHorariosLab",
   props: {
@@ -961,7 +959,10 @@ export default {
       } else return false;
     },
     checkTurmaLab(turma) {
-      let labs = _.filter(this.$store.state.sala.Salas, ["laboratorio", true]);
+      let labs = this.$_.filter(this.$store.state.sala.Salas, [
+        "laboratorio",
+        true,
+      ]);
       let result = 0;
       labs.forEach((lab) => {
         if (lab.id === turma.Sala1) result += 1;
@@ -973,10 +974,16 @@ export default {
     findDocenteInTurma(turma) {
       let d1 = undefined,
         d2 = undefined;
-      if (!_.isNull(turma.Docente1))
-        d1 = _.find(this.$store.state.docente.Docentes, ["id", turma.Docente1]);
-      if (!_.isNull(turma.Docente2))
-        d2 = _.find(this.$store.state.docente.Docentes, ["id", turma.Docente1]);
+      if (!this.$_.isNull(turma.Docente1))
+        d1 = this.$_.find(this.$store.state.docente.Docentes, [
+          "id",
+          turma.Docente1,
+        ]);
+      if (!this.$_.isNull(turma.Docente2))
+        d2 = this.$_.find(this.$store.state.docente.Docentes, [
+          "id",
+          turma.Docente1,
+        ]);
       let apelidos = "";
       if (d1 !== undefined) {
         apelidos += d1.apelido;

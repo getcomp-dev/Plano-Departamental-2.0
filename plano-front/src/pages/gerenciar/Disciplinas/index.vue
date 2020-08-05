@@ -254,22 +254,25 @@
           <li class="list-group-item">
             <b>Para adicionar disciplinas:</b> Com o cartão à direita em branco,
             preencha-o. Em seguida, clique em Adicionar
-            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>
+            <i class="fas fa-plus icon-green px-1" style="font-size:12px"></i>
             .
           </li>
           <li class="list-group-item">
             <b>Para editar ou deletar uma disciplina:</b>Na tabela, clique na
             disciplina que deseja alterar. Logo após, no cartão à direita,
             altere as informações que desejar e clique em Salvar
-            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+            <i class="fas fa-check icon-green px-1" style="font-size:12px"></i>
             ou, para excluí-lo, clique em Deletar
-            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
+            <i
+              class="far fa-trash-alt icon-red px-1"
+              style="font-size: 12px"
+            ></i>
             .
           </li>
           <li class="list-group-item">
             <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
             em Cancelar
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+            <i class="fas fa-times icon-gray px-1" style="font-size: 12px"></i>
             .
           </li>
           <li class="list-group-item">
@@ -283,16 +286,9 @@
 </template>
 
 <script>
-import _ from "lodash";
 import disciplinaService from "@/common/services/disciplina";
 import { toggleOrdination } from "@/common/mixins";
-import {
-  PageHeader,
-  BaseTable,
-  BaseButton,
-  BaseModal,
-  Card,
-} from "@/components/ui";
+import { PageHeader, Card } from "@/components/ui";
 
 const emptyDisciplina = {
   id: undefined,
@@ -308,10 +304,10 @@ const emptyDisciplina = {
 export default {
   name: "DashboardDisciplina",
   mixins: [toggleOrdination],
-  components: { PageHeader, BaseTable, Card, BaseButton, BaseModal },
+  components: { PageHeader, Card },
   data() {
     return {
-      disciplinaForm: _.clone(emptyDisciplina),
+      disciplinaForm: this.$_.clone(emptyDisciplina),
       error: undefined,
       disciplinaClickada: "",
       ordenacaoMain: {
@@ -423,13 +419,13 @@ export default {
 
     cleanDisciplina() {
       this.clearClick();
-      this.disciplinaForm = _.clone(emptyDisciplina);
+      this.disciplinaForm = this.$_.clone(emptyDisciplina);
       this.error = undefined;
     },
 
     showDisciplina(disciplina) {
       this.cleanDisciplina();
-      this.disciplinaForm = _.clone(disciplina);
+      this.disciplinaForm = this.$_.clone(disciplina);
     },
 
     textoLab(lab) {
@@ -449,7 +445,7 @@ export default {
       let disciplinasResultantes = this.$store.state.disciplina.Disciplinas;
 
       disciplinasResultantes.forEach((disciplina) => {
-        _.find(this.Perfis, (perfil) => {
+        this.$_.find(this.Perfis, (perfil) => {
           if (perfil.id === disciplina.Perfil) {
             disciplina.perfilAbreviacao = perfil.abreviacao;
             return true;
@@ -459,14 +455,14 @@ export default {
       return disciplinasResultantes;
     },
     DisciplinasOrdered() {
-      const disciplinasResultantes = _.orderBy(
+      const disciplinasResultantes = this.$_.orderBy(
         this.DisciplinasComPerfil,
         this.ordenacaoMain.disciplinas.order,
         this.ordenacaoMain.disciplinas.type
       );
 
       if (this.ordenacaoMain.perfis.order !== null) {
-        return _.orderBy(
+        return this.$_.orderBy(
           disciplinasResultantes,
           this.ordenacaoMain.perfis.order,
           this.ordenacaoMain.perfis.type

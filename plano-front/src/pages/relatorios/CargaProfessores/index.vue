@@ -43,8 +43,8 @@
           <th style="width: 25px" title="Semestre">
             S.
           </th>
-          <th style="width: 80px" title="Código" class="t-start">
-            Cód.
+          <th style="width: 80px" class="t-center">
+            Código
           </th>
           <th style="width: 300px" class="t-start">
             Disciplina
@@ -65,7 +65,7 @@
             CTotal
           </th>
         </template>
-        <template #tbody>
+        <template #tbody v-if="!tableIsLoading">
           <template v-for="docente in DocentesOrderedMain">
             <tr class="bg-custom" :key="'docentes' + docente.apelido">
               <td style="width: 130px" class="t-start">
@@ -95,7 +95,7 @@
               <td style="width: 25px">
                 {{ turma.periodo }}
               </td>
-              <td style="width: 80px" class="t-start">
+              <td style="width: 80px" class="t-center">
                 {{ turma.disciplinaCodigo }}
               </td>
               <td style="width: 300px" class="t-start">
@@ -105,7 +105,7 @@
                 {{ turma.letra }}
               </td>
               <td style="width: 180px">
-                <span v-for="horario in Horarios" :key="horario.id">
+                <span v-for="horario in AllHorarios" :key="horario.id">
                   {{ horario.id === turma.Horario1 ? horario.horario : "" }}
                   {{
                     horario.id === turma.Horario2 ? " / " + horario.horario : ""
@@ -184,7 +184,7 @@
               <td style="width: 25px">
                 {{ turma.periodo }}
               </td>
-              <td style="width: 80px" class="t-start">
+              <td style="width: 80px" class="t-center">
                 {{ turma.disciplinaCodigo }}
               </td>
               <td style="width: 300px" class="t-start">
@@ -194,7 +194,7 @@
                 {{ turma.letra }}
               </td>
               <td style="width: 180px">
-                <span v-for="horario in Horarios" :key="horario.id">
+                <span v-for="horario in AllHorarios" :key="horario.id">
                   {{ horario.id === turma.Horario1 ? horario.horario : "" }}
                   {{
                     horario.id === turma.Horario2 ? " / " + horario.horario : ""
@@ -267,7 +267,9 @@
           </template>
 
           <template
-            v-if="turmasSemAlocacao().length && docenteSemAlocacao.ativado"
+            v-if="
+              turmasSemAlocacao().length && filtroDocenteSemAlocacao.ativado
+            "
           >
             <tr class="bg-custom">
               <td style="width: 130px" class="t-start">
@@ -300,7 +302,7 @@
                 {{ turma.letra }}
               </td>
               <td style="width:180px">
-                <span v-for="horario in Horarios" :key="horario.id">
+                <span v-for="horario in AllHorarios" :key="horario.id">
                   {{ horario.id === turma.Horario1 ? horario.horario : "" }}
                   {{
                     horario.id === turma.Horario2 ? " / " + horario.horario : ""
@@ -337,8 +339,11 @@
               <td style="width: 50px"></td>
             </tr>
           </template>
+
           <tr
-            v-show="!docenteSemAlocacao.ativado && !DocentesOrderedMain.length"
+            v-show="
+              !filtroDocenteSemAlocacao.ativado && !DocentesOrderedMain.length
+            "
           >
             <td colspan="9" style="width:870px">
               <b>Nenhum docente encontrado.</b> Clique no botão de filtros
@@ -350,200 +355,159 @@
     </div>
 
     <!-- MODAL FILTROS -->
-    <BaseModal
+    <ModalFiltros
       ref="modalFiltros"
-      :modalOptions="{
-        type: 'filtros',
-        title: 'Filtros',
-        hasFooter: true,
-      }"
-      @btn-ok="btnOkFiltros()"
-      @select-all="modalSelectAll[tabAtivaModal]"
-      @select-none="modalSelectNone[tabAtivaModal]"
+      :callbacks="modalFiltrosCallbacks"
+      :tabsOptions="modalFiltrosTabs"
     >
-      <template #modal-body>
-        <NavTab
-          :currentTab="tabAtivaModal"
-          :allTabs="['Docentes']"
-          @change-tab="tabAtivaModal = $event"
-        />
+      <div class="div-table">
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Docentes'"
+          :type="'modal'"
+          :hasSearchBar="true"
+        >
+          <template #thead-search>
+            <InputSearch
+              v-model="searchDocentes"
+              placeholder="Pesquise o nome de um docente..."
+            />
+          </template>
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th
+              class="clickable t-start"
+              style="width: 425px"
+              @click="toggleOrder(ordenacaoDocentesModal, 'apelido')"
+            >
+              Nome
+              <i :class="setIconByOrder(ordenacaoDocentesModal, 'apelido')"></i>
+            </th>
+          </template>
+          <template #tbody>
+            <tr
+              v-for="docente in DocentesOrderedModal"
+              :key="'docenteModal' + docente.id"
+              @click="toggleItemInArray(docente, filtroDocentes.selecionados)"
+            >
+              <td style="width: 25px;">
+                <input
+                  type="checkbox"
+                  v-model="filtroDocentes.selecionados"
+                  :value="docente"
+                  class="form-check-input position-static m-0"
+                />
+              </td>
+              <td style="width: 425px;" class="t-start">
+                {{ docente.apelido }}
+              </td>
+            </tr>
+            <tr
+              @click="
+                filtroDocenteSemAlocacao.selecionado = !filtroDocenteSemAlocacao.selecionado
+              "
+            >
+              <td style="width: 25px;">
+                <input
+                  type="checkbox"
+                  v-model="filtroDocenteSemAlocacao.selecionado"
+                  class="form-check-input position-static m-0"
+                />
+              </td>
+              <td style="width: 425px;" class="t-start">
+                SEM ALOCAÇÃO
+              </td>
+            </tr>
+          </template>
+        </BaseTable>
+      </div>
+    </ModalFiltros>
 
-        <div class="div-table">
-          <BaseTable
-            v-show="tabAtivaModal === 'Docentes'"
-            :type="'modal'"
-            :hasSearchBar="true"
-          >
-            <template #thead-search>
-              <InputSearch
-                v-model="searchDocentes"
-                placeholder="Pesquise o nome de um docente..."
-              />
-            </template>
-            <template #thead>
-              <th style="width: 25px"></th>
-              <th
-                class="clickable t-start"
-                style="width: 425px"
-                @click="toggleOrder(ordenacaoDocentesModal, 'apelido')"
-              >
-                Nome
-                <i
-                  :class="setIconByOrder(ordenacaoDocentesModal, 'apelido')"
-                ></i>
-              </th>
-            </template>
-            <template #tbody>
-              <tr
-                v-for="docente in DocentesOrderedModal"
-                :key="'docenteModal' + docente.id"
-                @click="toggleItemInArray(docente, filtroDocentes.selecionados)"
-              >
-                <td style="width: 25px;">
-                  <input
-                    type="checkbox"
-                    v-model="filtroDocentes.selecionados"
-                    :value="docente"
-                    class="form-check-input position-static m-0"
-                  />
-                </td>
-                <td style="width: 425px;" class="t-start">
-                  {{ docente.apelido }}
-                </td>
-              </tr>
-              <tr
-                @click="
-                  docenteSemAlocacao.selecionado = !docenteSemAlocacao.selecionado
-                "
-              >
-                <td style="width: 25px;">
-                  <input
-                    type="checkbox"
-                    v-model="docenteSemAlocacao.selecionado"
-                    class="form-check-input position-static m-0"
-                  />
-                </td>
-                <td style="width: 425px;" class="t-start">
-                  SEM ALOCAÇÃO
-                </td>
-              </tr>
-            </template>
-          </BaseTable>
-        </div>
-      </template>
-    </BaseModal>
+    <ModalRelatorio ref="modalRelatorio" @selection-option="pdf($event)" />
 
-    <BaseModal
-      ref="modalRelatorio"
-      :customStyles="'width:370px'"
-      :modalOptions="{
-        title: 'Relátorio',
-        position: 'center',
-        hasBackground: true,
-      }"
-    >
-      <template #modal-body>
-        <ul class="list-relatorio list-group flex-row w-100 border-0">
-          <li
-            class="list-group-item clickable text-center m-0 rounded-0 col py-2"
-            v-on:click="pdf(1)"
-          >
-            <b>Parcial</b>
-          </li>
-          <li
-            class="list-group-item clickable text-center m-0 rounded-0 col py-2"
-            v-on:click="pdf(2)"
-          >
-            <b>Completo</b>
-          </li>
-        </ul>
-      </template>
-    </BaseModal>
-
-    <!-- MODAL AJUDA -->
-    <BaseModal
-      ref="modalAjuda"
-      :modalOptions="{
-        type: 'ajuda',
-        title: 'Ajuda',
-      }"
-    >
-      <template #modal-body>
-        <ul class="list-ajuda list-group">
-          <li class="list-group-item">
-            <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
-            <i class="fas fa-list-ul cancelbtn"></i> no cabeçalho da página e na
-            janela que será aberta utilize as abas para navegar entre os tipos
-            de filtros. Marque em suas respectivas tabelas quais informações
-            deseja visualizar, e para finalizar clique no botão OK.
-          </li>
-          <li class="list-group-item">
-            <b>Para gerar relatório dos docentes:</b> Clique no ícone relatório
-            <i class="fas fa-file-alt cancelbtn"></i>, selecione se deseja gerar
-            o relatório completo com todos os docentes, ou apenas o relatório
-            parcial com os docentes que estão selecionados no momento.
-          </li>
-        </ul>
-      </template>
-    </BaseModal>
+    <ModalAjuda ref="modalAjuda">
+      <li class="list-group-item">
+        <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
+        <i class="fas fa-list-ul icon-gray"></i> no cabeçalho da página e na
+        janela que será aberta utilize as abas para navegar entre os tipos de
+        filtros. Marque em suas respectivas tabelas quais informações deseja
+        visualizar, e para finalizar clique no botão OK.
+      </li>
+      <li class="list-group-item">
+        <b>Para gerar relatório dos docentes:</b> Clique no ícone relatório
+        <i class="fas fa-file-alt icon-gray"></i>, selecione se deseja gerar o
+        relatório completo com todos os docentes, ou apenas o relatório parcial
+        com os docentes que estão selecionados no momento.
+      </li>
+    </ModalAjuda>
   </div>
 </template>
 
 <script>
-import _ from "lodash";
 import pdfs from "@/common/services/pdfs";
-import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
+import { normalizeText } from "@/common/utils";
 import {
-  InputSearch,
-  PageHeader,
-  BaseTable,
-  NavTab,
-  BaseModal,
-  BaseButton,
-} from "@/components/ui";
+  toggleOrdination,
+  toggleItemInArray,
+  tableLoading,
+} from "@/common/mixins";
+import { InputSearch, PageHeader } from "@/components/ui";
+import { ModalAjuda, ModalRelatorio, ModalFiltros } from "@/components/modals";
+import { mapGetters } from "vuex";
 
 export default {
   name: "DashboardCargaProfessores",
-  mixins: [toggleOrdination, toggleItemInArray],
+  mixins: [toggleOrdination, toggleItemInArray, tableLoading],
   components: {
+    ModalRelatorio,
+    ModalAjuda,
+    ModalFiltros,
     PageHeader,
-    BaseTable,
-    NavTab,
-    BaseModal,
-    BaseButton,
     InputSearch,
   },
   data() {
     return {
-      tabAtivaModal: "Docentes",
       searchDocentes: "",
-      ordenacaoDocentesModal: { order: "apelido", type: "asc" },
       orednacaoDocentesMain: { order: "apelido", type: "asc" },
+      ordenacaoDocentesModal: { order: "apelido", type: "asc" },
       filtroDocentes: {
         ativados: [],
         selecionados: [],
       },
-      docenteSemAlocacao: {
+      modalFiltrosTabs: {
+        current: "Docentes",
+        array: ["Docentes"],
+      },
+      modalFiltrosCallbacks: {
+        selectAll: {
+          Docentes: () => {
+            this.filtroDocentes.selecionados = [...this.DocentesAtivos];
+            this.filtroDocenteSemAlocacao.selecionado = true;
+          },
+        },
+        selectNone: {
+          Docentes: () => {
+            this.filtroDocentes.selecionados.length = 0;
+            this.filtroDocenteSemAlocacao.selecionado = false;
+          },
+        },
+        btnOk: () => {
+          this.setTableLoadingState(true);
+          this.filtroDocentes.ativados = [...this.filtroDocentes.selecionados];
+          this.filtroDocenteSemAlocacao.ativado = this.filtroDocenteSemAlocacao.selecionado;
+          this.setTableLoadingState(false);
+        },
+      },
+      filtroDocenteSemAlocacao: {
         ativado: true,
         selecionado: true,
       },
-      modalSelectAll: {
-        Docentes: () => {
-          this.filtroDocentes.selecionados = [...this.Docentes];
-          this.docenteSemAlocacao.selecionado = true;
-        },
-      },
-      modalSelectNone: {
-        Docentes: () => {
-          this.filtroDocentes.selecionados.length = 0;
-          this.docenteSemAlocacao.selecionado = false;
-        },
-      },
     };
   },
-  mounted() {
+
+  beforeMount() {
     this.activeAllFiltros();
   },
+
   methods: {
     openAsideModal(modalName) {
       if (modalName === "filtros") {
@@ -555,36 +519,30 @@ export default {
       }
     },
     activeAllFiltros() {
-      this.modalSelectAll.Docentes();
+      this.modalFiltrosCallbacks.selectAll.Docentes();
       this.filtroDocentes.ativados = [...this.filtroDocentes.selecionados];
-      this.docenteSemAlocacao.ativado = this.docenteSemAlocacao.selecionado;
+      this.filtroDocenteSemAlocacao.ativado = this.filtroDocenteSemAlocacao.selecionado;
     },
-    pdf(opt) {
-      if (opt === 1) {
+
+    pdf(completo) {
+      if (completo)
         pdfs.pdfCargaProfessores({
           Docentes: this.filtroDocentes.ativados,
-          SemAlocacao: this.docenteSemAlocacao.ativado,
+          SemAlocacao: this.filtroDocenteSemAlocacao.ativado,
         });
-      }
-      if (opt === 2) {
+      else
         pdfs.pdfCargaProfessores({
           Docentes: this.DocentesInCreditos,
           SemAlocacao: true,
         });
-      }
-    },
-    btnOkFiltros() {
-      this.filtroDocentes.ativados = [...this.filtroDocentes.selecionados];
-      this.docenteSemAlocacao.ativado = this.docenteSemAlocacao.selecionado;
-      this.clearSearchDocentes();
     },
     turmaInDocentes(docente) {
       const turmasResultantes = [];
 
-      _.forEach(this.Turmas, (turma) => {
+      this.$_.forEach(this.AllTurmas, (turma) => {
         if (turma.Docente1 === docente.id || turma.Docente2 === docente.id) {
-          const DisciplinaFounded = _.find(
-            this.Disciplinas,
+          const DisciplinaFounded = this.$_.find(
+            this.DisciplinasDCC,
             (disciplina) => disciplina.id === turma.Disciplina
           );
 
@@ -600,16 +558,16 @@ export default {
         }
       });
 
-      return _.orderBy(turmasResultantes, ["Disciplina", "letra"]);
+      return this.$_.orderBy(turmasResultantes, ["Disciplina", "letra"]);
     },
     turmasInDocentes1Semestre(docente) {
-      return _.filter(
+      return this.$_.filter(
         this.turmaInDocentes(docente),
         (turma) => turma.periodo == 1 || turma.periodo == 2
       );
     },
     turmasInDocentes2Semestre(docente) {
-      return _.filter(
+      return this.$_.filter(
         this.turmaInDocentes(docente),
         (turma) => turma.periodo == 3 || turma.periodo == 4
       );
@@ -617,14 +575,14 @@ export default {
     turmasSemAlocacao() {
       const turmasResultantes = [];
 
-      _.forEach(this.Turmas, (turma) => {
+      this.$_.forEach(this.AllTurmas, (turma) => {
         if (
           turma.Docente1 == null &&
           turma.Docente2 == null &&
           turma.Disciplina != null
         ) {
-          const disciplinaFounded = _.find(
-            this.Disciplinas,
+          const disciplinaFounded = this.$_.find(
+            this.DisciplinasDCC,
             (disciplina) => turma.Disciplina === disciplina.id
           );
 
@@ -639,49 +597,56 @@ export default {
         }
       });
 
-      return _.orderBy(turmasResultantes, ["periodo", "Disciplina", "letra"]);
+      return this.$_.orderBy(turmasResultantes, [
+        "periodo",
+        "Disciplina",
+        "letra",
+      ]);
     },
     calculaCreditos(docente) {
       var creditosTotais = { periodo1: 0, periodo2: 0 };
 
-      for (let t = 0; t < this.Turmas.length; t++) {
+      for (let t = 0; t < this.AllTurmas.length; t++) {
         if (
-          this.Turmas[t].Docente1 === docente.id ||
-          this.Turmas[t].Docente2 === docente.id
+          this.AllTurmas[t].Docente1 === docente.id ||
+          this.AllTurmas[t].Docente2 === docente.id
         ) {
-          for (var d = 0; d < this.Disciplinas.length; d++) {
-            if (this.Disciplinas[d].id === this.Turmas[t].Disciplina) {
-              if (this.Turmas[t].Docente1 > 0 && this.Turmas[t].Docente2 > 0) {
+          for (var d = 0; d < this.DisciplinasDCC.length; d++) {
+            if (this.DisciplinasDCC[d].id === this.AllTurmas[t].Disciplina) {
+              if (
+                this.AllTurmas[t].Docente1 > 0 &&
+                this.AllTurmas[t].Docente2 > 0
+              ) {
                 //PRIMEIRO PERIODO
-                if (this.Turmas[t].periodo === 1) {
+                if (this.AllTurmas[t].periodo === 1) {
                   creditosTotais.periodo1 +=
-                    parseFloat(this.Disciplinas[d].cargaPratica) / 2;
+                    parseFloat(this.DisciplinasDCC[d].cargaPratica) / 2;
                   creditosTotais.periodo1 +=
-                    parseFloat(this.Disciplinas[d].cargaTeorica) / 2;
+                    parseFloat(this.DisciplinasDCC[d].cargaTeorica) / 2;
                 } else {
                   //SEGUNDO PERIODO
                   creditosTotais.periodo2 +=
-                    parseFloat(this.Disciplinas[d].cargaPratica) / 2;
+                    parseFloat(this.DisciplinasDCC[d].cargaPratica) / 2;
                   creditosTotais.periodo2 +=
-                    parseFloat(this.Disciplinas[d].cargaTeorica) / 2;
+                    parseFloat(this.DisciplinasDCC[d].cargaTeorica) / 2;
                 }
               } else {
                 //PRIMEIRO PERIODO
-                if (this.Turmas[t].periodo === 1) {
+                if (this.AllTurmas[t].periodo === 1) {
                   creditosTotais.periodo1 += parseFloat(
-                    this.Disciplinas[d].cargaPratica
+                    this.DisciplinasDCC[d].cargaPratica
                   );
                   creditosTotais.periodo1 += parseFloat(
-                    this.Disciplinas[d].cargaTeorica
+                    this.DisciplinasDCC[d].cargaTeorica
                   );
                 }
                 //SEGUNDO PERIODO
                 else {
                   creditosTotais.periodo2 += parseFloat(
-                    this.Disciplinas[d].cargaPratica
+                    this.DisciplinasDCC[d].cargaPratica
                   );
                   creditosTotais.periodo2 += parseFloat(
-                    this.Disciplinas[d].cargaTeorica
+                    this.DisciplinasDCC[d].cargaTeorica
                   );
                 }
               }
@@ -701,39 +666,37 @@ export default {
       return creditosTotais;
     },
     CargasPosFiltred(docenteId) {
-      return _.filter(this.CargasPos(docenteId), function(carga) {
+      return this.$_.filter(this.CargasPos(docenteId), function(carga) {
         return carga.trimestre == 1 || carga.trimestre == 2;
       });
     },
     getCargasPosDocente(docenteId, trimestres) {
-      return _.filter(
+      return this.$_.filter(
         this.CargasPos,
         (carga) =>
           trimestres.indexOf(carga.trimestre) != -1 &&
           carga.Docente === docenteId
       );
     },
-    clearSearchDocentes() {
-      this.searchDocentes = "";
-    },
-    normalizeText(text) {
-      return text
-        .toUpperCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
-    },
   },
   computed: {
+    ...mapGetters([
+      "DocentesAtivos",
+      "AllTurmas",
+      "DisciplinasDCC",
+      "AllHorarios",
+    ]),
+    // table main
     DocentesOrderedMain() {
-      return _.orderBy(
+      return this.$_.orderBy(
         this.DocentesFiltredMain,
         this.orednacaoDocentesMain.order,
         this.orednacaoDocentesMain.type
       );
     },
     DocentesFiltredMain() {
-      return _.filter(this.DocentesInCreditos, (docente) => {
-        const docenteFoundedIndex = _.findIndex(
+      return this.$_.filter(this.DocentesInCreditos, (docente) => {
+        const docenteFoundedIndex = this.$_.findIndex(
           this.filtroDocentes.ativados,
           (docenteAtivado) => docenteAtivado.id === docente.id
         );
@@ -741,26 +704,27 @@ export default {
         return docenteFoundedIndex !== -1;
       });
     },
+    // tables modal
     DocentesOrderedModal() {
-      return _.orderBy(
+      return this.$_.orderBy(
         this.DocentesFiltredModal,
         this.ordenacaoDocentesModal.order,
         this.ordenacaoDocentesModal.type
       );
     },
     DocentesFiltredModal() {
-      if (this.searchDocentes === "") return this.Docentes;
+      if (this.searchDocentes === "") return this.DocentesAtivos;
 
-      const searchNormalized = this.normalizeText(this.searchDocentes);
+      const searchNormalized = normalizeText(this.searchDocentes);
 
-      return this.Docentes.filter((docente) => {
-        const docenteApelido = this.normalizeText(docente.apelido);
+      return this.DocentesAtivos.filter((docente) => {
+        const docenteApelido = normalizeText(docente.apelido);
 
         return docenteApelido.match(searchNormalized);
       });
     },
     DocentesInCreditos() {
-      return this.Docentes.map((docente) => {
+      return this.DocentesAtivos.map((docente) => {
         const creditos = this.calculaCreditos(docente);
         return {
           ...docente,
@@ -773,20 +737,9 @@ export default {
         };
       });
     },
-    Docentes() {
-      return _.filter(this.$store.state.docente.Docentes, ["ativo", true]);
-    },
-    Turmas() {
-      return this.$store.state.turma.Turmas;
-    },
+
     CargasPos() {
-      return _.orderBy(this.$store.state.cargaPos.Cargas, "trimestre");
-    },
-    Disciplinas() {
-      return _.orderBy(this.$store.state.disciplina.Disciplinas, "nome");
-    },
-    Horarios() {
-      return this.$store.state.horario.Horarios;
+      return this.$_.orderBy(this.$store.state.cargaPos.Cargas, "trimestre");
     },
   },
 };

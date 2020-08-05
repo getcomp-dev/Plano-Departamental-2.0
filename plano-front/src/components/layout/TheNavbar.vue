@@ -20,8 +20,8 @@
         <select
           id="planoAtual"
           class="input-plano"
-          v-model.number="currentPlano"
-          @change="changePlano()"
+          v-model.number="planoIdForm"
+          @change="changeCurrentPlano(planoIdForm)"
         >
           <option v-for="plano in allPlanos" :value="plano.id" :key="plano.id">
             {{ plano.nome }} - {{ plano.ano }}
@@ -51,32 +51,22 @@ export default {
   name: "TheNavbar",
   data() {
     return {
-      currentPlano: null,
+      planoIdForm: null,
     };
   },
   created() {
-    this.currentPlano = parseInt(localStorage.getItem("Plano"), 10);
+    this.planoIdForm = this.currentPlanoId;
   },
   methods: {
-    ...mapActions(["setLoadingState", "closeSidebar", "toggleSidebar"]),
-    async changePlano() {
-      try {
-        this.setLoadingState("entire");
-
-        setTimeout(async () => {
-          await localStorage.setItem("Plano", this.currentPlano);
-          await this.$store.dispatch("fetchAll");
-          this.$socket.open();
-        }, 300);
-      } catch (error) {
-        console.log(error);
-      } finally {
-        this.setLoadingState("completed");
-      }
-    },
+    ...mapActions(["closeSidebar", "toggleSidebar", "changeCurrentPlano"]),
   },
   computed: {
-    ...mapGetters(["sidebarVisibility", "allPlanos"]),
+    ...mapGetters(["sidebarVisibility", "allPlanos", "currentPlanoId"]),
+  },
+  watch: {
+    currentPlanoId(newValue) {
+      this.planoIdForm = newValue;
+    },
   },
 };
 </script>

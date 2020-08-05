@@ -224,7 +224,7 @@
         <ul class="list-ajuda list-group">
           <li class="list-group-item">
             <b>Para excluir um usuário:</b> clique no ícone de deletar
-            <i class="fas fa-times delbtn"></i> presente na tabela, em seguida
+            <i class="fas fa-times icon-red"></i> presente na tabela, em seguida
             confirme se é realmente o usuário que deseja exluir e clique no
             botão deletar ou cancelar.
           </li>
@@ -235,14 +235,10 @@
 </template>
 
 <script>
-import _ from "lodash";
 import userService from "@/common/services/usuario";
 import { toggleOrdination, notification } from "@/common/mixins";
 import {
-  BaseTable,
-  BaseModal,
   PageHeader,
-  BaseButton,
   InputPassword,
   Card,
   ButtonSlideSection,
@@ -259,19 +255,16 @@ export default {
   name: "Usuarios",
   mixins: [notification, toggleOrdination],
   components: {
-    BaseTable,
     PageHeader,
-    BaseButton,
     Card,
     InputPassword,
-    BaseModal,
     ButtonSlideSection,
   },
   data() {
     return {
       isEditingSenha: false,
       userSelected: null,
-      userForm: _.clone(emptyUser),
+      userForm: this.$_.clone(emptyUser),
       novaSenha: "",
       confirmaSenha: "",
       ordenacaoMainUsers: { order: "nome", type: "asc" },
@@ -299,13 +292,13 @@ export default {
       this.showUser(user);
     },
     showUser(user) {
-      this.userForm = _.clone(user);
+      this.userForm = this.$_.clone(user);
     },
     cleanUser() {
       this.userSelected = null;
       this.confirmaSenha = "";
       this.isEditingSenha = false;
-      this.userForm = _.clone(emptyUser);
+      this.userForm = this.$_.clone(emptyUser);
     },
     openModalDelete() {
       this.$refs.modalDeleteUser.open();
@@ -327,7 +320,7 @@ export default {
       return true;
     },
     async createUser() {
-      const user = _.clone(this.userForm);
+      const user = this.$_.clone(this.userForm);
 
       if (!this.validateUser(user)) {
         this.showNotification({
@@ -352,7 +345,7 @@ export default {
       }
     },
     async editUser() {
-      const user = _.clone(this.userForm);
+      const user = this.$_.clone(this.userForm);
       user.senha = this.novaSenha;
 
       if (!this.validateEditUser(user)) {
@@ -379,7 +372,7 @@ export default {
       }
     },
     async deleteUser() {
-      const user = _.clone(this.userForm);
+      const user = this.$_.clone(this.userForm);
 
       try {
         await userService.delete(user.id, user);
@@ -421,7 +414,7 @@ export default {
         }
       };
 
-      return _.orderBy(this.Users, userSorter, type);
+      return this.$_.orderBy(this.Users, userSorter, type);
     },
 
     isEdit() {

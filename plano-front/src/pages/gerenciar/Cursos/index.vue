@@ -234,25 +234,22 @@
           <li class="list-group-item">
             <b>Para adicionar cursos:</b> Com o cartão à direita em branco,
             preencha-o. Em seguida, clique em Adicionar
-            <i class="fas fa-plus addbtn px-1" style="font-size: 12px;"></i>
+            <i class="fas fa-plus icon-green px-1"></i>
             .
           </li>
           <li class="list-group-item">
             <b>Para editar ou deletar um curso:</b> Na tabela, clique no curso
             que deseja alterar. Logo após, no cartão à direita, altere as
             informações que desejar e clique em Salvar
-            <i class="fas fa-check addbtn px-1" style="font-size: 12px;"></i>
+            <i class="fas fa-check icon-green px-1"></i>
             ou, para excluí-lo, clique em Deletar
-            <i
-              class="far fa-trash-alt delbtn px-1"
-              style="font-size: 12px;"
-            ></i>
+            <i class="far fa-trash-alt icon-red px-1"></i>
             .
           </li>
           <li class="list-group-item">
             <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
             em Cancelar
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px;"></i>
+            <i class="fas fa-times icon-gray px-1"></i>
             .
           </li>
           <li class="list-group-item">
@@ -267,17 +264,10 @@
 </template>
 
 <script>
-import _ from "lodash";
 import ls from "local-storage";
 import cursoService from "@/common/services/curso";
 import { toggleOrdination, notification } from "@/common/mixins";
-import {
-  PageHeader,
-  BaseTable,
-  BaseModal,
-  BaseButton,
-  Card,
-} from "@/components/ui";
+import { PageHeader, Card } from "@/components/ui";
 
 const emptyCurso = {
   id: undefined,
@@ -293,11 +283,11 @@ const emptyCurso = {
 export default {
   name: "DashboardCursos",
   mixins: [toggleOrdination, notification],
-  components: { PageHeader, BaseTable, Card, BaseButton, BaseModal },
+  components: { PageHeader, Card },
 
   data() {
     return {
-      cursoForm: _.clone(emptyCurso),
+      cursoForm: this.$_.clone(emptyCurso),
       cursoClickado: "",
       ordenacaoCursosMain: { order: "codigo", type: "asc" },
     };
@@ -445,7 +435,7 @@ export default {
 
     checkPedidos() {
       for (let t in this.$store.state.pedido.Pedidos) {
-        let pedido = _.find(this.$store.state.pedido.Pedidos[t], (p) => {
+        let pedido = this.$_.find(this.$store.state.pedido.Pedidos[t], (p) => {
           if (p.Curso === this.cursoForm.id) {
             if (
               parseInt(p.vagasPeriodizadas, 10) > 0 ||
@@ -491,16 +481,16 @@ export default {
     },
     cleanCurso() {
       this.clearClick();
-      this.cursoForm = _.clone(emptyCurso);
+      this.cursoForm = this.$_.clone(emptyCurso);
     },
     showCurso(curso) {
       this.cleanCurso();
-      this.cursoForm = _.clone(curso);
+      this.cursoForm = this.$_.clone(curso);
     },
   },
   computed: {
     Cursos() {
-      return _.orderBy(
+      return this.$_.orderBy(
         this.$store.state.curso.Cursos,
         this.ordenacaoCursosMain.order,
         this.ordenacaoCursosMain.type

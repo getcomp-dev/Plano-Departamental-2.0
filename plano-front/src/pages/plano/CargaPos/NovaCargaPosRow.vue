@@ -10,7 +10,7 @@
       </td>
       <td style="width:25px"><div style="height:30px"></div></td>
       <td style="width:55px">
-        <select type="text" v-model.number="cargaPosForm.trimestre">
+        <select v-model.number="cargaPosForm.trimestre">
           <option type="text" value="1">1</option>
           <option type="text" value="2">2</option>
           <option type="text" value="3">3</option>
@@ -18,8 +18,8 @@
         </select>
       </td>
       <td style="width:145px" class="less-padding">
-        <select type="text" v-model="cargaPosForm.Docente">
-          <option v-if="DocentesOrdered.length === 0" type="text" value
+        <select v-model.number="cargaPosForm.Docente">
+          <option v-if="!!DocentesOrdered.length" type="text" value
             >Nenhum Docente Encontrado</option
           >
           <option
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import _ from "lodash";
+import { mapActions } from "vuex";
 import cargaPosService from "@/common/services/cargaPos";
 import { notification } from "@/common/mixins";
 
@@ -60,10 +60,12 @@ export default {
   mixins: [notification],
   data() {
     return {
-      cargaPosForm: _.clone(emptyCarga),
+      cargaPosForm: this.$_.clone(emptyCarga),
     };
   },
   methods: {
+    ...mapActions(["pushNotification", "setPartialLoading"]),
+
     onlyNumber($event) {
       let keyCode = $event.keyCode ? $event.keyCode : $event.which;
       if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
@@ -85,10 +87,10 @@ export default {
         carga.programa === null ||
         carga.creditos === null
       ) {
-        this.showNotification({
+        this.pushNotification({
           type: "error",
-          title: "Erro!",
-          message: "Cadastro da nova carga inválido ou incompleto.",
+          title: "Erro ao criar nova carga!",
+          text: "Cadastro inválido ou incompleto.",
         });
         return false;
       }
@@ -97,37 +99,40 @@ export default {
     },
     addCarga() {
       this.cargaPosForm.Plano = localStorage.getItem("Plano");
-      const newCarga = _.clone(this.cargaPosForm);
+      const newCarga = this.$_.clone(this.cargaPosForm);
 
       this.setEmptyKeysToNull(newCarga);
       if (!this.validateCargaPos(newCarga)) return;
 
+      this.setPartialLoading(true);
       cargaPosService
         .create(newCarga)
         .then((response) => {
           this.cleanCarga();
-
-          this.showNotification({
+          this.pushNotification({
             type: "success",
-            message: `A carga ${response.CargaPos.programa} foi criada!`,
+            text: `Carga ${response.CargaPos.programa} foi criada!`,
           });
         })
         .catch((error) => {
-          this.showNotification({
+          this.pushNotification({
             type: "error",
             title: "Erro ao criar nova carga!",
-            message: error,
+            text: error.message || "",
           });
         });
+
+      this.setPartialLoading(false);
     },
+
     cleanCarga() {
-      this.cargaPosForm = _.clone(emptyCarga);
+      this.cargaPosForm = this.$_.clone(emptyCarga);
     },
   },
   computed: {
     DocentesOrdered() {
-      return _.orderBy(
-        _.filter(this.$store.state.docente.Docentes, ["ativo", true]),
+      return this.$_.orderBy(
+        this.$_.filter(this.$store.state.docente.Docentes, ["ativo", true]),
         "apelido"
       );
     },

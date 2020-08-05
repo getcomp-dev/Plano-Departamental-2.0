@@ -6,7 +6,7 @@
         title="Salvar"
         :type="'icon'"
         :color="'green'"
-        @click="$refs.novaTurmaExternaRow.addNovaTurma()"
+        @click="addNovaTurma"
       >
         <i class="fas fa-check"></i>
       </BaseButton>
@@ -15,7 +15,7 @@
         title="Adicionar"
         :type="'icon'"
         :color="'green'"
-        @click="toggleAdd()"
+        @click="toggleAdd"
       >
         <i class="fas fa-plus"></i>
       </BaseButton>
@@ -25,7 +25,7 @@
         title="Cancelar"
         :type="'icon'"
         :color="'gray'"
-        @click="toggleAdd()"
+        @click="toggleAdd"
       >
         <i class="fas fa-times"></i>
       </BaseButton>
@@ -35,7 +35,7 @@
         title="Deletar selecionados"
         :type="'icon'"
         :color="'red'"
-        @click="$refs.modalDelete.open()"
+        @click="openModalDelete"
       >
         <i class="fas fa-trash"></i>
       </BaseButton>
@@ -154,7 +154,8 @@
               :CursosAtivados="CursosDCC"
             />
           </template>
-          <tr v-if="TurmasExternasOrdered.length === 0">
+
+          <tr v-if="!TurmasExternasOrdered.length">
             <td style="width:990px">
               <b>Nenhuma turma encontrada.</b> Clique no botão de filtros
               <i class="fas fa-list-ul mx-1"></i> para selecioná-las.
@@ -163,135 +164,122 @@
         </template>
       </BaseTable>
     </div>
-    <!-- MODAL FILTROS -->
-    <BaseModal
+
+    <ModalFiltros
       ref="modalFiltros"
-      :modalOptions="{
-        type: 'filtros',
-        title: 'Filtros',
-        hasFooter: true,
-      }"
-      @btn-ok="btnOkFiltros()"
-      @select-all="modalSelectAll[tabAtivaModal]"
-      @select-none="modalSelectNone[tabAtivaModal]"
+      :callbacks="modalFiltrosCallbacks"
+      :tabsOptions="modalFiltrosTabs"
     >
-      <template #modal-body>
-        <NavTab
-          :currentTab="tabAtivaModal"
-          :allTabs="['Disciplinas', 'Semestres']"
-          @change-tab="tabAtivaModal = $event"
-        />
+      <div class="div-table">
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Disciplinas'"
+          :type="'modal'"
+          :hasSearchBar="true"
+        >
+          <template #thead-search>
+            <InputSearch
+              v-model="searchDisciplinasModal"
+              placeholder="Pesquise nome ou codigo de uma disciplina..."
+            />
+          </template>
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th
+              @click="toggleOrder(ordenacaoDisciplinasModal, 'codigo')"
+              class="clickable t-start"
+              style="width: 60px"
+            >
+              Cód.
+              <i
+                :class="setIconByOrder(ordenacaoDisciplinasModal, 'codigo')"
+              ></i>
+            </th>
+            <th
+              @click="toggleOrder(ordenacaoDisciplinasModal, 'nome')"
+              class="clickable t-start"
+              style="width: 305px"
+            >
+              Nome
+              <i :class="setIconByOrder(ordenacaoDisciplinasModal, 'nome')"></i>
+            </th>
+            <th class="t-start" style="width: 60px">
+              Perfis
+            </th>
+          </template>
+          <template #tbody>
+            <tr
+              v-for="disciplina in DisciplinasExternasOrderedModal"
+              :key="'disciplina' + disciplina.id"
+              @click="
+                toggleItemInArray(disciplina, filtroDisciplinas.selecionadas)
+              "
+            >
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroDisciplinas.selecionadas"
+                  :value="disciplina"
+                />
+              </td>
+              <td style="width: 60px" class="t-start">
+                {{ disciplina.codigo }}
+              </td>
+              <td style="width: 305px" class="t-start">
+                {{ disciplina.nome }}
+              </td>
+              <td class="t-start" style="width: 60px">
+                {{ disciplina.perfil.nome }}
+              </td>
+            </tr>
+            <tr v-show="DisciplinasExternasOrderedModal.length === 0">
+              <td colspan="3" style="width:450px">
+                NENHUMA DISCIPLINA ENCONTRADA.
+              </td>
+            </tr>
+          </template>
+        </BaseTable>
 
-        <div class="div-table">
-          <BaseTable
-            v-show="tabAtivaModal === 'Disciplinas'"
-            :type="'modal'"
-            :hasSearchBar="true"
-          >
-            <template #thead-search>
-              <InputSearch
-                v-model="searchDisciplinasModal"
-                placeholder="Pesquise nome ou codigo de uma disciplina..."
-              />
-            </template>
-            <template #thead>
-              <th style="width: 25px"></th>
-              <th
-                @click="toggleOrder(ordenacaoDisciplinasModal, 'codigo')"
-                class="clickable t-start"
-                style="width: 60px"
-              >
-                Cód.
-                <i
-                  :class="setIconByOrder(ordenacaoDisciplinasModal, 'codigo')"
-                ></i>
-              </th>
-              <th
-                @click="toggleOrder(ordenacaoDisciplinasModal, 'nome')"
-                class="clickable t-start"
-                style="width: 310px"
-              >
-                Nome
-                <i
-                  :class="setIconByOrder(ordenacaoDisciplinasModal, 'nome')"
-                ></i>
-              </th>
-              <th class="t-start" style="width: 60px">
-                Perfis
-              </th>
-            </template>
-            <template #tbody>
-              <tr
-                v-for="disciplina in DisciplinasExternasOrderedModal"
-                :key="'disciplina' + disciplina.id"
-                @click="
-                  toggleItemInArray(disciplina, filtroDisciplinas.selecionadas)
-                "
-              >
-                <td style="width: 25px">
-                  <input
-                    type="checkbox"
-                    class="form-check-input position-static m-0"
-                    v-model="filtroDisciplinas.selecionadas"
-                    :value="disciplina"
-                  />
-                </td>
-                <td style="width: 60px" class="t-start">
-                  {{ disciplina.codigo }}
-                </td>
-                <td style="width: 310px" class="t-start">
-                  {{ disciplina.nome }}
-                </td>
-                <td class="t-start" style="width: 60px">
-                  {{ disciplina.perfil.nome }}
-                </td>
-              </tr>
-              <tr v-show="DisciplinasExternasOrderedModal.length === 0">
-                <td colspan="3" style="width:450px">
-                  NENHUMA DISCIPLINA ENCONTRADA.
-                </td>
-              </tr>
-            </template>
-          </BaseTable>
-          <BaseTable v-show="tabAtivaModal === 'Semestres'" :type="'modal'">
-            <template #thead>
-              <th style="width: 25px"></th>
-              <th class="t-start" style="width: 425px">
-                Semestre Letivo
-              </th>
-            </template>
-            <template #tbody>
-              <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
-                <td style="width: 25px">
-                  <input
-                    type="checkbox"
-                    class="form-check-input position-static m-0"
-                    v-model="filtroSemestres.primeiro"
-                  />
-                </td>
-                <td style="width: 425px" class="t-start">PRIMEIRO</td>
-              </tr>
-              <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
-                <td style="width: 25px">
-                  <input
-                    type="checkbox"
-                    class="form-check-input position-static m-0"
-                    v-model="filtroSemestres.segundo"
-                  />
-                </td>
-                <td style="width: 425px" class="t-start">SEGUNDO</td>
-              </tr>
-            </template>
-          </BaseTable>
-        </div>
-      </template>
-    </BaseModal>
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Semestres'"
+          :type="'modal'"
+        >
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th class="t-start" style="width: 425px">
+              Semestre Letivo
+            </th>
+          </template>
+          <template #tbody>
+            <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroSemestres.primeiro"
+                />
+              </td>
+              <td style="width: 425px" class="t-start">PRIMEIRO</td>
+            </tr>
+            <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroSemestres.segundo"
+                />
+              </td>
+              <td style="width: 425px" class="t-start">SEGUNDO</td>
+            </tr>
+          </template>
+        </BaseTable>
+      </div>
+    </ModalFiltros>
 
-    <!-- MODAL DELETAR -->
     <ModalDelete
       ref="modalDelete"
       :isDeleting="!!Deletar.length"
-      @btn-deletar="deleteSelectedTurmas"
+      @btn-deletar="handleDeleteTurmas"
     >
       <li v-if="!Deletar.length" class="list-group-item">
         Nenhuma turma selecionada.
@@ -309,127 +297,79 @@
       </li>
     </ModalDelete>
 
-    <!-- MODAL AJUDA -->
-    <BaseModal
-      ref="modalAjuda"
-      :modalOptions="{
-        type: 'ajuda',
-        title: 'Ajuda',
-      }"
-    >
-      <template #modal-body>
-        <ul class="list-ajuda list-group">
-          <li class="list-group-item">
-            <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
-            <i class="fas fa-list-ul cancelbtn"></i> no cabeçalho da página e na
-            janela que será aberta utilize as abas para navegar entre os tipos
-            de filtros. Marque em suas respectivas tabelas quais informações
-            deseja visualizar, e para finalizar clique no botão OK.
-          </li>
-          <li class="list-group-item">
-            <b>Para adicionar uma turma à tabela:</b> Clique no ícone adicionar
-            <i class="fas fa-plus addbtn"></i> no cabeçalho da página em seguida
-            preencha a nova linha que irá aparecer no início da tabela. E note
-            que, os campos disciplina e letra da turma são obrigatórios. Após
-            preencher os campos clique no ícone salvar
-            <i class="fas fa-check addbtn"></i>
-            ou em cancelar
-            <i class="fas fa-times cancelbtn"></i>
-            .
-          </li>
-          <li class="list-group-item">
-            <b>Para deletar turmas da tabela:</b> Marque a(s) turma(s) que
-            deseja deletar através da caixa de seleção presente na primeira
-            coluna à esquerda na tabela, em seguida clique no ícone deletar
-            <i class="fas fa-trash delbtn"></i> no cabeçalho da página e na
-            janela que será aberta confirme clicando botão OK.
-          </li>
-          <li class="list-group-item">
-            <b>Para editar turma da tabela:</b> Basta fazer as alterações
-            necessárias diretamente nos campos da tabela e o sistema irá salvar
-            automaticamente.
-          </li>
-          <li class="list-group-item">
-            <b>Observações:</b> Em cada coluna de cursos possui dois campos de
-            vagas, sendo acima destinado para alunos na grade, e abaixo para
-            alunos repetentes. Para que uma turma externa apareça em na tela
-            <b>Horários</b> de um determinado curso é preciso que pelo menos uma
-            vaga para alunos na grade seja destinada ao mesmo.
-          </li>
-        </ul>
-      </template>
-    </BaseModal>
+    <ModalAjuda ref="modalAjuda">
+      <li class="list-group-item">
+        <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
+        <i class="fas fa-list-ul icon-gray"></i> no cabeçalho da página e na
+        janela que será aberta utilize as abas para navegar entre os tipos de
+        filtros. Marque em suas respectivas tabelas quais informações deseja
+        visualizar, e para finalizar clique no botão OK.
+      </li>
+      <li class="list-group-item">
+        <b>Para adicionar uma turma à tabela:</b> Clique no ícone adicionar
+        <i class="fas fa-plus icon-green"></i> no cabeçalho da página em seguida
+        preencha a nova linha que irá aparecer no início da tabela. E note que,
+        os campos disciplina e letra da turma são obrigatórios. Após preencher
+        os campos clique no ícone salvar
+        <i class="fas fa-check icon-green"></i>
+        ou em cancelar
+        <i class="fas fa-times icon-gray"></i>
+        .
+      </li>
+      <li class="list-group-item">
+        <b>Para deletar turmas da tabela:</b> Marque a(s) turma(s) que deseja
+        deletar através da caixa de seleção presente na primeira coluna à
+        esquerda na tabela, em seguida clique no ícone deletar
+        <i class="fas fa-trash icon-red"></i> no cabeçalho da página e na janela
+        que será aberta confirme clicando botão OK.
+      </li>
+      <li class="list-group-item">
+        <b>Para editar turma da tabela:</b> Basta fazer as alterações
+        necessárias diretamente nos campos da tabela e o sistema irá salvar
+        automaticamente.
+      </li>
+      <li class="list-group-item">
+        <b>Observações:</b> Em cada coluna de cursos possui dois campos de
+        vagas, sendo acima destinado para alunos na grade, e abaixo para alunos
+        repetentes. Para que uma turma externa apareça em na tela
+        <b>Horários</b> de um determinado curso é preciso que pelo menos uma
+        vaga para alunos na grade seja destinada ao mesmo.
+      </li>
+    </ModalAjuda>
   </div>
 </template>
 
 <script>
-import _ from "lodash";
-import turmaExternaService from "@/common/services/turmaExterna";
+import { mapActions, mapGetters } from "vuex";
+import { normalizeText } from "@/common/utils";
 import {
-  setEmptyValuesToNull,
-  validateObjectKeys,
-  normalizeText,
-} from "@/common/utils";
-import {
-  notification,
   maskTurmaLetra,
   toggleOrdination,
   toggleItemInArray,
   tableLoading,
 } from "@/common/mixins";
-import {
-  PageHeader,
-  BaseTable,
-  BaseModal,
-  ModalDelete,
-  NavTab,
-  BaseButton,
-  InputSearch,
-} from "@/components/ui";
+import { PageHeader, InputSearch } from "@/components/ui";
+import { ModalDelete, ModalAjuda, ModalFiltros } from "@/components/modals";
 import TurmaExternaRow from "./TurmaExternaRow.vue";
 import NovaTurmaExternaRow from "./NovaTurmaExternaRow.vue";
-import { mapActions, mapGetters } from "vuex";
-
-const emptyTurma = {
-  id: null,
-  periodo: 1,
-  letra: "A",
-  turno1: null,
-  turno2: null,
-  Disciplina: null,
-  Horario1: null,
-  Horario2: null,
-  Sala1: null,
-  Sala2: null,
-};
 
 export default {
   name: "DashboardTurmasExternas",
-  mixins: [
-    notification,
-    maskTurmaLetra,
-    toggleOrdination,
-    toggleItemInArray,
-    tableLoading,
-  ],
+  mixins: [maskTurmaLetra, toggleOrdination, toggleItemInArray, tableLoading],
   components: {
-    TurmaExternaRow,
-    PageHeader,
-    BaseTable,
-    BaseModal,
-    NavTab,
+    ModalFiltros,
+    ModalAjuda,
     ModalDelete,
-    BaseButton,
+    PageHeader,
     InputSearch,
+    TurmaExternaRow,
     NovaTurmaExternaRow,
   },
   data() {
     return {
-      ordenacaoTurmasMain: { order: "disciplina.codigo", type: "asc" },
-      turmaForm: _.clone(emptyTurma),
       isAdding: false,
-      semestre: 1,
-      searchDisciplinasModal: "",
+      ordenacaoTurmasMain: { order: "disciplina.codigo", type: "asc" },
+      ordenacaoDisciplinasModal: { order: "codigo", type: "asc" },
       filtroSemestres: {
         primeiro: true,
         segundo: true,
@@ -439,32 +379,51 @@ export default {
         ativadas: [],
         selecionadas: [],
       },
+      searchDisciplinasModal: "",
       tabAtivaModal: "Disciplinas",
-      ordenacaoDisciplinasModal: { order: "codigo", type: "asc" },
-      modalSelectAll: {
-        Disciplinas: () => {
-          this.filtroDisciplinas.selecionadas = [
-            ...this.DisciplinasExternasInPerfis,
-          ];
-        },
-        Semestres: () => {
-          this.filtroSemestres.primeiro = true;
-          this.filtroSemestres.segundo = true;
-        },
+      modalFiltrosTabs: {
+        current: "Disciplinas",
+        array: ["Disciplinas", "Semestres"],
       },
-      modalSelectNone: {
-        Disciplinas: () => {
-          this.filtroDisciplinas.selecionadas = [];
+      modalFiltrosCallbacks: {
+        selectAll: {
+          Disciplinas: () => {
+            this.filtroDisciplinas.selecionadas = [
+              ...this.DisciplinasExternasInPerfis,
+            ];
+          },
+          Semestres: () => {
+            this.filtroSemestres.primeiro = true;
+            this.filtroSemestres.segundo = true;
+          },
         },
-        Semestres: () => {
-          this.filtroSemestres.primeiro = false;
-          this.filtroSemestres.segundo = false;
+        selectNone: {
+          Disciplinas: () => {
+            this.filtroDisciplinas.selecionadas = [];
+          },
+          Semestres: () => {
+            this.filtroSemestres.primeiro = false;
+            this.filtroSemestres.segundo = false;
+          },
+        },
+        btnOk: () => {
+          this.setTableLoadingState(true);
+          this.filtroDisciplinas.ativadas = [
+            ...this.filtroDisciplinas.selecionadas,
+          ];
+          this.setSemestreAtivo();
+          this.setTableLoadingState(false);
         },
       },
     };
   },
+
   methods: {
-    ...mapActions(["clearDeleteExternas", "setLoadingState"]),
+    ...mapActions([
+      "setPartialLoading",
+      "pushNotification",
+      "deleteTurmasExternas",
+    ]),
 
     openAsideModal(modalName) {
       if (modalName === "filtros") {
@@ -474,14 +433,6 @@ export default {
         this.$refs.modalAjuda.toggle();
         this.$refs.modalFiltros.close();
       }
-    },
-    btnOkFiltros() {
-      this.setTableLoadingState(true);
-      this.filtroDisciplinas.ativadas = [
-        ...this.filtroDisciplinas.selecionadas,
-      ];
-      this.setSemestreAtivo();
-      this.setTableLoadingState(false);
     },
     toggleAdd() {
       this.isAdding = !this.isAdding;
@@ -495,51 +446,54 @@ export default {
         this.filtroSemestres.ativo = 3;
       else this.filtroSemestres.ativo = undefined;
     },
-    async deleteSelectedTurmas() {
-      if (!this.Deletar.length) return;
+    openModalDelete() {
+      this.$refs.modalDelete.open();
+    },
+    closeModalDelete() {
+      this.$refs.modalDelete.close();
+    },
+    addNovaTurma() {
+      this.$refs.novaTurmaExternaRow.handleAddNovaTurma();
+    },
 
+    async handleDeleteTurmas() {
       try {
-        this.setLoadingState("partial");
+        this.setPartialLoading(true);
 
-        for (let i = 0; i < this.Deletar.length; i++) {
-          await turmaExternaService.delete(this.Deletar[i].id, this.Deletar[i]);
-        }
-        this.$refs.modalDelete.close();
-        this.clearDeleteExternas();
-        this.showNotification({
-          type: "success",
-          message: "Turma(s) excluída(s).",
-        });
+        await this.deleteTurmasExternas();
+        this.closeModalDelete();
       } catch (error) {
-        this.showNotification({
+        this.pushNotification({
           type: "error",
-          message: "Erro ao excluir turma(s).",
+          title: "Erro ao excluir turma(s)!",
+          text: "Tente novamente",
         });
       } finally {
-        this.setLoadingState("completed");
+        this.setPartialLoading(false);
       }
     },
   },
+
   computed: {
     ...mapGetters([
       "TurmasExternasInDisciplinas",
       "DisciplinasExternasInPerfis",
     ]),
-
+    //main table
     TurmasExternasOrdered() {
-      return _.orderBy(
+      return this.$_.orderBy(
         this.TurmasExternarFiltredByDisciplinas,
         ["periodo", this.ordenacaoTurmasMain.order],
         ["asc", this.ordenacaoTurmasMain.type]
       );
     },
     TurmasExternarFiltredByDisciplinas() {
-      return _.filter(this.TurmasExternarFiltredBySemestres, (turma) =>
-        _.some(this.filtroDisciplinas.ativadas, ["id", turma.Disciplina])
+      return this.$_.filter(this.TurmasExternarFiltredBySemestres, (turma) =>
+        this.$_.some(this.filtroDisciplinas.ativadas, ["id", turma.Disciplina])
       );
     },
     TurmasExternarFiltredBySemestres() {
-      return _.filter(this.TurmasExternasInDisciplinas, (turma) => {
+      return this.$_.filter(this.TurmasExternasInDisciplinas, (turma) => {
         switch (this.filtroSemestres.ativo) {
           case 1:
             return turma.periodo === 1;
@@ -552,11 +506,12 @@ export default {
         }
       });
     },
+    //modal tables
     CursosDCC() {
-      return _.slice(this.$store.state.curso.Cursos, 0, 4);
+      return this.$_.slice(this.$store.state.curso.Cursos, 0, 4);
     },
     DisciplinasExternasOrderedModal() {
-      return _.orderBy(
+      return this.$_.orderBy(
         this.DisciplinasExternasFiltredModal,
         this.ordenacaoDisciplinasModal.order,
         this.ordenacaoDisciplinasModal.type
@@ -568,7 +523,7 @@ export default {
 
       const searchNormalized = normalizeText(this.searchDisciplinasModal);
 
-      return _.filter(this.DisciplinasExternasInPerfis, (disciplina) => {
+      return this.$_.filter(this.DisciplinasExternasInPerfis, (disciplina) => {
         const disciplinaNome = normalizeText(disciplina.nome);
         const disciplinaCodigo = normalizeText(disciplina.codigo);
 
@@ -578,6 +533,7 @@ export default {
         );
       });
     },
+    //Outros
     Deletar() {
       return this.$store.state.turmaExterna.Deletar;
     },

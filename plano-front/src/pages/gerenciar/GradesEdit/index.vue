@@ -237,21 +237,24 @@
           <li class="list-group-item">
             <b>Para adicionar disciplinas à Grade:</b> Com o cartão a direita em
             branco, preencha-o. Em seguida, clique em Adicionar
-            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>.
+            <i class="fas fa-plus icon-green px-1" style="font-size:12px"></i>.
           </li>
           <li class="list-group-item">
             <b>Para editar ou deletar uma disciplina:</b> Na tabela, clique na
             disciplina que deseja modificar. Logo após, no cartão à direita,
             altere as informações que desejar e clique em Salvar
-            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+            <i class="fas fa-check icon-green px-1" style="font-size:12px"></i>
             ou, para excluí-la, clique em Deletar
-            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
+            <i
+              class="far fa-trash-alt icon-red px-1"
+              style="font-size: 12px"
+            ></i>
             .
           </li>
           <li class="list-group-item">
             <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
             em Cancelar
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>
+            <i class="fas fa-times icon-gray px-1" style="font-size: 12px"></i>
             .
           </li>
         </ul>
@@ -261,17 +264,10 @@
 </template>
 
 <script>
-import _ from "lodash";
 import gradeService from "@/common/services/grade";
 import disciplinaGradeService from "@/common/services/disciplinaGrade";
 import { toggleOrdination } from "@/common/mixins";
-import {
-  PageHeader,
-  BaseTable,
-  BaseButton,
-  BaseModal,
-  Card,
-} from "@/components/ui";
+import { PageHeader, Card } from "@/components/ui";
 
 const emptyGrade = {
   id: undefined,
@@ -289,15 +285,12 @@ export default {
   mixins: [toggleOrdination],
   components: {
     PageHeader,
-    BaseTable,
     Card,
-    BaseButton,
-    BaseModal,
   },
   data() {
     return {
-      gradeForm: _.clone(emptyGrade),
-      disciplinaGradeForm: _.clone(emptyDisciplinaGrade),
+      gradeForm: this.$_.clone(emptyGrade),
+      disciplinaGradeForm: this.$_.clone(emptyDisciplinaGrade),
       error: undefined,
       currentGradeId: undefined,
       currentCursoId: undefined,
@@ -396,7 +389,7 @@ export default {
         });
     },
     cleanGradeForm() {
-      this.gradeForm = _.clone(emptyGrade);
+      this.gradeForm = this.$_.clone(emptyGrade);
       this.error = undefined;
     },
     cleanDisciplina() {
@@ -406,8 +399,11 @@ export default {
     },
     showGrade(gradeId) {
       this.cleanGradeForm();
-      const grade = _.find(this.$store.state.grade.Grades, ["id", gradeId]);
-      this.gradeForm = _.clone(grade);
+      const grade = this.$_.find(this.$store.state.grade.Grades, [
+        "id",
+        gradeId,
+      ]);
+      this.gradeForm = this.$_.clone(grade);
       this.disciplinaGradeForm.Grade = this.gradeForm.id;
     },
     changeCurso() {
@@ -508,7 +504,7 @@ export default {
     },
     showDisciplina(disciplinaGrade) {
       this.cleanDisciplina;
-      this.disciplinaGradeForm = _.clone(disciplinaGrade);
+      this.disciplinaGradeForm = this.$_.clone(disciplinaGrade);
     },
     isEven(number) {
       return number % 2 === 0;
@@ -525,17 +521,17 @@ export default {
       return this.disciplinaSelectedId !== this.disciplinaGradeForm.Disciplina;
     },
     DisciplinaGradesOrdered() {
-      return _.orderBy(
+      return this.$_.orderBy(
         this.DisciplinaGradesFiltred,
         this.ordenacaoDisciplinasMain.order,
         this.ordenacaoDisciplinasMain.type
       );
     },
     DisciplinaGradesFiltred() {
-      return _.filter(
+      return this.$_.filter(
         this.$store.state.disciplinaGrade.DisciplinaGrades,
         (disciplinaGrade) => {
-          return _.find(this.Disciplinas, (disciplina) => {
+          return this.$_.find(this.Disciplinas, (disciplina) => {
             if (
               this.currentGradeId === disciplinaGrade.Grade &&
               disciplina.id === disciplinaGrade.Disciplina
@@ -550,7 +546,7 @@ export default {
       );
     },
     GradesFiltredByCurrentCurso() {
-      return _.filter(
+      return this.$_.filter(
         this.Grades,
         (grade) => grade.Curso == this.currentCursoId
       );
@@ -562,7 +558,7 @@ export default {
       return this.$store.state.curso.Cursos;
     },
     Disciplinas() {
-      return _.orderBy(this.$store.state.disciplina.Disciplinas, "nome");
+      return this.$_.orderBy(this.$store.state.disciplina.Disciplinas, "nome");
     },
   },
 };

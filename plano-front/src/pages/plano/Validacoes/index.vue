@@ -31,38 +31,51 @@
       >
         <template #thead>
           <th
-            @click="toggleOrder(ordemTurmas, 'periodo')"
+            @click="toggleOrder(ordenacaoTurmasMain, 'periodo')"
             class="clickable"
             style="width: 35px"
             title="Semestre"
           >
             S.
-            <i :class="setIconByOrder(ordemTurmas, 'periodo')"></i>
+            <i :class="setIconByOrder(ordenacaoTurmasMain, 'periodo')"></i>
           </th>
           <th
-            @click="toggleOrder(ordemTurmas, 'disciplinaPerfil')"
+            @click="
+              toggleOrder(ordenacaoTurmasMain, 'disciplina.perfil.abreviacao')
+            "
             class="t-start clickable"
             style="width: 75px"
           >
             Perfil
-            <i :class="setIconByOrder(ordemTurmas, 'disciplinaPerfil')"></i>
+            <i
+              :class="
+                setIconByOrder(
+                  ordenacaoTurmasMain,
+                  'disciplina.perfil.abreviacao'
+                )
+              "
+            ></i>
           </th>
           <th
-            @click="toggleOrder(ordemTurmas, 'disciplinaCodigo')"
+            @click="toggleOrder(ordenacaoTurmasMain, 'disciplina.codigo')"
             class="t-start clickable"
             style="width: 70px"
             title="Código"
           >
             Cód.
-            <i :class="setIconByOrder(ordemTurmas, 'disciplinaCodigo')"></i>
+            <i
+              :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.codigo')"
+            ></i>
           </th>
           <th
-            @click="toggleOrder(ordemTurmas, 'disciplinaNome')"
+            @click="toggleOrder(ordenacaoTurmasMain, 'disciplina.nome')"
             class="t-start clickable"
             style="width: 300px"
           >
             Disciplina
-            <i :class="setIconByOrder(ordemTurmas, 'disciplinaNome')"></i>
+            <i
+              :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.nome')"
+            ></i>
           </th>
           <th style="width: 35px" class="t-staty" title="Turma">
             T.
@@ -72,20 +85,21 @@
           </th>
           <th style="width:50px">Editar</th>
         </template>
-        <template #tbody>
+
+        <template v-if="!tableIsLoading" #tbody>
           <template v-for="validacaoTurma in TurmasValidacoesOrdered">
             <tr :key="'turmaId' + validacaoTurma.id" class="bg-custom">
               <td style="width: 35px;">
                 {{ validacaoTurma.periodo }}
               </td>
               <td style="width: 75px;" class="t-start">
-                {{ validacaoTurma.disciplinaPerfil }}
+                {{ validacaoTurma.disciplina.perfil.abreviacao }}
               </td>
               <td style="width: 70px;" class="t-start">
-                {{ validacaoTurma.disciplinaCodigo }}
+                {{ validacaoTurma.disciplina.codigo }}
               </td>
               <td style="width: 300px;" class="t-start">
-                {{ validacaoTurma.disciplinaNome }}
+                {{ validacaoTurma.disciplina.nome }}
               </td>
               <td style="width: 35px">
                 {{ validacaoTurma.letra }}
@@ -104,6 +118,7 @@
                 </button>
               </td>
             </tr>
+
             <tr
               v-for="(conflito, i) in validacaoTurma.conflitos"
               :key="'conflito' + i + validacaoTurma.id + conflito.type"
@@ -112,7 +127,7 @@
                 <i
                   v-if="isCritical(conflito.type)"
                   style="background-color: inherit; font-size: 13px; margin:3px!important;"
-                  class="fas fa-exclamation-circle delbtn"
+                  class="fas fa-exclamation-circle icon-red"
                   title="Conflito critico!"
                 ></i>
               </td>
@@ -121,7 +136,8 @@
               </td>
             </tr>
           </template>
-          <tr v-show="TurmasValidacoesOrdered.length === 0">
+
+          <tr v-show="!TurmasValidacoesOrdered.length">
             <td style="width:695px">
               <b>Nenhum conflito encontrado.</b> Clique no botão de filtros
               <i class="fas fa-list-ul mx-1"></i> para selecioná-los.
@@ -137,12 +153,12 @@
         <template #thead>
           <th
             colspan="2"
-            @click="toggleOrder(ordemDocentes, 'nome')"
+            @click="toggleOrder(ordenacaoDocentesMain, 'nome')"
             style="width: 695px"
             class="t-start clickable"
           >
             Nome
-            <i :class="setIconByOrder(ordemDocentes, 'nome')"></i>
+            <i :class="setIconByOrder(ordenacaoDocentesMain, 'nome')"></i>
           </th>
         </template>
         <template #tbody>
@@ -159,7 +175,7 @@
               <td style="width: 35px">
                 <i
                   style="background-color: inherit; font-size: 13px; margin:3px!important;"
-                  class="fas fa-exclamation-circle delbtn"
+                  class="fas fa-exclamation-circle icon-red"
                   title="Conflito critico!"
                 ></i>
               </td>
@@ -173,158 +189,124 @@
       </BaseTable>
     </div>
 
-    <!-- Modal Filtros -->
-    <BaseModal
+    <ModalFiltros
       ref="modalFiltros"
-      :modalOptions="{
-        type: 'filtros',
-        title: 'Filtros',
-        hasFooter: true,
-      }"
-      :hasFooter="true"
-      @btn-ok="btnOkFiltros()"
-      @select-all="modalSelectAll[tabAtivaModal]"
-      @select-none="modalSelectNone[tabAtivaModal]"
+      :callbacks="modalFiltrosCallbacks"
+      :tabsOptions="modalFiltrosTabs"
     >
-      <template #modal-body>
-        <NavTab
-          :currentTab="tabAtivaModal"
-          :allTabs="['Conflitos', 'Semestres']"
-          @change-tab="tabAtivaModal = $event"
-        />
-        <div class="div-table">
-          <BaseTable v-show="tabAtivaModal === 'Conflitos'" :type="'modal'">
-            <template #thead>
-              <th style="width: 25px"></th>
-              <th style="width: 425px" class="t-start">
-                Conflito
-              </th>
-            </template>
-            <template #tbody>
-              <tr
-                v-for="conflito in ConflitosOrdered"
-                :key="'conflitosModal' + conflito.type"
-                @click="
-                  toggleItemInArray(conflito.type, filtroConflitos.selecionados)
-                "
-                style="text-transform: uppercase"
-              >
-                <td style="width: 25px;">
-                  <input
-                    type="checkbox"
-                    class="form-check-input position-static m-0"
-                    v-model="filtroConflitos.selecionados"
-                    :value="conflito.type"
-                  />
-                </td>
-                <td style="width: 425px" class="t-start">
-                  {{ conflito.msg }}
-                </td>
-              </tr>
-            </template>
-          </BaseTable>
+      <div class="div-table">
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Conflitos'"
+          :type="'modal'"
+        >
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th style="width: 425px" class="t-start">
+              Conflito
+            </th>
+          </template>
+          <template #tbody>
+            <tr
+              v-for="conflito in ConflitosOrdered"
+              :key="'conflitosModal' + conflito.type"
+              @click="
+                toggleItemInArray(conflito.type, filtroConflitos.selecionados)
+              "
+              style="text-transform: uppercase"
+            >
+              <td style="width: 25px;">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroConflitos.selecionados"
+                  :value="conflito.type"
+                />
+              </td>
+              <td style="width: 425px" class="t-start">
+                {{ conflito.msg }}
+              </td>
+            </tr>
+          </template>
+        </BaseTable>
 
-          <BaseTable v-show="tabAtivaModal === 'Semestres'" :type="'modal'">
-            <template #thead>
-              <th style="width: 25px;"></th>
-              <th style="width: 425px;" class="t-start">
-                Semestre Letivo
-              </th>
-            </template>
-            <template #tbody>
-              <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
-                <td style="width: 25px">
-                  <input
-                    type="checkbox"
-                    class="form-check-input position-static m-0"
-                    v-model="filtroSemestres.primeiro"
-                  />
-                </td>
-                <td style="width: 425px" class="t-start">
-                  PRIMEIRO
-                </td>
-              </tr>
-              <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
-                <td style="width: 25px">
-                  <input
-                    type="checkbox"
-                    class="form-check-input position-static m-0"
-                    v-model="filtroSemestres.segundo"
-                  />
-                </td>
-                <td style="width: 425px" class="t-start">SEGUNDO</td>
-              </tr>
-            </template>
-          </BaseTable>
-        </div>
-      </template>
-    </BaseModal>
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Semestres'"
+          :type="'modal'"
+        >
+          <template #thead>
+            <th style="width: 25px;"></th>
+            <th style="width: 425px;" class="t-start">
+              Semestre Letivo
+            </th>
+          </template>
+          <template #tbody>
+            <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroSemestres.primeiro"
+                />
+              </td>
+              <td style="width: 425px" class="t-start">
+                PRIMEIRO
+              </td>
+            </tr>
+            <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroSemestres.segundo"
+                />
+              </td>
+              <td style="width: 425px" class="t-start">SEGUNDO</td>
+            </tr>
+          </template>
+        </BaseTable>
+      </div>
+    </ModalFiltros>
 
-    <!-- modal turma edit -->
-    <BaseModal
+    <ModalEditTurma
       ref="modalEditTurma"
-      :modalOptions="{
-        type: 'editTurma',
-        title: 'Edição de Turma',
-      }"
-    >
-      <template #modal-body>
-        <BodyModalEditTurma
-          v-if="turmaClickada != null"
-          :hasEditDisciplina="false"
-          :key="turmaClickada.id + 'modalTurma'"
-          :turma="turmaClickada"
-        />
-      </template>
-    </BaseModal>
+      :turmaSelected="turmaClickada"
+      :hasEditDisciplina="false"
+    />
 
-    <BaseModal
-      ref="modalAjuda"
-      :modalOptions="{
-        type: 'ajuda',
-        title: 'Ajuda',
-      }"
-    >
-      <template #modal-body>
-        <ul class="list-ajuda list-group">
-          <li class="list-group-item">
-            <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
-            <i class="fas fa-list-ul cancelbtn"></i> no cabeçalho da página e na
-            janela que será aberta utilize as abas para navegar entre os tipos
-            de filtros. Marque em suas respectivas tabelas quais informações
-            deseja visualizar, e para finalizar clique no botão OK.
-          </li>
-          <li class="list-group-item">
-            <b>Para editar turma da tabela:</b> Clique no ícone
-            <i class="fas fa-edit"></i> presente na coluna editar da tabela, e
-            na janela que será aberta no formulário presente na parte superior
-            poderá ser feito alterações que somente serão enviadas ao clicar no
-            botão salvar. E na tabela de vagas na parte inferior da janela as
-            alterações serão salvas automaticamente.
-          </li>
-          <li class="list-group-item">
-            <b>Conflitos críticos:</b> Note que em alguns conflitos possuem o
-            ícone <i class="fas fa-exclamation-circle delbtn"></i>, isso
-            significa que ele é crítico e deve ter prioridade para ser corrigido
-          </li>
-        </ul>
-      </template>
-    </BaseModal>
+    <ModalAjuda ref="modalAjuda">
+      <li class="list-group-item">
+        <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
+        <i class="fas fa-list-ul icon-gray"></i> no cabeçalho da página e na
+        janela que será aberta utilize as abas para navegar entre os tipos de
+        filtros. Marque em suas respectivas tabelas quais informações deseja
+        visualizar, e para finalizar clique no botão OK.
+      </li>
+      <li class="list-group-item">
+        <b>Para editar turma da tabela:</b> Clique no ícone
+        <i class="fas fa-edit"></i> presente na coluna editar da tabela, e na
+        janela que será aberta no formulário presente na parte superior poderá
+        ser feito alterações que somente serão enviadas ao clicar no botão
+        salvar. E na tabela de vagas na parte inferior da janela as alterações
+        serão salvas automaticamente.
+      </li>
+      <li class="list-group-item">
+        <b>Conflitos críticos:</b> Note que em alguns conflitos possuem o ícone
+        <i class="fas fa-exclamation-circle icon-red"></i>, isso significa que
+        ele é crítico e deve ter prioridade para ser corrigido
+      </li>
+    </ModalAjuda>
   </div>
 </template>
 
 <script>
-import _ from "lodash";
-import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
+import { mapGetters } from "vuex";
 import {
-  PageHeader,
-  BaseTable,
-  BaseButton,
-  NavTab,
-  BodyModalEditTurma,
-  BaseModal,
-} from "@/components/ui";
-import { mapActions } from "vuex";
+  toggleOrdination,
+  toggleItemInArray,
+  tableLoading,
+} from "@/common/mixins";
+import { PageHeader, NavTab } from "@/components/ui";
+import { ModalAjuda, ModalFiltros, ModalEditTurma } from "@/components/modals";
 
 const AllConflitosTurmas = [
   { type: 1, msg: "Nenhum turno alocado" },
@@ -361,25 +343,23 @@ const AllConflitosTurmas = [
 
 export default {
   name: "Validacoes",
-  mixins: [toggleOrdination, toggleItemInArray],
+  mixins: [toggleOrdination, toggleItemInArray, tableLoading],
   components: {
-    BaseButton,
-    BodyModalEditTurma,
+    ModalAjuda,
+    ModalFiltros,
+    ModalEditTurma,
     PageHeader,
     NavTab,
-    BaseTable,
-    BaseModal,
   },
   data() {
     return {
-      allConflitos: _.clone(AllConflitosTurmas),
+      tabAtivaMain: "Turmas",
+      turmaClickada: null,
+      allConflitos: this.$_.clone(AllConflitosTurmas),
       grades1Semestre: { CCD: [], CCN: [], EC: [], SI: [] },
       grades2Semestre: { CCD: [], CCN: [], EC: [], SI: [] },
-      ordemTurmas: { order: "periodo", type: "asc" },
-      ordemDocentes: { order: "nome", type: "asc" },
-      turmaClickada: null,
-      tabAtivaMain: "Turmas",
-      tabAtivaModal: "Conflitos",
+      ordenacaoTurmasMain: { order: "periodo", type: "asc" },
+      ordenacaoDocentesMain: { order: "nome", type: "asc" },
       filtroConflitos: {
         ativados: [],
         selecionados: [],
@@ -389,24 +369,38 @@ export default {
         segundo: true,
         ativo: 3,
       },
-      modalSelectAll: {
-        Conflitos: () => {
-          this.filtroConflitos.selecionados = [
-            ...this.allConflitos.map((conflito) => conflito.type),
-          ];
-        },
-        Semestres: () => {
-          this.filtroSemestres.primeiro = true;
-          this.filtroSemestres.segundo = true;
-        },
+      modalFiltrosTabs: {
+        current: "Conflitos",
+        array: ["Conflitos", "Semestres"],
       },
-      modalSelectNone: {
-        Conflitos: () => {
-          this.filtroConflitos.selecionados = [];
+      modalFiltrosCallbacks: {
+        selectAll: {
+          Conflitos: () => {
+            this.filtroConflitos.selecionados = [
+              ...this.allConflitos.map((conflito) => conflito.type),
+            ];
+          },
+          Semestres: () => {
+            this.filtroSemestres.primeiro = true;
+            this.filtroSemestres.segundo = true;
+          },
         },
-        Semestres: () => {
-          this.filtroSemestres.primeiro = false;
-          this.filtroSemestres.segundo = false;
+        selectNone: {
+          Conflitos: () => {
+            this.filtroConflitos.selecionados = [];
+          },
+          Semestres: () => {
+            this.filtroSemestres.primeiro = false;
+            this.filtroSemestres.segundo = false;
+          },
+        },
+        btnOk: () => {
+          this.setTableLoadingState(true);
+          this.btnOkSemestre();
+          this.filtroConflitos.ativados = [
+            ...this.filtroConflitos.selecionados,
+          ];
+          this.setTableLoadingState(false);
         },
       },
     };
@@ -418,8 +412,8 @@ export default {
 
     let ano = this.$store.state.plano.Plano[0].ano;
     //CCD
-    g = _.filter(this.$store.state.grade.Grades, ["Curso", 4]);
-    g = _.orderBy(g, "periodoInicio", "desc");
+    g = this.$_.filter(this.$store.state.grade.Grades, ["Curso", 4]);
+    g = this.$_.orderBy(g, "periodoInicio", "desc");
     periodoFinal = 0;
     for (let i = 0; i < g.length; i++) {
       periodoInicial = periodoFinal + 1;
@@ -453,8 +447,8 @@ export default {
       }
     }
     //CCN
-    g = _.filter(this.$store.state.grade.Grades, ["Curso", 1]);
-    g = _.orderBy(g, "periodoInicio", "desc");
+    g = this.$_.filter(this.$store.state.grade.Grades, ["Curso", 1]);
+    g = this.$_.orderBy(g, "periodoInicio", "desc");
     periodoFinal = 0;
     for (let i = 0; i < g.length; i++) {
       periodoInicial = periodoFinal + 1;
@@ -488,8 +482,8 @@ export default {
       }
     }
     //SI
-    g = _.filter(this.$store.state.grade.Grades, ["Curso", 3]);
-    g = _.orderBy(g, "periodoInicio", "desc");
+    g = this.$_.filter(this.$store.state.grade.Grades, ["Curso", 3]);
+    g = this.$_.orderBy(g, "periodoInicio", "desc");
     periodoFinal = 0;
     for (let i = 0; i < g.length; i++) {
       periodoInicial = periodoFinal + 1;
@@ -523,8 +517,8 @@ export default {
       }
     }
     //EC
-    g = _.filter(this.$store.state.grade.Grades, ["Curso", 2]);
-    g = _.orderBy(g, "periodoInicio", "desc");
+    g = this.$_.filter(this.$store.state.grade.Grades, ["Curso", 2]);
+    g = this.$_.orderBy(g, "periodoInicio", "desc");
     periodoFinal = 0;
     for (let i = 0; i < g.length; i++) {
       periodoInicial = periodoFinal + 1;
@@ -558,9 +552,8 @@ export default {
       }
     }
   },
-  methods: {
-    ...mapActions(["setLoadingState"]),
 
+  methods: {
     openAsideModal(modalName) {
       if (modalName === "filtros") {
         this.$refs.modalFiltros.toggle();
@@ -569,12 +562,6 @@ export default {
         this.$refs.modalAjuda.toggle();
         this.$refs.modalFiltros.close();
       }
-    },
-    btnOkFiltros() {
-      this.setLoadingState("partial");
-      this.btnOkSemestre();
-      this.filtroConflitos.ativados = [...this.filtroConflitos.selecionados];
-      this.setLoadingState("completed");
     },
     btnOkSemestre() {
       if (this.filtroSemestres.primeiro && !this.filtroSemestres.segundo)
@@ -589,108 +576,68 @@ export default {
       this.turmaClickada = { ...turma };
       this.$refs.modalEditTurma.open();
     },
-    findPerfilById(id) {
-      let perfil = _.find(this.Perfis, (p) => p.id == id);
-      return perfil != undefined ? perfil : null;
-    },
-    findDocenteApelidoById(id) {
-      let docente = _.find(this.Docentes, (d) => d.id == id);
-      return docente != undefined ? docente.apelido : null;
-    },
-    findDisciplinaById(id) {
-      let disciplina = _.find(this.Disciplinas, (d) => d.id == id);
-      return disciplina != undefined ? disciplina : null;
-    },
-    findTurmaById(turmaId) {
-      let turmaFounded = _.find(this.Turmas, (turma) => turma.id == turmaId);
-      return turmaFounded != undefined ? turmaFounded : null;
-    },
-    totalPedidos(turma_id) {
-      const pedidos = this.$store.state.pedido.Pedidos[turma_id];
-      if (!pedidos.length) return 0;
 
-      let result = 0;
-      for (let p = 0; p < pedidos.length; p++) {
-        result += parseInt(pedidos[p].vagasPeriodizadas, 10);
-        result += parseInt(pedidos[p].vagasNaoPeriodizadas, 10);
-      }
-      return result;
-    },
-    isCritical(tipo) {
-      return tipo == 1 || tipo == 2 || tipo == 3 || tipo == 4 || tipo == 5.1
-        ? true
-        : false;
-    },
-    createValidacao(turma, disciplina) {
-      return {
-        //Turmas
-        ...turma,
-        docente1Apelido: this.findDocenteApelidoById(turma.Docente1),
-        docente2Apelido: this.findDocenteApelidoById(turma.Docente2),
-        pedidosTotais: this.totalPedidos(turma.id),
-        //Disciplinas
-        disciplinaNome: disciplina.nome,
-        disciplinaCodigo: disciplina.codigo,
-        disciplinaEad: disciplina.ead,
-        disciplinaLaboratorio: disciplina.laboratorio,
-        disciplinaCreditoTotal:
-          parseInt(disciplina.cargaTeorica, 10) +
-          parseInt(disciplina.cargaPratica, 10),
-        disciplinaPerfil: this.findPerfilById(disciplina.Perfil).abreviacao,
-        conflitos: [],
-      };
+    createValidacao(turma) {
+      const validacaoResult = this.$_.cloneDeep(turma);
+
+      validacaoResult.docente1Apelido = this.findDocenteApelidoById(
+        turma.Docente1
+      );
+      validacaoResult.docente2Apelido = this.findDocenteApelidoById(
+        turma.Docente2
+      );
+      validacaoResult.pedidosTotais = this.totalPedidos(turma.id);
+      validacaoResult.conflitos = [];
+      return validacaoResult;
     },
     checkAllValidations(validacao) {
       let check;
-      //Turno
+
       check = this.checkTurno(validacao.turno1);
       if (check) validacao.conflitos.push(check);
       //Compatibilidade do turno com disciplina
-      check = this.checkTurnoEAD(validacao.disciplinaEad, validacao.turno1);
+      check = this.checkTurnoEAD(validacao.disciplina.ead, validacao.turno1);
       if (check) validacao.conflitos.push(check);
-      //Horarios
+
       check = this.checkHorarios(
-        validacao.disciplinaEad,
-        validacao.disciplinaCreditoTotal,
+        validacao.disciplina.ead,
+        validacao.disciplina.creditoTotal,
         validacao.Horario1,
         validacao.Horario2
       );
       if (check) validacao.conflitos.push(check);
-      //Docente
+
       check = this.checkDocentes(
         validacao.docente1Apelido,
         validacao.docente2Apelido
       );
       if (check) validacao.conflitos.push(check);
-      //Salas
+
       check = this.checkSalasLab(
-        validacao.disciplinaLaboratorio,
+        validacao.disciplina.laboratorio,
         validacao.Sala1,
         validacao.Sala2
       );
       if (check) validacao.conflitos.push(check);
-
       //Lotação das salas
-      // sala 1
       check = this.checkVagaSala(validacao.Sala1, validacao.pedidosTotais);
       if (check) validacao.conflitos.push(check);
-      // sala 2
+
       if (validacao.Sala1 != validacao.Sala2) {
         check = this.checkVagaSala(validacao.Sala2, validacao.pedidosTotais);
         if (check) validacao.conflitos.push(check);
       }
 
-      // Pedidos - 7
       check = this.checkPedidos(validacao.pedidosTotais);
       if (check) validacao.conflitos.push(check);
-      // EAD com salas - 8
+
       check = this.checkSalasInEAD(
-        validacao.disciplinaEad,
+        validacao.disciplina.ead,
         validacao.Sala1,
         validacao.Sala2
       );
       if (check) validacao.conflitos.push(check);
-      //Periodo curso
+
       check = this.checkPeriodoCursos(validacao);
       if (check) validacao.conflitos.push(check);
 
@@ -700,9 +647,6 @@ export default {
       return turno === null || turno === undefined || turno === ""
         ? this.allConflitos[0]
         : null;
-    },
-    isEmpty(value) {
-      return value === null || value === undefined || value === "";
     },
     checkTurnoEAD(isEAD, turno) {
       return (isEAD == 1 && turno !== "EAD") || (isEAD != 1 && turno == "EAD")
@@ -745,7 +689,8 @@ export default {
     },
     checkVagaSala(sala_id, pedidosTotais) {
       let sala;
-      if (sala_id != null) sala = _.find(this.Salas, (s) => sala_id == s.id);
+      if (sala_id != null)
+        sala = this.$_.find(this.AllSalas, (s) => sala_id == s.id);
 
       if (sala != undefined) {
         if (sala.lotacao_maxima < pedidosTotais) {
@@ -782,9 +727,9 @@ export default {
         grades = this.grades2Semestre;
       }
       let conflitos = false;
-      if (_.find(pedidos, { Curso: 4 }).vagasPeriodizadas > 0) {
+      if (this.$_.find(pedidos, { Curso: 4 }).vagasPeriodizadas > 0) {
         for (let i = 0; i < grades.CCD.length; i++) {
-          let disciplinaGrade = _.find(
+          let disciplinaGrade = this.$_.find(
             this.$store.state.disciplinaGrade.DisciplinaGrades,
             { Grade: grades.CCD[i].id, Disciplina: turma.Disciplina }
           );
@@ -793,7 +738,7 @@ export default {
             disciplinaGrade.periodo >= grades.CCD[i].inicio &&
             disciplinaGrade.periodo <= grades.CCD[i].fim
           ) {
-            let disciplinasPeriodo = _.filter(
+            let disciplinasPeriodo = this.$_.filter(
               this.$store.state.disciplinaGrade.DisciplinaGrades,
               { Grade: grades.CCD[i].id, periodo: disciplinaGrade.periodo }
             );
@@ -801,19 +746,19 @@ export default {
               if (disciplinasPeriodo[d].Disciplina === turma.Disciplina) {
                 continue;
               }
-              let disciplinaConflito = _.find(
+              let disciplinaConflito = this.$_.find(
                 this.$store.state.disciplina.Disciplinas,
                 { id: disciplinasPeriodo[d].Disciplina }
               );
               let externa =
                 disciplinaConflito.Perfil == 13 ||
                 disciplinaConflito.Perfil == 15;
-              let turmasDisciplina = _.filter(
+              let turmasDisciplina = this.$_.filter(
                 externa
                   ? this.$store.state.turmaExterna.Turmas
                   : this.$store.state.turma.Turmas,
                 (t) => {
-                  let pedido = _.find(
+                  let pedido = this.$_.find(
                     externa
                       ? this.$store.state.pedidoExterno.Pedidos[t.id]
                       : this.$store.state.pedido.Pedidos[t.id],
@@ -851,9 +796,9 @@ export default {
           }
         }
       }
-      if (_.find(pedidos, { Curso: 1 }).vagasPeriodizadas > 0) {
+      if (this.$_.find(pedidos, { Curso: 1 }).vagasPeriodizadas > 0) {
         for (let i = 0; i < grades.CCN.length; i++) {
-          let disciplinaGrade = _.find(
+          let disciplinaGrade = this.$_.find(
             this.$store.state.disciplinaGrade.DisciplinaGrades,
             { Grade: grades.CCN[i].id, Disciplina: turma.Disciplina }
           );
@@ -862,7 +807,7 @@ export default {
             disciplinaGrade.periodo >= grades.CCN[i].inicio &&
             disciplinaGrade.periodo <= grades.CCN[i].fim
           ) {
-            let disciplinasPeriodo = _.filter(
+            let disciplinasPeriodo = this.$_.filter(
               this.$store.state.disciplinaGrade.DisciplinaGrades,
               { Grade: grades.CCN[i].id, periodo: disciplinaGrade.periodo }
             );
@@ -870,19 +815,19 @@ export default {
               if (disciplinasPeriodo[d].Disciplina === turma.Disciplina) {
                 continue;
               }
-              let disciplinaConflito = _.find(
+              let disciplinaConflito = this.$_.find(
                 this.$store.state.disciplina.Disciplinas,
                 { id: disciplinasPeriodo[d].Disciplina }
               );
               let externa =
                 disciplinaConflito.Perfil == 13 ||
                 disciplinaConflito.Perfil == 15;
-              let turmasDisciplina = _.filter(
+              let turmasDisciplina = this.$_.filter(
                 externa
                   ? this.$store.state.turmaExterna.Turmas
                   : this.$store.state.turma.Turmas,
                 (t) => {
-                  let pedido = _.find(
+                  let pedido = this.$_.find(
                     externa
                       ? this.$store.state.pedidoExterno.Pedidos[t.id]
                       : this.$store.state.pedido.Pedidos[t.id],
@@ -920,9 +865,9 @@ export default {
           }
         }
       }
-      if (_.find(pedidos, { Curso: 3 }).vagasPeriodizadas > 0) {
+      if (this.$_.find(pedidos, { Curso: 3 }).vagasPeriodizadas > 0) {
         for (let i = 0; i < grades.SI.length; i++) {
-          let disciplinaGrade = _.find(
+          let disciplinaGrade = this.$_.find(
             this.$store.state.disciplinaGrade.DisciplinaGrades,
             { Grade: grades.SI[i].id, Disciplina: turma.Disciplina }
           );
@@ -931,7 +876,7 @@ export default {
             disciplinaGrade.periodo >= grades.SI[i].inicio &&
             disciplinaGrade.periodo <= grades.SI[i].fim
           ) {
-            let disciplinasPeriodo = _.filter(
+            let disciplinasPeriodo = this.$_.filter(
               this.$store.state.disciplinaGrade.DisciplinaGrades,
               { Grade: grades.SI[i].id, periodo: disciplinaGrade.periodo }
             );
@@ -939,19 +884,19 @@ export default {
               if (disciplinasPeriodo[d].Disciplina === turma.Disciplina) {
                 continue;
               }
-              let disciplinaConflito = _.find(
+              let disciplinaConflito = this.$_.find(
                 this.$store.state.disciplina.Disciplinas,
                 { id: disciplinasPeriodo[d].Disciplina }
               );
               let externa =
                 disciplinaConflito.Perfil == 13 ||
                 disciplinaConflito.Perfil == 15;
-              let turmasDisciplina = _.filter(
+              let turmasDisciplina = this.$_.filter(
                 externa
                   ? this.$store.state.turmaExterna.Turmas
                   : this.$store.state.turma.Turmas,
                 (t) => {
-                  let pedido = _.find(
+                  let pedido = this.$_.find(
                     externa
                       ? this.$store.state.pedidoExterno.Pedidos[t.id]
                       : this.$store.state.pedido.Pedidos[t.id],
@@ -989,9 +934,9 @@ export default {
           }
         }
       }
-      if (_.find(pedidos, { Curso: 2 }).vagasPeriodizadas > 0) {
+      if (this.$_.find(pedidos, { Curso: 2 }).vagasPeriodizadas > 0) {
         for (let i = 0; i < grades.EC.length; i++) {
-          let disciplinaGrade = _.find(
+          let disciplinaGrade = this.$_.find(
             this.$store.state.disciplinaGrade.DisciplinaGrades,
             { Grade: grades.EC[i].id, Disciplina: turma.Disciplina }
           );
@@ -1000,7 +945,7 @@ export default {
             disciplinaGrade.periodo >= grades.EC[i].inicio &&
             disciplinaGrade.periodo <= grades.EC[i].fim
           ) {
-            let disciplinasPeriodo = _.filter(
+            let disciplinasPeriodo = this.$_.filter(
               this.$store.state.disciplinaGrade.DisciplinaGrades,
               { Grade: grades.EC[i].id, periodo: disciplinaGrade.periodo }
             );
@@ -1008,19 +953,19 @@ export default {
               if (disciplinasPeriodo[d].Disciplina === turma.Disciplina) {
                 continue;
               }
-              let disciplinaConflito = _.find(
+              let disciplinaConflito = this.$_.find(
                 this.$store.state.disciplina.Disciplinas,
                 { id: disciplinasPeriodo[d].Disciplina }
               );
               let externa =
                 disciplinaConflito.Perfil == 13 ||
                 disciplinaConflito.Perfil == 15;
-              let turmasDisciplina = _.filter(
+              let turmasDisciplina = this.$_.filter(
                 externa
                   ? this.$store.state.turmaExterna.Turmas
                   : this.$store.state.turma.Turmas,
                 (t) => {
-                  let pedido = _.find(
+                  let pedido = this.$_.find(
                     externa
                       ? this.$store.state.pedidoExterno.Pedidos[t.id]
                       : this.$store.state.pedido.Pedidos[t.id],
@@ -1061,25 +1006,21 @@ export default {
       if (conflitos) return { type: 10, msg: msg };
       else return false;
     },
-    isLab(salaId) {
-      let salaResultante = _.find(
-        this.Salas,
-        (sala) => salaId == sala.id && sala.laboratorio
-      );
-      if (salaResultante !== undefined) return true;
-      else return false;
-    },
+
     creditosGraduacao(docente) {
-      let turmas = _.filter(this.$store.state.turma.Turmas, (t) => {
+      let turmas = this.$_.filter(this.$store.state.turma.Turmas, (t) => {
         return t.Docente1 === docente.id || t.Docente2 === docente.id;
       });
 
       let cargaTotalDocente = 0;
 
       for (let i = 0; i < turmas.length; i++) {
-        let disciplina = _.find(this.$store.state.disciplina.Disciplinas, {
-          id: turmas[i].Disciplina,
-        });
+        let disciplina = this.$_.find(
+          this.$store.state.disciplina.Disciplinas,
+          {
+            id: turmas[i].Disciplina,
+          }
+        );
         let cargaTotalDisciplina =
           disciplina.cargaTeorica + disciplina.cargaPratica;
         if (turmas[i].Docente1 != null && turmas[i].Docente2 != null) {
@@ -1093,7 +1034,7 @@ export default {
       return cargaTotalDocente;
     },
     creditosPos(docente) {
-      let turmas = _.filter(this.$store.state.cargaPos.Cargas, (t) => {
+      let turmas = this.$_.filter(this.$store.state.cargaPos.Cargas, (t) => {
         return t.Docente === docente.id;
       });
 
@@ -1112,29 +1053,61 @@ export default {
       else return false;
     },
     filterByConflitos(arrayConflitos) {
-      const conflitosResultantes = _.filter(
+      const conflitosResultantes = this.$_.filter(
         arrayConflitos,
         (conflito) =>
           this.filtroConflitos.ativados.indexOf(conflito.type) !== -1
       );
       return conflitosResultantes;
     },
-  },
-  computed: {
-    ConflitosOrdered() {
-      return _.orderBy(AllConflitosTurmas, "msg");
+
+    findDocenteApelidoById(id) {
+      let docente = this.$_.find(this.DocentesAtivos, (d) => d.id == id);
+      return docente != undefined ? docente.apelido : null;
     },
+    totalPedidos(turmaId) {
+      const pedidos = this.$store.state.pedido.Pedidos[turmaId];
+      if (!pedidos.length) return 0;
+
+      let result = 0;
+      for (let p = 0; p < pedidos.length; p++) {
+        result += parseInt(pedidos[p].vagasPeriodizadas, 10);
+        result += parseInt(pedidos[p].vagasNaoPeriodizadas, 10);
+      }
+      return result;
+    },
+    isCritical(tipo) {
+      return tipo == 1 || tipo == 2 || tipo == 3 || tipo == 4 || tipo == 5.1
+        ? true
+        : false;
+    },
+    isLab(salaId) {
+      let salaResultante = this.$_.find(
+        this.AllSalas,
+        (sala) => salaId == sala.id && sala.laboratorio
+      );
+      if (salaResultante !== undefined) return true;
+      else return false;
+    },
+    isEmpty(value) {
+      return value === null || value === undefined || value === "";
+    },
+  },
+
+  computed: {
+    ...mapGetters(["AllSalas", "DocentesAtivos", "TurmasInDisciplinasPerfis"]),
+    //table main
     TurmasValidacoesOrdered() {
-      return _.orderBy(
+      return this.$_.orderBy(
         this.TurmasValidacoesFiltred,
-        this.ordemTurmas.order,
-        this.ordemTurmas.type
+        this.ordenacaoTurmasMain.order,
+        this.ordenacaoTurmasMain.type
       );
     },
     TurmasValidacoesFiltred() {
       const turmasResultantes = [];
 
-      _.forEach(this.TurmasValidacoes, (turma) => {
+      this.$_.forEach(this.TurmasValidacoes, (turma) => {
         const filtredConflitos = this.filterByConflitos(turma.conflitos);
         const filtredSemestre = this.filterBySemestre(turma.periodo);
 
@@ -1147,29 +1120,26 @@ export default {
     TurmasValidacoes() {
       let turmasResultantes = [];
 
-      this.Turmas.forEach((turma) => {
-        let disciplinaFounded = this.findDisciplinaById(turma.Disciplina);
+      this.TurmasInDisciplinasPerfis.forEach((turma) => {
+        let validacao = this.createValidacao(turma);
+        this.checkAllValidations(validacao);
 
-        if (disciplinaFounded) {
-          let validacao = this.createValidacao(turma, disciplinaFounded);
-          this.checkAllValidations(validacao);
-
-          if (validacao.conflitos.length) turmasResultantes.push(validacao);
-        }
+        if (validacao.conflitos.length) turmasResultantes.push(validacao);
       });
       return turmasResultantes;
     },
+
     DocentesValidacoesOrdered() {
-      return _.orderBy(
+      return this.$_.orderBy(
         this.DocentesValidacoes,
-        this.ordemDocentes.order,
-        this.ordemDocentes.type
+        this.ordenacaoDocentesMain.order,
+        this.ordenacaoDocentesMain.type
       );
     },
     DocentesValidacoes() {
       let docentesResultantes = [];
 
-      this.Docentes.forEach((docente) => {
+      this.DocentesAtivos.forEach((docente) => {
         let validacao = { nome: docente.nome, id: docente.id, conflitos: [] };
 
         const cargaGraduacao = this.creditosGraduacao(docente);
@@ -1193,20 +1163,9 @@ export default {
 
       return docentesResultantes;
     },
-    Turmas() {
-      return _.orderBy(this.$store.state.turma.Turmas, ["letra", "Disciplina"]);
-    },
-    Disciplinas() {
-      return _.orderBy(this.$store.state.disciplina.Disciplinas, "nome");
-    },
-    Perfis() {
-      return _.orderBy(this.$store.state.perfil.Perfis, "nome");
-    },
-    Salas() {
-      return _.orderBy(this.$store.state.sala.Salas, "nome");
-    },
-    Docentes() {
-      return _.filter(this.$store.state.docente.Docentes, ["ativo", true]);
+    //table modal
+    ConflitosOrdered() {
+      return this.$_.orderBy(AllConflitosTurmas, "msg");
     },
   },
 };

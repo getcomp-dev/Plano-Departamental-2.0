@@ -180,22 +180,22 @@
           <li class="list-group-item">
             <b>Para adicionar docentes:</b> Com o cartão à direita em branco,
             preencha-o. Em seguida, clique em Adicionar
-            <i class="fas fa-plus addbtn px-1" style="font-size: 12px;"></i>
+            <i class="fas fa-plus icon-green px-1"></i>
             .
           </li>
           <li class="list-group-item">
             <b>Para editar ou deletar um docente:</b>Na tabela, clique no
             docente que deseja alterar. Logo após, no cartão à direita, altere
             as informações que desejar e clique em Salvar
-            <i class="fas fa-check addbtn px-1" style="font-size: 12px;"></i>
+            <i class="fas fa-check icon-green px-1"></i>
             ou, para excluí-lo, clique em Deletar
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px;"></i>
+            <i class="fas fa-times icon-gray px-1"></i>
             .
           </li>
           <li class="list-group-item">
             <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
             em Cancelar
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px;"></i>
+            <i class="fas fa-times icon-gray px-1"></i>
             .
           </li>
           <li class="list-group-item">
@@ -209,17 +209,10 @@
 </template>
 
 <script>
-import _ from "lodash";
 import docenteService from "@/common/services/docente";
 import docentePerfilService from "@/common/services/docentePerfil";
 import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
-import {
-  PageHeader,
-  BaseTable,
-  BaseButton,
-  BaseModal,
-  Card,
-} from "@/components/ui";
+import { PageHeader, Card } from "@/components/ui";
 
 const emptyDocente = {
   id: undefined,
@@ -237,13 +230,13 @@ const emptyPerfil = {
 export default {
   name: "DashboardDocente",
   mixins: [toggleOrdination, toggleItemInArray],
-  components: { PageHeader, BaseTable, Card, BaseButton, BaseModal },
+  components: { PageHeader, Card },
   data() {
     return {
-      docenteForm: _.clone(emptyDocente),
+      docenteForm: this.$_.clone(emptyDocente),
       perfisAssociados: [],
       error: undefined,
-      docentePerfil: _.clone(emptyPerfil),
+      docentePerfil: this.$_.clone(emptyPerfil),
       docenteClickado: "",
       ordenacaoDocentesMain: { order: "nome", type: "asc" },
     };
@@ -259,12 +252,12 @@ export default {
     },
     cleanDocente() {
       this.clearClick();
-      this.docenteForm = _.clone(emptyDocente);
+      this.docenteForm = this.$_.clone(emptyDocente);
       this.error = undefined;
     },
 
     showDocentes(docente, docentePerfis) {
-      this.docenteForm = _.clone(docente);
+      this.docenteForm = this.$_.clone(docente);
       this.perfisAssociados = [];
       for (var i = 0; i < docentePerfis.length; i++) {
         if (docentePerfis[i].DocenteId === docente.id) {
@@ -349,7 +342,10 @@ export default {
     addPerfil(perfil) {
       this.docentePerfil.Docente = this.docenteForm.id;
       this.docentePerfil.Perfil = perfil;
-      let perfilData = _.find(this.$store.state.perfil.Perfis, ["id", perfil]);
+      let perfilData = this.$_.find(this.$store.state.perfil.Perfis, [
+        "id",
+        perfil,
+      ]);
       docentePerfilService
         .create(this.docentePerfil)
         .then(() => {
@@ -377,7 +373,10 @@ export default {
         });
     },
     deletePerfil(perfil) {
-      let perfilData = _.find(this.$store.state.perfil.Perfis, ["id", perfil]);
+      let perfilData = this.$_.find(this.$store.state.perfil.Perfis, [
+        "id",
+        perfil,
+      ]);
       docentePerfilService
         .delete(this.docenteForm.id, perfil)
         .then(() => {
@@ -401,7 +400,7 @@ export default {
         });
     },
     managePerfil(perfil) {
-      if (_.indexOf(this.perfisAssociados, perfil) === -1) {
+      if (this.$_.indexOf(this.perfisAssociados, perfil) === -1) {
         this.deletePerfil(perfil);
       } else {
         this.addPerfil(perfil);
@@ -413,7 +412,7 @@ export default {
   },
   computed: {
     Docentes() {
-      return _.orderBy(
+      return this.$_.orderBy(
         this.$store.state.docente.Docentes,
         this.ordenacaoDocentesMain.order,
         this.ordenacaoDocentesMain.type

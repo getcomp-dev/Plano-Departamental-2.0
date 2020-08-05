@@ -29,7 +29,6 @@ import GerenciarHistory from "@/pages/gerenciar/History";
 import GerenciarUsuarios from "@/pages/gerenciar/Usuarios";
 import GerenciarPlanos from "@/pages/gerenciar/Planos";
 
-import { USER_LOGGED_OUT } from "./vuex/mutation-types";
 Vue.use(VueRouter);
 
 function requireAuth(to, from, next) {
@@ -57,8 +56,23 @@ function requireSuperAdmin(to, from, next) {
 }
 
 const routes = [
-  { path: "/", name: "home", redirect: "/dashboard", beforeEnter: requireAuth },
-  { path: "/login", name: "login", component: Login },
+  {
+    path: "/login",
+    name: "login",
+    component: Login,
+  },
+
+  {
+    path: "/logout",
+    name: "logout",
+    beforeEnter: (to, from, next) => {
+      store.commit("USER_LOGGED_OUT");
+      next("/login");
+    },
+  },
+
+  { path: "*", redirect: "/dashboard" },
+
   {
     path: "/dashboard",
     component: Dashboard,
@@ -183,15 +197,6 @@ const routes = [
       },
     ],
   },
-  {
-    path: "/logout",
-    name: "logout",
-    beforeEnter: function(to, from, next) {
-      store.commit(USER_LOGGED_OUT);
-      next("/login");
-    },
-  },
-  { path: "/*", redirect: "/" },
 ];
 
 const router = new VueRouter({
@@ -202,12 +207,12 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  store.commit("SET_LOADING_STATE", "partial");
+  store.commit("SET_PARTIAL_LOADING", true);
   next();
 });
 
 router.afterEach(() => {
-  setTimeout(() => store.commit("SET_LOADING_STATE", "completed"), 500);
+  setTimeout(() => store.commit("SET_PARTIAL_LOADING", false), 500);
 });
 
 export default router;

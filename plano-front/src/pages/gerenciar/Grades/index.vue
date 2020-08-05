@@ -183,21 +183,24 @@
           <li class="list-group-item">
             <b>Para adicionar grades:</b> Com o cartão a direita em branco,
             preencha-o. Em seguida, clique em Adicionar
-            <i class="fas fa-plus addbtn px-1" style="font-size:12px"></i>.
+            <i class="fas fa-plus icon-green px-1" style="font-size:12px"></i>.
           </li>
           <li class="list-group-item">
             <b>Para editar ou deletar uma grade:</b> Na tabela, clique na grade
             que deseja alterar. Logo após, no cartão à direita, altere as
             informações que desejar e clique em Salvar
-            <i class="fas fa-check addbtn px-1" style="font-size:12px"></i>
+            <i class="fas fa-check icon-green px-1" style="font-size:12px"></i>
             ou, para excluí-la, clique em Deletar
-            <i class="far fa-trash-alt delbtn px-1" style="font-size: 12px"></i>
+            <i
+              class="far fa-trash-alt icon-red px-1"
+              style="font-size: 12px"
+            ></i>
             .
           </li>
           <li class="list-group-item">
             <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
             em Cancelar
-            <i class="fas fa-times cancelbtn px-1" style="font-size: 12px"></i>.
+            <i class="fas fa-times icon-gray px-1" style="font-size: 12px"></i>.
           </li>
         </ul>
       </template>
@@ -206,15 +209,8 @@
 </template>
 
 <script>
-import _ from "lodash";
 import gradeService from "@/common/services/grade";
-import {
-  PageHeader,
-  BaseTable,
-  BaseButton,
-  BaseModal,
-  Card,
-} from "@/components/ui";
+import { PageHeader, Card } from "@/components/ui";
 
 const emptyGrade = {
   id: undefined,
@@ -229,12 +225,12 @@ const emptyDisciplinaGrade = {
 };
 export default {
   name: "DashboardGrade",
-  components: { PageHeader, Card, BaseTable, BaseModal, BaseButton },
+  components: { PageHeader, Card },
   data() {
     return {
       error: undefined,
-      gradeForm: _.clone(emptyGrade),
-      disciplinaGradeForm: _.clone(emptyDisciplinaGrade),
+      gradeForm: this.$_.clone(emptyGrade),
+      disciplinaGradeForm: this.$_.clone(emptyDisciplinaGrade),
       currentGrade: undefined,
     };
   },
@@ -313,18 +309,18 @@ export default {
     },
     cleanGrade() {
       this.currentGrade = undefined;
-      this.gradeForm = _.clone(emptyGrade);
+      this.gradeForm = this.$_.clone(emptyGrade);
       this.error = undefined;
     },
     showGrade(grade) {
       this.cleanGrade();
 
       this.currentGrade = grade.id;
-      this.gradeForm = _.clone(grade);
+      this.gradeForm = this.$_.clone(grade);
       this.disciplinaGradeForm.Grade = this.gradeForm.id;
     },
     findGrade(id) {
-      var grade = _.find(this.$store.state.grade.Grades, ["id", id]);
+      var grade = this.$_.find(this.$store.state.grade.Grades, ["id", id]);
       this.showGrade(grade);
     },
     onlyNumber($event) {
@@ -345,7 +341,7 @@ export default {
       return this.$store.state.grade.Grades;
     },
     Grades_CCNoturno() {
-      return _.orderBy(
+      return this.$_.orderBy(
         this.Grades.filter(function(grade) {
           return grade.Curso == 1;
         }),
@@ -353,7 +349,7 @@ export default {
       );
     },
     Grades_CCDiurno() {
-      return _.orderBy(
+      return this.$_.orderBy(
         this.Grades.filter(function(grade) {
           return grade.Curso == 4;
         }),
@@ -366,7 +362,7 @@ export default {
       });
     },
     Grade_EC() {
-      return _.orderBy(
+      return this.$_.orderBy(
         this.Grades.filter(function(grade) {
           return grade.Curso == 2;
         }),

@@ -1,22 +1,17 @@
 <template>
   <div class="dashboard">
-    <TheNavbar
-      v-if="loadingState !== 'entire'"
-      @show-modal="showModal[$event]()"
-    />
-    <TheSidebar v-if="loadingState !== 'entire'" />
+    <template v-if="!onLoading.fetching">
+      <TheNavbar @show-modal="showModal[$event]()" />
+      <TheSidebar />
 
-    <main v-if="loadingState !== 'entire'" @click="closeSidebar">
-      <transition
-        enter-active-class="animated animate__fadeIn routerview-animation"
-        leave-active-class="animated animate__fadeOut routerview-animation"
-        mode="out-in"
-      >
-        <router-view></router-view>
-      </transition>
-    </main>
+      <main @click="closeSidebar">
+        <transition name="router-view-animation" mode="out-in" appear>
+          <router-view></router-view>
+        </transition>
+      </main>
+    </template>
 
-    <TheLoadingView :visibility="loadingState !== 'completed'" />
+    <TheLoadingView :visibility="onLoading.fetching || onLoading.partial" />
 
     <div
       v-show="modalOverlayVisibility"
@@ -30,17 +25,16 @@
 </template>
 
 <script>
-import _ from "lodash";
 import bddumpService from "@/common/services/bddump";
-import { EventBus } from "@/eventBus.js";
+import { EventBus } from "@/plugins/eventBus.js";
 import { mapGetters, mapActions } from "vuex";
 import { TheNavbar, TheSidebar, TheLoadingView } from "@/components/layout";
-import ModalUser from "./ModalUser.vue";
-import ModalDownload from "./ModalDownload.vue";
+import { ModalUser, ModalDownload, ModalAjuda } from "@/components/modals";
 
 export default {
   name: "TheDashboard",
   components: {
+    ModalAjuda,
     TheSidebar,
     TheNavbar,
     TheLoadingView,
@@ -49,7 +43,6 @@ export default {
   },
   data() {
     return {
-      plano: undefined,
       showModal: {
         download: () => {
           this.$refs.modalDownload.open();
@@ -60,29 +53,19 @@ export default {
       },
     };
   },
-
   created() {
-    this.setLoadingState("entire");
-    if (!localStorage.getItem("Plano")) localStorage.setItem("Plano", "1");
-
-    this.$store
-      .dispatch("fetchAll")
-      .then(() => {
-        this.$socket.open();
-        this.setLoadingState("completed");
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
-    this.$store.commit("setYear", 2019);
-    this.plano = localStorage.getItem("Plano");
+    this.initializeCurrentPlano();
   },
   beforeDestroy() {
     this.$socket.close();
   },
   methods: {
-    ...mapActions(["setLoadingState", "closeSidebar"]),
+    ...mapActions([
+      "setFetchingLoading",
+      "closeSidebar",
+      "initializeCurrentPlano",
+    ]),
+
     emitCloseCenterModal() {
       EventBus.$emit("close-modal");
     },
@@ -91,8 +74,8 @@ export default {
         this.files = response.Files.filter(function(elm) {
           return elm.match(/.*\.(sql)/gi);
         });
-        _.pull(this.files, "drop_all.sql");
-        _.forEach(this.files, function(value, index, array) {
+        this.$_.pull(this.files, "drop_all.sql");
+        this.$_.forEach(this.files, function(value, index, array) {
           array[index] = value.slice(0, -4);
         });
         //console.log(this.files.filter( function( elm ) {return elm.match(/.*\.(sql)/ig)}))
@@ -100,7 +83,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["modalOverlayVisibility", "loadingState"]),
+    ...mapGetters(["modalOverlayVisibility", "onLoading"]),
   },
 };
 </script>
@@ -129,9 +112,5 @@ export default {
   height: 100vh;
   width: 100vw;
   background-color: rgba(0, 0, 0, 0.4);
-}
-.routerview-animation {
-  animation-duration: 0.3s;
-  animation-fill-mode: both;
 }
 </style>

@@ -1,24 +1,20 @@
 <template>
-  <BaseModal
+  <BaseModal2
     ref="baseModalNovoPlano"
-    :modalOptions="{
-      position: 'centerNavbar',
-      hasBackground: 'true',
-      title: 'Turmas do novo plano',
-      hasFooter: true,
-    }"
+    title="Turmas do novo plano"
+    type="editTurma"
+    :hasBackground="true"
+    :hasFooter="true"
     :btnOkText="'Criar plano'"
-    @select-all="selectAllDisciplinas"
-    @select-none="selectNoneDisciplinas"
-    @btn-ok="novoPlano"
-    @on-close="clearSearch"
+    @on-close="searchDisciplinasModal = ''"
   >
     <template #modal-body>
-      <p class="alert alert-secondary  ">
+      <p class="alert alert-secondary" v-if="currentPlano">
         Selecione as disciplinas para quais as turmas do plano atual
         <b>{{ currentPlano.nome + " - " + currentPlano.ano }}</b>
         serão copiadas para o novo plano
       </p>
+
       <div class="div-table">
         <BaseTable
           :type="'modal'"
@@ -102,31 +98,57 @@
         </BaseTable>
       </div>
     </template>
-  </BaseModal>
+    <template #modal-footer>
+      <div>
+        <BaseButton
+          :type="'text'"
+          :color="'lightblue'"
+          @click="selectAllDisciplinas"
+        >
+          Selecionar Todos
+        </BaseButton>
+        <BaseButton
+          :type="'text'"
+          :color="'gray'"
+          @click="selectNoneDisciplinas"
+        >
+          Desmarcar Todos
+        </BaseButton>
+
+        <slot name="modal-footer-btn"></slot>
+      </div>
+      <BaseButton
+        class="paddingX-20"
+        :type="'text'"
+        :color="'green'"
+        @click="createNovoPlano"
+      >
+        OK
+      </BaseButton>
+    </template>
+  </BaseModal2>
 </template>
 
 <script>
-import _ from "lodash";
-import { mapGetters } from "vuex";
-import { normalizeText } from "@/common/utils";
+import { mapGetters, mapActions } from "vuex";
 import pedidoExternoService from "@/common/services/pedidoExterno";
 import turmaExternaService from "@/common/services/turmaExterna";
 import planoService from "@/common/services/plano";
 import turmaService from "@/common/services/turma";
 import pedidoService from "@/common/services/pedido";
+import { normalizeText } from "@/common/utils";
 import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
-import { BaseModal, InputSearch, BaseTable, BaseButton } from "@/components/ui";
+import { InputSearch } from "@/components/ui";
 
 export default {
   name: "ModalNovoPlano",
   mixins: [toggleItemInArray, toggleOrdination],
-  components: { BaseModal, BaseTable, BaseButton, InputSearch },
+  components: { InputSearch },
   props: {
     plano: { type: Object, required: true },
   },
   data() {
     return {
-      planoForm: _.clone(this.plano),
       searchDisciplinasModal: "",
       filtrosDisciplinas: [],
       ordenacaoModal: {
@@ -138,15 +160,17 @@ export default {
   },
 
   methods: {
+    ...mapActions(["setPartialLoading"]),
+
     open() {
       this.$refs.baseModalNovoPlano.open();
     },
-    clearSearch() {
-      this.searchDisciplinasModal = "";
+    close() {
+      this.$refs.baseModalNovoPlano.close();
     },
     selectAllDisciplinas() {
       this.filtrosDisciplinas = [
-        ..._.map(this.DisciplinasInPerfis, (disciplina) => disciplina.id),
+        ...this.$_.map(this.DisciplinasInPerfis, (disciplina) => disciplina.id),
       ];
     },
     selectNoneDisciplinas() {
@@ -157,8 +181,8 @@ export default {
       let g;
       let periodoInicial, periodoFinal;
       //CCD
-      g = _.filter(this.$store.state.grade.Grades, ["Curso", 4]);
-      g = _.orderBy(g, "periodoInicio", "desc");
+      g = this.$_.filter(this.$store.state.grade.Grades, ["Curso", 4]);
+      g = this.$_.orderBy(g, "periodoInicio", "desc");
       periodoFinal = 0;
       for (let i = 0; i < g.length; i++) {
         periodoInicial = periodoFinal + 1;
@@ -194,8 +218,8 @@ export default {
         }
       }
       //CCN
-      g = _.filter(this.$store.state.grade.Grades, ["Curso", 1]);
-      g = _.orderBy(g, "periodoInicio", "desc");
+      g = this.$_.filter(this.$store.state.grade.Grades, ["Curso", 1]);
+      g = this.$_.orderBy(g, "periodoInicio", "desc");
       periodoFinal = 0;
       for (let i = 0; i < g.length; i++) {
         periodoInicial = periodoFinal + 1;
@@ -231,8 +255,8 @@ export default {
         }
       }
       //SI
-      g = _.filter(this.$store.state.grade.Grades, ["Curso", 3]);
-      g = _.orderBy(g, "periodoInicio", "desc");
+      g = this.$_.filter(this.$store.state.grade.Grades, ["Curso", 3]);
+      g = this.$_.orderBy(g, "periodoInicio", "desc");
       periodoFinal = 0;
       for (let i = 0; i < g.length; i++) {
         periodoInicial = periodoFinal + 1;
@@ -268,8 +292,8 @@ export default {
         }
       }
       //EC
-      g = _.filter(this.$store.state.grade.Grades, ["Curso", 2]);
-      g = _.orderBy(g, "periodoInicio", "desc");
+      g = this.$_.filter(this.$store.state.grade.Grades, ["Curso", 2]);
+      g = this.$_.orderBy(g, "periodoInicio", "desc");
       periodoFinal = 0;
       for (let i = 0; i < g.length; i++) {
         periodoInicial = periodoFinal + 1;
@@ -305,12 +329,13 @@ export default {
         }
       }
     },
+
     generateTurmasNovoPlano() {
-      this.gradesAtivas(this.planoForm.ano);
+      this.gradesAtivas(this.plano.ano);
       let disciplinasNovoPlano1Semestre = [];
       let disciplinasNovoPlano2Semestre = [];
       for (let i = 0; i < this.grades1semestre.CCD.length; i++) {
-        let disciplinasGrade = _.filter(
+        let disciplinasGrade = this.$_.filter(
           this.$store.state.disciplinaGrade.DisciplinaGrades,
           { Grade: this.grades1semestre.CCD[i].id }
         );
@@ -320,7 +345,7 @@ export default {
               disciplina.periodo >= this.grades1semestre.CCD[i].inicio &&
               disciplina.periodo <= this.grades1semestre.CCD[i].fim
             ) {
-              let t = _.find(disciplinasNovoPlano1Semestre, {
+              let t = this.$_.find(disciplinasNovoPlano1Semestre, {
                 Disciplina: disciplina.Disciplina,
               });
               if (t === undefined) {
@@ -340,7 +365,7 @@ export default {
         });
       }
       for (let i = 0; i < this.grades1semestre.EC.length; i++) {
-        let disciplinasGrade = _.filter(
+        let disciplinasGrade = this.$_.filter(
           this.$store.state.disciplinaGrade.DisciplinaGrades,
           { Grade: this.grades1semestre.EC[i].id }
         );
@@ -350,7 +375,7 @@ export default {
               disciplina.periodo >= this.grades1semestre.EC[i].inicio &&
               disciplina.periodo <= this.grades1semestre.EC[i].fim
             ) {
-              let t = _.find(disciplinasNovoPlano1Semestre, {
+              let t = this.$_.find(disciplinasNovoPlano1Semestre, {
                 Disciplina: disciplina.Disciplina,
               });
               if (t === undefined) {
@@ -370,7 +395,7 @@ export default {
         });
       }
       for (let i = 0; i < this.grades1semestre.CCN.length; i++) {
-        let disciplinasGrade = _.filter(
+        let disciplinasGrade = this.$_.filter(
           this.$store.state.disciplinaGrade.DisciplinaGrades,
           { Grade: this.grades1semestre.CCN[i].id }
         );
@@ -380,7 +405,7 @@ export default {
               disciplina.periodo >= this.grades1semestre.CCN[i].inicio &&
               disciplina.periodo <= this.grades1semestre.CCN[i].fim
             ) {
-              let t = _.find(disciplinasNovoPlano1Semestre, {
+              let t = this.$_.find(disciplinasNovoPlano1Semestre, {
                 Disciplina: disciplina.Disciplina,
               });
               if (t === undefined) {
@@ -400,7 +425,7 @@ export default {
         });
       }
       for (let i = 0; i < this.grades1semestre.SI.length; i++) {
-        let disciplinasGrade = _.filter(
+        let disciplinasGrade = this.$_.filter(
           this.$store.state.disciplinaGrade.DisciplinaGrades,
           { Grade: this.grades1semestre.SI[i].id }
         );
@@ -410,7 +435,7 @@ export default {
               disciplina.periodo >= this.grades1semestre.SI[i].inicio &&
               disciplina.periodo <= this.grades1semestre.SI[i].fim
             ) {
-              let t = _.find(disciplinasNovoPlano1Semestre, {
+              let t = this.$_.find(disciplinasNovoPlano1Semestre, {
                 Disciplina: disciplina.Disciplina,
               });
               if (t === undefined) {
@@ -430,7 +455,7 @@ export default {
         });
       }
       for (let i = 0; i < this.grades2semestre.CCD.length; i++) {
-        let disciplinasGrade = _.filter(
+        let disciplinasGrade = this.$_.filter(
           this.$store.state.disciplinaGrade.DisciplinaGrades,
           { Grade: this.grades2semestre.CCD[i].id }
         );
@@ -440,7 +465,7 @@ export default {
               disciplina.periodo >= this.grades2semestre.CCD[i].inicio &&
               disciplina.periodo <= this.grades2semestre.CCD[i].fim
             ) {
-              let t = _.find(disciplinasNovoPlano2Semestre, {
+              let t = this.$_.find(disciplinasNovoPlano2Semestre, {
                 Disciplina: disciplina.Disciplina,
               });
               if (t === undefined) {
@@ -460,7 +485,7 @@ export default {
         });
       }
       for (let i = 0; i < this.grades2semestre.EC.length; i++) {
-        let disciplinasGrade = _.filter(
+        let disciplinasGrade = this.$_.filter(
           this.$store.state.disciplinaGrade.DisciplinaGrades,
           { Grade: this.grades2semestre.EC[i].id }
         );
@@ -470,7 +495,7 @@ export default {
               disciplina.periodo >= this.grades2semestre.EC[i].inicio &&
               disciplina.periodo <= this.grades2semestre.EC[i].fim
             ) {
-              let t = _.find(disciplinasNovoPlano2Semestre, {
+              let t = this.$_.find(disciplinasNovoPlano2Semestre, {
                 Disciplina: disciplina.Disciplina,
               });
               if (t === undefined) {
@@ -490,7 +515,7 @@ export default {
         });
       }
       for (let i = 0; i < this.grades2semestre.CCN.length; i++) {
-        let disciplinasGrade = _.filter(
+        let disciplinasGrade = this.$_.filter(
           this.$store.state.disciplinaGrade.DisciplinaGrades,
           { Grade: this.grades2semestre.CCN[i].id }
         );
@@ -500,7 +525,7 @@ export default {
               disciplina.periodo >= this.grades2semestre.CCN[i].inicio &&
               disciplina.periodo <= this.grades2semestre.CCN[i].fim
             ) {
-              let t = _.find(disciplinasNovoPlano2Semestre, {
+              let t = this.$_.find(disciplinasNovoPlano2Semestre, {
                 Disciplina: disciplina.Disciplina,
               });
               if (t === undefined) {
@@ -520,7 +545,7 @@ export default {
         });
       }
       for (let i = 0; i < this.grades2semestre.SI.length; i++) {
-        let disciplinasGrade = _.filter(
+        let disciplinasGrade = this.$_.filter(
           this.$store.state.disciplinaGrade.DisciplinaGrades,
           { Grade: this.grades2semestre.SI[i].id }
         );
@@ -530,7 +555,7 @@ export default {
               disciplina.periodo >= this.grades2semestre.SI[i].inicio &&
               disciplina.periodo <= this.grades2semestre.SI[i].fim
             ) {
-              let t = _.find(disciplinasNovoPlano2Semestre, {
+              let t = this.$_.find(disciplinasNovoPlano2Semestre, {
                 Disciplina: disciplina.Disciplina,
               });
               if (t === undefined) {
@@ -549,19 +574,19 @@ export default {
           }
         });
       }
-      disciplinasNovoPlano1Semestre = _.filter(
+      disciplinasNovoPlano1Semestre = this.$_.filter(
         disciplinasNovoPlano1Semestre,
         (d) => {
-          let perfil = _.find(this.AllDisciplinas, {
+          let perfil = this.$_.find(this.AllDisciplinas, {
             id: d.Disciplina,
           }).Perfil;
           return perfil !== 13 && perfil !== 15;
         }
       );
-      disciplinasNovoPlano2Semestre = _.filter(
+      disciplinasNovoPlano2Semestre = this.$_.filter(
         disciplinasNovoPlano2Semestre,
         (d) => {
-          let perfil = _.find(this.AllDisciplinas, {
+          let perfil = this.$_.find(this.AllDisciplinas, {
             id: d.Disciplina,
           }).Perfil;
           return perfil !== 13 && perfil !== 15;
@@ -569,7 +594,7 @@ export default {
       );
       let turmasNovoPlano = [];
       disciplinasNovoPlano1Semestre.forEach((d) => {
-        if (!_.includes(this.filtrosDisciplinas, d.Disciplina)) {
+        if (!this.$_.includes(this.filtrosDisciplinas, d.Disciplina)) {
           if ((d.CCD || d.EC) && (d.CCN || d.SI)) {
             turmasNovoPlano.push({
               semestre: 1,
@@ -609,7 +634,7 @@ export default {
         }
       });
       disciplinasNovoPlano2Semestre.forEach((d) => {
-        if (!_.includes(this.filtrosDisciplinas, d.Disciplina)) {
+        if (!this.$_.includes(this.filtrosDisciplinas, d.Disciplina)) {
           if ((d.CCD || d.EC) && (d.CCN || d.SI)) {
             turmasNovoPlano.push({
               semestre: 3,
@@ -652,13 +677,15 @@ export default {
 
       return turmasNovoPlano;
     },
-    novoPlano() {
-      this.$store.commit("COMPONENT_LOADING");
 
+    createNovoPlano() {
+      this.setPartialLoading(true);
       let turmasNovoPlano = this.generateTurmasNovoPlano();
 
-      planoService.create(this.planoForm).then((plano) => {
-        localStorage.setItem("Plano", plano.Plano.id);
+      console.log(this.plano);
+      console.log(turmasNovoPlano);
+      planoService.create(this.plano).then((plano) => {
+        // localStorage.setItem("Plano", plano.Plano.id);
         turmasNovoPlano.forEach((t) => {
           turmaService
             .create({
@@ -734,11 +761,17 @@ export default {
               console.log("erro ao criar turma: " + error);
             });
         });
-        let turmasCopiar = _.filter(this.$store.state.turma.Turmas, (t) => {
-          let disciplina = _.includes(this.filtrosDisciplinas, t.Disciplina);
-          if (disciplina) return true;
-          else return false;
-        });
+        let turmasCopiar = this.$_.filter(
+          this.$store.state.turma.Turmas,
+          (t) => {
+            let disciplina = this.$_.includes(
+              this.filtrosDisciplinas,
+              t.Disciplina
+            );
+            if (disciplina) return true;
+            else return false;
+          }
+        );
 
         turmasCopiar.forEach((t) => {
           turmaService
@@ -811,30 +844,37 @@ export default {
             });
         });
 
-        this.$store.dispatch("fetchAll");
-
+        // this.$store.dispatch("fetchAll");
+        this.close();
         setTimeout(() => {
-          this.$store.commit("COMPONENT_LOADED");
+          this.setPartialLoading(false);
         }, 300);
       });
     },
   },
+
   computed: {
-    ...mapGetters(["allPlanos", "DisciplinasInPerfis", "AllDisciplinas"]),
+    ...mapGetters([
+      "allPlanos",
+      "DisciplinasInPerfis",
+      "AllDisciplinas",
+      "currentPlanoId",
+    ]),
 
     DisciplinasOrderedModal() {
-      return _.orderBy(
+      return this.$_.orderBy(
         this.DisciplinasFiltredModal,
         this.ordenacaoModal.disciplinas.order,
         this.ordenacaoModal.disciplinas.type
       );
     },
+
     DisciplinasFiltredModal() {
       if (this.searchDisciplinasModal === "") return this.DisciplinasInPerfis;
 
       const searchNormalized = normalizeText(this.searchDisciplinasModal);
 
-      return _.filter(this.DisciplinasInPerfis, (disciplina) => {
+      return this.$_.filter(this.DisciplinasInPerfis, (disciplina) => {
         const disciplinaNome = normalizeText(disciplina.nome);
         const disciplinaCodigo = normalizeText(disciplina.codigo);
 
@@ -844,19 +884,12 @@ export default {
         );
       });
     },
+
     currentPlano() {
-      return _.find(
+      return this.$_.find(
         this.allPlanos,
-        (plano) => plano.id === parseInt(localStorage.getItem("Plano"), 10)
+        (plano) => plano.id === this.currentPlanoId
       );
-    },
-  },
-  watch: {
-    currentPlano: {
-      handler(newValue) {
-        this.planoForm = _.clone(newValue);
-      },
-      deep: true,
     },
   },
 };

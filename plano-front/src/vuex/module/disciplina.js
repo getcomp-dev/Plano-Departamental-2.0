@@ -58,23 +58,43 @@ const getters = {
   AllDisciplinas(state) {
     return _.orderBy(state.Disciplinas, ["codigo"]);
   },
+
+  DisciplinasDCC(state, getters) {
+    return _.filter(
+      getters.AllDisciplinas,
+      (disciplina) => disciplina.Perfil !== 13 && disciplina.Perfil !== 15
+    );
+  },
+  DisciplinasExternas(state, getters) {
+    return _.filter(
+      getters.AllDisciplinas,
+      (disciplina) => disciplina.Perfil === 13 || disciplina.Perfil === 15
+    );
+  },
+
   DisciplinasInPerfis(state, getters) {
     const disciplinasResults = [];
 
     _.forEach(getters.AllDisciplinas, (disciplina) => {
-      const perfilFounded = _.find(getters.allPerfis, [
+      const perfilFounded = _.find(getters.AllPerfis, [
         "id",
         disciplina.Perfil,
       ]);
-      if (perfilFounded)
+
+      if (perfilFounded) {
         disciplinasResults.push({
           ...disciplina,
+          creditoTotal:
+            parseInt(disciplina.cargaTeorica, 10) +
+            parseInt(disciplina.cargaPratica, 10),
+
           perfil: {
             nome: perfilFounded.nome,
             abreviacao: perfilFounded.abreviacao,
             cor: perfilFounded.cor,
           },
         });
+      }
     });
 
     return disciplinasResults;

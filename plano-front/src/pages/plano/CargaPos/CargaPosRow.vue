@@ -1,21 +1,11 @@
 <template>
-  <div class="cargaPos-row max-content ">
+  <tr class="cargaPos-row max-content ">
     <td style="width:70px"><div style="height:30px"></div></td>
     <td style="width: 25px">
-      <input
-        type="checkbox"
-        name="ativa"
-        value="true"
-        v-on:click="checkDelete(carga)"
-        v-model="ativo"
-      />
+      <input type="checkbox" @click="checkDelete(carga)" />
     </td>
     <td style="width: 55px">
-      <select
-        type="text"
-        v-model="cargaPosForm.trimestre"
-        v-on:change="editCargaPos()"
-      >
+      <select v-model.number="cargaPosForm.trimestre" @change="editCargaPos">
         <option type="text" value="1">1</option>
         <option type="text" value="2">2</option>
         <option type="text" value="3">3</option>
@@ -23,14 +13,7 @@
     </td>
 
     <td style="width: 145px">
-      <select
-        type="text"
-        v-model="cargaPosForm.Docente"
-        v-on:change="editCargaPos()"
-      >
-        <option v-if="Docentes.length === 0" type="text" value
-          >Nenhum Docente Encontrado</option
-        >
+      <select v-model.number="cargaPosForm.Docente" @change="editCargaPos">
         <option
           v-for="docente in Docentes"
           :key="'id docente' + docente.id"
@@ -44,17 +27,18 @@
       <input
         type="text"
         v-model.number="cargaPosForm.creditos"
-        @keypress="onlyNumber"
-        v-on:change="editCargaPos()"
+        @keypress="maskOnlyNumber"
+        @change="editCargaPos()"
       />
     </td>
-  </div>
+  </tr>
 </template>
 
 <script>
-import _ from "lodash";
 import cargaPosService from "@/common/services/cargaPos";
-import notificationMixin from "@/common/mixins/notification.js";
+import { mapActions, mapGetters } from "vuex";
+import { maskOnlyNumber } from "@/common/mixins";
+import { setEmptyValuesToNull, validateObjectKeys } from "@/common/utils";
 
 const emptyCarga = {
   id: null,
@@ -66,86 +50,65 @@ const emptyCarga = {
 
 export default {
   name: "CargaPosRow",
-  mixins: [notificationMixin],
+  mixins: [maskOnlyNumber],
   props: {
     carga: Object,
   },
   data() {
     return {
-      ativo: false,
-      cargaPosForm: _.clone(emptyCarga),
+      cargaPosForm: this.$_.clone(emptyCarga),
     };
   },
-  mounted() {
-    this.cargaPosForm = _.clone(this.carga);
-  },
+
   methods: {
-    isEmpty(value) {
-      return value === "" || value === undefined ? true : false;
+    ...mapActions(["pushNotification", "setPartialLoading"]),
+
+    resetCargaPos() {
+      this.cargaPosForm = this.$_.clone(this.carga);
     },
-    setEmptyKeysToNull(object) {
-      Object.keys(object).forEach((key) => {
-        if (this.isEmpty(object[key])) object[key] = null;
-      });
-    },
-    validateCargaPos(cargaPos) {
-      if (
-        cargaPos.trimestre === null ||
-        cargaPos.Docente === null ||
-        cargaPos.programa === null ||
-        cargaPos.creditos === null
-      ) {
-        this.showNotification({
+
+    async editCargaPos() {
+      try {
+        this.setPartialLoading(true);
+
+        const newCargaPos = this.$_.cloneDeepWith(
+          this.cargaPosForm,
+          setEmptyValuesToNull
+        );
+        validateObjectKeys(newCargaPos, ["creditos"]);
+
+        await cargaPosService.update(newCargaPos.id, newCargaPos);
+        this.pushNotification({
+          text: `Carga ${newCargaPos.programa} atualizada`,
+        });
+      } catch (error) {
+        this.resetCargaPos();
+
+        this.pushNotification({
           type: "error",
-          title: "Erro!",
-          message: "Cadastro da carga inválido ou incompleto.",
+          title: "Erro ao atualizar carga!",
+          text: error.message || "Tente novamente",
         });
-        return false;
-      }
-
-      return true;
-    },
-    editCargaPos() {
-      const newCargaPos = _.clone(this.cargaPosForm);
-
-      this.setEmptyKeysToNull(newCargaPos);
-      if (!this.validateCargaPos(newCargaPos)) {
-        this.cargaPosForm = _.clone(this.carga);
-        return;
-      }
-
-      cargaPosService
-        .update(newCargaPos.id, newCargaPos)
-        .then((response) => {
-          this.showNotification({
-            type: "success",
-            message: `A carga ${response.CargaPos.programa} foi atualizada!`,
-          });
-        })
-        .catch((error) => {
-          this.showNotification({
-            type: "error",
-            title: "Erro ao atualizar Carga!",
-            message: error,
-          });
-        });
-    },
-    onlyNumber($event) {
-      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
-      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
-        $event.preventDefault();
+      } finally {
+        this.setPartialLoading(false);
       }
     },
+
     checkDelete(carga) {
       this.$store.commit("checkDeleteCarga", { CargaPos: carga });
     },
   },
   computed: {
+    ...mapGetters(["DocentesAtivos"]),
+
     Docentes() {
-      return _.orderBy(
-        _.filter(this.$store.state.docente.Docentes, ["ativo", true]),
-        "apelido"
-      );
+      return this.$_.orderBy(this.DocentesAtivos, "apelido");
+    },
+  },
+  watch: {
+    carga: {
+      handler: "resetCargaPos",
+      immediate: true,
     },
   },
 };

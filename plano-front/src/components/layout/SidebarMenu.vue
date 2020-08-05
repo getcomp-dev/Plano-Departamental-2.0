@@ -9,7 +9,7 @@
     <ul class="nav flex-column mb-2" v-if="menuPages.length">
       <li v-for="page in menuPages" :key="page.routeName" @click="closeSidebar">
         <router-link :to="{ name: page.routeName }" class="nav-link">
-          <i class="icon-nav-link fas" :class="page.icon"></i>
+          <font-awesome-icon :icon="['fas', page.icon]" />
           {{ page.title }}
         </router-link>
       </li>
@@ -29,6 +29,7 @@ export default {
       default: "",
     },
   },
+
   methods: {
     ...mapActions(["closeSidebar"]),
   },
@@ -45,6 +46,7 @@ export default {
   color: #333;
   transition: all 100ms ease;
 }
+
 .sidebar-menu .nav li .nav-link {
   color: inherit;
   font-weight: 500;
@@ -54,26 +56,27 @@ export default {
   padding-left: 8px;
   transition: all 100ms ease;
 }
-.sidebar-menu .nav li .nav-link:focus {
+.sidebar-menu .nav > li .nav-link:focus {
   transition: border 100ms ease;
   box-shadow: none !important;
   border-left: var(--light-blue) 10px solid !important;
   outline: #007bff40 solid 2px !important;
   outline-offset: -1px !important;
 }
-.sidebar-menu .nav li .nav-link:hover {
+.sidebar-menu .nav > li .nav-link:hover {
   background-color: #0079fa;
   color: #fff !important;
 }
-.sidebar-menu .nav li .nav-link.active {
+.sidebar-menu .nav > li .nav-link.active {
   background-color: #0055af;
   border-left: var(--light-blue) 10px solid;
   color: white;
 }
-.sidebar-menu .nav li .nav-link svg {
+
+.sidebar-menu .nav > li .nav-link > svg {
   color: inherit;
   font-size: 12px;
-  width: 18px !important;
+  width: 18px;
   text-align: start;
 }
 </style>

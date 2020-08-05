@@ -55,18 +55,18 @@ const actions = {
 };
 
 const getters = {
-  allPerfis(state) {
+  AllPerfis(state) {
     return _.orderBy(state.Perfis, ["nome"]);
   },
   PerfisDCC(state, getters) {
     return _.filter(
-      getters.allPerfis,
+      getters.AllPerfis,
       (perfil) => perfil.id !== 13 && perfil.id !== 15
     );
   },
   PerfisExternos(state, getters) {
     return _.filter(
-      getters.allPerfis,
+      getters.AllPerfis,
       (perfil) => perfil.id === 13 || perfil.id === 15
     );
   },

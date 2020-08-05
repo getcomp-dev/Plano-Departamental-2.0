@@ -24,8 +24,6 @@
 
 <script>
 import pedidoExternoService from "@/common/services/pedidoExterno";
-import _ from "lodash";
-
 const emptyPedido = {
   vagasPeriodizadas: 0,
   vagasNaoPeriodizadas: 0,
@@ -53,11 +51,11 @@ export default {
   data() {
     return {
       ativo: false,
-      pedidoForm: _.clone(emptyPedido),
+      pedidoForm: this.$_.clone(emptyPedido),
     };
   },
   mounted: function() {
-    this.pedidoForm = _.clone(
+    this.pedidoForm = this.$_.clone(
       this.$store.state.pedidoExterno.Pedidos[this.turma.id][this.index]
     );
   },
@@ -74,7 +72,7 @@ export default {
       if (pedido.vagasNaoPeriodizadas == "") pedido.vagasNaoPeriodizadas = 0;
     },
     async editPedido() {
-      const pedido = _.clone(this.pedidoForm);
+      const pedido = this.$_.clone(this.pedidoForm);
       this.validatePedido(pedido);
 
       try {
@@ -105,7 +103,7 @@ export default {
 
   watch: {
     pedido: function() {
-      this.pedidoForm = _.clone(
+      this.pedidoForm = this.$_.clone(
         this.$store.state.pedidoExterno.Pedidos[this.turma.id][this.index]
       );
     },
