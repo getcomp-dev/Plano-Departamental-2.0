@@ -32,13 +32,14 @@ router.post('/', function(req, res, next){
         result[6].forEach((perfil) => perfis.push(perfil.dataValues))
 
         cursos = _.orderBy(cursos, 'posicao')
-        turmas = _.orderBy(_.orderBy(_.orderBy(_.orderBy(_.filter(turmas, function(t) { return t.Disciplina !== null}), 'letra'), 'Disciplina'), 'Perfil'), 'periodo')
+        turmas = _.orderBy(_.orderBy(_.orderBy(_.orderBy(_.filter(_.filter(turmas, {Plano: 1}), function(t) { return t.Disciplina !== null}), 'letra'), 'Disciplina'), 'Perfil'), 'periodo')
 
         let data = []
         var header = ["S.", "Cod", "Disciplina", "C.", "Turma", "Horário", "Docente", "Turno", "Sala", "Total"]
         if (cursos.length > 0) {
             cursos.forEach(function (curso) {
-                header.push(curso.codigo)
+                header.push(curso.codigo + ' Grade')
+                header.push(curso.codigo + ' Extra')
             })
         }
         data.push(header)
@@ -168,7 +169,8 @@ router.post('/', function(req, res, next){
                                 return false
                         })
                         if(pedido){
-                            pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
+                            ((pedido.vagasPeriodizadas === 0) ? pds.push('') : pds.push(pedido.vagasPeriodizadas));
+                            ((pedido.vagasNaoPeriodizadas === 0) ? pds.push('') : pds.push(pedido.vagasNaoPeriodizadas));
                             total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
                         }else{
                             pds.push('')
@@ -310,7 +312,8 @@ router.post('/', function(req, res, next){
                                     return false
                             })
                             if(pedido){
-                                pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
+                                ((pedido.vagasPeriodizadas === 0) ? pds.push('') : pds.push(pedido.vagasPeriodizadas));
+                                ((pedido.vagasNaoPeriodizadas === 0) ? pds.push('') : pds.push(pedido.vagasNaoPeriodizadas));
                                 total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
                             }else{
                                 pds.push('')
@@ -344,7 +347,7 @@ router.post('/', function(req, res, next){
             turmasExternas = _.orderBy(_.orderBy(_.filter(turmasExternas, function(t) { return t.Disciplina !== null}), 'letra'), 'Disciplina')
 
             let dataExterna = []
-            const header = ["S.", "Cod", "Disciplina", "C.", "Turma", "Horário", "Turno", "Sala", "Total", "35A", "65B", "76A", "65C"]
+            const header = ["S.", "Cod", "Disciplina", "C.", "Turma", "Horário", "Turno", "Sala", "Total", "35A Grade", "35A Extra", "65B Grade", "65B Extra", "76A Grade", "76A Extra", "65C Grade", "65C Extra"]
             dataExterna.push(header)
             for(let i=0; i < turmasExternas.length; i++) {
                 let turma = turmasExternas[i]
@@ -436,8 +439,8 @@ router.post('/', function(req, res, next){
                             return false
                     })
                     if (pedido) {
-                        console.log(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
-                        pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
+                        ((pedido.vagasPeriodizadas === 0) ? pds.push('') : pds.push(pedido.vagasPeriodizadas));
+                        ((pedido.vagasNaoPeriodizadas === 0) ? pds.push('') : pds.push(pedido.vagasNaoPeriodizadas));
                         total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
                     } else {
                         pds.push('')
@@ -451,7 +454,6 @@ router.post('/', function(req, res, next){
                 })
                 dataExterna.push(line)
             }
-            console.log("parte 2")
             for(let i=0; i < turmasExternas.length; i++) {
                 let turma = turmasExternas[i]
                 if (turma.periodo === 1)
@@ -542,8 +544,8 @@ router.post('/', function(req, res, next){
                             return false
                     })
                     if (pedido) {
-                        console.log(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
-                        pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
+                        ((pedido.vagasPeriodizadas === 0) ? pds.push('') : pds.push(pedido.vagasPeriodizadas));
+                        ((pedido.vagasNaoPeriodizadas === 0) ? pds.push('') : pds.push(pedido.vagasNaoPeriodizadas));
                         total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
                     } else {
                         pds.push('')
