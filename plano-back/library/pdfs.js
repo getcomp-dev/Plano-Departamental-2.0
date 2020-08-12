@@ -28,6 +28,7 @@ function Pdfs(){
     this.Plano = undefined
     this.Cursos = undefined
     this.Perfis = undefined
+    this.PlanoAtual = undefined
 
     ativos1 = {
         CCD: [[], [], [], [], [], [], [], [], [], []],
@@ -45,7 +46,7 @@ function Pdfs(){
     }
 }
 
-Pdfs.prototype.ready = () => new Promise((resolve, reject) => {
+Pdfs.prototype.ready = (config) => new Promise((resolve, reject) => {
     console.log('Pedindo dados')
     this.Salas = models.Sala.findAll()
     this.Disciplinas = models.Disciplina.findAll()
@@ -61,6 +62,7 @@ Pdfs.prototype.ready = () => new Promise((resolve, reject) => {
     this.Plano = models.Plano.findAll()
     this.Cursos = models.Curso.findAll()
     this.Perfis = models.Perfil.findAll()
+    this.PlanoAtual = config.Plano
     console.log('Resolvendo Promises')
     Promise.all([this.Salas, this.Disciplinas, this.Turmas, this.Cargas, this.Docentes, this.Horarios, this.Grades, this.DisciplinasGrade, this.TurmasExternas, this.Pedidos, this.PedidosExternos, this.Plano, this.Cursos, this.Perfis]).then(async (result) => {
         this.Salas = []
@@ -222,8 +224,8 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
         }
     });
     var disciplinas = _.orderBy(this.Disciplinas, 'nome');
-    var turmas1 = _.filter(this.Turmas, {'periodo': 1, 'Plano': 1});
-    var turmas2 = _.filter(this.Turmas, {'periodo': 3, 'Plano': 1});
+    var turmas1 = _.filter(this.Turmas, {'periodo': 1, 'Plano': this.PlanoAtual});
+    var turmas2 = _.filter(this.Turmas, {'periodo': 3, 'Plano': this.PlanoAtual});
     var seg = "",
         ter = "",
         qua = "",
@@ -1240,8 +1242,8 @@ const pdfCargaProfessores = () => new Promise((resolve, reject) => {
     var turmasProf1, turmasProf2
     var posProf1, posProf2
     var horarioTotal = ''
-    var listTurmas = _.filter(this.Turmas, {'Plano': 1})
-    var listCargas = _.filter(this.Cargas, {'Plano': 1})
+    var listTurmas = _.filter(this.Turmas, {'Plano': this.PlanoAtual})
+    var listCargas = _.filter(this.Cargas, {'Plano': this.PlanoAtual})
     for(var i = 0; i < professores.length; i++){
         turmasProf1 = _.filter(turmas(professores[i], listTurmas), function(t) {
             return t.periodo == 1 || t.periodo == 2;
@@ -2394,8 +2396,8 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
 
     var anoAtual = _.find(this.Plano, {id:1}).ano
 
-    let listTurmas = _.filter(this.Turmas, {Plano: 1})
-    let listTurmasExternas = _.filter(this.TurmasExternas, {Plano: 1})
+    let listTurmas = _.filter(this.Turmas, {Plano: this.PlanoAtual})
+    let listTurmasExternas = _.filter(this.TurmasExternas, {Plano: this.PlanoAtual})
 
     var ativos1 = createHorarios1(anoAtual, 1, this.DisciplinasGrade, listTurmas, listTurmasExternas, this.Cursos, this.Grades, this.Pedidos, this.PedidosExternos)
     var ativos2 = createHorarios2(anoAtual, 3, this.DisciplinasGrade, listTurmas, listTurmasExternas, this.Cursos, this.Grades, this.Pedidos, this.PedidosExternos)
@@ -6544,7 +6546,7 @@ const pdfRelatorioDisciplinas = () => new Promise((resolve, reject) =>  {
         ],
     });
     for (let i = 0; i < disciplinas.length; i++) {
-        turmasDisc = turmasRelatorioDisciplinas(disciplinas[i], 1, _.filter(this.Turmas, {Plano: 1}));
+        turmasDisc = turmasRelatorioDisciplinas(disciplinas[i], 1, _.filter(this.Turmas, {Plano: this.PlanoAtual}));
         if (turmasDisc.length > 0) {
             tables.push({
                 style: "tableExample",
@@ -6812,7 +6814,7 @@ const pdfRelatorioDisciplinas = () => new Promise((resolve, reject) =>  {
         ],
     });
     for (let i = 0; i < disciplinas.length; i++) {
-        turmasDisc = turmasRelatorioDisciplinas(disciplinas[i], 2, _.filter(this.Turmas, {Plano: 1}));
+        turmasDisc = turmasRelatorioDisciplinas(disciplinas[i], 2, _.filter(this.Turmas, {Plano: this.PlanoAtual}));
         if (turmasDisc.length > 0) {
             tables.push({
                 style: "tableExample",
@@ -6943,7 +6945,7 @@ const pdfRelatorioDisciplinas = () => new Promise((resolve, reject) =>  {
                                     bold: true,
                                 },
                                 {
-                                    text: "Vagas: " + vagasTurma(turmasDisc[j], 2, _.filter(this.Turmas, {Plano: 1})),
+                                    text: "Vagas: " + vagasTurma(turmasDisc[j], 2, _.filter(this.Turmas, {Plano: this.PlanoAtual})),
                                     alignment: "left",
                                     fontSize: 8,
                                     bold: true,
