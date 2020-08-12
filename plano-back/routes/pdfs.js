@@ -4,7 +4,7 @@ const express = require('express'),
 
 router.post('/criarPDFs', async function(req, res, next){
     const pdf = new pdfs
-    await pdf.ready({Plano: req.body.Plano})
+    await pdf.ready({Plano: parseInt(req.body.Plano)})
     res.send({success:true})
 })
 

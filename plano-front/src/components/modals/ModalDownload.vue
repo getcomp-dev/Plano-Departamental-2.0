@@ -78,9 +78,9 @@ export default {
         this.downloadState++;
         const pedidos = this.$store.state.pedido.Pedidos;
 
-        await xlsxService.downloadTable({ pedidos: pedidos });
+        await xlsxService.downloadTable({ pedidos: pedidos, Plano: localStorage.getItem('Plano') });
         this.downloadState++;
-        await downloadService.generatePdf();
+        await downloadService.generatePdf({ Plano:localStorage.getItem('Plano') });
         this.downloadState++;
         await downloadService.download();
         this.downloadState++;
