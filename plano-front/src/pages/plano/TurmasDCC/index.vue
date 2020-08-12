@@ -721,7 +721,7 @@ export default {
         for (let i = 0; i < this.Deletar.length; i++) {
           await turmaService.delete(this.Deletar[i].id);
         }
-        this.$refs.modalDelete.close();
+
         this.clearDelete();
         this.showNotification({
           type: "success",

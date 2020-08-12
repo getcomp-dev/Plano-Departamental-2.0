@@ -449,9 +449,6 @@ export default {
     openModalDelete() {
       this.$refs.modalDelete.open();
     },
-    closeModalDelete() {
-      this.$refs.modalDelete.close();
-    },
     addNovaTurma() {
       this.$refs.novaTurmaExternaRow.handleAddNovaTurma();
     },
@@ -461,7 +458,6 @@ export default {
         this.setPartialLoading(true);
 
         await this.deleteTurmasExternas();
-        this.closeModalDelete();
       } catch (error) {
         this.pushNotification({
           type: "error",

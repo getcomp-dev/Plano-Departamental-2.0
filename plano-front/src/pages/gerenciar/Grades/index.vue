@@ -118,10 +118,10 @@
       <Card
         :title="'Curso'"
         :toggleFooter="isEdit"
-        @btn-salvar="editGrade()"
-        @btn-delete="deleteGrade()"
-        @btn-add="addGrade()"
-        @btn-clean="cleanGrade()"
+        @btn-salvar="editGrade"
+        @btn-delete="openModalDelete"
+        @btn-add="addGrade"
+        @btn-clean="cleanGrade"
       >
         <template #form-group>
           <div class="row mb-2 mx-0">
@@ -144,7 +144,7 @@
                 class="card-input-menor form-control form-control-sm col"
                 id="periodoInicio"
                 v-model="gradeForm.periodoInicio"
-                @keypress="onlyNumber"
+                @keypress="maskOnlyNumber"
               />
             </div>
           </div>
@@ -170,70 +170,77 @@
       </Card>
     </div>
 
-    <!-- MODAL AJUDA -->
-    <BaseModal
-      ref="modalAjuda"
-      :modalOptions="{
-        type: 'ajuda',
-        title: 'Ajuda',
-      }"
+    <ModalDelete
+      ref="modalDelete"
+      :isDeleting="isEdit"
+      @btn-deletar="deleteGrade"
     >
-      <template #modal-body>
-        <ul class="list-ajuda list-group">
-          <li class="list-group-item">
-            <b>Para adicionar grades:</b> Com o cartão a direita em branco,
-            preencha-o. Em seguida, clique em Adicionar
-            <i class="fas fa-plus icon-green px-1" style="font-size:12px"></i>.
-          </li>
-          <li class="list-group-item">
-            <b>Para editar ou deletar uma grade:</b> Na tabela, clique na grade
-            que deseja alterar. Logo após, no cartão à direita, altere as
-            informações que desejar e clique em Salvar
-            <i class="fas fa-check icon-green px-1" style="font-size:12px"></i>
-            ou, para excluí-la, clique em Deletar
-            <i
-              class="far fa-trash-alt icon-red px-1"
-              style="font-size: 12px"
-            ></i>
-            .
-          </li>
-          <li class="list-group-item">
-            <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
-            em Cancelar
-            <i class="fas fa-times icon-gray px-1" style="font-size: 12px"></i>.
-          </li>
-        </ul>
-      </template>
-    </BaseModal>
+      <li v-if="isEdit" class="list-group-item">
+        <span>
+          Tem certeza que deseja excluír a grade
+          <b>{{ gradeForm.periodoInicio }} - {{ gradeForm.nome }}</b
+          >?
+        </span>
+      </li>
+      <li v-else class="list-group-item">
+        Nenhuma grade selecionada.
+      </li>
+    </ModalDelete>
+
+    <ModalAjuda ref="modalAjuda">
+      <li class="list-group-item">
+        <b>Para adicionar grades:</b> Com o cartão a direita em branco,
+        preencha-o. Em seguida, clique em Adicionar
+        <i class="fas fa-plus icon-green px-1" style="font-size:12px"></i>.
+      </li>
+      <li class="list-group-item">
+        <b>Para editar ou deletar uma grade:</b> Na tabela, clique na grade que
+        deseja alterar. Logo após, no cartão à direita, altere as informações
+        que desejar e clique em Salvar
+        <i class="fas fa-check icon-green px-1" style="font-size:12px"></i>
+        ou, para excluí-la, clique em Deletar
+        <i class="far fa-trash-alt icon-red px-1" style="font-size: 12px"></i>
+        .
+      </li>
+      <li class="list-group-item">
+        <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique em
+        Cancelar
+        <i class="fas fa-times icon-gray px-1" style="font-size: 12px"></i>.
+      </li>
+    </ModalAjuda>
   </div>
 </template>
 
 <script>
 import gradeService from "@/common/services/grade";
+import { maskOnlyNumber } from "@/common/mixins";
 import { PageHeader, Card } from "@/components/ui";
+import { ModalDelete, ModalAjuda } from "@/components/modals";
 
 const emptyGrade = {
-  id: undefined,
-  periodoInicio: undefined,
-  Curso: undefined,
-  nome: undefined,
+  id: null,
+  periodoInicio: null,
+  Curso: null,
+  nome: null,
 };
 const emptyDisciplinaGrade = {
-  periodo: undefined,
-  Disciplina: undefined,
-  Grade: undefined,
+  periodo: null,
+  Disciplina: null,
+  Grade: null,
 };
 export default {
   name: "DashboardGrade",
-  components: { PageHeader, Card },
+  mixins: [maskOnlyNumber],
+  components: { PageHeader, Card, ModalAjuda, ModalDelete },
   data() {
     return {
-      error: undefined,
+      error: null,
       gradeForm: this.$_.clone(emptyGrade),
       disciplinaGradeForm: this.$_.clone(emptyDisciplinaGrade),
-      currentGrade: undefined,
+      currentGrade: null,
     };
   },
+
   methods: {
     addGrade() {
       gradeService
@@ -262,6 +269,7 @@ export default {
         });
       this.cleanGrade();
     },
+
     editGrade() {
       gradeService
         .update(this.gradeForm.id, this.gradeForm)
@@ -282,8 +290,12 @@ export default {
           });
         });
     },
+
+    openModalDelete() {
+      this.$refs.modalDelete.open();
+    },
     deleteGrade() {
-      let grade_nome = this.gradeForm.nome;
+      const gradeNome = this.gradeForm.nome;
 
       gradeService
         .delete(this.gradeForm.id, this.gradeForm)
@@ -292,29 +304,28 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Grade ${grade_nome} foi excluída!`,
-            type: "warn",
+            text: `A Grade ${gradeNome} foi excluída!`,
+            type: "success",
           });
         })
-        .catch(() => {
-          this.error =
-            "<b>Erro ao excluir Grade, não pode haver disciplinas cadastradas na Grade.</b>";
+        .catch((error) => {
           this.$notify({
             group: "general",
-            title: `Erro!`,
-            text: this.error,
+            title: "Erro ao excluir Grade!",
+            text: error.response
+              ? "Grade não pode possuir disciplinas cadastradas para ser excluída"
+              : "",
             type: "error",
           });
         });
     },
     cleanGrade() {
-      this.currentGrade = undefined;
       this.gradeForm = this.$_.clone(emptyGrade);
-      this.error = undefined;
+      this.currentGrade = null;
+      this.error = null;
     },
     showGrade(grade) {
       this.cleanGrade();
-
       this.currentGrade = grade.id;
       this.gradeForm = this.$_.clone(grade);
       this.disciplinaGradeForm.Grade = this.gradeForm.id;
@@ -323,19 +334,14 @@ export default {
       var grade = this.$_.find(this.$store.state.grade.Grades, ["id", id]);
       this.showGrade(grade);
     },
-    onlyNumber($event) {
-      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
-      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
-        $event.preventDefault();
-      }
-    },
     isEven(number) {
       return number % 2 === 0;
     },
   },
+
   computed: {
     isEdit() {
-      return this.currentGrade != undefined;
+      return this.currentGrade != null;
     },
     Grades() {
       return this.$store.state.grade.Grades;

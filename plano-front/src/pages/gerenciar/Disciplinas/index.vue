@@ -129,10 +129,10 @@
       <Card
         :title="'Disciplina'"
         :toggleFooter="isEdit"
-        @btn-salvar="editDisciplina()"
-        @btn-delete="deleteDisciplina()"
-        @btn-add="addDisciplina()"
-        @btn-clean="cleanDisciplina()"
+        @btn-salvar="editDisciplina"
+        @btn-delete="openModalDelete"
+        @btn-add="addDisciplina"
+        @btn-clean="cleanDisciplina"
       >
         <template #form-group>
           <div class="row mb-2 mx-0">
@@ -188,7 +188,7 @@
                 type="text"
                 id="cargaTeorica"
                 class="form-control form-control-sm input-medio t-center"
-                @keypress="onlyNumber"
+                @keypress="maskOnlyNumber"
                 v-model.number="disciplinaForm.cargaTeorica"
               />
             </div>
@@ -201,7 +201,7 @@
                 type="text"
                 id="cargaPratica"
                 class="form-control form-control-sm input-medio t-center"
-                @keypress="onlyNumber"
+                @keypress="maskOnlyNumber"
                 v-model="disciplinaForm.cargaPratica"
               />
             </div>
@@ -241,54 +241,58 @@
       </Card>
     </div>
 
-    <!-- MODAL AJUDA -->
-    <BaseModal
-      ref="modalAjuda"
-      :modalOptions="{
-        type: 'ajuda',
-        title: 'Ajuda',
-      }"
+    <ModalDelete
+      ref="modalDelete"
+      :isDeleting="isEdit"
+      @btn-deletar="deleteDisciplina"
     >
-      <template #modal-body>
-        <ul class="list-ajuda list-group">
-          <li class="list-group-item">
-            <b>Para adicionar disciplinas:</b> Com o cartão à direita em branco,
-            preencha-o. Em seguida, clique em Adicionar
-            <i class="fas fa-plus icon-green px-1" style="font-size:12px"></i>
-            .
-          </li>
-          <li class="list-group-item">
-            <b>Para editar ou deletar uma disciplina:</b>Na tabela, clique na
-            disciplina que deseja alterar. Logo após, no cartão à direita,
-            altere as informações que desejar e clique em Salvar
-            <i class="fas fa-check icon-green px-1" style="font-size:12px"></i>
-            ou, para excluí-lo, clique em Deletar
-            <i
-              class="far fa-trash-alt icon-red px-1"
-              style="font-size: 12px"
-            ></i>
-            .
-          </li>
-          <li class="list-group-item">
-            <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
-            em Cancelar
-            <i class="fas fa-times icon-gray px-1" style="font-size: 12px"></i>
-            .
-          </li>
-          <li class="list-group-item">
-            <b>Para alterar a ordenação:</b> Clique em Nome ou Código no
-            cabeçalho da tabela para ordenação alfabética do mesmo.
-          </li>
-        </ul>
-      </template>
-    </BaseModal>
+      <li v-if="isEdit" class="list-group-item">
+        <span>
+          Tem certeza que deseja excluír a disciplina
+          <b>{{ disciplinaForm.codigo }} - {{ disciplinaForm.nome }}</b
+          >?
+        </span>
+      </li>
+      <li v-else class="list-group-item">
+        Nenhuma disciplina selecionada.
+      </li>
+    </ModalDelete>
+
+    <ModalAjuda ref="modalAjuda">
+      <li class="list-group-item">
+        <b>Para adicionar disciplinas:</b> Com o cartão à direita em branco,
+        preencha-o. Em seguida, clique em Adicionar
+        <i class="fas fa-plus icon-green px-1" style="font-size:12px"></i>
+        .
+      </li>
+      <li class="list-group-item">
+        <b>Para editar ou deletar uma disciplina:</b>Na tabela, clique na
+        disciplina que deseja alterar. Logo após, no cartão à direita, altere as
+        informações que desejar e clique em Salvar
+        <i class="fas fa-check icon-green px-1" style="font-size:12px"></i>
+        ou, para excluí-lo, clique em Deletar
+        <i class="far fa-trash-alt icon-red px-1" style="font-size: 12px"></i>
+        .
+      </li>
+      <li class="list-group-item">
+        <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique em
+        Cancelar
+        <i class="fas fa-times icon-gray px-1" style="font-size: 12px"></i>
+        .
+      </li>
+      <li class="list-group-item">
+        <b>Para alterar a ordenação:</b> Clique em Nome ou Código no cabeçalho
+        da tabela para ordenação alfabética do mesmo.
+      </li>
+    </ModalAjuda>
   </div>
 </template>
 
 <script>
 import disciplinaService from "@/common/services/disciplina";
-import { toggleOrdination } from "@/common/mixins";
+import { toggleOrdination, maskOnlyNumber } from "@/common/mixins";
 import { PageHeader, Card } from "@/components/ui";
+import { ModalDelete, ModalAjuda } from "@/components/modals";
 
 const emptyDisciplina = {
   id: undefined,
@@ -303,8 +307,8 @@ const emptyDisciplina = {
 
 export default {
   name: "DashboardDisciplina",
-  mixins: [toggleOrdination],
-  components: { PageHeader, Card },
+  mixins: [toggleOrdination, maskOnlyNumber],
+  components: { PageHeader, Card, ModalDelete, ModalAjuda },
   data() {
     return {
       disciplinaForm: this.$_.clone(emptyDisciplina),
@@ -317,19 +321,11 @@ export default {
     };
   },
   methods: {
-    onlyNumber($event) {
-      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
-      if (keyCode < 48 || keyCode > 57) {
-        $event.preventDefault();
-      }
-    },
     handleClickInDisciplina(disciplina) {
       this.showDisciplina(disciplina);
       this.disciplinaClickada = disciplina.id;
     },
-    clearClick() {
-      this.disciplinaClickada = "";
-    },
+
     addDisciplina() {
       disciplinaService
         .create(this.disciplinaForm)
@@ -367,7 +363,6 @@ export default {
           });
         });
     },
-
     editDisciplina() {
       disciplinaService
         .update(this.disciplinaForm.id, this.disciplinaForm)
@@ -393,7 +388,9 @@ export default {
           });
         });
     },
-
+    openModalDelete() {
+      this.$refs.modalDelete.open();
+    },
     deleteDisciplina() {
       disciplinaService
         .delete(this.disciplinaForm.id, this.disciplinaForm)
@@ -402,23 +399,24 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Disciplina ${response.Disciplina.nome} foi excluída!`,
+            text: `Disciplina ${response.Disciplina.nome} foi excluída`,
             type: "success",
           });
         })
-        .catch(() => {
-          this.error = "<b>Erro ao excluir Disciplina</b>";
+        .catch((error) => {
           this.$notify({
             group: "general",
-            title: `Erro!`,
-            text: this.error,
+            title: "Erro ao excluir Disciplina!",
+            text: error.response
+              ? "Disciplina não pode possuir nenhum vinculo para ser excluída"
+              : "",
             type: "error",
           });
         });
     },
 
     cleanDisciplina() {
-      this.clearClick();
+      this.disciplinaClickada = "";
       this.disciplinaForm = this.$_.clone(emptyDisciplina);
       this.error = undefined;
     },

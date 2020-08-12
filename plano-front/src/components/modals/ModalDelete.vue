@@ -19,7 +19,7 @@
           class="paddingX-20"
           :type="'text'"
           :color="'red'"
-          @click="$emit('btn-deletar')"
+          @click="handleBtnDelete"
         >
           Deletar
         </BaseButton>
@@ -35,6 +35,10 @@ export default {
     isDeleting: { type: Boolean, default: false },
   },
   methods: {
+    handleBtnDelete() {
+      this.$emit("btn-deletar");
+      this.close();
+    },
     open() {
       this.$refs.baseModalDelete.open();
     },

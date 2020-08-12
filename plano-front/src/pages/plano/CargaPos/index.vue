@@ -398,10 +398,6 @@ export default {
       this.isAdding = !this.isAdding;
     },
 
-    closeModalDelete() {
-      this.$refs.modalDelete.close();
-    },
-
     deleteCarga(cargaId) {
       cargaPosService
         .delete(cargaId)
@@ -425,7 +421,6 @@ export default {
       for (let i = 0; i < cargas.length; i++) {
         this.deleteCarga(cargas[i].id);
       }
-      this.closeModalDelete();
       this.$store.commit("emptyDeleteCarga");
     },
 

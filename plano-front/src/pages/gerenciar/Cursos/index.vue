@@ -115,11 +115,12 @@
             <div class="form-group col m-0 px-0">
               <label required for="nome" class="col-form-label">Nome</label>
               <input
+                id="nome"
                 type="text"
                 class="input-maior form-control
-                form-control-sm upper-case"
-                id="nome"
-                v-model="cursoForm.nome"
+                form-control-sm"
+                @input="cursoForm.nome = $event.target.value.toUpperCase()"
+                :value="cursoForm.nome"
               />
             </div>
           </div>
@@ -129,9 +130,10 @@
               <label required for="codigo" class="col-form-label">Código</label>
               <input
                 type="text"
-                class="form-control form-control-sm input-menor upper-case"
+                class="form-control form-control-sm input-menor"
                 id="codigo"
-                v-model="cursoForm.codigo"
+                @input="cursoForm.codigo = $event.target.value.toUpperCase()"
+                :value="cursoForm.codigo"
               />
             </div>
             <div class="form-group col m-0 px-0">
@@ -158,7 +160,7 @@
                 type="text"
                 class="form-control form-control-sm input-menor"
                 id="alunosEnrada1"
-                @keypress="onlyNumber"
+                @keypress="maskOnlyNumber"
                 v-model="cursoForm.alunosEntrada"
               />
             </div>
@@ -171,7 +173,7 @@
                 type="text"
                 class="form-control form-control-sm input-menor"
                 id="alunosEntrada2"
-                @keypress="onlyNumber"
+                @keypress="maskOnlyNumber"
                 v-model="cursoForm.alunosEntrada2"
               />
             </div>
@@ -180,94 +182,57 @@
       </Card>
     </div>
 
-    <BaseModal
-      ref="modalDeleteCurso"
-      :modalOptions="{
-        title: 'Deletar curso',
-        position: 'center',
-        hasBackground: true,
-        hasFooter: true,
-      }"
-      :customStyles="'width:450px; font-size:14px'"
+    <ModalDelete
+      ref="modalDelete"
+      :isDeleting="isEdit"
+      @btn-deletar="deleteCurso"
     >
-      <template #modal-body>
-        <p class="w-100 m-0">
-          <template v-if="isEdit">
-            O curso <b>{{ cursoForm.codigo }} - {{ cursoForm.nome }}</b> possui
-            vagas alocadas. Tem certeza que deseja excluí-lo?
-          </template>
-          <template v-else>
-            Nenhum curso selecionado!
-          </template>
-        </p>
-      </template>
-      <template #modal-footer>
-        <BaseButton
-          class="paddingX-20"
-          :type="'text'"
-          :color="'gray'"
-          @click="closeModalDelete"
-        >
-          Cancelar
-        </BaseButton>
-        <BaseButton
-          class="paddingX-20"
-          :type="'text'"
-          :color="'red'"
-          @click="deleteCurso"
-        >
-          Deletar
-        </BaseButton>
-      </template>
-    </BaseModal>
+      <li v-if="isEdit" class="list-group-item">
+        <span v-html="modalDeleteText"></span>
+      </li>
+      <li v-else class="list-group-item">
+        Nenhuma curso selecionado.
+      </li>
+    </ModalDelete>
 
-    <!-- MODAL AJUDA -->
-    <BaseModal
-      ref="modalAjuda"
-      :modalOptions="{
-        type: 'ajuda',
-        title: 'Ajuda',
-      }"
-    >
-      <template #modal-body>
-        <ul class="list-ajuda list-group">
-          <li class="list-group-item">
-            <b>Para adicionar cursos:</b> Com o cartão à direita em branco,
-            preencha-o. Em seguida, clique em Adicionar
-            <i class="fas fa-plus icon-green px-1"></i>
-            .
-          </li>
-          <li class="list-group-item">
-            <b>Para editar ou deletar um curso:</b> Na tabela, clique no curso
-            que deseja alterar. Logo após, no cartão à direita, altere as
-            informações que desejar e clique em Salvar
-            <i class="fas fa-check icon-green px-1"></i>
-            ou, para excluí-lo, clique em Deletar
-            <i class="far fa-trash-alt icon-red px-1"></i>
-            .
-          </li>
-          <li class="list-group-item">
-            <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
-            em Cancelar
-            <i class="fas fa-times icon-gray px-1"></i>
-            .
-          </li>
-          <li class="list-group-item">
-            <b>Para alterar a ordenação:</b> Clique em Nome no cabeçalho da
-            tabela para ordenar por ordem alfabética ou em Código para ordem
-            numérica do código do curso.
-          </li>
-        </ul>
-      </template>
-    </BaseModal>
+    <ModalAjuda ref="modalAjuda">
+      <li class="list-group-item">
+        <b>Para adicionar cursos:</b> Com o cartão à direita em branco,
+        preencha-o. Em seguida, clique em Adicionar
+        <i class="fas fa-plus icon-green px-1"></i>
+        .
+      </li>
+      <li class="list-group-item">
+        <b>Para editar ou deletar um curso:</b> Na tabela, clique no curso que
+        deseja alterar. Logo após, no cartão à direita, altere as informações
+        que desejar e clique em Salvar
+        <i class="fas fa-check icon-green px-1"></i>
+        ou, para excluí-lo, clique em Deletar
+        <i class="far fa-trash-alt icon-red px-1"></i>
+        .
+      </li>
+      <li class="list-group-item">
+        <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique em
+        Cancelar
+        <i class="fas fa-times icon-gray px-1"></i>
+        .
+      </li>
+      <li class="list-group-item">
+        <b>Para alterar a ordenação:</b> Clique em Nome no cabeçalho da tabela
+        para ordenar por ordem alfabética ou em Código para ordem numérica do
+        código do curso.
+      </li>
+    </ModalAjuda>
   </div>
 </template>
 
 <script>
 import ls from "local-storage";
 import cursoService from "@/common/services/curso";
-import { toggleOrdination, notification } from "@/common/mixins";
+import { toggleOrdination, maskOnlyNumber } from "@/common/mixins";
 import { PageHeader, Card } from "@/components/ui";
+import { ModalDelete, ModalAjuda } from "@/components/modals";
+import { mapActions } from "vuex";
 
 const emptyCurso = {
   id: undefined,
@@ -282,11 +247,12 @@ const emptyCurso = {
 
 export default {
   name: "DashboardCursos",
-  mixins: [toggleOrdination, notification],
-  components: { PageHeader, Card },
+  mixins: [toggleOrdination, maskOnlyNumber],
+  components: { PageHeader, Card, ModalDelete, ModalAjuda },
 
   data() {
     return {
+      modalDeleteText: "",
       cursoForm: this.$_.clone(emptyCurso),
       cursoClickado: "",
       ordenacaoCursosMain: { order: "codigo", type: "asc" },
@@ -299,12 +265,8 @@ export default {
     this.selectAll = true;
   },
   methods: {
-    onlyNumber($event) {
-      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
-      if (keyCode < 48 || keyCode > 57) {
-        $event.preventDefault();
-      }
-    },
+    ...mapActions(["pushNotification"]),
+
     handleClickInCurso(cursoId) {
       this.cursoClickado = cursoId;
     },
@@ -360,10 +322,10 @@ export default {
       else this.cursoForm.semestreInicial = 3;
 
       if (!this.validateCurso(this.cursoForm)) {
-        this.showNotification({
+        this.pushNotification({
           type: "error",
           title: "Erro ao criar Curso!",
-          message: "Campos obrigátorios incompletos ou inválidos.",
+          text: "Campos obrigátorios incompletos ou inválidos",
         });
         return;
       }
@@ -375,17 +337,16 @@ export default {
           this.cleanCurso();
 
           this.$notify({
-            group: "general",
             title: `Sucesso!`,
-            text: `O Curso ${response.Curso.nome} foi criado!`,
+            text: `Curso ${response.Curso.nome} foi criado`,
             type: "success",
           });
         })
         .catch((error) => {
-          this.showNotification({
+          this.pushNotification({
             type: "error",
             title: "Erro ao criar Curso!",
-            message: error,
+            text: error.message || "",
           });
         });
     },
@@ -410,30 +371,29 @@ export default {
         .update(this.cursoForm.id, this.cursoForm)
         .then((response) => {
           this.$notify({
-            group: "general",
             title: `Sucesso!`,
-            text: `O Curso ${response.Curso.nome} foi atualizado!`,
+            text: `Curso ${response.Curso.nome} foi atualizado`,
             type: "success",
           });
         })
         .catch((error) => {
-          this.showNotification({
+          this.pushNotification({
             type: "error",
-            title: "Erro ao atualizar Curso!",
-            message: error,
+            title: "Erro ao atualizar Curso",
+            text: error.message || "",
           });
         });
     },
 
     openModalDelete() {
-      this.$refs.modalDeleteCurso.open();
+      this.$refs.modalDelete.open();
     },
 
     closeModalDelete() {
-      this.$refs.modalDeleteCurso.close();
+      this.$refs.modalDelete.close();
     },
 
-    checkPedidos() {
+    checkCursoPedidos() {
       for (let t in this.$store.state.pedido.Pedidos) {
         let pedido = this.$_.find(this.$store.state.pedido.Pedidos[t], (p) => {
           if (p.Curso === this.cursoForm.id) {
@@ -452,11 +412,15 @@ export default {
     },
 
     checkDeleteCurso() {
-      if (this.checkPedidos()) {
-        this.openModalDelete();
+      if (this.checkCursoPedidos()) {
+        this.modalDeleteText = `
+        O curso <b>${this.cursoForm.codigo} - ${this.cursoForm.nome}</b>
+        possui vagas alocadas. Tem certeza que deseja excluí-lo?`;
       } else {
-        this.deleteCurso();
+        this.modalDeleteText = `Tem certeza que deseja excluír o curso
+        <b>${this.cursoForm.codigo} - ${this.cursoForm.nome}</b>?`;
       }
+      this.openModalDelete();
     },
     deleteCurso() {
       cursoService
@@ -465,17 +429,16 @@ export default {
           this.closeModalDelete();
           this.cleanCurso();
           this.$notify({
-            group: "general",
             title: `Sucesso!`,
-            text: `O Curso ${response.Curso.nome} foi excluído!`,
+            text: `O Curso ${response.Curso.nome} foi excluído`,
             type: "success",
           });
         })
         .catch((error) => {
-          this.showNotification({
+          this.pushNotification({
             type: "error",
             title: "Erro ao excluir Curso!",
-            message: error,
+            text: error.message || "",
           });
         });
     },

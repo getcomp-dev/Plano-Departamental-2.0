@@ -4,7 +4,6 @@
     title="Download"
     type="fromNavbar"
     :styles="{ width: '370px' }"
-    @on-close="resetOnClose()"
   >
     <template #modal-body>
       <div class="title-container pl-1">
@@ -63,6 +62,9 @@ export default {
     open() {
       this.$refs.baseModalDownload.open();
     },
+    close() {
+      this.$refs.baseModalDownload.close();
+    },
     resetDownloadState() {
       this.downloadState = 0;
     },
@@ -95,6 +97,11 @@ export default {
         const dataBlobed = await planoData.blob();
         await saveAs(dataBlobed, "data.zip");
         this.downloadState++;
+
+        setTimeout(() => {
+          this.close();
+          this.resetDownloadState();
+        }, 500);
       } catch (error) {
         console.log(error, "Erro na criação de arquivos para download");
       }

@@ -2383,6 +2383,7 @@ export default {
         };
       },
     };
-    pdfMake.createPdf(docDefinition).open();
+    let win = window.open('/');
+    pdfMake.createPdf(docDefinition).open({}, win);
   },
 };
