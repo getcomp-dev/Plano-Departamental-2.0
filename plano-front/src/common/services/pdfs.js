@@ -2383,9 +2383,6 @@ export default {
         };
       },
     };
-    let win = window.open('/');
-    win.onload = function() {
-      pdfMake.createPdf(docDefinition).open({}, win);
-    }
+    pdfMake.createPdf(docDefinition).open();
   },
 };
