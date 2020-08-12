@@ -13,9 +13,7 @@
         <option value="3">3</option>
       </select>
     </td>
-    <td style="width: 70px">
-      {{ turmaForm.disciplina.codigo }}
-    </td>
+    <td style="width: 70px">{{ turmaForm.disciplina.codigo }}</td>
 
     <td style="width: 330px" class="less-padding">
       <select v-model="turmaForm.Disciplina" @change="handleEditTurma()">
@@ -23,14 +21,11 @@
           v-for="disciplina in DisciplinasExternasInPerfis"
           :key="disciplina.id"
           :value="disciplina.id"
-          >{{ disciplina.nome }}</option
-        >
+        >{{ disciplina.nome }}</option>
       </select>
     </td>
 
-    <td style="width: 25px">
-      {{ totalCarga }}
-    </td>
+    <td style="width: 25px">{{ totalCarga }}</td>
 
     <td style="width: 45px;">
       <input
@@ -57,76 +52,45 @@
 
     <td style="width:85px" class="less-padding">
       <select v-model="turmaForm.Horario1" @change="checkHorario(1)">
-        <option value=""></option>
+        <option value></option>
         <option
           v-for="horario in HorariosFiltredByTurno"
           :key="horario.id"
           :value="horario.id"
-          >{{ horario.horario }}</option
-        >
+        >{{ horario.horario }}</option>
       </select>
-      <select
-        v-if="totalCarga >= 4"
-        v-model="turmaForm.Horario2"
-        @change="checkHorario(2)"
-      >
-        <option value=""></option>
+      <select v-if="totalCarga >= 4" v-model="turmaForm.Horario2" @change="checkHorario(2)">
+        <option value></option>
         <option
           v-for="horario in HorariosFiltredByTurno"
           :key="horario.id"
           :value="horario.id"
-          >{{ horario.horario }}</option
-        >
+        >{{ horario.horario }}</option>
       </select>
     </td>
 
     <td style="width: 95px" class="less-padding">
       <template v-if="!disciplinaIsIntegralEAD">
         <select v-model="turmaForm.Sala1" @change="checkSala(1)">
-          <option value=""></option>
-          <option
-            v-for="sala in AllSalas"
-            :key="'s1' + sala.id"
-            :value="sala.id"
-          >
-            {{ sala.nome }}
-          </option>
+          <option value></option>
+          <option v-for="sala in AllSalas" :key="'s1' + sala.id" :value="sala.id">{{ sala.nome }}</option>
         </select>
-        <select
-          v-if="totalCarga >= 4"
-          v-model="turmaForm.Sala2"
-          @change="checkSala(2)"
-        >
-          <option value=""></option>
-          <option
-            v-for="sala in AllSalas"
-            :key="'s2' + sala.id"
-            :value="sala.id"
-          >
-            {{ sala.nome }}</option
-          >
+        <select v-if="totalCarga >= 4" v-model="turmaForm.Sala2" @change="checkSala(2)">
+          <option value></option>
+          <option v-for="sala in AllSalas" :key="'s2' + sala.id" :value="sala.id">{{ sala.nome }}</option>
         </select>
       </template>
     </td>
 
     <td style="width: 40px;" class="p-0">
       <div style="height: 43px;" class="py-1">
-        <span style="font-weight:bold">
-          {{ totalPedidosNaoPeriodizados + totalPedidosPeriodizados }}</span
-        >
+        <span style="font-weight:bold">{{ totalPedidosNaoPeriodizados + totalPedidosPeriodizados }}</span>
         <br />
-        <p class="mt-1">
-          {{ totalPedidosPeriodizados }}+{{ totalPedidosNaoPeriodizados }}
-        </p>
+        <p class="mt-1">{{ totalPedidosPeriodizados }}+{{ totalPedidosNaoPeriodizados }}</p>
       </div>
     </td>
 
-    <td
-      v-for="indice in IndicesInPedidos"
-      :key="indice"
-      style="width:35px"
-      class="p-0"
-    >
+    <td v-for="indice in IndicesInPedidos" :key="indice" style="width:35px" class="p-0">
       <InputsPedidosExternos :index="indice" :turma="turma" />
     </td>
   </tr>
@@ -157,7 +121,6 @@ export default {
   methods: {
     ...mapActions([
       "setPartialLoading",
-      "pushNotification",
       "editTurmaExterna",
       "toggleTurmaToDelete",
     ]),
@@ -682,44 +645,41 @@ export default {
 <style scoped>
 .turmarow {
   font-size: 11px !important;
-  background-color: #fff !important;
+  background-color: #fff;
 }
 .turmarow td {
+  vertical-align: middle !important;
   margin: 0 !important;
   padding: 0 5px;
-  vertical-align: middle !important;
   text-align: center;
   word-break: break-word;
 }
 
 .turmarow select,
 .turmarow input {
-  font-size: 11px !important;
-  border: 1px solid #414141 !important;
-  color: #414141 !important;
-  border-radius: 0px !important;
+  font-size: 11px;
+  border: 1px solid #414141;
+  color: #414141;
+  border-radius: 0px;
 }
 .turmarow select {
-  height: 18px !important;
-  width: 100% !important;
+  height: 18px;
+  width: 100%;
 }
 .turmarow select + select {
-  margin-top: 2px !important;
+  margin-top: 3px;
 }
 .turmarow input[type="checkbox"] {
-  width: 14px !important;
-  height: 14px !important;
+  width: 14px;
+  height: 14px;
   margin: 0;
-  margin-top: 5px !important;
+  margin-top: 5px;
 }
 .turmarow .input-letra {
   margin: 0;
-  margin-top: 4px !important;
+  margin-top: 4px;
   height: 18px;
   width: 30px;
   text-align: center;
-}
-.turmarow .less-padding {
-  padding: 0 2px;
 }
 </style>

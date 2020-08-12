@@ -12,12 +12,18 @@
       </template>
       <tr>
         <div :class="hasSearchBar ? 'sticky2' : 'sticky'" class="max-content">
-          <slot name="thead"> </slot>
+          <slot name="thead"></slot>
         </div>
       </tr>
     </thead>
     <tbody>
-      <div class="max-content">
+      <template v-if="type === 'main' ">
+        <div class="max-content stickyAdd">
+          <slot name="add-row"></slot>
+        </div>
+      </template>
+
+      <div class="max-content" v-if="type !== 'main' || !onLoading.table">
         <slot name="tbody"></slot>
       </div>
     </tbody>
@@ -25,6 +31,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "BaseTable",
   props: {
@@ -34,6 +42,8 @@ export default {
     classes: { type: String | Array, default: "" },
   },
   computed: {
+    ...mapGetters(["onLoading"]),
+
     tableType() {
       return `${this.type}-table`;
     },
@@ -133,7 +143,25 @@ td:hover {
   color: #fff !important;
   cursor: default;
 }
+
+.stickyAdd {
+  display: block;
+  overflow: hidden !important;
+  position: sticky !important;
+  position: -webkit-sticky !important;
+  top: 19px !important;
+  overflow: hidden !important;
+  z-index: 5 !important;
+}
 /* searchBar */
+.sticky2 {
+  display: block !important;
+  overflow: hidden !important;
+  position: sticky !important;
+  top: 37px !important;
+  overflow: hidden !important;
+  z-index: 5;
+}
 .modal-table thead .div-search {
   display: flex;
   align-items: center;

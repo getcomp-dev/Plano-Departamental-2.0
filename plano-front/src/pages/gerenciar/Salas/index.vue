@@ -7,7 +7,7 @@
         :color="'lightblue'"
         @click="$refs.modalAjuda.toggle()"
       >
-        <i class="fas fa-question"></i>
+        <font-awesome-icon :icon="['fas','question']" />
       </BaseButton>
     </PageHeader>
 
@@ -37,31 +37,23 @@
               @click="toggleOrder(ordenacaoSalasMain, 'lotacao_maxima', 'desc')"
             >
               Lotação Max.
-              <i
-                :class="setIconByOrder(ordenacaoSalasMain, 'lotacao_maxima')"
-              ></i>
+              <i :class="setIconByOrder(ordenacaoSalasMain, 'lotacao_maxima')"></i>
             </th>
           </template>
           <template #tbody>
             <template v-for="sala in Salas">
               <tr
                 :key="sala.id"
-                v-on:click.prevent="showSala(sala), clickada(sala.nome)"
+                v-on:click.prevent="handleClickInSala(sala)"
                 :class="[
                   { 'bg-selected': salaClickada === sala.nome },
                   'clickable',
                 ]"
               >
-                <td style="width: 82px" class="t-start">
-                  {{ sala.nome }}
-                </td>
+                <td style="width: 82px" class="t-start">{{ sala.nome }}</td>
 
-                <td style="width: 90px">
-                  {{ booleanToText(sala.laboratorio) }}
-                </td>
-                <td style="width: 100px">
-                  {{ sala.lotacao_maxima }}
-                </td>
+                <td style="width: 90px">{{ booleanToText(sala.laboratorio) }}</td>
+                <td style="width: 100px">{{ sala.lotacao_maxima }}</td>
               </tr>
             </template>
           </template>
@@ -71,10 +63,10 @@
       <Card
         :title="'Sala'"
         :toggleFooter="isEdit"
-        @btn-salvar="editSala()"
-        @btn-delete="deleteSala()"
-        @btn-add="addSala()"
-        @btn-clean="cleanSala()"
+        @btn-salvar="editSala"
+        @btn-delete="openModalDelete"
+        @btn-add="addSala"
+        @btn-clean="cleanSala"
       >
         <template #form-group>
           <div class="row mb-2 mx-0">
@@ -91,14 +83,12 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="lotacao_maxima" class="col-form-label"
-                >Lotação Máx.</label
-              >
+              <label required for="lotacao_maxima" class="col-form-label">Lotação Máx.</label>
               <input
                 type="text"
                 class="input-menor form-control form-control-sm"
                 id="lotacao_maxima"
-                @keypress="onlyNumber"
+                @keypress="maskOnlyNumber"
                 v-model="salaForm.lotacao_maxima"
               />
             </div>
@@ -106,9 +96,7 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-check form-check-inline col m-0 px-0 pl-1">
-              <label class="form-check-label mr-2" for="laboratorio"
-                >Laboratório</label
-              >
+              <label class="form-check-label mr-2" for="laboratorio">Laboratório</label>
               <input
                 type="checkbox"
                 id="laboratorio"
@@ -122,50 +110,60 @@
       </Card>
     </div>
 
-    <!-- MODAL AJUDA -->
-    <BaseModal
-      ref="modalAjuda"
-      :modalOptions="{
-        type: 'ajuda',
-        title: 'Ajuda',
-      }"
-    >
-      <template #modal-body>
-        <ul class="list-ajuda list-group">
-          <li class="list-group-item">
-            <b>Para adicionar sala: </b> Com o cartão à direita em branco,
-            preencha-o. Em seguida, clique em Adicionar
-            <i class="fas fa-plus icon-green px-1" style="font-size:12px"></i>
-            .
-          </li>
-          <li class="list-group-item">
-            <b>Para editar ou deletar uma sala: </b>Na tabela, clique na sala
-            que deseja alterar. Logo após, no cartão à direita, altere as
-            informações que desejar e clique em Salvar
-            <i class="fas fa-check icon-green px-1" style="font-size:12px"></i>
-            ou, para excluí-la, clique em Deletar
-            <i
-              class="far fa-trash-alt icon-red px-1"
-              style="font-size: 12px"
-            ></i>
-            .
-          </li>
-          <li class="list-group-item">
-            <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
-            em Cancelar
-            <i class="fas fa-times icon-gray px-1" style="font-size: 12px"></i>
-            .
-          </li>
-        </ul>
-      </template>
-    </BaseModal>
+    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deleteSala">
+      <li class="list-group-item">
+        <span v-if="isEdit">
+          Tem certeza que deseja excluír a sala
+          <b>{{ salaForm.nome }}</b>?
+        </span>
+        <span v-else>Nenhuma sala selecionada.</span>
+      </li>
+    </ModalDelete>
+
+    <ModalAjuda ref="modalAjuda">
+      <li class="list-group-item">
+        <b>Para adicionar sala:</b> Com o cartão à direita em branco,
+        preencha-o. Em seguida, clique em Adicionar
+        <i
+          class="fas fa-plus icon-green px-1"
+          style="font-size:12px"
+        ></i>
+        .
+      </li>
+      <li class="list-group-item">
+        <b>Para editar ou deletar uma sala:</b>Na tabela, clique na sala
+        que deseja alterar. Logo após, no cartão à direita, altere as
+        informações que desejar e clique em Salvar
+        <i
+          class="fas fa-check icon-green px-1"
+          style="font-size:12px"
+        ></i>
+        ou, para excluí-la, clique em Deletar
+        <i
+          class="far fa-trash-alt icon-red px-1"
+          style="font-size: 12px"
+        ></i>
+        .
+      </li>
+      <li class="list-group-item">
+        <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
+        em Cancelar
+        <i
+          class="fas fa-times icon-gray px-1"
+          style="font-size: 12px"
+        ></i>
+        .
+      </li>
+    </ModalAjuda>
   </div>
 </template>
 
 <script>
 import salaService from "@/common/services/sala";
-import { toggleOrdination } from "@/common/mixins";
-import { PageHeader, Card } from "@/components/ui";
+import { toggleOrdination, maskOnlyNumber } from "@/common/mixins";
+import { Card } from "@/components/ui";
+import { ModalAjuda, ModalDelete } from "@/components/modals";
+import { mapGetters } from "vuex";
 
 const emptySala = {
   id: undefined,
@@ -176,34 +174,40 @@ const emptySala = {
 
 export default {
   name: "DashboardSalas",
-  mixins: [toggleOrdination],
+  mixins: [toggleOrdination, maskOnlyNumber],
   components: {
-    PageHeader,
     Card,
+    ModalAjuda,
+    ModalDelete,
   },
   data() {
     return {
-      salaForm: this.$_.clone(emptySala),
       error: undefined,
-      salaClickada: "",
+      salaForm: this.$_.clone(emptySala),
+      salaClickada: null,
       ordenacaoSalasMain: { order: "nome", type: "asc" },
     };
   },
+
   methods: {
-    onlyNumber($event) {
-      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
-      if (keyCode < 48 || keyCode > 57) {
-        $event.preventDefault();
-      }
+    openModalDelete() {
+      this.$refs.modalDelete.open();
     },
     booleanToText(isLab) {
       return isLab ? "Sim" : "-";
     },
-    clickada(salaNome) {
-      this.salaClickada = salaNome;
+    handleClickInSala(sala) {
+      this.salaClickada = sala.nome;
+      this.showSala(sala);
     },
-    clearClick() {
-      this.salaClickada = "";
+    cleanSala() {
+      this.salaClickada = null;
+      this.salaForm = this.$_.clone(emptySala);
+      this.error = null;
+    },
+    showSala(sala) {
+      this.cleanSala();
+      this.salaForm = this.$_.clone(sala);
     },
 
     addSala() {
@@ -234,7 +238,6 @@ export default {
           });
         });
     },
-
     editSala() {
       if (this.salaForm.lotacao_maxima === "") this.salaForm.lotacao_maxima = 0;
       salaService
@@ -261,7 +264,6 @@ export default {
           });
         });
     },
-
     deleteSala() {
       salaService
         .delete(this.salaForm.id, this.salaForm)
@@ -271,7 +273,7 @@ export default {
             group: "general",
             title: `Sucesso!`,
             text: `A Sala ${response.Sala.nome} foi excluída!`,
-            type: "warn",
+            type: "success",
           });
         })
         .catch(() => {
@@ -284,35 +286,17 @@ export default {
           });
         });
     },
-
-    cleanSala() {
-      this.clearClick();
-      this.salaForm = this.$_.clone(emptySala);
-      this.error = undefined;
-    },
-
-    showSala(sala) {
-      this.cleanSala();
-      this.salaForm = this.$_.clone(sala);
-      (function smoothscroll() {
-        var currentScroll =
-          document.documentElement.scrollTop || document.body.scrollTop;
-        if (currentScroll > 0) {
-          window.requestAnimationFrame(smoothscroll);
-          window.scrollTo(0, currentScroll - currentScroll / 5);
-        }
-      })();
-    },
   },
   computed: {
+    ...mapGetters(["AllSalas"]),
+
     Salas() {
       return this.$_.orderBy(
-        this.$store.state.sala.Salas,
+        this.AllSalas,
         this.ordenacaoSalasMain.order,
         this.ordenacaoSalasMain.type
       );
     },
-
     isEdit() {
       return this.salaForm.id !== undefined;
     },

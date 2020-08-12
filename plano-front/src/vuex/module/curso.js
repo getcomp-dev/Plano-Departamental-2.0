@@ -109,8 +109,7 @@ const getters = {
         case "35A":
         case "65C":
         case "76A":
-        case "65B":
-        case "65A":
+        case "65B": 
         case "65AB":
         case "65AC":
           return true;

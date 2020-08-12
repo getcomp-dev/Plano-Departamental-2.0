@@ -1,80 +1,53 @@
 <template>
-  <BaseModal
-    ref="baseModalUser"
-    :customStyles="'width:400px;'"
-    @on-close="clearEditUserForm()"
-    :modalOptions="{
-      type: 'fromNavbar',
-      title: 'Usuário',
-    }"
-  >
+  <BaseModal2 ref="baseModalUser" :title="'Usuário'" :type="'fromNavbar'">
     <template #modal-body>
       <div class="user-container w-100">
-        <div class="user-header border px-3 py-2  w-100">
+        <div class="user-header border px-3 py-2 w-100">
           <div class="d-flex w-100 align-items-center">
             <img class="user-img" src="@/assets/user.png" alt="Usuário" />
             <div class="d-flex flex-column w-100">
               <p class="mx-2">
-                <b>Nome:</b> {{ $store.state.auth.Usuario.nome }}
+                <b>Nome:</b>
+                {{ $store.state.auth.Usuario.nome }}
               </p>
               <p class="mx-2">
-                <b>Login:</b> {{ $store.state.auth.Usuario.login }}
+                <b>Login:</b>
+                {{ $store.state.auth.Usuario.login }}
               </p>
-              <p class="mx-2"><b>Tipo:</b> {{ adminText() }}</p>
+              <p class="mx-2">
+                <b>Tipo:</b>
+                {{ adminText() }}
+              </p>
             </div>
           </div>
-          <BaseButton :type="'text'" :color="'red'" @click="routerLogout">
-            Logout
-          </BaseButton>
+          <BaseButton :type="'text'" :color="'red'" @click="routerLogout">Logout</BaseButton>
         </div>
 
-        <div v-if="Admin" class="w-100 border  rounded-bottom py-2 px-3">
+        <div v-if="Admin" class="w-100 border rounded-bottom py-2 px-3">
           <div class="form-row">
             <label required for="nome">Nome</label>
-            <input
-              class="form-control"
-              type="text"
-              id="nome"
-              v-model="userForm.nome"
-            />
+            <input class="form-control" type="text" id="nome" v-model="userForm.nome" />
           </div>
           <div class="form-row">
             <label required for="login">Login</label>
-            <input
-              class="form-control"
-              type="text"
-              id="login"
-              v-model="userForm.login"
-            />
+            <input class="form-control" type="text" id="login" v-model="userForm.login" />
           </div>
           <div class="form-row">
             <label required for="senhaAtual">Senha atual</label>
-            <InputPassword
-              :isInvalid="false"
-              :inputId="'senhaAtual'"
-              v-model="senhaAtual"
-            />
+            <InputPassword :isInvalid="false" :inputId="'senhaAtual'" v-model="senhaAtual" />
           </div>
           <!-- toggle edit senha -->
-          <ButtonSlideSection
-            :isOpen="isEditingSenha"
-            @handel-click="toggleEditSenha"
-          />
+          <ButtonSlideSection :isOpen="isEditingSenha" @handel-click="toggleEditSenha" />
 
           <transition-group name="slideY" mode="out-in">
             <template v-if="isEditingSenha">
               <div :key="'newPass'" class="form-row">
                 <label required for="novaSenha">Nova senha</label>
-                <InputPassword
-                  :inputId="'novaSenha'"
-                  v-model="userForm.senha"
-                />
+                <InputPassword :inputId="'novaSenha'" v-model="userForm.senha" />
               </div>
 
               <div :key="'repeatPass'" class="form-row">
-                <label required for="confirmaSenha"
-                  >Confirmar nova senha
-                </label>
+                <label required for="confirmaSenha">Confirmar nova senha</label>
                 <InputPassword
                   :isInvalid="confirmaSenha != userForm.senha"
                   :inputId="'confirmaSenha'"
@@ -82,36 +55,22 @@
                 />
               </div>
             </template>
-
-            <div :key="'btns'" class="mt-3 mb-1 d-flex justify-content-end">
-              <BaseButton
-                class="paddingX-20"
-                :type="'text'"
-                :color="'gray'"
-                @click="close"
-              >
-                Cancelar
-              </BaseButton>
-              <BaseButton
-                class="paddingX-20"
-                :type="'text'"
-                :color="'blue'"
-                @click="editUser"
-              >
-                Salvar
-              </BaseButton>
-            </div>
           </transition-group>
+          <div :key="'btns'" class="mt-3 mb-1 d-flex justify-content-end">
+            <BaseButton class="paddingX-20" :type="'text'" :color="'gray'" @click="close">Cancelar</BaseButton>
+            <BaseButton class="paddingX-20" :type="'text'" :color="'blue'" @click="editUser">Salvar</BaseButton>
+          </div>
         </div>
       </div>
     </template>
-  </BaseModal>
+  </BaseModal2>
 </template>
 
 <script>
 import userService from "@/common/services/usuario";
 import { notification } from "@/common/mixins";
 import { InputPassword, ButtonSlideSection } from "@/components/ui";
+import { mapGetters } from "vuex";
 
 const emptyUser = {
   nome: "",
@@ -119,6 +78,7 @@ const emptyUser = {
   senha: "",
   admin: 0,
 };
+
 export default {
   name: "ModalUser",
   mixins: [notification],
@@ -132,9 +92,11 @@ export default {
       isEditingSenha: false,
     };
   },
+
   mounted() {
     this.clearEditUserForm();
   },
+
   methods: {
     adminText() {
       switch (this.$store.state.auth.Usuario.admin) {
@@ -178,6 +140,10 @@ export default {
       }
       return true;
     },
+    routerLogout() {
+      this.$router.push({ name: "logout" });
+    },
+
     async editUser() {
       const user = this.$_.clone(this.userForm);
       user.senhaAtual = this.senhaAtual;
@@ -208,20 +174,16 @@ export default {
         });
       }
     },
-    routerLogout() {
-      this.$router.push({ name: "logout" });
-    },
   },
+
   computed: {
-    Admin() {
-      return this.$store.state.auth.Usuario.admin >= 1;
-    },
+    ...mapGetters(["Admin"]),
   },
 };
 </script>
 
 <style scoped>
-@import url(../../assets/css/slideY-section-animation.css);
+@import url(../../assets/css/slideY-animation.css);
 
 .user-container {
   display: flex;

@@ -1,5 +1,5 @@
 <template>
-  <tr class="novaturma stickyAdd">
+  <tr class="novaturma">
     <td style="width: 25px"></td>
     <td style="width: 40px"></td>
     <td style="width: 55px" class="less-padding">
@@ -16,17 +16,14 @@
           turmaForm.disciplina ? turmaForm.disciplina.perfil.cor : ''
         }`
       "
-    >
-      {{ turmaForm.disciplina ? turmaForm.disciplina.perfil.abreviacao : "" }}
-    </td>
+    >{{ turmaForm.disciplina ? turmaForm.disciplina.perfil.abreviacao : "" }}</td>
     <td style="width:80px" class="less-padding">
       <select v-model="turmaForm.disciplina" @change="handleChangeDisciplina()">
         <option
           v-for="disciplina in DisciplinasDCCInPerfis"
           :key="disciplina.codigo + disciplina.id"
           :value="disciplina"
-          >{{ disciplina.codigo }}</option
-        >
+        >{{ disciplina.codigo }}</option>
       </select>
     </td>
     <td style="width: 330px;" class="less-padding">
@@ -35,13 +32,10 @@
           v-for="disciplina in DisciplinasDCCInPerfisOrderedByNome"
           :key="disciplina.nome + disciplina.id"
           :value="disciplina"
-          >{{ disciplina.nome }}</option
-        >
+        >{{ disciplina.nome }}</option>
       </select>
     </td>
-    <td style="width: 25px">
-      {{ totalCarga }}
-    </td>
+    <td style="width: 25px">{{ totalCarga }}</td>
     <td style="width: 45px">
       <input
         type="text"
@@ -53,31 +47,25 @@
     </td>
     <td style="width:130px" class="less-padding">
       <select type="text" v-model="turmaForm.Docente1">
-        <option type="text" value=""></option>
+        <option></option>
         <option
           v-for="docente in DocentesAtivos"
           :key="docente.id + docente.apelido"
           :value="docente.id"
-          >{{ docente.apelido }}</option
-        >
+        >{{ docente.apelido }}</option>
       </select>
 
       <select type="text" v-model="turmaForm.Docente2">
-        <option type="text" value=""></option>
+        <option></option>
         <option
           v-for="docente in DocentesAtivos"
           :key="docente.id + docente.nome"
           :value="docente.id"
-          >{{ docente.apelido }}</option
-        >
+        >{{ docente.apelido }}</option>
       </select>
     </td>
     <td style="width:80px">
-      <select
-        v-if="turmaForm.disciplina"
-        v-model="turmaForm.turno1"
-        @change="handleChangeTurno()"
-      >
+      <select v-if="turmaForm.disciplina" v-model="turmaForm.turno1" @change="handleChangeTurno()">
         <option v-if="disciplinaIsIntegralEAD" value="EAD">EAD</option>
         <template v-else>
           <option value="Diurno">Diurno</option>
@@ -87,18 +75,13 @@
     </td>
     <td style="width: 85px" class="less-padding">
       <template v-if="turmaForm.disciplina">
-        <select
-          type="text"
-          v-model="turmaForm.Horario1"
-          @change="handleChangeHorario(1)"
-        >
-          <option v-if="!disciplinaIsIntegralEAD" type="text" value=""></option>
+        <select type="text" v-model="turmaForm.Horario1" @change="handleChangeHorario(1)">
+          <option></option>
           <option
             v-for="horario in HorariosFiltredByTurno"
             :key="'1-horarioEAD-id' + horario.id"
             :value="horario.id"
-            >{{ horario.horario }}</option
-          >
+          >{{ horario.horario }}</option>
         </select>
 
         <select
@@ -107,26 +90,20 @@
           v-model="turmaForm.Horario2"
           @change="handleChangeHorario(2)"
         >
-          <option
-            v-if="!disciplinaIsIntegralEAD && !disciplinaIsParcialEAD"
-            type="text"
-            value=""
-          ></option>
+          <option></option>
           <template v-if="disciplinaIsParcialEAD">
             <option
               v-for="horario in HorariosEAD"
               :key="'2-horarioEAD-id' + horario.id"
               :value="horario.id"
-              >{{ horario.horario }}</option
-            >
+            >{{ horario.horario }}</option>
           </template>
           <template v-else>
             <option
               v-for="horario in HorariosFiltredByTurno"
               :key="'1-horarioEAD-id' + horario.id"
               :value="horario.id"
-              >{{ horario.horario }}</option
-            >
+            >{{ horario.horario }}</option>
           </template>
         </select>
       </template>
@@ -134,13 +111,8 @@
     <td style="width: 95px" class="less-padding">
       <template v-if="!disciplinaIsIntegralEAD && turmaForm.disciplina">
         <select v-model="turmaForm.Sala1">
-          <option type="text" value=""></option>
-          <option
-            v-for="sala in AllSalas"
-            :key="'s1' + sala.id"
-            :value="sala.id"
-            >{{ sala.nome }}</option
-          >
+          <option></option>
+          <option v-for="sala in AllSalas" :key="'s1' + sala.id" :value="sala.id">{{ sala.nome }}</option>
         </select>
 
         <select
@@ -148,23 +120,15 @@
           type="text"
           v-model="turmaForm.Sala2"
         >
-          <option type="text" value=""></option>
-          <option
-            v-for="sala in AllSalas"
-            :key="'s2' + sala.id"
-            :value="sala.id"
-            >{{ sala.nome }}</option
-          >
+          <option></option>
+          <option v-for="sala in AllSalas" :key="'s2' + sala.id" :value="sala.id">{{ sala.nome }}</option>
         </select>
       </template>
     </td>
     <td style="width:45px">
       <div style="height: 43px"></div>
     </td>
-    <td
-      v-if="cursosAtivadosLength"
-      :style="`width: ${35 * cursosAtivadosLength}px`"
-    ></td>
+    <td v-if="cursosAtivadosLength" :style="`width: ${35 * cursosAtivadosLength}px`"></td>
   </tr>
 </template>
 
@@ -363,7 +327,7 @@ export default {
   text-align: center;
 }
 .novaturma select + select {
-  margin-top: 2px !important;
+  margin-top: 3px !important;
 }
 
 .novaturma .input-letra {
@@ -372,14 +336,5 @@ export default {
   height: 18px;
   width: 30px;
   text-align: center;
-}
-.stickyAdd {
-  display: block;
-  overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 19px !important;
-  overflow: hidden !important;
-  z-index: 5 !important;
 }
 </style>

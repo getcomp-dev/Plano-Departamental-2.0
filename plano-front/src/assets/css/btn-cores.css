@@ -2,6 +2,7 @@
 .icon-green {
   color: #a0e7a0 !important;
 }
+
 .icon-green:hover {
   color: #77dd77 !important;
 }
@@ -9,6 +10,7 @@
 .icon-lightblue {
   color: #9ab3ff !important;
 }
+
 .icon-lightblue:hover {
   color: #728bdd !important;
 }
@@ -16,14 +18,24 @@
 .icon-gray {
   color: #8a8a8a !important;
 }
+
 .icon-gray:hover {
   color: #747474 !important;
+}
+
+.icon-darkgray {
+  color: #2e2e2e !important;
+}
+
+.icon-darkgray:hover {
+  color: #1b1b1b !important;
 }
 
 .icon-red {
   background-color: inherit !important;
   color: #ff817b !important;
 }
+
 .icon-red:hover {
   color: #ff5f48 !important;
 }

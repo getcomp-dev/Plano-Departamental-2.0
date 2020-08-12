@@ -20,16 +20,19 @@ body {
   width: 100%;
   padding: 0 !important;
 }
+
 #app {
   width: 100%;
   height: 100%;
 }
+
 main .main-component {
   width: 100%;
   overflow: hidden !important;
   margin: 0 !important;
   padding: 0 !important;
 }
+
 .page-content {
   display: flex;
   justify-content: space-between;
@@ -43,6 +46,7 @@ main .main-component {
   animation: fadeIn 0.3s;
   animation-fill-mode: both;
 }
+
 .router-view-animation-leave-active {
   animation: fadeOut 0.3s;
   animation-fill-mode: both;
@@ -54,6 +58,7 @@ main .main-component {
   -webkit-box-shadow: 0 0 0 0.2rem #007bff40 !important;
   box-shadow: 0 0 0 0.2rem #007bff40 !important;
 }
+
 input[type="checkbox"]:focus {
   border-color: #80bdff !important;
   outline: 0 !important;
@@ -64,12 +69,14 @@ input[type="checkbox"]:focus {
 .popover {
   font-size: 11px !important;
 }
+
 .popover .popover-header {
   font-size: 11px !important;
   /* padding-top: 5px;
   padding-bottom: 5px; */
   font-weight: bold;
 }
+
 .popover .popover-body {
   padding-top: 3px;
   padding-bottom: 3px;
@@ -95,14 +102,7 @@ input[type="checkbox"]:focus {
   overflow: hidden !important;
   z-index: 5 !important;
 }
-.sticky2 {
-  display: block !important;
-  overflow: hidden !important;
-  position: sticky !important;
-  top: 37px !important;
-  overflow: hidden !important;
-  z-index: 5;
-}
+
 
 .clickable {
   cursor: pointer !important;
@@ -125,6 +125,7 @@ input[type="checkbox"]:focus {
 .t-start {
   text-align: start !important;
 }
+
 .t-center {
   text-align: center !important;
 }
@@ -142,6 +143,7 @@ label[required] {
   padding-right: 10px;
   position: relative;
 }
+
 label[required]:after {
   content: "*";
   position: absolute;
@@ -150,6 +152,7 @@ label[required]:after {
   font-size: 16px;
   color: rgb(241, 3, 3);
 }
+
 label[required]:before {
   content: "Campo obrigatório";
   position: absolute;
@@ -167,6 +170,7 @@ label[required]:before {
 
   transition: all 200ms;
 }
+
 label[required]:hover:before {
   opacity: 1;
   z-index: 500;
@@ -179,6 +183,7 @@ label[required]:hover:before {
   text-align: start;
   line-height: 1.5;
 }
+
 .modal-custom .list-ajuda svg,
 .modal-custom .list-ajuda i {
   font-size: 12px !important;
@@ -189,10 +194,12 @@ label[required]:hover:before {
 .list-ajuda .list-group-item b:first-of-type {
   color: var(--light-blue);
 }
+
 .modal-custom .list-ajuda i:hover {
   color: #2a2a2a;
 }
-.list-delete > .list-group-item {
+
+.list-delete>.list-group-item {
   width: 100%;
   display: flex;
   flex-direction: column;

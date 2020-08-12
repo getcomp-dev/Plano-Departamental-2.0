@@ -5,26 +5,16 @@
         <div class="input-group-prepend">
           <label class="input-group-text">Ano</label>
         </div>
-        <select
-          v-model="novoAno"
-          class="form-control form-control-top"
-          v-on:change="runNovoAno()"
-        >
+        <select v-model="novoAno" class="form-control form-control-top" v-on:change="runNovoAno()">
           <option
             v-for="i in Array.from(Array(11), (e, i) => i - 5)"
             :key="i"
             :value="AnoAtual + i"
-            >{{ AnoAtual + i }}</option
-          >
+          >{{ AnoAtual + i }}</option>
         </select>
       </div>
-      <BaseButton
-        title="Filtros"
-        :type="'icon'"
-        :color="'gray'"
-        @click="openAsideModal('filtros')"
-      >
-        <i class="fas fa-list-ul"></i>
+      <BaseButton title="Filtros" :type="'icon'" :color="'gray'" @click="openAsideModal('filtros')">
+        <font-awesome-icon :icon="['fas','list-ul']" />
       </BaseButton>
 
       <BaseButton
@@ -33,7 +23,7 @@
         :color="'lightblue'"
         @click="openAsideModal('ajuda')"
       >
-        <i class="fas fa-question"></i>
+        <font-awesome-icon :icon="['fas','question']" />
       </BaseButton>
     </PageHeader>
 
@@ -43,148 +33,134 @@
           <th
             style="width:80px"
             class="clickable"
-            @click="toggleOrder(ordenacaoPerfisMain, setFixedOrderPerfil)"
+            @click="toggleOrder(ordenacaoMain.perfis, setFixedOrderPerfil)"
           >
             <div class="d-flex justify-content-between align-items-center">
               <i
                 class="fas fa-thumbtack"
-                :class="ordenacaoPerfisMain.order === null ? 'low-opacity' : ''"
+                :class="ordenacaoMain.perfis.order === null ? 'low-opacity' : ''"
               ></i>
-              <span>
-                Perfil
-              </span>
+              <span>Perfil</span>
 
-              <i
-                :class="setIconByOrder(ordenacaoPerfisMain, 'perfilAbreviacao')"
-              ></i>
+              <i :class="setIconByOrder(ordenacaoMain.perfis, 'perfil.abreviacao')"></i>
             </div>
           </th>
           <th
             class="clickable"
             style="width: 100px;"
-            @click="toggleOrder(ordenacaoDisciplinasMain, 'codigo')"
+            @click="toggleOrder(ordenacaoMain.disciplinas, 'codigo')"
           >
             Cód.
-            <i :class="setIconByOrder(ordenacaoDisciplinasMain, 'codigo')"></i>
+            <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'codigo')"></i>
           </th>
           <th
             class="t-start clickable"
             style="width: 380px"
-            @click="toggleOrder(ordenacaoDisciplinasMain, 'nome')"
+            @click="toggleOrder(ordenacaoMain.disciplinas, 'nome')"
           >
             Disciplina
-            <i :class="setIconByOrder(ordenacaoDisciplinasMain, 'nome')"></i>
+            <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'nome')"></i>
           </th>
           <th
             title="Sistemas de informação"
             v-if="activeSI"
             class="clickable"
             style="width: 140px;"
-            @click="toggleOrder(ordenacaoDisciplinasMain, 'gradeSI')"
+            @click="toggleOrder(ordenacaoMain.disciplinas, 'gradeSI')"
           >
             76A
-            <i :class="setIconByOrder(ordenacaoDisciplinasMain, 'gradeSI')"></i>
+            <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeSI')"></i>
           </th>
           <th
             title="Ciência da Computação Noturno"
             v-if="activeCCN"
             class="clickable"
             style="width: 140px;"
-            @click="toggleOrder(ordenacaoDisciplinasMain, 'gradeCCN')"
+            @click="toggleOrder(ordenacaoMain.disciplinas, 'gradeCCN')"
           >
             35A
-            <i
-              :class="setIconByOrder(ordenacaoDisciplinasMain, 'gradeCCN')"
-            ></i>
+            <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeCCN')"></i>
           </th>
           <th
             title="Ciência da Computação Noturno"
             v-if="activeCCD"
             class="clickable"
             style="width: 140px;"
-            @click="toggleOrder(ordenacaoDisciplinasMain, 'gradeCCD')"
+            @click="toggleOrder(ordenacaoMain.disciplinas, 'gradeCCD')"
           >
             65C
-            <i
-              :class="setIconByOrder(ordenacaoDisciplinasMain, 'gradeCCD')"
-            ></i>
+            <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeCCD')"></i>
           </th>
           <th
             title="Engenharia Computacional"
             v-if="activeEC"
             class="clickable"
             style="width: 140px;"
-            @click="toggleOrder(ordenacaoDisciplinasMain, 'gradeEC')"
+            @click="toggleOrder(ordenacaoMain.disciplinas, 'gradeEC')"
           >
             65B
-            <i :class="setIconByOrder(ordenacaoDisciplinasMain, 'gradeEC')"></i>
+            <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeEC')"></i>
           </th>
         </template>
         <template #tbody>
           <tr v-for="disciplina in DisciplinasOrderedMain" :key="disciplina.id">
             <td
               style="width: 80px"
-              :style="'backgroundColor:' + disciplina.perfilCor"
-            >
-              {{ disciplina.perfilAbreviacao }}
-            </td>
+              :style="'backgroundColor:' + disciplina.perfil.cor"
+            >{{ disciplina.perfil.abreviacao }}</td>
 
-            <td style="width: 100px">
-              {{ disciplina.codigo }}
-            </td>
-            <td style="width: 380px" class="t-start">
-              {{ disciplina.nome }}
-            </td>
+            <td style="width: 100px">{{ disciplina.codigo }}</td>
+            <td style="width: 380px" class="t-start">{{ disciplina.nome }}</td>
             <!-- 76A-  -->
             <td v-if="activeSI" style="width: 140px">
               {{
-                disciplina.gradeSI.semestre1.length !== 0
-                  ? `${disciplina.gradeSI.semestre1}º Período: 1º Semestre`
-                  : ""
+              disciplina.gradeSI.semestre1.length !== 0
+              ? `${disciplina.gradeSI.semestre1}º Período: 1º Semestre`
+              : ""
               }}
               {{
-                disciplina.gradeSI.semestre2.length !== 0
-                  ? `${disciplina.gradeSI.semestre2}º Período: 2º Semestre`
-                  : ""
+              disciplina.gradeSI.semestre2.length !== 0
+              ? `${disciplina.gradeSI.semestre2}º Período: 2º Semestre`
+              : ""
               }}
             </td>
             <!-- 35A-  -->
             <td v-if="activeCCN" style="width: 140px">
               {{
-                disciplina.gradeCCN.semestre1.length !== 0
-                  ? `${disciplina.gradeCCN.semestre1}º Período: 1º Semestre`
-                  : ""
+              disciplina.gradeCCN.semestre1.length !== 0
+              ? `${disciplina.gradeCCN.semestre1}º Período: 1º Semestre`
+              : ""
               }}
               {{
-                disciplina.gradeCCN.semestre2.length !== 0
-                  ? `${disciplina.gradeCCN.semestre2}º Período: 2º Semestre`
-                  : ""
+              disciplina.gradeCCN.semestre2.length !== 0
+              ? `${disciplina.gradeCCN.semestre2}º Período: 2º Semestre`
+              : ""
               }}
             </td>
             <!-- 65C -->
             <td v-if="activeCCD" style="width: 140px">
               {{
-                disciplina.gradeCCD.semestre1.length !== 0
-                  ? `${disciplina.gradeCCD.semestre1}º Período: 1º Semestre`
-                  : ""
+              disciplina.gradeCCD.semestre1.length !== 0
+              ? `${disciplina.gradeCCD.semestre1}º Período: 1º Semestre`
+              : ""
               }}
               {{
-                disciplina.gradeCCD.semestre2.length !== 0
-                  ? `${disciplina.gradeCCD.semestre2}º Período: 2º Semestre`
-                  : ""
+              disciplina.gradeCCD.semestre2.length !== 0
+              ? `${disciplina.gradeCCD.semestre2}º Período: 2º Semestre`
+              : ""
               }}
             </td>
             <!-- 65B -->
             <td v-if="activeEC" style="width: 140px">
               {{
-                disciplina.gradeEC.semestre1.length !== 0
-                  ? `${disciplina.gradeEC.semestre1}º Período: 1º Semestre`
-                  : ""
+              disciplina.gradeEC.semestre1.length !== 0
+              ? `${disciplina.gradeEC.semestre1}º Período: 1º Semestre`
+              : ""
               }}
               {{
-                disciplina.gradeEC.semestre2.length !== 0
-                  ? `${disciplina.gradeEC.semestre2}º Período: 2º Semestre`
-                  : ""
+              disciplina.gradeEC.semestre2.length !== 0
+              ? `${disciplina.gradeEC.semestre2}º Período: 2º Semestre`
+              : ""
               }}
             </td>
           </tr>
@@ -199,255 +175,247 @@
       </BaseTable>
     </div>
 
-    <!-- MODAL FILTROS -->
-    <BaseModal
+    <ModalFiltros
       ref="modalFiltros"
-      :modalOptions="{
-        type: 'filtros',
-        title: 'Filtros',
-        hasFooter: true,
-      }"
-      :hasFooter="true"
-      @btn-ok="btnOkFiltros()"
-      @select-all="modalSelectAll[tabAtivaModal]"
-      @select-none="modalSelectNone[tabAtivaModal]"
+      :callbacks="modalFiltrosCallbacks"
+      :tabsOptions="modalFiltrosTabs"
     >
-      <template #modal-body>
-        <NavTab
-          :currentTab="tabAtivaModal"
-          :allTabs="['Perfis', 'Disciplinas', 'Cursos']"
-          @change-tab="tabAtivaModal = $event"
-        />
+      <div class="div-table">
+        <BaseTable v-show="modalFiltrosTabs.current === 'Perfis'" :type="'modal'">
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th
+              class="t-start clickable"
+              @click="toggleOrder(ordenacaoModal.perfis, 'nome')"
+              style="width: 425px"
+            >
+              Nome
+              <i :class="setIconByOrder(ordenacaoModal.perfis, 'nome')"></i>
+            </th>
+          </template>
+          <template #tbody>
+            <tr
+              v-for="perfil in PerfisOrderedModal"
+              :key="'MdPerfil' + perfil.id"
+              @click="toggleItemInArray(perfil, filtroPerfis.selecionados)"
+            >
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  v-model="filtroPerfis.selecionados"
+                  :value="perfil"
+                  class="form-check-input position-static m-0"
+                />
+              </td>
+              <td style="width: 425px" class="t-start">{{ perfil.nome }}</td>
+            </tr>
+          </template>
+        </BaseTable>
 
-        <div class="div-table">
-          <BaseTable v-show="tabAtivaModal === 'Perfis'" :type="'modal'">
-            <template #thead>
-              <th style="width: 25px"></th>
-              <th
-                class="t-start clickable"
-                @click="toggleOrder(ordenacaoPerfisModal, 'nome')"
-                style="width: 425px"
-              >
-                Nome
-                <i :class="setIconByOrder(ordenacaoPerfisModal, 'nome')"></i>
-              </th>
-            </template>
-            <template #tbody>
-              <tr
-                v-for="perfil in PerfisOrderedModal"
-                :key="'MdPerfil' + perfil.id"
-                @click="toggleItemInArray(perfil, filtroPerfis.selecionados)"
-              >
-                <td style="width: 25px">
-                  <input
-                    type="checkbox"
-                    v-model="filtroPerfis.selecionados"
-                    :value="perfil"
-                    class="form-check-input position-static m-0"
-                  />
-                </td>
-                <td style="width: 425px" class="t-start">
-                  {{ perfil.nome }}
-                </td>
-              </tr>
-            </template>
-          </BaseTable>
-
-          <BaseTable
-            v-show="tabAtivaModal === 'Disciplinas'"
-            :type="'modal'"
-            :hasSearchBar="true"
-          >
-            <template #thead-search>
-              <InputSearch
-                v-model="searchDisciplinas"
-                placeholder="Pesquise o nome ou código de uma disciplina..."
-              />
-            </template>
-            <template #thead>
-              <th style="width: 25px"></th>
-              <th
-                title="Clique para ordenar por código"
-                class="t-start clickable"
-                style="width: 70px"
-                @click="toggleOrder(ordenacaoDisciplinasModal, 'codigo')"
-              >
-                Cód.
-                <i
-                  :class="setIconByOrder(ordenacaoDisciplinasModal, 'codigo')"
-                ></i>
-              </th>
-              <th
-                title="Clique para ordenar por nome"
-                class="t-start clickable"
-                style="width: 270px"
-                @click="toggleOrder(ordenacaoDisciplinasModal, 'nome')"
-              >
-                Nome
-                <i
-                  :class="setIconByOrder(ordenacaoDisciplinasModal, 'nome')"
-                ></i>
-              </th>
-              <th
-                title="Clique para ordenar por nome"
-                class="t-start clickable"
-                style="width: 85px"
-                @click="
-                  toggleOrder(ordenacaoDisciplinasModal, 'perfilAbreviacao')
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Disciplinas'"
+          :type="'modal'"
+          :hasSearchBar="true"
+        >
+          <template #thead-search>
+            <InputSearch
+              v-model="searchDisciplinas"
+              placeholder="Pesquise o nome ou código de uma disciplina..."
+            />
+          </template>
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th
+              title="Clique para ordenar por código"
+              class="t-start clickable"
+              style="width: 70px"
+              @click="toggleOrder(ordenacaoModal.disciplinas, 'codigo')"
+            >
+              Cód.
+              <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"></i>
+            </th>
+            <th
+              title="Clique para ordenar por nome"
+              class="t-start clickable"
+              style="width: 270px"
+              @click="toggleOrder(ordenacaoModal.disciplinas, 'nome')"
+            >
+              Nome
+              <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"></i>
+            </th>
+            <th
+              title="Clique para ordenar por nome"
+              class="t-start clickable"
+              style="width: 85px"
+              @click="
+                  toggleOrder(ordenacaoModal.disciplinas, 'perfil.abreviacao')
                 "
-              >
-                Perfil
-                <i
-                  :class="
+            >
+              Perfil
+              <i
+                :class="
                     setIconByOrder(
-                      ordenacaoDisciplinasModal,
-                      'perfilAbreviacao'
+                      ordenacaoModal.disciplinas,
+                      'perfil.abreviacao'
                     )
                   "
-                ></i>
-              </th>
-            </template>
-            <template #tbody>
-              <tr
-                v-for="disciplina in DisciplinasOrderedModal"
-                :key="'MdDisciplinas' + disciplina.id"
-                @click="
+              ></i>
+            </th>
+          </template>
+          <template #tbody>
+            <tr
+              v-for="disciplina in DisciplinasOrderedModal"
+              :key="'MdDisciplinas' + disciplina.id"
+              @click="
                   toggleItemInArray(disciplina, filtroDisciplinas.selecionados)
                 "
-              >
-                <td style="width: 25px">
-                  <input
-                    type="checkbox"
-                    class="form-check-input position-static m-0"
-                    v-model="filtroDisciplinas.selecionados"
-                    :value="disciplina"
-                  />
-                </td>
-                <td style="width: 70px" class="t-start">
-                  {{ disciplina.codigo }}
-                </td>
-                <td style="width: 270px" class="t-start">
-                  {{ disciplina.nome }}
-                </td>
-                <td style="width: 85px" class="t-start">
-                  {{ disciplina.perfilAbreviacao }}
-                </td>
-              </tr>
-              <tr v-show="!DisciplinasOrderedModal.length">
-                <td style="width:450px">
-                  NENHUMA DISCIPLINA ENCONTRADA.
-                </td>
-              </tr>
-            </template>
-          </BaseTable>
+            >
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroDisciplinas.selecionados"
+                  :value="disciplina"
+                />
+              </td>
+              <td style="width: 70px" class="t-start">{{ disciplina.codigo }}</td>
+              <td style="width: 270px" class="t-start">{{ disciplina.nome }}</td>
+              <td style="width: 85px" class="t-start">{{ disciplina.perfil.abreviacao }}</td>
+            </tr>
+            <tr v-show="!DisciplinasOrderedModal.length">
+              <td style="width:450px">NENHUMA DISCIPLINA ENCONTRADA.</td>
+            </tr>
+          </template>
+        </BaseTable>
 
-          <BaseTable v-show="tabAtivaModal === 'Cursos'" :type="'modal'">
-            <template #thead>
-              <th style="width: 25px"></th>
-              <th
-                class="t-start clickable"
-                style="width: 50px; text-align: center;"
-                @click="toggleOrder(ordenacaoCursosModal, 'codigo')"
-              >
-                Cód.
-                <i :class="setIconByOrder(ordenacaoCursosModal, 'codigo')"></i>
-              </th>
-              <th
-                class="clickable t-start"
-                style="width: 375px;"
-                @click="toggleOrder(ordenacaoCursosModal, 'nome')"
-              >
-                Nome
-                <i :class="setIconByOrder(ordenacaoCursosModal, 'nome')"></i>
-              </th>
-            </template>
+        <BaseTable v-show="modalFiltrosTabs.current === 'Cursos'" :type="'modal'">
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th
+              class="t-start clickable"
+              style="width: 50px; text-align: center;"
+              @click="toggleOrder(ordenacaoModal.cursos, 'codigo')"
+            >
+              Cód.
+              <i :class="setIconByOrder(ordenacaoModal.cursos, 'codigo')"></i>
+            </th>
+            <th
+              class="clickable t-start"
+              style="width: 375px;"
+              @click="toggleOrder(ordenacaoModal.cursos, 'nome')"
+            >
+              Nome
+              <i :class="setIconByOrder(ordenacaoModal.cursos, 'nome')"></i>
+            </th>
+          </template>
 
-            <template #tbody>
-              <tr
-                v-for="curso in CursosOrderedModal"
-                :key="'MdCursos' + curso.codigo"
-                @click="toggleItemInArray(curso, filtroCursos.selecionados)"
-              >
-                <td style="width: 25px">
-                  <input
-                    type="checkbox"
-                    :value="curso"
-                    v-model="filtroCursos.selecionados"
-                    class="form-check-input position-static m-0"
-                  />
-                </td>
-                <td style="width: 50px" class="t-start">
-                  {{ curso.codigo.toUpperCase() }}
-                </td>
-                <td style="width: 375px" class="t-start">
-                  {{ curso.nome }}
-                </td>
-              </tr>
-            </template>
-          </BaseTable>
-        </div>
-      </template>
-    </BaseModal>
+          <template #tbody>
+            <tr
+              v-for="curso in CursosOrderedModal"
+              :key="'MdCursos' + curso.codigo"
+              @click="toggleItemInArray(curso, filtroCursos.selecionados)"
+            >
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  :value="curso"
+                  v-model="filtroCursos.selecionados"
+                  class="form-check-input position-static m-0"
+                />
+              </td>
+              <td style="width: 50px" class="t-start">{{ curso.codigo.toUpperCase() }}</td>
+              <td style="width: 375px" class="t-start">{{ curso.nome }}</td>
+            </tr>
+          </template>
+        </BaseTable>
+      </div>
+    </ModalFiltros>
 
-    <!-- MODAL AJUDA -->
-    <BaseModal
-      ref="modalAjuda"
-      :modalOptions="{
-        type: 'ajuda',
-        title: 'Ajuda',
-      }"
-    >
-      <template #modal-body>
-        <ul class="list-ajuda list-group">
-          <li class="list-group-item">
-            <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
-            <i class="fas fa-list-ul icon-gray"></i> no cabeçalho da página e na
-            janela que será aberta utilize as abas para navegar entre os tipos
-            de filtros. Marque em suas respectivas tabelas quais informações
-            deseja visualizar, selecione o ano do plano no cabeçalho e para
-            finalizar clique no botão OK.
-          </li>
-        </ul>
-      </template>
-    </BaseModal>
+    <ModalAjuda ref="modalAjuda">
+      <li class="list-group-item">
+        <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
+        <i class="fas fa-list-ul icon-gray"></i> no cabeçalho da página e na
+        janela que será aberta utilize as abas para navegar entre os tipos
+        de filtros. Marque em suas respectivas tabelas quais informações
+        deseja visualizar, selecione o ano do plano no cabeçalho e para
+        finalizar clique no botão OK.
+      </li>
+    </ModalAjuda>
   </div>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { normalizeText } from "@/common/utils";
 import { toggleItemInArray, toggleOrdination } from "@/common/mixins";
-import { InputSearch, PageHeader, NavTab } from "@/components/ui";
-const allCursosDCC = [
-  {
-    nome: "SISTEMAS DE INFORMAÇÃO",
-    codigo: "76A",
-  },
-  {
-    nome: "CIÊNCIA DA COMPUTAÇÃO NOTURNO",
-    codigo: "35A",
-  },
-  {
-    nome: "CIÊNCIA DA COMPUTAÇÃO DIURNO",
-    codigo: "65C",
-  },
-  {
-    nome: "ENGENHARIA COMPUTACIONAL",
-    codigo: "65B",
-  },
-];
+import { InputSearch } from "@/components/ui";
+import { ModalAjuda, ModalFiltros } from "@/components/modals";
 
 export default {
   name: "GradeDisciplinas",
   mixins: [toggleItemInArray, toggleOrdination],
   components: {
-    PageHeader,
     InputSearch,
-
-    NavTab,
+    ModalAjuda,
+    ModalFiltros,
   },
   data() {
     return {
-      tabAtivaModal: "Perfis",
       searchDisciplinas: "",
+      filtroDisciplinas: {
+        ativados: [],
+        selecionados: [],
+      },
+      filtroCursos: {
+        ativados: [],
+        selecionados: [],
+      },
+      filtroPerfis: {
+        selecionados: [],
+      },
+      modalFiltrosTabs: {
+        current: "Perfis",
+        array: ["Perfis", "Disciplinas", "Cursos"],
+      },
+      modalFiltrosCallbacks: {
+        selectAll: {
+          Perfis: () => {
+            this.filtroPerfis.selecionados = [...this.AllPerfis];
+          },
+          Disciplinas: () => {
+            this.filtroDisciplinas.selecionados = [...this.DisciplinasInPerfis];
+          },
+          Cursos: () => {
+            this.filtroCursos.selecionados = [...this.CursosDCCFiltred];
+          },
+        },
+        selectNone: {
+          Perfis: () => {
+            this.filtroPerfis.selecionados = [];
+          },
+          Disciplinas: () => {
+            this.filtroDisciplinas.selecionados = [];
+          },
+          Cursos: () => {
+            this.filtroCursos.selecionados = [];
+          },
+        },
+        btnOk: () => {
+          this.filtroDisciplinas.ativados = [
+            ...this.filtroDisciplinas.selecionados,
+          ];
+          this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
+        },
+      },
+      ordenacaoModal: {
+        perfis: { order: "nome", type: "asc" },
+        disciplinas: { order: "codigo", type: "asc" },
+        cursos: { order: "codigo", type: "asc" },
+      },
+      ordenacaoMain: {
+        disciplinas: { order: "codigo", type: "asc" },
+        perfis: { order: "perfil.abreviacao", type: "asc" },
+      },
       ano: undefined,
       novoAno: undefined,
       disciplinasGrades: {},
@@ -463,59 +431,23 @@ export default {
         3: [], //SI
         4: [], //CCD
       },
-      filtroDisciplinas: {
-        ativados: [],
-        selecionados: [],
-      },
-      filtroCursos: {
-        ativados: [],
-        selecionados: [],
-      },
-      filtroPerfis: {
-        selecionados: [],
-      },
-      modalSelectAll: {
-        Perfis: () => {
-          this.filtroPerfis.selecionados = [...this.Perfis];
-        },
-        Disciplinas: () => {
-          this.filtroDisciplinas.selecionados = [...this.DisciplinasInPerfis];
-        },
-        Cursos: () => {
-          this.filtroCursos.selecionados = [...allCursosDCC];
-        },
-      },
-      modalSelectNone: {
-        Perfis: () => {
-          this.filtroPerfis.selecionados = [];
-        },
-        Disciplinas: () => {
-          this.filtroDisciplinas.selecionados = [];
-        },
-        Cursos: () => {
-          this.filtroCursos.selecionados = [];
-        },
-      },
-      ordenacaoPerfisModal: { order: "nome", type: "asc" },
-      ordenacaoDisciplinasModal: { order: "codigo", type: "asc" },
-      ordenacaoCursosModal: { order: "codigo", type: "asc" },
-      ordenacaoDisciplinasMain: { order: "codigo", type: "asc" },
-      ordenacaoPerfisMain: { order: "perfilAbreviacao", type: "asc" },
     };
   },
-  mounted() {
+
+  beforeMount() {
     this.ano = this.$_.find(this.$store.state.plano.Plano, {
       id: parseInt(localStorage.getItem("Plano"), 10),
     }).ano;
     this.novoAno = this.ano;
     this.runAll();
     //ativa todos filtros
-    this.modalSelectAll.Cursos();
-    this.modalSelectAll.Disciplinas();
-    this.modalSelectAll.Perfis();
+    this.modalFiltrosCallbacks.selectAll.Cursos();
+    this.modalFiltrosCallbacks.selectAll.Disciplinas();
+    this.modalFiltrosCallbacks.selectAll.Perfis();
     this.filtroDisciplinas.ativados = [...this.filtroDisciplinas.selecionados];
     this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
   },
+
   methods: {
     openAsideModal(modalName) {
       if (modalName === "filtros") {
@@ -525,12 +457,6 @@ export default {
         this.$refs.modalAjuda.toggle();
         this.$refs.modalFiltros.close();
       }
-    },
-    btnOkFiltros() {
-      this.filtroDisciplinas.ativados = [
-        ...this.filtroDisciplinas.selecionados,
-      ];
-      this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
     },
     runNovoAno() {
       //executa runAll, modificando o ano
@@ -544,7 +470,12 @@ export default {
     runAll() {
       //cria objeto para armazenar os períodos das disciplinas e chama as funções que a populam
       this.$store.state.disciplina.Disciplinas.forEach((d) => {
-        this.disciplinasGrades[d.id] = [[[], []], [[], []], [[], []], [[], []]]; //inicializa os períodos em 0 [Primeiro Semestre, Segundo Semestre]
+        this.disciplinasGrades[d.id] = [
+          [[], []],
+          [[], []],
+          [[], []],
+          [[], []],
+        ]; //inicializa os períodos em 0 [Primeiro Semestre, Segundo Semestre]
       });
       this.getGrades();
       this.get1Periodo();
@@ -724,29 +655,39 @@ export default {
 
       return periodo1Number + periodo2Number;
     },
-    normalizeText(text) {
-      return text
-        .toUpperCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
-    },
   },
   computed: {
-    Disciplinas() {
-      return this.$store.state.disciplina.Disciplinas;
-    },
-    DisciplinasInPerfis() {
-      let disciplinasResult = this.Disciplinas;
+    ...mapGetters(["CursosDCC", "DisciplinasInPerfis", "AllPerfis"]),
 
-      disciplinasResult.forEach((disciplina) => {
-        this.$_.find(this.Perfis, (perfil) => {
-          if (disciplina.Perfil === perfil.id) {
-            disciplina.perfilAbreviacao = perfil.abreviacao;
-            disciplina.perfilCor = perfil.cor;
-            return true;
-          }
-        });
-      });
+    DisciplinasOrderedMain() {
+      let disciplinasResult = this.DisciplinasFiltredMain;
+
+      if (this.ordenacaoMain.disciplinas.order.includes("grade")) {
+        disciplinasResult = this.$_.orderBy(
+          disciplinasResult,
+          (disciplina) => {
+            return this.somaPeriodos(
+              disciplina[this.ordenacaoMain.disciplinas.order].semestre1,
+              disciplina[this.ordenacaoMain.disciplinas.order].semestre2
+            );
+          },
+          this.ordenacaoMain.disciplinas.type
+        );
+      } else {
+        disciplinasResult = this.$_.orderBy(
+          disciplinasResult,
+          this.ordenacaoMain.disciplinas.order,
+          this.ordenacaoMain.disciplinas.type
+        );
+      }
+
+      if (this.ordenacaoMain.perfis.order != null) {
+        disciplinasResult = this.$_.orderBy(
+          disciplinasResult,
+          this.ordenacaoMain.perfis.order,
+          this.ordenacaoMain.perfis.type
+        );
+      }
       return disciplinasResult;
     },
     DisciplinasFiltredMain() {
@@ -770,47 +711,18 @@ export default {
           semestre2: this.disciplinasGrades[disciplina.id][1][1],
         };
       });
+
       return disciplinaResult;
     },
-    DisciplinasOrderedMain() {
-      let disciplinasResult = this.DisciplinasFiltredMain;
 
-      if (this.ordenacaoDisciplinasMain.order.includes("grade")) {
-        disciplinasResult = this.$_.orderBy(
-          disciplinasResult,
-          (disciplina) => {
-            return this.somaPeriodos(
-              disciplina[this.ordenacaoDisciplinasMain.order].semestre1,
-              disciplina[this.ordenacaoDisciplinasMain.order].semestre2
-            );
-          },
-          this.ordenacaoDisciplinasMain.type
-        );
-      } else {
-        disciplinasResult = this.$_.orderBy(
-          disciplinasResult,
-          this.ordenacaoDisciplinasMain.order,
-          this.ordenacaoDisciplinasMain.type
-        );
-      }
-
-      if (this.ordenacaoPerfisMain.order != null) {
-        disciplinasResult = this.$_.orderBy(
-          disciplinasResult,
-          this.ordenacaoPerfisMain.order,
-          this.ordenacaoPerfisMain.type
-        );
-      }
-      return disciplinasResult;
-    },
     DisciplinasFiltredModal() {
       if (this.searchDisciplinas === "") return this.DisciplinasInPerfis;
 
-      const searchNormalized = this.normalizeText(this.searchDisciplinas);
+      const searchNormalized = normalizeText(this.searchDisciplinas);
 
       return this.$_.filter(this.DisciplinasInPerfis, (disciplina) => {
-        const disciplinaNome = this.normalizeText(disciplina.nome);
-        const disciplinaCodigo = this.normalizeText(disciplina.codigo);
+        const disciplinaNome = normalizeText(disciplina.nome);
+        const disciplinaCodigo = normalizeText(disciplina.codigo);
 
         return (
           disciplinaNome.match(searchNormalized) ||
@@ -818,36 +730,44 @@ export default {
         );
       });
     },
-    setFixedOrderPerfil() {
-      if (this.ordenacaoPerfisMain.type === "desc") return null;
-      else return "perfilAbreviacao";
-    },
     DisciplinasOrderedModal() {
       return this.$_.orderBy(
         this.DisciplinasFiltredModal,
-        this.ordenacaoDisciplinasModal.order,
-        this.ordenacaoDisciplinasModal.type
+        this.ordenacaoModal.disciplinas.order,
+        this.ordenacaoModal.disciplinas.type
       );
+    },
+    CursosDCCFiltred() {
+      return this.$_.filter(this.CursosDCC, (curso) => {
+        switch (curso.codigo) {
+          case "76A":
+          case "35A":
+          case "65C":
+          case "65B":
+            return true;
+          default:
+            return false;
+        }
+      });
     },
     CursosOrderedModal() {
       return this.$_.orderBy(
-        allCursosDCC,
-        this.ordenacaoCursosModal.order,
-        this.ordenacaoCursosModal.type
+        this.CursosDCCFiltred,
+        this.ordenacaoModal.cursos.order,
+        this.ordenacaoModal.cursos.type
       );
     },
     PerfisOrderedModal() {
       return this.$_.orderBy(
-        this.Perfis,
-        this.ordenacaoPerfisModal.order,
-        this.ordenacaoPerfisModal.type
+        this.AllPerfis,
+        this.ordenacaoModal.perfis.order,
+        this.ordenacaoModal.perfis.type
       );
     },
-    Perfis() {
-      return this.$store.state.perfil.Perfis;
-    },
-    Horarios() {
-      return this.$_.orderBy(this.$store.state.horario.Horarios, "horario");
+
+    setFixedOrderPerfil() {
+      if (this.ordenacaoMain.perfis.type === "desc") return null;
+      else return "perfil.abreviacao";
     },
     AnoAtual() {
       return this.$_.find(this.$store.state.plano.Plano, {
@@ -890,7 +810,7 @@ export default {
   watch: {
     filtroPerfis: {
       handler(perfis) {
-        this.modalSelectNone.Disciplinas();
+        this.modalFiltrosCallbacks.selectNone.Disciplinas();
         const disciplinasResultantes = [];
 
         this.DisciplinasInPerfis.forEach((disciplina) => {
@@ -907,5 +827,4 @@ export default {
     },
   },
 };
-</script>
-<style scoped></style>
+</script> 

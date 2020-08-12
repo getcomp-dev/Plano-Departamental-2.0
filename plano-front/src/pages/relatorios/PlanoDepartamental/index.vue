@@ -7,7 +7,7 @@
         :color="'gray'"
         @click="openAsideModal('modalFiltros')"
       >
-        <i class="fas fa-list-ul"></i>
+        <font-awesome-icon :icon="['fas','list-ul']" />
       </BaseButton>
 
       <BaseButton
@@ -16,7 +16,7 @@
         :color="'gray'"
         @click="openAsideModal('modalRelatorio')"
       >
-        <i class="fas fa-file-alt"></i>
+        <font-awesome-icon :icon="['fas','file-alt']" />
       </BaseButton>
 
       <BaseButton
@@ -25,7 +25,7 @@
         :color="'lightblue'"
         @click="openAsideModal('modalAjuda')"
       >
-        <i class="fas fa-question"></i>
+        <font-awesome-icon :icon="['fas','question']" />
       </BaseButton>
     </PageHeader>
 
@@ -33,11 +33,11 @@
       <BaseTable>
         <template #thead>
           <th
-            class="clickable t-start"
+            class="clickable"
             style="width: 80px"
             @click="toggleOrder(ordenacaoMain.disciplinas, 'codigo')"
           >
-            Cód.
+            Código
             <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'codigo')"></i>
           </th>
           <th
@@ -60,64 +60,35 @@
               "
             ></i>
           </th>
-          <th style="width: 25px" title="Semestre">
-            S.
-          </th>
-          <th style="width: 35px" title="Turma">
-            T.
-          </th>
-          <th style="width: 200px">
-            Docentes
-          </th>
-          <th style="width: 180px">
-            Horário
-          </th>
+          <th style="width: 25px" title="Semestre">S.</th>
+          <th style="width: 35px" title="Turma">T.</th>
+          <th style="width: 200px">Docentes</th>
+          <th style="width: 180px">Horário</th>
 
-          <th :title="currentThTitle" style="width: 50px">
-            Vagas
-          </th>
+          <th :title="currentThTitle" style="width: 50px">Vagas</th>
         </template>
-        <template #tbody v-if="!tableIsLoading">
+        <template #tbody v-if="!onLoading.table">
           <template v-for="disciplina in DisciplinasInTurmasOrdered">
             <tr class="bg-custom" :key="'trDisc' + disciplina.id">
-              <td style="width: 80px" class="t-start">
-                {{ disciplina.codigo }}
-              </td>
-              <td style="width: 350px">
-                {{ disciplina.nome }}
-              </td>
-              <td style="width: 80px" class="less-padding">
-                {{ disciplina.perfil.abreviacao }}
-              </td>
+              <td style="width: 80px">{{ disciplina.codigo }}</td>
+              <td style="width: 350px">{{ disciplina.nome }}</td>
+              <td style="width: 80px" class="less-padding">{{ disciplina.perfil.abreviacao }}</td>
               <td style="width: 25px"></td>
               <td style="width: 35px"></td>
               <td style="width: 200px"></td>
               <td style="width: 180px"></td>
-              <td style="width: 50px">
-                {{ getDisciplinaVagasInCurrentSemestres(disciplina) }}
-              </td>
+              <td style="width: 50px">{{ getDisciplinaVagasInCurrentSemestres(disciplina) }}</td>
             </tr>
 
-            <tr
-              v-for="turma in disciplina.turmas"
-              :key="'trTurma' + turma.id + disciplina.id"
-            >
-              <td style="width: 80px" class="t-start"></td>
+            <tr v-for="turma in disciplina.turmas" :key="'trTurma' + turma.id + disciplina.id">
+              <td style="width: 80px"></td>
               <td style="width: 350px"></td>
               <td style="width: 80px"></td>
-              <td style="width: 25px">
-                {{ turma.periodo }}
-              </td>
-              <td style="width: 35px" class="less-padding">
-                {{ turma.letra }}
-              </td>
-              <td style="width: 200px">
-                {{ getDocentesApelidoByTurma(turma) }}
-              </td>
+              <td style="width: 25px">{{ turma.periodo }}</td>
+              <td style="width: 35px" class="less-padding">{{ turma.letra }}</td>
+              <td style="width: 200px">{{ getDocentesApelidoByTurma(turma) }}</td>
 
-              <td style="width: 180px">
-                {{ generateHorarioText(turma.Horario1, turma.Horario2) }}
-              </td>
+              <td style="width: 180px">{{ generateHorarioText(turma.Horario1, turma.Horario2) }}</td>
 
               <td
                 v-if="
@@ -127,9 +98,7 @@
                 @click="handleClickInTurmaVaga(turma)"
                 class="clickable p-vagas"
                 style="width: 50px"
-              >
-                {{ vagasTurma(turma, 1) }}
-              </td>
+              >{{ vagasTurma(turma, 1) }}</td>
 
               <td
                 v-if="
@@ -139,9 +108,7 @@
                 @click="handleClickInTurmaVaga(turma)"
                 class="clickable p-vagas"
                 style="width: 50px"
-              >
-                {{ vagasTurma(turma, 2) }}
-              </td>
+              >{{ vagasTurma(turma, 2) }}</td>
 
               <td
                 v-if="filtroSemestres.ativo == 3"
@@ -149,12 +116,8 @@
                 class="clickable p-vagas"
                 style="width: 50px"
               >
-                <template v-if="turma.periodo == 1 || turma.periodo == 2">
-                  {{ vagasTurma(turma, 1) }}
-                </template>
-                <template v-else>
-                  {{ vagasTurma(turma, 2) }}
-                </template>
+                <template v-if="turma.periodo == 1 || turma.periodo == 2">{{ vagasTurma(turma, 1) }}</template>
+                <template v-else>{{ vagasTurma(turma, 2) }}</template>
               </td>
             </tr>
           </template>
@@ -189,29 +152,23 @@
           <template #thead>
             <th style="width: 25px"></th>
             <th
-              title="Clique para ordenar por código"
-              class="t-start clickable"
+              title="Código"
+              class="clickable"
               style="width: 70px"
               @click="toggleOrder(ordenacaoModal.disciplinas, 'codigo')"
             >
               Cód.
-              <i
-                :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"
-              ></i>
+              <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"></i>
             </th>
             <th
-              title="Clique para ordenar por nome"
               class="t-start clickable"
               style="width: 270px"
               @click="toggleOrder(ordenacaoModal.disciplinas, 'nome')"
             >
               Nome
-              <i
-                :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"
-              ></i>
+              <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"></i>
             </th>
             <th
-              title="Clique para ordenar por nome"
               class="t-start clickable"
               style="width: 85px"
               @click="
@@ -245,33 +202,20 @@
                   :value="disciplina"
                 />
               </td>
-              <td style="width: 70px" class="t-start">
-                {{ disciplina.codigo }}
-              </td>
-              <td style="width: 270px" class="t-start">
-                {{ disciplina.nome }}
-              </td>
-              <td style="width: 85px" class="t-start">
-                {{ disciplina.perfil.abreviacao }}
-              </td>
+              <td style="width: 70px">{{ disciplina.codigo }}</td>
+              <td style="width: 270px" class="t-start">{{ disciplina.nome }}</td>
+              <td style="width: 85px" class="t-start">{{ disciplina.perfil.abreviacao }}</td>
             </tr>
             <tr v-show="!DisciplinasOrderedModal.length">
-              <td style="width:450px">
-                NENHUMA DISCIPLINA ENCONTRADA.
-              </td>
+              <td style="width:450px">NENHUMA DISCIPLINA ENCONTRADA.</td>
             </tr>
           </template>
         </BaseTable>
 
-        <BaseTable
-          v-show="modalFiltrosTabs.current === 'Semestres'"
-          :type="'modal'"
-        >
+        <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
           <template #thead>
             <th style="width: 25px"></th>
-            <th class="t-start clickable" style="width: 425px">
-              Semestre Letivo
-            </th>
+            <th class="t-start clickable" style="width: 425px">Semestre Letivo</th>
           </template>
           <template #tbody>
             <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
@@ -282,9 +226,7 @@
                   v-model="filtroSemestres.primeiro"
                 />
               </td>
-              <td style="width: 425px" class="t-start">
-                PRIMEIRO
-              </td>
+              <td style="width: 425px" class="t-start">PRIMEIRO</td>
             </tr>
             <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
               <td style="width: 25px">
@@ -299,10 +241,7 @@
           </template>
         </BaseTable>
 
-        <BaseTable
-          :type="'modal'"
-          v-show="modalFiltrosTabs.current === 'Perfis'"
-        >
+        <BaseTable :type="'modal'" v-show="modalFiltrosTabs.current === 'Perfis'">
           <template #thead>
             <th style="width: 25px;"></th>
             <th
@@ -328,35 +267,26 @@
                   class="form-check-input position-static m-0"
                 />
               </td>
-              <td style="width: 425px" class="t-start">
-                {{ perfil.nome }}
-              </td>
+              <td style="width: 425px" class="t-start">{{ perfil.nome }}</td>
             </tr>
           </template>
         </BaseTable>
       </div>
     </ModalFiltros>
 
-    <BaseModal
-      ref="modalVagas"
-      :classes="'modal-vagas'"
-      :modalOptions="{
-        type: 'editVagas',
-        title: 'Vagas',
-      }"
-    >
+    <BaseModal2 ref="modalVagas" :type="'editVagas'" :classes="'modal-vagas'">
       <template #modal-body>
         <template v-if="turmaSelecionada">
           <div class="vagas-header">
             <h6 class="vagas-title">
               {{
-                getDisciplinaByTurma(turmaSelecionada).codigo +
-                  " - " +
-                  getDisciplinaByTurma(turmaSelecionada).nome
+              getDisciplinaByTurma(turmaSelecionada).codigo +
+              " - " +
+              getDisciplinaByTurma(turmaSelecionada).nome
               }}
             </h6>
             <div class="input-form">
-              <label for="selectTurma" class="mr-2">Turma: </label>
+              <label for="selectTurma" class="mr-2">Turma:</label>
               <select
                 id="selectTurma"
                 class="form-control"
@@ -373,8 +303,7 @@
                   )"
                   :key="'selectModalVagas' + turma.id"
                   :value="turma"
-                  >{{ turma.letra }}</option
-                >
+                >{{ turma.letra }}</option>
               </select>
             </div>
           </div>
@@ -382,15 +311,13 @@
             <BaseTable :type="'modal'">
               <template #thead>
                 <th
-                  class="clickable t-start"
+                  class="clickable"
                   style="width: 55px"
                   title="Código"
                   @click="toggleOrder(ordenacaoModal.vagas, 'codigo')"
                 >
                   Cód.
-                  <i
-                    :class="setIconByOrder(ordenacaoModal.vagas, 'codigo')"
-                  ></i>
+                  <i :class="setIconByOrder(ordenacaoModal.vagas, 'codigo')"></i>
                 </th>
                 <th
                   class="clickable t-start"
@@ -402,7 +329,8 @@
                 </th>
 
                 <th
-                  class="clickable t-start less-padding"
+                  title="Vagas periodizadas"
+                  class="clickable less-padding"
                   style="width: 55px"
                   @click="
                     toggleOrder(
@@ -411,7 +339,6 @@
                       'desc'
                     )
                   "
-                  title="Clique para ordenar por vagas da grade"
                 >
                   Grade
                   <i
@@ -421,6 +348,7 @@
                   ></i>
                 </th>
                 <th
+                  title="Vagas não periodizadas"
                   class="clickable less-padding"
                   style="width: 55px"
                   @click="
@@ -430,7 +358,6 @@
                       'desc'
                     )
                   "
-                  title="Clique para ordenar por vagas extras"
                 >
                   Extra
                   <i
@@ -443,46 +370,31 @@
                   ></i>
                 </th>
                 <th
-                  class="clickable t-start less-padding"
+                  title="Total de vagas"
+                  class="clickable less-padding"
                   style="width: 55px"
                   @click="
                     toggleOrder(ordenacaoModal.vagas, 'vagasTotais', 'desc')
                   "
-                  title="Clique para ordenar por vagas extras"
                 >
                   Total
-                  <i
-                    :class="setIconByOrder(ordenacaoModal.vagas, 'vagasTotais')"
-                  ></i>
+                  <i :class="setIconByOrder(ordenacaoModal.vagas, 'vagasTotais')"></i>
                 </th>
               </template>
               <template #tbody>
-                <tr
-                  v-for="p in VagasTurmaSelecionada"
-                  :key="'vaga' + p.Curso + '-' + p.Turma"
-                >
-                  <td style="width: 55px" class="t-start">
-                    {{ getCursoByPedido(p).codigo }}
-                  </td>
-                  <td style="width: 300px" class="t-start">
-                    {{ getCursoByPedido(p).nome }}
-                  </td>
-                  <td style="width: 55px">
-                    {{ p.vagasPeriodizadas }}
-                  </td>
-                  <td style="width: 55px">
-                    {{ p.vagasNaoPeriodizadas }}
-                  </td>
-                  <td style="width: 55px">
-                    {{ p.vagasPeriodizadas + p.vagasNaoPeriodizadas }}
-                  </td>
+                <tr v-for="p in VagasTurmaSelecionada" :key="'vaga' + p.Curso + '-' + p.Turma">
+                  <td style="width: 55px">{{ getCursoByPedido(p).codigo }}</td>
+                  <td style="width: 300px" class="t-start">{{ getCursoByPedido(p).nome }}</td>
+                  <td style="width: 55px">{{ p.vagasPeriodizadas }}</td>
+                  <td style="width: 55px">{{ p.vagasNaoPeriodizadas }}</td>
+                  <td style="width: 55px">{{ p.vagasPeriodizadas + p.vagasNaoPeriodizadas }}</td>
                 </tr>
               </template>
             </BaseTable>
           </div>
         </template>
       </template>
-    </BaseModal>
+    </BaseModal2>
 
     <ModalRelatorio ref="modalRelatorio" @selection-option="pdf($event)" />
 
@@ -496,7 +408,8 @@
       </li>
       <li class="list-group-item">
         <b>Para gerar relatório de turmas das disciplinas:</b> Clique no ícone
-        relatório <i class="fas fa-file-alt icon-gray"></i> selecione se deseja
+        relatório
+        <i class="fas fa-file-alt icon-gray"></i> selecione se deseja
         gerar o relatório completo com todos as disciplinas, ou apenas o
         relatório parcial com as disciplinas que estão selecionados no momento.
       </li>
@@ -512,23 +425,18 @@
 <script>
 import pdfs from "@/common/services/pdfs";
 import { normalizeText } from "@/common/utils";
-import {
-  toggleItemInArray,
-  toggleOrdination,
-  tableLoading,
-} from "@/common/mixins";
-import { InputSearch, PageHeader } from "@/components/ui";
+import { toggleItemInArray, toggleOrdination } from "@/common/mixins";
+import { InputSearch } from "@/components/ui";
 import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
 import { mapGetters } from "vuex";
 
 export default {
   name: "PlanoDepartamental",
-  mixins: [toggleItemInArray, toggleOrdination, tableLoading],
+  mixins: [toggleItemInArray, toggleOrdination],
   components: {
     ModalRelatorio,
     ModalFiltros,
     ModalAjuda,
-    PageHeader,
     InputSearch,
   },
   data() {
@@ -568,9 +476,7 @@ export default {
             ];
           },
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = [
-              ...this.DisciplinasDCCInPerfis,
-            ];
+            this.filtroDisciplinas.selecionados = [...this.DisciplinasInPerfis];
           },
           Semestres: () => {
             this.filtroSemestres.primeiro = true;
@@ -590,12 +496,10 @@ export default {
           },
         },
         btnOk: () => {
-          this.setTableLoadingState(true);
           this.setSemestreAtivo();
           this.filtroDisciplinas.ativados = [
             ...this.filtroDisciplinas.selecionados,
           ];
-          this.setTableLoadingState(false);
         },
       },
     };
@@ -629,7 +533,7 @@ export default {
 
     pdf(completo) {
       const disciplinasSelecionadas = completo
-        ? this.DisciplinasDCCInPerfis
+        ? this.DisciplinasInPerfis
         : this.filtroDisciplinas.ativados;
 
       pdfs.pdfRelatorioDisciplinas({
@@ -738,7 +642,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["AllTurmas", "DisciplinasDCCInPerfis", "AllHorarios"]),
+    ...mapGetters([
+      "AllTurmas",
+      "DisciplinasInPerfis",
+      "AllHorarios",
+      "onLoading",
+    ]),
 
     DisciplinasInTurmasOrdered() {
       return this.$_.orderBy(
@@ -767,11 +676,11 @@ export default {
     },
 
     DisciplinasFiltredModal() {
-      if (this.searchDisciplinas === "") return this.DisciplinasDCCInPerfis;
+      if (this.searchDisciplinas === "") return this.DisciplinasInPerfis;
 
       const searchNormalized = normalizeText(this.searchDisciplinas);
 
-      return this.$_.filter(this.DisciplinasDCCInPerfis, (disciplina) => {
+      return this.$_.filter(this.DisciplinasInPerfis, (disciplina) => {
         const disciplinaNome = normalizeText(disciplina.nome);
         const disciplinaCodigo = normalizeText(disciplina.codigo);
 
@@ -801,7 +710,7 @@ export default {
       return this.$_.orderBy(
         this.$_.filter(
           this.$store.state.pedido.Pedidos[this.turmaSelecionada.id],
-          function(p) {
+          function (p) {
             return p.vagasPeriodizadas > 0 || p.vagasNaoPeriodizadas > 0;
           }
         ),
@@ -838,7 +747,7 @@ export default {
         this.modalFiltrosCallbacks.selectNone.Disciplinas();
         const disciplinasResultantes = [];
 
-        this.$_.forEach(this.DisciplinasDCCInPerfis, (disciplina) => {
+        this.$_.forEach(this.DisciplinasInPerfis, (disciplina) => {
           const perfilFounded = this.$_.find(
             perfis.selecionados,
             (perfil) => perfil.id === disciplina.Perfil

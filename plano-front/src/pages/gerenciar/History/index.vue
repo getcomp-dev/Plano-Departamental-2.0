@@ -19,7 +19,7 @@
         :color="'gray'"
         @click="$refs.modalFiltros.toggle()"
       >
-        <i class="fas fa-list-ul"></i>
+        <font-awesome-icon :icon="['fas','list-ul']" />
       </BaseButton>
     </PageHeader>
 
@@ -36,116 +36,93 @@
             <th style="width: 80px">Usuário</th>
             <th style="width: 160px">Hora</th>
           </template>
-          <template #tbody>
-            <template v-if="!tableIsLoading">
-              <tr v-for="h in History" :key="`History${h.id}`">
-                <td style="width: 110px">
-                  {{ h.tabelaModificada }}
-                </td>
-                <td style="width: 120px" class="less-padding">
-                  {{ h.campoModificado }}
-                </td>
-                <td style="width: 200px" class="less-padding">
-                  {{ linhaModificada(h) }}
-                </td>
-                <td style="width: 120px" class="less-padding">
-                  {{ valorAnterior(h) }}
-                </td>
-                <td style="width: 120px" class="less-padding">
-                  {{ valorNovo(h) }}
-                </td>
-                <td style="width: 65px" class="less-padding">
-                  {{ h.tipoOperacao }}
-                </td>
-                <td style="width: 80px" class="less-padding">
-                  {{ h.usuario }}
-                </td>
-                <td style="width: 160px" class="less-padding">
-                  {{ h.createdAt }}
-                </td>
-              </tr>
-            </template>
+          <template #tbody v-if="!onLoading.table">
+            <tr v-for="h in History" :key="`History${h.id}`">
+              <td style="width: 110px">{{ h.tabelaModificada }}</td>
+              <td style="width: 120px" class="less-padding">{{ h.campoModificado }}</td>
+              <td style="width: 200px" class="less-padding">{{ linhaModificada(h) }}</td>
+              <td style="width: 120px" class="less-padding">{{ valorAnterior(h) }}</td>
+              <td style="width: 120px" class="less-padding">{{ valorNovo(h) }}</td>
+              <td style="width: 65px" class="less-padding">{{ h.tipoOperacao }}</td>
+              <td style="width: 80px" class="less-padding">{{ h.usuario }}</td>
+              <td style="width: 160px" class="less-padding">{{ h.createdAt }}</td>
+            </tr>
           </template>
         </BaseTable>
       </div>
     </div>
-    <!-- ModalFiltros -->
-    <BaseModal
-      ref="modalFiltros"
-      :modalOptions="{
-        type: 'filtros',
-        title: 'Filtros',
-        hasFooter: true,
-      }"
-      :hasFooter="true"
-      @btn-ok="btnOkFiltros()"
-      @select-all="modalSelectAll[tabAtivaModal]"
-      @select-none="modalSelectNone[tabAtivaModal]"
-    >
-      <template #modal-body>
-        <NavTab :currentTab="'Tabelas'" :allTabs="['Tabelas']" />
 
-        <div class="div-table">
-          <BaseTable v-show="tabAtivaModal === 'Tabelas'" :type="'modal'">
-            <template #thead>
-              <th style="width:25px"></th>
-              <th style="width: 425px">
-                Nome
-              </th>
-            </template>
-            <template #tbody>
-              <tr
-                v-for="option in Options"
-                :key="`MdTabelas${option.value}`"
-                @click="toggleItemInArray(option.value, TabelasSelecionadas)"
-              >
-                <div class="max-content">
-                  <td style="width:25px">
-                    <input
-                      type="checkbox"
-                      v-model="TabelasSelecionadas"
-                      :value="option.value"
-                      class="form-check-input position-static m-0"
-                    />
-                  </td>
-                  <td style="width:425px" class="t-start">
-                    {{ option.text }}
-                  </td>
-                </div>
-              </tr>
-            </template>
-          </BaseTable>
-        </div>
-      </template>
-    </BaseModal>
+    <ModalFiltros
+      ref="modalFiltros"
+      :callbacks="modalFiltrosCallbacks"
+      :tabsOptions="modalFiltrosTabs"
+    >
+      <div class="div-table">
+        <BaseTable v-show="modalFiltrosTabs.current === 'Tabelas'" :type="'modal'">
+          <template #thead>
+            <th style="width:25px"></th>
+            <th style="width: 425px">Nome</th>
+          </template>
+          <template #tbody>
+            <tr
+              v-for="option in Options"
+              :key="`MdTabelas${option.value}`"
+              @click="toggleItemInArray(option.value, TabelasSelecionadas)"
+            >
+              <div class="max-content">
+                <td style="width:25px">
+                  <input
+                    type="checkbox"
+                    v-model="TabelasSelecionadas"
+                    :value="option.value"
+                    class="form-check-input position-static m-0"
+                  />
+                </td>
+                <td style="width:425px" class="t-start">{{ option.text }}</td>
+              </div>
+            </tr>
+          </template>
+        </BaseTable>
+      </div>
+    </ModalFiltros>
   </div>
 </template>
 
 <script>
-import { toggleItemInArray, tableLoading } from "@/common/mixins";
-import { PageHeader, NavTab } from "@/components/ui";
+import { toggleItemInArray } from "@/common/mixins";
+import { NavTab } from "@/components/ui";
+import { ModalFiltros } from "@/components/modals";
+import { mapGetters } from "vuex";
 
 export default {
   name: "DashboardHistory",
-  mixins: [toggleItemInArray, tableLoading],
+  mixins: [toggleItemInArray],
   components: {
-    PageHeader,
     NavTab,
+    ModalFiltros,
   },
   data() {
     return {
-      tabAtivaModal: "Tabelas",
       TabelasSelecionadas: [],
       TabelasAtivadas: [],
       operacoes: "Todos",
-      modalSelectAll: {
-        Tabelas: () => {
-          this.TabelasSelecionadas = [...this.$_.map(this.Options, "value")];
-        },
+      modalFiltrosTabs: {
+        current: "Tabelas",
+        array: ["Tabelas"],
       },
-      modalSelectNone: {
-        Tabelas: () => {
-          this.TabelasSelecionadas = [];
+      modalFiltrosCallbacks: {
+        selectNone: {
+          Tabelas: () => {
+            this.TabelasSelecionadas = [];
+          },
+        },
+        selectAll: {
+          Tabelas: () => {
+            this.TabelasSelecionadas = [...this.$_.map(this.Options, "value")];
+          },
+        },
+        btnOk: () => {
+          this.TabelasAtivadas = [...this.TabelasSelecionadas];
         },
       },
       Options: [
@@ -168,12 +145,6 @@ export default {
   },
 
   methods: {
-    btnOkFiltros() {
-      this.setTableLoadingState(true);
-      this.TabelasAtivadas = [...this.TabelasSelecionadas];
-      this.setTableLoadingState(false);
-    },
-
     linhaModificada(h) {
       let linha = h.linhaModificada;
       let aux = undefined;
@@ -476,11 +447,12 @@ export default {
     },
   },
   computed: {
+    ...mapGetters(["onLoading"]),
     History() {
       let TabelasAtivadas = this.TabelasAtivadas;
       return this.$_.orderBy(
         this.$_.filter(
-          this.$_.filter(this.$store.state.history.History, function(
+          this.$_.filter(this.$store.state.history.History, function (
             h,
             i,
             a,

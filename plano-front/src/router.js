@@ -82,25 +82,25 @@ const routes = [
 
       //plano
       {
-        path: "plano/turmasDcc",
+        path: "plano/turmas-dcc",
         name: "turmasDcc",
         component: PlanoTurmasDCC,
         beforeEnter: requireAdmin,
       },
       {
-        path: "plano/turmasExternas",
+        path: "plano/turmas-externas",
         name: "turmasExternas",
         component: PlanoTurmasExternas,
         beforeEnter: requireAdmin,
       },
       {
-        path: "plano/cargaPos",
+        path: "plano/carga-pos",
         name: "cargaPos",
         component: PlanoCargaPos,
         beforeEnter: requireAdmin,
       },
       {
-        path: "plano/Validacoes",
+        path: "plano/validacoes",
         name: "validacoes",
         component: PlanoValidacoes,
         beforeEnter: requireAdmin,
@@ -108,27 +108,27 @@ const routes = [
 
       //relatorios
       {
-        path: "relatorios/cargaProfessores",
+        path: "relatorios/carga-professores",
         name: "cargaProfessores",
         component: RelatoriosCargaProfessores,
       },
       {
-        path: "relatorios/gradeDisciplinas",
+        path: "relatorios/grade-disciplinas",
         name: "gradeDisciplinas",
         component: RelatoriosGradeDisciplinas,
       },
       {
-        path: "relatorios/horariosCursos",
+        path: "relatorios/horarios-cursos",
         name: "horariosCursos",
         component: RelatoriosHorarios,
       },
       {
-        path: "relatorios/horariosLaboratorios",
+        path: "relatorios/horarios-laboratorios",
         name: "horariosLaboratorios",
         component: RelatoriosHorariosLabs,
       },
       {
-        path: "relatorios/relatorioDisciplinas",
+        path: "relatorios/relatorio-disciplinas",
         name: "relatorioDisciplinas",
         component: RelatoriosPlanoDepartamental,
       },
@@ -166,7 +166,7 @@ const routes = [
         beforeEnter: requireSuperAdmin,
       },
       {
-        path: "gerenciar/gradesEdit",
+        path: "gerenciar/grades-edit",
         name: "gradesEdit",
         component: GerenciarGradesEdit,
         beforeEnter: requireSuperAdmin,
@@ -178,7 +178,7 @@ const routes = [
         beforeEnter: requireSuperAdmin,
       },
       {
-        path: "gerenciar/Planos",
+        path: "gerenciar/planos",
         name: "planos",
         component: GerenciarPlanos,
         beforeEnter: requireSuperAdmin,

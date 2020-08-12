@@ -7,7 +7,7 @@
         :color="'lightblue'"
         @click="$refs.modalAjuda.toggle()"
       >
-        <i class="fas fa-question"></i>
+        <font-awesome-icon :icon="['fas','question']" />
       </BaseButton>
     </PageHeader>
 
@@ -21,9 +21,7 @@
               @click="toggleOrder(ordenacaoDisciplinasMain, 'periodo')"
             >
               P.
-              <i
-                :class="setIconByOrder(ordenacaoDisciplinasMain, 'periodo')"
-              ></i>
+              <i :class="setIconByOrder(ordenacaoDisciplinasMain, 'periodo')"></i>
             </th>
             <th
               style="width:80px"
@@ -66,15 +64,9 @@
                   },
                 ]"
               >
-                <td style="width:35px">
-                  {{ disciplinaGrade.periodo }}
-                </td>
-                <td style="width:80px" class="t-start">
-                  {{ disciplinaGrade.disciplina_codigo }}
-                </td>
-                <td style="width:400px" class="t-start">
-                  {{ disciplinaGrade.disciplina_nome }}
-                </td>
+                <td style="width:35px">{{ disciplinaGrade.periodo }}</td>
+                <td style="width:80px" class="t-start">{{ disciplinaGrade.disciplina_codigo }}</td>
+                <td style="width:400px" class="t-start">{{ disciplinaGrade.disciplina_nome }}</td>
               </tr>
             </template>
             <tr v-show="!hasGradeSelected">
@@ -117,9 +109,7 @@
                   v-for="grade in GradesFiltredByCurrentCurso"
                   :key="'grade-id' + grade.id"
                   :value="grade.id"
-                >
-                  {{ grade.nome }}
-                </option>
+                >{{ grade.nome }}</option>
               </select>
             </div>
           </div>
@@ -128,9 +118,7 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group m-0 col px-0">
-              <label required for="disciplina" class="col-form-label"
-                >Disciplina</label
-              >
+              <label required for="disciplina" class="col-form-label">Disciplina</label>
               <select
                 :disabled="!hasGradeSelected"
                 type="text"
@@ -139,29 +127,24 @@
                 v-model="disciplinaGradeForm.Disciplina"
                 @change="clearClick()"
               >
-                <option v-if="Disciplinas.length === 0" type="text" value
-                  >Nenhuma Disciplina Encontrada</option
-                >
+                <option
+                  v-if="Disciplinas.length === 0"
+                  type="text"
+                  value
+                >Nenhuma Disciplina Encontrada</option>
                 <option
                   v-else
                   v-for="disciplina in Disciplinas"
                   :key="'2-grade-id' + disciplina.id"
                   :value="disciplina.id"
-                  >{{ disciplina.nome }}</option
-                >
+                >{{ disciplina.nome }}</option>
               </select>
             </div>
           </div>
 
           <div class="row mb-2 mx-0">
             <div class="form-group m-0 col px-0">
-              <label
-                required
-                for="periodoDisciplina"
-                class="col-form-label pb-1"
-              >
-                Período
-              </label>
+              <label required for="periodoDisciplina" class="col-form-label pb-1">Período</label>
               <div class="d-flex align-items-center">
                 <input
                   :disabled="!hasGradeSelected"
@@ -169,7 +152,7 @@
                   id="periodoDisciplina"
                   class="form-control form-control-sm input-menor2"
                   v-model="disciplinaGradeForm.periodo"
-                  @keypress="onlyNumber"
+                  @keypress="maskOnlyNumber"
                 />
 
                 <BaseButton
@@ -179,7 +162,7 @@
                   :color="'green'"
                   @click="editDisciplinaGrade()"
                 >
-                  <i class="fas fa-check"></i>
+                  <font-awesome-icon :icon="['fas','check']" />
                 </BaseButton>
               </div>
             </div>
@@ -188,13 +171,13 @@
         <template #footer>
           <BaseButton
             :disabled="!hasGradeSelected"
-            v-show="isNotEditDisciplina"
+            v-show="!isEditDisciplina"
             title="Adicionar à Grade"
             :type="'icon'"
             :color="'green'"
-            @click="addDisciplinaGrade()"
+            @click="addDisciplinaGrade"
           >
-            <i class="fas fa-plus"></i>
+            <font-awesome-icon :icon="['fas','plus']" />
           </BaseButton>
 
           <BaseButton
@@ -202,9 +185,9 @@
             title="Deletar Disciplina"
             :type="'icon'"
             :color="'red'"
-            @click="deleteDisciplinaGrade(), clearClick()"
+            @click="openModalDelete"
           >
-            <i class="fas fa-trash"></i>
+            <font-awesome-icon :icon="['fas','trash']" />
           </BaseButton>
 
           <BaseButton
@@ -212,62 +195,75 @@
             title="Cancelar"
             :type="'icon'"
             :color="'gray'"
-            @click="cleanDisciplina()"
+            @click="cleanDisciplina"
           >
-            <i class="fas fa-times"></i>
+            <font-awesome-icon :icon="['fas','times']" />
           </BaseButton>
         </template>
       </Card>
     </div>
 
-    <!-- MODAL AJUDA -->
-    <BaseModal
-      ref="modalAjuda"
-      :modalOptions="{
-        type: 'ajuda',
-        title: 'Ajuda',
-      }"
+    <ModalDelete
+      ref="modalDelete"
+      :isDeleting="isEditDisciplina"
+      @btn-deletar="deleteDisciplinaGrade"
     >
-      <template #modal-body>
-        <ul class="list-ajuda list-group">
-          <li class="list-group-item">
-            <b>Para exibir conteúdo na tabela:</b> Comece selecionando o curso
-            desejado. Em seguida, selecione a grade que quer visualizar.
-          </li>
-          <li class="list-group-item">
-            <b>Para adicionar disciplinas à Grade:</b> Com o cartão a direita em
-            branco, preencha-o. Em seguida, clique em Adicionar
-            <i class="fas fa-plus icon-green px-1" style="font-size:12px"></i>.
-          </li>
-          <li class="list-group-item">
-            <b>Para editar ou deletar uma disciplina:</b> Na tabela, clique na
-            disciplina que deseja modificar. Logo após, no cartão à direita,
-            altere as informações que desejar e clique em Salvar
-            <i class="fas fa-check icon-green px-1" style="font-size:12px"></i>
-            ou, para excluí-la, clique em Deletar
-            <i
-              class="far fa-trash-alt icon-red px-1"
-              style="font-size: 12px"
-            ></i>
-            .
-          </li>
-          <li class="list-group-item">
-            <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
-            em Cancelar
-            <i class="fas fa-times icon-gray px-1" style="font-size: 12px"></i>
-            .
-          </li>
-        </ul>
-      </template>
-    </BaseModal>
+      <li v-if="isEditDisciplina" class="list-group-item">
+        <span>
+          Tem certeza que deseja excluír a disciplina
+          <b>{{ nomeDisciplinaAtual }}</b>?
+        </span>
+      </li>
+      <li v-else class="list-group-item">Nenhuma disciplina selecionada.</li>
+    </ModalDelete>
+
+    <ModalAjuda ref="modalAjuda">
+      <li class="list-group-item">
+        <b>Para exibir conteúdo na tabela:</b> Comece selecionando o curso
+        desejado. Em seguida, selecione a grade que quer visualizar.
+      </li>
+      <li class="list-group-item">
+        <b>Para adicionar disciplinas à Grade:</b> Com o cartão a direita em
+        branco, preencha-o. Em seguida, clique em Adicionar
+        <i
+          class="fas fa-plus icon-green px-1"
+          style="font-size:12px"
+        ></i>.
+      </li>
+      <li class="list-group-item">
+        <b>Para editar ou deletar uma disciplina:</b> Na tabela, clique na
+        disciplina que deseja modificar. Logo após, no cartão à direita,
+        altere as informações que desejar e clique em Salvar
+        <i
+          class="fas fa-check icon-green px-1"
+          style="font-size:12px"
+        ></i>
+        ou, para excluí-la, clique em Deletar
+        <i
+          class="far fa-trash-alt icon-red px-1"
+          style="font-size: 12px"
+        ></i>
+        .
+      </li>
+      <li class="list-group-item">
+        <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
+        em Cancelar
+        <i
+          class="fas fa-times icon-gray px-1"
+          style="font-size: 12px"
+        ></i>
+        .
+      </li>
+    </ModalAjuda>
   </div>
 </template>
 
 <script>
 import gradeService from "@/common/services/grade";
 import disciplinaGradeService from "@/common/services/disciplinaGrade";
-import { toggleOrdination } from "@/common/mixins";
-import { PageHeader, Card } from "@/components/ui";
+import { toggleOrdination, maskOnlyNumber } from "@/common/mixins";
+import { Card } from "@/components/ui";
+import { ModalAjuda, ModalDelete } from "@/components/modals";
 
 const emptyGrade = {
   id: undefined,
@@ -282,30 +278,29 @@ const emptyDisciplinaGrade = {
 };
 export default {
   name: "DashboardGradeEdit",
-  mixins: [toggleOrdination],
+  mixins: [toggleOrdination, maskOnlyNumber],
   components: {
-    PageHeader,
     Card,
+    ModalAjuda,
+    ModalDelete,
   },
   data() {
     return {
       gradeForm: this.$_.clone(emptyGrade),
       disciplinaGradeForm: this.$_.clone(emptyDisciplinaGrade),
-      error: undefined,
-      currentGradeId: undefined,
-      currentCursoId: undefined,
-      disciplinaSelectedId: "",
-      nomeDisciplinaAtual: undefined,
+      error: null,
+      currentGradeId: null,
+      currentCursoId: null,
+      disciplinaSelectedId: null,
+      nomeDisciplinaAtual: null,
       ordenacaoDisciplinasMain: { order: "periodo", type: "asc" },
     };
   },
   methods: {
-    onlyNumber($event) {
-      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
-      if (keyCode < 48 || keyCode > 57) {
-        $event.preventDefault();
-      }
+    openModalDelete() {
+      this.$refs.modalDelete.open();
     },
+
     handleClickInDisciplina(disciplinaGrade) {
       this.disciplinaSelectedId = disciplinaGrade.Disciplina;
       this.nomeDisciplinaAtual = disciplinaGrade.disciplina_nome;
@@ -315,9 +310,69 @@ export default {
     },
 
     clearClick() {
-      this.disciplinaSelectedId = "";
-      this.nomeDisciplinaAtual = "";
+      this.disciplinaSelectedId = null;
+      this.nomeDisciplinaAtual = null;
     },
+
+    deleteGrade() {
+      let grade_nome = this.gradeForm.nome;
+      gradeService
+        .delete(this.gradeForm.id, this.gradeForm)
+        .then(() => {
+          this.cleanGradeForm();
+          this.$notify({
+            group: "general",
+            title: `Sucesso!`,
+            text: `A Grade ${grade_nome} foi excluída!`,
+            type: "success",
+          });
+        })
+        .catch(() => {
+          this.error = "<b>Erro ao excluir Grade</b>";
+          this.$notify({
+            group: "general",
+            title: `Erro!`,
+            text: this.error,
+            type: "error",
+          });
+        });
+    },
+    cleanGradeForm() {
+      this.gradeForm = this.$_.clone(emptyGrade);
+      this.error = undefined;
+    },
+    cleanDisciplina() {
+      this.clearClick();
+      this.disciplinaGradeForm.periodo = undefined;
+      this.disciplinaGradeForm.Disciplina = undefined;
+    },
+    showGrade(gradeId) {
+      this.cleanGradeForm();
+      const grade = this.$_.find(this.$store.state.grade.Grades, [
+        "id",
+        gradeId,
+      ]);
+      this.gradeForm = this.$_.clone(grade);
+      this.disciplinaGradeForm.Grade = this.gradeForm.id;
+    },
+    changeCurso() {
+      ///Curso foi selecionado mas grade ainda não foi selecionada
+      this.cleanDisciplina();
+      this.cleanGradeForm();
+      this.currentGradeId = null;
+    },
+    changeGrade() {
+      this.cleanDisciplina();
+      if (this.currentGradeId != null) this.showGrade(this.currentGradeId);
+    },
+    showDisciplina(disciplinaGrade) {
+      this.cleanDisciplina;
+      this.disciplinaGradeForm = this.$_.clone(disciplinaGrade);
+    },
+    isEven(number) {
+      return number % 2 === 0;
+    },
+
     addGrade() {
       gradeService
         .create(this.gradeForm)
@@ -365,57 +420,7 @@ export default {
           });
         });
     },
-    deleteGrade() {
-      let grade_nome = this.gradeForm.nome;
-      gradeService
-        .delete(this.gradeForm.id, this.gradeForm)
-        .then(() => {
-          this.cleanGradeForm();
-          this.$notify({
-            group: "general",
-            title: `Sucesso!`,
-            text: `A Grade ${grade_nome} foi excluída!`,
-            type: "warn",
-          });
-        })
-        .catch(() => {
-          this.error = "<b>Erro ao excluir Grade</b>";
-          this.$notify({
-            group: "general",
-            title: `Erro!`,
-            text: this.error,
-            type: "error",
-          });
-        });
-    },
-    cleanGradeForm() {
-      this.gradeForm = this.$_.clone(emptyGrade);
-      this.error = undefined;
-    },
-    cleanDisciplina() {
-      this.clearClick();
-      this.disciplinaGradeForm.periodo = undefined;
-      this.disciplinaGradeForm.Disciplina = undefined;
-    },
-    showGrade(gradeId) {
-      this.cleanGradeForm();
-      const grade = this.$_.find(this.$store.state.grade.Grades, [
-        "id",
-        gradeId,
-      ]);
-      this.gradeForm = this.$_.clone(grade);
-      this.disciplinaGradeForm.Grade = this.gradeForm.id;
-    },
-    changeCurso() {
-      ///Curso foi selecionado mas grade ainda não foi selecionada
-      this.cleanDisciplina();
-      this.cleanGradeForm();
-      this.currentGradeId = undefined;
-    },
-    changeGrade() {
-      this.cleanDisciplina();
-      if (this.currentGradeId != undefined) this.showGrade(this.currentGradeId);
-    },
+
     addDisciplinaGrade() {
       let nome_disciplina = null;
       for (const key in this.Disciplinas) {
@@ -430,12 +435,9 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Disciplina <b>${nome_disciplina}</b> foi adicionada à Grade <b>${
-              this.gradeForm.nome
-            }</b>!`,
+            text: `A Disciplina <b>${nome_disciplina}</b> foi adicionada à Grade <b>${this.gradeForm.nome}</b>!`,
             type: "success",
           });
-          // this.disciplinaGradeForm.Disciplina = undefined; //Limpa campo de disciplina apos adicionar
         })
         .catch(() => {
           this.error = "<b>Erro ao incluir Disciplina</b>";
@@ -458,9 +460,7 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Disciplina <b>${
-              this.nomeDisciplinaAtual
-            }</b> foi atualizada!`,
+            text: `A Disciplina <b>${this.nomeDisciplinaAtual}</b> foi atualizada!`,
             type: "success",
           });
         })
@@ -485,11 +485,10 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Disciplina <b>${
-              this.nomeDisciplinaAtual
-            }</b> foi excluída!`,
-            type: "warn",
+            text: `A Disciplina <b>${this.nomeDisciplinaAtual}</b> foi excluída!`,
+            type: "success",
           });
+          this.clearClick();
         })
         .catch(() => {
           this.error = "<b>Erro ao excluir Disciplina</b>";
@@ -500,25 +499,17 @@ export default {
             type: "error",
           });
         });
-      //this.cleanDisciplina();
-    },
-    showDisciplina(disciplinaGrade) {
-      this.cleanDisciplina;
-      this.disciplinaGradeForm = this.$_.clone(disciplinaGrade);
-    },
-    isEven(number) {
-      return number % 2 === 0;
     },
   },
   computed: {
     hasCursoSelected() {
-      return this.currentCursoId != undefined;
+      return this.currentCursoId != null;
     },
     hasGradeSelected() {
-      return this.currentGradeId != undefined;
+      return this.currentGradeId != null;
     },
-    isNotEditDisciplina() {
-      return this.disciplinaSelectedId !== this.disciplinaGradeForm.Disciplina;
+    isEditDisciplina() {
+      return this.disciplinaSelectedId !== null;
     },
     DisciplinaGradesOrdered() {
       return this.$_.orderBy(

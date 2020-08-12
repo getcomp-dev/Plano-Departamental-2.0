@@ -17,7 +17,7 @@
                 @click="$emit('btn-salvar')"
                 :key="1"
               >
-                <i class="fas fa-check"></i>
+                <font-awesome-icon :icon="['fas','check']" />
               </BaseButton>
               <BaseButton
                 title="Deletar"
@@ -26,7 +26,7 @@
                 @click="$emit('btn-delete')"
                 :key="2"
               >
-                <i class="fas fa-trash"></i>
+                <font-awesome-icon :icon="['fas','trash']" />
               </BaseButton>
             </template>
 
@@ -38,7 +38,7 @@
                 @click="$emit('btn-add')"
                 :key="4"
               >
-                <i class="fas fa-plus"></i>
+                <font-awesome-icon :icon="['fas','plus']" />
               </BaseButton>
             </template>
 
@@ -49,7 +49,7 @@
               @click="$emit('btn-clean')"
               :key="3"
             >
-              <i class="fas fa-times"></i>
+              <font-awesome-icon :icon="['fas','times']" />
             </BaseButton>
           </slot>
         </div>

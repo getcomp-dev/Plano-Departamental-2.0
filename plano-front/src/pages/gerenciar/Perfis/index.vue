@@ -7,7 +7,7 @@
         :color="'lightblue'"
         @click="$refs.modalAjuda.toggle()"
       >
-        <i class="fas fa-question"></i>
+        <font-awesome-icon :icon="['fas','question']" />
       </BaseButton>
     </PageHeader>
 
@@ -31,9 +31,7 @@
               Abreviação
               <i :class="setIconByOrder(ordenacaoPerfisMain, 'abreviacao')"></i>
             </th>
-            <th style="width: 60px;">
-              Cor
-            </th>
+            <th style="width: 60px;">Cor</th>
           </template>
           <template #tbody>
             <template v-for="perfil in Perfis">
@@ -47,12 +45,8 @@
                   },
                 ]"
               >
-                <td style="width: 350px;" class="t-start">
-                  {{ perfil.nome }}
-                </td>
-                <td style="width: 90px">
-                  {{ perfil.abreviacao }}
-                </td>
+                <td style="width: 350px;" class="t-start">{{ perfil.nome }}</td>
+                <td style="width: 90px">{{ perfil.abreviacao }}</td>
                 <td style="width: 60px">
                   <div
                     :style="{ 'background-color': perfil.cor }"
@@ -68,29 +62,28 @@
       <Card
         :title="'Perfil'"
         :toggleFooter="isEdit"
-        @btn-salvar="editPerfil()"
-        @btn-delete="deletePerfil()"
-        @btn-add="addPerfil()"
-        @btn-clean="cleanPerfil()"
+        @btn-salvar="editPerfil"
+        @btn-delete="openModalDelete"
+        @btn-add="addPerfil"
+        @btn-clean="cleanPerfil"
       >
         <template #form-group>
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
               <label required for="nome" class="col-form-label">Nome</label>
               <input
-                type="text"
-                class="input-maior form-control form-control-sm upper-case"
                 id="nome"
-                v-model="perfilForm.nome"
+                type="text"
+                class="input-maior form-control form-control-sm"
+                @input="perfilForm.nome= $event.target.value.toUpperCase()"
+                :value="perfilForm.nome"
               />
             </div>
           </div>
 
           <div class="row mb-2 mx-0">
             <div class="form-group col-8 m-0 px-0">
-              <label required for="abreviacao" class="col-form-label"
-                >Abreviação</label
-              >
+              <label required for="abreviacao" class="col-form-label">Abreviação</label>
               <input
                 type="text"
                 class="form-control form-control-sm"
@@ -114,54 +107,64 @@
       </Card>
     </div>
 
-    <!-- MODAL AJUDA -->
-    <BaseModal
-      ref="modalAjuda"
-      :modalOptions="{
-        type: 'ajuda',
-        title: 'Ajuda',
-      }"
-    >
-      <template #modal-body>
-        <ul class="list-ajuda list-group">
-          <li class="list-group-item">
-            <b>Para adicionar perfis: </b> Com o cartão à direita em branco,
-            preencha-o. Em seguida, clique em Adicionar
-            <i class="fas fa-plus icon-green px-1" style="font-size:12px"></i>
-            .
-          </li>
-          <li class="list-group-item">
-            <b>Para editar ou deletar um perfil: </b>Na tabela, clique no perfil
-            que deseja alterar. Logo após, no cartão à direita, altere as
-            informações que desejar e clique em Salvar
-            <i class="fas fa-check icon-green px-1" style="font-size:12px"></i>
-            ou, para excluí-lo, clique em Deletar
-            <i
-              class="far fa-trash-alt icon-red px-1"
-              style="font-size: 12px"
-            ></i>
-            .
-          </li>
-          <li class="list-group-item">
-            <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
-            em Cancelar
-            <i class="fas fa-times icon-gray px-1" style="font-size: 12px"></i>
-            .
-          </li>
-          <li class="list-group-item">
-            <b>Para alterar a ordenação:</b> Clique em Nome ou Abreviação no
-            cabeçalho da tabela para ordenação alfabética do mesmo.
-          </li>
-        </ul>
-      </template>
-    </BaseModal>
+    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deletePerfil">
+      <li v-if="isEdit" class="list-group-item">
+        <span>
+          Tem certeza que deseja excluír o perfil
+          <b>{{ perfilForm.nome}}</b>?
+        </span>
+      </li>
+      <li v-else class="list-group-item">Nenhum perfil selecionado.</li>
+    </ModalDelete>
+
+    <ModalAjuda ref="modalAjuda">
+      <li class="list-group-item">
+        <b>Para adicionar perfis:</b> Com o cartão à direita em branco,
+        preencha-o. Em seguida, clique em Adicionar
+        <i
+          class="fas fa-plus icon-green px-1"
+          style="font-size:12px"
+        ></i>
+        .
+      </li>
+      <li class="list-group-item">
+        <b>Para editar ou deletar um perfil:</b>Na tabela, clique no perfil
+        que deseja alterar. Logo após, no cartão à direita, altere as
+        informações que desejar e clique em Salvar
+        <i
+          class="fas fa-check icon-green px-1"
+          style="font-size:12px"
+        ></i>
+        ou, para excluí-lo, clique em Deletar
+        <i
+          class="far fa-trash-alt icon-red px-1"
+          style="font-size: 12px"
+        ></i>
+        .
+      </li>
+      <li class="list-group-item">
+        <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
+        em Cancelar
+        <i
+          class="fas fa-times icon-gray px-1"
+          style="font-size: 12px"
+        ></i>
+        .
+      </li>
+      <li class="list-group-item">
+        <b>Para alterar a ordenação:</b> Clique em Nome ou Abreviação no
+        cabeçalho da tabela para ordenação alfabética do mesmo.
+      </li>
+    </ModalAjuda>
   </div>
 </template>
 
 <script>
 import perfilService from "@/common/services/perfil";
 import { toggleOrdination } from "@/common/mixins";
-import { PageHeader, Card } from "@/components/ui";
+import { Card } from "@/components/ui";
+import { ModalAjuda, ModalDelete } from "@/components/modals";
+import { mapGetters } from "vuex";
 
 const emptyPerfil = {
   id: undefined,
@@ -174,18 +177,19 @@ export default {
   name: "DashboardPerfis",
   mixins: [toggleOrdination],
   components: {
-    PageHeader,
-
+    ModalAjuda,
     Card,
+    ModalDelete,
   },
   data() {
     return {
-      perfilForm: this.$_.clone(emptyPerfil),
       error: undefined,
-      perfilSelectedId: "",
+      perfilForm: this.$_.clone(emptyPerfil),
+      perfilSelectedId: null,
       ordenacaoPerfisMain: { order: "nome", type: "asc" },
     };
   },
+
   methods: {
     handleClickInPerfil(perfil) {
       this.cleanPerfil();
@@ -193,7 +197,7 @@ export default {
       this.showPerfil(perfil);
     },
     clearClick() {
-      this.perfilSelectedId = "";
+      this.perfilSelectedId = null;
     },
     cleanPerfil() {
       this.clearClick();
@@ -203,6 +207,10 @@ export default {
     showPerfil(perfil) {
       this.perfilForm = this.$_.clone(perfil);
     },
+    openModalDelete() {
+      this.$refs.modalDelete.open();
+    },
+
     addPerfil() {
       perfilService
         .create(this.perfilForm)
@@ -263,7 +271,7 @@ export default {
             group: "general",
             title: `Sucesso!`,
             text: `O Perfil ${response.Perfil.nome} foi excluído!`,
-            type: "warn",
+            type: "success",
           });
         })
         .catch(() => {
@@ -277,14 +285,18 @@ export default {
         });
     },
   },
+
   computed: {
+    ...mapGetters(["AllPerfis"]),
+
     Perfis() {
       return this.$_.orderBy(
-        this.$store.state.perfil.Perfis,
+        this.AllPerfis,
         this.ordenacaoPerfisMain.order,
         this.ordenacaoPerfisMain.type
       );
     },
+
     isEdit() {
       return this.perfilForm.id !== undefined;
     },

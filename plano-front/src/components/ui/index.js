@@ -1,4 +1,3 @@
-import PageHeader from "./PageHeader.vue";
 import Card from "./Card.vue";
 import NavTab from "./NavTab.vue";
 import BodyModalEditTurma from "./BodyModalEditTurma.vue";
@@ -10,7 +9,6 @@ import InputSearch from "./InputSearch.vue";
 export {
   InputSearch,
   ButtonSlideSection,
-  PageHeader,
   InputPassword,
   Card,
   NavTab,

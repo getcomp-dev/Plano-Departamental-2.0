@@ -24,9 +24,7 @@
             :iconSize="12"
             v-model="form.senha"
           />
-          <button type="submit" class="btn btn-sm btn-block mt-4 mb-3">
-            Entrar
-          </button>
+          <button type="submit" class="btn btn-sm btn-block mt-4 mb-3">Entrar</button>
 
           <b-alert
             :show="Boolean(error) ? 3 : false"
@@ -34,12 +32,11 @@
             variant="danger"
             dismissible
             fade
-            >{{ error }}</b-alert
-          >
+          >{{ error }}</b-alert>
         </form>
       </div>
     </div>
-    <TheLoadingView :visibility="onLoading.fetching || onLoading.partial" />
+    <TheLoadingView />
   </div>
 </template>
 
@@ -62,7 +59,7 @@ export default {
   },
   directives: {
     focus: {
-      inserted: function(el) {
+      inserted: function (el) {
         el.focus();
       },
     },

@@ -1,13 +1,8 @@
 <template>
   <div class="main-component row">
     <PageHeader :title="'Horários - Cursos'">
-      <BaseButton
-        title="Filtros"
-        :type="'icon'"
-        :color="'gray'"
-        @click="openAsideModal('filtros')"
-      >
-        <i class="fas fa-list-ul"></i>
+      <BaseButton title="Filtros" :type="'icon'" :color="'gray'" @click="openAsideModal('filtros')">
+        <font-awesome-icon :icon="['fas','list-ul']" />
       </BaseButton>
 
       <BaseButton
@@ -16,7 +11,7 @@
         :color="'gray'"
         @click="openAsideModal('relatorio')"
       >
-        <i class="fas fa-file-alt"></i>
+        <font-awesome-icon :icon="['fas','file-alt']" />
       </BaseButton>
 
       <BaseButton
@@ -25,23 +20,21 @@
         :color="'lightblue'"
         @click="openAsideModal('ajuda')"
       >
-        <i class="fas fa-question"></i>
+        <font-awesome-icon :icon="['fas','question']" />
       </BaseButton>
     </PageHeader>
 
-    <div class="row w-100 m-0" v-show="!tableIsLoading">
+    <div
+      class="row w-100 m-0"
+      v-show="
+        !onLoading.table && (CursosWithHorarios.length || EletivasIsSelected)
+      "
+    >
       <div v-show="semestre1IsActived" class="w-100">
-        <h2
-          v-show="CursosWithHorarios.length || EletivasIsSelected"
-          class="semestre-title"
-        >
-          1º SEMESTRE
-        </h2>
+        <h2 class="semestre-title">1º SEMESTRE</h2>
 
         <template v-for="curso in CursosWithHorarios">
-          <h3 class="curso-title pl-1" :key="1 + curso.nome">
-            {{ curso.nome }}
-          </h3>
+          <h3 class="curso-title pl-1" :key="1 + curso.nome">{{ curso.nome }}</h3>
           <ListTableHorarios
             :key="1 + curso.codigo + curso.value"
             :listaDePeriodos="listaDePeriodos"
@@ -54,23 +47,13 @@
         </template>
 
         <h3 v-show="EletivasIsSelected" class="curso-title pl-1">Eletivas</h3>
-        <TableEletivas
-          v-show="EletivasIsSelected"
-          :Eletivas="horariosAtivos1.Eletivas"
-        />
+        <TableEletivas v-show="EletivasIsSelected" :Eletivas="horariosAtivos1.Eletivas" />
       </div>
 
       <div v-show="semestre2IsActived" class="w-100">
-        <h2
-          v-show="CursosWithHorarios.length || EletivasIsSelected"
-          class="semestre-title"
-        >
-          2º SEMESTRE
-        </h2>
+        <h2 class="semestre-title">2º SEMESTRE</h2>
         <template v-for="curso in CursosWithHorarios">
-          <h3 class="curso-title pl-1" :key="2 + curso.nome">
-            {{ curso.nome }}
-          </h3>
+          <h3 class="curso-title pl-1" :key="2 + curso.nome">{{ curso.nome }}</h3>
           <ListTableHorarios
             :key="2 + curso.codigo + curso.value"
             :listaDePeriodos="listaDePeriodos"
@@ -83,12 +66,19 @@
         </template>
 
         <h3 v-show="EletivasIsSelected" class="curso-title pl-1">Eletivas</h3>
-        <TableEletivas
-          v-show="EletivasIsSelected"
-          :Eletivas="horariosAtivos2.Eletivas"
-        />
+        <TableEletivas v-show="EletivasIsSelected" :Eletivas="horariosAtivos2.Eletivas" />
       </div>
     </div>
+    <p
+      v-if="
+        (!semestre1IsActived && !semestre2IsActived) ||
+          (!CursosWithHorarios.length && !EletivasIsSelected)
+      "
+      class="text-empty"
+    >
+      <b>Nenhum horário encontrado.</b> Clique no botão de filtros
+      <font-awesome-icon :icon="['fas', 'list-ul']" class="mx-1" />para selecioná-los.
+    </p>
 
     <ModalFiltros
       ref="modalFiltros"
@@ -96,10 +86,7 @@
       :tabsOptions="modalFiltrosTabs"
     >
       <div class="div-table">
-        <BaseTable
-          v-show="modalFiltrosTabs.current === 'Cursos'"
-          :type="'modal'"
-        >
+        <BaseTable v-show="modalFiltrosTabs.current === 'Cursos'" :type="'modal'">
           <template #thead>
             <th style="width: 25px"></th>
             <th
@@ -133,25 +120,16 @@
                   class="form-check-input position-static m-0"
                 />
               </td>
-              <td style="width: 50px">
-                {{ curso.codigo }}
-              </td>
-              <td style="width: 375px" class="t-start">
-                {{ curso.nome }}
-              </td>
+              <td style="width: 50px">{{ curso.codigo }}</td>
+              <td style="width: 375px" class="t-start">{{ curso.nome }}</td>
             </tr>
           </template>
         </BaseTable>
 
-        <BaseTable
-          v-show="modalFiltrosTabs.current === 'Semestres'"
-          :type="'modal'"
-        >
+        <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
           <template #thead>
             <th style="width: 25px"></th>
-            <th style="width: 425px" class="t-start">
-              Semestre Letivo
-            </th>
+            <th style="width: 425px" class="t-start">Semestre Letivo</th>
           </template>
           <template #tbody>
             <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
@@ -162,9 +140,7 @@
                   v-model="filtroSemestres.primeiro"
                 />
               </td>
-              <td style="width: 425px" class="t-start">
-                PRIMEIRO
-              </td>
+              <td style="width: 425px" class="t-start">PRIMEIRO</td>
             </tr>
             <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
               <td style="width: 25px">
@@ -174,9 +150,7 @@
                   v-model="filtroSemestres.segundo"
                 />
               </td>
-              <td style="width: 425px" class="t-start">
-                SEGUNDO
-              </td>
+              <td style="width: 425px" class="t-start">SEGUNDO</td>
             </tr>
           </template>
         </BaseTable>
@@ -205,14 +179,8 @@
 
 <script>
 import { mapGetters } from "vuex";
-import {
-  toggleItemInArray,
-  toggleOrdination,
-  tableLoading,
-} from "@/common/mixins";
-import { PageHeader } from "@/components/ui";
+import { toggleItemInArray, toggleOrdination } from "@/common/mixins";
 import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
-
 import TableEletivas from "./TableEletivas.vue";
 import ListTableHorarios from "./ListTableHorarios.vue";
 
@@ -241,14 +209,13 @@ const allCursosOptions = [
 
 export default {
   name: "DashboardHorarios",
-  mixins: [toggleItemInArray, toggleOrdination, tableLoading],
+  mixins: [toggleItemInArray, toggleOrdination],
   components: {
     ModalFiltros,
     ModalAjuda,
     ModalRelatorio,
     ListTableHorarios,
     TableEletivas,
-    PageHeader,
   },
   data() {
     return {
@@ -302,10 +269,8 @@ export default {
           },
         },
         btnOk: () => {
-          this.setTableLoadingState(true);
           this.setSemestreAtivo();
           this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
-          this.setTableLoadingState(false);
         },
       },
       evenCCN: "false",
@@ -5374,7 +5339,7 @@ export default {
 
       var docDefinition = {
         content: tables,
-        footer: function(currentPage, pageCount) {
+        footer: function (currentPage, pageCount) {
           return {
             columns: [
               {
@@ -5403,6 +5368,7 @@ export default {
       "TurmasExternasInDisciplinas",
       "allPlanos",
       "AllDisciplinas",
+      "onLoading",
     ]),
 
     semestre1IsActived() {
@@ -5477,7 +5443,7 @@ export default {
             this.filtroCursos.ativados,
             (curso) => curso.codigo === "65B"
           ),
-          nome: "Engenharia da Computação",
+          nome: "Engenharia Computacional",
           codigo: "65B",
           value: 4,
           turno: "Diurno",
@@ -5515,6 +5481,13 @@ export default {
   font-size: 12px !important;
   font-weight: bold !important;
 }
+.text-empty {
+  width: 100%;
+  font-size: 12px;
+  padding: 5px;
+  background-color: var(--light-gray);
+}
+
 ::v-deep .container-horarios .div-table .periodo-title {
   font-size: 12px;
   font-weight: normal;

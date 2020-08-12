@@ -1,6 +1,8 @@
 <template>
-  <tr class="cargaPos-row max-content ">
-    <td style="width:70px"><div style="height:30px"></div></td>
+  <tr class="cargaPos-row max-content">
+    <td style="width:70px">
+      <div style="height:30px"></div>
+    </td>
     <td style="width: 25px">
       <input type="checkbox" @click="checkDelete(carga)" />
     </td>
@@ -18,8 +20,7 @@
           v-for="docente in Docentes"
           :key="'id docente' + docente.id"
           :value="docente.id"
-          >{{ docente.apelido }}</option
-        >
+        >{{ docente.apelido }}</option>
       </select>
     </td>
 
@@ -61,7 +62,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["pushNotification", "setPartialLoading"]),
+    ...mapActions(["setPartialLoading"]),
 
     resetCargaPos() {
       this.cargaPosForm = this.$_.clone(this.carga);
@@ -145,7 +146,7 @@ export default {
   text-align: center;
 }
 .cargaPos-row select + select {
-  margin-top: 2px !important;
+  margin-top: 3px !important;
 }
 .cargaPos-row input[type="checkbox"] {
   width: 13px !important;

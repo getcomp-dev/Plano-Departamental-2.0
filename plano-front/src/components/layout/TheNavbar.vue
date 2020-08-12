@@ -24,7 +24,7 @@
           @change="changeCurrentPlano(planoIdForm)"
         >
           <option v-for="plano in allPlanos" :value="plano.id" :key="plano.id">
-            {{ plano.nome }} - {{ plano.ano }}
+            {{ plano.ano }} - {{ plano.nome }}
           </option>
         </select>
       </li>

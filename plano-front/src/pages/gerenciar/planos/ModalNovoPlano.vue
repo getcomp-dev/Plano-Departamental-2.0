@@ -682,10 +682,7 @@ export default {
       this.setPartialLoading(true);
       let turmasNovoPlano = this.generateTurmasNovoPlano();
 
-      console.log(this.plano);
-      console.log(turmasNovoPlano);
       planoService.create(this.plano).then((plano) => {
-        // localStorage.setItem("Plano", plano.Plano.id);
         turmasNovoPlano.forEach((t) => {
           turmaService
             .create({
@@ -844,11 +841,12 @@ export default {
             });
         });
 
-        // this.$store.dispatch("fetchAll");
-        this.close();
-        setTimeout(() => {
-          this.setPartialLoading(false);
-        }, 300);
+        this.$store.dispatch("fetchAll").then(() => {
+          setTimeout(() => {
+            this.setPartialLoading(false);
+            this.close();
+          }, 300);
+        });
       });
     },
   },

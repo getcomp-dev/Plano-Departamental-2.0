@@ -1,10 +1,5 @@
 <template>
-  <BaseModal2
-    ref="baseModalFiltros"
-    type="filtros"
-    title="Filtros"
-    :hasFooter="true"
-  >
+  <BaseModal2 ref="baseModalFiltros" type="filtros" title="Filtros" :hasFooter="true">
     <template #modal-body>
       <NavTab
         :currentTab="tabsOptions.current"
@@ -17,29 +12,19 @@
 
     <template #modal-footer>
       <div>
-        <BaseButton :type="'text'" :color="'lightblue'" @click="selectAll">
-          Selecionar Todos
-        </BaseButton>
-        <BaseButton :type="'text'" :color="'gray'" @click="selectNone">
-          Desmarcar Todos
-        </BaseButton>
-
+        <BaseButton :type="'text'" :color="'lightblue'" @click="selectAll">Selecionar Todos</BaseButton>
+        <BaseButton :type="'text'" :color="'gray'" @click="selectNone">Desmarcar Todos</BaseButton>
         <slot name="modal-footer-btn"></slot>
       </div>
-      <BaseButton
-        class="paddingX-20"
-        :type="'text'"
-        :color="'green'"
-        @click="selectOk"
-      >
-        OK
-      </BaseButton>
+
+      <BaseButton class="paddingX-20" :type="'text'" :color="'green'" @click="selectOk">OK</BaseButton>
     </template>
   </BaseModal2>
 </template>
 
 <script>
 import NavTab from "@/components/ui/NavTab";
+import { mapActions } from "vuex";
 
 export default {
   name: "ModalFiltros",
@@ -50,6 +35,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(["setTableLoading"]),
+
     selectAll() {
       this.callbacks.selectAll[this.tabsOptions.current]();
     },
@@ -57,7 +44,9 @@ export default {
       this.callbacks.selectNone[this.tabsOptions.current]();
     },
     selectOk() {
+      this.setTableLoading(true);
       this.callbacks.btnOk();
+      this.setTableLoading(false);
     },
 
     toggle() {

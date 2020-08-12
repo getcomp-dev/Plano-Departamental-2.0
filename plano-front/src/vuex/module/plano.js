@@ -57,7 +57,7 @@ const actions = {
     });
   },
 
-  async initializeCurrentPlano({ commit, dispatch }) {
+  async initializePlano({ commit, dispatch }) {
     try {
       commit("SET_FETCHING_LOADING", true);
 

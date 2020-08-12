@@ -7,7 +7,7 @@
         :color="'lightblue'"
         @click="$refs.modalAjuda.toggle()"
       >
-        <i class="fas fa-question"></i>
+        <font-awesome-icon :icon="['fas','question']" />
       </BaseButton>
     </PageHeader>
 
@@ -58,32 +58,22 @@
       <Card
         :title="'Usuário'"
         :toggleFooter="isEdit"
-        @btn-salvar="editUser()"
-        @btn-delete="openModalDelete()"
-        @btn-add="createUser()"
-        @btn-clean="cleanUser()"
+        @btn-salvar="editUser"
+        @btn-delete="openModalDelete"
+        @btn-add="createUser"
+        @btn-clean="cleanUser"
       >
         <template #form-group>
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="nome">Nome </label>
-              <input
-                class="form-control"
-                type="text"
-                id="nome"
-                v-model="userForm.nome"
-              />
+              <label required for="nome">Nome</label>
+              <input class="form-control" type="text" id="nome" v-model="userForm.nome" />
             </div>
           </div>
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="login">Login </label>
-              <input
-                class="form-control"
-                type="text"
-                id="login"
-                v-model="userForm.login"
-              />
+              <label required for="login">Login</label>
+              <input class="form-control" type="text" id="login" v-model="userForm.login" />
             </div>
           </div>
           <!-- Create -->
@@ -92,17 +82,13 @@
             <div class="row mb-2 mx-0">
               <div class="form-group col m-0 px-0">
                 <label required for="novaSenha">Senha</label>
-                <InputPassword
-                  :iconSize="13"
-                  :inputId="'novaSenha'"
-                  v-model="userForm.senha"
-                />
+                <InputPassword :iconSize="13" :inputId="'novaSenha'" v-model="userForm.senha" />
               </div>
             </div>
             <!-- confirmar senha -->
             <div class="row mb-2 mx-0">
               <div class="form-group col m-0 px-0">
-                <label required for="confirmaSenha"> Confirmar senha </label>
+                <label required for="confirmaSenha">Confirmar senha</label>
                 <InputPassword
                   :iconSize="13"
                   :isInvalid="confirmaSenha != userForm.senha"
@@ -115,32 +101,21 @@
           <!-- Edit -->
           <template v-else-if="isEdit">
             <!-- toggle edit senha -->
-            <ButtonSlideSection
-              :isOpen="isEditingSenha"
-              @handel-click="toggleEditSenha"
-            />
+            <ButtonSlideSection :isOpen="isEditingSenha" @handel-click="toggleEditSenha" />
 
             <!-- edit senha -->
             <transition-group name="slideY" mode="out-in">
               <template v-if="isEditingSenha">
                 <div :key="'senha'" class="row mb-2 mx-0">
                   <div class="form-group col m-0 px-0">
-                    <label required for="novaSenha">
-                      Nova senha
-                    </label>
-                    <InputPassword
-                      :iconSize="13"
-                      :inputId="'novaSenha'"
-                      v-model="novaSenha"
-                    />
+                    <label required for="novaSenha">Nova senha</label>
+                    <InputPassword :iconSize="13" :inputId="'novaSenha'" v-model="novaSenha" />
                   </div>
                 </div>
                 <!-- confirma nova senha -->
                 <div :key="'confirma'" class="row mb-2 mx-0">
                   <div class="form-group col m-0 px-0">
-                    <label required for="confirmaSenha"
-                      >Confirmar nova senha
-                    </label>
+                    <label required for="confirmaSenha">Confirmar nova senha</label>
                     <InputPassword
                       :iconSize="13"
                       :isInvalid="confirmaSenha != novaSenha"
@@ -155,12 +130,8 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label for="userAdmin">Tipo </label>
-              <select
-                id="userAdmin"
-                v-model.number="userForm.admin"
-                class="form-control"
-              >
+              <label for="userAdmin">Tipo</label>
+              <select id="userAdmin" v-model.number="userForm.admin" class="form-control">
                 <option value="0">Consulta</option>
                 <option value="1">Comissão</option>
                 <option value="2">Administrador</option>
@@ -171,78 +142,34 @@
       </Card>
     </div>
 
-    <BaseModal
-      ref="modalDeleteUser"
-      :modalOptions="{
-        title: 'Deletar usuário',
-        position: 'center',
-        hasBackground: true,
-        hasFooter: true,
-      }"
-      :customStyles="'width:450px; font-size:14px'"
-    >
-      <template #modal-body>
-        <p class="w-100 m-0">
+    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deleteUser">
+      <li class="list-group-item">
+        <span>
           <template v-if="isEdit">
-            Tem certeza que deseja deletar o usuário
-            <b>{{ userForm.nome }}</b> ?
+            Tem certeza que deseja excluír o usuário
+            <b>{{ userForm.nome}}</b>?
           </template>
-          <template v-else>
-            Nenhum usuário selecionado!
-          </template>
-        </p>
-      </template>
-      <template #modal-footer>
-        <BaseButton
-          class="paddingX-20"
-          :type="'text'"
-          :color="'gray'"
-          @click="closeModalDelete()"
-        >
-          Cancelar
-        </BaseButton>
-        <BaseButton
-          class="paddingX-20"
-          :type="'text'"
-          :color="'red'"
-          @click="deleteUser()"
-        >
-          Deletar
-        </BaseButton>
-      </template>
-    </BaseModal>
-    <!-- MODAL AJUDA -->
+          <template v-else>Nenhum usuário selecionado!</template>
+        </span>
+      </li>
+    </ModalDelete>
 
-    <BaseModal
-      ref="modalAjuda"
-      :modalOptions="{
-        type: 'ajuda',
-        title: 'Ajuda',
-      }"
-    >
-      <template #modal-body>
-        <ul class="list-ajuda list-group">
-          <li class="list-group-item">
-            <b>Para excluir um usuário:</b> clique no ícone de deletar
-            <i class="fas fa-times icon-red"></i> presente na tabela, em seguida
-            confirme se é realmente o usuário que deseja exluir e clique no
-            botão deletar ou cancelar.
-          </li>
-        </ul>
-      </template>
-    </BaseModal>
+    <ModalAjuda ref="modalAjuda">
+      <li class="list-group-item">
+        <b>Para excluir um usuário:</b> clique no ícone de deletar
+        <i class="fas fa-times icon-red"></i> presente na tabela, em seguida
+        confirme se é realmente o usuário que deseja exluir e clique no
+        botão deletar ou cancelar.
+      </li>
+    </ModalAjuda>
   </div>
 </template>
 
 <script>
 import userService from "@/common/services/usuario";
 import { toggleOrdination, notification } from "@/common/mixins";
-import {
-  PageHeader,
-  InputPassword,
-  Card,
-  ButtonSlideSection,
-} from "@/components/ui";
+import { InputPassword, Card, ButtonSlideSection } from "@/components/ui";
+import { ModalDelete, ModalAjuda } from "@/components/modals";
 
 const emptyUser = {
   nome: "",
@@ -255,15 +182,16 @@ export default {
   name: "Usuarios",
   mixins: [notification, toggleOrdination],
   components: {
-    PageHeader,
     Card,
     InputPassword,
     ButtonSlideSection,
+    ModalDelete,
+    ModalAjuda,
   },
   data() {
     return {
-      isEditingSenha: false,
       userSelected: null,
+      isEditingSenha: false,
       userForm: this.$_.clone(emptyUser),
       novaSenha: "",
       confirmaSenha: "",
@@ -301,10 +229,7 @@ export default {
       this.userForm = this.$_.clone(emptyUser);
     },
     openModalDelete() {
-      this.$refs.modalDeleteUser.open();
-    },
-    closeModalDelete() {
-      this.$refs.modalDeleteUser.close();
+      this.$refs.modalDelete.open();
     },
     validateEditUser(user) {
       return (
@@ -380,7 +305,6 @@ export default {
           type: "success",
           message: `Usuário ${user.nome} foi removido.`,
         });
-        this.closeModalDelete();
         this.cleanUser();
       } catch (error) {
         this.showNotification({
@@ -425,7 +349,7 @@ export default {
 </script>
 
 <style scoped>
-@import url(../../../assets/css/slideY-section-animation.css);
+@import url(../../../assets/css/slideY-animation.css);
 
 .card {
   font-size: 11px;

@@ -7,7 +7,7 @@
         :color="'lightblue'"
         @click="$refs.modalAjuda.toggle()"
       >
-        <i class="fas fa-question"></i>
+        <font-awesome-icon :icon="['fas','question']" />
       </BaseButton>
     </PageHeader>
 
@@ -15,19 +15,13 @@
       <div class="p-0 div-table">
         <BaseTable :styles="'height:max-content'">
           <template #thead>
-            <th style="width: 220px">
-              Cursos
-            </th>
-            <th style="width: 100px">
-              Grades
-            </th>
+            <th style="width: 220px">Cursos</th>
+            <th style="width: 100px">Grades</th>
           </template>
 
           <template #tbody>
             <tr class="bg-custom">
-              <td style="width: 220px">
-                Ciência da Computação Diurno
-              </td>
+              <td style="width: 220px">Ciência da Computação Diurno</td>
               <td style="width:100px"></td>
             </tr>
             <template v-for="grade in Grades_CCDiurno">
@@ -40,16 +34,12 @@
                 ]"
               >
                 <td style="width: 220px"></td>
-                <td style="width: 100px">
-                  {{ grade.nome }}
-                </td>
+                <td style="width: 100px">{{ grade.nome }}</td>
               </tr>
             </template>
 
             <tr class="bg-custom">
-              <td style="width: 220px">
-                Ciência da Computação Noturno
-              </td>
+              <td style="width: 220px">Ciência da Computação Noturno</td>
               <td style="width:100px"></td>
             </tr>
             <template v-for="grade in Grades_CCNoturno">
@@ -62,16 +52,12 @@
                 ]"
               >
                 <td style="width: 220px"></td>
-                <td style="width: 100px">
-                  {{ grade.nome }}
-                </td>
+                <td style="width: 100px">{{ grade.nome }}</td>
               </tr>
             </template>
 
             <tr class="bg-custom">
-              <td style="width: 220px">
-                Sistemas de informação
-              </td>
+              <td style="width: 220px">Sistemas de informação</td>
               <td style="width:100px"></td>
             </tr>
             <template v-for="grade in Grades_SI">
@@ -84,16 +70,12 @@
                 ]"
               >
                 <td style="width: 220px"></td>
-                <td style="width: 100px">
-                  {{ grade.nome }}
-                </td>
+                <td style="width: 100px">{{ grade.nome }}</td>
               </tr>
             </template>
 
             <tr class="bg-custom">
-              <td style="width: 220px">
-                Engenharia da Computação
-              </td>
+              <td style="width: 220px">Engenharia da Computação</td>
               <td style="width:100px"></td>
             </tr>
             <template v-for="grade in Grade_EC">
@@ -106,9 +88,7 @@
                 ]"
               >
                 <td style="width: 220px"></td>
-                <td style="width: 100px">
-                  {{ grade.nome }}
-                </td>
+                <td style="width: 100px">{{ grade.nome }}</td>
               </tr>
             </template>
           </template>
@@ -136,9 +116,7 @@
             </div>
 
             <div class="form-group col-7 m-0 px-0">
-              <label required for="periodoInicio" class="col-form-label"
-                >Período de Início</label
-              >
+              <label required for="periodoInicio" class="col-form-label">Período de Início</label>
               <input
                 type="text"
                 class="card-input-menor form-control form-control-sm col"
@@ -170,42 +148,47 @@
       </Card>
     </div>
 
-    <ModalDelete
-      ref="modalDelete"
-      :isDeleting="isEdit"
-      @btn-deletar="deleteGrade"
-    >
+    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deleteGrade">
       <li v-if="isEdit" class="list-group-item">
         <span>
           Tem certeza que deseja excluír a grade
-          <b>{{ gradeForm.periodoInicio }} - {{ gradeForm.nome }}</b
-          >?
+          <b>{{ gradeForm.periodoInicio }} - {{ gradeForm.nome }}</b>?
         </span>
       </li>
-      <li v-else class="list-group-item">
-        Nenhuma grade selecionada.
-      </li>
+      <li v-else class="list-group-item">Nenhuma grade selecionada.</li>
     </ModalDelete>
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
         <b>Para adicionar grades:</b> Com o cartão a direita em branco,
         preencha-o. Em seguida, clique em Adicionar
-        <i class="fas fa-plus icon-green px-1" style="font-size:12px"></i>.
+        <i
+          class="fas fa-plus icon-green px-1"
+          style="font-size:12px"
+        ></i>.
       </li>
       <li class="list-group-item">
         <b>Para editar ou deletar uma grade:</b> Na tabela, clique na grade que
         deseja alterar. Logo após, no cartão à direita, altere as informações
         que desejar e clique em Salvar
-        <i class="fas fa-check icon-green px-1" style="font-size:12px"></i>
+        <i
+          class="fas fa-check icon-green px-1"
+          style="font-size:12px"
+        ></i>
         ou, para excluí-la, clique em Deletar
-        <i class="far fa-trash-alt icon-red px-1" style="font-size: 12px"></i>
+        <i
+          class="far fa-trash-alt icon-red px-1"
+          style="font-size: 12px"
+        ></i>
         .
       </li>
       <li class="list-group-item">
         <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique em
         Cancelar
-        <i class="fas fa-times icon-gray px-1" style="font-size: 12px"></i>.
+        <i
+          class="fas fa-times icon-gray px-1"
+          style="font-size: 12px"
+        ></i>.
       </li>
     </ModalAjuda>
   </div>
@@ -214,7 +197,7 @@
 <script>
 import gradeService from "@/common/services/grade";
 import { maskOnlyNumber } from "@/common/mixins";
-import { PageHeader, Card } from "@/components/ui";
+import { Card } from "@/components/ui";
 import { ModalDelete, ModalAjuda } from "@/components/modals";
 
 const emptyGrade = {
@@ -231,7 +214,7 @@ const emptyDisciplinaGrade = {
 export default {
   name: "DashboardGrade",
   mixins: [maskOnlyNumber],
-  components: { PageHeader, Card, ModalAjuda, ModalDelete },
+  components: { Card, ModalAjuda, ModalDelete },
   data() {
     return {
       error: null,
@@ -348,7 +331,7 @@ export default {
     },
     Grades_CCNoturno() {
       return this.$_.orderBy(
-        this.Grades.filter(function(grade) {
+        this.Grades.filter(function (grade) {
           return grade.Curso == 1;
         }),
         "nome"
@@ -356,20 +339,20 @@ export default {
     },
     Grades_CCDiurno() {
       return this.$_.orderBy(
-        this.Grades.filter(function(grade) {
+        this.Grades.filter(function (grade) {
           return grade.Curso == 4;
         }),
         "nome"
       );
     },
     Grades_SI() {
-      return this.Grades.filter(function(grade) {
+      return this.Grades.filter(function (grade) {
         return grade.Curso == 3;
       });
     },
     Grade_EC() {
       return this.$_.orderBy(
-        this.Grades.filter(function(grade) {
+        this.Grades.filter(function (grade) {
           return grade.Curso == 2;
         }),
         "nome"

@@ -7,7 +7,7 @@
         :color="'lightblue'"
         @click="$refs.modalAjuda.toggle()"
       >
-        <i class="fas fa-question"></i>
+        <font-awesome-icon :icon="['fas','question']" />
       </BaseButton>
     </PageHeader>
 
@@ -48,9 +48,7 @@
               @click="toggleOrder(ordenacaoCursosMain, 'alunosEntrada', 'desc')"
             >
               1º Sem.
-              <i
-                :class="setIconByOrder(ordenacaoCursosMain, 'alunosEntrada')"
-              ></i>
+              <i :class="setIconByOrder(ordenacaoCursosMain, 'alunosEntrada')"></i>
             </th>
             <th
               class="clickable"
@@ -61,9 +59,7 @@
               "
             >
               2º Sem.
-              <i
-                :class="setIconByOrder(ordenacaoCursosMain, 'alunosEntrada2')"
-              ></i>
+              <i :class="setIconByOrder(ordenacaoCursosMain, 'alunosEntrada2')"></i>
             </th>
           </template>
           <template #tbody>
@@ -76,21 +72,11 @@
                 'clickable',
               ]"
             >
-              <td style="width: 65px" class="t-start">
-                {{ curso.codigo }}
-              </td>
-              <td style="width: 300px" class="t-start">
-                {{ curso.nome }}
-              </td>
-              <td style="width: 65px">
-                {{ curso.turno }}
-              </td>
-              <td style="width: 70px;">
-                {{ curso.alunosEntrada }}
-              </td>
-              <td style="width: 70px;">
-                {{ curso.alunosEntrada2 }}
-              </td>
+              <td style="width: 65px" class="t-start">{{ curso.codigo }}</td>
+              <td style="width: 300px" class="t-start">{{ curso.nome }}</td>
+              <td style="width: 65px">{{ curso.turno }}</td>
+              <td style="width: 70px;">{{ curso.alunosEntrada }}</td>
+              <td style="width: 70px;">{{ curso.alunosEntrada2 }}</td>
             </tr>
             <tr v-if="!Cursos.length">
               <td colspan="5" style="width:570px" class="text-center">
@@ -117,8 +103,7 @@
               <input
                 id="nome"
                 type="text"
-                class="input-maior form-control
-                form-control-sm"
+                class="input-maior form-control form-control-sm"
                 @input="cursoForm.nome = $event.target.value.toUpperCase()"
                 :value="cursoForm.nome"
               />
@@ -153,9 +138,7 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="alunosEntrada1" class="col-form-label"
-                >Alunos 1º Sem.</label
-              >
+              <label required for="alunosEntrada1" class="col-form-label">Alunos 1º Sem.</label>
               <input
                 type="text"
                 class="form-control form-control-sm input-menor"
@@ -166,9 +149,7 @@
             </div>
 
             <div class="form-group col m-0 px-0">
-              <label required for="alunosEntrada2" class="col-form-label"
-                >Alunos 2º Sem.</label
-              >
+              <label required for="alunosEntrada2" class="col-form-label">Alunos 2º Sem.</label>
               <input
                 type="text"
                 class="form-control form-control-sm input-menor"
@@ -182,31 +163,29 @@
       </Card>
     </div>
 
-    <ModalDelete
-      ref="modalDelete"
-      :isDeleting="isEdit"
-      @btn-deletar="deleteCurso"
-    >
+    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deleteCurso">
       <li v-if="isEdit" class="list-group-item">
         <span v-html="modalDeleteText"></span>
       </li>
-      <li v-else class="list-group-item">
-        Nenhuma curso selecionado.
-      </li>
+      <li v-else class="list-group-item">Nenhuma curso selecionado.</li>
     </ModalDelete>
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
         <b>Para adicionar cursos:</b> Com o cartão à direita em branco,
         preencha-o. Em seguida, clique em Adicionar
-        <i class="fas fa-plus icon-green px-1"></i>
+        <i
+          class="fas fa-plus icon-green px-1"
+        ></i>
         .
       </li>
       <li class="list-group-item">
         <b>Para editar ou deletar um curso:</b> Na tabela, clique no curso que
         deseja alterar. Logo após, no cartão à direita, altere as informações
         que desejar e clique em Salvar
-        <i class="fas fa-check icon-green px-1"></i>
+        <i
+          class="fas fa-check icon-green px-1"
+        ></i>
         ou, para excluí-lo, clique em Deletar
         <i class="far fa-trash-alt icon-red px-1"></i>
         .
@@ -230,9 +209,8 @@
 import ls from "local-storage";
 import cursoService from "@/common/services/curso";
 import { toggleOrdination, maskOnlyNumber } from "@/common/mixins";
-import { PageHeader, Card } from "@/components/ui";
+import { Card } from "@/components/ui";
 import { ModalDelete, ModalAjuda } from "@/components/modals";
-import { mapActions } from "vuex";
 
 const emptyCurso = {
   id: undefined,
@@ -248,13 +226,13 @@ const emptyCurso = {
 export default {
   name: "DashboardCursos",
   mixins: [toggleOrdination, maskOnlyNumber],
-  components: { PageHeader, Card, ModalDelete, ModalAjuda },
+  components: { Card, ModalDelete, ModalAjuda },
 
   data() {
     return {
       modalDeleteText: "",
-      cursoForm: this.$_.clone(emptyCurso),
       cursoClickado: "",
+      cursoForm: this.$_.clone(emptyCurso),
       ordenacaoCursosMain: { order: "codigo", type: "asc" },
     };
   },
@@ -264,9 +242,8 @@ export default {
         .id + 1;
     this.selectAll = true;
   },
-  methods: {
-    ...mapActions(["pushNotification"]),
 
+  methods: {
     handleClickInCurso(cursoId) {
       this.cursoClickado = cursoId;
     },
@@ -451,6 +428,7 @@ export default {
       this.cursoForm = this.$_.clone(curso);
     },
   },
+
   computed: {
     Cursos() {
       return this.$_.orderBy(

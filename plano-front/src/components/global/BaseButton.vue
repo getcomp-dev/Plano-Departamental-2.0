@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     generateUniqueKey() {
-      return this.color + this.type + Math.random();
+      return this.$_.uniqueId(this.color);
     },
   },
   computed: {
@@ -68,7 +68,7 @@ export default {
   background-color: #fff;
   border: 1px solid rgb(199, 199, 199);
 }
-.base-btn.btn-icon i {
+.base-btn.btn-icon svg {
   font-size: 16px !important;
 }
 .btn-icon:focus {

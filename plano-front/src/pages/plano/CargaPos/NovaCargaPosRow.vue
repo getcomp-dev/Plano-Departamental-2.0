@@ -1,44 +1,41 @@
 <template>
-  <tr class="novaturma stickyAdd">
-    <div class="max-content stickyAdd">
-      <td style="width:70px" class="less-padding">
-        <select type="text" v-model="cargaPosForm.programa">
-          <option type="text" value="PGCC">PGCC</option>
-          <option type="text" value="PGEM">PGEM</option>
-          <option type="text" value="PGMC">PGMC</option>
-        </select>
-      </td>
-      <td style="width:25px"><div style="height:30px"></div></td>
-      <td style="width:55px">
-        <select v-model.number="cargaPosForm.trimestre">
-          <option type="text" value="1">1</option>
-          <option type="text" value="2">2</option>
-          <option type="text" value="3">3</option>
-          <option type="text" value="4">4</option>
-        </select>
-      </td>
-      <td style="width:145px" class="less-padding">
-        <select v-model.number="cargaPosForm.Docente">
-          <option v-if="!!DocentesOrdered.length" type="text" value
-            >Nenhum Docente Encontrado</option
-          >
-          <option
-            v-for="docente in DocentesOrdered"
-            :key="'id docente' + docente.id"
-            :value="docente.id"
-            >{{ docente.apelido }}</option
-          >
-        </select>
-      </td>
-      <td style="width:50px" class="less-padding">
-        <input
-          type="text"
-          id="creditos"
-          v-model.number="cargaPosForm.creditos"
-          @keypress="onlyNumber"
-        />
-      </td>
-    </div>
+  <tr class="novaturma">
+    <td style="width:70px" class="less-padding">
+      <select type="text" v-model="cargaPosForm.programa">
+        <option type="text" value="PGCC">PGCC</option>
+        <option type="text" value="PGEM">PGEM</option>
+        <option type="text" value="PGMC">PGMC</option>
+      </select>
+    </td>
+    <td style="width:25px">
+      <div style="height:30px"></div>
+    </td>
+    <td style="width:55px">
+      <select v-model.number="cargaPosForm.trimestre">
+        <option type="text" value="1">1</option>
+        <option type="text" value="2">2</option>
+        <option type="text" value="3">3</option>
+        <option type="text" value="4">4</option>
+      </select>
+    </td>
+    <td style="width:145px" class="less-padding">
+      <select v-model.number="cargaPosForm.Docente">
+        <option v-if="!!DocentesOrdered.length" type="text" value>Nenhum Docente Encontrado</option>
+        <option
+          v-for="docente in DocentesOrdered"
+          :key="'id docente' + docente.id"
+          :value="docente.id"
+        >{{ docente.apelido }}</option>
+      </select>
+    </td>
+    <td style="width:50px" class="less-padding">
+      <input
+        type="text"
+        id="creditos"
+        v-model.number="cargaPosForm.creditos"
+        @keypress="onlyNumber"
+      />
+    </td>
   </tr>
 </template>
 
@@ -64,7 +61,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["pushNotification", "setPartialLoading"]),
+    ...mapActions(["setPartialLoading"]),
 
     onlyNumber($event) {
       let keyCode = $event.keyCode ? $event.keyCode : $event.which;
@@ -175,7 +172,7 @@ export default {
   text-align: center;
 }
 .novaturma select + select {
-  margin-top: 2px !important;
+  margin-top: 3px !important;
 }
 .novaturma input[type="checkbox"] {
   width: 13px !important;
@@ -184,15 +181,5 @@ export default {
   margin: 0;
   margin-top: 5px !important;
   margin-bottom: auto !important;
-}
-.stickyAdd {
-  background-color: #cecece;
-  display: block;
-  overflow: hidden !important;
-  position: sticky !important;
-  position: -webkit-sticky !important;
-  top: 19px !important;
-  overflow: hidden !important;
-  z-index: 5 !important;
 }
 </style>

@@ -1,23 +1,19 @@
 <template>
-  <transition :name="customAnimation + '-modal'">
+  <transition :name="customAnimation">
     <div
-      @click.stop=""
+      @click.stop
       v-show="visibility"
       :class="['modal-custom', options.customClasses]"
       :style="options.typeStyles"
     >
       <header class="modal-custom-header w-100">
-        <h2 class="title">
-          {{ options.title }}
-        </h2>
+        <h2 class="title">{{ options.title }}</h2>
         <button
           type="button"
           class="btn-custom btn-close"
           @click="close()"
           aria-label="Close modal"
-        >
-          &times;
-        </button>
+        >&times;</button>
       </header>
 
       <main class="modal-custom-body">
@@ -25,7 +21,7 @@
       </main>
 
       <footer v-if="options.hasFooter" class="modal-custom-footer w-100">
-        <slot name="modal-footer"> </slot>
+        <slot name="modal-footer"></slot>
       </footer>
     </div>
   </transition>
@@ -33,7 +29,6 @@
 
 <script>
 import { EventBus } from "@/plugins/eventBus.js";
-
 const positions = {
   right: {
     top: "80px",
@@ -46,13 +41,8 @@ const positions = {
     zIndex: 1000,
     transform: "translateX(-50%)",
   },
-  centerNavbar: {
-    top: "40px",
-    left: "50%",
-    zIndex: 1000,
-    transform: "translateX(-50%)",
-  },
 };
+
 export default {
   name: "BaseModal2",
   props: {
@@ -69,14 +59,16 @@ export default {
       visibility: false,
     };
   },
+
   mounted() {
-    window.addEventListener("keyup", this.onEscKeyUp);
+    window.addEventListener("keyup", this.closeOnEscKey);
   },
   beforeDestroy() {
     this.$off("on-close");
     this.$store.commit("HIDE_MODAL_OVERLAY");
-    window.removeEventListener("keyup", this.onEscKeyUp);
+    window.removeEventListener("keyup", this.closeOnEscKey);
   },
+
   methods: {
     close() {
       this.visibility = false;
@@ -87,12 +79,12 @@ export default {
     toggle() {
       this.visibility = !this.visibility;
     },
-    onEscKeyUp(event) {
+    closeOnEscKey(event) {
       const { code } = event;
-
       if (code === "Escape") this.close();
     },
   },
+
   computed: {
     options() {
       const typeStyles = [];
@@ -107,7 +99,7 @@ export default {
 
         case "fromNavbar":
           hasBackground = true;
-          typeStyles.push(positions.centerNavbar, { minWidth: "370px" });
+          typeStyles.push(positions.center, { width: "400px" });
           break;
 
         case "filtros":
@@ -125,7 +117,7 @@ export default {
         case "editVagas":
           if (!title) title = "Editar Vagas";
           title = "Vagas";
-          hasBackground = false;
+          hasBackground = true;
           typeStyles.push(positions.center, { width: "580px" });
           break;
 
@@ -152,21 +144,19 @@ export default {
       switch (this.type) {
         case "editTurma":
         case "editVagas":
+        case "fromNavbar":
           return "center";
 
         case "filtros":
         case "ajuda":
           return "right";
-
-        case "fromNavbar":
-          return "fromNavbar";
-
         default:
           if (!this.position) return "center";
           else return this.position;
       }
     },
   },
+
   watch: {
     visibility(newValue) {
       if (newValue) {
@@ -188,8 +178,6 @@ export default {
 </script>
 
 <style scoped>
-@import "../../assets/css/base-modal-animations.css";
-
 .modal-custom {
   position: fixed;
   display: flex;
@@ -254,10 +242,10 @@ export default {
 }
 
 .right-enter-active {
-  animation: zoomInRight 0.3s;
+  animation: zoomInRight 0.3s ease;
 }
 .right-leave-active {
-  animation: zoomOutRight 0.3s;
+  animation: zoomOutRight 0.3s ease;
 }
 @keyframes zoomInRight {
   from {
@@ -281,10 +269,10 @@ export default {
 }
 
 .center-enter-active {
-  animation: zoomInCenter 0.3s;
+  animation: zoomInCenter 0.3s ease;
 }
 .center-leave-active {
-  animation: zoomOutCenter 0.3s;
+  animation: zoomOutCenter 0.3s ease;
 }
 @keyframes zoomInCenter {
   from {

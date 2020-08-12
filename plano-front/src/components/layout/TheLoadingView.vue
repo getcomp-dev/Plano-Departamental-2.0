@@ -1,13 +1,10 @@
 <template>
-  <transition
-    enter-active-class="animated animate__fadeIn animationOption"
-    leave-active-class="animated animate__fadeOut animationOption"
-  >
+  <transition name="loading-transition">
     <div
-      v-show="visibility"
+      v-show="onLoading.fetching || onLoading.partial|| onLoading.table"
       class="container-loading"
-      @click.stop=""
-      @keydown.stop=""
+      @click.stop
+      @keydown.stop
     >
       <div class="lds-ring">
         <div></div>
@@ -20,16 +17,17 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   name: "TheLoadingView",
-  props: {
-    visibility: { type: Boolean, default: false },
+  computed: {
+    ...mapGetters(["onLoading"]),
   },
 };
 </script>
 
+
 <style scoped>
-/* Loading page animation */
 .container-loading {
   position: fixed;
   top: 0;
@@ -81,9 +79,11 @@ export default {
     transform: rotate(360deg);
   }
 }
-
-.animationOption {
-  animation-duration: 200ms;
-  animation-timing-function: ease;
+/* transition */
+.loading-transition-enter-active {
+  animation: fadeIn 200ms ease;
+}
+.loading-transition-leave-active {
+  animation: fadeOut 200ms ease;
 }
 </style>

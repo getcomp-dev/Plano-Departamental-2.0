@@ -7,7 +7,7 @@
         :color="'lightblue'"
         @click="$refs.modalAjuda.toggle()"
       >
-        <i class="fas fa-question"></i>
+        <font-awesome-icon :icon="['fas','question']" />
       </BaseButton>
     </PageHeader>
 
@@ -22,9 +22,7 @@
               title="Clique para ordenar por código"
             >
               Código
-              <i
-                :class="setIconByOrder(ordenacaoMain.disciplinas, 'codigo')"
-              ></i>
+              <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'codigo')"></i>
             </th>
             <th
               @click="toggleOrder(ordenacaoMain.disciplinas, 'nome')"
@@ -47,9 +45,7 @@
                     ordenacaoMain.perfis.order === null ? 'low-opacity' : ''
                   "
                 ></i>
-                <span>
-                  Perfil
-                </span>
+                <span>Perfil</span>
 
                 <i
                   :class="
@@ -58,12 +54,8 @@
                 ></i>
               </div>
             </th>
-            <th style="width: 40px" title="Carga Teórica">
-              C.T.
-            </th>
-            <th style="width: 40px" title="Carga Prática">
-              C.P.
-            </th>
+            <th style="width: 40px" title="Carga Teórica">C.T.</th>
+            <th style="width: 40px" title="Carga Prática">C.P.</th>
 
             <th
               style="width: 70px"
@@ -98,28 +90,14 @@
                   'clickable',
                 ]"
               >
-                <td style="width: 82px" class="t-start">
-                  {{ disciplina.codigo }}
-                </td>
-                <td style="width: 300px" class="t-start">
-                  {{ disciplina.nome }}
-                </td>
-                <td style="width: 80px" class="t-start">
-                  {{ disciplina.perfilAbreviacao }}
-                </td>
-                <td style="width: 40px">
-                  {{ disciplina.cargaTeorica }}
-                </td>
-                <td style="width: 40px">
-                  {{ disciplina.cargaPratica }}
-                </td>
+                <td style="width: 82px" class="t-start">{{ disciplina.codigo }}</td>
+                <td style="width: 300px" class="t-start">{{ disciplina.nome }}</td>
+                <td style="width: 80px" class="t-start">{{ disciplina.perfilAbreviacao }}</td>
+                <td style="width: 40px">{{ disciplina.cargaTeorica }}</td>
+                <td style="width: 40px">{{ disciplina.cargaPratica }}</td>
 
-                <td style="width: 70px">
-                  {{ textoEad(disciplina.ead) }}
-                </td>
-                <td style="width: 70px">
-                  {{ textoLab(disciplina.laboratorio) }}
-                </td>
+                <td style="width: 70px">{{ textoEad(disciplina.ead) }}</td>
+                <td style="width: 70px">{{ textoLab(disciplina.laboratorio) }}</td>
               </tr>
             </template>
           </template>
@@ -163,27 +141,22 @@
                 type="text"
                 id="perfil"
                 style="width:100%"
-                class="form-control form-control-sm  "
+                class="form-control form-control-sm"
                 v-model="disciplinaForm.Perfil"
               >
-                <option v-if="Perfis.length === 0" type="text" value
-                  >Nenhum Perfil Encontrado</option
-                >
+                <option v-if="Perfis.length === 0" type="text" value>Nenhum Perfil Encontrado</option>
                 <option
                   v-for="perfil in Perfis"
                   :key="perfil.id"
                   :value="perfil.id"
-                  >{{ perfil.abreviacao }}</option
-                >
+                >{{ perfil.abreviacao }}</option>
               </select>
             </div>
           </div>
 
           <div class="row mb-2 mx-0">
             <div class="form-group m-0 col px-0">
-              <label required for="cargaTeorica" class="col-form-label"
-                >Carga Teórica</label
-              >
+              <label required for="cargaTeorica" class="col-form-label">Carga Teórica</label>
               <input
                 type="text"
                 id="cargaTeorica"
@@ -194,9 +167,7 @@
             </div>
 
             <div class="form-group m-0 col px-0">
-              <label required for="cargaPratica" class="col-form-label"
-                >Carga Prática</label
-              >
+              <label required for="cargaPratica" class="col-form-label">Carga Prática</label>
               <input
                 type="text"
                 id="cargaPratica"
@@ -209,9 +180,7 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="laboratorio" class="col-form-label"
-                >Laboratório</label
-              >
+              <label required for="laboratorio" class="col-form-label">Laboratório</label>
               <select
                 type="text"
                 class="form-control form-control-sm input-medio"
@@ -241,43 +210,48 @@
       </Card>
     </div>
 
-    <ModalDelete
-      ref="modalDelete"
-      :isDeleting="isEdit"
-      @btn-deletar="deleteDisciplina"
-    >
+    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deleteDisciplina">
       <li v-if="isEdit" class="list-group-item">
         <span>
           Tem certeza que deseja excluír a disciplina
-          <b>{{ disciplinaForm.codigo }} - {{ disciplinaForm.nome }}</b
-          >?
+          <b>{{ disciplinaForm.codigo +' - '+ disciplinaForm.nome }}</b>?
         </span>
       </li>
-      <li v-else class="list-group-item">
-        Nenhuma disciplina selecionada.
-      </li>
+      <li v-else class="list-group-item">Nenhuma disciplina selecionada.</li>
     </ModalDelete>
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
         <b>Para adicionar disciplinas:</b> Com o cartão à direita em branco,
         preencha-o. Em seguida, clique em Adicionar
-        <i class="fas fa-plus icon-green px-1" style="font-size:12px"></i>
+        <i
+          class="fas fa-plus icon-green px-1"
+          style="font-size:12px"
+        ></i>
         .
       </li>
       <li class="list-group-item">
         <b>Para editar ou deletar uma disciplina:</b>Na tabela, clique na
         disciplina que deseja alterar. Logo após, no cartão à direita, altere as
         informações que desejar e clique em Salvar
-        <i class="fas fa-check icon-green px-1" style="font-size:12px"></i>
+        <i
+          class="fas fa-check icon-green px-1"
+          style="font-size:12px"
+        ></i>
         ou, para excluí-lo, clique em Deletar
-        <i class="far fa-trash-alt icon-red px-1" style="font-size: 12px"></i>
+        <i
+          class="far fa-trash-alt icon-red px-1"
+          style="font-size: 12px"
+        ></i>
         .
       </li>
       <li class="list-group-item">
         <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique em
         Cancelar
-        <i class="fas fa-times icon-gray px-1" style="font-size: 12px"></i>
+        <i
+          class="fas fa-times icon-gray px-1"
+          style="font-size: 12px"
+        ></i>
         .
       </li>
       <li class="list-group-item">
@@ -291,7 +265,7 @@
 <script>
 import disciplinaService from "@/common/services/disciplina";
 import { toggleOrdination, maskOnlyNumber } from "@/common/mixins";
-import { PageHeader, Card } from "@/components/ui";
+import { Card } from "@/components/ui";
 import { ModalDelete, ModalAjuda } from "@/components/modals";
 
 const emptyDisciplina = {
@@ -308,7 +282,7 @@ const emptyDisciplina = {
 export default {
   name: "DashboardDisciplina",
   mixins: [toggleOrdination, maskOnlyNumber],
-  components: { PageHeader, Card, ModalDelete, ModalAjuda },
+  components: { Card, ModalDelete, ModalAjuda },
   data() {
     return {
       disciplinaForm: this.$_.clone(emptyDisciplina),

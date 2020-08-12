@@ -1,11 +1,7 @@
 <template>
   <div class="container-horarios pl-1">
     <template v-for="periodo in listaDePeriodos">
-      <div
-        v-if="curso.horarios[periodo.indice].length"
-        class="div-table"
-        :key="'periodo' + periodo.indice"
-      >
+      <div class="div-table" :key="'periodo' + periodo.indice">
         <h4 class="periodo-title">{{ periodo.nome }}</h4>
         <TableHorarios
           :Turmas="curso.horarios[periodo.indice]"

@@ -1,20 +1,11 @@
 <template>
   <div class="main-component row">
     <PageHeader :title="'Validações do Plano'">
-      <BaseButton
-        title="Filtros"
-        :type="'icon'"
-        :color="'gray'"
-        @click="openAsideModal('filtros')"
-      >
-        <i class="fas fa-list-ul"></i>
+      <BaseButton title="Filtros" :type="'icon'" :color="'gray'" @click="openAsideModal('filtros')">
+        <font-awesome-icon :icon="['fas','list-ul']" />
       </BaseButton>
-      <BaseButton
-        :type="'icon'"
-        :color="'lightblue'"
-        @click="openAsideModal('ajuda')"
-      >
-        <i class="fas fa-question"></i>
+      <BaseButton :type="'icon'" :color="'lightblue'" @click="openAsideModal('ajuda')">
+        <font-awesome-icon :icon="['fas','question']" />
       </BaseButton>
     </PageHeader>
 
@@ -25,10 +16,7 @@
     />
 
     <div class="div-table">
-      <BaseTable
-        v-show="tabAtivaMain === 'Turmas'"
-        :styles="'height: calc(100vh - 130px)'"
-      >
+      <BaseTable v-show="tabAtivaMain === 'Turmas'" :styles="'height: calc(100vh - 130px)'">
         <template #thead>
           <th
             @click="toggleOrder(ordenacaoTurmasMain, 'periodo')"
@@ -63,9 +51,7 @@
             title="Código"
           >
             Cód.
-            <i
-              :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.codigo')"
-            ></i>
+            <i :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.codigo')"></i>
           </th>
           <th
             @click="toggleOrder(ordenacaoTurmasMain, 'disciplina.nome')"
@@ -73,48 +59,32 @@
             style="width: 300px"
           >
             Disciplina
-            <i
-              :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.nome')"
-            ></i>
+            <i :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.nome')"></i>
           </th>
-          <th style="width: 35px" class="t-staty" title="Turma">
-            T.
-          </th>
-          <th style="width: 130px" class="s-start">
-            Docentes
-          </th>
+          <th style="width: 35px" class="t-staty" title="Turma">T.</th>
+          <th style="width: 130px" class="s-start">Docentes</th>
           <th style="width:50px">Editar</th>
         </template>
 
-        <template v-if="!tableIsLoading" #tbody>
+        <template #tbody>
           <template v-for="validacaoTurma in TurmasValidacoesOrdered">
             <tr :key="'turmaId' + validacaoTurma.id" class="bg-custom">
-              <td style="width: 35px;">
-                {{ validacaoTurma.periodo }}
-              </td>
-              <td style="width: 75px;" class="t-start">
-                {{ validacaoTurma.disciplina.perfil.abreviacao }}
-              </td>
-              <td style="width: 70px;" class="t-start">
-                {{ validacaoTurma.disciplina.codigo }}
-              </td>
-              <td style="width: 300px;" class="t-start">
-                {{ validacaoTurma.disciplina.nome }}
-              </td>
-              <td style="width: 35px">
-                {{ validacaoTurma.letra }}
-              </td>
+              <td style="width: 35px;">{{ validacaoTurma.periodo }}</td>
+              <td
+                style="width: 75px;"
+                class="t-start"
+              >{{ validacaoTurma.disciplina.perfil.abreviacao }}</td>
+              <td style="width: 70px;" class="t-start">{{ validacaoTurma.disciplina.codigo }}</td>
+              <td style="width: 300px;" class="t-start">{{ validacaoTurma.disciplina.nome }}</td>
+              <td style="width: 35px">{{ validacaoTurma.letra }}</td>
               <td style="width: 130px">
                 {{ validacaoTurma.docente1Apelido }}
                 <br />
                 {{ validacaoTurma.docente2Apelido }}
               </td>
               <td style="width: 50px" class="clickable" title="Editar turma">
-                <button
-                  class="btn-table"
-                  @click.stop="openModalEditTurma(validacaoTurma)"
-                >
-                  <i class="fas fa-edit btn-table-icon"></i>
+                <button class="btn-table" @click.stop="openModalEditTurma(validacaoTurma)">
+                  <font-awesome-icon :icon="['fas','edit']" class="btn-table-icon icon-darkgray" />
                 </button>
               </td>
             </tr>
@@ -131,9 +101,7 @@
                   title="Conflito critico!"
                 ></i>
               </td>
-              <td colspan="6" style="width:655px" class="t-start">
-                {{ conflito.msg }}
-              </td>
+              <td colspan="6" style="width:655px" class="t-start">{{ conflito.msg }}</td>
             </tr>
           </template>
 
@@ -146,10 +114,7 @@
         </template>
       </BaseTable>
 
-      <BaseTable
-        v-show="tabAtivaMain === 'Docentes'"
-        :styles="'height: calc(100vh - 130px)'"
-      >
+      <BaseTable v-show="tabAtivaMain === 'Docentes'" :styles="'height: calc(100vh - 130px)'">
         <template #thead>
           <th
             colspan="2"
@@ -164,9 +129,7 @@
         <template #tbody>
           <template v-for="validacaoDocente in DocentesValidacoesOrdered">
             <tr :key="'docenteId' + validacaoDocente.id" class="bg-custom">
-              <td colspan="2" style="width: 695px;" class="t-start">
-                {{ validacaoDocente.nome }}
-              </td>
+              <td colspan="2" style="width: 695px;" class="t-start">{{ validacaoDocente.nome }}</td>
             </tr>
             <tr
               v-for="conflito in validacaoDocente.conflitos"
@@ -180,9 +143,7 @@
                 ></i>
               </td>
 
-              <td style="width: 655px;" class="t-start">
-                {{ conflito }}
-              </td>
+              <td style="width: 655px;" class="t-start">{{ conflito }}</td>
             </tr>
           </template>
         </template>
@@ -195,15 +156,10 @@
       :tabsOptions="modalFiltrosTabs"
     >
       <div class="div-table">
-        <BaseTable
-          v-show="modalFiltrosTabs.current === 'Conflitos'"
-          :type="'modal'"
-        >
+        <BaseTable v-show="modalFiltrosTabs.current === 'Conflitos'" :type="'modal'">
           <template #thead>
             <th style="width: 25px"></th>
-            <th style="width: 425px" class="t-start">
-              Conflito
-            </th>
+            <th style="width: 425px" class="t-start">Conflito</th>
           </template>
           <template #tbody>
             <tr
@@ -222,22 +178,15 @@
                   :value="conflito.type"
                 />
               </td>
-              <td style="width: 425px" class="t-start">
-                {{ conflito.msg }}
-              </td>
+              <td style="width: 425px" class="t-start">{{ conflito.msg }}</td>
             </tr>
           </template>
         </BaseTable>
 
-        <BaseTable
-          v-show="modalFiltrosTabs.current === 'Semestres'"
-          :type="'modal'"
-        >
+        <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
           <template #thead>
             <th style="width: 25px;"></th>
-            <th style="width: 425px;" class="t-start">
-              Semestre Letivo
-            </th>
+            <th style="width: 425px;" class="t-start">Semestre Letivo</th>
           </template>
           <template #tbody>
             <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
@@ -248,9 +197,7 @@
                   v-model="filtroSemestres.primeiro"
                 />
               </td>
-              <td style="width: 425px" class="t-start">
-                PRIMEIRO
-              </td>
+              <td style="width: 425px" class="t-start">PRIMEIRO</td>
             </tr>
             <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
               <td style="width: 25px">
@@ -267,11 +214,7 @@
       </div>
     </ModalFiltros>
 
-    <ModalEditTurma
-      ref="modalEditTurma"
-      :turmaSelected="turmaClickada"
-      :hasEditDisciplina="false"
-    />
+    <ModalEditTurma ref="modalEditTurma" :turmaSelected="turmaClickada" :hasEditDisciplina="false" />
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
@@ -300,12 +243,8 @@
 
 <script>
 import { mapGetters } from "vuex";
-import {
-  toggleOrdination,
-  toggleItemInArray,
-  tableLoading,
-} from "@/common/mixins";
-import { PageHeader, NavTab } from "@/components/ui";
+import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
+import { NavTab } from "@/components/ui";
 import { ModalAjuda, ModalFiltros, ModalEditTurma } from "@/components/modals";
 
 const AllConflitosTurmas = [
@@ -343,12 +282,11 @@ const AllConflitosTurmas = [
 
 export default {
   name: "Validacoes",
-  mixins: [toggleOrdination, toggleItemInArray, tableLoading],
+  mixins: [toggleOrdination, toggleItemInArray],
   components: {
     ModalAjuda,
     ModalFiltros,
     ModalEditTurma,
-    PageHeader,
     NavTab,
   },
   data() {
@@ -395,12 +333,10 @@ export default {
           },
         },
         btnOk: () => {
-          this.setTableLoadingState(true);
           this.btnOkSemestre();
           this.filtroConflitos.ativados = [
             ...this.filtroConflitos.selecionados,
           ];
-          this.setTableLoadingState(false);
         },
       },
     };
@@ -696,11 +632,7 @@ export default {
         if (sala.lotacao_maxima < pedidosTotais) {
           return {
             type: 7,
-            msg: `Limite da sala ${
-              sala.nome
-            } execedido. Vagas: ${pedidosTotais} - Lotação: ${
-              sala.lotacao_maxima
-            } `,
+            msg: `Limite da sala ${sala.nome} execedido. Vagas: ${pedidosTotais} - Lotação: ${sala.lotacao_maxima} `,
           };
         }
       }
@@ -785,11 +717,7 @@ export default {
                   conflitos = true;
                   msg =
                     msg +
-                    `\nConflito de Horário com a turma ${
-                      disciplinaConflito.codigo
-                    }${turmasDisciplina[t].letra} no ${
-                      disciplinaGrade.periodo
-                    }º período da grade de Ciência da Computação - Diurno`;
+                    `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Ciência da Computação - Diurno`;
                 }
               }
             }
@@ -854,11 +782,7 @@ export default {
                   conflitos = true;
                   msg =
                     msg +
-                    `\nConflito de Horário com a turma ${
-                      disciplinaConflito.codigo
-                    }${turmasDisciplina[t].letra} no ${
-                      disciplinaGrade.periodo
-                    }º período da grade de Ciência da Computação - Noturno`;
+                    `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Ciência da Computação - Noturno`;
                 }
               }
             }
@@ -923,11 +847,7 @@ export default {
                   conflitos = true;
                   msg =
                     msg +
-                    `\nConflito de Horário com a turma ${
-                      disciplinaConflito.codigo
-                    }${turmasDisciplina[t].letra} no ${
-                      disciplinaGrade.periodo
-                    }º período da grade de Sistemas de Informação`;
+                    `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Sistemas de Informação`;
                 }
               }
             }
@@ -992,11 +912,7 @@ export default {
                   conflitos = true;
                   msg =
                     msg +
-                    `\nConflito de Horário com a turma ${
-                      disciplinaConflito.codigo
-                    }${turmasDisciplina[t].letra} no ${
-                      disciplinaGrade.periodo
-                    }º período da grade de Engenharia Computacional`;
+                    `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Engenharia Computacional`;
                 }
               }
             }
@@ -1153,8 +1069,9 @@ export default {
 
         if (cargaGraduacao + cargaPos < 16.0) {
           validacao.conflitos.push(
-            `Apenas ${cargaGraduacao +
-              cargaPos} créditos, ${cargaGraduacao}  na graduação e ${cargaPos} na pós`
+            `Apenas ${
+              cargaGraduacao + cargaPos
+            } créditos, ${cargaGraduacao}  na graduação e ${cargaPos} na pós`
           );
         }
 
@@ -1183,9 +1100,5 @@ export default {
 }
 .btn-table-icon {
   font-size: 12px;
-}
-.btn-table-icon:focus {
-  outline-offset: -1px !important;
-  outline: 1px solid #9ec0f7 !important;
 }
 </style>
