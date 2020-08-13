@@ -20,11 +20,11 @@
           v-for="turma in TurmasFiltredByHorario(horarioId)"
           :key="horarioId + turma.id + turma.periodo"
           v-b-popover.hover.right="{
-            title: turma.disciplina.nome,
+            title: Disciplina(turma).nome,
             content: findDocenteInTurma(turma),
           }"
         >
-          {{ turma.disciplina.codigo }}
+          {{ Disciplina(turma).codigo }}
         </p>
       </td>
     </tr>
@@ -46,6 +46,10 @@ export default {
         (turma) => turma.Horario1 == horario || turma.Horario2 == horario
       );
     },
+    Disciplina(turma){
+      return this.$_.find(this.$store.state.disciplina.Disciplinas, {id:turma.Disciplina})
+    },
+
     findDocenteInTurma(turma) {
       let d1 = undefined,
         d2 = undefined;
