@@ -288,12 +288,12 @@ export default {
         this.createHorarios(i,2)
     }
 
-    this.createHorarioEletivas(1)
-    this.createHorarioEletivas(2)
-    /*this.createListaDePeriodos();*/
+    /*this.createHorarioEletivas(1)
+    this.createHorarioEletivas(2)*/
+    this.createListaDePeriodos();
 
-    //this.modalFiltrosCallbacks.selectAll.Cursos();
-    //this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
+    this.modalFiltrosCallbacks.selectAll.Cursos();
+    this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
   },
 
   methods: {
