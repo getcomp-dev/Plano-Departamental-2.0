@@ -183,6 +183,7 @@ import { toggleItemInArray, toggleOrdination } from "@/common/mixins";
 import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
 import TableEletivas from "./TableEletivas.vue";
 import ListTableHorarios from "./ListTableHorarios.vue";
+import _ from "lodash"
 
 const allCursosOptions = [
   {
