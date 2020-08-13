@@ -280,7 +280,7 @@ export default {
     };
   },
 
-  mounted() {
+  /*mounted() {
     this.currentPlano = _.find(this.$store.state.plano.Plano, {id:parseInt(localStorage.getItem('Plano'))});
     for (let i = 1; i < 5; i++){
         this.createHorarios(i,1)
@@ -293,7 +293,7 @@ export default {
 
     this.modalFiltrosCallbacks.selectAll.Cursos();
     this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
-  },
+  },*/
 
   methods: {
     openAsideModal(modalName) {
