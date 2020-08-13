@@ -283,14 +283,14 @@ export default {
 
   mounted() {
     this.currentPlano = _.find(this.$store.state.plano.Plano, {id:parseInt(localStorage.getItem('Plano'))});
-    for (let i = 1; i < 5; i++){
+    /*for (let i = 1; i < 5; i++){
         this.createHorarios(i,1)
         this.createHorarios(i,2)
     }
 
     this.createHorarioEletivas(1)
     this.createHorarioEletivas(2)
-    this.createListaDePeriodos();
+    this.createListaDePeriodos();*/
 
     //this.modalFiltrosCallbacks.selectAll.Cursos();
     //this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
