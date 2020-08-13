@@ -291,8 +291,8 @@ export default {
     this.createHorarioEletivas(2)
     this.createListaDePeriodos();
 
-    this.modalFiltrosCallbacks.selectAll.Cursos();
-    this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
+    //this.modalFiltrosCallbacks.selectAll.Cursos();
+    //this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
   },
 
   methods: {
