@@ -1,11 +1,20 @@
 <template>
   <div class="main-component row">
     <PageHeader :title="'Validações do Plano'">
-      <BaseButton title="Filtros" :type="'icon'" :color="'gray'" @click="openAsideModal('filtros')">
-        <font-awesome-icon :icon="['fas','list-ul']" />
+      <BaseButton
+        title="Filtros"
+        :type="'icon'"
+        :color="'gray'"
+        @click="openAsideModal('filtros')"
+      >
+        <font-awesome-icon :icon="['fas', 'list-ul']" />
       </BaseButton>
-      <BaseButton :type="'icon'" :color="'lightblue'" @click="openAsideModal('ajuda')">
-        <font-awesome-icon :icon="['fas','question']" />
+      <BaseButton
+        :type="'icon'"
+        :color="'lightblue'"
+        @click="openAsideModal('ajuda')"
+      >
+        <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
     </PageHeader>
 
@@ -16,7 +25,10 @@
     />
 
     <div class="div-table">
-      <BaseTable v-show="tabAtivaMain === 'Turmas'" :styles="'height: calc(100vh - 130px)'">
+      <BaseTable
+        v-show="tabAtivaMain === 'Turmas'"
+        :styles="'height: calc(100vh - 130px)'"
+      >
         <template #thead>
           <th
             @click="toggleOrder(ordenacaoTurmasMain, 'periodo')"
@@ -51,7 +63,9 @@
             title="Código"
           >
             Cód.
-            <i :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.codigo')"></i>
+            <i
+              :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.codigo')"
+            ></i>
           </th>
           <th
             @click="toggleOrder(ordenacaoTurmasMain, 'disciplina.nome')"
@@ -59,7 +73,9 @@
             style="width: 300px"
           >
             Disciplina
-            <i :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.nome')"></i>
+            <i
+              :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.nome')"
+            ></i>
           </th>
           <th style="width: 35px" class="t-staty" title="Turma">T.</th>
           <th style="width: 130px" class="s-start">Docentes</th>
@@ -70,12 +86,15 @@
           <template v-for="validacaoTurma in TurmasValidacoesOrdered">
             <tr :key="'turmaId' + validacaoTurma.id" class="bg-custom">
               <td style="width: 35px;">{{ validacaoTurma.periodo }}</td>
-              <td
-                style="width: 75px;"
-                class="t-start"
-              >{{ validacaoTurma.disciplina.perfil.abreviacao }}</td>
-              <td style="width: 70px;" class="t-start">{{ validacaoTurma.disciplina.codigo }}</td>
-              <td style="width: 300px;" class="t-start">{{ validacaoTurma.disciplina.nome }}</td>
+              <td style="width: 75px;" class="t-start">
+                {{ validacaoTurma.disciplina.perfil.abreviacao }}
+              </td>
+              <td style="width: 70px;" class="t-start">
+                {{ validacaoTurma.disciplina.codigo }}
+              </td>
+              <td style="width: 300px;" class="t-start">
+                {{ validacaoTurma.disciplina.nome }}
+              </td>
               <td style="width: 35px">{{ validacaoTurma.letra }}</td>
               <td style="width: 130px">
                 {{ validacaoTurma.docente1Apelido }}
@@ -83,8 +102,14 @@
                 {{ validacaoTurma.docente2Apelido }}
               </td>
               <td style="width: 50px" class="clickable" title="Editar turma">
-                <button class="btn-table" @click.stop="openModalEditTurma(validacaoTurma)">
-                  <font-awesome-icon :icon="['fas','edit']" class="btn-table-icon icon-darkgray" />
+                <button
+                  class="btn-table"
+                  @click.stop="openModalEditTurma(validacaoTurma)"
+                >
+                  <font-awesome-icon
+                    :icon="['fas', 'edit']"
+                    class="icon-darkgray"
+                  />
                 </button>
               </td>
             </tr>
@@ -101,7 +126,9 @@
                   title="Conflito critico!"
                 ></i>
               </td>
-              <td colspan="6" style="width:655px" class="t-start">{{ conflito.msg }}</td>
+              <td colspan="6" style="width:655px" class="t-start">
+                {{ conflito.msg }}
+              </td>
             </tr>
           </template>
 
@@ -114,7 +141,10 @@
         </template>
       </BaseTable>
 
-      <BaseTable v-show="tabAtivaMain === 'Docentes'" :styles="'height: calc(100vh - 130px)'">
+      <BaseTable
+        v-show="tabAtivaMain === 'Docentes'"
+        :styles="'height: calc(100vh - 130px)'"
+      >
         <template #thead>
           <th
             colspan="2"
@@ -129,7 +159,9 @@
         <template #tbody>
           <template v-for="validacaoDocente in DocentesValidacoesOrdered">
             <tr :key="'docenteId' + validacaoDocente.id" class="bg-custom">
-              <td colspan="2" style="width: 695px;" class="t-start">{{ validacaoDocente.nome }}</td>
+              <td colspan="2" style="width: 695px;" class="t-start">
+                {{ validacaoDocente.nome }}
+              </td>
             </tr>
             <tr
               v-for="conflito in validacaoDocente.conflitos"
@@ -156,7 +188,10 @@
       :tabsOptions="modalFiltrosTabs"
     >
       <div class="div-table">
-        <BaseTable v-show="modalFiltrosTabs.current === 'Conflitos'" :type="'modal'">
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Conflitos'"
+          :type="'modal'"
+        >
           <template #thead>
             <th style="width: 25px"></th>
             <th style="width: 425px" class="t-start">Conflito</th>
@@ -183,7 +218,10 @@
           </template>
         </BaseTable>
 
-        <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Semestres'"
+          :type="'modal'"
+        >
           <template #thead>
             <th style="width: 25px;"></th>
             <th style="width: 425px;" class="t-start">Semestre Letivo</th>
@@ -214,7 +252,11 @@
       </div>
     </ModalFiltros>
 
-    <ModalEditTurma ref="modalEditTurma" :turmaSelected="turmaClickada" :hasEditDisciplina="false" />
+    <ModalEditTurma
+      ref="modalEditTurma"
+      :turma="turmaClicked"
+      :hasEditDisciplina="false"
+    />
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
@@ -243,9 +285,10 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { generateEmptyTurma } from "@/common/utils";
 import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
-import { NavTab } from "@/components/ui";
 import { ModalAjuda, ModalFiltros, ModalEditTurma } from "@/components/modals";
+import { NavTab } from "@/components/ui";
 
 const AllConflitosTurmas = [
   { type: 1, msg: "Nenhum turno alocado" },
@@ -292,7 +335,7 @@ export default {
   data() {
     return {
       tabAtivaMain: "Turmas",
-      turmaClickada: null,
+      turmaClicked: generateEmptyTurma(),
       allConflitos: this.$_.clone(AllConflitosTurmas),
       grades1Semestre: { CCD: [], CCN: [], EC: [], SI: [] },
       grades2Semestre: { CCD: [], CCN: [], EC: [], SI: [] },
@@ -333,7 +376,7 @@ export default {
           },
         },
         btnOk: () => {
-          this.btnOkSemestre();
+          this.setSemestreAtivo();
           this.filtroConflitos.ativados = [
             ...this.filtroConflitos.selecionados,
           ];
@@ -341,6 +384,7 @@ export default {
       },
     };
   },
+  
   mounted() {
     //define grades ativas por periodo
     let g;
@@ -499,17 +543,16 @@ export default {
         this.$refs.modalFiltros.close();
       }
     },
-    btnOkSemestre() {
-      if (this.filtroSemestres.primeiro && !this.filtroSemestres.segundo)
-        this.filtroSemestres.ativo = 1;
-      else if (!this.filtroSemestres.primeiro && this.filtroSemestres.segundo)
-        this.filtroSemestres.ativo = 2;
-      else if (this.filtroSemestres.primeiro && this.filtroSemestres.primeiro)
-        this.filtroSemestres.ativo = 3;
+    setSemestreAtivo() {
+      const { primeiro, segundo } = this.filtroSemestres;
+
+      if (primeiro && !segundo) this.filtroSemestres.ativo = 1;
+      else if (!primeiro && segundo) this.filtroSemestres.ativo = 2;
+      else if (primeiro && segundo) this.filtroSemestres.ativo = 3;
       else this.filtroSemestres.ativo = undefined;
     },
     openModalEditTurma(turma) {
-      this.turmaClickada = { ...turma };
+      this.turmaClicked = turma;
       this.$refs.modalEditTurma.open();
     },
 
@@ -632,7 +675,11 @@ export default {
         if (sala.lotacao_maxima < pedidosTotais) {
           return {
             type: 7,
-            msg: `Limite da sala ${sala.nome} execedido. Vagas: ${pedidosTotais} - Lotação: ${sala.lotacao_maxima} `,
+            msg: `Limite da sala ${
+              sala.nome
+            } execedido. Vagas: ${pedidosTotais} - Lotação: ${
+              sala.lotacao_maxima
+            } `,
           };
         }
       }
@@ -717,7 +764,11 @@ export default {
                   conflitos = true;
                   msg =
                     msg +
-                    `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Ciência da Computação - Diurno`;
+                    `\nConflito de Horário com a turma ${
+                      disciplinaConflito.codigo
+                    }${turmasDisciplina[t].letra} no ${
+                      disciplinaGrade.periodo
+                    }º período da grade de Ciência da Computação - Diurno`;
                 }
               }
             }
@@ -782,7 +833,11 @@ export default {
                   conflitos = true;
                   msg =
                     msg +
-                    `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Ciência da Computação - Noturno`;
+                    `\nConflito de Horário com a turma ${
+                      disciplinaConflito.codigo
+                    }${turmasDisciplina[t].letra} no ${
+                      disciplinaGrade.periodo
+                    }º período da grade de Ciência da Computação - Noturno`;
                 }
               }
             }
@@ -847,7 +902,11 @@ export default {
                   conflitos = true;
                   msg =
                     msg +
-                    `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Sistemas de Informação`;
+                    `\nConflito de Horário com a turma ${
+                      disciplinaConflito.codigo
+                    }${turmasDisciplina[t].letra} no ${
+                      disciplinaGrade.periodo
+                    }º período da grade de Sistemas de Informação`;
                 }
               }
             }
@@ -912,7 +971,11 @@ export default {
                   conflitos = true;
                   msg =
                     msg +
-                    `\nConflito de Horário com a turma ${disciplinaConflito.codigo}${turmasDisciplina[t].letra} no ${disciplinaGrade.periodo}º período da grade de Engenharia Computacional`;
+                    `\nConflito de Horário com a turma ${
+                      disciplinaConflito.codigo
+                    }${turmasDisciplina[t].letra} no ${
+                      disciplinaGrade.periodo
+                    }º período da grade de Engenharia Computacional`;
                 }
               }
             }
@@ -1069,9 +1132,8 @@ export default {
 
         if (cargaGraduacao + cargaPos < 16.0) {
           validacao.conflitos.push(
-            `Apenas ${
-              cargaGraduacao + cargaPos
-            } créditos, ${cargaGraduacao}  na graduação e ${cargaPos} na pós`
+            `Apenas ${cargaGraduacao +
+              cargaPos} créditos, ${cargaGraduacao}  na graduação e ${cargaPos} na pós`
           );
         }
 
@@ -1097,8 +1159,6 @@ export default {
   height: 100%;
   border: none;
   background: none;
-}
-.btn-table-icon {
   font-size: 12px;
 }
 </style>

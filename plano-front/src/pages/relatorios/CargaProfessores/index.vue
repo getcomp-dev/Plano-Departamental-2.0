@@ -1,26 +1,31 @@
 <template>
   <div class="main-component row p-0">
     <PageHeader :title="'Carga Professores'">
-      <BaseButton title="Filtros" :type="'icon'" :color="'gray'" @click="openAsideModal('filtros')">
-        <font-awesome-icon :icon="['fas','list-ul']" />
+      <BaseButton
+        title="Filtros"
+        :type="'icon'"
+        :color="'gray'"
+        @click="toggleAsideModal('filtros')"
+      >
+        <font-awesome-icon :icon="['fas', 'list-ul']" />
       </BaseButton>
 
       <BaseButton
         title="Relatório"
         :type="'icon'"
         :color="'gray'"
-        @click="$refs.modalRelatorio.toggle()"
+        @click="toggleAsideModal('relatorio')"
       >
-        <font-awesome-icon :icon="['fas','file-alt']" />
+        <font-awesome-icon :icon="['fas', 'file-alt']" />
       </BaseButton>
 
       <BaseButton
         title="Ajuda"
         :type="'icon'"
         :color="'lightblue'"
-        @click="openAsideModal('ajuda')"
+        @click="toggleAsideModal('ajuda')"
       >
-        <font-awesome-icon :icon="['fas','question']" />
+        <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
     </PageHeader>
 
@@ -36,247 +41,310 @@
             <i :class="setIconByOrder(orednacaoDocentesMain, 'apelido')"></i>
           </th>
           <th style="width: 25px" title="Semestre">S.</th>
-          <th style="width: 80px" class="t-center">Código</th>
+          <th style="width: 80px">Código</th>
           <th style="width: 300px" class="t-start">Disciplina</th>
-          <th style="width: 35px" title="Turma">T.</th>
-          <th style="width: 180px">Horário</th>
-          <th style="width: 35px" title="Somatório dos créditos no 1º semestre">CS1</th>
-          <th style="width: 35px" title="Somatório dos créditos no 2º semestre">CS2</th>
-          <th style="width: 50px" title="Somatório total dos créditos">CTotal</th>
+          <th style="width: 35px" class="less-padding" title="Turma">T.</th>
+          <th style="width: 130px">Horário</th>
+          <th
+            style="width: 35px"
+            class="less-padding"
+            title="Somatório dos créditos no 1º semestre"
+            v-if="semestre1IsActived"
+          >
+            CS1
+          </th>
+          <th
+            style="width: 35px"
+            class="less-padding"
+            title="Somatório dos créditos no 2º semestre"
+            v-if="semestre2IsActived"
+          >
+            CS2
+          </th>
+          <th
+            style="width: 50px"
+            title="Somatório total dos créditos"
+            v-if="semestre1IsActived && semestre2IsActived"
+          >
+            CTotal
+          </th>
         </template>
         <template #tbody>
           <template v-for="docente in DocentesOrderedMain">
-            <tr class="bg-custom" :key="'docentes' + docente.apelido">
-              <td style="width: 130px" class="t-start">{{ docente.apelido }}</td>
+            <tr class="bg-custom" :key="'docente' + docente.id">
+              <td style="width: 130px" class="t-start">
+                {{ docente.apelido }}
+              </td>
               <td style="width: 25px"></td>
-              <td style="width: 80px"></td>
+              <td style="width: 80px" class="less-padding"></td>
               <td style="width: 300px" class="t-start"></td>
-              <td style="width: 25px"></td>
-              <td style="width: 180px"></td>
-              <td style="width: 35px">{{ docente.cred1 }}</td>
-              <td style="width: 35px">{{ docente.cred2 }}</td>
-              <td style="width: 50px">{{ docente.cred1 + docente.cred2 }}</td>
+              <td style="width: 35px" class="less-padding"></td>
+              <td style="width: 130px"></td>
+              <td
+                style="width: 35px"
+                class="less-padding"
+                v-if="semestre1IsActived"
+              >
+                {{ docente.cred1 }}
+              </td>
+              <td
+                style="width: 35px"
+                class="less-padding"
+                v-if="semestre2IsActived"
+              >
+                {{ docente.cred2 }}
+              </td>
+              <td
+                style="width: 50px"
+                class="less-padding"
+                v-if="semestre1IsActived && semestre2IsActived"
+              >
+                {{ docente.cred1 + docente.cred2 }}
+              </td>
             </tr>
 
             <tr
-              v-for="turma in docente.turmas1Semestre"
-              :key="'1turmas' + turma.id + docente.apelido"
+              v-for="turma in docente.Turmas1Semestre"
+              :key="'turmas' + turma.id + turma.periodo + docente.apelido"
             >
               <td style="width: 130px"></td>
               <td style="width: 25px">{{ turma.periodo }}</td>
-              <td style="width: 80px" class="t-center">{{ turma.disciplinaCodigo }}</td>
-              <td style="width: 300px" class="t-start">{{ turma.disciplinaNome }}</td>
-              <td style="width: 35px">{{ turma.letra }}</td>
-              <td style="width: 180px">
-                <span v-for="horario in AllHorarios" :key="horario.id">
-                  {{ horario.id === turma.Horario1 ? horario.horario : "" }}
-                  {{
-                  horario.id === turma.Horario2 ? " / " + horario.horario : ""
-                  }}
-                </span>
+              <td style="width: 80px" class="less-padding">
+                {{ turma.disciplina.codigo }}
+              </td>
+              <td style="width: 300px" class="t-start">
+                {{ turma.disciplina.nome }}
+              </td>
+              <td style="width: 35px" class="less-padding">
+                {{ turma.letra }}
+              </td>
+              <td style="width: 130px">
+                {{ generateHorariosText(turma.Horario1, turma.Horario2) }}
+              </td>
+              <td
+                style="width: 35px"
+                class="less-padding"
+                v-if="semestre1IsActived"
+              >
+                {{
+                  turma.periodo === 1 || turma.periodo === 2
+                    ? turma.creditosDaTurma
+                    : ""
+                }}
+              </td>
+              <td
+                style="width:35px"
+                class="less-padding"
+                v-if="semestre2IsActived"
+              >
+                {{
+                  turma.periodo === 3 || turma.periodo === 4
+                    ? turma.creditosDaTurma
+                    : ""
+                }}
               </td>
 
-              <td style="width: 35px">
-                <span v-if="turma.periodo === 1">
-                  {{
-                  turma.Docente1 > 0 && turma.Docente2 > 0
-                  ? (turma.disciplinaCargaTeorica +
-                  turma.disciplinaCargaPratica) /
-                  2
-                  : turma.disciplinaCargaTeorica +
-                  turma.disciplinaCargaPratica
-                  }}
-                </span>
-              </td>
-
-              <td style="width:35px">
-                <span v-if="turma.periodo === 3">
-                  {{
-                  turma.Docente1 > 0 && turma.Docente2 > 0
-                  ? (turma.disciplinaCargaTeorica +
-                  turma.disciplinaCargaPratica) /
-                  2
-                  : turma.disciplinaCargaTeorica +
-                  turma.disciplinaCargaPratica
-                  }}
-                </span>
-              </td>
-
-              <td style="width: 50px"></td>
+              <td
+                style="width: 50px"
+                v-if="semestre1IsActived && semestre2IsActived"
+              ></td>
             </tr>
 
             <tr
-              v-for="carga in docente.cargasPos1Semestre"
-              :key="'1cargaPos' + carga.id + docente.id"
+              v-for="carga in docente.CargasPos1Semestre"
+              :key="'cp' + carga.id + carga.trimestre + docente.id"
             >
               <td style="width: 130px"></td>
               <td style="width: 25px">{{ carga.trimestre }}</td>
-              <td style="width: 80px"></td>
+              <td style="width: 80px" class="less-padding"></td>
+              <td style="width: 300px" class="t-start upper-case">
+                Disciplina do {{ carga.programa }}
+              </td>
+              <td style="width: 35px" class="less-padding"></td>
+              <td style="width: 130px"></td>
               <td
-                style="width: 300px"
-                class="t-start toUpperCase"
-              >Disciplina do {{ carga.programa }}</td>
-              <td style="width: 35px"></td>
-              <td style="width: 180px"></td>
-
-              <td style="width: 35px">
+                style="width: 35px"
+                class="less-padding"
+                v-if="semestre1IsActived"
+              >
                 {{
-                carga.trimestre == 1 || carga.trimestre == 2
-                ? carga.creditos
-                : ""
+                  carga.trimestre == 1 || carga.trimestre == 2
+                    ? carga.creditos
+                    : ""
                 }}
               </td>
-
-              <td style="width: 35px">
+              <td
+                style="width: 35px"
+                class="less-padding"
+                v-if="semestre2IsActived"
+              >
                 {{
-                carga.trimestre == 3 || carga.trimestre == 4
-                ? carga.creditos
-                : ""
+                  carga.trimestre == 3 || carga.trimestre == 4
+                    ? carga.creditos
+                    : ""
                 }}
               </td>
-
-              <td style="width: 50px"></td>
+              <td
+                style="width: 50px"
+                v-if="semestre1IsActived && semestre2IsActived"
+              ></td>
             </tr>
 
             <tr
-              v-for="turma in docente.turmas2Semestre"
-              :key="'2turmas' + turma.id + docente.apelido"
+              v-for="turma in docente.Turmas2Semestre"
+              :key="'turmas' + turma.id + turma.periodo + docente.apelido"
             >
               <td style="width: 130px"></td>
               <td style="width: 25px">{{ turma.periodo }}</td>
-              <td style="width: 80px" class="t-center">{{ turma.disciplinaCodigo }}</td>
-              <td style="width: 300px" class="t-start">{{ turma.disciplinaNome }}</td>
-              <td style="width: 35px">{{ turma.letra }}</td>
-              <td style="width: 180px">
-                <span v-for="horario in AllHorarios" :key="horario.id">
-                  {{ horario.id === turma.Horario1 ? horario.horario : "" }}
-                  {{
-                  horario.id === turma.Horario2 ? " / " + horario.horario : ""
-                  }}
-                </span>
+              <td style="width: 80px" class="less-padding">
+                {{ turma.disciplina.codigo }}
               </td>
-
-              <td style="width: 35px">
-                <span v-if="turma.periodo === 1">
-                  {{
-                  turma.Docente1 > 0 && turma.Docente2 > 0
-                  ? (turma.disciplinaCargaTeorica +
-                  turma.disciplinaCargaPratica) /
-                  2
-                  : turma.disciplinaCargaTeorica +
-                  turma.disciplinaCargaPratica
-                  }}
-                </span>
+              <td style="width: 300px" class="t-start">
+                {{ turma.disciplina.nome }}
               </td>
-
-              <td style="width:35px">
-                <span v-if="turma.periodo === 3">
-                  {{
-                  turma.Docente1 > 0 && turma.Docente2 > 0
-                  ? (turma.disciplinaCargaTeorica +
-                  turma.disciplinaCargaPratica) /
-                  2
-                  : turma.disciplinaCargaTeorica +
-                  turma.disciplinaCargaPratica
-                  }}
-                </span>
+              <td style="width: 35px" class="less-padding">
+                {{ turma.letra }}
               </td>
-
-              <td style="width: 50px"></td>
+              <td style="width: 130px">
+                {{ generateHorariosText(turma.Horario1, turma.Horario2) }}
+              </td>
+              <td
+                style="width: 35px"
+                class="less-padding"
+                v-if="semestre1IsActived"
+              >
+                {{
+                  turma.periodo === 1 || turma.periodo === 2
+                    ? turma.creditosDaTurma
+                    : ""
+                }}
+              </td>
+              <td
+                style="width:35px"
+                class="less-padding"
+                v-if="semestre2IsActived"
+              >
+                {{
+                  turma.periodo === 3 || turma.periodo === 4
+                    ? turma.creditosDaTurma
+                    : ""
+                }}
+              </td>
+              <td
+                style="width: 50px"
+                v-if="semestre1IsActived && semestre2IsActived"
+              ></td>
             </tr>
 
             <tr
-              v-for="carga in docente.cargasPos2Semestre"
+              v-for="carga in docente.CargasPos2Semestre"
               :key="'2cargaPos' + carga.id + docente.id"
             >
               <td style="width: 130px"></td>
               <td style="width: 25px">{{ carga.trimestre }}</td>
-              <td style="width: 80px"></td>
+              <td style="width: 80px" class="less-padding"></td>
+              <td style="width: 300px" class="t-start upper-case">
+                Disciplina do {{ carga.programa }}
+              </td>
+              <td style="width: 35px" class="less-padding"></td>
+              <td style="width: 130px"></td>
               <td
-                style="width: 300px"
-                class="t-start toUpperCase"
-              >Disciplina do {{ carga.programa }}</td>
-              <td style="width: 35px"></td>
-              <td style="width: 180px"></td>
-
-              <td style="width: 32px">
+                style="width: 35px"
+                class="less-padding"
+                v-if="semestre1IsActived"
+              >
                 {{
-                carga.trimestre == 1 || carga.trimestre == 2
-                ? carga.creditos
-                : ""
+                  carga.trimestre == 1 || carga.trimestre == 2
+                    ? carga.creditos
+                    : ""
                 }}
               </td>
-
-              <td style="width: 35px">
+              <td
+                style="width: 35px"
+                class="less-padding"
+                v-if="semestre2IsActived"
+              >
                 {{
-                carga.trimestre == 3 || carga.trimestre == 4
-                ? carga.creditos
-                : ""
+                  carga.trimestre == 3 || carga.trimestre == 4
+                    ? carga.creditos
+                    : ""
                 }}
               </td>
-
-              <td style="width: 50px"></td>
+              <td
+                style="width: 50px"
+                v-if="semestre1IsActived && semestre2IsActived"
+              ></td>
             </tr>
           </template>
 
           <template
             v-if="
-              turmasSemAlocacao().length && filtroDocenteSemAlocacao.ativado
+              turmasSemAlocacaoFiltred.length &&
+                filtroDocenteSemAlocacao.ativado
             "
           >
             <tr class="bg-custom">
               <td style="width: 130px" class="t-start">SEM ALOCAÇÃO</td>
               <td style="width: 25px"></td>
-              <td style="width: 80px"></td>
+              <td style="width: 80px" class="less-padding"></td>
               <td style="width: 300px"></td>
-              <td style="width: 35px"></td>
-              <td style="width: 180px"></td>
-              <td style="width: 35px"></td>
-              <td style="width: 35px"></td>
-              <td style="width: 50px"></td>
+              <td style="width: 35px" class="less-padding"></td>
+              <td style="width: 130px"></td>
+              <td style="width: 35px" v-if="semestre1IsActived"></td>
+              <td style="width: 35px" v-if="semestre2IsActived"></td>
+              <td
+                style="width: 50px"
+                v-if="semestre1IsActived && semestre2IsActived"
+              ></td>
             </tr>
-            <tr v-for="turma in turmasSemAlocacao()" :key="'semAlocacao' + turma.id">
+            <tr
+              v-for="turma in turmasSemAlocacaoFiltred"
+              :key="'semAlocacao' + turma.id"
+            >
               <td style="width: 130px"></td>
               <td style="width: 25px">{{ turma.periodo }}</td>
-              <td style="width: 80px">{{ turma.disciplinaCodigo }}</td>
-              <td style="width: 300px" class="t-start">{{ turma.disciplinaNome }}</td>
-              <td style="width: 35px">{{ turma.letra }}</td>
-              <td style="width:180px">
-                <span v-for="horario in AllHorarios" :key="horario.id">
-                  {{ horario.id === turma.Horario1 ? horario.horario : "" }}
-                  {{
-                  horario.id === turma.Horario2 ? " / " + horario.horario : ""
-                  }}
-                </span>
+              <td style="width: 80px" class="less-padding">
+                {{ turma.disciplina.codigo }}
               </td>
-
-              <td style="width: 35px">
+              <td style="width: 300px" class="t-start">
+                {{ turma.disciplina.nome }}
+              </td>
+              <td style="width: 35px" class="less-padding">
+                {{ turma.letra }}
+              </td>
+              <td style="width:130px">
+                {{ generateHorariosText(turma.Horario1, turma.Horario2) }}
+              </td>
+              <td
+                style="width: 35px"
+                class="less-padding"
+                v-if="semestre1IsActived"
+              >
                 <span v-if="turma.periodo === 1">
                   {{
-                  turma.Docente1 > 0 && turma.Docente2 > 0
-                  ? (turma.disciplinaCargaTeorica +
-                  turma.disciplinaCargaPratica) /
-                  2
-                  : turma.disciplinaCargaTeorica +
-                  turma.disciplinaCargaPratica
+                    turma.Docente1 > 0 && turma.Docente2 > 0
+                      ? turma.disciplina.creditoTotal / 2
+                      : turma.disciplina.creditoTotal
                   }}
                 </span>
               </td>
-
-              <td style="width: 35px">
+              <td
+                style="width: 35px"
+                class="less-padding"
+                v-if="semestre2IsActived"
+              >
                 <span v-if="turma.periodo === 3">
                   {{
-                  turma.Docente1 > 0 && turma.Docente2 > 0
-                  ? (turma.disciplinaCargaTeorica +
-                  turma.disciplinaCargaPratica) /
-                  2
-                  : turma.disciplinaCargaTeorica +
-                  turma.disciplinaCargaPratica
+                    turma.Docente1 > 0 && turma.Docente2 > 0
+                      ? turma.disciplina.creditoTotal / 2
+                      : turma.disciplina.creditoTotal
                   }}
                 </span>
               </td>
-
-              <td style="width: 50px"></td>
+              <td
+                style="width: 50px"
+                v-if="semestre1IsActived && semestre2IsActived"
+              ></td>
             </tr>
           </template>
 
@@ -285,10 +353,25 @@
               !filtroDocenteSemAlocacao.ativado && !DocentesOrderedMain.length
             "
           >
-            <td colspan="9" style="width:870px">
+            <td colspan="6" style="width:750px">
               <b>Nenhum docente encontrado.</b> Clique no botão de filtros
               <i class="fas fa-list-ul mx-1"></i> para selecioná-los.
             </td>
+            <td
+              style="width: 35px"
+              v-if="semestre1IsActived"
+              class="borderX-0"
+            ></td>
+            <td
+              style="width: 35px"
+              v-if="semestre2IsActived"
+              class="borderX-0"
+            ></td>
+            <td
+              style="width: 50px"
+              v-if="semestre1IsActived && semestre2IsActived"
+              class="borderX-0"
+            ></td>
           </tr>
         </template>
       </BaseTable>
@@ -306,7 +389,10 @@
           :hasSearchBar="true"
         >
           <template #thead-search>
-            <InputSearch v-model="searchDocentes" placeholder="Pesquise o nome de um docente..." />
+            <InputSearch
+              v-model="searchDocentes"
+              placeholder="Pesquise o nome de um docente..."
+            />
           </template>
           <template #thead>
             <th style="width: 25px"></th>
@@ -333,7 +419,9 @@
                   class="form-check-input position-static m-0"
                 />
               </td>
-              <td style="width: 425px;" class="t-start">{{ docente.apelido }}</td>
+              <td style="width: 425px;" class="t-start">
+                {{ docente.apelido }}
+              </td>
             </tr>
             <tr
               @click="
@@ -348,6 +436,39 @@
                 />
               </td>
               <td style="width: 425px;" class="t-start">SEM ALOCAÇÃO</td>
+            </tr>
+          </template>
+        </BaseTable>
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Semestres'"
+          :type="'modal'"
+        >
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th class="t-start clickable" style="width: 425px">
+              Semestre Letivo
+            </th>
+          </template>
+          <template #tbody>
+            <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroSemestres.primeiro"
+                />
+              </td>
+              <td style="width: 425px" class="t-start">PRIMEIRO</td>
+            </tr>
+            <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  v-model="filtroSemestres.segundo"
+                />
+              </td>
+              <td style="width: 425px" class="t-start">SEGUNDO</td>
             </tr>
           </template>
         </BaseTable>
@@ -375,16 +496,26 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import pdfs from "@/common/services/pdfs";
 import { normalizeText } from "@/common/utils";
-import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
+import {
+  toggleOrdination,
+  toggleItemInArray,
+  generateHorariosText,
+  toggleAsideModal,
+} from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
 import { ModalAjuda, ModalRelatorio, ModalFiltros } from "@/components/modals";
-import { mapGetters } from "vuex";
 
 export default {
   name: "DashboardCargaProfessores",
-  mixins: [toggleOrdination, toggleItemInArray],
+  mixins: [
+    toggleOrdination,
+    toggleItemInArray,
+    generateHorariosText,
+    toggleAsideModal,
+  ],
   components: {
     ModalRelatorio,
     ModalAjuda,
@@ -394,15 +525,25 @@ export default {
   data() {
     return {
       searchDocentes: "",
+      asideModalsRefs: ["modalFiltros", "modalAjuda", "modalRelatorio"],
       orednacaoDocentesMain: { order: "apelido", type: "asc" },
       ordenacaoDocentesModal: { order: "apelido", type: "asc" },
       filtroDocentes: {
         ativados: [],
         selecionados: [],
       },
+      filtroDocenteSemAlocacao: {
+        ativado: true,
+        selecionado: true,
+      },
+      filtroSemestres: {
+        primeiro: true,
+        segundo: true,
+        ativo: 3,
+      },
       modalFiltrosTabs: {
         current: "Docentes",
-        array: ["Docentes"],
+        array: ["Docentes", "Semestres"],
       },
       modalFiltrosCallbacks: {
         selectAll: {
@@ -410,117 +551,210 @@ export default {
             this.filtroDocentes.selecionados = [...this.DocentesAtivos];
             this.filtroDocenteSemAlocacao.selecionado = true;
           },
+          Semestres: () => {
+            this.filtroSemestres.primeiro = true;
+            this.filtroSemestres.segundo = true;
+          },
         },
         selectNone: {
           Docentes: () => {
             this.filtroDocentes.selecionados.length = 0;
             this.filtroDocenteSemAlocacao.selecionado = false;
           },
+          Semestres: () => {
+            this.filtroSemestres.primeiro = false;
+            this.filtroSemestres.segundo = false;
+          },
         },
         btnOk: () => {
+          this.setSemestreAtivo();
           this.filtroDocentes.ativados = [...this.filtroDocentes.selecionados];
           this.filtroDocenteSemAlocacao.ativado = this.filtroDocenteSemAlocacao.selecionado;
         },
-      },
-      filtroDocenteSemAlocacao: {
-        ativado: true,
-        selecionado: true,
       },
     };
   },
 
   beforeMount() {
-    this.activeAllFiltros();
+    this.modalFiltrosCallbacks.selectAll.Docentes();
+    this.filtroDocentes.ativados = [...this.filtroDocentes.selecionados];
+    this.filtroDocenteSemAlocacao.ativado = this.filtroDocenteSemAlocacao.selecionado;
   },
 
   methods: {
-    openAsideModal(modalName) {
-      if (modalName === "filtros") {
-        this.$refs.modalFiltros.toggle();
-        this.$refs.modalAjuda.close();
-      } else if (modalName === "ajuda") {
-        this.$refs.modalAjuda.toggle();
-        this.$refs.modalFiltros.close();
-      }
-    },
-    activeAllFiltros() {
-      this.modalFiltrosCallbacks.selectAll.Docentes();
-      this.filtroDocentes.ativados = [...this.filtroDocentes.selecionados];
-      this.filtroDocenteSemAlocacao.ativado = this.filtroDocenteSemAlocacao.selecionado;
-    },
+    setSemestreAtivo() {
+      const { primeiro, segundo } = this.filtroSemestres;
 
+      if (primeiro && !segundo) this.filtroSemestres.ativo = 1;
+      else if (!primeiro && segundo) this.filtroSemestres.ativo = 2;
+      else if (primeiro && segundo) this.filtroSemestres.ativo = 3;
+      else this.filtroSemestres.ativo = undefined;
+    },
     pdf(completo) {
       if (completo)
+        pdfs.pdfCargaProfessores({
+          Docentes: this.DocentesAtivos,
+          SemAlocacao: true,
+        });
+      else
         pdfs.pdfCargaProfessores({
           Docentes: this.filtroDocentes.ativados,
           SemAlocacao: this.filtroDocenteSemAlocacao.ativado,
         });
-      else
-        pdfs.pdfCargaProfessores({
-          Docentes: this.DocentesInCreditos,
-          SemAlocacao: true,
-        });
     },
-    turmaInDocentes(docente) {
-      const turmasResultantes = [];
 
-      this.$_.forEach(this.AllTurmas, (turma) => {
-        if (turma.Docente1 === docente.id || turma.Docente2 === docente.id) {
-          const DisciplinaFounded = this.$_.find(
-            this.DisciplinasDCC,
-            (disciplina) => disciplina.id === turma.Disciplina
-          );
+    turmaInDocentes(docenteId) {
+      let Turmas1Semestre = [];
+      let Turmas2Semestre = [];
+      let totalCreditos1Semestre = 0;
+      let totalCreditos2Semestre = 0;
 
-          if (DisciplinaFounded) {
-            turmasResultantes.push({
-              ...turma,
-              disciplinaNome: DisciplinaFounded.nome,
-              disciplinaCodigo: DisciplinaFounded.codigo,
-              disciplinaCargaTeorica: DisciplinaFounded.cargaTeorica,
-              disciplinaCargaPratica: DisciplinaFounded.cargaPratica,
-            });
+      this.$_.forEach(this.TurmasInDisciplinasPerfis, (turma) => {
+        if (turma.Docente1 === docenteId || turma.Docente2 === docenteId) {
+          let creditosDaTurma = 0;
+
+          if (
+            turma.Docente1 > 0 &&
+            turma.Docente2 > 0 &&
+            turma.Docente1 != turma.Docente2
+          )
+            creditosDaTurma += turma.disciplina.creditoTotal / 2;
+          else creditosDaTurma += turma.disciplina.creditoTotal;
+
+          if (turma.periodo === 1 || turma.periodo === 2) {
+            Turmas1Semestre.push({ ...turma, creditosDaTurma });
+            totalCreditos1Semestre += creditosDaTurma;
+          } else {
+            Turmas2Semestre.push({ ...turma, creditosDaTurma });
+            totalCreditos2Semestre += creditosDaTurma;
           }
         }
       });
 
-      return this.$_.orderBy(turmasResultantes, ["Disciplina", "letra"]);
-    },
-    turmasInDocentes1Semestre(docente) {
-      return this.$_.filter(
-        this.turmaInDocentes(docente),
-        (turma) => turma.periodo == 1 || turma.periodo == 2
-      );
-    },
-    turmasInDocentes2Semestre(docente) {
-      return this.$_.filter(
-        this.turmaInDocentes(docente),
-        (turma) => turma.periodo == 3 || turma.periodo == 4
-      );
-    },
-    turmasSemAlocacao() {
-      const turmasResultantes = [];
+      Turmas1Semestre = this.$_.orderBy(Turmas1Semestre, [
+        "Disciplina",
+        "letra",
+      ]);
+      Turmas2Semestre = this.$_.orderBy(Turmas2Semestre, [
+        "Disciplina",
+        "letra",
+      ]);
 
-      this.$_.forEach(this.AllTurmas, (turma) => {
-        if (
+      return {
+        totalCreditos1Semestre,
+        totalCreditos2Semestre,
+        Turmas1Semestre,
+        Turmas2Semestre,
+      };
+    },
+    cargaPosInDocentes(docenteId) {
+      let totalCreditos1Semestre = 0;
+      let totalCreditos2Semestre = 0;
+      const CargasPos1Semestre = [];
+      const CargasPos2Semestre = [];
+
+      this.$_.forEach(this.CargasPos, (carga) => {
+        if (carga.Docente === docenteId) {
+          const creditosDaCarga = parseFloat(carga.creditos) || 0;
+
+          if (carga.trimestre == 1 || carga.trimestre == 2) {
+            totalCreditos1Semestre += creditosDaCarga;
+            CargasPos1Semestre.push({ ...carga });
+          } else {
+            totalCreditos2Semestre += creditosDaCarga;
+            CargasPos2Semestre.push({ ...carga });
+          }
+        }
+      });
+
+      return {
+        totalCreditos1Semestre,
+        totalCreditos2Semestre,
+        CargasPos1Semestre,
+        CargasPos2Semestre,
+      };
+    },
+  },
+
+  computed: {
+    ...mapGetters([
+      "DocentesAtivos",
+      "AllHorarios",
+      "TurmasInDisciplinasPerfis",
+    ]),
+    // table main
+    DocentesOrderedMain() {
+      return this.$_.orderBy(
+        this.DocentesFiltredByDocenteMain,
+        this.orednacaoDocentesMain.order,
+        this.orednacaoDocentesMain.type
+      );
+    },
+    DocentesFiltredByDocenteMain() {
+      return this.$_.filter(this.DocentesFiltredBySemestreMain, (docente) => {
+        const docenteFoundedIndex = this.$_.findIndex(
+          this.filtroDocentes.ativados,
+          (docenteAtivado) => docenteAtivado.id === docente.id
+        );
+
+        return docenteFoundedIndex !== -1;
+      });
+    },
+    DocentesFiltredBySemestreMain() {
+      return this.$_.map(this.DocentesInTurmas, (docente) => {
+        const docenteFiltred = { ...docente };
+
+        if (!this.semestre1IsActived) {
+          docenteFiltred.Turmas1Semestre = [];
+          docenteFiltred.CargasPos1Semestre = [];
+        }
+        if (!this.semestre2IsActived) {
+          docenteFiltred.Turmas2Semestre = [];
+          docenteFiltred.CargasPos2Semestre = [];
+        }
+        return docenteFiltred;
+      });
+    },
+    DocentesInTurmas() {
+      return this.DocentesAtivos.map((docente) => {
+        const turmaInDocentesResult = this.turmaInDocentes(docente.id);
+        const cargaPosInDocentesResult = this.cargaPosInDocentes(docente.id);
+
+        const cred1 =
+          cargaPosInDocentesResult.totalCreditos1Semestre +
+          turmaInDocentesResult.totalCreditos1Semestre;
+        const cred2 =
+          cargaPosInDocentesResult.totalCreditos2Semestre +
+          turmaInDocentesResult.totalCreditos2Semestre;
+
+        const { Turmas1Semestre, Turmas2Semestre } = turmaInDocentesResult;
+        const {
+          CargasPos1Semestre,
+          CargasPos2Semestre,
+        } = cargaPosInDocentesResult;
+
+        return {
+          ...docente,
+          cred1,
+          cred2,
+          Turmas1Semestre,
+          Turmas2Semestre,
+          CargasPos1Semestre,
+          CargasPos2Semestre,
+        };
+      });
+    },
+
+    turmasSemAlocacao() {
+      let turmasResultantes = [];
+
+      turmasResultantes = this.$_.filter(
+        this.TurmasInDisciplinasPerfis,
+        (turma) =>
           turma.Docente1 == null &&
           turma.Docente2 == null &&
           turma.Disciplina != null
-        ) {
-          const disciplinaFounded = this.$_.find(
-            this.DisciplinasDCC,
-            (disciplina) => turma.Disciplina === disciplina.id
-          );
-
-          if (disciplinaFounded)
-            turmasResultantes.push({
-              ...turma,
-              disciplinaNome: disciplinaFounded.nome,
-              disciplinaCodigo: disciplinaFounded.codigo,
-              disciplinaCargaTeorica: disciplinaFounded.cargaTeorica,
-              disciplinaCargaPratica: disciplinaFounded.cargaPratica,
-            });
-        }
-      });
+      );
 
       return this.$_.orderBy(turmasResultantes, [
         "periodo",
@@ -528,105 +762,18 @@ export default {
         "letra",
       ]);
     },
-    calculaCreditos(docente) {
-      var creditosTotais = { periodo1: 0, periodo2: 0 };
-
-      for (let t = 0; t < this.AllTurmas.length; t++) {
-        if (
-          this.AllTurmas[t].Docente1 === docente.id ||
-          this.AllTurmas[t].Docente2 === docente.id
-        ) {
-          for (var d = 0; d < this.DisciplinasDCC.length; d++) {
-            if (this.DisciplinasDCC[d].id === this.AllTurmas[t].Disciplina) {
-              if (
-                this.AllTurmas[t].Docente1 > 0 &&
-                this.AllTurmas[t].Docente2 > 0
-              ) {
-                //PRIMEIRO PERIODO
-                if (this.AllTurmas[t].periodo === 1) {
-                  creditosTotais.periodo1 +=
-                    parseFloat(this.DisciplinasDCC[d].cargaPratica) / 2;
-                  creditosTotais.periodo1 +=
-                    parseFloat(this.DisciplinasDCC[d].cargaTeorica) / 2;
-                } else {
-                  //SEGUNDO PERIODO
-                  creditosTotais.periodo2 +=
-                    parseFloat(this.DisciplinasDCC[d].cargaPratica) / 2;
-                  creditosTotais.periodo2 +=
-                    parseFloat(this.DisciplinasDCC[d].cargaTeorica) / 2;
-                }
-              } else {
-                //PRIMEIRO PERIODO
-                if (this.AllTurmas[t].periodo === 1) {
-                  creditosTotais.periodo1 += parseFloat(
-                    this.DisciplinasDCC[d].cargaPratica
-                  );
-                  creditosTotais.periodo1 += parseFloat(
-                    this.DisciplinasDCC[d].cargaTeorica
-                  );
-                }
-                //SEGUNDO PERIODO
-                else {
-                  creditosTotais.periodo2 += parseFloat(
-                    this.DisciplinasDCC[d].cargaPratica
-                  );
-                  creditosTotais.periodo2 += parseFloat(
-                    this.DisciplinasDCC[d].cargaTeorica
-                  );
-                }
-              }
-            }
-          }
+    turmasSemAlocacaoFiltred() {
+      return this.$_.filter(this.turmasSemAlocacao, (turma) => {
+        switch (this.filtroSemestres.ativo) {
+          case 1:
+            return turma.periodo === 1;
+          case 2:
+            return turma.periodo === 2;
+          case 3:
+            return true;
+          default:
+            return false;
         }
-      }
-      for (let t = 0; t < this.CargasPos.length; t++) {
-        if (this.CargasPos[t].Docente === docente.id) {
-          if (this.CargasPos[t].trimestre == 3) {
-            creditosTotais.periodo2 += parseFloat(this.CargasPos[t].creditos);
-          } else {
-            creditosTotais.periodo1 += parseFloat(this.CargasPos[t].creditos);
-          }
-        }
-      }
-      return creditosTotais;
-    },
-    CargasPosFiltred(docenteId) {
-      return this.$_.filter(this.CargasPos(docenteId), function (carga) {
-        return carga.trimestre == 1 || carga.trimestre == 2;
-      });
-    },
-    getCargasPosDocente(docenteId, trimestres) {
-      return this.$_.filter(
-        this.CargasPos,
-        (carga) =>
-          trimestres.indexOf(carga.trimestre) != -1 &&
-          carga.Docente === docenteId
-      );
-    },
-  },
-  computed: {
-    ...mapGetters([
-      "DocentesAtivos",
-      "AllTurmas",
-      "DisciplinasDCC",
-      "AllHorarios",
-    ]),
-    // table main
-    DocentesOrderedMain() {
-      return this.$_.orderBy(
-        this.DocentesFiltredMain,
-        this.orednacaoDocentesMain.order,
-        this.orednacaoDocentesMain.type
-      );
-    },
-    DocentesFiltredMain() {
-      return this.$_.filter(this.DocentesInCreditos, (docente) => {
-        const docenteFoundedIndex = this.$_.findIndex(
-          this.filtroDocentes.ativados,
-          (docenteAtivado) => docenteAtivado.id === docente.id
-        );
-
-        return docenteFoundedIndex !== -1;
       });
     },
     // tables modal
@@ -648,38 +795,18 @@ export default {
         return docenteApelido.match(searchNormalized);
       });
     },
-    DocentesInCreditos() {
-      return this.DocentesAtivos.map((docente) => {
-        const creditos = this.calculaCreditos(docente);
-        return {
-          ...docente,
-          cred1: creditos.periodo1,
-          cred2: creditos.periodo2,
-          turmas1Semestre: this.turmasInDocentes1Semestre(docente),
-          turmas2Semestre: this.turmasInDocentes2Semestre(docente),
-          cargasPos1Semestre: this.getCargasPosDocente(docente.id, [1, 2]),
-          cargasPos2Semestre: this.getCargasPosDocente(docente.id, [3, 4]),
-        };
-      });
-    },
-
     CargasPos() {
-      return this.$_.orderBy(this.$store.state.cargaPos.Cargas, "trimestre");
+      return this.$store.state.cargaPos.Cargas;
+    },
+    // outros
+    semestre1IsActived() {
+      const { ativo } = this.filtroSemestres;
+      return ativo === 1 || ativo === 3;
+    },
+    semestre2IsActived() {
+      const { ativo } = this.filtroSemestres;
+      return ativo === 2 || ativo === 3;
     },
   },
 };
 </script>
-
-<style scoped>
-.toUpperCase {
-  text-transform: uppercase;
-}
-.docente-tr {
-  background-color: rgba(0, 0, 0, 0.089);
-  color: black;
-}
-.list-relatorio .list-group-item:hover {
-  text-decoration: underline;
-  background-color: #ebebeb;
-}
-</style>

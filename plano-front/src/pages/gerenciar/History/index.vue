@@ -19,7 +19,7 @@
         :color="'gray'"
         @click="$refs.modalFiltros.toggle()"
       >
-        <font-awesome-icon :icon="['fas','list-ul']" />
+        <font-awesome-icon :icon="['fas', 'list-ul']" />
       </BaseButton>
     </PageHeader>
 
@@ -36,16 +36,28 @@
             <th style="width: 80px">Usuário</th>
             <th style="width: 160px">Hora</th>
           </template>
-          <template #tbody v-if="!onLoading.table">
+          <template #tbody>
             <tr v-for="h in History" :key="`History${h.id}`">
               <td style="width: 110px">{{ h.tabelaModificada }}</td>
-              <td style="width: 120px" class="less-padding">{{ h.campoModificado }}</td>
-              <td style="width: 200px" class="less-padding">{{ linhaModificada(h) }}</td>
-              <td style="width: 120px" class="less-padding">{{ valorAnterior(h) }}</td>
-              <td style="width: 120px" class="less-padding">{{ valorNovo(h) }}</td>
-              <td style="width: 65px" class="less-padding">{{ h.tipoOperacao }}</td>
+              <td style="width: 120px" class="less-padding">
+                {{ h.campoModificado }}
+              </td>
+              <td style="width: 200px" class="less-padding">
+                {{ linhaModificada(h) }}
+              </td>
+              <td style="width: 120px" class="less-padding">
+                {{ valorAnterior(h) }}
+              </td>
+              <td style="width: 120px" class="less-padding">
+                {{ valorNovo(h) }}
+              </td>
+              <td style="width: 65px" class="less-padding">
+                {{ h.tipoOperacao }}
+              </td>
               <td style="width: 80px" class="less-padding">{{ h.usuario }}</td>
-              <td style="width: 160px" class="less-padding">{{ h.createdAt }}</td>
+              <td style="width: 160px" class="less-padding">
+                {{ h.createdAt }}
+              </td>
             </tr>
           </template>
         </BaseTable>
@@ -58,7 +70,10 @@
       :tabsOptions="modalFiltrosTabs"
     >
       <div class="div-table">
-        <BaseTable v-show="modalFiltrosTabs.current === 'Tabelas'" :type="'modal'">
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Tabelas'"
+          :type="'modal'"
+        >
           <template #thead>
             <th style="width:25px"></th>
             <th style="width: 425px">Nome</th>
@@ -452,7 +467,7 @@ export default {
       let TabelasAtivadas = this.TabelasAtivadas;
       return this.$_.orderBy(
         this.$_.filter(
-          this.$_.filter(this.$store.state.history.History, function (
+          this.$_.filter(this.$store.state.history.History, function(
             h,
             i,
             a,

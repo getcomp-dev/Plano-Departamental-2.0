@@ -28,11 +28,11 @@
           </option>
         </select>
       </li>
-      <li class="nav-item" @click="$emit('show-modal', 'user')">
+      <li class="nav-item" @click="callbacks.openModalUser">
         <font-awesome-icon :icon="['fas', 'user']" />
         <span>Usuário</span>
       </li>
-      <li class="nav-item" @click="$emit('show-modal', 'download')">
+      <li class="nav-item" @click="callbacks.openModalDownload">
         <font-awesome-icon :icon="['fas', 'save']" />
         <span>Download</span>
       </li>
@@ -49,20 +49,27 @@ import { mapGetters, mapActions } from "vuex";
 
 export default {
   name: "TheNavbar",
+  props: {
+    callbacks: { type: Object, required: true },
+  },
   data() {
     return {
       planoIdForm: null,
     };
   },
+
   created() {
     this.planoIdForm = this.currentPlanoId;
   },
+
   methods: {
     ...mapActions(["closeSidebar", "toggleSidebar", "changeCurrentPlano"]),
   },
+
   computed: {
     ...mapGetters(["sidebarVisibility", "allPlanos", "currentPlanoId"]),
   },
+
   watch: {
     currentPlanoId(newValue) {
       this.planoIdForm = newValue;

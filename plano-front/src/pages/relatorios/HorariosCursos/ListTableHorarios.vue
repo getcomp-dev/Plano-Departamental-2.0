@@ -5,7 +5,7 @@
         <h4 class="periodo-title">{{ periodo.nome }}</h4>
         <TableHorarios
           :Turmas="curso.horarios[periodo.indice]"
-          :listaDeHorarios="listHorarios"
+          :listaDeHorarios="listaDeHorariosFiltredByTurno"
         />
       </div>
     </template>
@@ -29,7 +29,7 @@ export default {
   computed: {
     ...mapGetters(["ListaDeHorariosNoturno", "ListaDeHorariosDiurno"]),
 
-    listHorarios() {
+    listaDeHorariosFiltredByTurno() {
       if (this.curso.turno === "Diurno") return this.ListaDeHorariosDiurno;
       else return this.ListaDeHorariosNoturno;
     },

@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
     <template v-if="!onLoading.fetching">
-      <TheNavbar @show-modal="showModal[$event]()" />
+      <TheNavbar :callbacks="navbarCallbacks" />
       <TheSidebar />
 
       <main @click="closeSidebar">
@@ -29,12 +29,11 @@ import bddumpService from "@/common/services/bddump";
 import { EventBus } from "@/plugins/eventBus.js";
 import { mapGetters, mapActions } from "vuex";
 import { TheNavbar, TheSidebar, TheLoadingView } from "@/components/layout";
-import { ModalUser, ModalDownload, ModalAjuda } from "@/components/modals";
+import { ModalUser, ModalDownload } from "@/components/modals";
 
 export default {
   name: "TheDashboard",
   components: {
-    ModalAjuda,
     TheSidebar,
     TheNavbar,
     TheLoadingView,
@@ -43,22 +42,20 @@ export default {
   },
   data() {
     return {
-      showModal: {
-        download: () => {
-          this.$refs.modalDownload.open();
-        },
-        user: () => {
-          this.$refs.modalUser.open();
-        },
+      navbarCallbacks: {
+        openModalDownload: () => this.$refs.modalDownload.open(),
+        openModalUser: () => this.$refs.modalUser.open(),
       },
     };
   },
+
   created() {
     this.initializePlano();
   },
   beforeDestroy() {
     this.$socket.close();
   },
+
   methods: {
     ...mapActions(["setFetchingLoading", "closeSidebar", "initializePlano"]),
 
@@ -67,11 +64,11 @@ export default {
     },
     returnFiles() {
       bddumpService.returnFiles().then((response) => {
-        this.files = response.Files.filter(function (elm) {
+        this.files = response.Files.filter(function(elm) {
           return elm.match(/.*\.(sql)/gi);
         });
         this.$_.pull(this.files, "drop_all.sql");
-        this.$_.forEach(this.files, function (value, index, array) {
+        this.$_.forEach(this.files, function(value, index, array) {
           array[index] = value.slice(0, -4);
         });
         //console.log(this.files.filter( function( elm ) {return elm.match(/.*\.(sql)/ig)}))

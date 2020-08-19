@@ -73,7 +73,8 @@ const getters = {
       (h) => parseInt(h.horario.slice(3, 5)) < 17
     );
   },
-  //Usado para as tabelas de horarios-cursos e horarios-labs
+
+  //Usado para as tabelas de Horarios-cursos e Horarios-labs
   ListaDeHorariosDiurno() {
     const listHorarios = [
       {
@@ -125,6 +126,32 @@ const getters = {
     });
 
     return listHorarios;
+  },
+  ListaDeHorariosEletivas(state, getters) {
+    const HorariosExtra = [
+      {
+        nome: "17-19",
+        horariosIds: [],
+      },
+      {
+        nome: "18-20",
+        horariosIds: [],
+      },
+    ];
+
+    let initialId = 32;
+    _.forEach(HorariosExtra, (itemHorario) => {
+      for (let horarioId = initialId; horarioId <= 41; horarioId += 2) {
+        itemHorario.horariosIds.push(horarioId);
+      }
+      initialId++;
+    });
+
+    return [
+      ...getters.ListaDeHorariosDiurno,
+      ...HorariosExtra,
+      ...getters.ListaDeHorariosNoturno,
+    ];
   },
 };
 

@@ -4,7 +4,7 @@
       <h1 class="card-title">{{ title }}</h1>
     </div>
     <div class="card-body">
-      <form>
+      <form autocomplete="off">
         <slot name="form-group"></slot>
 
         <div class="row m-0 mt-3 d-flex justify-content-end">
@@ -17,7 +17,7 @@
                 @click="$emit('btn-salvar')"
                 :key="1"
               >
-                <font-awesome-icon :icon="['fas','check']" />
+                <font-awesome-icon :icon="['fas', 'check']" />
               </BaseButton>
               <BaseButton
                 title="Deletar"
@@ -26,7 +26,7 @@
                 @click="$emit('btn-delete')"
                 :key="2"
               >
-                <font-awesome-icon :icon="['fas','trash']" />
+                <font-awesome-icon :icon="['fas', 'trash']" />
               </BaseButton>
             </template>
 
@@ -38,7 +38,7 @@
                 @click="$emit('btn-add')"
                 :key="4"
               >
-                <font-awesome-icon :icon="['fas','plus']" />
+                <font-awesome-icon :icon="['fas', 'plus']" />
               </BaseButton>
             </template>
 
@@ -49,7 +49,7 @@
               @click="$emit('btn-clean')"
               :key="3"
             >
-              <font-awesome-icon :icon="['fas','times']" />
+              <font-awesome-icon :icon="['fas', 'times']" />
             </BaseButton>
           </slot>
         </div>

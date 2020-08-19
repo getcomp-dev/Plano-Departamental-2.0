@@ -17,14 +17,14 @@
         class="tg-0lax"
       >
         <p
-          v-for="turma in TurmasFiltredByHorario(horarioId)"
+          v-for="turma in TurmasInHorarios(horarioId)"
           :key="horarioId + turma.id + turma.periodo"
           v-b-popover.hover.right="{
-            title: Disciplina(turma).nome,
-            content: findDocenteInTurma(turma),
+            title: turma.disciplina.nome,
+            content: turma.docenteApelido,
           }"
         >
-          {{ Disciplina(turma).codigo }}
+          {{ turma.disciplina.codigo }}
         </p>
       </td>
     </tr>
@@ -32,6 +32,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   name: "TableHorarios",
   props: {
@@ -40,40 +42,45 @@ export default {
   },
 
   methods: {
-    TurmasFiltredByHorario(horario) {
-      return this.$_.filter(
+    TurmasInHorarios(horarioId) {
+      const turmasFiltred = this.$_.filter(
         this.Turmas,
-        (turma) => turma.Horario1 == horario || turma.Horario2 == horario
+        (turma) => turma.Horario1 == horarioId || turma.Horario2 == horarioId
       );
-    },
-    Disciplina(turma){
-      return this.$_.find(this.$store.state.disciplina.Disciplinas, {id:turma.Disciplina})
+
+      return this.$_.map(turmasFiltred, (turma) => ({
+        ...turma,
+        docenteApelido: this.findDocentesApelidoInTurma(turma),
+        disciplina: this.findDisciplinaInTurma(turma),
+      }));
     },
 
-    findDocenteInTurma(turma) {
-      let d1 = undefined,
-        d2 = undefined;
+    findDocentesApelidoInTurma(turma) {
+      let docente1 = undefined;
+      let docente2 = undefined;
       if (!this.$_.isNull(turma.Docente1))
-        d1 = this.$_.find(this.$store.state.docente.Docentes, [
-          "id",
-          turma.Docente1,
-        ]);
+        docente1 = this.$_.find(this.AllDocentes, ["id", turma.Docente1]);
       if (!this.$_.isNull(turma.Docente2))
-        d2 = this.$_.find(this.$store.state.docente.Docentes, [
-          "id",
-          turma.Docente1,
-        ]);
+        docente2 = this.$_.find(this.AllDocentes, ["id", turma.Docente1]);
+
       let apelidos = "";
-      if (d1 !== undefined) {
-        apelidos += d1.apelido;
-        if (d2 !== undefined) {
-          apelidos = apelidos + " " + d2.apelido;
-        }
+      if (docente1 !== undefined) {
+        apelidos += docente1.apelido;
+        if (docente2 !== undefined) apelidos += "\n" + docente2.apelido;
       } else {
-        if (d2 !== undefined) apelidos += d2.apelido;
+        if (docente2 !== undefined) apelidos += docente2.apelido;
       }
       return apelidos;
     },
+    findDisciplinaInTurma(turma) {
+      return this.$_.find(this.AllDisciplinas, {
+        id: turma.Disciplina,
+      });
+    },
+  },
+
+  computed: {
+    ...mapGetters(["ListaDeHorariosEletivas", "AllDisciplinas", "AllDocentes"]),
   },
 };
 </script>

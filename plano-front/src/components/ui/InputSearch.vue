@@ -2,12 +2,13 @@
   <div class="input-search-container">
     <input
       ref="input"
-      type="text"
+      type="search"
       :placeholder="placeholder"
       :class="['input-search', classes]"
       :style="customStyle"
       :value="value"
       @input="updateValue($event.target.value)"
+      autocomplete="off"
     />
 
     <button class="btn-search" @click="clearInputValue">

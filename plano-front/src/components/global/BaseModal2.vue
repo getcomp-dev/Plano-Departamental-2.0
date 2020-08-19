@@ -13,7 +13,9 @@
           class="btn-custom btn-close"
           @click="close()"
           aria-label="Close modal"
-        >&times;</button>
+        >
+          <font-awesome-icon :icon="['fas', 'times']" />
+        </button>
       </header>
 
       <main class="modal-custom-body">
@@ -80,6 +82,8 @@ export default {
       this.visibility = !this.visibility;
     },
     closeOnEscKey(event) {
+      event.stopPropagation();
+
       const { code } = event;
       if (code === "Escape") this.close();
     },
@@ -210,7 +214,7 @@ export default {
   height: 100% !important;
   min-height: 55px;
   width: 70px;
-  font-size: 22px;
+  font-size: 16px;
   border: none;
   color: #2d2e2e;
   font-weight: bold;

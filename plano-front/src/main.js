@@ -49,7 +49,7 @@ Vue.component("PageHeader", PageHeader);
 import { mapActions } from "vuex";
 Vue.mixin({
   methods: {
-    ...mapActions(["pushNotification"]),
+    ...mapActions(["pushNotification", "setPartialLoading"]),
   },
 });
 

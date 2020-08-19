@@ -3,7 +3,7 @@
     ref="baseModalRelatorio"
     title="Relátorio"
     position="right"
-    :styles="{ width: '300px', zIndex: 900 }"
+    :styles="{ width: '300px', zIndex: 905 }"
   >
     <template #modal-body>
       <ul class="list-relatorio list-group flex-row w-100 border-0">
@@ -30,8 +30,10 @@ export default {
 
   methods: {
     handleSelect(value) {
-      this.$emit("selection-option", value);
+      this.setPartialLoading(true);
       this.close();
+      this.$emit("selection-option", value);
+      this.setPartialLoading(false);
     },
 
     toggle() {

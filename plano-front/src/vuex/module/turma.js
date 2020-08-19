@@ -1,6 +1,8 @@
 import Vue from "vue";
 import _ from "lodash";
 import turmaService from "../../common/services/turma";
+import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
+
 import {
   TURMA_FETCHED,
   SOCKET_TURMA_CREATED,
@@ -72,6 +74,18 @@ const actions = {
         .catch((error) => {
           reject(error);
         });
+    });
+  },
+
+  async editTurma({ commit }, turma) {
+    const turmaNormalized = _.cloneDeepWith(turma, setEmptyValuesToNull);
+    validateObjectKeys(turmaNormalized, ["letra", "Disciplina", "turno1"]);
+
+    await turmaService.update(turmaNormalized.id, turmaNormalized);
+
+    commit("PUSH_NOTIFICATION", {
+      type: "success",
+      text: `Turma ${turmaNormalized.letra} foi atualizada`,
     });
   },
 

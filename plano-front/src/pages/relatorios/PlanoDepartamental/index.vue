@@ -5,27 +5,27 @@
         title="Filtros"
         :type="'icon'"
         :color="'gray'"
-        @click="openAsideModal('modalFiltros')"
+        @click="toggleAsideModal('filtros')"
       >
-        <font-awesome-icon :icon="['fas','list-ul']" />
+        <font-awesome-icon :icon="['fas', 'list-ul']" />
       </BaseButton>
 
       <BaseButton
         title="Relátorio"
         :type="'icon'"
         :color="'gray'"
-        @click="openAsideModal('modalRelatorio')"
+        @click="toggleAsideModal('relatorio')"
       >
-        <font-awesome-icon :icon="['fas','file-alt']" />
+        <font-awesome-icon :icon="['fas', 'file-alt']" />
       </BaseButton>
 
       <BaseButton
         title="Ajuda"
         :type="'icon'"
         :color="'lightblue'"
-        @click="openAsideModal('modalAjuda')"
+        @click="toggleAsideModal('ajuda')"
       >
-        <font-awesome-icon :icon="['fas','question']" />
+        <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
     </PageHeader>
 
@@ -62,71 +62,157 @@
           </th>
           <th style="width: 25px" title="Semestre">S.</th>
           <th style="width: 35px" title="Turma">T.</th>
-          <th style="width: 200px">Docentes</th>
-          <th style="width: 180px">Horário</th>
+          <th style="width: 150px">Docentes</th>
+          <th style="width: 130px" class="less-padding">Horário</th>
 
-          <th :title="currentThTitle" style="width: 50px">Vagas</th>
+          <th
+            v-if="semestre1IsActived"
+            title="Somatório das vagas no 1º semestre"
+            style="width: 40px"
+            class="less-padding"
+          >
+            VS1
+          </th>
+          <th
+            v-if="semestre2IsActived"
+            title="Somatório das vagas no 2º semestre"
+            style="width: 40px"
+            class="less-padding"
+          >
+            VS2
+          </th>
+          <th
+            v-if="semestre1IsActived && semestre2IsActived"
+            title="Somatório total das vagas"
+            style="width: 45px"
+            class="less-padding"
+          >
+            VTotal
+          </th>
         </template>
-        <template #tbody v-if="!onLoading.table">
+
+        <template #tbody>
+          <tr v-show="DisciplinasInTurmasOrdered.length" class="bg-total-vg">
+            <td style="width: 80px"></td>
+            <td style="width: 350px" class="upper-case">Total de vagas</td>
+            <td style="width: 80px"></td>
+            <td style="width: 25px"></td>
+            <td style="width: 35px"></td>
+            <td style="width: 150px"></td>
+            <td style="width: 130px" class="less-padding"></td>
+            <td style="width: 40px" v-if="semestre1IsActived">
+              {{ totalVagas1Semestre }}
+            </td>
+            <td style="width: 40px" v-if="semestre2IsActived">
+              {{ totalVagas2Semestre }}
+            </td>
+            <td
+              style="width: 45px"
+              v-if="semestre1IsActived && semestre2IsActived"
+            >
+              {{ totalVagas1Semestre + totalVagas2Semestre }}
+            </td>
+          </tr>
+
           <template v-for="disciplina in DisciplinasInTurmasOrdered">
             <tr class="bg-custom" :key="'trDisc' + disciplina.id">
               <td style="width: 80px">{{ disciplina.codigo }}</td>
               <td style="width: 350px">{{ disciplina.nome }}</td>
-              <td style="width: 80px" class="less-padding">{{ disciplina.perfil.abreviacao }}</td>
+              <td style="width: 80px" class="less-padding">
+                {{ disciplina.perfil.abreviacao }}
+              </td>
               <td style="width: 25px"></td>
               <td style="width: 35px"></td>
-              <td style="width: 200px"></td>
-              <td style="width: 180px"></td>
-              <td style="width: 50px">{{ getDisciplinaVagasInCurrentSemestres(disciplina) }}</td>
+              <td style="width: 150px"></td>
+              <td style="width: 130px" class="less-padding"></td>
+              <td style="width: 40px" v-if="semestre1IsActived">
+                {{
+                  disciplina.vagas1Semestre === 0
+                    ? ""
+                    : disciplina.vagas1Semestre
+                }}
+              </td>
+              <td style="width: 40px" v-if="semestre2IsActived">
+                {{
+                  disciplina.vagas2Semestre === 0
+                    ? ""
+                    : disciplina.vagas2Semestre
+                }}
+              </td>
+              <td
+                style="width: 45px"
+                v-if="semestre1IsActived && semestre2IsActived"
+              >
+                {{ disciplina.vagas1Semestre + disciplina.vagas2Semestre }}
+              </td>
             </tr>
 
-            <tr v-for="turma in disciplina.turmas" :key="'trTurma' + turma.id + disciplina.id">
+            <tr
+              v-for="turma in disciplina.Turmas"
+              :key="'trTurma' + turma.id + disciplina.id"
+            >
               <td style="width: 80px"></td>
               <td style="width: 350px"></td>
               <td style="width: 80px"></td>
               <td style="width: 25px">{{ turma.periodo }}</td>
-              <td style="width: 35px" class="less-padding">{{ turma.letra }}</td>
-              <td style="width: 200px">{{ getDocentesApelidoByTurma(turma) }}</td>
-
-              <td style="width: 180px">{{ generateHorarioText(turma.Horario1, turma.Horario2) }}</td>
-
-              <td
-                v-if="
-                  filtroSemestres.ativo == 1 &&
-                    (turma.periodo == 1 || turma.periodo == 2)
-                "
-                @click="handleClickInTurmaVaga(turma)"
-                class="clickable p-vagas"
-                style="width: 50px"
-              >{{ vagasTurma(turma, 1) }}</td>
-
-              <td
-                v-if="
-                  filtroSemestres.ativo == 2 &&
-                    (turma.periodo == 3 || turma.periodo == 4)
-                "
-                @click="handleClickInTurmaVaga(turma)"
-                class="clickable p-vagas"
-                style="width: 50px"
-              >{{ vagasTurma(turma, 2) }}</td>
-
-              <td
-                v-if="filtroSemestres.ativo == 3"
-                @click="handleClickInTurmaVaga(turma)"
-                class="clickable p-vagas"
-                style="width: 50px"
-              >
-                <template v-if="turma.periodo == 1 || turma.periodo == 2">{{ vagasTurma(turma, 1) }}</template>
-                <template v-else>{{ vagasTurma(turma, 2) }}</template>
+              <td style="width: 35px" class="less-padding">
+                {{ turma.letra }}
               </td>
+              <td style="width: 150px">
+                {{ generateDocentesText(turma.Docente1, turma.Docente2) }}
+              </td>
+              <td style="width: 130px" class="less-padding">
+                {{ generateHorariosText(turma.Horario1, turma.Horario2) }}
+              </td>
+              <template v-if="semestre1IsActived">
+                <td
+                  v-if="turma.periodo === 1 || turma.periodo === 2"
+                  @click="handleClickInTurmaVaga(turma)"
+                  class="td-vagas clickable"
+                  style="width: 40px"
+                >
+                  {{ turma.vagas }}
+                </td>
+                <td v-else style="width: 40px"></td>
+              </template>
+              <template v-if="semestre2IsActived">
+                <td
+                  v-if="turma.periodo === 3 || turma.periodo === 4"
+                  @click="handleClickInTurmaVaga(turma)"
+                  class="td-vagas clickable"
+                  style="width: 40px"
+                >
+                  {{ turma.vagas }}
+                </td>
+                <td v-else style="width: 40px"></td>
+              </template>
+              <td
+                v-if="semestre1IsActived && semestre2IsActived"
+                style="width: 45px"
+              ></td>
             </tr>
           </template>
 
           <tr v-show="!DisciplinasInTurmasOrdered.length">
-            <td colspan="8" style="width: 1000px">
+            <td colspan="7" style="width: 850px">
               <b>Nenhuma disciplina encontrada.</b> Clique no botão de filtros
               <i class="fas fa-list-ul mx-1"></i> para selecioná-las.
             </td>
+            <td
+              style="width: 40px"
+              v-if="semestre1IsActived"
+              class="borderX-0"
+            ></td>
+            <td
+              style="width: 40px"
+              v-if="semestre2IsActived"
+              class="borderX-0"
+            ></td>
+            <td
+              style="width: 45px"
+              v-if="semestre1IsActived && semestre2IsActived"
+              class="borderX-0"
+            ></td>
           </tr>
         </template>
       </BaseTable>
@@ -158,7 +244,9 @@
               @click="toggleOrder(ordenacaoModal.disciplinas, 'codigo')"
             >
               Cód.
-              <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"></i>
+              <i
+                :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"
+              ></i>
             </th>
             <th
               class="t-start clickable"
@@ -166,7 +254,9 @@
               @click="toggleOrder(ordenacaoModal.disciplinas, 'nome')"
             >
               Nome
-              <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"></i>
+              <i
+                :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"
+              ></i>
             </th>
             <th
               class="t-start clickable"
@@ -191,7 +281,7 @@
               v-for="disciplina in DisciplinasOrderedModal"
               :key="'MdDisciplinas' + disciplina.id"
               @click="
-                toggleItemInArray(disciplina, filtroDisciplinas.selecionados)
+                toggleItemInArray(disciplina.id, filtroDisciplinas.selecionados)
               "
             >
               <td style="width: 25px">
@@ -199,12 +289,16 @@
                   type="checkbox"
                   class="form-check-input position-static m-0"
                   v-model="filtroDisciplinas.selecionados"
-                  :value="disciplina"
+                  :value="disciplina.id"
                 />
               </td>
               <td style="width: 70px">{{ disciplina.codigo }}</td>
-              <td style="width: 270px" class="t-start">{{ disciplina.nome }}</td>
-              <td style="width: 85px" class="t-start">{{ disciplina.perfil.abreviacao }}</td>
+              <td style="width: 270px" class="t-start">
+                {{ disciplina.nome }}
+              </td>
+              <td style="width: 85px" class="t-start">
+                {{ disciplina.perfil.abreviacao }}
+              </td>
             </tr>
             <tr v-show="!DisciplinasOrderedModal.length">
               <td style="width:450px">NENHUMA DISCIPLINA ENCONTRADA.</td>
@@ -212,10 +306,15 @@
           </template>
         </BaseTable>
 
-        <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Semestres'"
+          :type="'modal'"
+        >
           <template #thead>
             <th style="width: 25px"></th>
-            <th class="t-start clickable" style="width: 425px">Semestre Letivo</th>
+            <th class="t-start clickable" style="width: 425px">
+              Semestre Letivo
+            </th>
           </template>
           <template #tbody>
             <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
@@ -241,7 +340,10 @@
           </template>
         </BaseTable>
 
-        <BaseTable :type="'modal'" v-show="modalFiltrosTabs.current === 'Perfis'">
+        <BaseTable
+          :type="'modal'"
+          v-show="modalFiltrosTabs.current === 'Perfis'"
+        >
           <template #thead>
             <th style="width: 25px;"></th>
             <th
@@ -274,127 +376,7 @@
       </div>
     </ModalFiltros>
 
-    <BaseModal2 ref="modalVagas" :type="'editVagas'" :classes="'modal-vagas'">
-      <template #modal-body>
-        <template v-if="turmaSelecionada">
-          <div class="vagas-header">
-            <h6 class="vagas-title">
-              {{
-              getDisciplinaByTurma(turmaSelecionada).codigo +
-              " - " +
-              getDisciplinaByTurma(turmaSelecionada).nome
-              }}
-            </h6>
-            <div class="input-form">
-              <label for="selectTurma" class="mr-2">Turma:</label>
-              <select
-                id="selectTurma"
-                class="form-control"
-                style="width: 50px !important;"
-                v-model="turmaSelecionada"
-              >
-                <option
-                  v-for="turma in getTurmasByDisciplinaInSemestre(
-                    getDisciplinaByTurma(turmaSelecionada),
-                    turmaSelecionada.periodo === 1 ||
-                      turmaSelecionada.periodo === 2
-                      ? 1
-                      : 2
-                  )"
-                  :key="'selectModalVagas' + turma.id"
-                  :value="turma"
-                >{{ turma.letra }}</option>
-              </select>
-            </div>
-          </div>
-          <div class="div-table">
-            <BaseTable :type="'modal'">
-              <template #thead>
-                <th
-                  class="clickable"
-                  style="width: 55px"
-                  title="Código"
-                  @click="toggleOrder(ordenacaoModal.vagas, 'codigo')"
-                >
-                  Cód.
-                  <i :class="setIconByOrder(ordenacaoModal.vagas, 'codigo')"></i>
-                </th>
-                <th
-                  class="clickable t-start"
-                  style="width: 300px"
-                  @click="toggleOrder(ordenacaoModal.vagas, 'nome')"
-                >
-                  Nome
-                  <i :class="setIconByOrder(ordenacaoModal.vagas, 'nome')"></i>
-                </th>
-
-                <th
-                  title="Vagas periodizadas"
-                  class="clickable less-padding"
-                  style="width: 55px"
-                  @click="
-                    toggleOrder(
-                      ordenacaoModal.vagas,
-                      'vagasPeriodizadas',
-                      'desc'
-                    )
-                  "
-                >
-                  Grade
-                  <i
-                    :class="
-                      setIconByOrder(ordenacaoModal.vagas, 'vagasPeriodizadas')
-                    "
-                  ></i>
-                </th>
-                <th
-                  title="Vagas não periodizadas"
-                  class="clickable less-padding"
-                  style="width: 55px"
-                  @click="
-                    toggleOrder(
-                      ordenacaoModal.vagas,
-                      'vagasNaoPeriodizadas',
-                      'desc'
-                    )
-                  "
-                >
-                  Extra
-                  <i
-                    :class="
-                      setIconByOrder(
-                        ordenacaoModal.vagas,
-                        'vagasNaoPeriodizadas'
-                      )
-                    "
-                  ></i>
-                </th>
-                <th
-                  title="Total de vagas"
-                  class="clickable less-padding"
-                  style="width: 55px"
-                  @click="
-                    toggleOrder(ordenacaoModal.vagas, 'vagasTotais', 'desc')
-                  "
-                >
-                  Total
-                  <i :class="setIconByOrder(ordenacaoModal.vagas, 'vagasTotais')"></i>
-                </th>
-              </template>
-              <template #tbody>
-                <tr v-for="p in VagasTurmaSelecionada" :key="'vaga' + p.Curso + '-' + p.Turma">
-                  <td style="width: 55px">{{ getCursoByPedido(p).codigo }}</td>
-                  <td style="width: 300px" class="t-start">{{ getCursoByPedido(p).nome }}</td>
-                  <td style="width: 55px">{{ p.vagasPeriodizadas }}</td>
-                  <td style="width: 55px">{{ p.vagasNaoPeriodizadas }}</td>
-                  <td style="width: 55px">{{ p.vagasPeriodizadas + p.vagasNaoPeriodizadas }}</td>
-                </tr>
-              </template>
-            </BaseTable>
-          </div>
-        </template>
-      </template>
-    </BaseModal2>
+    <ModalVagas ref="modalVagas" :turma="turmaClicked" />
 
     <ModalRelatorio ref="modalRelatorio" @selection-option="pdf($event)" />
 
@@ -408,8 +390,7 @@
       </li>
       <li class="list-group-item">
         <b>Para gerar relatório de turmas das disciplinas:</b> Clique no ícone
-        relatório
-        <i class="fas fa-file-alt icon-gray"></i> selecione se deseja
+        relatório <i class="fas fa-file-alt icon-gray"></i> selecione se deseja
         gerar o relatório completo com todos as disciplinas, ou apenas o
         relatório parcial com as disciplinas que estão selecionados no momento.
       </li>
@@ -423,34 +404,48 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import pdfs from "@/common/services/pdfs";
 import { normalizeText } from "@/common/utils";
-import { toggleItemInArray, toggleOrdination } from "@/common/mixins";
+import {
+  toggleItemInArray,
+  toggleOrdination,
+  generateHorariosText,
+  generateDocentesText,
+  toggleAsideModal,
+} from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
 import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
-import { mapGetters } from "vuex";
+
+import ModalVagas from "./ModalVagas";
 
 export default {
   name: "PlanoDepartamental",
-  mixins: [toggleItemInArray, toggleOrdination],
+  mixins: [
+    toggleItemInArray,
+    toggleOrdination,
+    generateHorariosText,
+    generateDocentesText,
+    toggleAsideModal,
+  ],
   components: {
     ModalRelatorio,
     ModalFiltros,
     ModalAjuda,
     InputSearch,
+    ModalVagas,
   },
   data() {
     return {
-      turmaSelecionada: null,
+      turmaClicked: null,
       searchDisciplinas: "",
-      asideModaisRefs: ["modalFiltros", "modalAjuda", "modalRelatorio"],
+      asideModalsRefs: ["modalFiltros", "modalAjuda", "modalRelatorio"],
       ordenacaoMain: {
         disciplinas: { order: "codigo", type: "asc" },
       },
       ordenacaoModal: {
         perfis: { order: "nome", type: "asc" },
         disciplinas: { order: "codigo", type: "asc" },
-        vagas: { order: "vagasTotais", type: "desc" },
       },
       filtroDisciplinas: {
         ativados: [],
@@ -471,12 +466,15 @@ export default {
       modalFiltrosCallbacks: {
         selectAll: {
           Perfis: () => {
-            this.filtroPerfis.selecionados = [
-              ...this.$store.state.perfil.Perfis,
-            ];
+            this.filtroPerfis.selecionados = [...this.PerfisDCC];
           },
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = [...this.DisciplinasInPerfis];
+            this.filtroDisciplinas.selecionados = [
+              ...this.$_.map(
+                this.DisciplinasDCCInPerfis,
+                (disciplina) => disciplina.id
+              ),
+            ];
           },
           Semestres: () => {
             this.filtroSemestres.primeiro = true;
@@ -512,12 +510,6 @@ export default {
   },
 
   methods: {
-    openAsideModal(modalRef) {
-      this.$_.forEach(this.asideModaisRefs, (ref) => {
-        if (modalRef === ref) this.$refs[ref].toggle();
-        else this.$refs[ref].close();
-      });
-    },
     setSemestreAtivo() {
       const { primeiro, segundo } = this.filtroSemestres;
 
@@ -526,161 +518,148 @@ export default {
       else if (primeiro && segundo) this.filtroSemestres.ativo = 3;
       else this.filtroSemestres.ativo = undefined;
     },
+    toggleModalRelatorio() {
+      this.$refs.modalRelatorio.toggle();
+    },
     handleClickInTurmaVaga(turma) {
-      this.turmaSelecionada = turma;
+      this.turmaClicked = turma;
       this.$refs.modalVagas.open();
     },
-
     pdf(completo) {
-      const disciplinasSelecionadas = completo
-        ? this.DisciplinasInPerfis
-        : this.filtroDisciplinas.ativados;
+      let disciplinasSelecionadas;
+      if (completo) disciplinasSelecionadas = this.DisciplinasDCCInPerfis;
+      else
+        disciplinasSelecionadas = this.DisciplinasInTurmasFiltredByDisciplina;
 
       pdfs.pdfRelatorioDisciplinas({
         disciplinasSelecionadas,
       });
     },
-    vagasTurma(turma, semestre) {
-      if (
-        (semestre === 1 && (turma.periodo == 3 || turma.periodo == 4)) ||
-        (semestre === 2 && (turma.periodo == 1 || turma.periodo == 2))
-      )
-        return 0;
-      let pedidos = this.$store.state.pedido.Pedidos[turma.id];
+    getVagasByTurmaId(turmaId) {
+      const pedidosInCurrentTurma = this.Pedidos[turmaId];
 
       return this.$_.reduce(
-        pedidos,
+        pedidosInCurrentTurma,
         (sum, pedido) =>
           sum + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas,
         0
       );
     },
-    getDisciplinaVagasInCurrentSemestres(disciplina) {
-      const turmasFounded = this.$_.filter(this.AllTurmas, {
-        Disciplina: disciplina.id,
-      });
+  },
 
-      return this.$_.reduce(
-        turmasFounded,
-        (acc, turma) => {
-          return acc + this.vagasTurma(turma, this.filtroSemestres.ativo);
-        },
-        0
+  computed: {
+    ...mapGetters([
+      "TurmasInDisciplinasPerfis",
+      "DisciplinasDCCInPerfis",
+      "PerfisDCC",
+    ]),
+
+    DisciplinasInTurmasOrdered() {
+      return this.$_.orderBy(
+        this.DisciplinasInTurmasFiltredByDisciplina,
+        this.ordenacaoMain.disciplinas.order,
+        this.ordenacaoMain.disciplinas.type
       );
     },
-    generateHorarioText(horario1Id, horario2Id) {
-      const horarios1 = this.$_.find(
-        this.AllHorarios,
-        (horario) => horario.id === horario1Id
+    DisciplinasInTurmasFiltredByDisciplina() {
+      return this.$_.filter(
+        this.DisciplinasInTurmasFiltredBySemestre,
+        (disciplina) =>
+          this.$_.some(
+            this.filtroDisciplinas.ativados,
+            (disciplinaId) => disciplinaId === disciplina.id
+          )
       );
-      const horarios2 = this.$_.find(
-        this.AllHorarios,
-        (horario) => horario.id === horario2Id
-      );
-
-      if (horarios1 && !horarios2) return horarios1.horario;
-      else if (!horarios1 && horarios2) return horarios2.horario;
-      else if (horarios1 && horarios2)
-        return `${horarios1.horario} / ${horarios2.horario}`;
-      else return "";
     },
-    getHorarioById(horarioId) {
-      const horariosFounded = this.$_.find(
-        this.AllHorarios,
-        (horario) => horario.id === horarioId
-      );
+    DisciplinasInTurmasFiltredBySemestre() {
+      const disciplinasResult = [];
 
-      if (horariosFounded) return horariosFounded.horario;
-      else return "";
-    },
-    getTurmasByDisciplinaInSemestre(disciplina, semestre) {
-      let turmasResultantes = [];
-
-      turmasResultantes = this.$_.filter(this.AllTurmas, (turma) => {
-        if (turma.Disciplina === disciplina.id) {
-          switch (semestre) {
+      this.$_.forEach(this.DisciplinasInTurmas, (disciplina) => {
+        const TurmasFiltred = this.$_.filter(disciplina.Turmas, (turma) => {
+          switch (this.filtroSemestres.ativo) {
             case 1:
-              return turma.periodo === 1;
+              return turma.periodo === 1 || turma.periodo === 2;
             case 2:
-              return turma.periodo === 3;
+              return turma.periodo === 3 || turma.periodo === 4;
             case 3:
               return true;
             default:
               return false;
           }
-        }
-        return false;
-      });
+        });
 
-      return this.$_.orderBy(turmasResultantes, ["periodo", "letra"]);
-    },
-    getDocentesApelidoByTurma(turma) {
-      let d1 = this.$_.find(this.$store.state.docente.Docentes, {
-        id: turma.Docente1,
-      });
-      let d2 = this.$_.find(this.$store.state.docente.Docentes, {
-        id: turma.Docente2,
-      });
-      if (d1 === undefined && d2 === undefined) {
-        return "";
-      } else if (d2 === undefined) {
-        return `${d1.apelido}`;
-      } else if (d1 === undefined) {
-        return `${d2.apelido}`;
-      } else {
-        return `${d1.apelido} / ${d2.apelido}`;
-      }
-    },
-    getCursoByPedido(pedido) {
-      return this.$_.find(this.$store.state.curso.Cursos, { id: pedido.Curso });
-    },
-    getDisciplinaByTurma(turma) {
-      return this.$_.find(this.$store.state.disciplina.Disciplinas, {
-        id: turma.Disciplina,
-      });
-    },
-  },
-
-  computed: {
-    ...mapGetters([
-      "AllTurmas",
-      "DisciplinasInPerfis",
-      "AllHorarios",
-      "onLoading",
-    ]),
-
-    DisciplinasInTurmasOrdered() {
-      return this.$_.orderBy(
-        this.DisciplinasInTurmas,
-        this.ordenacaoMain.disciplinas.order,
-        this.ordenacaoMain.disciplinas.type
-      );
-    },
-    DisciplinasInTurmas() {
-      const turmasResultantes = [];
-
-      this.$_.forEach(this.filtroDisciplinas.ativados, (disciplina) => {
-        const turmas = this.getTurmasByDisciplinaInSemestre(
-          disciplina,
-          this.filtroSemestres.ativo
-        );
-        //Para apenas mostrar disciplinas que possuem turmas
-        if (turmas.length)
-          turmasResultantes.push({
+        if (TurmasFiltred.length)
+          disciplinasResult.push({
             ...disciplina,
-            turmas,
+            Turmas: TurmasFiltred,
           });
       });
 
-      return turmasResultantes;
+      return disciplinasResult;
+    },
+    DisciplinasInTurmas() {
+      const AllTurmasOrdered = this.$_.orderBy(this.TurmasInDisciplinasPerfis, [
+        "periodo",
+      ]);
+
+      return this.$_.map(this.DisciplinasDCCInPerfis, (disciplina) => {
+        const Turmas = [];
+        let vagas1Semestre = 0;
+        let vagas2Semestre = 0;
+
+        this.$_.forEach(AllTurmasOrdered, (turma) => {
+          if (turma.Disciplina === disciplina.id) {
+            const turmaVagas = this.getVagasByTurmaId(turma.id);
+
+            if (turma.periodo === 1 || turma.periodo === 2)
+              vagas1Semestre += turmaVagas;
+            else vagas2Semestre += turmaVagas;
+
+            Turmas.push({
+              ...turma,
+              vagas: turmaVagas,
+            });
+          }
+        });
+
+        return {
+          ...disciplina,
+          vagas1Semestre,
+          vagas2Semestre,
+          Turmas,
+        };
+      });
     },
 
+    totalVagas1Semestre() {
+      return this.$_.reduce(
+        this.DisciplinasInTurmasFiltredByDisciplina,
+        (sum, disciplina) => sum + disciplina.vagas1Semestre,
+        0
+      );
+    },
+    totalVagas2Semestre() {
+      return this.$_.reduce(
+        this.DisciplinasInTurmasFiltredByDisciplina,
+        (sum, disciplina) => sum + disciplina.vagas2Semestre,
+        0
+      );
+    },
+    // table modal
+
+    DisciplinasOrderedModal() {
+      return this.$_.orderBy(
+        this.DisciplinasFiltredModal,
+        this.ordenacaoModal.disciplinas.order,
+        this.ordenacaoModal.disciplinas.type
+      );
+    },
     DisciplinasFiltredModal() {
-      if (this.searchDisciplinas === "") return this.DisciplinasInPerfis;
+      if (this.searchDisciplinas === "") return this.DisciplinasDCCInPerfis;
 
       const searchNormalized = normalizeText(this.searchDisciplinas);
 
-      return this.$_.filter(this.DisciplinasInPerfis, (disciplina) => {
+      return this.$_.filter(this.DisciplinasDCCInPerfis, (disciplina) => {
         const disciplinaNome = normalizeText(disciplina.nome);
         const disciplinaCodigo = normalizeText(disciplina.codigo);
 
@@ -690,71 +669,46 @@ export default {
         );
       });
     },
-    DisciplinasOrderedModal() {
-      return this.$_.orderBy(
-        this.DisciplinasFiltredModal,
-        this.ordenacaoModal.disciplinas.order,
-        this.ordenacaoModal.disciplinas.type
-      );
-    },
     PerfisOrderedModal() {
       return this.$_.orderBy(
-        this.$store.state.perfil.Perfis,
+        this.PerfisDCC,
         this.ordenacaoModal.perfis.order,
         this.ordenacaoModal.perfis.type
       );
     },
-    VagasTurmaSelecionada() {
-      if (this.turmaSelecionada === null) return [];
 
-      return this.$_.orderBy(
-        this.$_.filter(
-          this.$store.state.pedido.Pedidos[this.turmaSelecionada.id],
-          function (p) {
-            return p.vagasPeriodizadas > 0 || p.vagasNaoPeriodizadas > 0;
-          }
-        ),
-        (p) => {
-          switch (this.ordenacaoModal.vagas.order) {
-            case "codigo":
-              return this.getCursoByPedido(p).codigo;
-            case "nome":
-              return this.getCursoByPedido(p).nome;
-            case "vagasPeriodizadas":
-              return p.vagasPeriodizadas;
-            case "vagasNaoPeriodizadas":
-              return p.vagasNaoPeriodizadas;
-            case "vagasTotais":
-              return p.vagasPeriodizadas + p.vagasNaoPeriodizadas;
-            default:
-              return this.getCursoByPedido(p).codigo;
-          }
-        },
-        this.ordenacaoModal.vagas.type
-      );
+    Pedidos() {
+      return this.$store.state.pedido.Pedidos;
     },
-    currentThTitle() {
+    semestre1IsActived() {
       const { ativo } = this.filtroSemestres;
-
-      if (ativo === 1) return "Vagas do 1º semestre";
-      else if (ativo === 2) return "Vagas do 2º semestre";
-      else return "Vagas do 1º e 2º semestres";
+      return ativo === 1 || ativo === 3;
+    },
+    semestre2IsActived() {
+      const { ativo } = this.filtroSemestres;
+      return ativo === 2 || ativo === 3;
     },
   },
+
   watch: {
     filtroPerfis: {
-      handler(perfis) {
+      handler(filtroPerfis) {
         this.modalFiltrosCallbacks.selectNone.Disciplinas();
         const disciplinasResultantes = [];
 
-        this.$_.forEach(this.DisciplinasInPerfis, (disciplina) => {
+        this.$_.forEach(this.DisciplinasDCCInPerfis, (disciplina) => {
           const perfilFounded = this.$_.find(
-            perfis.selecionados,
+            filtroPerfis.selecionados,
             (perfil) => perfil.id === disciplina.Perfil
           );
 
-          if (perfilFounded) disciplinasResultantes.push(disciplina);
+          if (perfilFounded) disciplinasResultantes.push(disciplina.id);
         });
+
+        //Quando selecionar todos add disciplinas MAC exeções
+        if (filtroPerfis.selecionados.length === this.PerfisDCC.length)
+          disciplinasResultantes.push(77, 88);
+
         this.filtroDisciplinas.selecionados = [...disciplinasResultantes];
       },
       deep: true,
@@ -764,43 +718,18 @@ export default {
 </script>
 
 <style scoped>
-.vagas-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
+.main-table td {
+  padding: 0 !important;
 }
-.vagas-header .vagas-title {
-  margin: 0;
-  font-weight: bold;
-  font-size: 14px;
-  width: 100%;
-}
-.modal-vagas .modal-table tbody tr td {
-  height: 20px !important;
-}
-.vagas-header .input-form {
-  display: flex;
-  align-items: center;
-}
-.input-form label {
-  margin: 0;
-}
-
-.form-control {
-  height: 25px !important;
-  font-size: 12px !important;
-  padding: 2px 5px 2px 5px !important;
-  text-align: start;
-}
-
-.p-vagas:hover {
+td.td-vagas:hover {
+  padding: 0 !important;
   color: var(--light-blue);
   text-decoration: underline;
 }
-
-.modal-content .modal-header {
-  padding: 0 !important;
+.bg-total-vg {
+  background-color: #cecece;
+}
+.bg-total-vg:hover {
+  background-color: #cecece !important;
 }
 </style>

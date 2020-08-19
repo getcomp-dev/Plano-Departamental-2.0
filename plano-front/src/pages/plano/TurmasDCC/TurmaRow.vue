@@ -1,5 +1,8 @@
 <template>
-  <tr class="turmarow max-content" :style="{ 'background-color': turmaForm.disciplina.perfil.cor }">
+  <tr
+    class="turmarow max-content"
+    :style="{ 'background-color': turmaForm.disciplina.perfil.cor }"
+  >
     <td style="width: 25px">
       <input
         type="checkbox"
@@ -8,20 +11,36 @@
       />
     </td>
     <td style="width:40px" class="p-0">
-      <button class="btn-table" @click.stop="$emit('handle-click-in-edit', turma)">
-        <font-awesome-icon :icon="['fas','edit']" class="btn-table-icon icon-darkgray" />
+      <button
+        class="btn-table"
+        @click.stop="$emit('handle-click-in-edit', turma)"
+      >
+        <font-awesome-icon
+          :icon="['fas', 'edit']"
+          class="btn-table-icon icon-darkgray"
+        />
       </button>
     </td>
     <td style="width: 55px" class="less-padding">
-      <select id="2periodo" v-model="turmaForm.periodo" @change="checkHorariosPeriodo()">
+      <select
+        id="2periodo"
+        v-model="turmaForm.periodo"
+        @change="checkHorariosPeriodo()"
+      >
         <option value="1">1</option>
         <option value="3">3</option>
       </select>
     </td>
-    <td style="width: 80px" class="less-padding">{{ turmaForm.disciplina.perfil.abreviacao }}</td>
-    <td style="width:80px" class="less-padding">{{ turmaForm.disciplina.codigo }}</td>
-    <td style="width: 330px" class="t-start">{{ turmaForm.disciplina.nome }}</td>
-    <td style="width: 25px">{{ allCreditos }}</td>
+    <td style="width: 80px" class="less-padding">
+      {{ turmaForm.disciplina.perfil.abreviacao }}
+    </td>
+    <td style="width:80px" class="less-padding">
+      {{ turmaForm.disciplina.codigo }}
+    </td>
+    <td style="width: 330px" class="t-start">
+      {{ turmaForm.disciplina.nome }}
+    </td>
+    <td style="width: 25px">{{ turmaForm.disciplina.creditoTotal }}</td>
     <td style="width: 45px">
       <input
         type="text"
@@ -29,32 +48,53 @@
         :value="turmaForm.letra"
         @input="turmaForm.letra = $event.target.value.toUpperCase()"
         @keypress="maskTurmaLetra"
-        @change="editTurma(turma)"
+        @change="editTurma"
       />
     </td>
     <td style="width: 130px;" class="less-padding">
-      <select type="text" id="docente1" v-model="turmaForm.Docente1" @change="checkDocente()">
-        <option v-if="DocentesAtivos.length === 0" type="text" value>Nenhum Docente Encontrado</option>
+      <select
+        type="text"
+        id="docente1"
+        v-model="turmaForm.Docente1"
+        @change="checkDocente()"
+      >
+        <option v-if="DocentesAtivos.length === 0" type="text" value
+          >Nenhum Docente Encontrado</option
+        >
         <option></option>
         <option
           v-for="docente in DocentesAtivos"
           :key="'docentes' + docente.id"
           :value="docente.id"
-        >{{ docente.apelido }}</option>
+          >{{ docente.apelido }}</option
+        >
       </select>
 
-      <select type="text" id="docente2" v-model="turmaForm.Docente2" @change="checkDocente()">
-        <option v-if="DocentesAtivos.length === 0" type="text" value>Nenhum Docente Encontrado</option>
+      <select
+        type="text"
+        id="docente2"
+        v-model="turmaForm.Docente2"
+        @change="checkDocente()"
+      >
+        <option v-if="DocentesAtivos.length === 0" type="text" value
+          >Nenhum Docente Encontrado</option
+        >
         <option></option>
         <option
           v-for="docente in DocentesAtivos"
           :key="'2-docente-id' + docente.id"
           :value="docente.id"
-        >{{ docente.apelido }}</option>
+          >{{ docente.apelido }}</option
+        >
       </select>
     </td>
     <td style="width: 80px;" class="less-padding">
-      <select type="text" id="SelectTurno" v-model="turmaForm.turno1" @change="editTurma()">
+      <select
+        type="text"
+        id="SelectTurno"
+        v-model="turmaForm.turno1"
+        @change="editTurma"
+      >
         <template v-if="isIntegralEAD">
           <option value="EAD">EAD</option>
         </template>
@@ -65,14 +105,20 @@
       </select>
     </td>
     <td style="width:85px" class="less-padding">
-      <select type="text" id="horario1" v-model="turmaForm.Horario1" @change="checkHorario(1)">
+      <select
+        type="text"
+        id="horario1"
+        v-model="turmaForm.Horario1"
+        @change="checkHorario(1)"
+      >
         <option></option>
 
         <option
           v-for="horario in HorariosFiltredByTurno"
           :key="'horario1' + horario.id"
           :value="horario.id"
-        >{{ horario.horario }}</option>
+          >{{ horario.horario }}</option
+        >
       </select>
 
       <select
@@ -87,7 +133,8 @@
             v-for="horario in HorariosEAD"
             :key="'horario2' + horario.id"
             :value="horario.id"
-          >{{ horario.horario }}</option>
+            >{{ horario.horario }}</option
+          >
         </template>
         <template v-else>
           <option></option>
@@ -96,20 +143,29 @@
             v-for="horario in HorariosFiltredByTurno"
             :key="'1-horarioEAD-id' + horario.id"
             :value="horario.id"
-          >{{ horario.horario }}</option>
+            >{{ horario.horario }}</option
+          >
         </template>
       </select>
     </td>
     <td style="width: 95px" class="less-padding">
       <template v-if="!isIntegralEAD">
-        <select type="text" id="sala1" v-model="turmaForm.Sala1" @change="checkSala()">
-          <option v-if="AllSalas.length === 0" type="text" value>Nenhuma Sala Encontrada</option>
+        <select
+          type="text"
+          id="sala1"
+          v-model="turmaForm.Sala1"
+          @change="checkSala()"
+        >
+          <option v-if="AllSalas.length === 0" type="text" value
+            >Nenhuma Sala Encontrada</option
+          >
           <option v-else value></option>
           <option
             v-for="sala in AllSalas"
             :key="'1-sala-id' + sala.id"
             :value="sala.id"
-          >{{ sala.nome }}</option>
+            >{{ sala.nome }}</option
+          >
         </select>
         <select
           v-if="hasMoreThan4Creditos && turmaForm.disciplina.ead === 0"
@@ -118,21 +174,28 @@
           v-model="turmaForm.Sala2"
           @change="checkSala()"
         >
-          <option v-if="AllSalas.length === 0" type="text" value>Nenhuma Sala Encontrada</option>
+          <option v-if="AllSalas.length === 0" type="text" value
+            >Nenhuma Sala Encontrada</option
+          >
           <option v-else value></option>
           <option
             v-for="sala in AllSalas"
             :key="'2-sala-id' + sala.id"
             :value="sala.id"
-          >{{ sala.nome }}</option>
+            >{{ sala.nome }}</option
+          >
         </select>
       </template>
     </td>
     <td style="width:45px" class="less-padding">
       <div style="height: 43px;" class="py-1">
-        <span style="font-weight:bold">{{ allPedidosPeriodizados + allPedidosNaoPeriodizados }}</span>
+        <span style="font-weight:bold">{{
+          totalPedidosPeriodizados + totalPedidosNaoPeriodizados
+        }}</span>
         <br />
-        <p class="mt-1">{{ allPedidosPeriodizados }}+{{ allPedidosNaoPeriodizados }}</p>
+        <p class="mt-1">
+          {{ totalPedidosPeriodizados }}+{{ totalPedidosNaoPeriodizados }}
+        </p>
       </div>
     </td>
     <td
@@ -145,8 +208,9 @@
         <InputsPedidosDCC
           v-if="pedido.Curso === curso.id"
           :key="pedido.Turma + curso.Curso"
-          v-bind:index="index"
-          v-bind:turma="turma"
+          :index="index"
+          :turma="turma"
+          :type="'main'"
         />
       </template>
     </td>
@@ -157,12 +221,12 @@
 import { mapGetters, mapActions } from "vuex";
 import turmaService from "@/common/services/turma";
 import { setEmptyValuesToNull, validateObjectKeys } from "@/common/utils";
-import { notification, maskTurmaLetra } from "@/common/mixins";
-import InputsPedidosDCC from "./InputsPedidosDCC.vue";
+import { maskTurmaLetra } from "@/common/mixins";
+import { InputsPedidosDCC } from "@/components/ui";
 
 export default {
   name: "TurmaRow",
-  mixins: [notification, maskTurmaLetra],
+  mixins: [maskTurmaLetra],
   components: {
     InputsPedidosDCC,
   },
@@ -185,7 +249,6 @@ export default {
       this.currentData = this.$_.clone(this.turma);
       this.setDefaultHorarios();
     },
-
     selectToDelete(turma) {
       this.$store.commit("checkDeleteTurma", turma);
     },
@@ -202,6 +265,39 @@ export default {
         this.turmaForm.Horario2 = 31;
       }
     },
+    async editTurma() {
+      try {
+        this.setPartialLoading(true);
+
+        const newTurma = this.$_.cloneDeepWith(
+          this.turmaForm,
+          setEmptyValuesToNull
+        );
+        validateObjectKeys(newTurma, ["letra", "Disciplina"]);
+
+        const response = await turmaService.update(newTurma.id, newTurma);
+        this.currentData = this.$_.clone(newTurma);
+
+        this.pushNotification({
+          type: "success",
+          text: `A Turma ${response.Turma.letra} foi atualizada!`,
+        });
+      } catch (error) {
+        this.turmaForm = this.$_.cloneDeep(this.turma);
+
+        const erroMsg = error.response
+          ? "A combinação de disciplina, semestre e turma deve ser única."
+          : error.message;
+        this.pushNotification({
+          type: "error",
+          title: "Erro ao atualizar turma!",
+          text: erroMsg,
+        });
+      } finally {
+        this.setPartialLoading(false);
+      }
+    },
+
     checkHorariosPeriodo() {
       if (!this.checkHorarioDocente(1) && !this.checkHorarioSala(1)) {
         if (!this.checkHorarioDocente(2) && !this.checkHorarioSala(2)) {
@@ -1007,39 +1103,8 @@ export default {
       }
       return false;
     },
-    async editTurma() {
-      try {
-        this.setPartialLoading(true);
-
-        const newTurma = this.$_.cloneDeepWith(
-          this.turmaForm,
-          setEmptyValuesToNull
-        );
-        validateObjectKeys(newTurma, ["letra", "Disciplina"]);
-
-        const response = await turmaService.update(newTurma.id, newTurma);
-        this.currentData = this.$_.clone(newTurma);
-
-        this.pushNotification({
-          type: "success",
-          text: `A Turma ${response.Turma.letra} foi atualizada!`,
-        });
-      } catch (error) {
-        this.turmaForm = this.$_.cloneDeep(this.turma);
-
-        const erroMsg = error.response
-          ? "A combinação de disciplina, semestre e turma deve ser única."
-          : error.message;
-        this.pushNotification({
-          type: "error",
-          title: "Erro ao atualizar turma!",
-          text: erroMsg,
-        });
-      } finally {
-        this.setPartialLoading(false);
-      }
-    },
   },
+
   computed: {
     ...mapGetters([
       "DocentesAtivos",
@@ -1071,16 +1136,10 @@ export default {
     isParcialEAD() {
       return this.turma.disciplina.ead === 2;
     },
-    allCreditos() {
-      return (
-        parseInt(this.turmaForm.disciplina.cargaTeorica) +
-        parseInt(this.turmaForm.disciplina.cargaPratica)
-      );
-    },
     hasMoreThan4Creditos() {
-      return this.allCreditos >= 4;
+      return this.turmaForm.disciplina.creditoTotal >= 4;
     },
-    allPedidosPeriodizados() {
+    totalPedidosPeriodizados() {
       return this.$_.reduce(
         this.currentTurmaPedidos,
         (sum, pedido) => {
@@ -1089,7 +1148,7 @@ export default {
         0
       );
     },
-    allPedidosNaoPeriodizados() {
+    totalPedidosNaoPeriodizados() {
       return this.$_.reduce(
         this.currentTurmaPedidos,
         (sum, pedido) => {
@@ -1160,8 +1219,6 @@ export default {
   height: 100%;
   border: none;
   background: none;
-}
-.btn-table-icon {
   font-size: 12px;
 }
 </style>

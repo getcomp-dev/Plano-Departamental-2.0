@@ -8,17 +8,27 @@
           :color="'green'"
           @click="$refs.novaTurma.addTurma()"
         >
-          <font-awesome-icon :icon="['fas','check']" />
+          <font-awesome-icon :icon="['fas', 'check']" />
         </BaseButton>
 
-        <BaseButton title="Cancelar" :type="'icon'" :color="'gray'" @click="toggleIsAdding()">
-          <font-awesome-icon :icon="['fas','times']" />
+        <BaseButton
+          title="Cancelar"
+          :type="'icon'"
+          :color="'gray'"
+          @click="toggleIsAdding"
+        >
+          <font-awesome-icon :icon="['fas', 'times']" />
         </BaseButton>
       </template>
 
       <template v-else>
-        <BaseButton title="Adicionar" :type="'icon'" :color="'green'" @click="toggleIsAdding()">
-          <font-awesome-icon :icon="['fas','plus']" />
+        <BaseButton
+          title="Adicionar"
+          :type="'icon'"
+          :color="'green'"
+          @click="toggleIsAdding"
+        >
+          <font-awesome-icon :icon="['fas', 'plus']" />
         </BaseButton>
 
         <BaseButton
@@ -27,16 +37,26 @@
           :color="'red'"
           @click="$refs.modalDelete.open()"
         >
-          <font-awesome-icon :icon="['fas','trash']" />
+          <font-awesome-icon :icon="['fas', 'trash']" />
         </BaseButton>
       </template>
 
-      <BaseButton title="Filtros" :type="'icon'" :color="'gray'" @click="openAsideModal('filtros')">
-        <font-awesome-icon :icon="['fas','list-ul']" />
+      <BaseButton
+        title="Filtros"
+        :type="'icon'"
+        :color="'gray'"
+        @click="openAsideModal('filtros')"
+      >
+        <font-awesome-icon :icon="['fas', 'list-ul']" />
       </BaseButton>
 
-      <BaseButton title="Relátorio" :type="'icon'" :color="'gray'" @click="generateXlsx">
-        <font-awesome-icon :icon="['fas','file-alt']" />
+      <BaseButton
+        title="Relátorio"
+        :type="'icon'"
+        :color="'gray'"
+        @click="generateXlsx"
+      >
+        <font-awesome-icon :icon="['fas', 'file-alt']" />
       </BaseButton>
 
       <BaseButton
@@ -45,7 +65,7 @@
         :color="'lightblue'"
         @click="openAsideModal('ajuda')"
       >
-        <font-awesome-icon :icon="['fas','question']" />
+        <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
     </PageHeader>
 
@@ -86,7 +106,9 @@
             title="Código"
           >
             Cód.
-            <i :class="setIconByOrder(ordenacaoMain.turmas, 'disciplina.codigo')"></i>
+            <i
+              :class="setIconByOrder(ordenacaoMain.turmas, 'disciplina.codigo')"
+            ></i>
           </th>
           <th
             class="clickable t-start"
@@ -94,7 +116,9 @@
             @click="toggleOrder(ordenacaoMain.turmas, 'disciplina.nome')"
           >
             Disciplina
-            <i :class="setIconByOrder(ordenacaoMain.turmas, 'disciplina.nome')"></i>
+            <i
+              :class="setIconByOrder(ordenacaoMain.turmas, 'disciplina.nome')"
+            ></i>
           </th>
           <th style="width:25px" title="Créditos">C.</th>
           <th style="width:45px" class="p-0" title="Turma">T.</th>
@@ -116,7 +140,8 @@
             <span
               class="w-100"
               :class="{ 'curso-codigo-big': nameIsBig(curso.codigo) }"
-            >{{ curso.codigo }}</span>
+              >{{ curso.codigo }}</span
+            >
           </th>
         </template>
 
@@ -134,7 +159,7 @@
             :key="turma.id + turma.disciplina.codigo + turma.letra"
             :turma="turma"
             :cursosAtivados="filtroCursos.ativados"
-            @handle-click-in-edit="handleClickInEdit($event)"
+            @handle-click-in-edit="openModalEditTurma($event)"
           />
 
           <tr v-show="TurmasOrdered.length === 0">
@@ -207,7 +232,9 @@
             @click="toggleOrder(ordenacaoModal.disciplinas, 'codigo')"
           >
             Cód.
-            <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"></i>
+            <i
+              :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"
+            ></i>
           </th>
           <th
             class="t-start clickable"
@@ -221,20 +248,20 @@
             class="t-start clickable"
             style="width: 85px"
             @click="
-                toggleOrder(
-                  ordenacaoModal.disciplinas,
-                  'disciplina.perfil.abreviacao'
-                )
-              "
+              toggleOrder(
+                ordenacaoModal.disciplinas,
+                'disciplina.perfil.abreviacao'
+              )
+            "
           >
             Perfil
             <i
               :class="
-                  setIconByOrder(
-                    ordenacaoModal.disciplinas,
-                    'disciplina.perfil.abreviacao'
-                  )
-                "
+                setIconByOrder(
+                  ordenacaoModal.disciplinas,
+                  'disciplina.perfil.abreviacao'
+                )
+              "
             ></i>
           </th>
         </template>
@@ -243,8 +270,8 @@
             v-for="disciplina in DisciplinasDCCOrderedModal"
             :key="'MdDisciplina' + disciplina.id"
             @click="
-                toggleItemInArray(disciplina.id, filtroDisciplinas.selecionados)
-              "
+              toggleItemInArray(disciplina.id, filtroDisciplinas.selecionados)
+            "
           >
             <td style="width: 25px">
               <input
@@ -256,15 +283,23 @@
             </td>
             <td style="width: 70px" class="t-start">{{ disciplina.codigo }}</td>
             <td style="width: 270px" class="t-start">{{ disciplina.nome }}</td>
-            <td style="width: 85px" class="t-start">{{ disciplina.perfil.abreviacao }}</td>
+            <td style="width: 85px" class="t-start">
+              {{ disciplina.perfil.abreviacao }}
+            </td>
           </tr>
           <tr v-if="DisciplinasDCCOrderedModal.length === 0">
-            <td colspan="3" style="width:450px">NENHUMA DISCIPLINA ENCONTRADA.</td>
+            <td colspan="3" style="width:450px">
+              NENHUMA DISCIPLINA ENCONTRADA.
+            </td>
           </tr>
         </template>
       </BaseTable>
 
-      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Cursos'" :hasSearchBar="true">
+      <BaseTable
+        type="modal"
+        v-show="modalFiltrosTabs.current === 'Cursos'"
+        :hasSearchBar="true"
+      >
         <template #thead-search>
           <InputSearch
             v-model="searchCursosModal"
@@ -348,20 +383,31 @@
           type="text"
           color="lightblue"
           @click="selectCursosDCC()"
-        >Cursos DCC</BaseButton>
+          >Cursos DCC</BaseButton
+        >
       </template>
     </ModalFiltros>
 
-    <ModalEditTurma ref="modalEditTurma" :turmaSelected="turmaClickada" />
+    <ModalEditTurma
+      ref="modalEditTurma"
+      :turma="turmaClicked"
+      :hasEditDisciplina="true"
+    />
 
     <ModalDelete
       ref="modalDelete"
       :isDeleting="!!Deletar.length"
       @btn-deletar="deleteSelectedTurmas"
     >
-      <li v-if="!Deletar.length" class="list-group-item">Nenhuma turma selecionada.</li>
+      <li v-if="!Deletar.length" class="list-group-item">
+        Nenhuma turma selecionada.
+      </li>
 
-      <li v-for="turma in Deletar" class="list-group-item" :key="'delete' + turma.id">
+      <li
+        v-for="turma in Deletar"
+        class="list-group-item"
+        :key="'delete' + turma.id"
+      >
         <span>
           <b>Semestre:</b>
           {{ turma.periodo }} -
@@ -389,9 +435,7 @@
         preencha a nova linha que irá aparecer no início da tabela. E note que,
         os campos disciplina, turno e letra da turma são obrigatórios. Após
         preencher os campos clique no ícone salvar
-        <i
-          class="fas fa-check icon-green"
-        ></i>
+        <i class="fas fa-check icon-green"></i>
         ou em cancelar
         <i class="fas fa-times icon-gray"></i>
         .
@@ -400,17 +444,13 @@
         <b>Para deletar turmas da tabela:</b> Marque a(s) turma(s) que deseja
         deletar através da caixa de seleção presente na primeira coluna à
         esquerda na tabela, em seguida clique no ícone deletar
-        <i
-          class="fas fa-trash icon-red"
-        ></i> no cabeçalho da página e na janela
+        <i class="fas fa-trash icon-red"></i> no cabeçalho da página e na janela
         que será aberta confirme clicando botão OK.
       </li>
       <li class="list-group-item">
         <b>Para editar turma da tabela:</b> Existem duas formas de fazer
-        alterações numa turma, a
-        <b>primeira</b> é modificando diretamente os
-        campos tabela e o sistema irá salvar automaticamente.
-        <br />A
+        alterações numa turma, a <b>primeira</b> é modificando diretamente os
+        campos tabela e o sistema irá salvar automaticamente. <br />A
         <b>segunda</b> forma é clicando no ícone
         <i class="fas fa-edit"></i> presente na coluna editar da tabela, e na
         janela que será aberta no formulário presente na parte superior poderá
@@ -427,8 +467,7 @@
       <li class="list-group-item">
         <b>Observações:</b> Em cada coluna de um curso existem dois campos de
         vagas, sendo o decima destinado para alunos na grade e debaixo para
-        alunos repetentes. Para que uma turma apareça na tela
-        <b>Horários</b> de
+        alunos repetentes. Para que uma turma apareça na tela <b>Horários</b> de
         um determinado curso é preciso que pelo menos uma vaga para alunos na
         grade seja destinada ao mesmo.
       </li>
@@ -442,13 +481,13 @@ import { saveAs } from "file-saver";
 import ls from "local-storage";
 import xlsx from "@/common/services/xlsx";
 import turmaService from "@/common/services/turma";
-import { normalizeText } from "@/common/utils";
+import { normalizeText, generateEmptyTurma } from "@/common/utils";
 import {
   toggleOrdination,
   toggleItemInArray,
   notification,
 } from "@/common/mixins";
-import { BodyModalEditTurma, InputSearch } from "@/components/ui";
+import { InputSearch } from "@/components/ui";
 import {
   ModalDelete,
   ModalFiltros,
@@ -468,20 +507,19 @@ export default {
     ModalDelete,
     TurmaRow,
     NovaTurmaRow,
-    BodyModalEditTurma,
     ModalEditTurma,
     InputSearch,
   },
   data() {
     return {
-      turmaClickada: null,
+      turmaClicked: generateEmptyTurma(),
       isAdding: false,
+      searchCursosModal: "",
+      searchDisciplinasModal: "",
       modalFiltrosTabs: {
         current: "Perfis",
         array: ["Perfis", "Disciplinas", "Cursos", "Semestres"],
       },
-      searchCursosModal: "",
-      searchDisciplinasModal: "",
       filtroPerfis: {
         selecionados: [],
       },
@@ -539,7 +577,10 @@ export default {
           this.filtroDisciplinas.ativadas = [
             ...this.filtroDisciplinas.selecionados,
           ];
-          this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
+
+          this.filtroCursos.ativados = [
+            ...this.$_.orderBy(this.filtroCursos.selecionados, ["posicao"]),
+          ];
         },
       },
       ordenacaoModal: {
@@ -553,6 +594,7 @@ export default {
       },
     };
   },
+
   mounted() {
     ls.set("toggle", -1);
     ls.on("toggle", () => {
@@ -578,7 +620,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["setPartialLoading", "clearDelete"]),
+    ...mapActions(["clearDelete"]),
 
     openAsideModal(modalName) {
       if (modalName === "filtros") {
@@ -589,21 +631,19 @@ export default {
         this.$refs.modalFiltros.close();
       }
     },
-    handleClickInEdit(turmaClicked) {
-      this.turmaClickada = turmaClicked;
+    openModalEditTurma(turma) {
+      this.turmaClicked = turma;
       this.$refs.modalEditTurma.open();
     },
     selectCursosDCC() {
       this.filtroCursos.selecionados = [...this.CursosDCC];
     },
-
     setSemestreAtivo() {
-      if (this.filtroSemestres.primeiro && !this.filtroSemestres.segundo)
-        this.filtroSemestres.ativo = 1;
-      else if (this.filtroSemestres.segundo && !this.filtroSemestres.primeiro)
-        this.filtroSemestres.ativo = 2;
-      else if (this.filtroSemestres.primeiro && this.filtroSemestres.primeiro)
-        this.filtroSemestres.ativo = 3;
+      const { primeiro, segundo } = this.filtroSemestres;
+
+      if (primeiro && !segundo) this.filtroSemestres.ativo = 1;
+      else if (!primeiro && segundo) this.filtroSemestres.ativo = 2;
+      else if (primeiro && segundo) this.filtroSemestres.ativo = 3;
       else this.filtroSemestres.ativo = undefined;
     },
     popoverCursoContent(curso) {
@@ -621,10 +661,14 @@ export default {
       if (nome.length > 4) return true;
       else return false;
     },
+
     async generateXlsx() {
       try {
         this.setPartialLoading(true);
-        await xlsx.downloadTable({ pedidos: this.$store.state.pedido.Pedidos, Plano: localStorage.getItem('Plano') });
+        await xlsx.downloadTable({
+          pedidos: this.$store.state.pedido.Pedidos,
+          Plano: localStorage.getItem("Plano"),
+        });
         const tableData = await fetch(
           "http://200.131.219.57:3000/api/xlsx/download",
           {
@@ -788,17 +832,21 @@ export default {
 
   watch: {
     filtroPerfis: {
-      handler(perfis) {
+      handler(filtroPerfis) {
         const disciplinasResultantes = [];
 
         this.DisciplinasDCCInPerfis.forEach((disciplina) => {
           const perfilFounded = this.$_.find(
-            perfis.selecionados,
+            filtroPerfis.selecionados,
             (perfil) => perfil.id === disciplina.Perfil
           );
 
           if (perfilFounded) disciplinasResultantes.push(disciplina.id);
         });
+
+        //Quando selecionar todos add disciplinas MAC exeções
+        if (filtroPerfis.selecionados.length === this.PerfisDCC.length)
+          disciplinasResultantes.push(77, 88);
 
         this.filtroDisciplinas.selecionados = [...disciplinasResultantes];
       },
