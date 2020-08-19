@@ -5,14 +5,14 @@
         title="Filtros"
         :type="'icon'"
         :color="'gray'"
-        @click="openAsideModal('filtros')"
+        @click="toggleAsideModal('filtros')"
       >
         <font-awesome-icon :icon="['fas', 'list-ul']" />
       </BaseButton>
       <BaseButton
         :type="'icon'"
         :color="'lightblue'"
-        @click="openAsideModal('ajuda')"
+        @click="toggleAsideModal('ajuda')"
       >
         <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
@@ -27,7 +27,7 @@
     <div class="div-table">
       <BaseTable
         v-show="tabAtivaMain === 'Turmas'"
-        :styles="'height: calc(100vh - 130px)'"
+        classes="custom-table-height"
       >
         <template #thead>
           <th
@@ -119,13 +119,15 @@
               :key="'conflito' + i + validacaoTurma.id + conflito.type"
             >
               <td style="width: 35px;">
-                <i
+                <font-awesome-icon
                   v-if="isCritical(conflito.type)"
-                  style="background-color: inherit; font-size: 13px; margin:3px!important;"
-                  class="fas fa-exclamation-circle icon-red"
+                  :icon="['fas', 'exclamation-circle']"
+                  class="icon-red"
                   title="Conflito critico!"
-                ></i>
+                  style="font-size: 13px"
+                />
               </td>
+
               <td colspan="6" style="width:655px" class="t-start">
                 {{ conflito.msg }}
               </td>
@@ -135,7 +137,8 @@
           <tr v-show="!TurmasValidacoesOrdered.length">
             <td style="width:695px">
               <b>Nenhum conflito encontrado.</b> Clique no botão de filtros
-              <i class="fas fa-list-ul mx-1"></i> para selecioná-los.
+              <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+              para selecioná-los.
             </td>
           </tr>
         </template>
@@ -143,7 +146,7 @@
 
       <BaseTable
         v-show="tabAtivaMain === 'Docentes'"
-        :styles="'height: calc(100vh - 130px)'"
+        classes="custom-table-height"
       >
         <template #thead>
           <th
@@ -168,11 +171,12 @@
               :key="'conflitos' + validacaoDocente.id + conflito"
             >
               <td style="width: 35px">
-                <i
-                  style="background-color: inherit; font-size: 13px; margin:3px!important;"
-                  class="fas fa-exclamation-circle icon-red"
+                <font-awesome-icon
+                  :icon="['fas', 'exclamation-circle']"
+                  class="icon-red"
                   title="Conflito critico!"
-                ></i>
+                  style="font-size: 13px"
+                />
               </td>
 
               <td style="width: 655px;" class="t-start">{{ conflito }}</td>
@@ -260,24 +264,28 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
-        <i class="fas fa-list-ul icon-gray"></i> no cabeçalho da página e na
-        janela que será aberta utilize as abas para navegar entre os tipos de
-        filtros. Marque em suas respectivas tabelas quais informações deseja
-        visualizar, e para finalizar clique no botão OK.
+        <b>Visualizar conflitos:</b> Clique no ícone de filtros
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" /> no
+        cabeçalho da página e, na janela que se abrirá, utilize as abas para
+        navegar entre os tipos de filtro disponíveis. Marque quais informações
+        deseja visualizar, e para finalizar clique no botão OK.
       </li>
       <li class="list-group-item">
-        <b>Para editar turma da tabela:</b> Clique no ícone
-        <i class="fas fa-edit"></i> presente na coluna editar da tabela, e na
-        janela que será aberta no formulário presente na parte superior poderá
-        ser feito alterações que somente serão enviadas ao clicar no botão
-        salvar. E na tabela de vagas na parte inferior da janela as alterações
-        serão salvas automaticamente.
+        <b>Editar turma:</b> Clique no ícone
+        <font-awesome-icon :icon="['fas', 'edit']" class="icon-darkgray" />
+        presente na couna "Editar". Uma janela de edição irá se abrir. As
+        alterações realizadas nos campos da metade superior da janela somente
+        serão enviadas ao clicar no botão "Salvar". Já para o quantitativo de
+        vagas na parte inferior, as alterações serão salvas automaticamente.
       </li>
       <li class="list-group-item">
-        <b>Conflitos críticos:</b> Note que em alguns conflitos possuem o ícone
-        <i class="fas fa-exclamation-circle icon-red"></i>, isso significa que
-        ele é crítico e deve ter prioridade para ser corrigido
+        <b>Conflitos críticos:</b>
+        Note que alguns conflitos possuem o ícone
+        <font-awesome-icon
+          :icon="['fas', 'exclamation-circle']"
+          class="icon-red"
+        />. Isso significa que ele é crítico, devendo ser priorizado na
+        correção.
       </li>
     </ModalAjuda>
   </div>
@@ -286,7 +294,11 @@
 <script>
 import { mapGetters } from "vuex";
 import { generateEmptyTurma } from "@/common/utils";
-import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
+import {
+  toggleOrdination,
+  toggleItemInArray,
+  toggleAsideModal,
+} from "@/common/mixins";
 import { ModalAjuda, ModalFiltros, ModalEditTurma } from "@/components/modals";
 import { NavTab } from "@/components/ui";
 
@@ -325,7 +337,7 @@ const AllConflitosTurmas = [
 
 export default {
   name: "Validacoes",
-  mixins: [toggleOrdination, toggleItemInArray],
+  mixins: [toggleOrdination, toggleItemInArray, toggleAsideModal],
   components: {
     ModalAjuda,
     ModalFiltros,
@@ -335,6 +347,7 @@ export default {
   data() {
     return {
       tabAtivaMain: "Turmas",
+      asideModalsRefs: ["modalFiltros", "modalAjuda"],
       turmaClicked: generateEmptyTurma(),
       allConflitos: this.$_.clone(AllConflitosTurmas),
       grades1Semestre: { CCD: [], CCN: [], EC: [], SI: [] },
@@ -384,7 +397,7 @@ export default {
       },
     };
   },
-  
+
   mounted() {
     //define grades ativas por periodo
     let g;
@@ -534,15 +547,6 @@ export default {
   },
 
   methods: {
-    openAsideModal(modalName) {
-      if (modalName === "filtros") {
-        this.$refs.modalFiltros.toggle();
-        this.$refs.modalAjuda.close();
-      } else if (modalName === "ajuda") {
-        this.$refs.modalAjuda.toggle();
-        this.$refs.modalFiltros.close();
-      }
-    },
     setSemestreAtivo() {
       const { primeiro, segundo } = this.filtroSemestres;
 
@@ -1160,5 +1164,8 @@ export default {
   border: none;
   background: none;
   font-size: 12px;
+}
+.custom-table-height {
+  height: calc(100vh - 130px) !important;
 }
 </style>

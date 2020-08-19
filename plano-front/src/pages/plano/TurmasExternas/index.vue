@@ -8,16 +8,16 @@
         :color="'green'"
         @click="addNovaTurma"
       >
-        <font-awesome-icon :icon="['fas','check']" />
+        <font-awesome-icon :icon="['fas', 'check']" />
       </BaseButton>
       <BaseButton
         v-show="!isAdding"
         title="Adicionar"
         :type="'icon'"
         :color="'green'"
-        @click="toggleAdd"
+        @click="toggleAddRow"
       >
-        <font-awesome-icon :icon="['fas','plus']" />
+        <font-awesome-icon :icon="['fas', 'plus']" />
       </BaseButton>
 
       <BaseButton
@@ -25,9 +25,9 @@
         title="Cancelar"
         :type="'icon'"
         :color="'gray'"
-        @click="toggleAdd"
+        @click="toggleAddRow"
       >
-        <font-awesome-icon :icon="['fas','times']" />
+        <font-awesome-icon :icon="['fas', 'times']" />
       </BaseButton>
 
       <BaseButton
@@ -37,20 +37,25 @@
         :color="'red'"
         @click="openModalDelete"
       >
-        <font-awesome-icon :icon="['fas','trash']" />
+        <font-awesome-icon :icon="['fas', 'trash']" />
       </BaseButton>
 
-      <BaseButton title="Filtros" :type="'icon'" :color="'gray'" @click="openAsideModal('filtros')">
-        <font-awesome-icon :icon="['fas','list-ul']" />
+      <BaseButton
+        title="Filtros"
+        :type="'icon'"
+        :color="'gray'"
+        @click="toggleAsideModal('filtros')"
+      >
+        <font-awesome-icon :icon="['fas', 'list-ul']" />
       </BaseButton>
 
       <BaseButton
         title="Ajuda"
         :type="'icon'"
         :color="'lightblue'"
-        @click="openAsideModal('ajuda')"
+        @click="toggleAsideModal('ajuda')"
       >
-        <font-awesome-icon :icon="['fas','question']" />
+        <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
     </PageHeader>
 
@@ -66,7 +71,9 @@
             title="Código"
           >
             Cód.
-            <i :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.codigo')"></i>
+            <i
+              :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.codigo')"
+            ></i>
           </th>
           <th
             style="width: 330px"
@@ -74,7 +81,9 @@
             @click="toggleOrder(ordenacaoTurmasMain, 'disciplina.nome')"
           >
             Disciplina
-            <i :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.nome')"></i>
+            <i
+              :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.nome')"
+            ></i>
           </th>
           <th style="width: 25px;" title="Créditos">C.</th>
           <th style="width: 45px" title="Turma">T.</th>
@@ -83,7 +92,11 @@
           <th style="width: 95px">Sala</th>
           <th style="width: 40px">Total</th>
           <template v-for="curso in CursosDCC">
-            <th style="width: 35px" :id="'curso' + curso.id" :key="'1-curso' + curso.id">
+            <th
+              style="width: 35px"
+              :id="'curso' + curso.id"
+              :key="'1-curso' + curso.id"
+            >
               {{ curso.codigo }}
               <b-popover
                 :key="'popover' + curso.id"
@@ -91,20 +104,26 @@
                 placement="bottom"
                 triggers="hover focus"
               >
-                <span class="w-100 text-center" style="font-size: 11px!important;">
+                <span
+                  class="w-100 text-center"
+                  style="font-size: 11px!important;"
+                >
                   <b>{{ curso.nome }}</b>
                 </span>
-                <p class="p-0 m-0 text-center" style="font-size: 11px!important;">
+                <p
+                  class="p-0 m-0 text-center"
+                  style="font-size: 11px!important;"
+                >
                   {{
-                  curso.semestreInicial == 1 || curso.semestreInicial == 3
-                  ? "1º - " + curso.alunosEntrada
-                  : ""
+                    curso.semestreInicial == 1 || curso.semestreInicial == 3
+                      ? "1º - " + curso.alunosEntrada
+                      : ""
                   }}
                   <br />
                   {{
-                  curso.semestreInicial == 2 || curso.semestreInicial == 3
-                  ? "2º - " + curso.alunosEntrada2
-                  : ""
+                    curso.semestreInicial == 2 || curso.semestreInicial == 3
+                      ? "2º - " + curso.alunosEntrada2
+                      : ""
                   }}
                 </p>
               </b-popover>
@@ -127,7 +146,8 @@
           <tr v-if="!TurmasExternasOrdered.length">
             <td style="width:990px">
               <b>Nenhuma turma encontrada.</b> Clique no botão de filtros
-              <i class="fas fa-list-ul mx-1"></i> para selecioná-las.
+              <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+              para selecioná-las.
             </td>
           </tr>
         </template>
@@ -159,7 +179,9 @@
               style="width: 60px"
             >
               Cód.
-              <i :class="setIconByOrder(ordenacaoDisciplinasModal, 'codigo')"></i>
+              <i
+                :class="setIconByOrder(ordenacaoDisciplinasModal, 'codigo')"
+              ></i>
             </th>
             <th
               @click="toggleOrder(ordenacaoDisciplinasModal, 'nome')"
@@ -187,17 +209,28 @@
                   :value="disciplina"
                 />
               </td>
-              <td style="width: 60px" class="t-start">{{ disciplina.codigo }}</td>
-              <td style="width: 305px" class="t-start">{{ disciplina.nome }}</td>
-              <td class="t-start" style="width: 60px">{{ disciplina.perfil.nome }}</td>
+              <td style="width: 60px" class="t-start">
+                {{ disciplina.codigo }}
+              </td>
+              <td style="width: 305px" class="t-start">
+                {{ disciplina.nome }}
+              </td>
+              <td class="t-start" style="width: 60px">
+                {{ disciplina.perfil.nome }}
+              </td>
             </tr>
             <tr v-show="DisciplinasExternasOrderedModal.length === 0">
-              <td colspan="3" style="width:450px">NENHUMA DISCIPLINA ENCONTRADA.</td>
+              <td colspan="3" style="width:450px">
+                NENHUMA DISCIPLINA ENCONTRADA.
+              </td>
             </tr>
           </template>
         </BaseTable>
 
-        <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Semestres'"
+          :type="'modal'"
+        >
           <template #thead>
             <th style="width: 25px"></th>
             <th class="t-start" style="width: 425px">Semestre Letivo</th>
@@ -228,9 +261,19 @@
       </div>
     </ModalFiltros>
 
-    <ModalDelete ref="modalDelete" :isDeleting="!!Deletar.length" @btn-deletar="handleDeleteTurmas">
-      <li v-if="!Deletar.length" class="list-group-item">Nenhuma turma selecionada.</li>
-      <li v-for="turma in Deletar" class="list-group-item" :key="'deletarTurma' + turma.id">
+    <ModalDelete
+      ref="modalDelete"
+      :isDeleting="!!Deletar.length"
+      @btn-deletar="handleDeleteTurmas"
+    >
+      <li v-if="!Deletar.length" class="list-group-item">
+        Nenhuma turma selecionada.
+      </li>
+      <li
+        v-for="turma in Deletar"
+        class="list-group-item"
+        :key="'deletarTurma' + turma.id"
+      >
         <span>
           <b>Semestre:</b>
           {{ turma.periodo }} -
@@ -246,45 +289,42 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
-        <i class="fas fa-list-ul icon-gray"></i> no cabeçalho da página e na
-        janela que será aberta utilize as abas para navegar entre os tipos de
-        filtros. Marque em suas respectivas tabelas quais informações deseja
-        visualizar, e para finalizar clique no botão OK.
+        <b>Visualizar conteúdo:</b>
+        Clique no ícone de filtros
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" /> no
+        cabeçalho da página e, na janela que se abrirá, utilize as abas para
+        navegar entre os tipos de filtro disponíveis. Marque quais informações
+        deseja visualizar, e para finalizar clique no botão OK.
       </li>
       <li class="list-group-item">
-        <b>Para adicionar uma turma à tabela:</b> Clique no ícone adicionar
-        <i class="fas fa-plus icon-green"></i> no cabeçalho da página em seguida
-        preencha a nova linha que irá aparecer no início da tabela. E note que,
-        os campos disciplina e letra da turma são obrigatórios. Após preencher
-        os campos clique no ícone salvar
-        <i
-          class="fas fa-check icon-green"
-        ></i>
-        ou em cancelar
-        <i class="fas fa-times icon-gray"></i>
-        .
+        <b>Adicionar turma:</b> Clique no ícone de adicionar
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" /> no
+        cabeçalho da página. Em seguida, preencha a nova linha que irá aparecer
+        no início da tabela. Note que os campos disciplina e turma são
+        obrigatórios. Após preencher os campos, clique no ícone de salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" /> ou de
+        cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />.
       </li>
       <li class="list-group-item">
-        <b>Para deletar turmas da tabela:</b> Marque a(s) turma(s) que deseja
-        deletar através da caixa de seleção presente na primeira coluna à
-        esquerda na tabela, em seguida clique no ícone deletar
-        <i
-          class="fas fa-trash icon-red"
-        ></i> no cabeçalho da página e na janela
-        que será aberta confirme clicando botão OK.
+        <b>Deletar turma:</b> Marque a(s) turma(s) que deseja deletar através da
+        caixa de seleção na coluna mais à esquerda da tabela. Em seguida, clique
+        no ícone de deletar
+        <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" /> no
+        cabeçalho da página. Confirme a exclusão clicando no botão OK na janela
+        que se abrirá.
       </li>
       <li class="list-group-item">
-        <b>Para editar turma da tabela:</b> Basta fazer as alterações
-        necessárias diretamente nos campos da tabela e o sistema irá salvar
-        automaticamente.
+        <b>Editar turma:</b> Basta fazer as alterações necessárias diretamente
+        nos campos da tabela. O sistema salvará as modificações automaticamente.
       </li>
       <li class="list-group-item">
-        <b>Observações:</b> Em cada coluna de cursos possui dois campos de
-        vagas, sendo acima destinado para alunos na grade, e abaixo para alunos
-        repetentes. Para que uma turma externa apareça em na tela
-        <b>Horários</b> de um determinado curso é preciso que pelo menos uma
-        vaga para alunos na grade seja destinada ao mesmo.
+        <b>Observações:</b> Em cada coluna de um curso, para cada disciplina,
+        existem dois campos de vagas. O campo superior é destinado às vagas de
+        grade, e o inferior é referente às vagas para alunos não periodizados.
+        Para que uma turma externa apareça na grade horária de um determinado
+        curso, na página "Horários", é preciso que pelo menos uma vaga de grade
+        seja destinada a este curso.
       </li>
     </ModalAjuda>
   </div>
@@ -293,7 +333,11 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { normalizeText } from "@/common/utils";
-import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
+import {
+  toggleOrdination,
+  toggleItemInArray,
+  toggleAsideModal,
+} from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
 import { ModalDelete, ModalAjuda, ModalFiltros } from "@/components/modals";
 import TurmaExternaRow from "./TurmaExternaRow.vue";
@@ -301,7 +345,7 @@ import NovaTurmaExternaRow from "./NovaTurmaExternaRow.vue";
 
 export default {
   name: "DashboardTurmasExternas",
-  mixins: [toggleOrdination, toggleItemInArray],
+  mixins: [toggleOrdination, toggleItemInArray, toggleAsideModal],
   components: {
     ModalFiltros,
     ModalAjuda,
@@ -313,6 +357,7 @@ export default {
   data() {
     return {
       isAdding: false,
+      asideModalsRefs: ["modalFiltros", "modalAjuda"],
       ordenacaoTurmasMain: { order: "disciplina.codigo", type: "asc" },
       ordenacaoDisciplinasModal: { order: "codigo", type: "asc" },
       filtroSemestres: {
@@ -362,27 +407,17 @@ export default {
   },
 
   methods: {
-    ...mapActions(["setPartialLoading", "deleteTurmasExternas"]),
+    ...mapActions(["deleteTurmasExternas"]),
 
-    openAsideModal(modalName) {
-      if (modalName === "filtros") {
-        this.$refs.modalFiltros.toggle();
-        this.$refs.modalAjuda.close();
-      } else if (modalName === "ajuda") {
-        this.$refs.modalAjuda.toggle();
-        this.$refs.modalFiltros.close();
-      }
-    },
-    toggleAdd() {
+    toggleAddRow() {
       this.isAdding = !this.isAdding;
     },
     setSemestreAtivo() {
-      if (this.filtroSemestres.primeiro && !this.filtroSemestres.segundo)
-        this.filtroSemestres.ativo = 1;
-      else if (this.filtroSemestres.segundo && !this.filtroSemestres.primeiro)
-        this.filtroSemestres.ativo = 2;
-      else if (this.filtroSemestres.primeiro && this.filtroSemestres.primeiro)
-        this.filtroSemestres.ativo = 3;
+      const { primeiro, segundo } = this.filtroSemestres;
+
+      if (primeiro && !segundo) this.filtroSemestres.ativo = 1;
+      else if (!primeiro && segundo) this.filtroSemestres.ativo = 2;
+      else if (primeiro && segundo) this.filtroSemestres.ativo = 3;
       else this.filtroSemestres.ativo = undefined;
     },
     openModalDelete() {
@@ -401,7 +436,6 @@ export default {
         this.pushNotification({
           type: "error",
           title: "Erro ao excluir turma(s)!",
-          text: "Tente novamente",
         });
       } finally {
         this.setPartialLoading(false);
@@ -414,7 +448,7 @@ export default {
       "TurmasExternasInDisciplinas",
       "DisciplinasExternasInPerfis",
     ]),
-    //main table
+
     TurmasExternasOrdered() {
       return this.$_.orderBy(
         this.TurmasExternarFiltredByDisciplinas,
@@ -468,7 +502,6 @@ export default {
         );
       });
     },
-    //Outros
     Deletar() {
       return this.$store.state.turmaExterna.Deletar;
     },

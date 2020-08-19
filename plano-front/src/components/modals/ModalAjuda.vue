@@ -28,8 +28,6 @@ export default {
 </script>
 
 <style scoped>
-@import "../../assets/css/btn-cores.css";
-
 .modal-custom .list-ajuda svg,
 .modal-custom .list-ajuda i {
   font-size: 12px !important;

@@ -45,7 +45,7 @@
         title="Filtros"
         :type="'icon'"
         :color="'gray'"
-        @click="openAsideModal('filtros')"
+        @click="toggleAsideModal('filtros')"
       >
         <font-awesome-icon :icon="['fas', 'list-ul']" />
       </BaseButton>
@@ -63,7 +63,7 @@
         title="Ajuda"
         :type="'icon'"
         :color="'lightblue'"
-        @click="openAsideModal('ajuda')"
+        @click="toggleAsideModal('ajuda')"
       >
         <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
@@ -165,7 +165,8 @@
           <tr v-show="TurmasOrdered.length === 0">
             <td style="width:1115px">
               <b>Nenhuma turma encontrada.</b> Clique no botão de filtros
-              <i class="fas fa-list-ul mx-1"></i> para selecioná-las.
+              <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+              para selecioná-las.
             </td>
             <td
               v-if="filtroCursos.ativados.length"
@@ -402,7 +403,6 @@
       <li v-if="!Deletar.length" class="list-group-item">
         Nenhuma turma selecionada.
       </li>
-
       <li
         v-for="turma in Deletar"
         class="list-group-item"
@@ -423,53 +423,57 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
-        <i class="fas fa-list-ul icon-gray"></i> no cabeçalho da página e na
-        janela que será aberta utilize as abas para navegar entre os tipos de
-        filtros. Marque em suas respectivas tabelas quais informações deseja
-        visualizar, e para finalizar clique no botão OK.
+        <b>Visualizar conteúdo:</b>
+        Clique no ícone de filtros
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" /> no
+        cabeçalho da página e, na janela que se abrirá, utilize as abas para
+        navegar entre os tipos de filtro disponíveis. Marque quais informações
+        deseja visualizar, e para finalizar clique no botão OK.
       </li>
       <li class="list-group-item">
-        <b>Para adicionar uma turma à tabela:</b> Clique no ícone adicionar
-        <i class="fas fa-plus icon-green"></i> no cabeçalho da página em seguida
-        preencha a nova linha que irá aparecer no início da tabela. E note que,
-        os campos disciplina, turno e letra da turma são obrigatórios. Após
-        preencher os campos clique no ícone salvar
-        <i class="fas fa-check icon-green"></i>
-        ou em cancelar
-        <i class="fas fa-times icon-gray"></i>
-        .
+        <b>Adicionar turma:</b>
+        Clique no ícone de adicionar
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" /> no
+        cabeçalho da página. Em seguida, preencha a nova linha que irá aparecer
+        no início da tabela. Note que os campos disciplina, turno e turma são
+        obrigatórios. Após preencher os campos, clique no ícone de salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" /> ou de
+        cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />.
       </li>
       <li class="list-group-item">
-        <b>Para deletar turmas da tabela:</b> Marque a(s) turma(s) que deseja
-        deletar através da caixa de seleção presente na primeira coluna à
-        esquerda na tabela, em seguida clique no ícone deletar
-        <i class="fas fa-trash icon-red"></i> no cabeçalho da página e na janela
-        que será aberta confirme clicando botão OK.
+        <b>Deletar turma(s):</b> Marque a(s) turma(s) que deseja deletar através
+        da caixa de seleção na coluna mais à esquerda da tabela. Em seguida,
+        clique no ícone de deletar
+        <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" /> no
+        cabeçalho da página. Confirme a exclusão clicando no botão OK na janela
+        que se abrirá.
       </li>
       <li class="list-group-item">
-        <b>Para editar turma da tabela:</b> Existem duas formas de fazer
-        alterações numa turma, a <b>primeira</b> é modificando diretamente os
-        campos tabela e o sistema irá salvar automaticamente. <br />A
-        <b>segunda</b> forma é clicando no ícone
-        <i class="fas fa-edit"></i> presente na coluna editar da tabela, e na
-        janela que será aberta no formulário presente na parte superior poderá
-        ser feito alterações que somente serão enviadas ao clicar no botão
-        salvar. E na tabela de vagas na parte inferior da janela as alterações
-        serão salvas automaticamente.
+        <b>Editar turma:</b>
+        Existem duas formas de se fazer alterações em uma turma. A primeira
+        forma envolve modificar diretamente os campos na tabela. Neste caso, o
+        sistema salvará automaticamente cada alteração. Na segunda forma,
+        deve-se clicar no ícone
+        <font-awesome-icon :icon="['fas', 'edit']" class="icon-darkgray" />
+        presente na couna "Editar". Uma janela de edição irá se abrir. Neste
+        caso, as alterações realizadas nos campos da metade superior da janela
+        somente serão enviadas ao clicar no botão "Salvar". Já para o
+        quantitativo de vagas na parte inferior, as alterações serão salvas
+        automaticamente.
       </li>
       <li class="list-group-item">
-        <b>Para gerar relatório das turmas:</b> Clique no ícone relatório
-        <i class="fas fa-file-alt icon-gray"></i>
-        e aguarde o
-        <i style="font-style: italic">download</i> do arquivo (.xlsx) iniciar.
+        <b>Relatório:</b> Clique no ícone relatório
+        <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" /> e
+        aguarde o download do arquivo (.xlsx) iniciar.
       </li>
       <li class="list-group-item">
-        <b>Observações:</b> Em cada coluna de um curso existem dois campos de
-        vagas, sendo o decima destinado para alunos na grade e debaixo para
-        alunos repetentes. Para que uma turma apareça na tela <b>Horários</b> de
-        um determinado curso é preciso que pelo menos uma vaga para alunos na
-        grade seja destinada ao mesmo.
+        <b>Observações:</b> Em cada coluna de um curso, para cada disciplina,
+        existem dois campos de vagas. O campo superior é destinado às vagas de
+        grade, e o inferior é referente às vagas para alunos não periodizados.
+        Para que uma turma apareça na grade horária de um determinado curso, na
+        página "Horários", é preciso que pelo menos uma vaga de grade seja
+        destinada a este curso.
       </li>
     </ModalAjuda>
   </div>
@@ -485,7 +489,7 @@ import { normalizeText, generateEmptyTurma } from "@/common/utils";
 import {
   toggleOrdination,
   toggleItemInArray,
-  notification,
+  toggleAsideModal,
 } from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
 import {
@@ -500,7 +504,7 @@ import TurmaRow from "./TurmaRow.vue";
 
 export default {
   name: "TurmasDCC",
-  mixins: [toggleOrdination, toggleItemInArray, notification],
+  mixins: [toggleOrdination, toggleItemInArray, toggleAsideModal],
   components: {
     ModalAjuda,
     ModalFiltros,
@@ -512,8 +516,9 @@ export default {
   },
   data() {
     return {
-      turmaClicked: generateEmptyTurma(),
       isAdding: false,
+      asideModalsRefs: ["modalFiltros", "modalAjuda"],
+      turmaClicked: generateEmptyTurma(),
       searchCursosModal: "",
       searchDisciplinasModal: "",
       modalFiltrosTabs: {
@@ -622,15 +627,6 @@ export default {
   methods: {
     ...mapActions(["clearDelete"]),
 
-    openAsideModal(modalName) {
-      if (modalName === "filtros") {
-        this.$refs.modalFiltros.toggle();
-        this.$refs.modalAjuda.close();
-      } else if (modalName === "ajuda") {
-        this.$refs.modalAjuda.toggle();
-        this.$refs.modalFiltros.close();
-      }
-    },
     openModalEditTurma(turma) {
       this.turmaClicked = turma;
       this.$refs.modalEditTurma.open();
@@ -681,9 +677,10 @@ export default {
         const tableDataBlobed = await tableData.blob();
         await saveAs(tableDataBlobed, "tabela.xlsx");
       } catch (error) {
-        this.showNotification({
+        this.pushNotification({
           type: "error",
-          message: `Erro ao gerar a tabela!\n ${error}`,
+          title: "Erro ao gerar a tabela!",
+          text: "Tente novamente",
         });
       } finally {
         this.setPartialLoading(false);
@@ -700,14 +697,14 @@ export default {
         }
 
         this.clearDelete();
-        this.showNotification({
+        this.pushNotification({
           type: "success",
-          message: "Turma(s) excluída(s).",
+          text: "Turma(s) selecionadas foram excluída(s)",
         });
       } catch (error) {
-        this.showNotification({
+        this.pushNotification({
           type: "error",
-          message: "Erro ao excluir turma(s).",
+          text: "Erro ao excluir turma(s).",
         });
       } finally {
         this.setPartialLoading(false);
@@ -722,9 +719,8 @@ export default {
       "PerfisDCC",
       "DisciplinasDCCInPerfis",
       "TurmasInDisciplinasPerfis",
-      "onLoading",
     ]),
-    // table main
+
     TurmasOrdered() {
       const { turmas, perfis } = this.ordenacaoMain;
 
@@ -820,7 +816,7 @@ export default {
       }
       return cursosResultantes;
     },
-    // outros
+
     setFixedOrderPerfil() {
       if (this.ordenacaoMain.perfis.type === "desc") return null;
       else return "disciplina.perfil.abreviacao";

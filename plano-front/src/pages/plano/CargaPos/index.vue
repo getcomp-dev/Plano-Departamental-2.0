@@ -8,16 +8,16 @@
         :color="'green'"
         @click="$refs.novaCargaPosRow.addCarga()"
       >
-        <font-awesome-icon :icon="['fas','check']" />
+        <font-awesome-icon :icon="['fas', 'check']" />
       </BaseButton>
       <BaseButton
         v-show="isAdding"
         title="Cancelar"
         :type="'icon'"
         :color="'gray'"
-        @click="toggleAdd()"
+        @click="toggleAddRow"
       >
-        <font-awesome-icon :icon="['fas','times']" />
+        <font-awesome-icon :icon="['fas', 'times']" />
       </BaseButton>
 
       <BaseButton
@@ -25,10 +25,11 @@
         title="Adicionar"
         :type="'icon'"
         :color="'green'"
-        @click="toggleAdd()"
+        @click="toggleAddRow"
       >
-        <font-awesome-icon :icon="['fas','plus']" />
+        <font-awesome-icon :icon="['fas', 'plus']" />
       </BaseButton>
+
       <BaseButton
         v-show="!isAdding"
         title="Deletar selecionados"
@@ -36,20 +37,25 @@
         :color="'red'"
         @click="$refs.modalDelete.open()"
       >
-        <font-awesome-icon :icon="['fas','trash']" />
+        <font-awesome-icon :icon="['fas', 'trash']" />
       </BaseButton>
 
-      <BaseButton title="Filtros" :type="'icon'" :color="'gray'" @click="openAsideModal('filtros')">
-        <font-awesome-icon :icon="['fas','list-ul']" />
+      <BaseButton
+        title="Filtros"
+        :type="'icon'"
+        :color="'gray'"
+        @click="toggleAsideModal('filtros')"
+      >
+        <font-awesome-icon :icon="['fas', 'list-ul']" />
       </BaseButton>
 
       <BaseButton
         title="Ajuda"
         :type="'icon'"
         :color="'lightblue'"
-        @click="openAsideModal('ajuda')"
+        @click="toggleAsideModal('ajuda')"
       >
-        <font-awesome-icon :icon="['fas','question']" />
+        <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
     </PageHeader>
 
@@ -87,7 +93,9 @@
             <tr class="bg-custom" :key="programa.nome">
               <td style="width:70px">{{ programa.nome }}</td>
               <td colspan="3" style="width: 225px"></td>
-              <td style="width:50px" title="Total de carga">{{ allCreditosCarga(programa.carga) }}</td>
+              <td style="width:50px" title="Total de carga">
+                {{ allCreditosCarga(programa.carga) }}
+              </td>
             </tr>
 
             <CargaPosRow
@@ -100,7 +108,8 @@
           <tr v-show="!ProgramasInCargaPosOrdered.length">
             <td style="width:345px">
               <b>Nenhuma carga encontrada.</b> Clique no botão de filtros
-              <i class="fas fa-list-ul mx-1"></i> para selecioná-las.
+              <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+              para selecioná-las.
             </td>
           </tr>
         </template>
@@ -113,7 +122,10 @@
       :tabsOptions="modalFiltrosTabs"
     >
       <div class="div-table">
-        <BaseTable v-show="modalFiltrosTabs.current === 'Programas'" :type="'modal'">
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Programas'"
+          :type="'modal'"
+        >
           <template #thead>
             <th style="width: 25px"></th>
             <th style="width: 425px" class="t-start">Programa</th>
@@ -139,7 +151,10 @@
           </template>
         </BaseTable>
 
-        <BaseTable v-show="modalFiltrosTabs.current === 'Trimestres'" :type="'modal'">
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Trimestres'"
+          :type="'modal'"
+        >
           <template #thead>
             <th style="width: 25px"></th>
             <th class="t-start" style="width: 425px">Trimestre letivo</th>
@@ -166,7 +181,10 @@
           </template>
         </BaseTable>
 
-        <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Semestres'"
+          :type="'modal'"
+        >
           <template #thead>
             <th style="width: 25px"></th>
             <th class="t-start" style="width: 425px">Semestre Letivo</th>
@@ -204,8 +222,14 @@
       :isDeleting="!!Deletar.length"
       @btn-deletar="deleteSelectedCargas"
     >
-      <li v-if="!Deletar.length" class="list-group-item">Nenhuma carga selecionada.</li>
-      <li v-for="carga in Deletar" :key="'deletarTurma' + carga.id" class="list-group-item">
+      <li v-if="!Deletar.length" class="list-group-item">
+        Nenhuma carga selecionada.
+      </li>
+      <li
+        v-for="carga in Deletar"
+        :key="'deletarTurma' + carga.id"
+        class="list-group-item"
+      >
         <span>
           <b>Trimestre:</b>
           {{ carga.trimestre }} -
@@ -221,46 +245,41 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
-        <i class="fas fa-list-ul icon-gray"></i> no cabeçalho da página e na
-        janela que será aberta utilize as abas para navegar entre os tipos de
-        filtros. Marque em suas respectivas tabelas quais informações deseja
-        visualizar, e para finalizar clique no botão OK.
+        <b>Visualizar cargas:</b> Clique no ícone de filtros
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+        no cabeçalho da página e, na janela que se abrirá, utilize as abas para
+        navegar entre os tipos de filtro disponíveis. Marque quais informações
+        deseja visualizar, e para finalizar clique no botão OK.
       </li>
       <li class="list-group-item">
-        <b>Para adicionar uma carga à tabela:</b> Clique no ícone adicionar
-        <i class="fas fa-plus icon-green"></i> no cabeçalho da página em seguida
-        preencha a nova linha que irá aparecer no início da tabela. E note que,
-        todos os campos presentes são obrigatórios. Após preencher os campos
-        clique no ícone salvar
-        <i
-          class="fas fa-check icon-green"
-        ></i>
-        ou em cancelar
-        <i class="fas fa-times icon-gray"></i>
-        .
+        <b>Adicionar carga:</b>
+        Clique no ícone de adicionar
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
+        no cabeçalho da página. Em seguida, preencha a nova linha que irá
+        aparecer no início da tabela. Note que todos os campos são obrigatórios.
+        Após preenchê-los, clique no ícone de salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" /> ou de
+        cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" /> .
       </li>
       <li class="list-group-item">
-        <b>Para deletar carga da tabela:</b> Marque a(s) carga(s) que deseja
-        deletar através da caixa de seleção presente na segunda coluna à
-        esquerda na tabela, em seguida clique no ícone deletar
-        <i
-          class="fas fa-trash icon-red"
-        ></i> no cabeçalho da página e na janela
-        que será aberta confirme clicando botão OK.
+        <b>Deletar carga(s):</b>
+        Marque a(s) carga(s) que deseja deletar através da caixa de seleção na
+        coluna mais à esquerda da tabela. Em seguida, clique no ícone de deletar
+        <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" /> no
+        cabeçalho da página. Confirme a exclusão clicando no botão OK na janela
+        que se abrirá.
       </li>
       <li class="list-group-item">
-        <b>Para editar carga da tabela:</b> Basta fazer as alterações
-        necessárias diretamente nos campos da tabela e o sistema irá salvar
-        automaticamente.
+        <b>Editar carga:</b> Basta fazer as alterações necessárias diretamente
+        nos campos da tabela. O sistema salvará as modificações automaticamente.
       </li>
       <li class="list-group-item">
-        <b>Observações:</b> Note que os
-        <b>filtros semestres e trimestres são interligados</b> onde, ao
-        selecionar um semestre os trimestres correspondetes tambem serão
-        selecionados e vice versa. O primeiro semestre corresponde ao primeiro e
-        segundo trimestre, e segundo semestre ao terceiro e quarto. Então só é
-        necessário utlizar um ou o outro.
+        <b>Observações:</b> Note que os filtros por semestre e trimestre são
+        interligados. Ao selecionar um semestre, os trimestres correspondentes
+        também serão selecionados, e vice versa. O primeiro semestre corresponde
+        ao primeiro e segundo trimestres, e o segundo semestre corresponde ao
+        terceiro e quarto trimestres.
       </li>
     </ModalAjuda>
   </div>
@@ -269,15 +288,19 @@
 <script>
 import { mapGetters } from "vuex";
 import cargaPosService from "@/common/services/cargaPos";
-import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
-
+import {
+  toggleOrdination,
+  toggleItemInArray,
+  toggleAsideModal,
+} from "@/common/mixins";
 import { ModalDelete, ModalFiltros, ModalAjuda } from "@/components/modals";
+
 import NovaCargaPosRow from "./NovaCargaPosRow.vue";
 import CargaPosRow from "./CargaPosRow.vue";
 
 export default {
   name: "DashboardCargaPos",
-  mixins: [toggleOrdination, toggleItemInArray],
+  mixins: [toggleOrdination, toggleItemInArray, toggleAsideModal],
   components: {
     ModalDelete,
     ModalFiltros,
@@ -288,6 +311,7 @@ export default {
   data() {
     return {
       isAdding: false,
+      asideModalsRefs: ["modalFiltros", "modalAjuda"],
       filtroProgramas: {
         ativados: [],
         selecionados: [],
@@ -347,21 +371,13 @@ export default {
       },
     };
   },
-  mounted() {
+
+  beforeMount() {
     this.connectSemestreInTrimestre();
   },
 
   methods: {
-    openAsideModal(modalName) {
-      if (modalName === "filtros") {
-        this.$refs.modalFiltros.toggle();
-        this.$refs.modalAjuda.close();
-      } else if (modalName === "ajuda") {
-        this.$refs.modalAjuda.toggle();
-        this.$refs.modalFiltros.close();
-      }
-    },
-    toggleAdd() {
+    toggleAddRow() {
       this.isAdding = !this.isAdding;
     },
     deleteCarga(cargaId) {
@@ -394,7 +410,7 @@ export default {
 
       this.$_.forEach(this.CargasPos, (carga) => {
         const docenteFounded = this.$_.find(
-          this.Docentes,
+          this.DocentesAtivos,
           (docente) => docente.id === carga.Docente
         );
 
@@ -437,7 +453,6 @@ export default {
         );
       }
     },
-
     selectTrimestre(newItem, array) {
       this.toggleItemInArray(newItem, array);
       this.connectTrimestreInSemestre();
@@ -459,7 +474,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["onLoading"]),
+    ...mapGetters(["DocentesAtivos"]),
 
     ProgramasInCargaPos() {
       const programasResutantes = [];
@@ -535,17 +550,9 @@ export default {
     CargasPos() {
       return this.$store.state.cargaPos.Cargas;
     },
-    Docentes() {
-      return this.$_.filter(this.$store.state.docente.Docentes, [
-        "ativo",
-        true,
-      ]);
-    },
     Deletar() {
       return this.$store.state.cargaPos.Deletar;
     },
   },
 };
 </script>
-
-<style scoped></style>

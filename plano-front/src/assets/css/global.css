@@ -6,6 +6,8 @@
   --dark-gray: #343a40;
 }
 
+@import "./btn-cores.css";
+
 @media screen and (max-width: 544px) {
   :root {
     --navbar-height: 60px;
