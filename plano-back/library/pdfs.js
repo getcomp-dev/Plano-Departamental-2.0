@@ -1103,7 +1103,7 @@ laboratorios
             return {
                 columns: [
                     {
-                        text: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+                        text: `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
                         margin: [30, 10, 0, 0],
                         fontSize: 8,
                         alignment: `left`,
@@ -1823,7 +1823,7 @@ const pdfCargaProfessores = () => new Promise((resolve, reject) => {
             return {
                 columns: [
                     {
-                        text: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+                        text: `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
                         margin: [30, 10, 0, 0],
                         fontSize: 8,
                         alignment: `left`,
@@ -6399,7 +6399,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
             return {
                 columns: [
                     {
-                        text: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+                        text: `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
                         margin: [30, 10, 0, 0],
                         fontSize: 8,
                         alignment: `left`,
@@ -7054,7 +7054,7 @@ const pdfRelatorioDisciplinas = () => new Promise((resolve, reject) =>  {
             return {
                 columns: [
                     {
-                        text: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+                        text: `${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
                         margin: [30, 10, 0, 0],
                         fontSize: 8,
                         alignment: `left`,
