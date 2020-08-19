@@ -1096,13 +1096,14 @@ laboratorios
         });
     }
     console.log(tables);
+    let date = new Date(Date.now())
     var docDefinitionLabs = {
         content: tables,
         footer: function(currentPage, pageCount) {
             return {
                 columns: [
                     {
-                        text: new Date(Date.now()).toLocaleString('pt-BR'),
+                        text: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
                         margin: [30, 10, 0, 0],
                         fontSize: 8,
                         alignment: `left`,
@@ -1815,13 +1816,14 @@ const pdfCargaProfessores = () => new Promise((resolve, reject) => {
 
 
     console.log("Criando Documento")
+    let date = new Date(Date.now())
     let docDefinitionCargas = {
         content: tables,
         footer: function(currentPage, pageCount) {
             return {
                 columns: [
                     {
-                        text: new Date(Date.now()).toLocaleString('pt-BR'),
+                        text: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
                         margin: [30, 10, 0, 0],
                         fontSize: 8,
                         alignment: `left`,
@@ -6390,13 +6392,14 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
     }
 
     console.log("Criando Documento")
+    let date = new Date(Date.now())
     let docDefinitionHorario = {
         content: tables,
         footer: function(currentPage, pageCount) {
             return {
                 columns: [
                     {
-                        text: new Date(Date.now()).toLocaleString('pt-BR'),
+                        text: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
                         margin: [30, 10, 0, 0],
                         fontSize: 8,
                         alignment: `left`,
@@ -7044,14 +7047,14 @@ const pdfRelatorioDisciplinas = () => new Promise((resolve, reject) =>  {
             }
         }
     }
-
+    let date = new Date(Date.now())
     var docDefinitionPlano = {
         content: tables,
         footer: function(currentPage, pageCount) {
             return {
                 columns: [
                     {
-                        text: new Date(Date.now()).toLocaleString('pt-BR'),
+                        text: `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
                         margin: [30, 10, 0, 0],
                         fontSize: 8,
                         alignment: `left`,
