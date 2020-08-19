@@ -1102,7 +1102,7 @@ laboratorios
             return {
                 columns: [
                     {
-                        text: new Date(Date.now()).toLocaleString('en-GB'),
+                        text: new Date(Date.now()).toLocaleString('pt-BR'),
                         margin: [30, 10, 0, 0],
                         fontSize: 8,
                         alignment: `left`,
@@ -1821,7 +1821,7 @@ const pdfCargaProfessores = () => new Promise((resolve, reject) => {
             return {
                 columns: [
                     {
-                        text: new Date(Date.now()).toLocaleString('en-GB'),
+                        text: new Date(Date.now()).toLocaleString('pt-BR'),
                         margin: [30, 10, 0, 0],
                         fontSize: 8,
                         alignment: `left`,
@@ -6396,7 +6396,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
             return {
                 columns: [
                     {
-                        text: new Date(Date.now()).toLocaleString('en-GB'),
+                        text: new Date(Date.now()).toLocaleString('pt-BR'),
                         margin: [30, 10, 0, 0],
                         fontSize: 8,
                         alignment: `left`,
@@ -7051,7 +7051,7 @@ const pdfRelatorioDisciplinas = () => new Promise((resolve, reject) =>  {
             return {
                 columns: [
                     {
-                        text: new Date(Date.now()).toLocaleString('en-GB'),
+                        text: new Date(Date.now()).toLocaleString('pt-BR'),
                         margin: [30, 10, 0, 0],
                         fontSize: 8,
                         alignment: `left`,
