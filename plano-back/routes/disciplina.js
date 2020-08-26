@@ -27,6 +27,7 @@ router.post('/', function (req, res, next) {
         Perfil: req.body.Perfil,
         ead: req.body.ead,
         laboratorio: req.body.laboratorio,
+        departamento: req.body.departamento
     }).then(function (disciplina) {
         ioBroadcast(SM.DISCIPLINA_CREATED, {'msg': 'Disciplina criada!', 'Disciplina': disciplina})
         console.log('\nRequest de '+req.usuario.nome+'\n')
@@ -84,6 +85,8 @@ router.post('/:id([0-9]+)', function (req, res, next) {
 
         if(disciplina.laboratorio != req.body.laboratorio)
             history({fieldName:'Laboratorio', lineId:disciplina.codigo, oldValue: disciplina.laboratorio, newValue: req.body.laboratorio, operationType:'Edit', user: req.usuario.nome})
+        if(disciplina.departamento != req.body.departamento)
+            history({fieldName:'Departamento', lineId:disciplina.codigo, oldValue: disciplina.departamento, newValue: req.body.departamento, operationType:'Edit', user: req.usuario.nome})
 
 
         return disciplina.updateAttributes({
@@ -93,7 +96,8 @@ router.post('/:id([0-9]+)', function (req, res, next) {
             cargaPratica: req.body.cargaPratica,
             Perfil: req.body.Perfil,
             ead: req.body.ead,
-            laboratorio: req.body.laboratorio
+            laboratorio: req.body.laboratorio,
+            departamento: req.body.departamento
         })
     }).then(function (disciplina) {
         ioBroadcast(SM.DISCIPLINA_UPDATED, {'msg': 'Disciplina atualizada!', 'Disciplina': disciplina})

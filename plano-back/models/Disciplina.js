@@ -26,6 +26,11 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false
     },
+    departamento: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      default: 1
+    },
   }, {
     freezeTableName: true,
     timestamps: false

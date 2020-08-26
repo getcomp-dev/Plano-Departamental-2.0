@@ -2396,7 +2396,7 @@ function createHorarios2 (ano, semestre, listaDisciplinasGrade, listaTurmas, lis
 
 const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
 
-    var anoAtual = _.find(this.Plano, {id:1}).ano
+    var anoAtual = _.find(this.Plano, {id:this.PlanoAtual}).ano
 
     let listTurmas = _.filter(this.Turmas, {Plano: this.PlanoAtual})
     let listTurmasExternas = _.filter(this.TurmasExternas, {Plano: this.PlanoAtual})
