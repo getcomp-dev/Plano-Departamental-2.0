@@ -35,7 +35,7 @@ module.exports = function (sequelize, DataTypes) {
     Perfil.hasMany(models.Disciplina, {
       foreignKey: {
         name: 'Perfil',
-        allowNull: false
+        allowNull: true
       },
       onDelete: 'RESTRICT'
     })
