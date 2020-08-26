@@ -83,6 +83,15 @@ const getters = {
             cor: perfilFounded.cor,
           },
         });
+      } else {
+        disciplinasResults.push({
+          ...disciplina,
+          perfil: {
+            nome: '',
+            abreviacao: '',
+            cor: undefined,
+          },
+        });
       }
     });
 
@@ -90,9 +99,7 @@ const getters = {
   },
   DisciplinasDCCInPerfis(state, getters) {
     return _.filter(getters.DisciplinasInPerfis, (disciplina) => {
-      if (disciplina.Perfil !== 13 && disciplina.Perfil !== 15) return true;
-      //Disciplinas exceções MAC
-      else if (disciplina.id === 77 || disciplina.id === 88) return true;
+      if (disciplina.departamento == 1) return true; //DCC
       else false;
     });
   },
@@ -100,8 +107,7 @@ const getters = {
     return _.filter(
       getters.DisciplinasInPerfis,
       (disciplina) =>
-        (disciplina.Perfil === 13 || disciplina.Perfil === 15) &&
-        (disciplina.id !== 77 && disciplina.id !== 88) //Remove as disciplinas exceções MAC que são do DCC
+        (disciplina.departamento == 2) //Outros
     );
   },
 };

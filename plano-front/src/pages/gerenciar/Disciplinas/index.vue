@@ -79,6 +79,14 @@
                 "
               ></i>
             </th>
+            <th
+                    style="width: 100px"
+                    class="clickable"
+                    @click="toggleOrder(ordenacaoMain.disciplinas, 'departamento')"
+            >
+              Departamento
+              <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'departamento')"></i>
+            </th>
           </template>
           <template #tbody>
             <template v-for="disciplina in DisciplinasOrdered">
@@ -98,6 +106,7 @@
 
                 <td style="width: 70px">{{ textoEad(disciplina.ead) }}</td>
                 <td style="width: 70px">{{ textoLab(disciplina.laboratorio) }}</td>
+                <td style="width: 100px">{{ textoDpto(disciplina.departamento) }}</td>
               </tr>
             </template>
           </template>
@@ -145,6 +154,7 @@
                 v-model="disciplinaForm.Perfil"
               >
                 <option v-if="Perfis.length === 0" type="text" value>Nenhum Perfil Encontrado</option>
+                <option value=""></option>
                 <option
                   v-for="perfil in Perfis"
                   :key="perfil.id"
@@ -203,6 +213,20 @@
                 <option value="0">Não</option>
                 <option value="1">Integral</option>
                 <option value="2">Parcial</option>
+              </select>
+            </div>
+          </div>
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0">
+              <label required for="departamento" class="col-form-label">Departamento</label>
+              <select
+                      type="text"
+                      class="form-control form-control-sm input-maior"
+                      id="departamento"
+                      v-model="disciplinaForm.departamento"
+              >
+                <option value="1">{{textoDpto(1)}}</option>
+                <option value="2">{{textoDpto(2)}}</option>
               </select>
             </div>
           </div>
@@ -277,6 +301,7 @@ const emptyDisciplina = {
   Perfil: undefined,
   ead: undefined,
   laboratorio: undefined,
+  departamento: undefined,
 };
 
 export default {
@@ -300,44 +325,61 @@ export default {
       this.disciplinaClickada = disciplina.id;
     },
 
+    allowPerfilNull(disciplina){
+      if(disciplina.Perfil === '')
+        disciplina.Perfil = null
+      return !(disciplina.departamento == 1 && !disciplina.Perfil)
+    },
+
     addDisciplina() {
-      disciplinaService
-        .create(this.disciplinaForm)
-        .then((response) => {
-          this.cleanDisciplina();
-          this.$notify({
-            group: "general",
-            title: `Sucesso!`,
-            text: `A Disciplina ${response.Disciplina.nome} foi criada!`,
-            type: "success",
-          });
-        })
-        .catch((error) => {
-          this.error = "<b>Erro ao criar Disciplina</b>";
-          console.log(error.response);
-          if (error.response.data.fullMessage) {
-            for (var e = 0; e < error.response.data.errors.length; e++) {
-              if (error.response.data.errors[e].message.search("null") !== -1)
-                this.error +=
-                  "<br/>" +
-                  error.response.data.errors[e].field +
-                  " não pode ser vazio";
-              else if (
-                error.response.data.errors[e].message.search("unique") !== -1 &&
-                error.response.data.errors[e].field.search("codigo") !== -1
-              )
-                this.error += "<br/>Disciplina já existe";
-            }
-          }
-          this.$notify({
-            group: "general",
-            title: `Erro!`,
-            text: this.error,
-            type: "error",
-          });
+      if(this.allowPerfilNull(this.disciplinaForm)){
+        disciplinaService
+                .create(this.disciplinaForm)
+                .then((response) => {
+                  this.cleanDisciplina();
+                  this.$notify({
+                    group: "general",
+                    title: `Sucesso!`,
+                    text: `A Disciplina ${response.Disciplina.nome} foi criada!`,
+                    type: "success",
+                  });
+                })
+                .catch((error) => {
+                  this.error = "<b>Erro ao criar Disciplina</b>";
+                  console.log(error.response);
+                  if (error.response.data.fullMessage) {
+                    for (var e = 0; e < error.response.data.errors.length; e++) {
+                      if (error.response.data.errors[e].message.search("null") !== -1)
+                        this.error +=
+                                "<br/>" +
+                                error.response.data.errors[e].field +
+                                " não pode ser vazio";
+                      else if (
+                              error.response.data.errors[e].message.search("unique") !== -1 &&
+                              error.response.data.errors[e].field.search("codigo") !== -1
+                      )
+                        this.error += "<br/>Disciplina já existe";
+                    }
+                  }
+                  this.$notify({
+                    group: "general",
+                    title: `Erro!`,
+                    text: this.error,
+                    type: "error",
+                  });
+                });
+      }else{
+        this.$notify({
+          group: "general",
+          title: `Erro!`,
+          text: 'Disciplinas do DCC devem fazer parte de um Perfil',
+          type: "error",
         });
+      }
+
     },
     editDisciplina() {
+      if(this.allowPerfilNull(this.disciplinaForm)){
       disciplinaService
         .update(this.disciplinaForm.id, this.disciplinaForm)
         .then((response) => {
@@ -361,6 +403,14 @@ export default {
             type: "error",
           });
         });
+      }else{
+        this.$notify({
+          group: "general",
+          title: `Erro!`,
+          text: 'Disciplinas do DCC devem fazer parte de um Perfil',
+          type: "error",
+        });
+      }
     },
     openModalDelete() {
       this.$refs.modalDelete.open();
@@ -410,6 +460,11 @@ export default {
       if (ead == 0) return "-";
       if (ead == 1) return "Integral";
       if (ead == 2) return "Parcial";
+    },
+
+    textoDpto(dpto) {
+      if (dpto == 1) return "DCC";
+      if (dpto == 2) return "Outro";
     },
   },
   computed: {

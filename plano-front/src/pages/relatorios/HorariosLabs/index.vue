@@ -5,38 +5,41 @@
         title="Filtros"
         :type="'icon'"
         :color="'gray'"
-        @click="openAsideModal('modalFiltros')"
+        @click="toggleAsideModal('filtros')"
       >
-        <font-awesome-icon :icon="['fas','list-ul']" />
+        <font-awesome-icon :icon="['fas', 'list-ul']" />
       </BaseButton>
 
       <BaseButton
         title="Relátorio"
         :type="'icon'"
         :color="'gray'"
-        @click="openAsideModal('modalRelatorio')"
+        @click="toggleAsideModal('relatorio')"
       >
-        <font-awesome-icon :icon="['fas','file-alt']" />
+        <font-awesome-icon :icon="['fas', 'file-alt']" />
       </BaseButton>
 
       <BaseButton
         title="Ajuda"
         :type="'icon'"
         :color="'lightblue'"
-        @click="openAsideModal('modalAjuda')"
+        @click="toggleAsideModal('ajuda')"
       >
-        <font-awesome-icon :icon="['fas','question']" />
+        <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
     </PageHeader>
 
-    <div class="row w-100 m-0" v-show="!onLoading.table">
+    <div class="w-100" v-show="!onLoading.table">
       <div v-show="hasLaboratorioAtivos && semestre1IsActived" class="w-100">
         <h2 class="semestre-title">1º SEMESTRE</h2>
         <div class="container-horarios px-1">
           <template v-for="lab in filtroLaboratorios.ativados">
             <div class="div-table" :key="'1-lab-id' + lab.id">
               <h3 class="lab-title">{{ lab.nome }}</h3>
-              <TableHorariosLab :laboratorio="lab" :Turmas="Turmas1"></TableHorariosLab>
+              <TableHorariosLab
+                :laboratorio="lab"
+                :Turmas="Turmas1"
+              ></TableHorariosLab>
             </div>
           </template>
         </div>
@@ -49,7 +52,10 @@
             <div class="div-table" :key="'2-lab-id' + lab.id">
               <h3 class="lab-title">{{ lab.nome }}</h3>
 
-              <TableHorariosLab :laboratorio="lab" :Turmas="Turmas2"></TableHorariosLab>
+              <TableHorariosLab
+                :laboratorio="lab"
+                :Turmas="Turmas2"
+              ></TableHorariosLab>
             </div>
           </template>
         </div>
@@ -63,7 +69,8 @@
       class="text-empty"
     >
       <b>Nenhum horário encontrado.</b> Clique no botão de filtros
-      <font-awesome-icon :icon="['fas', 'list-ul']" class="mx-1" />para selecioná-los.
+      <font-awesome-icon :icon="['fas', 'list-ul']" class="mx-1" />para
+      selecioná-los.
     </p>
 
     <ModalFiltros
@@ -72,7 +79,10 @@
       :tabsOptions="modalFiltrosTabs"
     >
       <div class="div-table">
-        <BaseTable v-show="modalFiltrosTabs.current === 'Laboratorios'" :type="'modal'">
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Laboratorios'"
+          :type="'modal'"
+        >
           <template #thead>
             <th style="width: 25px" class="t-start"></th>
             <th style="width: 425px" class="t-start">Nome</th>
@@ -93,15 +103,22 @@
                   class="form-check-input position-static m-0"
                 />
               </td>
-              <td style="width: 425px" class="t-start">{{ laboratorio.nome }}</td>
+              <td style="width: 425px" class="t-start">
+                {{ laboratorio.nome }}
+              </td>
             </tr>
           </template>
         </BaseTable>
 
-        <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Semestres'"
+          :type="'modal'"
+        >
           <template #thead>
             <th style="width: 25px"></th>
-            <th class="t-start clickable" style="width: 425px">Semestre Letivo</th>
+            <th class="t-start clickable" style="width: 425px">
+              Semestre Letivo
+            </th>
           </template>
           <template #tbody>
             <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
@@ -129,40 +146,36 @@
       </div>
     </ModalFiltros>
 
-    <!-- MODAL DE AJUDA -->
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Para exibir as tabelas de horários:</b> Clique no ícone filtros
-        <i class="fas fa-list-ul icon-gray"></i> no cabeçalho da página e na
-        janela que será aberta utilize as abas para navegar entre os tipos de
-        filtros. Marque em suas respectivas tabelas quais informações deseja
-        visualizar, e para finalizar clique no botão OK.
+        <b>Visualizar alocação:</b> Clique no ícone filtros
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />. Em
+        seguida, utilize as abas para navegar entre os filtros. Selecione as
+        informações que deseja visualizar e clique no botão OK.
       </li>
       <li class="list-group-item">
-        <b>Para gerar relatório dos horários:</b> Clique no ícone relatório
-        <i class="fas fa-file-alt icon-gray"></i>, selecione se deseja gerar o
-        relatório completo com todos os horários, ou apenas o relatório parcial
-        com os horários que estão selecionados no momento.
+        <b>Relatório:</b>
+        Clique no ícone relatório
+        <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" />. Em
+        seguida, indique se deseja gerar o relatório completo com todos os
+        laboratórios ou o relatório parcial com as informações exibidas na tela.
       </li>
     </ModalAjuda>
 
-    <!-- MODAL RELATORIO-->
     <ModalRelatorio ref="modalRelatorio" @selection-option="pdf($event)" />
   </div>
 </template>
 
 <script>
 import pdfs from "@/common/services/pdfs";
-import { toggleItemInArray } from "@/common/mixins";
-
-import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
-
-import TableHorariosLab from "./TableHorariosLab";
 import { mapGetters } from "vuex";
+import { toggleItemInArray, toggleAsideModal } from "@/common/mixins";
+import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
+import TableHorariosLab from "./TableHorariosLab";
 
 export default {
   name: "DashboardLaboratoriosAlocacao",
-  mixins: [toggleItemInArray],
+  mixins: [toggleItemInArray, toggleAsideModal],
   components: {
     ModalRelatorio,
     ModalAjuda,
@@ -171,8 +184,7 @@ export default {
   },
   data() {
     return {
-      tabAtivaModal: "Laboratorios",
-      asideModaisRefs: ["modalFiltros", "modalAjuda", "modalRelatorio"],
+      asideModalsRefs: ["modalFiltros", "modalAjuda", "modalRelatorio"],
       filtroLaboratorios: {
         ativados: [],
         selecionados: [],
@@ -225,12 +237,6 @@ export default {
   },
 
   methods: {
-    openAsideModal(modalRef) {
-      this.asideModaisRefs.forEach((ref) => {
-        if (modalRef === ref) this.$refs[ref].toggle();
-        else this.$refs[ref].close();
-      });
-    },
     setSemestreAtivo() {
       const { primeiro, segundo } = this.filtroSemestres;
 
@@ -328,7 +334,7 @@ export default {
 .lab-title {
   width: 100%;
   text-align: start;
-  font-size: 12px !important;
+  font-size: 12px;
   font-weight: bold;
 }
 .text-empty {
@@ -338,12 +344,12 @@ export default {
   background-color: var(--light-gray);
 }
 .container-horarios {
-  width: 100% !important;
+  width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, 381px);
+  grid-template-columns: repeat(auto-fill, 381px);
   justify-content: space-between;
-  grid-gap: 5px;
-  grid-row-gap: 20px;
+  grid-column-gap: 5px;
+  grid-row-gap: 16px;
   margin-bottom: 20px;
 }
 </style>

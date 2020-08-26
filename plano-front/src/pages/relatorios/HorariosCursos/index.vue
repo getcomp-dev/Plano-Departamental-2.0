@@ -5,7 +5,7 @@
         title="Filtros"
         :type="'icon'"
         :color="'gray'"
-        @click="openAsideModal('filtros')"
+        @click="toggleAsideModal('filtros')"
       >
         <font-awesome-icon :icon="['fas', 'list-ul']" />
       </BaseButton>
@@ -14,7 +14,7 @@
         title="Relátorio"
         :type="'icon'"
         :color="'gray'"
-        @click="openAsideModal('relatorio')"
+        @click="toggleAsideModal('relatorio')"
       >
         <font-awesome-icon :icon="['fas', 'file-alt']" />
       </BaseButton>
@@ -23,7 +23,7 @@
         title="Ajuda"
         :type="'icon'"
         :color="'lightblue'"
-        @click="openAsideModal('ajuda')"
+        @click="toggleAsideModal('ajuda')"
       >
         <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
@@ -36,20 +36,17 @@
       <div v-show="semestre1IsActived" class="w-100">
         <h2 class="semestre-title">1º SEMESTRE</h2>
 
-        <template v-for="curso in CursosWithHorarios">
-          <h3 class="curso-title pl-1" :key="1 + curso.nome">
-            {{ curso.nome }}
-          </h3>
-          <ListTableHorarios
-            :key="1 + curso.codigo + curso.value"
-            :listaDePeriodos="listaDePeriodos"
-            :curso="{
-              nome: curso.nome,
-              turno: curso.turno,
-              horarios: curso.horarios1Semestre,
-            }"
-          />
-        </template>
+        <ListTableHorarios
+          v-for="curso in CursosInHorariosFiltred"
+          :key="curso.codigo + curso.periodoInicial1Semestre"
+          :curso="{
+            id: curso.id,
+            nome: curso.nome,
+            turno: curso.turno,
+            periodoInicial: curso.periodoInicial1Semestre,
+            horarios: curso.horarios1Semestre,
+          }"
+        />
 
         <template v-if="EletivasIsActived">
           <h3 class="curso-title pl-1">Eletivas</h3>
@@ -60,20 +57,17 @@
       <div v-show="semestre2IsActived" class="w-100">
         <h2 class="semestre-title">2º SEMESTRE</h2>
 
-        <template v-for="curso in CursosWithHorarios">
-          <h3 class="curso-title pl-1" :key="2 + curso.nome">
-            {{ curso.nome }}
-          </h3>
-          <ListTableHorarios
-            :key="2 + curso.codigo + curso.value"
-            :listaDePeriodos="listaDePeriodos"
-            :curso="{
-              nome: curso.nome,
-              turno: curso.turno,
-              horarios: curso.horarios2Semestre,
-            }"
-          />
-        </template>
+        <ListTableHorarios
+          v-for="curso in CursosInHorariosFiltred"
+          :key="curso.nome + curso.periodoInicial2Semestre"
+          :curso="{
+            id: curso.id,
+            nome: curso.nome,
+            turno: curso.turno,
+            periodoInicial: curso.periodoInicial2Semestre,
+            horarios: curso.horarios2Semestre,
+          }"
+        />
 
         <template v-if="EletivasIsActived">
           <h3 class="curso-title pl-1">Eletivas</h3>
@@ -81,8 +75,12 @@
         </template>
       </div>
     </div>
+
     <p
-      v-if="!hasAnySemestreActived || !hasAnyHorariosActived"
+      v-if="
+        (!this.semestre1IsActived && !this.semestre2IsActived) ||
+          !hasAnyHorariosActived
+      "
       class="text-empty"
     >
       <b>Nenhum horário encontrado.</b> Clique no botão de filtros
@@ -122,7 +120,7 @@
           <template #tbody>
             <tr
               v-for="curso in CursosModalOrdered"
-              :key="'curso-id-' + curso.codigo"
+              :key="'MdCurso' + curso.codigo + curso.id"
               @click="toggleItemInArray(curso, filtroCursos.selecionados)"
             >
               <td style="width: 25px">
@@ -177,17 +175,18 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Para exibir as tabelas de horários:</b> Clique no ícone filtros
-        <i class="fas fa-list-ul icon-gray"></i> no cabeçalho da página e na
-        janela que será aberta utilize as abas para navegar entre os tipos de
-        filtros. Marque em suas respectivas tabelas quais informações deseja
-        visualizar, e para finalizar clique no botão OK.
+        <b>Visualizar grade:</b>
+        Clique no ícone filtros
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />. Em
+        seguida, utilize as abas para navegar entre os filtros. Selecione as
+        informações que deseja visualizar e clique no botão OK
       </li>
       <li class="list-group-item">
-        <b>Para gerar relatório dos horários:</b> Clique no ícone relatório
-        <i class="fas fa-file-alt icon-gray"></i>, selecione se deseja gerar o
-        relatório completo com todos os horários, ou apenas o relatório parcial
-        com os horários que estão selecionados no momento.
+        <b>Relatório:</b> Clique no ícone relatório
+        <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" />. Em
+        seguida, indique se deseja gerar o relatório completo com a grade
+        completa de todos os cursos ou o relatório parcial com as informações
+        exibidas na tela.
       </li>
     </ModalAjuda>
   </div>
@@ -195,37 +194,18 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { toggleItemInArray, toggleOrdination } from "@/common/mixins";
+import {
+  toggleItemInArray,
+  toggleOrdination,
+  toggleAsideModal,
+} from "@/common/mixins";
 import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
 import TableEletivas from "./TableEletivas.vue";
 import ListTableHorarios from "./ListTableHorarios.vue";
 
-const allCursosOptions = [
-  {
-    nome: "SISTEMAS DE INFORMAÇÃO",
-    codigo: "76A",
-  },
-  {
-    nome: "CIÊNCIA DA COMPUTAÇÃO NOTURNO",
-    codigo: "35A",
-  },
-  {
-    nome: "CIÊNCIA DA COMPUTAÇÃO DIURNO",
-    codigo: "65C",
-  },
-  {
-    nome: "ENGENHARIA COMPUTACIONAL",
-    codigo: "65B",
-  },
-  {
-    nome: "ELETIVAS",
-    codigo: "-",
-  },
-];
-
 export default {
   name: "DashboardHorarios",
-  mixins: [toggleItemInArray, toggleOrdination],
+  mixins: [toggleItemInArray, toggleOrdination, toggleAsideModal],
   components: {
     ModalFiltros,
     ModalAjuda,
@@ -235,7 +215,7 @@ export default {
   },
   data() {
     return {
-      planoAtual: null,
+      asideModalsRefs: ["modalFiltros", "modalAjuda", "modalRelatorio"],
       ordemCursos: { order: "codigo", type: "asc" },
       listaDePeriodos: [],
       filtroCursos: {
@@ -268,7 +248,7 @@ export default {
       modalFiltrosCallbacks: {
         selectAll: {
           Cursos: () => {
-            this.filtroCursos.selecionados = [...allCursosOptions];
+            this.filtroCursos.selecionados = [...this.OptionsCursosDCC];
           },
           Semestres: () => {
             this.filtroSemestres.primeiro = true;
@@ -289,14 +269,10 @@ export default {
           this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
         },
       },
-      evenCCN: "false",
-      evenCCD: "false",
-      evenEC: "false",
-      evenSI: "false",
     };
   },
 
-  mounted() {
+  beforeMount() {
     this.currentPlano = this.$_.find(this.$store.state.plano.Plano, {
       id: parseInt(localStorage.getItem("Plano")),
     });
@@ -307,28 +283,12 @@ export default {
 
     this.createHorarioEletivas(1);
     this.createHorarioEletivas(2);
-    this.createListaDePeriodos();
 
     this.modalFiltrosCallbacks.selectAll.Cursos();
     this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
   },
 
   methods: {
-    openAsideModal(modalName) {
-      if (modalName === "filtros") {
-        this.$refs.modalFiltros.toggle();
-        this.$refs.modalAjuda.close();
-        this.$refs.modalRelatorio.close();
-      } else if (modalName === "ajuda") {
-        this.$refs.modalAjuda.toggle();
-        this.$refs.modalFiltros.close();
-        this.$refs.modalRelatorio.close();
-      } else if (modalName === "relatorio") {
-        this.$refs.modalRelatorio.toggle();
-        this.$refs.modalAjuda.close();
-        this.$refs.modalFiltros.close();
-      }
-    },
     setSemestreAtivo() {
       const { primeiro, segundo } = this.filtroSemestres;
 
@@ -348,16 +308,10 @@ export default {
       } else return false;
     },
     checkPeriodo(turma, periodo) {
-      for (
-        var g = 0;
-        g < this.$store.state.disciplinaGrade.DisciplinaGrades.length;
-        g++
-      ) {
+      for (var g = 0; g < this.DisciplinaGrades.length; g++) {
         if (
-          this.$store.state.disciplinaGrade.DisciplinaGrades[g].Disciplina ==
-            turma &&
-          this.$store.state.disciplinaGrade.DisciplinaGrades[g].periodo ==
-            periodo
+          this.DisciplinaGrades[g].Disciplina == turma &&
+          this.DisciplinaGrades[g].periodo == periodo
         ) {
           return true;
         }
@@ -430,14 +384,7 @@ export default {
         Ativas: this.horariosAtivos2,
       });
     },
-    createListaDePeriodos() {
-      for (let i = 0; i < 10; i++) {
-        this.listaDePeriodos.push({
-          indice: i,
-          nome: `${i + 1}º Período`,
-        });
-      }
-    },
+
     createHorarios(curso, semestre) {
       let horariosAtivos;
       if (semestre === 1) horariosAtivos = this.horariosAtivos1;
@@ -467,7 +414,7 @@ export default {
         id: parseInt(localStorage.getItem("Plano")),
       });
 
-      let gradesCurso = this.$_.filter(this.Grades, { Curso: curso });
+      let gradesCurso = this.$_.filter(this.AllGrades, { Curso: curso });
       let gradesAtivas = [];
 
       gradesCurso.forEach((g) => {
@@ -516,8 +463,7 @@ export default {
           periodo: periodoInicio,
         }
       );
-      let disciplinasGrades = this.$store.state.disciplinaGrade
-        .DisciplinaGrades;
+      let disciplinasGrades = this.DisciplinaGrades;
       let inicio = 0;
 
       for (let i = 0; inicio < 10 && i < gradesAtivas.length; i++) {
@@ -577,12 +523,11 @@ export default {
         id: parseInt(localStorage.getItem("Plano")),
       });
 
-      let disciplinasGrades = this.$store.state.disciplinaGrade
-        .DisciplinaGrades;
+      let disciplinasGrades = this.DisciplinaGrades;
       let gradesAtivas = [[], [], [], []];
 
       for (let i = 1; i < 5; i++) {
-        let gradesCurso = this.$_.filter(this.Grades, { Curso: i });
+        let gradesCurso = this.$_.filter(this.AllGrades, { Curso: i });
         let inicio = 0;
         gradesCurso.forEach((g) => {
           let fim =
@@ -4671,88 +4616,98 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["AllTurmas", "AllDisciplinas", "onLoading"]),
+    ...mapGetters([
+      "AllTurmas",
+      "AllDisciplinas",
+      "CursosDCC",
+      "AllGrades",
+      "onLoading",
+    ]),
 
-    CursosModalOrdered() {
-      return this.$_.orderBy(
-        allCursosOptions,
-        this.ordemCursos.order,
-        this.ordemCursos.type
+    CursosInHorariosFiltred() {
+      return this.$_.filter(this.CursoInHorarios, (curso) =>
+        this.$_.some(this.filtroCursos.ativados, ["codigo", curso.codigo])
       );
     },
-    Grades() {
-      return this.$_.orderBy(
-        this.$store.state.grade.Grades,
-        "periodoInicio",
-        "desc"
-      );
-    },
-    Cursos() {
-      return this.$store.state.curso.Cursos;
-    },
-    CursosWithHorarios() {
-      const cursosResult = [
+    CursoInHorarios() {
+      return [
         {
-          isSelected: this.$_.some(
-            this.filtroCursos.ativados,
-            (curso) => curso.codigo === "65C"
-          ),
+          ...this.$_.find(this.CursosDCC, (curso) => curso.codigo === "65C"),
           nome: "Ciência da Computação - integral",
           turno: "Diurno",
-          codigo: "65C",
-          value: 1,
+          periodoInicial1Semestre: 1,
+          periodoInicial2Semestre: 2,
           horarios1Semestre: this.horariosAtivos1.CCD,
           horarios2Semestre: this.horariosAtivos2.CCD,
         },
         {
-          isSelected: this.$_.some(
-            this.filtroCursos.ativados,
-            (curso) => curso.codigo === "35A"
-          ),
+          ...this.$_.find(this.CursosDCC, (curso) => curso.codigo === "35A"),
           nome: "Ciência da Computação - noturno",
-          codigo: "35A",
-          value: 2,
           turno: "Noturno",
+          periodoInicial1Semestre: 2,
+          periodoInicial2Semestre: 1,
           horarios1Semestre: this.horariosAtivos1.CCN,
           horarios2Semestre: this.horariosAtivos2.CCN,
         },
         {
-          isSelected: this.$_.some(
-            this.filtroCursos.ativados,
-            (curso) => curso.codigo === "76A"
-          ),
+          ...this.$_.find(this.CursosDCC, (curso) => curso.codigo === "76A"),
           nome: "Sistemas de Informação",
-          codigo: "76A",
-          value: 3,
           turno: "Noturno",
+          periodoInicial1Semestre: 2,
+          periodoInicial2Semestre: 1,
           horarios1Semestre: this.horariosAtivos1.SI,
           horarios2Semestre: this.horariosAtivos2.SI,
         },
         {
-          isSelected: this.$_.some(
-            this.filtroCursos.ativados,
-            (curso) => curso.codigo === "65B"
-          ),
+          ...this.$_.find(this.CursosDCC, (curso) => curso.codigo === "65B"),
           nome: "Engenharia Computacional",
-          codigo: "65B",
-          value: 4,
           turno: "Diurno",
+          periodoInicial1Semestre: 1,
+          periodoInicial2Semestre: 2,
           horarios1Semestre: this.horariosAtivos1.EC,
           horarios2Semestre: this.horariosAtivos2.EC,
         },
       ];
-
-      return this.$_.filter(cursosResult, (curso) => curso.isSelected);
     },
+
+    CursosModalOrdered() {
+      return this.$_.orderBy(
+        this.OptionsCursosDCC,
+        this.ordemCursos.order,
+        this.ordemCursos.type
+      );
+    },
+    OptionsCursosDCC() {
+      return [
+        {
+          nome: "SISTEMAS DE INFORMAÇÃO",
+          codigo: "76A",
+        },
+        {
+          nome: "CIÊNCIA DA COMPUTAÇÃO NOTURNO",
+          codigo: "35A",
+        },
+        {
+          nome: "CIÊNCIA DA COMPUTAÇÃO DIURNO",
+          codigo: "65C",
+        },
+        {
+          nome: "ENGENHARIA COMPUTACIONAL",
+          codigo: "65B",
+        },
+        {
+          nome: "ELETIVAS",
+          codigo: "-",
+        },
+      ];
+    },
+
     DisciplinaGrades() {
       return this.$store.state.disciplinaGrade.DisciplinaGrades;
     },
 
     hasAnyHorariosActived() {
-      return this.CursosWithHorarios.length || this.EletivasIsActived;
-    },
-    hasAnySemestreActived() {
-      return this.semestre1IsActived && this.semestre2IsActived;
+      return this.CursosInHorariosFiltred.length || this.EletivasIsActived;
     },
     semestre1IsActived() {
       return (
@@ -4771,6 +4726,7 @@ export default {
       );
     },
   },
+
   watch: {
     AllTurmas() {
       this.updateHorarios();
@@ -4790,9 +4746,9 @@ export default {
 }
 .curso-title {
   width: 100%;
-  text-align: start !important;
-  font-size: 12px !important;
-  font-weight: bold !important;
+  text-align: start;
+  font-size: 12px;
+  font-weight: bold;
 }
 .text-empty {
   width: 100%;

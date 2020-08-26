@@ -5,16 +5,26 @@
         <div class="input-group-prepend">
           <label class="input-group-text">Ano</label>
         </div>
-        <select v-model="novoAno" class="form-control form-control-top" v-on:change="runNovoAno()">
+        <select
+          v-model="novoAno"
+          class="form-control form-control-top"
+          v-on:change="runNovoAno()"
+        >
           <option
             v-for="i in Array.from(Array(11), (e, i) => i - 5)"
             :key="i"
             :value="AnoAtual + i"
-          >{{ AnoAtual + i }}</option>
+            >{{ AnoAtual + i }}</option
+          >
         </select>
       </div>
-      <BaseButton title="Filtros" :type="'icon'" :color="'gray'" @click="openAsideModal('filtros')">
-        <font-awesome-icon :icon="['fas','list-ul']" />
+      <BaseButton
+        title="Filtros"
+        :type="'icon'"
+        :color="'gray'"
+        @click="openAsideModal('filtros')"
+      >
+        <font-awesome-icon :icon="['fas', 'list-ul']" />
       </BaseButton>
 
       <BaseButton
@@ -23,7 +33,7 @@
         :color="'lightblue'"
         @click="openAsideModal('ajuda')"
       >
-        <font-awesome-icon :icon="['fas','question']" />
+        <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
     </PageHeader>
 
@@ -38,11 +48,17 @@
             <div class="d-flex justify-content-between align-items-center">
               <i
                 class="fas fa-thumbtack"
-                :class="ordenacaoMain.perfis.order === null ? 'low-opacity' : ''"
+                :class="
+                  ordenacaoMain.perfis.order === null ? 'low-opacity' : ''
+                "
               ></i>
               <span>Perfil</span>
 
-              <i :class="setIconByOrder(ordenacaoMain.perfis, 'perfil.abreviacao')"></i>
+              <i
+                :class="
+                  setIconByOrder(ordenacaoMain.perfis, 'perfil.abreviacao')
+                "
+              ></i>
             </div>
           </th>
           <th
@@ -69,7 +85,9 @@
             @click="toggleOrder(ordenacaoMain.disciplinas, 'gradeSI')"
           >
             76A
-            <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeSI')"></i>
+            <i
+              :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeSI')"
+            ></i>
           </th>
           <th
             title="Ciência da Computação Noturno"
@@ -79,7 +97,9 @@
             @click="toggleOrder(ordenacaoMain.disciplinas, 'gradeCCN')"
           >
             35A
-            <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeCCN')"></i>
+            <i
+              :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeCCN')"
+            ></i>
           </th>
           <th
             title="Ciência da Computação Noturno"
@@ -89,7 +109,9 @@
             @click="toggleOrder(ordenacaoMain.disciplinas, 'gradeCCD')"
           >
             65C
-            <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeCCD')"></i>
+            <i
+              :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeCCD')"
+            ></i>
           </th>
           <th
             title="Engenharia Computacional"
@@ -99,7 +121,9 @@
             @click="toggleOrder(ordenacaoMain.disciplinas, 'gradeEC')"
           >
             65B
-            <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeEC')"></i>
+            <i
+              :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeEC')"
+            ></i>
           </th>
         </template>
         <template #tbody>
@@ -107,60 +131,62 @@
             <td
               style="width: 80px"
               :style="'backgroundColor:' + disciplina.perfil.cor"
-            >{{ disciplina.perfil.abreviacao }}</td>
+            >
+              {{ disciplina.perfil.abreviacao }}
+            </td>
 
             <td style="width: 100px">{{ disciplina.codigo }}</td>
             <td style="width: 380px" class="t-start">{{ disciplina.nome }}</td>
             <!-- 76A-  -->
             <td v-if="activeSI" style="width: 140px">
               {{
-              disciplina.gradeSI.semestre1.length !== 0
-              ? `${disciplina.gradeSI.semestre1}º Período: 1º Semestre`
-              : ""
+                disciplina.gradeSI.semestre1.length !== 0
+                  ? `${disciplina.gradeSI.semestre1}º Período: 1º Semestre`
+                  : ""
               }}
               {{
-              disciplina.gradeSI.semestre2.length !== 0
-              ? `${disciplina.gradeSI.semestre2}º Período: 2º Semestre`
-              : ""
+                disciplina.gradeSI.semestre2.length !== 0
+                  ? `${disciplina.gradeSI.semestre2}º Período: 2º Semestre`
+                  : ""
               }}
             </td>
             <!-- 35A-  -->
             <td v-if="activeCCN" style="width: 140px">
               {{
-              disciplina.gradeCCN.semestre1.length !== 0
-              ? `${disciplina.gradeCCN.semestre1}º Período: 1º Semestre`
-              : ""
+                disciplina.gradeCCN.semestre1.length !== 0
+                  ? `${disciplina.gradeCCN.semestre1}º Período: 1º Semestre`
+                  : ""
               }}
               {{
-              disciplina.gradeCCN.semestre2.length !== 0
-              ? `${disciplina.gradeCCN.semestre2}º Período: 2º Semestre`
-              : ""
+                disciplina.gradeCCN.semestre2.length !== 0
+                  ? `${disciplina.gradeCCN.semestre2}º Período: 2º Semestre`
+                  : ""
               }}
             </td>
             <!-- 65C -->
             <td v-if="activeCCD" style="width: 140px">
               {{
-              disciplina.gradeCCD.semestre1.length !== 0
-              ? `${disciplina.gradeCCD.semestre1}º Período: 1º Semestre`
-              : ""
+                disciplina.gradeCCD.semestre1.length !== 0
+                  ? `${disciplina.gradeCCD.semestre1}º Período: 1º Semestre`
+                  : ""
               }}
               {{
-              disciplina.gradeCCD.semestre2.length !== 0
-              ? `${disciplina.gradeCCD.semestre2}º Período: 2º Semestre`
-              : ""
+                disciplina.gradeCCD.semestre2.length !== 0
+                  ? `${disciplina.gradeCCD.semestre2}º Período: 2º Semestre`
+                  : ""
               }}
             </td>
             <!-- 65B -->
             <td v-if="activeEC" style="width: 140px">
               {{
-              disciplina.gradeEC.semestre1.length !== 0
-              ? `${disciplina.gradeEC.semestre1}º Período: 1º Semestre`
-              : ""
+                disciplina.gradeEC.semestre1.length !== 0
+                  ? `${disciplina.gradeEC.semestre1}º Período: 1º Semestre`
+                  : ""
               }}
               {{
-              disciplina.gradeEC.semestre2.length !== 0
-              ? `${disciplina.gradeEC.semestre2}º Período: 2º Semestre`
-              : ""
+                disciplina.gradeEC.semestre2.length !== 0
+                  ? `${disciplina.gradeEC.semestre2}º Período: 2º Semestre`
+                  : ""
               }}
             </td>
           </tr>
@@ -181,7 +207,10 @@
       :tabsOptions="modalFiltrosTabs"
     >
       <div class="div-table">
-        <BaseTable v-show="modalFiltrosTabs.current === 'Perfis'" :type="'modal'">
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Perfis'"
+          :type="'modal'"
+        >
           <template #thead>
             <th style="width: 25px"></th>
             <th
@@ -232,7 +261,9 @@
               @click="toggleOrder(ordenacaoModal.disciplinas, 'codigo')"
             >
               Cód.
-              <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"></i>
+              <i
+                :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"
+              ></i>
             </th>
             <th
               title="Clique para ordenar por nome"
@@ -241,24 +272,26 @@
               @click="toggleOrder(ordenacaoModal.disciplinas, 'nome')"
             >
               Nome
-              <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"></i>
+              <i
+                :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"
+              ></i>
             </th>
             <th
               title="Clique para ordenar por nome"
               class="t-start clickable"
               style="width: 85px"
               @click="
-                  toggleOrder(ordenacaoModal.disciplinas, 'perfil.abreviacao')
-                "
+                toggleOrder(ordenacaoModal.disciplinas, 'perfil.abreviacao')
+              "
             >
               Perfil
               <i
                 :class="
-                    setIconByOrder(
-                      ordenacaoModal.disciplinas,
-                      'perfil.abreviacao'
-                    )
-                  "
+                  setIconByOrder(
+                    ordenacaoModal.disciplinas,
+                    'perfil.abreviacao'
+                  )
+                "
               ></i>
             </th>
           </template>
@@ -267,8 +300,8 @@
               v-for="disciplina in DisciplinasOrderedModal"
               :key="'MdDisciplinas' + disciplina.id"
               @click="
-                  toggleItemInArray(disciplina, filtroDisciplinas.selecionados)
-                "
+                toggleItemInArray(disciplina, filtroDisciplinas.selecionados)
+              "
             >
               <td style="width: 25px">
                 <input
@@ -278,9 +311,15 @@
                   :value="disciplina"
                 />
               </td>
-              <td style="width: 70px" class="t-start">{{ disciplina.codigo }}</td>
-              <td style="width: 270px" class="t-start">{{ disciplina.nome }}</td>
-              <td style="width: 85px" class="t-start">{{ disciplina.perfil.abreviacao }}</td>
+              <td style="width: 70px" class="t-start">
+                {{ disciplina.codigo }}
+              </td>
+              <td style="width: 270px" class="t-start">
+                {{ disciplina.nome }}
+              </td>
+              <td style="width: 85px" class="t-start">
+                {{ disciplina.perfil.abreviacao }}
+              </td>
             </tr>
             <tr v-show="!DisciplinasOrderedModal.length">
               <td style="width:450px">NENHUMA DISCIPLINA ENCONTRADA.</td>
@@ -288,7 +327,10 @@
           </template>
         </BaseTable>
 
-        <BaseTable v-show="modalFiltrosTabs.current === 'Cursos'" :type="'modal'">
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Cursos'"
+          :type="'modal'"
+        >
           <template #thead>
             <th style="width: 25px"></th>
             <th
@@ -323,7 +365,9 @@
                   class="form-check-input position-static m-0"
                 />
               </td>
-              <td style="width: 50px" class="t-start">{{ curso.codigo.toUpperCase() }}</td>
+              <td style="width: 50px" class="t-start">
+                {{ curso.codigo.toUpperCase() }}
+              </td>
               <td style="width: 375px" class="t-start">{{ curso.nome }}</td>
             </tr>
           </template>
@@ -333,12 +377,12 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
-        <i class="fas fa-list-ul icon-gray"></i> no cabeçalho da página e na
-        janela que será aberta utilize as abas para navegar entre os tipos
-        de filtros. Marque em suas respectivas tabelas quais informações
-        deseja visualizar, selecione o ano do plano no cabeçalho e para
-        finalizar clique no botão OK.
+        <b>Visualizar disciplinas na grade:</b>
+        Clique no ícone filtros
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />. Em
+        seguida, utilize as abas para navegar entre os filtros. Selecione as
+        informações que deseja visualizar, incluindo o ano do plano
+        departamental, e clique em OK.
       </li>
     </ModalAjuda>
   </div>
@@ -470,12 +514,7 @@ export default {
     runAll() {
       //cria objeto para armazenar os períodos das disciplinas e chama as funções que a populam
       this.$store.state.disciplina.Disciplinas.forEach((d) => {
-        this.disciplinasGrades[d.id] = [
-          [[], []],
-          [[], []],
-          [[], []],
-          [[], []],
-        ]; //inicializa os períodos em 0 [Primeiro Semestre, Segundo Semestre]
+        this.disciplinasGrades[d.id] = [[[], []], [[], []], [[], []], [[], []]]; //inicializa os períodos em 0 [Primeiro Semestre, Segundo Semestre]
       });
       this.getGrades();
       this.get1Periodo();
@@ -656,6 +695,7 @@ export default {
       return periodo1Number + periodo2Number;
     },
   },
+
   computed: {
     ...mapGetters(["CursosDCC", "DisciplinasInPerfis", "AllPerfis"]),
 
@@ -807,6 +847,7 @@ export default {
       );
     },
   },
+
   watch: {
     filtroPerfis: {
       handler(perfis) {
@@ -827,4 +868,4 @@ export default {
     },
   },
 };
-</script> 
+</script>

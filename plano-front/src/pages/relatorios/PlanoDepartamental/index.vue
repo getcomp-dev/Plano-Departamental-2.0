@@ -60,57 +60,99 @@
               "
             ></i>
           </th>
+          <th style="width: 35px" title="Créditos">C.</th>
           <th style="width: 25px" title="Semestre">S.</th>
           <th style="width: 35px" title="Turma">T.</th>
           <th style="width: 150px">Docentes</th>
           <th style="width: 130px" class="less-padding">Horário</th>
 
-          <th
-            v-if="semestre1IsActived"
-            title="Somatório das vagas no 1º semestre"
-            style="width: 40px"
-            class="less-padding"
-          >
-            VS1
-          </th>
-          <th
-            v-if="semestre2IsActived"
-            title="Somatório das vagas no 2º semestre"
-            style="width: 40px"
-            class="less-padding"
-          >
-            VS2
-          </th>
-          <th
-            v-if="semestre1IsActived && semestre2IsActived"
-            title="Somatório total das vagas"
-            style="width: 45px"
-            class="less-padding"
-          >
-            VTotal
-          </th>
+          <template v-if="semestre1IsActived && semestre2IsActived">
+            <th
+              title="Somatório total dos créditos"
+              style="width: 45px"
+              class="less-padding"
+            >
+              CTotal
+            </th>
+            <th
+              title="Somatório total das vagas"
+              style="width: 45px"
+              class="less-padding"
+            >
+              VTotal
+            </th>
+          </template>
+          <template v-else-if="semestre1IsActived">
+            <th
+              title="Somatório dos créditos no 1º semestre"
+              style="width: 45px"
+              class="less-padding"
+            >
+              CS1
+            </th>
+            <th
+              title="Somatório das vagas no 1º semestre"
+              style="width: 45px"
+              class="less-padding"
+            >
+              VS1
+            </th>
+          </template>
+          <template v-else-if="semestre2IsActived">
+            <th
+              title="Somatório dos créditos no 2º semestre"
+              style="width: 45px"
+              class="less-padding"
+            >
+              CS2
+            </th>
+            <th
+              title="Somatório das vagas no 2º semestre"
+              style="width: 45px"
+              class="less-padding"
+            >
+              VS2
+            </th>
+          </template>
         </template>
 
         <template #tbody>
           <tr v-show="DisciplinasInTurmasOrdered.length" class="bg-total-vg">
             <td style="width: 80px"></td>
-            <td style="width: 350px" class="upper-case">Total de vagas</td>
+            <td style="width: 350px" class="upper-case">Totais</td>
             <td style="width: 80px"></td>
+            <td style="width: 35px"></td>
             <td style="width: 25px"></td>
             <td style="width: 35px"></td>
             <td style="width: 150px"></td>
             <td style="width: 130px" class="less-padding"></td>
-            <td style="width: 40px" v-if="semestre1IsActived">
-              {{ totalVagas1Semestre }}
+            <td style="width: 45px">
+              <template v-if="semestre1IsActived && semestre2IsActived">
+                {{
+                  somatoriosTotais.creditos1Semestre +
+                    somatoriosTotais.creditos2Semestre
+                }}
+              </template>
+              <template v-else-if="semestre1IsActived">
+                {{ somatoriosTotais.creditos1Semestre }}
+              </template>
+              <template v-else-if="semestre2IsActived">
+                {{ somatoriosTotais.creditos2Semestre }}
+              </template>
             </td>
-            <td style="width: 40px" v-if="semestre2IsActived">
-              {{ totalVagas2Semestre }}
-            </td>
-            <td
-              style="width: 45px"
-              v-if="semestre1IsActived && semestre2IsActived"
-            >
-              {{ totalVagas1Semestre + totalVagas2Semestre }}
+            <td style="width: 45px">
+              <template v-if="semestre1IsActived && semestre2IsActived">
+                {{
+                  somatoriosTotais.vagas1Semestre +
+                    somatoriosTotais.vagas2Semestre
+                }}
+              </template>
+              <template v-else-if="semestre1IsActived">
+                {{ somatoriosTotais.vagas1Semestre }}
+              </template>
+              <template v-else-if="semestre2IsActived">
+                {{ somatoriosTotais.vagas2Semestre }}
+              </template>
             </td>
           </tr>
 
@@ -121,29 +163,42 @@
               <td style="width: 80px" class="less-padding">
                 {{ disciplina.perfil.abreviacao }}
               </td>
+              <td style="width: 35px">{{ disciplina.creditoTotal }}</td>
               <td style="width: 25px"></td>
               <td style="width: 35px"></td>
               <td style="width: 150px"></td>
               <td style="width: 130px" class="less-padding"></td>
-              <td style="width: 40px" v-if="semestre1IsActived">
-                {{
-                  disciplina.vagas1Semestre === 0
-                    ? ""
-                    : disciplina.vagas1Semestre
-                }}
+              <td style="width: 45px">
+                <template v-if="semestre1IsActived && semestre2IsActived">
+                  {{
+                    disciplina.creditos1Semestre + disciplina.creditos2Semestre
+                  }}
+                </template>
+                <template v-else-if="semestre1IsActived">
+                  {{ disciplina.creditos1Semestre }}
+                </template>
+                <template v-else-if="semestre2IsActived">
+                  {{ disciplina.creditos2Semestre }}
+                </template>
               </td>
-              <td style="width: 40px" v-if="semestre2IsActived">
-                {{
-                  disciplina.vagas2Semestre === 0
-                    ? ""
-                    : disciplina.vagas2Semestre
-                }}
-              </td>
-              <td
-                style="width: 45px"
-                v-if="semestre1IsActived && semestre2IsActived"
-              >
-                {{ disciplina.vagas1Semestre + disciplina.vagas2Semestre }}
+              <td style="width: 45px">
+                <template v-if="semestre1IsActived && semestre2IsActived">
+                  {{ disciplina.vagas1Semestre + disciplina.vagas2Semestre }}
+                </template>
+                <template v-else-if="semestre1IsActived">
+                  {{
+                    disciplina.vagas1Semestre === 0
+                      ? ""
+                      : disciplina.vagas1Semestre
+                  }}
+                </template>
+                <template v-else-if="semestre2IsActived">
+                  {{
+                    disciplina.vagas2Semestre === 0
+                      ? ""
+                      : disciplina.vagas2Semestre
+                  }}
+                </template>
               </td>
             </tr>
 
@@ -154,6 +209,7 @@
               <td style="width: 80px"></td>
               <td style="width: 350px"></td>
               <td style="width: 80px"></td>
+              <td style="width: 35px"></td>
               <td style="width: 25px">{{ turma.periodo }}</td>
               <td style="width: 35px" class="less-padding">
                 {{ turma.letra }}
@@ -164,55 +220,29 @@
               <td style="width: 130px" class="less-padding">
                 {{ generateHorariosText(turma.Horario1, turma.Horario2) }}
               </td>
-              <template v-if="semestre1IsActived">
-                <td
-                  v-if="turma.periodo === 1 || turma.periodo === 2"
-                  @click="handleClickInTurmaVaga(turma)"
-                  class="td-vagas clickable"
-                  style="width: 40px"
-                >
-                  {{ turma.vagas }}
-                </td>
-                <td v-else style="width: 40px"></td>
-              </template>
-              <template v-if="semestre2IsActived">
-                <td
-                  v-if="turma.periodo === 3 || turma.periodo === 4"
-                  @click="handleClickInTurmaVaga(turma)"
-                  class="td-vagas clickable"
-                  style="width: 40px"
-                >
-                  {{ turma.vagas }}
-                </td>
-                <td v-else style="width: 40px"></td>
-              </template>
+              <td style="width: 45px"></td>
+
               <td
-                v-if="semestre1IsActived && semestre2IsActived"
+                v-if="semestre1IsActived || semestre2IsActived"
+                @click="handleClickInTurmaVaga(turma)"
+                class="td-vagas clickable"
                 style="width: 45px"
-              ></td>
+              >
+                {{ turma.vagas }}
+              </td>
+              <td v-else style="width: 45px"></td>
             </tr>
           </template>
 
           <tr v-show="!DisciplinasInTurmasOrdered.length">
-            <td colspan="7" style="width: 850px">
+            <td colspan="7" style="width: 885px">
               <b>Nenhuma disciplina encontrada.</b> Clique no botão de filtros
               <i class="fas fa-list-ul mx-1"></i> para selecioná-las.
             </td>
-            <td
-              style="width: 40px"
-              v-if="semestre1IsActived"
-              class="borderX-0"
-            ></td>
-            <td
-              style="width: 40px"
-              v-if="semestre2IsActived"
-              class="borderX-0"
-            ></td>
-            <td
-              style="width: 45px"
-              v-if="semestre1IsActived && semestre2IsActived"
-              class="borderX-0"
-            ></td>
+            <template v-if="semestre1IsActived || semestre2IsActived">
+              <td style="width: 45px" class="borderX-0"></td>
+              <td style="width: 45px" class="borderX-0"></td>
+            </template>
           </tr>
         </template>
       </BaseTable>
@@ -382,22 +412,22 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
-        <i class="fas fa-list-ul icon-gray"></i> no cabeçalho da página e na
-        janela que será aberta utilize as abas para navegar entre os tipos de
-        filtros. Marque em suas respectivas tabelas quais informações deseja
-        visualizar, e para finalizar clique no botão OK.
+        <b>Visualizar plano:</b> Clique no ícone filtros
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />. Em
+        seguida, utilize as abas para navegar entre os filtros. Selecione as
+        informações que deseja visualizar e clique em OK.
       </li>
       <li class="list-group-item">
-        <b>Para gerar relatório de turmas das disciplinas:</b> Clique no ícone
-        relatório <i class="fas fa-file-alt icon-gray"></i> selecione se deseja
-        gerar o relatório completo com todos as disciplinas, ou apenas o
-        relatório parcial com as disciplinas que estão selecionados no momento.
+        <b>Relatório :</b>
+        Clique no ícone relatório
+        <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" />. Em
+        seguida, indique se deseja gerar o relatório completo com todas as
+        disciplinas ou o relatório parcial com as disciplinas exibidas na tela.
       </li>
       <li class="list-group-item">
-        <b>Para visualizar vagas das turma:</b>
-        Clique no número de vagas da turma, presente na ultima coluna da tabela,
-        para visualizar a alocação das vagas por cursos.
+        <b>Visualizar vagas por turma:</b>
+        Clique no número de vagas desta turma, na última coluna da tabela, na
+        linha correspondente.
       </li>
     </ModalAjuda>
   </div>
@@ -606,14 +636,20 @@ export default {
         const Turmas = [];
         let vagas1Semestre = 0;
         let vagas2Semestre = 0;
+        let creditos1Semestre = 0;
+        let creditos2Semestre = 0;
 
         this.$_.forEach(AllTurmasOrdered, (turma) => {
           if (turma.Disciplina === disciplina.id) {
             const turmaVagas = this.getVagasByTurmaId(turma.id);
 
-            if (turma.periodo === 1 || turma.periodo === 2)
+            if (turma.periodo === 1 || turma.periodo === 2) {
+              creditos1Semestre += turma.disciplina.creditoTotal;
               vagas1Semestre += turmaVagas;
-            else vagas2Semestre += turmaVagas;
+            } else {
+              creditos2Semestre += turma.disciplina.creditoTotal;
+              vagas2Semestre += turmaVagas;
+            }
 
             Turmas.push({
               ...turma,
@@ -624,29 +660,41 @@ export default {
 
         return {
           ...disciplina,
+          Turmas,
           vagas1Semestre,
           vagas2Semestre,
-          Turmas,
+          creditos1Semestre,
+          creditos2Semestre,
         };
       });
     },
 
-    totalVagas1Semestre() {
-      return this.$_.reduce(
-        this.DisciplinasInTurmasFiltredByDisciplina,
-        (sum, disciplina) => sum + disciplina.vagas1Semestre,
-        0
-      );
-    },
-    totalVagas2Semestre() {
-      return this.$_.reduce(
-        this.DisciplinasInTurmasFiltredByDisciplina,
-        (sum, disciplina) => sum + disciplina.vagas2Semestre,
-        0
-      );
-    },
-    // table modal
+    somatoriosTotais() {
+      let vagas1Semestre = 0;
+      let vagas2Semestre = 0;
+      let creditos1Semestre = 0;
+      let creditos2Semestre = 0;
 
+      this.$_.forEach(
+        this.DisciplinasInTurmasFiltredByDisciplina,
+        (disciplina) => {
+          vagas1Semestre += disciplina.vagas1Semestre;
+          vagas2Semestre += disciplina.vagas2Semestre;
+
+          creditos1Semestre += disciplina.creditos1Semestre;
+          creditos2Semestre += disciplina.creditos2Semestre;
+        }
+      );
+
+      return {
+        vagas1Semestre,
+        creditos1Semestre,
+        vagas2Semestre,
+        creditos2Semestre,
+      };
+    },
+
+    // table modal
     DisciplinasOrderedModal() {
       return this.$_.orderBy(
         this.DisciplinasFiltredModal,
@@ -680,6 +728,7 @@ export default {
     Pedidos() {
       return this.$store.state.pedido.Pedidos;
     },
+
     semestre1IsActived() {
       const { ativo } = this.filtroSemestres;
       return ativo === 1 || ativo === 3;

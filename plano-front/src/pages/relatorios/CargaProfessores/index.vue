@@ -479,17 +479,19 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Para exibir conteúdo na tabela:</b> Clique no ícone filtros
-        <i class="fas fa-list-ul icon-gray"></i> no cabeçalho da página e na
-        janela que será aberta utilize as abas para navegar entre os tipos de
-        filtros. Marque em suas respectivas tabelas quais informações deseja
-        visualizar, e para finalizar clique no botão OK.
+        <b>Visualizar carga por professor:</b>
+        Clique no ícone filtros
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />. Em
+        seguida, utilize as abas para navegar entre os filtros. Selecione as
+        informações que deseja visualizar e clique em OK.
       </li>
       <li class="list-group-item">
-        <b>Para gerar relatório dos docentes:</b> Clique no ícone relatório
-        <i class="fas fa-file-alt icon-gray"></i>, selecione se deseja gerar o
-        relatório completo com todos os docentes, ou apenas o relatório parcial
-        com os docentes que estão selecionados no momento.
+        <b>Relatório:</b>
+        Clique no ícone relatório
+        <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" />. Em
+        seguida, indique se deseja gerar o relatório completo com a distribuição
+        das disciplinas para todos os professores ou o relatório parcial com as
+        informações exibidas na tela.
       </li>
     </ModalAjuda>
   </div>

@@ -1,18 +1,23 @@
 <template>
-  <div class="container-horarios pl-1">
-    <template v-for="periodo in listaDePeriodos">
+  <div class="w-100 pl-1">
+    <h3 class="curso-nome">
+      {{ curso.nome }}
+    </h3>
+
+    <div class="container-horarios">
       <div
-        v-if="curso.horarios[periodo.indice].length"
-        :key="'periodo' + periodo.indice"
+        v-for="periodo in PeriodosDaGradeDoCurso"
+        :key="periodo.indice + periodo.nome + curso.periodoInicial"
         class="div-table"
       >
         <h4 class="periodo-title">{{ periodo.nome }}</h4>
+
         <TableHorarios
           :Turmas="curso.horarios[periodo.indice]"
           :listaDeHorarios="listaDeHorariosFiltredByTurno"
         />
       </div>
-    </template>
+    </div>
   </div>
 </template>
 
@@ -26,41 +31,78 @@ export default {
     TableHorarios,
   },
   props: {
-    listaDePeriodos: { type: Array, required: true },
     curso: { type: Object, required: true },
   },
 
   computed: {
-    ...mapGetters(["ListaDeHorariosNoturno", "ListaDeHorariosDiurno"]),
+    ...mapGetters([
+      "ListaDeHorariosNoturno",
+      "ListaDeHorariosDiurno",
+      "AllGrades",
+    ]),
 
     listaDeHorariosFiltredByTurno() {
       if (this.curso.turno === "Diurno") return this.ListaDeHorariosDiurno;
       else return this.ListaDeHorariosNoturno;
+    },
+    GradesDoCurso() {
+      return this.$_.filter(
+        this.AllGrades,
+        (grade) => grade.Curso === this.curso.id
+      );
+    },
+    DisciplinasNaGradeDoCurso() {
+      return this.$store.state.disciplinaGrade.DisciplinaGrades;
+    },
+    PeriodoFinalDoCurso() {
+      let periodoFinal = this.curso.periodoInicial;
+
+      this.$_.forEach(this.GradesDoCurso, (grade) => {
+        this.$_.forEach(this.DisciplinasNaGradeDoCurso, (disciplinaGrade) => {
+          if (
+            disciplinaGrade.Grade === grade.id &&
+            disciplinaGrade.periodo > periodoFinal
+          ) {
+            periodoFinal = disciplinaGrade.periodo;
+          }
+        });
+      });
+
+      return periodoFinal;
+    },
+    PeriodosDaGradeDoCurso() {
+      const periodosResult = [];
+
+      for (
+        let i = this.curso.periodoInicial;
+        i <= this.PeriodoFinalDoCurso;
+        i += 2
+      ) {
+        periodosResult.push({
+          indice: i - 1,
+          nome: `${i}º Período`,
+        });
+      }
+      return periodosResult;
     },
   },
 };
 </script>
 
 <style scoped>
+.curso-nome {
+  width: 100%;
+  text-align: start;
+  font-size: 12px;
+  font-weight: bold;
+}
 .container-horarios {
-  width: 100% !important;
+  width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, 306px);
+  grid-template-columns: repeat(auto-fill, 306px);
   justify-content: space-between;
-  grid-gap: 5px;
-  grid-row-gap: 20px;
+  grid-column-gap: 5px;
+  grid-row-gap: 10px;
   margin-bottom: 20px;
-  max-width: 1550px !important;
-}
-
-@media screen and (max-width: 1273px) {
-  .container-horarios {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media screen and (max-width: 642px) {
-  .container-horarios {
-    grid-template-columns: 1fr;
-  }
 }
 </style>
