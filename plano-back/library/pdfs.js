@@ -29,6 +29,7 @@ function Pdfs(){
     this.Cursos = undefined
     this.Perfis = undefined
     this.PlanoAtual = undefined
+    this.PlanoAtualData = undefined
 
     ativos1 = {
         CCD: [[], [], [], [], [], [], [], [], [], []],
@@ -93,6 +94,7 @@ Pdfs.prototype.ready = (config) => new Promise((resolve, reject) => {
         result[11].forEach(plano => this.Plano.push(plano.dataValues))
         result[12].forEach(curso => this.Cursos.push(curso.dataValues))
         result[13].forEach(perfil => this.Perfis.push(perfil.dataValues))
+        this.PlanoAtualData = _.find(this.Plano, {id: this.PlanoAtual})
         console.log('Dados inicializados')
         await pdfAlocacaoLabs()
         console.log("Pdf Labs Criado")
@@ -197,7 +199,7 @@ const pdfAlocacaoLabs = () => new Promise((resolve) => {
         ],
     });
     tables.push({
-        text: "1º Semestre " + this.Plano[0].ano,
+        text: "1º Semestre " + this.PlanoAtualData.ano + " - " + this.PlanoAtualData.nome,
         alignment: "center",
         bold: true,
         fontSize: 10,
@@ -712,7 +714,7 @@ laboratorios
         ],
     });
     tables.push({
-        text: "2º Semestre " + this.Plano[0].ano,
+        text: "2º Semestre " + this.PlanoAtualData.ano + " - " + this.PlanoAtualData.nome,
         alignment: "center",
         bold: true,
         fontSize: 10,
@@ -1222,7 +1224,7 @@ const pdfCargaProfessores = () => new Promise((resolve, reject) => {
                 {
                     text:
                         "Departamento de Ciência da Computação - " +
-                        this.Plano[0].ano,
+                        this.PlanoAtualData.ano + " - " + this.PlanoAtualData.nome,
                     alignment: "center",
                     bold: true,
                     fontSize: 10,
@@ -6531,7 +6533,7 @@ const pdfRelatorioDisciplinas = () => new Promise((resolve, reject) =>  {
                     fontSize: 10,
                 },
                 {
-                    text: "1º Semestre - " + this.Plano[0].ano,
+                    text: "1º Semestre - " + this.PlanoAtualData.ano + " - " + this.PlanoAtualData.nome,
                     alignment: "center",
                     bold: true,
                     fontSize: 10,
@@ -6798,7 +6800,7 @@ const pdfRelatorioDisciplinas = () => new Promise((resolve, reject) =>  {
                     pageBreak: "before",
                 },
                 {
-                    text: "2º Semestre - " + this.Plano[0].ano,
+                    text: "2º Semestre - " + this.PlanoAtualData.ano + " - " + this.PlanoAtualData.nome,
                     alignment: "center",
                     bold: true,
                     fontSize: 10,
