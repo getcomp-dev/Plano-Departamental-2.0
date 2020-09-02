@@ -2434,7 +2434,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     fontSize: 10,
                 },
                 {
-                    text: "1º Semestre " + anoAtual,
+                    text: "1º Semestre "  + this.PlanoAtualData.ano + " - " + this.PlanoAtualData.nome,
                     alignment: "center",
                     bold: true,
                     fontSize: 10,
@@ -2815,7 +2815,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     pageBreak: "before",
                 },
                 {
-                    text: "1º Semestre " + anoAtual,
+                    text: "1º Semestre "  + this.PlanoAtualData.ano + " - " + this.PlanoAtualData.nome,
                     alignment: "center",
                     bold: true,
                     fontSize: 10,
@@ -3198,7 +3198,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     pageBreak: "before",
                 },
                 {
-                    text: "1º Semestre " + anoAtual,
+                    text: "1º Semestre "  + this.PlanoAtualData.ano + " - " + this.PlanoAtualData.nome,
                     alignment: "center",
                     bold: true,
                     fontSize: 10,
@@ -3581,7 +3581,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     pageBreak: "before",
                 },
                 {
-                    text: "1º Semestre " + anoAtual,
+                    text: "1º Semestre "  + this.PlanoAtualData.ano + " - " + this.PlanoAtualData.nome,
                     alignment: "center",
                     bold: true,
                     fontSize: 10,
@@ -3968,7 +3968,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     pageBreak: "before",
                 },
                 {
-                    text: "1º Semestre " + anoAtual,
+                    text: "1º Semestre "  + this.PlanoAtualData.ano + " - " + this.PlanoAtualData.nome,
                     alignment: "center",
                     bold: true,
                     fontSize: 10,
@@ -4430,7 +4430,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     pageBreak: "before",
                 },
                 {
-                    text: "2º Semestre " + anoAtual,
+                    text: "2º Semestre "  + this.PlanoAtualData.ano + " - " + this.PlanoAtualData.nome,
                     alignment: "center",
                     bold: true,
                     fontSize: 10,
@@ -4813,7 +4813,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     pageBreak: "before",
                 },
                 {
-                    text: "2º Semestre " + anoAtual,
+                    text: "2º Semestre "  + this.PlanoAtualData.ano + " - " + this.PlanoAtualData.nome,
                     alignment: "center",
                     bold: true,
                     fontSize: 10,
@@ -5196,7 +5196,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     pageBreak: "before",
                 },
                 {
-                    text: "2º Semestre " + anoAtual,
+                    text: "2º Semestre "  + this.PlanoAtualData.ano + " - " + this.PlanoAtualData.nome,
                     alignment: "center",
                     bold: true,
                     fontSize: 10,
@@ -5579,7 +5579,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     pageBreak: "before",
                 },
                 {
-                    text: "2º Semestre " + anoAtual,
+                    text: "2º Semestre "  + this.PlanoAtualData.ano + " - " + this.PlanoAtualData.nome,
                     alignment: "center",
                     bold: true,
                     fontSize: 10,
@@ -5962,7 +5962,7 @@ const pdfResumoHorarios = () => new Promise((resolve, reject) =>  {
                     pageBreak: "before",
                 },
                 {
-                    text: "2º Semestre " + anoAtual,
+                    text: "2º Semestre "  + this.PlanoAtualData.ano + " - " + this.PlanoAtualData.nome,
                     alignment: "center",
                     bold: true,
                     fontSize: 10,
