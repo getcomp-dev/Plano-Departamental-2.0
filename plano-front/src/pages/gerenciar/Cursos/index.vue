@@ -7,7 +7,7 @@
         :color="'lightblue'"
         @click="$refs.modalAjuda.toggle()"
       >
-        <font-awesome-icon :icon="['fas','question']" />
+        <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
     </PageHeader>
 
@@ -48,7 +48,9 @@
               @click="toggleOrder(ordenacaoCursosMain, 'alunosEntrada', 'desc')"
             >
               1º Sem.
-              <i :class="setIconByOrder(ordenacaoCursosMain, 'alunosEntrada')"></i>
+              <i
+                :class="setIconByOrder(ordenacaoCursosMain, 'alunosEntrada')"
+              ></i>
             </th>
             <th
               class="clickable"
@@ -59,14 +61,16 @@
               "
             >
               2º Sem.
-              <i :class="setIconByOrder(ordenacaoCursosMain, 'alunosEntrada2')"></i>
+              <i
+                :class="setIconByOrder(ordenacaoCursosMain, 'alunosEntrada2')"
+              ></i>
             </th>
           </template>
           <template #tbody>
             <tr
-              v-for="curso in Cursos"
+              v-for="curso in CursosOrdered"
               :key="'cursos' + curso.id + curso.codigo"
-              @click.prevent="showCurso(curso), handleClickInCurso(curso.id)"
+              @click.stop="showCurso(curso), handleClickInCurso(curso.id)"
               :class="[
                 { 'bg-selected': cursoClickado === curso.id },
                 'clickable',
@@ -78,10 +82,13 @@
               <td style="width: 70px;">{{ curso.alunosEntrada }}</td>
               <td style="width: 70px;">{{ curso.alunosEntrada2 }}</td>
             </tr>
-            <tr v-if="!Cursos.length">
+            <tr v-if="!CursosOrdered.length">
               <td colspan="5" style="width:570px" class="text-center">
-                <i class="fas fa-exclamation-triangle"></i> Nenhum curso
-                encontrado!
+                <font-awesome-icon
+                  :icon="['fas', 'exclamation-triangle']"
+                  class="icon-red"
+                />
+                <b> Nenhum curso encontrado!</b>
               </td>
             </tr>
           </template>
@@ -138,7 +145,9 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="alunosEntrada1" class="col-form-label">Alunos 1º Sem.</label>
+              <label required for="alunosEntrada1" class="col-form-label"
+                >Alunos 1º Sem.</label
+              >
               <input
                 type="text"
                 class="form-control form-control-sm input-menor"
@@ -149,7 +158,9 @@
             </div>
 
             <div class="form-group col m-0 px-0">
-              <label required for="alunosEntrada2" class="col-form-label">Alunos 2º Sem.</label>
+              <label required for="alunosEntrada2" class="col-form-label"
+                >Alunos 2º Sem.</label
+              >
               <input
                 type="text"
                 class="form-control form-control-sm input-menor"
@@ -163,7 +174,11 @@
       </Card>
     </div>
 
-    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deleteCurso">
+    <ModalDelete
+      ref="modalDelete"
+      :isDeleting="isEdit"
+      @btn-deletar="deleteCurso"
+    >
       <li v-if="isEdit" class="list-group-item">
         <span v-html="modalDeleteText"></span>
       </li>
@@ -172,34 +187,26 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Para adicionar cursos:</b> Com o cartão à direita em branco,
-        preencha-o. Em seguida, clique em Adicionar
-        <i
-          class="fas fa-plus icon-green px-1"
-        ></i>
-        .
+        <b>Adicionar:</b>
+        Preencha o cartão em branco à direita e em seguida, clique em Adicionar
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Para editar ou deletar um curso:</b> Na tabela, clique no curso que
-        deseja alterar. Logo após, no cartão à direita, altere as informações
-        que desejar e clique em Salvar
-        <i
-          class="fas fa-check icon-green px-1"
-        ></i>
-        ou, para excluí-lo, clique em Deletar
-        <i class="far fa-trash-alt icon-red px-1"></i>
-        .
+        <b>Editar:</b> Clique na linha da tabela do curso que deseja alterar. Em
+        seguida, no cartão à direita, altere as informações que desejar e clique
+        em Salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique em
-        Cancelar
-        <i class="fas fa-times icon-gray px-1"></i>
-        .
+        <b>Deletar:</b> Clique na linha da tabela do curso que deseja remover.
+        Em seguida, no cartão à direita, clique em Remover
+        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
+        confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
-        <b>Para alterar a ordenação:</b> Clique em Nome no cabeçalho da tabela
-        para ordenar por ordem alfabética ou em Código para ordem numérica do
-        código do curso.
+        <b>Limpar:</b> No cartão à direita, clique em Cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para
+        limpar as informações.
       </li>
     </ModalAjuda>
   </div>
@@ -207,6 +214,7 @@
 
 <script>
 import ls from "local-storage";
+import { mapGetters } from "vuex";
 import cursoService from "@/common/services/curso";
 import { toggleOrdination, maskOnlyNumber } from "@/common/mixins";
 import { Card } from "@/components/ui";
@@ -218,8 +226,8 @@ const emptyCurso = {
   codigo: undefined,
   turno: undefined,
   semestreInicial: undefined,
-  alunosEntrada: undefined,
-  alunosEntrada2: undefined,
+  alunosEntrada: 0,
+  alunosEntrada2: 0,
   posicao: undefined,
 };
 
@@ -227,7 +235,6 @@ export default {
   name: "DashboardCursos",
   mixins: [toggleOrdination, maskOnlyNumber],
   components: { Card, ModalDelete, ModalAjuda },
-
   data() {
     return {
       modalDeleteText: "",
@@ -236,10 +243,9 @@ export default {
       ordenacaoCursosMain: { order: "codigo", type: "asc" },
     };
   },
+
   created() {
-    this.ultimo =
-      this.$store.state.curso.Cursos[this.$store.state.curso.Cursos.length - 1]
-        .id + 1;
+    this.ultimo = this.AllCursos[this.AllCursos.length - 1].id + 1;
     this.selectAll = true;
   },
 
@@ -247,8 +253,15 @@ export default {
     handleClickInCurso(cursoId) {
       this.cursoClickado = cursoId;
     },
+    openModalDelete() {
+      this.$refs.modalDelete.open();
+    },
     clearClick() {
       this.cursoClickado = "";
+    },
+    showCurso(curso) {
+      this.cleanCurso();
+      this.cursoForm = this.$_.clone(curso);
     },
     toggleCurso(id) {
       var state = ls.get(`${id}`);
@@ -278,6 +291,35 @@ export default {
       }
       return true;
     },
+    checkCursoPedidos() {
+      for (let t in this.$store.state.pedido.Pedidos) {
+        let pedido = this.$_.find(this.$store.state.pedido.Pedidos[t], (p) => {
+          if (p.Curso === this.cursoForm.id) {
+            if (
+              parseInt(p.vagasPeriodizadas, 10) > 0 ||
+              parseInt(p.vagasNaoPeriodizadas, 10) > 0
+            ) {
+              return true;
+            }
+          }
+          return false;
+        });
+        if (pedido) return true;
+      }
+      return false;
+    },
+    checkDeleteCurso() {
+      if (this.checkCursoPedidos()) {
+        this.modalDeleteText = `
+        O curso <b>${this.cursoForm.codigo} - ${this.cursoForm.nome}</b>
+        possui vagas alocadas. Tem certeza que deseja excluí-lo?`;
+      } else {
+        this.modalDeleteText = `Tem certeza que deseja excluír o curso
+        <b>${this.cursoForm.codigo} - ${this.cursoForm.nome}</b>?`;
+      }
+      this.openModalDelete();
+    },
+
     addCurso() {
       this.cursoForm.posicao = this.ultimo;
       this.ultimo = this.ultimo + 1;
@@ -313,7 +355,7 @@ export default {
           this.$store.dispatch("fetchAllPedidos");
           this.cleanCurso();
 
-          this.$notify({
+          this.pushNotification({
             title: `Sucesso!`,
             text: `Curso ${response.Curso.nome} foi criado`,
             type: "success",
@@ -344,12 +386,13 @@ export default {
       )
         this.cursoForm.semestreInicial = 1;
       else this.cursoForm.semestreInicial = 3;
+
       cursoService
         .update(this.cursoForm.id, this.cursoForm)
         .then((response) => {
-          this.$notify({
+          this.pushNotification({
             title: `Sucesso!`,
-            text: `Curso ${response.Curso.nome} foi atualizado`,
+            text: `O Curso ${response.Curso.nome} foi atualizado`,
             type: "success",
           });
         })
@@ -361,51 +404,12 @@ export default {
           });
         });
     },
-
-    openModalDelete() {
-      this.$refs.modalDelete.open();
-    },
-
-    closeModalDelete() {
-      this.$refs.modalDelete.close();
-    },
-
-    checkCursoPedidos() {
-      for (let t in this.$store.state.pedido.Pedidos) {
-        let pedido = this.$_.find(this.$store.state.pedido.Pedidos[t], (p) => {
-          if (p.Curso === this.cursoForm.id) {
-            if (
-              parseInt(p.vagasPeriodizadas, 10) > 0 ||
-              parseInt(p.vagasNaoPeriodizadas, 10) > 0
-            ) {
-              return true;
-            }
-          }
-          return false;
-        });
-        if (pedido) return true;
-      }
-      return false;
-    },
-
-    checkDeleteCurso() {
-      if (this.checkCursoPedidos()) {
-        this.modalDeleteText = `
-        O curso <b>${this.cursoForm.codigo} - ${this.cursoForm.nome}</b>
-        possui vagas alocadas. Tem certeza que deseja excluí-lo?`;
-      } else {
-        this.modalDeleteText = `Tem certeza que deseja excluír o curso
-        <b>${this.cursoForm.codigo} - ${this.cursoForm.nome}</b>?`;
-      }
-      this.openModalDelete();
-    },
     deleteCurso() {
       cursoService
         .delete(this.cursoForm.id, this.cursoForm)
         .then((response) => {
-          this.closeModalDelete();
           this.cleanCurso();
-          this.$notify({
+          this.pushNotification({
             title: `Sucesso!`,
             text: `O Curso ${response.Curso.nome} foi excluído`,
             type: "success",
@@ -423,16 +427,14 @@ export default {
       this.clearClick();
       this.cursoForm = this.$_.clone(emptyCurso);
     },
-    showCurso(curso) {
-      this.cleanCurso();
-      this.cursoForm = this.$_.clone(curso);
-    },
   },
 
   computed: {
-    Cursos() {
+    ...mapGetters(["AllCursos"]),
+
+    CursosOrdered() {
       return this.$_.orderBy(
-        this.$store.state.curso.Cursos,
+        this.AllCursos,
         this.ordenacaoCursosMain.order,
         this.ordenacaoCursosMain.type
       );

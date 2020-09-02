@@ -249,10 +249,12 @@ export default {
       if (completo)
         pdfs.pdfAlocacaoLabs({
           laboratorios: this.LaboratoriosOrdered,
+          plano: this.$_.find(this.$store.state.plano.Plano, {id: parseInt(localStorage.getItem('Plano'))})
         });
       else
         pdfs.pdfAlocacaoLabs({
           laboratorios: this.filtroLaboratorios.ativados,
+          plano: this.$_.find(this.$store.state.plano.Plano, {id: parseInt(localStorage.getItem('Plano'))})
         });
     },
   },

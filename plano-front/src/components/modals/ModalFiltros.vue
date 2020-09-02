@@ -1,5 +1,10 @@
 <template>
-  <BaseModal2 ref="baseModalFiltros" type="filtros" title="Filtros" :hasFooter="true">
+  <BaseModal2
+    ref="baseModalFiltros"
+    type="filtros"
+    title="Filtros"
+    :hasFooter="true"
+  >
     <template #modal-body>
       <NavTab
         :currentTab="tabsOptions.current"
@@ -12,12 +17,22 @@
 
     <template #modal-footer>
       <div>
-        <BaseButton :type="'text'" :color="'lightblue'" @click="selectAll">Selecionar Todos</BaseButton>
-        <BaseButton :type="'text'" :color="'gray'" @click="selectNone">Desmarcar Todos</BaseButton>
+        <BaseButton :type="'text'" :color="'lightblue'" @click="selectAll"
+          >Selecionar Todos</BaseButton
+        >
+        <BaseButton :type="'text'" :color="'gray'" @click="selectNone"
+          >Desmarcar Todos</BaseButton
+        >
         <slot name="modal-footer-btn"></slot>
       </div>
 
-      <BaseButton class="paddingX-20" :type="'text'" :color="'green'" @click="selectOk">OK</BaseButton>
+      <BaseButton
+        class="paddingX-20"
+        :type="'text'"
+        :color="'green'"
+        @click="selectOk"
+        >OK</BaseButton
+      >
     </template>
   </BaseModal2>
 </template>
@@ -38,10 +53,18 @@ export default {
     ...mapActions(["setTableLoading"]),
 
     selectAll() {
-      this.callbacks.selectAll[this.tabsOptions.current]();
+      const currentTabNormalized = this.tabsOptions.current
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+      this.callbacks.selectAll[currentTabNormalized]();
     },
     selectNone() {
-      this.callbacks.selectNone[this.tabsOptions.current]();
+      const currentTabNormalized = this.tabsOptions.current
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+      this.callbacks.selectNone[currentTabNormalized]();
     },
     selectOk() {
       this.setTableLoading(true);

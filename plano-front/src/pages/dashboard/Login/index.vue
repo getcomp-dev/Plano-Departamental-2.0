@@ -24,7 +24,9 @@
             :iconSize="12"
             v-model="form.senha"
           />
-          <button type="submit" class="btn btn-sm btn-block mt-4 mb-3">Entrar</button>
+          <button type="submit" class="btn btn-sm btn-block mt-4 mb-3">
+            Entrar
+          </button>
 
           <b-alert
             :show="Boolean(error) ? 3 : false"
@@ -32,22 +34,28 @@
             variant="danger"
             dismissible
             fade
-          >{{ error }}</b-alert>
+            >{{ error }}</b-alert
+          >
         </form>
       </div>
     </div>
-    <TheLoadingView />
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import { TheLoadingView } from "@/components/layout";
+import { mapActions } from "vuex";
 import { InputPassword } from "@/components/ui";
 
 export default {
   name: "TheLogin",
-  components: { TheLoadingView, InputPassword },
+  components: { InputPassword },
+  directives: {
+    focus: {
+      inserted: function(el) {
+        el.focus();
+      },
+    },
+  },
   data() {
     return {
       form: {
@@ -57,13 +65,7 @@ export default {
       error: null,
     };
   },
-  directives: {
-    focus: {
-      inserted: function (el) {
-        el.focus();
-      },
-    },
-  },
+
   beforeCreate() {
     this.$store
       .dispatch("fetchUsuario")
@@ -72,6 +74,7 @@ export default {
       })
       .catch(() => {});
   },
+
   methods: {
     ...mapActions(["setFetchingLoading"]),
 
@@ -90,9 +93,6 @@ export default {
         this.setFetchingLoading(false);
       }
     },
-  },
-  computed: {
-    ...mapGetters(["onLoading"]),
   },
 };
 </script>

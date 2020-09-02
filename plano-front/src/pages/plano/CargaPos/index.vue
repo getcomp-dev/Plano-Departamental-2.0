@@ -6,7 +6,7 @@
         title="Salvar"
         :type="'icon'"
         :color="'green'"
-        @click="$refs.novaCargaPosRow.addCarga()"
+        @click="$refs.novaCargaPosRow.handleAddNovaCargaPos()"
       >
         <font-awesome-icon :icon="['fas', 'check']" />
       </BaseButton>
@@ -64,7 +64,7 @@
         <template #thead>
           <th style="width:70px" class="p-0">Programa</th>
           <th style="width:25px"></th>
-          <th style="width:55px" title="Trimestre">T.</th>
+          <th style="width:55px" title="Período letivo">P.</th>
           <th
             @click="toggleOrder(ordenacaoCargaPos, 'docenteApelido')"
             class="t-start clickable"
@@ -152,65 +152,32 @@
         </BaseTable>
 
         <BaseTable
-          v-show="modalFiltrosTabs.current === 'Trimestres'"
-          :type="'modal'"
+          type="modal"
+          v-show="modalFiltrosTabs.current === 'Períodos'"
         >
           <template #thead>
             <th style="width: 25px"></th>
-            <th class="t-start" style="width: 425px">Trimestre letivo</th>
+            <th style="width: 425px" class="t-start">Periodos Letivo</th>
           </template>
           <template #tbody>
             <tr
-              v-for="trimestre in Trimestres"
-              :key="'MdTrimestre' + trimestre.valor"
-              @click="selectTrimestre(trimestre, filtroTrimestres.selecionados)"
+              v-for="periodoLetivo in PeriodosLetivos"
+              :key="periodoLetivo.id + periodoLetivo.nome"
+              @click.stop="
+                toggleItemInArray(periodoLetivo, filtroPeriodos.selecionados)
+              "
             >
               <td style="width: 25px">
                 <input
                   type="checkbox"
                   class="form-check-input position-static m-0"
-                  :value="trimestre"
-                  @click.stop="
-                    selectTrimestre(trimestre, filtroTrimestres.selecionados)
-                  "
-                  v-model="filtroTrimestres.selecionados"
+                  :value="periodoLetivo"
+                  v-model="filtroPeriodos.selecionados"
                 />
               </td>
-              <td style="width: 425px" class="t-start">{{ trimestre.nome }}</td>
-            </tr>
-          </template>
-        </BaseTable>
-
-        <BaseTable
-          v-show="modalFiltrosTabs.current === 'Semestres'"
-          :type="'modal'"
-        >
-          <template #thead>
-            <th style="width: 25px"></th>
-            <th class="t-start" style="width: 425px">Semestre Letivo</th>
-          </template>
-          <template #tbody>
-            <tr @click="selectSemestre('primeiro')">
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  @click.stop="selectSemestre('primeiro')"
-                  v-model="filtroSemestres.primeiro"
-                />
+              <td style="width: 425px" class="t-start upper-case">
+                {{ periodoLetivo.nome }}
               </td>
-              <td style="width: 425px" class="t-start">PRIMEIRO</td>
-            </tr>
-            <tr @click="selectSemestre('segundo')">
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  @click.stop="selectSemestre('segundo')"
-                  v-model="filtroSemestres.segundo"
-                />
-              </td>
-              <td style="width: 425px" class="t-start">SEGUNDO</td>
             </tr>
           </template>
         </BaseTable>
@@ -219,19 +186,21 @@
 
     <ModalDelete
       ref="modalDelete"
-      :isDeleting="!!Deletar.length"
-      @btn-deletar="deleteSelectedCargas"
+      :isDeleting="!!CargasPosToDelete.length"
+      :hasClearDelete="true"
+      @btn-deletar="handleDeleteCargasPos"
+      @btn-clear="clearCargasPosToDelete"
     >
-      <li v-if="!Deletar.length" class="list-group-item">
+      <li v-if="!CargasPosToDelete.length" class="list-group-item">
         Nenhuma carga selecionada.
       </li>
       <li
-        v-for="carga in Deletar"
+        v-for="carga in CargasPosToDelete"
         :key="'deletarTurma' + carga.id"
         class="list-group-item"
       >
         <span>
-          <b>Trimestre:</b>
+          <b>Período:</b>
           {{ carga.trimestre }} -
           <b>Programa:</b>
           {{ carga.programa }}
@@ -274,20 +243,12 @@
         <b>Editar carga:</b> Basta fazer as alterações necessárias diretamente
         nos campos da tabela. O sistema salvará as modificações automaticamente.
       </li>
-      <li class="list-group-item">
-        <b>Observações:</b> Note que os filtros por semestre e trimestre são
-        interligados. Ao selecionar um semestre, os trimestres correspondentes
-        também serão selecionados, e vice versa. O primeiro semestre corresponde
-        ao primeiro e segundo trimestres, e o segundo semestre corresponde ao
-        terceiro e quarto trimestres.
-      </li>
     </ModalAjuda>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import cargaPosService from "@/common/services/cargaPos";
+import { mapGetters, mapActions } from "vuex";
 import {
   toggleOrdination,
   toggleItemInArray,
@@ -316,18 +277,14 @@ export default {
         ativados: [],
         selecionados: [],
       },
-      filtroTrimestres: {
+      filtroPeriodos: {
         ativados: [],
         selecionados: [],
-      },
-      filtroSemestres: {
-        primeiro: true,
-        segundo: true,
       },
       ordenacaoCargaPos: { order: "docenteApelido", type: "asc" },
       modalFiltrosTabs: {
         current: "Programas",
-        array: ["Programas", "Trimestres", "Semestres"],
+        array: ["Programas", "Períodos"],
       },
       modalFiltrosCallbacks: {
         selectAll: {
@@ -336,36 +293,22 @@ export default {
               ...this.AllProgramasPosOrdered,
             ];
           },
-          Trimestres: () => {
-            this.filtroTrimestres.selecionados = [...this.Trimestres];
-            this.connectTrimestreInSemestre();
-          },
-          Semestres: () => {
-            this.filtroSemestres.primeiro = true;
-            this.filtroSemestres.segundo = true;
-            this.connectSemestreInTrimestre();
+          Periodos: () => {
+            this.filtroPeriodos.selecionados = [...this.PeriodosLetivos];
           },
         },
         selectNone: {
           Programas: () => {
             this.filtroProgramas.selecionados = [];
           },
-          Trimestres: () => {
-            this.filtroTrimestres.selecionados = [];
-            this.connectTrimestreInSemestre();
-          },
-          Semestres: () => {
-            this.filtroSemestres.primeiro = false;
-            this.filtroSemestres.segundo = false;
-            this.connectSemestreInTrimestre();
+          Periodos: () => {
+            this.filtroPeriodos.selecionados = [];
           },
         },
         btnOk: () => {
+          this.filtroPeriodos.ativados = [...this.filtroPeriodos.selecionados];
           this.filtroProgramas.ativados = [
             ...this.filtroProgramas.selecionados,
-          ];
-          this.filtroTrimestres.ativados = [
-            ...this.filtroTrimestres.selecionados,
           ];
         },
       },
@@ -373,185 +316,107 @@ export default {
   },
 
   beforeMount() {
-    this.connectSemestreInTrimestre();
+    this.modalFiltrosCallbacks.selectAll.Periodos();
+  },
+  beforeDestroy() {
+    this.clearCargasPosToDelete();
   },
 
   methods: {
+    ...mapActions(["deleteCargasPos", "clearCargasPosToDelete"]),
+
     toggleAddRow() {
       this.isAdding = !this.isAdding;
     },
-    deleteCarga(cargaId) {
-      cargaPosService
-        .delete(cargaId)
-        .then((response) => {
-          this.pushNotification({
-            type: "success",
-            text: `A carga ${response.CargaPos.programa} foi excluída!`,
-          });
-        })
-        .catch((error) => {
-          this.pushNotification({
-            type: "error",
-            title: "Error ao deletar carga!",
-            text: error.message || "",
-          });
-        });
-    },
-    deleteSelectedCargas() {
-      let cargas = this.$store.state.cargaPos.Deletar;
-
-      for (let i = 0; i < cargas.length; i++) {
-        this.deleteCarga(cargas[i].id);
-      }
-      this.$store.commit("emptyDeleteCarga");
-    },
     cargaPosInDocente(programaNome) {
-      const cargasResultantes = [];
+      const cargasPosFiltered = this.$_.filter(this.AllCargasPos, [
+        "programa",
+        programaNome,
+      ]);
 
-      this.$_.forEach(this.CargasPos, (carga) => {
-        const docenteFounded = this.$_.find(
-          this.DocentesAtivos,
-          (docente) => docente.id === carga.Docente
-        );
+      return this.$_.map(cargasPosFiltered, (carga) => {
+        const docenteFounded = this.$_.find(this.DocentesAtivos, [
+          "id",
+          carga.Docente,
+        ]);
 
-        if (docenteFounded && programaNome === carga.programa) {
-          cargasResultantes.push({
-            ...carga,
-            docenteApelido: docenteFounded.apelido,
-          });
-        }
+        return {
+          ...carga,
+          docenteApelido: docenteFounded ? docenteFounded.apelido : "",
+        };
       });
-
-      return cargasResultantes;
     },
     allCreditosCarga(cargas) {
       return this.$_.reduce(cargas, (acc, carga) => acc + carga.creditos, 0);
     },
-
-    selectSemestre(semestre) {
-      this.filtroSemestres[semestre] = !this.filtroSemestres[semestre];
-      this.connectSemestreInTrimestre();
-    },
-    connectSemestreInTrimestre() {
-      const findTrimestre = (array, trimestreValor) =>
-        this.$_.find(array, (item) => item.valor === trimestreValor);
-
-      const allTrimestres = this.Trimestres;
-      this.filtroTrimestres.selecionados = [];
-
-      if (this.filtroSemestres.primeiro) {
-        this.filtroTrimestres.selecionados.push(
-          findTrimestre(allTrimestres, 1),
-          findTrimestre(allTrimestres, 2)
-        );
+    async handleDeleteCargasPos() {
+      try {
+        this.setPartialLoading(true);
+        await this.deleteCargasPos();
+      } catch (error) {
+        this.pushNotification({
+          type: "error",
+          title: "Erro ao excluir carga(s)!",
+        });
+      } finally {
+        this.setPartialLoading(false);
       }
-
-      if (this.filtroSemestres.segundo) {
-        this.filtroTrimestres.selecionados.push(
-          findTrimestre(allTrimestres, 3),
-          findTrimestre(allTrimestres, 4)
-        );
-      }
-    },
-    selectTrimestre(newItem, array) {
-      this.toggleItemInArray(newItem, array);
-      this.connectTrimestreInSemestre();
-    },
-    connectTrimestreInSemestre() {
-      const findTrimestre = (array, trimestreValor) =>
-        this.$_.find(array, (item) => item.valor === trimestreValor);
-
-      const { selecionados } = this.filtroTrimestres;
-
-      if (findTrimestre(selecionados, 1) && findTrimestre(selecionados, 2))
-        this.filtroSemestres.primeiro = true;
-      else this.filtroSemestres.primeiro = false;
-
-      if (findTrimestre(selecionados, 3) && findTrimestre(selecionados, 4))
-        this.filtroSemestres.segundo = true;
-      else this.filtroSemestres.segundo = false;
     },
   },
 
   computed: {
-    ...mapGetters(["DocentesAtivos"]),
+    ...mapGetters([
+      "DocentesAtivos",
+      "CargasPosToDelete",
+      "AllCargasPos",
+      "PeriodosLetivos",
+    ]),
 
-    ProgramasInCargaPos() {
-      const programasResutantes = [];
-
-      this.$_.forEach(this.AllProgramasPosOrdered, (programaNome) => {
-        programasResutantes.push({
-          nome: programaNome,
-          carga: this.cargaPosInDocente(programaNome),
-        });
-      });
-
-      return programasResutantes;
-    },
-    ProgramasInCargaPosFiltredByPrograma() {
-      return this.$_.filter(
-        this.ProgramasInCargaPos,
-        (programa) =>
-          this.$_.findIndex(
-            this.filtroProgramas.ativados,
-            (programaNome) => programaNome === programa.nome
-          ) !== -1
+    ProgramasInCargaPosOrdered() {
+      return this.$_.map(
+        this.ProgramasInCargaPosFiltredByPeriodo,
+        (programa) => ({
+          nome: programa.nome,
+          carga: this.$_.orderBy(
+            programa.carga,
+            ["trimestre", this.ordenacaoCargaPos.order],
+            ["asc", this.ordenacaoCargaPos.type]
+          ),
+        })
       );
     },
-    ProgramasInCargaPosFiltredByTrimestre() {
-      const programasResutantes = [];
-
-      this.$_.forEach(this.ProgramasInCargaPosFiltredByPrograma, (programa) => {
-        programasResutantes.push({
-          nome: programa.nome,
-
-          carga: this.$_.filter(
-            programa.carga,
-            (carga) =>
-              this.$_.findIndex(
-                this.filtroTrimestres.ativados,
-                (trimestre) => trimestre.valor === carga.trimestre
-              ) !== -1
-          ),
-        });
-      });
-
-      return programasResutantes;
-    },
-    ProgramasInCargaPosOrdered() {
-      const programasResutantes = [];
-
-      this.$_.forEach(
-        this.ProgramasInCargaPosFiltredByTrimestre,
+    ProgramasInCargaPosFiltredByPeriodo() {
+      return this.$_.map(
+        this.ProgramasInCargaPosFiltredByPrograma,
         (programa) => {
-          programasResutantes.push({
+          const cargasFiltred = this.$_.filter(programa.carga, (carga) =>
+            this.$_.some(this.filtroPeriodos.ativados, ["id", carga.trimestre])
+          );
+
+          return {
             nome: programa.nome,
-            carga: this.$_.orderBy(
-              programa.carga,
-              ["trimestre", this.ordenacaoCargaPos.order],
-              ["asc", this.ordenacaoCargaPos.type]
-            ),
-          });
+            carga: cargasFiltred,
+          };
         }
       );
-      return programasResutantes;
     },
+    ProgramasInCargaPosFiltredByPrograma() {
+      return this.$_.filter(this.ProgramasInCargaPos, (programa) =>
+        this.$_.some(
+          this.filtroProgramas.ativados,
+          (programaNome) => programaNome === programa.nome
+        )
+      );
+    },
+    ProgramasInCargaPos() {
+      return this.$_.map(this.AllProgramasPosOrdered, (programaNome) => ({
+        nome: programaNome,
+        carga: this.cargaPosInDocente(programaNome),
+      }));
+    },
+
     AllProgramasPosOrdered() {
       return this.$_.orderBy(["PGCC", "PGMC", "PGEM"], String, "asc");
-    },
-    Trimestres() {
-      return [
-        { nome: "PRIMEIRO", valor: 1 },
-        { nome: "SEGUNDO", valor: 2 },
-        { nome: "TERCEIRO", valor: 3 },
-        { nome: "QUARTO", valor: 4 },
-      ];
-    },
-    CargasPos() {
-      return this.$store.state.cargaPos.Cargas;
-    },
-    Deletar() {
-      return this.$store.state.cargaPos.Deletar;
     },
   },
 };

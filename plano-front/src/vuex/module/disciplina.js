@@ -87,8 +87,8 @@ const getters = {
         disciplinasResults.push({
           ...disciplina,
           perfil: {
-            nome: '',
-            abreviacao: '',
+            nome: "",
+            abreviacao: "",
             cor: undefined,
           },
         });
@@ -98,17 +98,10 @@ const getters = {
     return disciplinasResults;
   },
   DisciplinasDCCInPerfis(state, getters) {
-    return _.filter(getters.DisciplinasInPerfis, (disciplina) => {
-      if (disciplina.departamento == 1) return true; //DCC
-      else false;
-    });
+    return _.filter(getters.DisciplinasInPerfis, ["departamento", 1]);
   },
   DisciplinasExternasInPerfis(state, getters) {
-    return _.filter(
-      getters.DisciplinasInPerfis,
-      (disciplina) =>
-        (disciplina.departamento == 2) //Outros
-    );
+    return _.filter(getters.DisciplinasInPerfis, ["departamento", 2]);
   },
 };
 

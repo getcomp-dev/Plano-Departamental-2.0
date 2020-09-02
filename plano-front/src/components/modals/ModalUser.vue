@@ -20,30 +20,52 @@
               </p>
             </div>
           </div>
-          <BaseButton :type="'text'" :color="'red'" @click="routerLogout">Logout</BaseButton>
+          <BaseButton :type="'text'" :color="'red'" @click="routerLogout"
+            >Logout</BaseButton
+          >
         </div>
 
         <div v-if="Admin" class="w-100 border rounded-bottom py-2 px-3">
           <div class="form-row">
             <label required for="nome">Nome</label>
-            <input class="form-control" type="text" id="nome" v-model="userForm.nome" />
+            <input
+              class="form-control"
+              type="text"
+              id="nome"
+              v-model="userForm.nome"
+            />
           </div>
           <div class="form-row">
             <label required for="login">Login</label>
-            <input class="form-control" type="text" id="login" v-model="userForm.login" />
+            <input
+              class="form-control"
+              type="text"
+              id="login"
+              v-model="userForm.login"
+            />
           </div>
           <div class="form-row">
             <label required for="senhaAtual">Senha atual</label>
-            <InputPassword :isInvalid="false" :inputId="'senhaAtual'" v-model="senhaAtual" />
+            <InputPassword
+              :isInvalid="false"
+              :inputId="'senhaAtual'"
+              v-model="senhaAtual"
+            />
           </div>
           <!-- toggle edit senha -->
-          <ButtonSlideSection :isOpen="isEditingSenha" @handel-click="toggleEditSenha" />
+          <ButtonSlideSection
+            :isOpen="isEditingSenha"
+            @handel-click="toggleEditSenha"
+          />
 
           <transition-group name="slideY" mode="out-in">
             <template v-if="isEditingSenha">
               <div :key="'newPass'" class="form-row">
                 <label required for="novaSenha">Nova senha</label>
-                <InputPassword :inputId="'novaSenha'" v-model="userForm.senha" />
+                <InputPassword
+                  :inputId="'novaSenha'"
+                  v-model="userForm.senha"
+                />
               </div>
 
               <div :key="'repeatPass'" class="form-row">
@@ -57,8 +79,20 @@
             </template>
           </transition-group>
           <div :key="'btns'" class="mt-3 mb-1 d-flex justify-content-end">
-            <BaseButton class="paddingX-20" :type="'text'" :color="'gray'" @click="close">Cancelar</BaseButton>
-            <BaseButton class="paddingX-20" :type="'text'" :color="'blue'" @click="editUser">Salvar</BaseButton>
+            <BaseButton
+              class="paddingX-20"
+              :type="'text'"
+              :color="'gray'"
+              @click="close"
+              >Cancelar</BaseButton
+            >
+            <BaseButton
+              class="paddingX-20"
+              :type="'text'"
+              :color="'blue'"
+              @click="editUser"
+              >Salvar</BaseButton
+            >
           </div>
         </div>
       </div>
@@ -67,10 +101,9 @@
 </template>
 
 <script>
-import userService from "@/common/services/usuario";
-import { notification } from "@/common/mixins";
-import { InputPassword, ButtonSlideSection } from "@/components/ui";
 import { mapGetters } from "vuex";
+import userService from "@/common/services/usuario";
+import { InputPassword, ButtonSlideSection } from "@/components/ui";
 
 const emptyUser = {
   nome: "",
@@ -81,7 +114,6 @@ const emptyUser = {
 
 export default {
   name: "ModalUser",
-  mixins: [notification],
   components: { InputPassword, ButtonSlideSection },
   data() {
     return {
@@ -93,11 +125,17 @@ export default {
     };
   },
 
-  mounted() {
+  beforeMount() {
     this.clearEditUserForm();
   },
 
   methods: {
+    open() {
+      this.$refs.baseModalUser.open();
+    },
+    close() {
+      this.$refs.baseModalUser.close();
+    },
     adminText() {
       switch (this.$store.state.auth.Usuario.admin) {
         case 0:
@@ -112,12 +150,6 @@ export default {
       this.isEditingSenha = !this.isEditingSenha;
       this.userForm.senha = "";
       this.confirmaSenha = "";
-    },
-    open() {
-      this.$refs.baseModalUser.open();
-    },
-    close() {
-      this.$refs.baseModalUser.close();
     },
     clearEditUserForm() {
       this.userForm = this.$_.clone(emptyUser);
@@ -152,25 +184,25 @@ export default {
       if (!this.isEditingSenha) user.senha = this.senhaAtual;
 
       if (!this.validateEditUser(user)) {
-        this.showNotification({
+        this.pushNotification({
           type: "error",
-          message: `Campos obrigátorios incompletos ou inválidos.`,
+          text: `Campos obrigátorios incompletos ou inválidos.`,
         });
         return;
       }
 
       try {
         await userService.update(this.$store.state.auth.Usuario.id, user);
-        this.showNotification({
+        this.pushNotification({
           type: "success",
-          message: `Usuário ${this.$store.state.auth.Usuario.nome} atualizado.`,
+          text: `Usuário ${this.$store.state.auth.Usuario.nome} atualizado.`,
         });
         this.clearEditUserForm();
       } catch (error) {
-        this.showNotification({
+        this.pushNotification({
           type: "error",
           title: "Erro ao editar usuário",
-          message: "Senha atual incorreta.",
+          text: "Senha atual incorreta.",
         });
       }
     },

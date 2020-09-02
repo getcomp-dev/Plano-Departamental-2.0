@@ -7,7 +7,8 @@
       <input
         type="checkbox"
         class="form-check-input position-static m-0"
-        @click="selectToDelete(turma)"
+        v-model="toggleToDelete"
+        :value="turma"
       />
     </td>
     <td style="width:40px" class="p-0">
@@ -24,11 +25,13 @@
     <td style="width: 55px" class="less-padding">
       <select
         id="2periodo"
-        v-model="turmaForm.periodo"
+        v-model.number="turmaForm.periodo"
         @change="checkHorariosPeriodo()"
       >
         <option value="1">1</option>
+        <option value="2">2</option>
         <option value="3">3</option>
+        <option value="4">4</option>
       </select>
     </td>
     <td style="width: 80px" class="less-padding">
@@ -48,14 +51,14 @@
         :value="turmaForm.letra"
         @input="turmaForm.letra = $event.target.value.toUpperCase()"
         @keypress="maskTurmaLetra"
-        @change="editTurma"
+        @change="handleEditTurma"
       />
     </td>
     <td style="width: 130px;" class="less-padding">
       <select
         type="text"
         id="docente1"
-        v-model="turmaForm.Docente1"
+        v-model.number="turmaForm.Docente1"
         @change="checkDocente()"
       >
         <option v-if="DocentesAtivos.length === 0" type="text" value
@@ -73,7 +76,7 @@
       <select
         type="text"
         id="docente2"
-        v-model="turmaForm.Docente2"
+        v-model.number="turmaForm.Docente2"
         @change="checkDocente()"
       >
         <option v-if="DocentesAtivos.length === 0" type="text" value
@@ -93,11 +96,10 @@
         type="text"
         id="SelectTurno"
         v-model="turmaForm.turno1"
-        @change="editTurma"
+        @change="handleEditTurma"
       >
-        <template v-if="isIntegralEAD">
-          <option value="EAD">EAD</option>
-        </template>
+        <option v-if="isIntegralEAD" value="EAD">EAD</option>
+
         <template v-else>
           <option value="Diurno">Diurno</option>
           <option value="Noturno">Noturno</option>
@@ -108,7 +110,7 @@
       <select
         type="text"
         id="horario1"
-        v-model="turmaForm.Horario1"
+        v-model.number="turmaForm.Horario1"
         @change="checkHorario(1)"
       >
         <option></option>
@@ -125,7 +127,7 @@
         v-if="hasMoreThan4Creditos"
         type="text"
         id="horario2"
-        v-model="turmaForm.Horario2"
+        v-model.number="turmaForm.Horario2"
         @change="checkHorario(2)"
       >
         <template v-if="isParcialEAD">
@@ -153,7 +155,7 @@
         <select
           type="text"
           id="sala1"
-          v-model="turmaForm.Sala1"
+          v-model.number="turmaForm.Sala1"
           @change="checkSala()"
         >
           <option v-if="AllSalas.length === 0" type="text" value
@@ -171,7 +173,7 @@
           v-if="hasMoreThan4Creditos && turmaForm.disciplina.ead === 0"
           type="text"
           id="sala2"
-          v-model="turmaForm.Sala2"
+          v-model.number="turmaForm.Sala2"
           @change="checkSala()"
         >
           <option v-if="AllSalas.length === 0" type="text" value
@@ -188,14 +190,16 @@
       </template>
     </td>
     <td style="width:45px" class="less-padding">
-      <div style="height: 43px;" class="py-1">
-        <span style="font-weight:bold">{{
-          totalPedidosPeriodizados + totalPedidosNaoPeriodizados
-        }}</span>
-        <br />
-        <p class="mt-1">
+      <div
+        style="height:43px"
+        class="py-1 d-flex flex-column justify-content-between"
+      >
+        <span class="font-weight-bold">
+          {{ totalPedidosNaoPeriodizados + totalPedidosPeriodizados }}
+        </span>
+        <span>
           {{ totalPedidosPeriodizados }}+{{ totalPedidosNaoPeriodizados }}
-        </p>
+        </span>
       </div>
     </td>
     <td
@@ -204,7 +208,7 @@
       class="p-0"
       style="width:35px"
     >
-      <template v-for="(pedido, index) in currentTurmaPedidos">
+      <template v-for="(pedido, index) in PedidosOfCurrentTurma">
         <InputsPedidosDCC
           v-if="pedido.Curso === curso.id"
           :key="pedido.Turma + curso.Curso"
@@ -219,8 +223,6 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import turmaService from "@/common/services/turma";
-import { setEmptyValuesToNull, validateObjectKeys } from "@/common/utils";
 import { maskTurmaLetra } from "@/common/mixins";
 import { InputsPedidosDCC } from "@/components/ui";
 
@@ -242,15 +244,12 @@ export default {
   },
 
   methods: {
-    ...mapActions(["setPartialLoading"]),
+    ...mapActions(["setPartialLoading", "toggleTurmaToDelete", "editTurma"]),
 
     resetTurmaForm() {
       this.turmaForm = this.$_.clone(this.turma);
       this.currentData = this.$_.clone(this.turma);
       this.setDefaultHorarios();
-    },
-    selectToDelete(turma) {
-      this.$store.commit("checkDeleteTurma", turma);
     },
     clearHorarios() {
       this.turmaForm.Horario1 = null;
@@ -265,43 +264,10 @@ export default {
         this.turmaForm.Horario2 = 31;
       }
     },
-    async editTurma() {
-      try {
-        this.setPartialLoading(true);
-
-        const newTurma = this.$_.cloneDeepWith(
-          this.turmaForm,
-          setEmptyValuesToNull
-        );
-        validateObjectKeys(newTurma, ["letra", "Disciplina"]);
-
-        const response = await turmaService.update(newTurma.id, newTurma);
-        this.currentData = this.$_.clone(newTurma);
-
-        this.pushNotification({
-          type: "success",
-          text: `A Turma ${response.Turma.letra} foi atualizada!`,
-        });
-      } catch (error) {
-        this.turmaForm = this.$_.cloneDeep(this.turma);
-
-        const erroMsg = error.response
-          ? "A combinação de disciplina, semestre e turma deve ser única."
-          : error.message;
-        this.pushNotification({
-          type: "error",
-          title: "Erro ao atualizar turma!",
-          text: erroMsg,
-        });
-      } finally {
-        this.setPartialLoading(false);
-      }
-    },
-
     checkHorariosPeriodo() {
       if (!this.checkHorarioDocente(1) && !this.checkHorarioSala(1)) {
         if (!this.checkHorarioDocente(2) && !this.checkHorarioSala(2)) {
-          this.editTurma();
+          this.handleEditTurma();
         } else {
           this.turmaForm.Horario2 = this.currentData.Horario2;
           this.turmaForm.periodo = this.currentData.periodo;
@@ -316,7 +282,7 @@ export default {
         !this.checkHorarioDocente(horario) &&
         !this.checkHorarioSala(horario)
       ) {
-        this.editTurma();
+        this.handleEditTurma();
       } else {
         if (horario === 1) this.turmaForm.Horario1 = this.currentData.Horario1;
         else this.turmaForm.Horario2 = this.currentData.Horario2;
@@ -326,7 +292,7 @@ export default {
       let d1 = !this.checkHorarioDocente(1),
         d2 = !this.checkHorarioDocente(2);
       if (d1 && d2) {
-        this.editTurma();
+        this.handleEditTurma();
       } else {
         if (!d1) this.turmaForm.Docente1 = this.currentData.Docente1;
         if (!d2) this.turmaForm.Docente2 = this.currentData.Docente2;
@@ -336,7 +302,7 @@ export default {
       let s1 = !this.checkHorarioSala(1),
         s2 = !this.checkHorarioSala(2);
       if (s1 && s2) {
-        this.editTurma();
+        this.handleEditTurma();
       } else {
         if (!s1) this.turmaForm.Sala1 = this.currentData.Sala1;
         if (!s2) this.turmaForm.Sala2 = this.currentData.Sala2;
@@ -1103,6 +1069,25 @@ export default {
       }
       return false;
     },
+    async handleEditTurma() {
+      try {
+        this.setPartialLoading(true);
+
+        await this.editTurma(this.turmaForm);
+        this.currentData = this.$_.cloneDeep(this.turmaForm);
+      } catch (error) {
+        this.turmaForm = this.$_.cloneDeep(this.turma);
+        this.pushNotification({
+          type: "error",
+          title: "Erro ao atualizar turma!",
+          text: error.response
+            ? "A combinação de disciplina, período e turma deve ser única."
+            : error.message,
+        });
+      } finally {
+        this.setPartialLoading(false);
+      }
+    },
   },
 
   computed: {
@@ -1113,7 +1098,18 @@ export default {
       "HorariosEAD",
       "HorariosNoturno",
       "HorariosDiurno",
+      "TurmasToDelete",
+      "Pedidos",
     ]),
+
+    toggleToDelete: {
+      set() {
+        this.toggleTurmaToDelete(this.turma);
+      },
+      get() {
+        return this.TurmasToDelete;
+      },
+    },
 
     HorariosFiltredByTurno() {
       const cadastroEAD = this.turmaForm.disciplina.ead;
@@ -1141,7 +1137,7 @@ export default {
     },
     totalPedidosPeriodizados() {
       return this.$_.reduce(
-        this.currentTurmaPedidos,
+        this.PedidosOfCurrentTurma,
         (sum, pedido) => {
           return sum + parseInt(pedido.vagasPeriodizadas, 10);
         },
@@ -1150,15 +1146,15 @@ export default {
     },
     totalPedidosNaoPeriodizados() {
       return this.$_.reduce(
-        this.currentTurmaPedidos,
+        this.PedidosOfCurrentTurma,
         (sum, pedido) => {
           return sum + parseInt(pedido.vagasNaoPeriodizadas, 10);
         },
         0
       );
     },
-    currentTurmaPedidos() {
-      return this.$store.state.pedido.Pedidos[this.turma.id];
+    PedidosOfCurrentTurma() {
+      return this.Pedidos[this.turma.id];
     },
   },
 

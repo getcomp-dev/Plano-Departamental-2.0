@@ -10,6 +10,7 @@ import {
   SOCKET_PLANO_DELETED,
   SOCKET_PLANO_CREATED,
   SOCKET_PLANO_UPDATED,
+  SET_CURRENT_PLANO_ID,
 } from "../mutation-types";
 
 const state = {
@@ -18,7 +19,7 @@ const state = {
 };
 
 const mutations = {
-  ["SET_CURRENT_PLANO_ID"](state, data) {
+  [SET_CURRENT_PLANO_ID](state, data) {
     state.currentPlanoId = data;
   },
 
@@ -59,7 +60,7 @@ const actions = {
 
   async initializePlano({ commit, dispatch }) {
     try {
-      commit("SET_FETCHING_LOADING", true);
+      dispatch("setFetchingLoading", true);
 
       const PlanoInitial = localStorage.getItem("Plano")
         ? localStorage.getItem("Plano")
@@ -72,13 +73,13 @@ const actions = {
     } catch (error) {
       console.log(error);
     } finally {
-      commit("SET_FETCHING_LOADING", false);
+      dispatch("setFetchingLoading", false);
     }
   },
 
-  async changeCurrentPlano({ commit, dispatch }, planoId) {
+  async changeCurrentPlano({ dispatch }, planoId) {
     try {
-      commit("SET_FETCHING_LOADING", true);
+      dispatch("setFetchingLoading", true);
 
       dispatch("setCurrentPlanoId", planoId);
       await dispatch("fetchAll");
@@ -86,7 +87,7 @@ const actions = {
     } catch (error) {
       console.log(error);
     } finally {
-      commit("SET_FETCHING_LOADING", false);
+      dispatch("setFetchingLoading", false);
     }
   },
 
@@ -112,7 +113,7 @@ const actions = {
 
   setCurrentPlanoId({ commit }, planoId) {
     localStorage.setItem("Plano", parseInt(planoId, 10));
-    commit("SET_CURRENT_PLANO_ID", parseInt(planoId, 10));
+    commit(SET_CURRENT_PLANO_ID, parseInt(planoId, 10));
   },
 };
 

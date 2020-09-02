@@ -10,6 +10,8 @@
       <router-view></router-view>
     </transition>
 
+    <TheLoadingView />
+
     <notifications
       group="general"
       position="bottom right"
@@ -23,10 +25,11 @@
 
 <script>
 import { mapState } from "vuex";
+import { TheLoadingView } from "@/components/layout";
 
 export default {
   name: "App",
-
+  components: { TheLoadingView },
   computed: {
     ...mapState({
       queue: (state) => state.notifications.queue,

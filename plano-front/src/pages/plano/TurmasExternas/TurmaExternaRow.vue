@@ -4,24 +4,28 @@
       <input
         type="checkbox"
         class="form-check-input position-static m-0"
-        @click="toggleTurmaToDelete(turma)"
+        v-model="toggleToDelete"
+        :value="turma"
       />
     </td>
     <td style="width: 55px" class="less-padding">
-      <select v-model="turmaForm.periodo" @change="handleEditTurma()">
+      <select v-model.number="turmaForm.periodo" @change="handleEditTurma()">
         <option value="1">1</option>
+        <option value="2">2</option>
         <option value="3">3</option>
+        <option value="4">4</option>
       </select>
     </td>
-    <td style="width: 70px">{{ turmaForm.disciplina.codigo }}</td>
+    <td style="width: 80px">{{ turmaForm.disciplina.codigo }}</td>
 
     <td style="width: 330px" class="less-padding">
-      <select v-model="turmaForm.Disciplina" @change="handleEditTurma()">
+      <select v-model.number="turmaForm.Disciplina" @change="handleEditTurma">
         <option
           v-for="disciplina in DisciplinasExternasInPerfis"
           :key="disciplina.id"
           :value="disciplina.id"
-        >{{ disciplina.nome }}</option>
+          >{{ disciplina.nome }}</option
+        >
       </select>
     </td>
 
@@ -34,15 +38,14 @@
         :value="turmaForm.letra"
         @input="turmaForm.letra = $event.target.value.toUpperCase()"
         @keypress="maskTurmaLetra"
-        @change="handleEditTurma()"
+        @change="handleEditTurma"
       />
     </td>
 
     <td style="width: 80px;" class="less-padding">
       <select v-model="turmaForm.turno1" @change="handleEditTurma()">
-        <template v-if="disciplinaIsIntegralEAD">
-          <option value="EAD">EAD</option>
-        </template>
+        <option v-if="disciplinaIsIntegralEAD" value="EAD">EAD</option>
+
         <template v-else>
           <option value="Diurno">Diurno</option>
           <option value="Noturno">Noturno</option>
@@ -51,46 +54,77 @@
     </td>
 
     <td style="width:85px" class="less-padding">
-      <select v-model="turmaForm.Horario1" @change="checkHorario(1)">
-        <option value></option>
+      <select v-model.number="turmaForm.Horario1" @change="checkHorario(1)">
+        <option value=""></option>
         <option
           v-for="horario in HorariosFiltredByTurno"
           :key="horario.id"
           :value="horario.id"
-        >{{ horario.horario }}</option>
+          >{{ horario.horario }}</option
+        >
       </select>
-      <select v-if="totalCarga >= 4" v-model="turmaForm.Horario2" @change="checkHorario(2)">
-        <option value></option>
+      <select
+        v-if="totalCarga >= 4"
+        v-model.number="turmaForm.Horario2"
+        @change="checkHorario(2)"
+      >
+        <option value=""></option>
         <option
           v-for="horario in HorariosFiltredByTurno"
           :key="horario.id"
           :value="horario.id"
-        >{{ horario.horario }}</option>
+          >{{ horario.horario }}</option
+        >
       </select>
     </td>
 
     <td style="width: 95px" class="less-padding">
       <template v-if="!disciplinaIsIntegralEAD">
-        <select v-model="turmaForm.Sala1" @change="checkSala(1)">
-          <option value></option>
-          <option v-for="sala in AllSalas" :key="'s1' + sala.id" :value="sala.id">{{ sala.nome }}</option>
+        <select v-model.number="turmaForm.Sala1" @change="checkSala(1)">
+          <option value=""></option>
+          <option
+            v-for="sala in AllSalas"
+            :key="sala.id + sala.nome"
+            :value="sala.id"
+            >{{ sala.nome }}</option
+          >
         </select>
-        <select v-if="totalCarga >= 4" v-model="turmaForm.Sala2" @change="checkSala(2)">
+        <select
+          v-if="totalCarga >= 4"
+          v-model.number="turmaForm.Sala2"
+          @change="checkSala(2)"
+        >
           <option value></option>
-          <option v-for="sala in AllSalas" :key="'s2' + sala.id" :value="sala.id">{{ sala.nome }}</option>
+          <option
+            v-for="sala in AllSalas"
+            :key="sala.nome + sala.id"
+            :value="sala.id"
+            >{{ sala.nome }}</option
+          >
         </select>
       </template>
     </td>
 
-    <td style="width: 40px;" class="p-0">
-      <div style="height: 43px;" class="py-1">
-        <span style="font-weight:bold">{{ totalPedidosNaoPeriodizados + totalPedidosPeriodizados }}</span>
-        <br />
-        <p class="mt-1">{{ totalPedidosPeriodizados }}+{{ totalPedidosNaoPeriodizados }}</p>
+    <td style="width:45px" class="p-0">
+      <div
+        style="height:43px"
+        class="py-1 d-flex flex-column justify-content-between"
+      >
+        <span class="font-weight-bold">
+          {{ totalPedidosNaoPeriodizados + totalPedidosPeriodizados }}
+        </span>
+        <span>
+          {{ totalPedidosPeriodizados }}+{{ totalPedidosNaoPeriodizados }}
+        </span>
       </div>
     </td>
 
-    <td v-for="indice in IndicesInPedidos" :key="indice" style="width:35px" class="p-0">
+    <td
+      v-for="indice in IndicesInPedidos"
+      :key="indice"
+      style="width:35px"
+      class="p-0"
+    >
       <InputsPedidosExternos :index="indice" :turma="turma" />
     </td>
   </tr>
@@ -98,7 +132,6 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { maskTurmaLetra } from "@/common/mixins";
-
 import InputsPedidosExternos from "./InputsPedidosExternos.vue";
 
 export default {
@@ -122,7 +155,7 @@ export default {
     ...mapActions([
       "setPartialLoading",
       "editTurmaExterna",
-      "toggleTurmaToDelete",
+      "toggleTurmaExternaToDelete",
     ]),
 
     resetTurmaForm() {
@@ -141,7 +174,7 @@ export default {
           type: "error",
           title: "Erro ao atualizar turma!",
           text: error.response
-            ? "A combinação de disciplina, semestre e turma deve ser única."
+            ? "A combinação de disciplina, período e turma deve ser única."
             : error.message,
         });
       } finally {
@@ -567,22 +600,33 @@ export default {
       "HorariosNoturno",
       "HorariosDiurno",
       "AllSalas",
+      "TurmasExternasToDelete",
+      "PedidosExternos",
     ]),
 
+    toggleToDelete: {
+      set() {
+        this.toggleTurmaExternaToDelete(this.turma);
+      },
+      get() {
+        return this.TurmasExternasToDelete;
+      },
+    },
+
     totalPedidosPeriodizados() {
-      if (!this.currentTurmaPedidos) return 0;
+      if (!this.PedidosOfCurrentTurma) return 0;
 
       return this.$_.reduce(
-        this.currentTurmaPedidos,
+        this.PedidosOfCurrentTurma,
         (sum, turma) => sum + parseInt(turma.vagasPeriodizadas, 10),
         0
       );
     },
     totalPedidosNaoPeriodizados() {
-      if (!this.currentTurmaPedidos) return 0;
+      if (!this.PedidosOfCurrentTurma) return 0;
 
       return this.$_.reduce(
-        this.currentTurmaPedidos,
+        this.PedidosOfCurrentTurma,
         (sum, turma) => sum + parseInt(turma.vagasNaoPeriodizadas, 10),
         0
       );
@@ -600,7 +644,6 @@ export default {
     HorariosFiltredByTurno() {
       if (this.disciplinaIsIntegralEAD) return this.HorariosEAD;
 
-      //Se não, verifica o turno selecionado
       switch (this.turmaForm.turno1) {
         case "Noturno":
           return this.HorariosNoturno;
@@ -618,18 +661,18 @@ export default {
     IndicesInPedidos() {
       const indicesResultantes = [];
 
-      this.$_.forEach(this.currentTurmaPedidos, (pedido, index) => {
-        const cursoFounded = this.$_.find(
-          this.CursosAtivados,
-          (curso) => curso.id === pedido.Curso
-        );
+      this.$_.forEach(this.PedidosOfCurrentTurma, (pedido, index) => {
+        const cursoFounded = this.$_.some(this.CursosAtivados, [
+          "id",
+          pedido.Curso,
+        ]);
 
         if (cursoFounded) indicesResultantes.push(index);
       });
       return indicesResultantes;
     },
-    currentTurmaPedidos() {
-      return this.$store.state.pedidoExterno.Pedidos[this.turma.id];
+    PedidosOfCurrentTurma() {
+      return this.PedidosExternos[this.turma.id];
     },
   },
 
@@ -645,14 +688,18 @@ export default {
 <style scoped>
 .turmarow {
   font-size: 11px !important;
-  background-color: #fff;
+  background-color: #fff !important;
 }
-.turmarow td {
+
+.turmarow > td {
   vertical-align: middle !important;
   margin: 0 !important;
   padding: 0 5px;
   text-align: center;
   word-break: break-word;
+}
+.turmarow > td {
+  background-color: #fff !important;
 }
 
 .turmarow select,

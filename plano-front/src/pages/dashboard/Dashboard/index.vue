@@ -11,8 +11,6 @@
       </main>
     </template>
 
-    <TheLoadingView />
-
     <div
       v-show="modalOverlayVisibility"
       class="base-modal-overlay"
@@ -28,7 +26,7 @@
 import bddumpService from "@/common/services/bddump";
 import { EventBus } from "@/plugins/eventBus.js";
 import { mapGetters, mapActions } from "vuex";
-import { TheNavbar, TheSidebar, TheLoadingView } from "@/components/layout";
+import { TheNavbar, TheSidebar } from "@/components/layout";
 import { ModalUser, ModalDownload } from "@/components/modals";
 
 export default {
@@ -36,7 +34,6 @@ export default {
   components: {
     TheSidebar,
     TheNavbar,
-    TheLoadingView,
     ModalUser,
     ModalDownload,
   },
@@ -57,7 +54,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["setFetchingLoading", "closeSidebar", "initializePlano"]),
+    ...mapActions(["closeSidebar", "initializePlano"]),
 
     emitCloseCenterModal() {
       EventBus.$emit("close-modal");

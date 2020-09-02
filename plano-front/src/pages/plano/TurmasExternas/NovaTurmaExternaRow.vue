@@ -3,19 +3,22 @@
     <td style="width: 25px"></td>
 
     <td style="width: 55px" class="less-padding">
-      <select v-model="turmaForm.periodo">
+      <select v-model.number="turmaForm.periodo">
         <option value="1">1</option>
+        <option value="2">2</option>
         <option value="3">3</option>
+        <option value="4">4</option>
       </select>
     </td>
 
-    <td style="width: 70px" class="less-padding">
+    <td style="width: 80px" class="less-padding">
       <select v-model="turmaForm.disciplina" @change="handleChangeDisciplina">
         <option
           v-for="disciplina in DisciplinasExternasInPerfis"
           :key="'d1' + disciplina.id"
           :value="disciplina"
-        >{{ disciplina.codigo }}</option>
+          >{{ disciplina.codigo }}</option
+        >
       </select>
     </td>
 
@@ -25,7 +28,8 @@
           v-for="disciplina in DisciplinasExternasInPerfisOrderedByNome"
           :key="'d2' + disciplina.id"
           :value="disciplina"
-        >{{ disciplina.nome }}</option>
+          >{{ disciplina.nome }}</option
+        >
       </select>
     </td>
 
@@ -52,49 +56,71 @@
     </td>
 
     <td style="width: 85px" class="less-padding">
-      <select v-model="turmaForm.Horario1" @change="handleChangeHorario(1)">
+      <select
+        v-model.number="turmaForm.Horario1"
+        @change="handleChangeHorario(1)"
+      >
         <option
           v-for="horario in HorariosFiltredByTurno"
           :key="'h1' + horario.id"
           :value="horario.id"
-        >{{ horario.horario }}</option>
+          >{{ horario.horario }}</option
+        >
       </select>
       <select
-        type="text"
-        id="horario2"
-        v-model="turmaForm.Horario2"
+        v-model.number="turmaForm.Horario2"
         @change="handleChangeHorario(2)"
       >
         <option
           v-for="horario in HorariosFiltredByTurno"
           :key="'h2' + horario.id"
           :value="horario.id"
-        >{{ horario.horario }}</option>
+          >{{ horario.horario }}</option
+        >
       </select>
     </td>
 
     <td style="width: 95px" class="less-padding">
       <template v-if="!disciplinaIsIntegralEAD">
-        <select v-model="turmaForm.Sala1">
-          <option v-for="sala in AllSalas" :key="'s1' + sala.id" :value="sala.id">{{ sala.nome }}</option>
+        <select v-model.number="turmaForm.Sala1">
+          <option value=""></option>
+          <option
+            v-for="sala in AllSalas"
+            :key="sala.id + sala.nome"
+            :value="sala.id"
+            >{{ sala.nome }}</option
+          >
         </select>
-        <select v-if="totalCarga >= 4 && !disciplinaIsParcialEAD" v-model="turmaForm.Sala2">
-          <option v-for="sala in AllSalas" :key="'s2' + sala.id" :value="sala.id">{{ sala.nome }}</option>
+        <select
+          v-if="totalCarga >= 4 && !disciplinaIsParcialEAD"
+          v-model.number="turmaForm.Sala2"
+        >
+          <option value=""></option>
+          <option
+            v-for="sala in AllSalas"
+            :key="sala.nome + sala.id"
+            :value="sala.id"
+            >{{ sala.nome }}</option
+          >
         </select>
       </template>
     </td>
 
-    <td style="width: 40px">
-      <div style="height: 43px"></div>
+    <td style="width: 45px">
+      <div style="height:43px"></div>
     </td>
 
-    <td style="width: 35px;" v-for="cursosEmptySpace in 4" :key="cursosEmptySpace"></td>
+    <td
+      style="width: 35px;"
+      v-for="cursosEmptySpace in 4"
+      :key="cursosEmptySpace"
+    ></td>
   </tr>
 </template>
 
 <script>
-import { maskTurmaLetra } from "@/common/mixins";
 import { mapActions, mapGetters } from "vuex";
+import { maskTurmaLetra } from "@/common/mixins";
 
 const emptyTurma = {
   id: null,
@@ -122,13 +148,12 @@ export default {
   },
 
   methods: {
-    ...mapActions(["setPartialLoading", "addNovaTurmaExterna"]),
+    ...mapActions(["addNovaTurmaExterna"]),
 
     handleChangeTurno() {
       this.turmaForm.Horario1 = null;
       this.turmaForm.Horario2 = null;
     },
-
     handleChangeDisciplina() {
       this.turmaForm.Disciplina = this.turmaForm.disciplina.id;
       this.turmaForm.turno1 = null;
@@ -145,13 +170,11 @@ export default {
         this.turmaForm.Horario2 = 31;
       }
     },
-
     handleChangeHorario(horarioAtual) {
       if (horarioAtual === 1) this.setTurnoByHorario(this.turmaForm.Horario1);
       else if (!this.disciplinaIsParcialEAD)
         this.setTurnoByHorario(this.turmaForm.Horario2);
     },
-
     setTurnoByHorario(horarioId) {
       if (horarioId == 31 && this.disciplinaIsIntegralEAD)
         this.turmaForm.turno1 = "EAD";
@@ -160,18 +183,16 @@ export default {
       else if (this.$_.some(this.HorariosDiurno, ["id", horarioId]))
         this.turmaForm.turno1 = "Diurno";
     },
-
     async handleAddNovaTurma() {
       try {
         this.setPartialLoading(true);
-
         await this.addNovaTurmaExterna(this.turmaForm);
       } catch (error) {
         this.pushNotification({
           type: "error",
           title: "Erro ao criar nova turma!",
           text: error.response
-            ? "A combinação de disciplina, semestre e turma deve ser única."
+            ? "A combinação de disciplina, período e turma deve ser única."
             : error.message,
         });
       } finally {
@@ -188,13 +209,13 @@ export default {
       "HorariosDiurno",
       "AllSalas",
     ]),
+
     DisciplinasExternasInPerfisOrderedByNome() {
       return this.$_.orderBy(this.DisciplinasExternasInPerfis, ["nome"]);
     },
     HorariosFiltredByTurno() {
       if (this.disciplinaIsIntegralEAD) return this.HorariosEAD;
 
-      //Se não, verifica o turno selecionado
       switch (this.turmaForm.turno1) {
         case "Noturno":
           return this.HorariosNoturno;

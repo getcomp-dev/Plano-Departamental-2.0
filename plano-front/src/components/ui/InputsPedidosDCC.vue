@@ -1,5 +1,5 @@
 <template>
-  <div :class="pedidoTypeClass">
+  <div :class="typeClass">
     <input
       type="text"
       :class="['input-pedidos', { empty: pedidoForm.vagasPeriodizadas == 0 }]"
@@ -23,28 +23,16 @@
   </div>
 </template>
 <script>
-import { mapActions } from "vuex";
-import { maskOnlyNumber } from "@/common/mixins";
+import { mapActions, mapGetters } from "vuex";
+import { vFocusPedido, maskOnlyNumber } from "@/common/mixins";
 
 export default {
   name: "InputsPedidosDCC",
-  mixins: [maskOnlyNumber],
+  mixins: [maskOnlyNumber, vFocusPedido],
   props: {
     type: { type: String, default: "main" },
     turma: { type: Object, required: true },
     index: { type: Number, required: true },
-  },
-  directives: {
-    "focus-pedido": {
-      bind(el) {
-        el.addEventListener("focus", () => {
-          if (el.value == 0) el.value = "";
-        });
-        el.addEventListener("blur", () => {
-          if (el.value == "") el.value = 0;
-        });
-      },
-    },
   },
   data() {
     return {
@@ -56,9 +44,7 @@ export default {
     ...mapActions(["editPedido"]),
 
     resetPedidoForm() {
-      this.pedidoForm = this.$_.clone(
-        this.$store.state.pedido.Pedidos[this.turma.id][this.index]
-      );
+      this.pedidoForm = this.$_.clone(this.PedidosOfCurrentTurma);
     },
     async handleEditPedido() {
       try {
@@ -83,17 +69,19 @@ export default {
   },
 
   computed: {
-    currentTurmaPedidos() {
-      return this.$store.state.pedido.Pedidos[this.turma.id][this.index];
+    ...mapGetters(["Pedidos"]),
+
+    PedidosOfCurrentTurma() {
+      return this.Pedidos[this.turma.id][this.index];
     },
 
-    pedidoTypeClass() {
+    typeClass() {
       return `${this.type}-pedidos-container`;
     },
   },
 
   watch: {
-    currentTurmaPedidos: {
+    PedidosOfCurrentTurma: {
       handler: "resetPedidoForm",
       immediate: true,
     },

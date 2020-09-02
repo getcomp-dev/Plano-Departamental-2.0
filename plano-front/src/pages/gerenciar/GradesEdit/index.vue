@@ -7,7 +7,7 @@
         :color="'lightblue'"
         @click="$refs.modalAjuda.toggle()"
       >
-        <font-awesome-icon :icon="['fas','question']" />
+        <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
     </PageHeader>
 
@@ -18,10 +18,13 @@
             <th
               style="width:35px"
               class="clickable"
+              title="Período"
               @click="toggleOrder(ordenacaoDisciplinasMain, 'periodo')"
             >
               P.
-              <i :class="setIconByOrder(ordenacaoDisciplinasMain, 'periodo')"></i>
+              <i
+                :class="setIconByOrder(ordenacaoDisciplinasMain, 'periodo')"
+              ></i>
             </th>
             <th
               style="width:80px"
@@ -65,8 +68,12 @@
                 ]"
               >
                 <td style="width:35px">{{ disciplinaGrade.periodo }}</td>
-                <td style="width:80px" class="t-start">{{ disciplinaGrade.disciplina_codigo }}</td>
-                <td style="width:400px" class="t-start">{{ disciplinaGrade.disciplina_nome }}</td>
+                <td style="width:80px" class="t-start">
+                  {{ disciplinaGrade.disciplina_codigo }}
+                </td>
+                <td style="width:400px" class="t-start">
+                  {{ disciplinaGrade.disciplina_nome }}
+                </td>
               </tr>
             </template>
             <tr v-show="!hasGradeSelected">
@@ -109,7 +116,8 @@
                   v-for="grade in GradesFiltredByCurrentCurso"
                   :key="'grade-id' + grade.id"
                   :value="grade.id"
-                >{{ grade.nome }}</option>
+                  >{{ grade.nome }}</option
+                >
               </select>
             </div>
           </div>
@@ -118,7 +126,9 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group m-0 col px-0">
-              <label required for="disciplina" class="col-form-label">Disciplina</label>
+              <label required for="disciplina" class="col-form-label"
+                >Disciplina</label
+              >
               <select
                 :disabled="!hasGradeSelected"
                 type="text"
@@ -127,24 +137,28 @@
                 v-model="disciplinaGradeForm.Disciplina"
                 @change="clearClick()"
               >
-                <option
-                  v-if="Disciplinas.length === 0"
-                  type="text"
-                  value
-                >Nenhuma Disciplina Encontrada</option>
+                <option v-if="Disciplinas.length === 0" type="text" value
+                  >Nenhuma Disciplina Encontrada</option
+                >
                 <option
                   v-else
                   v-for="disciplina in Disciplinas"
                   :key="'2-grade-id' + disciplina.id"
                   :value="disciplina.id"
-                >{{ disciplina.nome }}</option>
+                  >{{ disciplina.nome }}</option
+                >
               </select>
             </div>
           </div>
 
           <div class="row mb-2 mx-0">
             <div class="form-group m-0 col px-0">
-              <label required for="periodoDisciplina" class="col-form-label pb-1">Período</label>
+              <label
+                required
+                for="periodoDisciplina"
+                class="col-form-label pb-1"
+                >Período</label
+              >
               <div class="d-flex align-items-center">
                 <input
                   :disabled="!hasGradeSelected"
@@ -162,7 +176,7 @@
                   :color="'green'"
                   @click="editDisciplinaGrade()"
                 >
-                  <font-awesome-icon :icon="['fas','check']" />
+                  <font-awesome-icon :icon="['fas', 'check']" />
                 </BaseButton>
               </div>
             </div>
@@ -177,7 +191,7 @@
             :color="'green'"
             @click="addDisciplinaGrade"
           >
-            <font-awesome-icon :icon="['fas','plus']" />
+            <font-awesome-icon :icon="['fas', 'plus']" />
           </BaseButton>
 
           <BaseButton
@@ -187,7 +201,7 @@
             :color="'red'"
             @click="openModalDelete"
           >
-            <font-awesome-icon :icon="['fas','trash']" />
+            <font-awesome-icon :icon="['fas', 'trash']" />
           </BaseButton>
 
           <BaseButton
@@ -197,7 +211,7 @@
             :color="'gray'"
             @click="cleanDisciplina"
           >
-            <font-awesome-icon :icon="['fas','times']" />
+            <font-awesome-icon :icon="['fas', 'times']" />
           </BaseButton>
         </template>
       </Card>
@@ -211,7 +225,8 @@
       <li v-if="isEditDisciplina" class="list-group-item">
         <span>
           Tem certeza que deseja excluír a disciplina
-          <b>{{ nomeDisciplinaAtual }}</b>?
+          <b>{{ nomeDisciplinaAtual }}</b
+          >?
         </span>
       </li>
       <li v-else class="list-group-item">Nenhuma disciplina selecionada.</li>
@@ -225,33 +240,21 @@
       <li class="list-group-item">
         <b>Para adicionar disciplinas à Grade:</b> Com o cartão a direita em
         branco, preencha-o. Em seguida, clique em Adicionar
-        <i
-          class="fas fa-plus icon-green px-1"
-          style="font-size:12px"
-        ></i>.
+        <i class="fas fa-plus icon-green px-1" style="font-size:12px"></i>.
       </li>
       <li class="list-group-item">
         <b>Para editar ou deletar uma disciplina:</b> Na tabela, clique na
-        disciplina que deseja modificar. Logo após, no cartão à direita,
-        altere as informações que desejar e clique em Salvar
-        <i
-          class="fas fa-check icon-green px-1"
-          style="font-size:12px"
-        ></i>
+        disciplina que deseja modificar. Logo após, no cartão à direita, altere
+        as informações que desejar e clique em Salvar
+        <i class="fas fa-check icon-green px-1" style="font-size:12px"></i>
         ou, para excluí-la, clique em Deletar
-        <i
-          class="far fa-trash-alt icon-red px-1"
-          style="font-size: 12px"
-        ></i>
+        <i class="far fa-trash-alt icon-red px-1" style="font-size: 12px"></i>
         .
       </li>
       <li class="list-group-item">
-        <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
-        em Cancelar
-        <i
-          class="fas fa-times icon-gray px-1"
-          style="font-size: 12px"
-        ></i>
+        <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique em
+        Cancelar
+        <i class="fas fa-times icon-gray px-1" style="font-size: 12px"></i>
         .
       </li>
     </ModalAjuda>
@@ -435,7 +438,9 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Disciplina <b>${nome_disciplina}</b> foi adicionada à Grade <b>${this.gradeForm.nome}</b>!`,
+            text: `A Disciplina <b>${nome_disciplina}</b> foi adicionada à Grade <b>${
+              this.gradeForm.nome
+            }</b>!`,
             type: "success",
           });
         })
@@ -460,7 +465,9 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Disciplina <b>${this.nomeDisciplinaAtual}</b> foi atualizada!`,
+            text: `A Disciplina <b>${
+              this.nomeDisciplinaAtual
+            }</b> foi atualizada!`,
             type: "success",
           });
         })
@@ -485,7 +492,9 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Disciplina <b>${this.nomeDisciplinaAtual}</b> foi excluída!`,
+            text: `A Disciplina <b>${
+              this.nomeDisciplinaAtual
+            }</b> foi excluída!`,
             type: "success",
           });
           this.clearClick();

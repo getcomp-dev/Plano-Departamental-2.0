@@ -25,6 +25,7 @@ import modals from "./module/modals";
 import loadingView from "./module/loadingView";
 import routesLists from "./module/routesLists";
 import notifications from "./module/notifications";
+import periodosLetivos from "./module/periodosLetivos";
 
 import {
   HTTP_REQUEST_INCREMENT,
@@ -86,6 +87,7 @@ export default new Vuex.Store({
     loadingView,
     routesLists,
     notifications,
+    periodosLetivos,
   },
 
   strict: process.env.NODE_ENV !== "production",

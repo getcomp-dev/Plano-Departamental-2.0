@@ -2,9 +2,9 @@
   <tr class="novaturma">
     <td style="width:70px" class="less-padding">
       <select type="text" v-model="cargaPosForm.programa">
-        <option type="text" value="PGCC">PGCC</option>
-        <option type="text" value="PGEM">PGEM</option>
-        <option type="text" value="PGMC">PGMC</option>
+        <option value="PGCC">PGCC</option>
+        <option value="PGEM">PGEM</option>
+        <option value="PGMC">PGMC</option>
       </select>
     </td>
     <td style="width:25px">
@@ -12,20 +12,23 @@
     </td>
     <td style="width:55px">
       <select v-model.number="cargaPosForm.trimestre">
-        <option type="text" value="1">1</option>
-        <option type="text" value="2">2</option>
-        <option type="text" value="3">3</option>
-        <option type="text" value="4">4</option>
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
       </select>
     </td>
     <td style="width:145px" class="less-padding">
       <select v-model.number="cargaPosForm.Docente">
-        <option v-if="!!DocentesOrdered.length" type="text" value>Nenhum Docente Encontrado</option>
+        <option v-if="!DocentesOrdered.length" type="text" value
+          >Nenhum Docente Encontrado</option
+        >
         <option
           v-for="docente in DocentesOrdered"
-          :key="'id docente' + docente.id"
+          :key="docente.id + docente.apelido"
           :value="docente.id"
-        >{{ docente.apelido }}</option>
+          >{{ docente.apelido }}</option
+        >
       </select>
     </td>
     <td style="width:50px" class="less-padding">
@@ -33,16 +36,15 @@
         type="text"
         id="creditos"
         v-model.number="cargaPosForm.creditos"
-        @keypress="onlyNumber"
+        @keypress="maskOnlyNumber"
       />
     </td>
   </tr>
 </template>
 
 <script>
-import { mapActions } from "vuex";
-import cargaPosService from "@/common/services/cargaPos";
-import { notification } from "@/common/mixins";
+import { mapActions, mapGetters } from "vuex";
+import { maskOnlyNumber } from "@/common/mixins";
 
 const emptyCarga = {
   id: null,
@@ -54,84 +56,35 @@ const emptyCarga = {
 
 export default {
   name: "NovaCargaPosRow",
-  mixins: [notification],
+  mixins: [maskOnlyNumber],
   data() {
     return {
       cargaPosForm: this.$_.clone(emptyCarga),
     };
   },
   methods: {
-    ...mapActions(["setPartialLoading"]),
+    ...mapActions(["addNovaCargaPos"]),
 
-    onlyNumber($event) {
-      let keyCode = $event.keyCode ? $event.keyCode : $event.which;
-      if ((keyCode < 48 || keyCode > 57) && keyCode !== 46) {
-        $event.preventDefault();
-      }
-    },
-    isEmpty(value) {
-      return value === "" || value === undefined ? true : false;
-    },
-    setEmptyKeysToNull(object) {
-      Object.keys(object).forEach((key) => {
-        if (this.isEmpty(object[key])) object[key] = null;
-      });
-    },
-    validateCargaPos(carga) {
-      if (
-        carga.trimestre === null ||
-        carga.Docente === null ||
-        carga.programa === null ||
-        carga.creditos === null
-      ) {
+    async handleAddNovaCargaPos() {
+      try {
+        this.setPartialLoading(true);
+        await this.addNovaCargaPos(this.cargaPosForm);
+      } catch (error) {
         this.pushNotification({
           type: "error",
           title: "Erro ao criar nova carga!",
-          text: "Cadastro inválido ou incompleto.",
+          text: error.message || "",
         });
-        return false;
+      } finally {
+        this.setPartialLoading(false);
       }
-
-      return true;
-    },
-    addCarga() {
-      this.cargaPosForm.Plano = localStorage.getItem("Plano");
-      const newCarga = this.$_.clone(this.cargaPosForm);
-
-      this.setEmptyKeysToNull(newCarga);
-      if (!this.validateCargaPos(newCarga)) return;
-
-      this.setPartialLoading(true);
-      cargaPosService
-        .create(newCarga)
-        .then((response) => {
-          this.cleanCarga();
-          this.pushNotification({
-            type: "success",
-            text: `Carga ${response.CargaPos.programa} foi criada!`,
-          });
-        })
-        .catch((error) => {
-          this.pushNotification({
-            type: "error",
-            title: "Erro ao criar nova carga!",
-            text: error.message || "",
-          });
-        });
-
-      this.setPartialLoading(false);
-    },
-
-    cleanCarga() {
-      this.cargaPosForm = this.$_.clone(emptyCarga);
     },
   },
   computed: {
+    ...mapGetters(["DocentesAtivos"]),
+
     DocentesOrdered() {
-      return this.$_.orderBy(
-        this.$_.filter(this.$store.state.docente.Docentes, ["ativo", true]),
-        "apelido"
-      );
+      return this.$_.orderBy(this.DocentesAtivos, "apelido");
     },
   },
 };

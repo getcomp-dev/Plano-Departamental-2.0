@@ -3,24 +3,34 @@
     <td style="width:70px">
       <div style="height:30px"></div>
     </td>
+
     <td style="width: 25px">
-      <input type="checkbox" @click="checkDelete(carga)" />
+      <input type="checkbox" v-model="toggleToDelete" :value="carga" />
     </td>
+
     <td style="width: 55px">
-      <select v-model.number="cargaPosForm.trimestre" @change="editCargaPos">
-        <option type="text" value="1">1</option>
-        <option type="text" value="2">2</option>
-        <option type="text" value="3">3</option>
+      <select
+        v-model.number="cargaPosForm.trimestre"
+        @change="handleEditCargaPos"
+      >
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
       </select>
     </td>
 
     <td style="width: 145px">
-      <select v-model.number="cargaPosForm.Docente" @change="editCargaPos">
+      <select
+        v-model.number="cargaPosForm.Docente"
+        @change="handleEditCargaPos"
+      >
         <option
-          v-for="docente in Docentes"
+          v-for="docente in DocentesOrdered"
           :key="'id docente' + docente.id"
           :value="docente.id"
-        >{{ docente.apelido }}</option>
+          >{{ docente.apelido }}</option
+        >
       </select>
     </td>
 
@@ -29,25 +39,15 @@
         type="text"
         v-model.number="cargaPosForm.creditos"
         @keypress="maskOnlyNumber"
-        @change="editCargaPos()"
+        @change="handleEditCargaPos"
       />
     </td>
   </tr>
 </template>
 
 <script>
-import cargaPosService from "@/common/services/cargaPos";
 import { mapActions, mapGetters } from "vuex";
 import { maskOnlyNumber } from "@/common/mixins";
-import { setEmptyValuesToNull, validateObjectKeys } from "@/common/utils";
-
-const emptyCarga = {
-  id: null,
-  trimestre: null,
-  Docente: null,
-  programa: null,
-  creditos: null,
-};
 
 export default {
   name: "CargaPosRow",
@@ -57,52 +57,47 @@ export default {
   },
   data() {
     return {
-      cargaPosForm: this.$_.clone(emptyCarga),
+      cargaPosForm: null,
     };
   },
 
   methods: {
-    ...mapActions(["setPartialLoading"]),
+    ...mapActions(["toggleCargaToDelete", "editCargaPos"]),
 
     resetCargaPos() {
       this.cargaPosForm = this.$_.clone(this.carga);
     },
 
-    async editCargaPos() {
+    async handleEditCargaPos() {
       try {
         this.setPartialLoading(true);
-
-        const newCargaPos = this.$_.cloneDeepWith(
-          this.cargaPosForm,
-          setEmptyValuesToNull
-        );
-        validateObjectKeys(newCargaPos, ["creditos"]);
-
-        await cargaPosService.update(newCargaPos.id, newCargaPos);
-        this.pushNotification({
-          text: `Carga ${newCargaPos.programa} atualizada`,
-        });
+        await this.editCargaPos(this.cargaPosForm);
       } catch (error) {
         this.resetCargaPos();
 
         this.pushNotification({
           type: "error",
           title: "Erro ao atualizar carga!",
-          text: error.message || "Tente novamente",
+          text: error.message || "",
         });
       } finally {
         this.setPartialLoading(false);
       }
     },
-
-    checkDelete(carga) {
-      this.$store.commit("checkDeleteCarga", { CargaPos: carga });
-    },
   },
   computed: {
-    ...mapGetters(["DocentesAtivos"]),
+    ...mapGetters(["DocentesAtivos", "CargasPosToDelete"]),
 
-    Docentes() {
+    toggleToDelete: {
+      set() {
+        this.toggleCargaToDelete(this.carga);
+      },
+      get() {
+        return this.CargasPosToDelete;
+      },
+    },
+
+    DocentesOrdered() {
       return this.$_.orderBy(this.DocentesAtivos, "apelido");
     },
   },

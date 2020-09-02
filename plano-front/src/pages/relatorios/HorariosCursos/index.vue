@@ -609,7 +609,7 @@ export default {
               fontSize: 10,
             },
             {
-              text: "1º Semestre " + this.currentPlano.ano,
+              text: "1º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -993,7 +993,7 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "1º Semestre " + this.currentPlano.ano,
+              text: "1º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -1379,7 +1379,7 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "1º Semestre " + this.currentPlano.ano,
+              text: "1º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -1765,7 +1765,7 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "1º Semestre " + this.currentPlano.ano,
+              text: "1º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -2151,7 +2151,7 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "1º Semestre " + this.currentPlano.ano,
+              text: "1º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -2612,7 +2612,7 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "2º Semestre " + this.currentPlano.ano,
+              text: "2º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -2998,7 +2998,7 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "2º Semestre " + this.currentPlano.ano,
+              text: "2º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -3384,7 +3384,7 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "2º Semestre " + this.currentPlano.ano,
+              text: "2º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -3770,7 +3770,7 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "2º Semestre " + this.currentPlano.ano,
+              text: "2º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -4156,7 +4156,7 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "2º Semestre " + this.currentPlano.ano,
+              text: "2º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,

@@ -14,16 +14,25 @@
     </template>
 
     <template #modal-footer>
-      <div class="ml-auto">
+      <div class="mr-auto">
         <BaseButton
+          v-if="hasClearDelete"
           class="paddingX-20"
           :type="'text'"
-          :color="'red'"
-          @click="handleBtnDelete"
+          :color="'gray'"
+          @click="emitClearDelete"
         >
-          Deletar
+          Cancelar seleções
         </BaseButton>
       </div>
+      <BaseButton
+        class="paddingX-20"
+        :type="'text'"
+        :color="'red'"
+        @click="emitDelete"
+      >
+        Deletar
+      </BaseButton>
     </template>
   </BaseModal2>
 </template>
@@ -33,17 +42,22 @@ export default {
   name: "ModalDelete",
   props: {
     isDeleting: { type: Boolean, default: false },
+    hasClearDelete: { type: Boolean, default: false },
   },
   methods: {
-    handleBtnDelete() {
-      this.$emit("btn-deletar");
-      this.close();
-    },
     open() {
       this.$refs.baseModalDelete.open();
     },
     close() {
       this.$refs.baseModalDelete.close();
+    },
+    emitDelete() {
+      this.close();
+      this.$emit("btn-deletar");
+    },
+    emitClearDelete() {
+      this.close();
+      this.$emit("btn-clear");
     },
   },
 };

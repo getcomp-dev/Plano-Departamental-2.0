@@ -5,7 +5,9 @@
     <td style="width: 55px" class="less-padding">
       <select v-model.number="turmaForm.periodo">
         <option value="1">1</option>
+        <option value="2">2</option>
         <option value="3">3</option>
+        <option value="4">4</option>
       </select>
     </td>
     <td
@@ -50,8 +52,8 @@
       />
     </td>
     <td style="width:130px" class="less-padding">
-      <select type="text" v-model="turmaForm.Docente1">
-        <option></option>
+      <select v-model.number="turmaForm.Docente1">
+        <option value=""></option>
         <option
           v-for="docente in DocentesAtivos"
           :key="docente.id + docente.apelido"
@@ -60,8 +62,8 @@
         >
       </select>
 
-      <select type="text" v-model="turmaForm.Docente2">
-        <option></option>
+      <select v-model.number="turmaForm.Docente2">
+        <option value=""></option>
         <option
           v-for="docente in DocentesAtivos"
           :key="docente.id + docente.nome"
@@ -86,8 +88,7 @@
     <td style="width: 85px" class="less-padding">
       <template v-if="turmaForm.disciplina">
         <select
-          type="text"
-          v-model="turmaForm.Horario1"
+          v-model.number="turmaForm.Horario1"
           @change="handleChangeHorario(1)"
         >
           <option
@@ -103,8 +104,7 @@
 
         <select
           v-if="totalCarga >= 4"
-          type="text"
-          v-model="turmaForm.Horario2"
+          v-model.number="turmaForm.Horario2"
           @change="handleChangeHorario(2)"
         >
           <option
@@ -132,8 +132,8 @@
     </td>
     <td style="width: 95px" class="less-padding">
       <template v-if="!disciplinaIsIntegralEAD && turmaForm.disciplina">
-        <select v-model="turmaForm.Sala1">
-          <option></option>
+        <select v-model.number="turmaForm.Sala1">
+          <option value=""></option>
           <option
             v-for="sala in AllSalas"
             :key="'s1' + sala.id"
@@ -144,10 +144,9 @@
 
         <select
           v-if="totalCarga >= 4 && turmaForm.disciplina.ead != 2"
-          type="text"
-          v-model="turmaForm.Sala2"
+          v-model.number="turmaForm.Sala2"
         >
-          <option></option>
+          <option value=""></option>
           <option
             v-for="sala in AllSalas"
             :key="'s2' + sala.id"
@@ -158,28 +157,23 @@
       </template>
     </td>
     <td style="width:45px">
-      <div style="height: 43px"></div>
+      <div style="height:43px"></div>
     </td>
     <td
       v-if="cursosAtivadosLength"
-      :style="`width: ${35 * cursosAtivadosLength}px`"
+      :style="`width:${35 * cursosAtivadosLength}px`"
     ></td>
   </tr>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import turmaService from "@/common/services/turma";
-import {
-  setEmptyValuesToNull,
-  validateObjectKeys,
-  generateEmptyTurma,
-} from "@/common/utils";
-import { notification, maskTurmaLetra } from "@/common/mixins";
+import { mapGetters, mapActions } from "vuex";
+import { generateEmptyTurma } from "@/common/utils";
+import { maskTurmaLetra } from "@/common/mixins";
 
 export default {
   name: "NovaTurmaRow",
-  mixins: [notification, maskTurmaLetra],
+  mixins: [maskTurmaLetra],
   props: { cursosAtivadosLength: Number, default: 0 },
   data() {
     return {
@@ -188,6 +182,8 @@ export default {
   },
 
   methods: {
+    ...mapActions(["addNovaTurma"]),
+
     handleChangeTurno() {
       this.turmaForm.Horario1 = null;
       if (!this.disciplinaIsParcialEAD) this.turmaForm.Horario2 = null;
@@ -233,32 +229,17 @@ export default {
         this.turmaForm.turno1 = "Diurno";
     },
 
-    async addTurma() {
+    async handleAddNovaTurma() {
       try {
         this.setPartialLoading(true);
-
-        const newTurma = this.$_.cloneDeepWith(
-          this.turmaForm,
-          setEmptyValuesToNull
-        );
-        validateObjectKeys(newTurma, ["Disciplina", "letra", "turno1"]);
-        newTurma.Plano = parseInt(localStorage.getItem("Plano"), 10);
-
-        const response = await turmaService.create(newTurma);
-        await this.$store.dispatch("fetchAllPedidos");
-        this.showNotification({
-          type: "success",
-          message: `Turma ${response.Turma.letra} foi criada!`,
-        });
+        await this.addNovaTurma(this.turmaForm);
       } catch (error) {
-        const erroMsg = error.response
-          ? "A combinação de disciplina, semestre e turma deve ser única."
-          : error.message;
-
-        this.showNotification({
+        this.pushNotification({
           type: "error",
           title: "Erro ao criar nova turma!",
-          message: erroMsg,
+          text: error.response
+            ? "A combinação de disciplina, período e turma deve ser única."
+            : error.message,
         });
       } finally {
         this.setPartialLoading(false);

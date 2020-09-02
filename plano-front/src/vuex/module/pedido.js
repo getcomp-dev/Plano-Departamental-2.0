@@ -94,12 +94,16 @@ const actions = {
 
     commit("PUSH_NOTIFICATION", {
       type: "success",
-      text: "Pedido foi atualizado",
+      text: "O pedido foi atualizado",
     });
   },
 };
 
-const getters = {};
+const getters = {
+  Pedidos(state) {
+    return state.Pedidos;
+  },
+};
 
 export default {
   state,

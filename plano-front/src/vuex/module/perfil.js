@@ -59,10 +59,7 @@ const getters = {
     return _.orderBy(state.Perfis, ["nome"]);
   },
   PerfisDCC(state, getters) {
-    return _.filter(
-      getters.AllPerfis,
-      (perfil) => perfil.id !== 13 && perfil.id !== 15
-    );
+    return _.filter(getters.AllPerfis, (perfil) => perfil.id !== 13);
   },
   PerfisExternos(state, getters) {
     return _.filter(

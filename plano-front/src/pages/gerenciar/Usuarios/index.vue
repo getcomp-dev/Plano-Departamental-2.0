@@ -7,7 +7,7 @@
         :color="'lightblue'"
         @click="$refs.modalAjuda.toggle()"
       >
-        <font-awesome-icon :icon="['fas','question']" />
+        <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
     </PageHeader>
 
@@ -67,13 +67,23 @@
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
               <label required for="nome">Nome</label>
-              <input class="form-control" type="text" id="nome" v-model="userForm.nome" />
+              <input
+                class="form-control"
+                type="text"
+                id="nome"
+                v-model="userForm.nome"
+              />
             </div>
           </div>
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
               <label required for="login">Login</label>
-              <input class="form-control" type="text" id="login" v-model="userForm.login" />
+              <input
+                class="form-control"
+                type="text"
+                id="login"
+                v-model="userForm.login"
+              />
             </div>
           </div>
           <!-- Create -->
@@ -82,7 +92,11 @@
             <div class="row mb-2 mx-0">
               <div class="form-group col m-0 px-0">
                 <label required for="novaSenha">Senha</label>
-                <InputPassword :iconSize="13" :inputId="'novaSenha'" v-model="userForm.senha" />
+                <InputPassword
+                  :iconSize="13"
+                  :inputId="'novaSenha'"
+                  v-model="userForm.senha"
+                />
               </div>
             </div>
             <!-- confirmar senha -->
@@ -101,7 +115,10 @@
           <!-- Edit -->
           <template v-else-if="isEdit">
             <!-- toggle edit senha -->
-            <ButtonSlideSection :isOpen="isEditingSenha" @handel-click="toggleEditSenha" />
+            <ButtonSlideSection
+              :isOpen="isEditingSenha"
+              @handel-click="toggleEditSenha"
+            />
 
             <!-- edit senha -->
             <transition-group name="slideY" mode="out-in">
@@ -109,13 +126,19 @@
                 <div :key="'senha'" class="row mb-2 mx-0">
                   <div class="form-group col m-0 px-0">
                     <label required for="novaSenha">Nova senha</label>
-                    <InputPassword :iconSize="13" :inputId="'novaSenha'" v-model="novaSenha" />
+                    <InputPassword
+                      :iconSize="13"
+                      :inputId="'novaSenha'"
+                      v-model="novaSenha"
+                    />
                   </div>
                 </div>
                 <!-- confirma nova senha -->
                 <div :key="'confirma'" class="row mb-2 mx-0">
                   <div class="form-group col m-0 px-0">
-                    <label required for="confirmaSenha">Confirmar nova senha</label>
+                    <label required for="confirmaSenha"
+                      >Confirmar nova senha</label
+                    >
                     <InputPassword
                       :iconSize="13"
                       :isInvalid="confirmaSenha != novaSenha"
@@ -131,7 +154,11 @@
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
               <label for="userAdmin">Tipo</label>
-              <select id="userAdmin" v-model.number="userForm.admin" class="form-control">
+              <select
+                id="userAdmin"
+                v-model.number="userForm.admin"
+                class="form-control"
+              >
                 <option value="0">Consulta</option>
                 <option value="1">Comissão</option>
                 <option value="2">Administrador</option>
@@ -142,14 +169,21 @@
       </Card>
     </div>
 
-    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deleteUser">
+    <ModalDelete
+      ref="modalDelete"
+      :isDeleting="isEdit"
+      @btn-deletar="deleteUser"
+    >
       <li class="list-group-item">
         <span>
           <template v-if="isEdit">
             Tem certeza que deseja excluír o usuário
-            <b>{{ userForm.nome}}</b>?
+            <b>{{ userForm.nome }}</b
+            >?
           </template>
-          <template v-else>Nenhum usuário selecionado!</template>
+          <template v-else
+            >Nenhum usuário selecionado!</template
+          >
         </span>
       </li>
     </ModalDelete>
@@ -158,8 +192,8 @@
       <li class="list-group-item">
         <b>Para excluir um usuário:</b> clique no ícone de deletar
         <i class="fas fa-times icon-red"></i> presente na tabela, em seguida
-        confirme se é realmente o usuário que deseja exluir e clique no
-        botão deletar ou cancelar.
+        confirme se é realmente o usuário que deseja exluir e clique no botão
+        deletar ou cancelar.
       </li>
     </ModalAjuda>
   </div>
@@ -167,7 +201,7 @@
 
 <script>
 import userService from "@/common/services/usuario";
-import { toggleOrdination, notification } from "@/common/mixins";
+import { toggleOrdination } from "@/common/mixins";
 import { InputPassword, Card, ButtonSlideSection } from "@/components/ui";
 import { ModalDelete, ModalAjuda } from "@/components/modals";
 
@@ -180,7 +214,7 @@ const emptyUser = {
 
 export default {
   name: "Usuarios",
-  mixins: [notification, toggleOrdination],
+  mixins: [toggleOrdination],
   components: {
     Card,
     InputPassword,
@@ -248,24 +282,24 @@ export default {
       const user = this.$_.clone(this.userForm);
 
       if (!this.validateUser(user)) {
-        this.showNotification({
+        this.pushNotification({
           type: "error",
-          message: `Campos obrigátorios incompletos ou inválidos.`,
+          text: `Campos obrigátorios incompletos ou inválidos.`,
         });
         return;
       }
 
       try {
         await userService.create(user);
-        this.showNotification({
+        this.pushNotification({
           type: "success",
-          message: `Usuário criado.`,
+          text: `Usuário criado.`,
         });
         this.cleanUser();
       } catch (error) {
-        this.showNotification({
+        this.pushNotification({
           type: "error",
-          message: error,
+          text: error,
         });
       }
     },
@@ -274,25 +308,25 @@ export default {
       user.senha = this.novaSenha;
 
       if (!this.validateEditUser(user)) {
-        this.showNotification({
+        this.pushNotification({
           type: "error",
-          message: `Campos obrigátorios incompletos ou inválidos.`,
+          text: `Campos obrigátorios incompletos ou inválidos.`,
         });
         return;
       }
 
       try {
         await userService.updateSuper(user.id, user);
-        this.showNotification({
+        this.pushNotification({
           type: "success",
-          message: `Usuário atualizado.`,
+          text: `Usuário atualizado.`,
         });
         this.novaSenha = "";
         this.confirmaSenha = "";
       } catch (error) {
-        this.showNotification({
+        this.pushNotification({
           type: "error",
-          message: "Login ou senha inválida",
+          text: "Login ou senha inválida",
         });
       }
     },
@@ -301,15 +335,15 @@ export default {
 
       try {
         await userService.delete(user.id, user);
-        this.showNotification({
+        this.pushNotification({
           type: "success",
-          message: `Usuário ${user.nome} foi removido.`,
+          text: `Usuário ${user.nome} foi removido.`,
         });
         this.cleanUser();
       } catch (error) {
-        this.showNotification({
+        this.pushNotification({
           type: "error",
-          message: error,
+          text: error,
         });
       }
     },

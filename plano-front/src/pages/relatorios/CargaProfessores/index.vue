@@ -71,7 +71,7 @@
         </template>
         <template #tbody>
           <template v-for="docente in DocentesOrderedMain">
-            <tr class="bg-custom" :key="'docente' + docente.id">
+            <tr class="bg-custom" :key="docente.id + docente.nome">
               <td style="width: 130px" class="t-start">
                 {{ docente.apelido }}
               </td>
@@ -105,7 +105,7 @@
 
             <tr
               v-for="turma in docente.Turmas1Semestre"
-              :key="'turmas' + turma.id + turma.periodo + docente.apelido"
+              :key="turma.id + docente.apelido + turma.periodo"
             >
               <td style="width: 130px"></td>
               <td style="width: 25px">{{ turma.periodo }}</td>
@@ -152,7 +152,7 @@
 
             <tr
               v-for="carga in docente.CargasPos1Semestre"
-              :key="'cp' + carga.id + carga.trimestre + docente.id"
+              :key="carga.id + docente.nome + carga.trimestre"
             >
               <td style="width: 130px"></td>
               <td style="width: 25px">{{ carga.trimestre }}</td>
@@ -192,7 +192,7 @@
 
             <tr
               v-for="turma in docente.Turmas2Semestre"
-              :key="'turmas' + turma.id + turma.periodo + docente.apelido"
+              :key="turma.id + docente.apelido + turma.periodo"
             >
               <td style="width: 130px"></td>
               <td style="width: 25px">{{ turma.periodo }}</td>
@@ -238,7 +238,7 @@
 
             <tr
               v-for="carga in docente.CargasPos2Semestre"
-              :key="'2cargaPos' + carga.id + docente.id"
+              :key="carga.id + docente.nome + carga.trimestre"
             >
               <td style="width: 130px"></td>
               <td style="width: 25px">{{ carga.trimestre }}</td>
@@ -597,11 +597,13 @@ export default {
         pdfs.pdfCargaProfessores({
           Docentes: this.DocentesAtivos,
           SemAlocacao: true,
+          plano: this.$_.find(this.$store.state.plano.Plano, {id: parseInt(localStorage.getItem('Plano'))})
         });
       else
         pdfs.pdfCargaProfessores({
           Docentes: this.filtroDocentes.ativados,
           SemAlocacao: this.filtroDocenteSemAlocacao.ativado,
+          plano: this.$_.find(this.$store.state.plano.Plano, {id: parseInt(localStorage.getItem('Plano'))})
         });
     },
 
@@ -626,7 +628,7 @@ export default {
           if (turma.periodo === 1 || turma.periodo === 2) {
             Turmas1Semestre.push({ ...turma, creditosDaTurma });
             totalCreditos1Semestre += creditosDaTurma;
-          } else {
+          } else if (turma.periodo === 3 || turma.periodo === 4) {
             Turmas2Semestre.push({ ...turma, creditosDaTurma });
             totalCreditos2Semestre += creditosDaTurma;
           }
@@ -634,10 +636,12 @@ export default {
       });
 
       Turmas1Semestre = this.$_.orderBy(Turmas1Semestre, [
+        "periodo",
         "Disciplina",
         "letra",
       ]);
       Turmas2Semestre = this.$_.orderBy(Turmas2Semestre, [
+        "periodo",
         "Disciplina",
         "letra",
       ]);
@@ -768,9 +772,9 @@ export default {
       return this.$_.filter(this.turmasSemAlocacao, (turma) => {
         switch (this.filtroSemestres.ativo) {
           case 1:
-            return turma.periodo === 1;
+            return turma.periodo === 1 || turma.periodo === 2;
           case 2:
-            return turma.periodo === 2;
+            return turma.periodo === 3 || turma.periodo === 4;
           case 3:
             return true;
           default:

@@ -68,20 +68,22 @@
           >
         </div>
 
-        <!-- Semestre, Turma e Creditos -->
+        <!-- Período, Turma e Creditos -->
         <div class="form-row w-100">
           <div class="form-group col">
-            <label for="selectSemestre">Semestre:</label>
+            <label for="selectPeriodo">Período:</label>
             <select
               type="email"
               class="form-control"
-              id="selectSemestre"
-              v-model="turmaForm.periodo"
+              id="selectPeriodo"
+              v-model.number="turmaForm.periodo"
               style="width:60px"
-              v-on:change="checkHorariosPeriodo()"
+              v-on:change="checkHorariosPeriodo"
             >
               <option value="1">1</option>
+              <option value="2">2</option>
               <option value="3">3</option>
+              <option value="4">4</option>
             </select>
           </div>
           <div class="form-group col">
@@ -488,7 +490,7 @@ export default {
         this.initialData = this.$_.clone(this.turmaForm);
       } catch (error) {
         const erroMsg = error.response
-          ? "A combinação de disciplina, semestre e turma deve ser única"
+          ? "A combinação de disciplina, período e turma deve ser única"
           : error.message;
         this.pushNotification({
           type: "error",

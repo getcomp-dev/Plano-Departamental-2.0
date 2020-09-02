@@ -61,57 +61,25 @@
             ></i>
           </th>
           <th style="width: 35px" title="Créditos">C.</th>
-          <th style="width: 25px" title="Semestre">S.</th>
+          <th style="width: 25px" title="Período letivo">P.</th>
           <th style="width: 35px" title="Turma">T.</th>
           <th style="width: 150px">Docentes</th>
           <th style="width: 130px" class="less-padding">Horário</th>
 
-          <template v-if="semestre1IsActived && semestre2IsActived">
+          <template v-if="anyPeriodoIsActived">
             <th
-              title="Somatório total dos créditos"
+              :title="currentTheadTitle.creditos"
               style="width: 45px"
               class="less-padding"
             >
-              CTotal
+              SC
             </th>
             <th
-              title="Somatório total das vagas"
+              :title="currentTheadTitle.vagas"
               style="width: 45px"
               class="less-padding"
             >
-              VTotal
-            </th>
-          </template>
-          <template v-else-if="semestre1IsActived">
-            <th
-              title="Somatório dos créditos no 1º semestre"
-              style="width: 45px"
-              class="less-padding"
-            >
-              CS1
-            </th>
-            <th
-              title="Somatório das vagas no 1º semestre"
-              style="width: 45px"
-              class="less-padding"
-            >
-              VS1
-            </th>
-          </template>
-          <template v-else-if="semestre2IsActived">
-            <th
-              title="Somatório dos créditos no 2º semestre"
-              style="width: 45px"
-              class="less-padding"
-            >
-              CS2
-            </th>
-            <th
-              title="Somatório das vagas no 2º semestre"
-              style="width: 45px"
-              class="less-padding"
-            >
-              VS2
+              SV
             </th>
           </template>
         </template>
@@ -127,32 +95,10 @@
             <td style="width: 150px"></td>
             <td style="width: 130px" class="less-padding"></td>
             <td style="width: 45px">
-              <template v-if="semestre1IsActived && semestre2IsActived">
-                {{
-                  somatoriosTotais.creditos1Semestre +
-                    somatoriosTotais.creditos2Semestre
-                }}
-              </template>
-              <template v-else-if="semestre1IsActived">
-                {{ somatoriosTotais.creditos1Semestre }}
-              </template>
-              <template v-else-if="semestre2IsActived">
-                {{ somatoriosTotais.creditos2Semestre }}
-              </template>
+              {{ somatoriosTotais.creditos }}
             </td>
             <td style="width: 45px">
-              <template v-if="semestre1IsActived && semestre2IsActived">
-                {{
-                  somatoriosTotais.vagas1Semestre +
-                    somatoriosTotais.vagas2Semestre
-                }}
-              </template>
-              <template v-else-if="semestre1IsActived">
-                {{ somatoriosTotais.vagas1Semestre }}
-              </template>
-              <template v-else-if="semestre2IsActived">
-                {{ somatoriosTotais.vagas2Semestre }}
-              </template>
+              {{ somatoriosTotais.vagas }}
             </td>
           </tr>
 
@@ -169,36 +115,10 @@
               <td style="width: 150px"></td>
               <td style="width: 130px" class="less-padding"></td>
               <td style="width: 45px">
-                <template v-if="semestre1IsActived && semestre2IsActived">
-                  {{
-                    disciplina.creditos1Semestre + disciplina.creditos2Semestre
-                  }}
-                </template>
-                <template v-else-if="semestre1IsActived">
-                  {{ disciplina.creditos1Semestre }}
-                </template>
-                <template v-else-if="semestre2IsActived">
-                  {{ disciplina.creditos2Semestre }}
-                </template>
+                {{ disciplina.somatorioCreditos }}
               </td>
               <td style="width: 45px">
-                <template v-if="semestre1IsActived && semestre2IsActived">
-                  {{ disciplina.vagas1Semestre + disciplina.vagas2Semestre }}
-                </template>
-                <template v-else-if="semestre1IsActived">
-                  {{
-                    disciplina.vagas1Semestre === 0
-                      ? ""
-                      : disciplina.vagas1Semestre
-                  }}
-                </template>
-                <template v-else-if="semestre2IsActived">
-                  {{
-                    disciplina.vagas2Semestre === 0
-                      ? ""
-                      : disciplina.vagas2Semestre
-                  }}
-                </template>
+                {{ disciplina.somatorioVagas }}
               </td>
             </tr>
 
@@ -223,7 +143,7 @@
               <td style="width: 45px"></td>
 
               <td
-                v-if="semestre1IsActived || semestre2IsActived"
+                v-if="anyPeriodoIsActived"
                 @click="handleClickInTurmaVaga(turma)"
                 class="td-vagas clickable"
                 style="width: 45px"
@@ -239,7 +159,7 @@
               <b>Nenhuma disciplina encontrada.</b> Clique no botão de filtros
               <i class="fas fa-list-ul mx-1"></i> para selecioná-las.
             </td>
-            <template v-if="semestre1IsActived || semestre2IsActived">
+            <template v-if="anyPeriodoIsActived">
               <td style="width: 45px" class="borderX-0"></td>
               <td style="width: 45px" class="borderX-0"></td>
             </template>
@@ -337,40 +257,6 @@
         </BaseTable>
 
         <BaseTable
-          v-show="modalFiltrosTabs.current === 'Semestres'"
-          :type="'modal'"
-        >
-          <template #thead>
-            <th style="width: 25px"></th>
-            <th class="t-start clickable" style="width: 425px">
-              Semestre Letivo
-            </th>
-          </template>
-          <template #tbody>
-            <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  v-model="filtroSemestres.primeiro"
-                />
-              </td>
-              <td style="width: 425px" class="t-start">PRIMEIRO</td>
-            </tr>
-            <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  v-model="filtroSemestres.segundo"
-                />
-              </td>
-              <td style="width: 425px" class="t-start">SEGUNDO</td>
-            </tr>
-          </template>
-        </BaseTable>
-
-        <BaseTable
           :type="'modal'"
           v-show="modalFiltrosTabs.current === 'Perfis'"
         >
@@ -400,6 +286,37 @@
                 />
               </td>
               <td style="width: 425px" class="t-start">{{ perfil.nome }}</td>
+            </tr>
+          </template>
+        </BaseTable>
+
+        <BaseTable
+          type="modal"
+          v-show="modalFiltrosTabs.current === 'Períodos'"
+        >
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th style="width: 425px" class="t-start">Periodos Letivo</th>
+          </template>
+          <template #tbody>
+            <tr
+              v-for="periodoLetivo in PeriodosLetivos"
+              :key="periodoLetivo.id + periodoLetivo.nome"
+              @click.stop="
+                toggleItemInArray(periodoLetivo, filtroPeriodos.selecionados)
+              "
+            >
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  :value="periodoLetivo"
+                  v-model="filtroPeriodos.selecionados"
+                />
+              </td>
+              <td style="width: 425px" class="t-start upper-case">
+                {{ periodoLetivo.nome }}
+              </td>
             </tr>
           </template>
         </BaseTable>
@@ -446,7 +363,6 @@ import {
 } from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
 import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
-
 import ModalVagas from "./ModalVagas";
 
 export default {
@@ -484,14 +400,13 @@ export default {
       filtroPerfis: {
         selecionados: [],
       },
-      filtroSemestres: {
-        primeiro: true,
-        segundo: true,
-        ativo: 3,
+      filtroPeriodos: {
+        ativados: [],
+        selecionados: [],
       },
       modalFiltrosTabs: {
         current: "Perfis",
-        array: ["Perfis", "Disciplinas", "Semestres"],
+        array: ["Perfis", "Disciplinas", "Períodos"],
       },
       modalFiltrosCallbacks: {
         selectAll: {
@@ -506,9 +421,8 @@ export default {
               ),
             ];
           },
-          Semestres: () => {
-            this.filtroSemestres.primeiro = true;
-            this.filtroSemestres.segundo = true;
+          Periodos: () => {
+            this.filtroPeriodos.selecionados = [...this.PeriodosLetivos];
           },
         },
         selectNone: {
@@ -518,13 +432,12 @@ export default {
           Disciplinas: () => {
             this.filtroDisciplinas.selecionados = [];
           },
-          Semestres: () => {
-            this.filtroSemestres.primeiro = false;
-            this.filtroSemestres.segundo = false;
+          Periodos: () => {
+            this.filtroPeriodos.selecionados = [];
           },
         },
         btnOk: () => {
-          this.setSemestreAtivo();
+          this.filtroPeriodos.ativados = [...this.filtroPeriodos.selecionados];
           this.filtroDisciplinas.ativados = [
             ...this.filtroDisciplinas.selecionados,
           ];
@@ -536,33 +449,21 @@ export default {
   beforeMount() {
     this.modalFiltrosCallbacks.selectAll.Disciplinas();
     this.modalFiltrosCallbacks.selectAll.Perfis();
-    this.filtroDisciplinas.ativados = [...this.filtroDisciplinas.selecionados];
+    this.modalFiltrosCallbacks.selectAll.Periodos();
+    this.modalFiltrosCallbacks.btnOk();
   },
 
   methods: {
-    setSemestreAtivo() {
-      const { primeiro, segundo } = this.filtroSemestres;
-
-      if (primeiro && !segundo) this.filtroSemestres.ativo = 1;
-      else if (!primeiro && segundo) this.filtroSemestres.ativo = 2;
-      else if (primeiro && segundo) this.filtroSemestres.ativo = 3;
-      else this.filtroSemestres.ativo = undefined;
-    },
-    toggleModalRelatorio() {
-      this.$refs.modalRelatorio.toggle();
-    },
     handleClickInTurmaVaga(turma) {
       this.turmaClicked = turma;
       this.$refs.modalVagas.open();
     },
     pdf(completo) {
-      let disciplinasSelecionadas;
-      if (completo) disciplinasSelecionadas = this.DisciplinasDCCInPerfis;
-      else
-        disciplinasSelecionadas = this.DisciplinasInTurmasFiltredByDisciplina;
-
       pdfs.pdfRelatorioDisciplinas({
-        disciplinasSelecionadas,
+        disciplinasSelecionadas: completo
+          ? this.DisciplinasDCCInPerfis
+          : this.DisciplinasInTurmasFiltredByDisciplina,
+        plano: this.$_.find(this.$store.state.plano.Plano, {id: parseInt(localStorage.getItem('Plano'))})
       });
     },
     getVagasByTurmaId(turmaId) {
@@ -582,18 +483,50 @@ export default {
       "TurmasInDisciplinasPerfis",
       "DisciplinasDCCInPerfis",
       "PerfisDCC",
+      "PeriodosLetivos",
+      "Pedidos",
     ]),
 
     DisciplinasInTurmasOrdered() {
       return this.$_.orderBy(
+        this.DisciplinasInTurmasSomatorios,
+        ["periodo", this.ordenacaoMain.disciplinas.order],
+        ["asc", this.ordenacaoMain.disciplinas.type]
+      );
+    },
+    DisciplinasInTurmasSomatorios() {
+      return this.$_.map(
         this.DisciplinasInTurmasFiltredByDisciplina,
-        this.ordenacaoMain.disciplinas.order,
-        this.ordenacaoMain.disciplinas.type
+        (disciplina) => {
+          const Turmas = [];
+          let somatorioCreditos = 0;
+          let somatorioVagas = 0;
+
+          this.$_.forEach(disciplina.Turmas, (turma) => {
+            if (turma.Disciplina === disciplina.id) {
+              const turmaVagas = this.getVagasByTurmaId(turma.id);
+              somatorioCreditos += turma.disciplina.creditoTotal;
+              somatorioVagas += turmaVagas;
+
+              Turmas.push({
+                ...turma,
+                vagas: turmaVagas,
+              });
+            }
+          });
+
+          return {
+            ...disciplina,
+            Turmas,
+            somatorioCreditos,
+            somatorioVagas,
+          };
+        }
       );
     },
     DisciplinasInTurmasFiltredByDisciplina() {
       return this.$_.filter(
-        this.DisciplinasInTurmasFiltredBySemestre,
+        this.DisciplinasInTurmasFiltredByPeriodo,
         (disciplina) =>
           this.$_.some(
             this.filtroDisciplinas.ativados,
@@ -601,100 +534,56 @@ export default {
           )
       );
     },
-    DisciplinasInTurmasFiltredBySemestre() {
-      const disciplinasResult = [];
+    DisciplinasInTurmasFiltredByPeriodo() {
+      const disciplinasResultantes = [];
 
       this.$_.forEach(this.DisciplinasInTurmas, (disciplina) => {
-        const TurmasFiltred = this.$_.filter(disciplina.Turmas, (turma) => {
-          switch (this.filtroSemestres.ativo) {
-            case 1:
-              return turma.periodo === 1 || turma.periodo === 2;
-            case 2:
-              return turma.periodo === 3 || turma.periodo === 4;
-            case 3:
-              return true;
-            default:
-              return false;
-          }
-        });
+        const TurmasFiltred = this.$_.filter(disciplina.Turmas, (turma) =>
+          this.$_.some(this.filtroPeriodos.ativados, ["id", turma.periodo])
+        );
 
-        if (TurmasFiltred.length)
-          disciplinasResult.push({
+        if (TurmasFiltred.length) {
+          disciplinasResultantes.push({
             ...disciplina,
             Turmas: TurmasFiltred,
           });
+        }
       });
-
-      return disciplinasResult;
+      return disciplinasResultantes;
     },
     DisciplinasInTurmas() {
-      const AllTurmasOrdered = this.$_.orderBy(this.TurmasInDisciplinasPerfis, [
-        "periodo",
-      ]);
-
+      const turmasOrdered = this.$_.orderBy(
+        this.TurmasInDisciplinasPerfis,
+        "periodo"
+      );
       return this.$_.map(this.DisciplinasDCCInPerfis, (disciplina) => {
-        const Turmas = [];
-        let vagas1Semestre = 0;
-        let vagas2Semestre = 0;
-        let creditos1Semestre = 0;
-        let creditos2Semestre = 0;
-
-        this.$_.forEach(AllTurmasOrdered, (turma) => {
-          if (turma.Disciplina === disciplina.id) {
-            const turmaVagas = this.getVagasByTurmaId(turma.id);
-
-            if (turma.periodo === 1 || turma.periodo === 2) {
-              creditos1Semestre += turma.disciplina.creditoTotal;
-              vagas1Semestre += turmaVagas;
-            } else {
-              creditos2Semestre += turma.disciplina.creditoTotal;
-              vagas2Semestre += turmaVagas;
-            }
-
-            Turmas.push({
-              ...turma,
-              vagas: turmaVagas,
-            });
-          }
-        });
+        const Turmas = this.$_.filter(turmasOrdered, [
+          "Disciplina",
+          disciplina.id,
+        ]);
 
         return {
           ...disciplina,
           Turmas,
-          vagas1Semestre,
-          vagas2Semestre,
-          creditos1Semestre,
-          creditos2Semestre,
         };
       });
     },
 
     somatoriosTotais() {
-      let vagas1Semestre = 0;
-      let vagas2Semestre = 0;
-      let creditos1Semestre = 0;
-      let creditos2Semestre = 0;
+      let vagas = 0;
+      let creditos = 0;
 
-      this.$_.forEach(
-        this.DisciplinasInTurmasFiltredByDisciplina,
-        (disciplina) => {
-          vagas1Semestre += disciplina.vagas1Semestre;
-          vagas2Semestre += disciplina.vagas2Semestre;
-
-          creditos1Semestre += disciplina.creditos1Semestre;
-          creditos2Semestre += disciplina.creditos2Semestre;
-        }
-      );
+      this.$_.forEach(this.DisciplinasInTurmasSomatorios, (disciplina) => {
+        vagas += disciplina.somatorioVagas;
+        creditos += disciplina.somatorioCreditos;
+      });
 
       return {
-        vagas1Semestre,
-        creditos1Semestre,
-        vagas2Semestre,
-        creditos2Semestre,
+        creditos,
+        vagas,
       };
     },
 
-    // table modal
     DisciplinasOrderedModal() {
       return this.$_.orderBy(
         this.DisciplinasFiltredModal,
@@ -725,17 +614,32 @@ export default {
       );
     },
 
-    Pedidos() {
-      return this.$store.state.pedido.Pedidos;
-    },
+    currentTheadTitle() {
+      const { ativados } = this.filtroPeriodos;
 
-    semestre1IsActived() {
-      const { ativo } = this.filtroSemestres;
-      return ativo === 1 || ativo === 3;
+      if (!ativados.length) {
+        return {
+          creditos: "",
+          vagas: "",
+        };
+      }
+
+      let periodosAtivados = "";
+      this.$_.forEach(ativados, (periodo, index) => {
+        periodosAtivados += `${periodo.id}º`;
+        if (index !== ativados.length - 1) periodosAtivados += ", ";
+      });
+
+      return {
+        creditos: `Somatório dos créditos no ${periodosAtivados} período`,
+        vagas: `Somatório das vagas no ${periodosAtivados} período`,
+      };
     },
-    semestre2IsActived() {
-      const { ativo } = this.filtroSemestres;
-      return ativo === 2 || ativo === 3;
+    allPeriodoIsActived() {
+      return this.filtroPeriodos.ativados.length === 4;
+    },
+    anyPeriodoIsActived() {
+      return this.filtroPeriodos.ativados.length !== 0;
     },
   },
 
@@ -746,17 +650,13 @@ export default {
         const disciplinasResultantes = [];
 
         this.$_.forEach(this.DisciplinasDCCInPerfis, (disciplina) => {
-          const perfilFounded = this.$_.find(
-            filtroPerfis.selecionados,
-            (perfil) => perfil.id === disciplina.Perfil
-          );
+          const perfilFounded = this.$_.some(filtroPerfis.selecionados, [
+            "id",
+            disciplina.Perfil,
+          ]);
 
           if (perfilFounded) disciplinasResultantes.push(disciplina.id);
         });
-
-        //Quando selecionar todos add disciplinas MAC exeções
-        if (filtroPerfis.selecionados.length === this.PerfisDCC.length)
-          disciplinasResultantes.push(77, 88);
 
         this.filtroDisciplinas.selecionados = [...disciplinasResultantes];
       },
@@ -768,7 +668,7 @@ export default {
 
 <style scoped>
 .main-table td {
-  padding: 0 !important;
+  padding: 0 2px !important;
 }
 td.td-vagas:hover {
   padding: 0 !important;

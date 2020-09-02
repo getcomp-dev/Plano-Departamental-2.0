@@ -94,7 +94,7 @@ export default {
       ],
     });
     tables.push({
-      text: "1º Semestre " + store.state.plano.Plano[0].ano,
+      text: "1º Semestre " + data.plano.ano + " - " + data.plano.nome,
       alignment: "center",
       bold: true,
       fontSize: 10,
@@ -571,7 +571,7 @@ export default {
       ],
     });
     tables.push({
-      text: "2º Semestre " + store.state.plano.Plano[0].ano,
+      text: "2º Semestre " + data.plano.ano + " - " + data.plano.nome,
       alignment: "center",
       bold: true,
       fontSize: 10,
@@ -1118,7 +1118,7 @@ export default {
           {
             text:
               "Departamento de Ciência da Computação - " +
-              store.state.plano.Plano[0].ano,
+              data.plano.ano + " - " + data.plano.nome,
             alignment: "center",
             bold: true,
             fontSize: 10,
@@ -1844,7 +1844,7 @@ export default {
             fontSize: 10,
           },
           {
-            text: "1º Semestre - " + store.state.plano.Plano[0].ano,
+            text: "1º Semestre - " + data.plano.ano + " - " + data.plano.nome,
             alignment: "center",
             bold: true,
             fontSize: 10,
@@ -2112,7 +2112,7 @@ export default {
             pageBreak: "before",
           },
           {
-            text: "2º Semestre - " + store.state.plano.Plano[0].ano,
+            text: "2º Semestre - " + data.plano.ano + " - " + data.plano.nome,
             alignment: "center",
             bold: true,
             fontSize: 10,

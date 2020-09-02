@@ -3,10 +3,13 @@ import _ from "lodash";
 import turmaExternaService from "../../common/services/turmaExterna";
 import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
 import {
+  PUSH_NOTIFICATION,
   TURMA_EXTERNA_FETCHED,
   SOCKET_TURMA_EXTERNA_CREATED,
   SOCKET_TURMA_EXTERNA_DELETED,
   SOCKET_TURMA_EXTERNA_UPDATED,
+  TOGGLE_TURMA_EXTERNA_TO_DELETE,
+  EMPTY_DELETE_TURMA_EXTERNA,
 } from "../mutation-types";
 
 const state = {
@@ -44,12 +47,12 @@ const mutations = {
     state.Ativas = data.Ativas;
   },
 
-  ["TOGGLE_TURMA_TO_DELETE"](state, data) {
+  [TOGGLE_TURMA_EXTERNA_TO_DELETE](state, data) {
     if (data.index === -1) state.Deletar.push(data.turma);
     else state.Deletar.splice(data.index, 1);
   },
 
-  ["EMPTY_DELETE_EXTERNO"](state) {
+  [EMPTY_DELETE_TURMA_EXTERNA](state) {
     state.Deletar = [];
   },
 };
@@ -77,21 +80,22 @@ const actions = {
     await turmaExternaService.create(turmaNormalized);
     await dispatch("fetchAllPedidosExternos");
 
-    commit("PUSH_NOTIFICATION", {
+    commit(PUSH_NOTIFICATION, {
       type: "success",
-      text: `Turma ${turmaNormalized.letra} foi criada`,
+      text: `A turma ${turmaNormalized.letra} foi criada`,
     });
   },
 
-  async editTurmaExterna({ commit }, turma) {
+  async editTurmaExterna({ commit, dispatch }, turma) {
     const turmaNormalized = _.cloneDeepWith(turma, setEmptyValuesToNull);
     validateObjectKeys(turmaNormalized, ["letra", "Disciplina"]);
 
     await turmaExternaService.update(turmaNormalized.id, turmaNormalized);
 
-    commit("PUSH_NOTIFICATION", {
+    dispatch("clearTurmasExternasToDelete");
+    commit(PUSH_NOTIFICATION, {
       type: "success",
-      text: `Turma ${turmaNormalized.letra} foi atualizada`,
+      text: `A turma ${turmaNormalized.letra} foi atualizada`,
     });
   },
 
@@ -102,17 +106,21 @@ const actions = {
       await turmaExternaService.delete(state.Deletar[i].id, state.Deletar[i]);
     }
 
-    commit("EMPTY_DELETE_EXTERNO");
-    commit("PUSH_NOTIFICATION", {
+    commit(EMPTY_DELETE_TURMA_EXTERNA);
+    commit(PUSH_NOTIFICATION, {
       type: "success",
-      text: "Turma(s) selecionadas foram excluída(s)",
+      text: "As turma(s) selecionadas foram excluída(s)",
     });
   },
 
-  toggleTurmaToDelete({ state, commit }, turma) {
+  toggleTurmaExternaToDelete({ commit, state }, turma) {
     const index = _.findIndex(state.Deletar, ["id", turma.id]);
 
-    commit("TOGGLE_TURMA_TO_DELETE", { index, turma });
+    commit(TOGGLE_TURMA_EXTERNA_TO_DELETE, { index, turma });
+  },
+
+  clearTurmasExternasToDelete({ commit, state }) {
+    if (state.Deletar.length) commit(EMPTY_DELETE_TURMA_EXTERNA);
   },
 };
 
@@ -120,7 +128,9 @@ const getters = {
   AllTurmasExternas(state) {
     return _.orderBy(state.Turmas, ["letra"]);
   },
-
+  TurmasExternasToDelete(state) {
+    return state.Deletar;
+  },
   TurmasExternasInDisciplinas(state, getters) {
     const turmasResult = [];
     _.forEach(getters.AllTurmasExternas, (turma) => {
