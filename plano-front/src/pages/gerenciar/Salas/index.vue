@@ -7,7 +7,7 @@
         :color="'lightblue'"
         @click="$refs.modalAjuda.toggle()"
       >
-        <font-awesome-icon :icon="['fas','question']" />
+        <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
     </PageHeader>
 
@@ -37,7 +37,9 @@
               @click="toggleOrder(ordenacaoSalasMain, 'lotacao_maxima', 'desc')"
             >
               Lotação Max.
-              <i :class="setIconByOrder(ordenacaoSalasMain, 'lotacao_maxima')"></i>
+              <i
+                :class="setIconByOrder(ordenacaoSalasMain, 'lotacao_maxima')"
+              ></i>
             </th>
           </template>
           <template #tbody>
@@ -52,7 +54,9 @@
               >
                 <td style="width: 82px" class="t-start">{{ sala.nome }}</td>
 
-                <td style="width: 90px">{{ booleanToText(sala.laboratorio) }}</td>
+                <td style="width: 90px">
+                  {{ booleanToText(sala.laboratorio) }}
+                </td>
                 <td style="width: 100px">{{ sala.lotacao_maxima }}</td>
               </tr>
             </template>
@@ -83,7 +87,9 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="lotacao_maxima" class="col-form-label">Lotação Máx.</label>
+              <label required for="lotacao_maxima" class="col-form-label"
+                >Lotação Máx.</label
+              >
               <input
                 type="text"
                 class="input-menor form-control form-control-sm"
@@ -96,7 +102,9 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-check form-check-inline col m-0 px-0 pl-1">
-              <label class="form-check-label mr-2" for="laboratorio">Laboratório</label>
+              <label class="form-check-label mr-2" for="laboratorio"
+                >Laboratório</label
+              >
               <input
                 type="checkbox"
                 id="laboratorio"
@@ -110,11 +118,16 @@
       </Card>
     </div>
 
-    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deleteSala">
+    <ModalDelete
+      ref="modalDelete"
+      :isDeleting="isEdit"
+      @btn-deletar="deleteSala"
+    >
       <li class="list-group-item">
         <span v-if="isEdit">
           Tem certeza que deseja excluír a sala
-          <b>{{ salaForm.nome }}</b>?
+          <b>{{ salaForm.nome }}</b
+          >?
         </span>
         <span v-else>Nenhuma sala selecionada.</span>
       </li>
@@ -122,37 +135,30 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Para adicionar sala:</b> Com o cartão à direita em branco,
-        preencha-o. Em seguida, clique em Adicionar
-        <i
-          class="fas fa-plus icon-green px-1"
-          style="font-size:12px"
-        ></i>
-        .
+        <b>Adicionar:</b>
+        Preencha o cartão em branco à direita e em seguida, clique em Adicionar
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Para editar ou deletar uma sala:</b>Na tabela, clique na sala
-        que deseja alterar. Logo após, no cartão à direita, altere as
-        informações que desejar e clique em Salvar
-        <i
-          class="fas fa-check icon-green px-1"
-          style="font-size:12px"
-        ></i>
-        ou, para excluí-la, clique em Deletar
-        <i
-          class="far fa-trash-alt icon-red px-1"
-          style="font-size: 12px"
-        ></i>
-        .
+        <b>Editar:</b> Clique na linha da tabela da sala que deseja alterar. Em
+        seguida, no cartão à direita, altere as informações que desejar e clique
+        em Salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
-        em Cancelar
-        <i
-          class="fas fa-times icon-gray px-1"
-          style="font-size: 12px"
-        ></i>
-        .
+        <b>Deletar:</b> Clique na linha da tabela da sala que deseja remover. Em
+        seguida, no cartão à direita, clique em Remover
+        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
+        confirme a remoção na janela que será aberta.
+      </li>
+      <li class="list-group-item">
+        <b>Limpar:</b> No cartão à direita, clique em Cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para
+        limpar as informações.
+      </li>
+      <li class="list-group-item">
+        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para
+        alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>

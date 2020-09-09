@@ -26,7 +26,7 @@
         @change="handleEditCargaPos"
       >
         <option
-          v-for="docente in DocentesOrdered"
+          v-for="docente in DocentesAtivos"
           :key="'id docente' + docente.id"
           :value="docente.id"
           >{{ docente.apelido }}</option
@@ -95,10 +95,6 @@ export default {
       get() {
         return this.CargasPosToDelete;
       },
-    },
-
-    DocentesOrdered() {
-      return this.$_.orderBy(this.DocentesAtivos, "apelido");
     },
   },
   watch: {

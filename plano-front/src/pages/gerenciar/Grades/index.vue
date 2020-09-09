@@ -7,7 +7,7 @@
         :color="'lightblue'"
         @click="$refs.modalAjuda.toggle()"
       >
-        <font-awesome-icon :icon="['fas','question']" />
+        <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
     </PageHeader>
 
@@ -116,7 +116,9 @@
             </div>
 
             <div class="form-group col-7 m-0 px-0">
-              <label required for="periodoInicio" class="col-form-label">Período de Início</label>
+              <label required for="periodoInicio" class="col-form-label"
+                >Período de Início</label
+              >
               <input
                 type="text"
                 class="card-input-menor form-control form-control-sm col"
@@ -148,11 +150,16 @@
       </Card>
     </div>
 
-    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deleteGrade">
+    <ModalDelete
+      ref="modalDelete"
+      :isDeleting="isEdit"
+      @btn-deletar="deleteGrade"
+    >
       <li v-if="isEdit" class="list-group-item">
         <span>
           Tem certeza que deseja excluír a grade
-          <b>{{ gradeForm.periodoInicio }} - {{ gradeForm.nome }}</b>?
+          <b>{{ gradeForm.periodoInicio }} - {{ gradeForm.nome }}</b
+          >?
         </span>
       </li>
       <li v-else class="list-group-item">Nenhuma grade selecionada.</li>
@@ -160,35 +167,30 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Para adicionar grades:</b> Com o cartão a direita em branco,
-        preencha-o. Em seguida, clique em Adicionar
-        <i
-          class="fas fa-plus icon-green px-1"
-          style="font-size:12px"
-        ></i>.
+        <b>Adicionar:</b>
+        Preencha o cartão em branco à direita e em seguida, clique em Adicionar
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Para editar ou deletar uma grade:</b> Na tabela, clique na grade que
-        deseja alterar. Logo após, no cartão à direita, altere as informações
-        que desejar e clique em Salvar
-        <i
-          class="fas fa-check icon-green px-1"
-          style="font-size:12px"
-        ></i>
-        ou, para excluí-la, clique em Deletar
-        <i
-          class="far fa-trash-alt icon-red px-1"
-          style="font-size: 12px"
-        ></i>
-        .
+        <b>Editar:</b> Clique na linha da tabela da grade que deseja alterar. Em
+        seguida, no cartão à direita, altere as informações que desejar e clique
+        em Salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique em
-        Cancelar
-        <i
-          class="fas fa-times icon-gray px-1"
-          style="font-size: 12px"
-        ></i>.
+        <b>Deletar:</b> Clique na linha da tabela da grade que deseja remover.
+        Em seguida, no cartão à direita, clique em Remover
+        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
+        confirme a remoção na janela que será aberta.
+      </li>
+      <li class="list-group-item">
+        <b>Limpar:</b> No cartão à direita, clique em Cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para
+        limpar as informações.
+      </li>
+      <li class="list-group-item">
+        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para
+        alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>
@@ -331,7 +333,7 @@ export default {
     },
     Grades_CCNoturno() {
       return this.$_.orderBy(
-        this.Grades.filter(function (grade) {
+        this.Grades.filter(function(grade) {
           return grade.Curso == 1;
         }),
         "nome"
@@ -339,20 +341,20 @@ export default {
     },
     Grades_CCDiurno() {
       return this.$_.orderBy(
-        this.Grades.filter(function (grade) {
+        this.Grades.filter(function(grade) {
           return grade.Curso == 4;
         }),
         "nome"
       );
     },
     Grades_SI() {
-      return this.Grades.filter(function (grade) {
+      return this.Grades.filter(function(grade) {
         return grade.Curso == 3;
       });
     },
     Grade_EC() {
       return this.$_.orderBy(
-        this.Grades.filter(function (grade) {
+        this.Grades.filter(function(grade) {
           return grade.Curso == 2;
         }),
         "nome"

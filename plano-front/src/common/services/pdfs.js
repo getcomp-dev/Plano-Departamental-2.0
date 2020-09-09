@@ -940,7 +940,7 @@ export default {
         },
       });
     }
-    console.log(tables);
+    // console.log(tables);
     var docDefinition = {
       content: tables,
       footer: function(currentPage, pageCount) {
@@ -1118,7 +1118,9 @@ export default {
           {
             text:
               "Departamento de Ciência da Computação - " +
-              data.plano.ano + " - " + data.plano.nome,
+              data.plano.ano +
+              " - " +
+              data.plano.nome,
             alignment: "center",
             bold: true,
             fontSize: 10,

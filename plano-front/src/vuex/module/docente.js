@@ -56,7 +56,7 @@ const actions = {
 
 const getters = {
   AllDocentes(state) {
-    return _.orderBy(state.Docentes, "nome");
+    return _.orderBy(state.Docentes, "apelido");
   },
   DocentesAtivos(state, getters) {
     return _.filter(getters.AllDocentes, ["ativo", true]);

@@ -123,7 +123,7 @@ const getters = {
   },
 
   allPlanos(state) {
-    const planosResultantes = _.orderBy(state.Plano, ["ano"]);
+    const planosResultantes = _.orderBy(state.Plano, "ano");
 
     if (process.env.NODE_ENV === "development") return planosResultantes;
     else return _.filter(planosResultantes, (plano) => plano.id != 2090); //2090 = id do plano de dev

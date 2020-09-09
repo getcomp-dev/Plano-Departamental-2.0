@@ -29,49 +29,20 @@
       </BaseButton>
     </PageHeader>
 
-    <div class="w-100" v-show="!onLoading.table">
-      <div v-show="hasLaboratorioAtivos && semestre1IsActived" class="w-100">
-        <h2 class="semestre-title">1º SEMESTRE</h2>
-        <div class="container-horarios px-1">
-          <template v-for="lab in filtroLaboratorios.ativados">
-            <div class="div-table" :key="'1-lab-id' + lab.id">
-              <h3 class="lab-title">{{ lab.nome }}</h3>
-              <TableHorariosLab
-                :laboratorio="lab"
-                :Turmas="Turmas1"
-              ></TableHorariosLab>
-            </div>
-          </template>
-        </div>
-      </div>
+    <div class="w-100">
+      <ListHorariosLab
+        v-show="!onLoading.table && filtroLaboratorios.ativados.length"
+        :periodos="filtroPeriodos.ativados"
+        :laboratorios="filtroLaboratorios.ativados"
+        :turmasInPeriodos="TurmasInPeriodos"
+      />
 
-      <div v-show="hasLaboratorioAtivos && semestre2IsActived" class="w-100">
-        <h2 class="semestre-title">2º SEMESTRE</h2>
-        <div class="container-horarios px-1">
-          <template v-for="lab in filtroLaboratorios.ativados">
-            <div class="div-table" :key="'2-lab-id' + lab.id">
-              <h3 class="lab-title">{{ lab.nome }}</h3>
-
-              <TableHorariosLab
-                :laboratorio="lab"
-                :Turmas="Turmas2"
-              ></TableHorariosLab>
-            </div>
-          </template>
-        </div>
-      </div>
+      <p v-if="horariosIsEmpty" class="text-empty">
+        <b>Nenhum horário encontrado.</b> Clique no botão de filtros
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="mx-1" />para
+        selecioná-los.
+      </p>
     </div>
-    <p
-      v-if="
-        (!semestre1IsActived && !semestre2IsActived) ||
-          !filtroLaboratorios.ativados.length
-      "
-      class="text-empty"
-    >
-      <b>Nenhum horário encontrado.</b> Clique no botão de filtros
-      <font-awesome-icon :icon="['fas', 'list-ul']" class="mx-1" />para
-      selecioná-los.
-    </p>
 
     <ModalFiltros
       ref="modalFiltros"
@@ -111,35 +82,32 @@
         </BaseTable>
 
         <BaseTable
-          v-show="modalFiltrosTabs.current === 'Semestres'"
-          :type="'modal'"
+          type="modal"
+          v-show="modalFiltrosTabs.current === 'Períodos'"
         >
           <template #thead>
             <th style="width: 25px"></th>
-            <th class="t-start clickable" style="width: 425px">
-              Semestre Letivo
-            </th>
+            <th style="width: 425px" class="t-start">Periodos Letivo</th>
           </template>
           <template #tbody>
-            <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
+            <tr
+              v-for="periodoLetivo in PeriodosLetivos"
+              :key="'md' + periodoLetivo.id + periodoLetivo.nome"
+              @click.stop="
+                toggleItemInArray(periodoLetivo, filtroPeriodos.selecionados)
+              "
+            >
               <td style="width: 25px">
                 <input
                   type="checkbox"
                   class="form-check-input position-static m-0"
-                  v-model="filtroSemestres.primeiro"
+                  :value="periodoLetivo"
+                  v-model="filtroPeriodos.selecionados"
                 />
               </td>
-              <td style="width: 425px" class="t-start">PRIMEIRO</td>
-            </tr>
-            <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  v-model="filtroSemestres.segundo"
-                />
+              <td style="width: 425px" class="t-start upper-case">
+                {{ periodoLetivo.nome }}
               </td>
-              <td style="width: 425px" class="t-start">SEGUNDO</td>
             </tr>
           </template>
         </BaseTable>
@@ -171,7 +139,7 @@ import pdfs from "@/common/services/pdfs";
 import { mapGetters } from "vuex";
 import { toggleItemInArray, toggleAsideModal } from "@/common/mixins";
 import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
-import TableHorariosLab from "./TableHorariosLab";
+import ListHorariosLab from "./ListHorariosLab";
 
 export default {
   name: "DashboardLaboratoriosAlocacao",
@@ -180,7 +148,7 @@ export default {
     ModalRelatorio,
     ModalAjuda,
     ModalFiltros,
-    TableHorariosLab,
+    ListHorariosLab,
   },
   data() {
     return {
@@ -189,14 +157,13 @@ export default {
         ativados: [],
         selecionados: [],
       },
-      filtroSemestres: {
-        primeiro: true,
-        segundo: true,
-        ativo: 3,
+      filtroPeriodos: {
+        ativados: [],
+        selecionados: [],
       },
       modalFiltrosTabs: {
         current: "Laboratorios",
-        array: ["Laboratorios", "Semestres"],
+        array: ["Laboratorios", "Períodos"],
       },
       modalFiltrosCallbacks: {
         selectAll: {
@@ -205,22 +172,20 @@ export default {
               ...this.LaboratoriosOrdered,
             ];
           },
-          Semestres: () => {
-            this.filtroSemestres.primeiro = true;
-            this.filtroSemestres.segundo = true;
+          Periodos: () => {
+            this.filtroPeriodos.selecionados = [...this.PeriodosLetivos];
           },
         },
         selectNone: {
           Laboratorios: () => {
             this.filtroLaboratorios.selecionados = [];
           },
-          Semestres: () => {
-            this.filtroSemestres.primeiro = false;
-            this.filtroSemestres.segundo = false;
+          Periodos: () => {
+            this.filtroPeriodos.selecionados = [];
           },
         },
         btnOk: () => {
-          this.setSemestreAtivo();
+          this.filtroPeriodos.ativados = [...this.filtroPeriodos.selecionados];
           this.filtroLaboratorios.ativados = [
             ...this.filtroLaboratorios.selecionados,
           ];
@@ -230,94 +195,83 @@ export default {
   },
 
   beforeMount() {
+    this.filtroPeriodos.selecionados = this.$_.filter(
+      this.PeriodosLetivos,
+      (periodo) => periodo.id === 1 || periodo.id === 3
+    );
     this.modalFiltrosCallbacks.selectAll.Laboratorios();
-    this.filtroLaboratorios.ativados = [
-      ...this.filtroLaboratorios.selecionados,
-    ];
+    this.modalFiltrosCallbacks.btnOk();
   },
 
   methods: {
-    setSemestreAtivo() {
-      const { primeiro, segundo } = this.filtroSemestres;
-
-      if (primeiro && !segundo) this.filtroSemestres.ativo = 1;
-      else if (!primeiro && segundo) this.filtroSemestres.ativo = 2;
-      else if (primeiro && segundo) this.filtroSemestres.ativo = 3;
-      else this.filtroSemestres.ativo = undefined;
-    },
     pdf(completo) {
-      if (completo)
-        pdfs.pdfAlocacaoLabs({
-          laboratorios: this.LaboratoriosOrdered,
-          plano: this.$_.find(this.$store.state.plano.Plano, {id: parseInt(localStorage.getItem('Plano'))})
-        });
-      else
-        pdfs.pdfAlocacaoLabs({
-          laboratorios: this.filtroLaboratorios.ativados,
-          plano: this.$_.find(this.$store.state.plano.Plano, {id: parseInt(localStorage.getItem('Plano'))})
-        });
+      let laboratorios;
+
+      if (completo) laboratorios = this.LaboratoriosOrdered;
+      else laboratorios = this.filtroLaboratorios.ativados;
+
+      pdfs.pdfAlocacaoLabs({
+        laboratorios,
+        plano: this.$_.find(this.allPlanos, ["id", this.currentPlanoId]),
+      });
     },
   },
 
   computed: {
-    ...mapGetters(["onLoading"]),
+    ...mapGetters([
+      "onLoading",
+      "Laboratorios",
+      "TurmasInDisciplinasPerfis",
+      "TurmasExternasInDisciplinas",
+      "allPlanos",
+      "currentPlanoId",
+      "PeriodosLetivos",
+    ]),
 
     LaboratoriosOrdered() {
       const laboratoriosResultantes = [];
-
       laboratoriosResultantes.push(
-        this.$_.find(this.Laboratorios, ["nome", "L107"])
-      );
-      laboratoriosResultantes.push(
-        this.$_.find(this.Laboratorios, ["nome", "L205"])
-      );
-      laboratoriosResultantes.push(
-        this.$_.find(this.Laboratorios, ["nome", "LAB4"])
-      );
-      laboratoriosResultantes.push(
-        this.$_.find(this.Laboratorios, ["nome", "LAB3"])
-      );
-      laboratoriosResultantes.push(
-        this.$_.find(this.Laboratorios, ["nome", "LABENG1"])
-      );
-      laboratoriosResultantes.push(
-        this.$_.find(this.Laboratorios, ["nome", "LABENG2"])
-      );
-      laboratoriosResultantes.push(
+        this.$_.find(this.Laboratorios, ["nome", "L107"]),
+        this.$_.find(this.Laboratorios, ["nome", "L205"]),
+        this.$_.find(this.Laboratorios, ["nome", "LAB4"]),
+        this.$_.find(this.Laboratorios, ["nome", "LAB3"]),
+        this.$_.find(this.Laboratorios, ["nome", "LABENG1"]),
+        this.$_.find(this.Laboratorios, ["nome", "LABENG2"]),
         this.$_.find(this.Laboratorios, ["nome", "LAB EST 2"])
       );
+
       return laboratoriosResultantes;
     },
-    Laboratorios() {
-      return this.$_.filter(this.$store.state.sala.Salas, [
-        "laboratorio",
-        true,
+    TurmasInPeriodos() {
+      const turmas = {
+        periodo1: [],
+        periodo2: [],
+        periodo3: [],
+        periodo4: [],
+      };
+      const turmasOredered = this.$_.orderBy(this.TurmasInDisciplinasPerfis, [
+        "periodo",
+        "disciplina.nome",
+        "letra",
       ]);
-    },
-    Turmas1() {
-      return this.$_.concat(
-        this.$_.filter(this.$store.state.turma.Turmas, ["periodo", 1]),
-        this.$_.filter(this.$store.state.turmaExterna.Turmas, ["periodo", 1])
+      const turmasExternasOrdered = this.$_.orderBy(
+        this.TurmasExternasInDisciplinas,
+        ["periodo", "disciplina.nome", "letra"]
       );
-    },
-    Turmas2() {
-      return this.$_.concat(
-        this.$_.filter(this.$store.state.turma.Turmas, ["periodo", 3]),
-        this.$_.filter(this.$store.state.turmaExterna.Turmas, ["periodo", 3])
-      );
-    },
 
-    hasLaboratorioAtivos() {
-      return this.filtroLaboratorios.ativados.length !== 0;
-    },
-    semestre1IsActived() {
-      return (
-        this.filtroSemestres.ativo === 1 || this.filtroSemestres.ativo === 3
+      this.$_.forEach(turmasOredered, (turma) =>
+        turmas[`periodo${turma.periodo}`].push({ ...turma })
       );
+      this.$_.forEach(turmasExternasOrdered, (turma) =>
+        turmas[`periodo${turma.periodo}`].push({ ...turma })
+      );
+
+      return turmas;
     },
-    semestre2IsActived() {
+    horariosIsEmpty() {
       return (
-        this.filtroSemestres.ativo === 2 || this.filtroSemestres.ativo === 3
+        !this.filtroPeriodos.ativados.length ||
+        !this.filtroLaboratorios.ativados.length
       );
     },
   },
@@ -325,33 +279,10 @@ export default {
 </script>
 
 <style scoped>
-.semestre-title {
-  width: 100%;
-  font-size: 16px;
-  padding: 5px;
-  background-color: var(--light-gray);
-  font-weight: bold;
-  text-align: start;
-}
-.lab-title {
-  width: 100%;
-  text-align: start;
-  font-size: 12px;
-  font-weight: bold;
-}
 .text-empty {
   width: 100%;
   font-size: 12px;
   padding: 5px;
   background-color: var(--light-gray);
-}
-.container-horarios {
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 381px);
-  justify-content: space-between;
-  grid-column-gap: 5px;
-  grid-row-gap: 16px;
-  margin-bottom: 20px;
 }
 </style>

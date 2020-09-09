@@ -34,7 +34,7 @@
       class="row w-100 m-0"
     >
       <div v-show="semestre1IsActived" class="w-100">
-        <h2 class="semestre-title">1º SEMESTRE</h2>
+        <h2 class="semestre-title">1º Semestre</h2>
 
         <ListTableHorarios
           v-for="curso in CursosInHorariosFiltred"
@@ -55,7 +55,7 @@
       </div>
 
       <div v-show="semestre2IsActived" class="w-100">
-        <h2 class="semestre-title">2º SEMESTRE</h2>
+        <h2 class="semestre-title">3º Semestre</h2>
 
         <ListTableHorarios
           v-for="curso in CursosInHorariosFiltred"
@@ -76,13 +76,7 @@
       </div>
     </div>
 
-    <p
-      v-if="
-        (!this.semestre1IsActived && !this.semestre2IsActived) ||
-          !hasAnyHorariosActived
-      "
-      class="text-empty"
-    >
+    <p v-if="horariosIsEmpty" class="text-empty">
       <b>Nenhum horário encontrado.</b> Clique no botão de filtros
       <font-awesome-icon :icon="['fas', 'list-ul']" class="mx-1" />para
       selecioná-los.
@@ -241,6 +235,20 @@ export default {
         SI: [[], [], [], [], [], [], [], [], [], []],
         Eletivas: [],
       },
+      horariosAtivos3: {
+        CCD: [[], [], [], [], [], [], [], [], [], []],
+        CCN: [[], [], [], [], [], [], [], [], [], []],
+        EC: [[], [], [], [], [], [], [], [], [], []],
+        SI: [[], [], [], [], [], [], [], [], [], []],
+        Eletivas: [],
+      },
+      horariosAtivos4: {
+        CCD: [[], [], [], [], [], [], [], [], [], []],
+        CCN: [[], [], [], [], [], [], [], [], [], []],
+        EC: [[], [], [], [], [], [], [], [], [], []],
+        SI: [[], [], [], [], [], [], [], [], [], []],
+        Eletivas: [],
+      },
       modalFiltrosTabs: {
         current: "Cursos",
         array: ["Cursos", "Semestres"],
@@ -279,10 +287,14 @@ export default {
     for (let i = 1; i < 5; i++) {
       this.createHorarios(i, 1);
       this.createHorarios(i, 2);
+      this.createHorarios(i, 3);
+      this.createHorarios(i, 4);
     }
 
     this.createHorarioEletivas(1);
     this.createHorarioEletivas(2);
+    this.createHorarioEletivas(3);
+    this.createHorarioEletivas(4);
 
     this.modalFiltrosCallbacks.selectAll.Cursos();
     this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
@@ -345,10 +357,6 @@ export default {
           }
       }
 
-      this.$store.commit("redefinirAtivas1", {
-        Ativas: this.horariosAtivos1,
-      });
-
       for (let i = 0; i < 10; i++) {
         for (let j = 0; j < this.horariosAtivos2.CCD[i].length; j++)
           for (let k = 0; k < this.AllTurmas.length; k++) {
@@ -376,8 +384,62 @@ export default {
           }
       }
 
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < this.horariosAtivos3.CCD[i].length; j++)
+                for (let k = 0; k < this.AllTurmas.length; k++) {
+                    if (this.horariosAtivos3.CCD[i][j].id == this.AllTurmas[k].id) {
+                        this.horariosAtivos3.CCD[i].splice(j, 1, this.AllTurmas[k]);
+                    }
+                }
+            for (let j = 0; j < this.horariosAtivos3.CCN[i].length; j++)
+                for (let k = 0; k < this.AllTurmas.length; k++) {
+                    if (this.horariosAtivos3.CCN[i][j].id == this.AllTurmas[k].id) {
+                        this.horariosAtivos3.CCN[i].splice(j, 1, this.AllTurmas[k]);
+                    }
+                }
+            for (let j = 0; j < this.horariosAtivos3.EC[i].length; j++)
+                for (let k = 0; k < this.AllTurmas.length; k++) {
+                    if (this.horariosAtivos3.EC[i][j].id == this.AllTurmas[k].id) {
+                        this.horariosAtivos3.EC[i].splice(j, 1, this.AllTurmas[k]);
+                    }
+                }
+            for (let j = 0; j < this.horariosAtivos3.SI[i].length; j++)
+                for (let k = 0; k < this.AllTurmas.length; k++) {
+                    if (this.horariosAtivos3.SI[i][j].id == this.AllTurmas[k].id) {
+                        this.horariosAtivos3.SI[i].splice(j, 1, this.AllTurmas[k]);
+                    }
+                }
+        }
+
+        for (let i = 0; i < 10; i++) {
+            for (let j = 0; j < this.horariosAtivos4.CCD[i].length; j++)
+                for (let k = 0; k < this.AllTurmas.length; k++) {
+                    if (this.horariosAtivos4.CCD[i][j].id == this.AllTurmas[k].id) {
+                        this.horariosAtivos4.CCD[i].splice(j, 1, this.AllTurmas[k]);
+                    }
+                }
+            for (let j = 0; j < this.horariosAtivos4.CCN[i].length; j++)
+                for (let k = 0; k < this.AllTurmas.length; k++) {
+                    if (this.horariosAtivos4.CCN[i][j].id == this.AllTurmas[k].id) {
+                        this.horariosAtivos4.CCN[i].splice(j, 1, this.AllTurmas[k]);
+                    }
+                }
+            for (let j = 0; j < this.horariosAtivos4.EC[i].length; j++)
+                for (let k = 0; k < this.AllTurmas.length; k++) {
+                    if (this.horariosAtivos4.EC[i][j].id == this.AllTurmas[k].id) {
+                        this.horariosAtivos4.EC[i].splice(j, 1, this.AllTurmas[k]);
+                    }
+                }
+            for (let j = 0; j < this.horariosAtivos4.SI[i].length; j++)
+                for (let k = 0; k < this.AllTurmas.length; k++) {
+                    if (this.horariosAtivos4.SI[i][j].id == this.AllTurmas[k].id) {
+                        this.horariosAtivos4.SI[i].splice(j, 1, this.AllTurmas[k]);
+                    }
+                }
+        }
+
       this.$store.commit("redefinirAtivas1", {
-        Ativas2: this.horariosAtivos2,
+        Ativas2: this.horariosAtivos1,
       });
 
       this.$store.commit("redefinirAtivas2", {
@@ -385,10 +447,19 @@ export default {
       });
     },
 
-    createHorarios(curso, semestre) {
+    createHorarios(curso, periodo) {
       let horariosAtivos;
-      if (semestre === 1) horariosAtivos = this.horariosAtivos1;
-      else horariosAtivos = this.horariosAtivos2;
+      let semestre = ((periodo === 1 || periodo === 2) ? 1:2)
+      switch(periodo){
+          case 1: horariosAtivos = this.horariosAtivos1;
+                  break;
+          case 2: horariosAtivos = this.horariosAtivos2;
+                  break;
+          case 3: horariosAtivos = this.horariosAtivos3;
+                  break;
+          case 4: horariosAtivos = this.horariosAtivos4;
+                  break;
+      }
       switch (curso) {
         case 1:
           horariosAtivos = horariosAtivos.CCN;
@@ -406,9 +477,9 @@ export default {
           return;
       }
 
-      let periodoInicio;
-      if (semestre === 1) periodoInicio = 1;
-      else periodoInicio = 3;
+      let periodoGrade;
+      if (semestre === 1) periodoGrade = 1;
+      else periodoGrade = 3;
 
       let plano = this.$_.find(this.$store.state.plano.Plano, {
         id: parseInt(localStorage.getItem("Plano")),
@@ -421,7 +492,7 @@ export default {
         let fim =
           1 +
           2 * (plano.ano - parseInt(g.periodoInicio.slice(0, 4), 10)) +
-          (periodoInicio - parseInt(g.periodoInicio.slice(5, 6), 10)) / 2;
+          (periodoGrade - parseInt(g.periodoInicio.slice(5, 6), 10)) / 2;
         if (fim > 10) {
           fim = 10;
         }
@@ -455,12 +526,12 @@ export default {
         this.$store.state.curso.Cursos[curso - 1].semestreInicial % 2 ===
         semestre - 1;
       let turmas = this.$_.filter(this.$store.state.turma.Turmas, {
-        periodo: periodoInicio,
+        periodo: periodo,
       });
       let turmasExternas = this.$_.filter(
         this.$store.state.turmaExterna.Turmas,
         {
-          periodo: periodoInicio,
+          periodo: periodo,
         }
       );
       let disciplinasGrades = this.DisciplinaGrades;
@@ -506,17 +577,25 @@ export default {
         inicio = gradesAtivas[i].fim;
       }
     },
-    createHorarioEletivas(semestre) {
+    createHorarioEletivas(periodo) {
       let horariosAtivos;
-      if (semestre === 1) horariosAtivos = this.horariosAtivos1.Eletivas;
-      else horariosAtivos = this.horariosAtivos2.Eletivas;
-
-      let periodoInicio;
-      if (semestre === 1) periodoInicio = 1;
-      else periodoInicio = 3;
+      let semestre = ((periodo === 1 || periodo === 2) ? 1:2)
+      switch(periodo){
+        case 1: horariosAtivos = this.horariosAtivos1.Eletivas;
+                break;
+        case 2: horariosAtivos = this.horariosAtivos2.Eletivas;
+                break;
+        case 3: horariosAtivos = this.horariosAtivos3.Eletivas;
+                break;
+        case 4: horariosAtivos = this.horariosAtivos4.Eletivas;
+                break;
+      }
+      let periodoGrade;
+      if (semestre === 1) periodoGrade = 1;
+      else periodoGrade = 3;
 
       let turmas = this.$_.filter(this.$store.state.turma.Turmas, {
-        periodo: periodoInicio,
+        periodo: periodo,
       });
 
       let plano = this.$_.find(this.$store.state.plano.Plano, {
@@ -533,7 +612,7 @@ export default {
           let fim =
             1 +
             2 * (plano.ano - parseInt(g.periodoInicio.slice(0, 4), 10)) +
-            (periodoInicio - parseInt(g.periodoInicio.slice(5, 6), 10)) / 2;
+            (periodoGrade - parseInt(g.periodoInicio.slice(5, 6), 10)) / 2;
           if (fim > 10) {
             fim = 10;
           }
@@ -609,7 +688,11 @@ export default {
               fontSize: 10,
             },
             {
-              text: "1º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
+              text:
+                "1º Semestre " +
+                this.currentPlano.ano +
+                " - " +
+                this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -993,7 +1076,11 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "1º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
+              text:
+                "1º Semestre " +
+                this.currentPlano.ano +
+                " - " +
+                this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -1379,7 +1466,11 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "1º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
+              text:
+                "1º Semestre " +
+                this.currentPlano.ano +
+                " - " +
+                this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -1765,7 +1856,11 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "1º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
+              text:
+                "1º Semestre " +
+                this.currentPlano.ano +
+                " - " +
+                this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -2151,7 +2246,11 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "1º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
+              text:
+                "1º Semestre " +
+                this.currentPlano.ano +
+                " - " +
+                this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -2612,7 +2711,11 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "2º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
+              text:
+                "2º Semestre " +
+                this.currentPlano.ano +
+                " - " +
+                this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -2998,7 +3101,11 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "2º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
+              text:
+                "2º Semestre " +
+                this.currentPlano.ano +
+                " - " +
+                this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -3384,7 +3491,11 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "2º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
+              text:
+                "2º Semestre " +
+                this.currentPlano.ano +
+                " - " +
+                this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -3770,7 +3881,11 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "2º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
+              text:
+                "2º Semestre " +
+                this.currentPlano.ano +
+                " - " +
+                this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -4156,7 +4271,11 @@ export default {
               pageBreak: "before",
             },
             {
-              text: "2º Semestre " + this.currentPlano.ano + " - " + this.currentPlano.nome,
+              text:
+                "2º Semestre " +
+                this.currentPlano.ano +
+                " - " +
+                this.currentPlano.nome,
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -4723,6 +4842,12 @@ export default {
       return this.$_.some(
         this.filtroCursos.ativados,
         (curso) => curso.codigo === "-"
+      );
+    },
+    horariosIsEmpty() {
+      return (
+        (!this.semestre1IsActived && !this.semestre2IsActived) ||
+        !this.hasAnyHorariosActived
       );
     },
   },

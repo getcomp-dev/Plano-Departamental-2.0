@@ -7,7 +7,7 @@
         :color="'lightblue'"
         @click="$refs.modalAjuda.toggle()"
       >
-        <font-awesome-icon :icon="['fas','question']" />
+        <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
     </PageHeader>
 
@@ -75,7 +75,7 @@
                 id="nome"
                 type="text"
                 class="input-maior form-control form-control-sm"
-                @input="perfilForm.nome= $event.target.value.toUpperCase()"
+                @input="perfilForm.nome = $event.target.value.toUpperCase()"
                 :value="perfilForm.nome"
               />
             </div>
@@ -83,7 +83,9 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group col-8 m-0 px-0">
-              <label required for="abreviacao" class="col-form-label">Abreviação</label>
+              <label required for="abreviacao" class="col-form-label"
+                >Abreviação</label
+              >
               <input
                 type="text"
                 class="form-control form-control-sm"
@@ -107,11 +109,16 @@
       </Card>
     </div>
 
-    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deletePerfil">
+    <ModalDelete
+      ref="modalDelete"
+      :isDeleting="isEdit"
+      @btn-deletar="deletePerfil"
+    >
       <li v-if="isEdit" class="list-group-item">
         <span>
           Tem certeza que deseja excluír o perfil
-          <b>{{ perfilForm.nome}}</b>?
+          <b>{{ perfilForm.nome }}</b
+          >?
         </span>
       </li>
       <li v-else class="list-group-item">Nenhum perfil selecionado.</li>
@@ -119,41 +126,30 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Para adicionar perfis:</b> Com o cartão à direita em branco,
-        preencha-o. Em seguida, clique em Adicionar
-        <i
-          class="fas fa-plus icon-green px-1"
-          style="font-size:12px"
-        ></i>
-        .
+        <b>Adicionar:</b>
+        Preencha o cartão em branco à direita e em seguida, clique em Adicionar
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Para editar ou deletar um perfil:</b>Na tabela, clique no perfil
-        que deseja alterar. Logo após, no cartão à direita, altere as
-        informações que desejar e clique em Salvar
-        <i
-          class="fas fa-check icon-green px-1"
-          style="font-size:12px"
-        ></i>
-        ou, para excluí-lo, clique em Deletar
-        <i
-          class="far fa-trash-alt icon-red px-1"
-          style="font-size: 12px"
-        ></i>
-        .
+        <b>Editar:</b> Clique na linha da tabela do perfil que deseja alterar.
+        Em seguida, no cartão à direita, altere as informações que desejar e
+        clique em Salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
-        em Cancelar
-        <i
-          class="fas fa-times icon-gray px-1"
-          style="font-size: 12px"
-        ></i>
-        .
+        <b>Deletar:</b> Clique na linha da tabela do perfil que deseja remover.
+        Em seguida, no cartão à direita, clique em Remover
+        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
+        confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
-        <b>Para alterar a ordenação:</b> Clique em Nome ou Abreviação no
-        cabeçalho da tabela para ordenação alfabética do mesmo.
+        <b>Limpar:</b> No cartão à direita, clique em Cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para
+        limpar as informações.
+      </li>
+      <li class="list-group-item">
+        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para
+        alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>

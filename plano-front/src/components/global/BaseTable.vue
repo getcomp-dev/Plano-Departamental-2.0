@@ -17,7 +17,7 @@
       </tr>
     </thead>
     <tbody>
-      <template v-if="type === 'main' ">
+      <template v-if="type === 'main'">
         <div class="max-content stickyAdd">
           <slot name="add-row"></slot>
         </div>
@@ -51,7 +51,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .table-custom {
   display: block;
   overflow-y: scroll;

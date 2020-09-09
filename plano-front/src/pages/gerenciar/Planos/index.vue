@@ -7,7 +7,7 @@
         :color="'lightblue'"
         @click="$refs.modalAjuda.toggle()"
       >
-        <font-awesome-icon :icon="['fas','question']" />
+        <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
     </PageHeader>
 
@@ -58,10 +58,12 @@
       <Card
         :title="'Plano'"
         :toggleFooter="isEdit"
+        :isPlano="isEdit"
         @btn-salvar="handleEditPlano"
         @btn-delete="openModalDelete"
         @btn-add="openModalNovoPlano"
         @btn-clean="cleanPlano"
+        @btn-copy="copyPlano(planoForm)"
       >
         <template #form-group>
           <div class="row mb-2 mx-0">
@@ -80,8 +82,17 @@
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
               <label required for="ano">Ano</label>
-              <select id="planoAno" v-model.number="planoForm.ano" class="form-control input-ano">
-                <option v-for="year in AnosDoPlano" :key="'anos' + year" :value="year">{{ year }}</option>
+              <select
+                id="planoAno"
+                v-model.number="planoForm.ano"
+                class="form-control input-ano"
+              >
+                <option
+                  v-for="year in AnosDoPlano"
+                  :key="'anos' + year"
+                  :value="year"
+                  >{{ year }}</option
+                >
               </select>
             </div>
           </div>
@@ -104,11 +115,15 @@
 
     <ModalNovoPlano ref="modalNovoPlano" :plano="planoForm" />
 
-    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="handleDeletePlano">
+    <ModalDelete
+      ref="modalDelete"
+      :isDeleting="isEdit"
+      @btn-deletar="handleDeletePlano"
+    >
       <li class="list-group-item">
         <span v-if="isEdit">
           Tem certeza que deseja excluír o plano
-          <b>{{ planoForm.ano + " - " + planoForm.nome}}</b>
+          <b>{{ planoForm.ano + " - " + planoForm.nome }}</b>
           ?
         </span>
         <span v-else class="list-group-item">Nenhum plano selecionado.</span>
@@ -117,10 +132,30 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Para excluir um plano:</b> clique no ícone de deletar
-        <i class="fas fa-times icon-red"></i> presente na tabela, em seguida
-        confirme se é realmente o plano que deseja exluir e clique no botão
-        deletar ou cancelar.
+        <b>Adicionar:</b>
+        Preencha o cartão em branco à direita e em seguida, clique em Adicionar
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
+      </li>
+      <li class="list-group-item">
+        <b>Editar:</b> Clique na linha da tabela do plano que deseja alterar. Em
+        seguida, no cartão à direita, altere as informações que desejar e clique
+        em Salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
+      </li>
+      <li class="list-group-item">
+        <b>Deletar:</b> Clique na linha da tabela do plano que deseja remover.
+        Em seguida, no cartão à direita, clique em Remover
+        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
+        confirme a remoção na janela que será aberta.
+      </li>
+      <li class="list-group-item">
+        <b>Limpar:</b> No cartão à direita, clique em Cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para
+        limpar as informações.
+      </li>
+      <li class="list-group-item">
+        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para
+        alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>
@@ -132,6 +167,8 @@ import { toggleOrdination } from "@/common/mixins";
 import { Card } from "@/components/ui";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
 import ModalNovoPlano from "./ModalNovoPlano";
+import copyPlanoService from "../../../common/services/copyPlano";
+import planoService from "../../../common/services/plano";
 
 const emptyPlano = {
   ano: "",
@@ -229,6 +266,38 @@ export default {
         this.setPartialLoading(false);
       }
     },
+
+    copyPlano(oldPlano){
+      let newPlano = {
+        nome: `Cópia de '${oldPlano.nome}'`,
+        ano: oldPlano.ano,
+        obs: `Cópia do plano '${oldPlano.nome} - ${oldPlano.ano}'`
+      }
+       planoService.create(newPlano).then((plano) => {
+         copyPlanoService.copyPlano(oldPlano.id, plano.Plano.id).then((response) => {
+           this.$notify({
+             group: "general",
+             title: `Sucesso!`,
+             text: `O Plano ${oldPlano.nome} foi copiado!`,
+             type: "success",
+           });
+         })
+         .catch((error) => {
+           this.error = "<b>Erro ao copiar plano</b>";
+           if (error.response.data.fullMessage) {
+             this.error +=
+               "<br/>" +
+                error.response.data.fullMessage.replace("\n", "<br/>");
+           }
+           this.$notify({
+             group: "general",
+             title: `Erro!`,
+             text: this.error,
+             type: "error",
+           });
+         });
+       })
+    }
   },
 
   computed: {

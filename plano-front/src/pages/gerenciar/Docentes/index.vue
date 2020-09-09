@@ -7,7 +7,7 @@
         :color="'lightblue'"
         @click="$refs.modalAjuda.toggle()"
       >
-        <font-awesome-icon :icon="['fas','question']" />
+        <font-awesome-icon :icon="['fas', 'question']" />
       </BaseButton>
     </PageHeader>
 
@@ -46,16 +46,16 @@
             <template v-for="docente in Docentes">
               <tr
                 :key="'docente-id' + docente.id"
-                v-on:click.prevent="
-                  handleClickInDocente(docente)
-                "
+                v-on:click.prevent="handleClickInDocente(docente)"
                 :class="[
                   { 'bg-selected': docenteClickadoId == docente.id },
                   'clickable',
                 ]"
               >
                 <td style="width:240px;" class="t-start">{{ docente.nome }}</td>
-                <td style="width:120px;" class="t-start">{{ docente.apelido }}</td>
+                <td style="width:120px;" class="t-start">
+                  {{ docente.apelido }}
+                </td>
                 <td style="width:65px">{{ booleanToText(docente.ativo) }}</td>
               </tr>
             </template>
@@ -88,7 +88,7 @@
                 id="nome"
                 type="text"
                 class="form-control form-control-sm input-maior"
-                @input="docenteForm.nome=$event.target.value.toUpperCase()"
+                @input="docenteForm.nome = $event.target.value.toUpperCase()"
                 :value="docenteForm.nome"
               />
             </div>
@@ -96,12 +96,14 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 mr-4 px-0">
-              <label required for="apelido" class="col-form-label">Apelido</label>
+              <label required for="apelido" class="col-form-label"
+                >Apelido</label
+              >
               <input
                 id="apelido"
                 type="text"
                 class="form-control form-control-sm input-medio"
-                @input="docenteForm.apelido=$event.target.value.toUpperCase()"
+                @input="docenteForm.apelido = $event.target.value.toUpperCase()"
                 :value="docenteForm.apelido"
               />
             </div>
@@ -131,7 +133,7 @@
                     <tr
                       v-for="perfil in AllPerfis"
                       :key="'perfil-id' + perfil.id"
-                      @click="toggleItemInArray(perfil.id,perfisAssociados)"
+                      @click="toggleItemInArray(perfil.id, perfisAssociados)"
                     >
                       <td style="width:25px">
                         <input
@@ -141,7 +143,9 @@
                           :value="perfil.id"
                         />
                       </td>
-                      <td style="width:225px" class="t-start">{{ perfil.nome }}</td>
+                      <td style="width:225px" class="t-start">
+                        {{ perfil.nome }}
+                      </td>
                     </tr>
                   </template>
                 </BaseTable>
@@ -152,11 +156,16 @@
       </Card>
     </div>
 
-    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deleteDocente">
+    <ModalDelete
+      ref="modalDelete"
+      :isDeleting="isEdit"
+      @btn-deletar="deleteDocente"
+    >
       <li v-if="isEdit" class="list-group-item">
         <span>
           Tem certeza que deseja excluír o docente
-          <b>{{ docenteForm.nome }}</b>?
+          <b>{{ docenteForm.nome }}</b
+          >?
         </span>
       </li>
       <li v-else class="list-group-item">Nenhum docente selecionado.</li>
@@ -164,33 +173,30 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Para adicionar docentes:</b> Com o cartão à direita em branco,
-        preencha-o. Em seguida, clique em Adicionar
-        <i
-          class="fas fa-plus icon-green px-1"
-        ></i>
-        .
+        <b>Adicionar:</b>
+        Preencha o cartão em branco à direita e em seguida, clique em Adicionar
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Para editar ou deletar um docente:</b>Na tabela, clique no
-        docente que deseja alterar. Logo após, no cartão à direita, altere
-        as informações que desejar e clique em Salvar
-        <i
-          class="fas fa-check icon-green px-1"
-        ></i>
-        ou, para excluí-lo, clique em Deletar
-        <i class="fas fa-times icon-gray px-1"></i>
-        .
+        <b>Editar:</b> Clique na linha da tabela do docente que deseja alterar.
+        Em seguida, no cartão à direita, altere as informações que desejar e
+        clique em Salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Para deixar o cartão em branco:</b> No cartão, à direita, clique
-        em Cancelar
-        <i class="fas fa-times icon-gray px-1"></i>
-        .
+        <b>Deletar:</b> Clique na linha da tabela do docente que deseja remover.
+        Em seguida, no cartão à direita, clique em Remover
+        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
+        confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
-        <b>Para alterar a ordenação:</b> Clique em Nome ou Apelido no
-        cabeçalho da tabela para ordenação alfabética do mesmo.
+        <b>Limpar:</b> No cartão à direita, clique em Cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para
+        limpar as informações.
+      </li>
+      <li class="list-group-item">
+        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para
+        alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>

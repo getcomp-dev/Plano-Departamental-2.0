@@ -190,10 +190,30 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Para excluir um usuário:</b> clique no ícone de deletar
-        <i class="fas fa-times icon-red"></i> presente na tabela, em seguida
-        confirme se é realmente o usuário que deseja exluir e clique no botão
-        deletar ou cancelar.
+        <b>Adicionar:</b>
+        Preencha o cartão em branco à direita e em seguida, clique em Adicionar
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
+      </li>
+      <li class="list-group-item">
+        <b>Editar:</b> Clique na linha da tabela do usuário que deseja alterar.
+        Em seguida, no cartão à direita, altere as informações que desejar e
+        clique em Salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
+      </li>
+      <li class="list-group-item">
+        <b>Deletar:</b> Clique na linha da tabela do usuário que deseja remover.
+        Em seguida, no cartão à direita, clique em Remover
+        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
+        confirme a remoção na janela que será aberta.
+      </li>
+      <li class="list-group-item">
+        <b>Limpar:</b> No cartão à direita, clique em Cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para
+        limpar as informações.
+      </li>
+      <li class="list-group-item">
+        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para
+        alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>

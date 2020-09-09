@@ -52,6 +52,9 @@ const getters = {
   AllSalas(state) {
     return _.orderBy(state.Salas, "nome");
   },
+  Laboratorios(state, getters) {
+    return _.filter(getters.AllSalas, ["laboratorio", true]);
+  },
 };
 
 export default {

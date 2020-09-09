@@ -11,10 +11,7 @@
           <th class="tg-0lax">Sex</th>
         </tr>
 
-        <tr
-          v-for="horarioItem in ListaDeHorariosEletivas"
-          :key="horarioItem.nome"
-        >
+        <tr v-for="horarioItem in ListaDeTodosHorarios" :key="horarioItem.nome">
           <td class="tg-0lax tg-hor">{{ horarioItem.nome }}</td>
           <td
             v-for="horarioId in horarioItem.horariosIds"
@@ -60,7 +57,6 @@ export default {
         disciplina: this.findDisciplinaInTurma(turma),
       }));
     },
-
     findDocentesApelidoInTurma(turma) {
       let docente1 = undefined;
       let docente2 = undefined;
@@ -86,7 +82,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["ListaDeHorariosEletivas", "AllDisciplinas", "AllDocentes"]),
+    ...mapGetters(["ListaDeTodosHorarios", "AllDisciplinas", "AllDocentes"]),
   },
 };
 </script>

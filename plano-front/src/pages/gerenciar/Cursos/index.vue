@@ -42,25 +42,25 @@
               <i :class="setIconByOrder(ordenacaoCursosMain, 'turno')"></i>
             </th>
             <th
-              class="clickable"
-              style="width: 70px"
-              title="Entrada de alunos 1º Semestre"
+              class="clickable p-0"
+              style="width: 75px"
+              title="Entrada de alunos 1º período"
               @click="toggleOrder(ordenacaoCursosMain, 'alunosEntrada', 'desc')"
             >
-              1º Sem.
+              1º Período
               <i
                 :class="setIconByOrder(ordenacaoCursosMain, 'alunosEntrada')"
               ></i>
             </th>
             <th
-              class="clickable"
-              style="width: 70px"
-              title="Entrada de alunos 2º Semestre"
+              class="clickable p-0"
+              style="width: 75px"
+              title="Entrada de alunos 3º período"
               @click="
                 toggleOrder(ordenacaoCursosMain, 'alunosEntrada2', 'desc')
               "
             >
-              2º Sem.
+              3º Período
               <i
                 :class="setIconByOrder(ordenacaoCursosMain, 'alunosEntrada2')"
               ></i>
@@ -79,8 +79,8 @@
               <td style="width: 65px" class="t-start">{{ curso.codigo }}</td>
               <td style="width: 300px" class="t-start">{{ curso.nome }}</td>
               <td style="width: 65px">{{ curso.turno }}</td>
-              <td style="width: 70px;">{{ curso.alunosEntrada }}</td>
-              <td style="width: 70px;">{{ curso.alunosEntrada2 }}</td>
+              <td style="width: 75px;">{{ curso.alunosEntrada }}</td>
+              <td style="width: 75px;">{{ curso.alunosEntrada2 }}</td>
             </tr>
             <tr v-if="!CursosOrdered.length">
               <td colspan="5" style="width:570px" class="text-center">
@@ -207,6 +207,10 @@
         <b>Limpar:</b> No cartão à direita, clique em Cancelar
         <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para
         limpar as informações.
+      </li>
+      <li class="list-group-item">
+        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para
+        alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>

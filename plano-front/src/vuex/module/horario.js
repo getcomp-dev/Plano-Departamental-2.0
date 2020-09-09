@@ -127,7 +127,7 @@ const getters = {
 
     return listHorarios;
   },
-  ListaDeHorariosEletivas(state, getters) {
+  ListaDeTodosHorarios(state, getters) {
     const HorariosExtra = [
       {
         nome: "17-19",

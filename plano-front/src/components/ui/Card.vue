@@ -10,6 +10,17 @@
         <div class="row m-0 mt-3 d-flex justify-content-end">
           <slot name="footer">
             <template v-if="toggleFooter">
+              <template v-if="isPlano">
+                <BaseButton
+                        title="Copiar Plano"
+                        :type="'icon'"
+                        :color="'blue'"
+                        @click="$emit('btn-copy')"
+                        :key="5"
+                >
+                  <font-awesome-icon :icon="['fas', 'copy']" />
+                </BaseButton>
+              </template>
               <BaseButton
                 title="Salvar"
                 :type="'icon'"
@@ -67,6 +78,7 @@ export default {
       default: "Nenhum titulo recebido!",
     },
     toggleFooter: { type: Boolean, default: false },
+    isPlano: { type: Boolean, default: false },
   },
 };
 </script>

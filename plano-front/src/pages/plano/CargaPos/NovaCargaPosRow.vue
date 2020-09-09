@@ -20,11 +20,11 @@
     </td>
     <td style="width:145px" class="less-padding">
       <select v-model.number="cargaPosForm.Docente">
-        <option v-if="!DocentesOrdered.length" type="text" value
+        <option v-if="!DocentesAtivos.length" type="text" value
           >Nenhum Docente Encontrado</option
         >
         <option
-          v-for="docente in DocentesOrdered"
+          v-for="docente in DocentesAtivos"
           :key="docente.id + docente.apelido"
           :value="docente.id"
           >{{ docente.apelido }}</option
@@ -82,10 +82,6 @@ export default {
   },
   computed: {
     ...mapGetters(["DocentesAtivos"]),
-
-    DocentesOrdered() {
-      return this.$_.orderBy(this.DocentesAtivos, "apelido");
-    },
   },
 };
 </script>

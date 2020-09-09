@@ -40,6 +40,15 @@
   color: #ff5f48 !important;
 }
 
+.icon-blue {
+  background-color: inherit !important;
+  color: #24a0ed !important;
+}
+
+.icon-blue:hover {
+  color: #1a79b2 !important;
+}
+
 /* ### text-cores ### */
 .text-green {
   background-color: #70b670 !important;

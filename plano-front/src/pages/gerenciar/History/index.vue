@@ -1,67 +1,68 @@
 <template>
   <div class="main-component row">
     <PageHeader :title="'Logs'">
-      <div class="input-group d-flex align-items-center mx-2 p-0">
-        <div class="input-group-prepend">
-          <label class="input-group-text">Operação</label>
-        </div>
-        <select class="form-control form-control-top" v-model="operacoes">
-          <option value="Todos">Todas</option>
-          <option value="Create">Create</option>
-          <option value="Delete">Delete</option>
-          <option value="Edit">Edit</option>
-        </select>
-      </div>
-
       <BaseButton
         title="Filtros"
         :type="'icon'"
         :color="'gray'"
-        @click="$refs.modalFiltros.toggle()"
+        @click="toggleAsideModal('filtros')"
       >
         <font-awesome-icon :icon="['fas', 'list-ul']" />
       </BaseButton>
+      <BaseButton
+        title="Filtros"
+        :type="'icon'"
+        :color="'lightblue'"
+        @click="toggleAsideModal('ajuda')"
+      >
+        <font-awesome-icon :icon="['fas', 'question']" />
+      </BaseButton>
     </PageHeader>
 
-    <div class="row w-100 m-0 p-0">
-      <div class="div-table">
-        <BaseTable>
-          <template #thead>
-            <th style="width: 110px;">Tabela Modificada</th>
-            <th style="width: 120px">Campo Modificado</th>
-            <th style="width: 200px">Linha Modificada</th>
-            <th style="width: 120px">Valor Anterior</th>
-            <th style="width: 120px">Novo Valor</th>
-            <th style="width: 65px">Operação</th>
-            <th style="width: 80px">Usuário</th>
-            <th style="width: 160px">Hora</th>
-          </template>
-          <template #tbody>
-            <tr v-for="h in History" :key="`History${h.id}`">
-              <td style="width: 110px">{{ h.tabelaModificada }}</td>
-              <td style="width: 120px" class="less-padding">
-                {{ h.campoModificado }}
-              </td>
-              <td style="width: 200px" class="less-padding">
-                {{ linhaModificada(h) }}
-              </td>
-              <td style="width: 120px" class="less-padding">
-                {{ valorAnterior(h) }}
-              </td>
-              <td style="width: 120px" class="less-padding">
-                {{ valorNovo(h) }}
-              </td>
-              <td style="width: 65px" class="less-padding">
-                {{ h.tipoOperacao }}
-              </td>
-              <td style="width: 80px" class="less-padding">{{ h.usuario }}</td>
-              <td style="width: 160px" class="less-padding">
-                {{ h.createdAt }}
-              </td>
-            </tr>
-          </template>
-        </BaseTable>
-      </div>
+    <div class="div-table">
+      <BaseTable>
+        <template #thead>
+          <th style="width: 110px;">Tabela Modificada</th>
+          <th style="width: 120px">Campo Modificado</th>
+          <th style="width: 200px">Linha Modificada</th>
+          <th style="width: 120px">Valor Anterior</th>
+          <th style="width: 120px">Novo Valor</th>
+          <th style="width: 65px">Operação</th>
+          <th style="width: 80px">Usuário</th>
+          <th style="width: 160px">Hora</th>
+        </template>
+        <template #tbody>
+          <tr v-for="h in HistoryOrdered" :key="`History${h.id}`">
+            <td style="width: 110px">{{ h.tabelaModificada }}</td>
+            <td style="width: 120px" class="less-padding">
+              {{ h.campoModificado }}
+            </td>
+            <td style="width: 200px" class="less-padding">
+              {{ linhaModificada(h) }}
+            </td>
+            <td style="width: 120px" class="less-padding">
+              {{ valorAnterior(h) }}
+            </td>
+            <td style="width: 120px" class="less-padding">
+              {{ valorNovo(h) }}
+            </td>
+            <td style="width: 65px" class="less-padding">
+              {{ h.tipoOperacao }}
+            </td>
+            <td style="width: 80px" class="less-padding">{{ h.usuario }}</td>
+            <td style="width: 160px" class="less-padding">
+              {{ h.createdAt }}
+            </td>
+          </tr>
+          <tr v-show="!HistoryOrdered.length">
+            <td style="width:975px">
+              <b>Nenhuma operação encontrada.</b> Clique no botão de filtros
+              <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+              para selecioná-las.
+            </td>
+          </tr>
+        </template>
+      </BaseTable>
     </div>
 
     <ModalFiltros
@@ -76,87 +77,128 @@
         >
           <template #thead>
             <th style="width:25px"></th>
-            <th style="width: 425px">Nome</th>
+            <th style="width: 425px" class="t-start">Nome</th>
           </template>
           <template #tbody>
             <tr
-              v-for="option in Options"
-              :key="`MdTabelas${option.value}`"
-              @click="toggleItemInArray(option.value, TabelasSelecionadas)"
+              v-for="tabela in TabelasOptions"
+              :key="tabela.nome + tabela.id"
+              @click="toggleItemInArray(tabela, filtroTabelas.selecionados)"
             >
-              <div class="max-content">
-                <td style="width:25px">
-                  <input
-                    type="checkbox"
-                    v-model="TabelasSelecionadas"
-                    :value="option.value"
-                    class="form-check-input position-static m-0"
-                  />
-                </td>
-                <td style="width:425px" class="t-start">{{ option.text }}</td>
-              </div>
+              <td style="width:25px">
+                <input
+                  type="checkbox"
+                  v-model="filtroTabelas.selecionados"
+                  :value="tabela"
+                  class="form-check-input position-static m-0"
+                />
+              </td>
+              <td style="width:425px" class="t-start upper-case">
+                {{ tabela.nome }}
+              </td>
+            </tr>
+          </template>
+        </BaseTable>
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Operações'"
+          :type="'modal'"
+        >
+          <template #thead>
+            <th style="width:25px"></th>
+            <th style="width: 425px" class="t-start">Nome</th>
+          </template>
+          <template #tbody>
+            <tr
+              v-for="operacao in OperacoesOptions"
+              :key="operacao.id"
+              @click="toggleItemInArray(operacao, filtroOperacoes.selecionados)"
+            >
+              <td style="width:25px">
+                <input
+                  type="checkbox"
+                  v-model="filtroOperacoes.selecionados"
+                  :value="operacao"
+                  class="form-check-input position-static m-0"
+                />
+              </td>
+              <td style="width:425px" class="t-start upper-case">
+                {{ operacao.nome }}
+              </td>
             </tr>
           </template>
         </BaseTable>
       </div>
     </ModalFiltros>
+
+    <ModalAjuda ref="modalAjuda">
+      <li class="list-group-item">
+        <b>Visualizar conteúdo:</b>
+        Clique no ícone de filtros
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" /> no
+        cabeçalho da página e, na janela que se abrirá, utilize as abas para
+        navegar entre os tipos de filtro disponíveis. Marque quais informações
+        deseja visualizar, e para finalizar clique no botão OK.
+      </li>
+    </ModalAjuda>
   </div>
 </template>
 
 <script>
-import { toggleItemInArray } from "@/common/mixins";
-import { NavTab } from "@/components/ui";
-import { ModalFiltros } from "@/components/modals";
+import { toggleItemInArray, toggleAsideModal } from "@/common/mixins";
+import { ModalFiltros, ModalAjuda } from "@/components/modals";
 import { mapGetters } from "vuex";
 
 export default {
   name: "DashboardHistory",
-  mixins: [toggleItemInArray],
+  mixins: [toggleItemInArray, toggleAsideModal],
   components: {
-    NavTab,
     ModalFiltros,
+    ModalAjuda,
   },
   data() {
     return {
-      TabelasSelecionadas: [],
-      TabelasAtivadas: [],
-      operacoes: "Todos",
+      asideModalsRefs: ["modalFiltros", "modalAjuda"],
+      filtroOperacoes: {
+        ativados: [],
+        selecionados: [],
+      },
+      filtroTabelas: {
+        ativados: [],
+        selecionados: [],
+      },
       modalFiltrosTabs: {
         current: "Tabelas",
-        array: ["Tabelas"],
+        array: ["Tabelas", "Operações"],
       },
       modalFiltrosCallbacks: {
         selectNone: {
           Tabelas: () => {
-            this.TabelasSelecionadas = [];
+            this.filtroTabelas.selecionados = [];
+          },
+          Operacoes: () => {
+            this.filtroOperacoes.selecionados = [];
           },
         },
         selectAll: {
           Tabelas: () => {
-            this.TabelasSelecionadas = [...this.$_.map(this.Options, "value")];
+            this.filtroTabelas.selecionados = [...this.TabelasOptions];
+          },
+          Operacoes: () => {
+            this.filtroOperacoes.selecionados = [...this.OperacoesOptions];
           },
         },
         btnOk: () => {
-          this.TabelasAtivadas = [...this.TabelasSelecionadas];
+          this.filtroTabelas.ativados = [...this.filtroTabelas.selecionados];
+          this.filtroOperacoes.ativados = [
+            ...this.filtroOperacoes.selecionados,
+          ];
         },
       },
-      Options: [
-        { text: "CARGA PÓS", value: "CargaPos" },
-        { text: "CURSO", value: "Curso" },
-        { text: "DISCIPLINA", value: "Disciplina" },
-        { text: "DISCIPLINA GRADE", value: "DisciplinaGrade" },
-        { text: "DOCENTE", value: "Docente" },
-        { text: "DOCENTE PERFIL", value: "DocentePerfil" },
-        { text: "GRADE", value: "Grade" },
-        { text: "PEDIDO", value: "Pedido" },
-        { text: "PEDIDO EXTERNO", value: "PedidoExterno" },
-        { text: "PERFIL", value: "Perfil" },
-        { text: "PLANO", value: "Plano" },
-        { text: "SALA", value: "Sala" },
-        { text: "TURMA", value: "Turma" },
-        { text: "TURMA EXTERNA", value: "TurmaExterna" },
-      ],
     };
+  },
+
+  beforeMount() {
+    this.modalFiltrosCallbacks.selectAll.Operacoes();
   },
 
   methods: {
@@ -462,43 +504,52 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["onLoading"]),
-    History() {
-      let TabelasAtivadas = this.TabelasAtivadas;
-      return this.$_.orderBy(
-        this.$_.filter(
-          this.$_.filter(this.$store.state.history.History, function(
-            h,
-            i,
-            a,
-            t = TabelasAtivadas
-          ) {
-            let v = false;
-            t.forEach((o) => {
-              if (h.tabelaModificada === o) {
-                v = true;
-              }
-            });
-            if (v) {
-              return true;
-            }
-          }),
-          this.operacoes === "Todos" ? {} : { tipoOperacao: this.operacoes }
-        ),
-        ["id"],
-        ["desc"]
+    ...mapGetters(["onLoading", "History"]),
+
+    HistoryOrdered() {
+      return this.$_.orderBy(this.HistoryFilteredByOperacao, "id", "desc");
+    },
+    HistoryFilteredByOperacao() {
+      return this.$_.filter(this.HistoryFilteredByTabelas, (history) =>
+        this.$_.some(this.filtroOperacoes.ativados, [
+          "id",
+          history.tipoOperacao,
+        ])
       );
+    },
+    HistoryFilteredByTabelas() {
+      return this.$_.filter(this.History, (history) =>
+        this.$_.some(this.filtroTabelas.ativados, [
+          "id",
+          history.tabelaModificada,
+        ])
+      );
+    },
+    OperacoesOptions() {
+      return [
+        { nome: "Criação", id: "Create" },
+        { nome: "Exclusão", id: "Delete" },
+        { nome: "Edição", id: "Edit" },
+      ];
+    },
+    TabelasOptions() {
+      return [
+        { nome: "CARGA PÓS", id: "CargaPos" },
+        { nome: "CURSO", id: "Curso" },
+        { nome: "DISCIPLINA", id: "Disciplina" },
+        { nome: "DISCIPLINA GRADE", id: "DisciplinaGrade" },
+        { nome: "DOCENTE", id: "Docente" },
+        { nome: "DOCENTE PERFIL", id: "DocentePerfil" },
+        { nome: "GRADE", id: "Grade" },
+        { nome: "PEDIDO", id: "Pedido" },
+        { nome: "PEDIDO EXTERNO", id: "PedidoExterno" },
+        { nome: "PERFIL", id: "Perfil" },
+        { nome: "PLANO", id: "Plano" },
+        { nome: "SALA", id: "Sala" },
+        { nome: "TURMA", id: "Turma" },
+        { nome: "TURMA EXTERNA", id: "TurmaExterna" },
+      ];
     },
   },
 };
 </script>
-
-<style scoped>
-.input-group-text {
-  width: 70px !important;
-}
-.form-control-top {
-  width: 70px !important;
-  text-align: center;
-}
-</style>

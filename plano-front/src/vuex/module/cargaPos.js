@@ -126,7 +126,7 @@ const actions = {
 
 const getters = {
   AllCargasPos(state) {
-    return state.Cargas;
+    return _.orderBy(state.Cargas, "trimestre");
   },
   CargasPosToDelete(state) {
     return state.Deletar;

@@ -17,7 +17,7 @@
         class="tg-0lax"
       >
         <p
-          v-for="turma in TurmasInHorarios(horarioId)"
+          v-for="turma in TurmasFilteredByHorario(horarioId)"
           :key="horarioId + turma.id + turma.periodo"
           v-b-popover.hover.right="{
             title: turma.disciplina.nome,
@@ -42,7 +42,7 @@ export default {
   },
 
   methods: {
-    TurmasInHorarios(horarioId) {
+    TurmasFilteredByHorario(horarioId) {
       const turmasFiltred = this.$_.filter(
         this.Turmas,
         (turma) => turma.Horario1 == horarioId || turma.Horario2 == horarioId
@@ -54,14 +54,13 @@ export default {
         disciplina: this.findDisciplinaInTurma(turma),
       }));
     },
-
     findDocentesApelidoInTurma(turma) {
       let docente1 = undefined;
       let docente2 = undefined;
       if (!this.$_.isNull(turma.Docente1))
         docente1 = this.$_.find(this.AllDocentes, ["id", turma.Docente1]);
       if (!this.$_.isNull(turma.Docente2))
-        docente2 = this.$_.find(this.AllDocentes, ["id", turma.Docente1]);
+        docente2 = this.$_.find(this.AllDocentes, ["id", turma.Docente2]);
 
       let apelidos = "";
       if (docente1 !== undefined) {
@@ -80,7 +79,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["ListaDeHorariosEletivas", "AllDisciplinas", "AllDocentes"]),
+    ...mapGetters(["AllDisciplinas", "AllDocentes"]),
   },
 };
 </script>
