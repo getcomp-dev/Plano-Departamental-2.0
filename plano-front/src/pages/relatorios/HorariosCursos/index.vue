@@ -71,7 +71,7 @@
 
         <template v-if="EletivasIsActived">
           <h3 class="curso-title pl-1">Eletivas</h3>
-          <TableEletivas :TurmasEletivas="horariosAtivos2.Eletivas" />
+          <TableEletivas :TurmasEletivas="horariosAtivos3.Eletivas" />
         </template>
       </div>
     </div>
@@ -2684,11 +2684,11 @@ export default {
         }
       }
 
-      var periodosCCD2 = this.horariosAtivos2.CCD;
-      var periodosCCN2 = this.horariosAtivos2.CCN;
-      var periodosEC2 = this.horariosAtivos2.EC;
-      var periodosSI2 = this.horariosAtivos2.SI;
-      var eletivas2 = this.horariosAtivos2.Eletivas;
+      var periodosCCD2 = this.horariosAtivos3.CCD;
+      var periodosCCN2 = this.horariosAtivos3.CCN;
+      var periodosEC2 = this.horariosAtivos3.EC;
+      var periodosSI2 = this.horariosAtivos3.SI;
+      var eletivas2 = this.horariosAtivos3.Eletivas;
 
       tables.push({
         columns: [
@@ -4757,7 +4757,7 @@ export default {
           periodoInicial1Semestre: 1,
           periodoInicial2Semestre: 2,
           horarios1Semestre: this.horariosAtivos1.CCD,
-          horarios2Semestre: this.horariosAtivos2.CCD,
+          horarios2Semestre: this.horariosAtivos3.CCD,
         },
         {
           ...this.$_.find(this.CursosDCC, (curso) => curso.codigo === "35A"),
@@ -4766,7 +4766,7 @@ export default {
           periodoInicial1Semestre: 2,
           periodoInicial2Semestre: 1,
           horarios1Semestre: this.horariosAtivos1.CCN,
-          horarios2Semestre: this.horariosAtivos2.CCN,
+          horarios2Semestre: this.horariosAtivos3.CCN,
         },
         {
           ...this.$_.find(this.CursosDCC, (curso) => curso.codigo === "76A"),
@@ -4775,7 +4775,7 @@ export default {
           periodoInicial1Semestre: 2,
           periodoInicial2Semestre: 1,
           horarios1Semestre: this.horariosAtivos1.SI,
-          horarios2Semestre: this.horariosAtivos2.SI,
+          horarios2Semestre: this.horariosAtivos3.SI,
         },
         {
           ...this.$_.find(this.CursosDCC, (curso) => curso.codigo === "65B"),
@@ -4784,7 +4784,7 @@ export default {
           periodoInicial1Semestre: 1,
           periodoInicial2Semestre: 2,
           horarios1Semestre: this.horariosAtivos1.EC,
-          horarios2Semestre: this.horariosAtivos2.EC,
+          horarios2Semestre: this.horariosAtivos3.EC,
         },
       ];
     },
