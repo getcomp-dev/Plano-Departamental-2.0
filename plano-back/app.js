@@ -31,7 +31,8 @@ const express = require('express'),
   pdfsRoute = require('./routes/pdfs'),
   downloads = require('./routes/download'),
   novoPlanoRoute = require('./routes/novoPlano'),
-  historyRoute = require('./routes/history')
+  historyRoute = require('./routes/history'),
+  copyPlanoRoute = require('./routes/copyPlano')
 
 
 const app = express()
@@ -81,6 +82,7 @@ app.use('/api/pdf', pdfsRoute)
 app.use('/api/download', downloads)
 app.use('/api/novoPlano', novoPlanoRoute)
 app.use('/api/history', historyRoute)
+app.use('/api/copyPlano', copyPlanoRoute)
 
 app.use(staticFileMiddleware);
 app.use(history({
