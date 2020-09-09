@@ -2,6 +2,7 @@ const router = require('express').Router(),
     exec = require('child_process').exec
 
 router.post('/:planoOld([0-9]+)&&:planoNew([0-9]+)', function(req, res, next){
+    console.log(`Plano old: ${req.params.planoOld} Plano new: ${req.params.planoNew}`)
     exec('mysql -u root mult_planos "' +
         'insert into Turma(periodo, letra, turno1, turno2, Disciplina, Docente1, Docente2, Horario1, Horario2, Sala1, Sala2, Plano) select periodo, letra, turno1, turno2, Disciplina, Docente1, Docente2, Horario1, Horario2, Sala1, Sala2,' + req.params.planoNew + ' from Turma where Plano = '+ req.params.planoOld+';' +
         'insert into TurmaExterna(periodo, letra, turno1, turno2, Disciplina, Horario1, Horario2, Sala1, Sala2, Plano) select periodo, letra, turno1, turno2, Disciplina, Horario1, Horario2, Sala1, Sala2, ' + req.params.planoNew + ' from TurmaExterna where Plano = '+ req.params.planoOld +';'+
