@@ -29,54 +29,81 @@
       </BaseButton>
     </PageHeader>
 
-    <div
-      v-show="!onLoading.table && hasAnyHorariosActived"
-      class="row w-100 m-0"
-    >
-      <div v-show="semestre1IsActived" class="w-100">
-        <h2 class="semestre-title">1º Semestre</h2>
-
-        <ListTableHorarios
-          v-for="curso in CursosInHorariosFiltred"
+    <div v-show="!onLoading.table && algumHorariosEstaAtivo" class="w-100 m-0">
+      <div
+        v-show="
+          filtroPeriodosEstaAtivo.periodo1 && filtroCursos.ativados.length
+        "
+        class="w-100"
+      >
+        <h2 class="periodo-title">1º Período letivo</h2>
+        <ListHorarios
+          v-for="curso in CursosComHorariosFiltred"
           :key="curso.codigo + curso.periodoInicial1Semestre"
+          :title="curso.nome"
           :curso="{
             id: curso.id,
-            nome: curso.nome,
             turno: curso.turno,
             periodoInicial: curso.periodoInicial1Semestre,
-            horarios: curso.horarios1Semestre,
           }"
+          :horariosTurmas="curso.horarios1Periodo"
         />
-
-        <template v-if="EletivasIsActived">
-          <h3 class="curso-title pl-1">Eletivas</h3>
-          <TableEletivas :TurmasEletivas="horariosAtivos1.Eletivas" />
-        </template>
+        <ListHorarios
+          v-if="filtroEletivasEstaAtivo"
+          :template="'extra'"
+          :title="'Eletivas'"
+          :horariosTurmas="horariosAtivos1Periodo.Eletivas"
+        />
       </div>
 
-      <div v-show="semestre2IsActived" class="w-100">
-        <h2 class="semestre-title">3º Semestre</h2>
+      <template v-if="filtroPeriodosEstaAtivo.periodo2">
+        <h2 class="periodo-title">2º Período letivo</h2>
+        <ListHorarios
+          :template="'extra'"
+          :title="'Cursos de inverno'"
+          :horariosTurmas="TurmasAtivas2Periodo"
+        />
+      </template>
 
-        <ListTableHorarios
-          v-for="curso in CursosInHorariosFiltred"
-          :key="curso.nome + curso.periodoInicial2Semestre"
+      <div
+        v-show="
+          filtroPeriodosEstaAtivo.periodo3 && filtroCursos.ativados.length
+        "
+        class="w-100"
+      >
+        <h2 class="periodo-title">3º Período letivo</h2>
+
+        <ListHorarios
+          v-for="curso in CursosComHorariosFiltred"
+          :key="curso.codigo + curso.periodoInicial2Semestre"
+          :title="curso.nome"
           :curso="{
             id: curso.id,
-            nome: curso.nome,
             turno: curso.turno,
             periodoInicial: curso.periodoInicial2Semestre,
-            horarios: curso.horarios2Semestre,
           }"
+          :horariosTurmas="curso.horarios3Periodo"
         />
-
-        <template v-if="EletivasIsActived">
-          <h3 class="curso-title pl-1">Eletivas</h3>
-          <TableEletivas :TurmasEletivas="horariosAtivos3.Eletivas" />
-        </template>
+        <ListHorarios
+          v-if="filtroEletivasEstaAtivo"
+          :template="'extra'"
+          :title="'Eletivas'"
+          :horariosTurmas="horariosAtivos3Periodo.Eletivas"
+        />
       </div>
+
+      <template v-if="filtroPeriodosEstaAtivo.periodo4">
+        <h2 class="periodo-title">4º Período letivo</h2>
+        <ListHorarios
+          v-show="filtroPeriodosEstaAtivo.periodo4"
+          :template="'extra'"
+          :title="'4º Período letivo - Cursos de verão'"
+          :horariosTurmas="TurmasAtivas4Periodo"
+        />
+      </template>
     </div>
 
-    <p v-if="horariosIsEmpty" class="text-empty">
+    <p v-show="!algumHorariosEstaAtivo" class="text-empty">
       <b>Nenhum horário encontrado.</b> Clique no botão de filtros
       <font-awesome-icon :icon="['fas', 'list-ul']" class="mx-1" />para
       selecioná-los.
@@ -113,7 +140,7 @@
           </template>
           <template #tbody>
             <tr
-              v-for="curso in CursosModalOrdered"
+              v-for="curso in CursosOrderedModal"
               :key="'MdCurso' + curso.codigo + curso.id"
               @click="toggleItemInArray(curso, filtroCursos.selecionados)"
             >
@@ -132,33 +159,62 @@
         </BaseTable>
 
         <BaseTable
+          type="modal"
+          v-show="modalFiltrosTabs.current === 'Períodos'"
+        >
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th style="width: 425px" class="t-start">Periodos Letivo</th>
+          </template>
+          <template #tbody>
+            <tr
+              v-for="periodo in PeriodosLetivos"
+              :key="periodo.id + periodo.nome"
+              @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
+            >
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  :value="periodo"
+                  v-model="filtroPeriodos.selecionados"
+                  @click.stop="selecionaPeriodo(periodo)"
+                />
+              </td>
+              <td style="width: 425px" class="t-start upper-case">
+                {{ periodo.nome }}
+              </td>
+            </tr>
+          </template>
+        </BaseTable>
+        <BaseTable
           v-show="modalFiltrosTabs.current === 'Semestres'"
           :type="'modal'"
         >
           <template #thead>
             <th style="width: 25px"></th>
-            <th style="width: 425px" class="t-start">Semestre Letivo</th>
+            <th class="t-start" style="width: 425px">
+              Semestre Letivo
+            </th>
           </template>
           <template #tbody>
-            <tr @click="filtroSemestres.primeiro = !filtroSemestres.primeiro">
+            <tr
+              v-for="semestre in SemestresLetivos"
+              :key="semestre.id + semestre.nome"
+              @click="selecionaSemestre(semestre)"
+            >
               <td style="width: 25px">
                 <input
                   type="checkbox"
                   class="form-check-input position-static m-0"
-                  v-model="filtroSemestres.primeiro"
+                  :value="semestre"
+                  v-model="filtroSemestres.selecionados"
+                  @click.stop="selecionaSemestre(semestre)"
                 />
               </td>
-              <td style="width: 425px" class="t-start">PRIMEIRO</td>
-            </tr>
-            <tr @click="filtroSemestres.segundo = !filtroSemestres.segundo">
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  v-model="filtroSemestres.segundo"
-                />
+              <td style="width: 425px" class="t-start upper-case">
+                {{ semestre.nome }}
               </td>
-              <td style="width: 425px" class="t-start">SEGUNDO</td>
             </tr>
           </template>
         </BaseTable>
@@ -192,88 +248,88 @@ import {
   toggleItemInArray,
   toggleOrdination,
   toggleAsideModal,
+  conectaFiltrosSemestresEPeriodos,
 } from "@/common/mixins";
 import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
-import TableEletivas from "./TableEletivas.vue";
-import ListTableHorarios from "./ListTableHorarios.vue";
+import ListHorarios from "./ListTableHorarios.vue";
 
 export default {
   name: "DashboardHorarios",
-  mixins: [toggleItemInArray, toggleOrdination, toggleAsideModal],
+  mixins: [
+    toggleItemInArray,
+    toggleOrdination,
+    toggleAsideModal,
+    conectaFiltrosSemestresEPeriodos,
+  ],
   components: {
     ModalFiltros,
     ModalAjuda,
     ModalRelatorio,
-    ListTableHorarios,
-    TableEletivas,
+    ListHorarios,
   },
   data() {
     return {
       asideModalsRefs: ["modalFiltros", "modalAjuda", "modalRelatorio"],
       ordemCursos: { order: "codigo", type: "asc" },
-      listaDePeriodos: [],
+      horariosAtivos1Periodo: {
+        CCD: [[], [], [], [], [], [], [], [], [], []],
+        CCN: [[], [], [], [], [], [], [], [], [], []],
+        EC: [[], [], [], [], [], [], [], [], [], []],
+        SI: [[], [], [], [], [], [], [], [], [], []],
+        Eletivas: [],
+      },
+      horariosAtivos3Periodo: {
+        CCD: [[], [], [], [], [], [], [], [], [], []],
+        CCN: [[], [], [], [], [], [], [], [], [], []],
+        EC: [[], [], [], [], [], [], [], [], [], []],
+        SI: [[], [], [], [], [], [], [], [], [], []],
+        Eletivas: [],
+      },
       filtroCursos: {
         selecionados: [],
         ativados: [],
       },
+      filtroPeriodos: {
+        ativados: [],
+        selecionados: [],
+      },
       filtroSemestres: {
-        primeiro: true,
-        segundo: true,
-        ativo: 3,
-      },
-      horariosAtivos1: {
-        CCD: [[], [], [], [], [], [], [], [], [], []],
-        CCN: [[], [], [], [], [], [], [], [], [], []],
-        EC: [[], [], [], [], [], [], [], [], [], []],
-        SI: [[], [], [], [], [], [], [], [], [], []],
-        Eletivas: [],
-      },
-      horariosAtivos2: {
-        CCD: [[], [], [], [], [], [], [], [], [], []],
-        CCN: [[], [], [], [], [], [], [], [], [], []],
-        EC: [[], [], [], [], [], [], [], [], [], []],
-        SI: [[], [], [], [], [], [], [], [], [], []],
-        Eletivas: [],
-      },
-      horariosAtivos3: {
-        CCD: [[], [], [], [], [], [], [], [], [], []],
-        CCN: [[], [], [], [], [], [], [], [], [], []],
-        EC: [[], [], [], [], [], [], [], [], [], []],
-        SI: [[], [], [], [], [], [], [], [], [], []],
-        Eletivas: [],
-      },
-      horariosAtivos4: {
-        CCD: [[], [], [], [], [], [], [], [], [], []],
-        CCN: [[], [], [], [], [], [], [], [], [], []],
-        EC: [[], [], [], [], [], [], [], [], [], []],
-        SI: [[], [], [], [], [], [], [], [], [], []],
-        Eletivas: [],
+        ativados: [],
+        selecionados: [],
       },
       modalFiltrosTabs: {
         current: "Cursos",
-        array: ["Cursos", "Semestres"],
+        array: ["Cursos", "Períodos", "Semestres"],
       },
       modalFiltrosCallbacks: {
         selectAll: {
           Cursos: () => {
-            this.filtroCursos.selecionados = [...this.OptionsCursosDCC];
+            this.filtroCursos.selecionados = [...this.CursosModal];
+          },
+          Periodos: () => {
+            this.filtroPeriodos.selecionados = [...this.PeriodosLetivos];
+            this.conectaPeriodoEmSemestre();
           },
           Semestres: () => {
-            this.filtroSemestres.primeiro = true;
-            this.filtroSemestres.segundo = true;
+            this.filtroSemestres.selecionados = [...this.SemestresLetivos];
+            this.conectaSemestreEmPeriodo();
           },
         },
         selectNone: {
           Cursos: () => {
             this.filtroCursos.selecionados = [];
           },
+          Periodos: () => {
+            this.filtroPeriodos.selecionados = [];
+            this.conectaPeriodoEmSemestre();
+          },
           Semestres: () => {
-            this.filtroSemestres.primeiro = false;
-            this.filtroSemestres.segundo = false;
+            this.filtroSemestres.selecionados = [];
+            this.conectaSemestreEmPeriodo();
           },
         },
         btnOk: () => {
-          this.setSemestreAtivo();
+          this.filtroPeriodos.ativados = [...this.filtroPeriodos.selecionados];
           this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
         },
       },
@@ -284,182 +340,49 @@ export default {
     this.currentPlano = this.$_.find(this.$store.state.plano.Plano, {
       id: parseInt(localStorage.getItem("Plano")),
     });
+
     for (let i = 1; i < 5; i++) {
       this.createHorarios(i, 1);
-      this.createHorarios(i, 2);
       this.createHorarios(i, 3);
-      this.createHorarios(i, 4);
     }
-
     this.createHorarioEletivas(1);
-    this.createHorarioEletivas(2);
     this.createHorarioEletivas(3);
-    this.createHorarioEletivas(4);
 
+    this.filtroPeriodos.selecionados = this.$_.filter(
+      this.PeriodosLetivos,
+      (periodo) => periodo.id === 1 || periodo.id === 3
+    );
     this.modalFiltrosCallbacks.selectAll.Cursos();
-    this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
+    this.modalFiltrosCallbacks.btnOk();
   },
 
   methods: {
-    setSemestreAtivo() {
-      const { primeiro, segundo } = this.filtroSemestres;
-
-      if (primeiro && !segundo) this.filtroSemestres.ativo = 1;
-      else if (!primeiro && segundo) this.filtroSemestres.ativo = 2;
-      else if (primeiro && segundo) this.filtroSemestres.ativo = 3;
-      else this.filtroSemestres.ativo = undefined;
-    },
     isEven(number) {
       if (number % 2 === 0) return true;
       else return false;
     },
-
     checkTurmaHorario(turma, horario) {
       if (turma.Horario1 == horario || turma.Horario2 == horario) {
         return true;
       } else return false;
     },
     checkPeriodo(turma, periodo) {
-      for (var g = 0; g < this.DisciplinaGrades.length; g++) {
+      for (var g = 0; g < this.DisciplinasDasGrades.length; g++) {
         if (
-          this.DisciplinaGrades[g].Disciplina == turma &&
-          this.DisciplinaGrades[g].periodo == periodo
+          this.DisciplinasDasGrades[g].Disciplina == turma &&
+          this.DisciplinasDasGrades[g].periodo == periodo
         ) {
           return true;
         }
       }
     },
-    updateHorarios() {
-      for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < this.horariosAtivos1.CCD[i].length; j++)
-          for (let k = 0; k < this.AllTurmas.length; k++) {
-            if (this.horariosAtivos1.CCD[i][j].id == this.AllTurmas[k].id) {
-              this.horariosAtivos1.CCD[i].splice(j, 1, this.AllTurmas[k]);
-            }
-          }
-        for (let j = 0; j < this.horariosAtivos1.CCN[i].length; j++)
-          for (let k = 0; k < this.AllTurmas.length; k++) {
-            if (this.horariosAtivos1.CCN[i][j].id == this.AllTurmas[k].id) {
-              this.horariosAtivos1.CCN[i].splice(j, 1, this.AllTurmas[k]);
-            }
-          }
-        for (let j = 0; j < this.horariosAtivos1.EC[i].length; j++)
-          for (let k = 0; k < this.AllTurmas.length; k++) {
-            if (this.horariosAtivos1.EC[i][j].id == this.AllTurmas[k].id) {
-              this.horariosAtivos1.EC[i].splice(j, 1, this.AllTurmas[k]);
-            }
-          }
-        for (let j = 0; j < this.horariosAtivos1.SI[i].length; j++)
-          for (let k = 0; k < this.AllTurmas.length; k++) {
-            if (this.horariosAtivos1.SI[i][j].id == this.AllTurmas[k].id) {
-              this.horariosAtivos1.SI[i].splice(j, 1, this.AllTurmas[k]);
-            }
-          }
-      }
-
-      for (let i = 0; i < 10; i++) {
-        for (let j = 0; j < this.horariosAtivos2.CCD[i].length; j++)
-          for (let k = 0; k < this.AllTurmas.length; k++) {
-            if (this.horariosAtivos2.CCD[i][j].id == this.AllTurmas[k].id) {
-              this.horariosAtivos2.CCD[i].splice(j, 1, this.AllTurmas[k]);
-            }
-          }
-        for (let j = 0; j < this.horariosAtivos2.CCN[i].length; j++)
-          for (let k = 0; k < this.AllTurmas.length; k++) {
-            if (this.horariosAtivos2.CCN[i][j].id == this.AllTurmas[k].id) {
-              this.horariosAtivos2.CCN[i].splice(j, 1, this.AllTurmas[k]);
-            }
-          }
-        for (let j = 0; j < this.horariosAtivos2.EC[i].length; j++)
-          for (let k = 0; k < this.AllTurmas.length; k++) {
-            if (this.horariosAtivos2.EC[i][j].id == this.AllTurmas[k].id) {
-              this.horariosAtivos2.EC[i].splice(j, 1, this.AllTurmas[k]);
-            }
-          }
-        for (let j = 0; j < this.horariosAtivos2.SI[i].length; j++)
-          for (let k = 0; k < this.AllTurmas.length; k++) {
-            if (this.horariosAtivos2.SI[i][j].id == this.AllTurmas[k].id) {
-              this.horariosAtivos2.SI[i].splice(j, 1, this.AllTurmas[k]);
-            }
-          }
-      }
-
-        for (let i = 0; i < 10; i++) {
-            for (let j = 0; j < this.horariosAtivos3.CCD[i].length; j++)
-                for (let k = 0; k < this.AllTurmas.length; k++) {
-                    if (this.horariosAtivos3.CCD[i][j].id == this.AllTurmas[k].id) {
-                        this.horariosAtivos3.CCD[i].splice(j, 1, this.AllTurmas[k]);
-                    }
-                }
-            for (let j = 0; j < this.horariosAtivos3.CCN[i].length; j++)
-                for (let k = 0; k < this.AllTurmas.length; k++) {
-                    if (this.horariosAtivos3.CCN[i][j].id == this.AllTurmas[k].id) {
-                        this.horariosAtivos3.CCN[i].splice(j, 1, this.AllTurmas[k]);
-                    }
-                }
-            for (let j = 0; j < this.horariosAtivos3.EC[i].length; j++)
-                for (let k = 0; k < this.AllTurmas.length; k++) {
-                    if (this.horariosAtivos3.EC[i][j].id == this.AllTurmas[k].id) {
-                        this.horariosAtivos3.EC[i].splice(j, 1, this.AllTurmas[k]);
-                    }
-                }
-            for (let j = 0; j < this.horariosAtivos3.SI[i].length; j++)
-                for (let k = 0; k < this.AllTurmas.length; k++) {
-                    if (this.horariosAtivos3.SI[i][j].id == this.AllTurmas[k].id) {
-                        this.horariosAtivos3.SI[i].splice(j, 1, this.AllTurmas[k]);
-                    }
-                }
-        }
-
-        for (let i = 0; i < 10; i++) {
-            for (let j = 0; j < this.horariosAtivos4.CCD[i].length; j++)
-                for (let k = 0; k < this.AllTurmas.length; k++) {
-                    if (this.horariosAtivos4.CCD[i][j].id == this.AllTurmas[k].id) {
-                        this.horariosAtivos4.CCD[i].splice(j, 1, this.AllTurmas[k]);
-                    }
-                }
-            for (let j = 0; j < this.horariosAtivos4.CCN[i].length; j++)
-                for (let k = 0; k < this.AllTurmas.length; k++) {
-                    if (this.horariosAtivos4.CCN[i][j].id == this.AllTurmas[k].id) {
-                        this.horariosAtivos4.CCN[i].splice(j, 1, this.AllTurmas[k]);
-                    }
-                }
-            for (let j = 0; j < this.horariosAtivos4.EC[i].length; j++)
-                for (let k = 0; k < this.AllTurmas.length; k++) {
-                    if (this.horariosAtivos4.EC[i][j].id == this.AllTurmas[k].id) {
-                        this.horariosAtivos4.EC[i].splice(j, 1, this.AllTurmas[k]);
-                    }
-                }
-            for (let j = 0; j < this.horariosAtivos4.SI[i].length; j++)
-                for (let k = 0; k < this.AllTurmas.length; k++) {
-                    if (this.horariosAtivos4.SI[i][j].id == this.AllTurmas[k].id) {
-                        this.horariosAtivos4.SI[i].splice(j, 1, this.AllTurmas[k]);
-                    }
-                }
-        }
-
-      this.$store.commit("redefinirAtivas1", {
-        Ativas2: this.horariosAtivos1,
-      });
-
-      this.$store.commit("redefinirAtivas2", {
-        Ativas: this.horariosAtivos2,
-      });
-    },
-
     createHorarios(curso, periodo) {
       let horariosAtivos;
-      let semestre = ((periodo === 1 || periodo === 2) ? 1:2)
-      switch(periodo){
-          case 1: horariosAtivos = this.horariosAtivos1;
-                  break;
-          case 2: horariosAtivos = this.horariosAtivos2;
-                  break;
-          case 3: horariosAtivos = this.horariosAtivos3;
-                  break;
-          case 4: horariosAtivos = this.horariosAtivos4;
-                  break;
-      }
+      let semestre = periodo === 1 || periodo === 2 ? 1 : 2;
+
+      if (periodo === 1) horariosAtivos = this.horariosAtivos1Periodo;
+      else horariosAtivos = this.horariosAtivos3Periodo;
+
       switch (curso) {
         case 1:
           horariosAtivos = horariosAtivos.CCN;
@@ -510,6 +433,7 @@ export default {
           }
         }
       }
+
       let pedidosExternos = [];
       for (let t in this.$store.state.pedidoExterno.Pedidos) {
         for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
@@ -525,16 +449,13 @@ export default {
       let even =
         this.$store.state.curso.Cursos[curso - 1].semestreInicial % 2 ===
         semestre - 1;
-      let turmas = this.$_.filter(this.$store.state.turma.Turmas, {
+      let turmas = this.$_.filter(this.TurmasInDisciplinasPerfis, {
         periodo: periodo,
       });
-      let turmasExternas = this.$_.filter(
-        this.$store.state.turmaExterna.Turmas,
-        {
-          periodo: periodo,
-        }
-      );
-      let disciplinasGrades = this.DisciplinaGrades;
+      let turmasExternas = this.$_.filter(this.TurmasExternasInDisciplinas, {
+        periodo: periodo,
+      });
+      let disciplinasGrades = this.DisciplinasDasGrades;
       let inicio = 0;
 
       for (let i = 0; inicio < 10 && i < gradesAtivas.length; i++) {
@@ -577,24 +498,133 @@ export default {
         inicio = gradesAtivas[i].fim;
       }
     },
+    updateHorarios() {
+      for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < this.horariosAtivos1Periodo.CCD[i].length; j++)
+          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
+            if (
+              this.horariosAtivos1Periodo.CCD[i][j].id ==
+              this.TurmasInDisciplinasPerfis[k].id
+            ) {
+              this.horariosAtivos1Periodo.CCD[i].splice(
+                j,
+                1,
+                this.TurmasInDisciplinasPerfis[k]
+              );
+            }
+          }
+        for (let j = 0; j < this.horariosAtivos1Periodo.CCN[i].length; j++)
+          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
+            if (
+              this.horariosAtivos1Periodo.CCN[i][j].id ==
+              this.TurmasInDisciplinasPerfis[k].id
+            ) {
+              this.horariosAtivos1Periodo.CCN[i].splice(
+                j,
+                1,
+                this.TurmasInDisciplinasPerfis[k]
+              );
+            }
+          }
+        for (let j = 0; j < this.horariosAtivos1Periodo.EC[i].length; j++)
+          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
+            if (
+              this.horariosAtivos1Periodo.EC[i][j].id ==
+              this.TurmasInDisciplinasPerfis[k].id
+            ) {
+              this.horariosAtivos1Periodo.EC[i].splice(
+                j,
+                1,
+                this.TurmasInDisciplinasPerfis[k]
+              );
+            }
+          }
+        for (let j = 0; j < this.horariosAtivos1Periodo.SI[i].length; j++)
+          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
+            if (
+              this.horariosAtivos1Periodo.SI[i][j].id ==
+              this.TurmasInDisciplinasPerfis[k].id
+            ) {
+              this.horariosAtivos1Periodo.SI[i].splice(
+                j,
+                1,
+                this.TurmasInDisciplinasPerfis[k]
+              );
+            }
+          }
+      }
+
+      for (let i = 0; i < 10; i++) {
+        for (let j = 0; j < this.horariosAtivos3Periodo.CCD[i].length; j++)
+          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
+            if (
+              this.horariosAtivos3Periodo.CCD[i][j].id ==
+              this.TurmasInDisciplinasPerfis[k].id
+            ) {
+              this.horariosAtivos3Periodo.CCD[i].splice(
+                j,
+                1,
+                this.TurmasInDisciplinasPerfis[k]
+              );
+            }
+          }
+        for (let j = 0; j < this.horariosAtivos3Periodo.CCN[i].length; j++)
+          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
+            if (
+              this.horariosAtivos3Periodo.CCN[i][j].id ==
+              this.TurmasInDisciplinasPerfis[k].id
+            ) {
+              this.horariosAtivos3Periodo.CCN[i].splice(
+                j,
+                1,
+                this.TurmasInDisciplinasPerfis[k]
+              );
+            }
+          }
+        for (let j = 0; j < this.horariosAtivos3Periodo.EC[i].length; j++)
+          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
+            if (
+              this.horariosAtivos3Periodo.EC[i][j].id ==
+              this.TurmasInDisciplinasPerfis[k].id
+            ) {
+              this.horariosAtivos3Periodo.EC[i].splice(
+                j,
+                1,
+                this.TurmasInDisciplinasPerfis[k]
+              );
+            }
+          }
+        for (let j = 0; j < this.horariosAtivos3Periodo.SI[i].length; j++)
+          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
+            if (
+              this.horariosAtivos3Periodo.SI[i][j].id ==
+              this.TurmasInDisciplinasPerfis[k].id
+            ) {
+              this.horariosAtivos3Periodo.SI[i].splice(
+                j,
+                1,
+                this.TurmasInDisciplinasPerfis[k]
+              );
+            }
+          }
+      }
+
+      this.$store.commit("redefinirAtivas1", {
+        Ativas1: this.horariosAtivos1Periodo,
+      });
+
+      this.$store.commit("redefinirAtivas2", {
+        Ativas2: this.horariosAtivos3Periodo,
+      });
+    },
+
     createHorarioEletivas(periodo) {
       let horariosAtivos;
-      let semestre = ((periodo === 1 || periodo === 2) ? 1:2)
-      switch(periodo){
-        case 1: horariosAtivos = this.horariosAtivos1.Eletivas;
-                break;
-        case 2: horariosAtivos = this.horariosAtivos2.Eletivas;
-                break;
-        case 3: horariosAtivos = this.horariosAtivos3.Eletivas;
-                break;
-        case 4: horariosAtivos = this.horariosAtivos4.Eletivas;
-                break;
-      }
-      let periodoGrade;
-      if (semestre === 1) periodoGrade = 1;
-      else periodoGrade = 3;
 
-      let turmas = this.$_.filter(this.$store.state.turma.Turmas, {
+      if (periodo === 1) horariosAtivos = this.horariosAtivos1Periodo.Eletivas;
+      else horariosAtivos = this.horariosAtivos3Periodo.Eletivas;
+
+      let turmas = this.$_.filter(this.TurmasInDisciplinasPerfis, {
         periodo: periodo,
       });
 
@@ -602,7 +632,6 @@ export default {
         id: parseInt(localStorage.getItem("Plano")),
       });
 
-      let disciplinasGrades = this.DisciplinaGrades;
       let gradesAtivas = [[], [], [], []];
 
       for (let i = 1; i < 5; i++) {
@@ -612,7 +641,7 @@ export default {
           let fim =
             1 +
             2 * (plano.ano - parseInt(g.periodoInicio.slice(0, 4), 10)) +
-            (periodoGrade - parseInt(g.periodoInicio.slice(5, 6), 10)) / 2;
+            (periodo - parseInt(g.periodoInicio.slice(5, 6), 10)) / 2;
           if (fim > 10) {
             fim = 10;
           }
@@ -627,9 +656,12 @@ export default {
       for (let i = 0; i < turmas.length; i++) {
         for (let j = 0; j < 4; j++) {
           for (let k = 0; k < gradesAtivas[j].length; k++) {
-            let disciplinasGradeAtual = this.$_.filter(disciplinasGrades, {
-              Grade: gradesAtivas[j][k].grade.id,
-            });
+            let disciplinasGradeAtual = this.$_.filter(
+              this.DisciplinasDasGrades,
+              {
+                Grade: gradesAtivas[j][k].grade.id,
+              }
+            );
             let disciplinaGrade = this.$_.find(disciplinasGradeAtual, {
               Disciplina: turmas[i].Disciplina,
             });
@@ -650,6 +682,12 @@ export default {
         eletiva = true;
       }
     },
+    filterPedidoPeriodizado(turma, Pedidos) {
+      return this.$_.some(
+        Pedidos,
+        (pedido) => pedido.Turma === turma.id && pedido.vagasPeriodizadas > 0
+      );
+    },
     pdf(completo) {
       var pdfMake = require("pdfmake/build/pdfmake.js");
       if (pdfMake.vfs == undefined) {
@@ -658,11 +696,11 @@ export default {
       }
       var tables = [];
       var disciplinas = this.AllDisciplinas;
-      var periodosCCD1 = this.horariosAtivos1.CCD;
-      var periodosCCN1 = this.horariosAtivos1.CCN;
-      var periodosEC1 = this.horariosAtivos1.EC;
-      var periodosSI1 = this.horariosAtivos1.SI;
-      var eletivas1 = this.horariosAtivos1.Eletivas;
+      var periodosCCD1 = this.horariosAtivos1Periodo.CCD;
+      var periodosCCN1 = this.horariosAtivos1Periodo.CCN;
+      var periodosEC1 = this.horariosAtivos1Periodo.EC;
+      var periodosSI1 = this.horariosAtivos1Periodo.SI;
+      var eletivas1 = this.horariosAtivos1Periodo.Eletivas;
       var seg = "",
         ter = "",
         qua = "",
@@ -2684,11 +2722,11 @@ export default {
         }
       }
 
-      var periodosCCD2 = this.horariosAtivos3.CCD;
-      var periodosCCN2 = this.horariosAtivos3.CCN;
-      var periodosEC2 = this.horariosAtivos3.EC;
-      var periodosSI2 = this.horariosAtivos3.SI;
-      var eletivas2 = this.horariosAtivos3.Eletivas;
+      var periodosCCD2 = this.horariosAtivos3Periodo.CCD;
+      var periodosCCN2 = this.horariosAtivos3Periodo.CCN;
+      var periodosEC2 = this.horariosAtivos3Periodo.EC;
+      var periodosSI2 = this.horariosAtivos3Periodo.SI;
+      var eletivas2 = this.horariosAtivos3Periodo.Eletivas;
 
       tables.push({
         columns: [
@@ -4736,124 +4774,203 @@ export default {
 
   computed: {
     ...mapGetters([
-      "AllTurmas",
-      "AllDisciplinas",
-      "CursosDCC",
-      "AllGrades",
       "onLoading",
+      "AllDisciplinas",
+      "DisciplinasDasGrades",
+      "AllGrades",
+      "PrincipaisCursosDCC",
+      "TurmasInDisciplinasPerfis",
+      "TurmasExternasInDisciplinas",
+      "Pedidos",
+      "PedidosExternos",
+      "PeriodosLetivos",
+      "SemestresLetivos",
     ]),
 
-    CursosInHorariosFiltred() {
-      return this.$_.filter(this.CursoInHorarios, (curso) =>
+    CursosComHorariosFiltred() {
+      return this.$_.filter(this.CursosComHorarios, (curso) =>
         this.$_.some(this.filtroCursos.ativados, ["codigo", curso.codigo])
       );
     },
-    CursoInHorarios() {
+    CursosComHorarios() {
       return [
         {
-          ...this.$_.find(this.CursosDCC, (curso) => curso.codigo === "65C"),
+          ...this.$_.find(
+            this.PrincipaisCursosDCC,
+            (curso) => curso.codigo === "65C"
+          ),
           nome: "Ciência da Computação - integral",
           turno: "Diurno",
           periodoInicial1Semestre: 1,
           periodoInicial2Semestre: 2,
-          horarios1Semestre: this.horariosAtivos1.CCD,
-          horarios2Semestre: this.horariosAtivos3.CCD,
+          horarios1Periodo: this.horariosAtivos1Periodo.CCD,
+          horarios3Periodo: this.horariosAtivos3Periodo.CCD,
         },
         {
-          ...this.$_.find(this.CursosDCC, (curso) => curso.codigo === "35A"),
+          ...this.$_.find(
+            this.PrincipaisCursosDCC,
+            (curso) => curso.codigo === "35A"
+          ),
           nome: "Ciência da Computação - noturno",
           turno: "Noturno",
           periodoInicial1Semestre: 2,
           periodoInicial2Semestre: 1,
-          horarios1Semestre: this.horariosAtivos1.CCN,
-          horarios2Semestre: this.horariosAtivos3.CCN,
+          horarios1Periodo: this.horariosAtivos1Periodo.CCN,
+          horarios3Periodo: this.horariosAtivos3Periodo.CCN,
         },
         {
-          ...this.$_.find(this.CursosDCC, (curso) => curso.codigo === "76A"),
+          ...this.$_.find(
+            this.PrincipaisCursosDCC,
+            (curso) => curso.codigo === "76A"
+          ),
           nome: "Sistemas de Informação",
           turno: "Noturno",
           periodoInicial1Semestre: 2,
           periodoInicial2Semestre: 1,
-          horarios1Semestre: this.horariosAtivos1.SI,
-          horarios2Semestre: this.horariosAtivos3.SI,
+          horarios1Periodo: this.horariosAtivos1Periodo.SI,
+          horarios3Periodo: this.horariosAtivos3Periodo.SI,
         },
         {
-          ...this.$_.find(this.CursosDCC, (curso) => curso.codigo === "65B"),
+          ...this.$_.find(
+            this.PrincipaisCursosDCC,
+            (curso) => curso.codigo === "65B"
+          ),
           nome: "Engenharia Computacional",
           turno: "Diurno",
           periodoInicial1Semestre: 1,
           periodoInicial2Semestre: 2,
-          horarios1Semestre: this.horariosAtivos1.EC,
-          horarios2Semestre: this.horariosAtivos3.EC,
+          horarios1Periodo: this.horariosAtivos1Periodo.EC,
+          horarios3Periodo: this.horariosAtivos3Periodo.EC,
         },
       ];
     },
 
-    CursosModalOrdered() {
+    TurmasAtivas2Periodo() {
+      const turmasFiltredbyPeriodo = this.$_.filter(
+        this.TurmasInDisciplinasPerfis,
+        ["periodo", 2]
+      );
+      const turmasFiltredByPedidos = this.$_.filter(
+        turmasFiltredbyPeriodo,
+        (turma) => this.filterPedidoPeriodizado(turma, this.PedidosDeCursosDCC)
+      );
+
+      const turmasExternasFiltredbyPeriodo = this.$_.filter(
+        this.TurmasExternasInDisciplinas,
+        ["periodo", 2]
+      );
+      const turmasExternasFiltredbyPeidos = this.$_.filter(
+        turmasExternasFiltredbyPeriodo,
+        (turma) =>
+          this.filterPedidoPeriodizado(turma, this.PedidosExternosDeCursosDCC)
+      );
+
+      return this.$_.concat(
+        turmasExternasFiltredbyPeidos,
+        turmasFiltredByPedidos
+      );
+    },
+    TurmasAtivas4Periodo() {
+      const turmasFiltredbyPeriodo = this.$_.filter(
+        this.TurmasInDisciplinasPerfis,
+        ["periodo", 4]
+      );
+      const turmasFiltredByPedidos = this.$_.filter(
+        turmasFiltredbyPeriodo,
+        (turma) => this.filterPedidoPeriodizado(turma, this.PedidosDeCursosDCC)
+      );
+
+      const turmasExternasFiltredbyPeriodo = this.$_.filter(
+        this.TurmasExternasInDisciplinas,
+        ["periodo", 4]
+      );
+      const turmasExternasFiltredbyPeidos = this.$_.filter(
+        turmasExternasFiltredbyPeriodo,
+        (turma) =>
+          this.filterPedidoPeriodizado(turma, this.PedidosExternosDeCursosDCC)
+      );
+
+      return this.$_.concat(
+        turmasExternasFiltredbyPeidos,
+        turmasFiltredByPedidos
+      );
+    },
+
+    PedidosDeCursosDCC() {
+      const pedidosResultantes = [];
+      for (const key in this.Pedidos) {
+        this.$_.forEach(this.Pedidos[key], (pedido) => {
+          if (this.$_.some(this.PrincipaisCursosDCC, ["id", pedido.Curso]))
+            pedidosResultantes.push({ ...pedido });
+        });
+      }
+
+      return pedidosResultantes;
+    },
+    PedidosExternosDeCursosDCC() {
+      const pedidosResultantes = [];
+      for (const key in this.PedidosExternos) {
+        this.$_.forEach(this.PedidosExternos[key], (pedido) => {
+          if (this.$_.some(this.PrincipaisCursosDCC, ["id", pedido.Curso]))
+            pedidosResultantes.push({ ...pedido });
+        });
+      }
+      return pedidosResultantes;
+    },
+
+    CursosOrderedModal() {
       return this.$_.orderBy(
-        this.OptionsCursosDCC,
+        this.CursosModal,
         this.ordemCursos.order,
         this.ordemCursos.type
       );
     },
-    OptionsCursosDCC() {
-      return [
-        {
-          nome: "SISTEMAS DE INFORMAÇÃO",
-          codigo: "76A",
-        },
-        {
-          nome: "CIÊNCIA DA COMPUTAÇÃO NOTURNO",
-          codigo: "35A",
-        },
-        {
-          nome: "CIÊNCIA DA COMPUTAÇÃO DIURNO",
-          codigo: "65C",
-        },
-        {
-          nome: "ENGENHARIA COMPUTACIONAL",
-          codigo: "65B",
-        },
-        {
-          nome: "ELETIVAS",
-          codigo: "-",
-        },
-      ];
+    CursosModal() {
+      const cursosResultantes = [...this.PrincipaisCursosDCC];
+      cursosResultantes.push({
+        nome: "ELETIVAS",
+        codigo: "-",
+      });
+
+      return cursosResultantes;
     },
 
-    DisciplinaGrades() {
-      return this.$store.state.disciplinaGrade.DisciplinaGrades;
-    },
-
-    hasAnyHorariosActived() {
-      return this.CursosInHorariosFiltred.length || this.EletivasIsActived;
-    },
-    semestre1IsActived() {
-      return (
-        this.filtroSemestres.ativo === 1 || this.filtroSemestres.ativo === 3
-      );
-    },
-    semestre2IsActived() {
-      return (
-        this.filtroSemestres.ativo === 2 || this.filtroSemestres.ativo === 3
-      );
-    },
-    EletivasIsActived() {
+    filtroEletivasEstaAtivo() {
       return this.$_.some(
         this.filtroCursos.ativados,
         (curso) => curso.codigo === "-"
       );
     },
-    horariosIsEmpty() {
+    filtroPeriodosEstaAtivo() {
+      const periodosResult = {
+        periodo1: false,
+        periodo2: false,
+        periodo3: false,
+        periodo4: false,
+      };
+
+      this.$_.forEach(this.PeriodosLetivos, (periodo) => {
+        periodosResult[`periodo${periodo.id}`] = this.$_.some(
+          this.filtroPeriodos.ativados,
+          ["id", periodo.id]
+        );
+      });
+
+      return periodosResult;
+    },
+    algumHorariosEstaAtivo() {
       return (
-        (!this.semestre1IsActived && !this.semestre2IsActived) ||
-        !this.hasAnyHorariosActived
+        (this.filtroCursos.ativados.length &&
+          (this.filtroPeriodosEstaAtivo.periodo1 ||
+            this.filtroPeriodosEstaAtivo.periodo3)) ||
+        this.filtroPeriodosEstaAtivo.periodo2 ||
+        this.filtroPeriodosEstaAtivo.periodo4
       );
     },
   },
 
   watch: {
-    AllTurmas() {
+    TurmasInDisciplinasPerfis() {
       this.updateHorarios();
     },
   },
@@ -4861,7 +4978,7 @@ export default {
 </script>
 
 <style scoped>
-.semestre-title {
+.periodo-title {
   width: 100%;
   font-size: 16px;
   padding: 5px;
@@ -4869,72 +4986,11 @@ export default {
   text-align: start;
   font-weight: bold;
 }
-.curso-title {
-  width: 100%;
-  text-align: start;
-  font-size: 12px;
-  font-weight: bold;
-}
+
 .text-empty {
   width: 100%;
   font-size: 12px;
   padding: 5px;
   background-color: var(--light-gray);
-}
-
-::v-deep .container-horarios .div-table .periodo-title {
-  font-size: 12px;
-  font-weight: normal;
-}
-::v-deep .container-horarios .div-table .tg {
-  border-collapse: collapse;
-  border-spacing: 0;
-  border-color: #ccc;
-}
-::v-deep .container-horarios .div-table .tg td {
-  font-family: Arial, sans-serif;
-  font-size: 11px;
-  padding: 0px !important;
-  border-style: solid;
-  border-width: 1px;
-  overflow: hidden;
-  word-break: break-word;
-  border-color: rgba(189, 189, 189, 0.644);
-  color: #333;
-  background-color: #fff;
-}
-::v-deep .container-horarios .div-table .tg th,
-::v-deep .container-horarios .div-table .tg-hor {
-  font-family: Arial, sans-serif;
-  font-size: 11px;
-  font-weight: bold;
-  padding: 0px;
-  border-style: solid;
-  border-width: 1px;
-  overflow: hidden;
-  word-break: normal;
-  border-color: rgba(189, 189, 189, 0.623);
-  color: #333;
-  background-color: #e9ecef !important;
-}
-::v-deep .container-horarios .div-table .tg .tg-0lax {
-  vertical-align: center;
-  text-align: center;
-  height: 22px;
-  min-width: 50px !important;
-}
-::v-deep .container-horarios td > p {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  min-width: 48px !important;
-  padding: 0 1px !important;
-  margin: 0 !important;
-}
-::v-deep .container-horarios td > p:hover {
-  cursor: default;
-  background-color: var(--light-gray) !important;
 }
 </style>

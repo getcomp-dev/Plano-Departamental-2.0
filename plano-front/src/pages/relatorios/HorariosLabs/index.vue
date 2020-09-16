@@ -36,13 +36,12 @@
         :laboratorios="filtroLaboratorios.ativados"
         :turmasInPeriodos="TurmasInPeriodos"
       />
-
-      <p v-if="horariosIsEmpty" class="text-empty">
-        <b>Nenhum horário encontrado.</b> Clique no botão de filtros
-        <font-awesome-icon :icon="['fas', 'list-ul']" class="mx-1" />para
-        selecioná-los.
-      </p>
     </div>
+    <p v-show="horariosIsEmpty" class="text-empty">
+      <b>Nenhum horário encontrado.</b> Clique no botão de filtros
+      <font-awesome-icon :icon="['fas', 'list-ul']" class="mx-1" />para
+      selecioná-los.
+    </p>
 
     <ModalFiltros
       ref="modalFiltros"
@@ -51,7 +50,7 @@
     >
       <div class="div-table">
         <BaseTable
-          v-show="modalFiltrosTabs.current === 'Laboratorios'"
+          v-show="modalFiltrosTabs.current === 'Laborátorios'"
           :type="'modal'"
         >
           <template #thead>
@@ -91,22 +90,53 @@
           </template>
           <template #tbody>
             <tr
-              v-for="periodoLetivo in PeriodosLetivos"
-              :key="'md' + periodoLetivo.id + periodoLetivo.nome"
-              @click.stop="
-                toggleItemInArray(periodoLetivo, filtroPeriodos.selecionados)
-              "
+              v-for="periodo in PeriodosLetivos"
+              :key="periodo.id + periodo.nome"
+              @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
             >
               <td style="width: 25px">
                 <input
                   type="checkbox"
                   class="form-check-input position-static m-0"
-                  :value="periodoLetivo"
+                  :value="periodo"
                   v-model="filtroPeriodos.selecionados"
+                  @click.stop="selecionaPeriodo(periodo)"
                 />
               </td>
               <td style="width: 425px" class="t-start upper-case">
-                {{ periodoLetivo.nome }}
+                {{ periodo.nome }}
+              </td>
+            </tr>
+          </template>
+        </BaseTable>
+
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Semestres'"
+          :type="'modal'"
+        >
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th class="t-start" style="width: 425px">
+              Semestre Letivo
+            </th>
+          </template>
+          <template #tbody>
+            <tr
+              v-for="semestre in SemestresLetivos"
+              :key="semestre.id + semestre.nome"
+              @click="selecionaSemestre(semestre)"
+            >
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  :value="semestre"
+                  v-model="filtroSemestres.selecionados"
+                  @click.stop="selecionaSemestre(semestre)"
+                />
+              </td>
+              <td style="width: 425px" class="t-start upper-case">
+                {{ semestre.nome }}
               </td>
             </tr>
           </template>
@@ -137,13 +167,21 @@
 <script>
 import pdfs from "@/common/services/pdfs";
 import { mapGetters } from "vuex";
-import { toggleItemInArray, toggleAsideModal } from "@/common/mixins";
+import {
+  toggleItemInArray,
+  toggleAsideModal,
+  conectaFiltrosSemestresEPeriodos,
+} from "@/common/mixins";
 import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
 import ListHorariosLab from "./ListHorariosLab";
 
 export default {
   name: "DashboardLaboratoriosAlocacao",
-  mixins: [toggleItemInArray, toggleAsideModal],
+  mixins: [
+    toggleItemInArray,
+    toggleAsideModal,
+    conectaFiltrosSemestresEPeriodos,
+  ],
   components: {
     ModalRelatorio,
     ModalAjuda,
@@ -161,9 +199,13 @@ export default {
         ativados: [],
         selecionados: [],
       },
+      filtroSemestres: {
+        ativados: [],
+        selecionados: [],
+      },
       modalFiltrosTabs: {
-        current: "Laboratorios",
-        array: ["Laboratorios", "Períodos"],
+        current: "Laborátorios",
+        array: ["Laborátorios", "Períodos", "Semestres"],
       },
       modalFiltrosCallbacks: {
         selectAll: {
@@ -174,6 +216,11 @@ export default {
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [...this.PeriodosLetivos];
+            this.conectaPeriodoEmSemestre();
+          },
+          Semestres: () => {
+            this.filtroSemestres.selecionados = [...this.SemestresLetivos];
+            this.conectaSemestreEmPeriodo();
           },
         },
         selectNone: {
@@ -182,6 +229,11 @@ export default {
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [];
+            this.conectaPeriodoEmSemestre();
+          },
+          Semestres: () => {
+            this.filtroSemestres.selecionados = [];
+            this.conectaSemestreEmPeriodo();
           },
         },
         btnOk: () => {
@@ -206,7 +258,6 @@ export default {
   methods: {
     pdf(completo) {
       let laboratorios;
-
       if (completo) laboratorios = this.LaboratoriosOrdered;
       else laboratorios = this.filtroLaboratorios.ativados;
 
@@ -226,6 +277,7 @@ export default {
       "allPlanos",
       "currentPlanoId",
       "PeriodosLetivos",
+      "SemestresLetivos",
     ]),
 
     LaboratoriosOrdered() {
@@ -243,30 +295,31 @@ export default {
       return laboratoriosResultantes;
     },
     TurmasInPeriodos() {
-      const turmas = {
+      const turmasResultantes = {
         periodo1: [],
         periodo2: [],
         periodo3: [],
         periodo4: [],
       };
+
       const turmasOredered = this.$_.orderBy(this.TurmasInDisciplinasPerfis, [
         "periodo",
         "disciplina.nome",
         "letra",
       ]);
+      this.$_.forEach(turmasOredered, (turma) =>
+        turmasResultantes[`periodo${turma.periodo}`].push({ ...turma })
+      );
+
       const turmasExternasOrdered = this.$_.orderBy(
         this.TurmasExternasInDisciplinas,
         ["periodo", "disciplina.nome", "letra"]
       );
-
-      this.$_.forEach(turmasOredered, (turma) =>
-        turmas[`periodo${turma.periodo}`].push({ ...turma })
-      );
       this.$_.forEach(turmasExternasOrdered, (turma) =>
-        turmas[`periodo${turma.periodo}`].push({ ...turma })
+        turmasResultantes[`periodo${turma.periodo}`].push({ ...turma })
       );
 
-      return turmas;
+      return turmasResultantes;
     },
     horariosIsEmpty() {
       return (

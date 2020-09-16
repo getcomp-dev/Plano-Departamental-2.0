@@ -74,52 +74,35 @@
         <template #thead>
           <th style="width:25px"></th>
           <th style="width:40px" class="p-0">Editar</th>
-          <th style="width:55px" title="Período letivo">P.</th>
-          <th
-            @click="toggleOrder(ordenacaoMain.perfis, setFixedOrderPerfil)"
-            style="width: 80px"
-            class="clickable t-center"
-          >
-            <div class="d-flex justify-content-between align-items-center">
-              <i
-                class="fas fa-thumbtack"
-                :class="
-                  ordenacaoMain.perfis.order === null ? 'low-opacity' : ''
-                "
-              ></i>
-              <span>Perfil</span>
+          <th style="width:55px" title="Período letivo, ordenação fixa">
+            <font-awesome-icon :icon="['fas', 'thumbtack']" />
+            P.
+          </th>
 
-              <i
-                :class="
-                  setIconByOrder(
-                    ordenacaoMain.perfis,
-                    'disciplina.perfil.abreviacao'
-                  )
-                "
-              ></i>
-            </div>
-          </th>
-          <th
-            class="clickable"
-            @click="toggleOrder(ordenacaoMain.turmas, 'disciplina.codigo')"
+          <ThOrdination
+            :type="'fixed'"
+            :text="'Perfil'"
+            :currentOrder="ordenacaoMain.perfis"
+            :orderToCheck="'disciplina.perfil.abreviacao'"
+            style="width: 80px"
+            class="t-start"
+          />
+
+          <ThOrdination
+            :text="'Código'"
+            :currentOrder="ordenacaoMain.turmas"
+            :orderToCheck="'disciplina.codigo'"
             style="width:80px"
-            title="Código"
-          >
-            Cód.
-            <i
-              :class="setIconByOrder(ordenacaoMain.turmas, 'disciplina.codigo')"
-            ></i>
-          </th>
-          <th
-            class="clickable t-start"
+          />
+
+          <ThOrdination
+            :text="'Disciplina'"
+            :currentOrder="ordenacaoMain.turmas"
+            :orderToCheck="'disciplina.nome'"
             style="width:330px"
-            @click="toggleOrder(ordenacaoMain.turmas, 'disciplina.nome')"
-          >
-            Disciplina
-            <i
-              :class="setIconByOrder(ordenacaoMain.turmas, 'disciplina.nome')"
-            ></i>
-          </th>
+            class="t-start"
+          />
+
           <th style="width:25px" title="Créditos">C.</th>
           <th style="width:45px" class="p-0" title="Turma">T.</th>
           <th style="width:130px">Docente</th>
@@ -185,19 +168,18 @@
       <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Perfis'">
         <template #thead>
           <th style="width:25px"></th>
-          <th
-            @click="toggleOrder(ordenacaoModal.perfis, 'nome')"
-            class="clickable t-start"
+          <ThOrdination
+            :text="'Nome'"
+            :currentOrder="ordenacaoModal.perfis"
+            :orderToCheck="'nome'"
+            class="t-start"
             style="width: 425px"
-          >
-            Nome
-            <i :class="setIconByOrder(ordenacaoModal.perfis, 'nome')"></i>
-          </th>
+          />
         </template>
         <template #tbody>
           <tr
             v-for="perfil in PerfisOrderedModal"
-            :key="'perfilId' + perfil.id"
+            :key="perfil.id + perfil.nome"
             @click.stop="toggleItemInArray(perfil, filtroPerfis.selecionados)"
           >
             <td style="width: 25px">
@@ -226,50 +208,34 @@
         </template>
         <template #thead>
           <th style="width:25px"></th>
-          <th
-            title="Código"
-            class="t-start clickable"
+          <ThOrdination
+            :text="'Código'"
+            :currentOrder="ordenacaoModal.disciplinas"
+            :orderToCheck="'codigo'"
+            class="t-start"
             style="width: 70px"
-            @click="toggleOrder(ordenacaoModal.disciplinas, 'codigo')"
-          >
-            Cód.
-            <i
-              :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"
-            ></i>
-          </th>
-          <th
-            class="t-start clickable"
+          />
+
+          <ThOrdination
+            :text="'Nome'"
+            :currentOrder="ordenacaoModal.disciplinas"
+            :orderToCheck="'nome'"
+            class="t-start"
             style="width: 270px"
-            @click="toggleOrder(ordenacaoModal.disciplinas, 'nome')"
-          >
-            Nome
-            <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"></i>
-          </th>
-          <th
-            class="t-start clickable"
+          />
+
+          <ThOrdination
+            :text="'Perfil'"
+            :currentOrder="ordenacaoModal.disciplinas"
+            :orderToCheck="'perfil.abreviacao'"
+            class="t-start"
             style="width: 85px"
-            @click="
-              toggleOrder(
-                ordenacaoModal.disciplinas,
-                'disciplina.perfil.abreviacao'
-              )
-            "
-          >
-            Perfil
-            <i
-              :class="
-                setIconByOrder(
-                  ordenacaoModal.disciplinas,
-                  'disciplina.perfil.abreviacao'
-                )
-              "
-            ></i>
-          </th>
+          />
         </template>
         <template #tbody>
           <tr
             v-for="disciplina in DisciplinasDCCOrderedModal"
-            :key="'MdDisciplina' + disciplina.id"
+            :key="disciplina.id + disciplina.nome"
             @click.stop="
               toggleItemInArray(disciplina.id, filtroDisciplinas.selecionados)
             "
@@ -309,22 +275,20 @@
         </template>
         <template #thead>
           <th style="width:25px"></th>
-          <th
-            @click="toggleOrder(ordenacaoModal.cursos, 'codigo')"
-            class="clickable t-start"
-            style="width: 50px;"
-          >
-            Cód.
-            <i :class="setIconByOrder(ordenacaoModal.cursos, 'codigo')"></i>
-          </th>
-          <th
-            @click="toggleOrder(ordenacaoModal.cursos, 'nome')"
-            class="clickable t-start"
-            style="width: 375px"
-          >
-            Nome
-            <i :class="setIconByOrder(ordenacaoModal.cursos, 'nome')"></i>
-          </th>
+          <ThOrdination
+            :text="'Código'"
+            :currentOrder="ordenacaoModal.cursos"
+            :orderToCheck="'codigo'"
+            class="t-start"
+            style="width: 70px"
+          />
+          <ThOrdination
+            :text="'Nome'"
+            :currentOrder="ordenacaoModal.cursos"
+            :orderToCheck="'nome'"
+            class="t-start"
+            style="width: 355px"
+          />
         </template>
         <template #tbody>
           <tr
@@ -340,8 +304,8 @@
                 class="form-check-input position-static m-0"
               />
             </td>
-            <td style="width: 50px;" class="t-start">{{ curso.codigo }}</td>
-            <td style="width: 375px" class="t-start">{{ curso.nome }}</td>
+            <td style="width: 70px;" class="t-start">{{ curso.codigo }}</td>
+            <td style="width: 355px" class="t-start">{{ curso.nome }}</td>
           </tr>
           <tr v-show="CursosOrderedModal.length === 0">
             <td colspan="3" style="width:450px">NENHUM CURSO ENCONTRADO.</td>
@@ -356,22 +320,53 @@
         </template>
         <template #tbody>
           <tr
-            v-for="periodoLetivo in PeriodosLetivos"
-            :key="periodoLetivo.id + periodoLetivo.nome"
-            @click.stop="
-              toggleItemInArray(periodoLetivo, filtroPeriodos.selecionados)
-            "
+            v-for="periodo in PeriodosLetivos"
+            :key="periodo.id + periodo.nome"
+            @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
           >
             <td style="width: 25px">
               <input
                 type="checkbox"
                 class="form-check-input position-static m-0"
-                :value="periodoLetivo"
+                :value="periodo"
                 v-model="filtroPeriodos.selecionados"
+                @click.stop="selecionaPeriodo(periodo)"
               />
             </td>
             <td style="width: 425px" class="t-start upper-case">
-              {{ periodoLetivo.nome }}
+              {{ periodo.nome }}
+            </td>
+          </tr>
+        </template>
+      </BaseTable>
+
+      <BaseTable
+        v-show="modalFiltrosTabs.current === 'Semestres'"
+        :type="'modal'"
+      >
+        <template #thead>
+          <th style="width: 25px"></th>
+          <th class="t-start" style="width: 425px">
+            Semestre Letivo
+          </th>
+        </template>
+        <template #tbody>
+          <tr
+            v-for="semestre in SemestresLetivos"
+            :key="semestre.id + semestre.nome"
+            @click="selecionaSemestre(semestre)"
+          >
+            <td style="width: 25px">
+              <input
+                type="checkbox"
+                class="form-check-input position-static m-0"
+                :value="semestre"
+                v-model="filtroSemestres.selecionados"
+                @click.stop="selecionaSemestre(semestre)"
+              />
+            </td>
+            <td style="width: 425px" class="t-start upper-case">
+              {{ semestre.nome }}
             </td>
           </tr>
         </template>
@@ -487,10 +482,10 @@ import ls from "local-storage";
 import xlsx from "@/common/services/xlsx";
 import { normalizeText, generateEmptyTurma } from "@/common/utils";
 import {
-  toggleOrdination,
   toggleItemInArray,
   toggleAsideModal,
   cursoPopoverContent,
+  conectaFiltrosSemestresEPeriodos,
 } from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
 import {
@@ -506,10 +501,10 @@ import TurmaRow from "./TurmaRow.vue";
 export default {
   name: "TurmasDCC",
   mixins: [
-    toggleOrdination,
     toggleItemInArray,
     toggleAsideModal,
     cursoPopoverContent,
+    conectaFiltrosSemestresEPeriodos,
   ],
   components: {
     ModalAjuda,
@@ -529,7 +524,7 @@ export default {
       searchDisciplinasModal: "",
       modalFiltrosTabs: {
         current: "Perfis",
-        array: ["Perfis", "Disciplinas", "Cursos", "Períodos"],
+        array: ["Perfis", "Disciplinas", "Cursos", "Períodos", "Semestres"],
       },
       filtroPerfis: {
         selecionados: [],
@@ -543,6 +538,10 @@ export default {
         selecionados: [],
       },
       filtroPeriodos: {
+        ativados: [],
+        selecionados: [],
+      },
+      filtroSemestres: {
         ativados: [],
         selecionados: [],
       },
@@ -564,6 +563,11 @@ export default {
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [...this.PeriodosLetivos];
+            this.conectaPeriodoEmSemestre();
+          },
+          Semestres: () => {
+            this.filtroSemestres.selecionados = [...this.SemestresLetivos];
+            this.conectaSemestreEmPeriodo();
           },
         },
         selectNone: {
@@ -578,6 +582,11 @@ export default {
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [];
+            this.conectaPeriodoEmSemestre();
+          },
+          Semestres: () => {
+            this.filtroSemestres.selecionados = [];
+            this.conectaSemestreEmPeriodo();
           },
         },
         btnOk: () => {
@@ -603,7 +612,10 @@ export default {
   },
 
   mounted() {
-    this.modalFiltrosCallbacks.selectAll.Periodos();
+    this.filtroPeriodos.selecionados = this.$_.filter(
+      this.PeriodosLetivos,
+      (periodo) => periodo.id === 1 || periodo.id === 3
+    );
 
     ls.set("toggle", -1);
     ls.on("toggle", () => {
@@ -647,7 +659,6 @@ export default {
       if (nome.length > 4) return true;
       else return false;
     },
-
     async generateXlsx() {
       try {
         this.setPartialLoading(true);
@@ -701,6 +712,7 @@ export default {
       "TurmasInDisciplinasPerfis",
       "TurmasToDelete",
       "PeriodosLetivos",
+      "SemestresLetivos",
     ]),
 
     TurmasOrdered() {
@@ -788,11 +800,6 @@ export default {
         });
       }
       return cursosResultantes;
-    },
-
-    setFixedOrderPerfil() {
-      if (this.ordenacaoMain.perfis.type === "desc") return null;
-      else return "disciplina.perfil.abreviacao";
     },
   },
 

@@ -20,7 +20,8 @@
           v-for="turma in TurmasFilteredByHorario(horarioId)"
           :key="horarioId + turma.id + turma.periodo"
           v-b-popover.hover.right="{
-            title: turma.disciplina.nome,
+            title: turma.disciplina.nome + ' - ' + turma.letra,
+
             content: turma.docenteApelido,
           }"
         >
@@ -83,3 +84,58 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+table.tg {
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-color: #ccc;
+}
+table.tg td {
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  padding: 0px !important;
+  border-style: solid;
+  border-width: 1px;
+  overflow: hidden;
+  word-break: break-word;
+  border-color: rgba(189, 189, 189, 0.644);
+  color: #333;
+  background-color: #fff;
+}
+table.tg th,
+table.tg .tg-hor {
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 0px;
+  border-style: solid;
+  border-width: 1px;
+  overflow: hidden;
+  word-break: normal;
+  border-color: rgba(189, 189, 189, 0.623);
+  color: #333;
+  background-color: #e9ecef !important;
+}
+table.tg .tg-0lax {
+  vertical-align: center;
+  text-align: center;
+  height: 22px;
+  min-width: 50px !important;
+  width: 50px !important;
+}
+table.tg td > p {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-width: 48px !important;
+  padding: 0 1px !important;
+  margin: 0 !important;
+}
+table.tg td > p:hover {
+  cursor: default;
+  background-color: var(--light-gray) !important;
+}
+</style>

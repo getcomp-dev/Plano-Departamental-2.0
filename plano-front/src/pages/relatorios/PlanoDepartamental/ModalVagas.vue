@@ -1,5 +1,5 @@
 <template>
-  <BaseModal2 ref="baseModalVagas" :type="'editVagas'" :classes="'modal-vagas'">
+  <BaseModal ref="baseModalVagas" :type="'editVagas'" :classes="'modal-vagas'">
     <template #modal-body v-if="turma !== null">
       <div class="modal-vagas-header">
         <h2 class="title">
@@ -102,7 +102,7 @@
         </BaseTable>
       </div>
     </template>
-  </BaseModal2>
+  </BaseModal>
 </template>
 
 <script>

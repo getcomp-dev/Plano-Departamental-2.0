@@ -1,5 +1,5 @@
 <template>
-  <BaseModal2
+  <BaseModal
     ref="baseModalRelatorio"
     title="Relátorio"
     position="right"
@@ -21,7 +21,7 @@
         </li>
       </ul>
     </template>
-  </BaseModal2>
+  </BaseModal>
 </template>
 
 <script>

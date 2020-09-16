@@ -138,7 +138,6 @@ export default {
   name: "TurmaExternaRow",
   props: {
     turma: { type: Object, required: true },
-    CursosAtivados: { type: Array, required: true },
   },
   mixins: [maskTurmaLetra],
   components: {
@@ -602,6 +601,7 @@ export default {
       "AllSalas",
       "TurmasExternasToDelete",
       "PedidosExternos",
+      "PrincipaisCursosDCC",
     ]),
 
     toggleToDelete: {
@@ -662,7 +662,7 @@ export default {
       const indicesResultantes = [];
 
       this.$_.forEach(this.PedidosOfCurrentTurma, (pedido, index) => {
-        const cursoFounded = this.$_.some(this.CursosAtivados, [
+        const cursoFounded = this.$_.some(this.PrincipaisCursosDCC, [
           "id",
           pedido.Curso,
         ]);

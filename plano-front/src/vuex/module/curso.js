@@ -109,9 +109,22 @@ const getters = {
         case "35A":
         case "65C":
         case "76A":
-        case "65B": 
+        case "65B":
         case "65AB":
         case "65AC":
+          return true;
+        default:
+          return false;
+      }
+    });
+  },
+  PrincipaisCursosDCC(state) {
+    return _.filter(state.Cursos, (curso) => {
+      switch (curso.codigo) {
+        case "35A":
+        case "65C":
+        case "76A":
+        case "65B":
           return true;
         default:
           return false;

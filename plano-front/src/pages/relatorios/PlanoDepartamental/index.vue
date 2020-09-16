@@ -157,7 +157,7 @@
           <tr v-show="!DisciplinasInTurmasOrdered.length">
             <td colspan="7" style="width: 885px">
               <b>Nenhuma disciplina encontrada.</b> Clique no botão de filtros
-              <i class="fas fa-list-ul mx-1"></i> para selecioná-las.
+              <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" /> para selecioná-las.
             </td>
             <template v-if="anyPeriodoIsActived">
               <td style="width: 45px" class="borderX-0"></td>
@@ -300,22 +300,53 @@
           </template>
           <template #tbody>
             <tr
-              v-for="periodoLetivo in PeriodosLetivos"
-              :key="periodoLetivo.id + periodoLetivo.nome"
-              @click.stop="
-                toggleItemInArray(periodoLetivo, filtroPeriodos.selecionados)
-              "
+              v-for="periodo in PeriodosLetivos"
+              :key="periodo.id + periodo.nome"
+              @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
             >
               <td style="width: 25px">
                 <input
                   type="checkbox"
                   class="form-check-input position-static m-0"
-                  :value="periodoLetivo"
+                  :value="periodo"
                   v-model="filtroPeriodos.selecionados"
+                  @click.stop="selecionaPeriodo(periodo)"
                 />
               </td>
               <td style="width: 425px" class="t-start upper-case">
-                {{ periodoLetivo.nome }}
+                {{ periodo.nome }}
+              </td>
+            </tr>
+          </template>
+        </BaseTable>
+
+        <BaseTable
+          v-show="modalFiltrosTabs.current === 'Semestres'"
+          :type="'modal'"
+        >
+          <template #thead>
+            <th style="width: 25px"></th>
+            <th class="t-start" style="width: 425px">
+              Semestre Letivo
+            </th>
+          </template>
+          <template #tbody>
+            <tr
+              v-for="semestre in SemestresLetivos"
+              :key="semestre.id + semestre.nome"
+              @click="selecionaSemestre(semestre)"
+            >
+              <td style="width: 25px">
+                <input
+                  type="checkbox"
+                  class="form-check-input position-static m-0"
+                  :value="semestre"
+                  v-model="filtroSemestres.selecionados"
+                  @click.stop="selecionaSemestre(semestre)"
+                />
+              </td>
+              <td style="width: 425px" class="t-start upper-case">
+                {{ semestre.nome }}
               </td>
             </tr>
           </template>
@@ -360,6 +391,7 @@ import {
   generateHorariosText,
   generateDocentesText,
   toggleAsideModal,
+  conectaFiltrosSemestresEPeriodos,
 } from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
 import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
@@ -373,6 +405,7 @@ export default {
     generateHorariosText,
     generateDocentesText,
     toggleAsideModal,
+    conectaFiltrosSemestresEPeriodos,
   ],
   components: {
     ModalRelatorio,
@@ -404,9 +437,13 @@ export default {
         ativados: [],
         selecionados: [],
       },
+      filtroSemestres: {
+        ativados: [],
+        selecionados: [],
+      },
       modalFiltrosTabs: {
         current: "Perfis",
-        array: ["Perfis", "Disciplinas", "Períodos"],
+        array: ["Perfis", "Disciplinas", "Períodos", "Semestres"],
       },
       modalFiltrosCallbacks: {
         selectAll: {
@@ -423,6 +460,11 @@ export default {
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [...this.PeriodosLetivos];
+            this.conectaPeriodoEmSemestre();
+          },
+          Semestres: () => {
+            this.filtroSemestres.selecionados = [...this.SemestresLetivos];
+            this.conectaSemestreEmPeriodo();
           },
         },
         selectNone: {
@@ -434,6 +476,11 @@ export default {
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [];
+            this.conectaPeriodoEmSemestre();
+          },
+          Semestres: () => {
+            this.filtroSemestres.selecionados = [];
+            this.conectaSemestreEmPeriodo();
           },
         },
         btnOk: () => {
@@ -447,9 +494,12 @@ export default {
   },
 
   beforeMount() {
+    this.filtroPeriodos.selecionados = this.$_.filter(
+      this.PeriodosLetivos,
+      (periodo) => periodo.id === 1 || periodo.id === 3
+    );
     this.modalFiltrosCallbacks.selectAll.Disciplinas();
     this.modalFiltrosCallbacks.selectAll.Perfis();
-    this.modalFiltrosCallbacks.selectAll.Periodos();
     this.modalFiltrosCallbacks.btnOk();
   },
 
@@ -463,7 +513,9 @@ export default {
         disciplinasSelecionadas: completo
           ? this.DisciplinasDCCInPerfis
           : this.DisciplinasInTurmasFiltredByDisciplina,
-        plano: this.$_.find(this.$store.state.plano.Plano, {id: parseInt(localStorage.getItem('Plano'))})
+        plano: this.$_.find(this.$store.state.plano.Plano, {
+          id: parseInt(localStorage.getItem("Plano")),
+        }),
       });
     },
     getVagasByTurmaId(turmaId) {
@@ -483,8 +535,9 @@ export default {
       "TurmasInDisciplinasPerfis",
       "DisciplinasDCCInPerfis",
       "PerfisDCC",
-      "PeriodosLetivos",
       "Pedidos",
+      "PeriodosLetivos",
+      "SemestresLetivos",
     ]),
 
     DisciplinasInTurmasOrdered() {

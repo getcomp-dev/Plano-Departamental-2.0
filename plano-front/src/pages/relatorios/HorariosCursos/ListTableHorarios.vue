@@ -1,20 +1,29 @@
 <template>
   <div class="w-100 pl-1">
-    <h3 class="curso-nome">
-      {{ curso.nome }}
+    <h3 class="title">
+      {{ title }}
     </h3>
 
     <div class="container-horarios">
-      <div
-        v-for="periodo in PeriodosDaGradeDoCurso"
-        :key="periodo.indice + periodo.nome + curso.periodoInicial"
-        class="div-table"
-      >
-        <h4 class="periodo-title">{{ periodo.nome }}</h4>
+      <template v-if="template === 'curso'">
+        <div
+          v-for="periodo in PeriodosDaGradeDoCurso"
+          :key="periodo.indice + periodo.nome + curso.periodoInicial"
+          class="div-table"
+        >
+          <h4 class="periodo-title">{{ periodo.nome }}</h4>
 
+          <TableHorarios
+            :Turmas="horariosTurmas[periodo.indice]"
+            :listaDeHorarios="listaDeHorariosFiltredByTurno"
+          />
+        </div>
+      </template>
+
+      <div v-else class="div-table">
         <TableHorarios
-          :Turmas="curso.horarios[periodo.indice]"
-          :listaDeHorarios="listaDeHorariosFiltredByTurno"
+          :Turmas="horariosTurmas"
+          :listaDeHorarios="ListaDeTodosHorarios"
         />
       </div>
     </div>
@@ -31,34 +40,41 @@ export default {
     TableHorarios,
   },
   props: {
-    curso: { type: Object, required: true },
+    template: { type: String, default: "curso" },
+    title: { type: String, required: true },
+    curso: { type: Object, default: () => {} },
+    horariosTurmas: { type: Array, required: true },
   },
 
   computed: {
     ...mapGetters([
+      "ListaDeTodosHorarios",
       "ListaDeHorariosNoturno",
       "ListaDeHorariosDiurno",
+      "DisciplinasDasGrades",
       "AllGrades",
     ]),
 
     listaDeHorariosFiltredByTurno() {
+      if (this.template !== "curso") return;
+
       if (this.curso.turno === "Diurno") return this.ListaDeHorariosDiurno;
       else return this.ListaDeHorariosNoturno;
     },
     GradesDoCurso() {
+      if (this.template !== "curso") return;
+
       return this.$_.filter(
         this.AllGrades,
         (grade) => grade.Curso === this.curso.id
       );
     },
-    DisciplinasNaGradeDoCurso() {
-      return this.$store.state.disciplinaGrade.DisciplinaGrades;
-    },
     PeriodoFinalDoCurso() {
-      let periodoFinal = this.curso.periodoInicial;
+      if (this.template !== "curso") return;
 
+      let periodoFinal = this.curso.periodoInicial;
       this.$_.forEach(this.GradesDoCurso, (grade) => {
-        this.$_.forEach(this.DisciplinasNaGradeDoCurso, (disciplinaGrade) => {
+        this.$_.forEach(this.DisciplinasDasGrades, (disciplinaGrade) => {
           if (
             disciplinaGrade.Grade === grade.id &&
             disciplinaGrade.periodo > periodoFinal
@@ -71,8 +87,9 @@ export default {
       return periodoFinal;
     },
     PeriodosDaGradeDoCurso() {
-      const periodosResult = [];
+      if (this.template !== "curso") return;
 
+      const periodosResult = [];
       for (
         let i = this.curso.periodoInicial;
         i <= this.PeriodoFinalDoCurso;
@@ -90,7 +107,7 @@ export default {
 </script>
 
 <style scoped>
-.curso-nome {
+.title {
   width: 100%;
   text-align: start;
   font-size: 12px;
@@ -103,6 +120,11 @@ export default {
   justify-content: space-between;
   grid-column-gap: 5px;
   grid-row-gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+}
+.container-horarios .periodo-title {
+  font-size: 12px;
+  font-weight: normal;
+  margin-bottom: 5px;
 }
 </style>

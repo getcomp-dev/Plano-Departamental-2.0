@@ -1,5 +1,5 @@
 <template>
-  <BaseModal2 ref="baseModalUser" :title="'Usuário'" :type="'fromNavbar'">
+  <BaseModal ref="baseModalUser" :title="'Usuário'" :type="'fromNavbar'">
     <template #modal-body>
       <div class="user-container w-100">
         <div class="user-header border px-3 py-2 w-100">
@@ -97,7 +97,7 @@
         </div>
       </div>
     </template>
-  </BaseModal2>
+  </BaseModal>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-  <BaseModal2 ref="baseModalDownload" title="Download" type="fromNavbar">
+  <BaseModal ref="baseModalDownload" title="Download" type="fromNavbar">
     <template #modal-body>
       <div class="title-container pl-1">
         <h2 class="title-list">Arquivos inclusos:</h2>
@@ -8,7 +8,8 @@
           :color="'darkblue'"
           @click="runDownload"
           :disabled="downloadState !== 0 && downloadState !== 5"
-        >Iniciar download</BaseButton>
+          >Iniciar download</BaseButton
+        >
       </div>
 
       <ul class="list-group">
@@ -21,7 +22,10 @@
 
       <div class="loading-container w-100">
         <div class="loading-bar w-100">
-          <div class="loading-bar-content" :style="`width: ${downloadState * 20}%`"></div>
+          <div
+            class="loading-bar-content"
+            :style="`width: ${downloadState * 20}%`"
+          ></div>
         </div>
 
         <p class="loading-text">
@@ -33,7 +37,7 @@
         </p>
       </div>
     </template>
-  </BaseModal2>
+  </BaseModal>
 </template>
 
 <script>
@@ -68,9 +72,14 @@ export default {
         this.downloadState++;
         const pedidos = this.$store.state.pedido.Pedidos;
 
-        await xlsxService.downloadTable({ pedidos: pedidos, Plano: localStorage.getItem('Plano') });
+        await xlsxService.downloadTable({
+          pedidos: pedidos,
+          Plano: localStorage.getItem("Plano"),
+        });
         this.downloadState++;
-        await downloadService.generatePdf({ Plano:localStorage.getItem('Plano') });
+        await downloadService.generatePdf({
+          Plano: localStorage.getItem("Plano"),
+        });
         this.downloadState++;
         await downloadService.download();
         this.downloadState++;

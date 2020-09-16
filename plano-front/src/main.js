@@ -21,7 +21,7 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 library.add(fas);
 Vue.component("font-awesome-icon", FontAwesomeIcon);
-import "./assets/font-awesome/fontawesome-all.css"; //Versão antiga
+import "./assets/font-awesome/fontawesome-all.css"; //Versão antiga para ser removida
 // bootstrap
 import BootstrapVue from "bootstrap-vue";
 import "bootstrap/dist/css/bootstrap.css";
@@ -36,14 +36,18 @@ Vue.use(Notifications);
 import "./assets/css/global.css";
 
 //Global components
-import BaseButton from "./components/global/BaseButton";
-import BaseTable from "./components/global/BaseTable";
-import BaseModal2 from "./components/global/BaseModal2";
-import PageHeader from "./components/global/PageHeader";
+import {
+  ThOrdination,
+  PageHeader,
+  BaseTable,
+  BaseModal,
+  BaseButton,
+} from "./components/global";
 Vue.component("BaseButton", BaseButton);
 Vue.component("BaseTable", BaseTable);
-Vue.component("BaseModal2", BaseModal2);
+Vue.component("BaseModal", BaseModal);
 Vue.component("PageHeader", PageHeader);
+Vue.component("ThOrdination", ThOrdination);
 
 //Global mixins
 import { mapActions } from "vuex";

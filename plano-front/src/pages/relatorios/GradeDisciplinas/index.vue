@@ -77,18 +77,7 @@
             Disciplina
             <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'nome')"></i>
           </th>
-          <th
-            title="Sistemas de informação"
-            v-if="activeSI"
-            class="clickable"
-            style="width: 140px;"
-            @click="toggleOrder(ordenacaoMain.disciplinas, 'gradeSI')"
-          >
-            76A
-            <i
-              :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeSI')"
-            ></i>
-          </th>
+
           <th
             title="Ciência da Computação Noturno"
             v-if="activeCCN"
@@ -113,6 +102,7 @@
               :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeCCD')"
             ></i>
           </th>
+
           <th
             title="Engenharia Computacional"
             v-if="activeEC"
@@ -123,6 +113,18 @@
             65B
             <i
               :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeEC')"
+            ></i>
+          </th>
+          <th
+            title="Sistemas de informação"
+            v-if="activeSI"
+            class="clickable"
+            style="width: 140px;"
+            @click="toggleOrder(ordenacaoMain.disciplinas, 'gradeSI')"
+          >
+            76A
+            <i
+              :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeSI')"
             ></i>
           </th>
         </template>
@@ -137,19 +139,7 @@
 
             <td style="width: 100px">{{ disciplina.codigo }}</td>
             <td style="width: 380px" class="t-start">{{ disciplina.nome }}</td>
-            <!-- 76A-  -->
-            <td v-if="activeSI" style="width: 140px">
-              {{
-                disciplina.gradeSI.semestre1.length !== 0
-                  ? `${disciplina.gradeSI.semestre1}º Período: 1º Semestre`
-                  : ""
-              }}
-              {{
-                disciplina.gradeSI.semestre2.length !== 0
-                  ? `${disciplina.gradeSI.semestre2}º Período: 2º Semestre`
-                  : ""
-              }}
-            </td>
+
             <!-- 35A-  -->
             <td v-if="activeCCN" style="width: 140px">
               {{
@@ -189,12 +179,26 @@
                   : ""
               }}
             </td>
+            <!-- 76A-  -->
+            <td v-if="activeSI" style="width: 140px">
+              {{
+                disciplina.gradeSI.semestre1.length !== 0
+                  ? `${disciplina.gradeSI.semestre1}º Período: 1º Semestre`
+                  : ""
+              }}
+              {{
+                disciplina.gradeSI.semestre2.length !== 0
+                  ? `${disciplina.gradeSI.semestre2}º Período: 2º Semestre`
+                  : ""
+              }}
+            </td>
           </tr>
 
           <tr v-show="!DisciplinasOrderedMain.length">
             <td style="width:1120px">
               <b>Nenhuma disciplina encontrada.</b> Clique no botão de filtros
-              <i class="fas fa-list-ul mx-1"></i> para selecioná-las.
+              <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+              para selecioná-las.
             </td>
           </tr>
         </template>
@@ -430,7 +434,7 @@ export default {
             this.filtroDisciplinas.selecionados = [...this.DisciplinasInPerfis];
           },
           Cursos: () => {
-            this.filtroCursos.selecionados = [...this.CursosDCCFiltred];
+            this.filtroCursos.selecionados = [...this.PrincipaisCursosDCC];
           },
         },
         selectNone: {
@@ -697,7 +701,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["CursosDCC", "DisciplinasInPerfis", "AllPerfis"]),
+    ...mapGetters(["PrincipaisCursosDCC", "DisciplinasInPerfis", "AllPerfis"]),
 
     DisciplinasOrderedMain() {
       let disciplinasResult = this.DisciplinasFiltredMain;
@@ -777,22 +781,10 @@ export default {
         this.ordenacaoModal.disciplinas.type
       );
     },
-    CursosDCCFiltred() {
-      return this.$_.filter(this.CursosDCC, (curso) => {
-        switch (curso.codigo) {
-          case "76A":
-          case "35A":
-          case "65C":
-          case "65B":
-            return true;
-          default:
-            return false;
-        }
-      });
-    },
+
     CursosOrderedModal() {
       return this.$_.orderBy(
-        this.CursosDCCFiltred,
+        this.PrincipaisCursosDCC,
         this.ordenacaoModal.cursos.order,
         this.ordenacaoModal.cursos.type
       );

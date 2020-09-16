@@ -123,10 +123,7 @@ const getters = {
   },
 
   allPlanos(state) {
-    const planosResultantes = _.orderBy(state.Plano, "ano");
-
-    if (process.env.NODE_ENV === "development") return planosResultantes;
-    else return _.filter(planosResultantes, (plano) => plano.id != 2090); //2090 = id do plano de dev
+    return _.orderBy(state.Plano, "ano");
   },
 
   AnosDoPlano() {
@@ -139,7 +136,7 @@ const getters = {
       yearsArry.push(parseInt(firstYear, 10));
       firstYear++;
     }
-    if (process.env.NODE_ENV === "development") yearsArry.push(2099);
+    yearsArry.push(2099); // plano de dev
 
     return yearsArry;
   },

@@ -1,5 +1,5 @@
 <template>
-  <BaseModal2
+  <BaseModal
     ref="baseModalNovoPlano"
     title="Turmas do novo plano"
     type="editTurma"
@@ -126,7 +126,7 @@
         OK
       </BaseButton>
     </template>
-  </BaseModal2>
+  </BaseModal>
 </template>
 
 <script>

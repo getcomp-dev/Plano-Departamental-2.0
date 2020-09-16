@@ -43,30 +43,26 @@
             </th>
           </template>
           <template #tbody>
-            <template v-for="docente in Docentes">
-              <tr
-                :key="'docente-id' + docente.id"
-                v-on:click.prevent="handleClickInDocente(docente)"
-                :class="[
-                  { 'bg-selected': docenteClickadoId == docente.id },
-                  'clickable',
-                ]"
-              >
-                <td style="width:240px;" class="t-start">{{ docente.nome }}</td>
-                <td style="width:120px;" class="t-start">
-                  {{ docente.apelido }}
-                </td>
-                <td style="width:65px">{{ booleanToText(docente.ativo) }}</td>
-              </tr>
-            </template>
-            <template v-if="Docentes.length == 0">
-              <tr>
-                <td colspan="2" class="text-center">
-                  <i class="fas fa-exclamation-triangle"></i> Nenhum docente
-                  encontrado!
-                </td>
-              </tr>
-            </template>
+            <tr
+              v-for="docente in DocentesOrdered"
+              :key="docente.id + docente.apelido"
+              @click="handleClickInDocente(docente)"
+              :class="[
+                { 'bg-selected': docenteClickadoId == docente.id },
+                'clickable',
+              ]"
+            >
+              <td style="width:240px;" class="t-start">{{ docente.nome }}</td>
+              <td style="width:120px;" class="t-start">
+                {{ docente.apelido }}
+              </td>
+              <td style="width:65px">{{ booleanToText(docente.ativo) }}</td>
+            </tr>
+            <tr v-if="!DocentesOrdered.length">
+              <td colspan="3" style="width:425px" class="text-center">
+                <b>Nenhum docente encontrado!</b>
+              </td>
+            </tr>
           </template>
         </BaseTable>
       </div>
@@ -132,7 +128,7 @@
                   <template #tbody>
                     <tr
                       v-for="perfil in AllPerfis"
-                      :key="'perfil-id' + perfil.id"
+                      :key="perfil.id + perfil.nome"
                       @click="toggleItemInArray(perfil.id, perfisAssociados)"
                     >
                       <td style="width:25px">
@@ -375,7 +371,7 @@ export default {
   computed: {
     ...mapGetters(["AllDocentes", "AllPerfis"]),
 
-    Docentes() {
+    DocentesOrdered() {
       return this.$_.orderBy(
         this.AllDocentes,
         this.ordenacaoDocentesMain.order,

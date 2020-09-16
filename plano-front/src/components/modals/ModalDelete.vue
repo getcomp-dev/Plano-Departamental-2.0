@@ -1,5 +1,5 @@
 <template>
-  <BaseModal2
+  <BaseModal
     ref="baseModalDelete"
     title="Confirmar exclusão"
     position="center"
@@ -34,7 +34,7 @@
         Deletar
       </BaseButton>
     </template>
-  </BaseModal2>
+  </BaseModal>
 </template>
 
 <script>

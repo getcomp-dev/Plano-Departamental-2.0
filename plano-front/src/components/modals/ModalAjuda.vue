@@ -1,5 +1,5 @@
 <template>
-  <BaseModal2
+  <BaseModal
     ref="baseModalAjuda"
     title="Ajuda"
     type="ajuda"
@@ -10,7 +10,7 @@
         <slot></slot>
       </ul>
     </template>
-  </BaseModal2>
+  </BaseModal>
 </template>
 
 <script>

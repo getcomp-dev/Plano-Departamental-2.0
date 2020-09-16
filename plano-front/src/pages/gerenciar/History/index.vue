@@ -29,29 +29,31 @@
           <th style="width: 120px">Novo Valor</th>
           <th style="width: 65px">Operação</th>
           <th style="width: 80px">Usuário</th>
-          <th style="width: 160px">Hora</th>
+          <th style="width: 160px">Data</th>
         </template>
         <template #tbody>
-          <tr v-for="h in HistoryOrdered" :key="`History${h.id}`">
-            <td style="width: 110px">{{ h.tabelaModificada }}</td>
+          <tr v-for="history in HistoryOrdered" :key="`History${history.id}`">
+            <td style="width: 110px">{{ history.tabelaModificada }}</td>
             <td style="width: 120px" class="less-padding">
-              {{ h.campoModificado }}
+              {{ history.campoModificado }}
             </td>
             <td style="width: 200px" class="less-padding">
-              {{ linhaModificada(h) }}
+              {{ linhaModificada(history) }}
             </td>
             <td style="width: 120px" class="less-padding">
-              {{ valorAnterior(h) }}
+              {{ valorAnterior(history) }}
             </td>
             <td style="width: 120px" class="less-padding">
-              {{ valorNovo(h) }}
+              {{ valorNovo(history) }}
             </td>
             <td style="width: 65px" class="less-padding">
-              {{ h.tipoOperacao }}
+              {{ history.tipoOperacao }}
             </td>
-            <td style="width: 80px" class="less-padding">{{ h.usuario }}</td>
+            <td style="width: 80px" class="less-padding">
+              {{ history.usuario }}
+            </td>
             <td style="width: 160px" class="less-padding">
-              {{ h.createdAt }}
+              {{ history.createdAt | convertDateUTC }}
             </td>
           </tr>
           <tr v-show="!HistoryOrdered.length">
@@ -105,7 +107,7 @@
         >
           <template #thead>
             <th style="width:25px"></th>
-            <th style="width: 425px" class="t-start">Nome</th>
+            <th style="width: 425px" class="t-start">Tipo</th>
           </template>
           <template #tbody>
             <tr
@@ -144,13 +146,17 @@
 </template>
 
 <script>
-import { toggleItemInArray, toggleAsideModal } from "@/common/mixins";
+import {
+  toggleItemInArray,
+  toggleAsideModal,
+  convertDateUTC,
+} from "@/common/mixins";
 import { ModalFiltros, ModalAjuda } from "@/components/modals";
 import { mapGetters } from "vuex";
 
 export default {
   name: "DashboardHistory",
-  mixins: [toggleItemInArray, toggleAsideModal],
+  mixins: [toggleItemInArray, toggleAsideModal, convertDateUTC],
   components: {
     ModalFiltros,
     ModalAjuda,

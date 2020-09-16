@@ -1,5 +1,5 @@
 <template>
-  <BaseModal2
+  <BaseModal
     ref="baseModalEditTurma"
     type="editTurma"
     title="Edição de Turma"
@@ -363,7 +363,7 @@
         </BaseTable>
       </div>
     </template>
-  </BaseModal2>
+  </BaseModal>
 </template>
 
 <script>

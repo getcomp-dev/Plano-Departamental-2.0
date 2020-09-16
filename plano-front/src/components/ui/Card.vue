@@ -12,11 +12,11 @@
             <template v-if="toggleFooter">
               <template v-if="isPlano">
                 <BaseButton
-                        title="Copiar Plano"
-                        :type="'icon'"
-                        :color="'blue'"
-                        @click="$emit('btn-copy')"
-                        :key="5"
+                  title="Copiar Plano"
+                  :type="'icon'"
+                  :color="'lightblue'"
+                  @click="$emit('btn-copy')"
+                  :key="5"
                 >
                   <font-awesome-icon :icon="['fas', 'copy']" />
                 </BaseButton>
@@ -75,7 +75,7 @@ export default {
   props: {
     title: {
       type: String,
-      default: "Nenhum titulo recebido!",
+      required: true,
     },
     toggleFooter: { type: Boolean, default: false },
     isPlano: { type: Boolean, default: false },

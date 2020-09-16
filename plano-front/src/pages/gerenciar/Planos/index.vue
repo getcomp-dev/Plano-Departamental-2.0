@@ -24,7 +24,7 @@
               <i :class="setIconByOrder(ordenacaoMainPlanos, 'ano')"></i>
             </th>
             <th
-              style="width: 70px"
+              style="width: 150px"
               class="t-start clickable"
               @click="toggleOrder(ordenacaoMainPlanos, 'nome')"
             >
@@ -48,7 +48,7 @@
               :class="{ 'bg-selected': plano.id === planoSelectedId }"
             >
               <td style="width: 70px" class="t-start">{{ plano.ano }}</td>
-              <td style="width: 70px" class="t-start">{{ plano.nome }}</td>
+              <td style="width: 150px" class="t-start">{{ plano.nome }}</td>
               <td style="width: 300px" class="t-start">{{ plano.obs }}</td>
             </tr>
           </template>
@@ -147,6 +147,11 @@
         Em seguida, no cartão à direita, clique em Remover
         <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
         confirme a remoção na janela que será aberta.
+      </li>
+      <li class="list-group-item">
+        <b>Copiar:</b> Clique na linha da tabela do plano que deseja copiar. Em
+        seguida, no cartão à direita, clique em Copiar
+        <font-awesome-icon :icon="['fas', 'copy']" class="icon-lightblue" /> .
       </li>
       <li class="list-group-item">
         <b>Limpar:</b> No cartão à direita, clique em Cancelar
@@ -267,37 +272,39 @@ export default {
       }
     },
 
-    copyPlano(oldPlano){
+    copyPlano(oldPlano) {
       let newPlano = {
         nome: `Cópia de '${oldPlano.nome}'`,
         ano: oldPlano.ano,
-        obs: `Cópia do plano '${oldPlano.nome} - ${oldPlano.ano}'`
-      }
-       planoService.create(newPlano).then((plano) => {
-         copyPlanoService.copyPlano(oldPlano.id, plano.Plano.id).then((response) => {
-           this.$notify({
-             group: "general",
-             title: `Sucesso!`,
-             text: `O Plano ${oldPlano.nome} foi copiado!`,
-             type: "success",
-           });
-         })
-         .catch((error) => {
-           this.error = "<b>Erro ao copiar plano</b>";
-           if (error.response.data.fullMessage) {
-             this.error +=
-               "<br/>" +
+        obs: `Cópia do plano '${oldPlano.nome} - ${oldPlano.ano}'`,
+      };
+      planoService.create(newPlano).then((plano) => {
+        copyPlanoService
+          .copyPlano(oldPlano.id, plano.Plano.id)
+          .then((response) => {
+            this.$notify({
+              group: "general",
+              title: `Sucesso!`,
+              text: `O Plano ${oldPlano.nome} foi copiado!`,
+              type: "success",
+            });
+          })
+          .catch((error) => {
+            this.error = "<b>Erro ao copiar plano</b>";
+            if (error.response.data.fullMessage) {
+              this.error +=
+                "<br/>" +
                 error.response.data.fullMessage.replace("\n", "<br/>");
-           }
-           this.$notify({
-             group: "general",
-             title: `Erro!`,
-             text: this.error,
-             type: "error",
-           });
-         });
-       })
-    }
+            }
+            this.$notify({
+              group: "general",
+              title: `Erro!`,
+              text: this.error,
+              type: "error",
+            });
+          });
+      });
+    },
   },
 
   computed: {

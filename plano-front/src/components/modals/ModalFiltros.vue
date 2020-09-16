@@ -1,5 +1,5 @@
 <template>
-  <BaseModal2
+  <BaseModal
     ref="baseModalFiltros"
     type="filtros"
     title="Filtros"
@@ -12,7 +12,9 @@
         @change-tab="tabsOptions.current = $event"
       />
 
-      <slot></slot>
+      <div class="div-table">
+        <slot></slot>
+      </div>
     </template>
 
     <template #modal-footer>
@@ -34,7 +36,7 @@
         >OK</BaseButton
       >
     </template>
-  </BaseModal2>
+  </BaseModal>
 </template>
 
 <script>
