@@ -1,40 +1,33 @@
 <template>
   <tr class="bg-custom">
-    <td style="width: 130px" class="t-start">
-      {{ docente.apelido }}
-    </td>
-    <td colspan="5" style="width:575px"></td>
+    <v-td width="130" align="start">{{ docente.apelido }}</v-td>
+    <v-td width="575" colspan="5" />
 
-    <td
-      v-if="semestresAtivados.primeiro"
-      style="width: 35px"
-      class="less-padding"
-    >
-      {{ docente.creditos1Semestre }}
-    </td>
-    <td
-      v-if="semestresAtivados.segundo"
-      style="width: 35px"
-      class="less-padding"
-    >
-      {{ docente.creditos2Semestre }}
-    </td>
-    <td
+    <v-td width="35" paddingX="2">
+      {{ !docente.creditos1Semestre ? "" : docente.creditos1Semestre }}
+    </v-td>
+
+    <v-td width="35" paddingX="2">
+      {{ !docente.creditos2Semestre ? "" : docente.creditos2Semestre }}
+    </v-td>
+
+    <v-td
       v-if="semestresAtivados.primeiro && semestresAtivados.segundo"
-      style="width: 50px"
-      class="less-padding"
+      width="40"
+      paddingX="2"
     >
-      {{ docente.creditos1Semestre + docente.creditos2Semestre }}
-    </td>
+      {{
+        !docente.creditos1Semestre && !docente.creditos2Semestre
+          ? ""
+          : docente.creditos1Semestre + docente.creditos2Semestre
+      }}
+    </v-td>
   </tr>
 </template>
 
 <script>
-import { generateHorariosText } from "@/common/mixins";
-
 export default {
   name: "DocenteRow",
-  mixins: [generateHorariosText],
   props: {
     docente: { type: Object, required: true },
     semestresAtivados: { type: Object, required: true },

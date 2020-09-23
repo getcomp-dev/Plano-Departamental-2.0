@@ -1,42 +1,32 @@
 <template>
   <tr>
-    <td style="width: 130px"></td>
-    <td style="width: 30px">{{ turma.periodo }}</td>
-    <td style="width: 80px" class="less-padding">
-      {{ turma.disciplina.codigo }}
-    </td>
-    <td style="width: 300px" class="t-start">
-      {{ turma.disciplina.nome }}
-    </td>
-    <td style="width: 35px" class="less-padding">
-      {{ turma.letra }}
-    </td>
-    <td style="width: 130px">
+    <v-td width="130" />
+    <v-td width="30">{{ turma.periodo }}</v-td>
+    <v-td width="80" paddingX="2">{{ turma.disciplina.codigo }}</v-td>
+    <v-td width="300" align="start">{{ turma.disciplina.nome }}</v-td>
+    <v-td width="35" paddingX="2">{{ turma.letra }}</v-td>
+
+    <v-td width="130">
       {{ generateHorariosText(turma.Horario1, turma.Horario2) }}
-    </td>
-    <td
-      v-if="semestresAtivados.primeiro"
-      style="width: 35px"
-      class="less-padding"
-    >
+    </v-td>
+
+    <v-td width="35" paddingX="2">
       {{
         turma.periodo === 1 || turma.periodo === 2 ? turma.creditosDaTurma : ""
       }}
-    </td>
-    <td
-      v-if="semestresAtivados.segundo"
-      style="width: 35px"
-      class="less-padding"
-    >
+    </v-td>
+
+    <v-td width="35" paddingX="2">
       {{
         turma.periodo === 3 || turma.periodo === 4 ? turma.creditosDaTurma : ""
       }}
-    </td>
-    <td
+    </v-td>
+
+    <v-td
       v-if="semestresAtivados.primeiro && semestresAtivados.segundo"
-      style="width: 50px"
-      class="less-padding"
-    ></td>
+      width="40"
+      paddingX="2"
+    />
   </tr>
 </template>
 

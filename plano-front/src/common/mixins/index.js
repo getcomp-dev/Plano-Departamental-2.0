@@ -9,8 +9,10 @@ import cursoPopoverContent from "./cursoPopoverContent";
 import vFocusPedido from "./vFocusPedido";
 import conectaFiltrosSemestresEPeriodos from "./conectaFiltrosSemestresEPeriodos";
 import convertDateUTC from "./convertDateUTC";
+import maskEmptyToZero from "./maskEmptyToZero";
 
 export {
+  maskEmptyToZero,
   convertDateUTC,
   conectaFiltrosSemestresEPeriodos,
   vFocusPedido,

@@ -1,7 +1,9 @@
 import Vue from "vue";
 import _ from "lodash";
 import cursoService from "../../common/services/curso";
+import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
 import ls from "local-storage";
+
 import {
   CURSO_FETCHED,
   SOCKET_CURSO_CREATED,
@@ -10,6 +12,7 @@ import {
   TOGGLE_CURSO_ATIVO,
   TOGGLE_ALL_CURSO_ATIVO_TRUE,
   TOGGLE_ALL_CURSO_ATIVO_FALSE,
+  PUSH_NOTIFICATION,
 } from "../mutation-types";
 
 const state = {
@@ -86,6 +89,61 @@ const actions = {
     });
   },
 
+  async createCurso({ commit, dispatch, getters }, curso) {
+    const cursoNormalized = _.cloneDeepWith(curso, setEmptyValuesToNull);
+    validateObjectKeys(cursoNormalized, [
+      "nome",
+      "codigo",
+      "turno",
+      "alunosEntrada",
+      "alunosEntrada2",
+    ]);
+    cursoNormalized.posicao = getters.ultimaPosicaoDeCursos;
+    cursoNormalized.semestreInicial = calculaSemestreInicial(
+      cursoNormalized.alunosEntrada,
+      cursoNormalized.alunosEntrada2
+    );
+
+    await cursoService.create(cursoNormalized);
+    await dispatch("fetchAllPedidos");
+
+    commit(PUSH_NOTIFICATION, {
+      type: "success",
+      text: `O curso ${cursoNormalized.nome} foi criada`,
+    });
+  },
+
+  async editCurso({ commit }, curso) {
+    const cursoNormalized = _.cloneDeepWith(curso, setEmptyValuesToNull);
+    validateObjectKeys(cursoNormalized, [
+      "nome",
+      "codigo",
+      "turno",
+      "alunosEntrada",
+      "alunosEntrada2",
+    ]);
+    cursoNormalized.semestreInicial = calculaSemestreInicial(
+      cursoNormalized.alunosEntrada,
+      cursoNormalized.alunosEntrada2
+    );
+
+    await cursoService.update(cursoNormalized.id, cursoNormalized);
+
+    commit(PUSH_NOTIFICATION, {
+      type: "success",
+      text: `A curso ${cursoNormalized.nome} foi atualizado`,
+    });
+  },
+
+  async deleteCurso({ commit }, curso) {
+    await cursoService.delete(curso.id, curso);
+
+    commit(PUSH_NOTIFICATION, {
+      type: "success",
+      text: `O curso ${curso.nome} foi excluído`,
+    });
+  },
+
   toggleCurso({ commit }, id) {
     commit(TOGGLE_CURSO_ATIVO, id);
   },
@@ -131,6 +189,9 @@ const getters = {
       }
     });
   },
+  ultimaPosicaoDeCursos(state) {
+    return state.Cursos[state.Cursos.length - 1].id + 1;
+  },
 };
 
 export default {
@@ -139,3 +200,9 @@ export default {
   actions,
   getters,
 };
+
+function calculaSemestreInicial(alunosEntrada, alunosEntrada2) {
+  if (alunosEntrada === 0 && alunosEntrada2 !== 0) return 2;
+  if (alunosEntrada !== 0 && alunosEntrada2 === 0) return 1;
+  return 3;
+}

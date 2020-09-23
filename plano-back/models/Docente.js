@@ -53,6 +53,12 @@ module.exports = function (sequelize, DataTypes) {
       },
       onDelete: 'RESTRICT'
     })
+
+    Docente.belongsToMany(models.Disciplina, {
+      through: models.DocenteDisciplina,
+      foreignKey: 'Docente',
+      onDelete: 'RESTRICT'
+    })
   }
 
   return Docente

@@ -11,12 +11,13 @@ export default {
   props: {
     currentOrder: { type: Object, required: true },
     orderToCheck: { type: String, required: true },
+    orderType: { type: String, default: "asc" },
   },
   computed: {
     options() {
       const { currentOrder, orderToCheck } = this;
       let classes = "low-opacity";
-      let currentIcon = "arrow-down";
+      let currentIcon = this.orderType === "asc" ? "arrow-down" : "arrow-up";
 
       if (currentOrder.order === orderToCheck) {
         currentIcon = currentOrder.type === "asc" ? "arrow-down" : "arrow-up";

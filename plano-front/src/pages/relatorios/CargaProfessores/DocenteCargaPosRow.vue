@@ -1,41 +1,31 @@
 <template>
   <tr>
-    <td style="width: 130px"></td>
-    <td style="width: 30px">{{ carga.trimestre }}</td>
-    <td style="width: 80px"></td>
-    <td style="width: 300px" class="t-start upper-case">
-      {{ carga.programa }}
-    </td>
-    <td style="width: 35px"></td>
-    <td style="width: 130px"></td>
-    <td
-      v-if="semestresAtivados.primeiro"
-      style="width: 35px"
-      class="less-padding"
-    >
+    <v-td width="130" />
+    <v-td width="25">{{ carga.trimestre }}</v-td>
+    <v-td width="80" />
+    <v-td width="300" align="start">{{ carga.programa }}</v-td>
+    <v-td width="35" />
+    <v-td width="130" />
+
+    <v-td width="35" paddingX="2">
       {{ carga.trimestre === 1 || carga.trimestre === 2 ? carga.creditos : "" }}
-    </td>
-    <td
-      v-if="semestresAtivados.segundo"
-      style="width: 35px"
-      class="less-padding"
-    >
+    </v-td>
+
+    <v-td width="35" paddingX="2">
       {{ carga.trimestre === 3 || carga.trimestre === 4 ? carga.creditos : "" }}
-    </td>
-    <td
-      style="width: 50px"
-      class="less-padding"
+    </v-td>
+
+    <v-td
       v-if="semestresAtivados.primeiro && semestresAtivados.segundo"
-    ></td>
+      width="40"
+      paddingX="2"
+    />
   </tr>
 </template>
 
 <script>
-import { generateHorariosText } from "@/common/mixins";
-
 export default {
   name: "DocenteCargaPosRow",
-  mixins: [generateHorariosText],
   props: {
     carga: { type: Object, required: true },
     semestresAtivados: { type: Object, required: true },

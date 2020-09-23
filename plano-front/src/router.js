@@ -28,6 +28,7 @@ import GerenciarSalas from "@/pages/gerenciar/Salas";
 import GerenciarHistory from "@/pages/gerenciar/History";
 import GerenciarUsuarios from "@/pages/gerenciar/Usuarios";
 import GerenciarPlanos from "@/pages/gerenciar/Planos";
+import GerenciarPreferencias from "@/pages/gerenciar/PreferenciasDocentes";
 
 Vue.use(VueRouter);
 
@@ -193,6 +194,12 @@ const routes = [
         path: "gerenciar/usuarios",
         name: "usuarios",
         component: GerenciarUsuarios,
+        beforeEnter: requireSuperAdmin,
+      },
+      {
+        path: "gerenciar/importPreferencias",
+        name: "preferencias",
+        component: GerenciarPreferencias,
         beforeEnter: requireSuperAdmin,
       },
     ],

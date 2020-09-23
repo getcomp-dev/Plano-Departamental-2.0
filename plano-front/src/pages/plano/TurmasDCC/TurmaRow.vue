@@ -66,10 +66,10 @@
         >
         <option></option>
         <option
-          v-for="docente in DocentesAtivos"
+          v-for="docente in DocentesByPreferencia"
           :key="'docentes' + docente.id"
           :value="docente.id"
-          >{{ docente.apelido }}</option
+          >{{ docente.apelido }} {{(orderByPreferencia && preferenciaDocente(docente) ? '- ' + preferenciaDocente(docente) : '')}}</option
         >
       </select>
 
@@ -84,10 +84,10 @@
         >
         <option></option>
         <option
-          v-for="docente in DocentesAtivos"
+          v-for="docente in DocentesByPreferencia"
           :key="'2-docente-id' + docente.id"
           :value="docente.id"
-          >{{ docente.apelido }}</option
+          >{{ docente.apelido }} {{(orderByPreferencia && preferenciaDocente(docente) ? '- ' + preferenciaDocente(docente) : '')}}</option
         >
       </select>
     </td>
@@ -235,6 +235,7 @@ export default {
   props: {
     turma: Object,
     cursosAtivados: Array,
+    orderByPreferencia: Boolean
   },
   data() {
     return {
@@ -1088,6 +1089,11 @@ export default {
         this.setPartialLoading(false);
       }
     },
+
+    preferenciaDocente(docente){
+      let p = this.$_.find(this.PreferenciasDisciplina, {Docente: docente.id})
+      return (p ? p.preferencia : false)
+    }
   },
 
   computed: {
@@ -1100,6 +1106,7 @@ export default {
       "HorariosDiurno",
       "TurmasToDelete",
       "Pedidos",
+      "PreferenciaDosDocentes"
     ]),
 
     toggleToDelete: {
@@ -1155,6 +1162,20 @@ export default {
     },
     PedidosOfCurrentTurma() {
       return this.Pedidos[this.turma.id];
+    },
+    PreferenciasDisciplina() {
+      return this.$_.filter(this.PreferenciaDosDocentes, {Disciplina: this.turmaForm.Disciplina})
+    },
+    DocentesByPreferencia() {
+      if(this.orderByPreferencia){
+        return this.$_.orderBy(this.DocentesAtivos, d => {
+          let p = this.$_.find(this.PreferenciasDisciplina, {Docente: d.id})
+          return (p ? p.preferencia : 0)
+        }, 'desc')
+      } else {
+        return this.DocentesAtivos
+      }
+
     },
   },
 

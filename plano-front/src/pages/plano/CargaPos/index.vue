@@ -68,20 +68,20 @@
             <font-awesome-icon :icon="['fas', 'thumbtack']" />
             T.
           </th>
-          <ThOrdination
-            :text="'Docente'"
+          <v-th-ordination
             :currentOrder="ordenacaoCargaPos"
-            :orderToCheck="'docenteApelido'"
-            class="t-start"
-            style="width:145px"
+            orderToCheck="docenteApelido"
+            width="145"
+            align="start"
+            text="Docente"
           />
-          <ThOrdination
-            :text="'C.'"
+          <v-th-ordination
             :currentOrder="ordenacaoCargaPos"
-            :orderToCheck="'creditos'"
-            :orderType="'desc'"
-            style="width:50px"
+            orderToCheck="creditos"
+            orderType="desc"
+            width="50"
             title="Créditos"
+            text="C."
           />
         </template>
 

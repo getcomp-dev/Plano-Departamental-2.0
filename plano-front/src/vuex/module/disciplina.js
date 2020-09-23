@@ -1,11 +1,13 @@
 import Vue from "vue";
 import _ from "lodash";
 import disciplinaService from "../../common/services/disciplina";
+import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
 import {
   DISCIPLINA_FETCHED,
   SOCKET_DISCIPLINA_CREATED,
   SOCKET_DISCIPLINA_DELETED,
   SOCKET_DISCIPLINA_UPDATED,
+  PUSH_NOTIFICATION,
 } from "../mutation-types";
 
 const state = {
@@ -50,6 +52,74 @@ const actions = {
         .catch((error) => {
           reject(error);
         });
+    });
+  },
+
+  async createDisciplina({ commit }, disciplina) {
+    const disciplinaNormalized = _.cloneDeepWith(
+      disciplina,
+      setEmptyValuesToNull
+    );
+    validateObjectKeys(disciplinaNormalized, [
+      "nome",
+      "codigo",
+      "cargaTeorica",
+      "cargaPratica",
+    ]);
+
+    if (disciplinaDCCENaoPossuiPerfil(disciplinaNormalized)) {
+      commit(PUSH_NOTIFICATION, {
+        type: "error",
+        text: "Disciplinas do DCC devem fazer parte de um Perfil",
+      });
+      return;
+    }
+
+    await disciplinaService.create(disciplinaNormalized);
+
+    commit(PUSH_NOTIFICATION, {
+      type: "success",
+      text: `A disciplina ${disciplinaNormalized.nome} foi criada`,
+    });
+  },
+
+  async editDisciplina({ commit }, disciplina) {
+    const disciplinaNormalized = _.cloneDeepWith(
+      disciplina,
+      setEmptyValuesToNull
+    );
+    validateObjectKeys(disciplinaNormalized, [
+      "nome",
+      "codigo",
+      "cargaTeorica",
+      "cargaPratica",
+    ]);
+
+    if (disciplinaDCCENaoPossuiPerfil(disciplinaNormalized)) {
+      commit(PUSH_NOTIFICATION, {
+        type: "error",
+        text: "Disciplinas do DCC devem fazer parte de um Perfil",
+      });
+      return;
+    }
+
+    await disciplinaService.update(
+      disciplinaNormalized.id,
+      disciplinaNormalized
+    );
+
+    commit(PUSH_NOTIFICATION, {
+      type: "success",
+      text: `A disciplina ${disciplinaNormalized.nome} foi atualizada`,
+    });
+  },
+
+  async deleteDisciplina({ commit }, disciplina) {
+    await disciplinaService.delete(disciplina.id, disciplina);
+
+    commit(PUSH_NOTIFICATION, {
+      type: "success",
+      text: `A disciplina ${disciplina.nome} foi excluída`,
     });
   },
 };
@@ -111,3 +181,7 @@ export default {
   actions,
   getters,
 };
+
+function disciplinaDCCENaoPossuiPerfil(disciplina) {
+  return disciplina.departamento === 1 && disciplina.Perfil === null;
+}

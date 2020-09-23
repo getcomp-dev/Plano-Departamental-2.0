@@ -6,7 +6,7 @@ export default {
           if (el.value == 0) el.value = "";
         };
         el.handleBlur = () => {
-          if (el.value == 0) el.value = "";
+          if (el.value == "") el.value = 0;
         };
 
         el.addEventListener("focus", el.handleFocus);

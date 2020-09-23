@@ -37,17 +37,21 @@ import "./assets/css/global.css";
 
 //Global components
 import {
-  ThOrdination,
   PageHeader,
   BaseTable,
   BaseModal,
   BaseButton,
+  VTd,
+  VTh,
+  VThOrdination,
 } from "./components/global";
 Vue.component("BaseButton", BaseButton);
 Vue.component("BaseTable", BaseTable);
 Vue.component("BaseModal", BaseModal);
 Vue.component("PageHeader", PageHeader);
-Vue.component("ThOrdination", ThOrdination);
+Vue.component("v-td", VTd);
+Vue.component("v-th", VTh);
+Vue.component("v-th-ordination", VThOrdination);
 
 //Global mixins
 import { mapActions } from "vuex";

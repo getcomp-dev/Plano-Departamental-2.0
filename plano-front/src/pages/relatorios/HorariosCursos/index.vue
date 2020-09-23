@@ -97,7 +97,7 @@
         <ListHorarios
           v-show="filtroPeriodosEstaAtivo.periodo4"
           :template="'extra'"
-          :title="'4º Período letivo - Cursos de verão'"
+          :title="'Cursos de verão'"
           :horariosTurmas="TurmasAtivas4Periodo"
         />
       </template>

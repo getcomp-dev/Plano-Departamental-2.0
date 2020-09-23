@@ -15,81 +15,80 @@
       <div class="div-table">
         <BaseTable>
           <template #thead>
-            <th
-              @click="toggleOrder(ordenacaoCursosMain, 'codigo')"
-              title="Clique para ordenar por nome"
-              class="clickable t-start"
-              style="width: 65px"
+            <v-th-ordination
+              :currentOrder="ordenacaoCursos"
+              orderToCheck="codigo"
+              width="65"
+              align="start"
             >
               Código
-              <i :class="setIconByOrder(ordenacaoCursosMain, 'codigo')"></i>
-            </th>
-            <th
-              @click="toggleOrder(ordenacaoCursosMain, 'nome')"
-              title="Clique para ordenar por nome"
-              class="clickable t-start"
-              style="width:300px"
+            </v-th-ordination>
+
+            <v-th-ordination
+              :currentOrder="ordenacaoCursos"
+              orderToCheck="nome"
+              width="300"
+              align="start"
             >
               Nome
-              <i :class="setIconByOrder(ordenacaoCursosMain, 'nome')"></i>
-            </th>
-            <th
-              class="clickable"
-              style="width:65px"
-              @click="toggleOrder(ordenacaoCursosMain, 'turno')"
+            </v-th-ordination>
+            <v-th-ordination
+              :currentOrder="ordenacaoCursos"
+              orderToCheck="turno"
+              width="65"
             >
               Turno
-              <i :class="setIconByOrder(ordenacaoCursosMain, 'turno')"></i>
-            </th>
-            <th
-              class="clickable p-0"
-              style="width: 75px"
+            </v-th-ordination>
+
+            <v-th-ordination
+              :currentOrder="ordenacaoCursos"
+              orderToCheck="alunosEntrada"
+              orderType="desc"
+              width="75"
+              paddingX="0"
               title="Entrada de alunos 1º período"
-              @click="toggleOrder(ordenacaoCursosMain, 'alunosEntrada', 'desc')"
             >
               1º Período
-              <i
-                :class="setIconByOrder(ordenacaoCursosMain, 'alunosEntrada')"
-              ></i>
-            </th>
-            <th
-              class="clickable p-0"
-              style="width: 75px"
+            </v-th-ordination>
+
+            <v-th-ordination
+              :currentOrder="ordenacaoCursos"
+              orderToCheck="alunosEntrada2"
+              orderType="desc"
+              width="75"
+              paddingX="0"
               title="Entrada de alunos 3º período"
-              @click="
-                toggleOrder(ordenacaoCursosMain, 'alunosEntrada2', 'desc')
-              "
             >
               3º Período
-              <i
-                :class="setIconByOrder(ordenacaoCursosMain, 'alunosEntrada2')"
-              ></i>
-            </th>
+            </v-th-ordination>
           </template>
           <template #tbody>
             <tr
               v-for="curso in CursosOrdered"
-              :key="'cursos' + curso.id + curso.codigo"
-              @click.stop="showCurso(curso), handleClickInCurso(curso.id)"
+              :key="curso.id + curso.codigo"
+              @click="handleClickInCurso(curso)"
+              class=""
               :class="[
-                { 'bg-selected': cursoClickado === curso.id },
                 'clickable',
+                { 'bg-selected': cursoSelecionado === curso.id },
               ]"
             >
-              <td style="width: 65px" class="t-start">{{ curso.codigo }}</td>
-              <td style="width: 300px" class="t-start">{{ curso.nome }}</td>
-              <td style="width: 65px">{{ curso.turno }}</td>
-              <td style="width: 75px;">{{ curso.alunosEntrada }}</td>
-              <td style="width: 75px;">{{ curso.alunosEntrada2 }}</td>
+              <v-td width="65" align="start">{{ curso.codigo }}</v-td>
+              <v-td width="300" align="start" :title="curso.nome">
+                {{ curso.nome }}
+              </v-td>
+              <v-td width="65">{{ curso.turno }}</v-td>
+              <v-td width="75">{{ curso.alunosEntrada }}</v-td>
+              <v-td width="75">{{ curso.alunosEntrada2 }}</v-td>
             </tr>
             <tr v-if="!CursosOrdered.length">
-              <td colspan="5" style="width:570px" class="text-center">
+              <v-td width="580" colspan="5">
                 <font-awesome-icon
                   :icon="['fas', 'exclamation-triangle']"
                   class="icon-red"
                 />
                 <b> Nenhum curso encontrado!</b>
-              </td>
+              </v-td>
             </tr>
           </template>
         </BaseTable>
@@ -97,11 +96,11 @@
 
       <Card
         :title="'Curso'"
-        :toggleFooter="isEdit"
-        @btn-salvar="editCurso()"
-        @btn-delete="checkDeleteCurso()"
-        @btn-add="addCurso()"
-        @btn-clean="cleanCurso()"
+        :toggleFooter="isEditing"
+        @btn-salvar="handleEditCurso"
+        @btn-delete="openModalDelete"
+        @btn-add="handleCreateCurso"
+        @btn-clean="cleanForm"
       >
         <template #form-group>
           <div class="row mb-2 mx-0">
@@ -111,8 +110,8 @@
                 id="nome"
                 type="text"
                 class="input-maior form-control form-control-sm"
-                @input="cursoForm.nome = $event.target.value.toUpperCase()"
                 :value="cursoForm.nome"
+                @input="cursoForm.nome = $event.target.value.toUpperCase()"
               />
             </div>
           </div>
@@ -124,8 +123,8 @@
                 type="text"
                 class="form-control form-control-sm input-menor"
                 id="codigo"
-                @input="cursoForm.codigo = $event.target.value.toUpperCase()"
                 :value="cursoForm.codigo"
+                @input="cursoForm.codigo = $event.target.value.toUpperCase()"
               />
             </div>
             <div class="form-group col m-0 px-0">
@@ -146,27 +145,31 @@
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
               <label required for="alunosEntrada1" class="col-form-label"
-                >Alunos 1º Sem.</label
-              >
+                >Alunos 1º Período
+              </label>
               <input
-                type="text"
-                class="form-control form-control-sm input-menor"
+                type="number"
+                min="0"
                 id="alunosEnrada1"
+                class="form-control form-control-sm input-menor"
+                v-model.number="cursoForm.alunosEntrada"
                 @keypress="maskOnlyNumber"
-                v-model="cursoForm.alunosEntrada"
+                @blur="maskEmptyToZero($event, cursoForm, 'alunosEntrada')"
               />
             </div>
 
             <div class="form-group col m-0 px-0">
               <label required for="alunosEntrada2" class="col-form-label"
-                >Alunos 2º Sem.</label
-              >
+                >Alunos 2º Período
+              </label>
               <input
-                type="text"
-                class="form-control form-control-sm input-menor"
+                type="number"
+                min="0"
                 id="alunosEntrada2"
+                class="form-control form-control-sm input-menor"
+                v-model.number="cursoForm.alunosEntrada2"
                 @keypress="maskOnlyNumber"
-                v-model="cursoForm.alunosEntrada2"
+                @blur="maskEmptyToZero($event, cursoForm, 'alunosEntrada2')"
               />
             </div>
           </div>
@@ -176,10 +179,10 @@
 
     <ModalDelete
       ref="modalDelete"
-      :isDeleting="isEdit"
-      @btn-deletar="deleteCurso"
+      :isDeleting="isEditing"
+      @btn-deletar="handleDeleteCurso"
     >
-      <li v-if="isEdit" class="list-group-item">
+      <li v-if="isEditing" class="list-group-item">
         <span v-html="modalDeleteText"></span>
       </li>
       <li v-else class="list-group-item">Nenhuma curso selecionado.</li>
@@ -218,54 +221,79 @@
 
 <script>
 import ls from "local-storage";
-import { mapGetters } from "vuex";
-import cursoService from "@/common/services/curso";
-import { toggleOrdination, maskOnlyNumber } from "@/common/mixins";
-import { Card } from "@/components/ui";
+import { mapActions, mapGetters } from "vuex";
+import { maskOnlyNumber, maskEmptyToZero } from "@/common/mixins";
 import { ModalDelete, ModalAjuda } from "@/components/modals";
+import { Card } from "@/components/ui";
 
 const emptyCurso = {
-  id: undefined,
-  nome: undefined,
-  codigo: undefined,
-  turno: undefined,
-  semestreInicial: undefined,
+  id: null,
+  semestreInicial: null,
+  posicao: null,
+  nome: "",
+  codigo: "",
+  turno: "",
   alunosEntrada: 0,
   alunosEntrada2: 0,
-  posicao: undefined,
 };
 
 export default {
   name: "DashboardCursos",
-  mixins: [toggleOrdination, maskOnlyNumber],
+  mixins: [maskOnlyNumber, maskEmptyToZero],
   components: { Card, ModalDelete, ModalAjuda },
   data() {
     return {
       modalDeleteText: "",
-      cursoClickado: "",
+      cursoSelecionado: "",
       cursoForm: this.$_.clone(emptyCurso),
-      ordenacaoCursosMain: { order: "codigo", type: "asc" },
+      ordenacaoCursos: { order: "codigo", type: "asc" },
     };
   },
 
   created() {
-    this.ultimo = this.AllCursos[this.AllCursos.length - 1].id + 1;
     this.selectAll = true;
   },
 
   methods: {
-    handleClickInCurso(cursoId) {
-      this.cursoClickado = cursoId;
+    ...mapActions(["createCurso", "editCurso", "deleteCurso"]),
+
+    handleClickInCurso(curso) {
+      this.cleanForm();
+      this.cursoSelecionado = curso.id;
+      this.cursoForm = this.$_.clone(curso);
+    },
+    cleanForm() {
+      this.cursoSelecionado = "";
+      this.cursoForm = this.$_.clone(emptyCurso);
+    },
+    checkSeCursoTemAlgumPedido(cursoId) {
+      for (let t in this.$store.state.pedido.Pedidos) {
+        let pedido = this.$_.find(this.$store.state.pedido.Pedidos[t], (p) => {
+          if (p.Curso === cursoId) {
+            if (
+              parseInt(p.vagasPeriodizadas, 10) > 0 ||
+              parseInt(p.vagasNaoPeriodizadas, 10) > 0
+            ) {
+              return true;
+            }
+          }
+          return false;
+        });
+        if (pedido) return true;
+      }
+      return false;
     },
     openModalDelete() {
+      if (this.checkSeCursoTemAlgumPedido(this.cursoForm.id)) {
+        this.modalDeleteText = `
+        O curso <b>${this.cursoForm.codigo} - ${this.cursoForm.nome}</b>
+        possui vagas alocadas. Tem certeza que deseja excluí-lo?`;
+      } else {
+        this.modalDeleteText = `Tem certeza que deseja excluír o curso
+        <b>${this.cursoForm.codigo} - ${this.cursoForm.nome}</b>?`;
+      }
+
       this.$refs.modalDelete.open();
-    },
-    clearClick() {
-      this.cursoClickado = "";
-    },
-    showCurso(curso) {
-      this.cleanCurso();
-      this.cursoForm = this.$_.clone(curso);
     },
     toggleCurso(id) {
       var state = ls.get(`${id}`);
@@ -283,153 +311,50 @@ export default {
         ls.set("toggle", true);
       }
     },
-    validateCurso(curso) {
-      for (const key of Object.keys(curso)) {
-        if (key !== "id")
-          if (
-            curso[key] === "" ||
-            curso[key] === null ||
-            curso[key] === undefined
-          )
-            return false;
-      }
-      return true;
-    },
-    checkCursoPedidos() {
-      for (let t in this.$store.state.pedido.Pedidos) {
-        let pedido = this.$_.find(this.$store.state.pedido.Pedidos[t], (p) => {
-          if (p.Curso === this.cursoForm.id) {
-            if (
-              parseInt(p.vagasPeriodizadas, 10) > 0 ||
-              parseInt(p.vagasNaoPeriodizadas, 10) > 0
-            ) {
-              return true;
-            }
-          }
-          return false;
-        });
-        if (pedido) return true;
-      }
-      return false;
-    },
-    checkDeleteCurso() {
-      if (this.checkCursoPedidos()) {
-        this.modalDeleteText = `
-        O curso <b>${this.cursoForm.codigo} - ${this.cursoForm.nome}</b>
-        possui vagas alocadas. Tem certeza que deseja excluí-lo?`;
-      } else {
-        this.modalDeleteText = `Tem certeza que deseja excluír o curso
-        <b>${this.cursoForm.codigo} - ${this.cursoForm.nome}</b>?`;
-      }
-      this.openModalDelete();
-    },
 
-    addCurso() {
-      this.cursoForm.posicao = this.ultimo;
-      this.ultimo = this.ultimo + 1;
-      if (
-        this.cursoForm.alunosEntrada == 0 ||
-        this.cursoForm.alunosEntrada === undefined
-      )
-        if (
-          this.cursoForm.alunosEntrada2 == 0 ||
-          this.cursoForm.alunosEntrada2 === undefined
-        )
-          this.cursoForm.semestreInicial = 3;
-        else this.cursoForm.semestreInicial = 2;
-      else if (
-        this.cursoForm.alunosEntrada2 == 0 ||
-        this.cursoForm.alunosEntrada2 === undefined
-      )
-        this.cursoForm.semestreInicial = 1;
-      else this.cursoForm.semestreInicial = 3;
-
-      if (!this.validateCurso(this.cursoForm)) {
+    async handleCreateCurso() {
+      try {
+        this.setPartialLoading(true);
+        await this.createCurso(this.cursoForm);
+        this.cleanForm();
+      } catch (error) {
         this.pushNotification({
           type: "error",
-          title: "Erro ao criar Curso!",
-          text: "Campos obrigátorios incompletos ou inválidos",
+          title: "Erro ao criar novo curso!",
+          text: error.message || "",
         });
-        return;
+      } finally {
+        this.setPartialLoading(false);
       }
-
-      cursoService
-        .create(this.cursoForm)
-        .then((response) => {
-          this.$store.dispatch("fetchAllPedidos");
-          this.cleanCurso();
-
-          this.pushNotification({
-            title: `Sucesso!`,
-            text: `Curso ${response.Curso.nome} foi criado`,
-            type: "success",
-          });
-        })
-        .catch((error) => {
-          this.pushNotification({
-            type: "error",
-            title: "Erro ao criar Curso!",
-            text: error.message || "",
-          });
-        });
     },
-    editCurso() {
-      if (
-        this.cursoForm.alunosEntrada == 0 ||
-        this.cursoForm.alunosEntrada === undefined
-      )
-        if (
-          this.cursoForm.alunosEntrada2 == 0 ||
-          this.cursoForm.alunosEntrada2 === undefined
-        )
-          this.cursoForm.semestreInicial = 3;
-        else this.cursoForm.semestreInicial = 2;
-      else if (
-        this.cursoForm.alunosEntrada2 == 0 ||
-        this.cursoForm.alunosEntrada2 === undefined
-      )
-        this.cursoForm.semestreInicial = 1;
-      else this.cursoForm.semestreInicial = 3;
-
-      cursoService
-        .update(this.cursoForm.id, this.cursoForm)
-        .then((response) => {
-          this.pushNotification({
-            title: `Sucesso!`,
-            text: `O Curso ${response.Curso.nome} foi atualizado`,
-            type: "success",
-          });
-        })
-        .catch((error) => {
-          this.pushNotification({
-            type: "error",
-            title: "Erro ao atualizar Curso",
-            text: error.message || "",
-          });
+    async handleEditCurso() {
+      try {
+        this.setPartialLoading(true);
+        await this.editCurso(this.cursoForm);
+      } catch (error) {
+        this.pushNotification({
+          type: "error",
+          title: "Erro ao editar curso!",
+          text: error.message || "",
         });
+      } finally {
+        this.setPartialLoading(false);
+      }
     },
-    deleteCurso() {
-      cursoService
-        .delete(this.cursoForm.id, this.cursoForm)
-        .then((response) => {
-          this.cleanCurso();
-          this.pushNotification({
-            title: `Sucesso!`,
-            text: `O Curso ${response.Curso.nome} foi excluído`,
-            type: "success",
-          });
-        })
-        .catch((error) => {
-          this.pushNotification({
-            type: "error",
-            title: "Erro ao excluir Curso!",
-            text: error.message || "",
-          });
+    async handleDeleteCurso() {
+      try {
+        this.setPartialLoading(true);
+        await this.deleteCurso(this.cursoForm);
+        this.cleanForm();
+      } catch (error) {
+        this.pushNotification({
+          type: "error",
+          title: "Erro ao deletar curso!",
+          text: error.message || "",
         });
-    },
-    cleanCurso() {
-      this.clearClick();
-      this.cursoForm = this.$_.clone(emptyCurso);
+      } finally {
+        this.setPartialLoading(false);
+      }
     },
   },
 
@@ -439,12 +364,12 @@ export default {
     CursosOrdered() {
       return this.$_.orderBy(
         this.AllCursos,
-        this.ordenacaoCursosMain.order,
-        this.ordenacaoCursosMain.type
+        this.ordenacaoCursos.order,
+        this.ordenacaoCursos.type
       );
     },
-    isEdit() {
-      return this.cursoForm.id !== undefined;
+    isEditing() {
+      return this.cursoForm.id !== null;
     },
   },
 };

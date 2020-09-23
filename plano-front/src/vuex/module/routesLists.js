@@ -119,6 +119,12 @@ const state = {
       description: `Listagem de todos os planos presentes no sistemas, e permite a adição,edição e exclusão de planos.`,
     },
     {
+      title: "Preferências Docentes",
+      routeName: "preferencias",
+      icon: "users",
+      description: `Listagem de preferências dos docentes, e permite importar um documento xlsx com atualiações das preferências.`,
+    },
+    {
       title: "Salas",
       routeName: "salas",
       icon: "university",

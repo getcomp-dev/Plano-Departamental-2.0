@@ -27,6 +27,7 @@ import routesLists from "./module/routesLists";
 import notifications from "./module/notifications";
 import periodosLetivos from "./module/periodosLetivos";
 import semestresLetivos from "./module/semestresLetivos";
+import docenteDisciplina from "./module/docenteDisciplina";
 
 import {
   HTTP_REQUEST_INCREMENT,
@@ -90,6 +91,7 @@ export default new Vuex.Store({
     notifications,
     periodosLetivos,
     semestresLetivos,
+    docenteDisciplina
   },
 
   strict: process.env.NODE_ENV !== "production",

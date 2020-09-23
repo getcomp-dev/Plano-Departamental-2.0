@@ -5,11 +5,9 @@
     :style="styles"
   >
     <thead class="thead-light max-content sticky">
-      <template v-if="hasSearchBar">
-        <div class="div-search sticky">
-          <slot name="thead-search"></slot>
-        </div>
-      </template>
+      <div class="div-search sticky" v-if="hasSearchBar">
+        <slot name="thead-search"></slot>
+      </div>
       <tr>
         <div :class="hasSearchBar ? 'sticky2' : 'sticky'" class="max-content">
           <slot name="thead"></slot>
@@ -23,9 +21,7 @@
         </div>
       </template>
 
-      <div class="max-content" v-if="type !== 'main' || !onLoading.table">
-        <slot name="tbody"></slot>
-      </div>
+      <slot v-if="type !== 'main' || !onLoading.table" name="tbody"></slot>
     </tbody>
   </table>
 </template>
@@ -71,15 +67,21 @@ export default {
   font-size: 10px !important;
   background-color: #e9ecef !important;
 }
+
 .table-custom thead {
   display: block !important;
   background-color: #e9ecef !important;
 }
+
 .table-custom tbody {
   display: block !important;
   width: max-content;
   background-color: #fff;
 }
+.modal-table tbody {
+  text-transform: uppercase;
+}
+
 .table-custom thead th,
 .table-custom tbody td {
   word-break: break-word;
@@ -104,9 +106,11 @@ td:hover {
   height: 20px !important;
 }
 .modal-table tbody tr td {
-  cursor: default;
+  cursor: pointer;
+  user-select: none;
   min-height: 21px !important;
 }
+
 .main-table tbody tr input[type="checkbox"] {
   width: 14px !important;
   height: 14px !important;
@@ -127,6 +131,7 @@ td:hover {
   -moz-box-shadow: 0px 0px 0px 0.005px #555;
   box-shadow: 0px 0px 0px 0.005px #555;
 }
+
 .table-custom tbody tr:hover {
   background-color: #dbdbdb;
 }

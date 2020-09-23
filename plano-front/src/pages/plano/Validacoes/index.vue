@@ -85,24 +85,25 @@
         <template #tbody>
           <template v-for="validacaoTurma in TurmasValidacoesOrdered">
             <tr :key="'turmaId' + validacaoTurma.id" class="bg-custom">
-              <td style="width: 35px;">{{ validacaoTurma.periodo }}</td>
-              <td style="width: 75px;" class="t-start">
+              <v-td width="35">{{ validacaoTurma.periodo }}</v-td>
+              <v-td width="75" align="start">
                 {{ validacaoTurma.disciplina.perfil.abreviacao }}
-              </td>
-              <td style="width: 70px;" class="t-start">
-                {{ validacaoTurma.disciplina.codigo }}
-              </td>
-              <td style="width: 300px;" class="t-start">
-                {{ validacaoTurma.disciplina.nome }}
-              </td>
-              <td style="width: 35px">{{ validacaoTurma.letra }}</td>
-              <td style="width: 130px">
+              </v-td>
+              <v-td width="70" align="start">{{
+                validacaoTurma.disciplina.codigo
+              }}</v-td>
+              <v-td width="300" align="start">{{
+                validacaoTurma.disciplina.nome
+              }}</v-td>
+              <v-td width="35">{{ validacaoTurma.letra }}</v-td>
+              <v-td width="130" align="start">
                 {{ validacaoTurma.docente1Apelido }}
                 <br />
                 {{ validacaoTurma.docente2Apelido }}
-              </td>
-              <td style="width: 50px" class="clickable" title="Editar turma">
+              </v-td>
+              <v-td width="50">
                 <button
+                  title="Editar turma"
                   class="btn-table"
                   @click.stop="openModalEditTurma(validacaoTurma)"
                 >
@@ -111,14 +112,14 @@
                     class="icon-darkgray"
                   />
                 </button>
-              </td>
+              </v-td>
             </tr>
 
             <tr
               v-for="(conflito, i) in validacaoTurma.conflitos"
               :key="'conflito' + i + validacaoTurma.id + conflito.type"
             >
-              <td style="width: 35px;">
+              <v-td width="35">
                 <font-awesome-icon
                   v-if="isCritical(conflito.type)"
                   :icon="['fas', 'exclamation-circle']"
@@ -126,11 +127,11 @@
                   title="Conflito critico!"
                   style="font-size: 13px"
                 />
-              </td>
+              </v-td>
 
-              <td colspan="6" style="width:655px" class="t-start">
+              <v-td width="655" align="start" colspan="6">
                 {{ conflito.msg }}
-              </td>
+              </v-td>
             </tr>
           </template>
 
@@ -236,7 +237,7 @@
               :key="periodo.id + periodo.nome"
               @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
             >
-              <td style="width: 25px">
+              <v-td width="25">
                 <input
                   type="checkbox"
                   class="form-check-input position-static m-0"
@@ -244,10 +245,8 @@
                   v-model="filtroPeriodos.selecionados"
                   @click.stop="selecionaPeriodo(periodo)"
                 />
-              </td>
-              <td style="width: 425px" class="t-start upper-case">
-                {{ periodo.nome }}
-              </td>
+              </v-td>
+              <v-td width="425" align="start" :text="periodo.nome" />
             </tr>
           </template>
         </BaseTable>

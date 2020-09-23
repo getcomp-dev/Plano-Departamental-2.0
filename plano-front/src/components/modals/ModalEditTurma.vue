@@ -306,34 +306,29 @@
             />
           </template>
           <template#thead>
-            <th
-              @click="toggleOrder(ordemVagas, 'codigo')"
-              class="clickable t-start"
-              style="width: 50px"
-              title="Clique para ordenar por código"
-            >
-              Cód.
-              <i :class="setIconByOrder(ordemVagas, 'codigo')"></i>
-            </th>
-            <th
-              @click="toggleOrder(ordemVagas, 'nome')"
-              class="clickable t-start"
-              style="width: 320px"
-              title="Clique para ordenar por nome"
-            >
-              Nome
-              <i :class="setIconByOrder(ordemVagas, 'nome')"></i>
-            </th>
-
-            <th
-              @click="toggleOrder(ordemVagas, 'VagasTotais', 'desc')"
-              class="clickable"
-              style="width: 80px"
+            <v-th-ordination
+              :currentOrder="ordemVagas"
+              orderToCheck="codigo"
+              width="50"
+              align="start"
+              title="Código"
+              text="Cód."
+            />
+            <v-th-ordination
+              :currentOrder="ordemVagas"
+              orderToCheck="nome"
+              width="320"
+              align="start"
+              text="Nome"
+            />
+            <v-th-ordination
+              :currentOrder="ordemVagas"
+              orderToCheck="VagasTotais"
+              width="80"
+              orderType="desc"
               title="Vagas periodizadas / Não periodizadas"
-            >
-              Vagas
-              <i :class="setIconByOrder(ordemVagas, 'VagasTotais')"></i>
-            </th>
+              text="Vagas"
+            />
           </template#thead>
           <template#tbody>
             <tr
@@ -369,14 +364,13 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { normalizeText } from "@/common/utils";
-import { toggleOrdination, maskTurmaLetra } from "@/common/mixins";
-
+import { maskTurmaLetra } from "@/common/mixins";
 import InputSearch from "../ui/InputSearch";
 import InputsPedidosDCC from "../ui/InputsPedidosDCC.vue";
 
 export default {
   name: "ModalEditTurmaBody",
-  mixins: [toggleOrdination, maskTurmaLetra],
+  mixins: [maskTurmaLetra],
   components: { InputSearch, InputsPedidosDCC },
   props: {
     turma: { type: Object, required: true },
@@ -1423,6 +1417,7 @@ export default {
       return this.$store.state.pedido.Pedidos[this.turma.id];
     },
   },
+
   watch: {
     turma: {
       handler: "resetTurmaForm",

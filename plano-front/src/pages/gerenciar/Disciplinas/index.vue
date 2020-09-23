@@ -3,8 +3,8 @@
     <PageHeader :title="'Disciplinas'">
       <BaseButton
         title="Ajuda"
-        :type="'icon'"
-        :color="'lightblue'"
+        type="icon"
+        color="lightblue"
         @click="$refs.modalAjuda.toggle()"
       >
         <font-awesome-icon :icon="['fas', 'question']" />
@@ -12,119 +12,113 @@
     </PageHeader>
 
     <div class="page-content">
-      <div class="div-table p-0">
+      <div class="div-table">
         <BaseTable>
           <template #thead>
-            <th
-              style="width: 82px; text-align:start"
-              @click="toggleOrder(ordenacaoMain.disciplinas, 'codigo')"
-              class="clickable"
-              title="Clique para ordenar por código"
+            <v-th-ordination
+              :currentOrder="ordenacaoMain.disciplina"
+              orderToCheck="codigo"
+              width="85"
+              align="start"
             >
               Código
-              <i
-                :class="setIconByOrder(ordenacaoMain.disciplinas, 'codigo')"
-              ></i>
-            </th>
-            <th
-              @click="toggleOrder(ordenacaoMain.disciplinas, 'nome')"
-              style="width: 300px; text-align:start"
-              class="clickable"
-              title="Clique para ordenar por nome"
+            </v-th-ordination>
+
+            <v-th-ordination
+              :currentOrder="ordenacaoMain.disciplina"
+              orderToCheck="nome"
+              width="300"
+              align="start"
             >
               Nome
-              <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'nome')"></i>
-            </th>
-            <th
-              style="width: 80px"
-              class="clickable t-start"
-              @click="toggleOrder(ordenacaoMain.perfis, setFixedOrderPerfil)"
+            </v-th-ordination>
+
+            <v-th-ordination
+              :orderFixed="true"
+              :currentOrder="ordenacaoMain.perfil"
+              orderToCheck="perfil.abreviacao"
+              width="80"
+              align="start"
             >
-              <div class="d-flex justify-content-between align-items-center">
-                <i
-                  class="fas fa-thumbtack"
-                  :class="
-                    ordenacaoMain.perfis.order === null ? 'low-opacity' : ''
-                  "
-                ></i>
-                <span>Perfil</span>
+              Perfil
+            </v-th-ordination>
 
-                <i
-                  :class="
-                    setIconByOrder(ordenacaoMain.perfis, 'perfilAbreviacao')
-                  "
-                ></i>
-              </div>
-            </th>
-            <th style="width: 40px" title="Carga Teórica">C.T.</th>
-            <th style="width: 40px" title="Carga Prática">C.P.</th>
+            <v-th width="40" title="Carga Teórica">
+              C.T.
+            </v-th>
+            <v-th width="40" title="Carga Prática">
+              C.P.
+            </v-th>
 
-            <th
-              style="width: 70px"
-              class="clickable"
-              @click="toggleOrder(ordenacaoMain.disciplinas, 'ead', 'desc')"
+            <v-th-ordination
+              :currentOrder="ordenacaoMain.disciplina"
+              orderToCheck="ead"
+              orderType="desc"
+              width="70"
             >
               EAD
-              <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'ead')"></i>
-            </th>
-            <th
-              style="width: 70px"
-              class="clickable"
-              @click="
-                toggleOrder(ordenacaoMain.disciplinas, 'laboratorio', 'desc')
-              "
+            </v-th-ordination>
+
+            <v-th-ordination
+              :currentOrder="ordenacaoMain.disciplina"
+              orderToCheck="laboratorio"
+              orderType="desc"
+              width="70"
+              title="Laborátorio"
             >
-              Lab
-              <i
-                :class="
-                  setIconByOrder(ordenacaoMain.disciplinas, 'laboratorio')
-                "
-              ></i>
-            </th>
-            <th
-              style="width: 100px"
-              class="clickable"
-              @click="toggleOrder(ordenacaoMain.disciplinas, 'departamento')"
+              Lab.
+            </v-th-ordination>
+
+            <v-th-ordination
+              :currentOrder="ordenacaoMain.disciplina"
+              orderToCheck="departamento"
+              width="70"
+              title="Departamento"
             >
-              Departamento
-              <i
-                :class="
-                  setIconByOrder(ordenacaoMain.disciplinas, 'departamento')
-                "
-              ></i>
-            </th>
+              Depto.
+            </v-th-ordination>
           </template>
           <template #tbody>
-            <template v-for="disciplina in DisciplinasOrdered">
-              <tr
-                :key="'table disciplina:' + disciplina.id"
-                @click.prevent="handleClickInDisciplina(disciplina)"
-                :class="[
-                  { 'bg-selected': disciplinaClickada === disciplina.id },
-                  'clickable',
-                ]"
-              >
-                <td style="width: 82px" class="t-start">
-                  {{ disciplina.codigo }}
-                </td>
-                <td style="width: 300px" class="t-start">
-                  {{ disciplina.nome }}
-                </td>
-                <td style="width: 80px" class="t-start">
-                  {{ disciplina.perfilAbreviacao }}
-                </td>
-                <td style="width: 40px">{{ disciplina.cargaTeorica }}</td>
-                <td style="width: 40px">{{ disciplina.cargaPratica }}</td>
-
-                <td style="width: 70px">{{ textoEad(disciplina.ead) }}</td>
-                <td style="width: 70px">
-                  {{ textoLab(disciplina.laboratorio) }}
-                </td>
-                <td style="width: 100px">
-                  {{ textoDpto(disciplina.departamento) }}
-                </td>
-              </tr>
-            </template>
+            <tr
+              v-for="disciplina in DisciplinasInPerfisOrdered"
+              :key="disciplina.id + disciplina.nome"
+              @click="handleClickInDisciplina(disciplina)"
+              :class="['clickable', disciplinaEstaSelecionada(disciplina.id)]"
+            >
+              <v-td width="85" align="start">
+                {{ disciplina.codigo }}
+              </v-td>
+              <v-td width="300" align="start">
+                {{ disciplina.nome }}
+              </v-td>
+              <v-td width="80" align="start">
+                {{ disciplina.perfil.abreviacao }}
+              </v-td>
+              <v-td width="40">
+                {{ disciplina.cargaTeorica }}
+              </v-td>
+              <v-td width="40">
+                {{ disciplina.cargaPratica }}
+              </v-td>
+              <v-td width="70">
+                {{ textoEad(disciplina.ead) }}
+              </v-td>
+              <v-td width="70">
+                {{ textoLab(disciplina.laboratorio) }}
+              </v-td>
+              <v-td width="70">
+                {{ textoDepto(disciplina.departamento) }}
+              </v-td>
+            </tr>
+            <tr v-if="!DisciplinasInPerfisOrdered.length">
+              <v-td width="755" colspan="8">
+                <font-awesome-icon
+                  :icon="['fas', 'exclamation-triangle']"
+                  class="icon-red"
+                />
+                <b> Nenhuma disciplina encontrada!</b>
+              </v-td>
+            </tr>
           </template>
         </BaseTable>
       </div>
@@ -132,10 +126,10 @@
       <Card
         :title="'Disciplina'"
         :toggleFooter="isEditing"
-        @btn-salvar="editDisciplina"
+        @btn-salvar="handleEditDisciplina"
         @btn-delete="openModalDelete"
-        @btn-add="addDisciplina"
-        @btn-clean="cleanDisciplina"
+        @btn-add="handleCreateDisciplina"
+        @btn-clean="cleanForm"
       >
         <template #form-group>
           <div class="row mb-2 mx-0">
@@ -145,7 +139,8 @@
                 type="text"
                 id="nome"
                 class="form-control form-control-sm input-maior upper-case"
-                v-model="disciplinaForm.nome"
+                :value="disciplinaForm.nome"
+                @input="disciplinaForm.nome = $event.target.value.toUpperCase()"
               />
             </div>
           </div>
@@ -157,7 +152,10 @@
                 type="text"
                 id="codigo"
                 class="form-control form-control-sm input-medio upper-case"
-                v-model="disciplinaForm.codigo"
+                :value="disciplinaForm.codigo"
+                @input="
+                  disciplinaForm.codigo = $event.target.value.toUpperCase()
+                "
               />
             </div>
             <div class="form-group m-0 col px-0">
@@ -169,13 +167,16 @@
                 class="form-control form-control-sm"
                 v-model="disciplinaForm.Perfil"
               >
-                <option v-if="Perfis.length === 0" type="text" value
+                <option v-if="AllPerfis.length === 0" type="text" value
                   >Nenhum Perfil Encontrado</option
                 >
-                <option value=""></option>
                 <option
-                  v-for="perfil in Perfis"
-                  :key="perfil.id"
+                  value=""
+                  v-if="disciplinaForm.departamento === 2"
+                ></option>
+                <option
+                  v-for="perfil in AllPerfis"
+                  :key="perfil.id + perfil.nome"
                   :value="perfil.id"
                   >{{ perfil.abreviacao }}</option
                 >
@@ -189,11 +190,13 @@
                 >Carga Teórica</label
               >
               <input
-                type="text"
+                type="number"
+                min="0"
                 id="cargaTeorica"
                 class="form-control form-control-sm input-medio t-center"
-                @keypress="maskOnlyNumber"
                 v-model.number="disciplinaForm.cargaTeorica"
+                @keypress="maskOnlyNumber"
+                @blur="maskEmptyToZero($event, disciplinaForm, 'cargaTeorica')"
               />
             </div>
 
@@ -202,11 +205,13 @@
                 >Carga Prática</label
               >
               <input
-                type="text"
+                type="number"
+                min="0"
                 id="cargaPratica"
                 class="form-control form-control-sm input-medio t-center"
+                v-model.number="disciplinaForm.cargaPratica"
                 @keypress="maskOnlyNumber"
-                v-model="disciplinaForm.cargaPratica"
+                @blur="maskEmptyToZero($event, disciplinaForm, 'cargaPratica')"
               />
             </div>
           </div>
@@ -220,7 +225,7 @@
                 type="text"
                 class="form-control form-control-sm input-medio"
                 id="laboratorio"
-                v-model="disciplinaForm.laboratorio"
+                v-model.number="disciplinaForm.laboratorio"
               >
                 <option value="0">Não</option>
                 <option value="1">Sim</option>
@@ -233,7 +238,7 @@
                 type="text"
                 class="form-control form-control-sm input-medio"
                 id="ead"
-                v-model="disciplinaForm.ead"
+                v-model.number="disciplinaForm.ead"
               >
                 <option value="0">Não</option>
                 <option value="1">Integral</option>
@@ -241,19 +246,20 @@
               </select>
             </div>
           </div>
+
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="departamento" class="col-form-label"
-                >Departamento</label
-              >
+              <label required for="departamento" class="col-form-label">
+                Departamento
+              </label>
               <select
                 type="text"
-                class="form-control form-control-sm input-maior"
+                class="form-control form-control-sm input-medio"
                 id="departamento"
                 v-model.number="disciplinaForm.departamento"
               >
-                <option value="1">{{ textoDpto(1) }}</option>
-                <option value="2">{{ textoDpto(2) }}</option>
+                <option value="1">{{ textoDepto(1) }}</option>
+                <option value="2">{{ textoDepto(2) }}</option>
               </select>
             </div>
           </div>
@@ -264,12 +270,12 @@
     <ModalDelete
       ref="modalDelete"
       :isDeleting="isEditing"
-      @btn-deletar="deleteDisciplina"
+      @btn-deletar="handleDeleteDisciplina"
     >
       <li v-if="isEditing" class="list-group-item">
         <span>
           Tem certeza que deseja excluír a disciplina
-          <b>{{ disciplinaForm.codigo + " - " + disciplinaForm.nome }}</b
+          <b>{{ disciplinaForm.codigo }} - {{ disciplinaForm.nome }}</b
           >?
         </span>
       </li>
@@ -308,58 +314,55 @@
 </template>
 
 <script>
-import disciplinaService from "@/common/services/disciplina";
-import { toggleOrdination, maskOnlyNumber } from "@/common/mixins";
-import { Card } from "@/components/ui";
+import { mapActions, mapGetters } from "vuex";
+import { maskOnlyNumber, maskEmptyToZero } from "@/common/mixins";
 import { ModalDelete, ModalAjuda } from "@/components/modals";
+import { Card } from "@/components/ui";
 
 const emptyDisciplina = {
-  id: undefined,
-  nome: undefined,
-  codigo: undefined,
-  cargaTeorica: undefined,
-  cargaPratica: undefined,
-  Perfil: undefined,
-  ead: undefined,
-  laboratorio: undefined,
-  departamento: undefined,
+  id: null,
+  nome: "",
+  codigo: "",
+  Perfil: "",
+  cargaTeorica: 0,
+  cargaPratica: 0,
+  laboratorio: 0,
+  ead: 0,
+  departamento: 1,
 };
 
 export default {
   name: "DashboardDisciplina",
-  mixins: [toggleOrdination, maskOnlyNumber],
+  mixins: [maskOnlyNumber, maskEmptyToZero],
   components: { Card, ModalDelete, ModalAjuda },
   data() {
     return {
+      disciplinaSelecionada: "",
       disciplinaForm: this.$_.clone(emptyDisciplina),
-      error: undefined,
-      disciplinaClickada: "",
       ordenacaoMain: {
-        disciplinas: { order: "codigo", type: "asc" },
-        perfis: { order: null, type: "asc" },
+        disciplina: { order: "codigo", type: "asc" },
+        perfil: { order: null, type: "asc" },
       },
     };
   },
+
   methods: {
+    ...mapActions(["createDisciplina", "editDisciplina", "deleteDisciplina"]),
+
     handleClickInDisciplina(disciplina) {
-      this.disciplinaClickada = disciplina.id;
-      this.showDisciplina(disciplina);
+      this.cleanForm();
+      this.disciplinaSelecionada = disciplina.id;
+      this.disciplinaForm = this.$_.clone(disciplina);
     },
-    allowPerfilNull(disciplina) {
-      if (disciplina.Perfil === "") disciplina.Perfil = null;
-      return !(disciplina.departamento == 1 && !disciplina.Perfil);
+    cleanForm() {
+      this.disciplinaSelecionada = "";
+      this.disciplinaForm = this.$_.clone(emptyDisciplina);
+    },
+    disciplinaEstaSelecionada(disciplinaId) {
+      return this.disciplinaSelecionada === disciplinaId ? "bg-selected" : "";
     },
     openModalDelete() {
       this.$refs.modalDelete.open();
-    },
-    cleanDisciplina() {
-      this.disciplinaClickada = "";
-      this.disciplinaForm = this.$_.clone(emptyDisciplina);
-      this.error = undefined;
-    },
-    showDisciplina(disciplina) {
-      this.cleanDisciplina();
-      this.disciplinaForm = this.$_.clone(disciplina);
     },
     textoLab(lab) {
       if (lab == 0) return "-";
@@ -371,156 +374,78 @@ export default {
       if (ead == 1) return "Integral";
       if (ead == 2) return "Parcial";
     },
-    textoDpto(dpto) {
-      if (dpto == 1) return "DCC";
-      if (dpto == 2) return "Outro";
+    textoDepto(dpto) {
+      if (dpto === 1) return "DCC";
+      if (dpto === 2) return "Outro";
     },
 
-    addDisciplina() {
-      if (this.allowPerfilNull(this.disciplinaForm)) {
-        disciplinaService
-          .create(this.disciplinaForm)
-          .then((response) => {
-            this.cleanDisciplina();
-            this.$notify({
-              group: "general",
-              title: `Sucesso!`,
-              text: `A Disciplina ${response.Disciplina.nome} foi criada!`,
-              type: "success",
-            });
-          })
-          .catch((error) => {
-            this.error = "<b>Erro ao criar Disciplina</b>";
-            console.log(error.response);
-            if (error.response.data.fullMessage) {
-              for (var e = 0; e < error.response.data.errors.length; e++) {
-                if (error.response.data.errors[e].message.search("null") !== -1)
-                  this.error +=
-                    "<br/>" +
-                    error.response.data.errors[e].field +
-                    " não pode ser vazio";
-                else if (
-                  error.response.data.errors[e].message.search("unique") !==
-                    -1 &&
-                  error.response.data.errors[e].field.search("codigo") !== -1
-                )
-                  this.error += "<br/>Disciplina já existe";
-              }
-            }
-            this.$notify({
-              group: "general",
-              title: `Erro!`,
-              text: this.error,
-              type: "error",
-            });
-          });
-      } else {
-        this.$notify({
-          group: "general",
-          title: `Erro!`,
-          text: "Disciplinas do DCC devem fazer parte de um Perfil",
+    async handleCreateDisciplina() {
+      try {
+        this.setPartialLoading(true);
+        await this.createDisciplina(this.disciplinaForm);
+        this.cleanForm();
+      } catch (error) {
+        this.pushNotification({
           type: "error",
+          title: "Erro ao criar nova disciplina!",
+          text: error.message || "",
         });
+      } finally {
+        this.setPartialLoading(false);
       }
     },
-    editDisciplina() {
-      if (this.allowPerfilNull(this.disciplinaForm)) {
-        disciplinaService
-          .update(this.disciplinaForm.id, this.disciplinaForm)
-          .then((response) => {
-            this.$notify({
-              group: "general",
-              title: `Sucesso!`,
-              text: `A Disciplina ${response.Disciplina.nome} foi atualizada!`,
-              type: "success",
-            });
-          })
-          .catch((error) => {
-            this.error = "<b>Erro ao atualizar Disciplina</b>";
-            if (error.response.data.fullMessage) {
-              this.error +=
-                "<br/>" +
-                error.response.data.fullMessage.replace("\n", "<br/>");
-            }
-            this.$notify({
-              group: "general",
-              title: `Erro!`,
-              text: this.error,
-              type: "error",
-            });
-          });
-      } else {
-        this.$notify({
-          group: "general",
-          title: `Erro!`,
-          text: "Disciplinas do DCC devem fazer parte de um Perfil",
+    async handleEditDisciplina() {
+      try {
+        this.setPartialLoading(true);
+        await this.editDisciplina(this.disciplinaForm);
+      } catch (error) {
+        this.pushNotification({
           type: "error",
+          title: "Erro ao atualiza disciplina!",
+          text: error.message || "",
         });
+      } finally {
+        this.setPartialLoading(false);
       }
     },
-    deleteDisciplina() {
-      disciplinaService
-        .delete(this.disciplinaForm.id, this.disciplinaForm)
-        .then((response) => {
-          this.cleanDisciplina();
-          this.$notify({
-            group: "general",
-            title: `Sucesso!`,
-            text: `Disciplina ${response.Disciplina.nome} foi excluída`,
-            type: "success",
-          });
-        })
-        .catch((error) => {
-          this.$notify({
-            group: "general",
-            title: "Erro ao excluir Disciplina!",
-            text: error.response
-              ? "Disciplina não pode possuir nenhum vinculo para ser excluída"
-              : "",
-            type: "error",
-          });
+    async handleDeleteDisciplina() {
+      try {
+        this.setPartialLoading(true);
+        await this.deleteDisciplina(this.disciplinaForm);
+        this.cleanForm();
+      } catch (error) {
+        this.pushNotification({
+          type: "error",
+          title: "Erro ao deletar disciplina!",
+          text: error.message || "",
         });
+      } finally {
+        this.setPartialLoading(false);
+      }
     },
   },
-  computed: {
-    DisciplinasComPerfil() {
-      let disciplinasResultantes = this.$store.state.disciplina.Disciplinas;
 
-      disciplinasResultantes.forEach((disciplina) => {
-        this.$_.find(this.Perfis, (perfil) => {
-          if (perfil.id === disciplina.Perfil) {
-            disciplina.perfilAbreviacao = perfil.abreviacao;
-            return true;
-          }
-        });
-      });
-      return disciplinasResultantes;
-    },
-    DisciplinasOrdered() {
+  computed: {
+    ...mapGetters(["DisciplinasInPerfis", "AllPerfis"]),
+
+    DisciplinasInPerfisOrdered() {
       const disciplinasResultantes = this.$_.orderBy(
-        this.DisciplinasComPerfil,
-        this.ordenacaoMain.disciplinas.order,
-        this.ordenacaoMain.disciplinas.type
+        this.DisciplinasInPerfis,
+        this.ordenacaoMain.disciplina.order,
+        this.ordenacaoMain.disciplina.type
       );
 
-      if (this.ordenacaoMain.perfis.order !== null) {
+      if (this.ordenacaoMain.perfil.order !== null) {
         return this.$_.orderBy(
           disciplinasResultantes,
-          this.ordenacaoMain.perfis.order,
-          this.ordenacaoMain.perfis.type
+          this.ordenacaoMain.perfil.order,
+          this.ordenacaoMain.perfil.type
         );
       }
       return disciplinasResultantes;
     },
-    setFixedOrderPerfil() {
-      if (this.ordenacaoMain.perfis.type === "desc") return null;
-      else return "perfilAbreviacao";
-    },
-    Perfis() {
-      return this.$store.state.perfil.Perfis;
-    },
     isEditing() {
-      return this.disciplinaForm.id !== undefined;
+      return this.disciplinaForm.id !== null;
     },
   },
 };
