@@ -1,9 +1,9 @@
 <template>
-  <div id="PageHeader" class="w-100 p-0 m-0 mb-2 border-bottom">
-    <h1 class="titulo m-0 my-1">{{ title }}</h1>
-    <div class="aside form-group m-0 p-0 my-1">
+  <div class="page-header mb-2 border-bottom">
+    <h1 class="m-0 my-1">{{ title }}</h1>
+    <aside class="aside my-1">
       <slot></slot>
-    </div>
+    </aside>
   </div>
 </template>
 
@@ -13,47 +13,37 @@ export default {
   props: {
     title: {
       type: String,
-      default: "Nenhum titulo passado para o componente!",
+      default: "Nenhum titulo!",
     },
   },
 };
 </script>
 
 <style scoped>
-#PageHeader {
+.page-header {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  width: 100%;
 }
-.titulo {
+.page-header > h1 {
   font-size: 25px;
   font-weight: normal;
   padding: 0 !important;
 }
 .aside {
-  display: flex !important;
-  justify-content: flex-end !important;
+  display: flex;
+  justify-content: flex-end;
 }
+/* Para quando tem um select no slot */
 .input-group {
   width: max-content !important;
 }
 .input-group-text {
-  display: -ms-flexbox;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -moz-box;
   display: flex;
-  -ms-flex-align: center;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-  -moz-box-align: center;
   align-items: center;
-  -ms-flex-pack: center;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-  -moz-box-pack: center;
   justify-content: center;
   width: 50px;
   height: 25px !important;

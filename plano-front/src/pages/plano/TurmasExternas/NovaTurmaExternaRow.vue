@@ -148,7 +148,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["addNovaTurmaExterna"]),
+    ...mapActions(["createTurmaExterna"]),
 
     handleChangeTurno() {
       this.turmaForm.Horario1 = null;
@@ -183,10 +183,10 @@ export default {
       else if (this.$_.some(this.HorariosDiurno, ["id", horarioId]))
         this.turmaForm.turno1 = "Diurno";
     },
-    async handleAddNovaTurma() {
+    async handleCreateTurmaExterna() {
       try {
         this.setPartialLoading(true);
-        await this.addNovaTurmaExterna(this.turmaForm);
+        await this.createTurmaExterna(this.turmaForm);
       } catch (error) {
         this.pushNotification({
           type: "error",

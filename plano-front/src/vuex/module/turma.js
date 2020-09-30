@@ -78,7 +78,7 @@ const actions = {
     });
   },
 
-  async addNovaTurma({ commit, dispatch, rootGetters }, turma) {
+  async createTurma({ commit, dispatch, rootGetters }, turma) {
     const turmaNormalized = _.cloneDeepWith(turma, setEmptyValuesToNull);
     validateObjectKeys(turmaNormalized, ["Disciplina", "letra", "turno1"]);
     turmaNormalized.Plano = rootGetters.currentPlanoId;

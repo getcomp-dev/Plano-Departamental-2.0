@@ -1,32 +1,9 @@
 <template>
   <div class="main-component row p-0">
     <PageHeader :title="'Horários - Laborátorios'">
-      <BaseButton
-        title="Filtros"
-        :type="'icon'"
-        :color="'gray'"
-        @click="toggleAsideModal('filtros')"
-      >
-        <font-awesome-icon :icon="['fas', 'list-ul']" />
-      </BaseButton>
-
-      <BaseButton
-        title="Relátorio"
-        :type="'icon'"
-        :color="'gray'"
-        @click="toggleAsideModal('relatorio')"
-      >
-        <font-awesome-icon :icon="['fas', 'file-alt']" />
-      </BaseButton>
-
-      <BaseButton
-        title="Ajuda"
-        :type="'icon'"
-        :color="'lightblue'"
-        @click="toggleAsideModal('ajuda')"
-      >
-        <font-awesome-icon :icon="['fas', 'question']" />
-      </BaseButton>
+      <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
+      <BaseButton template="relatorio" @click="toggleAsideModal('relatorio')" />
+      <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </PageHeader>
 
     <div class="w-100">
@@ -80,10 +57,7 @@
           </template>
         </BaseTable>
 
-        <BaseTable
-          type="modal"
-          v-show="modalFiltrosTabs.current === 'Períodos'"
-        >
+        <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Períodos'">
           <template #thead>
             <th style="width: 25px"></th>
             <th style="width: 425px" class="t-start">Periodos Letivo</th>
@@ -110,10 +84,7 @@
           </template>
         </BaseTable>
 
-        <BaseTable
-          v-show="modalFiltrosTabs.current === 'Semestres'"
-          :type="'modal'"
-        >
+        <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
           <template #thead>
             <th style="width: 25px"></th>
             <th class="t-start" style="width: 425px">
@@ -177,11 +148,7 @@ import ListHorariosLab from "./ListHorariosLab";
 
 export default {
   name: "DashboardLaboratoriosAlocacao",
-  mixins: [
-    toggleItemInArray,
-    toggleAsideModal,
-    conectaFiltrosSemestresEPeriodos,
-  ],
+  mixins: [toggleItemInArray, toggleAsideModal, conectaFiltrosSemestresEPeriodos],
   components: {
     ModalRelatorio,
     ModalAjuda,
@@ -210,9 +177,7 @@ export default {
       modalFiltrosCallbacks: {
         selectAll: {
           Laboratorios: () => {
-            this.filtroLaboratorios.selecionados = [
-              ...this.LaboratoriosOrdered,
-            ];
+            this.filtroLaboratorios.selecionados = [...this.LaboratoriosOrdered];
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [...this.PeriodosLetivos];

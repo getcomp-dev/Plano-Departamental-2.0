@@ -18,23 +18,8 @@
           >
         </select>
       </div>
-      <BaseButton
-        title="Filtros"
-        :type="'icon'"
-        :color="'gray'"
-        @click="openAsideModal('filtros')"
-      >
-        <font-awesome-icon :icon="['fas', 'list-ul']" />
-      </BaseButton>
-
-      <BaseButton
-        title="Ajuda"
-        :type="'icon'"
-        :color="'lightblue'"
-        @click="openAsideModal('ajuda')"
-      >
-        <font-awesome-icon :icon="['fas', 'question']" />
-      </BaseButton>
+      <BaseButton template="filtros" @click="openAsideModal('filtros')" />
+      <BaseButton template="ajuda" @click="openAsideModal('ajuda')" />
     </PageHeader>
 
     <div class="div-table">
@@ -48,16 +33,12 @@
             <div class="d-flex justify-content-between align-items-center">
               <i
                 class="fas fa-thumbtack"
-                :class="
-                  ordenacaoMain.perfis.order === null ? 'low-opacity' : ''
-                "
+                :class="ordenacaoMain.perfis.order === null ? 'low-opacity' : ''"
               ></i>
               <span>Perfil</span>
 
               <i
-                :class="
-                  setIconByOrder(ordenacaoMain.perfis, 'perfil.abreviacao')
-                "
+                :class="setIconByOrder(ordenacaoMain.perfis, 'perfil.abreviacao')"
               ></i>
             </div>
           </th>
@@ -86,9 +67,7 @@
             @click="toggleOrder(ordenacaoMain.disciplinas, 'gradeCCN')"
           >
             35A
-            <i
-              :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeCCN')"
-            ></i>
+            <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeCCN')"></i>
           </th>
           <th
             title="Ciência da Computação Noturno"
@@ -98,9 +77,7 @@
             @click="toggleOrder(ordenacaoMain.disciplinas, 'gradeCCD')"
           >
             65C
-            <i
-              :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeCCD')"
-            ></i>
+            <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeCCD')"></i>
           </th>
 
           <th
@@ -111,9 +88,7 @@
             @click="toggleOrder(ordenacaoMain.disciplinas, 'gradeEC')"
           >
             65B
-            <i
-              :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeEC')"
-            ></i>
+            <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeEC')"></i>
           </th>
           <th
             title="Sistemas de informação"
@@ -123,9 +98,7 @@
             @click="toggleOrder(ordenacaoMain.disciplinas, 'gradeSI')"
           >
             76A
-            <i
-              :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeSI')"
-            ></i>
+            <i :class="setIconByOrder(ordenacaoMain.disciplinas, 'gradeSI')"></i>
           </th>
         </template>
         <template #tbody>
@@ -211,10 +184,7 @@
       :tabsOptions="modalFiltrosTabs"
     >
       <div class="div-table">
-        <BaseTable
-          v-show="modalFiltrosTabs.current === 'Perfis'"
-          :type="'modal'"
-        >
+        <BaseTable v-show="modalFiltrosTabs.current === 'Perfis'" :type="'modal'">
           <template #thead>
             <th style="width: 25px"></th>
             <th
@@ -265,9 +235,7 @@
               @click="toggleOrder(ordenacaoModal.disciplinas, 'codigo')"
             >
               Cód.
-              <i
-                :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"
-              ></i>
+              <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"></i>
             </th>
             <th
               title="Clique para ordenar por nome"
@@ -276,25 +244,18 @@
               @click="toggleOrder(ordenacaoModal.disciplinas, 'nome')"
             >
               Nome
-              <i
-                :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"
-              ></i>
+              <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"></i>
             </th>
             <th
               title="Clique para ordenar por nome"
               class="t-start clickable"
               style="width: 85px"
-              @click="
-                toggleOrder(ordenacaoModal.disciplinas, 'perfil.abreviacao')
-              "
+              @click="toggleOrder(ordenacaoModal.disciplinas, 'perfil.abreviacao')"
             >
               Perfil
               <i
                 :class="
-                  setIconByOrder(
-                    ordenacaoModal.disciplinas,
-                    'perfil.abreviacao'
-                  )
+                  setIconByOrder(ordenacaoModal.disciplinas, 'perfil.abreviacao')
                 "
               ></i>
             </th>
@@ -303,9 +264,7 @@
             <tr
               v-for="disciplina in DisciplinasOrderedModal"
               :key="'MdDisciplinas' + disciplina.id"
-              @click="
-                toggleItemInArray(disciplina, filtroDisciplinas.selecionados)
-              "
+              @click="toggleItemInArray(disciplina, filtroDisciplinas.selecionados)"
             >
               <td style="width: 25px">
                 <input
@@ -331,10 +290,7 @@
           </template>
         </BaseTable>
 
-        <BaseTable
-          v-show="modalFiltrosTabs.current === 'Cursos'"
-          :type="'modal'"
-        >
+        <BaseTable v-show="modalFiltrosTabs.current === 'Cursos'" :type="'modal'">
           <template #thead>
             <th style="width: 25px"></th>
             <th
@@ -385,8 +341,8 @@
         Clique no ícone filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />. Em
         seguida, utilize as abas para navegar entre os filtros. Selecione as
-        informações que deseja visualizar, incluindo o ano do plano
-        departamental, e clique em OK.
+        informações que deseja visualizar, incluindo o ano do plano departamental, e
+        clique em OK.
       </li>
     </ModalAjuda>
   </div>
@@ -449,9 +405,7 @@ export default {
           },
         },
         btnOk: () => {
-          this.filtroDisciplinas.ativados = [
-            ...this.filtroDisciplinas.selecionados,
-          ];
+          this.filtroDisciplinas.ativados = [...this.filtroDisciplinas.selecionados];
           this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
         },
       },
@@ -581,8 +535,7 @@ export default {
                 //verifica se essa grade está sendo usada para essa disciplina(limite superior)
                 if (
                   (j > 0 &&
-                    this.gradesAtivas[i][j - 1].fim <
-                      gradedisciplina.periodo) ||
+                    this.gradesAtivas[i][j - 1].fim < gradedisciplina.periodo) ||
                   j === 0
                 )
                   //verifica se a disciplina não deveria estar incluída na grade anterior, ou se essa é a grade mais recente(limite inferior)
@@ -660,8 +613,7 @@ export default {
                 //verifica se essa grade está sendo usada para essa disciplina(limite superior)
                 if (
                   (j > 0 &&
-                    this.gradesAtivas[i][j - 1].fim <
-                      gradedisciplina.periodo) ||
+                    this.gradesAtivas[i][j - 1].fim < gradedisciplina.periodo) ||
                   j === 0
                 )
                   //verifica se a disciplina não deveria estar incluída na grade anterior, ou se essa é a grade mais recente(limite inferior)

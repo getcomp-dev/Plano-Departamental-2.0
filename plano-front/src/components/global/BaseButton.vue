@@ -1,12 +1,14 @@
 <template>
   <button
-    :key="generateUniqueKey()"
-    :disabled="disabled"
-    @click="$emit('click')"
-    :class="['btn base-btn', buttonClasses]"
     type="button"
+    :key="uniqueKey"
+    :disabled="disabled"
+    :class="['btn base-btn', options.class]"
+    :title="options.title"
+    @click="$emit('click')"
   >
-    <slot></slot>
+    <font-awesome-icon v-if="options.iconName" :icon="['fas', options.iconName]" />
+    <slot v-else>{{ text }}</slot>
   </button>
 </template>
 
@@ -14,22 +16,72 @@
 export default {
   name: "BaseButton",
   props: {
-    type: { type: String, required: true },
+    template: { type: String, default: null },
+    type: { type: String, default: "text" },
     color: { type: String, default: "gray" },
     disabled: { type: Boolean, default: false },
-  },
-  methods: {
-    generateUniqueKey() {
-      return this.$_.uniqueId(this.color);
-    },
+    text: { type: String | Number, default: "" },
   },
   computed: {
-    buttonClasses() {
-      const { type, color } = this;
+    options() {
+      if (!this.template)
+        return {
+          class: `btn-${this.type} ${this.type}-${this.color}`,
+        };
 
-      if (type === "icon" || type === "text")
-        return `btn-${type} ${type}-${color}`;
-      else return "";
+      let options = {};
+      switch (this.template.toLowerCase()) {
+        case "ajuda":
+          options.title = "Ajuda";
+          options.class = "btn-icon icon-lightblue";
+          options.iconName = "question";
+          break;
+        case "filtros":
+          options.title = "Filtros";
+          options.class = "btn-icon icon-gray";
+          options.iconName = "list-ul";
+          break;
+        case "adicionar":
+          options.title = "Adicionar";
+          options.class = "btn-icon icon-green";
+          options.iconName = "plus";
+          break;
+        case "cancelar":
+          options.title = "Cancelar";
+          options.class = "btn-icon icon-gray";
+          options.iconName = "times";
+          break;
+        case "deletar":
+          options.title = "Deletar";
+          options.class = "btn-icon icon-red";
+          options.iconName = "trash";
+          break;
+        case "salvar":
+          options.title = "Salvar";
+          options.class = "btn-icon icon-blue";
+          options.iconName = "check";
+          break;
+        case "relatorio":
+          options.title = "Relátorio";
+          options.class = "btn-icon icon-gray";
+          options.iconName = "file-alt";
+          break;
+        case "file-upload":
+          options.title = "Upload de Arquivo";
+          options.class = "btn-icon icon-blue";
+          options.iconName = "file-upload";
+          break;
+        default:
+          options.title = "Vazio!";
+          options.class = "btn-icon icon-gray";
+          options.iconName = "exclamation-triangle";
+          break;
+      }
+      return options;
+    },
+    uniqueKey() {
+      if (this.template) return this.$_.uniqueId(this.template);
+      else return this.$_.uniqueId(this.color);
     },
   },
 };

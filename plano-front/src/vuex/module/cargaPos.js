@@ -68,7 +68,7 @@ const actions = {
     });
   },
 
-  async addNovaCargaPos({ commit, rootGetters }, carga) {
+  async createCargaPos({ commit, rootGetters }, carga) {
     const cargaNormalized = _.cloneDeepWith(carga, setEmptyValuesToNull);
     validateObjectKeys(cargaNormalized, [
       "Programa",

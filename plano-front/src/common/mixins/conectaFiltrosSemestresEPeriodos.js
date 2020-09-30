@@ -39,6 +39,7 @@ export default {
       this.conectaPeriodoEmSemestre();
     },
     conectaPeriodoEmSemestre() {
+      this.filtroSemestres.selecionados = [];
       const periodosSelecionados = this.filtroPeriodos.selecionados;
       const semestresSelecionados = this.filtroSemestres.selecionados;
 
@@ -54,18 +55,12 @@ export default {
         semestresSelecionados.push(
           this.$_.find(this.SemestresLetivos, ["id", 1])
         );
-      } else {
-        const index = this.$_.findIndex(semestresSelecionados, ["id", 1]);
-        if (index !== -1) semestresSelecionados.splice(index, 1);
       }
 
       if (periodo3e4EstaSelecionado) {
         semestresSelecionados.push(
           this.$_.find(this.SemestresLetivos, ["id", 2])
         );
-      } else {
-        const index = this.$_.findIndex(semestresSelecionados, ["id", 2]);
-        if (index !== -1) semestresSelecionados.splice(index, 2);
       }
     },
   },

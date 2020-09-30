@@ -1,22 +1,8 @@
 <template>
   <div class="main-component row">
     <PageHeader :title="'Logs'">
-      <BaseButton
-        title="Filtros"
-        :type="'icon'"
-        :color="'gray'"
-        @click="toggleAsideModal('filtros')"
-      >
-        <font-awesome-icon :icon="['fas', 'list-ul']" />
-      </BaseButton>
-      <BaseButton
-        title="Filtros"
-        :type="'icon'"
-        :color="'lightblue'"
-        @click="toggleAsideModal('ajuda')"
-      >
-        <font-awesome-icon :icon="['fas', 'question']" />
-      </BaseButton>
+      <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
+      <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </PageHeader>
 
     <div class="div-table">
@@ -73,10 +59,7 @@
       :tabsOptions="modalFiltrosTabs"
     >
       <div class="div-table">
-        <BaseTable
-          v-show="modalFiltrosTabs.current === 'Tabelas'"
-          :type="'modal'"
-        >
+        <BaseTable v-show="modalFiltrosTabs.current === 'Tabelas'" :type="'modal'">
           <template #thead>
             <th style="width:25px"></th>
             <th style="width: 425px" class="t-start">Nome</th>
@@ -101,10 +84,7 @@
             </tr>
           </template>
         </BaseTable>
-        <BaseTable
-          v-show="modalFiltrosTabs.current === 'Operações'"
-          :type="'modal'"
-        >
+        <BaseTable v-show="modalFiltrosTabs.current === 'Operações'" :type="'modal'">
           <template #thead>
             <th style="width:25px"></th>
             <th style="width: 425px" class="t-start">Tipo</th>
@@ -137,9 +117,9 @@
         <b>Visualizar conteúdo:</b>
         Clique no ícone de filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" /> no
-        cabeçalho da página e, na janela que se abrirá, utilize as abas para
-        navegar entre os tipos de filtro disponíveis. Marque quais informações
-        deseja visualizar, e para finalizar clique no botão OK.
+        cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar
+        entre os tipos de filtro disponíveis. Marque quais informações deseja
+        visualizar, e para finalizar clique no botão OK.
       </li>
     </ModalAjuda>
   </div>
@@ -195,9 +175,7 @@ export default {
         },
         btnOk: () => {
           this.filtroTabelas.ativados = [...this.filtroTabelas.selecionados];
-          this.filtroOperacoes.ativados = [
-            ...this.filtroOperacoes.selecionados,
-          ];
+          this.filtroOperacoes.ativados = [...this.filtroOperacoes.selecionados];
         },
       },
     };
@@ -228,12 +206,9 @@ export default {
         }
         case "DisciplinaGrade": {
           aux = linha.split("/");
-          let disciplina = this.$_.find(
-            this.$store.state.disciplina.Disciplinas,
-            {
-              id: parseInt(aux[1]),
-            }
-          );
+          let disciplina = this.$_.find(this.$store.state.disciplina.Disciplinas, {
+            id: parseInt(aux[1]),
+          });
           let grade = this.$_.find(this.$store.state.grade.Grades, {
             id: parseInt(aux[2]),
           });
@@ -304,32 +279,24 @@ export default {
 
         case "PedidoExterno": {
           aux = linha.split("/");
-          let turmaExterna = this.$_.find(
-            this.$store.state.turmaExterna.Turmas,
-            {
-              id: parseInt(aux[0]),
-            }
-          );
+          let turmaExterna = this.$_.find(this.$store.state.turmaExterna.Turmas, {
+            id: parseInt(aux[0]),
+          });
           let disciplinaPedidoExterno =
             turmaExterna === undefined
               ? undefined
               : this.$_.find(this.$store.state.disciplina.Disciplinas, {
                   id: turmaExterna.Disciplina,
                 });
-          let cursoPedidoExterno = this.$_.find(
-            this.$store.state.curso.Cursos,
-            {
-              id: parseInt(aux[1]),
-            }
-          );
+          let cursoPedidoExterno = this.$_.find(this.$store.state.curso.Cursos, {
+            id: parseInt(aux[1]),
+          });
           linha = `${
             turmaExterna === undefined
               ? aux[0]
               : disciplinaPedidoExterno.codigo + " " + turmaExterna.letra
           }/${
-            cursoPedidoExterno === undefined
-              ? aux[1]
-              : cursoPedidoExterno.codigo
+            cursoPedidoExterno === undefined ? aux[1] : cursoPedidoExterno.codigo
           }`;
           break;
         }
@@ -517,18 +484,12 @@ export default {
     },
     HistoryFilteredByOperacao() {
       return this.$_.filter(this.HistoryFilteredByTabelas, (history) =>
-        this.$_.some(this.filtroOperacoes.ativados, [
-          "id",
-          history.tipoOperacao,
-        ])
+        this.$_.some(this.filtroOperacoes.ativados, ["id", history.tipoOperacao])
       );
     },
     HistoryFilteredByTabelas() {
       return this.$_.filter(this.History, (history) =>
-        this.$_.some(this.filtroTabelas.ativados, [
-          "id",
-          history.tabelaModificada,
-        ])
+        this.$_.some(this.filtroTabelas.ativados, ["id", history.tabelaModificada])
       );
     },
     OperacoesOptions() {

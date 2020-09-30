@@ -10,58 +10,25 @@
         <div class="row m-0 mt-3 d-flex justify-content-end">
           <slot name="footer">
             <template v-if="toggleFooter">
-              <template v-if="isPlano">
-                <BaseButton
-                  title="Copiar Plano"
-                  :type="'icon'"
-                  :color="'lightblue'"
-                  @click="$emit('btn-copy')"
-                  :key="5"
-                >
-                  <font-awesome-icon :icon="['fas', 'copy']" />
-                </BaseButton>
-              </template>
               <BaseButton
-                title="Salvar"
-                :type="'icon'"
-                :color="'green'"
-                @click="$emit('btn-salvar')"
-                :key="1"
+                v-if="isPlano"
+                title="Copiar Plano"
+                type="icon"
+                color="lightblue"
+                @click="$emit('btn-copy')"
               >
-                <font-awesome-icon :icon="['fas', 'check']" />
+                <font-awesome-icon :icon="['fas', 'copy']" />
               </BaseButton>
-              <BaseButton
-                title="Deletar"
-                :type="'icon'"
-                :color="'red'"
-                @click="$emit('btn-delete')"
-                :key="2"
-              >
-                <font-awesome-icon :icon="['fas', 'trash']" />
-              </BaseButton>
+
+              <BaseButton template="Salvar" @click="$emit('btn-salvar')" />
+              <BaseButton template="deletar" @click="$emit('btn-delete')" />
             </template>
 
             <template v-else>
-              <BaseButton
-                title="Adicionar"
-                :type="'icon'"
-                :color="'green'"
-                @click="$emit('btn-add')"
-                :key="4"
-              >
-                <font-awesome-icon :icon="['fas', 'plus']" />
-              </BaseButton>
+              <BaseButton template="adicionar" @click="$emit('btn-add')" />
             </template>
 
-            <BaseButton
-              title="Cancelar"
-              :type="'icon'"
-              :color="'gray'"
-              @click="$emit('btn-clean')"
-              :key="3"
-            >
-              <font-awesome-icon :icon="['fas', 'times']" />
-            </BaseButton>
+            <BaseButton template="cancelar" @click="$emit('btn-clean')" />
           </slot>
         </div>
       </form>

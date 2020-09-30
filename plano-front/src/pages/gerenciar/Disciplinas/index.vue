@@ -1,14 +1,7 @@
 <template>
   <div class="main-component row">
     <PageHeader :title="'Disciplinas'">
-      <BaseButton
-        title="Ajuda"
-        type="icon"
-        color="lightblue"
-        @click="$refs.modalAjuda.toggle()"
-      >
-        <font-awesome-icon :icon="['fas', 'question']" />
-      </BaseButton>
+      <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
     </PageHeader>
 
     <div class="page-content">
@@ -153,9 +146,7 @@
                 id="codigo"
                 class="form-control form-control-sm input-medio upper-case"
                 :value="disciplinaForm.codigo"
-                @input="
-                  disciplinaForm.codigo = $event.target.value.toUpperCase()
-                "
+                @input="disciplinaForm.codigo = $event.target.value.toUpperCase()"
               />
             </div>
             <div class="form-group m-0 col px-0">
@@ -170,10 +161,7 @@
                 <option v-if="AllPerfis.length === 0" type="text" value
                   >Nenhum Perfil Encontrado</option
                 >
-                <option
-                  value=""
-                  v-if="disciplinaForm.departamento === 2"
-                ></option>
+                <option value="" v-if="disciplinaForm.departamento === 2"></option>
                 <option
                   v-for="perfil in AllPerfis"
                   :key="perfil.id + perfil.nome"
@@ -289,21 +277,20 @@
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Editar:</b> Clique na linha da tabela da disciplina que deseja
-        alterar. Em seguida, no cartão à direita, altere as informações que
-        desejar e clique em Salvar
-        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
+        <b>Editar:</b> Clique na linha da tabela da disciplina que deseja alterar. Em
+        seguida, no cartão à direita, altere as informações que desejar e clique em
+        Salvar <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Deletar:</b> Clique na linha da tabela da disciplina que deseja
-        remover. Em seguida, no cartão à direita, clique em Remover
+        <b>Deletar:</b> Clique na linha da tabela da disciplina que deseja remover.
+        Em seguida, no cartão à direita, clique em Remover
         <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
         confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
         <b>Limpar:</b> No cartão à direita, clique em Cancelar
-        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para
-        limpar as informações.
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para limpar
+        as informações.
       </li>
       <li class="list-group-item">
         <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para

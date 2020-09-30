@@ -1,14 +1,7 @@
 <template>
   <div class="main-component">
     <PageHeader :title="'Usuários'">
-      <BaseButton
-        title="Ajuda"
-        :type="'icon'"
-        :color="'lightblue'"
-        @click="$refs.modalAjuda.toggle()"
-      >
-        <font-awesome-icon :icon="['fas', 'question']" />
-      </BaseButton>
+      <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
     </PageHeader>
 
     <div class="page-content">
@@ -136,9 +129,7 @@
                 <!-- confirma nova senha -->
                 <div :key="'confirma'" class="row mb-2 mx-0">
                   <div class="form-group col m-0 px-0">
-                    <label required for="confirmaSenha"
-                      >Confirmar nova senha</label
-                    >
+                    <label required for="confirmaSenha">Confirmar nova senha</label>
                     <InputPassword
                       :iconSize="13"
                       :isInvalid="confirmaSenha != novaSenha"
@@ -169,11 +160,7 @@
       </Card>
     </div>
 
-    <ModalDelete
-      ref="modalDelete"
-      :isDeleting="isEdit"
-      @btn-deletar="deleteUser"
-    >
+    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deleteUser">
       <li class="list-group-item">
         <span>
           <template v-if="isEdit">
@@ -195,21 +182,20 @@
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Editar:</b> Clique na linha da tabela do usuário que deseja alterar.
-        Em seguida, no cartão à direita, altere as informações que desejar e
-        clique em Salvar
-        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
+        <b>Editar:</b> Clique na linha da tabela do usuário que deseja alterar. Em
+        seguida, no cartão à direita, altere as informações que desejar e clique em
+        Salvar <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Deletar:</b> Clique na linha da tabela do usuário que deseja remover.
-        Em seguida, no cartão à direita, clique em Remover
+        <b>Deletar:</b> Clique na linha da tabela do usuário que deseja remover. Em
+        seguida, no cartão à direita, clique em Remover
         <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
         confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
         <b>Limpar:</b> No cartão à direita, clique em Cancelar
-        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para
-        limpar as informações.
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para limpar
+        as informações.
       </li>
       <li class="list-group-item">
         <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para

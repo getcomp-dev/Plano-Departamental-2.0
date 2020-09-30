@@ -4,12 +4,11 @@
       <div class="title-container pl-1">
         <h2 class="title-list">Arquivos inclusos:</h2>
         <BaseButton
-          :type="'text'"
-          :color="'darkblue'"
+          text="Iniciar download"
+          color="darkblue"
           @click="runDownload"
           :disabled="downloadState !== 0 && downloadState !== 5"
-          >Iniciar download</BaseButton
-        >
+        />
       </div>
 
       <ul class="list-group">

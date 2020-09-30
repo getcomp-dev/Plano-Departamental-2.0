@@ -3,60 +3,21 @@
     <PageHeader :title="'Graduação - Outros'">
       <BaseButton
         v-show="isAdding"
-        title="Salvar"
-        :type="'icon'"
-        :color="'green'"
-        @click="addNovaTurma"
-      >
-        <font-awesome-icon :icon="['fas', 'check']" />
-      </BaseButton>
+        template="salvar"
+        @click="$refs.novaTurmaExternaRow.handleCreateTurmaExterna()"
+      />
+      <BaseButton v-show="isAdding" template="cancelar" @click="toggleAddRow" />
+
+      <BaseButton v-show="!isAdding" template="adicionar" @click="toggleAddRow" />
       <BaseButton
         v-show="!isAdding"
-        title="Adicionar"
-        :type="'icon'"
-        :color="'green'"
-        @click="toggleAddRow"
-      >
-        <font-awesome-icon :icon="['fas', 'plus']" />
-      </BaseButton>
-
-      <BaseButton
-        v-show="isAdding"
-        title="Cancelar"
-        :type="'icon'"
-        :color="'gray'"
-        @click="toggleAddRow"
-      >
-        <font-awesome-icon :icon="['fas', 'times']" />
-      </BaseButton>
-
-      <BaseButton
-        v-show="!isAdding"
+        template="deletar"
         title="Deletar selecionados"
-        :type="'icon'"
-        :color="'red'"
         @click="openModalDelete"
-      >
-        <font-awesome-icon :icon="['fas', 'trash']" />
-      </BaseButton>
+      />
 
-      <BaseButton
-        title="Filtros"
-        :type="'icon'"
-        :color="'gray'"
-        @click="toggleAsideModal('filtros')"
-      >
-        <font-awesome-icon :icon="['fas', 'list-ul']" />
-      </BaseButton>
-
-      <BaseButton
-        title="Ajuda"
-        :type="'icon'"
-        :color="'lightblue'"
-        @click="toggleAsideModal('ajuda')"
-      >
-        <font-awesome-icon :icon="['fas', 'question']" />
-      </BaseButton>
+      <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
+      <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </PageHeader>
 
     <div class="div-table">
@@ -71,9 +32,7 @@
             title="Código"
           >
             Cód.
-            <i
-              :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.codigo')"
-            ></i>
+            <i :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.codigo')"></i>
           </th>
           <th
             style="width: 330px"
@@ -81,9 +40,7 @@
             @click="toggleOrder(ordenacaoTurmasMain, 'disciplina.nome')"
           >
             Disciplina
-            <i
-              :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.nome')"
-            ></i>
+            <i :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.nome')"></i>
           </th>
           <th style="width: 25px" title="Créditos">C.</th>
           <th style="width: 45px" title="Turma">T.</th>
@@ -166,9 +123,7 @@
           <tr
             v-for="disciplina in DisciplinasExternasOrderedModal"
             :key="disciplina.id + disciplina.nome"
-            @click="
-              toggleItemInArray(disciplina, filtroDisciplinas.selecionadas)
-            "
+            @click="toggleItemInArray(disciplina, filtroDisciplinas.selecionadas)"
           >
             <td style="width: 25px">
               <input
@@ -223,10 +178,7 @@
         </template>
       </BaseTable>
 
-      <BaseTable
-        v-show="modalFiltrosTabs.current === 'Semestres'"
-        :type="'modal'"
-      >
+      <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
         <template #thead>
           <th style="width: 25px"></th>
           <th class="t-start" style="width: 425px">
@@ -289,39 +241,37 @@
         <b>Visualizar conteúdo:</b>
         Clique no ícone de filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" /> no
-        cabeçalho da página e, na janela que se abrirá, utilize as abas para
-        navegar entre os tipos de filtro disponíveis. Marque quais informações
-        deseja visualizar, e para finalizar clique no botão OK.
+        cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar
+        entre os tipos de filtro disponíveis. Marque quais informações deseja
+        visualizar, e para finalizar clique no botão OK.
       </li>
       <li class="list-group-item">
         <b>Adicionar turma:</b> Clique no ícone de adicionar
-        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" /> no
-        cabeçalho da página. Em seguida, preencha a nova linha que irá aparecer
-        no início da tabela. Note que os campos disciplina e turma são
-        obrigatórios. Após preencher os campos, clique no ícone de salvar
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" /> no cabeçalho
+        da página. Em seguida, preencha a nova linha que irá aparecer no início da
+        tabela. Note que os campos disciplina e turma são obrigatórios. Após
+        preencher os campos, clique no ícone de salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" /> ou de
-        cancelar
-        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />.
+        cancelar <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />.
       </li>
       <li class="list-group-item">
         <b>Deletar turma:</b> Marque a(s) turma(s) que deseja deletar através da
-        caixa de seleção na coluna mais à esquerda da tabela. Em seguida, clique
-        no ícone de deletar
-        <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" /> no
-        cabeçalho da página. Confirme a exclusão clicando no botão OK na janela
-        que se abrirá.
+        caixa de seleção na coluna mais à esquerda da tabela. Em seguida, clique no
+        ícone de deletar
+        <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" /> no cabeçalho
+        da página. Confirme a exclusão clicando no botão OK na janela que se abrirá.
       </li>
       <li class="list-group-item">
-        <b>Editar turma:</b> Basta fazer as alterações necessárias diretamente
-        nos campos da tabela. O sistema salvará as modificações automaticamente.
+        <b>Editar turma:</b> Basta fazer as alterações necessárias diretamente nos
+        campos da tabela. O sistema salvará as modificações automaticamente.
       </li>
       <li class="list-group-item">
-        <b>Observações:</b> Em cada coluna de um curso, para cada disciplina,
-        existem dois campos de vagas. O campo superior é destinado às vagas de
-        grade, e o inferior é referente às vagas para alunos não periodizados.
-        Para que uma turma externa apareça na grade horária de um determinado
-        curso, na página "Horários", é preciso que pelo menos uma vaga de grade
-        seja destinada a este curso.
+        <b>Observações:</b> Em cada coluna de um curso, para cada disciplina, existem
+        dois campos de vagas. O campo superior é destinado às vagas de grade, e o
+        inferior é referente às vagas para alunos não periodizados. Para que uma
+        turma externa apareça na grade horária de um determinado curso, na página
+        "Horários", é preciso que pelo menos uma vaga de grade seja destinada a este
+        curso.
       </li>
     </ModalAjuda>
   </div>
@@ -414,9 +364,7 @@ export default {
         },
         btnOk: () => {
           this.filtroPeriodos.ativados = [...this.filtroPeriodos.selecionados];
-          this.filtroDisciplinas.ativadas = [
-            ...this.filtroDisciplinas.selecionadas,
-          ];
+          this.filtroDisciplinas.ativadas = [...this.filtroDisciplinas.selecionadas];
         },
       },
     };
@@ -440,9 +388,6 @@ export default {
     },
     openModalDelete() {
       this.$refs.modalDelete.open();
-    },
-    addNovaTurma() {
-      this.$refs.novaTurmaExternaRow.handleAddNovaTurma();
     },
 
     async handleDeleteTurmas() {
@@ -497,8 +442,7 @@ export default {
       );
     },
     DisciplinasExternasFiltredModal() {
-      if (this.searchCursosModal === "")
-        return this.DisciplinasExternasInPerfis;
+      if (this.searchCursosModal === "") return this.DisciplinasExternasInPerfis;
 
       const searchNormalized = normalizeText(this.searchDisciplinasModal);
 

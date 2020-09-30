@@ -17,22 +17,13 @@
       <div class="mr-auto">
         <BaseButton
           v-if="hasClearDelete"
-          class="paddingX-20"
-          :type="'text'"
-          :color="'gray'"
+          text="Cancelar seleções"
+          color="gray"
+          class="px-3"
           @click="emitClearDelete"
-        >
-          Cancelar seleções
-        </BaseButton>
+        />
       </div>
-      <BaseButton
-        class="paddingX-20"
-        :type="'text'"
-        :color="'red'"
-        @click="emitDelete"
-      >
-        Deletar
-      </BaseButton>
+      <BaseButton text="Deletar" color="red" class="px-3" @click="emitDelete" />
     </template>
   </BaseModal>
 </template>

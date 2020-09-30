@@ -1,32 +1,9 @@
 <template>
   <div class="main-component row p-0">
     <PageHeader :title="'Carga Professores'">
-      <BaseButton
-        title="Filtros"
-        type="icon"
-        color="gray"
-        @click="toggleAsideModal('filtros')"
-      >
-        <font-awesome-icon :icon="['fas', 'list-ul']" />
-      </BaseButton>
-
-      <BaseButton
-        title="Relatório"
-        type="icon"
-        color="gray"
-        @click="toggleAsideModal('relatorio')"
-      >
-        <font-awesome-icon :icon="['fas', 'file-alt']" />
-      </BaseButton>
-
-      <BaseButton
-        title="Ajuda"
-        type="icon"
-        color="lightblue"
-        @click="toggleAsideModal('ajuda')"
-      >
-        <font-awesome-icon :icon="['fas', 'question']" />
-      </BaseButton>
+      <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
+      <BaseButton template="relatorio" @click="toggleAsideModal('relatorio')" />
+      <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </PageHeader>
 
     <div class="div-table">
@@ -46,26 +23,13 @@
           <v-th width="300" align="start">Disciplina</v-th>
           <v-th width="35" title="Turma">T.</v-th>
           <v-th width="130">Horários</v-th>
-          <v-th
-            width="35"
-            paddingX="0"
-            title="Somatório dos créditos no 1º semestre"
+          <v-th width="35" paddingX="0" title="Somatório dos créditos no 1º semestre"
             >CS1
           </v-th>
-          <v-th
-            width="35"
-            paddingX="0"
-            title="Somatório dos créditos no 2º semestre"
+          <v-th width="35" paddingX="0" title="Somatório dos créditos no 2º semestre"
             >CS2
           </v-th>
-          <v-th
-            v-if="
-              filtroSemestresEstaAtivo.primeiro &&
-                filtroSemestresEstaAtivo.segundo
-            "
-            width="40"
-            paddingX="0"
-            title="Somatório total de créditos"
+          <v-th width="40" paddingX="0" title="Somatório total de créditos"
             >CTotal
           </v-th>
         </template>
@@ -73,45 +37,36 @@
         <template #tbody>
           <template v-if="algumFiltroEstaAtivo">
             <template v-for="docente in DocentesComTurmasECargasOrdered">
-              <DocenteRow
-                :key="docente.id + docente.nome"
-                :docente="docente"
-                :semestresAtivados="filtroSemestresEstaAtivo"
-              />
+              <DocenteRow :key="docente.id + docente.nome" :docente="docente" />
               <DocenteTurmaRow
                 v-for="turma in docente.turmas"
-                :key="turma.id + turma.letra + docente.id"
+                :key="turma.id + turma.letra + docente.nome"
                 :turma="turma"
-                :semestresAtivados="filtroSemestresEstaAtivo"
               />
               <DocenteCargaPosRow
                 v-for="carga in docente.cargasPos"
                 :key="carga.id + carga.programa + docente.id"
                 :carga="carga"
-                :semestresAtivados="filtroSemestresEstaAtivo"
               />
             </template>
 
             <template v-if="filtroDocenteSemAlocacaoEstaAtivo">
-              <DocenteRow
-                :docente="DocenteSemAlocacaoComTurmas"
-                :semestresAtivados="filtroSemestresEstaAtivo"
-              />
+              <DocenteRow :docente="DocenteSemAlocacaoComTurmas" />
+
               <DocenteTurmaRow
                 v-for="turma in DocenteSemAlocacaoComTurmas.turmas"
                 :key="turma.id + turma.letra + turma.periodo"
                 :turma="turma"
-                :semestresAtivados="filtroSemestresEstaAtivo"
               />
             </template>
           </template>
 
           <tr v-else>
-            <td :style="`width:${emptyRowWidth}px`">
+            <v-td width="815">
               <b>Nenhum docente encontrado.</b> Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
               para selecioná-los.
-            </td>
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -124,7 +79,7 @@
     >
       <BaseTable
         v-show="modalFiltrosTabs.current === 'Docentes'"
-        :type="'modal'"
+        type="modal"
         :hasSearchBar="true"
       >
         <template #thead-search>
@@ -206,10 +161,7 @@
         </template>
       </BaseTable>
 
-      <BaseTable
-        v-show="modalFiltrosTabs.current === 'Semestres'"
-        :type="'modal'"
-      >
+      <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" type="modal">
         <template #thead>
           <v-th width="25" />
           <v-th width="425" align="start">
@@ -253,8 +205,8 @@
         <b>Relatório:</b>
         Clique no ícone relatório
         <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" />. Em
-        seguida, indique se deseja gerar o relatório completo com a distribuição
-        das disciplinas para todos os professores ou o relatório parcial com as
+        seguida, indique se deseja gerar o relatório completo com a distribuição das
+        disciplinas para todos os professores ou o relatório parcial com as
         informações exibidas na tela.
       </li>
     </ModalAjuda>
@@ -278,11 +230,7 @@ import DocenteCargaPosRow from "./DocenteCargaPosRow";
 
 export default {
   name: "DashboardCargaProfessores",
-  mixins: [
-    toggleItemInArray,
-    toggleAsideModal,
-    conectaFiltrosSemestresEPeriodos,
-  ],
+  mixins: [toggleItemInArray, toggleAsideModal, conectaFiltrosSemestresEPeriodos],
   components: {
     ModalRelatorio,
     ModalAjuda,
@@ -367,8 +315,7 @@ export default {
 
   methods: {
     pdf(completo) {
-      let SemAlocacao;
-      let Docentes;
+      let SemAlocacao, Docentes;
 
       if (completo) {
         SemAlocacao = true;
@@ -387,9 +334,6 @@ export default {
     toggleFiltroDocenteSemAlocacaoSelecionado() {
       this.filtroDocenteSemAlocacao.selecionado = !this.filtroDocenteSemAlocacao
         .selecionado;
-    },
-    periodoEstaAtivo(periodoId) {
-      return this.$_.some(this.filtroPeriodos.ativados, ["id", periodoId]);
     },
     calculaCreditosDaTurma(creditos, docente1Id, docente2Id) {
       if (docente1Id > 0 && docente2Id > 0 && docente1Id !== docente2Id) {
@@ -482,12 +426,10 @@ export default {
         const cargasPosDoDocente = this.calculaCargasPosDoDocente(docente.id);
 
         const creditos1Semestre =
-          turmasDoDocente.creditos1Semestre +
-          cargasPosDoDocente.creditos1Semestre;
+          turmasDoDocente.creditos1Semestre + cargasPosDoDocente.creditos1Semestre;
 
         const creditos2Semestre =
-          turmasDoDocente.creditos2Semestre +
-          cargasPosDoDocente.creditos2Semestre;
+          turmasDoDocente.creditos2Semestre + cargasPosDoDocente.creditos2Semestre;
 
         return {
           ...docente,
@@ -498,7 +440,6 @@ export default {
         };
       });
     },
-
     DocenteSemAlocacaoComTurmas() {
       let creditos1Semestre = 0;
       let creditos2Semestre = 0;
@@ -535,10 +476,8 @@ export default {
           turma.Disciplina != null
       );
 
-      const turmasFilteredByPeriodo = this.$_.filter(
-        turmasSemDocente,
-        (turma) =>
-          this.$_.some(this.filtroPeriodos.ativados, ["id", turma.periodo])
+      const turmasFilteredByPeriodo = this.$_.filter(turmasSemDocente, (turma) =>
+        this.$_.some(this.filtroPeriodos.ativados, ["id", turma.periodo])
       );
 
       return this.$_.orderBy(turmasFilteredByPeriodo, [
@@ -553,10 +492,8 @@ export default {
         (turma) => turma.Docente1 != null || turma.Docente2 != null
       );
 
-      const turmasFilteredByPeriodo = this.$_.filter(
-        turmasComDocente,
-        (turma) =>
-          this.$_.some(this.filtroPeriodos.ativados, ["id", turma.periodo])
+      const turmasFilteredByPeriodo = this.$_.filter(turmasComDocente, (turma) =>
+        this.$_.some(this.filtroPeriodos.ativados, ["id", turma.periodo])
       );
 
       return this.$_.orderBy(turmasFilteredByPeriodo, [
@@ -566,15 +503,9 @@ export default {
       ]);
     },
     CargasPosFilteredByPeriodo() {
-      return this.$_.filter(this.AllCargasPos, (carga) => {
-        if (this.periodoEstaAtivo(1) && this.periodoEstaAtivo(3)) {
-          return true;
-        } else if (this.periodoEstaAtivo(1)) {
-          return carga.trimestre === 1 || carga.trimestre === 2;
-        } else if (this.periodoEstaAtivo(3)) {
-          return carga.trimestre === 3 || carga.trimestre === 4;
-        }
-      });
+      return this.$_.filter(this.AllCargasPos, (carga) =>
+        this.$_.some(this.filtroPeriodos.ativados, ["id", carga.trimestre])
+      );
     },
 
     DocentesOptionsModalOrdered() {
@@ -595,18 +526,11 @@ export default {
         return docenteApelido.match(searchNormalized);
       });
     },
-
     filtroDocenteSemAlocacaoEstaAtivo() {
       return (
         this.DocenteSemAlocacaoComTurmas.turmas.length &&
         this.filtroDocenteSemAlocacao.ativado
       );
-    },
-    filtroSemestresEstaAtivo() {
-      return {
-        primeiro: this.periodoEstaAtivo(1) || this.periodoEstaAtivo(2),
-        segundo: this.periodoEstaAtivo(3) || this.periodoEstaAtivo(4),
-      };
     },
     algumFiltroEstaAtivo() {
       return (
@@ -615,13 +539,6 @@ export default {
         (this.filtroDocenteSemAlocacao.ativado &&
           this.filtroPeriodos.ativados.length)
       );
-    },
-    emptyRowWidth() {
-      const { primeiro, segundo } = this.filtroSemestresEstaAtivo;
-      let tdTotalWidth = 0;
-      if (primeiro && segundo) tdTotalWidth = 40;
-
-      return 775 + tdTotalWidth;
     },
   },
 };

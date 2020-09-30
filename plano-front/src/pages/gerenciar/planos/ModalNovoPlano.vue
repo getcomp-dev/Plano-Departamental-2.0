@@ -36,9 +36,7 @@
               @click="toggleOrder(ordenacaoModal.disciplinas, 'codigo')"
             >
               Cód.
-              <i
-                :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"
-              ></i>
+              <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"></i>
             </th>
             <th
               class="t-start clickable"
@@ -46,16 +44,12 @@
               @click="toggleOrder(ordenacaoModal.disciplinas, 'nome')"
             >
               Nome
-              <i
-                :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"
-              ></i>
+              <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"></i>
             </th>
             <th
               class="t-start clickable"
               style="width: 85px"
-              @click="
-                toggleOrder(ordenacaoModal.disciplinas, 'perfilAbreviacao')
-              "
+              @click="toggleOrder(ordenacaoModal.disciplinas, 'perfilAbreviacao')"
             >
               Perfil
               <i
@@ -101,30 +95,18 @@
     <template #modal-footer>
       <div>
         <BaseButton
-          :type="'text'"
-          :color="'lightblue'"
+          text="Selecionar Todos"
+          color="lightblue"
           @click="selectAllDisciplinas"
-        >
-          Selecionar Todos
-        </BaseButton>
+        />
         <BaseButton
-          :type="'text'"
-          :color="'gray'"
+          text="Desmarcar Todos"
+          color="gray"
           @click="selectNoneDisciplinas"
-        >
-          Desmarcar Todos
-        </BaseButton>
-
+        />
         <slot name="modal-footer-btn"></slot>
       </div>
-      <BaseButton
-        class="paddingX-20"
-        :type="'text'"
-        :color="'green'"
-        @click="createNovoPlano"
-      >
-        OK
-      </BaseButton>
+      <BaseButton text="OK" color="green" class="px-3" @click="createNovoPlano" />
     </template>
   </BaseModal>
 </template>
@@ -188,8 +170,7 @@ export default {
         periodoInicial = periodoFinal + 1;
         periodoFinal =
           1 +
-          2 *
-            (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+          2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
           (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
         this.grades1semestre.CCD.push({
           id: g[i].id,
@@ -205,8 +186,7 @@ export default {
         periodoInicial = periodoFinal + 1;
         periodoFinal =
           1 +
-          2 *
-            (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+          2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
           (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
         this.grades2semestre.CCD.push({
           id: g[i].id,
@@ -225,8 +205,7 @@ export default {
         periodoInicial = periodoFinal + 1;
         periodoFinal =
           1 +
-          2 *
-            (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+          2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
           (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
         this.grades1semestre.CCN.push({
           id: g[i].id,
@@ -242,8 +221,7 @@ export default {
         periodoInicial = periodoFinal + 1;
         periodoFinal =
           1 +
-          2 *
-            (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+          2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
           (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
         this.grades2semestre.CCN.push({
           id: g[i].id,
@@ -262,8 +240,7 @@ export default {
         periodoInicial = periodoFinal + 1;
         periodoFinal =
           1 +
-          2 *
-            (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+          2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
           (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
         this.grades1semestre.SI.push({
           id: g[i].id,
@@ -279,8 +256,7 @@ export default {
         periodoInicial = periodoFinal + 1;
         periodoFinal =
           1 +
-          2 *
-            (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+          2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
           (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
         this.grades2semestre.SI.push({
           id: g[i].id,
@@ -299,8 +275,7 @@ export default {
         periodoInicial = periodoFinal + 1;
         periodoFinal =
           1 +
-          2 *
-            (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+          2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
           (1 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
         this.grades1semestre.EC.push({
           id: g[i].id,
@@ -316,8 +291,7 @@ export default {
         periodoInicial = periodoFinal + 1;
         periodoFinal =
           1 +
-          2 *
-            (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
+          2 * (parseInt(ano, 10) - parseInt(g[i].periodoInicio.slice(0, 4), 10)) +
           (3 - parseInt(g[i].periodoInicio.slice(5, 6), 10)) / 2;
         this.grades2semestre.EC.push({
           id: g[i].id,
@@ -758,17 +732,11 @@ export default {
               console.log("erro ao criar turma: " + error);
             });
         });
-        let turmasCopiar = this.$_.filter(
-          this.$store.state.turma.Turmas,
-          (t) => {
-            let disciplina = this.$_.includes(
-              this.filtrosDisciplinas,
-              t.Disciplina
-            );
-            if (disciplina) return true;
-            else return false;
-          }
-        );
+        let turmasCopiar = this.$_.filter(this.$store.state.turma.Turmas, (t) => {
+          let disciplina = this.$_.includes(this.filtrosDisciplinas, t.Disciplina);
+          if (disciplina) return true;
+          else return false;
+        });
 
         turmasCopiar.forEach((t) => {
           turmaService

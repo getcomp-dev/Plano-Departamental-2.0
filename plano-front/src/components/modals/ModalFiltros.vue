@@ -1,10 +1,5 @@
 <template>
-  <BaseModal
-    ref="baseModalFiltros"
-    type="filtros"
-    title="Filtros"
-    :hasFooter="true"
-  >
+  <BaseModal ref="baseModalFiltros" type="filtros" title="Filtros" :hasFooter="true">
     <template #modal-body>
       <NavTab
         :currentTab="tabsOptions.current"
@@ -19,22 +14,11 @@
 
     <template #modal-footer>
       <div>
-        <BaseButton :type="'text'" :color="'lightblue'" @click="selectAll"
-          >Selecionar Todos</BaseButton
-        >
-        <BaseButton :type="'text'" :color="'gray'" @click="selectNone"
-          >Desmarcar Todos</BaseButton
-        >
+        <BaseButton text="Selecionar Todos" color="lightblue" @click="selectAll" />
+        <BaseButton text="Desmarcar Todos" color="gray" @click="selectNone" />
         <slot name="modal-footer-btn"></slot>
       </div>
-
-      <BaseButton
-        class="paddingX-20"
-        :type="'text'"
-        :color="'green'"
-        @click="selectOk"
-        >OK</BaseButton
-      >
+      <BaseButton text="OK" color="green" class="px-3" @click="selectOk" />
     </template>
   </BaseModal>
 </template>

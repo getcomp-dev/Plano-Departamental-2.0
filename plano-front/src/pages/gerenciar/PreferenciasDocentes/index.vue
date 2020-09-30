@@ -1,10 +1,64 @@
 <template>
     <div>
-        <input type="file" ref="xlsxPrefs" id="xlsxPrefs">
-        <b-button @click="importPrefs">Atualizar Preferências</b-button>
-        <div class="div-table">
+        <PageHeader title="Preferências dos docentes">
+            <BaseButton template="file-upload" @click="openModalUpload()" />
+        </PageHeader>
+        <BaseTable>
+            <template #thead>
+                <v-th width="250">Docente</v-th>
+                <v-th :key="`disciplina${disciplina.id}`" v-for="disciplina in AllDisciplinas" width="80">{{disciplina.codigo}}</v-th>
+            </template>
+            <template #tbody>
+                <tr v-for="docente in AllDocentes" :key="`docente${docente.id}`">
+                    <v-td width = 250>{{docente.nome}}</v-td>
+                    <td class="td-pref" :key="`docente${docente.id}-disciplina${disciplina.id}`" v-for="disciplina in AllDisciplinas" :style="{width: '80px'}"
+                          v-b-popover.hover.right="{
+                            content: `${docente.nome}\n${disciplina.codigo} - ${disciplina.nome}`
+                          }"
+                        v-on:click="openModalEdit(docente, disciplina)"
+                    >{{preferencia(docente, disciplina)}}</td>
+                </tr>
+            </template>
+        </BaseTable>
 
-        </div>
+        <BaseModal ref="modalEdit" :title="'Editar Preferência'" :hasFooter="true">
+            <template #modal-body>
+                <div class="row" :style="{margin: '0'}">
+                    <p>Docente: {{(edit.docente ? edit.docente.nome : '')}}</p>
+                </div>
+                <div class="row" :style="{margin: '0'}">
+                    <p>Disciplina: {{(edit.disciplina ? edit.disciplina.nome : '')}}</p>
+                </div>
+                <div class="row" :style="{display: 'table-cell', verticalAlign: 'middle'}">
+                    <label for="inputPreferenciaDocentes">Preferência: </label>
+                    <input type="text" v-model="preferenciaForm.preferencia" id="inputPreferenciaDocentes" :style="{width: '25px', height: '20px', marginLeft: '10px', textAlign:'center'}">
+                </div>
+            </template>
+            <template #modal-footer>
+                <BaseButton
+                        type="text"
+                        color="lightblue"
+                        @click="handleEditPrefs()"
+                        class="ml-auto"
+                >Confirmar</BaseButton
+                >
+            </template>
+        </BaseModal>
+
+        <BaseModal ref="modalUpload" :title="'Selecione um arquivo para importar'" :hasFooter="true">
+            <template #modal-body>
+                <input type="file" ref="xlsxPrefs" id="xlsxPrefs">
+            </template>
+            <template #modal-footer>
+                <BaseButton
+                        type="text"
+                        color="lightblue"
+                        @click="importPrefs"
+                        class="ml-auto"
+                >Importar</BaseButton
+                >
+            </template>
+        </BaseModal>
     </div>
 </template>
 
@@ -15,7 +69,8 @@
     import { Card } from "@/components/ui";
     import { ModalAjuda, ModalDelete } from "@/components/modals";
     import XLSX from 'xlsx';
-    import _ from 'lodash'
+    import _ from 'lodash';
+    import {SET_PARTIAL_LOADING} from "../../../vuex/mutation-types";
 
     export default {
         name: "DashboardPreferencias",
@@ -23,7 +78,18 @@
         components: { Card, ModalAjuda, ModalDelete },
         data() {
             return {
-               file: undefined
+               file: undefined,
+               preferenciaForm: {
+                   Docente: undefined,
+                   Disciplina: undefined,
+                   preferencia: undefined
+               },
+               edit: {
+                   docente: undefined,
+                   disciplina: undefined,
+                   isZero: undefined
+               },
+               error: undefined
             };
         },
 
@@ -85,9 +151,118 @@
                     }
                 }
                 reader.readAsBinaryString(this.file);
-                console.log('ok')
+                this.$refs.modalUpload.close();
 
+            },
+
+            preferencia(docente, disciplina) {
+                let p = this.$_.find(this.PreferenciaDosDocentes, {Docente: docente.id, Disciplina:disciplina.id})
+                if (p) return p.preferencia
+                else return 0
+            },
+
+            openModalEdit(docente, disciplina) {
+                this.edit.docente = docente
+                this.edit.disciplina = disciplina
+                let p = this.preferencia(docente, disciplina)
+                if(p === 0) this.edit.isZero = true
+                else this.edit.isZero = false
+                this.preferenciaForm = {
+                    Docente: docente.id,
+                    Disciplina: disciplina.id,
+                    preferencia: p
+                }
+                this.$refs.modalEdit.open();
+            },
+
+            handleEditPrefs() {
+                if(this.edit.isZero){
+                    if(this.preferenciaForm.preferencia != 0){
+                        docenteDisciplinaService.create(this.preferenciaForm)
+                            .then(() => {
+                                this.$notify({
+                                    group: "general",
+                                    title: `Sucesso!`,
+                                    text: `Preferência atualizada com sucesso!`,
+                                    type: "success",
+                                });
+                                this.$refs.modalEdit.close()
+                            })
+                            .catch((error) => {
+                                this.error = "<b>Erro ao atualizar Preferência</b>";
+                                if (error.response.data.fullMessage) {
+                                    this.error +=
+                                        "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+                                }
+                                this.$notify({
+                                    group: "general",
+                                    title: `Erro!`,
+                                    text: this.error,
+                                    type: "error",
+                                });
+                            });
+                        this.edit.isZero = false
+                    }
+                }else{
+                    if(this.preferenciaForm.preferencia != this.preferencia(this.edit.docente, this.edit.disciplina)){
+                        if(this.preferenciaForm.preferencia == 0){
+                            docenteDisciplinaService.delete(this.preferenciaForm.Disciplina, this.preferenciaForm.Docente)
+                                .then(() => {
+                                    this.$notify({
+                                        group: "general",
+                                        title: `Sucesso!`,
+                                        text: `Preferência atualizada com sucesso!`,
+                                        type: "success",
+                                    });
+                                    this.$refs.modalEdit.close()
+                                })
+                                .catch((error) => {
+                                    this.error = "<b>Erro ao atualizar Preferência</b>";
+                                    if (error.response.data.fullMessage) {
+                                        this.error +=
+                                            "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+                                    }
+                                    this.$notify({
+                                        group: "general",
+                                        title: `Erro!`,
+                                        text: this.error,
+                                        type: "error",
+                                    });
+                                });
+                            this.edit.isZero = true
+                        }else{
+                            docenteDisciplinaService.update(this.preferenciaForm.Disciplina, this.preferenciaForm.Docente, this.preferenciaForm)
+                                .then(() => {
+                                    this.$notify({
+                                        group: "general",
+                                        title: `Sucesso!`,
+                                        text: `Preferência atualizada com sucesso!`,
+                                        type: "success",
+                                    });
+                                    this.$refs.modalEdit.close()
+                                })
+                                .catch((error) => {
+                                    this.error = "<b>Erro ao atualizar Preferência</b>";
+                                    if (error.response.data.fullMessage) {
+                                        this.error +=
+                                            "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+                                    }
+                                    this.$notify({
+                                        group: "general",
+                                        title: `Erro!`,
+                                        text: this.error,
+                                        type: "error",
+                                    });
+                                });
+                        }
+                    }
+                }
+            },
+
+            openModalUpload() {
+                this.$refs.modalUpload.open();
             }
+
         },
 
         computed: {
@@ -102,5 +277,11 @@
     }
     .card .input-medio {
         width: 150px;
+    }
+
+    .td-pref:hover {
+        color: #1a79b2;
+        text-decoration: underline;
+        cursor: pointer;
     }
 </style>

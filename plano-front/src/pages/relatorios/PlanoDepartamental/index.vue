@@ -1,32 +1,9 @@
 <template>
   <div class="main-component row p-0">
     <PageHeader :title="'Plano Departamental'">
-      <BaseButton
-        title="Filtros"
-        :type="'icon'"
-        :color="'gray'"
-        @click="toggleAsideModal('filtros')"
-      >
-        <font-awesome-icon :icon="['fas', 'list-ul']" />
-      </BaseButton>
-
-      <BaseButton
-        title="Relátorio"
-        :type="'icon'"
-        :color="'gray'"
-        @click="toggleAsideModal('relatorio')"
-      >
-        <font-awesome-icon :icon="['fas', 'file-alt']" />
-      </BaseButton>
-
-      <BaseButton
-        title="Ajuda"
-        :type="'icon'"
-        :color="'lightblue'"
-        @click="toggleAsideModal('ajuda')"
-      >
-        <font-awesome-icon :icon="['fas', 'question']" />
-      </BaseButton>
+      <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
+      <BaseButton template="relatorio" @click="toggleAsideModal('relatorio')" />
+      <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </PageHeader>
 
     <div class="div-table">
@@ -55,9 +32,7 @@
           >
             Perfil
             <i
-              :class="
-                setIconByOrder(ordenacaoMain.disciplinas, 'perfil.abreviacao')
-              "
+              :class="setIconByOrder(ordenacaoMain.disciplinas, 'perfil.abreviacao')"
             ></i>
           </th>
           <th style="width: 35px" title="Créditos">C.</th>
@@ -157,7 +132,8 @@
           <tr v-show="!DisciplinasInTurmasOrdered.length">
             <td colspan="7" style="width: 885px">
               <b>Nenhuma disciplina encontrada.</b> Clique no botão de filtros
-              <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" /> para selecioná-las.
+              <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" /> para
+              selecioná-las.
             </td>
             <template v-if="anyPeriodoIsActived">
               <td style="width: 45px" class="borderX-0"></td>
@@ -194,9 +170,7 @@
               @click="toggleOrder(ordenacaoModal.disciplinas, 'codigo')"
             >
               Cód.
-              <i
-                :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"
-              ></i>
+              <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"></i>
             </th>
             <th
               class="t-start clickable"
@@ -204,24 +178,17 @@
               @click="toggleOrder(ordenacaoModal.disciplinas, 'nome')"
             >
               Nome
-              <i
-                :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"
-              ></i>
+              <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"></i>
             </th>
             <th
               class="t-start clickable"
               style="width: 85px"
-              @click="
-                toggleOrder(ordenacaoModal.disciplinas, 'perfil.abreviacao')
-              "
+              @click="toggleOrder(ordenacaoModal.disciplinas, 'perfil.abreviacao')"
             >
               Perfil
               <i
                 :class="
-                  setIconByOrder(
-                    ordenacaoModal.disciplinas,
-                    'perfil.abreviacao'
-                  )
+                  setIconByOrder(ordenacaoModal.disciplinas, 'perfil.abreviacao')
                 "
               ></i>
             </th>
@@ -256,10 +223,7 @@
           </template>
         </BaseTable>
 
-        <BaseTable
-          :type="'modal'"
-          v-show="modalFiltrosTabs.current === 'Perfis'"
-        >
+        <BaseTable :type="'modal'" v-show="modalFiltrosTabs.current === 'Perfis'">
           <template #thead>
             <th style="width: 25px;"></th>
             <th
@@ -290,10 +254,7 @@
           </template>
         </BaseTable>
 
-        <BaseTable
-          type="modal"
-          v-show="modalFiltrosTabs.current === 'Períodos'"
-        >
+        <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Períodos'">
           <template #thead>
             <th style="width: 25px"></th>
             <th style="width: 425px" class="t-start">Periodos Letivo</th>
@@ -320,10 +281,7 @@
           </template>
         </BaseTable>
 
-        <BaseTable
-          v-show="modalFiltrosTabs.current === 'Semestres'"
-          :type="'modal'"
-        >
+        <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
           <template #thead>
             <th style="width: 25px"></th>
             <th class="t-start" style="width: 425px">
@@ -374,8 +332,8 @@
       </li>
       <li class="list-group-item">
         <b>Visualizar vagas por turma:</b>
-        Clique no número de vagas desta turma, na última coluna da tabela, na
-        linha correspondente.
+        Clique no número de vagas desta turma, na última coluna da tabela, na linha
+        correspondente.
       </li>
     </ModalAjuda>
   </div>
@@ -485,9 +443,7 @@ export default {
         },
         btnOk: () => {
           this.filtroPeriodos.ativados = [...this.filtroPeriodos.selecionados];
-          this.filtroDisciplinas.ativados = [
-            ...this.filtroDisciplinas.selecionados,
-          ];
+          this.filtroDisciplinas.ativados = [...this.filtroDisciplinas.selecionados];
         },
       },
     };
@@ -578,13 +534,11 @@ export default {
       );
     },
     DisciplinasInTurmasFiltredByDisciplina() {
-      return this.$_.filter(
-        this.DisciplinasInTurmasFiltredByPeriodo,
-        (disciplina) =>
-          this.$_.some(
-            this.filtroDisciplinas.ativados,
-            (disciplinaId) => disciplinaId === disciplina.id
-          )
+      return this.$_.filter(this.DisciplinasInTurmasFiltredByPeriodo, (disciplina) =>
+        this.$_.some(
+          this.filtroDisciplinas.ativados,
+          (disciplinaId) => disciplinaId === disciplina.id
+        )
       );
     },
     DisciplinasInTurmasFiltredByPeriodo() {
@@ -610,10 +564,7 @@ export default {
         "periodo"
       );
       return this.$_.map(this.DisciplinasDCCInPerfis, (disciplina) => {
-        const Turmas = this.$_.filter(turmasOrdered, [
-          "Disciplina",
-          disciplina.id,
-        ]);
+        const Turmas = this.$_.filter(turmasOrdered, ["Disciplina", disciplina.id]);
 
         return {
           ...disciplina,

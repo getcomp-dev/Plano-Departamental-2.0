@@ -72,7 +72,7 @@ const actions = {
     });
   },
 
-  async addNovaTurmaExterna({ commit, dispatch, rootGetters }, turma) {
+  async createTurmaExterna({ commit, dispatch, rootGetters }, turma) {
     const turmaNormalized = _.cloneDeepWith(turma, setEmptyValuesToNull);
     validateObjectKeys(turmaNormalized, ["Disciplina", "letra"]);
     turmaNormalized.Plano = rootGetters.currentPlanoId;

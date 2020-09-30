@@ -1,134 +1,82 @@
 <template>
   <div class="main-component row">
     <PageHeader :title="'Graduação - DCC'">
-      <template v-if="isAdding">
-        <BaseButton
-          title="Salvar"
-          :type="'icon'"
-          :color="'green'"
-          @click="$refs.novaTurma.handleAddNovaTurma()"
-        >
-          <font-awesome-icon :icon="['fas', 'check']" />
-        </BaseButton>
-
-        <BaseButton
-          title="Cancelar"
-          :type="'icon'"
-          :color="'gray'"
-          @click="toggleIsAdding"
-        >
-          <font-awesome-icon :icon="['fas', 'times']" />
-        </BaseButton>
-      </template>
-
-      <template v-else>
-        <BaseButton
-          title="Adicionar"
-          :type="'icon'"
-          :color="'green'"
-          @click="toggleIsAdding"
-        >
-          <font-awesome-icon :icon="['fas', 'plus']" />
-        </BaseButton>
-
-        <BaseButton
-          title="Deletar selecionados"
-          :type="'icon'"
-          :color="'red'"
-          @click="$refs.modalDelete.open()"
-        >
-          <font-awesome-icon :icon="['fas', 'trash']" />
-        </BaseButton>
-      </template>
-
       <BaseButton
-        title="Filtros"
-        :type="'icon'"
-        :color="'gray'"
-        @click="toggleAsideModal('filtros')"
-      >
-        <font-awesome-icon :icon="['fas', 'list-ul']" />
-      </BaseButton>
+        v-show="isAdding"
+        template="salvar"
+        @click="$refs.novaTurma.handleCreateTurma()"
+      />
+      <BaseButton v-show="isAdding" template="cancelar" @click="toggleIsAdding" />
 
+      <BaseButton v-show="!isAdding" template="adicionar" @click="toggleIsAdding" />
       <BaseButton
-        title="Relátorio"
-        :type="'icon'"
-        :color="'gray'"
-        @click="generateXlsx"
-      >
-        <font-awesome-icon :icon="['fas', 'file-alt']" />
-      </BaseButton>
+        v-show="!isAdding"
+        template="deletar"
+        title="Deletar selecionados"
+        @click="$refs.modalDelete.open()"
+      />
 
-      <BaseButton
-        title="Ajuda"
-        :type="'icon'"
-        :color="'lightblue'"
-        @click="toggleAsideModal('ajuda')"
-      >
-        <font-awesome-icon :icon="['fas', 'question']" />
-      </BaseButton>
+      <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
+      <BaseButton template="relatorio" @click="generateXlsx" />
+      <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </PageHeader>
 
     <div class="div-table">
       <BaseTable>
         <template #thead>
-          <th style="width:25px"></th>
-          <th style="width:40px" class="p-0">Editar</th>
-          <th style="width:55px" title="Período letivo, ordenação fixa">
+          <v-th width="25" />
+          <v-th width="40" paddingX="0">Editar</v-th>
+          <v-th width="55" paddingX="0" title="Período letivo, ordenação fixa">
             <font-awesome-icon :icon="['fas', 'thumbtack']" />
             P.
-          </th>
-
+          </v-th>
           <v-th-ordination
             :orderFixed="true"
             :currentOrder="ordenacaoMain.perfis"
             orderToCheck="disciplina.perfil.abreviacao"
             width="80"
             align="start"
-            text="Perfil"
-          />
-
+            >Perfil
+          </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoMain.turmas"
             orderToCheck="disciplina.codigo"
             width="80"
-            text="Código"
-          />
-
+            >Código
+          </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoMain.turmas"
             orderToCheck="disciplina.nome"
             width="330"
             align="start"
-            text="Disciplina"
-          />
-
-          <th style="width:25px" title="Créditos">C.</th>
-          <th style="width:45px" class="p-0" title="Turma">T.</th>
-          <th style="width:130px" @click="toggleOrderByPreferencia">
-            <font-awesome-icon  :class="orderByPreferencia ? '' : 'low-opacity'" :icon="['fas', 'thumbtack']" />
+            text=""
+            >Disciplina
+          </v-th-ordination>
+          <v-th width="25" paddingX="0" title="Créditos">C.</v-th>
+          <v-th width="45" paddingX="0" title="Turma">T.</v-th>
+          <v-th width="160" align="start">
+            <!-- @click.native="toggleOrderByPreferencia" -->
+            <!-- <font-awesome-icon  :class="orderByPreferencia ? '' : 'low-opacity'" :icon="['fas', 'thumbtack']" /> -->
             Docente
-          </th>
-          <th style="width:80px">Turno</th>
-          <th style="width:85px">Horário</th>
-          <th style="width:95px">Sala</th>
-          <th style="width:45px" title="Total de vagas">Total</th>
-          <th
+          </v-th>
+          <v-th width="80">Turno</v-th>
+          <v-th width="85">Horário</v-th>
+          <v-th width="95">Sala</v-th>
+          <v-th width="45" title="Total de vagas">Total</v-th>
+          <v-th
+            width="35"
+            paddingX="0"
             v-for="curso in filtroCursos.ativados"
             :key="curso.id + curso.codigo"
-            class="p-0"
-            style="width: 35px"
             v-b-popover.hover.bottom="{
               title: curso.nome,
               content: cursoPopoverContent(curso),
             }"
           >
-            <span
-              class="w-100"
-              :class="{ 'curso-codigo-big': nameIsBig(curso.codigo) }"
-              >{{ curso.codigo }}</span
-            >
-          </th>
+            <span :class="['w-100', { 'curso-codigo-big': nameIsBig(curso.codigo) }]"
+              >{{ curso.codigo }}
+            </span>
+          </v-th>
         </template>
 
         <template #add-row>
@@ -145,20 +93,16 @@
             :key="turma.id + turma.letra"
             :turma="turma"
             :cursosAtivados="filtroCursos.ativados"
-            :order-by-preferencia="orderByPreferencia"
-            @handle-click-in-edit="openModalEditTurma($event)"
+            @click-edit="openModalEditTurma($event)"
           />
+          <!-- :orderByPreferencia="orderByPreferencia" -->
 
-          <tr v-show="TurmasOrdered.length === 0">
-            <td style="width:1115px">
+          <tr v-show="!TurmasOrdered.length">
+            <v-td :width="1145 + 35 * filtroCursos.ativados.length">
               <b>Nenhuma turma encontrada.</b> Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
               para selecioná-las.
-            </td>
-            <td
-              v-if="filtroCursos.ativados.length"
-              :style="`width: ${35 * filtroCursos.ativados.length}px`"
-            ></td>
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -346,10 +290,7 @@
         </template>
       </BaseTable>
 
-      <BaseTable
-        v-show="modalFiltrosTabs.current === 'Semestres'"
-        :type="'modal'"
-      >
+      <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
         <template #thead>
           <th style="width: 25px"></th>
           <th class="t-start" style="width: 425px">
@@ -429,54 +370,50 @@
         <b>Visualizar conteúdo:</b>
         Clique no ícone de filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" /> no
-        cabeçalho da página e, na janela que se abrirá, utilize as abas para
-        navegar entre os tipos de filtro disponíveis. Marque quais informações
-        deseja visualizar, e para finalizar clique no botão OK.
+        cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar
+        entre os tipos de filtro disponíveis. Marque quais informações deseja
+        visualizar, e para finalizar clique no botão OK.
       </li>
       <li class="list-group-item">
         <b>Adicionar turma:</b>
         Clique no ícone de adicionar
-        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" /> no
-        cabeçalho da página. Em seguida, preencha a nova linha que irá aparecer
-        no início da tabela. Note que os campos disciplina, turno e turma são
-        obrigatórios. Após preencher os campos, clique no ícone de salvar
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" /> no cabeçalho
+        da página. Em seguida, preencha a nova linha que irá aparecer no início da
+        tabela. Note que os campos disciplina, turno e turma são obrigatórios. Após
+        preencher os campos, clique no ícone de salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" /> ou de
-        cancelar
-        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />.
+        cancelar <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />.
       </li>
       <li class="list-group-item">
-        <b>Deletar turma(s):</b> Marque a(s) turma(s) que deseja deletar através
-        da caixa de seleção na coluna mais à esquerda da tabela. Em seguida,
-        clique no ícone de deletar
-        <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" /> no
-        cabeçalho da página. Confirme a exclusão clicando no botão OK na janela
-        que se abrirá.
+        <b>Deletar turma(s):</b> Marque a(s) turma(s) que deseja deletar através da
+        caixa de seleção na coluna mais à esquerda da tabela. Em seguida, clique no
+        ícone de deletar
+        <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" /> no cabeçalho
+        da página. Confirme a exclusão clicando no botão OK na janela que se abrirá.
       </li>
       <li class="list-group-item">
         <b>Editar turma:</b>
-        Existem duas formas de se fazer alterações em uma turma. A primeira
-        forma envolve modificar diretamente os campos na tabela. Neste caso, o
-        sistema salvará automaticamente cada alteração. Na segunda forma,
-        deve-se clicar no ícone
+        Existem duas formas de se fazer alterações em uma turma. A primeira forma
+        envolve modificar diretamente os campos na tabela. Neste caso, o sistema
+        salvará automaticamente cada alteração. Na segunda forma, deve-se clicar no
+        ícone
         <font-awesome-icon :icon="['fas', 'edit']" class="icon-darkgray" />
-        presente na couna "Editar". Uma janela de edição irá se abrir. Neste
-        caso, as alterações realizadas nos campos da metade superior da janela
-        somente serão enviadas ao clicar no botão "Salvar". Já para o
-        quantitativo de vagas na parte inferior, as alterações serão salvas
-        automaticamente.
+        presente na couna "Editar". Uma janela de edição irá se abrir. Neste caso, as
+        alterações realizadas nos campos da metade superior da janela somente serão
+        enviadas ao clicar no botão "Salvar". Já para o quantitativo de vagas na
+        parte inferior, as alterações serão salvas automaticamente.
       </li>
       <li class="list-group-item">
         <b>Relatório:</b> Clique no ícone relatório
-        <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" /> e
-        aguarde o download do arquivo (.xlsx) iniciar.
+        <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" /> e aguarde
+        o download do arquivo (.xlsx) iniciar.
       </li>
       <li class="list-group-item">
-        <b>Observações:</b> Em cada coluna de um curso, para cada disciplina,
-        existem dois campos de vagas. O campo superior é destinado às vagas de
-        grade, e o inferior é referente às vagas para alunos não periodizados.
-        Para que uma turma apareça na grade horária de um determinado curso, na
-        página "Horários", é preciso que pelo menos uma vaga de grade seja
-        destinada a este curso.
+        <b>Observações:</b> Em cada coluna de um curso, para cada disciplina, existem
+        dois campos de vagas. O campo superior é destinado às vagas de grade, e o
+        inferior é referente às vagas para alunos não periodizados. Para que uma
+        turma apareça na grade horária de um determinado curso, na página "Horários",
+        é preciso que pelo menos uma vaga de grade seja destinada a este curso.
       </li>
     </ModalAjuda>
   </div>
@@ -598,9 +535,7 @@ export default {
         },
         btnOk: () => {
           this.filtroPeriodos.ativados = [...this.filtroPeriodos.selecionados];
-          this.filtroDisciplinas.ativadas = [
-            ...this.filtroDisciplinas.selecionados,
-          ];
+          this.filtroDisciplinas.ativadas = [...this.filtroDisciplinas.selecionados];
           this.filtroCursos.ativados = [
             ...this.$_.orderBy(this.filtroCursos.selecionados, ["posicao"]),
           ];
@@ -616,7 +551,7 @@ export default {
         perfis: { order: "disciplina.perfil.abreviacao", type: "asc" },
       },
 
-      orderByPreferencia: true
+      orderByPreferencia: true,
     };
   },
 
@@ -711,9 +646,9 @@ export default {
       }
     },
 
-    toggleOrderByPreferencia(){
-      this.orderByPreferencia = !this.orderByPreferencia
-    }
+    toggleOrderByPreferencia() {
+      this.orderByPreferencia = !this.orderByPreferencia;
+    },
   },
 
   computed: {
@@ -774,8 +709,7 @@ export default {
       );
     },
     DisciplinasDCCFiltredModal() {
-      if (this.searchDisciplinasModal === "")
-        return this.DisciplinasDCCInPerfis;
+      if (this.searchDisciplinasModal === "") return this.DisciplinasDCCInPerfis;
 
       const searchNormalized = normalizeText(this.searchDisciplinasModal);
 
@@ -807,8 +741,7 @@ export default {
           const cursoCodigo = normalizeText(curso.codigo);
 
           return (
-            cursoNome.match(searchNormalized) ||
-            cursoCodigo.match(searchNormalized)
+            cursoNome.match(searchNormalized) || cursoCodigo.match(searchNormalized)
           );
         });
       }

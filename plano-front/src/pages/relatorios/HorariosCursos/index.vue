@@ -1,39 +1,14 @@
 <template>
   <div class="main-component row">
     <PageHeader :title="'Horários - Cursos'">
-      <BaseButton
-        title="Filtros"
-        :type="'icon'"
-        :color="'gray'"
-        @click="toggleAsideModal('filtros')"
-      >
-        <font-awesome-icon :icon="['fas', 'list-ul']" />
-      </BaseButton>
-
-      <BaseButton
-        title="Relátorio"
-        :type="'icon'"
-        :color="'gray'"
-        @click="toggleAsideModal('relatorio')"
-      >
-        <font-awesome-icon :icon="['fas', 'file-alt']" />
-      </BaseButton>
-
-      <BaseButton
-        title="Ajuda"
-        :type="'icon'"
-        :color="'lightblue'"
-        @click="toggleAsideModal('ajuda')"
-      >
-        <font-awesome-icon :icon="['fas', 'question']" />
-      </BaseButton>
+      <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
+      <BaseButton template="relatorio" @click="toggleAsideModal('relatorio')" />
+      <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </PageHeader>
 
     <div v-show="!onLoading.table && algumHorariosEstaAtivo" class="w-100 m-0">
       <div
-        v-show="
-          filtroPeriodosEstaAtivo.periodo1 && filtroCursos.ativados.length
-        "
+        v-show="filtroPeriodosEstaAtivo.periodo1 && filtroCursos.ativados.length"
         class="w-100"
       >
         <h2 class="periodo-title">1º Período letivo</h2>
@@ -66,9 +41,7 @@
       </template>
 
       <div
-        v-show="
-          filtroPeriodosEstaAtivo.periodo3 && filtroCursos.ativados.length
-        "
+        v-show="filtroPeriodosEstaAtivo.periodo3 && filtroCursos.ativados.length"
         class="w-100"
       >
         <h2 class="periodo-title">3º Período letivo</h2>
@@ -115,10 +88,7 @@
       :tabsOptions="modalFiltrosTabs"
     >
       <div class="div-table">
-        <BaseTable
-          v-show="modalFiltrosTabs.current === 'Cursos'"
-          :type="'modal'"
-        >
+        <BaseTable v-show="modalFiltrosTabs.current === 'Cursos'" :type="'modal'">
           <template #thead>
             <th style="width: 25px"></th>
             <th
@@ -158,10 +128,7 @@
           </template>
         </BaseTable>
 
-        <BaseTable
-          type="modal"
-          v-show="modalFiltrosTabs.current === 'Períodos'"
-        >
+        <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Períodos'">
           <template #thead>
             <th style="width: 25px"></th>
             <th style="width: 425px" class="t-start">Periodos Letivo</th>
@@ -187,10 +154,7 @@
             </tr>
           </template>
         </BaseTable>
-        <BaseTable
-          v-show="modalFiltrosTabs.current === 'Semestres'"
-          :type="'modal'"
-        >
+        <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
           <template #thead>
             <th style="width: 25px"></th>
             <th class="t-start" style="width: 425px">
@@ -234,9 +198,8 @@
       <li class="list-group-item">
         <b>Relatório:</b> Clique no ícone relatório
         <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" />. Em
-        seguida, indique se deseja gerar o relatório completo com a grade
-        completa de todos os cursos ou o relatório parcial com as informações
-        exibidas na tela.
+        seguida, indique se deseja gerar o relatório completo com a grade completa de
+        todos os cursos ou o relatório parcial com as informações exibidas na tela.
       </li>
     </ModalAjuda>
   </div>
@@ -437,12 +400,8 @@ export default {
       let pedidosExternos = [];
       for (let t in this.$store.state.pedidoExterno.Pedidos) {
         for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
-          if (
-            this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === curso
-          ) {
-            pedidosExternos.push(
-              this.$store.state.pedidoExterno.Pedidos[t][pedido]
-            );
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === curso) {
+            pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido]);
           }
         }
       }
@@ -480,8 +439,7 @@ export default {
             }
             for (let k = 0; k < turmasExternas.length; k++) {
               if (
-                disciplinasGradeAtual[j].Disciplina ==
-                turmasExternas[k].Disciplina
+                disciplinasGradeAtual[j].Disciplina == turmasExternas[k].Disciplina
               ) {
                 let p = this.$_.find(pedidosExternos, {
                   Turma: turmasExternas[k].id,
@@ -656,12 +614,9 @@ export default {
       for (let i = 0; i < turmas.length; i++) {
         for (let j = 0; j < 4; j++) {
           for (let k = 0; k < gradesAtivas[j].length; k++) {
-            let disciplinasGradeAtual = this.$_.filter(
-              this.DisciplinasDasGrades,
-              {
-                Grade: gradesAtivas[j][k].grade.id,
-              }
-            );
+            let disciplinasGradeAtual = this.$_.filter(this.DisciplinasDasGrades, {
+              Grade: gradesAtivas[j][k].grade.id,
+            });
             let disciplinaGrade = this.$_.find(disciplinasGradeAtual, {
               Disciplina: turmas[i].Disciplina,
             });
@@ -719,8 +674,7 @@ export default {
           },
           [
             {
-              text:
-                "Horários dos cursos do Departamento de Ciência da Computação",
+              text: "Horários dos cursos do Departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -747,10 +701,7 @@ export default {
           },
         ],
       });
-      if (
-        this.$_.find(this.filtroCursos.ativados, { codigo: "65C" }) ||
-        completo
-      ) {
+      if (this.$_.find(this.filtroCursos.ativados, { codigo: "65C" }) || completo) {
         tables.push({
           text: "Ciência da Computação - integral",
           bold: true,
@@ -815,10 +766,7 @@ export default {
                     if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                       if (seg !== "") seg = seg + "\n";
                       seg =
-                        seg +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCD1[i][j].letra;
+                        seg + disciplinas[k].codigo + " " + periodosCCD1[i][j].letra;
                     }
                   }
                 }
@@ -827,10 +775,7 @@ export default {
                     if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                       if (ter != "") ter = ter + "\n";
                       ter =
-                        ter +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCD1[i][j].letra;
+                        ter + disciplinas[k].codigo + " " + periodosCCD1[i][j].letra;
                     }
                   }
                 }
@@ -839,10 +784,7 @@ export default {
                     if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                       if (qua != "") qua = qua + "\n";
                       qua =
-                        qua +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCD1[i][j].letra;
+                        qua + disciplinas[k].codigo + " " + periodosCCD1[i][j].letra;
                     }
                   }
                 }
@@ -851,10 +793,7 @@ export default {
                     if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                       if (qui != "") qui = qui + "\n";
                       qui =
-                        qui +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCD1[i][j].letra;
+                        qui + disciplinas[k].codigo + " " + periodosCCD1[i][j].letra;
                     }
                   }
                 }
@@ -863,10 +802,7 @@ export default {
                     if (periodosCCD1[i][j].Disciplina === disciplinas[k].id) {
                       if (sex != "") sex = sex + "\n";
                       sex =
-                        sex +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCD1[i][j].letra;
+                        sex + disciplinas[k].codigo + " " + periodosCCD1[i][j].letra;
                     }
                   }
                 }
@@ -1106,8 +1042,7 @@ export default {
           },
           [
             {
-              text:
-                "Horários dos cursos do Departamento de Ciência da Computação",
+              text: "Horários dos cursos do Departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -1137,10 +1072,7 @@ export default {
         ],
       });
 
-      if (
-        this.$_.find(this.filtroCursos.ativados, { codigo: "35A" }) ||
-        completo
-      ) {
+      if (this.$_.find(this.filtroCursos.ativados, { codigo: "35A" }) || completo) {
         tables.push({
           text: "Ciência da Computação - noturno",
           bold: true,
@@ -1205,10 +1137,7 @@ export default {
                     if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                       if (seg !== "") seg = seg + "\n";
                       seg =
-                        seg +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCN1[i][j].letra;
+                        seg + disciplinas[k].codigo + " " + periodosCCN1[i][j].letra;
                     }
                   }
                 }
@@ -1217,10 +1146,7 @@ export default {
                     if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                       if (ter != "") ter = ter + "\n";
                       ter =
-                        ter +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCN1[i][j].letra;
+                        ter + disciplinas[k].codigo + " " + periodosCCN1[i][j].letra;
                     }
                   }
                 }
@@ -1229,10 +1155,7 @@ export default {
                     if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                       if (qua != "") qua = qua + "\n";
                       qua =
-                        qua +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCN1[i][j].letra;
+                        qua + disciplinas[k].codigo + " " + periodosCCN1[i][j].letra;
                     }
                   }
                 }
@@ -1241,10 +1164,7 @@ export default {
                     if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                       if (qui != "") qui = qui + "\n";
                       qui =
-                        qui +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCN1[i][j].letra;
+                        qui + disciplinas[k].codigo + " " + periodosCCN1[i][j].letra;
                     }
                   }
                 }
@@ -1253,10 +1173,7 @@ export default {
                     if (periodosCCN1[i][j].Disciplina === disciplinas[k].id) {
                       if (sex != "") sex = sex + "\n";
                       sex =
-                        sex +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCN1[i][j].letra;
+                        sex + disciplinas[k].codigo + " " + periodosCCN1[i][j].letra;
                     }
                   }
                 }
@@ -1496,8 +1413,7 @@ export default {
           },
           [
             {
-              text:
-                "Horários dos cursos do Departamento de Ciência da Computação",
+              text: "Horários dos cursos do Departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -1527,10 +1443,7 @@ export default {
         ],
       });
 
-      if (
-        this.$_.find(this.filtroCursos.ativados, { codigo: "65B" }) ||
-        completo
-      ) {
+      if (this.$_.find(this.filtroCursos.ativados, { codigo: "65B" }) || completo) {
         tables.push({
           text: "Engenharia Computacional",
           bold: true,
@@ -1595,10 +1508,7 @@ export default {
                     if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                       if (seg !== "") seg = seg + "\n";
                       seg =
-                        seg +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosEC1[i][j].letra;
+                        seg + disciplinas[k].codigo + " " + periodosEC1[i][j].letra;
                     }
                   }
                 }
@@ -1607,10 +1517,7 @@ export default {
                     if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                       if (ter != "") ter = ter + "\n";
                       ter =
-                        ter +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosEC1[i][j].letra;
+                        ter + disciplinas[k].codigo + " " + periodosEC1[i][j].letra;
                     }
                   }
                 }
@@ -1619,10 +1526,7 @@ export default {
                     if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                       if (qua != "") qua = qua + "\n";
                       qua =
-                        qua +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosEC1[i][j].letra;
+                        qua + disciplinas[k].codigo + " " + periodosEC1[i][j].letra;
                     }
                   }
                 }
@@ -1631,10 +1535,7 @@ export default {
                     if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                       if (qui != "") qui = qui + "\n";
                       qui =
-                        qui +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosEC1[i][j].letra;
+                        qui + disciplinas[k].codigo + " " + periodosEC1[i][j].letra;
                     }
                   }
                 }
@@ -1643,10 +1544,7 @@ export default {
                     if (periodosEC1[i][j].Disciplina === disciplinas[k].id) {
                       if (sex != "") sex = sex + "\n";
                       sex =
-                        sex +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosEC1[i][j].letra;
+                        sex + disciplinas[k].codigo + " " + periodosEC1[i][j].letra;
                     }
                   }
                 }
@@ -1886,8 +1784,7 @@ export default {
           },
           [
             {
-              text:
-                "Horários dos cursos do Departamento de Ciência da Computação",
+              text: "Horários dos cursos do Departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -1917,10 +1814,7 @@ export default {
         ],
       });
 
-      if (
-        this.$_.find(this.filtroCursos.ativados, { codigo: "76A" }) ||
-        completo
-      ) {
+      if (this.$_.find(this.filtroCursos.ativados, { codigo: "76A" }) || completo) {
         tables.push({
           text: "Sistemas de Informação",
           bold: true,
@@ -1985,10 +1879,7 @@ export default {
                     if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                       if (seg !== "") seg = seg + "\n";
                       seg =
-                        seg +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosSI1[i][j].letra;
+                        seg + disciplinas[k].codigo + " " + periodosSI1[i][j].letra;
                     }
                   }
                 }
@@ -1997,10 +1888,7 @@ export default {
                     if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                       if (ter != "") ter = ter + "\n";
                       ter =
-                        ter +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosSI1[i][j].letra;
+                        ter + disciplinas[k].codigo + " " + periodosSI1[i][j].letra;
                     }
                   }
                 }
@@ -2009,10 +1897,7 @@ export default {
                     if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                       if (qua != "") qua = qua + "\n";
                       qua =
-                        qua +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosSI1[i][j].letra;
+                        qua + disciplinas[k].codigo + " " + periodosSI1[i][j].letra;
                     }
                   }
                 }
@@ -2021,10 +1906,7 @@ export default {
                     if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                       if (qui != "") qui = qui + "\n";
                       qui =
-                        qui +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosSI1[i][j].letra;
+                        qui + disciplinas[k].codigo + " " + periodosSI1[i][j].letra;
                     }
                   }
                 }
@@ -2033,10 +1915,7 @@ export default {
                     if (periodosSI1[i][j].Disciplina === disciplinas[k].id) {
                       if (sex != "") sex = sex + "\n";
                       sex =
-                        sex +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosSI1[i][j].letra;
+                        sex + disciplinas[k].codigo + " " + periodosSI1[i][j].letra;
                     }
                   }
                 }
@@ -2276,8 +2155,7 @@ export default {
           },
           [
             {
-              text:
-                "Horários dos cursos do Departamento de Ciência da Computação",
+              text: "Horários dos cursos do Departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -2307,10 +2185,7 @@ export default {
         ],
       });
 
-      if (
-        this.$_.find(this.filtroCursos.ativados, { codigo: "-" }) ||
-        completo
-      ) {
+      if (this.$_.find(this.filtroCursos.ativados, { codigo: "-" }) || completo) {
         tables.push({
           text: "Eletivas",
           bold: true,
@@ -2372,8 +2247,7 @@ export default {
                 for (let k = 0; k < disciplinas.length; k++) {
                   if (eletivas1[j].Disciplina === disciplinas[k].id) {
                     if (seg !== "") seg = seg + "\n";
-                    seg =
-                      seg + disciplinas[k].codigo + " " + eletivas1[j].letra;
+                    seg = seg + disciplinas[k].codigo + " " + eletivas1[j].letra;
                   }
                 }
               }
@@ -2386,8 +2260,7 @@ export default {
                 for (let k = 0; k < disciplinas.length; k++) {
                   if (eletivas1[j].Disciplina === disciplinas[k].id) {
                     if (ter != "") ter = ter + "\n";
-                    ter =
-                      ter + disciplinas[k].codigo + " " + eletivas1[j].letra;
+                    ter = ter + disciplinas[k].codigo + " " + eletivas1[j].letra;
                   }
                 }
               }
@@ -2400,8 +2273,7 @@ export default {
                 for (let k = 0; k < disciplinas.length; k++) {
                   if (eletivas1[j].Disciplina === disciplinas[k].id) {
                     if (qua != "") qua = qua + "\n";
-                    qua =
-                      qua + disciplinas[k].codigo + " " + eletivas1[j].letra;
+                    qua = qua + disciplinas[k].codigo + " " + eletivas1[j].letra;
                   }
                 }
               }
@@ -2414,8 +2286,7 @@ export default {
                 for (let k = 0; k < disciplinas.length; k++) {
                   if (eletivas1[j].Disciplina === disciplinas[k].id) {
                     if (qui != "") qui = qui + "\n";
-                    qui =
-                      qui + disciplinas[k].codigo + " " + eletivas1[j].letra;
+                    qui = qui + disciplinas[k].codigo + " " + eletivas1[j].letra;
                   }
                 }
               }
@@ -2428,8 +2299,7 @@ export default {
                 for (let k = 0; k < disciplinas.length; k++) {
                   if (eletivas1[j].Disciplina === disciplinas[k].id) {
                     if (sex != "") sex = sex + "\n";
-                    sex =
-                      sex + disciplinas[k].codigo + " " + eletivas1[j].letra;
+                    sex = sex + disciplinas[k].codigo + " " + eletivas1[j].letra;
                   }
                 }
               }
@@ -2741,8 +2611,7 @@ export default {
           },
           [
             {
-              text:
-                "Horários dos cursos do Departamento de Ciência da Computação",
+              text: "Horários dos cursos do Departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -2772,10 +2641,7 @@ export default {
         ],
       });
 
-      if (
-        this.$_.find(this.filtroCursos.ativados, { codigo: "65C" }) ||
-        completo
-      ) {
+      if (this.$_.find(this.filtroCursos.ativados, { codigo: "65C" }) || completo) {
         tables.push({
           text: "Ciência da Computação - integral",
           bold: true,
@@ -2840,10 +2706,7 @@ export default {
                     if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
                       if (seg !== "") seg = seg + "\n";
                       seg =
-                        seg +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCD2[i][j].letra;
+                        seg + disciplinas[k].codigo + " " + periodosCCD2[i][j].letra;
                     }
                   }
                 }
@@ -2852,10 +2715,7 @@ export default {
                     if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
                       if (ter != "") ter = ter + "\n";
                       ter =
-                        ter +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCD2[i][j].letra;
+                        ter + disciplinas[k].codigo + " " + periodosCCD2[i][j].letra;
                     }
                   }
                 }
@@ -2864,10 +2724,7 @@ export default {
                     if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
                       if (qua != "") qua = qua + "\n";
                       qua =
-                        qua +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCD2[i][j].letra;
+                        qua + disciplinas[k].codigo + " " + periodosCCD2[i][j].letra;
                     }
                   }
                 }
@@ -2876,10 +2733,7 @@ export default {
                     if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
                       if (qui != "") qui = qui + "\n";
                       qui =
-                        qui +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCD2[i][j].letra;
+                        qui + disciplinas[k].codigo + " " + periodosCCD2[i][j].letra;
                     }
                   }
                 }
@@ -2888,10 +2742,7 @@ export default {
                     if (periodosCCD2[i][j].Disciplina === disciplinas[k].id) {
                       if (sex != "") sex = sex + "\n";
                       sex =
-                        sex +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCD2[i][j].letra;
+                        sex + disciplinas[k].codigo + " " + periodosCCD2[i][j].letra;
                     }
                   }
                 }
@@ -3131,8 +2982,7 @@ export default {
           },
           [
             {
-              text:
-                "Horários dos cursos do Departamento de Ciência da Computação",
+              text: "Horários dos cursos do Departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -3162,10 +3012,7 @@ export default {
         ],
       });
 
-      if (
-        this.$_.find(this.filtroCursos.ativados, { codigo: "35A" }) ||
-        completo
-      ) {
+      if (this.$_.find(this.filtroCursos.ativados, { codigo: "35A" }) || completo) {
         tables.push({
           text: "Ciência da Computação - noturno",
           bold: true,
@@ -3230,10 +3077,7 @@ export default {
                     if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
                       if (seg !== "") seg = seg + "\n";
                       seg =
-                        seg +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCN2[i][j].letra;
+                        seg + disciplinas[k].codigo + " " + periodosCCN2[i][j].letra;
                     }
                   }
                 }
@@ -3242,10 +3086,7 @@ export default {
                     if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
                       if (ter != "") ter = ter + "\n";
                       ter =
-                        ter +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCN2[i][j].letra;
+                        ter + disciplinas[k].codigo + " " + periodosCCN2[i][j].letra;
                     }
                   }
                 }
@@ -3254,10 +3095,7 @@ export default {
                     if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
                       if (qua != "") qua = qua + "\n";
                       qua =
-                        qua +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCN2[i][j].letra;
+                        qua + disciplinas[k].codigo + " " + periodosCCN2[i][j].letra;
                     }
                   }
                 }
@@ -3266,10 +3104,7 @@ export default {
                     if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
                       if (qui != "") qui = qui + "\n";
                       qui =
-                        qui +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCN2[i][j].letra;
+                        qui + disciplinas[k].codigo + " " + periodosCCN2[i][j].letra;
                     }
                   }
                 }
@@ -3278,10 +3113,7 @@ export default {
                     if (periodosCCN2[i][j].Disciplina === disciplinas[k].id) {
                       if (sex != "") sex = sex + "\n";
                       sex =
-                        sex +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosCCN2[i][j].letra;
+                        sex + disciplinas[k].codigo + " " + periodosCCN2[i][j].letra;
                     }
                   }
                 }
@@ -3521,8 +3353,7 @@ export default {
           },
           [
             {
-              text:
-                "Horários dos cursos do Departamento de Ciência da Computação",
+              text: "Horários dos cursos do Departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -3552,10 +3383,7 @@ export default {
         ],
       });
 
-      if (
-        this.$_.find(this.filtroCursos.ativados, { codigo: "65B" }) ||
-        completo
-      ) {
+      if (this.$_.find(this.filtroCursos.ativados, { codigo: "65B" }) || completo) {
         tables.push({
           text: "Engenharia Computacional",
           bold: true,
@@ -3620,10 +3448,7 @@ export default {
                     if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
                       if (seg !== "") seg = seg + "\n";
                       seg =
-                        seg +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosEC2[i][j].letra;
+                        seg + disciplinas[k].codigo + " " + periodosEC2[i][j].letra;
                     }
                   }
                 }
@@ -3632,10 +3457,7 @@ export default {
                     if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
                       if (ter != "") ter = ter + "\n";
                       ter =
-                        ter +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosEC2[i][j].letra;
+                        ter + disciplinas[k].codigo + " " + periodosEC2[i][j].letra;
                     }
                   }
                 }
@@ -3644,10 +3466,7 @@ export default {
                     if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
                       if (qua != "") qua = qua + "\n";
                       qua =
-                        qua +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosEC2[i][j].letra;
+                        qua + disciplinas[k].codigo + " " + periodosEC2[i][j].letra;
                     }
                   }
                 }
@@ -3656,10 +3475,7 @@ export default {
                     if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
                       if (qui != "") qui = qui + "\n";
                       qui =
-                        qui +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosEC2[i][j].letra;
+                        qui + disciplinas[k].codigo + " " + periodosEC2[i][j].letra;
                     }
                   }
                 }
@@ -3668,10 +3484,7 @@ export default {
                     if (periodosEC2[i][j].Disciplina === disciplinas[k].id) {
                       if (sex != "") sex = sex + "\n";
                       sex =
-                        sex +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosEC2[i][j].letra;
+                        sex + disciplinas[k].codigo + " " + periodosEC2[i][j].letra;
                     }
                   }
                 }
@@ -3911,8 +3724,7 @@ export default {
           },
           [
             {
-              text:
-                "Horários dos cursos do Departamento de Ciência da Computação",
+              text: "Horários dos cursos do Departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -3942,10 +3754,7 @@ export default {
         ],
       });
 
-      if (
-        this.$_.find(this.filtroCursos.ativados, { codigo: "76A" }) ||
-        completo
-      ) {
+      if (this.$_.find(this.filtroCursos.ativados, { codigo: "76A" }) || completo) {
         tables.push({
           text: "Sistemas de Informação",
           bold: true,
@@ -4010,10 +3819,7 @@ export default {
                     if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
                       if (seg !== "") seg = seg + "\n";
                       seg =
-                        seg +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosSI2[i][j].letra;
+                        seg + disciplinas[k].codigo + " " + periodosSI2[i][j].letra;
                     }
                   }
                 }
@@ -4022,10 +3828,7 @@ export default {
                     if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
                       if (ter != "") ter = ter + "\n";
                       ter =
-                        ter +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosSI2[i][j].letra;
+                        ter + disciplinas[k].codigo + " " + periodosSI2[i][j].letra;
                     }
                   }
                 }
@@ -4034,10 +3837,7 @@ export default {
                     if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
                       if (qua != "") qua = qua + "\n";
                       qua =
-                        qua +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosSI2[i][j].letra;
+                        qua + disciplinas[k].codigo + " " + periodosSI2[i][j].letra;
                     }
                   }
                 }
@@ -4046,10 +3846,7 @@ export default {
                     if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
                       if (qui != "") qui = qui + "\n";
                       qui =
-                        qui +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosSI2[i][j].letra;
+                        qui + disciplinas[k].codigo + " " + periodosSI2[i][j].letra;
                     }
                   }
                 }
@@ -4058,10 +3855,7 @@ export default {
                     if (periodosSI2[i][j].Disciplina === disciplinas[k].id) {
                       if (sex != "") sex = sex + "\n";
                       sex =
-                        sex +
-                        disciplinas[k].codigo +
-                        " " +
-                        periodosSI2[i][j].letra;
+                        sex + disciplinas[k].codigo + " " + periodosSI2[i][j].letra;
                     }
                   }
                 }
@@ -4301,8 +4095,7 @@ export default {
           },
           [
             {
-              text:
-                "Horários dos cursos do Departamento de Ciência da Computação",
+              text: "Horários dos cursos do Departamento de Ciência da Computação",
               alignment: "center",
               bold: true,
               fontSize: 10,
@@ -4332,10 +4125,7 @@ export default {
         ],
       });
 
-      if (
-        this.$_.find(this.filtroCursos.ativados, { codigo: "-" }) ||
-        completo
-      ) {
+      if (this.$_.find(this.filtroCursos.ativados, { codigo: "-" }) || completo) {
         tables.push({
           text: "Eletivas",
           bold: true,
@@ -4397,8 +4187,7 @@ export default {
                 for (let k = 0; k < disciplinas.length; k++) {
                   if (eletivas2[j].Disciplina === disciplinas[k].id) {
                     if (seg !== "") seg = seg + "\n";
-                    seg =
-                      seg + disciplinas[k].codigo + " " + eletivas2[j].letra;
+                    seg = seg + disciplinas[k].codigo + " " + eletivas2[j].letra;
                   }
                 }
               }
@@ -4411,8 +4200,7 @@ export default {
                 for (let k = 0; k < disciplinas.length; k++) {
                   if (eletivas2[j].Disciplina === disciplinas[k].id) {
                     if (ter != "") ter = ter + "\n";
-                    ter =
-                      ter + disciplinas[k].codigo + " " + eletivas2[j].letra;
+                    ter = ter + disciplinas[k].codigo + " " + eletivas2[j].letra;
                   }
                 }
               }
@@ -4425,8 +4213,7 @@ export default {
                 for (let k = 0; k < disciplinas.length; k++) {
                   if (eletivas2[j].Disciplina === disciplinas[k].id) {
                     if (qua != "") qua = qua + "\n";
-                    qua =
-                      qua + disciplinas[k].codigo + " " + eletivas2[j].letra;
+                    qua = qua + disciplinas[k].codigo + " " + eletivas2[j].letra;
                   }
                 }
               }
@@ -4439,8 +4226,7 @@ export default {
                 for (let k = 0; k < disciplinas.length; k++) {
                   if (eletivas2[j].Disciplina === disciplinas[k].id) {
                     if (qui != "") qui = qui + "\n";
-                    qui =
-                      qui + disciplinas[k].codigo + " " + eletivas2[j].letra;
+                    qui = qui + disciplinas[k].codigo + " " + eletivas2[j].letra;
                   }
                 }
               }
@@ -4453,8 +4239,7 @@ export default {
                 for (let k = 0; k < disciplinas.length; k++) {
                   if (eletivas2[j].Disciplina === disciplinas[k].id) {
                     if (sex != "") sex = sex + "\n";
-                    sex =
-                      sex + disciplinas[k].codigo + " " + eletivas2[j].letra;
+                    sex = sex + disciplinas[k].codigo + " " + eletivas2[j].letra;
                   }
                 }
               }
@@ -4846,10 +4631,10 @@ export default {
     },
 
     TurmasAtivas2Periodo() {
-      const turmasFiltredbyPeriodo = this.$_.filter(
-        this.TurmasInDisciplinasPerfis,
-        ["periodo", 2]
-      );
+      const turmasFiltredbyPeriodo = this.$_.filter(this.TurmasInDisciplinasPerfis, [
+        "periodo",
+        2,
+      ]);
       const turmasFiltredByPedidos = this.$_.filter(
         turmasFiltredbyPeriodo,
         (turma) => this.filterPedidoPeriodizado(turma, this.PedidosDeCursosDCC)
@@ -4865,16 +4650,13 @@ export default {
           this.filterPedidoPeriodizado(turma, this.PedidosExternosDeCursosDCC)
       );
 
-      return this.$_.concat(
-        turmasExternasFiltredbyPeidos,
-        turmasFiltredByPedidos
-      );
+      return this.$_.concat(turmasExternasFiltredbyPeidos, turmasFiltredByPedidos);
     },
     TurmasAtivas4Periodo() {
-      const turmasFiltredbyPeriodo = this.$_.filter(
-        this.TurmasInDisciplinasPerfis,
-        ["periodo", 4]
-      );
+      const turmasFiltredbyPeriodo = this.$_.filter(this.TurmasInDisciplinasPerfis, [
+        "periodo",
+        4,
+      ]);
       const turmasFiltredByPedidos = this.$_.filter(
         turmasFiltredbyPeriodo,
         (turma) => this.filterPedidoPeriodizado(turma, this.PedidosDeCursosDCC)
@@ -4890,10 +4672,7 @@ export default {
           this.filterPedidoPeriodizado(turma, this.PedidosExternosDeCursosDCC)
       );
 
-      return this.$_.concat(
-        turmasExternasFiltredbyPeidos,
-        turmasFiltredByPedidos
-      );
+      return this.$_.concat(turmasExternasFiltredbyPeidos, turmasFiltredByPedidos);
     },
 
     PedidosDeCursosDCC() {

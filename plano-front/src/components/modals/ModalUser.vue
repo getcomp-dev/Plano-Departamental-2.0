@@ -20,9 +20,7 @@
               </p>
             </div>
           </div>
-          <BaseButton :type="'text'" :color="'red'" @click="routerLogout"
-            >Logout</BaseButton
-          >
+          <BaseButton text="Logout" color="red" @click="routerLogout" />
         </div>
 
         <div v-if="Admin" class="w-100 border rounded-bottom py-2 px-3">
@@ -62,10 +60,7 @@
             <template v-if="isEditingSenha">
               <div :key="'newPass'" class="form-row">
                 <label required for="novaSenha">Nova senha</label>
-                <InputPassword
-                  :inputId="'novaSenha'"
-                  v-model="userForm.senha"
-                />
+                <InputPassword :inputId="'novaSenha'" v-model="userForm.senha" />
               </div>
 
               <div :key="'repeatPass'" class="form-row">
@@ -81,18 +76,16 @@
           <div :key="'btns'" class="mt-3 mb-1 d-flex justify-content-end">
             <BaseButton
               class="paddingX-20"
-              :type="'text'"
-              :color="'gray'"
+              text="Cancelar"
+              color="gray"
               @click="close"
-              >Cancelar</BaseButton
-            >
+            />
             <BaseButton
               class="paddingX-20"
-              :type="'text'"
-              :color="'blue'"
+              text="Salvar"
+              color="blue"
               @click="editUser"
-              >Salvar</BaseButton
-            >
+            />
           </div>
         </div>
       </div>

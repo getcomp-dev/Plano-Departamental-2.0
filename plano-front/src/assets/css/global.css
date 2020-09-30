@@ -108,6 +108,9 @@ input[type="checkbox"]:focus {
 .clickable {
   cursor: pointer !important;
 }
+svg {
+  user-select: none;
+}
 
 .max-content {
   width: -webkit-max-content !important;

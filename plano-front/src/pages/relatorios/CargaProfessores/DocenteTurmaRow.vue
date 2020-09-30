@@ -5,28 +5,16 @@
     <v-td width="80" paddingX="2">{{ turma.disciplina.codigo }}</v-td>
     <v-td width="300" align="start">{{ turma.disciplina.nome }}</v-td>
     <v-td width="35" paddingX="2">{{ turma.letra }}</v-td>
-
     <v-td width="130">
       {{ generateHorariosText(turma.Horario1, turma.Horario2) }}
     </v-td>
-
     <v-td width="35" paddingX="2">
-      {{
-        turma.periodo === 1 || turma.periodo === 2 ? turma.creditosDaTurma : ""
-      }}
+      {{ turmaIs1Semestre ? turma.creditosDaTurma : "" }}
     </v-td>
-
     <v-td width="35" paddingX="2">
-      {{
-        turma.periodo === 3 || turma.periodo === 4 ? turma.creditosDaTurma : ""
-      }}
+      {{ turmaIs2Semestre ? turma.creditosDaTurma : "" }}
     </v-td>
-
-    <v-td
-      v-if="semestresAtivados.primeiro && semestresAtivados.segundo"
-      width="40"
-      paddingX="2"
-    />
+    <v-td width="40" />
   </tr>
 </template>
 
@@ -38,7 +26,15 @@ export default {
   mixins: [generateHorariosText],
   props: {
     turma: { type: Object, required: true },
-    semestresAtivados: { type: Object, required: true },
+  },
+
+  computed: {
+    turmaIs1Semestre() {
+      return this.turma.periodo === 1 || this.turma.periodo === 2;
+    },
+    turmaIs2Semestre() {
+      return this.turma.periodo === 3 || this.turma.periodo === 4;
+    },
   },
 };
 </script>

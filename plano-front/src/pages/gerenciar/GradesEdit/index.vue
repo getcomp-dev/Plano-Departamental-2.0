@@ -1,14 +1,7 @@
 <template>
   <div class="main-component row">
     <PageHeader :title="'Disciplina na Grade'">
-      <BaseButton
-        title="Ajuda"
-        :type="'icon'"
-        :color="'lightblue'"
-        @click="$refs.modalAjuda.toggle()"
-      >
-        <font-awesome-icon :icon="['fas', 'question']" />
-      </BaseButton>
+      <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
     </PageHeader>
 
     <div class="page-content">
@@ -22,16 +15,12 @@
               @click="toggleOrder(ordenacaoDisciplinasMain, 'periodo')"
             >
               P.
-              <i
-                :class="setIconByOrder(ordenacaoDisciplinasMain, 'periodo')"
-              ></i>
+              <i :class="setIconByOrder(ordenacaoDisciplinasMain, 'periodo')"></i>
             </th>
             <th
               style="width:80px"
               class="clickable t-start"
-              @click="
-                toggleOrder(ordenacaoDisciplinasMain, 'disciplina_codigo')
-              "
+              @click="toggleOrder(ordenacaoDisciplinasMain, 'disciplina_codigo')"
             >
               Código
               <i
@@ -47,9 +36,7 @@
             >
               Disciplina
               <i
-                :class="
-                  setIconByOrder(ordenacaoDisciplinasMain, 'disciplina_nome')
-                "
+                :class="setIconByOrder(ordenacaoDisciplinasMain, 'disciplina_nome')"
               ></i>
             </th>
           </template>
@@ -153,10 +140,7 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group m-0 col px-0">
-              <label
-                required
-                for="periodoDisciplina"
-                class="col-form-label pb-1"
+              <label required for="periodoDisciplina" class="col-form-label pb-1"
                 >Período</label
               >
               <div class="d-flex align-items-center">
@@ -171,48 +155,35 @@
 
                 <BaseButton
                   :disabled="!hasGradeSelected"
-                  title="Salvar"
-                  :type="'icon'"
-                  :color="'green'"
+                  template="salvar"
+                  title="Salvar período"
                   @click="editDisciplinaGrade()"
-                >
-                  <font-awesome-icon :icon="['fas', 'check']" />
-                </BaseButton>
+                />
               </div>
             </div>
           </div>
         </template>
         <template #footer>
           <BaseButton
-            :disabled="!hasGradeSelected"
             v-show="!isEditDisciplina"
+            template="adicionar"
             title="Adicionar à Grade"
-            :type="'icon'"
-            :color="'green'"
+            :disabled="!hasGradeSelected"
             @click="addDisciplinaGrade"
-          >
-            <font-awesome-icon :icon="['fas', 'plus']" />
-          </BaseButton>
+          />
 
           <BaseButton
-            :disabled="!hasGradeSelected"
+            template="deletar"
             title="Deletar Disciplina"
-            :type="'icon'"
-            :color="'red'"
+            :disabled="!hasGradeSelected"
             @click="openModalDelete"
-          >
-            <font-awesome-icon :icon="['fas', 'trash']" />
-          </BaseButton>
+          />
 
           <BaseButton
+            template="cancelar"
             :disabled="!hasGradeSelected"
-            title="Cancelar"
-            :type="'icon'"
-            :color="'gray'"
             @click="cleanDisciplina"
-          >
-            <font-awesome-icon :icon="['fas', 'times']" />
-          </BaseButton>
+          />
         </template>
       </Card>
     </div>
@@ -234,34 +205,32 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Visualizar conteúdo:</b> Na parte superior do cartão à direita,
-        selecione o curso e a grade que deseja visualizar.
+        <b>Visualizar conteúdo:</b> Na parte superior do cartão à direita, selecione
+        o curso e a grade que deseja visualizar.
       </li>
       <li class="list-group-item">
         <b>Adicionar:</b>
-        Para adicionar uma disciplinas à grade selecionada, com a parte de baixo
-        do cartão à direita em branco, preencha-a e em seguida clique em
-        Adicionar
+        Para adicionar uma disciplinas à grade selecionada, com a parte de baixo do
+        cartão à direita em branco, preencha-a e em seguida clique em Adicionar
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
       </li>
       <li class="list-group-item">
         <b>Editar:</b>
-        Para editar uma disciplinas da grade selecionada clique na linha da
-        tabela da disciplina que deseja alterar. Em seguida, no cartão à
-        direita, altere as informações que desejar e clique em Salvar
+        Para editar uma disciplinas da grade selecionada clique na linha da tabela da
+        disciplina que deseja alterar. Em seguida, no cartão à direita, altere as
+        informações que desejar e clique em Salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Deletar:</b> Clique na linha da tabela da disciplina que deseja
-        remover. Em seguida, no cartão à direita, clique em Remover
+        <b>Deletar:</b> Clique na linha da tabela da disciplina que deseja remover.
+        Em seguida, no cartão à direita, clique em Remover
         <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
         confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
         <b>Limpar:</b> No cartão à direita, clique em Cancelar
-        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para
-        limpar as informações da disciplina porém a grade continuará
-        selecionada.
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para limpar
+        as informações da disciplina porém a grade continuará selecionada.
       </li>
       <li class="list-group-item">
         <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para
@@ -361,10 +330,7 @@ export default {
     },
     showGrade(gradeId) {
       this.cleanGradeForm();
-      const grade = this.$_.find(this.$store.state.grade.Grades, [
-        "id",
-        gradeId,
-      ]);
+      const grade = this.$_.find(this.$store.state.grade.Grades, ["id", gradeId]);
       this.gradeForm = this.$_.clone(grade);
       this.disciplinaGradeForm.Grade = this.gradeForm.id;
     },
@@ -475,9 +441,7 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Disciplina <b>${
-              this.nomeDisciplinaAtual
-            }</b> foi atualizada!`,
+            text: `A Disciplina <b>${this.nomeDisciplinaAtual}</b> foi atualizada!`,
             type: "success",
           });
         })
@@ -502,9 +466,7 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Disciplina <b>${
-              this.nomeDisciplinaAtual
-            }</b> foi excluída!`,
+            text: `A Disciplina <b>${this.nomeDisciplinaAtual}</b> foi excluída!`,
             type: "success",
           });
           this.clearClick();

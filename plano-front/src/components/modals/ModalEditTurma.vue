@@ -40,10 +40,7 @@
               v-model="turmaForm.disciplina"
               @change="setDefaultHorarios"
             >
-              <option
-                v-if="!DisciplinasOrderedByCodigo.length"
-                type="text"
-                value
+              <option v-if="!DisciplinasOrderedByCodigo.length" type="text" value
                 >Nenhuma Disciplina Encontrada</option
               >
               <option
@@ -57,13 +54,9 @@
         </div>
         <div v-else class="form-row w-100 m-0 mb-2 pr-1">
           <p class="modal-title col p-0 m-0 ">
-            {{
-              turmaForm.disciplina.codigo + " - " + turmaForm.disciplina.nome
-            }}
+            {{ turmaForm.disciplina.codigo + " - " + turmaForm.disciplina.nome }}
           </p>
-          <span
-            class="modal-title p-0 m-0 text-right"
-            style="font-weight:normal"
+          <span class="modal-title p-0 m-0 text-right" style="font-weight:normal"
             >Créditos: {{ turmaForm.disciplina.creditoTotal }}</span
           >
         </div>
@@ -171,11 +164,7 @@
               v-model="turmaForm.Horario1"
               @change="checkHorario(1), setTurnoByHorario(1)"
             >
-              <option
-                v-if="!disciplinaIsIntegralEAD"
-                type="text"
-                value=""
-              ></option>
+              <option v-if="!disciplinaIsIntegralEAD" type="text" value=""></option>
               <option
                 v-for="horario in HorariosFiltredByTurno"
                 :key="'1-horario-id' + horario.id"
@@ -267,20 +256,16 @@
         <div class="w-100 mb-2">
           <BaseButton
             class="paddingX-20"
-            :type="'text'"
-            :color="'green'"
+            color="green"
+            text="Salvar"
             @click="handleEditTurma"
-          >
-            Salvar
-          </BaseButton>
+          />
           <BaseButton
             class="paddingX-20"
-            :type="'text'"
-            :color="'gray'"
+            color="gray"
+            text="Cancelar"
             @click="resetTurmaForm"
-          >
-            Cancelar
-          </BaseButton>
+          />
         </div>
       </div>
       <hr class="mb-1 mt-0 w-100" />
@@ -294,11 +279,7 @@
       </div>
 
       <div class="div-table">
-        <BaseTable
-          :type="'modal'"
-          :styles="'height:350px'"
-          :hasSearchBar="true"
-        >
+        <BaseTable :type="'modal'" :styles="'height:350px'" :hasSearchBar="true">
           <template #thead-search>
             <InputSearch
               v-model="searchCursos"
@@ -1319,14 +1300,10 @@ export default {
     ]),
 
     disciplinaIsIntegralEAD() {
-      return this.turmaForm.disciplina
-        ? this.turmaForm.disciplina.ead === 1
-        : false;
+      return this.turmaForm.disciplina ? this.turmaForm.disciplina.ead === 1 : false;
     },
     disciplinaIsParcialEAD() {
-      return this.turmaForm.disciplina
-        ? this.turmaForm.disciplina.ead === 2
-        : false;
+      return this.turmaForm.disciplina ? this.turmaForm.disciplina.ead === 2 : false;
     },
     hasMoreThan4Creditos() {
       return this.turmaForm.disciplina
@@ -1343,10 +1320,7 @@ export default {
             curso.VagasTotais =
               parseInt(this.currentTurmaPedidos[index].vagasPeriodizadas, 10) *
                 1000 + //peso para priorizar vagas periodizadas
-              parseInt(
-                this.currentTurmaPedidos[index].vagasNaoPeriodizadas,
-                10
-              );
+              parseInt(this.currentTurmaPedidos[index].vagasNaoPeriodizadas, 10);
             curso.indiceVaga = index;
             break;
           }
@@ -1369,8 +1343,7 @@ export default {
         const cursoCodigo = normalizeText(curso.codigo);
 
         return (
-          cursoNome.match(searchNormalized) ||
-          cursoCodigo.match(searchNormalized)
+          cursoNome.match(searchNormalized) || cursoCodigo.match(searchNormalized)
         );
       });
     },
@@ -1396,10 +1369,7 @@ export default {
         case "Noturno":
           return this.HorariosNoturno;
         default:
-          return this.$_.filter(
-            this.AllHorarios,
-            (horario) => horario.id != 31
-          ); //Todos sem EAD
+          return this.$_.filter(this.AllHorarios, (horario) => horario.id != 31); //Todos sem EAD
       }
     },
 

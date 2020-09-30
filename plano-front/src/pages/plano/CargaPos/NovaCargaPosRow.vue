@@ -63,12 +63,12 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["addNovaCargaPos"]),
+    ...mapActions(["createCargaPos"]),
 
-    async handleAddNovaCargaPos() {
+    async handleCreateCargaPos() {
       try {
         this.setPartialLoading(true);
-        await this.addNovaCargaPos(this.cargaPosForm);
+        await this.createCargaPos(this.cargaPosForm);
       } catch (error) {
         this.pushNotification({
           type: "error",

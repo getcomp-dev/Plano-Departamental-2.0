@@ -3,60 +3,21 @@
     <PageHeader :title="'Pós Graduação'">
       <BaseButton
         v-show="isAdding"
-        title="Salvar"
-        :type="'icon'"
-        :color="'green'"
-        @click="$refs.novaCargaPosRow.handleAddNovaCargaPos()"
-      >
-        <font-awesome-icon :icon="['fas', 'check']" />
-      </BaseButton>
-      <BaseButton
-        v-show="isAdding"
-        title="Cancelar"
-        :type="'icon'"
-        :color="'gray'"
-        @click="toggleAddRow"
-      >
-        <font-awesome-icon :icon="['fas', 'times']" />
-      </BaseButton>
+        template="salvar"
+        @click="$refs.novaCargaPosRow.handleCreateCargaPos()"
+      />
+      <BaseButton v-show="isAdding" template="cancelar" @click="toggleAddRow" />
 
+      <BaseButton v-show="!isAdding" template="adicionar" @click="toggleAddRow" />
       <BaseButton
         v-show="!isAdding"
-        title="Adicionar"
-        :type="'icon'"
-        :color="'green'"
-        @click="toggleAddRow"
-      >
-        <font-awesome-icon :icon="['fas', 'plus']" />
-      </BaseButton>
-
-      <BaseButton
-        v-show="!isAdding"
+        template="deletar"
         title="Deletar selecionados"
-        :type="'icon'"
-        :color="'red'"
         @click="$refs.modalDelete.open()"
-      >
-        <font-awesome-icon :icon="['fas', 'trash']" />
-      </BaseButton>
+      />
 
-      <BaseButton
-        title="Filtros"
-        :type="'icon'"
-        :color="'gray'"
-        @click="toggleAsideModal('filtros')"
-      >
-        <font-awesome-icon :icon="['fas', 'list-ul']" />
-      </BaseButton>
-
-      <BaseButton
-        title="Ajuda"
-        :type="'icon'"
-        :color="'lightblue'"
-        @click="toggleAsideModal('ajuda')"
-      >
-        <font-awesome-icon :icon="['fas', 'question']" />
-      </BaseButton>
+      <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
+      <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </PageHeader>
 
     <div class="div-table">
@@ -122,10 +83,7 @@
       :callbacks="modalFiltrosCallbacks"
       :tabsOptions="modalFiltrosTabs"
     >
-      <BaseTable
-        v-show="modalFiltrosTabs.current === 'Programas'"
-        :type="'modal'"
-      >
+      <BaseTable v-show="modalFiltrosTabs.current === 'Programas'" :type="'modal'">
         <template #thead>
           <th style="width: 25px"></th>
           <th style="width: 425px" class="t-start">Programa</th>
@@ -134,9 +92,7 @@
           <tr
             v-for="programaPos in AllProgramasPosOrdered"
             :key="programaPos"
-            @click="
-              toggleItemInArray(programaPos, filtroProgramas.selecionados)
-            "
+            @click="toggleItemInArray(programaPos, filtroProgramas.selecionados)"
           >
             <td style="width:25px">
               <input
@@ -151,10 +107,7 @@
         </template>
       </BaseTable>
 
-      <BaseTable
-        v-show="modalFiltrosTabs.current === 'Trimestres'"
-        :type="'modal'"
-      >
+      <BaseTable v-show="modalFiltrosTabs.current === 'Trimestres'" :type="'modal'">
         <template #thead>
           <th style="width: 25px"></th>
           <th class="t-start" style="width: 425px">Trimestre letivo</th>
@@ -181,10 +134,7 @@
         </template>
       </BaseTable>
 
-      <BaseTable
-        v-show="modalFiltrosTabs.current === 'Semestres'"
-        :type="'modal'"
-      >
+      <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
         <template #thead>
           <th style="width: 25px"></th>
           <th class="t-start" style="width: 425px">
@@ -247,38 +197,36 @@
         <b>Visualizar cargas:</b> Clique no ícone de filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
         no cabeçalho da página e, na janela que se abrirá, utilize as abas para
-        navegar entre os tipos de filtro disponíveis. Marque quais informações
-        deseja visualizar, e para finalizar clique no botão OK.
+        navegar entre os tipos de filtro disponíveis. Marque quais informações deseja
+        visualizar, e para finalizar clique no botão OK.
       </li>
       <li class="list-group-item">
         <b>Adicionar carga:</b>
         Clique no ícone de adicionar
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
-        no cabeçalho da página. Em seguida, preencha a nova linha que irá
-        aparecer no início da tabela. Note que todos os campos são obrigatórios.
-        Após preenchê-los, clique no ícone de salvar
+        no cabeçalho da página. Em seguida, preencha a nova linha que irá aparecer no
+        início da tabela. Note que todos os campos são obrigatórios. Após
+        preenchê-los, clique no ícone de salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" /> ou de
-        cancelar
-        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" /> .
+        cancelar <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" /> .
       </li>
       <li class="list-group-item">
         <b>Deletar carga(s):</b>
-        Marque a(s) carga(s) que deseja deletar através da caixa de seleção na
-        coluna mais à esquerda da tabela. Em seguida, clique no ícone de deletar
-        <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" /> no
-        cabeçalho da página. Confirme a exclusão clicando no botão OK na janela
-        que se abrirá.
+        Marque a(s) carga(s) que deseja deletar através da caixa de seleção na coluna
+        mais à esquerda da tabela. Em seguida, clique no ícone de deletar
+        <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" /> no cabeçalho
+        da página. Confirme a exclusão clicando no botão OK na janela que se abrirá.
       </li>
       <li class="list-group-item">
-        <b>Editar carga:</b> Basta fazer as alterações necessárias diretamente
-        nos campos da tabela. O sistema salvará as modificações automaticamente.
+        <b>Editar carga:</b> Basta fazer as alterações necessárias diretamente nos
+        campos da tabela. O sistema salvará as modificações automaticamente.
       </li>
       <li class="list-group-item">
         <b>Observações:</b> Note que os filtros por semestre e trimestre são
-        interligados. Ao selecionar um semestre, os trimestres correspondentes
-        também serão selecionados, e vice versa. O primeiro semestre corresponde
-        ao primeiro e segundo trimestres, e o segundo semestre corresponde ao
-        terceiro e quarto trimestres.
+        interligados. Ao selecionar um semestre, os trimestres correspondentes também
+        serão selecionados, e vice versa. O primeiro semestre corresponde ao primeiro
+        e segundo trimestres, e o segundo semestre corresponde ao terceiro e quarto
+        trimestres.
       </li>
     </ModalAjuda>
   </div>
@@ -326,9 +274,7 @@ export default {
       modalFiltrosCallbacks: {
         selectAll: {
           Programas: () => {
-            this.filtroProgramas.selecionados = [
-              ...this.AllProgramasPosOrdered,
-            ];
+            this.filtroProgramas.selecionados = [...this.AllProgramasPosOrdered];
           },
           Trimestres: () => {
             this.filtroTrimestres.selecionados = [...this.Trimestres];
@@ -353,15 +299,9 @@ export default {
           },
         },
         btnOk: () => {
-          this.filtroSemestres.ativados = [
-            ...this.filtroSemestres.selecionados,
-          ];
-          this.filtroProgramas.ativados = [
-            ...this.filtroProgramas.selecionados,
-          ];
-          this.filtroTrimestres.ativados = [
-            ...this.filtroTrimestres.selecionados,
-          ];
+          this.filtroSemestres.ativados = [...this.filtroSemestres.selecionados];
+          this.filtroProgramas.ativados = [...this.filtroProgramas.selecionados];
+          this.filtroTrimestres.ativados = [...this.filtroTrimestres.selecionados];
         },
       },
     };
@@ -428,17 +368,11 @@ export default {
       this.filtroTrimestres.selecionados = [];
 
       if (this.$_.some(this.filtroSemestres.selecionados, ["id", 1])) {
-        this.filtroTrimestres.selecionados.push(
-          findTrimestre(1),
-          findTrimestre(2)
-        );
+        this.filtroTrimestres.selecionados.push(findTrimestre(1), findTrimestre(2));
       }
 
       if (this.$_.some(this.filtroSemestres.selecionados, ["id", 2])) {
-        this.filtroTrimestres.selecionados.push(
-          findTrimestre(3),
-          findTrimestre(4)
-        );
+        this.filtroTrimestres.selecionados.push(findTrimestre(3), findTrimestre(4));
       }
     },
     selectTrimestre(newItem, array) {
@@ -447,26 +381,21 @@ export default {
     },
     connectTrimestreInSemestre() {
       const someTrimestreAtivado = (trimestreId) => {
-        return this.$_.some(this.filtroTrimestres.selecionados, [
-          "id",
-          trimestreId,
-        ]);
+        return this.$_.some(this.filtroTrimestres.selecionados, ["id", trimestreId]);
       };
+
+      this.filtroSemestres.selecionados = [];
       const semestresSelecionados = this.filtroSemestres.selecionados;
 
       if (someTrimestreAtivado(1) && someTrimestreAtivado(2)) {
-        semestresSelecionados.push(
-          this.$_.find(this.SemestresLetivos, ["id", 1])
-        );
+        semestresSelecionados.push(this.$_.find(this.SemestresLetivos, ["id", 1]));
       } else {
         const index = this.$_.findIndex(semestresSelecionados, ["id", 1]);
         if (index !== -1) semestresSelecionados.splice(index, 1);
       }
 
       if (someTrimestreAtivado(3) && someTrimestreAtivado(4)) {
-        semestresSelecionados.push(
-          this.$_.find(this.SemestresLetivos, ["id", 2])
-        );
+        semestresSelecionados.push(this.$_.find(this.SemestresLetivos, ["id", 2]));
       } else {
         const index = this.$_.findIndex(semestresSelecionados, ["id", 2]);
         if (index !== -1) semestresSelecionados.splice(index, 2);
@@ -483,39 +412,30 @@ export default {
     ]),
 
     ProgramasInCargaPosOrdered() {
-      return this.$_.map(
-        this.ProgramasInCargaPosFiltredByTrimestre,
-        (programa) => {
-          const cargasOrdered = this.$_.orderBy(
-            programa.cargas,
-            ["trimestre", this.ordenacaoCargaPos.order],
-            ["asc", this.ordenacaoCargaPos.type]
-          );
+      return this.$_.map(this.ProgramasInCargaPosFiltredByTrimestre, (programa) => {
+        const cargasOrdered = this.$_.orderBy(
+          programa.cargas,
+          ["trimestre", this.ordenacaoCargaPos.order],
+          ["asc", this.ordenacaoCargaPos.type]
+        );
 
-          return {
-            nome: programa.nome,
-            cargas: cargasOrdered,
-          };
-        }
-      );
+        return {
+          nome: programa.nome,
+          cargas: cargasOrdered,
+        };
+      });
     },
     ProgramasInCargaPosFiltredByTrimestre() {
-      return this.$_.map(
-        this.ProgramasInCargaPosFiltredByPrograma,
-        (programa) => {
-          const cargasFiltered = this.$_.filter(programa.cargas, (carga) =>
-            this.$_.some(this.filtroTrimestres.ativados, [
-              "id",
-              carga.trimestre,
-            ])
-          );
+      return this.$_.map(this.ProgramasInCargaPosFiltredByPrograma, (programa) => {
+        const cargasFiltered = this.$_.filter(programa.cargas, (carga) =>
+          this.$_.some(this.filtroTrimestres.ativados, ["id", carga.trimestre])
+        );
 
-          return {
-            nome: programa.nome,
-            cargas: cargasFiltered,
-          };
-        }
-      );
+        return {
+          nome: programa.nome,
+          cargas: cargasFiltered,
+        };
+      });
     },
     ProgramasInCargaPosFiltredByPrograma() {
       return this.$_.filter(this.ProgramasInCargaPos, (programa) =>

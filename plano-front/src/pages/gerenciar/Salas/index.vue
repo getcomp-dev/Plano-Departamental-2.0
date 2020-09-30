@@ -1,14 +1,7 @@
 <template>
   <div class="main-component row">
     <PageHeader :title="'Salas'">
-      <BaseButton
-        title="Ajuda"
-        :type="'icon'"
-        :color="'lightblue'"
-        @click="$refs.modalAjuda.toggle()"
-      >
-        <font-awesome-icon :icon="['fas', 'question']" />
-      </BaseButton>
+      <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
     </PageHeader>
 
     <div class="page-content">
@@ -37,9 +30,7 @@
               @click="toggleOrder(ordenacaoSalasMain, 'lotacao_maxima', 'desc')"
             >
               Lotação Max.
-              <i
-                :class="setIconByOrder(ordenacaoSalasMain, 'lotacao_maxima')"
-              ></i>
+              <i :class="setIconByOrder(ordenacaoSalasMain, 'lotacao_maxima')"></i>
             </th>
           </template>
           <template #tbody>
@@ -47,10 +38,7 @@
               <tr
                 :key="sala.id"
                 v-on:click.prevent="handleClickInSala(sala)"
-                :class="[
-                  { 'bg-selected': salaClickada === sala.nome },
-                  'clickable',
-                ]"
+                :class="[{ 'bg-selected': salaClickada === sala.nome }, 'clickable']"
               >
                 <td style="width: 82px" class="t-start">{{ sala.nome }}</td>
 
@@ -118,11 +106,7 @@
       </Card>
     </div>
 
-    <ModalDelete
-      ref="modalDelete"
-      :isDeleting="isEdit"
-      @btn-deletar="deleteSala"
-    >
+    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deleteSala">
       <li class="list-group-item">
         <span v-if="isEdit">
           Tem certeza que deseja excluír a sala
@@ -141,9 +125,8 @@
       </li>
       <li class="list-group-item">
         <b>Editar:</b> Clique na linha da tabela da sala que deseja alterar. Em
-        seguida, no cartão à direita, altere as informações que desejar e clique
-        em Salvar
-        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
+        seguida, no cartão à direita, altere as informações que desejar e clique em
+        Salvar <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
       </li>
       <li class="list-group-item">
         <b>Deletar:</b> Clique na linha da tabela da sala que deseja remover. Em
@@ -153,8 +136,8 @@
       </li>
       <li class="list-group-item">
         <b>Limpar:</b> No cartão à direita, clique em Cancelar
-        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para
-        limpar as informações.
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para limpar
+        as informações.
       </li>
       <li class="list-group-item">
         <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para
@@ -231,10 +214,7 @@ export default {
         .catch((error) => {
           this.error = "";
           if (error.response.data.fullMessage) {
-            this.error += error.response.data.fullMessage.replace(
-              "\n",
-              "<br/>"
-            );
+            this.error += error.response.data.fullMessage.replace("\n", "<br/>");
           }
           this.$notify({
             group: "general",

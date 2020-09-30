@@ -1,27 +1,27 @@
 <template>
   <tr class="novaturma">
-    <td style="width: 25px"></td>
-    <td style="width: 40px"></td>
-    <td style="width: 55px" class="less-padding">
+    <v-td width="25" />
+    <v-td width="40" />
+    <v-td width="55" paddinX="2">
       <select v-model.number="turmaForm.periodo">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
       </select>
-    </td>
-    <td
-      style="width: 80px"
-      class="less-padding"
-      :style="
-        `background-color:${
-          turmaForm.disciplina ? turmaForm.disciplina.perfil.cor : ''
-        }`
-      "
+    </v-td>
+    <v-td
+      width="80"
+      paddinX="2"
+      :style="{
+        backgroundColor: turmaForm.disciplina
+          ? turmaForm.disciplina.perfil.cor
+          : '',
+      }"
     >
       {{ turmaForm.disciplina ? turmaForm.disciplina.perfil.abreviacao : "" }}
-    </td>
-    <td style="width:80px" class="less-padding">
+    </v-td>
+    <v-td width="80" paddinX="2">
       <select v-model="turmaForm.disciplina" @change="handleChangeDisciplina">
         <option
           v-for="disciplina in DisciplinasDCCInPerfis"
@@ -30,8 +30,8 @@
           >{{ disciplina.codigo }}</option
         >
       </select>
-    </td>
-    <td style="width: 330px;" class="less-padding">
+    </v-td>
+    <v-td width="330" paddinX="2">
       <select v-model="turmaForm.disciplina" @change="handleChangeDisciplina">
         <option
           v-for="disciplina in DisciplinasDCCInPerfisOrderedByNome"
@@ -40,9 +40,9 @@
           >{{ disciplina.nome }}</option
         >
       </select>
-    </td>
-    <td style="width: 25px">{{ totalCarga }}</td>
-    <td style="width: 45px">
+    </v-td>
+    <v-td width="25">{{ totalCarga }}</v-td>
+    <v-td width="45">
       <input
         type="text"
         class="input-letra"
@@ -50,16 +50,16 @@
         @input="turmaForm.letra = $event.target.value.toUpperCase()"
         :value="turmaForm.letra"
       />
-    </td>
-    <td style="width:130px" class="less-padding">
+    </v-td>
+    <v-td width="160" paddinX="2">
       <select v-model.number="turmaForm.Docente1">
-        <option value=""></option>
+        <option></option>
         <option
           v-for="docente in DocentesAtivos"
           :key="docente.id + docente.apelido"
           :value="docente.id"
-          >{{ docente.apelido }}</option
-        >
+          >{{ docente.apelido }}
+        </option>
       </select>
 
       <select v-model.number="turmaForm.Docente2">
@@ -71,8 +71,8 @@
           >{{ docente.apelido }}</option
         >
       </select>
-    </td>
-    <td style="width:80px">
+    </v-td>
+    <v-td width="80">
       <select
         v-if="turmaForm.disciplina"
         v-model="turmaForm.turno1"
@@ -84,16 +84,16 @@
           <option value="Noturno">Noturno</option>
         </template>
       </select>
-    </td>
-    <td style="width: 85px" class="less-padding">
+    </v-td>
+    <v-td width="85" paddinX="2">
       <template v-if="turmaForm.disciplina">
         <select
           v-model.number="turmaForm.Horario1"
           @change="handleChangeHorario(1)"
         >
-          <option
-            v-if="!disciplinaIsParcialEAD && !disciplinaIsIntegralEAD"
-          ></option>
+          <option v-if="!disciplinaIsParcialEAD && !disciplinaIsIntegralEAD">
+          </option>
+
           <option
             v-for="horario in HorariosFiltredByTurno"
             :key="'1-horarioEAD-id' + horario.id"
@@ -107,9 +107,8 @@
           v-model.number="turmaForm.Horario2"
           @change="handleChangeHorario(2)"
         >
-          <option
-            v-if="!disciplinaIsParcialEAD && !disciplinaIsIntegralEAD"
-          ></option>
+          <option v-if="!disciplinaIsParcialEAD && !disciplinaIsIntegralEAD">
+          </option>
 
           <template v-if="disciplinaIsParcialEAD">
             <option
@@ -129,40 +128,36 @@
           </template>
         </select>
       </template>
-    </td>
-    <td style="width: 95px" class="less-padding">
+    </v-td>
+    <v-td width="95" paddinX="2">
       <template v-if="!disciplinaIsIntegralEAD && turmaForm.disciplina">
         <select v-model.number="turmaForm.Sala1">
-          <option value=""></option>
+          <option></option>
           <option
             v-for="sala in AllSalas"
             :key="'s1' + sala.id"
             :value="sala.id"
-            >{{ sala.nome }}</option
-          >
+            >{{ sala.nome }}
+          </option>
         </select>
 
         <select
           v-if="totalCarga >= 4 && turmaForm.disciplina.ead != 2"
           v-model.number="turmaForm.Sala2"
         >
-          <option value=""></option>
+          <option></option>
           <option
             v-for="sala in AllSalas"
             :key="'s2' + sala.id"
             :value="sala.id"
-            >{{ sala.nome }}</option
-          >
+            >{{ sala.nome }}
+          </option>
         </select>
       </template>
-    </td>
-    <td style="width:45px">
+    </v-td>
+    <v-td :width="45 + 35 * cursosAtivadosLength">
       <div style="height:43px"></div>
-    </td>
-    <td
-      v-if="cursosAtivadosLength"
-      :style="`width:${35 * cursosAtivadosLength}px`"
-    ></td>
+    </v-td>
   </tr>
 </template>
 
@@ -182,7 +177,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["addNovaTurma"]),
+    ...mapActions(["createTurma"]),
 
     handleChangeTurno() {
       this.turmaForm.Horario1 = null;
@@ -228,11 +223,10 @@ export default {
       else if (this.$_.some(this.HorariosDiurno, ["id", horarioId]))
         this.turmaForm.turno1 = "Diurno";
     },
-
-    async handleAddNovaTurma() {
+    async handleCreateTurma() {
       try {
         this.setPartialLoading(true);
-        await this.addNovaTurma(this.turmaForm);
+        await this.createTurma(this.turmaForm);
       } catch (error) {
         this.pushNotification({
           type: "error",
