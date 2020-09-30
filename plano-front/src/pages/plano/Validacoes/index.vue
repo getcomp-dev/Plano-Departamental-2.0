@@ -207,7 +207,9 @@
                   @click.stop="selecionaPeriodo(periodo)"
                 />
               </v-td>
-              <v-td width="425" align="start" :text="periodo.nome" />
+              <v-td width="425" align="start">
+                {{ periodo.nome }}
+              </v-td>
             </tr>
           </template>
         </BaseTable>

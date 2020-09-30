@@ -20,10 +20,7 @@
       </button>
     </v-td>
     <v-td width="55" paddingX="2">
-      <select
-        v-model.number="turmaForm.periodo"
-        @change="checkHorariosPeriodo()"
-      >
+      <select v-model.number="turmaForm.periodo" @change="checkHorariosPeriodo()">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
@@ -113,7 +110,7 @@
         </template>
       </select>
     </v-td>
-    <v-td width="85" paddingX="2">
+    <td width="85" paddingX="2">
       <select
         type="text"
         @change="checkHorario(1)"
@@ -153,8 +150,8 @@
           >
         </template>
       </select>
-    </v-td>
-    <v-td width="95" paddingX="2">
+    </td>
+    <td width="95" paddingX="2">
       <template v-if="!isIntegralEAD">
         <select
           type="text"
@@ -192,7 +189,7 @@
           >
         </select>
       </template>
-    </v-td>
+    </td>
     <v-td width="45" paddingX="2">
       <div
         style="height:43px"
@@ -283,10 +280,7 @@ export default {
       }
     },
     checkHorario(horario) {
-      if (
-        !this.checkHorarioDocente(horario) &&
-        !this.checkHorarioSala(horario)
-      ) {
+      if (!this.checkHorarioDocente(horario) && !this.checkHorarioSala(horario)) {
         this.handleEditTurma();
       } else {
         if (horario === 1) this.turmaForm.Horario1 = this.currentData.Horario1;

@@ -6,6 +6,7 @@
       maxWidth: tdWidth,
       padding: tdPadding,
     }"
+    @click="$emit('click')"
   >
     <slot></slot>
   </td>
