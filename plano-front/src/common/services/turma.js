@@ -29,5 +29,11 @@ export default {
         return Vue.axios.delete(`/turma/${turmaId}`, config)
             .then((response) => Promise.resolve(response.data))
             .catch((error) => Promise.reject(error))
+    },
+
+    search(payload, config = {}) {
+        return Vue.axios.post('/turma/busca', payload, config)
+            .then((response) => Promise.resolve(response.data))
+            .catch((error) => Promise.reject(error))
     }
 }

@@ -533,9 +533,11 @@ export default {
     },
 
     addPreferencia() {
+      console.log(this.add)
       if (this.add.Docente && this.add.Disciplina && this.add.preferencia) {
         if (this.add.Docente.id) this.add.Docente = this.add.Docente.id;
         if (this.add.Disciplina.id) this.add.Disciplina = this.add.Disciplina.id;
+        console.log(this.add)
         docenteDisciplinaService
           .create(this.add)
           .then(() => {
@@ -545,7 +547,11 @@ export default {
               text: `Preferência adicionada com sucesso!`,
               type: "success",
             });
-            this.$refs.modalEdit.close();
+            this.add.Disciplina = undefined;
+            this.add.Docente = undefined;
+            this.add.preferencia = undefined;
+            this.$refs.modalAddDocente.close();
+            this.$refs.modalAddDisciplina.close();
           })
           .catch((error) => {
             this.error = "<b>Erro ao atualizar Preferência</b>";
@@ -559,12 +565,12 @@ export default {
               text: this.error,
               type: "error",
             });
+            this.add.Disciplina = undefined;
+            this.add.Docente = undefined;
+            this.add.preferencia = undefined;
+            this.$refs.modalAddDocente.close();
+            this.$refs.modalAddDisciplina.close();
           });
-        this.add.Disciplina = undefined;
-        this.add.Docente = undefined;
-        this.add.preferencia = undefined;
-        this.$refs.modalAddDocente.close();
-        this.$refs.modalAddDisciplina.close();
       }
     },
 

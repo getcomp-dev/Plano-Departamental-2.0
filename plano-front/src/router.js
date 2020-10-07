@@ -17,6 +17,7 @@ import RelatoriosGradeDisciplinas from "@/pages/relatorios/GradeDisciplinas";
 import RelatoriosHorarios from "@/pages/relatorios/HorariosCursos";
 import RelatoriosHorariosLabs from "@/pages/relatorios/HorariosLabs";
 import RelatoriosPlanoDepartamental from "@/pages/relatorios/PlanoDepartamental";
+import RelatoriosBuscaTurmas from "@/pages/relatorios/BuscaTurmas";
 // Gerenciar
 import GerenciarCursos from "@/pages/gerenciar/Cursos";
 import GerenciarDocentes from "@/pages/gerenciar/Docentes";
@@ -132,6 +133,11 @@ const routes = [
         path: "relatorios/relatorio-disciplinas",
         name: "relatorioDisciplinas",
         component: RelatoriosPlanoDepartamental,
+      },
+      {
+        path: "relatorios/busca-turmas",
+        name: "buscaTurmas",
+        component: RelatoriosBuscaTurmas,
       },
 
       //gerenciar
