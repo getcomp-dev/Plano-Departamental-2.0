@@ -7,9 +7,7 @@
     </div>
 
     <button @click.stop="toggleSidebar" type="button" class="btn-navbar">
-      <font-awesome-icon
-        :icon="['fas', sidebarVisibility ? 'times' : 'bars']"
-      />
+      <font-awesome-icon :icon="['fas', sidebarVisibility ? 'times' : 'bars']" />
     </button>
 
     <ul class="navbar-nav">
@@ -23,7 +21,7 @@
           v-model.number="planoIdForm"
           @change="changeCurrentPlano(planoIdForm)"
         >
-          <option v-for="plano in allPlanos" :value="plano.id" :key="plano.id">
+          <option v-for="plano in AllPlanos" :value="plano.id" :key="plano.id">
             {{ plano.ano }} - {{ plano.nome }}
           </option>
         </select>
@@ -67,7 +65,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["sidebarVisibility", "allPlanos", "currentPlanoId"]),
+    ...mapGetters(["sidebarVisibility", "AllPlanos", "currentPlanoId"]),
   },
 
   watch: {

@@ -68,8 +68,13 @@ export default {
           break;
         case "file-upload":
           options.title = "Upload de Arquivo";
-          options.class = "btn-icon icon-blue";
+          options.class = "btn-icon icon-gray";
           options.iconName = "file-upload";
+          break;
+        case "swap-modes":
+          options.title = "Trocar Visualização";
+          options.class = "btn-icon icon-gray";
+          options.iconName = "sync-alt";
           break;
         default:
           options.title = "Vazio!";

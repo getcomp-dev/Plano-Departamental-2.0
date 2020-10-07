@@ -122,7 +122,7 @@ const getters = {
     return state.currentPlanoId;
   },
 
-  allPlanos(state) {
+  AllPlanos(state) {
     return _.orderBy(state.Plano, "ano");
   },
 

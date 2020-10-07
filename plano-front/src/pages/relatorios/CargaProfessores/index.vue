@@ -16,21 +16,27 @@
             align="start"
             >Docente
           </v-th-ordination>
-          <v-th width="30" title="Período ou Trimestre" paddingX="0">
-            P./T.
-          </v-th>
+          <v-th width="30" title="Período" paddingX="0">P.</v-th>
           <v-th width="80">Código</v-th>
           <v-th width="300" align="start">Disciplina</v-th>
           <v-th width="35" title="Turma">T.</v-th>
           <v-th width="130">Horários</v-th>
-          <v-th width="35" paddingX="0" title="Somatório dos créditos no 1º semestre"
-            >CS1
+          <v-th
+            width="35"
+            paddingX="0"
+            title="Somatório dos créditos no 1º semestre"
+          >
+            CS1
           </v-th>
-          <v-th width="35" paddingX="0" title="Somatório dos créditos no 2º semestre"
-            >CS2
+          <v-th
+            width="35"
+            paddingX="0"
+            title="Somatório dos créditos no 2º semestre"
+          >
+            CS2
           </v-th>
-          <v-th width="40" paddingX="0" title="Somatório total de créditos"
-            >CTotal
+          <v-th width="40" paddingX="0" title="Somatório total de créditos">
+            CTotal
           </v-th>
         </template>
 
@@ -155,7 +161,7 @@
               />
             </v-td>
             <v-td width="425" align="start">
-              {{ periodo.nome }}
+              {{ periodo.nome.split("(")[0] }}
             </v-td>
           </tr>
         </template>
@@ -305,10 +311,7 @@ export default {
   },
 
   beforeMount() {
-    this.filtroPeriodos.selecionados = this.$_.filter(
-      this.PeriodosLetivos,
-      (periodo) => periodo.id === 1 || periodo.id === 3
-    );
+    this.modalFiltrosCallbacks.selectAll.Periodos();
     this.modalFiltrosCallbacks.selectAll.Docentes();
     this.modalFiltrosCallbacks.btnOk();
   },
@@ -328,7 +331,7 @@ export default {
       pdfs.pdfCargaProfessores({
         Docentes,
         SemAlocacao,
-        plano: this.$_.find(this.allPlanos, ["id", this.currentPlanoId]),
+        plano: this.$_.find(this.AllPlanos, ["id", this.currentPlanoId]),
       });
     },
     toggleFiltroDocenteSemAlocacaoSelecionado() {
@@ -403,7 +406,7 @@ export default {
       "TurmasInDisciplinasPerfis",
       "PeriodosLetivos",
       "AllCargasPos",
-      "allPlanos",
+      "AllPlanos",
       "currentPlanoId",
       "SemestresLetivos",
     ]),

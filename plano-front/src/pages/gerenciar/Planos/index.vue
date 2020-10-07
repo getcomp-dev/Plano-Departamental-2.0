@@ -191,12 +191,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      "setPartialLoading",
-      "setCurrentPlanoId",
-      "deletePlano",
-      "editPlano",
-    ]),
+    ...mapActions(["setCurrentPlanoId", "deletePlano", "editPlano"]),
 
     limitNomeLength($event) {
       if ($event.target.value.length >= 10) $event.preventDefault();
@@ -299,11 +294,11 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["allPlanos", "AnosDoPlano"]),
+    ...mapGetters(["AllPlanos", "AnosDoPlano"]),
 
     PlanosOrdered() {
       const { order, type } = this.ordenacaoMainPlanos;
-      return this.$_.orderBy(this.allPlanos, order, type);
+      return this.$_.orderBy(this.AllPlanos, order, type);
     },
     isEdit() {
       return this.planoSelectedId != null;

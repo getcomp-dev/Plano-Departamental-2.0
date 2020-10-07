@@ -3,6 +3,7 @@ const models = require('../models/index'),
     ioBroadcast = require('../library/socketIO').broadcast,
     SM = require('../library/SocketMessages'),
     CustomError = require('../library/CustomError')
+const { Op } = require("sequelize");
 
 const history = function(params){
     models.History.create({
@@ -52,6 +53,36 @@ router.post('/', function (req, res, next) {
 
 router.get('/Plano/:id([0-9]+)', function (req, res, next) {
     models.Turma.findAll({where:{Plano:req.params.id}}).then(function (turmas) {
+        res.send({
+            success: true,
+            message: 'Turmas listadas',
+            Turmas: turmas
+        })
+    }).catch(function (err) {
+        return next(err, req, res)
+    })
+})
+
+router.post('/busca', function (req, res, next) {
+    console.log(req.body.Docentes.length)
+    models.Turma.findAll({where:{
+        [Op.and]: [
+            (req.body.Planos.length > 0 ? {Plano: [...req.body.Planos]} : true),
+            (req.body.Disciplinas.length > 0 ? {Disciplina: [req.body.Disciplinas]} : true),
+            (req.body.Docentes.length > 0 ? {[Op.or]: [
+                {Docente1: [...req.body.Docentes]},
+                {Docente2: [...req.body.Docentes]}
+            ]} : true),
+            (req.body.Horarios.length > 0 ? {[Op.or]: [
+                {Horario1: [...req.body.Horarios]},
+                {Horario2: [...req.body.Horarios]}
+            ]} : true),
+            (req.body.Salas.length > 0 ? {[Op.or]: [
+                {Sala1: [...req.body.Salas]},
+                {Sala2: [...req.body.Salas]}
+            ]} : true)
+        ]
+        }}).then(function (turmas) {
         res.send({
             success: true,
             message: 'Turmas listadas',

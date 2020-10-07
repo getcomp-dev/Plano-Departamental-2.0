@@ -112,7 +112,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import pedidoExternoService from "@/common/services/pedidoExterno";
 import turmaExternaService from "@/common/services/turmaExterna";
 import planoService from "@/common/services/plano";
@@ -142,8 +142,6 @@ export default {
   },
 
   methods: {
-    ...mapActions(["setPartialLoading"]),
-
     open() {
       this.$refs.baseModalNovoPlano.open();
     },
@@ -821,7 +819,7 @@ export default {
 
   computed: {
     ...mapGetters([
-      "allPlanos",
+      "AllPlanos",
       "DisciplinasInPerfis",
       "AllDisciplinas",
       "currentPlanoId",
@@ -853,7 +851,7 @@ export default {
 
     currentPlano() {
       return this.$_.find(
-        this.allPlanos,
+        this.AllPlanos,
         (plano) => plano.id === this.currentPlanoId
       );
     },

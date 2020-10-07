@@ -7,7 +7,6 @@
         @click="$refs.novaTurma.handleCreateTurma()"
       />
       <BaseButton v-show="isAdding" template="cancelar" @click="toggleIsAdding" />
-
       <BaseButton v-show="!isAdding" template="adicionar" @click="toggleIsAdding" />
       <BaseButton
         v-show="!isAdding"
@@ -15,7 +14,6 @@
         title="Deletar selecionados"
         @click="$refs.modalDelete.open()"
       />
-
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="relatorio" @click="generateXlsx" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
@@ -54,11 +52,7 @@
           </v-th-ordination>
           <v-th width="25" paddingX="0" title="Créditos">C.</v-th>
           <v-th width="45" paddingX="0" title="Turma">T.</v-th>
-          <v-th width="160" align="start">
-            <!-- @click.native="toggleOrderByPreferencia" -->
-            <!-- <font-awesome-icon  :class="orderByPreferencia ? '' : 'low-opacity'" :icon="['fas', 'thumbtack']" /> -->
-            Docente
-          </v-th>
+          <v-th width="160" align="start">Docente </v-th>
           <v-th width="80">Turno</v-th>
           <v-th width="85">Horário</v-th>
           <v-th width="95">Sala</v-th>
@@ -95,7 +89,6 @@
             :cursosAtivados="filtroCursos.ativados"
             @click-edit="openModalEditTurma($event)"
           />
-          <!-- :orderByPreferencia="orderByPreferencia" -->
 
           <tr v-show="!TurmasOrdered.length">
             <v-td :width="1145 + 35 * filtroCursos.ativados.length">
@@ -115,7 +108,7 @@
     >
       <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Perfis'">
         <template #thead>
-          <th style="width:25px"></th>
+          <v-th width="25" />
           <v-th-ordination
             :currentOrder="ordenacaoModal.perfis"
             orderToCheck="nome"
@@ -128,17 +121,19 @@
           <tr
             v-for="perfil in PerfisOrderedModal"
             :key="perfil.id + perfil.nome"
-            @click.stop="toggleItemInArray(perfil, filtroPerfis.selecionados)"
+            @click.stop="selectPerfils(perfil)"
           >
-            <td style="width: 25px">
+            <v-td width="25">
               <input
                 type="checkbox"
-                v-model="filtroPerfis.selecionados"
-                :value="perfil"
                 class="form-check-input position-static m-0"
+                :value="perfil"
+                v-model="filtroPerfis.selecionados"
+                :indeterminate.prop="perfil.halfChecked"
+                @click.stop="selectPerfils(perfil)"
               />
-            </td>
-            <td style="width: 425px" class="t-start">{{ perfil.nome }}</td>
+            </v-td>
+            <v-td width="425" align="start">{{ perfil.nome }}</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -155,7 +150,7 @@
           />
         </template>
         <template #thead>
-          <th style="width:25px"></th>
+          <v-th width="25" />
           <v-th-ordination
             :currentOrder="ordenacaoModal.disciplinas"
             orderToCheck="codigo"
@@ -184,30 +179,27 @@
           <tr
             v-for="disciplina in DisciplinasDCCOrderedModal"
             :key="disciplina.id + disciplina.nome"
-            @click.stop="
-              toggleItemInArray(disciplina.id, filtroDisciplinas.selecionados)
-            "
+            @click.stop="selectDisciplina(disciplina)"
           >
-            <td style="width: 25px">
+            <v-td width="25">
               <input
                 type="checkbox"
                 class="form-check-input position-static m-0"
                 v-model="filtroDisciplinas.selecionados"
-                :value="disciplina.id"
+                :value="disciplina"
+                @click.stop="selectDisciplina(disciplina)"
               />
-            </td>
-            <td style="width: 70px" class="t-start">{{ disciplina.codigo }}</td>
-            <td class="t-start" style="width: 270px" :title="disciplina.nome">
+            </v-td>
+            <v-td width="70" align="start">{{ disciplina.codigo }}</v-td>
+            <v-td align="start" width="270" :title="disciplina.nome">
               {{ disciplina.nome }}
-            </td>
-            <td style="width: 85px" class="t-start">
-              {{ disciplina.perfil.abreviacao }}
-            </td>
+            </v-td>
+            <v-td width="85" align="start">{{ disciplina.perfil.abreviacao }}</v-td>
           </tr>
-          <tr v-if="DisciplinasDCCOrderedModal.length === 0">
-            <td colspan="3" style="width:450px">
+          <tr v-if="!DisciplinasDCCOrderedModal.length">
+            <v-td colspan="3" width="450">
               NENHUMA DISCIPLINA ENCONTRADA.
-            </td>
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -224,12 +216,12 @@
           />
         </template>
         <template #thead>
-          <th style="width:25px"></th>
+          <v-th width="25" />
           <v-th-ordination
             :currentOrder="ordenacaoModal.cursos"
             orderToCheck="codigo"
             width="70"
-            algin="start"
+            align="start"
             text="Código"
           />
           <v-th-ordination
@@ -246,27 +238,27 @@
             :key="curso.id + curso.nome"
             @click.stop="toggleItemInArray(curso, filtroCursos.selecionados)"
           >
-            <td style="width: 25px">
+            <v-td width="25">
               <input
                 type="checkbox"
                 v-model="filtroCursos.selecionados"
                 :value="curso"
                 class="form-check-input position-static m-0"
               />
-            </td>
-            <td style="width: 70px;" class="t-start">{{ curso.codigo }}</td>
-            <td style="width: 355px" class="t-start">{{ curso.nome }}</td>
+            </v-td>
+            <v-td width="70" align="start">{{ curso.codigo }}</v-td>
+            <v-td width="355" align="start">{{ curso.nome }}</v-td>
           </tr>
-          <tr v-show="CursosOrderedModal.length === 0">
-            <td colspan="3" style="width:450px">NENHUM CURSO ENCONTRADO.</td>
+          <tr v-show="!CursosOrderedModal.length">
+            <v-td colspan="3" width="450">NENHUM CURSO ENCONTRADO.</v-td>
           </tr>
         </template>
       </BaseTable>
 
       <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Períodos'">
         <template #thead>
-          <th style="width: 25px"></th>
-          <th style="width: 425px" class="t-start">Periodos Letivo</th>
+          <v-th width="25" />
+          <v-th width="425" align="start">Periodos Letivo</v-th>
         </template>
         <template #tbody>
           <tr
@@ -274,7 +266,7 @@
             :key="periodo.id + periodo.nome"
             @click.stop="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
           >
-            <td style="width: 25px">
+            <v-td width="25">
               <input
                 type="checkbox"
                 class="form-check-input position-static m-0"
@@ -282,29 +274,24 @@
                 v-model="filtroPeriodos.selecionados"
                 @click.stop="selecionaPeriodo(periodo)"
               />
-            </td>
-            <td style="width: 425px" class="t-start upper-case">
-              {{ periodo.nome }}
-            </td>
+            </v-td>
+            <v-td width="425" align="start">{{ periodo.nome }}</v-td>
           </tr>
         </template>
       </BaseTable>
 
-      <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
+      <BaseTable :type="'modal'" v-show="modalFiltrosTabs.current === 'Semestres'">
         <template #thead>
-          <th style="width: 25px"></th>
-          <th class="t-start" style="width: 425px">
-            Semestre Letivo
-          </th>
+          <v-th width="25" />
+          <v-th width="425" align="start">Semestre Letivo</v-th>
         </template>
-
         <template #tbody>
           <tr
             v-for="semestre in SemestresLetivos"
             :key="semestre.id + semestre.nome"
             @click.stop="selecionaSemestre(semestre)"
           >
-            <td style="width: 25px">
+            <v-td width="25">
               <input
                 type="checkbox"
                 class="form-check-input position-static m-0"
@@ -312,10 +299,8 @@
                 v-model="filtroSemestres.selecionados"
                 @click.stop="selecionaSemestre(semestre)"
               />
-            </td>
-            <td style="width: 425px" class="t-start upper-case">
-              {{ semestre.nome }}
-            </td>
+            </v-td>
+            <v-td width="425" align="start">{{ semestre.nome }}</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -323,11 +308,10 @@
       <template #modal-footer-btn>
         <BaseButton
           v-if="modalFiltrosTabs.current === 'Cursos'"
-          type="text"
+          text="Cursos DCC"
           color="lightblue"
           @click="selectCursosDCC()"
-          >Cursos DCC</BaseButton
-        >
+        />
       </template>
     </ModalFiltros>
 
@@ -492,15 +476,12 @@ export default {
       modalFiltrosCallbacks: {
         selectAll: {
           Perfis: () => {
-            this.filtroPerfis.selecionados = [...this.PerfisDCC];
+            this.filtroDisciplinas.selecionados = [...this.DisciplinasDCCInPerfis];
+            this.filtroPerfis.selecionados = [...this.PerfisOptionsModal];
           },
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = [
-              ...this.$_.map(
-                this.DisciplinasDCCInPerfis,
-                (disciplina) => disciplina.id
-              ),
-            ];
+            this.filtroDisciplinas.selecionados = [...this.DisciplinasDCCInPerfis];
+            this.filtroPerfis.selecionados = [...this.PerfisOptionsModal];
           },
           Cursos: () => {
             this.filtroCursos.selecionados = [...this.AllCursos];
@@ -517,9 +498,11 @@ export default {
         selectNone: {
           Perfis: () => {
             this.filtroPerfis.selecionados = [];
+            this.conectaPerfisEmDisciplinas();
           },
           Disciplinas: () => {
             this.filtroDisciplinas.selecionados = [];
+            this.conectaDisciplinasEmPerfis();
           },
           Cursos: () => {
             this.filtroCursos.selecionados = [];
@@ -550,16 +533,11 @@ export default {
         turmas: { order: "disciplina.codigo", type: "asc" },
         perfis: { order: "disciplina.perfil.abreviacao", type: "asc" },
       },
-
-      orderByPreferencia: true,
     };
   },
 
-  mounted() {
-    this.filtroPeriodos.selecionados = this.$_.filter(
-      this.PeriodosLetivos,
-      (periodo) => periodo.id === 1 || periodo.id === 3
-    );
+  beforeMount() {
+    this.modalFiltrosCallbacks.selectAll.Periodos();
 
     ls.set("toggle", -1);
     ls.on("toggle", () => {
@@ -603,6 +581,81 @@ export default {
       if (nome.length > 4) return true;
       else return false;
     },
+
+    selectDisciplina(disciplina) {
+      this.toggleItemInArray(disciplina, this.filtroDisciplinas.selecionados);
+      this.conectaDisciplinasEmPerfis();
+    },
+    conectaDisciplinasEmPerfis() {
+      this.filtroPerfis.selecionados = [];
+
+      this.filtroPerfis.selecionados = this.$_.filter(
+        this.PerfisOptionsModal,
+        (perfil) =>
+          this.$_.some(this.filtroDisciplinas.selecionados, ["Perfil", perfil.id])
+      );
+    },
+
+    selectPerfils(perfil) {
+      perfil.halfChecked = false;
+      const indexDoPerfil = this.$_.findIndex(this.filtroPerfis.selecionados, [
+        "id",
+        perfil.id,
+      ]);
+
+      if (indexDoPerfil === -1) this.filtroPerfis.selecionados.push(perfil);
+      else this.filtroPerfis.selecionados.splice(indexDoPerfil, 1);
+
+      this.conectaPerfisEmDisciplinas();
+    },
+    conectaPerfisEmDisciplinas() {
+      //Se não tem nenhum perfil selecionado, zera disciplinas
+      if (!this.filtroPerfis.selecionados.length) {
+        this.filtroDisciplinas.selecionados = [];
+        return;
+      }
+
+      this.$_.forEach(this.PerfisDCC, (perfil) => {
+        const perfilFounded = this.$_.find(this.filtroPerfis.selecionados, [
+          "id",
+          perfil.id,
+        ]);
+        //Se o perfil esta selecionado
+        if (perfilFounded) {
+          //E se não esta half checked. Então adiciona todas disciplinas do perfil
+          if (!perfilFounded.halfChecked) {
+            const disciplinasDoPefil = this.$_.filter(this.DisciplinasDCCInPerfis, [
+              "Perfil",
+              perfilFounded.id,
+            ]);
+
+            this.filtroDisciplinas.selecionados = this.$_.union(
+              disciplinasDoPefil,
+              this.filtroDisciplinas.selecionados
+            );
+          }
+        } else {
+          //Se o perfil não esta selecionado, remove todos as disciplinas desse perfil
+          this.filtroDisciplinas.selecionados = this.$_.filter(
+            this.filtroDisciplinas.selecionados,
+            (disciplina) => disciplina.Perfil !== perfil.id
+          );
+        }
+      });
+      // const disciplinasResult = this.$_.filter(
+      //   this.DisciplinasDCCInPerfis,
+      //   (disciplina) =>
+      //     this.$_.some(
+      //       this.filtroPerfis.selecionados,
+      //       (perfil) => !perfil.halfChecked && perfil.id === disciplina.Perfil
+      //     )
+      // );
+      // this.filtroDisciplinas.selecionados = this.$_.union(
+      //   this.filtroDisciplinas.selecionados,
+      //   disciplinasResult
+      // );
+    },
+
     async generateXlsx() {
       try {
         this.setPartialLoading(true);
@@ -645,10 +698,6 @@ export default {
         this.setPartialLoading(false);
       }
     },
-
-    toggleOrderByPreferencia() {
-      this.orderByPreferencia = !this.orderByPreferencia;
-    },
   },
 
   computed: {
@@ -684,7 +733,7 @@ export default {
       return this.$_.filter(this.TurmasFiltredByPeriodos, (turma) =>
         this.$_.some(
           this.filtroDisciplinas.ativadas,
-          (disciplinaId) => disciplinaId === turma.Disciplina
+          (disciplina) => disciplina.id === turma.Disciplina
         )
       );
     },
@@ -696,11 +745,36 @@ export default {
     // tables modal
     PerfisOrderedModal() {
       return this.$_.orderBy(
-        this.PerfisDCC,
+        this.PerfisOptionsModal,
         this.ordenacaoModal.perfis.order,
         this.ordenacaoModal.perfis.type
       );
     },
+    PerfisOptionsModal() {
+      return this.$_.map(this.PerfisDCC, (perfil) => {
+        const disciplinasDoPerfilTotal = this.$_.filter(
+          this.DisciplinasDCCInPerfis,
+          ["Perfil", perfil.id]
+        ).length;
+        const disciplinasDoPerfilSelecionadas = this.$_.filter(
+          this.filtroDisciplinas.selecionados,
+          ["Perfil", perfil.id]
+        ).length;
+
+        let halfChecked = false;
+        if (disciplinasDoPerfilTotal === disciplinasDoPerfilSelecionadas) {
+          halfChecked = false;
+        } else if (disciplinasDoPerfilSelecionadas > 0) {
+          halfChecked = true;
+        }
+
+        return {
+          ...perfil,
+          halfChecked,
+        };
+      });
+    },
+
     DisciplinasDCCOrderedModal() {
       return this.$_.orderBy(
         this.DisciplinasDCCFiltredModal,
@@ -750,23 +824,20 @@ export default {
   },
 
   watch: {
-    filtroPerfis: {
-      handler(filtroPerfis) {
-        const disciplinasResultantes = [];
-
-        this.DisciplinasDCCInPerfis.forEach((disciplina) => {
-          const perfilFounded = this.$_.some(
-            filtroPerfis.selecionados,
-            (perfil) => perfil.id === disciplina.Perfil
-          );
-
-          if (perfilFounded) disciplinasResultantes.push(disciplina.id);
-        });
-
-        this.filtroDisciplinas.selecionados = [...disciplinasResultantes];
-      },
-      deep: true,
-    },
+    // filtroPerfis: {
+    //   handler(filtroPerfis) {
+    //     const disciplinasResultantes = [];
+    //     this.DisciplinasDCCInPerfis.forEach((disciplina) => {
+    //       const perfilFounded = this.$_.some(
+    //         filtroPerfis.selecionados,
+    //         (perfil) => perfil.id === disciplina.Perfil
+    //       );
+    //       if (perfilFounded) disciplinasResultantes.push(disciplina.id);
+    //     });
+    //     this.filtroDisciplinas.selecionados = [...disciplinasResultantes];
+    //   },
+    //   deep: true,
+    // },
   },
 };
 </script>

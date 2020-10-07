@@ -151,11 +151,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      "setPartialLoading",
-      "editTurmaExterna",
-      "toggleTurmaExternaToDelete",
-    ]),
+    ...mapActions(["editTurmaExterna", "toggleTurmaExternaToDelete"]),
 
     resetTurmaForm() {
       this.turmaForm = this.$_.clone(this.turma);
@@ -652,10 +648,7 @@ export default {
         case "EAD":
           return this.HorariosEAD;
         default:
-          return this.$_.filter(
-            this.AllHorarios,
-            (horario) => horario.id != 31
-          ); //Todos sem EAD
+          return this.$_.filter(this.AllHorarios, (horario) => horario.id != 31); //Todos sem EAD
       }
     },
     IndicesInPedidos() {

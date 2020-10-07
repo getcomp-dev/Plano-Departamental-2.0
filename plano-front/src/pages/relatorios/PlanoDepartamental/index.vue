@@ -450,12 +450,9 @@ export default {
   },
 
   beforeMount() {
-    this.filtroPeriodos.selecionados = this.$_.filter(
-      this.PeriodosLetivos,
-      (periodo) => periodo.id === 1 || periodo.id === 3
-    );
-    this.modalFiltrosCallbacks.selectAll.Disciplinas();
+    this.modalFiltrosCallbacks.selectAll.Periodos();
     this.modalFiltrosCallbacks.selectAll.Perfis();
+    this.modalFiltrosCallbacks.selectAll.Disciplinas();
     this.modalFiltrosCallbacks.btnOk();
   },
 
@@ -463,16 +460,6 @@ export default {
     handleClickInTurmaVaga(turma) {
       this.turmaClicked = turma;
       this.$refs.modalVagas.open();
-    },
-    pdf(completo) {
-      pdfs.pdfRelatorioDisciplinas({
-        disciplinasSelecionadas: completo
-          ? this.DisciplinasDCCInPerfis
-          : this.DisciplinasInTurmasFiltredByDisciplina,
-        plano: this.$_.find(this.$store.state.plano.Plano, {
-          id: parseInt(localStorage.getItem("Plano")),
-        }),
-      });
     },
     getVagasByTurmaId(turmaId) {
       const pedidosInCurrentTurma = this.Pedidos[turmaId];
@@ -484,6 +471,19 @@ export default {
         0
       );
     },
+    pdf(completo) {
+      let disciplinasSelecionadas = completo
+        ? this.DisciplinasDCCInPerfis
+        : this.DisciplinasInTurmasFiltredByDisciplina;
+
+      pdfs.pdfRelatorioDisciplinas({
+        disciplinasSelecionadas,
+        plano: this.$_.find(this.AllPlanos, [
+          "id",
+          parseInt(localStorage.getItem("Plano")),
+        ]),
+      });
+    },
   },
 
   computed: {
@@ -491,6 +491,7 @@ export default {
       "TurmasInDisciplinasPerfis",
       "DisciplinasDCCInPerfis",
       "PerfisDCC",
+      "AllPlanos",
       "Pedidos",
       "PeriodosLetivos",
       "SemestresLetivos",

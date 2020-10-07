@@ -185,7 +185,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import docenteService from "@/common/services/docente";
 import docentePerfilService from "@/common/services/docentePerfil";
 import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
@@ -219,8 +219,6 @@ export default {
   },
 
   methods: {
-    ...mapActions(["setPartialLoading"]),
-
     handleClickInDocente(docente) {
       this.cleanDocente();
       this.docenteClickadoId = docente.id;

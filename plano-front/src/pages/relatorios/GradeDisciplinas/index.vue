@@ -6,20 +6,20 @@
           <label class="input-group-text">Ano</label>
         </div>
         <select
-          v-model="novoAno"
           class="form-control form-control-top"
-          v-on:change="runNovoAno()"
+          v-model="novoAno"
+          @change="runNovoAno()"
         >
           <option
             v-for="i in Array.from(Array(11), (e, i) => i - 5)"
             :key="i"
             :value="AnoAtual + i"
-            >{{ AnoAtual + i }}</option
-          >
+            >{{ AnoAtual + i }}
+          </option>
         </select>
       </div>
-      <BaseButton template="filtros" @click="openAsideModal('filtros')" />
-      <BaseButton template="ajuda" @click="openAsideModal('ajuda')" />
+      <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
+      <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </PageHeader>
 
     <div class="div-table">
@@ -351,13 +351,17 @@
 <script>
 import { mapGetters } from "vuex";
 import { normalizeText } from "@/common/utils";
-import { toggleItemInArray, toggleOrdination } from "@/common/mixins";
+import {
+  toggleItemInArray,
+  toggleOrdination,
+  toggleAsideModal,
+} from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
 import { ModalAjuda, ModalFiltros } from "@/components/modals";
 
 export default {
   name: "GradeDisciplinas",
-  mixins: [toggleItemInArray, toggleOrdination],
+  mixins: [toggleItemInArray, toggleOrdination, toggleAsideModal],
   components: {
     InputSearch,
     ModalAjuda,
@@ -366,6 +370,7 @@ export default {
   data() {
     return {
       searchDisciplinas: "",
+      asideModalsRefs: ["modalFiltros", "modalAjuda"],
       filtroDisciplinas: {
         ativados: [],
         selecionados: [],
@@ -437,29 +442,21 @@ export default {
   },
 
   beforeMount() {
-    this.ano = this.$_.find(this.$store.state.plano.Plano, {
-      id: parseInt(localStorage.getItem("Plano"), 10),
-    }).ano;
+    const currentPlano = this.$_.find(this.AllPlanos, [
+      "id",
+      parseInt(localStorage.getItem("Plano")),
+    ]);
+    this.ano = currentPlano.ano;
     this.novoAno = this.ano;
     this.runAll();
-    //ativa todos filtros
+
     this.modalFiltrosCallbacks.selectAll.Cursos();
-    this.modalFiltrosCallbacks.selectAll.Disciplinas();
     this.modalFiltrosCallbacks.selectAll.Perfis();
-    this.filtroDisciplinas.ativados = [...this.filtroDisciplinas.selecionados];
-    this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
+    this.modalFiltrosCallbacks.selectAll.Disciplinas();
+    this.modalFiltrosCallbacks.btnOk();
   },
 
   methods: {
-    openAsideModal(modalName) {
-      if (modalName === "filtros") {
-        this.$refs.modalFiltros.toggle();
-        this.$refs.modalAjuda.close();
-      } else if (modalName === "ajuda") {
-        this.$refs.modalAjuda.toggle();
-        this.$refs.modalFiltros.close();
-      }
-    },
     runNovoAno() {
       //executa runAll, modificando o ano
       if (this.ano != this.novoAno) {
@@ -653,7 +650,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["PrincipaisCursosDCC", "DisciplinasInPerfis", "AllPerfis"]),
+    ...mapGetters([
+      "PrincipaisCursosDCC",
+      "DisciplinasInPerfis",
+      "AllPerfis",
+      "AllPlanos",
+    ]),
 
     DisciplinasOrderedMain() {
       let disciplinasResult = this.DisciplinasFiltredMain;

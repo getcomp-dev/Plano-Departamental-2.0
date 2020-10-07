@@ -246,7 +246,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["setPartialLoading", "toggleTurmaToDelete", "editTurma"]),
+    ...mapActions(["toggleTurmaToDelete", "editTurma"]),
 
     resetTurmaForm() {
       this.turmaForm = this.$_.clone(this.turma);
