@@ -1,10 +1,11 @@
 <template>
   <td
     :style="{
-      textAlign: align,
       width: tdWidth,
       maxWidth: tdWidth,
       padding: tdPadding,
+      textAlign: align,
+      whiteSpace: whiteSpace,
     }"
     @click="$emit('click')"
   >
@@ -19,6 +20,7 @@ export default {
     width: { type: String | Number, required: true },
     align: { type: String, default: "center" },
     paddingX: { type: String | Number, default: "5" },
+    whiteSpace: { type: String, default: "nowrap" },
   },
 
   computed: {
@@ -36,7 +38,6 @@ td {
   display: block-inline;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
   margin: 0;
 }
 </style>

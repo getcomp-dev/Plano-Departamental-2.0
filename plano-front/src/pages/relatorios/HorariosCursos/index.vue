@@ -75,7 +75,6 @@
         />
       </template>
     </div>
-
     <p v-show="!algumHorariosEstaAtivo" class="text-empty">
       <b>Nenhum horário encontrado.</b> Clique no botão de filtros
       <font-awesome-icon :icon="['fas', 'list-ul']" class="mx-1" />para
@@ -88,7 +87,7 @@
       :tabsOptions="modalFiltrosTabs"
     >
       <div class="div-table">
-        <BaseTable v-show="modalFiltrosTabs.current === 'Cursos'" :type="'modal'">
+        <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Cursos'">
           <template #thead>
             <th style="width: 25px"></th>
             <th
@@ -135,7 +134,7 @@
           </template>
           <template #tbody>
             <tr
-              v-for="periodo in PeriodosLetivos"
+              v-for="periodo in PeriodosOptions"
               :key="periodo.id + periodo.nome"
               @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
             >
@@ -154,7 +153,8 @@
             </tr>
           </template>
         </BaseTable>
-        <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
+
+        <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Semestres'">
           <template #thead>
             <th style="width: 25px"></th>
             <th class="t-start" style="width: 425px">
@@ -163,7 +163,7 @@
           </template>
           <template #tbody>
             <tr
-              v-for="semestre in SemestresLetivos"
+              v-for="semestre in SemestresOptions"
               :key="semestre.id + semestre.nome"
               @click="selecionaSemestre(semestre)"
             >
@@ -171,6 +171,7 @@
                 <input
                   type="checkbox"
                   class="form-check-input position-static m-0"
+                  :indeterminate.prop="semestre.halfChecked"
                   :value="semestre"
                   v-model="filtroSemestres.selecionados"
                   @click.stop="selecionaSemestre(semestre)"
@@ -257,7 +258,6 @@ export default {
         selecionados: [],
       },
       filtroSemestres: {
-        ativados: [],
         selecionados: [],
       },
       modalFiltrosTabs: {
@@ -270,12 +270,12 @@ export default {
             this.filtroCursos.selecionados = [...this.CursosModal];
           },
           Periodos: () => {
-            this.filtroPeriodos.selecionados = [...this.PeriodosLetivos];
-            this.conectaPeriodoEmSemestre();
+            this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
+            this.filtroSemestres.selecionados = [...this.SemestresOptions];
           },
           Semestres: () => {
-            this.filtroSemestres.selecionados = [...this.SemestresLetivos];
-            this.conectaSemestreEmPeriodo();
+            this.filtroSemestres.selecionados = [...this.SemestresOptions];
+            this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
           },
         },
         selectNone: {
@@ -284,11 +284,11 @@ export default {
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [];
-            this.conectaPeriodoEmSemestre();
+            this.filtroSemestres.selecionados = [];
           },
           Semestres: () => {
             this.filtroSemestres.selecionados = [];
-            this.conectaSemestreEmPeriodo();
+            this.filtroPeriodos.selecionados = [];
           },
         },
         btnOk: () => {
@@ -312,7 +312,7 @@ export default {
     this.createHorarioEletivas(3);
 
     this.filtroPeriodos.selecionados = this.$_.filter(
-      this.PeriodosLetivos,
+      this.PeriodosOptions,
       (periodo) => periodo.id === 1 || periodo.id === 3
     );
     this.modalFiltrosCallbacks.selectAll.Cursos();
@@ -4568,8 +4568,6 @@ export default {
       "TurmasExternasInDisciplinas",
       "Pedidos",
       "PedidosExternos",
-      "PeriodosLetivos",
-      "SemestresLetivos",
     ]),
 
     CursosComHorariosFiltred() {
@@ -4728,7 +4726,7 @@ export default {
         periodo4: false,
       };
 
-      this.$_.forEach(this.PeriodosLetivos, (periodo) => {
+      this.$_.forEach(this.PeriodosOptions, (periodo) => {
         periodosResult[`periodo${periodo.id}`] = this.$_.some(
           this.filtroPeriodos.ativados,
           ["id", periodo.id]

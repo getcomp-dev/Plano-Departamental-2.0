@@ -2,7 +2,7 @@
   <tr class="novaturma">
     <v-td width="25" />
     <v-td width="40" />
-    <v-td width="55" paddinX="2">
+    <v-td width="55" paddingX="2">
       <select v-model.number="turmaForm.periodo">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -10,37 +10,39 @@
         <option value="4">4</option>
       </select>
     </v-td>
+
     <v-td
       width="80"
       paddinX="2"
       :style="{
-        backgroundColor: turmaForm.disciplina
-          ? turmaForm.disciplina.perfil.cor
-          : '',
+        backgroundColor: turmaForm.disciplina ? turmaForm.disciplina.perfil.cor : '',
       }"
     >
       {{ turmaForm.disciplina ? turmaForm.disciplina.perfil.abreviacao : "" }}
     </v-td>
+
     <v-td width="80" paddinX="2">
       <select v-model="turmaForm.disciplina" @change="handleChangeDisciplina">
         <option
           v-for="disciplina in DisciplinasDCCInPerfis"
           :key="disciplina.codigo + disciplina.id"
           :value="disciplina"
-          >{{ disciplina.codigo }}</option
-        >
+          >{{ disciplina.codigo }}
+        </option>
       </select>
     </v-td>
+
     <v-td width="330" paddinX="2">
       <select v-model="turmaForm.disciplina" @change="handleChangeDisciplina">
         <option
           v-for="disciplina in DisciplinasDCCInPerfisOrderedByNome"
           :key="disciplina.nome + disciplina.id"
           :value="disciplina"
-          >{{ disciplina.nome }}</option
-        >
+          >{{ disciplina.nome }}
+        </option>
       </select>
     </v-td>
+
     <v-td width="25">{{ totalCarga }}</v-td>
     <v-td width="45">
       <input
@@ -51,27 +53,49 @@
         :value="turmaForm.letra"
       />
     </v-td>
-    <v-td width="160" paddinX="2">
-      <select v-model.number="turmaForm.Docente1">
-        <option></option>
-        <option
-          v-for="docente in DocentesAtivos"
-          :key="docente.id + docente.apelido"
-          :value="docente.id"
-          >{{ docente.apelido }}
-        </option>
-      </select>
+    <td style="width:160px; padding: 0 2px">
+      <div class="d-flex align-items-center justify-content-start w-100">
+        <div class="d-flex flex-column" style="width:130px">
+          <select v-model.number="turmaForm.Docente1">
+            <option></option>
+            <option
+              v-for="docente in DocentesByPreferencia"
+              :key="docente.id + docente.apelido"
+              :value="docente.id"
+              >{{ docente.apelido }}
+              {{
+                orderByPreferencia && preferenciaDocente(docente)
+                  ? "- " + preferenciaDocente(docente)
+                  : ""
+              }}
+            </option>
+          </select>
 
-      <select v-model.number="turmaForm.Docente2">
-        <option value=""></option>
-        <option
-          v-for="docente in DocentesAtivos"
-          :key="docente.id + docente.nome"
-          :value="docente.id"
-          >{{ docente.apelido }}</option
-        >
-      </select>
-    </v-td>
+          <select v-model.number="turmaForm.Docente2">
+            <option></option>
+            <option
+              v-for="docente in DocentesByPreferencia"
+              :key="docente.apelido + docente.id"
+              :value="docente.id"
+              >{{ docente.apelido }}
+              {{
+                orderByPreferencia && preferenciaDocente(docente)
+                  ? "- " + preferenciaDocente(docente)
+                  : ""
+              }}
+            </option>
+          </select>
+        </div>
+
+        <font-awesome-icon
+          :icon="['fas', 'graduation-cap']"
+          :class="['clickable mx-auto', { 'low-opacity': !orderByPreferencia }]"
+          @click="orderByPreferencia = !orderByPreferencia"
+          style="font-size:12px"
+          title="Alternar ordenação de docentes por preferência"
+        />
+      </div>
+    </td>
     <v-td width="80">
       <select
         v-if="turmaForm.disciplina"
@@ -85,12 +109,10 @@
         </template>
       </select>
     </v-td>
-    <v-td width="85" paddinX="2">
+
+    <td style="width:85px">
       <template v-if="turmaForm.disciplina">
-        <select
-          v-model.number="turmaForm.Horario1"
-          @change="handleChangeHorario(1)"
-        >
+        <select v-model.number="turmaForm.Horario1" @change="handleChangeHorario(1)">
           <option v-if="!disciplinaIsParcialEAD && !disciplinaIsIntegralEAD">
           </option>
 
@@ -128,15 +150,13 @@
           </template>
         </select>
       </template>
-    </v-td>
-    <v-td width="95" paddinX="2">
+    </td>
+
+    <td style="width:95px">
       <template v-if="!disciplinaIsIntegralEAD && turmaForm.disciplina">
         <select v-model.number="turmaForm.Sala1">
           <option></option>
-          <option
-            v-for="sala in AllSalas"
-            :key="'s1' + sala.id"
-            :value="sala.id"
+          <option v-for="sala in AllSalas" :key="'s1' + sala.id" :value="sala.id"
             >{{ sala.nome }}
           </option>
         </select>
@@ -146,15 +166,13 @@
           v-model.number="turmaForm.Sala2"
         >
           <option></option>
-          <option
-            v-for="sala in AllSalas"
-            :key="'s2' + sala.id"
-            :value="sala.id"
+          <option v-for="sala in AllSalas" :key="'s2' + sala.id" :value="sala.id"
             >{{ sala.nome }}
           </option>
         </select>
       </template>
-    </v-td>
+    </td>
+
     <v-td :width="45 + 35 * cursosAtivadosLength">
       <div style="height:43px"></div>
     </v-td>
@@ -173,6 +191,7 @@ export default {
   data() {
     return {
       turmaForm: generateEmptyTurma({ periodo: 1, letra: "A" }),
+      orderByPreferencia: false,
     };
   },
 
@@ -239,6 +258,12 @@ export default {
         this.setPartialLoading(false);
       }
     },
+    preferenciaDocente(docente) {
+      let p = this.$_.find(this.PreferenciasDisciplina, {
+        Docente: docente.id,
+      });
+      return p ? p.preferencia : false;
+    },
   },
 
   computed: {
@@ -250,8 +275,34 @@ export default {
       "HorariosNoturno",
       "HorariosDiurno",
       "AllSalas",
+      "PreferenciaDosDocentes",
     ]),
 
+    PreferenciasDisciplina() {
+      return this.$_.filter(this.PreferenciaDosDocentes, [
+        "Disciplina",
+        this.turmaForm.Disciplina,
+      ]);
+    },
+
+    DocentesByPreferencia() {
+      if (this.orderByPreferencia) {
+        return this.$_.orderBy(
+          this.DocentesAtivos,
+          (docente) => {
+            const p = this.$_.find(this.PreferenciasDisciplina, [
+              "Docente",
+              docente.id,
+            ]);
+
+            return p ? p.preferencia : 0;
+          },
+          "desc"
+        );
+      } else {
+        return this.DocentesAtivos;
+      }
+    },
     DisciplinasDCCInPerfisOrderedByNome() {
       return this.$_.orderBy(this.DisciplinasDCCInPerfis, ["nome"]);
     },
@@ -267,10 +318,7 @@ export default {
           return this.HorariosEAD;
         default:
           //Todos sem EAD
-          return this.$_.filter(
-            this.AllHorarios,
-            (horario) => horario.id != 31
-          );
+          return this.$_.filter(this.AllHorarios, (horario) => horario.id != 31);
       }
     },
     totalCarga() {
@@ -280,14 +328,10 @@ export default {
         : "";
     },
     disciplinaIsIntegralEAD() {
-      return this.turmaForm.disciplina
-        ? this.turmaForm.disciplina.ead === 1
-        : false;
+      return this.turmaForm.disciplina ? this.turmaForm.disciplina.ead === 1 : false;
     },
     disciplinaIsParcialEAD() {
-      return this.turmaForm.disciplina
-        ? this.turmaForm.disciplina.ead === 2
-        : false;
+      return this.turmaForm.disciplina ? this.turmaForm.disciplina.ead === 2 : false;
     },
   },
 };

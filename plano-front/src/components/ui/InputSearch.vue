@@ -2,7 +2,7 @@
   <div class="input-search-container">
     <input
       ref="input"
-      type="search"
+      type="text"
       :placeholder="placeholder"
       :class="['input-search', classes]"
       :style="customStyle"
@@ -52,7 +52,7 @@ export default {
   height: 25px;
   font-size: 12px;
   color: var(--dark-gray);
-  padding: 10px 5px;
+  padding: 5px;
   padding-right: 38px;
   border: 1px solid #949494aa;
   background-color: #fff;

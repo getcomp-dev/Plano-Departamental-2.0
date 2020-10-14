@@ -19,7 +19,7 @@
                     <v-th width="95">Sala</v-th>
                 </template>
                 <template #tbody>
-                    <tr v-for="turma in TurmasRetornadas" :key="'turma' + turma.id" :style="{backgroundColor: perfil(turma.Disciplina).cor}">
+                    <tr v-for="turma in TurmasRetornadasOrdered" :key="'turma' + turma.id" :style="{backgroundColor: perfil(turma.Disciplina).cor}">
                         <v-td width="100">
                             {{plano(turma.Plano)}}
                         </v-td>
@@ -64,7 +64,14 @@
             <BaseTable
                     type="modal"
                     v-show="modalFiltrosTabs.current === 'Disciplinas'"
+                    :hasSearchBar="true"
             >
+                <template #thead-search>
+                    <InputSearch
+                            v-model="searchDisciplinasModal"
+                            placeholder="Pesquise nome ou codigo de uma disciplina..."
+                    />
+                </template>
                 <template #thead>
                     <th style="width:25px"></th>
                     <v-th width="70">Código</v-th>
@@ -72,8 +79,9 @@
                 </template>
                 <template #tbody>
                     <tr
-                            v-for="disciplina in AllDisciplinas"
+                            v-for="disciplina in DisciplinasDCCFiltredModal"
                             :key="disciplina.id + disciplina.nome"
+                            @click.prevent="toggle('Disciplinas', disciplina.id)"
                     >
                         <td style="width: 25px">
                             <input
@@ -99,16 +107,24 @@
             <BaseTable
                     type="modal"
                     v-show="modalFiltrosTabs.current === 'Docentes'"
+                    :hasSearchBar="true"
             >
+                <template #thead-search>
+                    <InputSearch
+                            v-model="searchDocentesModal"
+                            placeholder="Pesquise nome ou apelido de um docente..."
+                    />
+                </template>
                 <template #thead>
                     <th style="width:25px"></th>
-                    <v-th width="70">Apelido</v-th>
+                    <v-th width="120">Apelido</v-th>
                     <v-th width="270">Nome</v-th>
                 </template>
                 <template #tbody>
                     <tr
-                            v-for="docente in AllDocentes"
+                            v-for="docente in DocentesFiltredModal"
                             :key="docente.id + docente.nome"
+                            @click.prevent="toggle('Docentes', docente.id)"
                     >
                         <td style="width: 25px">
                             <input
@@ -118,7 +134,7 @@
                                     :value="docente.id"
                             />
                         </td>
-                        <td style="width: 70px" class="t-start">{{ docente.apelido }}</td>
+                        <td style="width: 120px" class="t-start">{{ docente.apelido }}</td>
                         <td class="t-start" style="width: 270px" :title="docente.nome">
                             {{ docente.nome }}
                         </td>
@@ -143,6 +159,7 @@
                     <tr
                             v-for="horario in AllHorarios"
                             :key="horario.id + horario.horario"
+                            @click.prevent="toggle('Horarios', horario.id)"
                     >
                         <td style="width: 25px">
                             <input
@@ -168,12 +185,13 @@
             >
                 <template #thead>
                     <th style="width:25px"></th>
-                    <v-th width="70">Nome</v-th>
+                    <v-th width="100">Nome</v-th>
                 </template>
                 <template #tbody>
                     <tr
                             v-for="sala in AllSalas"
                             :key="sala.id + sala.nome"
+                            @click.prevent="toggle('Salas', sala.id)"
                     >
                         <td style="width: 25px">
                             <input
@@ -183,7 +201,7 @@
                                     :value="sala.id"
                             />
                         </td>
-                        <td style="width: 70px" class="t-start">{{ sala.nome }}</td>
+                        <td style="width: 100px" class="t-start">{{ sala.nome }}</td>
                     </tr>
                     <tr v-if="AllSalas.length === 0">
                         <td colspan="3" style="width:450px">
@@ -206,6 +224,7 @@
                     <tr
                             v-for="plano in AllPlanos"
                             :key="plano.id + plano.ano + plano.nome"
+                            @click.prevent="toggle('Planos', plano.id)"
                     >
                         <td style="width: 25px">
                             <input
@@ -270,7 +289,7 @@
             return {
                 asideModalsRefs: ["modalFiltros"],
                 turmaClicked: generateEmptyTurma(),
-                searchCursosModal: "",
+                searchDocentesModal: "",
                 searchDisciplinasModal: "",
 
                 searchConditions: {
@@ -289,7 +308,7 @@
                 modalFiltrosCallbacks: {
                     selectAll: {
                         Disciplinas: () => {
-                            this.searchConditions.Disciplinas = [...this.$_.map(this.AllDisciplinas, function(d){
+                            this.searchConditions.Disciplinas = [...this.$_.map(this.DisciplinasDCC, function(d){
                                 return d.id
                             })];
                         },
@@ -358,12 +377,7 @@
             },
 
             search() {
-                turmaService.search(this.searchConditions).then((turmas) => {this.TurmasRetornadas = turmas.Turmas; console.log(this.TurmasRetornadas)}).catch((error) => console.log(error))
-            },
-
-            test() {
-                this.searchConditions.Docentes = [10, 40]
-                this.search()
+                turmaService.search(this.searchConditions).then((turmas) => {this.TurmasRetornadas = turmas.Turmas;}).catch((error) => console.log(error))
             },
 
             perfil(disciplina) {
@@ -374,7 +388,10 @@
 
             plano(p) {
                 let plano = this.$_.find(this.$store.state.plano.Plano, {id: p})
-                return `${plano.ano} - ${plano.nome}`
+                if(plano)
+                    return `${plano.ano} - ${plano.nome}`
+                else
+                    return '????'
             },
 
             disciplina(d) {
@@ -435,6 +452,14 @@
                         return ``
                     }
                 }
+            },
+
+            toggle(fieldName, fieldValue){
+                let i = this.$_.findIndex(this.searchConditions[fieldName], (v) => v == fieldValue)
+                if(i === -1)
+                    this.searchConditions[fieldName].push(fieldValue)
+                else
+                    this.searchConditions[fieldName].splice(i, 1)
             }
         },
 
@@ -450,6 +475,16 @@
 
             AllPlanos() {
                 return this.$store.state.plano.Plano
+            },
+
+            DisciplinasDCC() {
+                return this.$_.filter(this.AllDisciplinas, (d) => d.departamento === 1)
+            },
+
+            TurmasRetornadasOrdered() {
+                return this.$_.sortBy(this.TurmasRetornadas, (t) => {
+                    if (this.plano(t.Plano).ano) return this.plano(t.Plano).ano
+                    else return '????'})
             },
 
             TurmasOrdered() {
@@ -498,11 +533,11 @@
                 );
             },
             DisciplinasDCCFiltredModal() {
-                if (this.searchDisciplinasModal === "") return this.DisciplinasDCCInPerfis;
+                if (this.searchDisciplinasModal === "") return this.DisciplinasDCC;
 
                 const searchNormalized = normalizeText(this.searchDisciplinasModal);
 
-                return this.$_.filter(this.DisciplinasDCCInPerfis, (disciplina) => {
+                return this.$_.filter(this.DisciplinasDCC, (disciplina) => {
                     const disciplinaNome = normalizeText(disciplina.nome);
                     const disciplinaCodigo = normalizeText(disciplina.codigo);
 
@@ -512,30 +547,22 @@
                     );
                 });
             },
-            CursosOrderedModal() {
-                return this.$_.orderBy(
-                    this.CursosFiltredModal,
-                    this.ordenacaoModal.cursos.order,
-                    this.ordenacaoModal.cursos.type
-                );
-            },
-            CursosFiltredModal() {
-                let cursosResultantes = this.AllCursos;
+            DocentesFiltredModal() {
+                if (this.searchDocentesModal === "") return this.AllDocentes;
 
-                if (this.searchCursosModal !== "") {
-                    const searchNormalized = normalizeText(this.searchCursosModal);
+                const searchNormalized = normalizeText(this.searchDocentesModal);
 
-                    cursosResultantes = this.$_.filter(cursosResultantes, (curso) => {
-                        const cursoNome = normalizeText(curso.nome);
-                        const cursoCodigo = normalizeText(curso.codigo);
+                return this.$_.filter(this.AllDocentes, (docente) => {
+                    const docenteNome = normalizeText(docente.nome);
+                    const docenteApelido = normalizeText(docente.apelido);
 
-                        return (
-                            cursoNome.match(searchNormalized) || cursoCodigo.match(searchNormalized)
-                        );
-                    });
-                }
-                return cursosResultantes;
-            },
+                    return (
+                        docenteNome.match(searchNormalized) ||
+                        docenteApelido.match(searchNormalized)
+                    );
+                });
+            }
+
         },
 
         watch: {

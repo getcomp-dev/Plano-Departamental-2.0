@@ -1,47 +1,36 @@
 <template>
-  <tr class="cargaPos-row max-content">
-    <td style="width:70px">
-      <div style="height:30px"></div>
-    </td>
-
-    <td style="width: 25px">
+  <tr class="cargapos-row">
+    <v-td width="75" />
+    <v-td width="25">
       <input type="checkbox" v-model="toggleToDelete" :value="carga" />
-    </td>
-
-    <td style="width: 55px">
-      <select
-        v-model.number="cargaPosForm.trimestre"
-        @change="handleEditCargaPos"
-      >
+    </v-td>
+    <v-td width="55">
+      <select v-model.number="cargaPosForm.trimestre" @change="handleEditCargaPos">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
       </select>
-    </td>
-
-    <td style="width: 145px">
-      <select
-        v-model.number="cargaPosForm.Docente"
-        @change="handleEditCargaPos"
-      >
+    </v-td>
+    <v-td width="145">
+      <select v-model.number="cargaPosForm.Docente" @change="handleEditCargaPos">
         <option
           v-for="docente in DocentesAtivos"
-          :key="'id docente' + docente.id"
+          :key="docente.id + docente.apelido"
           :value="docente.id"
           >{{ docente.apelido }}</option
         >
       </select>
-    </td>
-
-    <td style="width: 50px">
+    </v-td>
+    <v-td width="60">
       <input
         type="text"
         v-model.number="cargaPosForm.creditos"
         @keypress="maskOnlyNumber"
         @change="handleEditCargaPos"
+        @paste.prevent
       />
-    </td>
+    </v-td>
   </tr>
 </template>
 
@@ -53,7 +42,7 @@ export default {
   name: "CargaPosRow",
   mixins: [maskOnlyNumber],
   props: {
-    carga: Object,
+    carga: { type: Object, required: true },
   },
   data() {
     return {
@@ -67,7 +56,6 @@ export default {
     resetCargaPos() {
       this.cargaPosForm = this.$_.clone(this.carga);
     },
-
     async handleEditCargaPos() {
       try {
         this.setPartialLoading(true);
@@ -85,6 +73,7 @@ export default {
       }
     },
   },
+
   computed: {
     ...mapGetters(["DocentesAtivos", "CargasPosToDelete"]),
 
@@ -97,6 +86,7 @@ export default {
       },
     },
   },
+
   watch: {
     carga: {
       handler: "resetCargaPos",
@@ -107,39 +97,28 @@ export default {
 </script>
 
 <style scoped>
-.cargaPos-row {
+.cargapos-row {
   font-size: 11px !important;
 }
-.cargaPos-row td {
-  margin: 0 !important;
-  padding: 0 5px;
-  vertical-align: middle !important;
-  text-align: center;
-  word-break: break-word;
-}
-
-.cargaPos-row select,
-.cargaPos-row input {
-  font-size: 11px !important;
-  border: 1px solid #414141 !important;
+.cargapos-row select,
+.cargapos-row input[type="text"] {
+  width: 100%;
+  margin: 5px 0;
+  height: 19px;
+  padding: 0 0;
+  font-size: 11px;
+  border: 1px solid #414141;
+  border-radius: 0px;
   color: #414141;
-  border-radius: 0px !important;
 }
-.cargaPos-row select {
-  padding: 0 0 !important;
-  height: 18px !important;
-  width: 100% !important;
+.cargapos-row select {
   text-align: start;
 }
-.cargaPos-row input[type="text"] {
-  width: 100% !important;
-  height: 18px !important;
+.cargapos-row input[type="text"] {
   text-align: center;
+  padding: 0 0px;
 }
-.cargaPos-row select + select {
-  margin-top: 3px !important;
-}
-.cargaPos-row input[type="checkbox"] {
+.cargapos-row input[type="checkbox"] {
   width: 13px !important;
   height: 13px !important;
   text-align: center !important;

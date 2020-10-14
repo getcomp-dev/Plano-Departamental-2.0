@@ -14,63 +14,58 @@
     <div class="div-table">
       <BaseTable v-show="tabAtivaMain === 'Turmas'" classes="custom-table-height">
         <template #thead>
-          <th
-            @click="toggleOrder(ordenacaoTurmasMain, 'periodo')"
-            class="clickable"
-            style="width: 35px"
+          <v-th-ordination
+            :currentOrder="ordenacaoTurmasMain"
+            orderToCheck="periodo"
+            width="35"
             title="Período letivo"
-          >
-            P.
-            <i :class="setIconByOrder(ordenacaoTurmasMain, 'periodo')"></i>
-          </th>
-          <th
-            @click="toggleOrder(ordenacaoTurmasMain, 'disciplina.perfil.abreviacao')"
-            class="t-start clickable"
-            style="width: 75px"
-          >
-            Perfil
-            <i
-              :class="
-                setIconByOrder(ordenacaoTurmasMain, 'disciplina.perfil.abreviacao')
-              "
-            ></i>
-          </th>
-          <th
-            @click="toggleOrder(ordenacaoTurmasMain, 'disciplina.codigo')"
-            class="t-start clickable"
-            style="width: 70px"
-            title="Código"
-          >
-            Cód.
-            <i :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.codigo')"></i>
-          </th>
-          <th
-            @click="toggleOrder(ordenacaoTurmasMain, 'disciplina.nome')"
-            class="t-start clickable"
-            style="width: 300px"
-          >
-            Disciplina
-            <i :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.nome')"></i>
-          </th>
-          <th style="width: 35px" class="t-staty" title="Turma">T.</th>
-          <th style="width: 130px" class="s-start">Docentes</th>
-          <th style="width:50px">Editar</th>
+            >P.
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoTurmasMain"
+            orderToCheck="disciplina.perfil.abreviacao"
+            width="75"
+            align="start"
+            title="Período letivo"
+            >Perfil
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoTurmasMain"
+            orderToCheck="disciplina.codigo"
+            width="80"
+            align="start"
+            >Código
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoTurmasMain"
+            orderToCheck="disciplina.nome"
+            width="300"
+            align="start"
+            >Disciplina
+          </v-th-ordination>
+          <v-th width="35" title="Turma">T.</v-th>
+          <v-th width="130" align="start">Docentes</v-th>
+          <v-th width="50">Editar</v-th>
         </template>
 
         <template #tbody>
           <template v-for="validacaoTurma in TurmasValidacoesOrdered">
-            <tr :key="'turmaId' + validacaoTurma.id" class="bg-custom">
-              <v-td width="35">{{ validacaoTurma.periodo }}</v-td>
+            <tr :key="validacaoTurma.id + validacaoTurma.letra" class="bg-custom">
+              <v-td width="35">
+                {{ validacaoTurma.periodo }}
+              </v-td>
               <v-td width="75" align="start">
                 {{ validacaoTurma.disciplina.perfil.abreviacao }}
               </v-td>
-              <v-td width="70" align="start">{{
-                validacaoTurma.disciplina.codigo
-              }}</v-td>
-              <v-td width="300" align="start">{{
-                validacaoTurma.disciplina.nome
-              }}</v-td>
-              <v-td width="35">{{ validacaoTurma.letra }}</v-td>
+              <v-td width="80" align="start">
+                {{ validacaoTurma.disciplina.codigo }}
+              </v-td>
+              <v-td width="300" align="start">
+                {{ validacaoTurma.disciplina.nome }}
+              </v-td>
+              <v-td width="35">
+                {{ validacaoTurma.letra }}
+              </v-td>
               <v-td width="130" align="start">
                 {{ validacaoTurma.docente1Apelido }}
                 <br />
@@ -100,58 +95,62 @@
                   style="font-size: 13px"
                 />
               </v-td>
-
-              <v-td width="655" align="start" colspan="6">
-                {{ conflito.msg }}
-              </v-td>
+              <v-td width="670" align="start" colspan="6">{{ conflito.msg }}</v-td>
             </tr>
           </template>
 
           <tr v-show="!TurmasValidacoesOrdered.length">
-            <td style="width:695px">
-              <b>Nenhum conflito encontrado.</b> Clique no botão de filtros
+            <v-td width="705">
+              <b>Nenhum conflito encontrado em turmas.</b> Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
               para selecioná-los.
-            </td>
+            </v-td>
           </tr>
         </template>
       </BaseTable>
 
       <BaseTable v-show="tabAtivaMain === 'Docentes'" classes="custom-table-height">
         <template #thead>
-          <th
+          <v-th-ordination
+            :currentOrder="ordenacaoDocentesMain"
+            orderToCheck="nome"
+            width="705"
+            align="start"
             colspan="2"
-            @click="toggleOrder(ordenacaoDocentesMain, 'nome')"
-            style="width: 695px"
-            class="t-start clickable"
-          >
-            Nome
-            <i :class="setIconByOrder(ordenacaoDocentesMain, 'nome')"></i>
-          </th>
+            >Nome
+          </v-th-ordination>
         </template>
+
         <template #tbody>
           <template v-for="validacaoDocente in DocentesValidacoesOrdered">
-            <tr :key="'docenteId' + validacaoDocente.id" class="bg-custom">
-              <td colspan="2" style="width: 695px;" class="t-start">
+            <tr :key="validacaoDocente.id + validacaoDocente.nome" class="bg-custom">
+              <v-td colspan="2" width="705" align="start">
                 {{ validacaoDocente.nome }}
-              </td>
+              </v-td>
             </tr>
+
             <tr
               v-for="conflito in validacaoDocente.conflitos"
-              :key="'conflitos' + validacaoDocente.id + conflito"
+              :key="validacaoDocente.id + conflito"
             >
-              <td style="width: 35px">
+              <v-td width="35">
                 <font-awesome-icon
                   :icon="['fas', 'exclamation-circle']"
                   class="icon-red"
                   title="Conflito critico!"
                   style="font-size: 13px"
                 />
-              </td>
+              </v-td>
 
-              <td style="width: 655px;" class="t-start">{{ conflito }}</td>
+              <v-td width="670" align="start">{{ conflito }}</v-td>
             </tr>
           </template>
+
+          <tr v-show="!DocentesValidacoesOrdered.length">
+            <v-td width="705">
+              <b>Nenhum conflito encontrado em docentes.</b>
+            </v-td>
+          </tr>
         </template>
       </BaseTable>
     </div>
@@ -162,41 +161,41 @@
       :tabsOptions="modalFiltrosTabs"
     >
       <div class="div-table">
-        <BaseTable v-show="modalFiltrosTabs.current === 'Conflitos'" :type="'modal'">
+        <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Conflitos'">
           <template #thead>
-            <th style="width: 25px"></th>
-            <th style="width: 425px" class="t-start">Conflito</th>
+            <v-th width="25" />
+            <v-th width="425" align="start">Conflito</v-th>
           </template>
           <template #tbody>
             <tr
-              v-for="conflito in ConflitosOrdered"
-              :key="'conflitosModal' + conflito.type"
+              v-for="conflito in ConflitosOptionsOrdered"
+              :key="conflito.type + conflito.msg"
               @click="toggleItemInArray(conflito.type, filtroConflitos.selecionados)"
               style="text-transform: uppercase"
             >
-              <td style="width: 25px;">
+              <v-td width="25">
                 <input
                   type="checkbox"
                   class="form-check-input position-static m-0"
                   v-model="filtroConflitos.selecionados"
                   :value="conflito.type"
                 />
-              </td>
-              <td style="width: 425px" class="t-start">{{ conflito.msg }}</td>
+              </v-td>
+              <v-td width="425" align="start">{{ conflito.msg }} </v-td>
             </tr>
           </template>
         </BaseTable>
 
         <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Períodos'">
           <template #thead>
-            <th style="width: 25px"></th>
-            <th style="width: 425px" class="t-start">Periodos Letivo</th>
+            <v-th width="25" />
+            <v-th width="425" align="start">Periodos Letivo</v-th>
           </template>
           <template #tbody>
             <tr
-              v-for="periodo in PeriodosLetivos"
+              v-for="periodo in PeriodosOptions"
               :key="periodo.id + periodo.nome"
-              @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
+              @click.stop="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
             >
               <v-td width="25">
                 <input
@@ -207,38 +206,33 @@
                   @click.stop="selecionaPeriodo(periodo)"
                 />
               </v-td>
-              <v-td width="425" align="start">
-                {{ periodo.nome }}
-              </v-td>
+              <v-td width="425" align="start">{{ periodo.nome }}</v-td>
             </tr>
           </template>
         </BaseTable>
 
-        <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
+        <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Semestres'">
           <template #thead>
-            <th style="width: 25px"></th>
-            <th class="t-start" style="width: 425px">
-              Semestre Letivo
-            </th>
+            <v-th width="25" />
+            <v-th width="425" align="start">Semestre Letivo</v-th>
           </template>
           <template #tbody>
             <tr
-              v-for="semestre in SemestresLetivos"
+              v-for="semestre in SemestresOptions"
               :key="semestre.id + semestre.nome"
-              @click="selecionaSemestre(semestre)"
+              @click.stop="selecionaSemestre(semestre)"
             >
-              <td style="width: 25px">
+              <v-td width="25">
                 <input
                   type="checkbox"
                   class="form-check-input position-static m-0"
+                  :indeterminate.prop="semestre.halfChecked"
                   :value="semestre"
                   v-model="filtroSemestres.selecionados"
                   @click.stop="selecionaSemestre(semestre)"
                 />
-              </td>
-              <td style="width: 425px" class="t-start upper-case">
-                {{ semestre.nome }}
-              </td>
+              </v-td>
+              <v-td width="425" align="start">{{ semestre.nome }}</v-td>
             </tr>
           </template>
         </BaseTable>
@@ -281,7 +275,6 @@
 import { mapGetters } from "vuex";
 import { generateEmptyTurma } from "@/common/utils";
 import {
-  toggleOrdination,
   toggleItemInArray,
   toggleAsideModal,
   conectaFiltrosSemestresEPeriodos,
@@ -323,12 +316,7 @@ const AllConflitosTurmas = [
 
 export default {
   name: "Validacoes",
-  mixins: [
-    toggleOrdination,
-    toggleItemInArray,
-    toggleAsideModal,
-    conectaFiltrosSemestresEPeriodos,
-  ],
+  mixins: [toggleItemInArray, toggleAsideModal, conectaFiltrosSemestresEPeriodos],
   components: {
     ModalAjuda,
     ModalFiltros,
@@ -354,7 +342,6 @@ export default {
         selecionados: [],
       },
       filtroSemestres: {
-        ativados: [],
         selecionados: [],
       },
       modalFiltrosTabs: {
@@ -369,12 +356,12 @@ export default {
             ];
           },
           Periodos: () => {
-            this.filtroPeriodos.selecionados = [...this.PeriodosLetivos];
-            this.conectaPeriodoEmSemestre();
+            this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
+            this.filtroSemestres.selecionados = [...this.SemestresOptions];
           },
           Semestres: () => {
-            this.filtroSemestres.selecionados = [...this.SemestresLetivos];
-            this.conectaSemestreEmPeriodo();
+            this.filtroSemestres.selecionados = [...this.SemestresOptions];
+            this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
           },
         },
         selectNone: {
@@ -383,11 +370,11 @@ export default {
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [];
-            this.conectaPeriodoEmSemestre();
+            this.filtroSemestres.selecionados = [];
           },
           Semestres: () => {
             this.filtroSemestres.selecionados = [];
-            this.conectaSemestreEmPeriodo();
+            this.filtroPeriodos.selecionados = [];
           },
         },
         btnOk: () => {
@@ -553,7 +540,6 @@ export default {
       this.turmaClicked = turma;
       this.$refs.modalEditTurma.open();
     },
-
     createValidacao(turma) {
       const validacaoResult = this.$_.cloneDeep(turma);
 
@@ -1007,9 +993,11 @@ export default {
       return this.$_.some(this.filtroPeriodos.ativados, ["id", periodo]);
     },
     filterByConflitos(arrayConflitos) {
-      const conflitosResultantes = this.$_.filter(
-        arrayConflitos,
-        (conflito) => this.filtroConflitos.ativados.indexOf(conflito.type) !== -1
+      const conflitosResultantes = this.$_.filter(arrayConflitos, (conflito) =>
+        this.$_.some(
+          this.filtroConflitos.ativados,
+          (conflitoType) => conflitoType === conflito.type
+        )
       );
       return conflitosResultantes;
     },
@@ -1048,14 +1036,8 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      "AllSalas",
-      "DocentesAtivos",
-      "TurmasInDisciplinasPerfis",
-      "PeriodosLetivos",
-      "SemestresLetivos",
-    ]),
-    //table main
+    ...mapGetters(["AllSalas", "DocentesAtivos", "TurmasInDisciplinasPerfis"]),
+
     TurmasValidacoesOrdered() {
       return this.$_.orderBy(
         this.TurmasValidacoesFiltred,
@@ -1120,8 +1102,8 @@ export default {
 
       return docentesResultantes;
     },
-    //table modal
-    ConflitosOrdered() {
+
+    ConflitosOptionsOrdered() {
       return this.$_.orderBy(AllConflitosTurmas, "msg");
     },
   },

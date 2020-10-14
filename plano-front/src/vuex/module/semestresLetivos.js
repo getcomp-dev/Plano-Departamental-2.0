@@ -1,12 +1,12 @@
 const state = {
   SemestresLetivos: [
     {
-      nome: "Primeiro",
       id: 1,
+      nome: "Primeiro",
     },
     {
-      nome: "Segundo",
       id: 2,
+      nome: "Segundo",
     },
   ],
 };

@@ -26,10 +26,7 @@
       :tabsOptions="modalFiltrosTabs"
     >
       <div class="div-table">
-        <BaseTable
-          v-show="modalFiltrosTabs.current === 'Laborátorios'"
-          :type="'modal'"
-        >
+        <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Laborátorios'">
           <template #thead>
             <th style="width: 25px" class="t-start"></th>
             <th style="width: 425px" class="t-start">Nome</th>
@@ -64,7 +61,7 @@
           </template>
           <template #tbody>
             <tr
-              v-for="periodo in PeriodosLetivos"
+              v-for="periodo in PeriodosOptions"
               :key="periodo.id + periodo.nome"
               @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
             >
@@ -84,7 +81,7 @@
           </template>
         </BaseTable>
 
-        <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
+        <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Semestres'">
           <template #thead>
             <th style="width: 25px"></th>
             <th class="t-start" style="width: 425px">
@@ -93,7 +90,7 @@
           </template>
           <template #tbody>
             <tr
-              v-for="semestre in SemestresLetivos"
+              v-for="semestre in SemestresOptions"
               :key="semestre.id + semestre.nome"
               @click="selecionaSemestre(semestre)"
             >
@@ -101,6 +98,7 @@
                 <input
                   type="checkbox"
                   class="form-check-input position-static m-0"
+                  :indeterminate.prop="semestre.halfChecked"
                   :value="semestre"
                   v-model="filtroSemestres.selecionados"
                   @click.stop="selecionaSemestre(semestre)"
@@ -167,7 +165,6 @@ export default {
         selecionados: [],
       },
       filtroSemestres: {
-        ativados: [],
         selecionados: [],
       },
       modalFiltrosTabs: {
@@ -180,12 +177,12 @@ export default {
             this.filtroLaboratorios.selecionados = [...this.LaboratoriosOrdered];
           },
           Periodos: () => {
-            this.filtroPeriodos.selecionados = [...this.PeriodosLetivos];
-            this.conectaPeriodoEmSemestre();
+            this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
+            this.filtroSemestres.selecionados = [...this.SemestresOptions];
           },
           Semestres: () => {
-            this.filtroSemestres.selecionados = [...this.SemestresLetivos];
-            this.conectaSemestreEmPeriodo();
+            this.filtroSemestres.selecionados = [...this.SemestresOptions];
+            this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
           },
         },
         selectNone: {
@@ -194,15 +191,17 @@ export default {
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [];
-            this.conectaPeriodoEmSemestre();
+            this.filtroSemestres.selecionados = [];
           },
           Semestres: () => {
             this.filtroSemestres.selecionados = [];
-            this.conectaSemestreEmPeriodo();
+            this.filtroPeriodos.selecionados = [];
           },
         },
         btnOk: () => {
-          this.filtroPeriodos.ativados = [...this.filtroPeriodos.selecionados];
+          this.filtroPeriodos.ativados = [
+            ...this.$_.orderBy(this.filtroPeriodos.selecionados, "id"),
+          ];
           this.filtroLaboratorios.ativados = [
             ...this.filtroLaboratorios.selecionados,
           ];
@@ -213,7 +212,7 @@ export default {
 
   beforeMount() {
     this.filtroPeriodos.selecionados = this.$_.filter(
-      this.PeriodosLetivos,
+      this.PeriodosOptions,
       (periodo) => periodo.id === 1 || periodo.id === 3
     );
     this.modalFiltrosCallbacks.selectAll.Laboratorios();
@@ -241,8 +240,6 @@ export default {
       "TurmasExternasInDisciplinas",
       "AllPlanos",
       "currentPlanoId",
-      "PeriodosLetivos",
-      "SemestresLetivos",
     ]),
 
     LaboratoriosOrdered() {

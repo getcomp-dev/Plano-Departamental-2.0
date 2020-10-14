@@ -21,12 +21,11 @@
     <div class="div-table">
       <BaseTable>
         <template #thead>
-          <th style="width:70px" class="p-0">Programa</th>
-          <th style="width:25px"></th>
-          <th style="width:55px" title="Período, ordenação fixa">
-            <font-awesome-icon :icon="['fas', 'thumbtack']" />
-            P.
-          </th>
+          <v-th width="75">Programa</v-th>
+          <v-th width="25" />
+          <v-th width="55" title="Período, ordenação fixa">
+            <font-awesome-icon :icon="['fas', 'thumbtack']" /> P.
+          </v-th>
           <v-th-ordination
             :currentOrder="ordenacaoCargaPos"
             orderToCheck="docenteApelido"
@@ -38,7 +37,7 @@
             :currentOrder="ordenacaoCargaPos"
             orderToCheck="creditos"
             orderType="desc"
-            width="50"
+            width="60"
             title="Créditos"
             text="C."
           />
@@ -51,11 +50,13 @@
         <template #tbody>
           <template v-for="programa in ProgramasInCargaPosOrdered">
             <tr class="bg-custom" :key="programa.nome">
-              <td style="width:70px">{{ programa.nome }}</td>
-              <td colspan="3" style="width: 225px"></td>
-              <td style="width:50px" title="Total de carga">
+              <v-td width="75">{{ programa.nome }}</v-td>
+              <v-td width="25" />
+              <v-td width="55" />
+              <v-td width="145" />
+              <v-td width="60" title="Total de carga">
                 {{ calculaTotalDeCreditosDaCarga(programa.cargas) }}
-              </td>
+              </v-td>
             </tr>
 
             <CargaPosRow
@@ -66,11 +67,11 @@
           </template>
 
           <tr v-show="!ProgramasInCargaPosOrdered.length">
-            <td style="width:345px">
+            <v-td width="360" whiteSpace="normal">
               <b>Nenhuma carga encontrada.</b> Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
               para selecioná-las.
-            </td>
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -83,40 +84,41 @@
     >
       <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Programas'">
         <template #thead>
-          <th style="width: 25px"></th>
-          <th style="width: 425px" class="t-start">Programa</th>
+          <v-th width="25" />
+          <v-th width="425" align="start">Programa</v-th>
         </template>
+
         <template #tbody>
           <tr
             v-for="programaPos in AllProgramasPosOrdered"
             :key="programaPos"
             @click="toggleItemInArray(programaPos, filtroProgramas.selecionados)"
           >
-            <td style="width:25px">
+            <v-td width="25">
               <input
                 type="checkbox"
                 class="form-check-input position-static m-0"
                 :value="programaPos"
                 v-model="filtroProgramas.selecionados"
               />
-            </td>
-            <td style="width:425px" class="t-start">{{ programaPos }}</td>
+            </v-td>
+            <v-td width="425" align="start">{{ programaPos }}</v-td>
           </tr>
         </template>
       </BaseTable>
 
       <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Períodos'">
         <template #thead>
-          <th style="width: 25px"></th>
-          <th style="width: 425px" class="t-start">Periodos Letivo</th>
+          <v-th width="25" />
+          <v-th width="425" align="start">Periodos Letivo</v-th>
         </template>
         <template #tbody>
           <tr
-            v-for="periodo in PeriodosLetivos"
+            v-for="periodo in PeriodosOptions"
             :key="periodo.id + periodo.nome"
             @click.stop="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
           >
-            <td style="width: 25px">
+            <v-td width="25">
               <input
                 type="checkbox"
                 class="form-check-input position-static m-0"
@@ -124,40 +126,39 @@
                 v-model="filtroPeriodos.selecionados"
                 @click.stop="selecionaPeriodo(periodo)"
               />
-            </td>
-            <td style="width: 425px" class="t-start upper-case">
+            </v-td>
+            <v-td width="425" align="start">
               {{ periodo.nome.split("(")[0] }}
-            </td>
+            </v-td>
           </tr>
         </template>
       </BaseTable>
 
       <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Semestres'">
         <template #thead>
-          <th style="width: 25px"></th>
-          <th class="t-start" style="width: 425px">
-            Semestre Letivo
-          </th>
+          <v-th width="25" />
+          <v-th width="425" align="start"> Semestre Letivo</v-th>
         </template>
 
         <template #tbody>
           <tr
-            v-for="semestre in SemestresLetivos"
+            v-for="semestre in SemestresOptions"
             :key="semestre.id + semestre.nome"
             @click.stop="selecionaSemestre(semestre)"
           >
-            <td style="width: 25px">
+            <v-td width="25">
               <input
                 type="checkbox"
                 class="form-check-input position-static m-0"
+                :indeterminate.prop="semestre.halfChecked"
                 :value="semestre"
                 v-model="filtroSemestres.selecionados"
                 @click.stop="selecionaSemestre(semestre)"
               />
-            </td>
-            <td style="width: 425px" class="t-start upper-case">
+            </v-td>
+            <v-td width="425" align="start">
               {{ semestre.nome }}
-            </td>
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -278,12 +279,12 @@ export default {
             this.filtroProgramas.selecionados = [...this.AllProgramasPosOrdered];
           },
           Periodos: () => {
-            this.filtroPeriodos.selecionados = [...this.PeriodosLetivos];
-            this.conectaPeriodoEmSemestre();
+            this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
+            this.filtroSemestres.selecionados = [...this.SemestresOptions];
           },
           Semestres: () => {
-            this.filtroSemestres.selecionados = [...this.SemestresLetivos];
-            this.conectaSemestreEmPeriodo();
+            this.filtroSemestres.selecionados = [...this.SemestresOptions];
+            this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
           },
         },
         selectNone: {
@@ -292,11 +293,11 @@ export default {
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [];
-            this.conectaPeriodoEmSemestre();
+            this.filtroSemestres.selecionados = [];
           },
           Semestres: () => {
             this.filtroSemestres.selecionados = [];
-            this.conectaSemestreEmPeriodo();
+            this.filtroPeriodos.selecionados = [];
           },
         },
         btnOk: () => {
@@ -357,13 +358,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      "DocentesAtivos",
-      "CargasPosToDelete",
-      "AllCargasPos",
-      "SemestresLetivos",
-      "PeriodosLetivos",
-    ]),
+    ...mapGetters(["DocentesAtivos", "CargasPosToDelete", "AllCargasPos"]),
 
     ProgramasInCargaPosOrdered() {
       return this.$_.map(this.ProgramasInCargaPosFiltredByPeriodo, (programa) => {

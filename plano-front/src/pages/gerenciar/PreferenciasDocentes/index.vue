@@ -1,6 +1,7 @@
 <template>
   <div>
     <PageHeader title="Preferências dos docentes">
+      <BaseButton template="adicionar" @click="openModalAddPreferencia()" />
       <BaseButton template="swap-modes" @click="swapModes()" />
       <BaseButton template="file-upload" @click="openModalUpload()" />
     </PageHeader>
@@ -268,6 +269,70 @@
     </BaseModal>
 
     <BaseModal
+            ref="modalAddPreferencia"
+            :title="'Adicionar Preferência'"
+            :hasFooter="true"
+    >
+      <template #modal-body>
+        <div class="row" :style="{ margin: '0' }">
+          <label for="selectPreferenciaAdicionarPreferenciaDocentes">Docente: </label>
+          <select
+                  v-model="add.Docente"
+                  id="selectPreferenciaAdicionarPreferenciaDocentes"
+                  style="width: 200px; margin-left: auto"
+          >
+            <option
+                    v-for="docente in AllDocentes"
+                    :key="`adicionarPreferenciaDocente${docente.id}`"
+                    :value="docente.id"
+            >
+              {{ docente.apelido }}
+            </option>
+          </select>
+        </div>
+        <div class="row" :style="{ margin: '0' }">
+          <label for="selectPreferenciaAdicionarPreferenciaDisciplinas">Disciplina: </label>
+          <select
+                  v-model="add.Disciplina"
+                  id="selectPreferenciaAdicionarPreferenciaDisciplinas"
+                  style="width: 200px; margin-left: auto"
+          >
+            <option
+                    v-for="disciplina in AllDisciplinas"
+                    :key="`adicionarPreferenciaDisciplina${disciplina.id}`"
+                    :value="disciplina.id"
+            >
+              {{ disciplina.codigo }} - {{ disciplina.nome }}
+            </option>
+          </select>
+        </div>
+        <div class="row" :style="{ display: 'table-cell', verticalAlign: 'middle' }">
+          <label for="inputPreferenciaAdicionarPreferencia">Preferência: </label>
+          <input
+                  type="text"
+                  v-model="add.preferencia"
+                  id="inputPreferenciaAdicionarPreferencia"
+                  :style="{
+              width: '25px',
+              height: '20px',
+              marginLeft: '10px',
+              textAlign: 'center',
+            }"
+          />
+        </div>
+      </template>
+      <template #modal-footer>
+        <BaseButton
+                type="text"
+                color="lightblue"
+                @click="addPreferencia()"
+                class="ml-auto"
+        >Confirmar</BaseButton
+        >
+      </template>
+    </BaseModal>
+
+    <BaseModal
       ref="modalUpload"
       :title="'Selecione um arquivo para importar'"
       :hasFooter="true"
@@ -438,6 +503,10 @@ export default {
       this.$refs.modalAddDisciplina.open();
     },
 
+    openModalAddPreferencia() {
+      this.$refs.modalAddPreferencia.open();
+    },
+
     handleEditPrefs() {
       if (this.edit.isZero) {
         if (this.preferenciaForm.preferencia != 0) {
@@ -605,9 +674,13 @@ export default {
 
     DocentesPorDisciplinas() {
       let prefs = {};
-      this.PreferenciaDosDocentes.forEach((p) => {
-        if (prefs[p.Disciplina] === undefined) prefs[p.Disciplina] = [];
-        prefs[p.Disciplina].push(p);
+      let preferencias = _.orderBy(this.PreferenciaDosDocentes, (p) => {
+        return this.disciplinaById(p.Disciplina).codigo
+      })
+      preferencias.forEach((p) => {
+        let codigo = this.disciplinaById(p.Disciplina).codigo
+        if (prefs[codigo] === undefined) prefs[codigo] = [];
+        prefs[codigo].push(p);
       });
       for (var disc in prefs) {
         if (Object.prototype.hasOwnProperty.call(prefs, disc)) {
@@ -625,9 +698,13 @@ export default {
 
     DisciplinasPorDocentes() {
       let prefs = {};
-      this.PreferenciaDosDocentes.forEach((p) => {
-        if (prefs[p.Docente] === undefined) prefs[p.Docente] = [];
-        prefs[p.Docente].push(p);
+      let preferencias = _.orderBy(this.PreferenciaDosDocentes, (p) => {
+        return this.docenteById(p.Docente).apelido
+      })
+      preferencias.forEach((p) => {
+        let apelido = this.docenteById(p.Docente).apelido
+        if (prefs[apelido] === undefined) prefs[apelido] = [];
+        prefs[apelido].push(p);
       });
       for (var doce in prefs) {
         if (Object.prototype.hasOwnProperty.call(prefs, doce)) {

@@ -38,7 +38,7 @@ export default {
 
   watch: {
     queue: {
-      handler: function(queue) {
+      handler(queue) {
         const queueTop = queue[queue.length - 1];
 
         this.$notify({ ...queueTop, group: "general" });

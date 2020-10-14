@@ -1,51 +1,48 @@
 <template>
-  <tr class="novaturma">
-    <td style="width:70px" class="less-padding">
+  <tr class="novacarga">
+    <v-td width="75">
       <select type="text" v-model="cargaPosForm.programa">
         <option value="PGCC">PGCC</option>
         <option value="PGEM">PGEM</option>
         <option value="PGMC">PGMC</option>
       </select>
-    </td>
-    <td style="width:25px">
-      <div style="height:30px"></div>
-    </td>
-    <td style="width:55px">
+    </v-td>
+    <v-td width="25" />
+    <v-td width="55">
       <select v-model.number="cargaPosForm.trimestre">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
       </select>
-    </td>
-    <td style="width:145px" class="less-padding">
+    </v-td>
+    <v-td width="145">
       <select v-model.number="cargaPosForm.Docente">
-        <option v-if="!DocentesAtivos.length" type="text" value
-          >Nenhum Docente Encontrado</option
-        >
+        <option v-if="!DocentesAtivos.length">
+          Nenhum Docente Encontrado
+        </option>
         <option
           v-for="docente in DocentesAtivos"
           :key="docente.id + docente.apelido"
           :value="docente.id"
-          >{{ docente.apelido }}</option
-        >
+          >{{ docente.apelido }}
+        </option>
       </select>
-    </td>
-    <td style="width:50px" class="less-padding">
+    </v-td>
+    <v-td width="60">
       <input
         type="text"
-        id="creditos"
         v-model.number="cargaPosForm.creditos"
         @keypress="maskOnlyNumber"
+        @paste.prevent
       />
-    </td>
+    </v-td>
   </tr>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { maskOnlyNumber } from "@/common/mixins";
-
 const emptyCarga = {
   id: null,
   trimestre: null,
@@ -62,6 +59,7 @@ export default {
       cargaPosForm: this.$_.clone(emptyCarga),
     };
   },
+
   methods: {
     ...mapActions(["createCargaPos"]),
 
@@ -80,6 +78,7 @@ export default {
       }
     },
   },
+
   computed: {
     ...mapGetters(["DocentesAtivos"]),
   },
@@ -87,43 +86,32 @@ export default {
 </script>
 
 <style scoped>
-.novaturma {
+.novacarga {
   font-size: 11px !important;
   background-color: #cecece;
 }
-.novaturma td {
-  margin: 0 !important;
-  padding: 0 5px;
-  vertical-align: middle !important;
-  text-align: center;
-  word-break: break-word;
+.novacarga:hover {
+  background-color: #cecece;
 }
-.novaturma .less-padding {
-  padding: 0 2px;
-}
-
-.novaturma select,
-.novaturma input {
-  font-size: 11px !important;
-  border: 1px solid #414141 !important;
+.novacarga select,
+.novacarga input[type="text"] {
+  width: 100%;
+  margin: 5px 0;
+  height: 19px;
+  padding: 0 0;
+  font-size: 11px;
+  border: 1px solid #414141;
+  border-radius: 0px;
   color: #414141;
-  border-radius: 0px !important;
 }
-.novaturma select {
-  height: 18px !important;
-  width: 100% !important;
-  padding: 0 0 !important;
+.novacarga select {
   text-align: start;
 }
-.novaturma input[type="text"] {
-  width: 100% !important;
-  height: 18px !important;
+.novacarga input[type="text"] {
   text-align: center;
+  padding: 0 0px;
 }
-.novaturma select + select {
-  margin-top: 3px !important;
-}
-.novaturma input[type="checkbox"] {
+.novacarga input[type="checkbox"] {
   width: 13px !important;
   height: 13px !important;
   text-align: center !important;

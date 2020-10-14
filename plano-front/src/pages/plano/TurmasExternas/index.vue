@@ -7,7 +7,6 @@
         @click="$refs.novaTurmaExternaRow.handleCreateTurmaExterna()"
       />
       <BaseButton v-show="isAdding" template="cancelar" @click="toggleAddRow" />
-
       <BaseButton v-show="!isAdding" template="adicionar" @click="toggleAddRow" />
       <BaseButton
         v-show="!isAdding"
@@ -15,7 +14,6 @@
         title="Deletar selecionados"
         @click="openModalDelete"
       />
-
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </PageHeader>
@@ -23,42 +21,40 @@
     <div class="div-table">
       <BaseTable>
         <template #thead>
-          <th style="width: 25px"></th>
-          <th style="width: 55px" title="Período letivo">P.</th>
-          <th
-            style="width: 80px"
-            class="clickable"
-            @click="toggleOrder(ordenacaoTurmasMain, 'disciplina.codigo')"
-            title="Código"
-          >
-            Cód.
-            <i :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.codigo')"></i>
-          </th>
-          <th
-            style="width: 330px"
-            class="clickable"
-            @click="toggleOrder(ordenacaoTurmasMain, 'disciplina.nome')"
-          >
-            Disciplina
-            <i :class="setIconByOrder(ordenacaoTurmasMain, 'disciplina.nome')"></i>
-          </th>
-          <th style="width: 25px" title="Créditos">C.</th>
-          <th style="width: 45px" title="Turma">T.</th>
-          <th style="width: 80px">Turno</th>
-          <th style="width: 85px">Horário</th>
-          <th style="width: 95px">Sala</th>
-          <th style="width: 45px" title="Total de vagas">Total</th>
-          <th
-            style="width:35px"
+          <v-th width="25" />
+          <v-th width="55" title="Período letivo">P.</v-th>
+          <v-th-ordination
+            :currentOrder="ordenacaoTurmasMain"
+            orderToCheck="disciplina.codigo"
+            width="80"
+            align="start"
+            text="Código"
+            >Código
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoTurmasMain"
+            orderToCheck="disciplina.nome"
+            width="330"
+            align="start"
+            >Disciplina
+          </v-th-ordination>
+          <v-th width="25" title="Créditos">C.</v-th>
+          <v-th width="45" title="Turma">T.</v-th>
+          <v-th width="80">Turno</v-th>
+          <v-th width="85">Horário</v-th>
+          <v-th width="95">Sala</v-th>
+          <v-th width="45" title="Total de vagas">Total</v-th>
+          <v-th
             v-for="curso in PrincipaisCursosDCC"
             :key="curso.id + curso.nome"
+            width="35"
             v-b-popover.hover.bottom="{
               title: curso.nome,
               content: cursoPopoverContent(curso),
             }"
           >
             {{ curso.codigo }}
-          </th>
+          </v-th>
         </template>
 
         <template #add-row>
@@ -89,8 +85,8 @@
       :tabsOptions="modalFiltrosTabs"
     >
       <BaseTable
+        type="modal"
         v-show="modalFiltrosTabs.current === 'Disciplinas'"
-        :type="'modal'"
         :hasSearchBar="true"
       >
         <template #thead-search>
@@ -100,69 +96,67 @@
           />
         </template>
         <template #thead>
-          <th style="width: 25px"></th>
-          <th
-            @click="toggleOrder(ordenacaoDisciplinasModal, 'codigo')"
-            class="clickable t-start"
-            style="width: 70px"
-          >
-            Código
-            <i :class="setIconByOrder(ordenacaoDisciplinasModal, 'codigo')"></i>
-          </th>
-          <th
-            @click="toggleOrder(ordenacaoDisciplinasModal, 'nome')"
-            class="clickable t-start"
-            style="width: 295px"
-          >
-            Nome
-            <i :class="setIconByOrder(ordenacaoDisciplinasModal, 'nome')"></i>
-          </th>
-          <th class="t-start" style="width: 60px">Perfis</th>
+          <v-th width="25" />
+          <v-th-ordination
+            :currentOrder="ordenacaoDisciplinasModal"
+            orderToCheck="codigo"
+            width="70"
+            align="start"
+            >Código
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoDisciplinasModal"
+            orderToCheck="nome"
+            width="295"
+            align="start"
+            >Nome
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoDisciplinasModal"
+            orderToCheck="perfil.abreviacao"
+            width="60"
+            align="start"
+            >Perfis
+          </v-th-ordination>
         </template>
         <template #tbody>
           <tr
-            v-for="disciplina in DisciplinasExternasOrderedModal"
+            v-for="disciplina in DisciplinasOptionsOrdered"
             :key="disciplina.id + disciplina.nome"
             @click="toggleItemInArray(disciplina, filtroDisciplinas.selecionadas)"
           >
-            <td style="width: 25px">
+            <v-td width="25">
               <input
                 type="checkbox"
                 class="form-check-input position-static m-0"
                 v-model="filtroDisciplinas.selecionadas"
                 :value="disciplina"
               />
-            </td>
-            <td style="width: 70px" class="t-start">
-              {{ disciplina.codigo }}
-            </td>
-            <td style="width: 295px" class="t-start">
-              {{ disciplina.nome }}
-            </td>
-            <td class="t-start" style="width: 60px">
-              {{ disciplina.perfil.nome }}
-            </td>
+            </v-td>
+            <v-td width="70" align="start">{{ disciplina.codigo }} </v-td>
+            <v-td width="295" align="start">{{ disciplina.nome }} </v-td>
+            <v-td width="60" align="start">{{ disciplina.perfil.abreviacao }} </v-td>
           </tr>
-          <tr v-show="DisciplinasExternasOrderedModal.length === 0">
-            <td colspan="3" style="width:450px">
+          <tr v-show="!DisciplinasOptionsOrdered.length">
+            <v-td colspan="3" width="450">
               NENHUMA DISCIPLINA ENCONTRADA.
-            </td>
+            </v-td>
           </tr>
         </template>
       </BaseTable>
 
       <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Períodos'">
         <template #thead>
-          <th style="width: 25px"></th>
-          <th style="width: 425px" class="t-start">Periodos Letivo</th>
+          <v-th width="25" />
+          <v-th width="425" align="start">Periodos Letivo</v-th>
         </template>
         <template #tbody>
           <tr
-            v-for="periodo in PeriodosLetivos"
+            v-for="periodo in PeriodosOptions"
             :key="periodo.id + periodo.nome"
-            @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
+            @click.stop="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
           >
-            <td style="width: 25px">
+            <v-td width="25">
               <input
                 type="checkbox"
                 class="form-check-input position-static m-0"
@@ -170,39 +164,34 @@
                 v-model="filtroPeriodos.selecionados"
                 @click.stop="selecionaPeriodo(periodo)"
               />
-            </td>
-            <td style="width: 425px" class="t-start upper-case">
-              {{ periodo.nome }}
-            </td>
+            </v-td>
+            <v-td width="425" align="start">{{ periodo.nome }}</v-td>
           </tr>
         </template>
       </BaseTable>
 
-      <BaseTable v-show="modalFiltrosTabs.current === 'Semestres'" :type="'modal'">
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Semestres'">
         <template #thead>
-          <th style="width: 25px"></th>
-          <th class="t-start" style="width: 425px">
-            Semestre Letivo
-          </th>
+          <v-th width="25" />
+          <v-th width="425" align="start">Semestre Letivo</v-th>
         </template>
         <template #tbody>
           <tr
-            v-for="semestre in SemestresLetivos"
+            v-for="semestre in SemestresOptions"
             :key="semestre.id + semestre.nome"
-            @click="selecionaSemestre(semestre)"
+            @click.stop="selecionaSemestre(semestre)"
           >
-            <td style="width: 25px">
+            <v-td width="25">
               <input
                 type="checkbox"
                 class="form-check-input position-static m-0"
+                :indeterminate.prop="semestre.halfChecked"
                 :value="semestre"
                 v-model="filtroSemestres.selecionados"
                 @click.stop="selecionaSemestre(semestre)"
               />
-            </td>
-            <td style="width: 425px" class="t-start upper-case">
-              {{ semestre.nome }}
-            </td>
+            </v-td>
+            <v-td width="425" align="start">{{ semestre.nome }}</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -281,7 +270,6 @@
 import { mapActions, mapGetters } from "vuex";
 import { normalizeText } from "@/common/utils";
 import {
-  toggleOrdination,
   toggleItemInArray,
   toggleAsideModal,
   cursoPopoverContent,
@@ -295,7 +283,6 @@ import NovaTurmaExternaRow from "./NovaTurmaExternaRow.vue";
 export default {
   name: "DashboardTurmasExternas",
   mixins: [
-    toggleOrdination,
     toggleItemInArray,
     toggleAsideModal,
     cursoPopoverContent,
@@ -326,7 +313,6 @@ export default {
         selecionados: [],
       },
       filtroSemestres: {
-        ativados: [],
         selecionados: [],
       },
       filtroDisciplinas: {
@@ -341,12 +327,12 @@ export default {
             ];
           },
           Periodos: () => {
-            this.filtroPeriodos.selecionados = [...this.PeriodosLetivos];
-            this.conectaPeriodoEmSemestre();
+            this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
+            this.filtroSemestres.selecionados = [...this.SemestresOptions];
           },
           Semestres: () => {
-            this.filtroSemestres.selecionados = [...this.SemestresLetivos];
-            this.conectaSemestreEmPeriodo();
+            this.filtroSemestres.selecionados = [...this.SemestresOptions];
+            this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
           },
         },
         selectNone: {
@@ -355,11 +341,11 @@ export default {
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [];
-            this.conectaPeriodoEmSemestre();
+            this.filtroDisciplinas.selecionadas = [];
           },
           Semestres: () => {
             this.filtroSemestres.selecionados = [];
-            this.conectaSemestreEmPeriodo();
+            this.filtroPeriodos.selecionados = [];
           },
         },
         btnOk: () => {
@@ -386,11 +372,9 @@ export default {
     openModalDelete() {
       this.$refs.modalDelete.open();
     },
-
     async handleDeleteTurmas() {
       try {
         this.setPartialLoading(true);
-
         await this.deleteTurmasExternas();
       } catch (error) {
         this.pushNotification({
@@ -408,8 +392,7 @@ export default {
       "TurmasExternasInDisciplinas",
       "DisciplinasExternasInPerfis",
       "TurmasExternasToDelete",
-      "PeriodosLetivos",
-      "SemestresLetivos",
+
       "PrincipaisCursosDCC",
     ]),
 
@@ -431,26 +414,23 @@ export default {
       );
     },
 
-    DisciplinasExternasOrderedModal() {
+    DisciplinasOptionsOrdered() {
       return this.$_.orderBy(
-        this.DisciplinasExternasFiltredModal,
+        this.DisciplinasOptionsFiltered,
         this.ordenacaoDisciplinasModal.order,
         this.ordenacaoDisciplinasModal.type
       );
     },
-    DisciplinasExternasFiltredModal() {
+    DisciplinasOptionsFiltered() {
       if (this.searchCursosModal === "") return this.DisciplinasExternasInPerfis;
 
       const searchNormalized = normalizeText(this.searchDisciplinasModal);
 
       return this.$_.filter(this.DisciplinasExternasInPerfis, (disciplina) => {
-        const disciplinaNome = normalizeText(disciplina.nome);
-        const disciplinaCodigo = normalizeText(disciplina.codigo);
+        const nome = normalizeText(disciplina.nome);
+        const codigo = normalizeText(disciplina.codigo);
 
-        return (
-          disciplinaNome.match(searchNormalized) ||
-          disciplinaCodigo.match(searchNormalized)
-        );
+        return nome.match(searchNormalized) || codigo.match(searchNormalized);
       });
     },
   },
