@@ -26,7 +26,7 @@
             :currentOrder="ordenacaoMain.disciplinas"
             orderToCheck="perfil.abreviacao"
             width="80"
-            align="start"
+            align="center"
             >Perfil
           </v-th-ordination>
           <v-th width="30" title="Créditos">C.</v-th>

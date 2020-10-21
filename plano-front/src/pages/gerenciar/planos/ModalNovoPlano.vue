@@ -9,7 +9,7 @@
     @on-close="searchDisciplinasModal = ''"
   >
     <template #modal-body>
-      <p class="alert alert-secondary" v-if="currentPlano">
+      <p class="alert alert-secondary">
         Selecione as disciplinas para quais as turmas do plano atual
         <b>{{ currentPlano.nome + " - " + currentPlano.ano }}</b>
         serão copiadas para o novo plano
@@ -822,7 +822,7 @@ export default {
       "AllPlanos",
       "DisciplinasInPerfis",
       "AllDisciplinas",
-      "currentPlanoId",
+      "currentPlano",
     ]),
 
     DisciplinasOrderedModal() {
@@ -847,13 +847,6 @@ export default {
           disciplinaCodigo.match(searchNormalized)
         );
       });
-    },
-
-    currentPlano() {
-      return this.$_.find(
-        this.AllPlanos,
-        (plano) => plano.id === this.currentPlanoId
-      );
     },
   },
 };

@@ -394,7 +394,7 @@ export default {
       pdfs.pdfCargaProfessores({
         Docentes,
         SemAlocacao,
-        plano: this.$_.find(this.AllPlanos, ["id", this.currentPlanoId]),
+        plano: this.currentPlano,
       });
     },
   },
@@ -405,7 +405,7 @@ export default {
       "TurmasInDisciplinasPerfis",
       "AllCargasPos",
       "AllPlanos",
-      "currentPlanoId",
+      "currentPlano",
     ]),
 
     DocentesComTurmasECargasOrdered() {

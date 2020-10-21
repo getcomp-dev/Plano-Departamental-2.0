@@ -227,7 +227,7 @@ export default {
 
       pdfs.pdfAlocacaoLabs({
         laboratorios,
-        plano: this.$_.find(this.AllPlanos, ["id", this.currentPlanoId]),
+        plano: this.currentPlano,
       });
     },
   },
@@ -239,7 +239,7 @@ export default {
       "TurmasInDisciplinasPerfis",
       "TurmasExternasInDisciplinas",
       "AllPlanos",
-      "currentPlanoId",
+      "currentPlano",
     ]),
 
     LaboratoriosOrdered() {

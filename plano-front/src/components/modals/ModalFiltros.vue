@@ -52,9 +52,9 @@ export default {
 
       this.callbacks.selectNone[currentTabNormalized]();
     },
-    selectOk() {
+    async selectOk() {
       this.setTableLoading(true);
-      this.callbacks.btnOk();
+      await this.callbacks.btnOk();
       this.setTableLoading(false);
     },
 

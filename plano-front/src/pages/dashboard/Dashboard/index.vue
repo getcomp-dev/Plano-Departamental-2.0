@@ -1,20 +1,18 @@
 <template>
-  <div class="dashboard">
-    <template v-if="!onLoading.fetching">
-      <TheNavbar :callbacks="navbarCallbacks" />
-      <TheSidebar />
+  <div class="dashboard" v-if="!onLoading.fetching">
+    <TheNavbar :modalCallbacks="modalCallbacks" />
+    <TheSidebar />
 
-      <main @click="closeSidebar">
-        <transition name="router-view-animation" mode="out-in" appear>
-          <router-view></router-view>
-        </transition>
-      </main>
-    </template>
+    <main @click="closeSidebar">
+      <transition name="router-view-animation" mode="out-in" appear>
+        <router-view></router-view>
+      </transition>
+    </main>
 
     <div
       v-show="modalOverlayVisibility"
       class="base-modal-overlay"
-      @click.stop="emitCloseCenterModal()"
+      @click.stop="emitCloseCenterModal"
     ></div>
 
     <ModalUser ref="modalUser" />
@@ -39,22 +37,22 @@ export default {
   },
   data() {
     return {
-      navbarCallbacks: {
-        openModalDownload: () => this.$refs.modalDownload.open(),
-        openModalUser: () => this.$refs.modalUser.open(),
+      modalCallbacks: {
+        openDownload: () => this.$refs.modalDownload.open(),
+        openUser: () => this.$refs.modalUser.open(),
       },
     };
   },
 
   created() {
-    this.initializePlano();
+    this.initializeCurrentPlano();
   },
   beforeDestroy() {
     this.$socket.close();
   },
 
   methods: {
-    ...mapActions(["closeSidebar", "initializePlano"]),
+    ...mapActions(["initializeCurrentPlano", "closeSidebar"]),
 
     emitCloseCenterModal() {
       EventBus.$emit("close-modal");
@@ -72,6 +70,7 @@ export default {
       });
     },
   },
+
   computed: {
     ...mapGetters(["modalOverlayVisibility", "onLoading"]),
   },

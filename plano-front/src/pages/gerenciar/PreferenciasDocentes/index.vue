@@ -269,38 +269,42 @@
     </BaseModal>
 
     <BaseModal
-            ref="modalAddPreferencia"
-            :title="'Adicionar Preferência'"
-            :hasFooter="true"
+      ref="modalAddPreferencia"
+      :title="'Adicionar Preferência'"
+      :hasFooter="true"
     >
       <template #modal-body>
         <div class="row" :style="{ margin: '0' }">
-          <label for="selectPreferenciaAdicionarPreferenciaDocentes">Docente: </label>
+          <label for="selectPreferenciaAdicionarPreferenciaDocentes"
+            >Docente:
+          </label>
           <select
-                  v-model="add.Docente"
-                  id="selectPreferenciaAdicionarPreferenciaDocentes"
-                  style="width: 200px; margin-left: auto"
+            v-model="add.Docente"
+            id="selectPreferenciaAdicionarPreferenciaDocentes"
+            style="width: 200px; margin-left: auto"
           >
             <option
-                    v-for="docente in AllDocentes"
-                    :key="`adicionarPreferenciaDocente${docente.id}`"
-                    :value="docente.id"
+              v-for="docente in AllDocentes"
+              :key="`adicionarPreferenciaDocente${docente.id}`"
+              :value="docente.id"
             >
               {{ docente.apelido }}
             </option>
           </select>
         </div>
         <div class="row" :style="{ margin: '0' }">
-          <label for="selectPreferenciaAdicionarPreferenciaDisciplinas">Disciplina: </label>
+          <label for="selectPreferenciaAdicionarPreferenciaDisciplinas"
+            >Disciplina:
+          </label>
           <select
-                  v-model="add.Disciplina"
-                  id="selectPreferenciaAdicionarPreferenciaDisciplinas"
-                  style="width: 200px; margin-left: auto"
+            v-model="add.Disciplina"
+            id="selectPreferenciaAdicionarPreferenciaDisciplinas"
+            style="width: 200px; margin-left: auto"
           >
             <option
-                    v-for="disciplina in AllDisciplinas"
-                    :key="`adicionarPreferenciaDisciplina${disciplina.id}`"
-                    :value="disciplina.id"
+              v-for="disciplina in AllDisciplinas"
+              :key="`adicionarPreferenciaDisciplina${disciplina.id}`"
+              :value="disciplina.id"
             >
               {{ disciplina.codigo }} - {{ disciplina.nome }}
             </option>
@@ -309,10 +313,10 @@
         <div class="row" :style="{ display: 'table-cell', verticalAlign: 'middle' }">
           <label for="inputPreferenciaAdicionarPreferencia">Preferência: </label>
           <input
-                  type="text"
-                  v-model="add.preferencia"
-                  id="inputPreferenciaAdicionarPreferencia"
-                  :style="{
+            type="text"
+            v-model="add.preferencia"
+            id="inputPreferenciaAdicionarPreferencia"
+            :style="{
               width: '25px',
               height: '20px',
               marginLeft: '10px',
@@ -323,11 +327,11 @@
       </template>
       <template #modal-footer>
         <BaseButton
-                type="text"
-                color="lightblue"
-                @click="addPreferencia()"
-                class="ml-auto"
-        >Confirmar</BaseButton
+          type="text"
+          color="lightblue"
+          @click="addPreferencia()"
+          class="ml-auto"
+          >Confirmar</BaseButton
         >
       </template>
     </BaseModal>
@@ -602,11 +606,11 @@ export default {
     },
 
     addPreferencia() {
-      console.log(this.add)
+      console.log(this.add);
       if (this.add.Docente && this.add.Disciplina && this.add.preferencia) {
         if (this.add.Docente.id) this.add.Docente = this.add.Docente.id;
         if (this.add.Disciplina.id) this.add.Disciplina = this.add.Disciplina.id;
-        console.log(this.add)
+        console.log(this.add);
         docenteDisciplinaService
           .create(this.add)
           .then(() => {
@@ -675,10 +679,10 @@ export default {
     DocentesPorDisciplinas() {
       let prefs = {};
       let preferencias = _.orderBy(this.PreferenciaDosDocentes, (p) => {
-        return this.disciplinaById(p.Disciplina).codigo
-      })
+        return this.disciplinaById(p.Disciplina).codigo;
+      });
       preferencias.forEach((p) => {
-        let codigo = this.disciplinaById(p.Disciplina).codigo
+        let codigo = this.disciplinaById(p.Disciplina).codigo;
         if (prefs[codigo] === undefined) prefs[codigo] = [];
         prefs[codigo].push(p);
       });
@@ -699,10 +703,10 @@ export default {
     DisciplinasPorDocentes() {
       let prefs = {};
       let preferencias = _.orderBy(this.PreferenciaDosDocentes, (p) => {
-        return this.docenteById(p.Docente).apelido
-      })
+        return this.docenteById(p.Docente).apelido;
+      });
       preferencias.forEach((p) => {
-        let apelido = this.docenteById(p.Docente).apelido
+        let apelido = this.docenteById(p.Docente).apelido;
         if (prefs[apelido] === undefined) prefs[apelido] = [];
         prefs[apelido].push(p);
       });

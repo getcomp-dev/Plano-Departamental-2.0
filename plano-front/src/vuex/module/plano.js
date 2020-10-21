@@ -58,14 +58,14 @@ const actions = {
     });
   },
 
-  async initializePlano({ commit, dispatch }) {
+  async initializeCurrentPlano({ commit, dispatch }) {
     try {
       dispatch("setFetchingLoading", true);
 
-      const PlanoInitial = localStorage.getItem("Plano")
+      const currentPlanoId = localStorage.getItem("Plano")
         ? localStorage.getItem("Plano")
-        : "1";
-      dispatch("setCurrentPlanoId", PlanoInitial);
+        : 1;
+      dispatch("setCurrentPlanoId", currentPlanoId);
 
       await dispatch("fetchAll");
       $socket.open();
@@ -118,14 +118,12 @@ const actions = {
 };
 
 const getters = {
-  currentPlanoId(state) {
-    return state.currentPlanoId;
+  currentPlano(state, rootGetters) {
+    return _.find(rootGetters.AllPlanos, ["id", state.currentPlanoId]);
   },
-
   AllPlanos(state) {
     return _.orderBy(state.Plano, "ano");
   },
-
   AnosDoPlano() {
     let firstYear = 2019;
     const currentYear = new Date().getFullYear();

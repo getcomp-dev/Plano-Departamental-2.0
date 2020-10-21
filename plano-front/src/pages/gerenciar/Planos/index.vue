@@ -1,7 +1,8 @@
 <template>
   <div class="main-component">
     <PageHeader :title="'Planos'">
-      <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
+      <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
+      <BaseButton template="file-upload" @click="toggleAsideModal('importPlano')" />
     </PageHeader>
 
     <div class="page-content">
@@ -155,17 +156,20 @@
         alterar a ordenação das informações.
       </li>
     </ModalAjuda>
+
+    <ModalImportPlano ref="modalImportPlano" />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { toggleOrdination } from "@/common/mixins";
-import { Card } from "@/components/ui";
+import { toggleOrdination, toggleAsideModal } from "@/common/mixins";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
-import ModalNovoPlano from "./ModalNovoPlano";
+import { Card } from "@/components/ui";
 import copyPlanoService from "../../../common/services/copyPlano";
 import planoService from "../../../common/services/plano";
+import ModalNovoPlano from "./ModalNovoPlano";
+import ModalImportPlano from "./ModalImportPlano";
 
 const emptyPlano = {
   ano: "",
@@ -175,15 +179,17 @@ const emptyPlano = {
 
 export default {
   name: "Planos",
-  mixins: [toggleOrdination],
+  mixins: [toggleOrdination, toggleAsideModal],
   components: {
     ModalAjuda,
     ModalDelete,
     Card,
     ModalNovoPlano,
+    ModalImportPlano,
   },
   data() {
     return {
+      asideModalsRefs: ["modalImportPlano", "modalAjuda"],
       planoForm: this.$_.clone(emptyPlano),
       planoSelectedId: null,
       ordenacaoMainPlanos: { order: "ano", type: "asc" },
@@ -191,27 +197,23 @@ export default {
   },
 
   methods: {
-    ...mapActions(["setCurrentPlanoId", "deletePlano", "editPlano"]),
+    ...mapActions(["deletePlano", "editPlano"]),
 
     limitNomeLength($event) {
       if ($event.target.value.length >= 10) $event.preventDefault();
     },
-
     handleClickInPlano(plano) {
       this.cleanPlano();
       this.planoSelectedId = plano.id;
       this.planoForm = this.$_.clone(plano);
     },
-
     cleanPlano() {
       this.planoSelectedId = null;
       this.planoForm = this.$_.clone(emptyPlano);
     },
-
     openModalDelete() {
       this.$refs.modalDelete.open();
     },
-
     openModalNovoPlano() {
       if (
         this.planoForm.ano === "" ||
@@ -242,7 +244,6 @@ export default {
         this.setPartialLoading(false);
       }
     },
-
     async handleDeletePlano() {
       try {
         this.setPartialLoading(true);
@@ -258,7 +259,6 @@ export default {
         this.setPartialLoading(false);
       }
     },
-
     copyPlano(oldPlano) {
       let newPlano = {
         nome: `Cópia de '${oldPlano.nome}'`,

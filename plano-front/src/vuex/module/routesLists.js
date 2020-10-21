@@ -9,7 +9,6 @@ const state = {
       description: `Página inicial.`,
     },
   ],
-
   routesPlano: [
     {
       title: "Graduação - DCC",
@@ -66,12 +65,6 @@ const state = {
       routeName: "relatorioDisciplinas",
       icon: "file-alt",
       description: `Listagem de turmas, horários e professores alocados por disciplina.`,
-    },
-    {
-      title: "Busca Turmas",
-      routeName: "buscaTurmas",
-      icon: "file-alt",
-      description: `Busca de turmas em todos os planos.`,
     },
   ],
   routesGerenciar: [
@@ -143,11 +136,15 @@ const state = {
       description: `Listagem de todos os usuários presentes no sistema, permitindo a adição e a alteração de usuários.`,
     },
   ],
+  routesHistorico: [
+    {
+      title: "Busca Turmas",
+      routeName: "buscaTurmas",
+      icon: "search",
+      description: `Busca de turmas em todos os planos.`,
+    },
+  ],
 };
-
-const mutations = {};
-
-const actions = {};
 
 const getters = {
   routesHome(state) {
@@ -162,11 +159,12 @@ const getters = {
   routesGerenciar(state) {
     return _.orderBy(state.routesGerenciar, ["title"]);
   },
+  routesHistorico(state) {
+    return _.orderBy(state.routesHistorico, ["title"]);
+  },
 };
 
 export default {
   state,
-  mutations,
-  actions,
   getters,
 };

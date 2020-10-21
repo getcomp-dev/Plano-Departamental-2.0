@@ -30,18 +30,12 @@ const mutations = {
   },
 
   [SOCKET_TURMA_UPDATED](state, data) {
-    let index = _.findIndex(
-      state.Turmas,
-      (turma) => turma.id === data.Turma.id
-    );
+    let index = _.findIndex(state.Turmas, (turma) => turma.id === data.Turma.id);
     Vue.set(state.Turmas, index, data.Turma);
   },
 
   [SOCKET_TURMA_DELETED](state, data) {
-    let index = _.findIndex(
-      state.Turmas,
-      (turma) => turma.id === data.Turma.id
-    );
+    let index = _.findIndex(state.Turmas, (turma) => turma.id === data.Turma.id);
     state.Turmas.splice(index, 1);
   },
 
@@ -81,15 +75,16 @@ const actions = {
   async createTurma({ commit, dispatch, rootGetters }, turma) {
     const turmaNormalized = _.cloneDeepWith(turma, setEmptyValuesToNull);
     validateObjectKeys(turmaNormalized, ["Disciplina", "letra", "turno1"]);
-    turmaNormalized.Plano = rootGetters.currentPlanoId;
+    turmaNormalized.Plano = rootGetters.currentPlano.id;
 
-    await turmaService.create(turmaNormalized);
+    const response = await turmaService.create(turmaNormalized);
     await dispatch("fetchAllPedidos");
 
     commit(PUSH_NOTIFICATION, {
       type: "success",
       text: `A turma ${turmaNormalized.letra} foi criada`,
     });
+    return response.Turma;
   },
 
   async editTurma({ commit, dispatch }, turma) {
@@ -134,9 +129,6 @@ const getters = {
   AllTurmas(state) {
     return _.orderBy(state.Turmas, ["letra"]);
   },
-  TurmasToDelete(state) {
-    return state.Deletar;
-  },
   TurmasInDisciplinasPerfis(state, getters) {
     const turmasResult = [];
     _.forEach(getters.AllTurmas, (turma) => {
@@ -154,6 +146,9 @@ const getters = {
         });
     });
     return turmasResult;
+  },
+  TurmasToDelete(state) {
+    return state.Deletar;
   },
 };
 

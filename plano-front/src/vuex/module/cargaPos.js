@@ -28,18 +28,12 @@ const mutations = {
   },
 
   [SOCKET_CARGA_POS_UPDATED](state, data) {
-    let index = _.findIndex(
-      state.Cargas,
-      (carga) => carga.id === data.CargaPos.id
-    );
+    let index = _.findIndex(state.Cargas, (carga) => carga.id === data.CargaPos.id);
     Vue.set(state.Cargas, index, data.CargaPos);
   },
 
   [SOCKET_CARGA_POS_DELETED](state, data) {
-    let index = _.findIndex(
-      state.Cargas,
-      (carga) => carga.id === data.CargaPos.id
-    );
+    let index = _.findIndex(state.Cargas, (carga) => carga.id === data.CargaPos.id);
     state.Cargas.splice(index, 1);
   },
 
@@ -76,7 +70,7 @@ const actions = {
       "trimestre",
       "creditos",
     ]);
-    cargaNormalized.Plano = rootGetters.currentPlanoId;
+    cargaNormalized.Plano = rootGetters.currentPlano.id;
 
     await cargaPosService.create(cargaNormalized);
 

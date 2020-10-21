@@ -11,10 +11,7 @@
 
     <input
       type="text"
-      :class="[
-        'input-pedidos',
-        { empty: pedidoForm.vagasNaoPeriodizadas == 0 },
-      ]"
+      :class="['input-pedidos', { empty: pedidoForm.vagasNaoPeriodizadas == 0 }]"
       v-model.number="pedidoForm.vagasNaoPeriodizadas"
       @change="handleEditPedido"
       @keypress="maskOnlyNumber"
@@ -50,7 +47,7 @@ export default {
       try {
         this.setPartialLoading(true);
 
-        this.editPedido(this.pedidoForm);
+        await this.editPedido(this.pedidoForm);
       } catch (error) {
         let erroMsg = "";
         if (error.response.data.fullMessage)

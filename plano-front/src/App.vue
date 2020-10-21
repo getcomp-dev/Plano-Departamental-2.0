@@ -6,12 +6,6 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.0.0/animate.min.css"
     />
 
-    <transition name="router-view-animation" mode="out-in" appear>
-      <router-view></router-view>
-    </transition>
-
-    <TheLoadingView />
-
     <notifications
       group="general"
       position="bottom right"
@@ -20,27 +14,31 @@
       :closeOnClick="false"
       classes="vue-notification"
     />
+
+    <transition name="router-view-animation" mode="out-in" appear>
+      <router-view></router-view>
+    </transition>
+
+    <TheLoadingView />
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 import { TheLoadingView } from "@/components/layout";
 
 export default {
   name: "App",
   components: { TheLoadingView },
+
   computed: {
-    ...mapState({
-      queue: (state) => state.notifications.queue,
-    }),
+    ...mapGetters(["notificationsQueue"]),
   },
 
   watch: {
-    queue: {
-      handler(queue) {
-        const queueTop = queue[queue.length - 1];
-
+    notificationsQueue: {
+      handler(notificationsQueue) {
+        const queueTop = notificationsQueue[notificationsQueue.length - 1];
         this.$notify({ ...queueTop, group: "general" });
       },
       immediate: true,

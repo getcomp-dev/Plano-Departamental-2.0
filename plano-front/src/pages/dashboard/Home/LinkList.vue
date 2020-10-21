@@ -1,12 +1,10 @@
 <template>
-  <div class="col-12 col-sm-12 col-md-4 col-lg-4 col-xl-4 mb-3">
+  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-3 mb-3">
     <h3 class="list-title">{{ title }}</h3>
     <ul class="list-group">
       <li v-for="page in pages" :key="page.routeName" class="list-group-item">
         <strong>
-          <router-link :to="{ name: page.routeName }"
-            >{{ page.title }}:</router-link
-          >
+          <router-link :to="{ name: page.routeName }">{{ page.title }}:</router-link>
         </strong>
         {{ page.description }}
       </li>
@@ -34,6 +32,7 @@ export default {
   font-weight: 600;
   color: #3f3f3f;
 }
+
 .list-group {
   line-height: 30px;
   font-size: 12px;

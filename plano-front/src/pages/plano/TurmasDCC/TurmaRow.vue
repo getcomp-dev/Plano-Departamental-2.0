@@ -116,7 +116,7 @@
         @change="checkHorario(1)"
         v-model.number="turmaForm.Horario1"
       >
-        <option></option>
+        <option v-if="!isIntegralEAD"></option>
         <option
           v-for="horario in HorariosFiltredByTurno"
           :key="'horario1' + horario.id"
@@ -140,7 +140,7 @@
           >
         </template>
         <template v-else>
-          <option></option>
+          <option v-if="!isIntegralEAD"></option>
 
           <option
             v-for="horario in HorariosFiltredByTurno"

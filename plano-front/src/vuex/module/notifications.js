@@ -20,8 +20,15 @@ const actions = {
   },
 };
 
+const getters = {
+  notificationsQueue(state) {
+    return state.queue;
+  },
+};
+
 export default {
   state,
   mutations,
   actions,
+  getters,
 };

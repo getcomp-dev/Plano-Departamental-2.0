@@ -2,13 +2,14 @@
   <transition name="sidebar-animation">
     <nav v-show="sidebarVisibility" class="sidebar bg-light" @click.stop="">
       <SidebarMenu :menuPages="routesHome" />
-      <SidebarMenu v-if="Admin" :menuTitle="'Plano'" :menuPages="routesPlano" />
-      <SidebarMenu :menuTitle="'Relatórios'" :menuPages="routesRelatorios" />
+      <SidebarMenu v-if="Admin" menuTitle="Plano" :menuPages="routesPlano" />
+      <SidebarMenu menuTitle="Relatórios" :menuPages="routesRelatorios" />
       <SidebarMenu
         v-if="SuperAdmin"
-        :menuTitle="'Gerenciar'"
+        menuTitle="Gerenciar"
         :menuPages="routesGerenciar"
       />
+      <SidebarMenu menuTitle="Histórico" :menuPages="routesHistorico" />
     </nav>
   </transition>
 </template>
@@ -32,6 +33,7 @@ export default {
       "routesPlano",
       "routesRelatorios",
       "routesGerenciar",
+      "routesHistorico",
     ]),
   },
 };
@@ -45,7 +47,7 @@ export default {
   z-index: 940;
   height: calc(100vh - var(--navbar-height));
   width: 100%;
-  max-width: 200px;
+  max-width: 210px;
 
   overflow-x: hidden;
   overflow-y: auto;

@@ -28,18 +28,12 @@ const mutations = {
   },
 
   [SOCKET_TURMA_EXTERNA_UPDATED](state, data) {
-    let index = _.findIndex(
-      state.Turmas,
-      (turma) => turma.id === data.Turma.id
-    );
+    let index = _.findIndex(state.Turmas, (turma) => turma.id === data.Turma.id);
     Vue.set(state.Turmas, index, data.Turma);
   },
 
   [SOCKET_TURMA_EXTERNA_DELETED](state, data) {
-    let index = _.findIndex(
-      state.Turmas,
-      (turma) => turma.id === data.Turma.id
-    );
+    let index = _.findIndex(state.Turmas, (turma) => turma.id === data.Turma.id);
     state.Turmas.splice(index, 1);
   },
 
@@ -75,7 +69,7 @@ const actions = {
   async createTurmaExterna({ commit, dispatch, rootGetters }, turma) {
     const turmaNormalized = _.cloneDeepWith(turma, setEmptyValuesToNull);
     validateObjectKeys(turmaNormalized, ["Disciplina", "letra"]);
-    turmaNormalized.Plano = rootGetters.currentPlanoId;
+    turmaNormalized.Plano = rootGetters.currentPlano.id;
 
     await turmaExternaService.create(turmaNormalized);
     await dispatch("fetchAllPedidosExternos");
@@ -128,9 +122,6 @@ const getters = {
   AllTurmasExternas(state) {
     return _.orderBy(state.Turmas, ["letra"]);
   },
-  TurmasExternasToDelete(state) {
-    return state.Deletar;
-  },
   TurmasExternasInDisciplinas(state, getters) {
     const turmasResult = [];
     _.forEach(getters.AllTurmasExternas, (turma) => {
@@ -148,6 +139,9 @@ const getters = {
         });
     });
     return turmasResult;
+  },
+  TurmasExternasToDelete(state) {
+    return state.Deletar;
   },
 };
 

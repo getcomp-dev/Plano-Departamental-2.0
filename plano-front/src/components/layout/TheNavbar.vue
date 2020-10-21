@@ -1,8 +1,8 @@
 <template>
   <nav class="navbar-container shadow">
     <div @click="closeSidebar" class="navbar-brand">
-      <router-link :to="{ name: 'dashboardHome' }" class="brand-title"
-        >Plano Departamental
+      <router-link :to="{ path: '/dashboard' }" class="brand-title">
+        Plano Departamental
       </router-link>
     </div>
 
@@ -11,7 +11,7 @@
     </button>
 
     <ul class="navbar-nav">
-      <li class="nav-item pr-0">
+      <li class="nav-item nav-item-plano">
         <label class="m-0 pr-2" for="planoAtual">
           Plano atual
         </label>
@@ -26,11 +26,11 @@
           </option>
         </select>
       </li>
-      <li class="nav-item" @click="callbacks.openModalUser">
+      <li class="nav-item" @click="modalCallbacks.openUser">
         <font-awesome-icon :icon="['fas', 'user']" />
         <span>Usuário</span>
       </li>
-      <li class="nav-item" @click="callbacks.openModalDownload">
+      <li class="nav-item" @click="modalCallbacks.openDownload">
         <font-awesome-icon :icon="['fas', 'save']" />
         <span>Download</span>
       </li>
@@ -48,7 +48,7 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "TheNavbar",
   props: {
-    callbacks: { type: Object, required: true },
+    modalCallbacks: { type: Object, required: true },
   },
   data() {
     return {
@@ -56,21 +56,21 @@ export default {
     };
   },
 
-  created() {
-    this.planoIdForm = this.currentPlanoId;
-  },
-
   methods: {
     ...mapActions(["closeSidebar", "toggleSidebar", "changeCurrentPlano"]),
   },
 
   computed: {
-    ...mapGetters(["sidebarVisibility", "AllPlanos", "currentPlanoId"]),
+    ...mapGetters(["sidebarVisibility", "AllPlanos", "currentPlano"]),
   },
 
   watch: {
-    currentPlanoId(newValue) {
-      this.planoIdForm = newValue;
+    currentPlano: {
+      handler(currentPlano) {
+        this.planoIdForm = currentPlano.id;
+      },
+      immediate: true,
+      deep: true,
     },
   },
 };
@@ -92,25 +92,26 @@ export default {
 }
 /* brand */
 .navbar-container > .navbar-brand {
-  height: 30px;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 160px;
-  min-width: 160px;
+  width: 170px;
+  height: 30px;
   margin: 0;
   padding: 0;
+  padding-left: 10px;
+
   cursor: pointer;
   color: #cdced0;
   background-color: #272b30;
   transition: all 0.2s ease;
 }
 .navbar-container > .navbar-brand > .brand-title {
-  text-decoration: none;
+  width: 100%;
   padding: 0;
-  font-weight: 500;
-  text-align: center;
   font-size: 15px;
+  text-align: left;
+  text-decoration: none;
   color: currentColor;
 }
 .navbar-container > .btn-navbar {
@@ -130,7 +131,7 @@ export default {
 }
 .navbar-container > .navbar-brand:hover,
 .navbar-container > .btn-navbar:hover {
-  color: #ffffff !important;
+  color: #ffffff;
 }
 .btn-navbar:focus,
 .navbar-brand .brand-title:focus {
@@ -166,6 +167,10 @@ ul.navbar-nav > li.nav-item {
 ul.navbar-nav > li.nav-item:hover {
   color: #fff;
 }
+ul.navbar-nav > li.nav-item-plano {
+  cursor: default;
+  padding-right: 0;
+}
 ul.navbar-nav > li.nav-item span,
 ul.navbar-nav > li.nav-item > label {
   min-width: max-content;
@@ -180,7 +185,7 @@ ul.navbar-nav > li.nav-item svg {
 /* input plano */
 ul.navbar-nav > li.nav-item .input-plano {
   text-align: start;
-  width: 120px;
+  width: 150px;
   height: 20px;
   font-size: 12px;
   border-radius: 3px;

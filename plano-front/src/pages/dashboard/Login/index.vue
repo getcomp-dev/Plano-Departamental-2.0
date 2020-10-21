@@ -76,21 +76,24 @@ export default {
   },
 
   methods: {
-    ...mapActions(["setFetchingLoading"]),
+    ...mapActions(["setPartialLoading"]),
 
     async handleLogin() {
       try {
-        this.setFetchingLoading(true);
+        this.setPartialLoading(true);
 
         await this.$store.dispatch("authenticate", this.form);
-        if (this.$store.state.route.query.redirect)
+        if (this.$store.state.route.query.redirect) {
           this.$router.replace(this.$store.state.route.query.redirect);
-        else this.$router.replace("/dashboard");
+        } else {
+          this.$router.replace("/dashboard");
+        }
       } catch (error) {
-        if (error.response) this.error = error.response.data.message;
-        else this.error = "Erro na requisição! Tente novamente.";
+        this.error = error.response
+          ? error.response.data.message
+          : "Erro na requisição! Tente novamente.";
       } finally {
-        this.setFetchingLoading(false);
+        this.setPartialLoading(false);
       }
     },
   },
