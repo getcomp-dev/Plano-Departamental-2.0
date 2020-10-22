@@ -33,6 +33,11 @@
               Observação
               <i :class="setIconByOrder(ordenacaoMainPlanos, 'obs')"></i>
             </th>
+            <th
+                    style="width: 80px"
+            >
+              Editável
+            </th>
           </template>
           <template #tbody>
             <tr
@@ -44,6 +49,7 @@
               <td style="width: 70px" class="t-start">{{ plano.ano }}</td>
               <td style="width: 150px" class="t-start">{{ plano.nome }}</td>
               <td style="width: 300px" class="t-start">{{ plano.obs }}</td>
+              <td style="width: 80px" class="t-start">{{ plano.isEditable }}</td>
             </tr>
           </template>
         </BaseTable>
@@ -101,6 +107,20 @@
                 v-model="planoForm.obs"
                 class="form-control"
               ></textarea>
+            </div>
+          </div>
+
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0">
+              <label required for="planoEditavel">Editável</label>
+              <select
+                      id="planoEditavel"
+                      v-model.number="planoForm.isEditable"
+                      class="form-control input-ano"
+              >
+                <option value="true">Sim</option>
+                <option value="false">Não</option>
+              </select>
             </div>
           </div>
         </template>
@@ -175,6 +195,7 @@ const emptyPlano = {
   ano: "",
   nome: "",
   obs: "",
+  isEditable: "true"
 };
 
 export default {

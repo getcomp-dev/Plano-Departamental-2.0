@@ -1,5 +1,5 @@
 <template>
-  <div class="main-component row">
+  <div class="main-component row" v-if="isEditable">
     <PageHeader :title="'Validações do Plano'">
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
@@ -1036,7 +1036,11 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["AllSalas", "DocentesAtivos", "TurmasInDisciplinasPerfis"]),
+    ...mapGetters(["AllSalas", "DocentesAtivos", "TurmasInDisciplinasPerfis", "currentPlano"]),
+
+    isEditable() {
+      return this.currentPlano.isEditable
+    },
 
     TurmasValidacoesOrdered() {
       return this.$_.orderBy(

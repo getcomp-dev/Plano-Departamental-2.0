@@ -1,5 +1,5 @@
 <template>
-  <div class="main-component row">
+  <div class="main-component row" v-if="isEditable">
     <PageHeader :title="'Graduação - Outros'">
       <BaseButton
         v-show="isAdding"
@@ -392,9 +392,13 @@ export default {
       "TurmasExternasInDisciplinas",
       "DisciplinasExternasInPerfis",
       "TurmasExternasToDelete",
-
       "PrincipaisCursosDCC",
+      "currentPlano"
     ]),
+
+    isEditable() {
+      return this.currentPlano.isEditable
+    },
 
     TurmasExternasOrdered() {
       return this.$_.orderBy(

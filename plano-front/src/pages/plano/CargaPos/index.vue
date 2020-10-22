@@ -1,5 +1,5 @@
 <template>
-  <div class="main-component row">
+  <div class="main-component row" v-if="isEditable">
     <PageHeader :title="'Pós Graduação'">
       <BaseButton
         v-show="isAdding"
@@ -358,7 +358,11 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["DocentesAtivos", "CargasPosToDelete", "AllCargasPos"]),
+    ...mapGetters(["DocentesAtivos", "CargasPosToDelete", "AllCargasPos", "currentPlano"]),
+
+    isEditable() {
+      return this.currentPlano.isEditable
+    },
 
     ProgramasInCargaPosOrdered() {
       return this.$_.map(this.ProgramasInCargaPosFiltredByPeriodo, (programa) => {
