@@ -10,6 +10,9 @@ module.exports = function (sequelize, DataTypes) {
         },
         obs: {
             type: DataTypes.STRING
+        },
+        isEditable: {
+            type: DataTypes.BOOLEAN
         }
     }, {
         freezeTableName: true,
