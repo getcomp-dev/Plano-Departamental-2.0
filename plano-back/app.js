@@ -14,6 +14,7 @@ const express = require('express'),
   cursoRoute = require('./routes/curso'),
   disciplinaRoute = require('./routes/disciplina'),
   pedidoRoute = require('./routes/pedido'),
+  pedidoOferecidoRoute = require('./routes/pedidoOferecido'),
   pedidoExternoRoute = require('./routes/pedidoExterno'),
   docenteRoute = require('./routes/docente'),
   docentePerfilRoute = require('./routes/docentePerfil'),
@@ -65,6 +66,7 @@ app.use('/api/perfil', perfilRoute)
 app.use('/api/curso', cursoRoute)
 app.use('/api/disciplina', disciplinaRoute)
 app.use('/api/pedido', pedidoRoute)
+app.use('/api/pedidoOferecido', pedidoOferecidoRoute)
 app.use('/api/pedidoExterno', pedidoExternoRoute)
 app.use('/api/docente', docenteRoute)
 app.use('/api/docentePerfil', docentePerfilRoute)
