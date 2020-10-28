@@ -83,6 +83,15 @@ module.exports = function (sequelize, DataTypes) {
       onDelete: 'CASCADE'
     })
 
+    Curso.belongsToMany(models.Turma, {
+      through: models.PedidoOferecido,
+      foreignKey: {
+        name:'Curso',
+        allowNull: false
+      },
+      onDelete: 'CASCADE'
+    })
+
     Curso.belongsToMany(models.TurmaExterna, {
       through: models.PedidoExterno,
       foreignKey: {
