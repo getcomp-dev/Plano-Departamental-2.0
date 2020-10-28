@@ -7,9 +7,13 @@
       textAlign: align,
       whiteSpace: whiteSpace,
     }"
+    :class="`v-td td-${type}`"
     @click="$emit('click')"
   >
-    <slot></slot>
+    <div v-if="type === 'content'" class="flex-center">
+      <slot></slot>
+    </div>
+    <slot v-else></slot>
   </td>
 </template>
 
@@ -17,6 +21,7 @@
 export default {
   name: "v-td",
   props: {
+    type: { type: String, default: "text" },
     width: { type: String | Number, required: true },
     align: { type: String, default: "center" },
     paddingX: { type: String | Number, default: "5" },
@@ -33,11 +38,26 @@ export default {
   },
 };
 </script>
+
 <style scoped>
-td {
+.v-td {
+  margin: 0;
+}
+.v-td.td-text {
   display: block-inline;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin: 0;
+}
+
+.v-td.td-content {
+  padding: 0 3px !important;
+}
+.v-td > div.flex-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
 </style>

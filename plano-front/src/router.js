@@ -186,8 +186,8 @@ const routes = [
       //historico
       {
         path: "relatorios/busca-turmas",
-        name: "buscaTurmas",
-        component: lazyLoad("relatorios/BuscaTurmas"),
+        name: "buscarTurmas",
+        component: lazyLoad("historico/BuscarTurmas"),
       },
     ],
   },

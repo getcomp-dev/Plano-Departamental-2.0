@@ -3,15 +3,10 @@
     class="turmarow max-content"
     :style="{ backgroundColor: turmaForm.disciplina.perfil.cor }"
   >
-    <v-td width="25">
-      <input
-        type="checkbox"
-        class="form-check-input position-static m-0"
-        v-model="toggleToDelete"
-        :value="turma"
-      />
+    <v-td width="25" type="content">
+      <input type="checkbox" v-model="toggleToDelete" :value="turma" />
     </v-td>
-    <v-td width="40" paddingX="0">
+    <v-td width="40" type="content">
       <button class="btn-table" @click.stop="$emit('click-edit', turma)">
         <font-awesome-icon
           :icon="['fas', 'edit']"
@@ -19,7 +14,7 @@
         />
       </button>
     </v-td>
-    <v-td width="55" paddingX="2">
+    <v-td width="55" type="content">
       <select v-model.number="turmaForm.periodo" @change="checkHorariosPeriodo()">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -33,53 +28,45 @@
     <v-td width="80" paddingX="2">{{ turmaForm.disciplina.codigo }}</v-td>
     <v-td width="330" align="start">{{ turmaForm.disciplina.nome }}</v-td>
     <v-td width="25">{{ turmaForm.disciplina.creditoTotal }}</v-td>
-    <v-td width="45" paddingX="2">
+    <v-td width="45" type="content">
       <input
         type="text"
-        class="input-letra"
+        style="width:30px"
         :value="turmaForm.letra"
         @input="turmaForm.letra = $event.target.value.toUpperCase()"
         @keypress="maskTurmaLetra"
-        @blur="handleEditTurma"
+        @change="handleEditTurma"
       />
     </v-td>
-    <v-td width="160" paddingX="2">
-      <div class="d-flex align-items-center justify-content-start w-100">
+    <v-td width="160" type="none" paddingX="3">
+      <div class="d-flex align-items-center w-100">
         <div class="d-flex flex-column" style="width:130px">
-          <select
-            type="text"
-            v-model.number="turmaForm.Docente1"
-            @change="checkDocente"
-          >
-            <option v-if="DocentesAtivos.length === 0" type="text" value
-              >Nenhum Docente Encontrado
+          <select v-model.number="turmaForm.Docente1" @change="checkDocente">
+            <option v-if="!DocentesAtivos.length">
+              Nenhum Docente Encontrado
             </option>
-            <option></option>
+            <option v-else />
             <option
               v-for="docente in DocentesByPreferencia"
-              :key="'docentes' + docente.id"
+              :key="docente.id + docente.apelido"
               :value="docente.id"
               >{{ docente.apelido }}
               {{
                 orderByPreferencia && preferenciaDocente(docente)
                   ? "- " + preferenciaDocente(docente)
                   : ""
-              }}</option
-            >
+              }}
+            </option>
           </select>
 
-          <select
-            type="text"
-            v-model.number="turmaForm.Docente2"
-            @change="checkDocente()"
-          >
-            <option v-if="DocentesAtivos.length === 0" type="text" value
-              >Nenhum Docente Encontrado</option
-            >
-            <option></option>
+          <select v-model.number="turmaForm.Docente2" @change="checkDocente">
+            <option v-if="!DocentesAtivos.length">
+              Nenhum Docente Encontrado
+            </option>
+            <option v-else />
             <option
               v-for="docente in DocentesByPreferencia"
-              :key="'2-docente-id' + docente.id"
+              :key="docente.apelido + docente.id"
               :value="docente.id"
               >{{ docente.apelido }}
               {{
@@ -90,114 +77,100 @@
             >
           </select>
         </div>
-
         <font-awesome-icon
           :icon="['fas', 'graduation-cap']"
           :class="['clickable mx-auto', { 'low-opacity': !orderByPreferencia }]"
-          @click="orderByPreferencia = !orderByPreferencia"
           style="font-size:12px"
           title="Alternar ordenação de docentes por preferência"
+          @click="orderByPreferencia = !orderByPreferencia"
         />
       </div>
     </v-td>
-    <v-td width="80" paddingX="2">
+    <v-td width="80" type="content">
       <select type="text" v-model="turmaForm.turno1" @change="handleEditTurma">
         <option v-if="isIntegralEAD" value="EAD">EAD</option>
-
         <template v-else>
           <option value="Diurno">Diurno</option>
           <option value="Noturno">Noturno</option>
         </template>
       </select>
     </v-td>
-    <td width="85" paddingX="2">
-      <select
-        type="text"
-        @change="checkHorario(1)"
-        v-model.number="turmaForm.Horario1"
-      >
-        <option v-if="!isIntegralEAD"></option>
+    <v-td width="85" type="content">
+      <select @change="checkHorario(1)" v-model.number="turmaForm.Horario1">
+        <option v-if="!isIntegralEAD" />
         <option
           v-for="horario in HorariosFiltredByTurno"
-          :key="'horario1' + horario.id"
+          :key="horario.id + horario.horario"
           :value="horario.id"
-          >{{ horario.horario }}</option
-        >
+          >{{ horario.horario }}
+        </option>
       </select>
 
       <select
         v-if="hasMoreThan4Creditos"
-        type="text"
         @change="checkHorario(2)"
         v-model.number="turmaForm.Horario2"
       >
         <template v-if="isParcialEAD">
           <option
             v-for="horario in HorariosEAD"
-            :key="'horario2' + horario.id"
+            :key="horario.horario + horario.id"
             :value="horario.id"
-            >{{ horario.horario }}</option
-          >
+            >{{ horario.horario }}
+          </option>
         </template>
-        <template v-else>
-          <option v-if="!isIntegralEAD"></option>
 
+        <template v-else>
+          <option v-if="!isIntegralEAD" />
           <option
             v-for="horario in HorariosFiltredByTurno"
-            :key="'1-horarioEAD-id' + horario.id"
+            :key="horario.horario + horario.id"
             :value="horario.id"
-            >{{ horario.horario }}</option
-          >
+            >{{ horario.horario }}
+          </option>
         </template>
       </select>
-    </td>
-    <td width="95" paddingX="2">
+    </v-td>
+    <v-td width="95" type="content">
       <template v-if="!isIntegralEAD">
-        <select
-          type="text"
-          id="sala1"
-          v-model.number="turmaForm.Sala1"
-          @change="checkSala()"
-        >
-          <option v-if="AllSalas.length === 0" type="text" value
-            >Nenhuma Sala Encontrada</option
-          >
-          <option v-else value></option>
+        <select v-model.number="turmaForm.Sala1" @change="checkSala">
+          <option v-if="!AllSalas.length" type="text">
+            Nenhuma Sala Encontrada
+          </option>
+          <option v-else />
+
           <option
             v-for="sala in AllSalas"
-            :key="'1-sala-id' + sala.id"
+            :key="sala.id + sala.nome"
             :value="sala.id"
             >{{ sala.nome }}</option
           >
         </select>
+
         <select
           v-if="hasMoreThan4Creditos && turmaForm.disciplina.ead === 0"
-          type="text"
-          id="sala2"
           v-model.number="turmaForm.Sala2"
-          @change="checkSala()"
+          @change="checkSala"
         >
-          <option v-if="AllSalas.length === 0" type="text" value
-            >Nenhuma Sala Encontrada</option
-          >
-          <option v-else value></option>
+          <option v-if="!AllSalas.length" type="text">
+            Nenhuma Sala Encontrada
+          </option>
+          <option v-else />
+
           <option
             v-for="sala in AllSalas"
-            :key="'2-sala-id' + sala.id"
+            :key="sala.nome + sala.id"
             :value="sala.id"
-            >{{ sala.nome }}</option
-          >
+            >{{ sala.nome }}
+          </option>
         </select>
       </template>
-    </td>
-    <v-td width="45" paddingX="2">
-      <div
-        style="height:43px"
-        class="py-1 d-flex flex-column justify-content-between"
-      >
-        <span class="font-weight-bold">
+    </v-td>
+    <v-td width="45" type="content">
+      <div class="d-flex flex-column justify-content-between py-1">
+        <b class="mb-1">
           {{ totalPedidosNaoPeriodizados + totalPedidosPeriodizados }}
-        </span>
+        </b>
         <span>
           {{ totalPedidosPeriodizados }}+{{ totalPedidosNaoPeriodizados }}
         </span>
@@ -208,6 +181,7 @@
       :key="curso.id + curso.codigo"
       width="35"
       paddingX="0"
+      type="none"
     >
       <template v-for="(pedido, index) in PedidosOfCurrentTurma">
         <InputsPedidosDCC
@@ -215,7 +189,7 @@
           :key="pedido.Turma + curso.Curso"
           :index="index"
           :turma="turma"
-          :type="'main'"
+          type="main"
         />
       </template>
     </v-td>
@@ -1197,44 +1171,8 @@ export default {
 
 <style scoped>
 .turmarow {
-  font-size: 11px !important;
-}
-.turmarow td {
-  vertical-align: middle !important;
-  margin: 0 !important;
-  padding: 0 5px;
-  text-align: center;
-  word-break: break-word;
-}
-
-.turmarow select,
-.turmarow input {
   font-size: 11px;
-  border: 1px solid #414141;
-  color: #414141;
-  border-radius: 0px;
 }
-.turmarow select {
-  height: 18px;
-  width: 100%;
-}
-.turmarow select + select {
-  margin-top: 3px;
-}
-.turmarow input[type="checkbox"] {
-  width: 14px;
-  height: 14px;
-  margin: 0;
-  margin-top: 5px;
-}
-.turmarow .input-letra {
-  margin: 0;
-  margin-top: 4px;
-  height: 18px;
-  width: 30px;
-  text-align: center;
-}
-
 .btn-table {
   display: flex;
   justify-content: center;
@@ -1244,5 +1182,6 @@ export default {
   border: none;
   background: none;
   font-size: 12px;
+  padding: 0;
 }
 </style>

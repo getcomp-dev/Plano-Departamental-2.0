@@ -8,7 +8,7 @@
 
 @import "./btn-cores.css";
 
-@media screen and (max-width: 544px) {
+@media screen and (max-width: 594px) {
   :root {
     --navbar-height: 60px;
   }
@@ -21,6 +21,9 @@ body {
   height: 100%;
   width: 100%;
   padding: 0 !important;
+}
+button {
+  padding: 0;
 }
 
 #app {

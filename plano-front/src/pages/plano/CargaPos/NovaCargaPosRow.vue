@@ -1,6 +1,6 @@
 <template>
   <tr class="novacarga">
-    <v-td width="75">
+    <v-td width="75" type="content">
       <select type="text" v-model="cargaPosForm.programa">
         <option value="PGCC">PGCC</option>
         <option value="PGEM">PGEM</option>
@@ -8,7 +8,7 @@
       </select>
     </v-td>
     <v-td width="25" />
-    <v-td width="55">
+    <v-td width="55" type="content">
       <select v-model.number="cargaPosForm.trimestre">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -16,20 +16,20 @@
         <option value="4">4</option>
       </select>
     </v-td>
-    <v-td width="145">
+    <v-td width="145" type="content">
       <select v-model.number="cargaPosForm.Docente">
         <option v-if="!DocentesAtivos.length">
           Nenhum Docente Encontrado
         </option>
         <option
           v-for="docente in DocentesAtivos"
-          :key="docente.id + docente.apelido"
+          :key="docente.id"
           :value="docente.id"
           >{{ docente.apelido }}
         </option>
       </select>
     </v-td>
-    <v-td width="60">
+    <v-td width="60" type="content">
       <input
         type="text"
         v-model.number="cargaPosForm.creditos"
@@ -93,30 +93,8 @@ export default {
 .novacarga:hover {
   background-color: #cecece;
 }
-.novacarga select,
-.novacarga input[type="text"] {
-  width: 100%;
-  margin: 5px 0;
-  height: 19px;
-  padding: 0 0;
-  font-size: 11px;
-  border: 1px solid #414141;
-  border-radius: 0px;
-  color: #414141;
-}
+.novacarga input,
 .novacarga select {
-  text-align: start;
-}
-.novacarga input[type="text"] {
-  text-align: center;
-  padding: 0 0px;
-}
-.novacarga input[type="checkbox"] {
-  width: 13px !important;
-  height: 13px !important;
-  text-align: center !important;
-  margin: 0;
-  margin-top: 5px !important;
-  margin-bottom: auto !important;
+  margin: 5px 0;
 }
 </style>

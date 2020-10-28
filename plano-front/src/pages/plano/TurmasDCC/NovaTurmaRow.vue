@@ -2,7 +2,7 @@
   <tr class="novaturma">
     <v-td width="25" />
     <v-td width="40" />
-    <v-td width="55" paddingX="2">
+    <v-td width="55" type="content">
       <select v-model.number="turmaForm.periodo">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -10,7 +10,6 @@
         <option value="4">4</option>
       </select>
     </v-td>
-
     <v-td
       width="80"
       paddinX="2"
@@ -20,8 +19,7 @@
     >
       {{ turmaForm.disciplina ? turmaForm.disciplina.perfil.abreviacao : "" }}
     </v-td>
-
-    <v-td width="80" paddinX="2">
+    <v-td width="80" type="content">
       <select v-model="turmaForm.disciplina" @change="handleChangeDisciplina">
         <option
           v-for="disciplina in DisciplinasDCCInPerfis"
@@ -31,8 +29,7 @@
         </option>
       </select>
     </v-td>
-
-    <v-td width="330" paddinX="2">
+    <v-td width="330" type="content">
       <select v-model="turmaForm.disciplina" @change="handleChangeDisciplina">
         <option
           v-for="disciplina in DisciplinasDCCInPerfisOrderedByNome"
@@ -42,19 +39,18 @@
         </option>
       </select>
     </v-td>
-
     <v-td width="25">{{ totalCarga }}</v-td>
-    <v-td width="45">
+    <v-td width="45" type="content">
       <input
         type="text"
-        class="input-letra"
-        @keypress="maskTurmaLetra"
-        @input="turmaForm.letra = $event.target.value.toUpperCase()"
+        style="width:30px"
         :value="turmaForm.letra"
+        @input="turmaForm.letra = $event.target.value.toUpperCase()"
+        @keypress="maskTurmaLetra"
       />
     </v-td>
-    <td style="width:160px; padding: 0 2px">
-      <div class="d-flex align-items-center justify-content-start w-100">
+    <v-td width="160" type="none" paddingX="3">
+      <div class="d-flex align-items-center w-100">
         <div class="d-flex flex-column" style="width:130px">
           <select v-model.number="turmaForm.Docente1">
             <option></option>
@@ -90,13 +86,13 @@
         <font-awesome-icon
           :icon="['fas', 'graduation-cap']"
           :class="['clickable mx-auto', { 'low-opacity': !orderByPreferencia }]"
-          @click="orderByPreferencia = !orderByPreferencia"
           style="font-size:12px"
           title="Alternar ordenação de docentes por preferência"
+          @click="orderByPreferencia = !orderByPreferencia"
         />
       </div>
-    </td>
-    <v-td width="80">
+    </v-td>
+    <v-td width="80" type="content">
       <select
         v-if="turmaForm.disciplina"
         v-model="turmaForm.turno1"
@@ -109,16 +105,14 @@
         </template>
       </select>
     </v-td>
-
-    <td style="width:85px">
+    <v-td width="85" type="content">
       <template v-if="turmaForm.disciplina">
         <select v-model.number="turmaForm.Horario1" @change="handleChangeHorario(1)">
-          <option v-if="!disciplinaIsParcialEAD && !disciplinaIsIntegralEAD">
-          </option>
+          <option v-if="!disciplinaIsParcialEAD && !disciplinaIsIntegralEAD" />
 
           <option
             v-for="horario in HorariosFiltredByTurno"
-            :key="'1-horarioEAD-id' + horario.id"
+            :key="horario.id + horario.horario"
             :value="horario.id"
             >{{ horario.horario }}</option
           >
@@ -129,35 +123,38 @@
           v-model.number="turmaForm.Horario2"
           @change="handleChangeHorario(2)"
         >
-          <option v-if="!disciplinaIsParcialEAD && !disciplinaIsIntegralEAD">
-          </option>
+          <option v-if="!disciplinaIsParcialEAD && !disciplinaIsIntegralEAD" />
 
           <template v-if="disciplinaIsParcialEAD">
             <option
               v-for="horario in HorariosEAD"
-              :key="'2-horarioEAD-id' + horario.id"
+              :key="horario.horario + horario.id"
               :value="horario.id"
-              >{{ horario.horario }}</option
-            >
+              >{{ horario.horario }}
+            </option>
           </template>
+
           <template v-else>
             <option
               v-for="horario in HorariosFiltredByTurno"
-              :key="'1-horarioEAD-id' + horario.id"
+              :key="horario.horario + horario.id"
               :value="horario.id"
-              >{{ horario.horario }}</option
-            >
+              >{{ horario.horario }}
+            </option>
           </template>
         </select>
       </template>
-    </td>
-
-    <td style="width:95px">
+    </v-td>
+    <v-td width="95" type="content">
       <template v-if="!disciplinaIsIntegralEAD && turmaForm.disciplina">
         <select v-model.number="turmaForm.Sala1">
-          <option></option>
-          <option v-for="sala in AllSalas" :key="'s1' + sala.id" :value="sala.id"
-            >{{ sala.nome }}
+          <option />
+          <option
+            v-for="sala in AllSalas"
+            :key="sala.id + sala.nome"
+            :value="sala.id"
+          >
+            {{ sala.nome }}
           </option>
         </select>
 
@@ -165,17 +162,18 @@
           v-if="totalCarga >= 4 && turmaForm.disciplina.ead != 2"
           v-model.number="turmaForm.Sala2"
         >
-          <option></option>
-          <option v-for="sala in AllSalas" :key="'s2' + sala.id" :value="sala.id"
-            >{{ sala.nome }}
+          <option />
+          <option
+            v-for="sala in AllSalas"
+            :key="sala.nome + sala.id"
+            :value="sala.id"
+          >
+            {{ sala.nome }}
           </option>
         </select>
       </template>
-    </td>
-
-    <v-td :width="45 + 35 * cursosAtivadosLength">
-      <div style="height:43px"></div>
     </v-td>
+    <v-td :width="45 + 35 * cursosAtivadosLength" />
   </tr>
 </template>
 
@@ -339,47 +337,10 @@ export default {
 
 <style scoped>
 .novaturma {
-  font-size: 11px !important;
+  font-size: 11px;
   background-color: #e9e9e9;
 }
-.novaturma td {
-  margin: 0 !important;
-  padding: 0 5px;
-  height: 43px !important;
-  vertical-align: middle !important;
-  text-align: center;
-  word-break: break-word;
-}
-.novaturma .less-padding {
-  padding: 0 2px;
-}
-.novaturma select,
-.novaturma input {
-  font-size: 11px !important;
-  border: 1px solid #414141 !important;
-  color: #414141;
-  border-radius: 0px !important;
-}
-.novaturma select {
-  padding: 0 0 !important;
-  height: 18px !important;
-  width: 100% !important;
-  text-align: start;
-}
-.novaturma input[type="text"] {
-  width: 100% !important;
-  height: 18px !important;
-  text-align: center;
-}
-.novaturma select + select {
-  margin-top: 3px !important;
-}
-
-.novaturma .input-letra {
-  margin: 0;
-  margin-top: 4px !important;
-  height: 18px;
-  width: 30px;
-  text-align: center;
+.novaturma:hover {
+  background-color: #e9e9e9;
 }
 </style>

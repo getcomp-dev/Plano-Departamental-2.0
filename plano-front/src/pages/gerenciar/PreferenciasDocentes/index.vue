@@ -1,417 +1,621 @@
 <template>
-  <div>
-    <PageHeader title="Preferências dos docentes">
-      <BaseButton template="adicionar" @click="openModalAddPreferencia()" />
-      <BaseButton template="swap-modes" @click="swapModes()" />
-      <BaseButton template="file-upload" @click="openModalUpload()" />
+  <div class="main-component">
+    <PageHeader :title="'Preferências dos docentes'">
+      <BaseButton template="adicionar" @click="openModalNewPreferencia" />
+      <BaseButton template="file-upload" @click="openModalUpload" />
+      <BaseButton template="swap-modes" @click="toggleTableMode" />
+      <!-- <BaseButton template="ajuda" /> -->
     </PageHeader>
+
     <div class="div-table">
-      <BaseTable v-if="docentespordisciplina" style="border: 0px;">
+      <BaseTable v-show="tableMode === 'disciplina'">
         <template #thead>
-          <th style="width: 80px">Código</th>
-          <th style="width: 420px">Nome</th>
-          <th style="width: 100px">Perfil</th>
-          <th style="width: 200px">Docente</th>
-          <th style="width: 40px">Pref</th>
+          <v-th width="90">Código</v-th>
+          <v-th width="420" align="start">Nome</v-th>
+          <v-th width="80">Perfil</v-th>
+          <v-th width="120" align="start">Docente</v-th>
+          <v-th width="50" title="Preferência">Pref.</v-th>
         </template>
 
         <template #tbody>
           <template v-for="disciplina in DocentesPorDisciplinas">
-            <tr
-              :key="disciplina[0].Disciplina + 'headerDisciplina'"
-              class="bg-custom"
-            >
-              <td style="width: 80px">
-                {{ disciplinaById(disciplina[0].Disciplina).codigo }}
-              </td>
-              <td style="width: 420px">
-                {{ disciplinaById(disciplina[0].Disciplina).nome }}
-              </td>
-              <td style="width: 100px">
+            <tr :key="disciplina[0].Disciplina" class="bg-custom">
+              <v-td width="90">
+                {{ findDisciplinaById(disciplina[0].Disciplina).codigo }}
+              </v-td>
+              <v-td width="420" align="start">
+                {{ findDisciplinaById(disciplina[0].Disciplina).nome }}
+              </v-td>
+              <v-td width="80" paddingX="2">
                 {{
-                  perfilById(disciplinaById(disciplina[0].Disciplina).Perfil)
+                  findPerfilById(findDisciplinaById(disciplina[0].Disciplina).Perfil)
                     .abreviacao
                 }}
-              </td>
-              <td style="width: 200px"></td>
-              <td
-                style="width: 40px"
-                @click="openModalAddDocente(disciplina[0].Disciplina)"
-                class="td-pref"
+              </v-td>
+              <v-td width="120" />
+              <v-td
+                width="50"
+                class="clickable"
+                type="content"
+                @click="openModalAddPreferencia(disciplina[0].Disciplina)"
               >
-                +
-              </td>
+                <font-awesome-icon :icon="['fas', 'plus']" class="icon-darkgray" />
+              </v-td>
             </tr>
 
             <tr
               v-for="preferencia in disciplina"
-              :key="
-                'disciplina' +
-                  preferencia.Disciplina +
-                  'docente' +
-                  preferencia.Docente
-              "
+              :key="preferencia.Disciplina + '-' + preferencia.Docente"
             >
-              <td style="width: 80px"></td>
-              <td style="width: 420px"></td>
-              <td style="width: 100px"></td>
-              <td style="width: 200px">
-                {{ docenteById(preferencia.Docente).apelido }}
-              </td>
-              <td
-                style="width: 40px"
-                @click="openModalEdit(preferencia)"
+              <v-td width="90" />
+              <v-td width="420" />
+              <v-td width="80" />
+              <v-td width="120" align="start">
+                {{ findDocenteById(preferencia.Docente).apelido }}
+              </v-td>
+              <v-td
+                width="50"
                 class="td-pref"
+                @click="openModalEditPreferencia(preferencia)"
+                :title="
+                  'Preferência: ' +
+                    preferenciaText(preferencia.preferencia) +
+                    '\nClique para editar'
+                "
               >
                 {{ preferencia.preferencia }}
-              </td>
+              </v-td>
             </tr>
           </template>
         </template>
       </BaseTable>
 
-      <BaseTable v-else style="border: 0px;">
+      <BaseTable v-show="tableMode === 'docente'">
         <template #thead>
-          <th style="width: 200px">Docente</th>
-          <th style="width: 80px">Código</th>
-          <th style="width: 420px">Nome</th>
-          <th style="width: 100px">Perfil</th>
-          <th style="width: 40px">Pref</th>
+          <v-th width="120" align="start">Docente</v-th>
+          <v-th width="90">Código</v-th>
+          <v-th width="420" align="start">Nome</v-th>
+          <v-th width="80">Perfil</v-th>
+          <v-th width="50" title="Preferência">Pref.</v-th>
         </template>
 
         <template #tbody>
           <template v-for="docente in DisciplinasPorDocentes">
-            <tr :key="docente[0].Docente + 'headerDocente'" class="bg-custom">
-              <td style="width: 200px">
-                {{ docenteById(docente[0].Docente).apelido }}
-              </td>
-              <td style="width: 80px"></td>
-              <td style="width: 420px"></td>
-              <td style="width: 100px"></td>
-              <td
-                style="width: 40px"
-                @click="openModalAddDisciplina(docente[0].Docente)"
-                class="td-pref"
+            <tr :key="docente[0].Docente" class="bg-custom">
+              <v-td width="120" align="start">
+                {{ findDocenteById(docente[0].Docente).apelido }}
+              </v-td>
+              <v-td width="90" />
+              <v-td width="420" />
+              <v-td width="80" />
+              <v-td
+                width="50"
+                class="clickable"
+                type="content"
+                @click="openModalAddPreferencia(docente[0].Docente)"
               >
-                +
-              </td>
+                <font-awesome-icon :icon="['fas', 'plus']" class="icon-darkgray" />
+              </v-td>
             </tr>
 
             <tr
               v-for="preferencia in docente"
-              :key="
-                'docente' +
-                  preferencia.Docente +
-                  'disciplina' +
-                  preferencia.Disciplina
-              "
+              :key="preferencia.Docente + '-' + preferencia.Disciplina"
             >
-              <td style="width: 200px"></td>
-              <td style="width: 80px">
-                {{ disciplinaById(preferencia.Disciplina).codigo }}
-              </td>
-              <td style="width: 420px">
-                {{ disciplinaById(preferencia.Disciplina).nome }}
-              </td>
-              <td style="width: 100px">
+              <v-td width="120" />
+              <v-td width="90">
+                {{ findDisciplinaById(preferencia.Disciplina).codigo }}
+              </v-td>
+              <v-td width="420" align="start">
+                {{ findDisciplinaById(preferencia.Disciplina).nome }}
+              </v-td>
+              <v-td width="80">
                 {{
-                  perfilById(disciplinaById(preferencia.Disciplina).Perfil)
+                  findPerfilById(findDisciplinaById(preferencia.Disciplina).Perfil)
                     .abreviacao
                 }}
-              </td>
-              <td
-                style="width: 40px"
-                @click="openModalEdit(preferencia)"
+              </v-td>
+              <v-td
+                width="50"
                 class="td-pref"
+                type="content"
+                @click="openModalEditPreferencia(preferencia)"
+                :title="
+                  'Preferência: ' +
+                    preferenciaText(preferencia.preferencia) +
+                    '\nClique para editar'
+                "
               >
                 {{ preferencia.preferencia }}
-              </td>
+              </v-td>
             </tr>
           </template>
         </template>
       </BaseTable>
     </div>
 
-    <BaseModal ref="modalEdit" :title="'Editar Preferência'" :hasFooter="true">
+    <BaseModal
+      ref="modalEditPref"
+      class="modal-pref"
+      :title="'Editar Preferência'"
+      :hasFooter="true"
+      :position="'right'"
+      :styles="{ width: '400px' }"
+    >
       <template #modal-body>
-        <div class="row" :style="{ margin: '0' }">
-          <p>Docente: {{ edit.docente ? edit.docente.nome : "" }}</p>
+        <div class="form-row w-100">
+          <span class="w-100 mb-2">
+            <b>Docente:</b>
+            {{ edit.docente ? edit.docente.nome : "" }}
+          </span>
+          <span class="w-100">
+            <b>Disciplina:</b>
+            {{ edit.disciplina ? edit.disciplina.nome : "" }}
+          </span>
         </div>
-        <div class="row" :style="{ margin: '0' }">
-          <p>Disciplina: {{ edit.disciplina ? edit.disciplina.nome : "" }}</p>
-        </div>
-        <div class="row" :style="{ display: 'table-cell', verticalAlign: 'middle' }">
-          <label for="inputPreferenciaDocentes">Preferência: </label>
-          <input
-            type="text"
-            v-model="preferenciaForm.preferencia"
-            id="inputPreferenciaDocentes"
-            :style="{
-              width: '25px',
-              height: '20px',
-              marginLeft: '10px',
-              textAlign: 'center',
-            }"
-          />
+
+        <div class="form-row w-100">
+          <div class="form-group col-6">
+            <label for="editPref">Preferência:</label>
+            <select
+              id="editPref"
+              class="form-control"
+              v-model="preferenciaForm.preferencia"
+            >
+              <option v-for="pref in [0, 1, 2, 3]" :key="pref" :value="pref">
+                {{ pref }} - {{ preferenciaText(pref) }}
+              </option>
+            </select>
+          </div>
         </div>
       </template>
+
       <template #modal-footer>
         <BaseButton
-          type="text"
           color="lightblue"
-          @click="handleEditPrefs()"
+          text="Confirmar"
           class="ml-auto"
-          >Confirmar</BaseButton
-        >
+          @click="handleEditPrefs"
+        />
       </template>
     </BaseModal>
 
     <BaseModal
-      ref="modalAddDocente"
-      :title="'Adicionar Preferência'"
+      ref="modalAddPref"
+      class="modal-pref"
+      :title="
+        tableMode === 'docente'
+          ? 'Adicionar preferência ao docente'
+          : 'Adicionar preferência à disciplina'
+      "
       :hasFooter="true"
+      :position="'right'"
+      :styles="{ width: '400px' }"
     >
       <template #modal-body>
-        <div class="row" :style="{ margin: '0' }">
-          <p>Disciplina: {{ add.Disciplina ? add.Disciplina.nome : "" }}</p>
-        </div>
-        <div class="row" :style="{ margin: '0' }">
-          <label for="selectPreferenciaAdicionarDocentes">Docente: </label>
-          <select
-            v-model="add.Docente"
-            id="selectPreferenciaAdicionarDocentes"
-            style="width: 200px"
-          >
-            <option
-              v-for="docente in AllDocentes"
-              :key="`adicionarDocente${docente.id}`"
-              :value="docente.id"
-            >
-              {{ docente.apelido }}
-            </option>
-          </select>
-        </div>
-        <div class="row" :style="{ display: 'table-cell', verticalAlign: 'middle' }">
-          <label for="inputPreferenciaAdicionarDocentes">Preferência: </label>
-          <input
-            type="text"
-            v-model="add.preferencia"
-            id="inputPreferenciaAdicionarDocentes"
-            :style="{
-              width: '25px',
-              height: '20px',
-              marginLeft: '10px',
-              textAlign: 'center',
-            }"
-          />
-        </div>
+        <template v-if="tableMode === 'disciplina'">
+          <div class="form-row w-100">
+            <span class="w-100">
+              <b>Disciplina:</b>
+              {{ add.Disciplina ? add.Disciplina.nome : "" }}
+            </span>
+          </div>
+
+          <div class="form-row w-100">
+            <div class="form-group col-6 ">
+              <label for="addDocente">Docente:</label>
+              <select id="addDocente" class="form-control" v-model="add.Docente">
+                <option
+                  v-for="docente in AllDocentes"
+                  :key="docente.id + docente.apelido"
+                  :value="docente.id"
+                >
+                  {{ docente.apelido }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group col-6 pl-3">
+              <label for="addPref">Preferência:</label>
+              <select id="addPref" v-model.number="add.preferencia" class="form-control">
+                <option v-for="pref in [0, 1, 2, 3]" :key="pref" :value="pref">
+                  {{ pref }} - {{ preferenciaText(pref) }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </template>
+
+        <template v-else-if="tableMode === 'docente'">
+          <div class="form-row w-100">
+            <span class="w-100">
+              <b>Docente:</b>
+              {{ add.Docente ? add.Docente.apelido : "" }}
+            </span>
+          </div>
+
+          <div class="form-row w-100">
+            <div class="form-group col">
+              <label for="addDisciplina">Disciplina:</label>
+              <select
+                id="addDisciplina"
+                class="form-control"
+                style="width:100%"
+                v-model="add.Disciplina"
+              >
+                <option
+                  v-for="disciplina in AllDisciplinas"
+                  :key="disciplina.id + disciplina.codigo"
+                  :value="disciplina.id"
+                >
+                  {{ disciplina.nome }}
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row w-100">
+            <div class="form-group col-6">
+              <label for="addDisciplina">Código:</label>
+              <select id="addDisciplina" class="form-control" v-model="add.Disciplina">
+                <option
+                  v-for="disciplina in AllDisciplinas"
+                  :key="disciplina.id + disciplina.codigo"
+                  :value="disciplina.id"
+                >
+                  {{ disciplina.codigo }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group col-6 pl-3">
+              <label for="addPref">Preferência:</label>
+              <select id="addPref" v-model.number="add.preferencia" class="form-control">
+                <option v-for="pref in [0, 1, 2, 3]" :key="pref" :value="pref">
+                  {{ pref }} - {{ preferenciaText(pref) }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </template>
       </template>
+
       <template #modal-footer>
         <BaseButton
-          type="text"
           color="lightblue"
-          @click="addPreferencia()"
+          text="Confirmar"
           class="ml-auto"
-          >Confirmar</BaseButton
-        >
+          @click="addPreferencia"
+        />
       </template>
     </BaseModal>
 
     <BaseModal
-      ref="modalAddDisciplina"
-      :title="'Adicionar Preferência'"
+      ref="modalNewPref"
+      class="modal-pref"
+      :title="'Nova Preferência'"
       :hasFooter="true"
+      :position="'right'"
+      :styles="{ width: '400px' }"
     >
       <template #modal-body>
-        <div class="row" :style="{ margin: '0' }">
-          <p>Docente: {{ add.Docente ? add.Docente.apelido : "" }}</p>
+        <div class="form-row w-100">
+          <div class="form-group col">
+            <label for="newDisciplina">Disciplina:</label>
+            <select id="newDisciplina" class="form-control" v-model="add.Disciplina">
+              <option
+                v-for="disciplina in AllDisciplinas"
+                :key="disciplina.id + disciplina.codigo"
+                :value="disciplina.id"
+              >
+                {{ disciplina.nome }}
+              </option>
+            </select>
+          </div>
         </div>
-        <div class="row" :style="{ margin: '0' }">
-          <label for="selectPreferenciaAdicionarDisciplinas">Disciplina: </label>
-          <select
-            v-model="add.Disciplina"
-            id="selectPreferenciaAdicionarDisciplinas"
-            style="width: 200px"
-          >
-            <option
-              v-for="disciplina in AllDisciplinas"
-              :key="`adicionarDisciplina${disciplina.id}`"
-              :value="disciplina.id"
-            >
-              {{ disciplina.codigo }} - {{ disciplina.nome }}
-            </option>
-          </select>
-        </div>
-        <div class="row" :style="{ display: 'table-cell', verticalAlign: 'middle' }">
-          <label for="inputPreferenciaAdicionarDisciplinas">Preferência: </label>
-          <input
-            type="text"
-            v-model="add.preferencia"
-            id="inputPreferenciaAdicionarDisciplinas"
-            :style="{
-              width: '25px',
-              height: '20px',
-              marginLeft: '10px',
-              textAlign: 'center',
-            }"
-          />
-        </div>
-      </template>
-      <template #modal-footer>
-        <BaseButton
-          type="text"
-          color="lightblue"
-          @click="addPreferencia()"
-          class="ml-auto"
-          >Confirmar</BaseButton
-        >
-      </template>
-    </BaseModal>
 
-    <BaseModal
-      ref="modalAddPreferencia"
-      :title="'Adicionar Preferência'"
-      :hasFooter="true"
-    >
-      <template #modal-body>
-        <div class="row" :style="{ margin: '0' }">
-          <label for="selectPreferenciaAdicionarPreferenciaDocentes"
-            >Docente:
-          </label>
-          <select
-            v-model="add.Docente"
-            id="selectPreferenciaAdicionarPreferenciaDocentes"
-            style="width: 200px; margin-left: auto"
-          >
-            <option
-              v-for="docente in AllDocentes"
-              :key="`adicionarPreferenciaDocente${docente.id}`"
-              :value="docente.id"
-            >
-              {{ docente.apelido }}
+        <div class="form-row w-100">
+          <div class="form-group col-6">
+            <label for="newCodigo">Código:</label>
+            <select id="newCodigo" class="form-control" v-model="add.Disciplina">
+              <option
+                v-for="disciplina in AllDisciplinas"
+                :key="disciplina.id + disciplina.codigo"
+                :value="disciplina.id"
+              >
+                {{ disciplina.codigo }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group col-6 pl-3">
+            <label for="newDocente">Docente:</label>
+            <select id="newDocente" class="form-control" v-model="add.Docente">
+              <option
+                v-for="docente in AllDocentes"
+                :key="docente.id + docente.nome"
+                :value="docente.id"
+              >
+                {{ docente.apelido }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group col-6">
+          <label for="newPref">Preferência:</label>
+          <select id="newPref" v-model.number="add.preferencia" class="form-control">
+            <option v-for="pref in [0, 1, 2, 3]" :key="pref" :value="pref">
+              {{ pref }} - {{ preferenciaText(pref) }}
             </option>
           </select>
-        </div>
-        <div class="row" :style="{ margin: '0' }">
-          <label for="selectPreferenciaAdicionarPreferenciaDisciplinas"
-            >Disciplina:
-          </label>
-          <select
-            v-model="add.Disciplina"
-            id="selectPreferenciaAdicionarPreferenciaDisciplinas"
-            style="width: 200px; margin-left: auto"
-          >
-            <option
-              v-for="disciplina in AllDisciplinas"
-              :key="`adicionarPreferenciaDisciplina${disciplina.id}`"
-              :value="disciplina.id"
-            >
-              {{ disciplina.codigo }} - {{ disciplina.nome }}
-            </option>
-          </select>
-        </div>
-        <div class="row" :style="{ display: 'table-cell', verticalAlign: 'middle' }">
-          <label for="inputPreferenciaAdicionarPreferencia">Preferência: </label>
-          <input
-            type="text"
-            v-model="add.preferencia"
-            id="inputPreferenciaAdicionarPreferencia"
-            :style="{
-              width: '25px',
-              height: '20px',
-              marginLeft: '10px',
-              textAlign: 'center',
-            }"
-          />
         </div>
       </template>
+
       <template #modal-footer>
         <BaseButton
-          type="text"
           color="lightblue"
-          @click="addPreferencia()"
           class="ml-auto"
-          >Confirmar</BaseButton
-        >
+          text="Confirmar"
+          @click="addPreferencia"
+        />
       </template>
     </BaseModal>
 
     <BaseModal
       ref="modalUpload"
-      :title="'Selecione um arquivo para importar'"
+      class="modal-pref"
+      :title="'Importar preferências'"
       :hasFooter="true"
+      :hasBackground="true"
+      :styles="{ width: '400px' }"
     >
       <template #modal-body>
         <input type="file" ref="xlsxPrefs" id="xlsxPrefs" />
       </template>
+
       <template #modal-footer>
         <BaseButton
-          type="text"
           color="lightblue"
-          @click="importPrefs"
           class="ml-auto"
-          >Importar</BaseButton
-        >
+          text="Importar"
+          @click="importPrefs"
+        />
       </template>
     </BaseModal>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
-import docenteDisciplinaService from "@/common/services/docenteDisciplina";
-import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
-import { Card } from "@/components/ui";
-import { ModalAjuda, ModalDelete } from "@/components/modals";
 import XLSX from "xlsx";
-import _ from "lodash";
-import { SET_PARTIAL_LOADING } from "../../../vuex/mutation-types";
+import docenteDisciplinaService from "@/common/services/docenteDisciplina";
+import { mapGetters } from "vuex";
+import { ModalAjuda } from "@/components/modals";
 
 export default {
-  name: "DashboardPreferencias",
-  mixins: [toggleOrdination, toggleItemInArray],
-  components: { Card, ModalAjuda, ModalDelete },
+  name: "PreferenciasDocentes",
+  components: { ModalAjuda },
   data() {
     return {
-      file: undefined,
+      file: null,
       preferenciaForm: {
-        Docente: undefined,
-        Disciplina: undefined,
-        preferencia: undefined,
+        Docente: null,
+        Disciplina: null,
+        preferencia: null,
       },
       edit: {
-        docente: undefined,
-        disciplina: undefined,
-        isZero: undefined,
+        docente: null,
+        disciplina: null,
+        isZero: null,
       },
       add: {
-        Docente: undefined,
-        Disciplina: undefined,
-        preferencia: undefined,
+        Docente: null,
+        Disciplina: null,
+        preferencia: 0,
       },
-      error: undefined,
-      docentespordisciplina: true,
+      error: null,
+      tableMode: "docente",
     };
   },
 
   methods: {
-    ...mapActions(["setPartialLoading"]),
+    preferenciaText(preferencia) {
+      switch (preferencia) {
+        case 0:
+          return "Inapto";
+        case 1:
+          return "Emergência";
+        case 2:
+          return "Confortável";
+        case 3:
+          return "Interesse";
+        default:
+          break;
+      }
+    },
+    toggleTableMode() {
+      if (this.tableMode === "docente") this.tableMode = "disciplina";
+      else this.tableMode = "docente";
 
+      this.$refs.modalNewPref.close();
+      this.$refs.modalAddPref.close();
+      this.$refs.modalEditPref.close();
+    },
+    openModalEditPreferencia(preferencia) {
+      this.edit.docente = this.findDocenteById(preferencia.Docente);
+      this.edit.disciplina = this.findDisciplinaById(preferencia.Disciplina);
+      let p = preferencia.preferencia;
+
+      if (p === 0) {
+        this.edit.isZero = true;
+      } else {
+        this.edit.isZero = false;
+      }
+
+      this.preferenciaForm = {
+        Docente: preferencia.Docente,
+        Disciplina: preferencia.Disciplina,
+        preferencia: p,
+      };
+      this.$refs.modalNewPref.close();
+      this.$refs.modalAddPref.close();
+      this.$refs.modalEditPref.open();
+    },
+    openModalAddPreferencia(newValue) {
+      if (this.tableMode === "disciplina") {
+        this.add.Disciplina = this.findDisciplinaById(newValue);
+      } else {
+        this.add.Docente = this.findDocenteById(newValue);
+      }
+
+      this.$refs.modalNewPref.close();
+      this.$refs.modalEditPref.close();
+      this.$refs.modalAddPref.open();
+    },
+    openModalNewPreferencia() {
+      this.$refs.modalAddPref.close();
+      this.$refs.modalEditPref.close();
+      this.$refs.modalNewPref.open();
+    },
+    openModalUpload() {
+      this.$refs.modalUpload.open();
+    },
+
+    findPreferencia(docente, disciplina) {
+      let preferenciaFounded = this.$_.find(this.PreferenciaDosDocentes, {
+        Docente: docente.id,
+        Disciplina: disciplina.id,
+      });
+
+      return preferenciaFounded ? preferenciaFounded.preferencia : 0;
+    },
+    findDisciplinaById(disc) {
+      return this.$_.find(this.AllDisciplinas, { id: disc });
+    },
+    findDocenteById(doce) {
+      return this.$_.find(this.AllDocentes, { id: doce });
+    },
+    findPerfilById(perfil) {
+      return this.$_.find(this.AllPerfis, { id: perfil });
+    },
+
+    addPreferencia() {
+      if (this.add.Docente && this.add.Disciplina && this.add.preferencia) {
+        if (this.add.Docente.id) this.add.Docente = this.add.Docente.id;
+        if (this.add.Disciplina.id) this.add.Disciplina = this.add.Disciplina.id;
+
+        docenteDisciplinaService
+          .create(this.add)
+          .then(() => {
+            this.pushNotification({
+              type: "success",
+              text: `Preferência adicionada com sucesso!`,
+            });
+
+            this.add.Disciplina = null;
+            this.add.Docente = null;
+            this.add.preferencia = 0;
+          })
+          .catch(() => {
+            this.pushNotification({
+              type: "error",
+              title: "Erro ao adicionar preferência!",
+              text: "Verifique se a preferência já não existe",
+            });
+          });
+      }
+    },
+    handleEditPrefs() {
+      if (this.edit.isZero) {
+        if (this.preferenciaForm.preferencia != 0) {
+          docenteDisciplinaService
+            .create(this.preferenciaForm)
+            .then(() => {
+              this.pushNotification({
+                type: "success",
+                text: `Preferência atualizada com sucesso!`,
+              });
+            })
+            .catch((error) => {
+              this.error = "<b>Erro ao atualizar Preferência</b>";
+              if (error.response.data.fullMessage) {
+                this.error +=
+                  "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+              }
+              this.pushNotification({
+                type: "error",
+                text: this.error,
+              });
+            });
+          this.edit.isZero = false;
+        }
+      } else {
+        if (
+          this.preferenciaForm.preferencia !=
+          this.findPreferencia(this.edit.docente, this.edit.disciplina)
+        ) {
+          if (this.preferenciaForm.preferencia == 0) {
+            docenteDisciplinaService
+              .delete(this.preferenciaForm.Disciplina, this.preferenciaForm.Docente)
+              .then(() => {
+                this.pushNotification({
+                  type: "success",
+                  text: "Preferência atualizada com sucesso!",
+                });
+              })
+              .catch((error) => {
+                this.error = "<b>Erro ao atualizar Preferência</b>";
+                if (error.response.data.fullMessage) {
+                  this.error +=
+                    "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+                }
+                this.pushNotification({
+                  type: "error",
+                  text: this.error,
+                });
+              });
+            this.edit.isZero = true;
+          } else {
+            docenteDisciplinaService
+              .update(
+                this.preferenciaForm.Disciplina,
+                this.preferenciaForm.Docente,
+                this.preferenciaForm
+              )
+              .then(() => {
+                this.pushNotification({
+                  type: "success",
+                  text: `Preferência atualizada com sucesso!`,
+                });
+              })
+              .catch((error) => {
+                this.error = "<b>Erro ao atualizar Preferência</b>";
+                if (error.response.data.fullMessage) {
+                  this.error +=
+                    "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+                }
+                this.pushNotification({
+                  type: "error",
+                  text: this.error,
+                });
+              });
+          }
+        }
+      }
+    },
     importPrefs() {
-      console.log(this.PreferenciaDosDocentes);
       this.file = this.$refs.xlsxPrefs.files[0];
-      let reader = new FileReader();
-      let name = this.file.name;
-      let docentes = this.AllDocentes;
-      let disciplinas = this.AllDisciplinas;
-      let preferencias = this.PreferenciaDosDocentes;
+      const reader = new FileReader();
+
+      const docentes = this.AllDocentes;
+      const disciplinas = this.AllDisciplinas;
+      const preferencias = this.PreferenciaDosDocentes;
       reader.onload = function(e) {
-        let data = e.target.result;
-        let workbook = XLSX.read(data, { type: "binary" });
+        const workbook = XLSX.read(e.target.result, { type: "binary" });
         let first_worksheet = workbook.Sheets[workbook.SheetNames[0]];
         let prefs = XLSX.utils.sheet_to_json(first_worksheet);
-        let disciplinasFields = _.filter(
-          _.split(XLSX.utils.sheet_to_csv(first_worksheet), ","),
+        let disciplinasFields = this.$_.filter(
+          this.$_.split(XLSX.utils.sheet_to_csv(first_worksheet), ","),
           function(p) {
             return p.substring(0, 11) === "Disciplinas";
           }
@@ -420,7 +624,7 @@ export default {
         for (let i = 0; i < disciplinasFields.length; i++) {
           let start = disciplinasFields[i].indexOf("[");
           let end = disciplinasFields[i].indexOf("\t");
-          let disc = _.find(disciplinas, {
+          let disc = this.$_.find(disciplinas, {
             codigo: disciplinasFields[i].substring(start + 1, end),
           });
           disciplinasCods.push(disc);
@@ -429,11 +633,13 @@ export default {
           }
         }
         for (let i = 0; i < prefs.length; i++) {
-          let docente = _.find(docentes, { nome: prefs[i].Nome.toUpperCase() });
+          let docente = this.$_.find(docentes, {
+            nome: prefs[i].Nome.toUpperCase(),
+          });
           if (docente) {
             for (let j = 0; j < disciplinasFields.length; j++) {
               if (disciplinasCods[j]) {
-                let prefdisc = _.find(preferencias, {
+                let prefdisc = this.$_.find(preferencias, {
                   Docente: docente.id,
                   Disciplina: disciplinasCods[j].id,
                 });
@@ -473,199 +679,6 @@ export default {
       reader.readAsBinaryString(this.file);
       this.$refs.modalUpload.close();
     },
-
-    preferencia(docente, disciplina) {
-      let p = this.$_.find(this.PreferenciaDosDocentes, {
-        Docente: docente.id,
-        Disciplina: disciplina.id,
-      });
-      if (p) return p.preferencia;
-      else return 0;
-    },
-
-    openModalEdit(preferencia) {
-      this.edit.docente = this.docenteById(preferencia.Docente);
-      this.edit.disciplina = this.disciplinaById(preferencia.Disciplina);
-      let p = preferencia.preferencia;
-      if (p === 0) this.edit.isZero = true;
-      else this.edit.isZero = false;
-      this.preferenciaForm = {
-        Docente: preferencia.Docente,
-        Disciplina: preferencia.Disciplina,
-        preferencia: p,
-      };
-      this.$refs.modalEdit.open();
-    },
-
-    openModalAddDocente(disciplina) {
-      this.add.Disciplina = this.disciplinaById(disciplina);
-      this.$refs.modalAddDocente.open();
-    },
-
-    openModalAddDisciplina(docente) {
-      this.add.Docente = this.docenteById(docente);
-      this.$refs.modalAddDisciplina.open();
-    },
-
-    openModalAddPreferencia() {
-      this.$refs.modalAddPreferencia.open();
-    },
-
-    handleEditPrefs() {
-      if (this.edit.isZero) {
-        if (this.preferenciaForm.preferencia != 0) {
-          docenteDisciplinaService
-            .create(this.preferenciaForm)
-            .then(() => {
-              this.$notify({
-                group: "general",
-                title: `Sucesso!`,
-                text: `Preferência atualizada com sucesso!`,
-                type: "success",
-              });
-              this.$refs.modalEdit.close();
-            })
-            .catch((error) => {
-              this.error = "<b>Erro ao atualizar Preferência</b>";
-              if (error.response.data.fullMessage) {
-                this.error +=
-                  "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-              }
-              this.$notify({
-                group: "general",
-                title: `Erro!`,
-                text: this.error,
-                type: "error",
-              });
-            });
-          this.edit.isZero = false;
-        }
-      } else {
-        if (
-          this.preferenciaForm.preferencia !=
-          this.preferencia(this.edit.docente, this.edit.disciplina)
-        ) {
-          if (this.preferenciaForm.preferencia == 0) {
-            docenteDisciplinaService
-              .delete(this.preferenciaForm.Disciplina, this.preferenciaForm.Docente)
-              .then(() => {
-                this.$notify({
-                  group: "general",
-                  title: `Sucesso!`,
-                  text: `Preferência atualizada com sucesso!`,
-                  type: "success",
-                });
-                this.$refs.modalEdit.close();
-              })
-              .catch((error) => {
-                this.error = "<b>Erro ao atualizar Preferência</b>";
-                if (error.response.data.fullMessage) {
-                  this.error +=
-                    "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-                }
-                this.$notify({
-                  group: "general",
-                  title: `Erro!`,
-                  text: this.error,
-                  type: "error",
-                });
-              });
-            this.edit.isZero = true;
-          } else {
-            docenteDisciplinaService
-              .update(
-                this.preferenciaForm.Disciplina,
-                this.preferenciaForm.Docente,
-                this.preferenciaForm
-              )
-              .then(() => {
-                this.$notify({
-                  group: "general",
-                  title: `Sucesso!`,
-                  text: `Preferência atualizada com sucesso!`,
-                  type: "success",
-                });
-                this.$refs.modalEdit.close();
-              })
-              .catch((error) => {
-                this.error = "<b>Erro ao atualizar Preferência</b>";
-                if (error.response.data.fullMessage) {
-                  this.error +=
-                    "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-                }
-                this.$notify({
-                  group: "general",
-                  title: `Erro!`,
-                  text: this.error,
-                  type: "error",
-                });
-              });
-          }
-        }
-      }
-    },
-
-    addPreferencia() {
-      console.log(this.add);
-      if (this.add.Docente && this.add.Disciplina && this.add.preferencia) {
-        if (this.add.Docente.id) this.add.Docente = this.add.Docente.id;
-        if (this.add.Disciplina.id) this.add.Disciplina = this.add.Disciplina.id;
-        console.log(this.add);
-        docenteDisciplinaService
-          .create(this.add)
-          .then(() => {
-            this.$notify({
-              group: "general",
-              title: `Sucesso!`,
-              text: `Preferência adicionada com sucesso!`,
-              type: "success",
-            });
-            this.add.Disciplina = undefined;
-            this.add.Docente = undefined;
-            this.add.preferencia = undefined;
-            this.$refs.modalAddDocente.close();
-            this.$refs.modalAddDisciplina.close();
-          })
-          .catch((error) => {
-            this.error = "<b>Erro ao atualizar Preferência</b>";
-            if (error.response.data.fullMessage) {
-              this.error +=
-                "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-            }
-            this.$notify({
-              group: "general",
-              title: `Erro!`,
-              text: this.error,
-              type: "error",
-            });
-            this.add.Disciplina = undefined;
-            this.add.Docente = undefined;
-            this.add.preferencia = undefined;
-            this.$refs.modalAddDocente.close();
-            this.$refs.modalAddDisciplina.close();
-          });
-      }
-    },
-
-    openModalUpload() {
-      this.$refs.modalUpload.open();
-    },
-
-    disciplinaById(disc) {
-      return _.find(this.AllDisciplinas, { id: disc });
-    },
-
-    docenteById(doce) {
-      return _.find(this.AllDocentes, { id: doce });
-    },
-
-    perfilById(perfil) {
-      return _.find(this.AllPerfis, { id: perfil });
-    },
-
-    swapModes() {
-      this.docentespordisciplina = !this.docentespordisciplina;
-    },
   },
 
   computed: {
@@ -678,19 +691,19 @@ export default {
 
     DocentesPorDisciplinas() {
       let prefs = {};
-      let preferencias = _.orderBy(this.PreferenciaDosDocentes, (p) => {
-        return this.disciplinaById(p.Disciplina).codigo;
+      let preferencias = this.$_.orderBy(this.PreferenciaDosDocentes, (p) => {
+        return this.findDisciplinaById(p.Disciplina).codigo;
       });
       preferencias.forEach((p) => {
-        let codigo = this.disciplinaById(p.Disciplina).codigo;
+        let codigo = this.findDisciplinaById(p.Disciplina).codigo;
         if (prefs[codigo] === undefined) prefs[codigo] = [];
         prefs[codigo].push(p);
       });
       for (var disc in prefs) {
         if (Object.prototype.hasOwnProperty.call(prefs, disc)) {
-          prefs[disc] = _.orderBy(
-            _.orderBy(prefs[disc], (doce) => {
-              return this.docenteById(doce.Docente).apelido;
+          prefs[disc] = this.$_.orderBy(
+            this.$_.orderBy(prefs[disc], (doce) => {
+              return this.findDocenteById(doce.Docente).apelido;
             }),
             ["preferencia"],
             ["desc"]
@@ -699,22 +712,21 @@ export default {
       }
       return prefs;
     },
-
     DisciplinasPorDocentes() {
       let prefs = {};
-      let preferencias = _.orderBy(this.PreferenciaDosDocentes, (p) => {
-        return this.docenteById(p.Docente).apelido;
+      let preferencias = this.$_.orderBy(this.PreferenciaDosDocentes, (p) => {
+        return this.findDocenteById(p.Docente).apelido;
       });
       preferencias.forEach((p) => {
-        let apelido = this.docenteById(p.Docente).apelido;
+        let apelido = this.findDocenteById(p.Docente).apelido;
         if (prefs[apelido] === undefined) prefs[apelido] = [];
         prefs[apelido].push(p);
       });
       for (var doce in prefs) {
         if (Object.prototype.hasOwnProperty.call(prefs, doce)) {
-          prefs[doce] = _.orderBy(
-            _.orderBy(prefs[doce], (disc) => {
-              return this.disciplinaById(disc.Disciplina).codigo;
+          prefs[doce] = this.$_.orderBy(
+            this.$_.orderBy(prefs[doce], (disc) => {
+              return this.findDisciplinaById(disc.Disciplina).codigo;
             }),
             ["preferencia"],
             ["desc"]
@@ -728,16 +740,35 @@ export default {
 </script>
 
 <style scoped>
-.card .input-maior {
-  width: 270px;
-}
-.card .input-medio {
-  width: 150px;
-}
-
 .td-pref:hover {
   color: #1a79b2;
   text-decoration: underline;
   cursor: pointer;
+}
+
+.modal-pref {
+  font-size: 14px;
+}
+.modal-pref span {
+  text-align: start;
+}
+.modal-pref .form-control {
+  width: 100%;
+  height: 28px;
+  font-size: 12px;
+  padding: 0 5px;
+  text-align: start;
+}
+.modal-pref .form-row {
+  margin: 0;
+  padding: 0;
+  margin-bottom: 0.75rem;
+}
+.modal-pref .form-group {
+  margin: 0;
+  padding: 0;
+}
+.modal-pref label {
+  font-weight: bold;
 }
 </style>

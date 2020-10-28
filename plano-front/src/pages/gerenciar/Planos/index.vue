@@ -1,8 +1,8 @@
 <template>
   <div class="main-component">
     <PageHeader :title="'Planos'">
-      <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
-      <BaseButton template="file-upload" @click="toggleAsideModal('importPlano')" />
+      <BaseButton template="file-upload" @click="$refs.modalImportPlano.open()" />
+      <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
     </PageHeader>
 
     <div class="page-content">
@@ -84,15 +84,12 @@
               <label required for="ano">Ano</label>
               <select
                 id="planoAno"
-                v-model.number="planoForm.ano"
                 class="form-control input-ano"
+                v-model.number="planoForm.ano"
               >
-                <option
-                  v-for="year in AnosDoPlano"
-                  :key="'anos' + year"
-                  :value="year"
-                  >{{ year }}</option
-                >
+                <option v-for="ano in AnosDoPlano" :key="'ano' + ano" :value="ano">
+                  {{ ano }}
+                </option>
               </select>
             </div>
           </div>
@@ -183,7 +180,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { toggleOrdination, toggleAsideModal } from "@/common/mixins";
+import { toggleOrdination } from "@/common/mixins";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
 import { Card } from "@/components/ui";
 import copyPlanoService from "../../../common/services/copyPlano";
@@ -200,7 +197,7 @@ const emptyPlano = {
 
 export default {
   name: "Planos",
-  mixins: [toggleOrdination, toggleAsideModal],
+  mixins: [toggleOrdination],
   components: {
     ModalAjuda,
     ModalDelete,
@@ -210,7 +207,6 @@ export default {
   },
   data() {
     return {
-      asideModalsRefs: ["modalImportPlano", "modalAjuda"],
       planoForm: this.$_.clone(emptyPlano),
       planoSelectedId: null,
       ordenacaoMainPlanos: { order: "ano", type: "asc" },

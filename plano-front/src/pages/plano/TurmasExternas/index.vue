@@ -27,7 +27,6 @@
             :currentOrder="ordenacaoTurmasMain"
             orderToCheck="disciplina.codigo"
             width="80"
-            align="start"
             text="Código"
             >Código
           </v-th-ordination>
@@ -56,7 +55,6 @@
             {{ curso.codigo }}
           </v-th>
         </template>
-
         <template #add-row>
           <NovaTurmaExternaRow ref="novaTurmaExternaRow" v-show="isAdding" />
         </template>
@@ -69,11 +67,11 @@
           />
 
           <tr v-show="!TurmasExternasOrdered.length">
-            <td style="width:1005px">
+            <v-td width="1005">
               <b>Nenhuma turma encontrada.</b> Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
               para selecioná-las.
-            </td>
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -124,6 +122,7 @@
             v-for="disciplina in DisciplinasOptionsOrdered"
             :key="disciplina.id + disciplina.nome"
             @click="toggleItemInArray(disciplina, filtroDisciplinas.selecionadas)"
+            v-prevent-click-selection
           >
             <v-td width="25">
               <input
@@ -154,7 +153,8 @@
           <tr
             v-for="periodo in PeriodosOptions"
             :key="periodo.id + periodo.nome"
-            @click.stop="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
+            @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
+            v-prevent-click-selection
           >
             <v-td width="25">
               <input
@@ -179,7 +179,8 @@
           <tr
             v-for="semestre in SemestresOptions"
             :key="semestre.id + semestre.nome"
-            @click.stop="selecionaSemestre(semestre)"
+            @click="selecionaSemestre(semestre)"
+            v-prevent-click-selection
           >
             <v-td width="25">
               <input
@@ -274,6 +275,7 @@ import {
   toggleAsideModal,
   cursoPopoverContent,
   conectaFiltrosSemestresEPeriodos,
+  preventClickSelection,
 } from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
 import { ModalDelete, ModalAjuda, ModalFiltros } from "@/components/modals";
@@ -287,6 +289,7 @@ export default {
     toggleAsideModal,
     cursoPopoverContent,
     conectaFiltrosSemestresEPeriodos,
+    preventClickSelection,
   ],
   components: {
     ModalFiltros,

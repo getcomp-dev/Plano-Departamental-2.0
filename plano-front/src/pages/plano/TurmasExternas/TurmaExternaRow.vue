@@ -1,134 +1,120 @@
 <template>
   <tr class="turmarow">
-    <td style="width: 25px">
-      <input
-        type="checkbox"
-        class="form-check-input position-static m-0"
-        v-model="toggleToDelete"
-        :value="turma"
-      />
-    </td>
-    <td style="width: 55px" class="less-padding">
-      <select v-model.number="turmaForm.periodo" @change="handleEditTurma()">
+    <v-td width="25" type="content">
+      <input type="checkbox" v-model="toggleToDelete" :value="turma" />
+    </v-td>
+    <v-td width="55" type="content">
+      <select v-model.number="turmaForm.periodo" @change="handleEditTurma">
         <option value="1">1</option>
         <option value="2">2</option>
         <option value="3">3</option>
         <option value="4">4</option>
       </select>
-    </td>
-    <td style="width: 80px">{{ turmaForm.disciplina.codigo }}</td>
-
-    <td style="width: 330px" class="less-padding">
+    </v-td>
+    <v-td width="80">{{ turmaForm.disciplina.codigo }}</v-td>
+    <v-td width="330" type="content">
       <select v-model.number="turmaForm.Disciplina" @change="handleEditTurma">
         <option
           v-for="disciplina in DisciplinasExternasInPerfis"
           :key="disciplina.id"
           :value="disciplina.id"
-          >{{ disciplina.nome }}</option
-        >
+          >{{ disciplina.nome }}
+        </option>
       </select>
-    </td>
-
-    <td style="width: 25px">{{ totalCarga }}</td>
-
-    <td style="width: 45px;">
+    </v-td>
+    <v-td width="25">{{ totalCarga }}</v-td>
+    <v-td width="45" type="content">
       <input
         type="text"
-        class="input-letra"
+        style="width:30px"
         :value="turmaForm.letra"
         @input="turmaForm.letra = $event.target.value.toUpperCase()"
         @keypress="maskTurmaLetra"
         @change="handleEditTurma"
       />
-    </td>
-
-    <td style="width: 80px;" class="less-padding">
-      <select v-model="turmaForm.turno1" @change="handleEditTurma()">
+    </v-td>
+    <v-td width="80" type="content">
+      <select v-model="turmaForm.turno1" @change="handleEditTurma">
         <option v-if="disciplinaIsIntegralEAD" value="EAD">EAD</option>
-
         <template v-else>
           <option value="Diurno">Diurno</option>
           <option value="Noturno">Noturno</option>
         </template>
       </select>
-    </td>
-
-    <td style="width:85px" class="less-padding">
+    </v-td>
+    <v-td width="85" type="content">
       <select v-model.number="turmaForm.Horario1" @change="checkHorario(1)">
-        <option value=""></option>
+        <option />
         <option
           v-for="horario in HorariosFiltredByTurno"
-          :key="horario.id"
+          :key="horario.id + horario.horario"
           :value="horario.id"
-          >{{ horario.horario }}</option
-        >
+          >{{ horario.horario }}
+        </option>
       </select>
       <select
         v-if="totalCarga >= 4"
         v-model.number="turmaForm.Horario2"
         @change="checkHorario(2)"
       >
-        <option value=""></option>
+        <option />
         <option
           v-for="horario in HorariosFiltredByTurno"
-          :key="horario.id"
+          :key="horario.id + horario.horario"
           :value="horario.id"
-          >{{ horario.horario }}</option
-        >
+          >{{ horario.horario }}
+        </option>
       </select>
-    </td>
-
-    <td style="width: 95px" class="less-padding">
+    </v-td>
+    <v-td width="95" type="content">
       <template v-if="!disciplinaIsIntegralEAD">
         <select v-model.number="turmaForm.Sala1" @change="checkSala(1)">
-          <option value=""></option>
+          <option />
           <option
             v-for="sala in AllSalas"
             :key="sala.id + sala.nome"
             :value="sala.id"
-            >{{ sala.nome }}</option
-          >
+            >{{ sala.nome }}
+          </option>
         </select>
+
         <select
           v-if="totalCarga >= 4"
           v-model.number="turmaForm.Sala2"
           @change="checkSala(2)"
         >
-          <option value></option>
+          <option />
           <option
             v-for="sala in AllSalas"
             :key="sala.nome + sala.id"
             :value="sala.id"
-            >{{ sala.nome }}</option
-          >
+            >{{ sala.nome }}
+          </option>
         </select>
       </template>
-    </td>
-
-    <td style="width:45px" class="p-0">
-      <div
-        style="height:43px"
-        class="py-1 d-flex flex-column justify-content-between"
-      >
-        <span class="font-weight-bold">
+    </v-td>
+    <v-td width="45" type="content">
+      <div class="d-flex flex-column justify-content-between py-1">
+        <b class="mb-1">
           {{ totalPedidosNaoPeriodizados + totalPedidosPeriodizados }}
-        </span>
+        </b>
         <span>
           {{ totalPedidosPeriodizados }}+{{ totalPedidosNaoPeriodizados }}
         </span>
       </div>
-    </td>
-
-    <td
+    </v-td>
+    <v-td
       v-for="indice in IndicesInPedidos"
-      :key="indice"
-      style="width:35px"
-      class="p-0"
+      :key="'index' + indice"
+      width="35"
+      paddingX="0"
+      type="none"
     >
       <InputsPedidosExternos :index="indice" :turma="turma" />
-    </td>
+    </v-td>
   </tr>
 </template>
+
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { maskTurmaLetra } from "@/common/mixins";
@@ -136,12 +122,12 @@ import InputsPedidosExternos from "./InputsPedidosExternos.vue";
 
 export default {
   name: "TurmaExternaRow",
-  props: {
-    turma: { type: Object, required: true },
-  },
   mixins: [maskTurmaLetra],
   components: {
     InputsPedidosExternos,
+  },
+  props: {
+    turma: { type: Object, required: true },
   },
   data() {
     return {
@@ -157,7 +143,6 @@ export default {
       this.turmaForm = this.$_.clone(this.turma);
       this.currentData = this.$_.clone(this.turma);
     },
-
     async handleEditTurma() {
       try {
         this.setPartialLoading(true);
@@ -176,7 +161,6 @@ export default {
         this.setPartialLoading(false);
       }
     },
-
     checkHorario(horario) {
       if (!this.checkHorarioSala(horario)) this.handleEditTurma();
       else {
@@ -680,46 +664,6 @@ export default {
 
 <style scoped>
 .turmarow {
-  font-size: 11px !important;
-  background-color: #fff !important;
-}
-
-.turmarow > td {
-  vertical-align: middle !important;
-  margin: 0 !important;
-  padding: 0 5px;
-  text-align: center;
-  word-break: break-word;
-}
-.turmarow > td {
-  background-color: #fff !important;
-}
-
-.turmarow select,
-.turmarow input {
   font-size: 11px;
-  border: 1px solid #414141;
-  color: #414141;
-  border-radius: 0px;
-}
-.turmarow select {
-  height: 18px;
-  width: 100%;
-}
-.turmarow select + select {
-  margin-top: 3px;
-}
-.turmarow input[type="checkbox"] {
-  width: 14px;
-  height: 14px;
-  margin: 0;
-  margin-top: 5px;
-}
-.turmarow .input-letra {
-  margin: 0;
-  margin-top: 4px;
-  height: 18px;
-  width: 30px;
-  text-align: center;
 }
 </style>

@@ -138,8 +138,8 @@ const state = {
   ],
   routesHistorico: [
     {
-      title: "Busca Turmas",
-      routeName: "buscaTurmas",
+      title: "Buscar Turmas",
+      routeName: "buscarTurmas",
       icon: "search",
       description: `Busca de turmas em todos os planos.`,
     },

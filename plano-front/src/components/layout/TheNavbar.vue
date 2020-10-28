@@ -199,7 +199,7 @@ ul.navbar-nav > li.nav-item .input-plano:hover {
   border-color: #ffffffbf;
 }
 
-@media screen and (max-width: 660px) {
+@media screen and (max-width: 686px) {
   ul.navbar-nav > li.nav-item > span {
     display: none;
   }
@@ -207,9 +207,12 @@ ul.navbar-nav > li.nav-item .input-plano:hover {
     padding: 0 10px;
   }
 }
-@media screen and (max-width: 544px) {
+@media screen and (max-width: 594px) {
   .navbar-container > .navbar-brand {
     width: 100% !important;
+  }
+  .navbar-container > .navbar-brand > .brand-title {
+    text-align: center;
   }
   .navbar-container > .btn-navbar {
     position: fixed;

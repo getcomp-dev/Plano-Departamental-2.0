@@ -117,11 +117,13 @@
             text="Nome"
           />
         </template>
+
         <template #tbody>
           <tr
             v-for="perfil in PerfisOptionsOrdered"
             :key="perfil.id + perfil.nome"
-            @click.stop="selectPerfis(perfil)"
+            @click="selectPerfis(perfil)"
+            v-prevent-click-selection
           >
             <v-td width="25">
               <input
@@ -175,11 +177,13 @@
             text="Perfil"
           />
         </template>
+
         <template #tbody>
           <tr
             v-for="disciplina in DisciplinasOptionsOrdered"
             :key="disciplina.id + disciplina.nome"
-            @click.stop="selectDisciplina(disciplina)"
+            @click="selectDisciplina(disciplina)"
+            v-prevent-click-selection
           >
             <v-td width="25">
               <input
@@ -232,11 +236,13 @@
             text="Nome"
           />
         </template>
+
         <template #tbody>
           <tr
             v-for="curso in CursosOptionsOrdered"
             :key="curso.id + curso.nome"
-            @click.stop="toggleItemInArray(curso, filtroCursos.selecionados)"
+            @click="toggleItemInArray(curso, filtroCursos.selecionados)"
+            v-prevent-click-selection
           >
             <v-td width="25">
               <input
@@ -260,11 +266,13 @@
           <v-th width="25" />
           <v-th width="425" align="start">Periodos Letivo</v-th>
         </template>
+
         <template #tbody>
           <tr
             v-for="periodo in PeriodosOptions"
             :key="periodo.id + periodo.nome"
-            @click.stop="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
+            @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
+            v-prevent-click-selection
           >
             <v-td width="25">
               <input
@@ -285,11 +293,13 @@
           <v-th width="25" />
           <v-th width="425" align="start">Semestre Letivo</v-th>
         </template>
+
         <template #tbody>
           <tr
             v-for="semestre in SemestresOptions"
             :key="semestre.id + semestre.nome"
-            @click.stop="selecionaSemestre(semestre)"
+            @click="selecionaSemestre(semestre)"
+            v-prevent-click-selection
           >
             <v-td width="25">
               <input
@@ -416,6 +426,7 @@ import {
   cursoPopoverContent,
   conectaFiltroPerfisEDisciplinas,
   conectaFiltrosSemestresEPeriodos,
+  preventClickSelection,
 } from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
 import {
@@ -424,7 +435,6 @@ import {
   ModalEditTurma,
   ModalAjuda,
 } from "@/components/modals";
-
 import NovaTurmaRow from "./NovaTurmaRow.vue";
 import TurmaRow from "./TurmaRow.vue";
 
@@ -436,6 +446,7 @@ export default {
     cursoPopoverContent,
     conectaFiltrosSemestresEPeriodos,
     conectaFiltroPerfisEDisciplinas,
+    preventClickSelection,
   ],
   components: {
     ModalAjuda,
@@ -482,11 +493,13 @@ export default {
             this.filtroPerfis.selecionados = [...this.PerfisOptions];
           },
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = [...this.DisciplinasOptions];
-            this.filtroPerfis.selecionados = [...this.PerfisOptions];
+            this.filtroDisciplinas.selecionados = [
+              ...this.DisciplinasOptionsFiltered,
+            ];
+            this.conectaDisciplinasEmPerfis();
           },
           Cursos: () => {
-            this.filtroCursos.selecionados = [...this.AllCursos];
+            this.filtroCursos.selecionados = [...this.CursosOptionsFiltered];
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [...this.PeriodosOptions];

@@ -1,10 +1,10 @@
 <template>
   <tr class="cargapos-row">
     <v-td width="75" />
-    <v-td width="25">
+    <v-td width="25" type="content">
       <input type="checkbox" v-model="toggleToDelete" :value="carga" />
     </v-td>
-    <v-td width="55">
+    <v-td width="55" type="content">
       <select v-model.number="cargaPosForm.trimestre" @change="handleEditCargaPos">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -12,17 +12,17 @@
         <option value="4">4</option>
       </select>
     </v-td>
-    <v-td width="145">
+    <v-td width="145" type="content">
       <select v-model.number="cargaPosForm.Docente" @change="handleEditCargaPos">
         <option
           v-for="docente in DocentesAtivos"
-          :key="docente.id + docente.apelido"
+          :key="docente.id"
           :value="docente.id"
-          >{{ docente.apelido }}</option
-        >
+          >{{ docente.apelido }}
+        </option>
       </select>
     </v-td>
-    <v-td width="60">
+    <v-td width="60" type="content">
       <input
         type="text"
         v-model.number="cargaPosForm.creditos"
@@ -98,32 +98,10 @@ export default {
 
 <style scoped>
 .cargapos-row {
-  font-size: 11px !important;
-}
-.cargapos-row select,
-.cargapos-row input[type="text"] {
-  width: 100%;
-  margin: 5px 0;
-  height: 19px;
-  padding: 0 0;
   font-size: 11px;
-  border: 1px solid #414141;
-  border-radius: 0px;
-  color: #414141;
 }
+.cargapos-row input,
 .cargapos-row select {
-  text-align: start;
-}
-.cargapos-row input[type="text"] {
-  text-align: center;
-  padding: 0 0px;
-}
-.cargapos-row input[type="checkbox"] {
-  width: 13px !important;
-  height: 13px !important;
-  text-align: center !important;
-  margin: 0;
-  margin-top: 5px !important;
-  margin-bottom: auto !important;
+  margin: 5px 0;
 }
 </style>

@@ -34,14 +34,13 @@
             </th>
           </template>
           <template #tbody>
-            <template v-for="sala in Salas">
+            <template v-for="sala in SalasOrdered">
               <tr
                 :key="sala.id"
-                v-on:click.prevent="handleClickInSala(sala)"
-                :class="[{ 'bg-selected': salaClickada === sala.nome }, 'clickable']"
+                @click="handleClickInSala(sala)"
+                :class="[{ 'bg-selected': salaSelected === sala.id }, 'clickable']"
               >
                 <td style="width: 82px" class="t-start">{{ sala.nome }}</td>
-
                 <td style="width: 90px">
                   {{ booleanToText(sala.laboratorio) }}
                 </td>
@@ -155,10 +154,10 @@ import { ModalAjuda, ModalDelete } from "@/components/modals";
 import { mapGetters } from "vuex";
 
 const emptySala = {
-  id: undefined,
-  nome: undefined,
-  laboratorio: undefined,
-  lotacao_maxima: undefined,
+  id: null,
+  nome: null,
+  laboratorio: null,
+  lotacao_maxima: null,
 };
 
 export default {
@@ -171,9 +170,9 @@ export default {
   },
   data() {
     return {
-      error: undefined,
+      error: null,
+      salaSelected: null,
       salaForm: this.$_.clone(emptySala),
-      salaClickada: null,
       ordenacaoSalasMain: { order: "nome", type: "asc" },
     };
   },
@@ -186,11 +185,11 @@ export default {
       return isLab ? "Sim" : "-";
     },
     handleClickInSala(sala) {
-      this.salaClickada = sala.nome;
       this.showSala(sala);
+      this.salaSelected = sala.id;
     },
     cleanSala() {
-      this.salaClickada = null;
+      this.salaSelected = null;
       this.salaForm = this.$_.clone(emptySala);
       this.error = null;
     },
@@ -273,10 +272,11 @@ export default {
         });
     },
   },
+
   computed: {
     ...mapGetters(["AllSalas"]),
 
-    Salas() {
+    SalasOrdered() {
       return this.$_.orderBy(
         this.AllSalas,
         this.ordenacaoSalasMain.order,
@@ -284,7 +284,7 @@ export default {
       );
     },
     isEdit() {
-      return this.salaForm.id !== undefined;
+      return this.salaForm.id != null;
     },
   },
 };

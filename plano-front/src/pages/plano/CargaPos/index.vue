@@ -42,7 +42,6 @@
             text="C."
           />
         </template>
-
         <template #add-row>
           <NovaCargaPosRow ref="novaCargaPosRow" v-show="isAdding" />
         </template>
@@ -93,6 +92,7 @@
             v-for="programaPos in AllProgramasPosOrdered"
             :key="programaPos"
             @click="toggleItemInArray(programaPos, filtroProgramas.selecionados)"
+            v-prevent-click-selection
           >
             <v-td width="25">
               <input
@@ -112,11 +112,13 @@
           <v-th width="25" />
           <v-th width="425" align="start">Periodos Letivo</v-th>
         </template>
+
         <template #tbody>
           <tr
             v-for="periodo in PeriodosOptions"
             :key="periodo.id + periodo.nome"
-            @click.stop="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
+            @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
+            v-prevent-click-selection
           >
             <v-td width="25">
               <input
@@ -144,7 +146,8 @@
           <tr
             v-for="semestre in SemestresOptions"
             :key="semestre.id + semestre.nome"
-            @click.stop="selecionaSemestre(semestre)"
+            @click="selecionaSemestre(semestre)"
+            v-prevent-click-selection
           >
             <v-td width="25">
               <input
@@ -238,6 +241,7 @@ import {
   toggleItemInArray,
   toggleAsideModal,
   conectaFiltrosSemestresEPeriodos,
+  preventClickSelection,
 } from "@/common/mixins";
 import { ModalDelete, ModalFiltros, ModalAjuda } from "@/components/modals";
 import NovaCargaPosRow from "./NovaCargaPosRow.vue";
@@ -245,7 +249,12 @@ import CargaPosRow from "./CargaPosRow.vue";
 
 export default {
   name: "DashboardCargaPos",
-  mixins: [toggleItemInArray, toggleAsideModal, conectaFiltrosSemestresEPeriodos],
+  mixins: [
+    toggleItemInArray,
+    toggleAsideModal,
+    conectaFiltrosSemestresEPeriodos,
+    preventClickSelection,
+  ],
   components: {
     ModalDelete,
     ModalFiltros,

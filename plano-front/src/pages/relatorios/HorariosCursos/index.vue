@@ -86,104 +86,102 @@
       :callbacks="modalFiltrosCallbacks"
       :tabsOptions="modalFiltrosTabs"
     >
-      <div class="div-table">
-        <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Cursos'">
-          <template #thead>
-            <th style="width: 25px"></th>
-            <th
-              class="clickable t-start"
-              style="width: 50px"
-              @click="toggleOrder(ordemCursos, 'codigo')"
-            >
-              Cód.
-              <i :class="setIconByOrder(ordemCursos, 'codigo')"></i>
-            </th>
-            <th
-              class="clickable t-start"
-              style="width: 375px;"
-              @click="toggleOrder(ordemCursos, 'nome')"
-            >
-              Nome
-              <i :class="setIconByOrder(ordemCursos, 'nome')"></i>
-            </th>
-          </template>
-          <template #tbody>
-            <tr
-              v-for="curso in CursosOrderedModal"
-              :key="'MdCurso' + curso.codigo + curso.id"
-              @click="toggleItemInArray(curso, filtroCursos.selecionados)"
-            >
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  :value="curso"
-                  v-model="filtroCursos.selecionados"
-                  class="form-check-input position-static m-0"
-                />
-              </td>
-              <td style="width: 50px">{{ curso.codigo }}</td>
-              <td style="width: 375px" class="t-start">{{ curso.nome }}</td>
-            </tr>
-          </template>
-        </BaseTable>
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Cursos'">
+        <template #thead>
+          <th style="width: 25px"></th>
+          <th
+            class="clickable t-start"
+            style="width: 50px"
+            @click="toggleOrder(ordemCursos, 'codigo')"
+          >
+            Cód.
+            <i :class="setIconByOrder(ordemCursos, 'codigo')"></i>
+          </th>
+          <th
+            class="clickable t-start"
+            style="width: 375px;"
+            @click="toggleOrder(ordemCursos, 'nome')"
+          >
+            Nome
+            <i :class="setIconByOrder(ordemCursos, 'nome')"></i>
+          </th>
+        </template>
 
-        <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Períodos'">
-          <template #thead>
-            <th style="width: 25px"></th>
-            <th style="width: 425px" class="t-start">Periodos Letivo</th>
-          </template>
-          <template #tbody>
-            <tr
-              v-for="periodo in PeriodosOptions"
-              :key="periodo.id + periodo.nome"
-              @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
-            >
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  :value="periodo"
-                  v-model="filtroPeriodos.selecionados"
-                  @click.stop="selecionaPeriodo(periodo)"
-                />
-              </td>
-              <td style="width: 425px" class="t-start upper-case">
-                {{ periodo.nome }}
-              </td>
-            </tr>
-          </template>
-        </BaseTable>
+        <template #tbody>
+          <tr
+            v-for="curso in CursosOrderedModal"
+            :key="curso.nome + curso.id"
+            @click="toggleItemInArray(curso, filtroCursos.selecionados)"
+            v-prevent-click-selection
+          >
+            <td style="width: 25px">
+              <input
+                type="checkbox"
+                :value="curso"
+                v-model="filtroCursos.selecionados"
+                class="form-check-input position-static m-0"
+              />
+            </td>
+            <td style="width: 50px">{{ curso.codigo }}</td>
+            <td style="width: 375px" class="t-start">{{ curso.nome }}</td>
+          </tr>
+        </template>
+      </BaseTable>
 
-        <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Semestres'">
-          <template #thead>
-            <th style="width: 25px"></th>
-            <th class="t-start" style="width: 425px">
-              Semestre Letivo
-            </th>
-          </template>
-          <template #tbody>
-            <tr
-              v-for="semestre in SemestresOptions"
-              :key="semestre.id + semestre.nome"
-              @click="selecionaSemestre(semestre)"
-            >
-              <td style="width: 25px">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  :indeterminate.prop="semestre.halfChecked"
-                  :value="semestre"
-                  v-model="filtroSemestres.selecionados"
-                  @click.stop="selecionaSemestre(semestre)"
-                />
-              </td>
-              <td style="width: 425px" class="t-start upper-case">
-                {{ semestre.nome }}
-              </td>
-            </tr>
-          </template>
-        </BaseTable>
-      </div>
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Períodos'">
+        <template #thead>
+          <v-th width="25" />
+          <v-th width="425" align="start">Periodos Letivo</v-th>
+        </template>
+
+        <template #tbody>
+          <tr
+            v-for="periodo in PeriodosOptions"
+            :key="periodo.id + periodo.nome"
+            @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
+            v-prevent-click-selection
+          >
+            <v-td width="25">
+              <input
+                type="checkbox"
+                class="form-check-input position-static m-0"
+                :value="periodo"
+                v-model="filtroPeriodos.selecionados"
+                @click.stop="selecionaPeriodo(periodo)"
+              />
+            </v-td>
+            <v-td width="425" align="start">{{ periodo.nome }}</v-td>
+          </tr>
+        </template>
+      </BaseTable>
+
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Semestres'">
+        <template #thead>
+          <v-th width="25" />
+          <v-th width="425" align="start">Semestre Letivo</v-th>
+        </template>
+
+        <template #tbody>
+          <tr
+            v-for="semestre in SemestresOptions"
+            :key="semestre.id + semestre.nome"
+            @click="selecionaSemestre(semestre)"
+            v-prevent-click-selection
+          >
+            <v-td width="25">
+              <input
+                type="checkbox"
+                class="form-check-input position-static m-0"
+                :indeterminate.prop="semestre.halfChecked"
+                :value="semestre"
+                v-model="filtroSemestres.selecionados"
+                @click.stop="selecionaSemestre(semestre)"
+              />
+            </v-td>
+            <v-td width="425" align="start">{{ semestre.nome }} </v-td>
+          </tr>
+        </template>
+      </BaseTable>
     </ModalFiltros>
 
     <ModalRelatorio ref="modalRelatorio" @selection-option="pdf($event)" />
@@ -213,6 +211,7 @@ import {
   toggleOrdination,
   toggleAsideModal,
   conectaFiltrosSemestresEPeriodos,
+  preventClickSelection,
 } from "@/common/mixins";
 import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
 import ListHorarios from "./ListTableHorarios.vue";
@@ -224,6 +223,7 @@ export default {
     toggleOrdination,
     toggleAsideModal,
     conectaFiltrosSemestresEPeriodos,
+    preventClickSelection,
   ],
   components: {
     ModalFiltros,

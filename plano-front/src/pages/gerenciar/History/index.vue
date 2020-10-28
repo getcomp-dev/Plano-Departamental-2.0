@@ -58,58 +58,60 @@
       :callbacks="modalFiltrosCallbacks"
       :tabsOptions="modalFiltrosTabs"
     >
-      <div class="div-table">
-        <BaseTable v-show="modalFiltrosTabs.current === 'Tabelas'" :type="'modal'">
-          <template #thead>
-            <th style="width:25px"></th>
-            <th style="width: 425px" class="t-start">Nome</th>
-          </template>
-          <template #tbody>
-            <tr
-              v-for="tabela in TabelasOptions"
-              :key="tabela.nome + tabela.id"
-              @click="toggleItemInArray(tabela, filtroTabelas.selecionados)"
-            >
-              <td style="width:25px">
-                <input
-                  type="checkbox"
-                  v-model="filtroTabelas.selecionados"
-                  :value="tabela"
-                  class="form-check-input position-static m-0"
-                />
-              </td>
-              <td style="width:425px" class="t-start upper-case">
-                {{ tabela.nome }}
-              </td>
-            </tr>
-          </template>
-        </BaseTable>
-        <BaseTable v-show="modalFiltrosTabs.current === 'Operações'" :type="'modal'">
-          <template #thead>
-            <th style="width:25px"></th>
-            <th style="width: 425px" class="t-start">Tipo</th>
-          </template>
-          <template #tbody>
-            <tr
-              v-for="operacao in OperacoesOptions"
-              :key="operacao.id"
-              @click="toggleItemInArray(operacao, filtroOperacoes.selecionados)"
-            >
-              <td style="width:25px">
-                <input
-                  type="checkbox"
-                  v-model="filtroOperacoes.selecionados"
-                  :value="operacao"
-                  class="form-check-input position-static m-0"
-                />
-              </td>
-              <td style="width:425px" class="t-start upper-case">
-                {{ operacao.nome }}
-              </td>
-            </tr>
-          </template>
-        </BaseTable>
-      </div>
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Tabelas'">
+        <template #thead>
+          <th style="width:25px"></th>
+          <th style="width: 425px" class="t-start">Nome</th>
+        </template>
+
+        <template #tbody>
+          <tr
+            v-for="tabela in TabelasOptions"
+            :key="tabela.nome + tabela.id"
+            @click="toggleItemInArray(tabela, filtroTabelas.selecionados)"
+            v-prevent-click-selection
+          >
+            <td style="width:25px">
+              <input
+                type="checkbox"
+                v-model="filtroTabelas.selecionados"
+                :value="tabela"
+                class="form-check-input position-static m-0"
+              />
+            </td>
+            <td style="width:425px" class="t-start upper-case">
+              {{ tabela.nome }}
+            </td>
+          </tr>
+        </template>
+      </BaseTable>
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Operações'">
+        <template #thead>
+          <th style="width:25px"></th>
+          <th style="width: 425px" class="t-start">Tipo</th>
+        </template>
+
+        <template #tbody>
+          <tr
+            v-for="operacao in OperacoesOptions"
+            :key="operacao.id"
+            @click="toggleItemInArray(operacao, filtroOperacoes.selecionados)"
+            v-prevent-click-selection
+          >
+            <td style="width:25px">
+              <input
+                type="checkbox"
+                v-model="filtroOperacoes.selecionados"
+                :value="operacao"
+                class="form-check-input position-static m-0"
+              />
+            </td>
+            <td style="width:425px" class="t-start upper-case">
+              {{ operacao.nome }}
+            </td>
+          </tr>
+        </template>
+      </BaseTable>
     </ModalFiltros>
 
     <ModalAjuda ref="modalAjuda">
@@ -130,13 +132,19 @@ import {
   toggleItemInArray,
   toggleAsideModal,
   convertDateUTC,
+  preventClickSelection,
 } from "@/common/mixins";
 import { ModalFiltros, ModalAjuda } from "@/components/modals";
 import { mapGetters } from "vuex";
 
 export default {
   name: "DashboardHistory",
-  mixins: [toggleItemInArray, toggleAsideModal, convertDateUTC],
+  mixins: [
+    toggleItemInArray,
+    toggleAsideModal,
+    convertDateUTC,
+    preventClickSelection,
+  ],
   components: {
     ModalFiltros,
     ModalAjuda,

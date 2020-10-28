@@ -6,6 +6,7 @@
       v-model.number="pedidoForm.vagasPeriodizadas"
       @change="handleEditPedido"
       @keypress="maskOnlyNumber"
+      @paste.prevent
       v-focus-pedido
     />
 
@@ -15,10 +16,12 @@
       v-model.number="pedidoForm.vagasNaoPeriodizadas"
       @change="handleEditPedido"
       @keypress="maskOnlyNumber"
+      @paste.prevent
       v-focus-pedido
     />
   </div>
 </template>
+
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { vFocusPedido, maskOnlyNumber } from "@/common/mixins";
@@ -71,7 +74,6 @@ export default {
     PedidosOfCurrentTurma() {
       return this.Pedidos[this.turma.id][this.index];
     },
-
     typeClass() {
       return `${this.type}-pedidos-container`;
     },
@@ -91,34 +93,27 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-around;
   width: 100%;
-  height: 44px;
-  padding: 0 2px !important;
+  height: 100%;
+  padding: 0 3px;
 }
 .modal-pedidos-container {
   display: flex;
   align-items: center;
   justify-content: space-around;
   width: 100%;
-  padding: 2.5px 0 !important;
+  padding: 2.5px 0;
+}
+
+.modal-pedidos-container > input.input-pedidos {
+  width: 30px;
+  margin: 0 3px;
 }
 
 input.input-pedidos {
-  height: 18px;
-  text-align: center;
-  font-size: 11px;
-  color: #202020;
-  border: 1px solid #414141 !important;
   background-color: #dbdbdb;
 }
-.main-pedidos-container > input.input-pedidos {
-  width: 100%;
-}
-.modal-pedidos-container > input.input-pedidos {
-  width: 30px !important;
-}
-
 input.input-pedidos.empty {
   color: #dadada;
   background-color: #fff;

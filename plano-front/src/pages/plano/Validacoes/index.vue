@@ -166,12 +166,13 @@
             <v-th width="25" />
             <v-th width="425" align="start">Conflito</v-th>
           </template>
+
           <template #tbody>
             <tr
               v-for="conflito in ConflitosOptionsOrdered"
               :key="conflito.type + conflito.msg"
               @click="toggleItemInArray(conflito.type, filtroConflitos.selecionados)"
-              style="text-transform: uppercase"
+              v-prevent-click-selection
             >
               <v-td width="25">
                 <input
@@ -191,11 +192,13 @@
             <v-th width="25" />
             <v-th width="425" align="start">Periodos Letivo</v-th>
           </template>
+
           <template #tbody>
             <tr
               v-for="periodo in PeriodosOptions"
               :key="periodo.id + periodo.nome"
-              @click.stop="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
+              @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
+              v-prevent-click-selection
             >
               <v-td width="25">
                 <input
@@ -216,11 +219,13 @@
             <v-th width="25" />
             <v-th width="425" align="start">Semestre Letivo</v-th>
           </template>
+
           <template #tbody>
             <tr
               v-for="semestre in SemestresOptions"
               :key="semestre.id + semestre.nome"
-              @click.stop="selecionaSemestre(semestre)"
+              @click="selecionaSemestre(semestre)"
+              v-prevent-click-selection
             >
               <v-td width="25">
                 <input
@@ -278,6 +283,7 @@ import {
   toggleItemInArray,
   toggleAsideModal,
   conectaFiltrosSemestresEPeriodos,
+  preventClickSelection,
 } from "@/common/mixins";
 import { ModalAjuda, ModalFiltros, ModalEditTurma } from "@/components/modals";
 import { NavTab } from "@/components/ui";
@@ -316,7 +322,12 @@ const AllConflitosTurmas = [
 
 export default {
   name: "Validacoes",
-  mixins: [toggleItemInArray, toggleAsideModal, conectaFiltrosSemestresEPeriodos],
+  mixins: [
+    toggleItemInArray,
+    toggleAsideModal,
+    conectaFiltrosSemestresEPeriodos,
+    preventClickSelection,
+  ],
   components: {
     ModalAjuda,
     ModalFiltros,

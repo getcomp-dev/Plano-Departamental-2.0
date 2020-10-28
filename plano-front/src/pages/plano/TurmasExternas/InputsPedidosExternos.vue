@@ -6,17 +6,16 @@
       v-model.number="pedidoForm.vagasPeriodizadas"
       @change="handleEditPedido"
       @keypress="maskOnlyNumber"
+      @paste.prevent
       v-focus-pedido
     />
     <input
       type="text"
-      :class="[
-        'input-pedidos',
-        { empty: pedidoForm.vagasNaoPeriodizadas == 0 },
-      ]"
+      :class="['input-pedidos', { empty: pedidoForm.vagasNaoPeriodizadas == 0 }]"
       v-model.number="pedidoForm.vagasNaoPeriodizadas"
       @change="handleEditPedido"
       @keypress="maskOnlyNumber"
+      @paste.prevent
       v-focus-pedido
     />
   </div>
@@ -88,19 +87,13 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: space-around;
   width: 100%;
-  height: 44px;
-  padding: 0 2px !important;
+  height: 100%;
+  padding: 0 3px;
 }
 
 input.input-pedidos {
-  width: 100%;
-  height: 18px;
-  font-size: 11px;
-  text-align: center;
-  color: #202020;
-  border: 1px solid #414141 !important;
   background-color: #dbdbdb;
 }
 input.input-pedidos.empty {

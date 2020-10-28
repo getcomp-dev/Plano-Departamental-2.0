@@ -107,29 +107,7 @@ td:hover {
 }
 .modal-table tbody tr td {
   cursor: pointer;
-  user-select: none;
   min-height: 21px !important;
-}
-
-.main-table tbody tr input[type="checkbox"] {
-  width: 14px !important;
-  height: 14px !important;
-  text-align: center !important;
-  margin: 0;
-  margin-top: 5px !important;
-  margin-bottom: auto !important;
-}
-.modal-table tbody tr input[type="checkbox"] {
-  position: relative !important;
-  border-width: 1px !important ;
-  margin-left: 0 !important;
-  margin-top: 4.2px !important;
-  margin-bottom: auto !important;
-  height: 12px !important;
-  width: 12px !important;
-  -webkit-box-shadow: 0px 0px 0px 0.005px #555;
-  -moz-box-shadow: 0px 0px 0px 0.005px #555;
-  box-shadow: 0px 0px 0px 0.005px #555;
 }
 
 .table-custom tbody tr:hover {
@@ -158,7 +136,7 @@ td:hover {
   overflow: hidden !important;
   z-index: 5 !important;
 }
-/* searchBar */
+/* Search Bar */
 .sticky2 {
   display: block !important;
   overflow: hidden !important;
@@ -175,6 +153,46 @@ td:hover {
   background-color: #e9ecef;
   border: 1px solid #dee2e6;
   border-bottom: 0;
+}
+
+/* Inputs */
+.table-custom tbody tr > td input,
+.table-custom tbody tr > td select {
+  width: 100%;
+  height: 18px;
+  margin: 2px 0;
+  font-size: 11px;
+  color: #202020;
+  border: 1px solid #414141;
+  border-radius: 0px;
+}
+.table-custom tbody tr > td select {
+  text-align: start;
+}
+.table-custom tbody tr > td select + select,
+.table-custom tbody tr > td input + input {
+  margin-top: 0;
+}
+.table-custom tbody tr > td input {
+  text-align: center;
+}
+
+.main-table tbody tr input[type="checkbox"] {
+  width: 14px;
+  height: 14px;
+  margin: 0;
+}
+.modal-table tbody tr input[type="checkbox"] {
+  position: relative !important;
+  border-width: 1px !important ;
+  margin-left: 0 !important;
+  margin-top: 4.2px !important;
+  margin-bottom: auto !important;
+  height: 12px;
+  width: 12px;
+  -webkit-box-shadow: 0px 0px 0px 0.005px #555;
+  -moz-box-shadow: 0px 0px 0px 0.005px #555;
+  box-shadow: 0px 0px 0px 0.005px #555;
 }
 
 @-moz-document url-prefix() {

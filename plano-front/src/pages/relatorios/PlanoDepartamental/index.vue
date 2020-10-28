@@ -123,163 +123,162 @@
       :callbacks="modalFiltrosCallbacks"
       :tabsOptions="modalFiltrosTabs"
     >
-      <div class="div-table">
-        <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Perfis'">
-          <template #thead>
-            <v-th width="25" />
-            <v-th-ordination
-              :currentOrder="ordenacaoModal.perfis"
-              orderToCheck="nome"
-              width="425"
-              align="start"
-              >Nome
-            </v-th-ordination>
-          </template>
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Perfis'">
+        <template #thead>
+          <v-th width="25" />
+          <v-th-ordination
+            :currentOrder="ordenacaoModal.perfis"
+            orderToCheck="nome"
+            width="425"
+            align="start"
+            >Nome
+          </v-th-ordination>
+        </template>
 
-          <template #tbody>
-            <tr
-              v-for="perfil in PerfisOptionsOrdered"
-              :key="perfil.id + perfil.nome"
-              @click.stop="selectPerfis(perfil)"
-            >
-              <v-td width="25">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  :value="perfil"
-                  v-model="filtroPerfis.selecionados"
-                  :indeterminate.prop="perfil.halfChecked"
-                  @click.stop="selectPerfis(perfil)"
-                />
-              </v-td>
-              <v-td width="425" align="start">{{ perfil.nome }}</v-td>
-            </tr>
-          </template>
-        </BaseTable>
+        <template #tbody>
+          <tr
+            v-for="perfil in PerfisOptionsOrdered"
+            :key="perfil.id + perfil.nome"
+            @click.stop="selectPerfis(perfil)"
+          >
+            <v-td width="25">
+              <input
+                type="checkbox"
+                class="form-check-input position-static m-0"
+                :value="perfil"
+                v-model="filtroPerfis.selecionados"
+                :indeterminate.prop="perfil.halfChecked"
+                @click.stop="selectPerfis(perfil)"
+              />
+            </v-td>
+            <v-td width="425" align="start">{{ perfil.nome }}</v-td>
+          </tr>
+        </template>
+      </BaseTable>
 
-        <BaseTable
-          type="modal"
-          v-show="modalFiltrosTabs.current === 'Disciplinas'"
-          :hasSearchBar="true"
-        >
-          <template #thead-search>
-            <InputSearch
-              v-model="searchDisciplinas"
-              placeholder="Pesquise nome ou codigo de uma disciplina..."
-            />
-          </template>
+      <BaseTable
+        type="modal"
+        v-show="modalFiltrosTabs.current === 'Disciplinas'"
+        :hasSearchBar="true"
+      >
+        <template #thead-search>
+          <InputSearch
+            v-model="searchDisciplinas"
+            placeholder="Pesquise nome ou codigo de uma disciplina..."
+          />
+        </template>
+        <template #thead>
+          <v-th width="25" />
+          <v-th-ordination
+            :currentOrder="ordenacaoModal.disciplinas"
+            orderToCheck="codigo"
+            width="70"
+            align="start"
+            >Código
+          </v-th-ordination>
 
-          <template #thead>
-            <v-th width="25" />
-            <v-th-ordination
-              :currentOrder="ordenacaoModal.disciplinas"
-              orderToCheck="codigo"
-              width="70"
-              align="start"
-              >Código
-            </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoModal.disciplinas"
+            orderToCheck="nome"
+            width="270"
+            align="start"
+            >Nome
+          </v-th-ordination>
 
-            <v-th-ordination
-              :currentOrder="ordenacaoModal.disciplinas"
-              orderToCheck="nome"
-              width="270"
-              align="start"
-              >Nome
-            </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoModal.disciplinas"
+            orderToCheck="perfil.abreviacao"
+            width="85"
+            align="start"
+            >Perfil
+          </v-th-ordination>
+        </template>
 
-            <v-th-ordination
-              :currentOrder="ordenacaoModal.disciplinas"
-              orderToCheck="perfil.abreviacao"
-              width="85"
-              align="start"
-              >Perfil
-            </v-th-ordination>
-          </template>
+        <template #tbody>
+          <tr
+            v-for="disciplina in DisciplinasOptionsOrdered"
+            :key="disciplina.id + disciplina.nome"
+            @click="selectDisciplina(disciplina)"
+            v-prevent-click-selection
+          >
+            <v-td width="25">
+              <input
+                type="checkbox"
+                class="form-check-input position-static m-0"
+                v-model="filtroDisciplinas.selecionados"
+                :value="disciplina"
+                @click.stop="selectDisciplina(disciplina)"
+              />
+            </v-td>
+            <v-td width="70" align="start">{{ disciplina.codigo }}</v-td>
+            <v-td align="start" width="270" :title="disciplina.nome">
+              {{ disciplina.nome }}
+            </v-td>
+            <v-td width="85" align="start">{{ disciplina.perfil.abreviacao }}</v-td>
+          </tr>
 
-          <template #tbody>
-            <tr
-              v-for="disciplina in DisciplinasOptionsOrdered"
-              :key="disciplina.id + disciplina.nome"
-              @click.stop="selectDisciplina(disciplina)"
-            >
-              <v-td width="25">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  v-model="filtroDisciplinas.selecionados"
-                  :value="disciplina"
-                  @click.stop="selectDisciplina(disciplina)"
-                />
-              </v-td>
-              <v-td width="70" align="start">{{ disciplina.codigo }}</v-td>
-              <v-td align="start" width="270" :title="disciplina.nome">
-                {{ disciplina.nome }}
-              </v-td>
-              <v-td width="85" align="start">{{
-                disciplina.perfil.abreviacao
-              }}</v-td>
-            </tr>
-            <tr v-if="!DisciplinasOptionsOrdered.length">
-              <v-td colspan="3" width="450">
-                NENHUMA DISCIPLINA ENCONTRADA.
-              </v-td>
-            </tr>
-          </template>
-        </BaseTable>
+          <tr v-if="!DisciplinasOptionsOrdered.length">
+            <v-td colspan="3" width="450">
+              NENHUMA DISCIPLINA ENCONTRADA.
+            </v-td>
+          </tr>
+        </template>
+      </BaseTable>
 
-        <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Períodos'">
-          <template #thead>
-            <v-th width="25" />
-            <v-th width="425" align="start">Periodos Letivo</v-th>
-          </template>
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Períodos'">
+        <template #thead>
+          <v-th width="25" />
+          <v-th width="425" align="start">Periodos Letivo</v-th>
+        </template>
 
-          <template #tbody>
-            <tr
-              v-for="periodo in PeriodosOptions"
-              :key="periodo.id + periodo.nome"
-              @click.stop="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
-            >
-              <v-td width="25">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  :value="periodo"
-                  v-model="filtroPeriodos.selecionados"
-                  @click.stop="selecionaPeriodo(periodo)"
-                />
-              </v-td>
-              <v-td width="425" align="start">{{ periodo.nome }}</v-td>
-            </tr>
-          </template>
-        </BaseTable>
+        <template #tbody>
+          <tr
+            v-for="periodo in PeriodosOptions"
+            :key="periodo.id + periodo.nome"
+            @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
+            v-prevent-click-selection
+          >
+            <v-td width="25">
+              <input
+                type="checkbox"
+                class="form-check-input position-static m-0"
+                :value="periodo"
+                v-model="filtroPeriodos.selecionados"
+                @click.stop="selecionaPeriodo(periodo)"
+              />
+            </v-td>
+            <v-td width="425" align="start">{{ periodo.nome }}</v-td>
+          </tr>
+        </template>
+      </BaseTable>
 
-        <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Semestres'">
-          <template #thead>
-            <v-th width="25" />
-            <v-th width="425" align="start">Semestre Letivo</v-th>
-          </template>
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Semestres'">
+        <template #thead>
+          <v-th width="25" />
+          <v-th width="425" align="start">Semestre Letivo</v-th>
+        </template>
 
-          <template #tbody>
-            <tr
-              v-for="semestre in SemestresOptions"
-              :key="semestre.id + semestre.nome"
-              @click.stop="selecionaSemestre(semestre)"
-            >
-              <v-td width="25">
-                <input
-                  type="checkbox"
-                  class="form-check-input position-static m-0"
-                  :indeterminate.prop="semestre.halfChecked"
-                  :value="semestre"
-                  v-model="filtroSemestres.selecionados"
-                  @click.stop="selecionaSemestre(semestre)"
-                />
-              </v-td>
-              <v-td width="425" align="start">{{ semestre.nome }} </v-td>
-            </tr>
-          </template>
-        </BaseTable>
-      </div>
+        <template #tbody>
+          <tr
+            v-for="semestre in SemestresOptions"
+            :key="semestre.id + semestre.nome"
+            @click="selecionaSemestre(semestre)"
+            v-prevent-click-selection
+          >
+            <v-td width="25">
+              <input
+                type="checkbox"
+                class="form-check-input position-static m-0"
+                :indeterminate.prop="semestre.halfChecked"
+                :value="semestre"
+                v-model="filtroSemestres.selecionados"
+                @click.stop="selecionaSemestre(semestre)"
+              />
+            </v-td>
+            <v-td width="425" align="start">{{ semestre.nome }} </v-td>
+          </tr>
+        </template>
+      </BaseTable>
     </ModalFiltros>
 
     <ModalVagas ref="modalVagas" :turma="turmaClicked" />
@@ -320,6 +319,7 @@ import {
   toggleAsideModal,
   conectaFiltroPerfisEDisciplinas,
   conectaFiltrosSemestresEPeriodos,
+  preventClickSelection,
 } from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
 import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
@@ -334,6 +334,7 @@ export default {
     toggleAsideModal,
     conectaFiltroPerfisEDisciplinas,
     conectaFiltrosSemestresEPeriodos,
+    preventClickSelection,
   ],
   components: {
     ModalRelatorio,

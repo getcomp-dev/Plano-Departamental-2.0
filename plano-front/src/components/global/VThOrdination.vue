@@ -8,8 +8,10 @@
   >
     <div v-if="orderFixed" class="container-fixed-order">
       <font-awesome-icon
+        v-if="align === 'center'"
         :icon="['fas', 'thumbtack']"
-        :class="currentOrder.order === null ? 'low-opacity' : ''"
+        :class="{ 'low-opacity': currentOrder.order === null }"
+        title="Ordenação fixa"
       />
       <span>
         {{ text }}
@@ -18,11 +20,21 @@
         </template>
       </span>
 
-      <OrdinationArrow
-        :currentOrder="currentOrder"
-        :orderToCheck="orderToCheck"
-        :orderType="orderType"
-      />
+      <div>
+        <font-awesome-icon
+          :icon="['fas', 'thumbtack']"
+          v-if="align === 'start'"
+          class="mx-1"
+          :class="{ 'low-opacity': currentOrder.order === null }"
+          title="Ordenação fixa"
+        />
+
+        <OrdinationArrow
+          :currentOrder="currentOrder"
+          :orderToCheck="orderToCheck"
+          :orderType="orderType"
+        />
+      </div>
     </div>
 
     <template v-else>

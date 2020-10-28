@@ -104,11 +104,13 @@
             >Nome
           </v-th-ordination>
         </template>
+
         <template #tbody>
           <tr
             v-for="docente in DocentesOptionsModalOrdered"
             :key="docente.id + docente.apelido"
             @click="toggleItemInArray(docente, filtroDocentes.selecionados)"
+            v-prevent-click-selection
           >
             <v-td width="25">
               <input
@@ -118,9 +120,7 @@
                 v-model="filtroDocentes.selecionados"
               />
             </v-td>
-            <v-td width="425" align="start">
-              {{ docente.apelido }}
-            </v-td>
+            <v-td width="425" align="start">{{ docente.apelido }}</v-td>
           </tr>
 
           <tr @click="toggleFiltroDocenteSemAlocacaoSelecionado">
@@ -141,15 +141,15 @@
       <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Períodos'">
         <template #thead>
           <v-th width="25" />
-          <v-th width="425" align="start">
-            Periodos Letivo
-          </v-th>
+          <v-th width="425" align="start">Periodos Letivo</v-th>
         </template>
+
         <template #tbody>
           <tr
             v-for="periodo in PeriodosOptions"
             :key="periodo.id + periodo.nome"
             @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
+            v-prevent-click-selection
           >
             <v-td width="25">
               <input
@@ -160,9 +160,7 @@
                 @click.stop="selecionaPeriodo(periodo)"
               />
             </v-td>
-            <v-td width="425" align="start">
-              {{ periodo.nome.split("(")[0] }}
-            </v-td>
+            <v-td width="425" align="start">{{ periodo.nome.split("(")[0] }}</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -174,11 +172,13 @@
             Semestre Letivo
           </v-th>
         </template>
+
         <template #tbody>
           <tr
             v-for="semestre in SemestresOptions"
             :key="semestre.id + semestre.nome"
             @click="selecionaSemestre(semestre)"
+            v-prevent-click-selection
           >
             <v-td width="25">
               <input
@@ -190,9 +190,7 @@
                 @click.stop="selecionaSemestre(semestre)"
               />
             </v-td>
-            <v-td width="425" align="start">
-              {{ semestre.nome }}
-            </v-td>
+            <v-td width="425" align="start">{{ semestre.nome }}</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -228,6 +226,7 @@ import {
   toggleItemInArray,
   toggleAsideModal,
   conectaFiltrosSemestresEPeriodos,
+  preventClickSelection,
 } from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
 import { ModalAjuda, ModalRelatorio, ModalFiltros } from "@/components/modals";
@@ -237,7 +236,12 @@ import DocenteCargaPosRow from "./DocenteCargaPosRow";
 
 export default {
   name: "DashboardCargaProfessores",
-  mixins: [toggleItemInArray, toggleAsideModal, conectaFiltrosSemestresEPeriodos],
+  mixins: [
+    toggleItemInArray,
+    toggleAsideModal,
+    conectaFiltrosSemestresEPeriodos,
+    preventClickSelection,
+  ],
   components: {
     ModalRelatorio,
     ModalAjuda,

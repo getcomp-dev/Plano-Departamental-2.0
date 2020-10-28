@@ -27,6 +27,15 @@
               <i :class="setIconByOrder(ordenacaoDocentesMain, 'apelido')"></i>
             </th>
             <th
+                    class="clickable t-start"
+                    @click="toggleOrder(ordenacaoDocentesMain, 'nomesiga')"
+                    title="Clique para ordenar pelo nome do siga"
+                    style="width: 240px;"
+            >
+              Nome SIGA
+              <i :class="setIconByOrder(ordenacaoDocentesMain, 'nomesiga')"></i>
+            </th>
+            <th
               style="width:65px"
               class="clickable t-center"
               @click="toggleOrder(ordenacaoDocentesMain, 'ativo', 'desc')"
@@ -48,6 +57,9 @@
               <td style="width:240px;" class="t-start">{{ docente.nome }}</td>
               <td style="width:120px;" class="t-start">
                 {{ docente.apelido }}
+              </td>
+              <td style="width:240px;" class="t-start">
+                {{ docente.nomesiga }}
               </td>
               <td style="width:65px">{{ booleanToText(docente.ativo) }}</td>
             </tr>
@@ -106,6 +118,21 @@
               />
             </div>
           </div>
+
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0">
+              <label required for="nomesiga" class="col-form-label">Nome SIGA</label>
+
+              <input
+                      id="nomesiga"
+                      type="text"
+                      class="form-control form-control-sm input-maior"
+                      @input="docenteForm.nomesiga = $event.target.value.toUpperCase()"
+                      :value="docenteForm.nomesiga"
+              />
+            </div>
+          </div>
+
           <template v-if="isEdit">
             <div class="border-bottom mt-2 mb-1"></div>
             <small>Perfis Associados ao docente</small>
@@ -196,6 +223,7 @@ const emptyDocente = {
   id: null,
   nome: null,
   apelido: null,
+  nomesiga: null,
   creditos: 0,
   ativo: 1,
 };
@@ -250,6 +278,7 @@ export default {
     async addDocente() {
       try {
         this.setPartialLoading(true);
+        if(!docenteForm.nomesiga) docenteForm.nomesiga = docenteForm.nome
         const response = await docenteService.create(this.docenteForm);
         this.cleanDocente();
         this.pushNotification({

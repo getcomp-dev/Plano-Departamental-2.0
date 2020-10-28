@@ -1,21 +1,11 @@
 <template>
-  <BaseModal
-    ref="baseModal"
-    title="Importar plano"
-    position="right"
-    :hasFooter="true"
-  >
+  <BaseModal ref="baseModal" title="Importar plano" position="center" :hasBackground="true" :hasFooter="true">
     <template #modal-body>
       <input type="file" ref="inputFilePlano" />
     </template>
 
     <template #modal-footer>
-      <BaseButton
-        color="lightblue"
-        text="Importar"
-        class="ml-auto"
-        @click="handleImportPlano"
-      />
+      <BaseButton color="lightblue" text="Importar" class="ml-auto" @click="handleImportPlano" />
     </template>
   </BaseModal>
 </template>
@@ -23,14 +13,12 @@
 <script>
 import XLSX from "xlsx";
 import { mapActions, mapGetters } from "vuex";
-import { generateEmptyTurma } from "@/common/utils";
+import { generateEmptyTurma, normalizeText } from "@/common/utils";
 // import planoService from "../../../common/services/plano";
 
 export default {
   name: "ModalImportPlano",
-  mounted() {
-    console.log(this.AllTurmas);
-  },
+
   methods: {
     ...mapActions(["createTurma", "editPedido"]),
 
@@ -73,7 +61,10 @@ export default {
         const [, periodoStr] = inputFile.name.split(".");
         const periodoDoPlano = parseInt(periodoStr) || null;
 
-        await this.createPlanoImported(turmasDoPlano.slice(0, 5), periodoDoPlano);
+        await this.createPlanoImported(
+          turmasDoPlano.slice(480, 500),
+          periodoDoPlano
+        );
         await this.$store.dispatch("fetchAll");
 
         this.$refs.baseModal.close();
@@ -84,15 +75,14 @@ export default {
     },
 
     async createPlanoImported(turmasImported, periodo = 1) {
-      // Create plano
-      // const newPlano = this.createPlano()
+      // Create plano // const newPlano = this.createPlano();
       const keys = {
         disciplinaCod: null,
         letra: null,
         cursoCod: null,
         vagas1: null,
         vagas2: null,
-        horarios: null,
+        horarioESala: null,
       };
       let i = 0;
       for (const key in turmasImported[0]) {
@@ -101,7 +91,7 @@ export default {
         else if (i === 3) keys.cursoCod = key;
         else if (i === 5) keys.vagas1 = key;
         else if (i === 6) keys.vagas2 = key;
-        else if (i === 7) keys.horarios = key;
+        else if (i === 7) keys.horarioESala = key;
         i++;
       }
       let currentTurma = {};
@@ -113,31 +103,34 @@ export default {
         newTurma.letra = turmaFile[keys.letra] || null;
         newTurma.Disciplina = this.findDisciplinaId(turmaFile[keys.disciplinaCod]);
 
-        if (turmaFile[keys.horarios]) {
-          const [strHorario1, strHorario2] = turmaFile[keys.horarios].split(";");
-          newTurma.Horario1 = this.findHorarioId(strHorario1);
-          newTurma.Horario2 = this.findHorarioId(strHorario2);
-
+        if (turmaFile[keys.horarioESala]) {
+          const [str1, str2] = turmaFile[keys.horarioESala].split(";");
+          //Horarios
+          newTurma.Horario1 = this.findHorarioId(str1);
+          newTurma.Horario2 = this.findHorarioId(str2);
           newTurma.turno1 = this.findTurno(newTurma.Horario1, newTurma.Horario2);
+
+          //Salas
+          if (newTurma.turno1 !== "EAD") {
+            newTurma.Sala1 = this.findSalaId(str1);
+            newTurma.Sala2 = this.findSalaId(str2);
+          }
         }
 
-        //Se não achou a Disciplina, letra ou turno1 não cria a turma
         if (!newTurma.Disciplina || !newTurma.letra || !newTurma.turno1) {
+          //Se não achou a Disciplina, letra ou turno1 não cria a turma
           continue;
         }
 
-        //Se é igual a turma anterior, então cria apenas a vaga
         if (this.isTheSameTurma(currentTurma, newTurma)) {
+          //Se é igual a turma anterior, então cria apenas a vaga
           await this.createPedido(turmaFile, keys, currentTurma.id);
           continue;
         }
 
-        //Cria a turma
-        const turmaCreated = await this.createTurma(newTurma);
-        //Atualiza currentTurma
-        currentTurma = { ...turmaCreated };
-        //Cria pedido
-        await this.createPedido(turmaFile, keys, turmaCreated.id);
+        const turmaCreated = await this.createTurma(newTurma); //Cria a turma
+        currentTurma = { ...turmaCreated }; //Atualiza currentTurma
+        await this.createPedido(turmaFile, keys, turmaCreated.id); //Cria pedido
       }
     },
     async createPedido(turmaFile, keys, turmaId) {
@@ -146,23 +139,30 @@ export default {
         Curso: null,
         vagasNaoPeriodizadas: 0,
         vagasPeriodizadas: 0,
+        vagasOferecidas: 0,
+        vagasOcupadas: 0,
       };
       pedido.Turma = turmaId;
       pedido.Curso = this.findCursoId(turmaFile[keys.cursoCod]);
-      pedido.vagasPeriodizadas = turmaFile[keys.vagas1];
-      pedido.vagasNaoPeriodizadas = turmaFile[keys.vagas2];
+      pedido.vagasOferecidas = turmaFile[keys.vagas1];
+      pedido.vagasOcupadas = turmaFile[keys.vagas2];
 
       if (pedido.Curso) {
         await this.editPedido(pedido);
       } else {
-        console.log("Curso não econtrado");
+        console.log("Curso não econtrado: " + turmaFile[keys.cursoCod]);
       }
     },
 
     findTurno(horario1Id, horario2Id) {
       if (!horario1Id && !horario2Id) return null;
-      else if (horario1Id <= 28 || horario2Id <= 28) return "Diurno";
-      else return "Noturno";
+      else if (horario1Id == 31) return "EAD";
+      else if (
+        this.$_.some(this.HorariosNoturno, ["id", horario1Id]) ||
+        this.$_.some(this.HorariosNoturno, ["id", horario2Id])
+      )
+        return "Noturno";
+      else return "Diurno";
     },
     findCursoId(cursoCodigo) {
       const cursoFounded = this.$_.find(this.AllCursos, ["codigo", cursoCodigo]);
@@ -177,7 +177,9 @@ export default {
       return disciplinaFounded ? disciplinaFounded.id : null;
     },
     findHorarioId(horarioString) {
-      const [dia, hora] = horarioString.split(",");
+      if (!horarioString) return null;
+
+      const [dia, hora, sala] = horarioString.split(",");
       const nomeHorario = this.parseDiaEHora(dia, hora);
 
       if (nomeHorario) {
@@ -188,19 +190,20 @@ export default {
 
         return horarioFounded ? horarioFounded.id : null;
       }
+
+      if (normalizeText(sala).includes(normalizeText("HORÁRIO EAD"))) {
+        console.log("EAD sala", sala);
+        return 31; //Id EAD
+      }
+
+      return null;
     },
     parseDiaEHora(dia, hora) {
       if (!dia || !hora) return null;
 
       let diaNormalized = null;
       let horaNormalized = null;
-
-      switch (
-        dia
-          .trim()
-          .substring(0, 3)
-          .toLowerCase()
-      ) {
+      switch (dia.trim().substring(0, 3).toLowerCase()) {
         case "seg":
           diaNormalized = "2a";
           break;
@@ -216,20 +219,35 @@ export default {
         case "sex":
           diaNormalized = "6a";
           break;
+        case "sab":
+          return "EAD";
       }
 
       const horarioFounded =
         this.$_.find(this.ListaDeTodosHorarios, (horarioItem) =>
-          horarioItem.nome.includes(hora.substring(0, 1) + "-")
+          horarioItem.nome.includes(hora.substring(0, 2) + "-")
         ) || {};
 
       horaNormalized = horarioFounded.nome;
 
       if (diaNormalized && horaNormalized) {
         return diaNormalized + " " + horaNormalized;
+      } else {
+        return null;
       }
+    },
+    findSalaId(salaString) {
+      if (!salaString) return null;
 
-      return null;
+      const [, , sala] = salaString.split(",");
+      const salaNormalized = normalizeText(sala);
+
+      const salaFounded = this.$_.find(this.AllSalas, (sala) => {
+        const nomeNormalized = normalizeText(sala.nome);
+        return salaNormalized.includes(nomeNormalized);
+      });
+
+      return salaFounded ? salaFounded.id : null;
     },
     isTheSameTurma(turma1, turma2) {
       return (
@@ -245,10 +263,12 @@ export default {
   computed: {
     ...mapGetters([
       "AllHorarios",
+      "HorariosNoturno",
       "AllDisciplinas",
       "AllCursos",
       "ListaDeTodosHorarios",
       "AllTurmas",
+      "AllSalas",
     ]),
   },
 };
