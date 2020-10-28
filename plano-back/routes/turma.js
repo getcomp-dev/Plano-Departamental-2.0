@@ -80,7 +80,8 @@ router.post('/busca', function (req, res, next) {
             (req.body.Salas.length > 0 ? {[Op.or]: [
                 {Sala1: [...req.body.Salas]},
                 {Sala2: [...req.body.Salas]}
-            ]} : true)
+            ]} : true),
+            (req.body.Periodos.length > 0 ? {periodo: [...req.body.Periodos]} : true),
         ]
         }}).then(function (turmas) {
         res.send({

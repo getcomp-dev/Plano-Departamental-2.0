@@ -10,6 +10,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false
     },
+    nomesiga: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     creditos: {
       type: DataTypes.INTEGER,
       allowNull: false
