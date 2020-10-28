@@ -39,7 +39,7 @@ router.post('/', function (req, res, next) {
 })
 
 router.get('/', function (req, res, next) {
-    models.Pedido.findAll().then(function (pedidos) {
+    models.Pedido.findAll({attributes: ['vagasPeriodizadas', 'vagasNaoPeriodizadas', 'createdAt', 'updatedAt', 'Curso', 'Turma']}).then(function (pedidos) {
 
         res.send({
             success: true,
