@@ -1,5 +1,5 @@
 <template>
-  <div class="main-component row" v-if="isEditable">
+  <div class="main-component row" v-if="currentPlano.isEditable">
     <PageHeader :title="'Graduação - DCC'">
       <BaseButton
         v-show="isAdding"
@@ -32,27 +32,28 @@
             :orderFixed="true"
             :currentOrder="ordenacaoMain.perfis"
             orderToCheck="disciplina.perfil.abreviacao"
-            width="80"
-            align="start"
-            >Perfil
+            width="80" 
+          >
+            Perfil
           </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoMain.turmas"
             orderToCheck="disciplina.codigo"
             width="80"
-            >Código
+          >
+            Código
           </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoMain.turmas"
             orderToCheck="disciplina.nome"
             width="330"
             align="start"
-            text=""
-            >Disciplina
+          >
+            Disciplina
           </v-th-ordination>
           <v-th width="25" paddingX="0" title="Créditos">C.</v-th>
           <v-th width="45" paddingX="0" title="Turma">T.</v-th>
-          <v-th width="160" align="start">Docente </v-th>
+          <v-th width="160" align="start">Docente</v-th>
           <v-th width="80">Turno</v-th>
           <v-th width="85">Horário</v-th>
           <v-th width="95">Sala</v-th>
@@ -67,8 +68,8 @@
               content: cursoPopoverContent(curso),
             }"
           >
-            <span :class="['w-100', { 'curso-codigo-big': nameIsBig(curso.codigo) }]"
-              >{{ curso.codigo }}
+            <span :class="['w-100', { 'curso-codigo-big': nameIsBig(curso.codigo) }]">
+              {{ curso.codigo }}
             </span>
           </v-th>
         </template>
@@ -92,7 +93,8 @@
 
           <tr v-show="!TurmasOrdered.length">
             <v-td :width="1145 + 35 * filtroCursos.ativados.length">
-              <b>Nenhuma turma encontrada.</b> Clique no botão de filtros
+              <b>Nenhuma turma encontrada.</b>
+              Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
               para selecioná-las.
             </v-td>
@@ -114,8 +116,9 @@
             orderToCheck="nome"
             width="425"
             align="start"
-            text="Nome"
-          />
+          >
+            Nome
+          </v-th-ordination>
         </template>
 
         <template #tbody>
@@ -125,12 +128,11 @@
             @click="selectPerfis(perfil)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
-                :value="perfil"
                 v-model="filtroPerfis.selecionados"
+                :value="perfil"
                 :indeterminate.prop="perfil.halfChecked"
                 @click.stop="selectPerfis(perfil)"
               />
@@ -158,24 +160,27 @@
             orderToCheck="codigo"
             width="70"
             align="start"
-            text="Código"
-          />
+          >
+            Código
+          </v-th-ordination>
 
           <v-th-ordination
             :currentOrder="ordenacaoModal.disciplinas"
             orderToCheck="nome"
             width="270"
             align="start"
-            text="Nome"
-          />
+          >
+            Nome
+          </v-th-ordination>
 
           <v-th-ordination
             :currentOrder="ordenacaoModal.disciplinas"
             orderToCheck="perfil.abreviacao"
             width="85"
             align="start"
-            text="Perfil"
-          />
+          >
+            Perfil
+          </v-th-ordination>
         </template>
 
         <template #tbody>
@@ -185,10 +190,9 @@
             @click="selectDisciplina(disciplina)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
                 v-model="filtroDisciplinas.selecionados"
                 :value="disciplina"
                 @click.stop="selectDisciplina(disciplina)"
@@ -226,15 +230,17 @@
             orderToCheck="codigo"
             width="70"
             align="start"
-            text="Código"
-          />
+          >
+            Código
+          </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoModal.cursos"
             orderToCheck="nome"
             width="355"
             align="start"
-            text="Nome"
-          />
+          >
+            Nome
+          </v-th-ordination>
         </template>
 
         <template #tbody>
@@ -244,13 +250,8 @@
             @click="toggleItemInArray(curso, filtroCursos.selecionados)"
             v-prevent-click-selection
           >
-            <v-td width="25">
-              <input
-                type="checkbox"
-                v-model="filtroCursos.selecionados"
-                :value="curso"
-                class="form-check-input position-static m-0"
-              />
+            <v-td width="25" type="content">
+              <input type="checkbox" v-model="filtroCursos.selecionados" :value="curso" />
             </v-td>
             <v-td width="70" align="start">{{ curso.codigo }}</v-td>
             <v-td width="355" align="start">{{ curso.nome }}</v-td>
@@ -274,12 +275,11 @@
             @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
-                :value="periodo"
                 v-model="filtroPeriodos.selecionados"
+                :value="periodo"
                 @click.stop="selecionaPeriodo(periodo)"
               />
             </v-td>
@@ -301,17 +301,16 @@
             @click="selecionaSemestre(semestre)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
-                :indeterminate.prop="semestre.halfChecked"
-                :value="semestre"
                 v-model="filtroSemestres.selecionados"
+                :value="semestre"
+                :indeterminate.prop="semestre.halfChecked"
                 @click.stop="selecionaSemestre(semestre)"
               />
             </v-td>
-            <v-td width="425" align="start">{{ semestre.nome }} </v-td>
+            <v-td width="425" align="start">{{ semestre.nome }}</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -364,51 +363,55 @@
       <li class="list-group-item">
         <b>Visualizar conteúdo:</b>
         Clique no ícone de filtros
-        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" /> no
-        cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar
-        entre os tipos de filtro disponíveis. Marque quais informações deseja
-        visualizar, e para finalizar clique no botão OK.
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+        no cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar
+        entre os tipos de filtro disponíveis. Marque quais informações deseja visualizar,
+        e para finalizar clique no botão OK.
       </li>
       <li class="list-group-item">
         <b>Adicionar turma:</b>
         Clique no ícone de adicionar
-        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" /> no cabeçalho
-        da página. Em seguida, preencha a nova linha que irá aparecer no início da
-        tabela. Note que os campos disciplina, turno e turma são obrigatórios. Após
-        preencher os campos, clique no ícone de salvar
-        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" /> ou de
-        cancelar <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />.
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
+        no cabeçalho da página. Em seguida, preencha a nova linha que irá aparecer no
+        início da tabela. Note que os campos disciplina, turno e turma são obrigatórios.
+        Após preencher os campos, clique no ícone de salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
+        ou de cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />
+        .
       </li>
       <li class="list-group-item">
-        <b>Deletar turma(s):</b> Marque a(s) turma(s) que deseja deletar através da
-        caixa de seleção na coluna mais à esquerda da tabela. Em seguida, clique no
-        ícone de deletar
-        <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" /> no cabeçalho
-        da página. Confirme a exclusão clicando no botão OK na janela que se abrirá.
+        <b>Deletar turma(s):</b>
+        Marque a(s) turma(s) que deseja deletar através da caixa de seleção na coluna mais
+        à esquerda da tabela. Em seguida, clique no ícone de deletar
+        <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" />
+        no cabeçalho da página. Confirme a exclusão clicando no botão OK na janela que se
+        abrirá.
       </li>
       <li class="list-group-item">
         <b>Editar turma:</b>
-        Existem duas formas de se fazer alterações em uma turma. A primeira forma
-        envolve modificar diretamente os campos na tabela. Neste caso, o sistema
-        salvará automaticamente cada alteração. Na segunda forma, deve-se clicar no
-        ícone
+        Existem duas formas de se fazer alterações em uma turma. A primeira forma envolve
+        modificar diretamente os campos na tabela. Neste caso, o sistema salvará
+        automaticamente cada alteração. Na segunda forma, deve-se clicar no ícone
         <font-awesome-icon :icon="['fas', 'edit']" class="icon-darkgray" />
         presente na couna "Editar". Uma janela de edição irá se abrir. Neste caso, as
         alterações realizadas nos campos da metade superior da janela somente serão
-        enviadas ao clicar no botão "Salvar". Já para o quantitativo de vagas na
-        parte inferior, as alterações serão salvas automaticamente.
+        enviadas ao clicar no botão "Salvar". Já para o quantitativo de vagas na parte
+        inferior, as alterações serão salvas automaticamente.
       </li>
       <li class="list-group-item">
-        <b>Relatório:</b> Clique no ícone relatório
-        <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" /> e aguarde
-        o download do arquivo (.xlsx) iniciar.
+        <b>Relatório:</b>
+        Clique no ícone relatório
+        <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" />
+        e aguarde o download do arquivo (.xlsx) iniciar.
       </li>
       <li class="list-group-item">
-        <b>Observações:</b> Em cada coluna de um curso, para cada disciplina, existem
-        dois campos de vagas. O campo superior é destinado às vagas de grade, e o
-        inferior é referente às vagas para alunos não periodizados. Para que uma
-        turma apareça na grade horária de um determinado curso, na página "Horários",
-        é preciso que pelo menos uma vaga de grade seja destinada a este curso.
+        <b>Observações:</b>
+        Em cada coluna de um curso, para cada disciplina, existem dois campos de vagas. O
+        campo superior é destinado às vagas de grade, e o inferior é referente às vagas
+        para alunos não periodizados. Para que uma turma apareça na grade horária de um
+        determinado curso, na página "Horários", é preciso que pelo menos uma vaga de
+        grade seja destinada a este curso.
       </li>
     </ModalAjuda>
   </div>
@@ -493,13 +496,17 @@ export default {
             this.filtroPerfis.selecionados = [...this.PerfisOptions];
           },
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = [
-              ...this.DisciplinasOptionsFiltered,
-            ];
+            this.filtroDisciplinas.selecionados = this.$_.union(
+              this.DisciplinasOptionsFiltered,
+              this.filtroDisciplinas.selecionados
+            );
             this.conectaDisciplinasEmPerfis();
           },
           Cursos: () => {
-            this.filtroCursos.selecionados = [...this.CursosOptionsFiltered];
+            this.filtroCursos.selecionados = this.$_.union(
+              this.CursosOptionsFiltered,
+              this.filtroCursos.selecionados
+            );
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
@@ -516,11 +523,17 @@ export default {
             this.filtroDisciplinas.selecionados = [];
           },
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = [];
-            this.filtroPerfis.selecionados = [];
+            this.filtroDisciplinas.selecionados = this.$_.difference(
+              this.filtroDisciplinas.selecionados,
+              this.DisciplinasOptionsFiltered
+            );
+            this.conectaDisciplinasEmPerfis();
           },
           Cursos: () => {
-            this.filtroCursos.selecionados = [];
+            this.filtroCursos.selecionados = this.$_.difference(
+              this.filtroCursos.selecionados,
+              this.CursosOptionsFiltered
+            );
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [];
@@ -534,9 +547,9 @@ export default {
         btnOk: () => {
           this.filtroPeriodos.ativados = [...this.filtroPeriodos.selecionados];
           this.filtroDisciplinas.ativadas = [...this.filtroDisciplinas.selecionados];
-          this.filtroCursos.ativados = [
-            ...this.$_.orderBy(this.filtroCursos.selecionados, ["posicao"]),
-          ];
+          this.filtroCursos.ativados = this.$_.orderBy(this.filtroCursos.selecionados, [
+            "posicao",
+          ]);
         },
       },
       ordenacaoModal: {
@@ -605,15 +618,12 @@ export default {
           pedidos: this.$store.state.pedido.Pedidos,
           Plano: localStorage.getItem("Plano"),
         });
-        const tableData = await fetch(
-          "http://200.131.219.57:3000/api/xlsx/download",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${this.$store.state.auth.token}`,
-            },
-          }
-        );
+        const tableData = await fetch("http://200.131.219.57:3000/api/xlsx/download", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.$store.state.auth.token}`,
+          },
+        });
         const tableDataBlobed = await tableData.blob();
         await saveAs(tableDataBlobed, "tabela.xlsx");
       } catch (error) {
@@ -649,12 +659,7 @@ export default {
       "DisciplinasDCCInPerfis",
       "TurmasInDisciplinasPerfis",
       "TurmasToDelete",
-      "currentPlano"
     ]),
-
-    isEditable() {
-      return this.currentPlano.isEditable
-    },
 
     TurmasOrdered() {
       const { turmas, perfis } = this.ordenacaoMain;

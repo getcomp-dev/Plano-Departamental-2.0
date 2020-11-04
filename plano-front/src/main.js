@@ -54,10 +54,13 @@ Vue.component("v-th", VTh);
 Vue.component("v-th-ordination", VThOrdination);
 
 //Global mixins
-import { mapActions } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 Vue.mixin({
   methods: {
     ...mapActions(["pushNotification", "setPartialLoading"]),
+  },
+  computed: {
+    ...mapGetters(["currentPlano"]),
   },
 });
 

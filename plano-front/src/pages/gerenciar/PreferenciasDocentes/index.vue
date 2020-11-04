@@ -10,7 +10,14 @@
     <div class="div-table">
       <BaseTable v-show="tableMode === 'disciplina'">
         <template #thead>
-          <v-th width="90">Código</v-th>
+          <v-th-ordination
+            :currentOrder="ordenacaoMain.disciplinas"
+            orderToCheck="codigo"
+            width="90"
+            align="start"
+          >
+            Código
+          </v-th-ordination>
           <v-th width="420" align="start">Nome</v-th>
           <v-th width="80">Perfil</v-th>
           <v-th width="120" align="start">Docente</v-th>
@@ -18,26 +25,23 @@
         </template>
 
         <template #tbody>
-          <template v-for="disciplina in DocentesPorDisciplinas">
+          <template v-for="disciplina in DocentesPorDisciplinasOrdered">
             <tr :key="disciplina[0].Disciplina" class="bg-custom">
-              <v-td width="90">
-                {{ findDisciplinaById(disciplina[0].Disciplina).codigo }}
+              <v-td width="90" align="start">
+                {{ disciplina[0].disciplina.codigo }}
               </v-td>
               <v-td width="420" align="start">
-                {{ findDisciplinaById(disciplina[0].Disciplina).nome }}
+                {{ disciplina[0].disciplina.nome }}
               </v-td>
               <v-td width="80" paddingX="2">
-                {{
-                  findPerfilById(findDisciplinaById(disciplina[0].Disciplina).Perfil)
-                    .abreviacao
-                }}
+                {{ disciplina[0].disciplina.perfil.abreviacao }}
               </v-td>
               <v-td width="120" />
               <v-td
                 width="50"
                 class="clickable"
                 type="content"
-                @click="openModalAddPreferencia(disciplina[0].Disciplina)"
+                @click="openModalAddPreferencia(disciplina[0])"
               >
                 <font-awesome-icon :icon="['fas', 'plus']" class="icon-darkgray" />
               </v-td>
@@ -50,9 +54,7 @@
               <v-td width="90" />
               <v-td width="420" />
               <v-td width="80" />
-              <v-td width="120" align="start">
-                {{ findDocenteById(preferencia.Docente).apelido }}
-              </v-td>
+              <v-td width="120" align="start">{{ preferencia.docente.apelido }}</v-td>
               <v-td
                 width="50"
                 class="td-pref"
@@ -72,7 +74,14 @@
 
       <BaseTable v-show="tableMode === 'docente'">
         <template #thead>
-          <v-th width="120" align="start">Docente</v-th>
+          <v-th-ordination
+            :currentOrder="ordenacaoMain.docentes"
+            orderToCheck="nome"
+            width="120"
+            align="start"
+          >
+            Docente
+          </v-th-ordination>
           <v-th width="90">Código</v-th>
           <v-th width="420" align="start">Nome</v-th>
           <v-th width="80">Perfil</v-th>
@@ -80,19 +89,17 @@
         </template>
 
         <template #tbody>
-          <template v-for="docente in DisciplinasPorDocentes">
+          <template v-for="docente in DisciplinasPorDocentesOrdered">
             <tr :key="docente[0].Docente" class="bg-custom">
-              <v-td width="120" align="start">
-                {{ findDocenteById(docente[0].Docente).apelido }}
-              </v-td>
+              <v-td width="120" align="start">{{ docente[0].docente.apelido }}</v-td>
               <v-td width="90" />
               <v-td width="420" />
               <v-td width="80" />
               <v-td
                 width="50"
-                class="clickable"
                 type="content"
-                @click="openModalAddPreferencia(docente[0].Docente)"
+                class="clickable"
+                @click="openModalAddPreferencia(docente[0])"
               >
                 <font-awesome-icon :icon="['fas', 'plus']" class="icon-darkgray" />
               </v-td>
@@ -103,18 +110,9 @@
               :key="preferencia.Docente + '-' + preferencia.Disciplina"
             >
               <v-td width="120" />
-              <v-td width="90">
-                {{ findDisciplinaById(preferencia.Disciplina).codigo }}
-              </v-td>
-              <v-td width="420" align="start">
-                {{ findDisciplinaById(preferencia.Disciplina).nome }}
-              </v-td>
-              <v-td width="80">
-                {{
-                  findPerfilById(findDisciplinaById(preferencia.Disciplina).Perfil)
-                    .abreviacao
-                }}
-              </v-td>
+              <v-td width="90">{{ preferencia.disciplina.codigo }}</v-td>
+              <v-td width="420" align="start">{{ preferencia.disciplina.nome }}</v-td>
+              <v-td width="80">{{ preferencia.disciplina.perfil.abreviacao }}</v-td>
               <v-td
                 width="50"
                 class="td-pref"
@@ -244,7 +242,7 @@
                 v-model="add.Disciplina"
               >
                 <option
-                  v-for="disciplina in AllDisciplinas"
+                  v-for="disciplina in DisciplinasInPerfis"
                   :key="disciplina.id + disciplina.codigo"
                   :value="disciplina.id"
                 >
@@ -259,7 +257,7 @@
               <label for="addDisciplina">Código:</label>
               <select id="addDisciplina" class="form-control" v-model="add.Disciplina">
                 <option
-                  v-for="disciplina in AllDisciplinas"
+                  v-for="disciplina in DisciplinasInPerfis"
                   :key="disciplina.id + disciplina.codigo"
                   :value="disciplina.id"
                 >
@@ -304,7 +302,7 @@
             <label for="newDisciplina">Disciplina:</label>
             <select id="newDisciplina" class="form-control" v-model="add.Disciplina">
               <option
-                v-for="disciplina in AllDisciplinas"
+                v-for="disciplina in DisciplinasInPerfis"
                 :key="disciplina.id + disciplina.codigo"
                 :value="disciplina.id"
               >
@@ -319,7 +317,7 @@
             <label for="newCodigo">Código:</label>
             <select id="newCodigo" class="form-control" v-model="add.Disciplina">
               <option
-                v-for="disciplina in AllDisciplinas"
+                v-for="disciplina in DisciplinasInPerfis"
                 :key="disciplina.id + disciplina.codigo"
                 :value="disciplina.id"
               >
@@ -415,6 +413,10 @@ export default {
       },
       error: null,
       tableMode: "docente",
+      ordenacaoMain: {
+        docentes: { order: "nome", type: "asc" },
+        disciplinas: { order: "codigo", type: "asc" },
+      },
     };
   },
 
@@ -442,8 +444,8 @@ export default {
       this.$refs.modalEditPref.close();
     },
     openModalEditPreferencia(preferencia) {
-      this.edit.docente = this.findDocenteById(preferencia.Docente);
-      this.edit.disciplina = this.findDisciplinaById(preferencia.Disciplina);
+      this.edit.docente = { ...preferencia.docente };
+      this.edit.disciplina = { ...preferencia.disciplina };
       let p = preferencia.preferencia;
 
       if (p === 0) {
@@ -461,11 +463,11 @@ export default {
       this.$refs.modalAddPref.close();
       this.$refs.modalEditPref.open();
     },
-    openModalAddPreferencia(newValue) {
+    openModalAddPreferencia({ disciplina, docente }) {
       if (this.tableMode === "disciplina") {
-        this.add.Disciplina = this.findDisciplinaById(newValue);
+        this.add.Disciplina = disciplina;
       } else {
-        this.add.Docente = this.findDocenteById(newValue);
+        this.add.Docente = docente;
       }
 
       this.$refs.modalNewPref.close();
@@ -480,7 +482,6 @@ export default {
     openModalUpload() {
       this.$refs.modalUpload.open();
     },
-
     findPreferencia(docente, disciplina) {
       let preferenciaFounded = this.$_.find(this.PreferenciaDosDocentes, {
         Docente: docente.id,
@@ -488,15 +489,6 @@ export default {
       });
 
       return preferenciaFounded ? preferenciaFounded.preferencia : 0;
-    },
-    findDisciplinaById(disc) {
-      return this.$_.find(this.AllDisciplinas, { id: disc });
-    },
-    findDocenteById(doce) {
-      return this.$_.find(this.AllDocentes, { id: doce });
-    },
-    findPerfilById(perfil) {
-      return this.$_.find(this.AllPerfis, { id: perfil });
     },
 
     addPreferencia() {
@@ -608,7 +600,7 @@ export default {
       const reader = new FileReader();
 
       const docentes = this.AllDocentes;
-      const disciplinas = this.AllDisciplinas;
+      const disciplinas = this.DisciplinasInPerfis;
       const preferencias = this.PreferenciaDosDocentes;
       reader.onload = function(e) {
         const workbook = XLSX.read(e.target.result, { type: "binary" });
@@ -682,57 +674,104 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      "AllDocentes",
-      "AllDisciplinas",
-      "PreferenciaDosDocentes",
-      "AllPerfis",
-    ]),
+    ...mapGetters(["AllDocentes", "DisciplinasInPerfis", "PreferenciaDosDocentes"]),
 
-    DocentesPorDisciplinas() {
-      let prefs = {};
-      let preferencias = this.$_.orderBy(this.PreferenciaDosDocentes, (p) => {
-        return this.findDisciplinaById(p.Disciplina).codigo;
-      });
-      preferencias.forEach((p) => {
-        let codigo = this.findDisciplinaById(p.Disciplina).codigo;
-        if (prefs[codigo] === undefined) prefs[codigo] = [];
-        prefs[codigo].push(p);
-      });
-      for (var disc in prefs) {
-        if (Object.prototype.hasOwnProperty.call(prefs, disc)) {
-          prefs[disc] = this.$_.orderBy(
-            this.$_.orderBy(prefs[disc], (doce) => {
-              return this.findDocenteById(doce.Docente).apelido;
-            }),
-            ["preferencia"],
-            ["desc"]
+    DocentesPorDisciplinasOrdered() {
+      const prefsOrdered = {};
+
+      if (this.ordenacaoMain.disciplinas.type === "asc") {
+        this.$_(this.DocentesPorDisciplinas)
+          .keys()
+          .sort()
+          .each((key) => {
+            prefsOrdered[key] = this.DocentesPorDisciplinas[key];
+          });
+      } else {
+        this.$_(this.DocentesPorDisciplinas)
+          .keys()
+          .sort()
+          .reverse()
+          .each((key) => {
+            prefsOrdered[key] = this.DocentesPorDisciplinas[key];
+          });
+      }
+
+      for (var key in prefsOrdered) {
+        if (Object.prototype.hasOwnProperty.call(prefsOrdered, key)) {
+          prefsOrdered[key] = this.$_.orderBy(
+            prefsOrdered[key],
+            ["preferencia", "docente.apelido"],
+            ["desc", "asc"]
           );
         }
       }
+
+      return prefsOrdered;
+    },
+    DocentesPorDisciplinas() {
+      const preferencias = this.$_.orderBy(
+        this.PreferenciaDosDocentes,
+        "disciplina.codigo"
+      );
+
+      const prefs = {};
+      this.$_.forEach(preferencias, (pref) => {
+        if (prefs[pref.disciplina.codigo] === undefined) {
+          prefs[pref.disciplina.codigo] = [];
+        }
+
+        prefs[pref.disciplina.codigo].push(pref);
+      });
+
       return prefs;
     },
-    DisciplinasPorDocentes() {
-      let prefs = {};
-      let preferencias = this.$_.orderBy(this.PreferenciaDosDocentes, (p) => {
-        return this.findDocenteById(p.Docente).apelido;
-      });
-      preferencias.forEach((p) => {
-        let apelido = this.findDocenteById(p.Docente).apelido;
-        if (prefs[apelido] === undefined) prefs[apelido] = [];
-        prefs[apelido].push(p);
-      });
-      for (var doce in prefs) {
-        if (Object.prototype.hasOwnProperty.call(prefs, doce)) {
-          prefs[doce] = this.$_.orderBy(
-            this.$_.orderBy(prefs[doce], (disc) => {
-              return this.findDisciplinaById(disc.Disciplina).codigo;
-            }),
-            ["preferencia"],
-            ["desc"]
+
+    DisciplinasPorDocentesOrdered() {
+      const prefsOrdered = {};
+
+      if (this.ordenacaoMain.docentes.type === "asc") {
+        this.$_(this.DisciplinasPorDocentes)
+          .keys()
+          .sort()
+          .each((key) => {
+            prefsOrdered[key] = this.DisciplinasPorDocentes[key];
+          });
+      } else {
+        this.$_(this.DisciplinasPorDocentes)
+          .keys()
+          .sort()
+          .reverse()
+          .each((key) => {
+            prefsOrdered[key] = this.DisciplinasPorDocentes[key];
+          });
+      }
+
+      for (var key in prefsOrdered) {
+        if (Object.prototype.hasOwnProperty.call(prefsOrdered, key)) {
+          prefsOrdered[key] = this.$_.orderBy(
+            prefsOrdered[key],
+            ["preferencia", "disciplina.codigo"],
+            ["desc", "asc"]
           );
         }
       }
+
+      return prefsOrdered;
+    },
+    DisciplinasPorDocentes() {
+      const preferencias = this.$_.orderBy(this.PreferenciaDosDocentes, [
+        "docente.apelido",
+      ]);
+
+      const prefs = {};
+      this.$_.forEach(preferencias, (pref) => {
+        if (prefs[pref.docente.apelido] === undefined) {
+          prefs[pref.docente.apelido] = [];
+        }
+
+        prefs[pref.docente.apelido].push(pref);
+      });
+
       return prefs;
     },
   },

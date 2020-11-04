@@ -5,125 +5,123 @@
     </PageHeader>
 
     <div class="page-content">
-      <div class="p-0 div-table">
+      <div class="div-table">
         <BaseTable :styles="'height:max-content'">
           <template #thead>
-            <th style="width: 220px">Cursos</th>
-            <th style="width: 100px">Grades</th>
+            <v-th width="220">Cursos</v-th>
+            <v-th width="100">Grades</v-th>
           </template>
 
           <template #tbody>
             <tr class="bg-custom">
-              <td style="width: 220px">Ciência da Computação Diurno</td>
-              <td style="width:100px"></td>
+              <v-td width="220">Ciência da Computação Diurno</v-td>
+              <v-td width="100" />
             </tr>
-            <template v-for="grade in Grades_CCDiurno">
-              <tr
-                @click="findGrade(grade.id)"
-                :key="'grade-id' + grade.id"
-                :class="['clickable', { 'bg-selected': gradeForm.id == grade.id }]"
-              >
-                <td style="width: 220px"></td>
-                <td style="width: 100px">{{ grade.nome }}</td>
-              </tr>
-            </template>
+
+            <tr
+              v-for="grade in GradesCCD"
+              :key="grade.id + grade.nome + grade.Curso"
+              :class="['clickable', { 'bg-selected': gradeSelected === grade.id }]"
+              @click="showGrade(grade)"
+            >
+              <v-td width="220" />
+              <v-td width="100">{{ grade.nome }}</v-td>
+            </tr>
 
             <tr class="bg-custom">
-              <td style="width: 220px">Ciência da Computação Noturno</td>
-              <td style="width:100px"></td>
+              <v-td width="220">Ciência da Computação Noturno</v-td>
+              <v-td width="100" />
             </tr>
-            <template v-for="grade in Grades_CCNoturno">
-              <tr
-                @click="findGrade(grade.id)"
-                :key="'grade-id' + grade.id"
-                :class="['clickable', { 'bg-selected': gradeForm.id == grade.id }]"
-              >
-                <td style="width: 220px"></td>
-                <td style="width: 100px">{{ grade.nome }}</td>
-              </tr>
-            </template>
+            <tr
+              v-for="grade in GradesCCN"
+              :key="grade.id + grade.nome + grade.Curso"
+              :class="['clickable', { 'bg-selected': gradeSelected === grade.id }]"
+              @click="showGrade(grade)"
+            >
+              <v-td width="220" />
+              <v-td width="100">{{ grade.nome }}</v-td>
+            </tr>
 
             <tr class="bg-custom">
-              <td style="width: 220px">Sistemas de informação</td>
-              <td style="width:100px"></td>
+              <v-td width="220">Sistemas de informação</v-td>
+              <v-td width="100" />
             </tr>
-            <template v-for="grade in Grades_SI">
-              <tr
-                @click="findGrade(grade.id)"
-                :key="'grade-id' + grade.id"
-                :class="['clickable', { 'bg-selected': gradeForm.id == grade.id }]"
-              >
-                <td style="width: 220px"></td>
-                <td style="width: 100px">{{ grade.nome }}</td>
-              </tr>
-            </template>
+            <tr
+              v-for="grade in GradesSI"
+              :key="grade.id + grade.nome + grade.Curso"
+              :class="['clickable', { 'bg-selected': gradeSelected === grade.id }]"
+              @click="showGrade(grade)"
+            >
+              <v-td width="220" />
+              <v-td width="100">{{ grade.nome }}</v-td>
+            </tr>
 
             <tr class="bg-custom">
-              <td style="width: 220px">Engenharia da Computação</td>
-              <td style="width:100px"></td>
+              <v-td width="220">Engenharia da Computação</v-td>
+              <v-td width="100" />
             </tr>
-            <template v-for="grade in Grade_EC">
-              <tr
-                @click="findGrade(grade.id)"
-                :key="'grade-id' + grade.id"
-                :class="['clickable', { 'bg-selected': gradeForm.id == grade.id }]"
-              >
-                <td style="width: 220px"></td>
-                <td style="width: 100px">{{ grade.nome }}</td>
-              </tr>
-            </template>
+            <tr
+              v-for="grade in GradesEC"
+              :key="grade.id + grade.nome + grade.Curso"
+              :class="['clickable', { 'bg-selected': gradeSelected === grade.id }]"
+              @click="showGrade(grade)"
+            >
+              <v-td width="220" />
+              <v-td width="100">{{ grade.nome }}</v-td>
+            </tr>
+
+            <tr v-if="!GradesOrdered.length">
+              <v-td width="320" colspan="2">Nenhuma grade encontrada</v-td>
+            </tr>
           </template>
         </BaseTable>
       </div>
 
       <Card
         :title="'Curso'"
-        :toggleFooter="isEdit"
-        @btn-salvar="editGrade"
+        :toggleFooter="isEditing"
+        @btn-salvar="handleEditGrade"
         @btn-delete="openModalDelete"
-        @btn-add="addGrade"
+        @btn-add="handleCreateGrade"
         @btn-clean="cleanGrade"
       >
         <template #form-group>
           <div class="row mb-2 mx-0">
             <div class="form-group col-5 m-0 px-0">
-              <label required for="nome" class="col-form-label">Nome</label>
+              <label required for="gradeNome" class="col-form-label">Nome</label>
               <input
                 type="text"
                 class="card-input-menor form-control form-control-sm"
-                id="nome"
+                id="gradeNome"
                 v-model="gradeForm.nome"
               />
             </div>
 
             <div class="form-group col-7 m-0 px-0">
-              <label required for="periodoInicio" class="col-form-label"
-                >Período de Início</label
-              >
+              <label required for="periodoInicio" class="col-form-label">
+                Período de Início
+              </label>
               <input
                 type="text"
-                class="card-input-menor form-control form-control-sm col"
                 id="periodoInicio"
+                class="card-input-menor form-control form-control-sm col"
                 v-model="gradeForm.periodoInicio"
-                @keypress="maskOnlyNumber"
               />
             </div>
           </div>
 
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="curso" class="col-form-label">Curso</label>
+              <label required for="gradeCurso" class="col-form-label">gradeCurso</label>
               <select
-                type="text"
-                style="text-align:center;"
+                id="gradeCurso"
                 class="form-control form-control-sm card-input-maior"
-                id="curso"
-                v-model="gradeForm.Curso"
+                v-model.number="gradeForm.Curso"
               >
-                <option value="4">Ciência da Computação Diurno</option>
-                <option value="1">Ciência da Computação Noturno</option>
-                <option value="3">Sistemas de Informação</option>
-                <option value="2">Engenharia Computacional</option>
+                <option :value="4">Ciência da Computação Diurno</option>
+                <option :value="1">Ciência da Computação Noturno</option>
+                <option :value="3">Sistemas de Informação</option>
+                <option :value="2">Engenharia Computacional</option>
               </select>
             </div>
           </div>
@@ -131,12 +129,15 @@
       </Card>
     </div>
 
-    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deleteGrade">
-      <li v-if="isEdit" class="list-group-item">
+    <ModalDelete
+      ref="modalDelete"
+      :isDeleting="isEditing"
+      @btn-deletar="handleDeleteGrade"
+    >
+      <li v-if="isEditing" class="list-group-item">
         <span>
           Tem certeza que deseja excluír a grade
-          <b>{{ gradeForm.periodoInicio }} - {{ gradeForm.nome }}</b
-          >?
+          <b>{{ gradeForm.periodoInicio }} - {{ gradeForm.nome }}</b> ?
         </span>
       </li>
       <li v-else class="list-group-item">Nenhuma grade selecionada.</li>
@@ -149,192 +150,136 @@
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Editar:</b> Clique na linha da tabela da grade que deseja alterar. Em
-        seguida, no cartão à direita, altere as informações que desejar e clique em
-        Salvar <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
+        <b>Editar:</b> Clique na linha da tabela da grade que deseja alterar. Em seguida,
+        no cartão à direita, altere as informações que desejar e clique em Salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Deletar:</b> Clique na linha da tabela da grade que deseja remover. Em
-        seguida, no cartão à direita, clique em Remover
-        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
-        confirme a remoção na janela que será aberta.
+        <b>Deletar:</b> Clique na linha da tabela da grade que deseja remover. Em seguida,
+        no cartão à direita, clique em Remover
+        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e confirme a
+        remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
         <b>Limpar:</b> No cartão à direita, clique em Cancelar
-        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para limpar
-        as informações.
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para limpar as
+        informações.
       </li>
       <li class="list-group-item">
-        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para
-        alterar a ordenação das informações.
+        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para alterar a
+        ordenação das informações.
       </li>
     </ModalAjuda>
   </div>
 </template>
 
 <script>
-import gradeService from "@/common/services/grade";
+import { mapActions, mapGetters } from "vuex";
 import { maskOnlyNumber } from "@/common/mixins";
-import { Card } from "@/components/ui";
 import { ModalDelete, ModalAjuda } from "@/components/modals";
-
+import { Card } from "@/components/ui";
 const emptyGrade = {
   id: null,
   periodoInicio: null,
   Curso: null,
   nome: null,
 };
-const emptyDisciplinaGrade = {
-  periodo: null,
-  Disciplina: null,
-  Grade: null,
-};
+
 export default {
   name: "DashboardGrade",
   mixins: [maskOnlyNumber],
   components: { Card, ModalAjuda, ModalDelete },
   data() {
     return {
-      error: null,
       gradeForm: this.$_.clone(emptyGrade),
-      disciplinaGradeForm: this.$_.clone(emptyDisciplinaGrade),
-      currentGrade: null,
+      gradeSelected: null,
     };
   },
 
   methods: {
-    addGrade() {
-      gradeService
-        .create(this.gradeForm)
-        .then((response) => {
-          this.cleanGrade();
-          this.$notify({
-            group: "general",
-            title: `Sucesso!`,
-            text: `A Grade ${response.Grade.nome} foi criada!`,
-            type: "success",
-          });
-        })
-        .catch((error) => {
-          this.error = "<b>Erro ao criar Grade</b>";
-          if (error.response.data.fullMessage) {
-            this.error +=
-              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-          }
-          this.$notify({
-            group: "general",
-            title: `Erro!`,
-            text: this.error,
-            type: "error",
-          });
-        });
-      this.cleanGrade();
-    },
-
-    editGrade() {
-      gradeService
-        .update(this.gradeForm.id, this.gradeForm)
-        .then((response) => {
-          this.$notify({
-            group: "general",
-            title: `Sucesso!`,
-            text: `A Grade ${response.Grade.nome} foi atualizada!`,
-            type: "success",
-          });
-        })
-        .catch(() => {
-          this.$notify({
-            group: "general",
-            title: "Erro!",
-            text: "Erro ao atualizar Grade",
-            type: "error",
-          });
-        });
-    },
+    ...mapActions(["createGrade", "editGrade", "deleteGrade"]),
 
     openModalDelete() {
       this.$refs.modalDelete.open();
     },
-    deleteGrade() {
-      const gradeNome = this.gradeForm.nome;
-
-      gradeService
-        .delete(this.gradeForm.id, this.gradeForm)
-        .then(() => {
-          this.cleanGrade();
-          this.$notify({
-            group: "general",
-            title: `Sucesso!`,
-            text: `A Grade ${gradeNome} foi excluída!`,
-            type: "success",
-          });
-        })
-        .catch((error) => {
-          this.$notify({
-            group: "general",
-            title: "Erro ao excluir Grade!",
-            text: error.response
-              ? "Grade não pode possuir disciplinas cadastradas para ser excluída"
-              : "",
-            type: "error",
-          });
-        });
-    },
     cleanGrade() {
       this.gradeForm = this.$_.clone(emptyGrade);
-      this.currentGrade = null;
-      this.error = null;
+      this.gradeSelected = null;
     },
     showGrade(grade) {
       this.cleanGrade();
-      this.currentGrade = grade.id;
+      this.gradeSelected = grade.id;
       this.gradeForm = this.$_.clone(grade);
-      this.disciplinaGradeForm.Grade = this.gradeForm.id;
     },
-    findGrade(id) {
-      var grade = this.$_.find(this.$store.state.grade.Grades, ["id", id]);
-      this.showGrade(grade);
+
+    async handleCreateGrade() {
+      try {
+        this.setPartialLoading(true);
+        await this.createGrade(this.gradeForm);
+        this.cleanGrade();
+      } catch (error) {
+        this.pushNotification({
+          type: "error",
+          title: "Erro ao criar nova grade!",
+          text: error.message,
+        });
+      } finally {
+        this.setPartialLoading(false);
+      }
     },
-    isEven(number) {
-      return number % 2 === 0;
+    async handleEditGrade() {
+      try {
+        this.setPartialLoading(true);
+        await this.editGrade(this.gradeForm);
+      } catch (error) {
+        this.pushNotification({
+          type: "error",
+          title: "Erro ao atualizar grade!",
+          text: error.message,
+        });
+      } finally {
+        this.setPartialLoading(false);
+      }
+    },
+    async handleDeleteGrade() {
+      try {
+        this.setPartialLoading(true);
+        await this.deleteGrade(this.gradeForm);
+        this.cleanGrade();
+      } catch (error) {
+        this.pushNotification({
+          type: "error",
+          title: "Erro ao excluir grade!",
+          text: error.response
+            ? "Grade não pode possuir disciplinas cadastradas para ser excluída"
+            : "",
+        });
+      } finally {
+        this.setPartialLoading(false);
+      }
     },
   },
 
   computed: {
-    isEdit() {
-      return this.currentGrade != null;
+    ...mapGetters(["AllGrades"]),
+
+    GradesOrdered() {
+      return this.$_.orderBy(this.AllGrades, "nome");
     },
-    Grades() {
-      return this.$store.state.grade.Grades;
+    GradesCCN() {
+      return this.$_.filter(this.GradesOrdered, ["Curso", 1]);
     },
-    Grades_CCNoturno() {
-      return this.$_.orderBy(
-        this.Grades.filter(function(grade) {
-          return grade.Curso == 1;
-        }),
-        "nome"
-      );
+    GradesEC() {
+      return this.$_.filter(this.GradesOrdered, ["Curso", 2]);
     },
-    Grades_CCDiurno() {
-      return this.$_.orderBy(
-        this.Grades.filter(function(grade) {
-          return grade.Curso == 4;
-        }),
-        "nome"
-      );
+    GradesSI() {
+      return this.$_.filter(this.GradesOrdered, ["Curso", 3]);
     },
-    Grades_SI() {
-      return this.Grades.filter(function(grade) {
-        return grade.Curso == 3;
-      });
+    GradesCCD() {
+      return this.$_.filter(this.GradesOrdered, ["Curso", 4]);
     },
-    Grade_EC() {
-      return this.$_.orderBy(
-        this.Grades.filter(function(grade) {
-          return grade.Curso == 2;
-        }),
-        "nome"
-      );
+    isEditing() {
+      return this.gradeSelected != null;
     },
   },
 };

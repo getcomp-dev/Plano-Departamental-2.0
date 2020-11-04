@@ -1,5 +1,5 @@
 <template>
-  <div class="main-component row" v-if="isEditable">
+  <div class="main-component row" v-if="currentPlano.isEditable">
     <PageHeader :title="'Graduação - Outros'">
       <BaseButton
         v-show="isAdding"
@@ -28,14 +28,16 @@
             orderToCheck="disciplina.codigo"
             width="80"
             text="Código"
-            >Código
+          >
+            Código
           </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoTurmasMain"
             orderToCheck="disciplina.nome"
             width="330"
             align="start"
-            >Disciplina
+          >
+            Disciplina
           </v-th-ordination>
           <v-th width="25" title="Créditos">C.</v-th>
           <v-th width="45" title="Turma">T.</v-th>
@@ -68,7 +70,8 @@
 
           <tr v-show="!TurmasExternasOrdered.length">
             <v-td width="1005">
-              <b>Nenhuma turma encontrada.</b> Clique no botão de filtros
+              <b>Nenhuma turma encontrada.</b>
+              Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
               para selecioná-las.
             </v-td>
@@ -100,42 +103,46 @@
             orderToCheck="codigo"
             width="70"
             align="start"
-            >Código
+          >
+            Código
           </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoDisciplinasModal"
             orderToCheck="nome"
             width="295"
             align="start"
-            >Nome
+          >
+            Nome
           </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoDisciplinasModal"
             orderToCheck="perfil.abreviacao"
             width="60"
             align="start"
-            >Perfis
+          >
+            Perfis
           </v-th-ordination>
         </template>
+
         <template #tbody>
           <tr
             v-for="disciplina in DisciplinasOptionsOrdered"
             :key="disciplina.id + disciplina.nome"
-            @click="toggleItemInArray(disciplina, filtroDisciplinas.selecionadas)"
+            @click="toggleItemInArray(disciplina, filtroDisciplinas.selecionados)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
-                v-model="filtroDisciplinas.selecionadas"
+                v-model="filtroDisciplinas.selecionados"
                 :value="disciplina"
               />
             </v-td>
-            <v-td width="70" align="start">{{ disciplina.codigo }} </v-td>
-            <v-td width="295" align="start">{{ disciplina.nome }} </v-td>
-            <v-td width="60" align="start">{{ disciplina.perfil.abreviacao }} </v-td>
+            <v-td width="70" align="start">{{ disciplina.codigo }}</v-td>
+            <v-td width="295" align="start">{{ disciplina.nome }}</v-td>
+            <v-td width="60" align="start">{{ disciplina.perfil.abreviacao }}</v-td>
           </tr>
+
           <tr v-show="!DisciplinasOptionsOrdered.length">
             <v-td colspan="3" width="450">
               NENHUMA DISCIPLINA ENCONTRADA.
@@ -149,6 +156,7 @@
           <v-th width="25" />
           <v-th width="425" align="start">Periodos Letivo</v-th>
         </template>
+
         <template #tbody>
           <tr
             v-for="periodo in PeriodosOptions"
@@ -156,12 +164,11 @@
             @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
-                :value="periodo"
                 v-model="filtroPeriodos.selecionados"
+                :value="periodo"
                 @click.stop="selecionaPeriodo(periodo)"
               />
             </v-td>
@@ -175,6 +182,7 @@
           <v-th width="25" />
           <v-th width="425" align="start">Semestre Letivo</v-th>
         </template>
+
         <template #tbody>
           <tr
             v-for="semestre in SemestresOptions"
@@ -182,13 +190,12 @@
             @click="selecionaSemestre(semestre)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
-                :indeterminate.prop="semestre.halfChecked"
-                :value="semestre"
                 v-model="filtroSemestres.selecionados"
+                :value="semestre"
+                :indeterminate.prop="semestre.halfChecked"
                 @click.stop="selecionaSemestre(semestre)"
               />
             </v-td>
@@ -230,38 +237,43 @@
       <li class="list-group-item">
         <b>Visualizar conteúdo:</b>
         Clique no ícone de filtros
-        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" /> no
-        cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar
-        entre os tipos de filtro disponíveis. Marque quais informações deseja
-        visualizar, e para finalizar clique no botão OK.
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+        no cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar
+        entre os tipos de filtro disponíveis. Marque quais informações deseja visualizar,
+        e para finalizar clique no botão OK.
       </li>
       <li class="list-group-item">
-        <b>Adicionar turma:</b> Clique no ícone de adicionar
-        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" /> no cabeçalho
-        da página. Em seguida, preencha a nova linha que irá aparecer no início da
-        tabela. Note que os campos disciplina e turma são obrigatórios. Após
+        <b>Adicionar turma:</b>
+        Clique no ícone de adicionar
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
+        no cabeçalho da página. Em seguida, preencha a nova linha que irá aparecer no
+        início da tabela. Note que os campos disciplina e turma são obrigatórios. Após
         preencher os campos, clique no ícone de salvar
-        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" /> ou de
-        cancelar <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />.
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
+        ou de cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />
+        .
       </li>
       <li class="list-group-item">
-        <b>Deletar turma:</b> Marque a(s) turma(s) que deseja deletar através da
-        caixa de seleção na coluna mais à esquerda da tabela. Em seguida, clique no
-        ícone de deletar
-        <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" /> no cabeçalho
-        da página. Confirme a exclusão clicando no botão OK na janela que se abrirá.
+        <b>Deletar turma:</b>
+        Marque a(s) turma(s) que deseja deletar através da caixa de seleção na coluna mais
+        à esquerda da tabela. Em seguida, clique no ícone de deletar
+        <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" />
+        no cabeçalho da página. Confirme a exclusão clicando no botão OK na janela que se
+        abrirá.
       </li>
       <li class="list-group-item">
-        <b>Editar turma:</b> Basta fazer as alterações necessárias diretamente nos
-        campos da tabela. O sistema salvará as modificações automaticamente.
+        <b>Editar turma:</b>
+        Basta fazer as alterações necessárias diretamente nos campos da tabela. O sistema
+        salvará as modificações automaticamente.
       </li>
       <li class="list-group-item">
-        <b>Observações:</b> Em cada coluna de um curso, para cada disciplina, existem
-        dois campos de vagas. O campo superior é destinado às vagas de grade, e o
-        inferior é referente às vagas para alunos não periodizados. Para que uma
-        turma externa apareça na grade horária de um determinado curso, na página
-        "Horários", é preciso que pelo menos uma vaga de grade seja destinada a este
-        curso.
+        <b>Observações:</b>
+        Em cada coluna de um curso, para cada disciplina, existem dois campos de vagas. O
+        campo superior é destinado às vagas de grade, e o inferior é referente às vagas
+        para alunos não periodizados. Para que uma turma externa apareça na grade horária
+        de um determinado curso, na página "Horários", é preciso que pelo menos uma vaga
+        de grade seja destinada a este curso.
       </li>
     </ModalAjuda>
   </div>
@@ -320,14 +332,15 @@ export default {
       },
       filtroDisciplinas: {
         ativadas: [],
-        selecionadas: [],
+        selecionados: [],
       },
       modalFiltrosCallbacks: {
         selectAll: {
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionadas = [
-              ...this.DisciplinasExternasInPerfis,
-            ];
+            this.filtroDisciplinas.selecionados = this.$_.union(
+              this.DisciplinasOptionsFiltered,
+              this.filtroDisciplinas.selecionados
+            );
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
@@ -340,11 +353,14 @@ export default {
         },
         selectNone: {
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionadas = [];
+            this.filtroDisciplinas.selecionados = this.$_.difference(
+              this.filtroDisciplinas.selecionados,
+              this.DisciplinasOptionsFiltered
+            );
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [];
-            this.filtroDisciplinas.selecionadas = [];
+            this.filtroDisciplinas.selecionados = [];
           },
           Semestres: () => {
             this.filtroSemestres.selecionados = [];
@@ -353,7 +369,7 @@ export default {
         },
         btnOk: () => {
           this.filtroPeriodos.ativados = [...this.filtroPeriodos.selecionados];
-          this.filtroDisciplinas.ativadas = [...this.filtroDisciplinas.selecionadas];
+          this.filtroDisciplinas.ativadas = [...this.filtroDisciplinas.selecionados];
         },
       },
     };
@@ -396,12 +412,7 @@ export default {
       "DisciplinasExternasInPerfis",
       "TurmasExternasToDelete",
       "PrincipaisCursosDCC",
-      "currentPlano"
     ]),
-
-    isEditable() {
-      return this.currentPlano.isEditable
-    },
 
     TurmasExternasOrdered() {
       return this.$_.orderBy(

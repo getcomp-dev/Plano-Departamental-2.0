@@ -84,8 +84,9 @@ export default {
   align-items: center;
 }
 
-.card input,
-.card select {
+.card select,
+.card input[type="text"],
+.card input[type="number"] {
   height: 28px !important;
   padding: 5px !important;
   font-size: 12px !important;

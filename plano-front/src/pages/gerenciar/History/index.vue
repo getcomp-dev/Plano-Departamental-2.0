@@ -8,46 +8,48 @@
     <div class="div-table">
       <BaseTable>
         <template #thead>
-          <th style="width: 110px;">Tabela Modificada</th>
-          <th style="width: 120px">Campo Modificado</th>
-          <th style="width: 200px">Linha Modificada</th>
-          <th style="width: 120px">Valor Anterior</th>
-          <th style="width: 120px">Novo Valor</th>
-          <th style="width: 65px">Operação</th>
-          <th style="width: 80px">Usuário</th>
-          <th style="width: 160px">Data</th>
+          <v-th width="110">Tabela Modificada</v-th>
+          <v-th width="120">Campo Modificado</v-th>
+          <v-th width="200">Linha Modificada</v-th>
+          <v-th width="120">Valor Anterior</v-th>
+          <v-th width="120">Novo Valor</v-th>
+          <v-th width="65">Operação</v-th>
+          <v-th width="80">Usuário</v-th>
+          <v-th width="160">Data</v-th>
         </template>
         <template #tbody>
-          <tr v-for="history in HistoryOrdered" :key="`History${history.id}`">
-            <td style="width: 110px">{{ history.tabelaModificada }}</td>
-            <td style="width: 120px" class="less-padding">
+          <tr v-for="history in HistoryOrdered" :key="history.id">
+            <v-td width="110">{{ history.tabelaModificada }}</v-td>
+            <v-td width="120" paddingX="0">
               {{ history.campoModificado }}
-            </td>
-            <td style="width: 200px" class="less-padding">
+            </v-td>
+            <v-td width="200" paddingX="0">
               {{ linhaModificada(history) }}
-            </td>
-            <td style="width: 120px" class="less-padding">
+            </v-td>
+            <v-td width="120" paddingX="0">
               {{ valorAnterior(history) }}
-            </td>
-            <td style="width: 120px" class="less-padding">
+            </v-td>
+            <v-td width="120" paddingX="0">
               {{ valorNovo(history) }}
-            </td>
-            <td style="width: 65px" class="less-padding">
+            </v-td>
+            <v-td width="65" paddingX="0">
               {{ history.tipoOperacao }}
-            </td>
-            <td style="width: 80px" class="less-padding">
+            </v-td>
+            <v-td width="80" paddingX="0">
               {{ history.usuario }}
-            </td>
-            <td style="width: 160px" class="less-padding">
+            </v-td>
+            <v-td width="160" paddingX="0">
               {{ history.createdAt | convertDateUTC }}
-            </td>
+            </v-td>
           </tr>
+
           <tr v-show="!HistoryOrdered.length">
-            <td style="width:975px">
-              <b>Nenhuma operação encontrada.</b> Clique no botão de filtros
+            <v-td width="975" colspan="8">
+              <b>Nenhuma operação encontrada.</b>
+              Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
               para selecioná-las.
-            </td>
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -60,55 +62,49 @@
     >
       <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Tabelas'">
         <template #thead>
-          <th style="width:25px"></th>
-          <th style="width: 425px" class="t-start">Nome</th>
+          <v-th width="25" />
+          <v-th width="425" align="start">Nome</v-th>
         </template>
 
         <template #tbody>
           <tr
             v-for="tabela in TabelasOptions"
-            :key="tabela.nome + tabela.id"
+            :key="tabela.id + tabela.nome"
             @click="toggleItemInArray(tabela, filtroTabelas.selecionados)"
             v-prevent-click-selection
           >
-            <td style="width:25px">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
                 v-model="filtroTabelas.selecionados"
                 :value="tabela"
-                class="form-check-input position-static m-0"
               />
-            </td>
-            <td style="width:425px" class="t-start upper-case">
-              {{ tabela.nome }}
-            </td>
+            </v-td>
+            <v-td width="425" align="start">{{ tabela.nome }}</v-td>
           </tr>
         </template>
       </BaseTable>
       <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Operações'">
         <template #thead>
-          <th style="width:25px"></th>
-          <th style="width: 425px" class="t-start">Tipo</th>
+          <v-th width="25" />
+          <v-th width="425" align="start">Tipo</v-th>
         </template>
 
         <template #tbody>
           <tr
             v-for="operacao in OperacoesOptions"
-            :key="operacao.id"
+            :key="operacao.id + operacao.nome"
             @click="toggleItemInArray(operacao, filtroOperacoes.selecionados)"
             v-prevent-click-selection
           >
-            <td style="width:25px">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
                 v-model="filtroOperacoes.selecionados"
                 :value="operacao"
-                class="form-check-input position-static m-0"
               />
-            </td>
-            <td style="width:425px" class="t-start upper-case">
-              {{ operacao.nome }}
-            </td>
+            </v-td>
+            <v-td width="425" align="start">{{ operacao.nome }}</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -118,10 +114,10 @@
       <li class="list-group-item">
         <b>Visualizar conteúdo:</b>
         Clique no ícone de filtros
-        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" /> no
-        cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar
-        entre os tipos de filtro disponíveis. Marque quais informações deseja
-        visualizar, e para finalizar clique no botão OK.
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+        no cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar
+        entre os tipos de filtro disponíveis. Marque quais informações deseja visualizar,
+        e para finalizar clique no botão OK.
       </li>
     </ModalAjuda>
   </div>
@@ -139,12 +135,7 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "DashboardHistory",
-  mixins: [
-    toggleItemInArray,
-    toggleAsideModal,
-    convertDateUTC,
-    preventClickSelection,
-  ],
+  mixins: [toggleItemInArray, toggleAsideModal, convertDateUTC, preventClickSelection],
   components: {
     ModalFiltros,
     ModalAjuda,
@@ -255,9 +246,7 @@ export default {
           let cursoGrade = this.$_.find(this.$store.state.curso.Cursos, {
             id: parseInt(aux[0]),
           });
-          linha = `${cursoGrade === undefined ? aux[0] : cursoGrade.codigo} - ${
-            aux[1]
-          }`;
+          linha = `${cursoGrade === undefined ? aux[0] : cursoGrade.codigo} - ${aux[1]}`;
           break;
         }
 
@@ -303,21 +292,18 @@ export default {
             turmaExterna === undefined
               ? aux[0]
               : disciplinaPedidoExterno.codigo + " " + turmaExterna.letra
-          }/${
-            cursoPedidoExterno === undefined ? aux[1] : cursoPedidoExterno.codigo
-          }`;
+          }/${cursoPedidoExterno === undefined ? aux[1] : cursoPedidoExterno.codigo}`;
           break;
         }
 
         case "Turma": {
           aux = linha.split("/");
-          let disciplinaTurma = this.$_.find(
-            this.$store.state.disciplina.Disciplinas,
-            { id: parseInt(aux[1]) }
-          );
-          linha = `${
-            disciplinaTurma === undefined ? aux[1] : disciplinaTurma.codigo
-          }/${aux[0]}`;
+          let disciplinaTurma = this.$_.find(this.$store.state.disciplina.Disciplinas, {
+            id: parseInt(aux[1]),
+          });
+          linha = `${disciplinaTurma === undefined ? aux[1] : disciplinaTurma.codigo}/${
+            aux[0]
+          }`;
           break;
         }
 
@@ -328,9 +314,7 @@ export default {
             { id: parseInt(aux[1]) }
           );
           linha = `${
-            disciplinaTurmaExterna === undefined
-              ? aux[1]
-              : disciplinaTurmaExterna.codigo
+            disciplinaTurmaExterna === undefined ? aux[1] : disciplinaTurmaExterna.codigo
           }/${aux[0]}`;
           break;
         }

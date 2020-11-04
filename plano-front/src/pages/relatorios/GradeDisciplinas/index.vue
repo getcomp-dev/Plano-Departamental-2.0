@@ -14,7 +14,8 @@
             v-for="i in Array.from(Array(11), (e, i) => i - 5)"
             :key="i"
             :value="AnoAtual + i"
-            >{{ AnoAtual + i }}
+          >
+            {{ AnoAtual + i }}
           </option>
         </select>
       </div>
@@ -30,58 +31,59 @@
             :currentOrder="ordenacaoMain.perfis"
             orderToCheck="perfil.abreviacao"
             width="80"
-            >Perfil
+          >
+            Perfil
           </v-th-ordination>
-
           <v-th-ordination
             :currentOrder="ordenacaoMain.disciplinas"
             orderToCheck="codigo"
             width="100"
-            >Código
+          >
+            Código
           </v-th-ordination>
-
           <v-th-ordination
             :currentOrder="ordenacaoMain.disciplinas"
             orderToCheck="nome"
             width="380"
             align="start"
-            >Disciplina
+          >
+            Disciplina
           </v-th-ordination>
-
           <v-th-ordination
             v-if="cursosAtivados.CCN"
             :currentOrder="ordenacaoMain.disciplinas"
             orderToCheck="gradeCCN"
             width="140"
             title="Ciência da Computação Diurno"
-            >35A
+          >
+            35A
           </v-th-ordination>
-
           <v-th-ordination
             v-if="cursosAtivados.CCD"
             :currentOrder="ordenacaoMain.disciplinas"
             orderToCheck="gradeCCD"
             width="140"
             title="Ciência da Computação Noturno"
-            >65C
+          >
+            65C
           </v-th-ordination>
-
           <v-th-ordination
             v-if="cursosAtivados.EC"
             :currentOrder="ordenacaoMain.disciplinas"
             orderToCheck="gradeEC"
             width="140"
             title="Engenharia Computacional"
-            >65B
+          >
+            65B
           </v-th-ordination>
-
           <v-th-ordination
             v-if="cursosAtivados.SI"
             :currentOrder="ordenacaoMain.disciplinas"
             orderToCheck="gradeSI"
             width="140"
             title="Sistemas de informação"
-            >76A
+          >
+            76A
           </v-th-ordination>
         </template>
 
@@ -95,7 +97,8 @@
 
           <tr v-show="!DisciplinasOrderedMain.length">
             <v-td width="1120">
-              <b>Nenhuma disciplina encontrada.</b> Clique no botão de filtros
+              <b>Nenhuma disciplina encontrada.</b>
+              Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
               para selecioná-las.
             </v-td>
@@ -117,8 +120,9 @@
             orderToCheck="nome"
             width="425"
             align="start"
-            text="Nome"
-          />
+          >
+            Nome
+          </v-th-ordination>
         </template>
 
         <template #tbody>
@@ -128,12 +132,11 @@
             @click="selectPerfis(perfil)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
-                :value="perfil"
                 v-model="filtroPerfis.selecionados"
+                :value="perfil"
                 :indeterminate.prop="perfil.halfChecked"
                 @click.stop="selectPerfis(perfil)"
               />
@@ -161,22 +164,25 @@
             orderToCheck="codigo"
             width="70"
             align="start"
-            text="Código"
-          />
+          >
+            Código
+          </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoModal.disciplinas"
             orderToCheck="nome"
             width="270"
             align="start"
-            text="Nome"
-          />
+          >
+            Nome
+          </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoModal.disciplinas"
             orderToCheck="perfil.abreviacao"
             width="85"
             align="start"
-            text="Perfil"
-          />
+          >
+            Perfil
+          </v-th-ordination>
         </template>
 
         <template #tbody>
@@ -186,10 +192,9 @@
             @click="selectDisciplina(disciplina)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
                 v-model="filtroDisciplinas.selecionados"
                 :value="disciplina"
                 @click.stop="selectDisciplina(disciplina)"
@@ -216,17 +221,19 @@
           <v-th-ordination
             :currentOrder="ordenacaoModal.cursos"
             orderToCheck="codigo"
-            width="65"
+            width="70"
             align="start"
-            text="Código"
-          />
+          >
+            Código
+          </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoModal.cursos"
             orderToCheck="nome"
             width="355"
             align="start"
-            text="Nome"
-          />
+          >
+            Nome
+          </v-th-ordination>
         </template>
 
         <template #tbody>
@@ -236,20 +243,15 @@
             @click="toggleItemInArray(curso, filtroCursos.selecionados)"
             v-prevent-click-selection
           >
-            <v-td width="25">
-              <input
-                type="checkbox"
-                :value="curso"
-                v-model="filtroCursos.selecionados"
-                class="form-check-input position-static m-0"
-              />
+            <v-td width="25" type="content">
+              <input type="checkbox" v-model="filtroCursos.selecionados" :value="curso" />
             </v-td>
-            <v-td width="65" align="start">{{ curso.codigo.toUpperCase() }} </v-td>
+            <v-td width="70" align="start">{{ curso.codigo.toUpperCase() }}</v-td>
             <v-td width="355" align="start">{{ curso.nome }}</v-td>
           </tr>
 
           <tr v-if="!CursosOptionsOrdered.length">
-            <v-td width="450">
+            <v-td width="450" colspan="3">
               NENHUM CURSO ENCONTRADO.
             </v-td>
           </tr>
@@ -261,8 +263,8 @@
       <li class="list-group-item">
         <b>Visualizar disciplinas na grade:</b>
         Clique no ícone filtros
-        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />. Em
-        seguida, utilize as abas para navegar entre os filtros. Selecione as
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+        . Em seguida, utilize as abas para navegar entre os filtros. Selecione as
         informações que deseja visualizar, incluindo o ano do plano departamental, e
         clique em OK.
       </li>
@@ -322,8 +324,11 @@ export default {
             this.filtroPerfis.selecionados = [...this.PerfisOptions];
           },
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = [...this.DisciplinasOptions];
-            this.filtroPerfis.selecionados = [...this.PerfisOptions];
+            this.filtroDisciplinas.selecionados = this.$_.union(
+              this.DisciplinasOptionsFiltered,
+              this.filtroDisciplinas.selecionados
+            );
+            this.conectaDisciplinasEmPerfis();
           },
           Cursos: () => {
             this.filtroCursos.selecionados = [...this.PrincipaisCursosDCC];
@@ -335,8 +340,11 @@ export default {
             this.filtroDisciplinas.selecionados = [];
           },
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = [];
-            this.filtroPerfis.selecionados = [];
+            this.filtroDisciplinas.selecionados = this.$_.difference(
+              this.filtroDisciplinas.selecionados,
+              this.DisciplinasOptionsFiltered
+            );
+            this.conectaDisciplinasEmPerfis();
           },
           Cursos: () => {
             this.filtroCursos.selecionados = [];
@@ -398,7 +406,12 @@ export default {
     runAll() {
       //cria objeto para armazenar os períodos das disciplinas e chama as funções que a populam
       this.$store.state.disciplina.Disciplinas.forEach((d) => {
-        this.disciplinasGrades[d.id] = [[[], []], [[], []], [[], []], [[], []]]; //inicializa os períodos em 0 [Primeiro Semestre, Segundo Semestre]
+        this.disciplinasGrades[d.id] = [
+          [[], []],
+          [[], []],
+          [[], []],
+          [[], []],
+        ]; //inicializa os períodos em 0 [Primeiro Semestre, Segundo Semestre]
       });
       this.getGrades();
       this.get1Periodo();
@@ -460,8 +473,7 @@ export default {
               if (gradedisciplina.periodo <= this.gradesAtivas[i][j].fim) {
                 //verifica se essa grade está sendo usada para essa disciplina(limite superior)
                 if (
-                  (j > 0 &&
-                    this.gradesAtivas[i][j - 1].fim < gradedisciplina.periodo) ||
+                  (j > 0 && this.gradesAtivas[i][j - 1].fim < gradedisciplina.periodo) ||
                   j === 0
                 )
                   //verifica se a disciplina não deveria estar incluída na grade anterior, ou se essa é a grade mais recente(limite inferior)
@@ -538,8 +550,7 @@ export default {
               if (gradedisciplina.periodo <= this.gradesAtivas[i][j].fim) {
                 //verifica se essa grade está sendo usada para essa disciplina(limite superior)
                 if (
-                  (j > 0 &&
-                    this.gradesAtivas[i][j - 1].fim < gradedisciplina.periodo) ||
+                  (j > 0 && this.gradesAtivas[i][j - 1].fim < gradedisciplina.periodo) ||
                   j === 0
                 )
                   //verifica se a disciplina não deveria estar incluída na grade anterior, ou se essa é a grade mais recente(limite inferior)
@@ -579,12 +590,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      "PrincipaisCursosDCC",
-      "DisciplinasInPerfis",
-      "currentPlano",
-      "AllPerfis",
-    ]),
+    ...mapGetters(["PrincipaisCursosDCC", "DisciplinasInPerfis", "AllPerfis"]),
 
     DisciplinasOrderedMain() {
       let disciplinasResult = this.DisciplinasFiltredMain;
@@ -640,6 +646,20 @@ export default {
       });
 
       return disciplinaResult;
+    },
+
+    AnoAtual() {
+      return this.$_.find(this.$store.state.plano.Plano, {
+        id: parseInt(localStorage.getItem("Plano"), 10),
+      }).ano;
+    },
+    cursosAtivados() {
+      return {
+        CCD: this.$_.some(this.filtroCursos.ativados, ["codigo", "65C"]),
+        CCN: this.$_.some(this.filtroCursos.ativados, ["codigo", "35A"]),
+        SI: this.$_.some(this.filtroCursos.ativados, ["codigo", "76A"]),
+        EC: this.$_.some(this.filtroCursos.ativados, ["codigo", "65B"]),
+      };
     },
     //Modal Options
     DisciplinasOptionsOrdered() {
@@ -701,20 +721,6 @@ export default {
         this.ordenacaoModal.cursos.order,
         this.ordenacaoModal.cursos.type
       );
-    },
-
-    AnoAtual() {
-      return this.$_.find(this.$store.state.plano.Plano, {
-        id: parseInt(localStorage.getItem("Plano"), 10),
-      }).ano;
-    },
-    cursosAtivados() {
-      return {
-        CCD: this.$_.some(this.filtroCursos.ativados, ["codigo", "65C"]),
-        CCN: this.$_.some(this.filtroCursos.ativados, ["codigo", "35A"]),
-        SI: this.$_.some(this.filtroCursos.ativados, ["codigo", "76A"]),
-        EC: this.$_.some(this.filtroCursos.ativados, ["codigo", "65B"]),
-      };
     },
   },
 };

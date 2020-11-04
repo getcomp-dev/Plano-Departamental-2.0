@@ -67,6 +67,7 @@
               orderToCheck="departamento"
               width="70"
               title="Departamento"
+              align="start"
             >
               Depto.
             </v-th-ordination>
@@ -84,7 +85,11 @@
               <v-td width="300" align="start">
                 {{ disciplina.nome }}
               </v-td>
-              <v-td width="80" align="start">
+              <v-td
+                width="80"
+                align="start"
+                :style="{ backgroundColor: disciplina.perfil.cor }"
+              >
                 {{ disciplina.perfil.abreviacao }}
               </v-td>
               <v-td width="40">
@@ -99,7 +104,7 @@
               <v-td width="70">
                 {{ textoLab(disciplina.laboratorio) }}
               </v-td>
-              <v-td width="70">
+              <v-td width="70" align="start">
                 {{ textoDepto(disciplina.departamento) }}
               </v-td>
             </tr>
@@ -109,7 +114,7 @@
                   :icon="['fas', 'exclamation-triangle']"
                   class="icon-red"
                 />
-                <b> Nenhuma disciplina encontrada!</b>
+                <b>Nenhuma disciplina encontrada!</b>
               </v-td>
             </tr>
           </template>
@@ -127,10 +132,10 @@
         <template #form-group>
           <div class="row mb-2 mx-0">
             <div class="form-group m-0 col px-0">
-              <label required for="nome" class="col-form-label">Nome</label>
+              <label required for="disciplinaNome" class="col-form-label">Nome</label>
               <input
                 type="text"
-                id="nome"
+                id="disciplinaNome"
                 class="form-control form-control-sm input-maior upper-case"
                 :value="disciplinaForm.nome"
                 @input="disciplinaForm.nome = $event.target.value.toUpperCase()"
@@ -158,25 +163,26 @@
                 class="form-control form-control-sm"
                 v-model="disciplinaForm.Perfil"
               >
-                <option v-if="AllPerfis.length === 0" type="text" value
-                  >Nenhum Perfil Encontrado</option
-                >
+                <option v-if="AllPerfis.length === 0" type="text" value>
+                  Nenhum Perfil Encontrado
+                </option>
                 <option value="" v-if="disciplinaForm.departamento === 2"></option>
                 <option
                   v-for="perfil in AllPerfis"
                   :key="perfil.id + perfil.nome"
                   :value="perfil.id"
-                  >{{ perfil.abreviacao }}</option
                 >
+                  {{ perfil.abreviacao }}
+                </option>
               </select>
             </div>
           </div>
 
           <div class="row mb-2 mx-0">
             <div class="form-group m-0 col px-0">
-              <label required for="cargaTeorica" class="col-form-label"
-                >Carga Teórica</label
-              >
+              <label required for="cargaTeorica" class="col-form-label">
+                Carga Teórica
+              </label>
               <input
                 type="number"
                 min="0"
@@ -189,9 +195,9 @@
             </div>
 
             <div class="form-group m-0 col px-0">
-              <label required for="cargaPratica" class="col-form-label"
-                >Carga Prática</label
-              >
+              <label required for="cargaPratica" class="col-form-label">
+                Carga Prática
+              </label>
               <input
                 type="number"
                 min="0"
@@ -206,9 +212,7 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="laboratorio" class="col-form-label"
-                >Laboratório</label
-              >
+              <label required for="laboratorio" class="col-form-label">Laboratório</label>
               <select
                 type="text"
                 class="form-control form-control-sm input-medio"
@@ -263,8 +267,8 @@
       <li v-if="isEditing" class="list-group-item">
         <span>
           Tem certeza que deseja excluír a disciplina
-          <b>{{ disciplinaForm.codigo }} - {{ disciplinaForm.nome }}</b
-          >?
+          <b>{{ disciplinaForm.codigo }} - {{ disciplinaForm.nome }}</b>
+          ?
         </span>
       </li>
       <li v-else class="list-group-item">Nenhuma disciplina selecionada.</li>
@@ -274,27 +278,33 @@
       <li class="list-group-item">
         <b>Adicionar:</b>
         Preencha o cartão em branco à direita e em seguida, clique em Adicionar
-        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
+        .
       </li>
       <li class="list-group-item">
-        <b>Editar:</b> Clique na linha da tabela da disciplina que deseja alterar. Em
-        seguida, no cartão à direita, altere as informações que desejar e clique em
-        Salvar <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
+        <b>Editar:</b>
+        Clique na linha da tabela da disciplina que deseja alterar. Em seguida, no cartão
+        à direita, altere as informações que desejar e clique em Salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
+        .
       </li>
       <li class="list-group-item">
-        <b>Deletar:</b> Clique na linha da tabela da disciplina que deseja remover.
-        Em seguida, no cartão à direita, clique em Remover
-        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
-        confirme a remoção na janela que será aberta.
+        <b>Deletar:</b>
+        Clique na linha da tabela da disciplina que deseja remover. Em seguida, no cartão
+        à direita, clique em Remover
+        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
+        e confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
-        <b>Limpar:</b> No cartão à direita, clique em Cancelar
-        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para limpar
-        as informações.
+        <b>Limpar:</b>
+        No cartão à direita, clique em Cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />
+        , para limpar as informações.
       </li>
       <li class="list-group-item">
-        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para
-        alterar a ordenação das informações.
+        <b>Ordenar:</b>
+        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
+        informações.
       </li>
     </ModalAjuda>
   </div>
@@ -328,7 +338,7 @@ export default {
       disciplinaForm: this.$_.clone(emptyDisciplina),
       ordenacaoMain: {
         disciplina: { order: "codigo", type: "asc" },
-        perfil: { order: null, type: "asc" },
+        perfil: { order: "perfil.abreviacao", type: "asc" },
       },
     };
   },

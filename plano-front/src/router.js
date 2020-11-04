@@ -113,6 +113,11 @@ const routes = [
         name: "relatorioDisciplinas",
         component: lazyLoad("relatorios/PlanoDepartamental"),
       },
+      {
+        path: "relatorios/turmas-cursos",
+        name: "turmasCursos",
+        component: lazyLoad("relatorios/TurmasCursos"),
+      },
 
       //gerenciar
       {

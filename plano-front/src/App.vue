@@ -12,7 +12,6 @@
       :duration="5000"
       :max="5"
       :closeOnClick="false"
-      classes="vue-notification"
     />
 
     <transition name="router-view-animation" mode="out-in" appear>
@@ -24,7 +23,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import { TheLoadingView } from "@/components/layout";
 
 export default {
@@ -49,25 +48,8 @@ export default {
 </script>
 
 <style>
-.vue-notification {
-  padding: 10px;
-  margin-top: 15px;
-  margin-right: 15px;
-  font-size: 12px;
-  color: #ffffff;
-  background: #44a4fc;
-  border-left: 5px solid #187fe7;
-}
-.vue-notification .warn {
-  background: #ffb648;
-  border-left-color: #f48a06;
-}
-.vue-notification .error {
-  background: #e54d42;
-  border-left-color: #b82e24;
-}
-.vue-notification .success {
-  background: #68cd86;
-  border-left-color: #42a85f;
+#app .vue-notification.warn {
+  background: #fa9e2d;
+  border-left-color: #e07e06;
 }
 </style>

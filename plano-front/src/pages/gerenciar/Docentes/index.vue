@@ -12,7 +12,7 @@
               class="clickable t-start"
               @click="toggleOrder(ordenacaoDocentesMain, 'nome')"
               title="Clique para ordenar por nome"
-              style="width: 240px;"
+              style="width: 240px"
             >
               Nome
               <i :class="setIconByOrder(ordenacaoDocentesMain, 'nome')"></i>
@@ -21,22 +21,22 @@
               class="clickable t-start"
               @click="toggleOrder(ordenacaoDocentesMain, 'apelido')"
               title="Clique para ordenar por apelido"
-              style="width: 120px;"
+              style="width: 120px"
             >
               Apelido
               <i :class="setIconByOrder(ordenacaoDocentesMain, 'apelido')"></i>
             </th>
             <th
-                    class="clickable t-start"
-                    @click="toggleOrder(ordenacaoDocentesMain, 'nomesiga')"
-                    title="Clique para ordenar pelo nome do siga"
-                    style="width: 240px;"
+              class="clickable t-start"
+              @click="toggleOrder(ordenacaoDocentesMain, 'nomesiga')"
+              title="Clique para ordenar pelo nome do siga"
+              style="width: 240px"
             >
               Nome SIGA
               <i :class="setIconByOrder(ordenacaoDocentesMain, 'nomesiga')"></i>
             </th>
             <th
-              style="width:65px"
+              style="width: 65px"
               class="clickable t-center"
               @click="toggleOrder(ordenacaoDocentesMain, 'ativo', 'desc')"
             >
@@ -44,27 +44,25 @@
               <i :class="setIconByOrder(ordenacaoDocentesMain, 'ativo')"></i>
             </th>
           </template>
+
           <template #tbody>
             <tr
               v-for="docente in DocentesOrdered"
               :key="docente.id + docente.apelido"
+              :class="[{ 'bg-selected': docenteClickadoId == docente.id }, 'clickable']"
               @click="handleClickInDocente(docente)"
-              :class="[
-                { 'bg-selected': docenteClickadoId == docente.id },
-                'clickable',
-              ]"
             >
-              <td style="width:240px;" class="t-start">{{ docente.nome }}</td>
-              <td style="width:120px;" class="t-start">
+              <td style="width: 240px" class="t-start">{{ docente.nome }}</td>
+              <td style="width: 120px" class="t-start">
                 {{ docente.apelido }}
               </td>
-              <td style="width:240px;" class="t-start">
+              <td style="width: 240px" class="t-start">
                 {{ docente.nomesiga }}
               </td>
-              <td style="width:65px">{{ booleanToText(docente.ativo) }}</td>
+              <td style="width: 65px">{{ booleanToText(docente.ativo) }}</td>
             </tr>
             <tr v-if="!DocentesOrdered.length">
-              <td colspan="3" style="width:425px" class="text-center">
+              <td colspan="3" style="width: 425px" class="text-center">
                 <b>Nenhum docente encontrado!</b>
               </td>
             </tr>
@@ -96,7 +94,7 @@
           </div>
 
           <div class="row mb-2 mx-0">
-            <div class="form-group col m-0 mr-4 px-0">
+            <div class="form-group col-8 m-0 px-0">
               <label required for="apelido" class="col-form-label">Apelido</label>
               <input
                 id="apelido"
@@ -107,15 +105,9 @@
               />
             </div>
 
-            <div class="form-check form-check-inline col m-0 mr-4 mt-4 px-0">
+            <div class="form-check form-check-inline col-auto m-0 mt-4 px-0">
               <label for="ativo" class="form-check-label mr-2">Ativo</label>
-              <input
-                id="ativo"
-                type="checkbox"
-                value="1"
-                class="form-check-input"
-                v-model="docenteForm.ativo"
-              />
+              <input id="ativo" type="checkbox" value="1" v-model="docenteForm.ativo" />
             </div>
           </div>
 
@@ -124,11 +116,11 @@
               <label required for="nomesiga" class="col-form-label">Nome SIGA</label>
 
               <input
-                      id="nomesiga"
-                      type="text"
-                      class="form-control form-control-sm input-maior"
-                      @input="docenteForm.nomesiga = $event.target.value.toUpperCase()"
-                      :value="docenteForm.nomesiga"
+                id="nomesiga"
+                type="text"
+                class="form-control form-control-sm input-maior"
+                @input="docenteForm.nomesiga = $event.target.value.toUpperCase()"
+                :value="docenteForm.nomesiga"
               />
             </div>
           </div>
@@ -136,30 +128,32 @@
           <template v-if="isEdit">
             <div class="border-bottom mt-2 mb-1"></div>
             <small>Perfis Associados ao docente</small>
+
             <div class="row mb-3 mx-0">
               <div class="div-table">
-                <BaseTable :type="'modal'" :styles="'max-height: 300px'">
+                <BaseTable type="main" :styles="'max-height: 300px'">
                   <template #thead>
-                    <th style="width:25px"></th>
-                    <th style="width:225px" class="t-start">Perfis</th>
+                    <v-th width="25" />
+                    <v-th width="225" align="start">Perfis</v-th>
                   </template>
+
                   <template #tbody>
                     <tr
                       v-for="perfil in AllPerfis"
-                      :key="perfil.id + perfil.nome"
+                      :key="perfil.id + perfil.abreviacao"
                       @click="toggleItemInArray(perfil.id, perfisAssociados)"
                     >
-                      <td style="width:25px">
+                      <v-td width="25" type="content">
                         <input
                           type="checkbox"
-                          class="form-check-input position-static m-0"
+                          style="width: 11px"
                           v-model="perfisAssociados"
                           :value="perfil.id"
                         />
-                      </td>
-                      <td style="width:225px" class="t-start">
+                      </v-td>
+                      <v-td width="225" align="start" :title="perfil.nome">
                         {{ perfil.nome }}
-                      </td>
+                      </v-td>
                     </tr>
                   </template>
                 </BaseTable>
@@ -173,9 +167,7 @@
     <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deleteDocente">
       <li v-if="isEdit" class="list-group-item">
         <span>
-          Tem certeza que deseja excluír o docente
-          <b>{{ docenteForm.nome }}</b
-          >?
+          Tem certeza que deseja excluír o docente <b>{{ docenteForm.nome }}</b> ?
         </span>
       </li>
       <li v-else class="list-group-item">Nenhum docente selecionado.</li>
@@ -183,29 +175,28 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Adicionar:</b>
-        Preencha o cartão em branco à direita e em seguida, clique em Adicionar
-        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
+        <b>Adicionar:</b> Preencha o cartão em branco à direita e em seguida, clique em
+        Adicionar <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" /> .
       </li>
       <li class="list-group-item">
         <b>Editar:</b> Clique na linha da tabela do docente que deseja alterar. Em
-        seguida, no cartão à direita, altere as informações que desejar e clique em
-        Salvar <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
+        seguida, no cartão à direita, altere as informações que desejar e clique em Salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" /> .
       </li>
       <li class="list-group-item">
         <b>Deletar:</b> Clique na linha da tabela do docente que deseja remover. Em
         seguida, no cartão à direita, clique em Remover
-        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
-        confirme a remoção na janela que será aberta.
+        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
+        e confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
         <b>Limpar:</b> No cartão à direita, clique em Cancelar
-        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para limpar
-        as informações.
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" /> , para limpar as
+        informações.
       </li>
       <li class="list-group-item">
-        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para
-        alterar a ordenação das informações.
+        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para alterar a
+        ordenação das informações.
       </li>
     </ModalAjuda>
   </div>
@@ -218,7 +209,6 @@ import docentePerfilService from "@/common/services/docentePerfil";
 import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
 import { Card } from "@/components/ui";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
-
 const emptyDocente = {
   id: null,
   nome: null,
@@ -278,7 +268,9 @@ export default {
     async addDocente() {
       try {
         this.setPartialLoading(true);
-        if(!docenteForm.nomesiga) docenteForm.nomesiga = docenteForm.nome
+        if (!this.docenteForm.nomesiga) {
+          this.docenteForm.nomesiga = this.docenteForm.nome;
+        }
         const response = await docenteService.create(this.docenteForm);
         this.cleanDocente();
         this.pushNotification({
@@ -355,8 +347,7 @@ export default {
           this.perfilsOfCurrentDocente[i]
         );
 
-        if (perfilIndex === -1)
-          await this.deletePerfil(this.perfilsOfCurrentDocente[i]);
+        if (perfilIndex === -1) await this.deletePerfil(this.perfilsOfCurrentDocente[i]);
       }
       //Adiciona os que existem no perfisAssociados mas não existem em perfilsOfCurrentDocente
       for (let i = 0; i < this.perfisAssociados.length; i++) {

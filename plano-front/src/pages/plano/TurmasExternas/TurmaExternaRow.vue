@@ -18,7 +18,8 @@
           v-for="disciplina in DisciplinasExternasInPerfis"
           :key="disciplina.id"
           :value="disciplina.id"
-          >{{ disciplina.nome }}
+        >
+          {{ disciplina.nome }}
         </option>
       </select>
     </v-td>
@@ -49,7 +50,8 @@
           v-for="horario in HorariosFiltredByTurno"
           :key="horario.id + horario.horario"
           :value="horario.id"
-          >{{ horario.horario }}
+        >
+          {{ horario.horario }}
         </option>
       </select>
       <select
@@ -62,7 +64,8 @@
           v-for="horario in HorariosFiltredByTurno"
           :key="horario.id + horario.horario"
           :value="horario.id"
-          >{{ horario.horario }}
+        >
+          {{ horario.horario }}
         </option>
       </select>
     </v-td>
@@ -70,11 +73,8 @@
       <template v-if="!disciplinaIsIntegralEAD">
         <select v-model.number="turmaForm.Sala1" @change="checkSala(1)">
           <option />
-          <option
-            v-for="sala in AllSalas"
-            :key="sala.id + sala.nome"
-            :value="sala.id"
-            >{{ sala.nome }}
+          <option v-for="sala in AllSalas" :key="sala.id + sala.nome" :value="sala.id">
+            {{ sala.nome }}
           </option>
         </select>
 
@@ -84,11 +84,8 @@
           @change="checkSala(2)"
         >
           <option />
-          <option
-            v-for="sala in AllSalas"
-            :key="sala.nome + sala.id"
-            :value="sala.id"
-            >{{ sala.nome }}
+          <option v-for="sala in AllSalas" :key="sala.nome + sala.id" :value="sala.id">
+            {{ sala.nome }}
           </option>
         </select>
       </template>
@@ -98,9 +95,7 @@
         <b class="mb-1">
           {{ totalPedidosNaoPeriodizados + totalPedidosPeriodizados }}
         </b>
-        <span>
-          {{ totalPedidosPeriodizados }}+{{ totalPedidosNaoPeriodizados }}
-        </span>
+        <span>{{ totalPedidosPeriodizados }}+{{ totalPedidosNaoPeriodizados }}</span>
       </div>
     </v-td>
     <v-td
@@ -189,13 +184,10 @@ export default {
       if (
         (!this.$_.isNull(this.turmaForm.Horario1) ||
           !this.$_.isNull(this.turmaForm.Horario2)) &&
-        (!this.$_.isNull(this.turmaForm.Sala1) ||
-          !this.$_.isNull(this.turmaForm.Sala2))
+        (!this.$_.isNull(this.turmaForm.Sala1) || !this.$_.isNull(this.turmaForm.Sala2))
       ) {
         if (
-          horario === 1
-            ? this.turmaForm.Horario1 === 31
-            : this.turmaForm.Horario2 === 31
+          horario === 1 ? this.turmaForm.Horario1 === 31 : this.turmaForm.Horario2 === 31
         ) {
           return false;
         } else if (
@@ -295,18 +287,14 @@ export default {
           let d1, d2;
           if (sala === 1) {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -358,18 +346,14 @@ export default {
           let d1, d2;
           if (sala === 1) {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -421,18 +405,14 @@ export default {
           let d1, d2;
           if (sala === 1) {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -480,18 +460,14 @@ export default {
           let d1, d2;
           if (sala === 1) {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -539,18 +515,14 @@ export default {
           let d1, d2;
           if (sala === 1) {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -639,10 +611,7 @@ export default {
       const indicesResultantes = [];
 
       this.$_.forEach(this.PedidosOfCurrentTurma, (pedido, index) => {
-        const cursoFounded = this.$_.some(this.PrincipaisCursosDCC, [
-          "id",
-          pedido.Curso,
-        ]);
+        const cursoFounded = this.$_.some(this.PrincipaisCursosDCC, ["id", pedido.Curso]);
 
         if (cursoFounded) indicesResultantes.push(index);
       });

@@ -1,4 +1,8 @@
+import { toggleItemInArray } from "./index";
+
 export default {
+  mixins: [toggleItemInArray],
+
   methods: {
     selectDisciplina(disciplina) {
       this.toggleItemInArray(disciplina, this.filtroDisciplinas.selecionados, "id");

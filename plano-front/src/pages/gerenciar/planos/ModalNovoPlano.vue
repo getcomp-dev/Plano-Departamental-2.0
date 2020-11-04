@@ -17,7 +17,7 @@
 
       <div class="div-table">
         <BaseTable
-          :type="'modal'"
+          type="modal"
           :styles="'max-height: 500px;height:500px'"
           :hasSearchBar="true"
         >
@@ -28,70 +28,62 @@
             />
           </template>
           <template #thead>
-            <th style="width: 25px"></th>
-            <th
-              title="Código"
-              class="t-start clickable"
-              style="width: 70px"
-              @click="toggleOrder(ordenacaoModal.disciplinas, 'codigo')"
+            <v-th width="25" />
+            <v-th-ordination
+              :currentOrder="ordenacaoModal.disciplinas"
+              orderToCheck="codigo"
+              width="80"
+              align="start"
             >
-              Cód.
-              <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'codigo')"></i>
-            </th>
-            <th
-              class="t-start clickable"
-              style="width: 270px"
-              @click="toggleOrder(ordenacaoModal.disciplinas, 'nome')"
+              Código
+            </v-th-ordination>
+            <v-th-ordination
+              :currentOrder="ordenacaoModal.disciplinas"
+              orderToCheck="nome"
+              width="260"
+              align="start"
             >
               Nome
-              <i :class="setIconByOrder(ordenacaoModal.disciplinas, 'nome')"></i>
-            </th>
-            <th
-              class="t-start clickable"
-              style="width: 85px"
-              @click="toggleOrder(ordenacaoModal.disciplinas, 'perfilAbreviacao')"
+            </v-th-ordination>
+            <v-th-ordination
+              :currentOrder="ordenacaoModal.disciplinas"
+              orderToCheck="perfil.abreviacao"
+              width="85"
+              align="start"
             >
               Perfil
-              <i
-                :class="
-                  setIconByOrder(ordenacaoModal.disciplinas, 'perfilAbreviacao')
-                "
-              ></i>
-            </th>
+            </v-th-ordination>
           </template>
+
           <template #tbody>
             <tr
               v-for="disciplina in DisciplinasOrderedModal"
-              :key="'MdDisciplina' + disciplina.id"
+              :key="disciplina.id"
               @click="toggleItemInArray(disciplina.id, filtrosDisciplinas)"
+              v-prevent-click-selection
             >
-              <td style="width: 25px">
+              <v-td width="25" type="content">
                 <input
                   type="checkbox"
-                  class="form-check-input position-static m-0"
                   v-model="filtrosDisciplinas"
                   :value="disciplina.id"
                 />
-              </td>
-              <td style="width: 70px" class="t-start">
-                {{ disciplina.codigo }}
-              </td>
-              <td style="width: 270px" class="t-start">
+              </v-td>
+              <v-td width="80" align="start">{{ disciplina.codigo }}</v-td>
+              <v-td width="260" align="start" :title="disciplina.nome">
                 {{ disciplina.nome }}
-              </td>
-              <td style="width: 85px" class="t-start">
-                {{ disciplina.perfil.abreviacao }}
-              </td>
+              </v-td>
+              <v-td width="85" align="start">{{ disciplina.perfil.abreviacao }}</v-td>
             </tr>
-            <tr v-if="DisciplinasOrderedModal.length === 0">
-              <td colspan="3" style="width:450px">
-                NENHUMA DISCIPLINA ENCONTRADA.
-              </td>
+
+            <tr v-if="!DisciplinasOrderedModal.length">
+              <v-td colspan="3" width="450">NENHUMA DISCIPLINA ENCONTRADA.</v-td>
             </tr>
           </template>
         </BaseTable>
       </div>
     </template>
+
     <template #modal-footer>
       <div>
         <BaseButton
@@ -99,11 +91,7 @@
           color="lightblue"
           @click="selectAllDisciplinas"
         />
-        <BaseButton
-          text="Desmarcar Todos"
-          color="gray"
-          @click="selectNoneDisciplinas"
-        />
+        <BaseButton text="Desmarcar Todos" color="gray" @click="selectNoneDisciplinas" />
         <slot name="modal-footer-btn"></slot>
       </div>
       <BaseButton text="OK" color="green" class="px-3" @click="createNovoPlano" />
@@ -113,18 +101,22 @@
 
 <script>
 import { mapGetters } from "vuex";
-import pedidoExternoService from "@/common/services/pedidoExterno";
-import turmaExternaService from "@/common/services/turmaExterna";
 import planoService from "@/common/services/plano";
 import turmaService from "@/common/services/turma";
 import pedidoService from "@/common/services/pedido";
+import pedidoExternoService from "@/common/services/pedidoExterno";
+import turmaExternaService from "@/common/services/turmaExterna";
 import { normalizeText } from "@/common/utils";
-import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
+import {
+  toggleOrdination,
+  toggleItemInArray,
+  preventClickSelection,
+} from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
 
 export default {
   name: "ModalNovoPlano",
-  mixins: [toggleItemInArray, toggleOrdination],
+  mixins: [toggleItemInArray, toggleOrdination, preventClickSelection],
   components: { InputSearch },
   props: {
     plano: { type: Object, required: true },
@@ -148,14 +140,20 @@ export default {
     close() {
       this.$refs.baseModalNovoPlano.close();
     },
+
     selectAllDisciplinas() {
-      this.filtrosDisciplinas = [
-        ...this.$_.map(this.DisciplinasInPerfis, (disciplina) => disciplina.id),
-      ];
+      this.filtrosDisciplinas = this.$_.union(
+        this.filtrosDisciplinas,
+        this.$_.map(this.DisciplinasFiltredModal, "id")
+      );
     },
     selectNoneDisciplinas() {
-      this.filtrosDisciplinas = [];
+      this.filtrosDisciplinas = this.$_.difference(
+        this.filtrosDisciplinas,
+        this.$_.map(this.DisciplinasFiltredModal, "id")
+      );
     },
+
     gradesAtivas(ano) {
       //define grades ativas por periodo
       let g;
@@ -301,7 +299,6 @@ export default {
         }
       }
     },
-
     generateTurmasNovoPlano() {
       this.gradesAtivas(this.plano.ano);
       let disciplinasNovoPlano1Semestre = [];
@@ -649,7 +646,6 @@ export default {
 
       return turmasNovoPlano;
     },
-
     createNovoPlano() {
       this.setPartialLoading(true);
       let turmasNovoPlano = this.generateTurmasNovoPlano();
@@ -818,12 +814,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      "AllPlanos",
-      "DisciplinasInPerfis",
-      "AllDisciplinas",
-      "currentPlano",
-    ]),
+    ...mapGetters(["DisciplinasInPerfis", "AllDisciplinas"]),
 
     DisciplinasOrderedModal() {
       return this.$_.orderBy(
@@ -832,7 +823,6 @@ export default {
         this.ordenacaoModal.disciplinas.type
       );
     },
-
     DisciplinasFiltredModal() {
       if (this.searchDisciplinasModal === "") return this.DisciplinasInPerfis;
 

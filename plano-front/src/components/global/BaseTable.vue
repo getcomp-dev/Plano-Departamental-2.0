@@ -52,7 +52,7 @@ export default {
   display: block;
   overflow-y: scroll;
   margin: 0 !important;
-  font-weight: normal !important;
+  font-weight: normal;
   background-color: #fff !important;
 }
 .main-table {
@@ -64,7 +64,7 @@ export default {
 .modal-table {
   max-height: 450px;
   overflow-x: hidden !important;
-  font-size: 10px !important;
+  font-size: 10px;
   background-color: #e9ecef !important;
 }
 
@@ -81,35 +81,28 @@ export default {
 .modal-table tbody {
   text-transform: uppercase;
 }
-
 .table-custom thead th,
 .table-custom tbody td {
-  word-break: break-word;
-  vertical-align: middle !important;
+  vertical-align: middle;
   text-align: center;
   margin: 0 !important;
   padding: 0 5px;
 }
 .table-custom thead tr th {
-  word-wrap: none !important;
-  height: 18px !important;
+  word-wrap: none;
+  height: 18px;
   user-select: none;
+}
+.modal-table thead tr th {
+  font-size: 11px;
+}
+.modal-table tbody tr td {
+  cursor: pointer;
 }
 th:hover,
 td:hover {
   cursor: default;
 }
-.modal-table thead tr th {
-  font-size: 11px !important;
-}
-.main-table tbody tr td {
-  height: 20px !important;
-}
-.modal-table tbody tr td {
-  cursor: pointer;
-  min-height: 21px !important;
-}
-
 .table-custom tbody tr:hover {
   background-color: #dbdbdb;
 }
@@ -117,6 +110,7 @@ td:hover {
 .table-custom thead tr th svg {
   font-size: 9px;
 }
+
 .bg-custom {
   background-color: #f1f1f1;
 }
@@ -156,7 +150,7 @@ td:hover {
 }
 
 /* Inputs */
-.table-custom tbody tr > td input,
+.table-custom tbody tr > td input[type="text"],
 .table-custom tbody tr > td select {
   width: 100%;
   height: 18px;
@@ -170,7 +164,7 @@ td:hover {
   text-align: start;
 }
 .table-custom tbody tr > td select + select,
-.table-custom tbody tr > td input + input {
+.table-custom tbody tr > td input[type="text"] + input[type="text"] {
   margin-top: 0;
 }
 .table-custom tbody tr > td input {
@@ -180,27 +174,13 @@ td:hover {
 .main-table tbody tr input[type="checkbox"] {
   width: 14px;
   height: 14px;
-  margin: 0;
+  margin: 3px 0;
 }
 .modal-table tbody tr input[type="checkbox"] {
-  position: relative !important;
-  border-width: 1px !important ;
-  margin-left: 0 !important;
-  margin-top: 4.2px !important;
-  margin-bottom: auto !important;
+  margin: 3px 0;
   height: 12px;
   width: 12px;
-  -webkit-box-shadow: 0px 0px 0px 0.005px #555;
-  -moz-box-shadow: 0px 0px 0px 0.005px #555;
+  border-width: 1px !important;
   box-shadow: 0px 0px 0px 0.005px #555;
-}
-
-@-moz-document url-prefix() {
-  .main-table tbody select {
-    height: 20px !important;
-  }
-  .main-table tbody input[type="text"] {
-    margin-top: 0px !important;
-  }
 }
 </style>

@@ -4,10 +4,11 @@
       <NavTab
         :currentTab="tabsOptions.current"
         :allTabs="tabsOptions.array"
+        :withScroll="tabsOptions.withScroll"
         @change-tab="tabsOptions.current = $event"
       />
 
-      <div class="div-table">
+      <div class="div-table w-100">
         <slot></slot>
       </div>
     </template>
@@ -24,8 +25,9 @@
 </template>
 
 <script>
-import NavTab from "@/components/ui/NavTab";
 import { mapActions } from "vuex";
+import NavTab from "@/components/ui/NavTab";
+import { normalizeText } from "@/common/utils";
 
 export default {
   name: "ModalFiltros",
@@ -33,36 +35,31 @@ export default {
   props: {
     callbacks: { type: Object, required: true },
     tabsOptions: { type: Object, required: true },
+    navTabScroll: { type: Boolean, default: false },
   },
 
   methods: {
     ...mapActions(["setTableLoading"]),
-
-    selectAll() {
-      const currentTabNormalized = this.tabsOptions.current
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
-
-      this.callbacks.selectAll[currentTabNormalized]();
-    },
-    selectNone() {
-      const currentTabNormalized = this.tabsOptions.current
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
-
-      this.callbacks.selectNone[currentTabNormalized]();
-    },
-    async selectOk() {
-      this.setTableLoading(true);
-      await this.callbacks.btnOk();
-      this.setTableLoading(false);
-    },
 
     toggle() {
       this.$refs.baseModalFiltros.toggle();
     },
     close() {
       this.$refs.baseModalFiltros.close();
+    },
+
+    selectAll() {
+      const currentTabNormalized = normalizeText(this.tabsOptions.current, false);
+      this.callbacks.selectAll[currentTabNormalized]();
+    },
+    selectNone() {
+      const currentTabNormalized = normalizeText(this.tabsOptions.current, false);
+      this.callbacks.selectNone[currentTabNormalized]();
+    },
+    async selectOk() {
+      this.setTableLoading(true);
+      await this.callbacks.btnOk();
+      this.setTableLoading(false);
     },
   },
 };

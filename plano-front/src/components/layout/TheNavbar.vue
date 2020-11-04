@@ -21,7 +21,7 @@
           v-model.number="planoIdForm"
           @change="changeCurrentPlano(planoIdForm)"
         >
-          <option v-for="plano in AllPlanos" :value="plano.id" :key="plano.id">
+          <option v-for="plano in PlanosVisiveis" :value="plano.id" :key="plano.id">
             {{ plano.ano }} - {{ plano.nome }}
           </option>
         </select>
@@ -62,12 +62,27 @@ export default {
 
   computed: {
     ...mapGetters(["sidebarVisibility", "AllPlanos", "currentPlano"]),
+
+    PlanosVisiveis() {
+      return this.$_.filter(this.AllPlanos, ["visible", true]);
+    },
   },
 
   watch: {
     currentPlano: {
       handler(currentPlano) {
-        this.planoIdForm = currentPlano.id;
+        if (currentPlano) {
+          this.planoIdForm = currentPlano.id;
+        } else {
+          this.changeCurrentPlano(1);
+          this.planoIdForm = 1;
+
+          this.pushNotification({
+            type: "warn",
+            title: "Aviso!",
+            text: "O plano atual foi alterando para o plano 2020 - Padrão.",
+          });
+        }
       },
       immediate: true,
       deep: true,

@@ -33,10 +33,11 @@
               Observação
               <i :class="setIconByOrder(ordenacaoMainPlanos, 'obs')"></i>
             </th>
-            <th
-                    style="width: 80px"
-            >
+            <th style="width: 80px">
               Editável
+            </th>
+            <th style="width: 80px">
+              Visível
             </th>
           </template>
           <template #tbody>
@@ -50,6 +51,7 @@
               <td style="width: 150px" class="t-start">{{ plano.nome }}</td>
               <td style="width: 300px" class="t-start">{{ plano.obs }}</td>
               <td style="width: 80px" class="t-start">{{ plano.isEditable }}</td>
+              <td style="width: 80px" class="t-start">{{ plano.visible }}</td>
             </tr>
           </template>
         </BaseTable>
@@ -111,9 +113,22 @@
             <div class="form-group col m-0 px-0">
               <label required for="planoEditavel">Editável</label>
               <select
-                      id="planoEditavel"
-                      v-model.number="planoForm.isEditable"
-                      class="form-control input-ano"
+                id="planoEditavel"
+                v-model.number="planoForm.isEditable"
+                class="form-control input-ano"
+              >
+                <option value="true">Sim</option>
+                <option value="false">Não</option>
+              </select>
+            </div>
+          </div>
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0">
+              <label required for="planoVisivel">Visível</label>
+              <select
+                id="planoVisivel"
+                v-model.number="planoForm.visible"
+                class="form-control input-ano"
               >
                 <option value="true">Sim</option>
                 <option value="false">Não</option>
@@ -126,11 +141,7 @@
 
     <ModalNovoPlano ref="modalNovoPlano" :plano="planoForm" />
 
-    <ModalDelete
-      ref="modalDelete"
-      :isDeleting="isEdit"
-      @btn-deletar="handleDeletePlano"
-    >
+    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="handleDeletePlano">
       <li class="list-group-item">
         <span v-if="isEdit">
           Tem certeza que deseja excluír o plano
@@ -145,32 +156,40 @@
       <li class="list-group-item">
         <b>Adicionar:</b>
         Preencha o cartão em branco à direita e em seguida, clique em Adicionar
-        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
+        .
       </li>
       <li class="list-group-item">
-        <b>Editar:</b> Clique na linha da tabela do plano que deseja alterar. Em
-        seguida, no cartão à direita, altere as informações que desejar e clique em
-        Salvar <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
+        <b>Editar:</b>
+        Clique na linha da tabela do plano que deseja alterar. Em seguida, no cartão à
+        direita, altere as informações que desejar e clique em Salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
+        .
       </li>
       <li class="list-group-item">
-        <b>Deletar:</b> Clique na linha da tabela do plano que deseja remover. Em
-        seguida, no cartão à direita, clique em Remover
-        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
-        confirme a remoção na janela que será aberta.
+        <b>Deletar:</b>
+        Clique na linha da tabela do plano que deseja remover. Em seguida, no cartão à
+        direita, clique em Remover
+        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
+        e confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
-        <b>Copiar:</b> Clique na linha da tabela do plano que deseja copiar. Em
-        seguida, no cartão à direita, clique em Copiar
-        <font-awesome-icon :icon="['fas', 'copy']" class="icon-lightblue" /> .
+        <b>Copiar:</b>
+        Clique na linha da tabela do plano que deseja copiar. Em seguida, no cartão à
+        direita, clique em Copiar
+        <font-awesome-icon :icon="['fas', 'copy']" class="icon-lightblue" />
+        .
       </li>
       <li class="list-group-item">
-        <b>Limpar:</b> No cartão à direita, clique em Cancelar
-        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para limpar
-        as informações.
+        <b>Limpar:</b>
+        No cartão à direita, clique em Cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />
+        , para limpar as informações.
       </li>
       <li class="list-group-item">
-        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para
-        alterar a ordenação das informações.
+        <b>Ordenar:</b>
+        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
+        informações.
       </li>
     </ModalAjuda>
 
@@ -192,7 +211,8 @@ const emptyPlano = {
   ano: "",
   nome: "",
   obs: "",
-  isEditable: "true"
+  isEditable: "true",
+  visible: "true",
 };
 
 export default {

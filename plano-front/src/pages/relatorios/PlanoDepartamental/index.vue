@@ -13,21 +13,24 @@
             :currentOrder="ordenacaoMain.disciplinas"
             orderToCheck="codigo"
             width="80"
-            >Código
+          >
+            Código
           </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoMain.disciplinas"
             orderToCheck="nome"
             width="350"
             align="start"
-            >Nome
+          >
+            Nome
           </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoMain.disciplinas"
             orderToCheck="perfil.abreviacao"
             width="80"
             align="center"
-            >Perfil
+          >
+            Perfil
           </v-th-ordination>
           <v-th width="30" title="Créditos">C.</v-th>
           <v-th width="30" title="Período letivo">P.</v-th>
@@ -35,7 +38,7 @@
           <v-th width="150">Docentes</v-th>
           <v-th width="130">Horário</v-th>
 
-          <template v-if="algumPeriodoAtivado">
+          <template v-if="filtroPeriodos.ativados.length">
             <v-th width="45" :title="theadTitle.creditos">
               SC
             </v-th>
@@ -92,7 +95,7 @@
               </v-td>
               <v-td width="45" />
               <v-td
-                v-if="algumPeriodoAtivado"
+                v-if="filtroPeriodos.ativados.length"
                 width="45"
                 class="td-vagas clickable"
                 @click.native="handleClickInTurmaVaga(turma)"
@@ -105,11 +108,12 @@
 
           <tr v-show="!DisciplinasInTurmasOrdered.length">
             <v-td width="885" colspan="7">
-              <b>Nenhuma disciplina encontrada.</b> Clique no botão de filtros
-              <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" /> para
-              selecioná-las.
+              <b>Nenhuma disciplina encontrada.</b>
+              Clique no botão de filtros
+              <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+              para selecioná-las.
             </v-td>
-            <template v-if="algumPeriodoAtivado">
+            <template v-if="filtroPeriodos.ativados.length">
               <v-td width="45" class="borderX-0"></v-td>
               <v-td width="45" class="borderX-0"></v-td>
             </template>
@@ -131,7 +135,8 @@
             orderToCheck="nome"
             width="425"
             align="start"
-            >Nome
+          >
+            Nome
           </v-th-ordination>
         </template>
 
@@ -141,12 +146,11 @@
             :key="perfil.id + perfil.nome"
             @click.stop="selectPerfis(perfil)"
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
-                :value="perfil"
                 v-model="filtroPerfis.selecionados"
+                :value="perfil"
                 :indeterminate.prop="perfil.halfChecked"
                 @click.stop="selectPerfis(perfil)"
               />
@@ -174,23 +178,24 @@
             orderToCheck="codigo"
             width="70"
             align="start"
-            >Código
+          >
+            Código
           </v-th-ordination>
-
           <v-th-ordination
             :currentOrder="ordenacaoModal.disciplinas"
             orderToCheck="nome"
             width="270"
             align="start"
-            >Nome
+          >
+            Nome
           </v-th-ordination>
-
           <v-th-ordination
             :currentOrder="ordenacaoModal.disciplinas"
             orderToCheck="perfil.abreviacao"
             width="85"
             align="start"
-            >Perfil
+          >
+            Perfil
           </v-th-ordination>
         </template>
 
@@ -201,10 +206,9 @@
             @click="selectDisciplina(disciplina)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
                 v-model="filtroDisciplinas.selecionados"
                 :value="disciplina"
                 @click.stop="selectDisciplina(disciplina)"
@@ -238,12 +242,11 @@
             @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
-                :value="periodo"
                 v-model="filtroPeriodos.selecionados"
+                :value="periodo"
                 @click.stop="selecionaPeriodo(periodo)"
               />
             </v-td>
@@ -265,17 +268,16 @@
             @click="selecionaSemestre(semestre)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
-                :indeterminate.prop="semestre.halfChecked"
-                :value="semestre"
                 v-model="filtroSemestres.selecionados"
+                :value="semestre"
+                :indeterminate.prop="semestre.halfChecked"
                 @click.stop="selecionaSemestre(semestre)"
               />
             </v-td>
-            <v-td width="425" align="start">{{ semestre.nome }} </v-td>
+            <v-td width="425" align="start">{{ semestre.nome }}</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -287,16 +289,17 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Visualizar plano:</b> Clique no ícone filtros
-        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />. Em
-        seguida, utilize as abas para navegar entre os filtros. Selecione as
+        <b>Visualizar plano:</b>
+        Clique no ícone filtros
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+        . Em seguida, utilize as abas para navegar entre os filtros. Selecione as
         informações que deseja visualizar e clique em OK.
       </li>
       <li class="list-group-item">
         <b>Relatório :</b>
         Clique no ícone relatório
-        <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" />. Em
-        seguida, indique se deseja gerar o relatório completo com todas as
+        <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" />
+        . Em seguida, indique se deseja gerar o relatório completo com todas as
         disciplinas ou o relatório parcial com as disciplinas exibidas na tela.
       </li>
       <li class="list-group-item">
@@ -313,7 +316,6 @@ import { mapGetters } from "vuex";
 import pdfs from "@/common/services/pdfs";
 import { normalizeText } from "@/common/utils";
 import {
-  toggleItemInArray,
   generateHorariosText,
   generateDocentesText,
   toggleAsideModal,
@@ -328,7 +330,6 @@ import ModalVagas from "./ModalVagas";
 export default {
   name: "PlanoDepartamental",
   mixins: [
-    toggleItemInArray,
     generateHorariosText,
     generateDocentesText,
     toggleAsideModal,
@@ -380,8 +381,11 @@ export default {
             this.filtroPerfis.selecionados = [...this.PerfisOptions];
           },
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = [...this.DisciplinasOptions];
-            this.filtroPerfis.selecionados = [...this.PerfisOptions];
+            this.filtroDisciplinas.selecionados = this.$_.union(
+              this.DisciplinasOptionsFiltered,
+              this.filtroDisciplinas.selecionados
+            );
+            this.conectaDisciplinasEmPerfis();
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
@@ -398,8 +402,11 @@ export default {
             this.filtroDisciplinas.selecionados = [];
           },
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = [];
-            this.filtroPerfis.selecionados = [];
+            this.filtroDisciplinas.selecionados = this.$_.difference(
+              this.filtroDisciplinas.selecionados,
+              this.DisciplinasOptionsFiltered
+            );
+            this.conectaDisciplinasEmPerfis();
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [];
@@ -411,9 +418,11 @@ export default {
           },
         },
         btnOk: () => {
-          this.filtroPeriodos.ativados = [
-            ...this.$_.orderBy(this.filtroPeriodos.selecionados, "id"),
-          ];
+          this.filtroPeriodos.ativados = this.$_.orderBy(
+            this.filtroPeriodos.selecionados,
+            "id"
+          );
+
           this.filtroDisciplinas.ativados = [...this.filtroDisciplinas.selecionados];
         },
       },
@@ -437,8 +446,7 @@ export default {
 
       return this.$_.reduce(
         pedidosInCurrentTurma,
-        (sum, pedido) =>
-          sum + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas,
+        (sum, pedido) => sum + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas,
         0
       );
     },
@@ -524,10 +532,7 @@ export default {
       return filteredByPeriodos;
     },
     DisciplinasInTurmas() {
-      const turmasOrdered = this.$_.orderBy(
-        this.TurmasInDisciplinasPerfis,
-        "periodo"
-      );
+      const turmasOrdered = this.$_.orderBy(this.TurmasInDisciplinasPerfis, "periodo");
 
       return this.$_.map(this.DisciplinasDCCInPerfis, (disciplina) => {
         const turmasDaDisciplina = this.$_.filter(turmasOrdered, [
@@ -555,7 +560,28 @@ export default {
         vagas,
       };
     },
-    // Modals Options
+    theadTitle() {
+      const { ativados: periodosAtivados } = this.filtroPeriodos;
+
+      if (!periodosAtivados.length) {
+        return {
+          creditos: "",
+          vagas: "",
+        };
+      }
+
+      let periodoText = "";
+      this.$_.forEach(periodosAtivados, (periodo, index) => {
+        periodoText += `${periodo.id}º`;
+        if (index !== periodosAtivados.length - 1) periodoText += ", ";
+      });
+
+      return {
+        creditos: `Somatório dos créditos no ${periodoText} período`,
+        vagas: `Somatório das vagas no ${periodoText} período`,
+      };
+    },
+    //Modal Options
     PerfisOptionsOrdered() {
       return this.$_.orderBy(
         this.PerfisOptions,
@@ -608,31 +634,6 @@ export default {
     },
     DisciplinasOptions() {
       return this.DisciplinasDCCInPerfis;
-    },
-
-    theadTitle() {
-      const { ativados } = this.filtroPeriodos;
-
-      if (!ativados.length) {
-        return {
-          creditos: "",
-          vagas: "",
-        };
-      }
-
-      let periodosAtivados = "";
-      this.$_.forEach(ativados, (periodo, index) => {
-        periodosAtivados += `${periodo.id}º`;
-        if (index !== ativados.length - 1) periodosAtivados += ", ";
-      });
-
-      return {
-        creditos: `Somatório dos créditos no ${periodosAtivados} período`,
-        vagas: `Somatório das vagas no ${periodosAtivados} período`,
-      };
-    },
-    algumPeriodoAtivado() {
-      return this.filtroPeriodos.ativados.length !== 0;
     },
   },
 };

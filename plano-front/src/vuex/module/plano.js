@@ -92,10 +92,11 @@ const actions = {
   },
 
   async deletePlano({ commit, dispatch, rootGetters }, plano) {
-    await planoService.delete(plano.id, plano);
-
-    if (plano.id === rootGetters.currentPlanoId)
+    if (plano.id === rootGetters.currentPlanoId) {
       await dispatch("changeCurrentPlano", 1);
+    }
+
+    await planoService.delete(plano.id, plano);
 
     commit("PUSH_NOTIFICATION", {
       text: `Plano ${plano.nome} - ${plano.ano} foi removido`,

@@ -66,6 +66,12 @@ const state = {
       icon: "file-alt",
       description: `Listagem de turmas, horários e professores alocados por disciplina.`,
     },
+    {
+      title: "Turmas - Cursos",
+      routeName: "turmasCursos",
+      icon: "file-alt",
+      description: `Listagem de turmas alocadas para cada curso.`,
+    },
   ],
   routesGerenciar: [
     {

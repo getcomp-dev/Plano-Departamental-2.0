@@ -117,12 +117,11 @@
             @click="selectPerfis(perfil)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
-                :value="perfil"
                 v-model="filtroPerfis.selecionados"
+                :value="perfil"
                 :indeterminate.prop="perfil.halfChecked"
                 @click.stop="selectPerfis(perfil)"
               />
@@ -183,10 +182,9 @@
             @click="selectDisciplina(disciplina)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
                 v-model="filtroDisciplinas.selecionados"
                 :value="disciplina"
                 @click.stop="selectDisciplina(disciplina)"
@@ -241,13 +239,12 @@
           <tr
             v-for="docente in DocentesOptionsOrdered"
             :key="docente.id + docente.nome"
-            @click="toggle('Docentes', docente.id)"
+            @click="toggleSearchCodition('Docentes', docente.id)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
                 v-model="searchConditions.Docentes"
                 :value="docente.id"
               />
@@ -265,33 +262,67 @@
       <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Períodos'">
         <template #thead>
           <v-th width="25" />
-          <v-th width="425" align="start">Período</v-th>
+          <v-th width="425" align="start">Periodos Letivo</v-th>
         </template>
 
         <template #tbody>
           <tr
             v-for="periodo in PeriodosOptions"
             :key="periodo.id + periodo.nome"
-            @click.stop="toggle('Periodos', periodo.id)"
+            @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
+            v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
-                v-model="searchConditions.Periodos"
-                :value="periodo.id"
+                v-model="filtroPeriodos.selecionados"
+                :value="periodo"
+                @click.stop="selecionaPeriodo(periodo)"
               />
             </v-td>
-            <v-td width="425" class="t-start">{{ periodo.nome }}</v-td>
-          </tr>
-
-          <tr v-if="!AllHorarios.length">
-            <v-td colspan="2" width="450">NENHUM HORÁRIO ENCONTRADO.</v-td>
+            <v-td width="425" align="start">{{ periodo.nome }}</v-td>
           </tr>
         </template>
       </BaseTable>
 
-      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Horários'">
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Semestres'">
+        <template #thead>
+          <v-th width="25" />
+          <v-th width="425" align="start">Semestre Letivo</v-th>
+        </template>
+
+        <template #tbody>
+          <tr
+            v-for="semestre in SemestresOptions"
+            :key="semestre.id + semestre.nome"
+            @click="selecionaSemestre(semestre)"
+            v-prevent-click-selection
+          >
+            <v-td width="25" type="content">
+              <input
+                type="checkbox"
+                v-model="filtroSemestres.selecionados"
+                :value="semestre"
+                :indeterminate.prop="semestre.halfChecked"
+                @click.stop="selecionaSemestre(semestre)"
+              />
+            </v-td>
+            <v-td width="425" align="start">{{ semestre.nome }}</v-td>
+          </tr>
+        </template>
+      </BaseTable>
+
+      <BaseTable
+        type="modal"
+        v-show="modalFiltrosTabs.current === 'Horários'"
+        :hasSearchBar="true"
+      >
+        <template #thead-search>
+          <InputSearch
+            v-model="searchHorariosModal"
+            placeholder="Pesquise um horário..."
+          />
+        </template>
         <template #thead>
           <v-th width="25" />
           <v-th width="425" align="start">Horário</v-th>
@@ -299,29 +330,35 @@
 
         <template #tbody>
           <tr
-            v-for="horario in AllHorarios"
+            v-for="horario in HorariosOptionsFiltered"
             :key="horario.id + horario.horario"
-            @click="toggle('Horarios', horario.id)"
+            @click="toggleSearchCodition('Horarios', horario.id)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
                 v-model="searchConditions.Horarios"
                 :value="horario.id"
               />
             </v-td>
-            <v-td width="425" class="t-start">{{ horario.horario }}</v-td>
+            <v-td width="425" align="start">{{ horario.horario }}</v-td>
           </tr>
 
-          <tr v-if="!AllHorarios.length">
+          <tr v-if="!HorariosOptionsFiltered.length">
             <v-td colspan="2" width="450">NENHUM HORÁRIO ENCONTRADO.</v-td>
           </tr>
         </template>
       </BaseTable>
 
-      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Salas'">
+      <BaseTable
+        type="modal"
+        v-show="modalFiltrosTabs.current === 'Salas'"
+        :hasSearchBar="true"
+      >
+        <template #thead-search>
+          <InputSearch v-model="searchSalasModal" placeholder="Pesquise uma sala..." />
+        </template>
         <template #thead>
           <v-th width="25" />
           <v-th width="425" align="start">Nome</v-th>
@@ -329,23 +366,18 @@
 
         <template #tbody>
           <tr
-            v-for="sala in AllSalas"
+            v-for="sala in SalasOptionsFiltered"
             :key="sala.id + sala.nome"
-            @click="toggle('Salas', sala.id)"
+            @click="toggleSearchCodition('Salas', sala.id)"
             v-prevent-click-selection
           >
-            <v-td width="25">
-              <input
-                type="checkbox"
-                class="form-check-input position-static m-0"
-                v-model="searchConditions.Salas"
-                :value="sala.id"
-              />
+            <v-td width="25" type="content">
+              <input type="checkbox" v-model="searchConditions.Salas" :value="sala.id" />
             </v-td>
-            <v-td width="425" class="t-start">{{ sala.nome }}</v-td>
+            <v-td width="425" align="start">{{ sala.nome }}</v-td>
           </tr>
 
-          <tr v-if="!AllSalas.length">
+          <tr v-if="!SalasOptionsFiltered.length">
             <v-td colspan="2" width="450">NENHUMA SALA ENCONTRADA.</v-td>
           </tr>
         </template>
@@ -362,13 +394,12 @@
           <tr
             v-for="plano in AllPlanos"
             :key="plano.id + plano.ano + plano.nome"
-            @click="toggle('Planos', plano.id)"
+            @click="toggleSearchCodition('Planos', plano.id)"
             v-prevent-click-selection
           >
-            <v-td width="25">
+            <v-td width="25" type="content">
               <input
                 type="checkbox"
-                class="form-check-input position-static m-0"
                 v-model="searchConditions.Planos"
                 :value="plano.id"
               />
@@ -384,7 +415,7 @@
       </BaseTable>
     </ModalFiltros>
 
-    <ModalAjuda ref="modalAjuda"></ModalAjuda>
+    <ModalAjuda ref="modalAjuda" />
   </div>
 </template>
 
@@ -393,13 +424,13 @@ import { mapGetters } from "vuex";
 import turmaService from "@/common/services/turma";
 import { normalizeText, generateEmptyTurma } from "@/common/utils";
 import {
-  toggleItemInArray,
   toggleAsideModal,
   preventClickSelection,
   generateDocentesText,
   generateHorariosText,
   generateSalasText,
   conectaFiltroPerfisEDisciplinas,
+  conectaFiltrosSemestresEPeriodos,
 } from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
 import { ModalFiltros, ModalAjuda } from "@/components/modals";
@@ -407,13 +438,13 @@ import { ModalFiltros, ModalAjuda } from "@/components/modals";
 export default {
   name: "BuscarTurmas",
   mixins: [
-    toggleItemInArray,
     toggleAsideModal,
     preventClickSelection,
     generateDocentesText,
     generateHorariosText,
     generateSalasText,
     conectaFiltroPerfisEDisciplinas,
+    conectaFiltrosSemestresEPeriodos,
   ],
   components: {
     ModalAjuda,
@@ -426,6 +457,8 @@ export default {
       turmaClicked: generateEmptyTurma(),
       searchDocentesModal: "",
       searchDisciplinasModal: "",
+      searchHorariosModal: "",
+      searchSalasModal: "",
       searchConditions: {
         Planos: [],
         Disciplinas: [],
@@ -434,23 +467,31 @@ export default {
         Salas: [],
         Periodos: [],
       },
-      modalFiltrosTabs: {
-        current: "Disciplinas",
-        array: [ 
-          "Disciplinas",
-          "Docentes",
-          "Períodos",
-          "Horários",
-          "Salas",
-          "Planos",
-        ],
-        Periodos: [],
-      },
       filtroPerfis: {
         selecionados: [],
       },
       filtroDisciplinas: {
         selecionados: [],
+      },
+      filtroPeriodos: {
+        selecionados: [],
+      },
+      filtroSemestres: {
+        selecionados: [],
+      },
+      modalFiltrosTabs: {
+        current: "Perfis",
+        array: [
+          "Perfis",
+          "Disciplinas",
+          "Docentes",
+          "Períodos",
+          "Semestres",
+          "Horários",
+          "Salas",
+          "Planos",
+        ],
+        withScroll: true,
       },
       modalFiltrosCallbacks: {
         selectAll: {
@@ -459,29 +500,29 @@ export default {
             this.filtroPerfis.selecionados = [...this.PerfisOptions];
           },
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = [...this.DisciplinasOptionsFiltered];
+            this.filtroDisciplinas.selecionados = this.$_.union(
+              this.DisciplinasOptionsFiltered,
+              this.filtroDisciplinas.selecionados
+            );
             this.conectaDisciplinasEmPerfis();
           },
           Docentes: () => {
-            this.searchConditions.Docentes = [
-              ...this.$_.map(this.AllDocentes, function(d) {
-                return d.id;
-              }),
-            ];
+            this.searchConditions.Docentes = this.$_.union(
+              this.searchConditions.Docentes,
+              this.$_.map(this.DocentesFiltredModal, "id")
+            );
           },
           Horarios: () => {
-            this.searchConditions.Horarios = [
-              ...this.$_.map(this.AllHorarios, function(d) {
-                return d.id;
-              }),
-            ];
+            this.searchConditions.Horarios = this.$_.union(
+              this.searchConditions.Horarios,
+              this.$_.map(this.HorariosOptionsFiltered, "id")
+            );
           },
           Salas: () => {
-            this.searchConditions.Salas = [
-              ...this.$_.map(this.AllSalas, function(d) {
-                return d.id;
-              }),
-            ];
+            this.searchConditions.Salas = this.$_.union(
+              this.searchConditions.Salas,
+              this.$_.map(this.SalasOptionsFiltered, "id")
+            );
           },
           Planos: () => {
             this.searchConditions.Planos = [
@@ -491,11 +532,12 @@ export default {
             ];
           },
           Periodos: () => {
-            this.searchConditions.Periodos = [
-              ...this.$_.map(this.PeriodosOptions, function(d) {
-                return d.id;
-              }),
-            ];
+            this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
+            this.filtroSemestres.selecionados = [...this.SemestresOptions];
+          },
+          Semestres: () => {
+            this.filtroSemestres.selecionados = [...this.SemestresOptions];
+            this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
           },
         },
         selectNone: {
@@ -504,34 +546,54 @@ export default {
             this.filtroDisciplinas.selecionados = [];
           },
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = [];
-            this.filtroPerfis.selecionados = [];
+            this.filtroDisciplinas.selecionados = this.$_.difference(
+              this.filtroDisciplinas.selecionados,
+              this.DisciplinasOptionsFiltered
+            );
+            this.conectaDisciplinasEmPerfis();
           },
           Docentes: () => {
-            this.searchConditions.Docentes = [];
+            this.searchConditions.Docentes = this.$_.difference(
+              this.searchConditions.Docentes,
+              this.$_.map(this.DocentesFiltredModal, "id")
+            );
           },
           Horarios: () => {
-            this.searchConditions.Horarios = [];
+            this.searchConditions.Horarios = this.$_.difference(
+              this.searchConditions.Horarios,
+              this.$_.map(this.HorariosOptionsFiltered, "id")
+            );
           },
           Salas: () => {
-            this.searchConditions.Salas = [];
+            this.searchConditions.Salas = this.$_.difference(
+              this.searchConditions.Salas,
+              this.$_.map(this.SalasOptionsFiltered, "id")
+            );
           },
           Planos: () => {
             this.searchConditions.Planos = [];
           },
           Periodos: () => {
-            this.searchConditions.Periodos = [];
+            this.filtroPeriodos.selecionados = [];
+            this.filtroSemestres.selecionados = [];
+          },
+          Semestres: () => {
+            this.filtroSemestres.selecionados = [];
+            this.filtroPeriodos.selecionados = [];
           },
         },
         btnOk: async () => {
-          this.searchConditions.Disciplinas = [
-            ...this.$_.map(
-              this.filtroDisciplinas.selecionados,
-              (disciplina) => disciplina.id
-            ),
-          ];
+          this.searchConditions.Disciplinas = this.$_.map(
+            this.filtroDisciplinas.selecionados,
+            (disciplina) => disciplina.id
+          );
 
-          await this.search();
+          this.searchConditions.Periodos = this.$_.map(
+            this.filtroPeriodos.selecionados,
+            (perfil) => perfil.id
+          );
+
+          await this.searchTurmas();
         },
       },
       ordenacaoModal: {
@@ -545,28 +607,26 @@ export default {
         planos: { order: "plano.ano", type: "asc" },
         perfis: { order: "disciplina.perfil.abreviacao", type: "asc" },
       },
-      PeriodosOptions: [
-        { id: 1, nome: "Primeiro" },
-        { id: 2, nome: "Segundo (Inverno)" },
-        { id: 3, nome: "Terceiro" },
-        { id: 4, nome: "Quarto (Verão)" },
-      ],
       TurmasRetornadas: null,
     };
   },
 
   methods: {
-    search() {
-      turmaService
-        .search(this.searchConditions)
-        .then((turmas) => {
-          this.TurmasRetornadas = turmas.Turmas;
-        })
-        .catch((error) => console.log(error));
+    async searchTurmas() {
+      try {
+        const response = await turmaService.search(this.searchConditions);
+        this.TurmasRetornadas = response.Turmas;
+      } catch (error) {
+        this.pushNotification({
+          type: "error",
+          text: "Não foi possivel encontrar turmas.",
+        });
+      }
     },
 
-    toggle(fieldName, fieldValue) {
+    toggleSearchCodition(fieldName, fieldValue) {
       let i = this.$_.findIndex(this.searchConditions[fieldName], (v) => v == fieldValue);
+
       if (i === -1) this.searchConditions[fieldName].push(fieldValue);
       else this.searchConditions[fieldName].splice(i, 1);
     },
@@ -575,7 +635,6 @@ export default {
   computed: {
     ...mapGetters([
       "PerfisDCC",
-      "AllDisciplinas",
       "AllPlanos",
       "AllDocentes",
       "AllHorarios",
@@ -634,6 +693,7 @@ export default {
         };
       });
     },
+
     DisciplinasOptionsOrdered() {
       return this.$_.orderBy(
         this.DisciplinasOptionsFiltered,
@@ -656,6 +716,7 @@ export default {
     DisciplinasOptions() {
       return this.DisciplinasDCCInPerfis;
     },
+
     DocentesOptionsOrdered() {
       return this.$_.orderBy(
         this.DocentesFiltredModal,
@@ -673,6 +734,29 @@ export default {
         const apelido = normalizeText(docente.apelido);
 
         return nome.match(searchNormalized) || apelido.match(searchNormalized);
+      });
+    },
+
+    HorariosOptionsFiltered() {
+      if (this.searchHorariosModal === "") return this.AllHorarios;
+
+      const searchNormalized = normalizeText(this.searchHorariosModal);
+
+      return this.$_.filter(this.AllHorarios, (horario) => {
+        const nome = normalizeText(horario.horario);
+
+        return nome.match(searchNormalized);
+      });
+    },
+    SalasOptionsFiltered() {
+      if (this.searchSalasModal === "") return this.AllSalas;
+
+      const searchNormalized = normalizeText(this.searchSalasModal);
+
+      return this.$_.filter(this.AllSalas, (sala) => {
+        const nome = normalizeText(sala.nome);
+
+        return nome.match(searchNormalized);
       });
     },
   },

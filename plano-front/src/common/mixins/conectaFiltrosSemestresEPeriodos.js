@@ -1,6 +1,9 @@
 import { mapGetters } from "vuex";
+import { toggleItemInArray } from "./index";
 
 export default {
+  mixins: [toggleItemInArray],
+
   methods: {
     periodoEstaSelecionado(periodoId) {
       return this.$_.some(this.filtroPeriodos.selecionados, ["id", periodoId]);

@@ -2,13 +2,13 @@
   <transition name="sidebar-animation">
     <nav v-show="sidebarVisibility" class="sidebar bg-light" @click.stop="">
       <SidebarMenu :menuPages="routesHome" />
-      <SidebarMenu v-if="Admin && planoIsEditable" menuTitle="Plano" :menuPages="routesPlano" />
-      <SidebarMenu menuTitle="Relatórios" :menuPages="routesRelatorios" />
       <SidebarMenu
-        v-if="SuperAdmin"
-        menuTitle="Gerenciar"
-        :menuPages="routesGerenciar"
+        v-if="Admin && currentPlano.isEditable"
+        menuTitle="Plano"
+        :menuPages="routesPlano"
       />
+      <SidebarMenu menuTitle="Relatórios" :menuPages="routesRelatorios" />
+      <SidebarMenu v-if="SuperAdmin" menuTitle="Gerenciar" :menuPages="routesGerenciar" />
       <SidebarMenu menuTitle="Histórico" :menuPages="routesHistorico" />
     </nav>
   </transition>
@@ -20,8 +20,7 @@ import SidebarMenu from "./SidebarMenu.vue";
 
 export default {
   name: "TheSidebar",
-  components: {SidebarMenu,
-  },
+  components: { SidebarMenu },
 
   computed: {
     ...mapGetters([
@@ -33,12 +32,8 @@ export default {
       "routesRelatorios",
       "routesGerenciar",
       "routesHistorico",
-      "currentPlano"
+      "currentPlano",
     ]),
-
-    planoIsEditable() {
-      return this.currentPlano.isEditable
-    }
   },
 };
 </script>
