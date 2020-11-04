@@ -36,7 +36,8 @@ router.post('/', function (req, res, next) {
         ano: req.body.ano,
         nome: req.body.nome,
         obs: req.body.obs,
-        isEditable: (req.body.isEditable ? req.body.isEditable : true)
+        isEditable: (req.body.isEditable ? req.body.isEditable : true),
+        visible: (req.body.visible ? req.body.visible : true),
     }).then(function (plano) {
         ioBroadcast(SM.PLANO_CREATED, {'msg': 'Plano criado!', 'Plano': plano})
         console.log('\nRequest de '+req.usuario.nome+'\n')
@@ -65,7 +66,8 @@ router.post('/:id([0-9]+)', function (req, res, next) {
             ano: req.body.ano,
             nome: req.body.nome,
             obs: req.body.obs,
-            isEditable: req.body.isEditable
+            isEditable: req.body.isEditable,
+            visible: req.body.visible
         })
     }).then(function (plano) {
         ioBroadcast(SM.PLANO_UPDATED, {'msg': 'Plano atualizado!', 'Plano': plano})

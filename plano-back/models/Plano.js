@@ -13,6 +13,9 @@ module.exports = function (sequelize, DataTypes) {
         },
         isEditable: {
             type: DataTypes.BOOLEAN
+        },
+        visible: {
+            type: DataTypes.BOOLEAN
         }
     }, {
         freezeTableName: true,
