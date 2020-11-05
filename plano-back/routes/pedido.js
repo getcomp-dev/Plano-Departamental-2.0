@@ -55,6 +55,7 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
     console.log('\nRequest de '+req.usuario.nome+'\n')
 
     models.Pedido.findOne({
+        attributes: ['vagasPeriodizadas', 'vagasNaoPeriodizadas', 'createdAt', 'updatedAt', 'Curso', 'Turma'],
         where: {
             Curso: req.params.Curso,
             Turma: req.params.Turma
