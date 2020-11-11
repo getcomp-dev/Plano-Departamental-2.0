@@ -79,7 +79,7 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
         return pedido.updateAttributes({
             vagasPeriodizadas: req.body.vagasPeriodizadas,
             vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
-            CursoId: req.body.Curso,
+            Curso: req.body.Curso,
             Turma: req.body.Turma
         })
     }).then(function (pedido) {
