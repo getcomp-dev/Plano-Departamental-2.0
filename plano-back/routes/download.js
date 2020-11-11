@@ -76,6 +76,29 @@ router.get('/', function(req, res, next){
 
 })
 
+router.get('/createTurmasCursosZip'), function(req, res, next){
+    const zip = new JSZip()
+    let filenames = fs.readdirSync('/home/planodcc/Plano-Departamental-2.0/plano-back')
+    filenames.forEach((f) => {
+        if(f.includes('.pdf') && !['Cargas.pdf', 'Labs.pdf', 'Horarios.pdf', 'Plano-departamental.pdf'].includes(f)){
+            let pdf = fs.readFileSync(`./${f}`, (err, data) => {
+                if(err) throw err
+                return data
+            })
+            zip.file(f, pdf)
+            zip.generateAsync({type: "uint8array"})
+                .then(function (r) {
+                    fs.writeFileSync('TurmasCursos.zip', r);
+                });
+            res.send({success: true})
+        }
+    })
+})
+
+router.get('/downloadTurmasCursosZip', function(req, res, next){
+    res.download('./TurmasCursos.zip', 'TurmasCursos.zip')
+})
+
 router.get('/all', function(req, res, next){
     res.download('./data.zip', 'data.zip')
 })
