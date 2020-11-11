@@ -7137,12 +7137,14 @@ const pdfRelatorioDisciplinas = () => new Promise((resolve, reject) =>  {
     pdfDocPlano.end();
 })
 
-function turmasCurso(curso, listTurmas, listPedidos) {
+function turmasCurso(curso, listTurmas, listPedidos, listDisciplinas) {
     let turmas = []
     listTurmas.forEach((t) => {
         let pedidos = _.find(listPedidos, ['Turma', t.id])
-        let pedido = _.find(pedidos, ['Curso', curso])
+        let pedido = _.find(pedidos, ['Curso', curso.id])
         if(pedido.vagasPeriodizadas > 0 || pedido.vagasNaoPeriodizadas > 0){
+            let disciplina = _.find(listDisciplinas, ['id', t.Disciplina])
+            t.disciplina = disciplina
             turmas.push({turma: t, pedido: pedido})
         }
     })
@@ -7181,8 +7183,7 @@ const pdfTurmasCursos = (curso) => new Promise((resolve, reject) => {
         ],
     });
         let listTurmas =  _.filter(this.Turmas, {'Plano': this.PlanoAtual})
-        let listPedidos = this.Pedidos
-        let turmas = turmasCurso(curso.id, listTurmas, listPedidos);
+        let turmas = turmasCurso(curso, listTurmas, this.Pedidos, this.Disciplinas);
         if (turmas.length > 0) {
             tables.push({
                 style: "tableExample",
@@ -7243,8 +7244,6 @@ const pdfTurmasCursos = (curso) => new Promise((resolve, reject) => {
             ];
 
             for (let j = 0; j < turmas.length; j++) {
-                let pedido = _.find(this.Pedidos, {'Curso': curso.id, 'Turma': turmas[j].id})
-                let disciplina = _.find(this.Disciplinas, ['id', turmas[j].Disciplina])
                 let horario1 = _.find(this.Horarios, {
                     id: turmas[j].turma.Horario1,
                 });
@@ -7264,25 +7263,25 @@ const pdfTurmasCursos = (curso) => new Promise((resolve, reject) => {
                 tabelaTurmasBody.push(
                     [
                         {
-                            text: turmas[j].periodo,
+                            text: turmas[j].turma.periodo,
                             alignment: "center",
                             fontSize: 8,
                             bold: true,
                         },
                         {
-                            text: disciplina.codigo,
+                            text: turmas[j].turma.disciplina.codigo,
                             alignment: "left",
                             fontSize: 8,
                             bold: true,
                         },
                         {
-                            text: disciplina.nome,
+                            text: turmas[j].turma.disciplina.nome,
                             alignment: "left",
                             fontSize: 8,
                             bold: true,
                         },
                         {
-                            text: turmas[j].letra,
+                            text: turmas[j].turma.letra,
                             alignment: "center",
                             fontSize: 8,
                             bold: true,
@@ -7295,13 +7294,13 @@ const pdfTurmasCursos = (curso) => new Promise((resolve, reject) => {
                             bold: true,
                         },
                         {
-                            text: (pedido.vagasPeriodizadas ? pedido.vagasPeriodizadas : ''),
+                            text: (turmas[j].pedido.vagasPeriodizadas ? turmas[j].pedido.vagasPeriodizadas : ''),
                             alignment: "center",
                             fontSize: 8,
                             bold: true,
                         },
                         {
-                            text: (pedido.vagasNaoPeriodizadas ? pedido.vagasNaoPeriodizadas : ''),
+                            text: (turmas[j].pedido.vagasNaoPeriodizadas ? turmas[j].pedido.vagasNaoPeriodizadas : ''),
                             alignment: "center",
                             fontSize: 8,
                             bold: true,
