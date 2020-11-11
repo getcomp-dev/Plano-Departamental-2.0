@@ -85,7 +85,7 @@ router.get('/createTurmasCursosZip', function(req, res, next){
                 if(err) throw err
                 return data
             })
-            zip.file(f, pdf)
+            zip.file(f, pdf, {binary: true})
         }
     })
     zip.generateAsync({type: "uint8array"})
