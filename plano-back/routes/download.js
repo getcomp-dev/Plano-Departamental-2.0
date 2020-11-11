@@ -90,7 +90,8 @@ router.get('/createTurmasCursosZip', function(req, res, next){
     })
     zip.generateAsync({type: "uint8array"})
         .then(function (r) {
-            fs.writeFileSync('TurmasCursos.zip', r).then(res.send({success: true})).catch(res.send({success: false}))
+            fs.writeFileSync('TurmasCursos.zip', r)
+            res.send({success: true})
         });
 
 })
