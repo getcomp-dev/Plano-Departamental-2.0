@@ -14,89 +14,78 @@
         >
           <option
             v-for="turma in TurmasOptionsModalVagas"
-            :key="'mdVagas' + turma.id + turma.periodo"
+            :key="turma.id + turma.letra"
             :value="turma.letra"
-            >{{ turma.letra }}</option
           >
+            {{ turma.letra }}
+          </option>
         </select>
       </div>
 
       <div class="div-table">
-        <BaseTable :type="'modal'">
+        <BaseTable :styles="'height:auto'">
           <template #thead>
-            <th
-              class="clickable"
-              style="width: 55px"
-              title="Código"
-              @click="toggleOrder(ordenacaoVagas, 'curso.codigo')"
+            <v-th-ordination
+              :currentOrder="ordenacaoVagas"
+              orderToCheck="curso.codigo"
+              width="65"
+              align="start"
             >
-              Cód.
-              <i :class="setIconByOrder(ordenacaoVagas, 'curso.codigo')"></i>
-            </th>
-            <th
-              class="clickable t-start"
-              style="width: 300px"
-              @click="toggleOrder(ordenacaoVagas, 'curso.nome')"
+              Código
+            </v-th-ordination>
+            <v-th-ordination
+              :currentOrder="ordenacaoVagas"
+              orderToCheck="curso.nome"
+              width="300"
+              align="start"
             >
               Nome
-              <i :class="setIconByOrder(ordenacaoVagas, 'curso.nome')"></i>
-            </th>
-
-            <th
+            </v-th-ordination>
+            <v-th-ordination
+              :currentOrder="ordenacaoVagas"
+              orderToCheck="vagasPeriodizadas"
+              orderType="desc"
+              width="55"
               title="Vagas periodizadas"
-              class="clickable less-padding"
-              style="width: 55px"
-              @click="toggleOrder(ordenacaoVagas, 'vagasPeriodizadas', 'desc')"
             >
               Grade
-              <i
-                :class="setIconByOrder(ordenacaoVagas, 'vagasPeriodizadas')"
-              ></i>
-            </th>
-            <th
+            </v-th-ordination>
+            <v-th-ordination
+              :currentOrder="ordenacaoVagas"
+              orderToCheck="vagasNaoPeriodizadas"
+              orderType="desc"
+              width="55"
               title="Vagas não periodizadas"
-              class="clickable less-padding"
-              style="width: 55px"
-              @click="
-                toggleOrder(ordenacaoVagas, 'vagasNaoPeriodizadas', 'desc')
-              "
             >
               Extra
-              <i
-                :class="setIconByOrder(ordenacaoVagas, 'vagasNaoPeriodizadas')"
-              ></i>
-            </th>
-            <th
+            </v-th-ordination>
+            <v-th-ordination
+              :currentOrder="ordenacaoVagas"
+              orderToCheck="vagasTotais"
+              orderType="desc"
+              width="55"
               title="Total de vagas"
-              class="clickable less-padding"
-              style="width: 55px"
-              @click="toggleOrder(ordenacaoVagas, 'vagasTotais', 'desc')"
             >
               Total
-              <i :class="setIconByOrder(ordenacaoVagas, 'vagasTotais')"></i>
-            </th>
+            </v-th-ordination>
           </template>
 
           <template #tbody>
             <tr
               v-for="pedido in PedidosOrdered"
-              :key="'trPedido' + pedido.Curso + pedido.Turma"
+              :key="pedido.Turma + pedido.curso.codigo"
             >
-              <td style="width: 55px">{{ pedido.curso.codigo }}</td>
-              <td style="width: 300px" class="t-start">
-                {{ pedido.curso.nome }}
-              </td>
-              <td style="width: 55px">{{ pedido.vagasPeriodizadas }}</td>
-              <td style="width: 55px">{{ pedido.vagasNaoPeriodizadas }}</td>
-              <td style="width: 55px">
-                {{ pedido.vagasTotais }}
-              </td>
+              <v-td width="65" align="start">{{ pedido.curso.codigo }}</v-td>
+              <v-td width="300" align="start">{{ pedido.curso.nome }}</v-td>
+              <v-td width="55">{{ pedido.vagasPeriodizadas }}</v-td>
+              <v-td width="55">{{ pedido.vagasNaoPeriodizadas }}</v-td>
+              <v-td width="55">{{ pedido.vagasTotais }}</v-td>
             </tr>
 
             <tr v-show="!PedidosOrdered.length">
-              <td colspan="5" style="width:520px">
-                <b>Turma atual não possui nenhuma vaga cadastrada.</b>
-              </td>
+              <v-td colspan="5" width="530">
+                <b>Turma atual não possui nenhuma vaga cadastrada</b>
+              </v-td>
             </tr>
           </template>
         </BaseTable>
@@ -107,11 +96,9 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { toggleItemInArray, toggleOrdination } from "@/common/mixins";
 
 export default {
   name: "ModalVagas",
-  mixins: [toggleItemInArray, toggleOrdination],
   props: {
     turma: { type: Object | null, required: true },
   },
@@ -151,8 +138,7 @@ export default {
 
       const pedidosDaTurma = this.$_.filter(
         this.Pedidos[currentTurmaSelected.id],
-        (pedido) =>
-          pedido.vagasPeriodizadas > 0 || pedido.vagasNaoPeriodizadas > 0
+        (pedido) => pedido.vagasPeriodizadas > 0 || pedido.vagasNaoPeriodizadas > 0
       );
 
       return this.$_.map(pedidosDaTurma, (pedido) => {
@@ -206,13 +192,10 @@ export default {
   width: 100%;
 }
 .modal-vagas-header > .select-letra {
-  width: 60px !important;
-  height: 25px !important;
-  font-size: 12px !important;
-  padding: 2px 5px !important;
+  width: 60px;
+  height: 25px;
+  font-size: 12px;
+  padding: 2px 5px;
   text-align: start;
-}
-.modal-vagas .modal-table tbody tr > td {
-  height: 20px !important;
 }
 </style>

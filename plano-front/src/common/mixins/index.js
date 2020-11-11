@@ -1,5 +1,4 @@
 import toggleItemInArray from "./toggleItemInArray";
-import toggleOrdination from "./toggleOrdination";
 import maskTurmaLetra from "./maskTurmaLetra";
 import maskOnlyNumber from "./maskOnlyNumber";
 import generateHorariosText from "./generateHorariosText";
@@ -13,6 +12,7 @@ import convertDateUTC from "./convertDateUTC";
 import maskEmptyToZero from "./maskEmptyToZero";
 import conectaFiltroPerfisEDisciplinas from "./conectaFiltroPerfisEDisciplinas";
 import preventClickSelection from "./preventClickSelection";
+import generateBooleanText from "./generateBooleanText";
 
 export {
   preventClickSelection,
@@ -24,10 +24,10 @@ export {
   cursoPopoverContent,
   toggleAsideModal,
   generateSalasText,
+  generateBooleanText,
   generateDocentesText,
   generateHorariosText,
   maskOnlyNumber,
   maskTurmaLetra,
   toggleItemInArray,
-  toggleOrdination,
 };

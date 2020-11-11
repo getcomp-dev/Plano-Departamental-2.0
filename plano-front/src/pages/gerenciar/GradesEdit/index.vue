@@ -8,38 +8,32 @@
       <div class="div-table">
         <BaseTable>
           <template #thead>
-            <th
-              style="width:35px"
-              class="clickable"
+            <v-th-ordination
+              :currentOrder="ordenacaoDisciplinasMain"
+              orderToCheck="periodo"
+              width="35"
               title="Período"
-              @click="toggleOrder(ordenacaoDisciplinasMain, 'periodo')"
             >
               P.
-              <i :class="setIconByOrder(ordenacaoDisciplinasMain, 'periodo')"></i>
-            </th>
-            <th
-              style="width:80px"
-              class="clickable t-start"
-              @click="toggleOrder(ordenacaoDisciplinasMain, 'disciplina_codigo')"
+            </v-th-ordination>
+            <v-th-ordination
+              :currentOrder="ordenacaoDisciplinasMain"
+              orderToCheck="disciplina_codigo"
+              width="80"
+              align="start"
             >
               Código
-              <i
-                :class="
-                  setIconByOrder(ordenacaoDisciplinasMain, 'disciplina_codigo')
-                "
-              ></i>
-            </th>
-            <th
-              style="width:400px"
-              class="clickable t-start"
-              @click="toggleOrder(ordenacaoDisciplinasMain, 'disciplina_nome')"
+            </v-th-ordination>
+            <v-th-ordination
+              :currentOrder="ordenacaoDisciplinasMain"
+              orderToCheck="disciplina_nome"
+              width="400"
+              align="start"
             >
               Disciplina
-              <i
-                :class="setIconByOrder(ordenacaoDisciplinasMain, 'disciplina_nome')"
-              ></i>
-            </th>
+            </v-th-ordination>
           </template>
+
           <template #tbody>
             <template v-for="disciplinaGrade in DisciplinaGradesOrdered">
               <tr
@@ -48,25 +42,24 @@
                 :class="[
                   'clickable',
                   { 'bg-custom': isEven(disciplinaGrade.periodo) },
-                  {
-                    'bg-selected':
-                      disciplinaSelectedId === disciplinaGrade.Disciplina,
-                  },
+                  { 'bg-selected': disciplinaSelectedId === disciplinaGrade.Disciplina },
                 ]"
               >
-                <td style="width:35px">{{ disciplinaGrade.periodo }}</td>
-                <td style="width:80px" class="t-start">
+                <v-td width="35">{{ disciplinaGrade.periodo }}</v-td>
+                <v-td width="80" align="start">
                   {{ disciplinaGrade.disciplina_codigo }}
-                </td>
-                <td style="width:400px" class="t-start">
+                </v-td>
+                <v-td width="400" align="start">
                   {{ disciplinaGrade.disciplina_nome }}
-                </td>
+                </v-td>
               </tr>
             </template>
+
             <tr v-show="!hasGradeSelected">
-              <td style="width:515px">
-                <b>Nenhuma disciplina encontrada</b>, selecione uma grade.
-              </td>
+              <v-td width="515" colspan="3">
+                <b>Nenhuma disciplina encontrada</b>
+                , selecione uma grade.
+              </v-td>
             </tr>
           </template>
         </BaseTable>
@@ -101,10 +94,11 @@
               >
                 <option
                   v-for="grade in GradesFiltredByCurrentCurso"
-                  :key="'grade-id' + grade.id"
+                  :key="grade.id + grade.nome"
                   :value="grade.id"
-                  >{{ grade.nome }}</option
                 >
+                  {{ grade.nome }}
+                </option>
               </select>
             </div>
           </div>
@@ -113,9 +107,7 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group m-0 col px-0">
-              <label required for="disciplina" class="col-form-label"
-                >Disciplina</label
-              >
+              <label required for="disciplina" class="col-form-label">Disciplina</label>
               <select
                 :disabled="!hasGradeSelected"
                 type="text"
@@ -124,25 +116,26 @@
                 v-model="disciplinaGradeForm.Disciplina"
                 @change="clearClick()"
               >
-                <option v-if="Disciplinas.length === 0" type="text" value
-                  >Nenhuma Disciplina Encontrada</option
-                >
+                <option v-if="Disciplinas.length === 0" type="text" value>
+                  Nenhuma Disciplina Encontrada
+                </option>
                 <option
                   v-else
                   v-for="disciplina in Disciplinas"
-                  :key="'2-grade-id' + disciplina.id"
+                  :key="disciplina.id + disciplina.nome"
                   :value="disciplina.id"
-                  >{{ disciplina.nome }}</option
                 >
+                  {{ disciplina.nome }}
+                </option>
               </select>
             </div>
           </div>
 
           <div class="row mb-2 mx-0">
             <div class="form-group m-0 col px-0">
-              <label required for="periodoDisciplina" class="col-form-label pb-1"
-                >Período</label
-              >
+              <label required for="periodoDisciplina" class="col-form-label pb-1">
+                Período
+              </label>
               <div class="d-flex align-items-center">
                 <input
                   :disabled="!hasGradeSelected"
@@ -196,8 +189,8 @@
       <li v-if="isEditDisciplina" class="list-group-item">
         <span>
           Tem certeza que deseja excluír a disciplina
-          <b>{{ nomeDisciplinaAtual }}</b
-          >?
+          <b>{{ nomeDisciplinaAtual }}</b>
+          ?
         </span>
       </li>
       <li v-else class="list-group-item">Nenhuma disciplina selecionada.</li>
@@ -205,36 +198,42 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Visualizar conteúdo:</b> Na parte superior do cartão à direita, selecione
-        o curso e a grade que deseja visualizar.
+        <b>Visualizar conteúdo:</b>
+        Na parte superior do cartão à direita, selecione o curso e a grade que deseja
+        visualizar.
       </li>
       <li class="list-group-item">
         <b>Adicionar:</b>
-        Para adicionar uma disciplinas à grade selecionada, com a parte de baixo do
-        cartão à direita em branco, preencha-a e em seguida clique em Adicionar
-        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
+        Para adicionar uma disciplinas à grade selecionada, com a parte de baixo do cartão
+        à direita em branco, preencha-a e em seguida clique em Adicionar
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
+        .
       </li>
       <li class="list-group-item">
         <b>Editar:</b>
         Para editar uma disciplinas da grade selecionada clique na linha da tabela da
         disciplina que deseja alterar. Em seguida, no cartão à direita, altere as
         informações que desejar e clique em Salvar
-        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
+        .
       </li>
       <li class="list-group-item">
-        <b>Deletar:</b> Clique na linha da tabela da disciplina que deseja remover.
-        Em seguida, no cartão à direita, clique em Remover
-        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
-        confirme a remoção na janela que será aberta.
+        <b>Deletar:</b>
+        Clique na linha da tabela da disciplina que deseja remover. Em seguida, no cartão
+        à direita, clique em Remover
+        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
+        e confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
-        <b>Limpar:</b> No cartão à direita, clique em Cancelar
-        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para limpar
-        as informações da disciplina porém a grade continuará selecionada.
+        <b>Limpar:</b>
+        No cartão à direita, clique em Cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />
+        , para limpar as informações da disciplina porém a grade continuará selecionada.
       </li>
       <li class="list-group-item">
-        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para
-        alterar a ordenação das informações.
+        <b>Ordenar:</b>
+        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
+        informações.
       </li>
     </ModalAjuda>
   </div>
@@ -243,7 +242,7 @@
 <script>
 import gradeService from "@/common/services/grade";
 import disciplinaGradeService from "@/common/services/disciplinaGrade";
-import { toggleOrdination, maskOnlyNumber } from "@/common/mixins";
+import { maskOnlyNumber } from "@/common/mixins";
 import { Card } from "@/components/ui";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
 
@@ -260,7 +259,7 @@ const emptyDisciplinaGrade = {
 };
 export default {
   name: "DashboardGradeEdit",
-  mixins: [toggleOrdination, maskOnlyNumber],
+  mixins: [maskOnlyNumber],
   components: {
     Card,
     ModalAjuda,
@@ -414,9 +413,7 @@ export default {
           this.$notify({
             group: "general",
             title: `Sucesso!`,
-            text: `A Disciplina <b>${nome_disciplina}</b> foi adicionada à Grade <b>${
-              this.gradeForm.nome
-            }</b>!`,
+            text: `A Disciplina <b>${nome_disciplina}</b> foi adicionada à Grade <b>${this.gradeForm.nome}</b>!`,
             type: "success",
           });
         })
@@ -518,10 +515,7 @@ export default {
       );
     },
     GradesFiltredByCurrentCurso() {
-      return this.$_.filter(
-        this.Grades,
-        (grade) => grade.Curso == this.currentCursoId
-      );
+      return this.$_.filter(this.Grades, (grade) => grade.Curso == this.currentCursoId);
     },
     Grades() {
       return this.$store.state.grade.Grades;

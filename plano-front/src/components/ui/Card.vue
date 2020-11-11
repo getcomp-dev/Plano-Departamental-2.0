@@ -72,21 +72,23 @@ export default {
   font-size: 12px !important;
   padding-top: 15px !important;
 }
-.card label {
-  line-height: 1.2 !important;
-  font-size: 12px !important;
-  text-align: start !important;
-  padding-top: 0 !important;
+.card > .card-body label {
+  line-height: 1.2;
+  font-size: 12px;
+  text-align: start;
+  padding: 0;
+  margin-bottom: 3px;
 }
-.card .form-check label {
-  height: 25px !important;
+.card > .card-body .form-check label {
+  height: 25px;
   display: flex;
   align-items: center;
 }
 
 .card select,
 .card input[type="text"],
-.card input[type="number"] {
+.card input[type="number"],
+.card input[type="password"] {
   height: 28px !important;
   padding: 5px !important;
   font-size: 12px !important;

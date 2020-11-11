@@ -19,15 +19,16 @@
               v-model="turmaForm.disciplina"
               @change="setDefaultHorarios"
             >
-              <option v-if="!DisciplinasOrderedByNome.length" type="text" value
-                >Nenhuma Disciplina Encontrada</option
-              >
+              <option v-if="!DisciplinasOrderedByNome.length" type="text" value>
+                Nenhuma Disciplina Encontrada
+              </option>
               <option
                 v-for="disciplina in DisciplinasOrderedByNome"
                 :key="'2-' + disciplina.id"
                 :value="disciplina"
-                >{{ disciplina.nome }}</option
               >
+                {{ disciplina.nome }}
+              </option>
             </select>
           </div>
           <div class="form-group col-4">
@@ -40,15 +41,16 @@
               v-model="turmaForm.disciplina"
               @change="setDefaultHorarios"
             >
-              <option v-if="!DisciplinasOrderedByCodigo.length" type="text" value
-                >Nenhuma Disciplina Encontrada</option
-              >
+              <option v-if="!DisciplinasOrderedByCodigo.length" type="text" value>
+                Nenhuma Disciplina Encontrada
+              </option>
               <option
                 v-for="disciplina in DisciplinasOrderedByCodigo"
                 :key="'1-' + disciplina.id"
                 :value="disciplina"
-                >{{ disciplina.codigo }}</option
               >
+                {{ disciplina.codigo }}
+              </option>
             </select>
           </div>
         </div>
@@ -56,9 +58,9 @@
           <p class="modal-title col p-0 m-0 ">
             {{ turmaForm.disciplina.codigo + " - " + turmaForm.disciplina.nome }}
           </p>
-          <span class="modal-title p-0 m-0 text-right" style="font-weight:normal"
-            >Créditos: {{ turmaForm.disciplina.creditoTotal }}</span
-          >
+          <span class="modal-title p-0 m-0 text-right" style="font-weight:normal">
+            Créditos: {{ turmaForm.disciplina.creditoTotal }}
+          </span>
         </div>
 
         <!-- Período, Turma e Creditos -->
@@ -122,16 +124,17 @@
               v-model="turmaForm.Docente1"
               v-on:change="checkDocente(1)"
             >
-              <option v-if="!DocentesOrdered.length" type="text" value=""
-                >Nenhum Docente Encontrado</option
-              >
+              <option v-if="!DocentesOrdered.length" type="text" value="">
+                Nenhum Docente Encontrado
+              </option>
               <option v-else type="text" value=""></option>
               <option
                 v-for="docente in DocentesOrdered"
                 :key="'1-docente-id' + docente.id"
                 :value="docente.id"
-                >{{ docente.apelido }}</option
               >
+                {{ docente.apelido }}
+              </option>
             </select>
             <select
               type="text"
@@ -141,16 +144,17 @@
               v-model="turmaForm.Docente2"
               v-on:change="checkDocente(2)"
             >
-              <option v-if="!DocentesOrdered.length" type="text" value=""
-                >Nenhum Docente Encontrado</option
-              >
+              <option v-if="!DocentesOrdered.length" type="text" value="">
+                Nenhum Docente Encontrado
+              </option>
               <option v-else type="text" value=""></option>
               <option
                 v-for="docente in DocentesOrdered"
                 :key="'2-docente-id' + docente.id"
                 :value="docente.id"
-                >{{ docente.apelido }}</option
               >
+                {{ docente.apelido }}
+              </option>
             </select>
           </div>
 
@@ -169,8 +173,9 @@
                 v-for="horario in HorariosFiltredByTurno"
                 :key="'1-horario-id' + horario.id"
                 :value="horario.id"
-                >{{ horario.horario }}</option
               >
+                {{ horario.horario }}
+              </option>
             </select>
 
             <select
@@ -188,21 +193,19 @@
                   v-for="horario in HorariosEAD"
                   :key="'2-horarioEAD-id' + horario.id"
                   :value="horario.id"
-                  >{{ horario.horario }}</option
                 >
+                  {{ horario.horario }}
+                </option>
               </template>
               <template v-else>
-                <option
-                  v-if="!disciplinaIsIntegralEAD"
-                  type="text"
-                  value=""
-                ></option>
+                <option v-if="!disciplinaIsIntegralEAD" type="text" value=""></option>
                 <option
                   v-for="horario in HorariosFiltredByTurno"
                   :key="'2-horario-id' + horario.id"
                   :value="horario.id"
-                  >{{ horario.horario }}</option
                 >
+                  {{ horario.horario }}
+                </option>
               </template>
             </select>
           </div>
@@ -218,16 +221,17 @@
                 v-model="turmaForm.Sala1"
                 v-on:change="checkSala()"
               >
-                <option v-if="AllSalas.length === 0" type="text" value=""
-                  >Nenhuma Sala Encontrada</option
-                >
+                <option v-if="AllSalas.length === 0" type="text" value="">
+                  Nenhuma Sala Encontrada
+                </option>
                 <option v-else value=""></option>
                 <option
                   v-for="sala in AllSalas"
                   :key="'1-sala-id' + sala.id"
                   :value="sala.id"
-                  >{{ sala.nome }}</option
                 >
+                  {{ sala.nome }}
+                </option>
               </select>
               <select
                 v-if="hasMoreThan4Creditos && turmaForm.disciplina.ead != 2"
@@ -238,16 +242,17 @@
                 v-model="turmaForm.Sala2"
                 v-on:change="checkSala()"
               >
-                <option v-if="AllSalas.length === 0" type="text" value=""
-                  >Nenhuma Sala Encontrada</option
-                >
+                <option v-if="AllSalas.length === 0" type="text" value="">
+                  Nenhuma Sala Encontrada
+                </option>
                 <option v-else value=""></option>
                 <option
                   v-for="sala in AllSalas"
                   :key="'2-sala-id' + sala.id"
                   :value="sala.id"
-                  >{{ sala.nome }}</option
                 >
+                  {{ sala.nome }}
+                </option>
               </select>
             </template>
           </div>
@@ -273,13 +278,11 @@
       <div class="w-100 d-flex justify-content-between mb-1">
         <h3 class="modal-title">VAGAS</h3>
 
-        <p class="modal-title" style="font-weight:normal">
-          Total: {{ totalPedidos }}
-        </p>
+        <p class="modal-title" style="font-weight:normal">Total: {{ totalPedidos }}</p>
       </div>
 
       <div class="div-table">
-        <BaseTable :type="'modal'" :styles="'height:350px'" :hasSearchBar="true">
+        <BaseTable type="modal" :styles="'height:350px'" :hasSearchBar="true">
           <template #thead-search>
             <InputSearch
               v-model="searchCursos"
@@ -311,29 +314,24 @@
               text="Vagas"
             />
           </template#thead>
+
           <template#tbody>
-            <tr
-              v-for="curso in CursosTableOrdered"
-              :key="'vaga' + curso.id + '-CursosVagas'"
-            >
-              <td style="width: 50px" class="t-start">
+            <tr v-for="curso in CursosTableOrdered" :key="curso.id + curso.codigo">
+              <v-td width="50" align="start">
                 {{ curso.codigo }}
-              </td>
-              <td style="width: 320px" class="t-start">
+              </v-td>
+              <v-td width="320" align="start" :title="curso.nome">
                 {{ curso.nome }}
-              </td>
-              <td style="width: 80px">
-                <InputsPedidosDCC
-                  :index="curso.indiceVaga"
-                  :turma="turma"
-                  :type="'modal'"
-                />
-              </td>
+              </v-td>
+              <v-td width="80" type="content">
+                <InputsPedidosDCC type="modal" :index="curso.indiceVaga" :turma="turma" />
+              </v-td>
             </tr>
+
             <tr v-if="!CursosTableOrdered.length">
-              <td colspan="3" style="width:450px">
-                NENHUM CURSO ENCONTRADO.
-              </td>
+              <v-td colspan="3" width="450">
+                NENHUM CURSO ENCONTRADO
+              </v-td>
             </tr>
           </template#tbody>
         </BaseTable>
@@ -350,7 +348,7 @@ import InputSearch from "../ui/InputSearch";
 import InputsPedidosDCC from "../ui/InputsPedidosDCC.vue";
 
 export default {
-  name: "ModalEditTurmaBody",
+  name: "ModalEditTurma",
   mixins: [maskTurmaLetra],
   components: { InputSearch, InputsPedidosDCC },
   props: {
@@ -425,8 +423,7 @@ export default {
     },
     setTurnoByHorario(horarioAtual) {
       if (horarioAtual === 1) this.adjustTurno(this.turmaForm.Horario1);
-      else if (!this.disciplinaIsParcialEAD)
-        this.adjustTurno(this.turmaForm.Horario2);
+      else if (!this.disciplinaIsParcialEAD) this.adjustTurno(this.turmaForm.Horario2);
     },
     adjustTurno(horario) {
       if (horario == 31 && this.disciplinaIsIntegralEAD) {
@@ -505,11 +502,9 @@ export default {
       const hasConflictHorario2 = this.checkHorarioDocente(2);
 
       if (docente === 1) {
-        if (hasConflictHorario1 || hasConflictHorario2)
-          this.turmaForm.Docente1 = null;
+        if (hasConflictHorario1 || hasConflictHorario2) this.turmaForm.Docente1 = null;
       } else {
-        if (hasConflictHorario1 || hasConflictHorario2)
-          this.turmaForm.Docente2 = null;
+        if (hasConflictHorario1 || hasConflictHorario2) this.turmaForm.Docente2 = null;
       }
     },
     checkSala() {
@@ -537,9 +532,7 @@ export default {
           !this.$_.isNull(this.turmaForm.Docente2))
       ) {
         if (
-          horario === 1
-            ? this.turmaForm.Horario1 === 31
-            : this.turmaForm.Horario2 === 31
+          horario === 1 ? this.turmaForm.Horario1 === 31 : this.turmaForm.Horario2 === 31
         ) {
           return false;
         } else if (
@@ -905,13 +898,10 @@ export default {
       if (
         (!this.$_.isNull(this.turmaForm.Horario1) ||
           !this.$_.isNull(this.turmaForm.Horario2)) &&
-        (!this.$_.isNull(this.turmaForm.Sala1) ||
-          !this.$_.isNull(this.turmaForm.Sala2))
+        (!this.$_.isNull(this.turmaForm.Sala1) || !this.$_.isNull(this.turmaForm.Sala2))
       ) {
         if (
-          horario === 1
-            ? this.turmaForm.Horario1 === 31
-            : this.turmaForm.Horario2 === 31
+          horario === 1 ? this.turmaForm.Horario1 === 31 : this.turmaForm.Horario2 === 31
         ) {
           return false;
         } else if (
@@ -1011,18 +1001,14 @@ export default {
           let d1, d2;
           if (sala === 1) {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -1074,18 +1060,14 @@ export default {
           let d1, d2;
           if (sala === 1) {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -1137,18 +1119,14 @@ export default {
           let d1, d2;
           if (sala === 1) {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -1196,18 +1174,14 @@ export default {
           let d1, d2;
           if (sala === 1) {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -1255,18 +1229,14 @@ export default {
           let d1, d2;
           if (sala === 1) {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -1318,8 +1288,7 @@ export default {
         for (let index = 0; index < this.currentTurmaPedidos.length; index++) {
           if (this.currentTurmaPedidos[index].Curso === curso.id) {
             curso.VagasTotais =
-              parseInt(this.currentTurmaPedidos[index].vagasPeriodizadas, 10) *
-                1000 + //peso para priorizar vagas periodizadas
+              parseInt(this.currentTurmaPedidos[index].vagasPeriodizadas, 10) * 1000 + //peso para priorizar vagas periodizadas
               parseInt(this.currentTurmaPedidos[index].vagasNaoPeriodizadas, 10);
             curso.indiceVaga = index;
             break;
@@ -1327,11 +1296,7 @@ export default {
         }
       });
 
-      return this.$_.orderBy(
-        cursosResult,
-        this.ordemVagas.order,
-        this.ordemVagas.type
-      );
+      return this.$_.orderBy(cursosResult, this.ordemVagas.order, this.ordemVagas.type);
     },
     CursosFiltred() {
       if (this.searchCursos === "") return this.AllCursos;
@@ -1342,9 +1307,7 @@ export default {
         const cursoNome = normalizeText(curso.nome);
         const cursoCodigo = normalizeText(curso.codigo);
 
-        return (
-          cursoNome.match(searchNormalized) || cursoCodigo.match(searchNormalized)
-        );
+        return cursoNome.match(searchNormalized) || cursoCodigo.match(searchNormalized);
       });
     },
 
