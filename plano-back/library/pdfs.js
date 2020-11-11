@@ -7140,8 +7140,7 @@ const pdfRelatorioDisciplinas = () => new Promise((resolve, reject) =>  {
 function turmasCurso(curso, listTurmas, listPedidos, listDisciplinas) {
     let turmas = []
     listTurmas.forEach((t) => {
-        let pedidos = _.find(listPedidos, ['Turma', t.id])
-        let pedido = _.find(pedidos, ['Curso', curso.id])
+        let pedido = _.find(listPedidos, {'Turma': t.id, 'Curso': curso.id})
         if(pedido.vagasPeriodizadas > 0 || pedido.vagasNaoPeriodizadas > 0){
             let disciplina = _.find(listDisciplinas, ['id', t.Disciplina])
             t.disciplina = disciplina
