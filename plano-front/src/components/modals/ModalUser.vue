@@ -26,11 +26,21 @@
         <div v-if="Admin" class="w-100 border rounded-bottom py-2 px-3">
           <div class="form-row">
             <label required for="nome">Nome</label>
-            <input class="form-control" type="text" id="nome" v-model="userForm.nome" />
+            <input
+              class="form-control"
+              type="text"
+              id="nome"
+              v-model="userForm.nome"
+            />
           </div>
           <div class="form-row">
             <label required for="login">Login</label>
-            <input class="form-control" type="text" id="login" v-model="userForm.login" />
+            <input
+              class="form-control"
+              type="text"
+              id="login"
+              v-model="userForm.login"
+            />
           </div>
           <div class="form-row">
             <label required for="senhaAtual">Senha atual</label>
@@ -41,7 +51,10 @@
             />
           </div>
           <!-- toggle edit senha -->
-          <ButtonSlideSection :isOpen="isEditingSenha" @handel-click="toggleEditSenha" />
+          <ButtonSlideSection
+            :isOpen="isEditingSenha"
+            @handel-click="toggleEditSenha"
+          />
 
           <transition-group name="slideY" mode="out-in">
             <template v-if="isEditingSenha">
@@ -61,7 +74,12 @@
             </template>
           </transition-group>
           <div :key="'btns'" class="mt-3 mb-1 d-flex justify-content-end">
-            <BaseButton class="paddingX-20" text="Cancelar" color="gray" @click="close" />
+            <BaseButton
+              class="paddingX-20"
+              text="Cancelar"
+              color="gray"
+              @click="close"
+            />
             <BaseButton
               class="paddingX-20"
               text="Salvar"
@@ -190,6 +208,8 @@ export default {
 </script>
 
 <style scoped>
+@import url(../../assets/css/slideY-animation.css);
+
 .user-container {
   display: flex;
   flex-direction: column;

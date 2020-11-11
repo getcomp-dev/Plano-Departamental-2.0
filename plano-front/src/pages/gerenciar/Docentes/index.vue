@@ -8,38 +8,41 @@
       <div class="div-table">
         <BaseTable>
           <template #thead>
-            <v-th-ordination
-              :currentOrder="ordenacaoDocentesMain"
-              orderToCheck="nome"
-              width="240"
-              align="start"
+            <th
+              class="clickable t-start"
+              @click="toggleOrder(ordenacaoDocentesMain, 'nome')"
+              title="Clique para ordenar por nome"
+              style="width: 240px"
             >
               Nome
-            </v-th-ordination>
-            <v-th-ordination
-              :currentOrder="ordenacaoDocentesMain"
-              orderToCheck="apelido"
-              width="120"
-              align="start"
+              <i :class="setIconByOrder(ordenacaoDocentesMain, 'nome')"></i>
+            </th>
+            <th
+              class="clickable t-start"
+              @click="toggleOrder(ordenacaoDocentesMain, 'apelido')"
+              title="Clique para ordenar por apelido"
+              style="width: 120px"
             >
               Apelido
-            </v-th-ordination>
-            <v-th-ordination
-              :currentOrder="ordenacaoDocentesMain"
-              orderToCheck="nomesiga"
-              width="240"
-              align="start"
+              <i :class="setIconByOrder(ordenacaoDocentesMain, 'apelido')"></i>
+            </th>
+            <th
+              class="clickable t-start"
+              @click="toggleOrder(ordenacaoDocentesMain, 'nomesiga')"
+              title="Clique para ordenar pelo nome do siga"
+              style="width: 240px"
             >
               Nome SIGA
-            </v-th-ordination>
-            <v-th-ordination
-              :currentOrder="ordenacaoDocentesMain"
-              orderToCheck="ativo"
-              orderType="desc"
-              width="65"
+              <i :class="setIconByOrder(ordenacaoDocentesMain, 'nomesiga')"></i>
+            </th>
+            <th
+              style="width: 65px"
+              class="clickable t-center"
+              @click="toggleOrder(ordenacaoDocentesMain, 'ativo', 'desc')"
             >
               Ativo
-            </v-th-ordination>
+              <i :class="setIconByOrder(ordenacaoDocentesMain, 'ativo')"></i>
+            </th>
           </template>
 
           <template #tbody>
@@ -49,18 +52,19 @@
               :class="[{ 'bg-selected': docenteClickadoId == docente.id }, 'clickable']"
               @click="handleClickInDocente(docente)"
             >
-              <v-td width="240" align="start">{{ docente.nome }}</v-td>
-              <v-td width="120" align="start">{{ docente.apelido }}</v-td>
-              <v-td width="240" align="start" :title="docente.nomesiga">
+              <td style="width: 240px" class="t-start">{{ docente.nome }}</td>
+              <td style="width: 120px" class="t-start">
+                {{ docente.apelido }}
+              </td>
+              <td style="width: 240px" class="t-start">
                 {{ docente.nomesiga }}
-              </v-td>
-              <v-td width="65">{{ generateBooleanText(docente.ativo) }}</v-td>
+              </td>
+              <td style="width: 65px">{{ booleanToText(docente.ativo) }}</td>
             </tr>
-
             <tr v-if="!DocentesOrdered.length">
-              <v-td width="665" colspan="3">
-                <b>Nenhum docente encontrado</b>
-              </v-td>
+              <td colspan="3" style="width: 425px" class="text-center">
+                <b>Nenhum docente encontrado!</b>
+              </td>
             </tr>
           </template>
         </BaseTable>
@@ -163,9 +167,7 @@
     <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deleteDocente">
       <li v-if="isEdit" class="list-group-item">
         <span>
-          Tem certeza que deseja excluír o docente
-          <b>{{ docenteForm.nome }}</b>
-          ?
+          Tem certeza que deseja excluír o docente <b>{{ docenteForm.nome }}</b> ?
         </span>
       </li>
       <li v-else class="list-group-item">Nenhum docente selecionado.</li>
@@ -173,35 +175,28 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Adicionar:</b>
-        Preencha o cartão em branco à direita e em seguida, clique em Adicionar
-        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
-        .
+        <b>Adicionar:</b> Preencha o cartão em branco à direita e em seguida, clique em
+        Adicionar <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" /> .
       </li>
       <li class="list-group-item">
-        <b>Editar:</b>
-        Clique na linha da tabela do docente que deseja alterar. Em seguida, no cartão à
-        direita, altere as informações que desejar e clique em Salvar
-        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
-        .
+        <b>Editar:</b> Clique na linha da tabela do docente que deseja alterar. Em
+        seguida, no cartão à direita, altere as informações que desejar e clique em Salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" /> .
       </li>
       <li class="list-group-item">
-        <b>Deletar:</b>
-        Clique na linha da tabela do docente que deseja remover. Em seguida, no cartão à
-        direita, clique em Remover
+        <b>Deletar:</b> Clique na linha da tabela do docente que deseja remover. Em
+        seguida, no cartão à direita, clique em Remover
         <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
         e confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
-        <b>Limpar:</b>
-        No cartão à direita, clique em Cancelar
-        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />
-        , para limpar as informações.
+        <b>Limpar:</b> No cartão à direita, clique em Cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" /> , para limpar as
+        informações.
       </li>
       <li class="list-group-item">
-        <b>Ordenar:</b>
-        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
-        informações.
+        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para alterar a
+        ordenação das informações.
       </li>
     </ModalAjuda>
   </div>
@@ -211,7 +206,7 @@
 import { mapGetters } from "vuex";
 import docenteService from "@/common/services/docente";
 import docentePerfilService from "@/common/services/docentePerfil";
-import { toggleItemInArray, generateBooleanText } from "@/common/mixins";
+import { toggleOrdination, toggleItemInArray } from "@/common/mixins";
 import { Card } from "@/components/ui";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
 const emptyDocente = {
@@ -229,7 +224,7 @@ const emptyPerfil = {
 
 export default {
   name: "DashboardDocente",
-  mixins: [toggleItemInArray, generateBooleanText],
+  mixins: [toggleOrdination, toggleItemInArray],
   components: { Card, ModalAjuda, ModalDelete },
   data() {
     return {
@@ -265,6 +260,9 @@ export default {
     },
     openModalDelete() {
       this.$refs.modalDelete.open();
+    },
+    booleanToText(docenteIsAtivo) {
+      return docenteIsAtivo ? "Sim" : "-";
     },
 
     async addDocente() {

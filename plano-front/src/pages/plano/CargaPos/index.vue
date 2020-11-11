@@ -44,7 +44,7 @@
           />
         </template>
         <template #add-row>
-          <NovaCargaPosRow ref="novaCargaPosRow" v-if="isAdding" />
+          <NovaCargaPosRow ref="novaCargaPosRow" v-show="isAdding" />
         </template>
 
         <template #tbody>

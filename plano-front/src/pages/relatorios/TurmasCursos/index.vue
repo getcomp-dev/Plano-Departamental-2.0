@@ -3,7 +3,6 @@
         <PageHeader :title="'Turmas - Cursos'">
             <!--<BaseButton template="filtros" @click="toggleAsideModal('filtros')" />-->
             <BaseButton template="relatorio" @click="toggleAsideModal('relatorio')" />
-            <BaseButton template="download" @click="downloadTurmasCursos" />
             <!--<BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />-->
         </PageHeader>
 
@@ -91,8 +90,7 @@
     import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
     import ModalVagas from "../PlanoDepartamental/ModalVagas";
     import _ from "lodash";
-    import downloadService from "@/common/services/download"
-    import {saveAs} from "file-saver";
+    import store from "../../../vuex/store";
 
     export default {
         name: "TurmasCursos",
@@ -229,26 +227,6 @@
             pdf(completo) {
                 pdfs.pdfTurmasCursos(this.AllCursos);
             },
-
-            async downloadTurmasCursos() {
-                await downloadService.generatePdfTurmasCurso({
-                    Plano: localStorage.getItem("Plano"),
-                }).then(() =>
-                    downloadService.createZipTurmasCursos().then( () =>
-                        fetch("http://200.131.219.57:3000/api/download/downloadTurmasCursosZip", {
-                            method: "GET",
-                            headers: {
-                                Authorization: `Bearer ${this.$store.state.auth.token}`,
-                            },
-                        })
-                            .then((r) => r.blob())
-                            .then((blob) => {
-                                saveAs(blob, "TurmasCursos.zip");
-                            })
-                    )
-                )
-
-            }
         },
 
         computed: {

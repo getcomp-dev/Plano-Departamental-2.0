@@ -8,51 +8,46 @@
       <div class="div-table">
         <BaseTable :styles="'height:max-content'">
           <template #thead>
-            <v-th-ordination
-              :currentOrder="ordenacaoPerfisMain"
-              orderToCheck="nome"
-              width="350"
-              align="start"
+            <th
+              @click="toggleOrder(ordenacaoPerfisMain, 'nome')"
+              style="width: 350px"
+              class="clickable t-start"
             >
               Nome
-            </v-th-ordination>
-            <v-th-ordination
-              :currentOrder="ordenacaoPerfisMain"
-              orderToCheck="abreviacao"
-              width="90"
-              align="start"
+              <i :class="setIconByOrder(ordenacaoPerfisMain, 'nome')"></i>
+            </th>
+            <th
+              @click="toggleOrder(ordenacaoPerfisMain, 'abreviacao')"
+              style="width: 90px;"
+              class="clickable"
             >
               Abreviação
-            </v-th-ordination>
-            <v-th width="60">Cor</v-th>
+              <i :class="setIconByOrder(ordenacaoPerfisMain, 'abreviacao')"></i>
+            </th>
+            <th style="width: 60px;">Cor</th>
           </template>
-
           <template #tbody>
-            <tr
-              v-for="perfil in Perfis"
-              :key="perfil.id"
-              :class="['clickable', { 'bg-selected': perfilSelectedId === perfil.id }]"
-              @click="handleClickInPerfil(perfil)"
-            >
-              <v-td width="350" align="start">{{ perfil.nome }}</v-td>
-              <v-td width="90">{{ perfil.abreviacao }}</v-td>
-              <v-td width="60" type="content">
-                <div
-                  :style="{
-                    backgroundColor: perfil.cor,
-                    width: '50px',
-                    height: '12px',
-                    border: '1px black solid',
-                  }"
-                ></div>
-              </v-td>
-            </tr>
-
-            <tr v-if="!Perfis.length">
-              <v-td width="500" colspan="3">
-                <b>Nenhum perfil encontrado</b>
-              </v-td>
-            </tr>
+            <template v-for="perfil in Perfis">
+              <tr
+                :key="perfil.id"
+                @click="handleClickInPerfil(perfil)"
+                :class="[
+                  'clickable',
+                  {
+                    'bg-selected': perfilSelectedId === perfil.id,
+                  },
+                ]"
+              >
+                <td style="width: 350px;" class="t-start">{{ perfil.nome }}</td>
+                <td style="width: 90px">{{ perfil.abreviacao }}</td>
+                <td style="width: 60px">
+                  <div
+                    :style="{ 'background-color': perfil.cor }"
+                    style="width: 50px; height: 12px; border: 1px black solid"
+                  ></div>
+                </td>
+              </tr>
+            </template>
           </template>
         </BaseTable>
       </div>
@@ -68,10 +63,10 @@
         <template #form-group>
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="perfilNome" class="col-form-label">Nome</label>
+              <label required for="nome" class="col-form-label">Nome</label>
               <input
+                id="nome"
                 type="text"
-                id="perfilNome"
                 class="input-maior form-control form-control-sm"
                 @input="perfilForm.nome = $event.target.value.toUpperCase()"
                 :value="perfilForm.nome"
@@ -84,9 +79,9 @@
               <label required for="abreviacao" class="col-form-label">Abreviação</label>
               <input
                 type="text"
-                id="abreviacao"
                 class="form-control form-control-sm"
                 style="width:150px"
+                id="abreviacao"
                 v-model="perfilForm.abreviacao"
               />
             </div>
@@ -154,18 +149,21 @@
 
 <script>
 import perfilService from "@/common/services/perfil";
+import { toggleOrdination } from "@/common/mixins";
 import { Card } from "@/components/ui";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
 import { mapGetters } from "vuex";
+
 const emptyPerfil = {
-  id: null,
-  nome: null,
-  abreviacao: null,
-  cor: "#8E79F6",
+  id: undefined,
+  nome: undefined,
+  abreviacao: undefined,
+  cor: "#ff0000",
 };
 
 export default {
   name: "DashboardPerfis",
+  mixins: [toggleOrdination],
   components: {
     ModalAjuda,
     Card,
@@ -173,7 +171,7 @@ export default {
   },
   data() {
     return {
-      error: null,
+      error: undefined,
       perfilForm: this.$_.clone(emptyPerfil),
       perfilSelectedId: null,
       ordenacaoPerfisMain: { order: "nome", type: "asc" },
@@ -192,7 +190,7 @@ export default {
     cleanPerfil() {
       this.clearClick();
       this.perfilForm = this.$_.clone(emptyPerfil);
-      this.error = null;
+      this.error = undefined;
     },
     showPerfil(perfil) {
       this.perfilForm = this.$_.clone(perfil);
@@ -288,7 +286,7 @@ export default {
     },
 
     isEdit() {
-      return this.perfilForm.id != null;
+      return this.perfilForm.id !== undefined;
     },
   },
 };

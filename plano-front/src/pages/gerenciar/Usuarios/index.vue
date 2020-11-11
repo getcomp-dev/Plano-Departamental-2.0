@@ -8,48 +8,41 @@
       <div class="div-table">
         <BaseTable>
           <template #thead>
-            <v-th-ordination
-              :currentOrder="ordenacaoMainUsers"
-              orderToCheck="nome"
-              width="150"
-              align="start"
+            <th
+              style="width: 150px"
+              class="t-start clickable"
+              @click="toggleOrder(ordenacaoMainUsers, 'nome')"
             >
               Nome
-            </v-th-ordination>
-            <v-th-ordination
-              :currentOrder="ordenacaoMainUsers"
-              orderToCheck="login"
-              width="120"
-              align="start"
+              <i :class="setIconByOrder(ordenacaoMainUsers, 'nome')"></i>
+            </th>
+            <th
+              style="width: 120px"
+              class="t-start clickable"
+              @click="toggleOrder(ordenacaoMainUsers, 'login')"
             >
               Login
-            </v-th-ordination>
-            <v-th-ordination
-              :currentOrder="ordenacaoMainUsers"
-              orderToCheck="admin"
-              orderType="desc"
-              width="90"
-              align="start"
+              <i :class="setIconByOrder(ordenacaoMainUsers, 'login')"></i>
+            </th>
+            <th
+              style="width: 115px"
+              class="clickable less-padding"
+              @click="toggleOrder(ordenacaoMainUsers, 'admin', 'desc')"
             >
               Tipo
-            </v-th-ordination>
+              <i :class="setIconByOrder(ordenacaoMainUsers, 'admin')"></i>
+            </th>
           </template>
           <template #tbody>
             <tr
               v-for="user in UsersOrdered"
-              :key="user.id"
-              :class="{ 'bg-selected': user.id === userSelected }"
+              :key="user.login + user.nome"
               @click="handleClickInUser(user)"
+              :class="{ 'bg-selected': user.id === userSelected }"
             >
-              <v-td width="150" align="start">{{ user.nome }}</v-td>
-              <v-td width="120" align="start">{{ user.login }}</v-td>
-              <v-td width="90" align="start">{{ adminText(user.admin) }}</v-td>
-            </tr>
-
-            <tr v-if="!UsersOrdered.length">
-              <v-td width="360" colspan="3">
-                <b>Nenhum usuário encontrado</b>
-              </v-td>
+              <td style="width: 150px" class="t-start">{{ user.nome }}</td>
+              <td style="width: 120px" class="t-start">{{ user.login }}</td>
+              <td style="width: 115px">{{ adminText(user.admin) }}</td>
             </tr>
           </template>
         </BaseTable>
@@ -57,7 +50,7 @@
 
       <Card
         :title="'Usuário'"
-        :toggleFooter="isEditing"
+        :toggleFooter="isEdit"
         @btn-salvar="editUser"
         @btn-delete="openModalDelete"
         @btn-add="createUser"
@@ -66,11 +59,11 @@
         <template #form-group>
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="userNome">Nome</label>
+              <label required for="nome">Nome</label>
               <input
-                type="text"
-                id="userNome"
                 class="form-control"
+                type="text"
+                id="nome"
                 v-model="userForm.nome"
               />
             </div>
@@ -87,7 +80,7 @@
             </div>
           </div>
           <!-- Create -->
-          <template v-if="!isEditing">
+          <template v-if="!isEdit">
             <!-- senha -->
             <div class="row mb-2 mx-0">
               <div class="form-group col m-0 px-0">
@@ -113,7 +106,7 @@
             </div>
           </template>
           <!-- Edit -->
-          <template v-else-if="isEditing">
+          <template v-else-if="isEdit">
             <!-- toggle edit senha -->
             <ButtonSlideSection
               :isOpen="isEditingSenha"
@@ -152,7 +145,11 @@
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
               <label for="userAdmin">Tipo</label>
-              <select id="userAdmin" v-model.number="userForm.admin" class="form-control">
+              <select
+                id="userAdmin"
+                v-model.number="userForm.admin"
+                class="form-control"
+              >
                 <option value="0">Consulta</option>
                 <option value="1">Comissão</option>
                 <option value="2">Administrador</option>
@@ -163,15 +160,17 @@
       </Card>
     </div>
 
-    <ModalDelete ref="modalDelete" :isDeleting="isEditing" @btn-deletar="deleteUser">
+    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="deleteUser">
       <li class="list-group-item">
         <span>
-          <template v-if="isEditing">
+          <template v-if="isEdit">
             Tem certeza que deseja excluír o usuário
-            <b>{{ userForm.nome }}</b>
-            ?
+            <b>{{ userForm.nome }}</b
+            >?
           </template>
-          <template v-else>Nenhum usuário selecionado!</template>
+          <template v-else
+            >Nenhum usuário selecionado!</template
+          >
         </span>
       </li>
     </ModalDelete>
@@ -180,33 +179,27 @@
       <li class="list-group-item">
         <b>Adicionar:</b>
         Preencha o cartão em branco à direita e em seguida, clique em Adicionar
-        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
-        .
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Editar:</b>
-        Clique na linha da tabela do usuário que deseja alterar. Em seguida, no cartão à
-        direita, altere as informações que desejar e clique em Salvar
-        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
-        .
+        <b>Editar:</b> Clique na linha da tabela do usuário que deseja alterar. Em
+        seguida, no cartão à direita, altere as informações que desejar e clique em
+        Salvar <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
       </li>
       <li class="list-group-item">
-        <b>Deletar:</b>
-        Clique na linha da tabela do usuário que deseja remover. Em seguida, no cartão à
-        direita, clique em Remover
-        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
-        e confirme a remoção na janela que será aberta.
+        <b>Deletar:</b> Clique na linha da tabela do usuário que deseja remover. Em
+        seguida, no cartão à direita, clique em Remover
+        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
+        confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
-        <b>Limpar:</b>
-        No cartão à direita, clique em Cancelar
-        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />
-        , para limpar as informações.
+        <b>Limpar:</b> No cartão à direita, clique em Cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para limpar
+        as informações.
       </li>
       <li class="list-group-item">
-        <b>Ordenar:</b>
-        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
-        informações.
+        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para
+        alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>
@@ -214,8 +207,10 @@
 
 <script>
 import userService from "@/common/services/usuario";
+import { toggleOrdination } from "@/common/mixins";
 import { InputPassword, Card, ButtonSlideSection } from "@/components/ui";
 import { ModalDelete, ModalAjuda } from "@/components/modals";
+
 const emptyUser = {
   nome: "",
   login: "",
@@ -225,6 +220,7 @@ const emptyUser = {
 
 export default {
   name: "Usuarios",
+  mixins: [toggleOrdination],
   components: {
     Card,
     InputPassword,
@@ -242,7 +238,6 @@ export default {
       ordenacaoMainUsers: { order: "nome", type: "asc" },
     };
   },
-
   methods: {
     adminText(admin) {
       switch (admin) {
@@ -284,7 +279,8 @@ export default {
     },
     validateUser(user) {
       for (const entry of Object.entries(user)) {
-        if ((entry[1] === "" || entry[1] === null) && entry[0] !== "senha") return false;
+        if ((entry[1] === "" || entry[1] === null) && entry[0] !== "senha")
+          return false;
       }
       return true;
     },
@@ -358,7 +354,6 @@ export default {
       }
     },
   },
-
   computed: {
     Users() {
       const usersResultantes = [];
@@ -385,7 +380,8 @@ export default {
 
       return this.$_.orderBy(this.Users, userSorter, type);
     },
-    isEditing() {
+
+    isEdit() {
       return this.userSelected != null;
     },
   },
@@ -393,6 +389,8 @@ export default {
 </script>
 
 <style scoped>
+@import url(../../../assets/css/slideY-animation.css);
+
 .card {
   font-size: 11px;
 }

@@ -29,6 +29,7 @@ import { TheLoadingView } from "@/components/layout";
 export default {
   name: "App",
   components: { TheLoadingView },
+
   computed: {
     ...mapGetters(["notificationsQueue"]),
   },

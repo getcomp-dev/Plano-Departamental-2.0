@@ -26,7 +26,7 @@ import { EventBus } from "@/plugins/eventBus.js";
 import { mapGetters, mapActions } from "vuex";
 import { TheNavbar, TheSidebar } from "@/components/layout";
 import { ModalUser, ModalDownload } from "@/components/modals";
-import { SOCKET_PLANO_UPDATED } from "../../../vuex/mutation-types";
+import {SOCKET_PLANO_UPDATED} from "../../../vuex/mutation-types";
 
 export default {
   name: "TheDashboard",
@@ -47,24 +47,25 @@ export default {
 
   created() {
     this.initializeCurrentPlano().then(() => {
-      if (!this.$_.find(this.AllPlanos, ["id", this.currentPlano.id]).visible) {
-        const firstVisiblePlano = this.$_.find(this.AllPlanos, ["visible", true]);
-        this.changeCurrentPlano(firstVisiblePlano.id);
+      let currentId = localStorage.getItem('Plano')
+      if(!this.$_.find(this.AllPlanos, ['id', parseInt(currentId)]).visible){
+        let firstVisiblePlano = this.$_.find(this.AllPlanos, ['visible', true])
+        this.changeCurrentPlano(firstVisiblePlano.id)
       }
-    });
-    this.unwatch = this.$store.subscribe((mutation) => {
-      if (mutation.type === SOCKET_PLANO_UPDATED) {
-        if (mutation.payload.Plano.id == localStorage.getItem("Plano")) {
-          if (!mutation.payload.Plano.visible) {
-            let planovisivel = this.$_.find(this.AllPlanos, ["visible", true]);
-            this.changeCurrentPlano(planovisivel.id);
+    })
+    this.unwatch = this.$store.subscribe((mutation, state) => {
+      if(mutation.type === SOCKET_PLANO_UPDATED){
+        if (mutation.payload.Plano.id == localStorage.getItem('Plano')){
+          if(!mutation.payload.Plano.visible){
+            let planovisivel = this.$_.find(this.AllPlanos, ['visible', true])
+            this.changeCurrentPlano(planovisivel.id)
           }
         }
       }
-    });
+    })
   },
-  destroyed() {
-    this.unwatch();
+  beforeDestroy() {
+    this.unwatch()
     this.$socket.close();
   },
 
@@ -83,6 +84,7 @@ export default {
         this.$_.forEach(this.files, function(value, index, array) {
           array[index] = value.slice(0, -4);
         });
+        //console.log(this.files.filter( function( elm ) {return elm.match(/.*\.(sql)/ig)}))
       });
     },
   },

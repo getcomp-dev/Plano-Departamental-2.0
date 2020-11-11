@@ -1,6 +1,7 @@
 <template>
   <div class="main-component">
     <PageHeader :title="'Planos'">
+      <BaseButton template="file-upload" @click="$refs.modalImportPlano.open()" />
       <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
     </PageHeader>
 
@@ -8,59 +9,49 @@
       <div class="div-table">
         <BaseTable :styles="'height:max-content'">
           <template #thead>
-            <v-th-ordination
-              :currentOrder="ordenacaoMainPlanos"
-              orderToCheck="ano"
-              width="70"
-              align="start"
+            <th
+              style="width: 70px"
+              class="t-start clickable"
+              @click="toggleOrder(ordenacaoMainPlanos, 'ano')"
             >
               Ano
-            </v-th-ordination>
-            <v-th-ordination
-              :currentOrder="ordenacaoMainPlanos"
-              orderToCheck="nome"
-              width="150"
-              align="start"
+              <i :class="setIconByOrder(ordenacaoMainPlanos, 'ano')"></i>
+            </th>
+            <th
+              style="width: 150px"
+              class="t-start clickable"
+              @click="toggleOrder(ordenacaoMainPlanos, 'nome')"
             >
               Nome
-            </v-th-ordination>
-            <v-th width="300" align="start">Observação</v-th>
-            <v-th-ordination
-              :currentOrder="ordenacaoMainPlanos"
-              orderToCheck="isEditable"
-              orderType="desc"
-              width="70"
+              <i :class="setIconByOrder(ordenacaoMainPlanos, 'nome')"></i>
+            </th>
+            <th
+              style="width: 300px"
+              class="t-start clickable"
+              @click="toggleOrder(ordenacaoMainPlanos, 'obs')"
             >
+              Observação
+              <i :class="setIconByOrder(ordenacaoMainPlanos, 'obs')"></i>
+            </th>
+            <th style="width: 80px">
               Editável
-            </v-th-ordination>
-            <v-th-ordination
-              :currentOrder="ordenacaoMainPlanos"
-              orderToCheck="visible"
-              orderType="desc"
-              width="70"
-            >
+            </th>
+            <th style="width: 80px">
               Visível
-            </v-th-ordination>
+            </th>
           </template>
-
           <template #tbody>
             <tr
               v-for="plano in PlanosOrdered"
               :key="plano.id"
-              :class="{ 'bg-selected': plano.id === planoSelectedId }"
               @click="handleClickInPlano(plano)"
+              :class="{ 'bg-selected': plano.id === planoSelectedId }"
             >
-              <v-td width="70" align="start">{{ plano.ano }}</v-td>
-              <v-td width="150" align="start">{{ plano.nome }}</v-td>
-              <v-td width="300" align="start" :title="plano.obs">{{ plano.obs }}</v-td>
-              <v-td width="70">{{ generateBooleanText(plano.isEditable) }}</v-td>
-              <v-td width="70">{{ generateBooleanText(plano.visible) }}</v-td>
-            </tr>
-
-            <tr v-if="!PlanosOrdered.length">
-              <v-td width="680" colspan="5">
-                <b>Nenhum plano encontrado</b>
-              </v-td>
+              <td style="width: 70px" class="t-start">{{ plano.ano }}</td>
+              <td style="width: 150px" class="t-start">{{ plano.nome }}</td>
+              <td style="width: 300px" class="t-start">{{ plano.obs }}</td>
+              <td style="width: 80px" class="t-start">{{ plano.isEditable }}</td>
+              <td style="width: 80px" class="t-start">{{ plano.visible }}</td>
             </tr>
           </template>
         </BaseTable>
@@ -68,32 +59,34 @@
 
       <Card
         :title="'Plano'"
-        :toggleFooter="isEditing"
-        :isPlano="isEditing"
+        :toggleFooter="isEdit"
+        :isPlano="isEdit"
         @btn-salvar="handleEditPlano"
         @btn-delete="openModalDelete"
         @btn-add="openModalNovoPlano"
         @btn-clean="cleanPlano"
-        @btn-copy="copyPlanoSelected(planoForm)"
+        @btn-copy="copyPlano(planoForm)"
       >
         <template #form-group>
-          <div class="row w-100 m-0 mb-2">
-            <div class="form-group col-9 m-0 p-0 pr-3">
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0">
               <label required for="planoNome">Nome</label>
               <input
                 type="text"
                 id="planoNome"
                 v-model="planoForm.nome"
-                class="form-control w-100"
-                @keypress="limitStringLength"
+                @keypress="limitNomeLength"
+                class="form-control"
               />
             </div>
+          </div>
 
-            <div class="form-group col-3 m-0 p-0">
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0">
               <label required for="ano">Ano</label>
               <select
                 id="planoAno"
-                class="form-control w-100"
+                class="form-control input-ano"
                 v-model.number="planoForm.ano"
               >
                 <option v-for="ano in AnosDoPlano" :key="'ano' + ano" :value="ano">
@@ -108,8 +101,8 @@
               <label for="planoObs">Observações</label>
               <textarea
                 id="planoObs"
-                cols="38"
-                rows="5"
+                cols="30"
+                rows="3"
                 v-model="planoForm.obs"
                 class="form-control"
               ></textarea>
@@ -117,27 +110,28 @@
           </div>
 
           <div class="row mb-2 mx-0">
-            <div class="form-group col-6 m-0 p-0 pr-2">
+            <div class="form-group col m-0 px-0">
               <label required for="planoEditavel">Editável</label>
               <select
                 id="planoEditavel"
                 v-model.number="planoForm.isEditable"
-                class="form-control"
+                class="form-control input-ano"
               >
-                <option :value="true">Sim</option>
-                <option :value="false">Não</option>
+                <option value="true">Sim</option>
+                <option value="false">Não</option>
               </select>
             </div>
-
-            <div class="form-group col-6 m-0 p-0 pl-2">
+          </div>
+          <div class="row mb-2 mx-0">
+            <div class="form-group col m-0 px-0">
               <label required for="planoVisivel">Visível</label>
               <select
                 id="planoVisivel"
                 v-model.number="planoForm.visible"
-                class="form-control"
+                class="form-control input-ano"
               >
-                <option :value="true">Sim</option>
-                <option :value="false">Não</option>
+                <option value="true">Sim</option>
+                <option value="false">Não</option>
               </select>
             </div>
           </div>
@@ -147,13 +141,9 @@
 
     <ModalNovoPlano ref="modalNovoPlano" :plano="planoForm" />
 
-    <ModalDelete
-      ref="modalDelete"
-      :isDeleting="isEditing"
-      @btn-deletar="handleDeletePlano"
-    >
+    <ModalDelete ref="modalDelete" :isDeleting="isEdit" @btn-deletar="handleDeletePlano">
       <li class="list-group-item">
-        <span v-if="isEditing">
+        <span v-if="isEdit">
           Tem certeza que deseja excluír o plano
           <b>{{ planoForm.ano + " - " + planoForm.nome }}</b>
           ?
@@ -202,33 +192,38 @@
         informações.
       </li>
     </ModalAjuda>
+
+    <ModalImportPlano ref="modalImportPlano" />
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { generateBooleanText } from "@/common/mixins";
+import { toggleOrdination } from "@/common/mixins";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
 import { Card } from "@/components/ui";
-import copyPlanoService from "@/common/services/copyPlano";
-import planoService from "@/common/services/plano";
-import ModalNovoPlano from "./ModalNovoPlano/index";
+import copyPlanoService from "../../../common/services/copyPlano";
+import planoService from "../../../common/services/plano";
+import ModalNovoPlano from "./ModalNovoPlano";
+import ModalImportPlano from "./ModalImportPlano";
+
 const emptyPlano = {
-  ano: 2019,
+  ano: "",
   nome: "",
   obs: "",
-  isEditable: true,
-  visible: true,
+  isEditable: "true",
+  visible: "true",
 };
 
 export default {
   name: "Planos",
-  mixins: [generateBooleanText],
+  mixins: [toggleOrdination],
   components: {
     ModalAjuda,
     ModalDelete,
     Card,
     ModalNovoPlano,
+    ModalImportPlano,
   },
   data() {
     return {
@@ -241,8 +236,8 @@ export default {
   methods: {
     ...mapActions(["deletePlano", "editPlano"]),
 
-    limitStringLength($event) {
-      if ($event.target.value.length >= 12) $event.preventDefault();
+    limitNomeLength($event) {
+      if ($event.target.value.length >= 10) $event.preventDefault();
     },
     handleClickInPlano(plano) {
       this.cleanPlano();
@@ -301,7 +296,7 @@ export default {
         this.setPartialLoading(false);
       }
     },
-    copyPlanoSelected(oldPlano) {
+    copyPlano(oldPlano) {
       let newPlano = {
         nome: `Cópia de '${oldPlano.nome}'`,
         ano: oldPlano.ano,
@@ -342,7 +337,7 @@ export default {
       const { order, type } = this.ordenacaoMainPlanos;
       return this.$_.orderBy(this.AllPlanos, order, type);
     },
-    isEditing() {
+    isEdit() {
       return this.planoSelectedId != null;
     },
   },
@@ -351,15 +346,21 @@ export default {
 
 <style scoped>
 ::v-deep .card input[type="text"],
-::v-deep .card select {
-  width: 100%;
+::v-deep .card input[type="password"] {
+  width: 200px !important;
   height: 25px !important;
   padding: 0px 5px !important;
   font-size: 12px !important;
   text-align: start;
 }
+.card select {
+  width: 100px;
+  font-size: 12px !important;
+  height: 25px !important;
+  padding: 0px 5px !important;
+}
 textarea {
-  padding: 5px;
-  font-size: 12px;
+  padding: 5px !important;
+  font-size: 12px !important;
 }
 </style>

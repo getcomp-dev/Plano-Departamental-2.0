@@ -25,8 +25,7 @@
           v-for="disciplina in DisciplinasDCCInPerfis"
           :key="disciplina.codigo + disciplina.id"
           :value="disciplina"
-        >
-          {{ disciplina.codigo }}
+          >{{ disciplina.codigo }}
         </option>
       </select>
     </v-td>
@@ -36,8 +35,7 @@
           v-for="disciplina in DisciplinasDCCInPerfisOrderedByNome"
           :key="disciplina.nome + disciplina.id"
           :value="disciplina"
-        >
-          {{ disciplina.nome }}
+          >{{ disciplina.nome }}
         </option>
       </select>
     </v-td>
@@ -60,8 +58,7 @@
               v-for="docente in DocentesByPreferencia"
               :key="docente.id + docente.apelido"
               :value="docente.id"
-            >
-              {{ docente.apelido }}
+              >{{ docente.apelido }}
               {{
                 orderByPreferencia && preferenciaDocente(docente)
                   ? "- " + preferenciaDocente(docente)
@@ -76,8 +73,7 @@
               v-for="docente in DocentesByPreferencia"
               :key="docente.apelido + docente.id"
               :value="docente.id"
-            >
-              {{ docente.apelido }}
+              >{{ docente.apelido }}
               {{
                 orderByPreferencia && preferenciaDocente(docente)
                   ? "- " + preferenciaDocente(docente)
@@ -118,9 +114,8 @@
             v-for="horario in HorariosFiltredByTurno"
             :key="horario.id + horario.horario"
             :value="horario.id"
+            >{{ horario.horario }}</option
           >
-            {{ horario.horario }}
-          </option>
         </select>
 
         <select
@@ -135,8 +130,7 @@
               v-for="horario in HorariosEAD"
               :key="horario.horario + horario.id"
               :value="horario.id"
-            >
-              {{ horario.horario }}
+              >{{ horario.horario }}
             </option>
           </template>
 
@@ -145,8 +139,7 @@
               v-for="horario in HorariosFiltredByTurno"
               :key="horario.horario + horario.id"
               :value="horario.id"
-            >
-              {{ horario.horario }}
+              >{{ horario.horario }}
             </option>
           </template>
         </select>
@@ -156,7 +149,11 @@
       <template v-if="!disciplinaIsIntegralEAD && turmaForm.disciplina">
         <select v-model.number="turmaForm.Sala1">
           <option />
-          <option v-for="sala in AllSalas" :key="sala.id + sala.nome" :value="sala.id">
+          <option
+            v-for="sala in AllSalas"
+            :key="sala.id + sala.nome"
+            :value="sala.id"
+          >
             {{ sala.nome }}
           </option>
         </select>
@@ -166,7 +163,11 @@
           v-model.number="turmaForm.Sala2"
         >
           <option />
-          <option v-for="sala in AllSalas" :key="sala.nome + sala.id" :value="sala.id">
+          <option
+            v-for="sala in AllSalas"
+            :key="sala.nome + sala.id"
+            :value="sala.id"
+          >
             {{ sala.nome }}
           </option>
         </select>
@@ -232,7 +233,8 @@ export default {
         this.setTurnoByHorario(this.turmaForm.Horario2);
     },
     setTurnoByHorario(horarioId) {
-      if (horarioId == 31 && this.disciplinaIsIntegralEAD) this.turmaForm.turno1 = "EAD";
+      if (horarioId == 31 && this.disciplinaIsIntegralEAD)
+        this.turmaForm.turno1 = "EAD";
       else if (this.$_.some(this.HorariosNoturno, ["id", horarioId]))
         this.turmaForm.turno1 = "Noturno";
       else if (this.$_.some(this.HorariosDiurno, ["id", horarioId]))
@@ -241,7 +243,6 @@ export default {
     async handleCreateTurma() {
       try {
         this.setPartialLoading(true);
-        this.turmaForm.Plano = this.currentPlano.id;
         await this.createTurma(this.turmaForm);
       } catch (error) {
         this.pushNotification({
@@ -287,7 +288,10 @@ export default {
         return this.$_.orderBy(
           this.DocentesAtivos,
           (docente) => {
-            const p = this.$_.find(this.PreferenciasDisciplina, ["Docente", docente.id]);
+            const p = this.$_.find(this.PreferenciasDisciplina, [
+              "Docente",
+              docente.id,
+            ]);
 
             return p ? p.preferencia : 0;
           },

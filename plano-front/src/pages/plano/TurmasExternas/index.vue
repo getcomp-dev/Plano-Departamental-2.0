@@ -58,7 +58,7 @@
           </v-th>
         </template>
         <template #add-row>
-          <NovaTurmaExternaRow ref="novaTurmaExternaRow" v-if="isAdding" />
+          <NovaTurmaExternaRow ref="novaTurmaExternaRow" v-show="isAdding" />
         </template>
 
         <template #tbody>

@@ -32,7 +32,7 @@
             :orderFixed="true"
             :currentOrder="ordenacaoMain.perfis"
             orderToCheck="disciplina.perfil.abreviacao"
-            width="80"
+            width="80" 
           >
             Perfil
           </v-th-ordination>
@@ -77,7 +77,7 @@
         <template #add-row>
           <NovaTurmaRow
             ref="novaTurma"
-            v-if="isAdding"
+            v-show="isAdding"
             :cursosAtivadosLength="filtroCursos.ativados.length"
           />
         </template>
