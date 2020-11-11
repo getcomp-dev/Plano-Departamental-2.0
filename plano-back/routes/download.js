@@ -86,12 +86,12 @@ router.get('/createTurmasCursosZip', function(req, res, next){
                 return data
             })
             zip.file(f, pdf)
-            zip.generateAsync({type: "uint8array"})
-                .then(function (r) {
-                    fs.writeFileSync('TurmasCursos.zip', r);
-                });
         }
     })
+    zip.generateAsync({type: "uint8array"})
+        .then(function (r) {
+            fs.writeFileSync('TurmasCursos.zip', r);
+        });
     res.send({success: true})
 })
 
