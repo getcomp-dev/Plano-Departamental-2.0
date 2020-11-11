@@ -53,7 +53,6 @@ router.get('/', function (req, res, next) {
 
 router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
     console.log('\nRequest de '+req.usuario.nome+'\n')
-
     models.Pedido.findOne({
         attributes: ['vagasPeriodizadas', 'vagasNaoPeriodizadas', 'createdAt', 'updatedAt', 'Curso', 'Turma'],
         where: {
@@ -80,7 +79,7 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
         return pedido.updateAttributes({
             vagasPeriodizadas: req.body.vagasPeriodizadas,
             vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
-            Curso: req.body.Curso,
+            CursoId: req.body.Curso,
             Turma: req.body.Turma
         })
     }).then(function (pedido) {
