@@ -76,11 +76,14 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
             history({fieldName:'Turma', lineId:`${pedido.Turma}/${pedido.Curso}`, oldValue: pedido.Turma, newValue: req.body.Turma, operationType:'Edit', user: req.usuario.nome})
 
 
-        return pedido.updateAttributes({
+        return Pedido.update({
             vagasPeriodizadas: req.body.vagasPeriodizadas,
             vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
-            Curso: req.body.Curso,
-            Turma: req.body.Turma
+        }, {
+            where:{
+                Curso: req.params.Curso,
+                Turma: req.params.Turma
+            }
         })
     }).then(function (pedido) {
         ioBroadcast(SM.PEDIDO_UPDATED, {'msg': 'Pedido atualizado!', 'Pedido': pedido})
