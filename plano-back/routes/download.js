@@ -90,9 +90,9 @@ router.get('/createTurmasCursosZip', function(req, res, next){
                 .then(function (r) {
                     fs.writeFileSync('TurmasCursos.zip', r);
                 });
-            res.send({success: true})
         }
     })
+    res.send({success: true})
 })
 
 router.get('/downloadTurmasCursosZip', function(req, res, next){
