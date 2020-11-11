@@ -76,7 +76,7 @@ router.get('/', function(req, res, next){
 
 })
 
-router.get('/createTurmasCursosZip'), function(req, res, next){
+router.get('/createTurmasCursosZip', function(req, res, next){
     const zip = new JSZip()
     let filenames = fs.readdirSync('/home/planodcc/Plano-Departamental-2.0/plano-back')
     filenames.forEach((f) => {
