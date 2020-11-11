@@ -159,7 +159,7 @@ Pdfs.prototype.TurmasCursos = (config) => new Promise((resolve, reject) => {
         console.log('Dados inicializados')
         let promises = []
         this.Cursos.forEach(curso => {
-            promises.push(pdfTurmasCursos())
+            promises.push(pdfTurmasCursos(curso))
         })
         Promise.all([...promises]).then(async () => {resolve()})
         resolve()
