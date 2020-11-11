@@ -1,10 +1,11 @@
 <template>
   <transition name="loading-transition">
     <div
-      v-show="onLoading.fetching || onLoading.partial|| onLoading.table"
+      v-show="onLoading.fetching || onLoading.partial || onLoading.table"
       class="container-loading"
       @click.stop
       @keydown.stop
+      @keypress.stop
     >
       <div class="lds-ring">
         <div></div>
@@ -25,7 +26,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 .container-loading {

@@ -63,12 +63,12 @@ export default {
   },
 
   mounted() {
-    window.addEventListener("keyup", this.closeOnEscKey);
+    document.addEventListener("keydown", this.closeOnEscKey);
   },
   beforeDestroy() {
     this.$off("on-close");
     this.$store.commit("HIDE_MODAL_OVERLAY");
-    window.removeEventListener("keyup", this.closeOnEscKey);
+    document.removeEventListener("keydown", this.closeOnEscKey);
   },
 
   methods: {

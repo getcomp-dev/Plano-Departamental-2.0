@@ -198,7 +198,6 @@
 import { mapGetters } from "vuex";
 import {
   toggleItemInArray,
-  toggleOrdination,
   toggleAsideModal,
   conectaFiltrosSemestresEPeriodos,
   preventClickSelection,
@@ -210,7 +209,6 @@ export default {
   name: "DashboardHorarios",
   mixins: [
     toggleItemInArray,
-    toggleOrdination,
     toggleAsideModal,
     conectaFiltrosSemestresEPeriodos,
     preventClickSelection,

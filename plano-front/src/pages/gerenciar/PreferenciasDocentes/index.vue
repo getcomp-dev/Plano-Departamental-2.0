@@ -11,7 +11,7 @@
       <BaseTable v-show="tableMode === 'disciplina'">
         <template #thead>
           <v-th-ordination
-            :currentOrder="ordenacaoMain.disciplinas"
+            :currentOrder="ordenacaoDisciplina.disciplinas"
             orderToCheck="codigo"
             width="90"
             align="start"
@@ -20,8 +20,24 @@
           </v-th-ordination>
           <v-th width="420" align="start">Nome</v-th>
           <v-th width="80">Perfil</v-th>
-          <v-th width="120" align="start">Docente</v-th>
-          <v-th width="50" title="Preferência">Pref.</v-th>
+          <v-th-ordination
+            :currentOrder="ordenacaoDisciplina.docentes"
+            orderToCheck="docente.nome"
+            width="120"
+            align="start"
+          >
+            Docente
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoDisciplina.pref"
+            orderToCheck="preferencia"
+            orderType="desc"
+            :orderFixed="true"
+            width="60"
+            title="Preferência"
+          >
+            Pref.
+          </v-th-ordination>
         </template>
 
         <template #tbody>
@@ -38,7 +54,7 @@
               </v-td>
               <v-td width="120" />
               <v-td
-                width="50"
+                width="60"
                 class="clickable"
                 type="content"
                 @click="openModalAddPreferencia(disciplina[0])"
@@ -54,9 +70,11 @@
               <v-td width="90" />
               <v-td width="420" />
               <v-td width="80" />
-              <v-td width="120" align="start">{{ preferencia.docente.apelido }}</v-td>
+              <v-td width="120" align="start" :title="preferencia.docente.nome">
+                {{ preferencia.docente.apelido }}
+              </v-td>
               <v-td
-                width="50"
+                width="60"
                 class="td-pref"
                 @click="openModalEditPreferencia(preferencia)"
                 :title="
@@ -75,17 +93,45 @@
       <BaseTable v-show="tableMode === 'docente'">
         <template #thead>
           <v-th-ordination
-            :currentOrder="ordenacaoMain.docentes"
+            :currentOrder="ordenacaoDocentes.docentes"
             orderToCheck="nome"
             width="120"
             align="start"
           >
             Docente
           </v-th-ordination>
-          <v-th width="90">Código</v-th>
-          <v-th width="420" align="start">Nome</v-th>
-          <v-th width="80">Perfil</v-th>
-          <v-th width="50" title="Preferência">Pref.</v-th>
+          <v-th-ordination
+            :currentOrder="ordenacaoDocentes.disciplinas"
+            orderToCheck="disciplina.codigo"
+            width="90"
+          >
+            Código
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoDocentes.disciplinas"
+            orderToCheck="disciplina.nome"
+            width="420"
+            align="start"
+          >
+            Nome
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoDocentes.disciplinas"
+            orderToCheck="disciplina.perfil.abreviacao"
+            width="80"
+          >
+            Perfil
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoDocentes.pref"
+            orderToCheck="preferencia"
+            orderType="desc"
+            :orderFixed="true"
+            width="60"
+            title="Preferência"
+          >
+            Pref.
+          </v-th-ordination>
         </template>
 
         <template #tbody>
@@ -96,7 +142,7 @@
               <v-td width="420" />
               <v-td width="80" />
               <v-td
-                width="50"
+                width="60"
                 type="content"
                 class="clickable"
                 @click="openModalAddPreferencia(docente[0])"
@@ -114,7 +160,7 @@
               <v-td width="420" align="start">{{ preferencia.disciplina.nome }}</v-td>
               <v-td width="80">{{ preferencia.disciplina.perfil.abreviacao }}</v-td>
               <v-td
-                width="50"
+                width="60"
                 class="td-pref"
                 type="content"
                 @click="openModalEditPreferencia(preferencia)"
@@ -242,7 +288,7 @@
                 v-model="add.Disciplina"
               >
                 <option
-                  v-for="disciplina in DisciplinasInPerfis"
+                  v-for="disciplina in AllDisciplinas"
                   :key="disciplina.id + disciplina.codigo"
                   :value="disciplina.id"
                 >
@@ -257,7 +303,7 @@
               <label for="addDisciplina">Código:</label>
               <select id="addDisciplina" class="form-control" v-model="add.Disciplina">
                 <option
-                  v-for="disciplina in DisciplinasInPerfis"
+                  v-for="disciplina in AllDisciplinas"
                   :key="disciplina.id + disciplina.codigo"
                   :value="disciplina.id"
                 >
@@ -302,7 +348,7 @@
             <label for="newDisciplina">Disciplina:</label>
             <select id="newDisciplina" class="form-control" v-model="add.Disciplina">
               <option
-                v-for="disciplina in DisciplinasInPerfis"
+                v-for="disciplina in AllDisciplinas"
                 :key="disciplina.id + disciplina.codigo"
                 :value="disciplina.id"
               >
@@ -317,7 +363,7 @@
             <label for="newCodigo">Código:</label>
             <select id="newCodigo" class="form-control" v-model="add.Disciplina">
               <option
-                v-for="disciplina in DisciplinasInPerfis"
+                v-for="disciplina in AllDisciplinas"
                 :key="disciplina.id + disciplina.codigo"
                 :value="disciplina.id"
               >
@@ -385,9 +431,9 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 import XLSX from "xlsx";
 import docenteDisciplinaService from "@/common/services/docenteDisciplina";
-import { mapGetters } from "vuex";
 import { ModalAjuda } from "@/components/modals";
 
 export default {
@@ -413,9 +459,15 @@ export default {
       },
       error: null,
       tableMode: "docente",
-      ordenacaoMain: {
+      ordenacaoDocentes: {
         docentes: { order: "nome", type: "asc" },
+        disciplinas: { order: "disciplina.codigo", type: "asc" },
+        pref: { order: "preferencia", type: "desc" },
+      },
+      ordenacaoDisciplina: {
         disciplinas: { order: "codigo", type: "asc" },
+        docentes: { order: "apelido", type: "asc" },
+        pref: { order: "preferencia", type: "desc" },
       },
     };
   },
@@ -490,7 +542,6 @@ export default {
 
       return preferenciaFounded ? preferenciaFounded.preferencia : 0;
     },
-
     addPreferencia() {
       if (this.add.Docente && this.add.Disciplina && this.add.preferencia) {
         if (this.add.Docente.id) this.add.Docente = this.add.Docente.id;
@@ -600,7 +651,7 @@ export default {
       const reader = new FileReader();
 
       const docentes = this.AllDocentes;
-      const disciplinas = this.DisciplinasInPerfis;
+      const disciplinas = this.AllDisciplinas;
       const preferencias = this.PreferenciaDosDocentes;
       reader.onload = function(e) {
         const workbook = XLSX.read(e.target.result, { type: "binary" });
@@ -674,12 +725,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["AllDocentes", "DisciplinasInPerfis", "PreferenciaDosDocentes"]),
+    ...mapGetters(["AllDocentes", "AllDisciplinas", "PreferenciaDosDocentes"]),
 
     DocentesPorDisciplinasOrdered() {
       const prefsOrdered = {};
 
-      if (this.ordenacaoMain.disciplinas.type === "asc") {
+      if (this.ordenacaoDisciplina.disciplinas.type === "asc") {
         this.$_(this.DocentesPorDisciplinas)
           .keys()
           .sort()
@@ -696,12 +747,15 @@ export default {
           });
       }
 
+      const docentesOrd = this.ordenacaoDisciplina.docentes;
+      const prefOrd = this.ordenacaoDisciplina.pref;
+
       for (var key in prefsOrdered) {
         if (Object.prototype.hasOwnProperty.call(prefsOrdered, key)) {
           prefsOrdered[key] = this.$_.orderBy(
             prefsOrdered[key],
-            ["preferencia", "docente.apelido"],
-            ["desc", "asc"]
+            [prefOrd.order, docentesOrd.order],
+            [prefOrd.type, docentesOrd.type]
           );
         }
       }
@@ -729,7 +783,7 @@ export default {
     DisciplinasPorDocentesOrdered() {
       const prefsOrdered = {};
 
-      if (this.ordenacaoMain.docentes.type === "asc") {
+      if (this.ordenacaoDocentes.docentes.type === "asc") {
         this.$_(this.DisciplinasPorDocentes)
           .keys()
           .sort()
@@ -746,12 +800,15 @@ export default {
           });
       }
 
+      const disciplinasOrd = this.ordenacaoDocentes.disciplinas;
+      const prefOrd = this.ordenacaoDocentes.pref;
+
       for (var key in prefsOrdered) {
         if (Object.prototype.hasOwnProperty.call(prefsOrdered, key)) {
           prefsOrdered[key] = this.$_.orderBy(
             prefsOrdered[key],
-            ["preferencia", "disciplina.codigo"],
-            ["desc", "asc"]
+            [prefOrd.order, disciplinasOrd.order],
+            [prefOrd.type, disciplinasOrd.type]
           );
         }
       }

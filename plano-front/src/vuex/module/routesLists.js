@@ -125,7 +125,7 @@ const state = {
     },
     {
       title: "Preferências Docentes",
-      routeName: "preferencias",
+      routeName: "preferenciasDocentes",
       icon: "users",
       description: `Listagem de preferências dos docentes, e permite importar um documento xlsx com atualiações das preferências.`,
     },

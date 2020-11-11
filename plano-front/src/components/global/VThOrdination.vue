@@ -75,7 +75,7 @@ export default {
       const { currentOrder, orderType } = this;
       let newOrder = this.orderToCheck;
 
-      if (this.orderFixed && currentOrder.type === "desc") {
+      if (this.orderFixed && currentOrder.type !== this.orderType) {
         newOrder = null;
       }
 

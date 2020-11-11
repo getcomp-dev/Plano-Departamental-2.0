@@ -2,7 +2,7 @@
   <BaseModal ref="baseModalDownload" title="Download" type="fromNavbar">
     <template #modal-body>
       <div class="title-container pl-1">
-        <h2 class="title-list">Arquivos inclusos:</h2>
+        <h2 class="title-list" @click="downloadTurmasCursos">Arquivos inclusos:</h2>
         <BaseButton
           text="Iniciar download"
           color="darkblue"
@@ -151,6 +151,26 @@ export default {
     async startDownload() {
       await this.download();
     },
+
+    async downloadTurmasCursos() {
+      await downloadService.generatePdfTurmasCurso({
+        Plano: localStorage.getItem("Plano"),
+      }).then(() =>
+              downloadService.createZipTurmasCursos().then( () =>
+                      fetch("http://200.131.219.57:3000/api/download/downloadTurmasCursosZip", {
+                        method: "GET",
+                        headers: {
+                          Authorization: `Bearer ${this.$store.state.auth.token}`,
+                        },
+                      })
+                              .then((r) => r.blob())
+                              .then((blob) => {
+                                saveAs(blob, "TurmasCursos.zip");
+                              })
+              )
+      )
+
+    }
   },
   computed: {
     downloadStateText() {

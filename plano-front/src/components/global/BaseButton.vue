@@ -71,6 +71,11 @@ export default {
           options.class = "btn-icon icon-gray";
           options.iconName = "file-upload";
           break;
+        case "download":
+          options.title = "Baixar Arquivos";
+          options.class = "btn-icon icon-gray";
+          options.iconName = "save";
+          break;
         case "swap-modes":
           options.title = "Trocar Visualização";
           options.class = "btn-icon icon-gray";
