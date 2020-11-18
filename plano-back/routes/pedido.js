@@ -75,8 +75,7 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
         if(pedido.Turma != req.body.Turma)
             history({fieldName:'Turma', lineId:`${pedido.Turma}/${pedido.Curso}`, oldValue: pedido.Turma, newValue: req.body.Turma, operationType:'Edit', user: req.usuario.nome})
 
-
-        models.Pedido.update({
+        return models.Pedido.update({
             vagasPeriodizadas: req.body.vagasPeriodizadas,
             vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
         }, {
@@ -84,14 +83,16 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
                 Curso: req.params.Curso,
                 Turma: req.params.Turma
             }
+        }).then(() => {
+            return models.Pedido.findOne({
+                attributes: ['vagasPeriodizadas', 'vagasNaoPeriodizadas', 'createdAt', 'updatedAt', 'Curso', 'Turma'],
+                where: {
+                    Curso: req.params.Curso,
+                    Turma: req.params.Turma
+                }
+            })
         })
-        return models.Pedido.findOne({
-            attributes: ['vagasPeriodizadas', 'vagasNaoPeriodizadas', 'createdAt', 'updatedAt', 'Curso', 'Turma'],
-            where: {
-                Curso: req.params.Curso,
-                Turma: req.params.Turma
-            }
-        })
+
     }).then(function (pedido) {
         ioBroadcast(SM.PEDIDO_UPDATED, {'msg': 'Pedido atualizado!', 'Pedido': pedido})
         console.log('\nRequest de '+req.usuario.nome+'\n')
