@@ -81,11 +81,10 @@ router.get('/createTurmasCursosZip', async function(req, res, next){
     let filenames = fs.readdirSync('/home/planodcc/Plano-Departamental-2.0/plano-back')
     filenames.forEach((f) => {
         if(f.includes('.pdf') && !['Cargas.pdf', 'Labs.pdf', 'Horarios.pdf', 'Plano-departamental.pdf'].includes(f)){
-            let pdf = fs.readFileSync(`./${f}`, (err, data) => {
+            fs.readFileSync(`./${f}`, (err, data) => {
                 if(err) throw err
-                return data
+                zip.file (f, data)
             })
-            zip.file(f, pdf)
         }
     })
     await zip.generateAsync({type: "uint8array"})
