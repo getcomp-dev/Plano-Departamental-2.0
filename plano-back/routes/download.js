@@ -78,7 +78,14 @@ router.get('/', function(req, res, next){
 
 router.get('/createTurmasCursosZip', async function(req, res, next){
     const zip = new JSZip()
-    zip.folder('./TurmasCursos')
+    let filenames = fs.readdirSync('/home/planodcc/Plano-Departamental-2.0/plano-back/TurmasCursos')
+    filenames.forEach((f) => {
+        let pdf = fs.readFileSync(`./TurmasCursos/${f}`, (err, data) => {
+            if(err) throw err
+            return data
+        })
+        zip.file(f, pdf)
+    })
     await zip.generateAsync({type: "uint8array"})
         .then(function (r) {
             fs.writeFileSync('TurmasCursos.zip', r)
