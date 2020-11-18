@@ -76,11 +76,18 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
             history({fieldName:'Turma', lineId:`${pedido.Turma}/${pedido.Curso}`, oldValue: pedido.Turma, newValue: req.body.Turma, operationType:'Edit', user: req.usuario.nome})
 
 
-        return models.Pedido.update({
+        models.Pedido.update({
             vagasPeriodizadas: req.body.vagasPeriodizadas,
             vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
         }, {
             where:{
+                Curso: req.params.Curso,
+                Turma: req.params.Turma
+            }
+        })
+        return models.Pedido.findOne({
+            attributes: ['vagasPeriodizadas', 'vagasNaoPeriodizadas', 'createdAt', 'updatedAt', 'Curso', 'Turma'],
+            where: {
                 Curso: req.params.Curso,
                 Turma: req.params.Turma
             }
