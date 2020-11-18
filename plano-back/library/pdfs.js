@@ -161,7 +161,7 @@ Pdfs.prototype.TurmasCursos = (config) => new Promise((resolve, reject) => {
         this.Cursos.forEach(curso => {
             promises.push(pdfTurmasCursos(curso))
         })
-        Promise.all([...promises]).then(async () => {resolve()})
+        Promise.all(promises).then(async () => {resolve()})
         resolve()
     })
 })
