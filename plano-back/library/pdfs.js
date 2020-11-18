@@ -7350,7 +7350,7 @@ const pdfTurmasCursos = (curso) => new Promise((resolve, reject) => {
     };
     console.log("Criando PDF")
     let pdfDocTurmasCurso = printer.createPdfKitDocument(docDefinitionTurmasCurso);
-    let turmasCursoStream = fs.createWriteStream(`${curso.codigo}.pdf`)
+    let turmasCursoStream = fs.createWriteStream(`./TurmasCursos/${curso.codigo}.pdf`)
     turmasCursoStream.on("finish", resolve)
     pdfDocTurmasCurso.pipe(turmasCursoStream);
     pdfDocTurmasCurso.end();
