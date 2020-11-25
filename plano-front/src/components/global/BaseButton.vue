@@ -67,22 +67,22 @@ export default {
           options.iconName = "file-alt";
           break;
         case "file-upload":
-          options.title = "Upload de Arquivo";
+          options.title = "Upload de arquivo";
           options.class = "btn-icon icon-gray";
           options.iconName = "file-upload";
           break;
         case "download":
-          options.title = "Baixar Arquivos";
+          options.title = "Baixar arquivos";
           options.class = "btn-icon icon-gray";
           options.iconName = "save";
           break;
         case "swap-modes":
-          options.title = "Trocar Visualização";
+          options.title = "Alterar visualização da tabela";
           options.class = "btn-icon icon-gray";
           options.iconName = "sync-alt";
           break;
         default:
-          options.title = "Vazio!";
+          options.title = "Vazio";
           options.class = "btn-icon icon-gray";
           options.iconName = "exclamation-triangle";
           break;

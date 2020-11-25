@@ -85,7 +85,6 @@ router.get('/createTurmasCursosZip', async function(req, res, next){
             return data
         })
         zip.file(f, pdf, {binary: true, compression : "DEFLATE"})
-        console.log('PDF Adicionado')
     })
     zip.generateNodeStream({type:'nodebuffer',streamFiles:true})
         .pipe(fs.createWriteStream('TurmasCursos.zip'))

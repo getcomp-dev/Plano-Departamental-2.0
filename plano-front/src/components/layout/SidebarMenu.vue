@@ -10,7 +10,9 @@
       <li v-for="page in menuPages" :key="page.routeName" @click="closeSidebar">
         <router-link :to="{ name: page.routeName }" class="nav-link">
           <font-awesome-icon :icon="['fas', page.icon]" />
-          {{ page.title }}
+          <span>
+            {{ page.title }}
+          </span>
         </router-link>
       </li>
     </ul>
@@ -24,10 +26,7 @@ export default {
   name: "SidebarMenu",
   props: {
     menuPages: { type: Array, default: () => [] },
-    menuTitle: {
-      type: String,
-      default: "",
-    },
+    menuTitle: { type: String, default: "" },
   },
 
   methods: {
@@ -48,12 +47,14 @@ export default {
 }
 
 .sidebar-menu .nav li .nav-link {
-  color: inherit;
+  display: flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 5px;
+  padding-left: 8px;
   font-weight: 500;
   font-size: 12px;
-  height: 30px;
-  padding: 5px;
-  padding-left: 8px;
+  color: inherit;
   transition: all 100ms ease;
 }
 .sidebar-menu .nav > li .nav-link:focus {
@@ -72,11 +73,11 @@ export default {
   border-left: var(--light-blue) 10px solid;
   color: white;
 }
-
 .sidebar-menu .nav > li .nav-link > svg {
   color: inherit;
   font-size: 12px;
   width: 18px;
+  margin-right: 3px;
   text-align: start;
 }
 </style>

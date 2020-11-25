@@ -452,15 +452,12 @@ export default {
     },
     pdf(completo) {
       let disciplinasSelecionadas = completo
-        ? this.DisciplinasDCCInPerfis
+        ? this.DisciplinasInTurmas
         : this.DisciplinasInTurmasFiltered;
 
       pdfs.pdfRelatorioDisciplinas({
         disciplinasSelecionadas,
-        plano: this.$_.find(this.AllPlanos, [
-          "id",
-          parseInt(localStorage.getItem("Plano")),
-        ]),
+        plano: this.currentPlano,
       });
     },
   },

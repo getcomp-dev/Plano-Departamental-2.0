@@ -1,6 +1,6 @@
 <template>
   <div class="main-component">
-    <PageHeader :title="'Planos'">
+    <PageHeader :title="'Plano departamental'">
       <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
     </PageHeader>
 
@@ -67,7 +67,7 @@
       </div>
 
       <Card
-        :title="'Plano'"
+        :title="'Plano departamental'"
         :toggleFooter="isEditing"
         :isPlano="isEditing"
         @btn-salvar="handleEditPlano"
@@ -348,18 +348,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-::v-deep .card input[type="text"],
-::v-deep .card select {
-  width: 100%;
-  height: 25px !important;
-  padding: 0px 5px !important;
-  font-size: 12px !important;
-  text-align: start;
-}
-textarea {
-  padding: 5px;
-  font-size: 12px;
-}
-</style>

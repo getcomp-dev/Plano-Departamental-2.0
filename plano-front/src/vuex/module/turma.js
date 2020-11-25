@@ -72,17 +72,11 @@ const actions = {
     });
   },
 
-  async createTurma({ commit, dispatch }, turma) {
+  async createTurma({}, turma) {
     const turmaNormalized = _.cloneDeepWith(turma, setEmptyValuesToNull);
     validateObjectKeys(turmaNormalized, ["Disciplina", "letra", "turno1"]);
 
     const response = await turmaService.create(turmaNormalized);
-    await dispatch("fetchAllPedidos");
-
-    commit(PUSH_NOTIFICATION, {
-      type: "success",
-      text: `A turma ${turmaNormalized.letra} foi criada`,
-    });
     return response.Turma;
   },
 

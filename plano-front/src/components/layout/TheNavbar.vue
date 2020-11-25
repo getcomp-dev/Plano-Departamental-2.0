@@ -2,7 +2,8 @@
   <nav class="navbar-container shadow">
     <div @click="closeSidebar" class="navbar-brand">
       <router-link :to="{ path: '/dashboard' }" class="brand-title">
-        Plano Departamental
+        <font-awesome-icon :icon="['fas', 'graduation-cap']" />
+        SIPlanWeb
       </router-link>
     </div>
 
@@ -31,7 +32,7 @@
         <span>Usuário</span>
       </li>
       <li class="nav-item" @click="modalCallbacks.openDownload">
-        <font-awesome-icon :icon="['fas', 'save']" />
+        <font-awesome-icon :icon="['fas', 'download']" />
         <span>Download</span>
       </li>
       <li class="nav-item" @click="$router.push({ name: 'logout' })">
@@ -115,18 +116,17 @@ export default {
   height: 30px;
   margin: 0;
   padding: 0;
-  padding-left: 10px;
-
   cursor: pointer;
   color: #cdced0;
   background-color: #272b30;
   transition: all 0.2s ease;
 }
 .navbar-container > .navbar-brand > .brand-title {
-  width: 100%;
   padding: 0;
-  font-size: 15px;
-  text-align: left;
+  margin: 0;
+  font-size: 16px;
+  text-align: start;
+  font-family: "Crete Round", serif;
   text-decoration: none;
   color: currentColor;
 }

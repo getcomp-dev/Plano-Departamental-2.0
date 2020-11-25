@@ -139,7 +139,7 @@ td:hover {
   overflow: hidden !important;
   z-index: 5;
 }
-.modal-table thead .div-search {
+.table-custom thead .div-search {
   display: flex;
   align-items: center;
   width: 100%;

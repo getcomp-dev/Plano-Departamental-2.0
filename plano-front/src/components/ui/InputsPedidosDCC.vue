@@ -4,7 +4,7 @@
       type="text"
       :class="['input-pedidos', { empty: pedidoForm.vagasPeriodizadas == 0 }]"
       v-model.number="pedidoForm.vagasPeriodizadas"
-      @change="handleEditPedido"
+      @change="debouncedEditPedido"
       @keypress="maskOnlyNumber"
       @paste.prevent
       v-focus-pedido
@@ -14,7 +14,7 @@
       type="text"
       :class="['input-pedidos', { empty: pedidoForm.vagasNaoPeriodizadas == 0 }]"
       v-model.number="pedidoForm.vagasNaoPeriodizadas"
-      @change="handleEditPedido"
+      @change="debouncedEditPedido"
       @keypress="maskOnlyNumber"
       @paste.prevent
       v-focus-pedido
@@ -37,6 +37,7 @@ export default {
   data() {
     return {
       pedidoForm: null,
+      debouncedEditPedido: this.$_.debounce(this.handleEditPedido, 1000),
     };
   },
 
@@ -44,26 +45,21 @@ export default {
     ...mapActions(["editPedido"]),
 
     resetPedidoForm() {
-      this.pedidoForm = this.$_.clone(this.PedidosOfCurrentTurma);
+      this.pedidoForm = this.$_.cloneDeep(this.PedidosOfCurrentTurma);
     },
     async handleEditPedido() {
       try {
-        this.setPartialLoading(true);
-
         await this.editPedido(this.pedidoForm);
       } catch (error) {
         let erroMsg = "";
         if (error.response.data.fullMessage)
-          erroMsg +=
-            "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+          erroMsg += "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
 
         this.pushNotification({
           type: "error",
           title: "Erro ao atualizar Pedido",
           text: erroMsg,
         });
-      } finally {
-        this.setPartialLoading(false);
       }
     },
   },

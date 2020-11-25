@@ -59,7 +59,7 @@ const actions = {
 };
 
 const getters = {
-  PreferenciaDosDocentes(state, rootGetters) {
+  PreferenciasDocentes(state, rootGetters) {
     return _.map(state.DocenteDisciplinas, (pref) => {
       return {
         ...pref,

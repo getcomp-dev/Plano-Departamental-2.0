@@ -85,13 +85,20 @@ export default {
   align-items: center;
 }
 
-.card select,
-.card input[type="text"],
-.card input[type="number"],
-.card input[type="password"] {
-  height: 28px !important;
-  padding: 5px !important;
+.card > .card-body select,
+.card > .card-body input[type="text"],
+.card > .card-body input[type="number"],
+.card > .card-body input[type="password"] {
+  width: 100%;
+  height: 28px;
+  padding: 0 5px !important;
   font-size: 12px !important;
+  text-align: start;
+}
+.card > .card-body textarea {
+  width: 100%;
+  padding: 5px;
+  font-size: 12px;
   text-align: start;
 }
 </style>

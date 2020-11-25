@@ -282,7 +282,11 @@
       </div>
 
       <div class="div-table">
-        <BaseTable type="modal" :styles="'height:350px'" :hasSearchBar="true">
+        <BaseTable
+          type="main"
+          :styles="'height:350px;font-size:10px!important'"
+          :hasSearchBar="true"
+        >
           <template #thead-search>
             <InputSearch
               v-model="searchCursos"

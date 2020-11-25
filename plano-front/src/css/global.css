@@ -6,6 +6,7 @@
   --dark-gray: #343a40;
 }
 
+@import url("https://fonts.googleapis.com/css2?family=Crete+Round&display=swap");
 @import "./btn-cores.css";
 @import "./slideY-animation.css";
 

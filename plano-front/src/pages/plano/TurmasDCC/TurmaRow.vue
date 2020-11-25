@@ -8,10 +8,7 @@
     </v-td>
     <v-td width="40" type="content">
       <button class="btn-table" @click.stop="$emit('click-edit', turma)">
-        <font-awesome-icon
-          :icon="['fas', 'edit']"
-          class="btn-table-icon icon-darkgray"
-        />
+        <font-awesome-icon :icon="['fas', 'edit']" class="btn-table-icon icon-darkgray" />
       </button>
     </v-td>
     <v-td width="55" type="content">
@@ -50,7 +47,8 @@
               v-for="docente in DocentesByPreferencia"
               :key="docente.id + docente.apelido"
               :value="docente.id"
-              >{{ docente.apelido }}
+            >
+              {{ docente.apelido }}
               {{
                 orderByPreferencia && preferenciaDocente(docente)
                   ? "- " + preferenciaDocente(docente)
@@ -68,13 +66,14 @@
               v-for="docente in DocentesByPreferencia"
               :key="docente.apelido + docente.id"
               :value="docente.id"
-              >{{ docente.apelido }}
+            >
+              {{ docente.apelido }}
               {{
                 orderByPreferencia && preferenciaDocente(docente)
                   ? "- " + preferenciaDocente(docente)
                   : ""
-              }}</option
-            >
+              }}
+            </option>
           </select>
         </div>
         <font-awesome-icon
@@ -102,7 +101,8 @@
           v-for="horario in HorariosFiltredByTurno"
           :key="horario.id + horario.horario"
           :value="horario.id"
-          >{{ horario.horario }}
+        >
+          {{ horario.horario }}
         </option>
       </select>
 
@@ -116,7 +116,8 @@
             v-for="horario in HorariosEAD"
             :key="horario.horario + horario.id"
             :value="horario.id"
-            >{{ horario.horario }}
+          >
+            {{ horario.horario }}
           </option>
         </template>
 
@@ -126,7 +127,8 @@
             v-for="horario in HorariosFiltredByTurno"
             :key="horario.horario + horario.id"
             :value="horario.id"
-            >{{ horario.horario }}
+          >
+            {{ horario.horario }}
           </option>
         </template>
       </select>
@@ -139,12 +141,9 @@
           </option>
           <option v-else />
 
-          <option
-            v-for="sala in AllSalas"
-            :key="sala.id + sala.nome"
-            :value="sala.id"
-            >{{ sala.nome }}</option
-          >
+          <option v-for="sala in AllSalas" :key="sala.id + sala.nome" :value="sala.id">
+            {{ sala.nome }}
+          </option>
         </select>
 
         <select
@@ -157,11 +156,8 @@
           </option>
           <option v-else />
 
-          <option
-            v-for="sala in AllSalas"
-            :key="sala.nome + sala.id"
-            :value="sala.id"
-            >{{ sala.nome }}
+          <option v-for="sala in AllSalas" :key="sala.nome + sala.id" :value="sala.id">
+            {{ sala.nome }}
           </option>
         </select>
       </template>
@@ -171,9 +167,7 @@
         <b class="mb-1">
           {{ totalPedidosNaoPeriodizados + totalPedidosPeriodizados }}
         </b>
-        <span>
-          {{ totalPedidosPeriodizados }}+{{ totalPedidosNaoPeriodizados }}
-        </span>
+        <span>{{ totalPedidosPeriodizados }}+{{ totalPedidosNaoPeriodizados }}</span>
       </div>
     </v-td>
     <v-td
@@ -298,9 +292,7 @@ export default {
           !this.$_.isNull(this.turmaForm.Docente2))
       ) {
         if (
-          horario === 1
-            ? this.turmaForm.Horario1 === 31
-            : this.turmaForm.Horario2 === 31
+          horario === 1 ? this.turmaForm.Horario1 === 31 : this.turmaForm.Horario2 === 31
         ) {
           return false;
         } else if (
@@ -664,13 +656,10 @@ export default {
       if (
         (!this.$_.isNull(this.turmaForm.Horario1) ||
           !this.$_.isNull(this.turmaForm.Horario2)) &&
-        (!this.$_.isNull(this.turmaForm.Sala1) ||
-          !this.$_.isNull(this.turmaForm.Sala2))
+        (!this.$_.isNull(this.turmaForm.Sala1) || !this.$_.isNull(this.turmaForm.Sala2))
       ) {
         if (
-          horario === 1
-            ? this.turmaForm.Horario1 === 31
-            : this.turmaForm.Horario2 === 31
+          horario === 1 ? this.turmaForm.Horario1 === 31 : this.turmaForm.Horario2 === 31
         ) {
           return false;
         } else if (
@@ -768,18 +757,14 @@ export default {
           let d1, d2;
           if (sala === 1) {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -831,18 +816,14 @@ export default {
           let d1, d2;
           if (sala === 1) {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -894,18 +875,14 @@ export default {
           let d1, d2;
           if (sala === 1) {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -953,18 +930,14 @@ export default {
           let d1, d2;
           if (sala === 1) {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -1012,18 +985,14 @@ export default {
           let d1, d2;
           if (sala === 1) {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) &&
-              this.turmaForm.Sala1 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
             d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala1;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
             d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) &&
-              this.turmaForm.Sala2 === t.Sala2;
+              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -1080,7 +1049,7 @@ export default {
       "HorariosDiurno",
       "TurmasToDelete",
       "Pedidos",
-      "PreferenciaDosDocentes",
+      "PreferenciasDocentes",
     ]),
 
     toggleToDelete: {
@@ -1138,7 +1107,7 @@ export default {
       return this.Pedidos[this.turma.id];
     },
     PreferenciasDisciplina() {
-      return this.$_.filter(this.PreferenciaDosDocentes, {
+      return this.$_.filter(this.PreferenciasDocentes, {
         Disciplina: this.turmaForm.Disciplina,
       });
     },

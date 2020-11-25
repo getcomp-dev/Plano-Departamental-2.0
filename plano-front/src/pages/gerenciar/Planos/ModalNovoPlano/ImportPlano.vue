@@ -8,7 +8,7 @@
 
     <div class="form-row">
       <div class="form-group col-4">
-        <label for="periodoPlano">Período das turmas:</label>
+        <label for="periodoPlano">Período:</label>
         <select
           id="periodoPlano"
           v-model.number="periodoTurmas"
@@ -27,7 +27,12 @@
 
     <div class="form-row">
       <div class="form-group col">
-        <input type="file" ref="inputFilePlano" class="w-100 form-control-file" />
+        <input
+          type="file"
+          ref="inputFilePlano"
+          class="w-100 form-control-file"
+          accept=".csv"
+        />
       </div>
     </div>
   </div>
@@ -52,8 +57,12 @@ export default {
     ...mapActions(["createTurma", "editPedido"]),
 
     async handleImportPlano() {
+      if (!this.periodoTurmas) {
+        throw new Error("Escolha o período do plano");
+      }
+
       this.setPartialLoading(true);
-      const inputFile = this.$refs.inputFilePlano.files[0];
+      const [inputFile] = this.$refs.inputFilePlano.files;
       const reader = new FileReader();
 
       reader.onload = async (event) => {
@@ -69,14 +78,13 @@ export default {
         const turmasDoPlano = JSON.parse(dataStringNormalized);
 
         await this.createPlanoImported(turmasDoPlano, this.periodoTurmas);
-        await this.$store.dispatch("fetchAll");
-
+        // await this.$store.dispatch("fetchAll"); //Não é necessario ?
         this.setPartialLoading(false);
       };
 
       reader.readAsBinaryString(inputFile);
     },
-    async createPlanoImported(turmasImported, periodo = 1) {
+    async createPlanoImported(turmasImported, periodo) {
       const keys = {
         disciplinaCod: null,
         letra: null,
@@ -97,53 +105,34 @@ export default {
         else if (i === 8) keys.docentes = key;
         i++;
       }
-      let currentTurma = {};
 
+      let currentTurma = {};
       const response = await planoService.create(this.plano);
 
       for (const turmaFile of turmasImported) {
-        const newTurma = generateEmptyTurma();
+        const newTurma = generateEmptyTurma({
+          periodo,
+          Plano: response.Plano.id,
+          letra: turmaFile[keys.letra] || null,
+        });
 
-        newTurma.Plano = response.Plano.id;
-        newTurma.periodo = periodo;
-        newTurma.letra = turmaFile[keys.letra] || null;
-        newTurma.Disciplina = this.findDisciplinaId(turmaFile[keys.disciplinaCod]);
+        this.setDisciplina(newTurma, turmaFile[keys.disciplinaCod]);
+        this.setHorariosESalas(newTurma, turmaFile[keys.horarioESala]);
+        this.setDocentes(newTurma, turmaFile[keys.docentes]);
 
-        if (turmaFile[keys.horarioESala]) {
-          const [str1, str2] = turmaFile[keys.horarioESala].split(";");
-          //Horarios
-          newTurma.Horario1 = this.findHorarioId(str1);
-          newTurma.Horario2 = this.findHorarioId(str2);
-          newTurma.turno1 = this.findTurno(newTurma.Horario1, newTurma.Horario2);
-
-          //Salas
-          if (newTurma.turno1 !== "EAD") {
-            newTurma.Sala1 = this.findSalaId(str1);
-            newTurma.Sala2 = this.findSalaId(str2);
-          }
-        }
-
-        if (turmaFile[keys.docentes]) {
-          const [docente1Str, docente2Str] = turmaFile[keys.docentes].split(";");
-          newTurma.Docente1 = this.findDocenteId(docente1Str);
-          newTurma.Docente2 = this.findDocenteId(docente2Str);
-        }
-
+        //Se não achou a Disciplina, letra ou turno1 não cria a turma
         if (!newTurma.Disciplina || !newTurma.letra || !newTurma.turno1) {
-          //Se não achou a Disciplina, letra ou turno1 não cria a turma
           continue;
         }
-
-        if (this.isTheSameTurma(currentTurma, newTurma)) {
-          //Se é igual a turma anterior, então cria apenas a vaga
+        //Se a nova turma é igual a currentTurma, não cria a turma e cria apenas a vaga
+        if (this.turmasIsEqual(currentTurma, newTurma)) {
           // await this.createPedido(turmaFile, keys, currentTurma.id); //Não esta funcionando
           continue;
         }
 
-        const turmaCreated = await this.createTurma(newTurma); //Cria a turma
+        const turmaCreated = await this.createTurma(newTurma); //Se é uma turma nova cria
+        // await this.createPedido(turmaFile, keys, turmaCreated.id); //E cria pedido da turma
         currentTurma = { ...turmaCreated }; //Atualiza currentTurma
-
-        // await this.createPedido(turmaFile, keys, turmaCreated.id); //Não esta funcionando
       }
     },
     async createPedido(turmaFile, keys, turmaId) {
@@ -167,57 +156,80 @@ export default {
       }
     },
 
+    setDisciplina(turma, strCodigo) {
+      if (!strCodigo) return;
+
+      const disciplinaFounded = this.$_.find(this.AllDisciplinas, ["codigo", strCodigo]);
+      turma.Disciplina = disciplinaFounded ? disciplinaFounded.id : null;
+    },
+    setHorariosESalas(turma, strHorarioESala) {
+      if (!strHorarioESala) return;
+
+      const [str1, str2] = strHorarioESala.split(";");
+      turma.Horario1 = this.findHorarioId(str1);
+      turma.Horario2 = this.findHorarioId(str2);
+      turma.turno1 = this.findTurno(turma.Horario1, turma.Horario2);
+
+      if (turma.turno1 !== "EAD") {
+        turma.Sala1 = this.findSalaId(str1);
+        turma.Sala2 = this.findSalaId(str2);
+      }
+    },
+    setDocentes(turma, strDocentes) {
+      if (!strDocentes) return;
+
+      const [docente1Str, docente2Str] = strDocentes.split(";");
+      turma.Docente1 = this.findDocenteId(docente1Str);
+      turma.Docente2 = this.findDocenteId(docente2Str);
+    },
     findTurno(horario1Id, horario2Id) {
-      if (!horario1Id && !horario2Id) return null;
-      else if (horario1Id == 31) return "EAD";
-      else if (
+      if (!horario1Id && !horario2Id) {
+        return null;
+      } else if (horario1Id == 31) {
+        return "EAD";
+      } else if (
         this.$_.some(this.HorariosNoturno, ["id", horario1Id]) ||
         this.$_.some(this.HorariosNoturno, ["id", horario2Id])
-      )
+      ) {
         return "Noturno";
-      else return "Diurno";
+      } else {
+        return "Diurno";
+      }
     },
     findCursoId(cursoCodigo) {
+      if (!cursoCodigo) return null;
+
       const cursoFounded = this.$_.find(this.AllCursos, ["codigo", cursoCodigo]);
       return cursoFounded ? cursoFounded.id : null;
     },
-    findDocenteId(docenteNomeSiga) {
-      if (!docenteNomeSiga.length) return null;
+    findDocenteId(nomeSiga) {
+      if (!nomeSiga) return null;
 
       const docenteFounded = this.$_.find(
         this.AllDocentes,
-        (docente) => normalizeText(docente.nomesiga) === normalizeText(docenteNomeSiga)
+        (docente) => normalizeText(docente.nomesiga) === normalizeText(nomeSiga)
       );
       return docenteFounded ? docenteFounded.id : null;
     },
-    findDisciplinaId(disciplinaCodigo) {
-      const disciplinaFounded = this.$_.find(this.AllDisciplinas, [
-        "codigo",
-        disciplinaCodigo,
-      ]);
+    findHorarioId(strHorario) {
+      if (!strHorario) return null;
 
-      return disciplinaFounded ? disciplinaFounded.id : null;
-    },
-    findHorarioId(horarioString) {
-      if (!horarioString) return null;
-
-      const [dia, hora, sala] = horarioString.split(",");
-      const nomeHorario = this.parseDiaEHora(dia, hora);
+      const [dia, hora, sala] = strHorario.split(",");
+      const nomeHorario = this.findHorarioNomeByDiaEHora(dia, hora);
 
       if (nomeHorario) {
         const horarioFounded = this.$_.find(this.AllHorarios, ["horario", nomeHorario]);
-
         return horarioFounded ? horarioFounded.id : null;
       }
 
+      //Caso não tenha achando nenhum horario mas tenha uma sala EAD
       if (normalizeText(sala).includes(normalizeText("HORÁRIO EAD"))) {
         console.log("EAD sala", sala);
-        return 31; //Id EAD
+        return 31; //Id horario EAD
       }
-
       return null;
     },
-    parseDiaEHora(dia, hora) {
+    findHorarioNomeByDiaEHora(dia, hora) {
       if (!dia || !hora) return null;
 
       let diaNormalized = null;
@@ -247,12 +259,10 @@ export default {
           return "EAD";
       }
 
-      const horarioFounded =
-        this.$_.find(this.ListaDeTodosHorarios, (horarioItem) =>
-          horarioItem.nome.includes(hora.substring(0, 2) + "-")
-        ) || {};
-
-      horaNormalized = horarioFounded.nome;
+      const horarioFounded = this.$_.find(this.ListaDeTodosHorarios, (horarioItem) =>
+        horarioItem.nome.includes(hora.substring(0, 2) + "-")
+      );
+      horaNormalized = horarioFounded ? horarioFounded.nome : null;
 
       if (diaNormalized && horaNormalized) {
         return diaNormalized + " " + horaNormalized;
@@ -260,24 +270,22 @@ export default {
         return null;
       }
     },
-    findSalaId(salaString) {
-      if (!salaString) return null;
+    findSalaId(strSala) {
+      if (!strSala) return null;
 
-      const [, , sala] = salaString.split(",");
-      const salaNormalized = normalizeText(sala);
+      const [, , sala] = strSala.split(",");
+      const strSalaNormalized = normalizeText(sala);
 
       const salaFounded = this.$_.find(this.AllSalas, (sala) => {
         const nomeNormalized = normalizeText(sala.nome);
-        return salaNormalized.includes(nomeNormalized);
+        return strSalaNormalized.includes(nomeNormalized);
       });
-
       return salaFounded ? salaFounded.id : null;
     },
-    isTheSameTurma(turma1, turma2) {
+    turmasIsEqual(turma1, turma2) {
       return (
         turma1.letra === turma2.letra &&
         turma1.Disciplina === turma2.Disciplina &&
-        turma1.turno1 === turma2.turno1 &&
         turma1.Horario1 === turma2.Horario1 &&
         turma1.Horario2 === turma2.Horario2
       );

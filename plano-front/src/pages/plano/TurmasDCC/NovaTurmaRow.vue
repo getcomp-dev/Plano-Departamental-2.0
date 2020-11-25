@@ -193,7 +193,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["createTurma"]),
+    ...mapActions(["createTurma", "fetchAllPedidos"]),
 
     handleChangeTurno() {
       this.turmaForm.Horario1 = null;
@@ -243,6 +243,12 @@ export default {
         this.setPartialLoading(true);
         this.turmaForm.Plano = this.currentPlano.id;
         await this.createTurma(this.turmaForm);
+        await this.fetchAllPedidos();
+
+        this.pushNotification({
+          type: "success",
+          text: `A turma ${this.turmaForm.letra} foi criada`,
+        });
       } catch (error) {
         this.pushNotification({
           type: "error",
@@ -272,11 +278,11 @@ export default {
       "HorariosNoturno",
       "HorariosDiurno",
       "AllSalas",
-      "PreferenciaDosDocentes",
+      "PreferenciasDocentes",
     ]),
 
     PreferenciasDisciplina() {
-      return this.$_.filter(this.PreferenciaDosDocentes, [
+      return this.$_.filter(this.PreferenciasDocentes, [
         "Disciplina",
         this.turmaForm.Disciplina,
       ]);
