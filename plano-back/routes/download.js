@@ -86,12 +86,13 @@ router.get('/createTurmasCursosZip', async function(req, res, next){
         })
         zip.file(f, pdf, {binary: true, compression : "DEFLATE"})
     })
-    setTimeout(zip.generateAsync({type: "uint8array"})
-        .then(function (r) {
-            fs.writeFileSync('TurmasCursos.zip', r)
+    zip.generateNodeStream({type:'nodebuffer',streamFiles:true})
+        .pipe(fs.createWriteStream('TurmasCursos.zip'))
+        .on('finish', function () {
+            console.log("TurmasCursos.zip written.");
             res.send({success: true})
-        }), 1000
-    )
+        });
+
 
 })
 
