@@ -88,7 +88,7 @@ router.get('/createTurmasCursosZip', async function(req, res, next){
                     throw err
                 }
                 else {
-                    console.log(`${Buffer.byteLength(data)} bytes`)
+                    console.log(`${f}, ${Buffer.byteLength(data)} bytes`)
                     zip.file(f, data, {binary: true, compression : "DEFLATE"})
                     resolve(data)
                 }
