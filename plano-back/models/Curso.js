@@ -68,6 +68,14 @@ module.exports = function (sequelize, DataTypes) {
       onDelete: 'RESTRICT'
     })
 
+    Curso.hasMany(models.GradeExterna, {
+      foreignKey: {
+        name: 'Curso',
+        allowNull: false
+      },
+      onDelete: 'RESTRICT'
+    })
+
     Curso.belongsToMany(models.Turma, {
       through: models.Vaga,
       foreignKey: 'Curso',
