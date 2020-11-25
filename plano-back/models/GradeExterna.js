@@ -16,9 +16,9 @@ module.exports = function (sequelize, DataTypes) {
         timestamps: false
     })
 
-    Grade.associate = function (models) {
+    GradeExterna.associate = function (models) {
 
-        Grade.belongsToMany(models.Disciplina, {
+        GradeExterna.belongsToMany(models.Disciplina, {
             through: models.DisciplinaGradeExterna,
             foreignKey: 'Grade',
             onDelete: 'RESTRICT'
