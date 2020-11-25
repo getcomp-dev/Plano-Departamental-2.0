@@ -86,11 +86,12 @@ router.get('/createTurmasCursosZip', async function(req, res, next){
         })
         zip.file(f, pdf)
     })
-    await zip.generateAsync({type: "uint8array"})
+    setTimeout(await zip.generateAsync({type: "uint8array"})
         .then(function (r) {
             fs.writeFileSync('TurmasCursos.zip', r)
             res.send({success: true})
-        });
+        }), 500
+    )
 
 })
 
