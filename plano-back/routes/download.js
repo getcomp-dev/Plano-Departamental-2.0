@@ -79,25 +79,32 @@ router.get('/', function(req, res, next){
 router.get('/createTurmasCursosZip', async function(req, res, next){
     const zip = new JSZip()
     let filenames = fs.readdirSync('/home/planodcc/Plano-Departamental-2.0/plano-back/TurmasCursos')
+    let promises = []
     filenames.forEach((f) => {
-        let pdf
-        fs.readFile(`./TurmasCursos/${f}`, (err, data) => {
-            if(err) throw err
-            else {
-                pdf = data
-                return pdf
-            }
-        })
-        console.log(`${Buffer.byteLength(pdf)} bytes`)
-        zip.file(f, pdf, {binary: true, compression : "DEFLATE"})
-    })
-    zip.generateNodeStream({type:'nodebuffer',streamFiles:false})
-        .pipe(fs.createWriteStream('TurmasCursos.zip'))
-        .on('finish', function () {
-            console.log("TurmasCursos.zip written.");
-            res.send({success: true})
-        });
+        promises.push(new Promise((resolve, reject) => {
+            fs.readFile(`./TurmasCursos/${f}`, (err, data) => {
+                if(err) {
+                    reject(err)
+                    throw err
+                }
+                else {
+                    console.log(`${Buffer.byteLength(data)} bytes`)
+                    zip.file(f, data, {binary: true, compression : "DEFLATE"})
+                    resolve(data)
+                }
+            })
+        }))
 
+    })
+    Promise.all(promises).then(() => {
+        zip.generateNodeStream({type:'nodebuffer',streamFiles:false})
+            .pipe(fs.createWriteStream('TurmasCursos.zip'))
+            .on('finish', function () {
+                console.log("TurmasCursos.zip written.");
+                res.send({success: true})
+            });
+
+    })
 
 })
 
