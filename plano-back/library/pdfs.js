@@ -161,8 +161,7 @@ Pdfs.prototype.TurmasCursos = (config) => new Promise((resolve, reject) => {
         this.Cursos.forEach(curso => {
             promises.push(pdfTurmasCursos(curso))
         })
-        Promise.all(promises).then(async () => {resolve()})
-        resolve()
+        Promise.all(promises).then(() => resolve()).catch(() => reject())
     })
 })
 
@@ -7351,8 +7350,8 @@ const pdfTurmasCursos = (curso) => new Promise((resolve, reject) => {
     console.log("Criando PDF")
     let pdfDocTurmasCurso = printer.createPdfKitDocument(docDefinitionTurmasCurso);
     let turmasCursoStream = fs.createWriteStream(`./TurmasCursos/${curso.codigo}.pdf`)
-    turmasCursoStream.on("finish", resolve)
     pdfDocTurmasCurso.pipe(turmasCursoStream);
+    turmasCursoStream.on("finish", resolve)
     pdfDocTurmasCurso.end();
 })
 
