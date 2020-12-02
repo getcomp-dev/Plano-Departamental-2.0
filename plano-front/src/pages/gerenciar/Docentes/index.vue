@@ -26,14 +26,6 @@
             </v-th-ordination>
             <v-th-ordination
               :currentOrder="ordenacaoDocentesMain"
-              orderToCheck="nomesiga"
-              width="240"
-              align="start"
-            >
-              Nome SIGA
-            </v-th-ordination>
-            <v-th-ordination
-              :currentOrder="ordenacaoDocentesMain"
               orderToCheck="ativo"
               orderType="desc"
               width="65"
@@ -51,9 +43,6 @@
             >
               <v-td width="240" align="start">{{ docente.nome }}</v-td>
               <v-td width="120" align="start">{{ docente.apelido }}</v-td>
-              <v-td width="240" align="start" :title="docente.nomesiga">
-                {{ docente.nomesiga }}
-              </v-td>
               <v-td width="65">{{ generateBooleanText(docente.ativo) }}</v-td>
             </tr>
 
@@ -104,20 +93,6 @@
             <div class="form-check form-check-inline col-auto m-0 mt-4 px-0">
               <label for="ativo" class="form-check-label mr-2">Ativo</label>
               <input id="ativo" type="checkbox" value="1" v-model="docenteForm.ativo" />
-            </div>
-          </div>
-
-          <div class="row mb-2 mx-0">
-            <div class="form-group col m-0 px-0">
-              <label required for="nomesiga" class="col-form-label">Nome SIGA</label>
-
-              <input
-                id="nomesiga"
-                type="text"
-                class="form-control form-control-sm input-maior"
-                @input="docenteForm.nomesiga = $event.target.value.toUpperCase()"
-                :value="docenteForm.nomesiga"
-              />
             </div>
           </div>
 

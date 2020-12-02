@@ -1608,7 +1608,6 @@ export default {
     let tables = [];
     let disciplinas = _.orderBy(data.disciplinasSelecionadas, "codigo");
     let turmasDisc = undefined;
-
     tables.push({
       columns: [
         {
@@ -1646,11 +1645,7 @@ export default {
       ],
     });
     for (let i = 0; i < disciplinas.length; i++) {
-      //Turmas 1 semestre
-      turmasDisc = disciplinas[i].turmas.filter(
-        (turma) => turma.periodo === 1 || turma.periodo === 2
-      );
-
+      turmasDisc = this.turmasRelatorioDisciplinas(disciplinas[i], 1);
       if (turmasDisc.length > 0) {
         tables.push({
           style: "tableExample",
@@ -1919,11 +1914,7 @@ export default {
       ],
     });
     for (let i = 0; i < disciplinas.length; i++) {
-      //Turmas 2 semestre
-      turmasDisc = disciplinas[i].turmas.filter(
-        (turma) => turma.periodo === 3 || turma.periodo === 4
-      );
-
+      turmasDisc = this.turmasRelatorioDisciplinas(disciplinas[i], 2);
       if (turmasDisc.length > 0) {
         tables.push({
           style: "tableExample",
@@ -2178,7 +2169,7 @@ export default {
     pdfMake.createPdf(docDefinition).open();
   },
 
-  turmasCurso(curso) {
+  turmasCurso(curso, periodos) {
     let turmas = [];
     store.getters.TurmasInDisciplinasPerfis.forEach((t) => {
       let pedidos = store.getters.Pedidos[t.id];
@@ -2189,7 +2180,15 @@ export default {
     });
     return _.orderBy(
       _.orderBy(
-        _.orderBy(turmas, (t) => {
+        _.orderBy(
+            _.filter(turmas, (t) => {
+              let periodo = false
+              periodos.forEach((p) => {
+                if(p == t.turma.periodo)
+                  periodo = true
+              })
+              return periodo
+            }), (t) => {
           return t.turma.letra;
         }),
         (t) => {
@@ -2202,7 +2201,7 @@ export default {
     );
   },
 
-  pdfTurmasCursos(cursos) {
+  pdfTurmasCursos(config) {
     var pdfMake = require("pdfmake/build/pdfmake.js");
     if (pdfMake.vfs == undefined) {
       var pdfFonts = require("pdfmake/build/vfs_fonts.js");
@@ -2238,8 +2237,10 @@ export default {
         },
       ],
     });
+    let cursos = config.Cursos
+    console.log(config)
     for (let i = 0; i < cursos.length; i++) {
-      let turmas = this.turmasCurso(cursos[i].id);
+      let turmas = this.turmasCurso(cursos[i].id, config.periodos);
       if (turmas.length > 0) {
         tables.push({
           style: "tableExample",
@@ -2275,8 +2276,8 @@ export default {
         let tabelaTurmasBody = [
           [
             { text: "Período", alignment: "left", bold: "true", fontSize: 8 },
-            { text: "Cód. Disc.", alignment: "left", bold: "true", fontSize: 8 },
-            { text: "Nome Disciplina", alignment: "left", bold: "true", fontSize: 8 },
+            { text: "Cód.", alignment: "left", bold: "true", fontSize: 8 },
+            { text: "Disciplina", alignment: "left", bold: "true", fontSize: 8 },
             {
               text: "Turma",
               alignment: "center",
@@ -2291,7 +2292,7 @@ export default {
               fontSize: 8,
             },
             {
-              text: "Não Grade",
+              text: "Extra",
               alignment: "center",
               bold: "true",
               fontSize: 8,
@@ -2320,49 +2321,50 @@ export default {
             {
               text: turmas[j].turma.periodo,
               alignment: "center",
-              fontSize: 8,
-              bold: true,
+              fontSize: 6,
+              bold: false,
+              margin: [0, 0, 0, j === turmas.length - 1 ? 10 : 0],
             },
             {
               text: turmas[j].turma.disciplina.codigo,
               alignment: "left",
-              fontSize: 8,
-              bold: true,
+              fontSize: 6,
+              bold: false,
             },
             {
               text: turmas[j].turma.disciplina.nome,
               alignment: "left",
-              fontSize: 8,
-              bold: true,
+              fontSize: 6,
+              bold: false,
             },
             {
               text: turmas[j].turma.letra,
               alignment: "center",
-              fontSize: 8,
-              bold: true,
+              fontSize: 6,
+              bold: false,
             },
 
             {
               text: horarioTotal,
               alignment: "center",
-              fontSize: 8,
-              bold: true,
+              fontSize: 6,
+              bold: false,
             },
             {
               text: turmas[j].pedido.vagasPeriodizadas
                 ? turmas[j].pedido.vagasPeriodizadas
                 : "",
               alignment: "center",
-              fontSize: 8,
-              bold: true,
+              fontSize: 6,
+              bold: false,
             },
             {
               text: turmas[j].pedido.vagasNaoPeriodizadas
                 ? turmas[j].pedido.vagasNaoPeriodizadas
                 : "",
               alignment: "center",
-              fontSize: 8,
-              bold: true,
+              fontSize: 6,
+              bold: false,
             },
           ]);
         }

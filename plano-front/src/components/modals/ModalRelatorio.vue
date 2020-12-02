@@ -6,7 +6,7 @@
     :styles="{ width: '300px', zIndex: 905 }"
   >
     <template #modal-body>
-      <ul class="list-relatorio list-group flex-row w-100">
+      <ul class="list-relatorio list-group flex-row w-100 border-0">
         <li
           class="list-group-item clickable text-center m-0 rounded-0 col py-2"
           @click="handleSelect(false)"
@@ -48,7 +48,6 @@ export default {
 
 <style scoped>
 .list-relatorio .list-group-item {
-  border: 1px solid rgba(0, 0, 0, 0.125);
   font-size: 11px;
   font-weight: bold;
 }

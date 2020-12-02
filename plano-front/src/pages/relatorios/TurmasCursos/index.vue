@@ -1,9 +1,9 @@
 <template>
   <div class="main-component row p-0">
     <PageHeader :title="'Turmas - Cursos'">
-      <!--<BaseButton template="filtros" @click="toggleAsideModal('filtros')" />-->
+      <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="relatorio" @click="toggleAsideModal('relatorio')" />
-      <BaseButton template="download" @click="downloadTurmasCursos" />
+      <BaseButton template="download" @click="toggleAsideModal('DownloadTurmasCursos')" />
       <!--<BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />-->
     </PageHeader>
 
@@ -17,11 +17,11 @@
           <v-th width="40" title="Turma">T.</v-th>
           <v-th width="120" title="Horário">Horário</v-th>
           <v-th width="80" title="Vagas da Grade">Grade</v-th>
-          <v-th width="80" title="Vagas Não Grade">Não Grade</v-th>
+          <v-th width="80" title="Vagas Não Grade">Extra</v-th>
         </template>
 
         <template #tbody>
-          <template v-for="curso in CursosOrdered">
+          <template v-for="curso in filtroCursos.ativados">
             <tr :key="`Curso${curso.id}`" style="background-color: #f1f1f1">
               <v-td width="80">{{ curso.codigo }}</v-td>
               <v-td width="300">{{ curso.nome }}</v-td>
@@ -52,6 +52,110 @@
     </div>
 
     <ModalRelatorio ref="modalRelatorio" @selection-option="pdf($event)" />
+
+    <ModalDownloadTurmasCursos ref="modalDownloadTurmasCursos" @selection-option="downloadTurmasCursos($event)" />
+
+    <ModalFiltros
+            ref="modalFiltros"
+            :callbacks="modalFiltrosCallbacks"
+            :tabsOptions="modalFiltrosTabs"
+    >
+      <BaseTable
+              type="modal"
+              v-show="modalFiltrosTabs.current === 'Cursos'"
+              :hasSearchBar="true"
+      >
+        <template #thead-search>
+          <InputSearch
+                  v-model="searchCursos"
+                  placeholder="Pesquise nome ou codigo de um curso..."
+          />
+        </template>
+        <template #thead>
+          <v-th width="25" />
+          <v-th-ordination
+                  :currentOrder="ordenacaoModal.cursos"
+                  orderToCheck="codigo"
+                  width="70"
+                  align="start"
+          >
+            Código
+          </v-th-ordination>
+          <v-th-ordination
+                  :currentOrder="ordenacaoModal.cursos"
+                  orderToCheck="nome"
+                  width="270"
+                  align="start"
+          >
+            Nome
+          </v-th-ordination>
+          <v-th-ordination
+                  :currentOrder="ordenacaoModal.cursos"
+                  orderToCheck="turno"
+                  width="85"
+                  align="start"
+          >
+            Turno
+          </v-th-ordination>
+        </template>
+
+        <template #tbody>
+          <tr
+                  v-for="curso in CursosFiltrados"
+                  :key="curso.id + curso.nome"
+          >
+            <v-td width="25" type="content">
+              <input
+                      type="checkbox"
+                      v-model="filtroCursos.selecionados"
+                      :value="curso"
+              />
+            </v-td>
+            <v-td width="70" align="start">{{ curso.codigo }}</v-td>
+            <v-td align="start" width="270" :title="curso.nome">
+              {{ curso.nome }}
+            </v-td>
+            <v-td width="85" align="start">{{ curso.turno }}</v-td>
+          </tr>
+
+          <tr v-if="!AllCursos.length">
+            <v-td colspan="3" width="450">
+              NENHUM CURSO ENCONTRADO
+            </v-td>
+          </tr>
+        </template>
+      </BaseTable>
+
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Períodos'">
+        <template #thead>
+          <v-th width="25" />
+          <v-th width="425" align="start">Período Letivo</v-th>
+        </template>
+
+        <template #tbody>
+          <tr>
+            <v-td width="25" type="content">
+              <input
+                      type="checkbox"
+                      v-model="filtroPeriodos.selecionados"
+                      :value="1"
+              />
+            </v-td>
+            <v-td width="425" align="start">PRIMEIRO</v-td>
+          </tr>
+          <tr>
+            <v-td width="25" type="content">
+              <input
+                      type="checkbox"
+                      v-model="filtroPeriodos.selecionados"
+                      :value="3"
+              />
+            </v-td>
+            <v-td width="425" align="start">TERCEIRO</v-td>
+          </tr>
+        </template>
+      </BaseTable>
+    </ModalFiltros>
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
@@ -91,7 +195,7 @@ import {
   preventClickSelection,
 } from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
-import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
+import { ModalRelatorio, ModalAjuda, ModalFiltros, ModalDownloadTurmasCursos } from "@/components/modals";
 import ModalVagas from "../PlanoDepartamental/ModalVagas";
 import _ from "lodash";
 import downloadService from "@/common/services/download";
@@ -114,79 +218,51 @@ export default {
     ModalAjuda,
     InputSearch,
     ModalVagas,
+    ModalDownloadTurmasCursos
   },
   data() {
     return {
       turmaClicked: null,
-      searchDisciplinas: "",
-      asideModalsRefs: ["modalAjuda", "modalRelatorio"],
+      searchCursos: "",
+      asideModalsRefs: ["modalAjuda", "modalRelatorio", "modalFiltros", "modalDownloadTurmasCursos"],
       ordenacaoMain: {
         disciplinas: { order: "codigo", type: "asc" },
       },
       ordenacaoModal: {
-        perfis: { order: "nome", type: "asc" },
-        disciplinas: { order: "codigo", type: "asc" },
+        cursos: { order: "codigo", type: "asc" },
       },
-      filtroDisciplinas: {
-        ativados: [],
+      filtroCursos: {
         selecionados: [],
-      },
-      filtroPerfis: {
-        selecionados: [],
+        ativados: []
       },
       filtroPeriodos: {
-        ativados: [],
         selecionados: [],
-      },
-      filtroSemestres: {
-        selecionados: [],
+        ativados: []
       },
       modalFiltrosTabs: {
-        current: "Perfis",
-        array: ["Perfis", "Disciplinas", "Períodos", "Semestres"],
+        current: "Cursos",
+        array: ["Cursos", "Períodos"],
       },
       modalFiltrosCallbacks: {
         selectAll: {
-          Perfis: () => {
-            this.filtroDisciplinas.selecionados = [...this.DisciplinasOptions];
-            this.filtroPerfis.selecionados = [...this.PerfisOptions];
-          },
-          Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = [...this.DisciplinasOptions];
-            this.filtroPerfis.selecionados = [...this.PerfisOptions];
-          },
+          Cursos: () => {
+            this.filtroCursos.selecionados = [...this.CursosFiltrados];
+            },
           Periodos: () => {
-            this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
-            this.filtroSemestres.selecionados = [...this.SemestresOptions];
-          },
-          Semestres: () => {
-            this.filtroSemestres.selecionados = [...this.SemestresOptions];
-            this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
+            this.filtroPeriodos.selecionados = [1, 3];
           },
         },
         selectNone: {
-          Perfis: () => {
-            this.filtroPerfis.selecionados = [];
-            this.filtroDisciplinas.selecionados = [];
-          },
-          Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = [];
-            this.filtroPerfis.selecionados = [];
+          Cursos: () => {
+            this.filtroCursos.selecionados = [];
           },
           Periodos: () => {
-            this.filtroPeriodos.selecionados = [];
-            this.filtroSemestres.selecionados = [];
-          },
-          Semestres: () => {
-            this.filtroSemestres.selecionados = [];
             this.filtroPeriodos.selecionados = [];
           },
         },
         btnOk: () => {
-          this.filtroPeriodos.ativados = [
-            ...this.$_.orderBy(this.filtroPeriodos.selecionados, "id"),
-          ];
-          this.filtroDisciplinas.ativados = [...this.filtroDisciplinas.selecionados];
+          this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
+          this.filtroPeriodos.ativados = [...this.filtroPeriodos.selecionados];
         },
       },
     };
@@ -208,7 +284,15 @@ export default {
       });
       return this.$_.orderBy(
         this.$_.orderBy(
-          this.$_.orderBy(turmas, (t) => {
+          this.$_.orderBy(
+            this.$_.filter(turmas, (t) => {
+              let periodo = false
+              this.filtroPeriodos.ativados.forEach((p) => {
+                if(p == t.turma.periodo)
+                  periodo = true
+              })
+              return periodo
+            }), (t) => {
             return t.turma.letra;
           }),
           (t) => {
@@ -242,13 +326,17 @@ export default {
     },
 
     pdf(completo) {
-      pdfs.pdfTurmasCursos(this.AllCursos);
+      if(completo)
+        pdfs.pdfTurmasCursos({Cursos: this.AllCursos, periodos: this.filtroPeriodos.ativados});
+      else
+        pdfs.pdfTurmasCursos({Cursos: this.filtroCursos.ativados, periodos: this.filtroPeriodos.ativados});
     },
 
-    async downloadTurmasCursos() {
+    async downloadTurmasCursos(periodo) {
       await downloadService
         .generatePdfTurmasCurso({
           Plano: localStorage.getItem("Plano"),
+          periodo: periodo
         })
         .then(() =>
           downloadService.createZipTurmasCursos().then(() =>
@@ -279,6 +367,20 @@ export default {
 
     CursosOrdered() {
       return this.$_.orderBy(this.AllCursos, "codigo");
+    },
+
+    CursosFiltrados() {
+       if(this.searchCursos === "") return this.AllCursos
+       else{
+         const searchNormalized = normalizeText(this.searchCursos);
+
+         return this.$_.filter(this.AllCursos, (curso) => {
+           const nome = normalizeText(curso.nome);
+           const codigo = normalizeText(curso.codigo);
+
+           return nome.match(searchNormalized) || codigo.match(searchNormalized);
+         });
+       }
     },
   },
 };
