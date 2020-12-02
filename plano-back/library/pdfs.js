@@ -7266,7 +7266,6 @@ const pdfTurmasCursos = (curso) => new Promise((resolve, reject) => {
                             alignment: "center",
                             fontSize: 6,
                             bold: false,
-                            margin: [0, 0, 0, j === turmas.length - 1 ? 10 : 0],
                         },
                         {
                             text: turmas[j].turma.disciplina.codigo,
