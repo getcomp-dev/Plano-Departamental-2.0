@@ -125,6 +125,7 @@ Pdfs.prototype.TurmasCursos = (config) => new Promise((resolve, reject) => {
     this.Cursos = models.Curso.findAll()
     this.Perfis = models.Perfil.findAll()
     this.PlanoAtual = config.Plano
+    this.periodo = config.periodo
     console.log('Resolvendo Promises')
     Promise.all([this.Salas, this.Disciplinas, this.Turmas, this.Cargas, this.Docentes, this.Horarios, this.Grades, this.DisciplinasGrade, this.TurmasExternas, this.Pedidos, this.PedidosExternos, this.Plano, this.Cursos, this.Perfis]).then(async (result) => {
         this.Salas = []
@@ -7180,7 +7181,7 @@ const pdfTurmasCursos = (curso) => new Promise((resolve, reject) => {
             },
         ],
     });
-        let listTurmas =  _.filter(this.Turmas, {'Plano': this.PlanoAtual})
+        let listTurmas =  _.filter(this.Turmas, {'Plano': this.PlanoAtual, 'periodo': this.periodo})
         let turmas = turmasCurso(curso, listTurmas, this.Pedidos, this.Disciplinas);
         if (turmas.length > 0) {
             tables.push({
