@@ -7218,8 +7218,8 @@ const pdfTurmasCursos = (curso) => new Promise((resolve, reject) => {
             let tabelaTurmasBody = [
                 [
                     { text: "Período", alignment: "left", bold: "true", fontSize: 8  },
-                    { text: "Cód. Disc.", alignment: "left", bold: "true", fontSize: 8 },
-                    { text: "Nome Disciplina", alignment: "left", bold: "true", fontSize: 8 },
+                    { text: "Cód. ", alignment: "left", bold: "true", fontSize: 8 },
+                    { text: "Disciplina", alignment: "left", bold: "true", fontSize: 8 },
                     {
                         text: "Turma",
                         alignment: "center",
@@ -7234,7 +7234,7 @@ const pdfTurmasCursos = (curso) => new Promise((resolve, reject) => {
                         fontSize: 8,
                     },
                     {
-                        text: "Não Grade",
+                        text: "Extra",
                         alignment: "center",
                         bold: "true",
                         fontSize: 8,
@@ -7264,45 +7264,46 @@ const pdfTurmasCursos = (curso) => new Promise((resolve, reject) => {
                         {
                             text: turmas[j].turma.periodo,
                             alignment: "center",
-                            fontSize: 8,
-                            bold: true,
+                            fontSize: 6,
+                            bold: false,
+                            margin: [0, 0, 0, j === turmas.length - 1 ? 10 : 0],
                         },
                         {
                             text: turmas[j].turma.disciplina.codigo,
                             alignment: "left",
-                            fontSize: 8,
-                            bold: true,
+                            fontSize: 6,
+                            bold: false,
                         },
                         {
                             text: turmas[j].turma.disciplina.nome,
                             alignment: "left",
-                            fontSize: 8,
-                            bold: true,
+                            fontSize: 6,
+                            bold: false,
                         },
                         {
                             text: turmas[j].turma.letra,
                             alignment: "center",
-                            fontSize: 8,
-                            bold: true,
+                            fontSize: 6,
+                            bold: false,
                         },
 
                         {
                             text: horarioTotal,
                             alignment: "center",
-                            fontSize: 8,
-                            bold: true,
+                            fontSize: 6,
+                            bold: false,
                         },
                         {
                             text: (turmas[j].pedido.vagasPeriodizadas ? turmas[j].pedido.vagasPeriodizadas : ''),
                             alignment: "center",
-                            fontSize: 8,
-                            bold: true,
+                            fontSize: 6,
+                            bold: false,
                         },
                         {
                             text: (turmas[j].pedido.vagasNaoPeriodizadas ? turmas[j].pedido.vagasNaoPeriodizadas : ''),
                             alignment: "center",
-                            fontSize: 8,
-                            bold: true,
+                            fontSize: 6,
+                            bold: false,
                         },
                     ])
             }
