@@ -7228,13 +7228,7 @@ const pdfTurmasCursos = (curso) => new Promise((resolve, reject) => {
                     },
                     { text: "Horário", alignment: "center", bold: "true", fontSize: 8 },
                     {
-                        text: "Grade",
-                        alignment: "center",
-                        bold: "true",
-                        fontSize: 8,
-                    },
-                    {
-                        text: "Extra",
+                        text: "Vagas",
                         alignment: "center",
                         bold: "true",
                         fontSize: 8,
@@ -7293,23 +7287,20 @@ const pdfTurmasCursos = (curso) => new Promise((resolve, reject) => {
                             bold: false,
                         },
                         {
-                            text: (turmas[j].pedido.vagasPeriodizadas ? turmas[j].pedido.vagasPeriodizadas : ''),
+                            text: (turmas[j].pedido.vagasPeriodizadas || turmas[j].pedido.vagasNaoPeriodizadas)
+                                ? turmas[j].pedido.vagasPeriodizadas + turmas[j].pedido.vagasNaoPeriodizadas
+                                : "",
                             alignment: "center",
                             fontSize: 6,
                             bold: false,
                         },
-                        {
-                            text: (turmas[j].pedido.vagasNaoPeriodizadas ? turmas[j].pedido.vagasNaoPeriodizadas : ''),
-                            alignment: "center",
-                            fontSize: 6,
-                            bold: false,
-                        },
+
                     ])
             }
             tables.push({
                 style: "tableExample",
                 table: {
-                    widths: [28, 48, "*", 24, 68, 40, 40],
+                    widths: [28, 48, "*", 24, 68, 40],
                     headerRows: 1,
                     color: "#426",
                     body: tabelaTurmasBody,
