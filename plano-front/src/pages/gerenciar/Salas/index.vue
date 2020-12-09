@@ -1,8 +1,8 @@
 <template>
   <div class="main-component row">
-    <PageHeader :title="'Salas'">
+    <portal to="page-header">
       <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
-    </PageHeader>
+    </portal>
 
     <div class="page-content">
       <div class="div-table">
@@ -69,31 +69,31 @@
             <div class="form-group col m-0 px-0">
               <label required for="salaNome" class="col-form-label">Nome</label>
               <input
-                type="text"
-                class="input-menor form-control form-control-sm"
                 id="salaNome"
-                v-model="salaForm.nome"
+                type="text"
+                class="form-control form-control-sm input-md"
+                @change="salaForm.nome = normalizeInputText($event)"
+                :value="salaForm.nome"
               />
             </div>
-          </div>
 
-          <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="lotacao_maxima" class="col-form-label">
+              <label required for="lotacaoMaxima" class="col-form-label">
                 Lotação Máx.
               </label>
               <input
-                type="text"
-                class="input-menor form-control form-control-sm"
-                id="lotacao_maxima"
+                id="lotacaoMaxima"
+                type="number"
+                min="0"
+                class="form-control form-control-sm text-center input-md"
                 @keypress="maskOnlyNumber"
-                v-model="salaForm.lotacao_maxima"
+                v-model.number="salaForm.lotacao_maxima"
               />
             </div>
           </div>
 
           <div class="row mb-2 mx-0">
-            <div class="form-check form-check-inline col m-0 px-0 pl-1">
+            <div class="form-check form-check-inline col m-0 px-0">
               <label class="form-check-label mr-2" for="laboratorio">Laboratório</label>
               <input
                 type="checkbox"
@@ -156,21 +156,23 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { clone, orderBy } from "lodash-es";
 import salaService from "@/common/services/sala";
-import { generateBooleanText, maskOnlyNumber } from "@/common/mixins";
+import { generateBooleanText, maskOnlyNumber, normalizeInputText } from "@/common/mixins";
 import { Card } from "@/components/ui";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
-import { mapGetters } from "vuex";
+
 const emptySala = {
   id: null,
   nome: null,
-  laboratorio: null,
-  lotacao_maxima: null,
+  laboratorio: 0,
+  lotacao_maxima: 0,
 };
 
 export default {
   name: "DashboardSalas",
-  mixins: [maskOnlyNumber, generateBooleanText],
+  mixins: [maskOnlyNumber, generateBooleanText, normalizeInputText],
   components: {
     Card,
     ModalAjuda,
@@ -180,7 +182,7 @@ export default {
     return {
       error: null,
       salaSelected: null,
-      salaForm: this.$_.clone(emptySala),
+      salaForm: clone(emptySala),
       ordenacaoSalasMain: { order: "nome", type: "asc" },
     };
   },
@@ -196,12 +198,12 @@ export default {
     },
     cleanSala() {
       this.salaSelected = null;
-      this.salaForm = this.$_.clone(emptySala);
+      this.salaForm = clone(emptySala);
       this.error = null;
     },
     showSala(sala) {
       this.cleanSala();
-      this.salaForm = this.$_.clone(sala);
+      this.salaForm = clone(sala);
     },
 
     addSala() {
@@ -283,7 +285,7 @@ export default {
     ...mapGetters(["AllSalas"]),
 
     SalasOrdered() {
-      return this.$_.orderBy(
+      return orderBy(
         this.AllSalas,
         this.ordenacaoSalasMain.order,
         this.ordenacaoSalasMain.type
@@ -295,10 +297,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.card .input-menor {
-  min-width: 100px;
-  text-align: start;
-}
-</style>

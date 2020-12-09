@@ -1,8 +1,8 @@
 <template>
   <div class="main-component">
-    <PageHeader :title="'Usuários'">
+    <portal to="page-header">
       <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
-    </PageHeader>
+    </portal>
 
     <div class="page-content">
       <div class="div-table">
@@ -171,7 +171,9 @@
             <b>{{ userForm.nome }}</b>
             ?
           </template>
-          <template v-else>Nenhum usuário selecionado!</template>
+          <template v-else>
+            Nenhum usuário selecionado!
+          </template>
         </span>
       </li>
     </ModalDelete>
@@ -214,8 +216,10 @@
 
 <script>
 import userService from "@/common/services/usuario";
+import { clone, orderBy } from "lodash-es";
 import { InputPassword, Card, ButtonSlideSection } from "@/components/ui";
 import { ModalDelete, ModalAjuda } from "@/components/modals";
+
 const emptyUser = {
   nome: "",
   login: "",
@@ -236,7 +240,7 @@ export default {
     return {
       userSelected: null,
       isEditingSenha: false,
-      userForm: this.$_.clone(emptyUser),
+      userForm: clone(emptyUser),
       novaSenha: "",
       confirmaSenha: "",
       ordenacaoMainUsers: { order: "nome", type: "asc" },
@@ -245,14 +249,9 @@ export default {
 
   methods: {
     adminText(admin) {
-      switch (admin) {
-        case 0:
-          return "Consulta";
-        case 1:
-          return "Comissão";
-        case 2:
-          return "Administrador";
-      }
+      if (admin === 0) return "Consulta";
+      else if (admin === 1) return "Comissão";
+      else if (admin === 2) return "Administrador";
     },
     toggleEditSenha() {
       this.isEditingSenha = !this.isEditingSenha;
@@ -265,13 +264,13 @@ export default {
       this.showUser(user);
     },
     showUser(user) {
-      this.userForm = this.$_.clone(user);
+      this.userForm = clone(user);
     },
     cleanUser() {
       this.userSelected = null;
       this.confirmaSenha = "";
       this.isEditingSenha = false;
-      this.userForm = this.$_.clone(emptyUser);
+      this.userForm = clone(emptyUser);
     },
     openModalDelete() {
       this.$refs.modalDelete.open();
@@ -289,7 +288,7 @@ export default {
       return true;
     },
     async createUser() {
-      const user = this.$_.clone(this.userForm);
+      const user = clone(this.userForm);
 
       if (!this.validateUser(user)) {
         this.pushNotification({
@@ -314,7 +313,7 @@ export default {
       }
     },
     async editUser() {
-      const user = this.$_.clone(this.userForm);
+      const user = clone(this.userForm);
       user.senha = this.novaSenha;
 
       if (!this.validateEditUser(user)) {
@@ -341,7 +340,7 @@ export default {
       }
     },
     async deleteUser() {
-      const user = this.$_.clone(this.userForm);
+      const user = clone(this.userForm);
 
       try {
         await userService.delete(user.id, user);
@@ -383,7 +382,7 @@ export default {
         }
       };
 
-      return this.$_.orderBy(this.Users, userSorter, type);
+      return orderBy(this.Users, userSorter, type);
     },
     isEditing() {
       return this.userSelected != null;

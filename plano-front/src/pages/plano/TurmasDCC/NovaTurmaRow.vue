@@ -178,6 +178,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { orderBy, filter, some } from "lodash-es";
 import { generateEmptyTurma } from "@/common/utils";
 import { maskTurmaLetra } from "@/common/mixins";
 
@@ -233,9 +234,9 @@ export default {
     },
     setTurnoByHorario(horarioId) {
       if (horarioId == 31 && this.disciplinaIsIntegralEAD) this.turmaForm.turno1 = "EAD";
-      else if (this.$_.some(this.HorariosNoturno, ["id", horarioId]))
+      else if (some(this.HorariosNoturno, ["id", horarioId]))
         this.turmaForm.turno1 = "Noturno";
-      else if (this.$_.some(this.HorariosDiurno, ["id", horarioId]))
+      else if (some(this.HorariosDiurno, ["id", horarioId]))
         this.turmaForm.turno1 = "Diurno";
     },
     async handleCreateTurma() {
@@ -262,7 +263,7 @@ export default {
       }
     },
     preferenciaDocente(docente) {
-      let p = this.$_.find(this.PreferenciasDisciplina, {
+      let p = find(this.PreferenciasDisciplina, {
         Docente: docente.id,
       });
       return p ? p.preferencia : false;
@@ -282,18 +283,15 @@ export default {
     ]),
 
     PreferenciasDisciplina() {
-      return this.$_.filter(this.PreferenciasDocentes, [
-        "Disciplina",
-        this.turmaForm.Disciplina,
-      ]);
+      return filter(this.PreferenciasDocentes, ["Disciplina", this.turmaForm.Disciplina]);
     },
 
     DocentesByPreferencia() {
       if (this.orderByPreferencia) {
-        return this.$_.orderBy(
+        return orderBy(
           this.DocentesAtivos,
           (docente) => {
-            const p = this.$_.find(this.PreferenciasDisciplina, ["Docente", docente.id]);
+            const p = find(this.PreferenciasDisciplina, ["Docente", docente.id]);
 
             return p ? p.preferencia : 0;
           },
@@ -304,7 +302,7 @@ export default {
       }
     },
     DisciplinasDCCInPerfisOrderedByNome() {
-      return this.$_.orderBy(this.DisciplinasDCCInPerfis, ["nome"]);
+      return orderBy(this.DisciplinasDCCInPerfis, ["nome"]);
     },
     HorariosFiltredByTurno() {
       if (this.disciplinaIsIntegralEAD) return this.HorariosEAD;
@@ -318,7 +316,7 @@ export default {
           return this.HorariosEAD;
         default:
           //Todos sem EAD
-          return this.$_.filter(this.AllHorarios, (horario) => horario.id != 31);
+          return filter(this.AllHorarios, (horario) => horario.id != 31);
       }
     },
     totalCarga() {

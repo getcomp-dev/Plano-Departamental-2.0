@@ -3,11 +3,13 @@ import { HISTORY_FETCHED, SOCKET_HISTORY_CREATED } from "../mutation-types";
 
 const state = {
   History: [],
+  wasFetched: false,
 };
 
 const mutations = {
   [HISTORY_FETCHED](state, data) {
     state.History = data.History;
+    state.wasFetched = true;
   },
 
   [SOCKET_HISTORY_CREATED](state, data) {
@@ -16,18 +18,24 @@ const mutations = {
 };
 
 const actions = {
-  fetchAll({ commit }) {
-    return new Promise((resolve, reject) => {
-      historyService
-        .fetchAll()
-        .then((response) => {
-          commit(HISTORY_FETCHED, response);
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+  fetchAllHistory({ commit, state, dispatch }) {
+    if (!state.wasFetched) {
+      dispatch("setFetchingLoading", true);
+
+      return new Promise((resolve, reject) => {
+        historyService
+          .fetchAll()
+          .then((response) => {
+            commit(HISTORY_FETCHED, response);
+            console.log("fetched");
+            dispatch("setFetchingLoading", false);
+            resolve();
+          })
+          .catch((error) => {
+            reject(error);
+          });
+      });
+    }
   },
 };
 

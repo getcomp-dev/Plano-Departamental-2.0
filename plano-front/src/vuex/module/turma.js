@@ -1,8 +1,7 @@
 import Vue from "vue";
-import _ from "lodash";
 import turmaService from "../../common/services/turma";
+import { find, cloneDeepWith, orderBy } from "lodash-es";
 import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
-
 import {
   PUSH_NOTIFICATION,
   TURMA_FETCHED,
@@ -30,12 +29,12 @@ const mutations = {
   },
 
   [SOCKET_TURMA_UPDATED](state, data) {
-    let index = _.findIndex(state.Turmas, (turma) => turma.id === data.Turma.id);
+    let index = state.Turmas.findIndex((turma) => turma.id === data.Turma.id);
     Vue.set(state.Turmas, index, data.Turma);
   },
 
   [SOCKET_TURMA_DELETED](state, data) {
-    let index = _.findIndex(state.Turmas, (turma) => turma.id === data.Turma.id);
+    let index = state.Turmas.findIndex((turma) => turma.id === data.Turma.id);
     state.Turmas.splice(index, 1);
   },
 
@@ -72,8 +71,8 @@ const actions = {
     });
   },
 
-  async createTurma({}, turma) {
-    const turmaNormalized = _.cloneDeepWith(turma, setEmptyValuesToNull);
+  async createTurma(_, turma) {
+    const turmaNormalized = cloneDeepWith(turma, setEmptyValuesToNull);
     validateObjectKeys(turmaNormalized, ["Disciplina", "letra", "turno1"]);
 
     const response = await turmaService.create(turmaNormalized);
@@ -81,7 +80,7 @@ const actions = {
   },
 
   async editTurma({ commit, dispatch }, turma) {
-    const turmaNormalized = _.cloneDeepWith(turma, setEmptyValuesToNull);
+    const turmaNormalized = cloneDeepWith(turma, setEmptyValuesToNull);
     validateObjectKeys(turmaNormalized, ["letra", "Disciplina", "turno1"]);
 
     await turmaService.update(turmaNormalized.id, turmaNormalized);
@@ -108,7 +107,7 @@ const actions = {
   },
 
   toggleTurmaToDelete({ commit, state }, turma) {
-    const index = _.findIndex(state.Deletar, ["id", turma.id]);
+    const index = state.Deletar.findIndex(["id", turma.id]);
 
     commit(TOGGLE_TURMA_TO_DELETE, { index, turma });
   },
@@ -120,12 +119,14 @@ const actions = {
 
 const getters = {
   AllTurmas(state) {
-    return _.orderBy(state.Turmas, ["letra"]);
+    return orderBy(state.Turmas, ["letra"]);
   },
-  TurmasInDisciplinasPerfis(state, getters) {
+
+  TurmasInDisciplinasPerfis(_, getters) {
     const turmasResult = [];
-    _.forEach(getters.AllTurmas, (turma) => {
-      const disciplinaFounded = _.find(getters.DisciplinasInPerfis, [
+
+    getters.AllTurmas.forEach((turma) => {
+      const disciplinaFounded = find(getters.DisciplinasInPerfis, [
         "id",
         turma.Disciplina,
       ]);
@@ -138,8 +139,10 @@ const getters = {
           },
         });
     });
+
     return turmasResult;
   },
+
   TurmasToDelete(state) {
     return state.Deletar;
   },

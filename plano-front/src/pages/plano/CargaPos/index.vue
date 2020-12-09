@@ -1,22 +1,24 @@
 <template>
   <div class="main-component row" v-if="currentPlano.isEditable">
-    <PageHeader :title="'Pós Graduação'">
-      <BaseButton
-        v-show="isAdding"
-        template="salvar"
-        @click="$refs.novaCargaPosRow.handleCreateCargaPos()"
-      />
-      <BaseButton v-show="isAdding" template="cancelar" @click="toggleAddRow" />
-      <BaseButton v-show="!isAdding" template="adicionar" @click="toggleAddRow" />
-      <BaseButton
-        v-show="!isAdding"
-        template="deletar"
-        title="Deletar selecionados"
-        @click="$refs.modalDelete.open()"
-      />
+    <portal to="page-header">
+      <template v-if="isAdding">
+        <BaseButton
+          template="salvar"
+          @click="$refs.novaCargaPosRow.handleCreateCargaPos()"
+        />
+        <BaseButton template="cancelar" @click="toggleAddRow" />
+      </template>
+      <template v-else>
+        <BaseButton template="adicionar" @click="toggleAddRow" />
+        <BaseButton
+          template="deletar"
+          title="Deletar selecionados"
+          @click="$refs.modalDelete.open()"
+        />
+      </template>
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
-    </PageHeader>
+    </portal>
 
     <div class="div-table">
       <BaseTable>
@@ -66,7 +68,7 @@
             />
           </template>
 
-          <tr v-show="!ProgramasInCargaPosOrdered.length">
+          <tr v-if="!ProgramasInCargaPosOrdered.length">
             <v-td width="360" whiteSpace="normal">
               <b>Nenhuma carga encontrada.</b>
               Clique no botão de filtros
@@ -241,6 +243,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { filter, find, orderBy, some } from "lodash-es";
 import {
   toggleItemInArray,
   toggleAsideModal,
@@ -335,13 +338,10 @@ export default {
       this.isAdding = !this.isAdding;
     },
     cargaPosInDocente(programaNome) {
-      const cargasPosFiltered = this.$_.filter(this.AllCargasPos, [
-        "programa",
-        programaNome,
-      ]);
+      const cargasPosFiltered = filter(this.AllCargasPos, ["programa", programaNome]);
 
-      return this.$_.map(cargasPosFiltered, (carga) => {
-        const docenteFounded = this.$_.find(this.DocentesAtivos, ["id", carga.Docente]);
+      return cargasPosFiltered.map((carga) => {
+        const docenteFounded = find(this.DocentesAtivos, ["id", carga.Docente]);
 
         return {
           ...carga,
@@ -350,7 +350,7 @@ export default {
       });
     },
     calculaTotalDeCreditosDaCarga(cargas) {
-      return this.$_.reduce(cargas, (acc, carga) => acc + carga.creditos, 0);
+      return cargas.reduce((acc, carga) => acc + carga.creditos, 0);
     },
     async handleDeleteCargasPos() {
       try {
@@ -371,8 +371,8 @@ export default {
     ...mapGetters(["DocentesAtivos", "CargasPosToDelete", "AllCargasPos"]),
 
     ProgramasInCargaPosOrdered() {
-      return this.$_.map(this.ProgramasInCargaPosFiltredByPeriodo, (programa) => {
-        const cargasOrdered = this.$_.orderBy(
+      return this.ProgramasInCargaPosFiltredByPeriodo.map((programa) => {
+        const cargasOrdered = orderBy(
           programa.cargas,
           ["trimestre", this.ordenacaoCargaPos.order],
           ["asc", this.ordenacaoCargaPos.type]
@@ -385,9 +385,9 @@ export default {
       });
     },
     ProgramasInCargaPosFiltredByPeriodo() {
-      return this.$_.map(this.ProgramasInCargaPosFiltredByPrograma, (programa) => {
-        const cargasFiltered = this.$_.filter(programa.cargas, (carga) =>
-          this.$_.some(this.filtroPeriodos.ativados, ["id", carga.trimestre])
+      return this.ProgramasInCargaPosFiltredByPrograma.map((programa) => {
+        const cargasFiltered = filter(programa.cargas, (carga) =>
+          some(this.filtroPeriodos.ativados, ["id", carga.trimestre])
         );
 
         return {
@@ -397,21 +397,21 @@ export default {
       });
     },
     ProgramasInCargaPosFiltredByPrograma() {
-      return this.$_.filter(this.ProgramasInCargaPos, (programa) =>
-        this.$_.some(
+      return filter(this.ProgramasInCargaPos, (programa) =>
+        some(
           this.filtroProgramas.ativados,
           (programaNome) => programaNome === programa.nome
         )
       );
     },
     ProgramasInCargaPos() {
-      return this.$_.map(this.AllProgramasPosOrdered, (programaNome) => ({
+      return this.AllProgramasPosOrdered.map((programaNome) => ({
         nome: programaNome,
         cargas: this.cargaPosInDocente(programaNome),
       }));
     },
     AllProgramasPosOrdered() {
-      return this.$_.orderBy(["PGCC", "PGMC", "PGEM"], String, "asc");
+      return orderBy(["PGCC", "PGMC", "PGEM"], String, "asc");
     },
   },
 };

@@ -1,22 +1,24 @@
 <template>
   <div class="main-component row" v-if="currentPlano.isEditable">
-    <PageHeader :title="'Graduação - Outros'">
-      <BaseButton
-        v-show="isAdding"
-        template="salvar"
-        @click="$refs.novaTurmaExternaRow.handleCreateTurmaExterna()"
-      />
-      <BaseButton v-show="isAdding" template="cancelar" @click="toggleAddRow" />
-      <BaseButton v-show="!isAdding" template="adicionar" @click="toggleAddRow" />
-      <BaseButton
-        v-show="!isAdding"
-        template="deletar"
-        title="Deletar selecionados"
-        @click="openModalDelete"
-      />
+    <portal to="page-header">
+      <template v-if="isAdding">
+        <BaseButton
+          template="salvar"
+          @click="$refs.novaTurmaRow.handleCreateTurmaExterna()"
+        />
+        <BaseButton template="cancelar" @click="toggleAddRow" />
+      </template>
+      <template v-else>
+        <BaseButton template="adicionar" @click="toggleAddRow" />
+        <BaseButton
+          template="deletar"
+          title="Deletar selecionados"
+          @click="openModalDelete"
+        />
+      </template>
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
-    </PageHeader>
+    </portal>
 
     <div class="div-table">
       <BaseTable>
@@ -49,7 +51,7 @@
             v-for="curso in PrincipaisCursosDCC"
             :key="curso.id + curso.nome"
             width="35"
-            v-b-popover.hover.bottom="{
+            v-b-popover.html.hover.bottom="{
               title: curso.nome,
               content: cursoPopoverContent(curso),
             }"
@@ -58,7 +60,7 @@
           </v-th>
         </template>
         <template #add-row>
-          <NovaTurmaExternaRow ref="novaTurmaExternaRow" v-if="isAdding" />
+          <NovaTurmaExternaRow ref="novaTurmaRow" v-if="isAdding" />
         </template>
 
         <template #tbody>
@@ -68,7 +70,7 @@
             :turma="turma"
           />
 
-          <tr v-show="!TurmasExternasOrdered.length">
+          <tr v-if="!TurmasExternasOrdered.length">
             <v-td width="1005">
               <b>Nenhuma turma encontrada.</b>
               Clique no botão de filtros
@@ -143,7 +145,7 @@
             <v-td width="60" align="start">{{ disciplina.perfil.abreviacao }}</v-td>
           </tr>
 
-          <tr v-show="!DisciplinasOptionsOrdered.length">
+          <tr v-if="!DisciplinasOptionsOrdered.length">
             <v-td colspan="3" width="450">
               NENHUMA DISCIPLINA ENCONTRADA.
             </v-td>
@@ -281,6 +283,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { union, difference, orderBy, some, filter } from "lodash-es";
 import { normalizeText } from "@/common/utils";
 import {
   toggleItemInArray,
@@ -337,7 +340,7 @@ export default {
       modalFiltrosCallbacks: {
         selectAll: {
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = this.$_.union(
+            this.filtroDisciplinas.selecionados = union(
               this.DisciplinasOptionsFiltered,
               this.filtroDisciplinas.selecionados
             );
@@ -353,7 +356,7 @@ export default {
         },
         selectNone: {
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = this.$_.difference(
+            this.filtroDisciplinas.selecionados = difference(
               this.filtroDisciplinas.selecionados,
               this.DisciplinasOptionsFiltered
             );
@@ -415,25 +418,25 @@ export default {
     ]),
 
     TurmasExternasOrdered() {
-      return this.$_.orderBy(
+      return orderBy(
         this.TurmasExternarFiltredByDisciplinas,
         ["periodo", this.ordenacaoTurmasMain.order],
         ["asc", this.ordenacaoTurmasMain.type]
       );
     },
     TurmasExternarFiltredByDisciplinas() {
-      return this.$_.filter(this.TurmasExternarFiltredByPeriodos, (turma) =>
-        this.$_.some(this.filtroDisciplinas.ativadas, ["id", turma.Disciplina])
+      return filter(this.TurmasExternarFiltredByPeriodos, (turma) =>
+        some(this.filtroDisciplinas.ativadas, ["id", turma.Disciplina])
       );
     },
     TurmasExternarFiltredByPeriodos() {
-      return this.$_.filter(this.TurmasExternasInDisciplinas, (turma) =>
-        this.$_.some(this.filtroPeriodos.ativados, ["id", turma.periodo])
+      return filter(this.TurmasExternasInDisciplinas, (turma) =>
+        some(this.filtroPeriodos.ativados, ["id", turma.periodo])
       );
     },
 
     DisciplinasOptionsOrdered() {
-      return this.$_.orderBy(
+      return orderBy(
         this.DisciplinasOptionsFiltered,
         this.ordenacaoDisciplinasModal.order,
         this.ordenacaoDisciplinasModal.type
@@ -444,7 +447,7 @@ export default {
 
       const searchNormalized = normalizeText(this.searchDisciplinasModal);
 
-      return this.$_.filter(this.DisciplinasExternasInPerfis, (disciplina) => {
+      return filter(this.DisciplinasExternasInPerfis, (disciplina) => {
         const nome = normalizeText(disciplina.nome);
         const codigo = normalizeText(disciplina.codigo);
 

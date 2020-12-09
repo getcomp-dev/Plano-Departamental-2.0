@@ -1,5 +1,4 @@
 import Vue from "vue";
-import _ from "lodash";
 import disciplinaGradeService from "../../common/services/disciplinaGrade";
 import {
   DISCIPLINA_GRADE_FETCHED,
@@ -22,8 +21,7 @@ const mutations = {
   },
 
   [SOCKET_DISCIPLINA_GRADE_UPDATED](state, data) {
-    let index = _.findIndex(
-      state.DisciplinaGrades,
+    const index = state.DisciplinaGrades.findIndex(
       (disciplinaGrade) =>
         (disciplinaGrade.Disciplina === data.DisciplinaGrade.Disciplina) &
         (disciplinaGrade.Grade === data.DisciplinaGrade.Grade)
@@ -32,8 +30,7 @@ const mutations = {
   },
 
   [SOCKET_DISCIPLINA_GRADE_DELETED](state, data) {
-    let index = _.findIndex(
-      state.DisciplinaGrades,
+    const index = state.DisciplinaGrades.findIndex(
       (disciplinaGrade) =>
         (disciplinaGrade.Disciplina === data.DisciplinaGrade.Disciplina) &
         (disciplinaGrade.Grade === data.DisciplinaGrade.Grade)

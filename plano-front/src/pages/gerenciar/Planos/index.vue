@@ -1,8 +1,8 @@
 <template>
   <div class="main-component">
-    <PageHeader :title="'Plano departamental'">
+    <portal to="page-header">
       <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
-    </PageHeader>
+    </portal>
 
     <div class="page-content">
       <div class="div-table">
@@ -67,7 +67,7 @@
       </div>
 
       <Card
-        :title="'Plano departamental'"
+        :title="'Plano Departamental'"
         :toggleFooter="isEditing"
         :isPlano="isEditing"
         @btn-salvar="handleEditPlano"
@@ -78,14 +78,15 @@
       >
         <template #form-group>
           <div class="row w-100 m-0 mb-2">
-            <div class="form-group col-9 m-0 p-0 pr-3">
+            <div class="form-group col-9 m-0 p-0">
               <label required for="planoNome">Nome</label>
               <input
                 type="text"
                 id="planoNome"
-                v-model="planoForm.nome"
                 class="form-control w-100"
-                @keypress="limitStringLength"
+                @keypress="maskLimitLength($event, 12)"
+                @change="planoForm.nome = normalizeInputText($event)"
+                :value="planoForm.nome"
               />
             </div>
 
@@ -117,7 +118,7 @@
           </div>
 
           <div class="row mb-2 mx-0">
-            <div class="form-group col-6 m-0 p-0 pr-2">
+            <div class="form-group col-6 m-0 p-0">
               <label required for="planoEditavel">Editável</label>
               <select
                 id="planoEditavel"
@@ -129,7 +130,7 @@
               </select>
             </div>
 
-            <div class="form-group col-6 m-0 p-0 pl-2">
+            <div class="form-group col-6 m-0 p-0">
               <label required for="planoVisivel">Visível</label>
               <select
                 id="planoVisivel"
@@ -207,12 +208,19 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { generateBooleanText } from "@/common/mixins";
-import { ModalAjuda, ModalDelete } from "@/components/modals";
-import { Card } from "@/components/ui";
+import { clone, orderBy } from "lodash-es";
 import copyPlanoService from "@/common/services/copyPlano";
 import planoService from "@/common/services/plano";
+import {
+  generateBooleanText,
+  normalizeInputText,
+  maskLimitLength,
+} from "@/common/mixins";
+import { ModalAjuda, ModalDelete } from "@/components/modals";
+import { Card } from "@/components/ui";
 import ModalNovoPlano from "./ModalNovoPlano/index";
+import workerSrc from '!!file-loader!pdfjs-dist/build/pdf.worker.min.js'
+
 const emptyPlano = {
   ano: 2019,
   nome: "",
@@ -223,7 +231,7 @@ const emptyPlano = {
 
 export default {
   name: "Planos",
-  mixins: [generateBooleanText],
+  mixins: [generateBooleanText, normalizeInputText, maskLimitLength],
   components: {
     ModalAjuda,
     ModalDelete,
@@ -232,7 +240,7 @@ export default {
   },
   data() {
     return {
-      planoForm: this.$_.clone(emptyPlano),
+      planoForm: clone(emptyPlano),
       planoSelectedId: null,
       ordenacaoMainPlanos: { order: "ano", type: "asc" },
     };
@@ -241,17 +249,14 @@ export default {
   methods: {
     ...mapActions(["deletePlano", "editPlano"]),
 
-    limitStringLength($event) {
-      if ($event.target.value.length >= 12) $event.preventDefault();
-    },
     handleClickInPlano(plano) {
       this.cleanPlano();
       this.planoSelectedId = plano.id;
-      this.planoForm = this.$_.clone(plano);
+      this.planoForm = clone(plano);
     },
     cleanPlano() {
       this.planoSelectedId = null;
-      this.planoForm = this.$_.clone(emptyPlano);
+      this.planoForm = clone(emptyPlano);
     },
     openModalDelete() {
       this.$refs.modalDelete.open();
@@ -301,6 +306,202 @@ export default {
         this.setPartialLoading(false);
       }
     },
+
+    async importTurmaPorDepartamento(event) {
+      const pdfjsLib = require(/* webpackChunkName: "pdfjs-dist" */ `pdfjs-dist`)
+      pdfjsLib.GlobalWorkerOptions.workerSrc = workerSrc
+      let file = event.target.files[0];
+      console.log(file)
+      let fullText = []
+      let data = {}
+      let fileReader = new FileReader()
+      fileReader.onload = async function() {
+        let typedarray = new Uint8Array(this.result)
+        let pdf = await pdfjsLib.getDocument(typedarray).promise
+        for(let i = 1; i <= pdf._pdfInfo.numPages; i++){
+          let page = await pdf.getPage(i)
+          let text = await page.getTextContent()
+          fullText.push(...text.items)
+        }
+        let i = 0;
+
+        let nexti = () => {
+          i = i+1
+          if(!fullText[i].str) {
+            i = i + 4
+          }
+          if(fullText[i].str === pdf._pdfInfo.numPages.toString()){
+            if(fullText[i + 2].str === 'Página :'){
+              i = i+8
+            }
+          }
+        }
+
+        while(fullText[i].str !== 'Disciplina'){
+          nexti()
+        }
+
+        while(i < fullText.length){
+
+          if(fullText[i].str === 'Disciplina'){
+            nexti()
+
+            let disciplina = fullText[i].str.split(' ')[0]
+            data[disciplina] = {}
+            data[disciplina].codigo = disciplina
+            data[disciplina].Turmas = {}
+
+            nexti()
+
+            while(i < fullText.length && fullText[i].str !== 'Disciplina') {
+              let turma = fullText[i].str.split(' ')[1]
+              data[disciplina].Turmas[turma] = {}
+              data[disciplina].Turmas[turma].Turma = turma
+
+              nexti()
+
+              data[disciplina].Turmas[turma].vagasOferecidas = fullText[i].str.split(' ')[2]
+
+              nexti()
+
+              data[disciplina].Turmas[turma].vagasOcupadas = fullText[i].str.split(' ')[2]
+
+              nexti()
+
+              if (i < fullText.length && fullText[i].str === 'Aprovado:') {
+                data[disciplina].Turmas[turma].Aprovado = {}
+                nexti()
+                while (i < fullText.length
+                && fullText[i].str !== 'Cancelado:'
+                && fullText[i].str !== 'Rep Freq:'
+                && fullText[i].str !== 'Rep Nota:'
+                && fullText[i].str !== 'Reprovado:'
+                && fullText[i].str !== 'Sem Conceito:'
+                && fullText[i].str !== 'Trancado:'
+                && fullText[i].str !== 'Disciplina'
+                && fullText[i].str.substring(0, 5) !== 'Turma') {
+                  let curso = fullText[i].str
+                  data[disciplina].Turmas[turma].Aprovado[curso] = {}
+                  data[disciplina].Turmas[turma].Aprovado[curso].Curso = fullText[i].str
+                  nexti()
+                  data[disciplina].Turmas[turma].Aprovado[curso].Quantidade = fullText[i].str
+                  nexti()
+                }
+              }
+
+              if (i < fullText.length && fullText[i].str === 'Cancelado:') {
+                data[disciplina].Turmas[turma].Cancelado = {}
+                nexti()
+                while (i < fullText.length
+                && fullText[i].str !== 'Rep Freq:'
+                && fullText[i].str !== 'Rep Nota:'
+                && fullText[i].str !== 'Reprovado:'
+                && fullText[i].str !== 'Sem Conceito:'
+                && fullText[i].str !== 'Trancado:'
+                && fullText[i].str !== 'Disciplina'
+                && fullText[i].str.substring(0, 5) !== 'Turma') {
+                  let curso = fullText[i].str
+                  data[disciplina].Turmas[turma].Cancelado[curso] = {}
+                  data[disciplina].Turmas[turma].Cancelado[curso].Curso = fullText[i].str
+                  nexti()
+                  data[disciplina].Turmas[turma].Cancelado[curso].Quantidade = fullText[i].str
+                  nexti()
+                }
+              }
+
+              if (i < fullText.length && fullText[i].str === 'Rep Freq:') {
+                data[disciplina].Turmas[turma].RepFreq = {}
+                nexti()
+                while (i < fullText.length
+                && fullText[i].str !== 'Rep Nota:'
+                && fullText[i].str !== 'Reprovado:'
+                && fullText[i].str !== 'Sem Conceito:'
+                && fullText[i].str !== 'Trancado:'
+                && fullText[i].str !== 'Disciplina'
+                && fullText[i].str.substring(0, 5) !== 'Turma') {
+                  let curso = fullText[i].str
+                  data[disciplina].Turmas[turma].RepFreq[curso] = {}
+                  data[disciplina].Turmas[turma].RepFreq[curso].Curso = fullText[i].str
+                  nexti()
+                  data[disciplina].Turmas[turma].RepFreq[curso].Quantidade = fullText[i].str
+                  nexti()
+                }
+              }
+
+              if (i < fullText.length && fullText[i].str === 'Rep Nota:') {
+                data[disciplina].Turmas[turma].RepNota = {}
+                nexti()
+                while (i < fullText.length
+                && fullText[i].str !== 'Reprovado:'
+                && fullText[i].str !== 'Sem Conceito:'
+                && fullText[i].str !== 'Trancado:'
+                && fullText[i].str !== 'Disciplina'
+                && fullText[i].str.substring(0, 5) !== 'Turma') {
+                  let curso = fullText[i].str
+                  data[disciplina].Turmas[turma].RepNota[curso] = {}
+                  data[disciplina].Turmas[turma].RepNota[curso].Curso = fullText[i].str
+                  nexti()
+                  data[disciplina].Turmas[turma].RepNota[curso].Quantidade = fullText[i].str
+                  nexti()
+                }
+              }
+
+              if (i < fullText.length && fullText[i].str === 'Reprovado:') {
+                data[disciplina].Turmas[turma].Reprovado = {}
+                nexti()
+                while (i < fullText.length
+                && fullText[i].str !== 'Sem Conceito:'
+                && fullText[i].str !== 'Trancado:'
+                && fullText[i].str !== 'Disciplina'
+                && fullText[i].str.substring(0, 5) !== 'Turma') {
+                  let curso = fullText[i].str
+                  data[disciplina].Turmas[turma].Reprovado[curso] = {}
+                  data[disciplina].Turmas[turma].Reprovado[curso].Curso = fullText[i].str
+                  nexti()
+                  data[disciplina].Turmas[turma].Reprovado[curso].Quantidade = fullText[i].str
+                  nexti()
+                }
+              }
+
+              if (i < fullText.length && fullText[i].str === 'Sem Conceito:') {
+                data[disciplina].Turmas[turma].SemConceito = {}
+                nexti()
+                while (i < fullText.length
+                && fullText[i].str !== 'Trancado:'
+                && fullText[i].str !== 'Disciplina'
+                && fullText[i].str.substring(0, 5) !== 'Turma') {
+                  let curso = fullText[i].str
+                  data[disciplina].Turmas[turma].SemConceito[curso] = {}
+                  data[disciplina].Turmas[turma].SemConceito[curso].Curso = fullText[i].str
+                  nexti()
+                  data[disciplina].Turmas[turma].SemConceito[curso].Quantidade = fullText[i].str
+                  nexti()
+                }
+              }
+
+
+              if (i < fullText.length && fullText[i].str === 'Trancado:') {
+                data[disciplina].Turmas[turma].Trancado = {}
+                nexti()
+                while (i < fullText.length
+                && fullText[i].str !== 'Disciplina'
+                && fullText[i].str.substring(0, 5) !== 'Turma') {
+                  let curso = fullText[i].str
+                  data[disciplina].Turmas[turma].Trancado[curso] = {}
+                  data[disciplina].Turmas[turma].Trancado[curso].Curso = fullText[i].str
+                  nexti()
+                  data[disciplina].Turmas[turma].Trancado[curso].Quantidade = fullText[i].str
+                  nexti()
+                }
+              }
+            }
+            console.log(data[disciplina])
+          }
+        }
+      }
+      fileReader.readAsArrayBuffer(file);
+    },
+
     copyPlanoSelected(oldPlano) {
       let newPlano = {
         nome: `Cópia de '${oldPlano.nome}'`,
@@ -340,7 +541,7 @@ export default {
 
     PlanosOrdered() {
       const { order, type } = this.ordenacaoMainPlanos;
-      return this.$_.orderBy(this.AllPlanos, order, type);
+      return orderBy(this.AllPlanos, order, type);
     },
     isEditing() {
       return this.planoSelectedId != null;

@@ -3,14 +3,18 @@
     <TheNavbar :modalCallbacks="modalCallbacks" />
     <TheSidebar />
 
-    <main @click="closeSidebar">
+    <main role="main" @click.stop="closeSidebar">
+      <ThePageHeader :title="currentPageTitle">
+        <portal-target name="page-header" class="aside"></portal-target>
+      </ThePageHeader>
+
       <transition name="router-view-animation" mode="out-in" appear>
         <router-view></router-view>
       </transition>
     </main>
 
     <div
-      v-show="modalOverlayVisibility"
+      v-if="modalOverlayVisibility"
       class="base-modal-overlay"
       @click.stop="emitCloseCenterModal"
     ></div>
@@ -21,10 +25,11 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from "vuex";
+import { find, pull } from "lodash-es";
 import bddumpService from "@/common/services/bddump";
 import { EventBus } from "@/plugins/eventBus.js";
-import { mapGetters, mapActions } from "vuex";
-import { TheNavbar, TheSidebar } from "@/components/layout";
+import { TheNavbar, TheSidebar, ThePageHeader } from "@/components/layout";
 import { ModalUser, ModalDownload } from "@/components/modals";
 import { SOCKET_PLANO_UPDATED } from "../../../vuex/mutation-types";
 
@@ -33,6 +38,7 @@ export default {
   components: {
     TheSidebar,
     TheNavbar,
+    ThePageHeader,
     ModalUser,
     ModalDownload,
   },
@@ -47,8 +53,8 @@ export default {
 
   created() {
     this.initializeCurrentPlano().then(() => {
-      if (!this.$_.find(this.AllPlanos, ["id", this.currentPlano.id]).visible) {
-        const firstVisiblePlano = this.$_.find(this.AllPlanos, ["visible", true]);
+      if (!find(this.AllPlanos, ["id", this.currentPlano.id]).visible) {
+        const firstVisiblePlano = find(this.AllPlanos, ["visible", true]);
         this.changeCurrentPlano(firstVisiblePlano.id);
       }
     });
@@ -56,7 +62,7 @@ export default {
       if (mutation.type === SOCKET_PLANO_UPDATED) {
         if (mutation.payload.Plano.id == localStorage.getItem("Plano")) {
           if (!mutation.payload.Plano.visible) {
-            let planovisivel = this.$_.find(this.AllPlanos, ["visible", true]);
+            let planovisivel = find(this.AllPlanos, ["visible", true]);
             this.changeCurrentPlano(planovisivel.id);
           }
         }
@@ -79,8 +85,8 @@ export default {
         this.files = response.Files.filter(function(elm) {
           return elm.match(/.*\.(sql)/gi);
         });
-        this.$_.pull(this.files, "drop_all.sql");
-        this.$_.forEach(this.files, function(value, index, array) {
+        pull(this.files, "drop_all.sql");
+        this.files.forEach((value, index, array) => {
           array[index] = value.slice(0, -4);
         });
       });
@@ -88,7 +94,12 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["modalOverlayVisibility", "onLoading", "AllPlanos"]),
+    ...mapGetters(["modalOverlayVisibility", "onLoading", "AllPlanos", "allRoutes"]),
+
+    currentPageTitle() {
+      const currentPage = this.allRoutes.find((route) => route.path === this.$route.path);
+      return currentPage ? currentPage.title : "Pagina nao encontrado!";
+    },
   },
 };
 </script>
@@ -104,10 +115,10 @@ export default {
 .dashboard > main {
   width: 100%;
   height: calc(100vh - var(--navbar-height));
-  overflow-y: auto !important;
   margin-top: var(--navbar-height);
-  transition: all 200ms ease;
   padding: 0 8px;
+  overflow-y: auto !important;
+  transition: all 200ms ease;
 }
 .dashboard > .base-modal-overlay {
   position: fixed;
@@ -116,6 +127,6 @@ export default {
   z-index: 950;
   height: 100vh;
   width: 100vw;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: #00000066;
 }
 </style>

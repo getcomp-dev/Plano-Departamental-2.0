@@ -1,6 +1,7 @@
 import Vue from "vue";
-import _ from "lodash";
 import gradeService from "../../common/services/grade";
+import { cloneDeepWith, orderBy } from "lodash-es";
+import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
 import {
   GRADE_FETCHED,
   SOCKET_GRADE_CREATED,
@@ -8,7 +9,6 @@ import {
   SOCKET_GRADE_UPDATED,
   PUSH_NOTIFICATION,
 } from "../mutation-types";
-import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
 
 const state = {
   Grades: [],
@@ -24,12 +24,12 @@ const mutations = {
   },
 
   [SOCKET_GRADE_UPDATED](state, data) {
-    let index = _.findIndex(state.Grades, (grade) => grade.id === data.Grade.id);
+    let index = state.Grades.findIndex((grade) => grade.id === data.Grade.id);
     Vue.set(state.Grades, index, data.Grade);
   },
 
   [SOCKET_GRADE_DELETED](state, data) {
-    let index = _.findIndex(state.Grades, (grade) => grade.id === data.Grade.id);
+    let index = state.Grades.findIndex((grade) => grade.id === data.Grade.id);
     state.Grades.splice(index, 1);
   },
 };
@@ -49,7 +49,7 @@ const actions = {
     });
   },
   async createGrade({ commit }, grade) {
-    const gradeNormalized = _.cloneDeepWith(grade, setEmptyValuesToNull);
+    const gradeNormalized = cloneDeepWith(grade, setEmptyValuesToNull);
     validateObjectKeys(gradeNormalized, ["nome", "periodoInicio", "Curso"]);
 
     await gradeService.create(gradeNormalized);
@@ -60,7 +60,7 @@ const actions = {
     });
   },
   async editGrade({ commit }, grade) {
-    const gradeNormalized = _.cloneDeepWith(grade, setEmptyValuesToNull);
+    const gradeNormalized = cloneDeepWith(grade, setEmptyValuesToNull);
     validateObjectKeys(gradeNormalized, ["nome", "periodoInicio", "Curso"]);
 
     await gradeService.update(gradeNormalized.id, gradeNormalized);
@@ -71,7 +71,7 @@ const actions = {
     });
   },
   async deleteGrade({ commit }, grade) {
-    const gradeNormalized = _.cloneDeepWith(grade, setEmptyValuesToNull);
+    const gradeNormalized = cloneDeepWith(grade, setEmptyValuesToNull);
     validateObjectKeys(gradeNormalized, ["id", "Curso"]);
 
     await gradeService.delete(gradeNormalized.id, gradeNormalized);
@@ -85,7 +85,7 @@ const actions = {
 
 const getters = {
   AllGrades(state) {
-    return _.orderBy(state.Grades, "periodoInicio", "desc");
+    return orderBy(state.Grades, "periodoInicio", "desc");
   },
 };
 

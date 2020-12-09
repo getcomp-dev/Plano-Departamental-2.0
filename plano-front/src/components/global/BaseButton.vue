@@ -4,7 +4,7 @@
     :key="uniqueKey"
     :disabled="disabled"
     :class="['btn base-btn', options.class]"
-    :title="options.title"
+    :title="title ? title : options.title"
     @click="$emit('click')"
   >
     <font-awesome-icon v-if="options.iconName" :icon="['fas', options.iconName]" />
@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import { uniqueId } from "lodash-es";
+
 export default {
   name: "BaseButton",
   props: {
@@ -21,7 +23,9 @@ export default {
     color: { type: String, default: "gray" },
     disabled: { type: Boolean, default: false },
     text: { type: String | Number, default: "" },
+    title: { type: String, default: "" },
   },
+
   computed: {
     options() {
       if (!this.template)
@@ -89,9 +93,10 @@ export default {
       }
       return options;
     },
+
     uniqueKey() {
-      if (this.template) return this.$_.uniqueId(this.template);
-      else return this.$_.uniqueId(this.color);
+      if (this.template) return uniqueId(this.template);
+      else return uniqueId(this.color);
     },
   },
 };

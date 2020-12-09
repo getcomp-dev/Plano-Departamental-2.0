@@ -1,4 +1,4 @@
-import { startCase } from "lodash";
+import { startCase } from "lodash-es";
 
 function generalError(message) {
   this.name = "generalError";

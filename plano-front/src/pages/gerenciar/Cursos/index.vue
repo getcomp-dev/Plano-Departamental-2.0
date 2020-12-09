@@ -1,8 +1,8 @@
 <template>
   <div class="main-component row">
-    <PageHeader :title="'Cursos'">
+    <portal to="page-header">
       <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
-    </PageHeader>
+    </portal>
 
     <div class="page-content">
       <div class="div-table">
@@ -61,10 +61,7 @@
               :key="curso.id + curso.codigo"
               @click="handleClickInCurso(curso)"
               class=""
-              :class="[
-                'clickable',
-                { 'bg-selected': cursoSelecionado === curso.id },
-              ]"
+              :class="['clickable', { 'bg-selected': cursoSelecionado === curso.id }]"
             >
               <v-td width="65" align="start">{{ curso.codigo }}</v-td>
               <v-td width="300" align="start" :title="curso.nome">
@@ -80,7 +77,7 @@
                   :icon="['fas', 'exclamation-triangle']"
                   class="icon-red"
                 />
-                <b> Nenhum curso encontrado!</b>
+                <b>Nenhum curso encontrado!</b>
               </v-td>
             </tr>
           </template>
@@ -103,8 +100,8 @@
                 id="nome"
                 type="text"
                 class="input-maior form-control form-control-sm"
+                @change="cursoForm.nome = normalizeInputText($event)"
                 :value="cursoForm.nome"
-                @input="cursoForm.nome = $event.target.value.toUpperCase()"
               />
             </div>
           </div>
@@ -113,19 +110,20 @@
             <div class="form-group col m-0 px-0">
               <label required for="codigo" class="col-form-label">Código</label>
               <input
-                type="text"
-                class="form-control form-control-sm input-menor"
                 id="codigo"
+                type="text"
+                class="form-control form-control-sm input-md"
+                @change="cursoForm.codigo = normalizeInputText($event)"
                 :value="cursoForm.codigo"
-                @input="cursoForm.codigo = $event.target.value.toUpperCase()"
               />
             </div>
+
             <div class="form-group col m-0 px-0">
               <label required for="turno" class="col-form-label">Turno</label>
               <select
-                type="text"
-                class="form-control form-control-sm input-medio"
                 id="turno"
+                type="text"
+                class="form-control form-control-sm input-md"
                 v-model="cursoForm.turno"
               >
                 <option value="Diurno">Diurno</option>
@@ -137,14 +135,14 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="alunosEntrada1" class="col-form-label"
-                >Alunos 1º Período
+              <label required for="alunosEntrada1" class="col-form-label">
+                Alunos 1º Período
               </label>
               <input
                 type="number"
                 min="0"
                 id="alunosEnrada1"
-                class="form-control form-control-sm input-menor"
+                class="form-control form-control-sm text-center input-md"
                 v-model.number="cursoForm.alunosEntrada"
                 @keypress="maskOnlyNumber"
                 @blur="maskEmptyToZero($event, cursoForm, 'alunosEntrada')"
@@ -152,14 +150,14 @@
             </div>
 
             <div class="form-group col m-0 px-0">
-              <label required for="alunosEntrada2" class="col-form-label"
-                >Alunos 2º Período
+              <label required for="alunosEntrada2" class="col-form-label">
+                Alunos 2º Período
               </label>
               <input
                 type="number"
                 min="0"
                 id="alunosEntrada2"
-                class="form-control form-control-sm input-menor"
+                class="form-control form-control-sm text-center input-md"
                 v-model.number="cursoForm.alunosEntrada2"
                 @keypress="maskOnlyNumber"
                 @blur="maskEmptyToZero($event, cursoForm, 'alunosEntrada2')"
@@ -185,27 +183,33 @@
       <li class="list-group-item">
         <b>Adicionar:</b>
         Preencha o cartão em branco à direita e em seguida, clique em Adicionar
-        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
+        .
       </li>
       <li class="list-group-item">
-        <b>Editar:</b> Clique na linha da tabela do curso que deseja alterar. Em
-        seguida, no cartão à direita, altere as informações que desejar e clique em
-        Salvar <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
+        <b>Editar:</b>
+        Clique na linha da tabela do curso que deseja alterar. Em seguida, no cartão à
+        direita, altere as informações que desejar e clique em Salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
+        .
       </li>
       <li class="list-group-item">
-        <b>Deletar:</b> Clique na linha da tabela do curso que deseja remover. Em
-        seguida, no cartão à direita, clique em Remover
-        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e
-        confirme a remoção na janela que será aberta.
+        <b>Deletar:</b>
+        Clique na linha da tabela do curso que deseja remover. Em seguida, no cartão à
+        direita, clique em Remover
+        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
+        e confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
-        <b>Limpar:</b> No cartão à direita, clique em Cancelar
-        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para limpar
-        as informações.
+        <b>Limpar:</b>
+        No cartão à direita, clique em Cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />
+        , para limpar as informações.
       </li>
       <li class="list-group-item">
-        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para
-        alterar a ordenação das informações.
+        <b>Ordenar:</b>
+        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
+        informações.
       </li>
     </ModalAjuda>
   </div>
@@ -214,7 +218,8 @@
 <script>
 import ls from "local-storage";
 import { mapActions, mapGetters } from "vuex";
-import { maskOnlyNumber, maskEmptyToZero } from "@/common/mixins";
+import { clone, find, orderBy } from "lodash-es";
+import { maskOnlyNumber, maskEmptyToZero, normalizeInputText } from "@/common/mixins";
 import { ModalDelete, ModalAjuda } from "@/components/modals";
 import { Card } from "@/components/ui";
 
@@ -231,13 +236,13 @@ const emptyCurso = {
 
 export default {
   name: "DashboardCursos",
-  mixins: [maskOnlyNumber, maskEmptyToZero],
+  mixins: [maskOnlyNumber, maskEmptyToZero, normalizeInputText],
   components: { Card, ModalDelete, ModalAjuda },
   data() {
     return {
       modalDeleteText: "",
       cursoSelecionado: "",
-      cursoForm: this.$_.clone(emptyCurso),
+      cursoForm: clone(emptyCurso),
       ordenacaoCursos: { order: "codigo", type: "asc" },
     };
   },
@@ -252,15 +257,15 @@ export default {
     handleClickInCurso(curso) {
       this.cleanForm();
       this.cursoSelecionado = curso.id;
-      this.cursoForm = this.$_.clone(curso);
+      this.cursoForm = clone(curso);
     },
     cleanForm() {
       this.cursoSelecionado = "";
-      this.cursoForm = this.$_.clone(emptyCurso);
+      this.cursoForm = clone(emptyCurso);
     },
     checkSeCursoTemAlgumPedido(cursoId) {
       for (let t in this.$store.state.pedido.Pedidos) {
-        let pedido = this.$_.find(this.$store.state.pedido.Pedidos[t], (p) => {
+        let pedido = find(this.$store.state.pedido.Pedidos[t], (p) => {
           if (p.Curso === cursoId) {
             if (
               parseInt(p.vagasPeriodizadas, 10) > 0 ||
@@ -354,7 +359,7 @@ export default {
     ...mapGetters(["AllCursos"]),
 
     CursosOrdered() {
-      return this.$_.orderBy(
+      return orderBy(
         this.AllCursos,
         this.ordenacaoCursos.order,
         this.ordenacaoCursos.type
@@ -366,16 +371,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.card .input-maior {
-  width: 250px;
-}
-.card .input-menor {
-  width: 100px;
-  text-align: center !important;
-}
-.card .input-medio {
-  width: 100%;
-}
-</style>

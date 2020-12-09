@@ -1,7 +1,7 @@
 <template>
   <BaseModal
     ref="baseModalPlano"
-    title="Plano departamental"
+    title="Plano Departamental"
     type="editTurma"
     class="modal-plano"
     :hasBackground="true"
@@ -74,6 +74,8 @@ export default {
     },
     async handleCreatePlano() {
       try {
+        this.setPartialLoading(true);
+
         if (this.currentTab === "Importar") {
           await this.$refs.importPlano.handleImportPlano();
         } else if (this.currentTab === "Copiar") {
@@ -86,6 +88,8 @@ export default {
           type: "error",
           text: error.message,
         });
+      } finally {
+        this.setPartialLoading(false);
       }
     },
   },

@@ -4,26 +4,21 @@ import store from "./vuex/store";
 import router from "./router";
 import axios from "./common/services/axios";
 import { sync } from "vuex-router-sync";
-sync(store, router);
-axios(Vue, store);
-
 import SocketIoInstance from "./socketInstance.js";
 import VueSocketio from "vue-socket.io";
-import LodashVue from "./plugins/lodashVue.js";
 import PortalVue from "portal-vue";
-import { AlertPlugin, PopoverPlugin } from "bootstrap-vue";
 import Notifications from "vue-notification";
-
+import { VBPopover } from "bootstrap-vue";
+sync(store, router);
+axios(Vue, store);
 Vue.use(VueSocketio, SocketIoInstance, store);
-Vue.use(LodashVue);
+
+Vue.directive("b-popover", VBPopover);
 Vue.use(PortalVue);
 Vue.use(Notifications);
-Vue.use(AlertPlugin);
-Vue.use(PopoverPlugin);
 
 //Global components
 import {
-  PageHeader,
   BaseTable,
   BaseModal,
   BaseButton,
@@ -40,7 +35,6 @@ Vue.component("font-awesome-icon", FontAwesomeIcon);
 Vue.component("BaseButton", BaseButton);
 Vue.component("BaseTable", BaseTable);
 Vue.component("BaseModal", BaseModal);
-Vue.component("PageHeader", PageHeader);
 Vue.component("v-td", VTd);
 Vue.component("v-th", VTh);
 Vue.component("v-th-ordination", VThOrdination);
@@ -57,8 +51,7 @@ Vue.mixin({
 });
 
 //css
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./css/global.css";
 
 Vue.config.productionTip = false;

@@ -1,7 +1,7 @@
 <template>
   <transition name="loading-transition">
     <div
-      v-show="onLoading.fetching || onLoading.partial || onLoading.table"
+      v-if="onLoading.fetching || onLoading.partial || onLoading.table"
       class="container-loading"
       @click.stop
       @keydown.stop

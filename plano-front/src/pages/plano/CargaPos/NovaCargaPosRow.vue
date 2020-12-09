@@ -21,11 +21,8 @@
         <option v-if="!DocentesAtivos.length">
           Nenhum Docente Encontrado
         </option>
-        <option
-          v-for="docente in DocentesAtivos"
-          :key="docente.id"
-          :value="docente.id"
-          >{{ docente.apelido }}
+        <option v-for="docente in DocentesAtivos" :key="docente.id" :value="docente.id">
+          {{ docente.apelido }}
         </option>
       </select>
     </v-td>
@@ -42,6 +39,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { clone } from "lodash-es";
 import { maskOnlyNumber } from "@/common/mixins";
 const emptyCarga = {
   id: null,
@@ -56,7 +54,7 @@ export default {
   mixins: [maskOnlyNumber],
   data() {
     return {
-      cargaPosForm: this.$_.clone(emptyCarga),
+      cargaPosForm: clone(emptyCarga),
     };
   },
 
@@ -88,13 +86,16 @@ export default {
 <style scoped>
 .novacarga {
   font-size: 11px !important;
-  background-color: #cecece;
+  background-color: #e9e9e9;
 }
 .novacarga:hover {
-  background-color: #cecece;
+  background-color: #e9e9e9;
 }
 .novacarga input,
 .novacarga select {
   margin: 5px 0;
+}
+.novaturma {
+  font-size: 11px;
 }
 </style>

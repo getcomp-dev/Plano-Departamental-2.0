@@ -1,7 +1,7 @@
 <template>
   <nav class="navbar-container shadow">
     <div @click="closeSidebar" class="navbar-brand">
-      <router-link :to="{ path: '/dashboard' }" class="brand-title">
+      <router-link :to="{ path: '/home' }" class="brand-title">
         <font-awesome-icon :icon="['fas', 'graduation-cap']" />
         SIPlanWeb
       </router-link>
@@ -35,7 +35,7 @@
         <font-awesome-icon :icon="['fas', 'download']" />
         <span>Download</span>
       </li>
-      <li class="nav-item" @click="$router.push({ name: 'logout' })">
+      <li class="nav-item" @click="doLogout">
         <font-awesome-icon :icon="['fas', 'sign-out-alt']" />
         <span>Logout</span>
       </li>
@@ -45,7 +45,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-
+import { filter, find } from "lodash-es";
 export default {
   name: "TheNavbar",
   props: {
@@ -58,14 +58,14 @@ export default {
   },
 
   methods: {
-    ...mapActions(["closeSidebar", "toggleSidebar", "changeCurrentPlano"]),
+    ...mapActions(["closeSidebar", "toggleSidebar", "changeCurrentPlano", "doLogout"]),
   },
 
   computed: {
     ...mapGetters(["sidebarVisibility", "AllPlanos", "currentPlano"]),
 
     PlanosVisiveis() {
-      return this.$_.filter(this.AllPlanos, ["visible", true]);
+      return filter(this.AllPlanos, ["visible", true]);
     },
   },
 
@@ -75,7 +75,7 @@ export default {
         if (currentPlano) {
           this.planoIdForm = currentPlano.id;
         } else {
-          const firstVisiblePlano = this.$_.find(this.AllPlanos, ["visible", true]);
+          const firstVisiblePlano = find(this.AllPlanos, ["visible", true]);
           this.changeCurrentPlano(firstVisiblePlano.id);
           this.planoIdForm = firstVisiblePlano.id;
 

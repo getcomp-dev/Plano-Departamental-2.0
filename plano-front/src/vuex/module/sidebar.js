@@ -8,6 +8,7 @@ const mutations = {
   [SET_SIDEBAR_VISIBILITY](state, data) {
     state.sidebarVisibility = data;
   },
+
   [TOGGLE_SIDEBAR](state) {
     state.sidebarVisibility = !state.sidebarVisibility;
   },
@@ -17,9 +18,11 @@ const actions = {
   openSidebar({ commit }) {
     commit("SET_SIDEBAR_VISIBILITY", true);
   },
+
   closeSidebar({ commit }) {
     commit("SET_SIDEBAR_VISIBILITY", false);
   },
+
   toggleSidebar({ commit }) {
     commit("TOGGLE_SIDEBAR");
   },

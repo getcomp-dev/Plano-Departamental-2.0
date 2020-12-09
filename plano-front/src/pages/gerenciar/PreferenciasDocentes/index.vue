@@ -1,11 +1,11 @@
 <template>
   <div class="main-component">
-    <PageHeader :title="'Preferências dos docentes'">
+    <portal to="page-header">
       <BaseButton template="adicionar" @click="toggleAsideModal('newPref')" />
       <BaseButton template="file-upload" @click="toggleAsideModal('upload')" />
       <BaseButton template="swap-modes" @click="toggleTableMode" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
-    </PageHeader>
+    </portal>
 
     <div class="div-table">
       <BaseTable v-show="tableMode === 'disciplina'">
@@ -468,15 +468,18 @@
       <li class="list-group-item">
         <b>Ordenar:</b>
         Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
-        informações.
+        informações. Note que existem colunas com o icone
+        <font-awesome-icon :icon="['fas', 'thumbtack']" class="icon-darkgray" />
+        que significa que esta ordenação terá pripridade em relação as outras.
       </li>
     </ModalAjuda>
   </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
 import XLSX from "xlsx";
+import { mapGetters } from "vuex";
+import { find, filter, orderBy, map } from "lodash-es";
 import docenteDisciplinaService from "@/common/services/docenteDisciplina";
 import { ModalAjuda } from "@/components/modals";
 import { toggleAsideModal } from "@/common/mixins";
@@ -549,7 +552,7 @@ export default {
       this.$refs.modalEditPref.close();
     },
     closeAllModals() {
-      this.$_.forEach(this.asideModalsRefs, (ref) => {
+      this.asideModalsRefs.forEach((ref) => {
         this.$refs[ref].close();
       });
     },
@@ -583,7 +586,7 @@ export default {
       this.$refs.modalAddPref.open();
     },
     findPreferencia(docente, disciplina) {
-      let preferenciaFounded = this.$_.find(this.PreferenciasDocentes, {
+      let preferenciaFounded = find(this.PreferenciasDocentes, {
         Docente: docente.id,
         Disciplina: disciplina.id,
       });
@@ -705,8 +708,8 @@ export default {
         const workbook = XLSX.read(e.target.result, { type: "binary" });
         let first_worksheet = workbook.Sheets[workbook.SheetNames[0]];
         let prefs = XLSX.utils.sheet_to_json(first_worksheet);
-        let disciplinasFields = this.$_.filter(
-          this.$_.split(XLSX.utils.sheet_to_csv(first_worksheet), ","),
+        let disciplinasFields = filter(
+          XLSX.utils.sheet_to_csv(first_worksheet).split(","),
           function(p) {
             return p.substring(0, 11) === "Disciplinas";
           }
@@ -715,7 +718,7 @@ export default {
         for (let i = 0; i < disciplinasFields.length; i++) {
           let start = disciplinasFields[i].indexOf("[");
           let end = disciplinasFields[i].indexOf("\t");
-          let disc = this.$_.find(disciplinas, {
+          let disc = find(disciplinas, {
             codigo: disciplinasFields[i].substring(start + 1, end),
           });
           disciplinasCods.push(disc);
@@ -724,13 +727,13 @@ export default {
           }
         }
         for (let i = 0; i < prefs.length; i++) {
-          let docente = this.$_.find(docentes, {
+          let docente = find(docentes, {
             nome: prefs[i].Nome.toUpperCase(),
           });
           if (docente) {
             for (let j = 0; j < disciplinasFields.length; j++) {
               if (disciplinasCods[j]) {
-                let prefdisc = this.$_.find(preferencias, {
+                let prefdisc = find(preferencias, {
                   Docente: docente.id,
                   Disciplina: disciplinasCods[j].id,
                 });
@@ -780,10 +783,10 @@ export default {
       const docentesOrd = this.ordenacaoDocentes.docentes;
       const preferenciaOrd = this.ordenacaoDocentes.pref;
 
-      const docentesOrdered = this.$_.map(this.DocentesInPreferencias, (docente) => {
+      const docentesOrdered = map(this.DocentesInPreferencias, (docente) => {
         return {
           ...docente,
-          preferencias: this.$_.orderBy(
+          preferencias: orderBy(
             docente.preferencias,
             [preferenciaOrd.order, disciplinasOrd.order],
             [preferenciaOrd.type, disciplinasOrd.type]
@@ -791,13 +794,13 @@ export default {
         };
       });
 
-      return this.$_.orderBy(docentesOrdered, docentesOrd.order, docentesOrd.type);
+      return orderBy(docentesOrdered, docentesOrd.order, docentesOrd.type);
     },
     DocentesInPreferencias() {
       const docentesResult = [];
 
-      this.$_.forEach(this.DocentesAtivos, (docente) => {
-        const preferenciasDoDocente = this.$_.filter(this.PreferenciasDocentes, [
+      this.DocentesAtivos.forEach((docente) => {
+        const preferenciasDoDocente = filter(this.PreferenciasDocentes, [
           "Docente",
           docente.id,
         ]);
@@ -817,31 +820,24 @@ export default {
       const disciplinasOrd = this.ordenacaoDisciplina.disciplinas;
       const preferenciaOrd = this.ordenacaoDisciplina.pref;
 
-      const disciplinasOrdered = this.$_.map(
-        this.DisciplinasInPreferencias,
-        (disciplina) => {
-          return {
-            ...disciplina,
-            preferencias: this.$_.orderBy(
-              disciplina.preferencias,
-              [preferenciaOrd.order, docentesOrd.order],
-              [preferenciaOrd.type, docentesOrd.type]
-            ),
-          };
-        }
-      );
+      const disciplinasOrdered = map(this.DisciplinasInPreferencias, (disciplina) => {
+        return {
+          ...disciplina,
+          preferencias: orderBy(
+            disciplina.preferencias,
+            [preferenciaOrd.order, docentesOrd.order],
+            [preferenciaOrd.type, docentesOrd.type]
+          ),
+        };
+      });
 
-      return this.$_.orderBy(
-        disciplinasOrdered,
-        disciplinasOrd.order,
-        disciplinasOrd.type
-      );
+      return orderBy(disciplinasOrdered, disciplinasOrd.order, disciplinasOrd.type);
     },
     DisciplinasInPreferencias() {
       const disciplinasResult = [];
 
-      this.$_.forEach(this.DisciplinasDCCInPerfis, (disciplina) => {
-        const preferenciasDaDisciplina = this.$_.filter(this.PreferenciasDocentes, [
+      this.DisciplinasDCCInPerfis.forEach((disciplina) => {
+        const preferenciasDaDisciplina = filter(this.PreferenciasDocentes, [
           "Disciplina",
           disciplina.id,
         ]);

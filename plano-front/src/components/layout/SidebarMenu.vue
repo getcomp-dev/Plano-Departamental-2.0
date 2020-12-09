@@ -7,8 +7,8 @@
       {{ menuTitle }}
     </h3>
     <ul class="nav flex-column mb-2" v-if="menuPages.length">
-      <li v-for="page in menuPages" :key="page.routeName" @click="closeSidebar">
-        <router-link :to="{ name: page.routeName }" class="nav-link">
+      <li v-for="page in menuPages" :key="page.path" @click="closeSidebar">
+        <router-link :to="{ path: page.path }" class="nav-link">
           <font-awesome-icon :icon="['fas', page.icon]" />
           <span>
             {{ page.title }}

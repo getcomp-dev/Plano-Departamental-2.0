@@ -1,6 +1,6 @@
 import Vue from "vue";
-import _ from "lodash";
 import perfilService from "../../common/services/perfil";
+import { orderBy, filter } from "lodash-es";
 import {
   PERFIL_FETCHED,
   SOCKET_PERFIL_CREATED,
@@ -22,18 +22,12 @@ const mutations = {
   },
 
   [SOCKET_PERFIL_UPDATED](state, data) {
-    let index = _.findIndex(
-      state.Perfis,
-      (perfil) => perfil.id === data.Perfil.id
-    );
+    let index = state.Perfis.findIndex((perfil) => perfil.id === data.Perfil.id);
     Vue.set(state.Perfis, index, data.Perfil);
   },
 
   [SOCKET_PERFIL_DELETED](state, data) {
-    let index = _.findIndex(
-      state.Perfis,
-      (perfil) => perfil.id === data.Perfil.id
-    );
+    let index = state.Perfis.findIndex((perfil) => perfil.id === data.Perfil.id);
     state.Perfis.splice(index, 1);
   },
 };
@@ -56,16 +50,15 @@ const actions = {
 
 const getters = {
   AllPerfis(state) {
-    return _.orderBy(state.Perfis, ["nome"]);
+    return orderBy(state.Perfis, ["nome"]);
   },
-  PerfisDCC(state, getters) {
-    return _.filter(getters.AllPerfis, (perfil) => perfil.id !== 13);
+
+  PerfisDCC(_, getters) {
+    return filter(getters.AllPerfis, (perfil) => perfil.id !== 13);
   },
-  PerfisExternos(state, getters) {
-    return _.filter(
-      getters.AllPerfis,
-      (perfil) => perfil.id === 13 || perfil.id === 15
-    );
+
+  PerfisExternos(_, getters) {
+    return filter(getters.AllPerfis, (perfil) => perfil.id === 13 || perfil.id === 15);
   },
 };
 

@@ -24,6 +24,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { debounce, clone } from "lodash-es";
 import { vFocusPedido, maskOnlyNumber } from "@/common/mixins";
 
 export default {
@@ -37,7 +38,7 @@ export default {
   data() {
     return {
       pedidoForm: null,
-      debouncedEditPedido: this.$_.debounce(this.handleEditPedido, 1000),
+      debouncedEditPedido: debounce(this.handleEditPedido, 1500),
     };
   },
 
@@ -45,7 +46,7 @@ export default {
     ...mapActions(["editPedido"]),
 
     resetPedidoForm() {
-      this.pedidoForm = this.$_.cloneDeep(this.PedidosOfCurrentTurma);
+      this.pedidoForm = clone(this.PedidosOfCurrentTurma);
     },
     async handleEditPedido() {
       try {

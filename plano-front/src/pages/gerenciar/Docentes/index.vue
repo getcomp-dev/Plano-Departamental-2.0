@@ -1,8 +1,8 @@
 <template>
   <div class="main-component row">
-    <PageHeader :title="'Docentes'">
+    <portal to="page-header">
       <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
-    </PageHeader>
+    </portal>
 
     <div class="page-content">
       <div class="div-table">
@@ -37,8 +37,8 @@
           <template #tbody>
             <tr
               v-for="docente in DocentesOrdered"
-              :key="docente.id + docente.apelido"
-              :class="[{ 'bg-selected': docenteClickadoId == docente.id }, 'clickable']"
+              :key="docente.id"
+              :class="[{ 'bg-selected': docenteClickado.id == docente.id }, 'clickable']"
               @click="handleClickInDocente(docente)"
             >
               <v-td width="240" align="start">{{ docente.nome }}</v-td>
@@ -67,12 +67,11 @@
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
               <label required for="nome" class="col-form-label">Nome</label>
-
               <input
                 id="nome"
                 type="text"
-                class="form-control form-control-sm input-maior"
-                @input="docenteForm.nome = $event.target.value.toUpperCase()"
+                class="form-control form-control-sm input-lg"
+                @change="docenteForm.nome = normalizeInputText($event)"
                 :value="docenteForm.nome"
               />
             </div>
@@ -84,15 +83,22 @@
               <input
                 id="apelido"
                 type="text"
-                class="form-control form-control-sm input-medio"
-                @input="docenteForm.apelido = $event.target.value.toUpperCase()"
+                class="form-control form-control-sm"
+                @change="docenteForm.apelido = normalizeInputText($event)"
                 :value="docenteForm.apelido"
               />
             </div>
 
-            <div class="form-check form-check-inline col-auto m-0 mt-4 px-0">
-              <label for="ativo" class="form-check-label mr-2">Ativo</label>
-              <input id="ativo" type="checkbox" value="1" v-model="docenteForm.ativo" />
+            <div class="form-group col-auto m-0 p-0 pt-4">
+              <div class="d-flex align-items-center">
+                <label for="ativo" class="form-check-label m-0 mr-2">Ativo</label>
+                <input
+                  id="ativo"
+                  type="checkbox"
+                  :value="1"
+                  v-model.number="docenteForm.ativo"
+                />
+              </div>
             </div>
           </div>
 
@@ -184,11 +190,17 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { clone, filter, orderBy } from "lodash-es";
 import docenteService from "@/common/services/docente";
 import docentePerfilService from "@/common/services/docentePerfil";
-import { toggleItemInArray, generateBooleanText } from "@/common/mixins";
+import {
+  toggleItemInArray,
+  generateBooleanText,
+  normalizeInputText,
+} from "@/common/mixins";
 import { Card } from "@/components/ui";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
+
 const emptyDocente = {
   id: null,
   nome: null,
@@ -204,13 +216,13 @@ const emptyPerfil = {
 
 export default {
   name: "DashboardDocente",
-  mixins: [toggleItemInArray, generateBooleanText],
+  mixins: [toggleItemInArray, generateBooleanText, normalizeInputText],
   components: { Card, ModalAjuda, ModalDelete },
   data() {
     return {
-      docenteForm: this.$_.clone(emptyDocente),
+      docenteForm: clone(emptyDocente),
       perfisAssociados: [],
-      docenteClickadoId: null,
+      docenteClickado: {},
       perfilsOfCurrentDocente: [],
       ordenacaoDocentesMain: { order: "nome", type: "asc" },
     };
@@ -219,23 +231,25 @@ export default {
   methods: {
     handleClickInDocente(docente) {
       this.cleanDocente();
-      this.docenteClickadoId = docente.id;
+      this.docenteClickado = docente;
       this.showDocente(docente);
     },
     cleanDocente() {
-      this.docenteClickadoId = null;
-      this.docenteForm = this.$_.clone(emptyDocente);
+      this.docenteClickado = {};
+      this.docenteForm = clone(emptyDocente);
     },
     showDocente(docente) {
-      this.docenteForm = this.$_.clone(docente);
+      this.docenteForm = clone(docente);
       this.updatePerfisAssociados();
     },
     updatePerfisAssociados() {
-      this.perfilsOfCurrentDocente = this.$_.map(
-        this.$_.filter(this.DocentePerfis, ["DocenteId", this.docenteForm.id]),
-        "Perfil"
+      const docentePerfisFiltered = filter(this.DocentePerfis, [
+        "DocenteId",
+        this.docenteForm.id,
+      ]);
+      this.perfilsOfCurrentDocente = docentePerfisFiltered.map(
+        (docentePerfil) => docentePerfil.Perfil
       );
-
       this.perfisAssociados = [...this.perfilsOfCurrentDocente];
     },
     openModalDelete() {
@@ -269,7 +283,9 @@ export default {
     async editDocente() {
       try {
         this.setPartialLoading(true);
-
+        if (!this.docenteForm.nome || !this.docenteForm.apelido) {
+          throw new Error("Campos obrigatorios invalidos");
+        }
         const response = await docenteService.update(
           this.docenteForm.id,
           this.docenteForm
@@ -284,10 +300,14 @@ export default {
         this.pushNotification({
           type: "error",
           title: "Erro ao atualizar Docente",
-          text: error.response.data.fullMessage
+          text: error.message
+            ? error.message
+            : error.response.data.fullMessage
             ? "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>")
             : "",
         });
+
+        this.showDocente(this.docenteClickado);
       } finally {
         this.setPartialLoading(false);
       }
@@ -319,25 +339,21 @@ export default {
     async editDocentePerfil() {
       //Remove os que não existem em perfisAssociados mas existem em perfilsOfCurrentDocente
       for (let i = 0; i < this.perfilsOfCurrentDocente.length; i++) {
-        const perfilIndex = this.$_.indexOf(
-          this.perfisAssociados,
+        const perfilIndex = this.perfisAssociados.indexOf(
           this.perfilsOfCurrentDocente[i]
         );
-
         if (perfilIndex === -1) await this.deletePerfil(this.perfilsOfCurrentDocente[i]);
       }
       //Adiciona os que existem no perfisAssociados mas não existem em perfilsOfCurrentDocente
       for (let i = 0; i < this.perfisAssociados.length; i++) {
-        const perfilIndex = this.$_.indexOf(
-          this.perfilsOfCurrentDocente,
+        const perfilIndex = this.perfilsOfCurrentDocente.indexOf(
           this.perfisAssociados[i]
         );
-
         if (perfilIndex === -1) await this.addPerfil(this.perfisAssociados[i]);
       }
     },
     async addPerfil(perfilId) {
-      const newPerfilDocente = this.$_.clone(emptyPerfil);
+      const newPerfilDocente = clone(emptyPerfil);
       newPerfilDocente.Docente = this.docenteForm.id;
       newPerfilDocente.DocenteId = this.docenteForm.id;
       newPerfilDocente.Perfil = perfilId;
@@ -353,7 +369,7 @@ export default {
     ...mapGetters(["AllDocentes", "AllPerfis"]),
 
     DocentesOrdered() {
-      return this.$_.orderBy(
+      return orderBy(
         this.AllDocentes,
         this.ordenacaoDocentesMain.order,
         this.ordenacaoDocentesMain.type
@@ -370,12 +386,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.card .input-maior {
-  width: 270px;
-}
-.card .input-medio {
-  width: 150px;
-}
-</style>

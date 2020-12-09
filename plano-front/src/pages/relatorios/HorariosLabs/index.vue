@@ -1,10 +1,10 @@
 <template>
   <div class="main-component row p-0">
-    <PageHeader :title="'Horários - Laborátorios'">
+    <portal to="page-header">
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="relatorio" @click="toggleAsideModal('relatorio')" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
-    </PageHeader>
+    </portal>
 
     <div class="w-100">
       <ListHorariosLab
@@ -14,6 +14,7 @@
         :turmasInPeriodos="TurmasInPeriodos"
       />
     </div>
+
     <p v-show="horariosIsEmpty" class="text-empty">
       <b>Nenhum horário encontrado.</b>
       Clique no botão de filtros
@@ -122,13 +123,14 @@
       </li>
     </ModalAjuda>
 
-    <ModalRelatorio ref="modalRelatorio" @selection-option="pdf($event)" />
+    <ModalRelatorio ref="modalRelatorio" @selection-option="generatePdf($event)" />
   </div>
 </template>
 
 <script>
-import pdfs from "@/common/services/pdfs";
 import { mapGetters } from "vuex";
+import { filter, find, orderBy } from "lodash-es";
+import { pdfHorariosLabs } from "@/common/services/pdfs";
 import {
   toggleItemInArray,
   toggleAsideModal,
@@ -199,7 +201,7 @@ export default {
         },
         btnOk: () => {
           this.filtroPeriodos.ativados = [
-            ...this.$_.orderBy(this.filtroPeriodos.selecionados, "id"),
+            ...orderBy(this.filtroPeriodos.selecionados, "id"),
           ];
           this.filtroLaboratorios.ativados = [...this.filtroLaboratorios.selecionados];
         },
@@ -208,7 +210,7 @@ export default {
   },
 
   beforeMount() {
-    this.filtroPeriodos.selecionados = this.$_.filter(
+    this.filtroPeriodos.selecionados = filter(
       this.PeriodosOptions,
       (periodo) => periodo.id === 1 || periodo.id === 3
     );
@@ -217,13 +219,19 @@ export default {
   },
 
   methods: {
-    pdf(completo) {
-      let laboratorios;
-      if (completo) laboratorios = this.LaboratoriosOrdered;
-      else laboratorios = this.filtroLaboratorios.ativados;
+    generatePdf(completo) {
+      let laboratorios, periodosAtivados;
+      if (completo) {
+        laboratorios = this.LaboratoriosOrdered;
+        periodosAtivados = this.PeriodosOptions;
+      } else {
+        laboratorios = this.filtroLaboratorios.ativados;
+        periodosAtivados = this.filtroPeriodos.ativados;
+      }
 
-      pdfs.pdfAlocacaoLabs({
+      pdfHorariosLabs({
         laboratorios,
+        periodosAtivados,
         plano: this.currentPlano,
       });
     },
@@ -241,13 +249,13 @@ export default {
     LaboratoriosOrdered() {
       const laboratoriosResultantes = [];
       laboratoriosResultantes.push(
-        this.$_.find(this.Laboratorios, ["nome", "L107"]),
-        this.$_.find(this.Laboratorios, ["nome", "L205"]),
-        this.$_.find(this.Laboratorios, ["nome", "LAB4"]),
-        this.$_.find(this.Laboratorios, ["nome", "LAB3"]),
-        this.$_.find(this.Laboratorios, ["nome", "LABENG1"]),
-        this.$_.find(this.Laboratorios, ["nome", "LABENG2"]),
-        this.$_.find(this.Laboratorios, ["nome", "LAB EST 2"])
+        find(this.Laboratorios, ["nome", "L107"]),
+        find(this.Laboratorios, ["nome", "L205"]),
+        find(this.Laboratorios, ["nome", "LAB4"]),
+        find(this.Laboratorios, ["nome", "LAB3"]),
+        find(this.Laboratorios, ["nome", "LABENG1"]),
+        find(this.Laboratorios, ["nome", "LABENG2"]),
+        find(this.Laboratorios, ["nome", "LAB EST 2"])
       );
 
       return laboratoriosResultantes;
@@ -260,21 +268,21 @@ export default {
         periodo4: [],
       };
 
-      const turmasOredered = this.$_.orderBy(this.TurmasInDisciplinasPerfis, [
+      const turmasOredered = orderBy(this.TurmasInDisciplinasPerfis, [
         "periodo",
         "disciplina.nome",
         "letra",
       ]);
-      this.$_.forEach(turmasOredered, (turma) =>
+      turmasOredered.forEach((turma) =>
         turmasResultantes[`periodo${turma.periodo}`].push({ ...turma })
       );
 
-      const turmasExternasOrdered = this.$_.orderBy(this.TurmasExternasInDisciplinas, [
+      const turmasExternasOrdered = orderBy(this.TurmasExternasInDisciplinas, [
         "periodo",
         "disciplina.nome",
         "letra",
       ]);
-      this.$_.forEach(turmasExternasOrdered, (turma) =>
+      turmasExternasOrdered.forEach((turma) =>
         turmasResultantes[`periodo${turma.periodo}`].push({ ...turma })
       );
 

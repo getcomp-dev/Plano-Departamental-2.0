@@ -1,7 +1,5 @@
-/* globals localStorage */
-import _ from "lodash";
+import router from "../../router.js";
 import authService from "../../common/services/auth";
-
 import {
   AUTHENTICATE,
   USER_FETCHED,
@@ -73,19 +71,29 @@ const actions = {
       }
     });
   },
+
+  doLogout({ commit }) {
+    commit(USER_LOGGED_OUT);
+    router.push({ path: "/login" });
+  },
 };
 
 const getters = {
-  usuarioNome: (state) => {
-    return state.Usuario ? _.words(state.Usuario.nome)[0] : "";
-  },
-  Admin(state) {
-    return state.Usuario.admin >= 1;
-  },
-  SuperAdmin(state) {
-    return state.Usuario.admin >= 2;
+  currentUser(state) {
+    return {
+      ...state.Usuario,
+      isAdmin: state.Usuario.admin >= 1,
+      isSuperAdmin: state.Usuario.admin >= 2,
+      type: adminText(state.Usuario.admin),
+    };
   },
 };
+
+function adminText(admin) {
+  if (admin === 0) return "Consulta";
+  else if (admin === 1) return "Comissão";
+  else if (admin === 2) return "Administrador";
+}
 
 export default {
   state,

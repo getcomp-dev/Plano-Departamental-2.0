@@ -5,7 +5,7 @@ import ModalEditTurma from "./ModalEditTurma";
 import ModalRelatorio from "./ModalRelatorio";
 import ModalFiltros from "./ModalFiltros";
 import ModalDelete from "./ModalDelete";
-import ModalDownloadTurmasCursos from "./ModalDownloadTurmasCursos"
+import ModalDownloadTurmasCursos from "./ModalDownloadTurmasCursos";
 
 export {
   ModalUser,
@@ -15,5 +15,5 @@ export {
   ModalRelatorio,
   ModalFiltros,
   ModalDelete,
-  ModalDownloadTurmasCursos
+  ModalDownloadTurmasCursos,
 };

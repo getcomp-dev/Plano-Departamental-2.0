@@ -1,5 +1,5 @@
 import Vue from "vue";
-import _ from "lodash";
+import { find, map } from "lodash-es";
 import docenteDisciplinaService from "../../common/services/docenteDisciplina";
 import {
   DOCENTE_DISCIPLINA_FETCHED,
@@ -22,8 +22,7 @@ const mutations = {
   },
 
   [SOCKET_DOCENTE_DISCIPLINA_UPDATED](state, data) {
-    let index = _.findIndex(
-      state.DocenteDisciplinas,
+    const index = state.DocenteDisciplinas.findIndex(
       (docenteDisciplina) =>
         (docenteDisciplina.Disciplina === data.DocenteDisciplina.Disciplina) &
         (docenteDisciplina.Docente === data.DocenteDisciplina.Docente)
@@ -32,8 +31,7 @@ const mutations = {
   },
 
   [SOCKET_DOCENTE_DISCIPLINA_DELETED](state, data) {
-    let index = _.findIndex(
-      state.DocenteDisciplinas,
+    const index = state.DocenteDisciplinas.findIndex(
       (docenteDisciplina) =>
         (docenteDisciplina.Disciplina === data.DocenteDisciplina.Disciplina) &
         (docenteDisciplina.Docente === data.DocenteDisciplina.Docente)
@@ -60,11 +58,11 @@ const actions = {
 
 const getters = {
   PreferenciasDocentes(state, rootGetters) {
-    return _.map(state.DocenteDisciplinas, (pref) => {
+    return map(state.DocenteDisciplinas, (pref) => {
       return {
         ...pref,
-        disciplina: _.find(rootGetters.DisciplinasInPerfis, ["id", pref.Disciplina]),
-        docente: _.find(rootGetters.AllDocentes, ["id", pref.Docente]),
+        disciplina: find(rootGetters.DisciplinasInPerfis, ["id", pref.Disciplina]),
+        docente: find(rootGetters.AllDocentes, ["id", pref.Docente]),
       };
     });
   },

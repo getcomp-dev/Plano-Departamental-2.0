@@ -1,9 +1,8 @@
 import Vue from "vue";
-import _ from "lodash";
+import { orderBy, cloneDeepWith, filter } from "lodash-es";
 import cursoService from "../../common/services/curso";
 import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
 import ls from "local-storage";
-
 import {
   CURSO_FETCHED,
   SOCKET_CURSO_CREATED,
@@ -37,18 +36,12 @@ const mutations = {
   },
 
   [SOCKET_CURSO_UPDATED](state, data) {
-    let index = _.findIndex(
-      state.Cursos,
-      (curso) => curso.id === data.Curso.id
-    );
+    let index = state.Cursos.findIndex((curso) => curso.id === data.Curso.id);
     Vue.set(state.Cursos, index, data.Curso);
   },
 
   [SOCKET_CURSO_DELETED](state, data) {
-    let index = _.findIndex(
-      state.Cursos,
-      (curso) => curso.id === data.Curso.id
-    );
+    let index = state.Cursos.findIndex((curso) => curso.id === data.Curso.id);
     state.Cursos.splice(index, 1);
     ls.remove(`${data.Curso.id}`);
     Vue.set(state.Ativos, data.Curso.id, undefined);
@@ -90,7 +83,7 @@ const actions = {
   },
 
   async createCurso({ commit, dispatch, getters }, curso) {
-    const cursoNormalized = _.cloneDeepWith(curso, setEmptyValuesToNull);
+    const cursoNormalized = cloneDeepWith(curso, setEmptyValuesToNull);
     validateObjectKeys(cursoNormalized, [
       "nome",
       "codigo",
@@ -114,7 +107,7 @@ const actions = {
   },
 
   async editCurso({ commit }, curso) {
-    const cursoNormalized = _.cloneDeepWith(curso, setEmptyValuesToNull);
+    const cursoNormalized = cloneDeepWith(curso, setEmptyValuesToNull);
     validateObjectKeys(cursoNormalized, [
       "nome",
       "codigo",
@@ -159,10 +152,11 @@ const actions = {
 
 const getters = {
   AllCursos(state) {
-    return _.orderBy(state.Cursos, ["nome"]);
+    return orderBy(state.Cursos, ["nome"]);
   },
-  CursosDCC(state, getters) {
-    return _.filter(getters.AllCursos, (curso) => {
+
+  CursosDCC(_, getters) {
+    return filter(getters.AllCursos, (curso) => {
       switch (curso.codigo) {
         case "35A":
         case "65C":
@@ -176,8 +170,9 @@ const getters = {
       }
     });
   },
+
   PrincipaisCursosDCC(state) {
-    return _.filter(state.Cursos, (curso) => {
+    return filter(state.Cursos, (curso) => {
       switch (curso.codigo) {
         case "35A":
         case "65C":
@@ -189,6 +184,7 @@ const getters = {
       }
     });
   },
+
   ultimaPosicaoDeCursos(state) {
     return state.Cursos[state.Cursos.length - 1].id + 1;
   },

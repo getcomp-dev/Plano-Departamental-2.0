@@ -1,11 +1,11 @@
 <template>
   <div class="main-component row p-0">
-    <PageHeader :title="'Turmas - Cursos'">
+    <portal to="page-header">
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="relatorio" @click="toggleAsideModal('relatorio')" />
       <BaseButton template="download" @click="toggleAsideModal('DownloadTurmasCursos')" />
       <!--<BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />-->
-    </PageHeader>
+    </portal>
 
     <div class="div-table">
       <BaseTable>
@@ -16,8 +16,7 @@
           <v-th width="80" title="Código da Disciplina">Disciplina</v-th>
           <v-th width="40" title="Turma">T.</v-th>
           <v-th width="120" title="Horário">Horário</v-th>
-          <v-th width="80" title="Vagas da Grade">Grade</v-th>
-          <v-th width="80" title="Vagas Não Grade">Extra</v-th>
+          <v-th width="80" title="Vagas">Vagas</v-th>
         </template>
 
         <template #tbody>
@@ -29,7 +28,6 @@
               <v-td width="80"></v-td>
               <v-td width="40"></v-td>
               <v-td width="120"></v-td>
-              <v-td width="80"></v-td>
               <v-td width="80"></v-td>
             </tr>
 
@@ -43,57 +41,61 @@
               <v-td width="80">{{ turma.turma.disciplina.codigo }}</v-td>
               <v-td width="40">{{ turma.turma.letra }}</v-td>
               <v-td width="120">{{ horarioTotal(turma.turma) }}</v-td>
-              <v-td width="80">{{ turma.pedido.vagasPeriodizadas }}</v-td>
-              <v-td width="80">{{ turma.pedido.vagasNaoPeriodizadas }}</v-td>
+              <v-td width="80">
+                {{ turma.pedido.vagasPeriodizadas + turma.pedido.vagasNaoPeriodizadas }}
+              </v-td>
             </tr>
           </template>
         </template>
       </BaseTable>
     </div>
 
-    <ModalRelatorio ref="modalRelatorio" @selection-option="pdf($event)" />
+    <ModalRelatorio ref="modalRelatorio" @selection-option="generatePdf($event)" />
 
-    <ModalDownloadTurmasCursos ref="modalDownloadTurmasCursos" @selection-option="downloadTurmasCursos($event)" />
+    <ModalDownloadTurmasCursos
+      ref="modalDownloadTurmasCursos"
+      @selection-option="downloadTurmasCursos($event)"
+    />
 
     <ModalFiltros
-            ref="modalFiltros"
-            :callbacks="modalFiltrosCallbacks"
-            :tabsOptions="modalFiltrosTabs"
+      ref="modalFiltros"
+      :callbacks="modalFiltrosCallbacks"
+      :tabsOptions="modalFiltrosTabs"
     >
       <BaseTable
-              type="modal"
-              v-show="modalFiltrosTabs.current === 'Cursos'"
-              :hasSearchBar="true"
+        type="modal"
+        v-show="modalFiltrosTabs.current === 'Cursos'"
+        :hasSearchBar="true"
       >
         <template #thead-search>
           <InputSearch
-                  v-model="searchCursos"
-                  placeholder="Pesquise nome ou codigo de um curso..."
+            v-model="searchCursos"
+            placeholder="Pesquise nome ou codigo de um curso..."
           />
         </template>
         <template #thead>
           <v-th width="25" />
           <v-th-ordination
-                  :currentOrder="ordenacaoModal.cursos"
-                  orderToCheck="codigo"
-                  width="70"
-                  align="start"
+            :currentOrder="ordenacaoModal.cursos"
+            orderToCheck="codigo"
+            width="70"
+            align="start"
           >
             Código
           </v-th-ordination>
           <v-th-ordination
-                  :currentOrder="ordenacaoModal.cursos"
-                  orderToCheck="nome"
-                  width="270"
-                  align="start"
+            :currentOrder="ordenacaoModal.cursos"
+            orderToCheck="nome"
+            width="270"
+            align="start"
           >
             Nome
           </v-th-ordination>
           <v-th-ordination
-                  :currentOrder="ordenacaoModal.cursos"
-                  orderToCheck="turno"
-                  width="85"
-                  align="start"
+            :currentOrder="ordenacaoModal.cursos"
+            orderToCheck="turno"
+            width="85"
+            align="start"
           >
             Turno
           </v-th-ordination>
@@ -101,15 +103,12 @@
 
         <template #tbody>
           <tr
-                  v-for="curso in CursosFiltrados"
-                  :key="curso.id + curso.nome"
+            v-for="curso in CursosFiltrados"
+            :key="curso.id + curso.nome"
+            @click="toggleItemInArray(curso, filtroCursos.selecionados)"
           >
             <v-td width="25" type="content">
-              <input
-                      type="checkbox"
-                      v-model="filtroCursos.selecionados"
-                      :value="curso"
-              />
+              <input type="checkbox" v-model="filtroCursos.selecionados" :value="curso" />
             </v-td>
             <v-td width="70" align="start">{{ curso.codigo }}</v-td>
             <v-td align="start" width="270" :title="curso.nome">
@@ -133,23 +132,15 @@
         </template>
 
         <template #tbody>
-          <tr>
+          <tr @click="toggleItemInArray(1, filtroPeriodos.selecionados)">
             <v-td width="25" type="content">
-              <input
-                      type="checkbox"
-                      v-model="filtroPeriodos.selecionados"
-                      :value="1"
-              />
+              <input type="checkbox" v-model="filtroPeriodos.selecionados" :value="1" />
             </v-td>
             <v-td width="425" align="start">PRIMEIRO</v-td>
           </tr>
-          <tr>
+          <tr @click="toggleItemInArray(3, filtroPeriodos.selecionados)">
             <v-td width="25" type="content">
-              <input
-                      type="checkbox"
-                      v-model="filtroPeriodos.selecionados"
-                      :value="3"
-              />
+              <input type="checkbox" v-model="filtroPeriodos.selecionados" :value="3" />
             </v-td>
             <v-td width="425" align="start">TERCEIRO</v-td>
           </tr>
@@ -183,21 +174,24 @@
 
 <script>
 import { mapGetters } from "vuex";
-import pdfs from "@/common/services/pdfs";
+import { find, orderBy, filter } from "lodash-es";
+import { pdfTurmasCursos } from "@/common/services/pdfs";
 import { normalizeText } from "@/common/utils";
 import {
   toggleItemInArray,
-  generateHorariosText,
-  generateDocentesText,
   toggleAsideModal,
   conectaFiltroPerfisEDisciplinas,
   conectaFiltrosSemestresEPeriodos,
   preventClickSelection,
 } from "@/common/mixins";
+import {
+  ModalRelatorio,
+  ModalAjuda,
+  ModalFiltros,
+  ModalDownloadTurmasCursos,
+} from "@/components/modals";
 import { InputSearch } from "@/components/ui";
-import { ModalRelatorio, ModalAjuda, ModalFiltros, ModalDownloadTurmasCursos } from "@/components/modals";
 import ModalVagas from "../PlanoDepartamental/ModalVagas";
-import _ from "lodash";
 import downloadService from "@/common/services/download";
 import { saveAs } from "file-saver";
 
@@ -205,8 +199,6 @@ export default {
   name: "TurmasCursos",
   mixins: [
     toggleItemInArray,
-    generateHorariosText,
-    generateDocentesText,
     toggleAsideModal,
     conectaFiltroPerfisEDisciplinas,
     conectaFiltrosSemestresEPeriodos,
@@ -218,13 +210,18 @@ export default {
     ModalAjuda,
     InputSearch,
     ModalVagas,
-    ModalDownloadTurmasCursos
+    ModalDownloadTurmasCursos,
   },
   data() {
     return {
       turmaClicked: null,
       searchCursos: "",
-      asideModalsRefs: ["modalAjuda", "modalRelatorio", "modalFiltros", "modalDownloadTurmasCursos"],
+      asideModalsRefs: [
+        "modalAjuda",
+        "modalRelatorio",
+        "modalFiltros",
+        "modalDownloadTurmasCursos",
+      ],
       ordenacaoMain: {
         disciplinas: { order: "codigo", type: "asc" },
       },
@@ -233,11 +230,11 @@ export default {
       },
       filtroCursos: {
         selecionados: [],
-        ativados: []
+        ativados: [],
       },
       filtroPeriodos: {
-        selecionados: [],
-        ativados: []
+        selecionados: [1, 3],
+        ativados: [],
       },
       modalFiltrosTabs: {
         current: "Cursos",
@@ -247,7 +244,7 @@ export default {
         selectAll: {
           Cursos: () => {
             this.filtroCursos.selecionados = [...this.CursosFiltrados];
-            },
+          },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [1, 3];
           },
@@ -277,24 +274,25 @@ export default {
       let turmas = [];
       this.TurmasInDisciplinasPerfis.forEach((t) => {
         let pedidos = this.Pedidos[t.id];
-        let pedido = _.find(pedidos, ["Curso", curso]);
+        let pedido = find(pedidos, ["Curso", curso]);
         if (pedido.vagasPeriodizadas > 0 || pedido.vagasNaoPeriodizadas > 0) {
           turmas.push({ turma: t, pedido: pedido });
         }
       });
-      return this.$_.orderBy(
-        this.$_.orderBy(
-          this.$_.orderBy(
-            this.$_.filter(turmas, (t) => {
-              let periodo = false
+      return orderBy(
+        orderBy(
+          orderBy(
+            filter(turmas, (t) => {
+              let periodo = false;
               this.filtroPeriodos.ativados.forEach((p) => {
-                if(p == t.turma.periodo)
-                  periodo = true
-              })
-              return periodo
-            }), (t) => {
-            return t.turma.letra;
-          }),
+                if (p == t.turma.periodo) periodo = true;
+              });
+              return periodo;
+            }),
+            (t) => {
+              return t.turma.letra;
+            }
+          ),
           (t) => {
             return t.turma.disciplina.codigo;
           }
@@ -306,10 +304,10 @@ export default {
     },
 
     horarioTotal(turma) {
-      let horario1 = _.find(this.$store.state.horario.Horarios, {
+      let horario1 = find(this.$store.state.horario.Horarios, {
         id: turma.Horario1,
       });
-      let horario2 = _.find(this.$store.state.horario.Horarios, {
+      let horario2 = find(this.$store.state.horario.Horarios, {
         id: turma.Horario2,
       });
       let horarioTotal = undefined;
@@ -325,18 +323,23 @@ export default {
       return horarioTotal;
     },
 
-    pdf(completo) {
-      if(completo)
-        pdfs.pdfTurmasCursos({Cursos: this.AllCursos, periodos: this.filtroPeriodos.ativados});
-      else
-        pdfs.pdfTurmasCursos({Cursos: this.filtroCursos.ativados, periodos: this.filtroPeriodos.ativados});
+    generatePdf(completo) {
+      let cursos;
+      if (completo) cursos = this.AllCursos;
+      else cursos = this.filtroCursos.ativados;
+
+      pdfTurmasCursos({
+        cursos,
+        periodos: this.filtroPeriodos.ativados,
+      });
     },
 
     async downloadTurmasCursos(periodo) {
+      this.setPartialLoading(true);
       await downloadService
         .generatePdfTurmasCurso({
           Plano: localStorage.getItem("Plano"),
-          periodo: periodo
+          periodo: periodo,
         })
         .then(() =>
           downloadService.createZipTurmasCursos().then(() =>
@@ -349,6 +352,7 @@ export default {
               .then((r) => r.blob())
               .then((blob) => {
                 saveAs(blob, "TurmasCursos.zip");
+                this.setPartialLoading(false);
               })
           )
         );
@@ -366,21 +370,21 @@ export default {
     ]),
 
     CursosOrdered() {
-      return this.$_.orderBy(this.AllCursos, "codigo");
+      return orderBy(this.AllCursos, "codigo");
     },
 
     CursosFiltrados() {
-       if(this.searchCursos === "") return this.AllCursos
-       else{
-         const searchNormalized = normalizeText(this.searchCursos);
+      if (this.searchCursos === "") return this.AllCursos;
+      else {
+        const searchNormalized = normalizeText(this.searchCursos);
 
-         return this.$_.filter(this.AllCursos, (curso) => {
-           const nome = normalizeText(curso.nome);
-           const codigo = normalizeText(curso.codigo);
+        return filter(this.AllCursos, (curso) => {
+          const nome = normalizeText(curso.nome);
+          const codigo = normalizeText(curso.codigo);
 
-           return nome.match(searchNormalized) || codigo.match(searchNormalized);
-         });
-       }
+          return nome.match(searchNormalized) || codigo.match(searchNormalized);
+        });
+      }
     },
   },
 };

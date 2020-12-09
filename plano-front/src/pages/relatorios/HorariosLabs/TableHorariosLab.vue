@@ -33,6 +33,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { filter, isNull, find } from "lodash-es";
 
 export default {
   name: "TableHorariosLab",
@@ -42,15 +43,14 @@ export default {
   },
   methods: {
     TurmasFilteredByHorario(horarioId) {
-      const turmasFiltred = this.$_.filter(
+      const turmasFiltred = filter(
         this.turmas,
         (turma) =>
-          (turma.Horario1 == horarioId &&
-            turma.Sala1 === this.laboratorio.id) ||
+          (turma.Horario1 == horarioId && turma.Sala1 === this.laboratorio.id) ||
           (turma.Horario2 == horarioId && turma.Sala2 === this.laboratorio.id)
       );
 
-      return this.$_.map(turmasFiltred, (turma) => ({
+      return turmasFiltred.map((turma) => ({
         ...turma,
         docenteApelido: this.findDocentesApelidoInTurma(turma),
       }));
@@ -58,10 +58,10 @@ export default {
     findDocentesApelidoInTurma(turma) {
       let docente1;
       let docente2;
-      if (!this.$_.isNull(turma.Docente1))
-        docente1 = this.$_.find(this.AllDocentes, ["id", turma.Docente1]);
-      if (!this.$_.isNull(turma.Docente2))
-        docente2 = this.$_.find(this.AllDocentes, ["id", turma.Docente2]);
+      if (!isNull(turma.Docente1))
+        docente1 = find(this.AllDocentes, ["id", turma.Docente1]);
+      if (!isNull(turma.Docente2))
+        docente2 = find(this.AllDocentes, ["id", turma.Docente2]);
 
       let apelidos = "";
       if (docente1 !== undefined) {

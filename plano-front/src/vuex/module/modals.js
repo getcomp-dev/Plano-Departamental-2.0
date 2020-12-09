@@ -14,8 +14,6 @@ const mutations = {
   },
 };
 
-const actions = {};
-
 const getters = {
   modalOverlayVisibility(state) {
     return state.modalOverlayVisibility;
@@ -25,6 +23,5 @@ const getters = {
 export default {
   state,
   mutations,
-  actions,
   getters,
 };

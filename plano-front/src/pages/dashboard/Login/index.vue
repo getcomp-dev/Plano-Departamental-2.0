@@ -34,15 +34,9 @@
             Entrar
           </button>
 
-          <b-alert
-            :show="Boolean(error) ? 3 : false"
-            @dismissed="error = null"
-            variant="danger"
-            dismissible
-            fade
-          >
+          <span v-show="error != null" class="alert alert-danger">
             {{ error }}
-          </b-alert>
+          </span>
         </form>
       </div>
     </div>
@@ -99,6 +93,10 @@ export default {
         this.error = error.response
           ? error.response.data.message
           : "Erro na requisição! Tente novamente.";
+        //Tempo que a mensagem de erro será exibida
+        setTimeout(() => {
+          this.error = null;
+        }, 3000);
       } finally {
         this.setPartialLoading(false);
       }

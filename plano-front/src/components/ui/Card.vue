@@ -51,10 +51,6 @@ export default {
 </script>
 
 <style>
-.card .btn-icon {
-  margin-right: 0 !important;
-  margin-left: 5px !important;
-}
 .card {
   width: max-content;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
@@ -88,6 +84,7 @@ export default {
 .card > .card-body select,
 .card > .card-body input[type="text"],
 .card > .card-body input[type="number"],
+.card > .card-body input[type="color"],
 .card > .card-body input[type="password"] {
   width: 100%;
   height: 28px;
@@ -95,10 +92,31 @@ export default {
   font-size: 12px !important;
   text-align: start;
 }
+.card > .card-body select {
+  padding: 0 !important;
+}
+
+.card > .card-body .input-lg {
+  width: 270px !important;
+}
+.card > .card-body .input-md {
+  width: 130px !important;
+}
+.card > .card-body .input-sm {
+  width: 80px !important;
+}
+
+.card > .card-body .form-group + .form-group {
+  padding-left: 10px !important;
+}
 .card > .card-body textarea {
   width: 100%;
   padding: 5px;
   font-size: 12px;
   text-align: start;
+}
+.card .btn-icon {
+  margin-right: 0 !important;
+  margin-left: 5px !important;
 }
 </style>

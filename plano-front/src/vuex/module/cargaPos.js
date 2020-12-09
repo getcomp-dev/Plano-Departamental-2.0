@@ -1,8 +1,7 @@
 import Vue from "vue";
-import _ from "lodash";
 import cargaPosService from "../../common/services/cargaPos";
+import { orderBy, cloneDeepWith } from "lodash-es";
 import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
-
 import {
   PUSH_NOTIFICATION,
   CARGA_POS_FETCHED,
@@ -28,12 +27,12 @@ const mutations = {
   },
 
   [SOCKET_CARGA_POS_UPDATED](state, data) {
-    let index = _.findIndex(state.Cargas, (carga) => carga.id === data.CargaPos.id);
+    let index = state.Cargas.findIndex((carga) => carga.id === data.CargaPos.id);
     Vue.set(state.Cargas, index, data.CargaPos);
   },
 
   [SOCKET_CARGA_POS_DELETED](state, data) {
-    let index = _.findIndex(state.Cargas, (carga) => carga.id === data.CargaPos.id);
+    let index = state.Cargas.findIndex((carga) => carga.id === data.CargaPos.id);
     state.Cargas.splice(index, 1);
   },
 
@@ -63,7 +62,7 @@ const actions = {
   },
 
   async createCargaPos({ commit, rootGetters }, carga) {
-    const cargaNormalized = _.cloneDeepWith(carga, setEmptyValuesToNull);
+    const cargaNormalized = cloneDeepWith(carga, setEmptyValuesToNull);
     validateObjectKeys(cargaNormalized, [
       "Programa",
       "programa",
@@ -81,7 +80,7 @@ const actions = {
   },
 
   async editCargaPos({ commit, dispatch }, carga) {
-    const cargaNormalized = _.cloneDeepWith(carga, setEmptyValuesToNull);
+    const cargaNormalized = cloneDeepWith(carga, setEmptyValuesToNull);
     validateObjectKeys(cargaNormalized, ["creditos", "programa"]);
 
     await cargaPosService.update(cargaNormalized.id, cargaNormalized);
@@ -107,10 +106,10 @@ const actions = {
     });
   },
 
-  toggleCargaToDelete({ commit, state }, carga) {
-    const index = _.findIndex(state.Deletar, ["id", carga.id]);
+  toggleCargaToDelete({ commit, state }, cargaToDelete) {
+    const index = state.Deletar.findIndex((carga) => carga.id == cargaToDelete.id);
 
-    commit(TOGGLE_CARGA_POS_TO_DELETE, { index, carga });
+    commit(TOGGLE_CARGA_POS_TO_DELETE, { index, cargaToDelete });
   },
 
   clearCargasPosToDelete({ commit, state }) {
@@ -120,8 +119,9 @@ const actions = {
 
 const getters = {
   AllCargasPos(state) {
-    return _.orderBy(state.Cargas, "trimestre");
+    return orderBy(state.Cargas, "trimestre");
   },
+
   CargasPosToDelete(state) {
     return state.Deletar;
   },

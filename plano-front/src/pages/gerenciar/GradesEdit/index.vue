@@ -1,8 +1,8 @@
 <template>
   <div class="main-component row">
-    <PageHeader :title="'Disciplina na Grade'">
+    <portal to="page-header">
       <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
-    </PageHeader>
+    </portal>
 
     <div class="page-content">
       <div class="div-table">
@@ -55,7 +55,7 @@
               </tr>
             </template>
 
-            <tr v-show="!hasGradeSelected">
+            <tr v-if="!hasGradeSelected">
               <v-td width="515" colspan="3">
                 <b>Nenhuma disciplina encontrada</b>
                 , selecione uma grade.
@@ -141,7 +141,8 @@
                   :disabled="!hasGradeSelected"
                   type="text"
                   id="periodoDisciplina"
-                  class="form-control form-control-sm input-menor2"
+                  class="form-control form-control-sm mr-2"
+                  style="width:100px"
                   v-model="disciplinaGradeForm.periodo"
                   @keypress="maskOnlyNumber"
                 />
@@ -240,8 +241,9 @@
 </template>
 
 <script>
-import gradeService from "@/common/services/grade";
+import { clone, find, filter, orderBy } from "lodash-es";
 import disciplinaGradeService from "@/common/services/disciplinaGrade";
+import gradeService from "@/common/services/grade";
 import { maskOnlyNumber } from "@/common/mixins";
 import { Card } from "@/components/ui";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
@@ -267,8 +269,8 @@ export default {
   },
   data() {
     return {
-      gradeForm: this.$_.clone(emptyGrade),
-      disciplinaGradeForm: this.$_.clone(emptyDisciplinaGrade),
+      gradeForm: clone(emptyGrade),
+      disciplinaGradeForm: clone(emptyDisciplinaGrade),
       error: null,
       currentGradeId: null,
       currentCursoId: null,
@@ -319,7 +321,7 @@ export default {
         });
     },
     cleanGradeForm() {
-      this.gradeForm = this.$_.clone(emptyGrade);
+      this.gradeForm = clone(emptyGrade);
       this.error = undefined;
     },
     cleanDisciplina() {
@@ -329,8 +331,8 @@ export default {
     },
     showGrade(gradeId) {
       this.cleanGradeForm();
-      const grade = this.$_.find(this.$store.state.grade.Grades, ["id", gradeId]);
-      this.gradeForm = this.$_.clone(grade);
+      const grade = find(this.$store.state.grade.Grades, ["id", gradeId]);
+      this.gradeForm = clone(grade);
       this.disciplinaGradeForm.Grade = this.gradeForm.id;
     },
     changeCurso() {
@@ -345,7 +347,7 @@ export default {
     },
     showDisciplina(disciplinaGrade) {
       this.cleanDisciplina;
-      this.disciplinaGradeForm = this.$_.clone(disciplinaGrade);
+      this.disciplinaGradeForm = clone(disciplinaGrade);
     },
     isEven(number) {
       return number % 2 === 0;
@@ -490,17 +492,17 @@ export default {
       return this.disciplinaSelectedId !== null;
     },
     DisciplinaGradesOrdered() {
-      return this.$_.orderBy(
+      return orderBy(
         this.DisciplinaGradesFiltred,
         this.ordenacaoDisciplinasMain.order,
         this.ordenacaoDisciplinasMain.type
       );
     },
     DisciplinaGradesFiltred() {
-      return this.$_.filter(
+      return filter(
         this.$store.state.disciplinaGrade.DisciplinaGrades,
         (disciplinaGrade) => {
-          return this.$_.find(this.Disciplinas, (disciplina) => {
+          return find(this.Disciplinas, (disciplina) => {
             if (
               this.currentGradeId === disciplinaGrade.Grade &&
               disciplina.id === disciplinaGrade.Disciplina
@@ -515,7 +517,7 @@ export default {
       );
     },
     GradesFiltredByCurrentCurso() {
-      return this.$_.filter(this.Grades, (grade) => grade.Curso == this.currentCursoId);
+      return filter(this.Grades, (grade) => grade.Curso == this.currentCursoId);
     },
     Grades() {
       return this.$store.state.grade.Grades;
@@ -524,7 +526,7 @@ export default {
       return this.$store.state.curso.Cursos;
     },
     Disciplinas() {
-      return this.$_.orderBy(this.$store.state.disciplina.Disciplinas, "nome");
+      return orderBy(this.$store.state.disciplina.Disciplinas, "nome");
     },
   },
 };
@@ -543,11 +545,7 @@ export default {
   width: 80px;
   text-align: start !important;
 }
-.card .input-menor2 {
-  width: 40px;
-  margin-right: 10px;
-  text-align: center;
-}
+
 .even {
   background-color: #c8c8c8;
 }

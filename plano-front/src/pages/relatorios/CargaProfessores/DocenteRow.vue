@@ -1,6 +1,6 @@
 <template>
   <tr class="bg-custom">
-    <v-td width="130" align="start">{{ docente.apelido }}</v-td>
+    <v-td width="130" align="start" :title="docente.nome">{{ docente.apelido }}</v-td>
     <v-td width="575" colspan="5" />
     <v-td width="35" paddingX="2">
       {{ docente.creditos1Semestre ? docente.creditos1Semestre : "" }}

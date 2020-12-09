@@ -112,6 +112,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { clone, isNull, find, some, filter } from "lodash-es";
 import { maskTurmaLetra } from "@/common/mixins";
 import InputsPedidosExternos from "./InputsPedidosExternos.vue";
 
@@ -135,8 +136,8 @@ export default {
     ...mapActions(["editTurmaExterna", "toggleTurmaExternaToDelete"]),
 
     resetTurmaForm() {
-      this.turmaForm = this.$_.clone(this.turma);
-      this.currentData = this.$_.clone(this.turma);
+      this.turmaForm = clone(this.turma);
+      this.currentData = clone(this.turma);
     },
     async handleEditTurma() {
       try {
@@ -182,53 +183,28 @@ export default {
       if (this.turmaForm.Sala2 === "") this.turmaForm.Sala2 = null;
 
       if (
-        (!this.$_.isNull(this.turmaForm.Horario1) ||
-          !this.$_.isNull(this.turmaForm.Horario2)) &&
-        (!this.$_.isNull(this.turmaForm.Sala1) || !this.$_.isNull(this.turmaForm.Sala2))
+        (!isNull(this.turmaForm.Horario1) || !isNull(this.turmaForm.Horario2)) &&
+        (!isNull(this.turmaForm.Sala1) || !isNull(this.turmaForm.Sala2))
       ) {
         if (
           horario === 1 ? this.turmaForm.Horario1 === 31 : this.turmaForm.Horario2 === 31
         ) {
           return false;
-        } else if (
-          horario === 1 &&
-          this.$_.includes(horarios1618, this.turmaForm.Horario1)
-        ) {
+        } else if (horario === 1 && horarios1618.includes(this.turmaForm.Horario1)) {
           if (this.checkHorarioSala1618(1, 1)) return true;
-        } else if (
-          horario === 2 &&
-          this.$_.includes(horarios1618, this.turmaForm.Horario2)
-        ) {
+        } else if (horario === 2 && horarios1618.includes(this.turmaForm.Horario2)) {
           if (this.checkHorarioSala1618(2, 2)) return true;
-        } else if (
-          horario === 1 &&
-          this.$_.includes(horarios1719, this.turmaForm.Horario1)
-        ) {
+        } else if (horario === 1 && horarios1719.includes(this.turmaForm.Horario1)) {
           if (this.checkHorarioSala1719(1, 1)) return true;
-        } else if (
-          horario === 2 &&
-          this.$_.includes(horarios1719, this.turmaForm.Horario2)
-        ) {
+        } else if (horario === 2 && horarios1719.includes(this.turmaForm.Horario2)) {
           if (this.checkHorarioSala1719(2, 2)) return true;
-        } else if (
-          horario === 1 &&
-          this.$_.includes(horarios1820, this.turmaForm.Horario1)
-        ) {
+        } else if (horario === 1 && horarios1820.includes(this.turmaForm.Horario1)) {
           if (this.checkHorarioSala1820(1, 1)) return true;
-        } else if (
-          horario === 2 &&
-          this.$_.includes(horarios1820, this.turmaForm.Horario2)
-        ) {
+        } else if (horario === 2 && horarios1820.includes(this.turmaForm.Horario2)) {
           if (this.checkHorarioSala1820(2, 2)) return true;
-        } else if (
-          horario === 1 &&
-          this.$_.includes(horarios1921, this.turmaForm.Horario1)
-        ) {
+        } else if (horario === 1 && horarios1921.includes(this.turmaForm.Horario1)) {
           if (this.checkHorarioSala1921(1, 1)) return true;
-        } else if (
-          horario === 2 &&
-          this.$_.includes(horarios1921, this.turmaForm.Horario2)
-        ) {
+        } else if (horario === 2 && horarios1921.includes(this.turmaForm.Horario2)) {
           if (this.checkHorarioSala1921(2, 2)) return true;
         } else {
           if (horario == 1) {
@@ -243,12 +219,12 @@ export default {
     notifyHorarioSala(horario, sala) {
       let h =
         horario === 1
-          ? this.$_.find(this.AllHorarios, ["id", this.turmaForm.Horario1])
-          : this.$_.find(this.AllHorarios, ["id", this.turmaForm.Horario2]);
+          ? find(this.AllHorarios, ["id", this.turmaForm.Horario1])
+          : find(this.AllHorarios, ["id", this.turmaForm.Horario2]);
       let s =
         sala === 1
-          ? this.$_.find(this.AllSalas, ["id", this.turmaForm.Sala1])
-          : this.$_.find(this.AllSalas, ["id", this.turmaForm.Sala2]);
+          ? find(this.AllSalas, ["id", this.turmaForm.Sala1])
+          : find(this.AllSalas, ["id", this.turmaForm.Sala2]);
 
       let text = `Conflito no horário ${h.horario} com a sala ${s.nome}`;
       this.$notify({
@@ -259,11 +235,8 @@ export default {
       });
     },
     checkHorarioSala1618(horario, sala) {
-      let conflitos = this.$_.filter(
-        this.$_.concat(
-          this.$store.state.turma.Turmas,
-          this.$store.state.turmaExterna.Turmas
-        ),
+      let conflitos = filter(
+        this.$store.state.turma.Turmas.concat(this.$store.state.turmaExterna.Turmas),
         (t) => {
           if (this.turmaForm.periodo != t.periodo) {
             return false;
@@ -286,15 +259,11 @@ export default {
           }
           let d1, d2;
           if (sala === 1) {
-            d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
-            d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
+            d1 = !isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
+            d2 = !isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
-            d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
-            d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
+            d1 = !isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
+            d2 = !isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -314,11 +283,8 @@ export default {
       return false;
     },
     checkHorarioSala1719(horario, sala) {
-      let conflitos = this.$_.filter(
-        this.$_.concat(
-          this.$store.state.turma.Turmas,
-          this.$store.state.turmaExterna.Turmas
-        ),
+      let conflitos = filter(
+        this.$store.state.turma.Turmas.concat(this.$store.state.turmaExterna.Turmas),
         (t) => {
           if (this.turmaForm.periodo != t.periodo) {
             return false;
@@ -345,15 +311,11 @@ export default {
           }
           let d1, d2;
           if (sala === 1) {
-            d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
-            d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
+            d1 = !isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
+            d2 = !isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
-            d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
-            d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
+            d1 = !isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
+            d2 = !isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -373,11 +335,8 @@ export default {
       return false;
     },
     checkHorarioSala1820(horario, sala) {
-      let conflitos = this.$_.filter(
-        this.$_.concat(
-          this.$store.state.turma.Turmas,
-          this.$store.state.turmaExterna.Turmas
-        ),
+      let conflitos = filter(
+        this.$store.state.turma.Turmas.concat(this.$store.state.turmaExterna.Turmas),
         (t) => {
           if (this.turmaForm.periodo != t.periodo) {
             return false;
@@ -404,15 +363,11 @@ export default {
           }
           let d1, d2;
           if (sala === 1) {
-            d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
-            d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
+            d1 = !isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
+            d2 = !isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
-            d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
-            d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
+            d1 = !isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
+            d2 = !isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -432,11 +387,8 @@ export default {
       return false;
     },
     checkHorarioSala1921(horario, sala) {
-      let conflitos = this.$_.filter(
-        this.$_.concat(
-          this.$store.state.turma.Turmas,
-          this.$store.state.turmaExterna.Turmas
-        ),
+      let conflitos = filter(
+        this.$store.state.turma.Turmas.concat(this.$store.state.turmaExterna.Turmas),
         (t) => {
           if (this.turmaForm.periodo != t.periodo) {
             return false;
@@ -459,15 +411,11 @@ export default {
           }
           let d1, d2;
           if (sala === 1) {
-            d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
-            d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
+            d1 = !isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
+            d2 = !isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
-            d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
-            d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
+            d1 = !isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
+            d2 = !isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -487,11 +435,8 @@ export default {
       return false;
     },
     checkHorarioSalaGeral(horario, sala) {
-      let conflitos = this.$_.filter(
-        this.$_.concat(
-          this.$store.state.turma.Turmas,
-          this.$store.state.turmaExterna.Turmas
-        ),
+      let conflitos = filter(
+        this.$store.state.turma.Turmas.concat(this.$store.state.turmaExterna.Turmas),
         (t) => {
           if (this.turmaForm.periodo != t.periodo) {
             return false;
@@ -499,30 +444,22 @@ export default {
           let h1, h2;
           if (horario === 1) {
             h1 =
-              !this.$_.isNull(this.turmaForm.Horario1) &&
-              this.turmaForm.Horario1 === t.Horario1;
+              !isNull(this.turmaForm.Horario1) && this.turmaForm.Horario1 === t.Horario1;
             h2 =
-              !this.$_.isNull(this.turmaForm.Horario1) &&
-              this.turmaForm.Horario1 === t.Horario2;
+              !isNull(this.turmaForm.Horario1) && this.turmaForm.Horario1 === t.Horario2;
           } else {
             h1 =
-              !this.$_.isNull(this.turmaForm.Horario2) &&
-              this.turmaForm.Horario2 === t.Horario1;
+              !isNull(this.turmaForm.Horario2) && this.turmaForm.Horario2 === t.Horario1;
             h2 =
-              !this.$_.isNull(this.turmaForm.Horario2) &&
-              this.turmaForm.Horario2 === t.Horario2;
+              !isNull(this.turmaForm.Horario2) && this.turmaForm.Horario2 === t.Horario2;
           }
           let d1, d2;
           if (sala === 1) {
-            d1 =
-              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
-            d2 =
-              !this.$_.isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
+            d1 = !isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala1;
+            d2 = !isNull(this.turmaForm.Sala1) && this.turmaForm.Sala1 === t.Sala2;
           } else {
-            d1 =
-              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
-            d2 =
-              !this.$_.isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
+            d1 = !isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala1;
+            d2 = !isNull(this.turmaForm.Sala2) && this.turmaForm.Sala2 === t.Sala2;
           }
 
           return (h1 && d1) || (h2 && d2);
@@ -568,8 +505,7 @@ export default {
     totalPedidosPeriodizados() {
       if (!this.PedidosOfCurrentTurma) return 0;
 
-      return this.$_.reduce(
-        this.PedidosOfCurrentTurma,
+      return this.PedidosOfCurrentTurma.reduce(
         (sum, turma) => sum + parseInt(turma.vagasPeriodizadas, 10),
         0
       );
@@ -577,8 +513,7 @@ export default {
     totalPedidosNaoPeriodizados() {
       if (!this.PedidosOfCurrentTurma) return 0;
 
-      return this.$_.reduce(
-        this.PedidosOfCurrentTurma,
+      return this.PedidosOfCurrentTurma.reduce(
         (sum, turma) => sum + parseInt(turma.vagasNaoPeriodizadas, 10),
         0
       );
@@ -604,14 +539,14 @@ export default {
         case "EAD":
           return this.HorariosEAD;
         default:
-          return this.$_.filter(this.AllHorarios, (horario) => horario.id != 31); //Todos sem EAD
+          return filter(this.AllHorarios, (horario) => horario.id != 31); //Todos sem EAD
       }
     },
     IndicesInPedidos() {
       const indicesResultantes = [];
 
-      this.$_.forEach(this.PedidosOfCurrentTurma, (pedido, index) => {
-        const cursoFounded = this.$_.some(this.PrincipaisCursosDCC, ["id", pedido.Curso]);
+      this.PedidosOfCurrentTurma.forEach((pedido, index) => {
+        const cursoFounded = some(this.PrincipaisCursosDCC, ["id", pedido.Curso]);
 
         if (cursoFounded) indicesResultantes.push(index);
       });

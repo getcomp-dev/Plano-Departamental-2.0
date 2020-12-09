@@ -42,11 +42,11 @@
 
 .icon-blue {
   background-color: inherit !important;
-  color: #24a0ed !important;
+  color: #2482ed !important;
 }
 
 .icon-blue:hover {
-  color: #1a79b2 !important;
+  color: rgb(25, 85, 163) !important;
 }
 
 /* ### text-cores ### */

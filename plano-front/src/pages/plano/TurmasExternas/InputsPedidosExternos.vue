@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { clone } from "lodash-es";
 import { vFocusPedido, maskOnlyNumber } from "@/common/mixins";
 import { mapGetters, mapActions } from "vuex";
 
@@ -42,7 +43,7 @@ export default {
     ...mapActions(["editPedidoExterno"]),
 
     resetPedidoForm() {
-      this.pedidoForm = this.$_.clone(this.PedidosOfCurrentTurma);
+      this.pedidoForm = clone(this.PedidosOfCurrentTurma);
     },
     async handleEditPedido() {
       try {
@@ -51,8 +52,7 @@ export default {
       } catch (error) {
         let erroMsg = "";
         if (error.response.data.fullMessage)
-          erroMsg +=
-            "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+          erroMsg += "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
 
         this.pushNotification({
           type: "error",

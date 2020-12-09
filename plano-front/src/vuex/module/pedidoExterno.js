@@ -1,5 +1,5 @@
 import Vue from "vue";
-import _ from "lodash";
+import { cloneDeepWith } from "lodash-es";
 import pedidoExternoService from "../../common/services/pedidoExterno";
 import { setEmptyValuesToNull } from "@/common/utils";
 import {
@@ -36,16 +36,14 @@ const mutations = {
   },
 
   [SOCKET_PEDIDO_EXTERNO_UPDATED](state, data) {
-    let index = _.findIndex(
-      state.Pedidos[data.Pedido.Turma],
+    const index = state.Pedidos[data.Pedido.Turma].findIndex(
       (pedido) => pedido.Curso === data.Pedido.Curso
     );
     Vue.set(state.Pedidos[data.Pedido.Turma], index, data.Pedido);
   },
 
   [SOCKET_PEDIDO_EXTERNO_DELETED](state, data) {
-    let index = _.findIndex(
-      state.Pedidos[data.Pedido.Turma],
+    const index = state.Pedidos[data.Pedido.Turma].findIndex(
       (pedido) => pedido.Curso === data.Pedido.Curso
     );
     state.Pedidos[data.Pedido.Turma].splice(index, 1);
@@ -82,7 +80,7 @@ const actions = {
   },
 
   async editPedidoExterno({ commit }, pedido) {
-    const pedidoNormalized = _.cloneDeepWith(pedido, setEmptyValuesToNull);
+    const pedidoNormalized = cloneDeepWith(pedido, setEmptyValuesToNull);
 
     if (pedidoNormalized.vagasPeriodizadas === null)
       pedidoNormalized.vagasPeriodizadas = 0;

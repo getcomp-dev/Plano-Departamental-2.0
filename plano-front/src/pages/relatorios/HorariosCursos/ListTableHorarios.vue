@@ -21,10 +21,7 @@
       </template>
 
       <div v-else class="div-table">
-        <TableHorarios
-          :Turmas="horariosTurmas"
-          :listaDeHorarios="ListaDeTodosHorarios"
-        />
+        <TableHorarios :Turmas="horariosTurmas" :listaDeHorarios="ListaDeTodosHorarios" />
       </div>
     </div>
   </div>
@@ -32,6 +29,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { filter } from "lodash-es";
 import TableHorarios from "./TableHorarios.vue";
 
 export default {
@@ -64,17 +62,14 @@ export default {
     GradesDoCurso() {
       if (this.template !== "curso") return;
 
-      return this.$_.filter(
-        this.AllGrades,
-        (grade) => grade.Curso === this.curso.id
-      );
+      return filter(this.AllGrades, (grade) => grade.Curso === this.curso.id);
     },
     PeriodoFinalDoCurso() {
       if (this.template !== "curso") return;
 
       let periodoFinal = this.curso.periodoInicial;
-      this.$_.forEach(this.GradesDoCurso, (grade) => {
-        this.$_.forEach(this.DisciplinasDasGrades, (disciplinaGrade) => {
+      this.GradesDoCurso.forEach((grade) => {
+        this.DisciplinasDasGrades.forEach((disciplinaGrade) => {
           if (
             disciplinaGrade.Grade === grade.id &&
             disciplinaGrade.periodo > periodoFinal
@@ -90,11 +85,7 @@ export default {
       if (this.template !== "curso") return;
 
       const periodosResult = [];
-      for (
-        let i = this.curso.periodoInicial;
-        i <= this.PeriodoFinalDoCurso;
-        i += 2
-      ) {
+      for (let i = this.curso.periodoInicial; i <= this.PeriodoFinalDoCurso; i += 2) {
         periodosResult.push({
           indice: i - 1,
           nome: `${i}º Período`,

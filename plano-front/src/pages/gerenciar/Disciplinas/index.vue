@@ -1,8 +1,8 @@
 <template>
   <div class="main-component row">
-    <PageHeader :title="'Disciplinas'">
+    <portal to="page-header">
       <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
-    </PageHeader>
+    </portal>
 
     <div class="page-content">
       <div class="div-table">
@@ -88,7 +88,7 @@
               <v-td
                 width="80"
                 align="start"
-                :style="{ backgroundColor: disciplina.perfil.cor }"
+                :style="{ backgroundColor: disciplina.perfil.cor, color: '#212529' }"
               >
                 {{ disciplina.perfil.abreviacao }}
               </v-td>
@@ -136,9 +136,9 @@
               <input
                 type="text"
                 id="disciplinaNome"
-                class="form-control form-control-sm input-maior upper-case"
+                class="form-control form-control-sm"
+                @change="disciplinaForm.nome = normalizeInputText($event)"
                 :value="disciplinaForm.nome"
-                @input="disciplinaForm.nome = $event.target.value.toUpperCase()"
               />
             </div>
           </div>
@@ -147,20 +147,18 @@
             <div class="form-group m-0 col px-0">
               <label required for="codigo" class="col-form-label">Código</label>
               <input
-                type="text"
                 id="codigo"
-                class="form-control form-control-sm input-medio upper-case"
+                type="text"
+                class="form-control form-control-sm input-md"
+                @change="disciplinaForm.codigo = normalizeInputText($event)"
                 :value="disciplinaForm.codigo"
-                @input="disciplinaForm.codigo = $event.target.value.toUpperCase()"
               />
             </div>
             <div class="form-group m-0 col px-0">
               <label required for="perfil" class="col-form-label">Perfil</label>
               <select
-                type="text"
                 id="perfil"
-                style="width:100%"
-                class="form-control form-control-sm"
+                class="form-control form-control-sm input-md"
                 v-model="disciplinaForm.Perfil"
               >
                 <option v-if="AllPerfis.length === 0" type="text" value>
@@ -184,10 +182,10 @@
                 Carga Teórica
               </label>
               <input
+                id="cargaTeorica"
                 type="number"
                 min="0"
-                id="cargaTeorica"
-                class="form-control form-control-sm input-medio t-center"
+                class="form-control form-control-sm text-center input-md"
                 v-model.number="disciplinaForm.cargaTeorica"
                 @keypress="maskOnlyNumber"
                 @blur="maskEmptyToZero($event, disciplinaForm, 'cargaTeorica')"
@@ -199,10 +197,10 @@
                 Carga Prática
               </label>
               <input
+                id="cargaPratica"
                 type="number"
                 min="0"
-                id="cargaPratica"
-                class="form-control form-control-sm input-medio t-center"
+                class="form-control form-control-sm text-center input-md"
                 v-model.number="disciplinaForm.cargaPratica"
                 @keypress="maskOnlyNumber"
                 @blur="maskEmptyToZero($event, disciplinaForm, 'cargaPratica')"
@@ -214,27 +212,25 @@
             <div class="form-group col m-0 px-0">
               <label required for="laboratorio" class="col-form-label">Laboratório</label>
               <select
-                type="text"
-                class="form-control form-control-sm input-medio"
                 id="laboratorio"
+                class="form-control form-control-sm input-md"
                 v-model.number="disciplinaForm.laboratorio"
               >
-                <option value="0">Não</option>
-                <option value="1">Sim</option>
-                <option value="2">Desejável</option>
+                <option :value="0">Não</option>
+                <option :value="1">Sim</option>
+                <option :value="2">Desejável</option>
               </select>
             </div>
             <div class="form-group col m-0 px-0">
               <label required for="ead" class="col-form-label">EAD</label>
               <select
-                type="text"
-                class="form-control form-control-sm input-medio"
                 id="ead"
+                class="form-control form-control-sm input-md"
                 v-model.number="disciplinaForm.ead"
               >
-                <option value="0">Não</option>
-                <option value="1">Integral</option>
-                <option value="2">Parcial</option>
+                <option :value="0">Não</option>
+                <option :value="1">Integral</option>
+                <option :value="2">Parcial</option>
               </select>
             </div>
           </div>
@@ -245,13 +241,13 @@
                 Departamento
               </label>
               <select
-                type="text"
-                class="form-control form-control-sm input-medio"
                 id="departamento"
+                type="text"
+                class="form-control form-control-sm input-md"
                 v-model.number="disciplinaForm.departamento"
               >
-                <option value="1">{{ textoDepto(1) }}</option>
-                <option value="2">{{ textoDepto(2) }}</option>
+                <option :value="1">{{ textoDepto(1) }}</option>
+                <option :value="2">{{ textoDepto(2) }}</option>
               </select>
             </div>
           </div>
@@ -312,7 +308,8 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { maskOnlyNumber, maskEmptyToZero } from "@/common/mixins";
+import { clone, orderBy } from "lodash-es";
+import { maskOnlyNumber, maskEmptyToZero, normalizeInputText } from "@/common/mixins";
 import { ModalDelete, ModalAjuda } from "@/components/modals";
 import { Card } from "@/components/ui";
 
@@ -330,12 +327,12 @@ const emptyDisciplina = {
 
 export default {
   name: "DashboardDisciplina",
-  mixins: [maskOnlyNumber, maskEmptyToZero],
+  mixins: [maskOnlyNumber, maskEmptyToZero, normalizeInputText],
   components: { Card, ModalDelete, ModalAjuda },
   data() {
     return {
       disciplinaSelecionada: "",
-      disciplinaForm: this.$_.clone(emptyDisciplina),
+      disciplinaForm: clone(emptyDisciplina),
       ordenacaoMain: {
         disciplina: { order: "codigo", type: "asc" },
         perfil: { order: "perfil.abreviacao", type: "asc" },
@@ -349,11 +346,11 @@ export default {
     handleClickInDisciplina(disciplina) {
       this.cleanForm();
       this.disciplinaSelecionada = disciplina.id;
-      this.disciplinaForm = this.$_.clone(disciplina);
+      this.disciplinaForm = clone(disciplina);
     },
     cleanForm() {
       this.disciplinaSelecionada = "";
-      this.disciplinaForm = this.$_.clone(emptyDisciplina);
+      this.disciplinaForm = clone(emptyDisciplina);
     },
     disciplinaEstaSelecionada(disciplinaId) {
       return this.disciplinaSelecionada === disciplinaId ? "bg-selected" : "";
@@ -426,14 +423,14 @@ export default {
     ...mapGetters(["DisciplinasInPerfis", "AllPerfis"]),
 
     DisciplinasInPerfisOrdered() {
-      const disciplinasResultantes = this.$_.orderBy(
+      const disciplinasResultantes = orderBy(
         this.DisciplinasInPerfis,
         this.ordenacaoMain.disciplina.order,
         this.ordenacaoMain.disciplina.type
       );
 
       if (this.ordenacaoMain.perfil.order !== null) {
-        return this.$_.orderBy(
+        return orderBy(
           disciplinasResultantes,
           this.ordenacaoMain.perfil.order,
           this.ordenacaoMain.perfil.type
@@ -447,16 +444,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.card .input-maior {
-  width: 280px;
-}
-.card .input-medio {
-  width: 100px;
-}
-.card .input-menor {
-  width: 80px;
-  text-align: center !important;
-}
-</style>

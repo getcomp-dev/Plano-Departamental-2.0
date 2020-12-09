@@ -1,8 +1,8 @@
 <template>
   <div class="main-component row">
-    <PageHeader :title="'Grades'">
+    <portal to="page-header">
       <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
-    </PageHeader>
+    </portal>
 
     <div class="page-content">
       <div class="div-table">
@@ -87,24 +87,25 @@
       >
         <template #form-group>
           <div class="row mb-2 mx-0">
-            <div class="form-group col-5 m-0 px-0">
+            <div class="form-group col m-0 px-0">
               <label required for="gradeNome" class="col-form-label">Nome</label>
               <input
                 type="text"
-                class="card-input-menor form-control form-control-sm"
+                class="form-control form-control-sm input-md"
                 id="gradeNome"
-                v-model="gradeForm.nome"
+                @change="gradeForm.nome = normalizeInputText($event)"
+                :value="gradeForm.nome"
               />
             </div>
 
-            <div class="form-group col-7 m-0 px-0">
+            <div class="form-group col m-0 px-0">
               <label required for="periodoInicio" class="col-form-label">
                 Período de Início
               </label>
               <input
                 type="text"
                 id="periodoInicio"
-                class="card-input-menor form-control form-control-sm col"
+                class="form-control form-control-sm input-md"
                 v-model="gradeForm.periodoInicio"
               />
             </div>
@@ -112,10 +113,12 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="gradeCurso" class="col-form-label">gradeCurso</label>
+              <label required for="gradeCurso" class="col-form-label">
+                Curso da grade
+              </label>
               <select
                 id="gradeCurso"
-                class="form-control form-control-sm card-input-maior"
+                class="form-control form-control-sm input-lg"
                 v-model.number="gradeForm.Curso"
               >
                 <option :value="4">Ciência da Computação Diurno</option>
@@ -137,7 +140,8 @@
       <li v-if="isEditing" class="list-group-item">
         <span>
           Tem certeza que deseja excluír a grade
-          <b>{{ gradeForm.periodoInicio }} - {{ gradeForm.nome }}</b> ?
+          <b>{{ gradeForm.periodoInicio }} - {{ gradeForm.nome }}</b>
+          ?
         </span>
       </li>
       <li v-else class="list-group-item">Nenhuma grade selecionada.</li>
@@ -147,27 +151,33 @@
       <li class="list-group-item">
         <b>Adicionar:</b>
         Preencha o cartão em branco à direita e em seguida, clique em Adicionar
-        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />.
+        <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
+        .
       </li>
       <li class="list-group-item">
-        <b>Editar:</b> Clique na linha da tabela da grade que deseja alterar. Em seguida,
-        no cartão à direita, altere as informações que desejar e clique em Salvar
-        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />.
+        <b>Editar:</b>
+        Clique na linha da tabela da grade que deseja alterar. Em seguida, no cartão à
+        direita, altere as informações que desejar e clique em Salvar
+        <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
+        .
       </li>
       <li class="list-group-item">
-        <b>Deletar:</b> Clique na linha da tabela da grade que deseja remover. Em seguida,
-        no cartão à direita, clique em Remover
-        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" /> e confirme a
-        remoção na janela que será aberta.
+        <b>Deletar:</b>
+        Clique na linha da tabela da grade que deseja remover. Em seguida, no cartão à
+        direita, clique em Remover
+        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
+        e confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
-        <b>Limpar:</b> No cartão à direita, clique em Cancelar
-        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />, para limpar as
+        <b>Limpar:</b>
+        No cartão à direita, clique em Cancelar
+        <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />
+        , para limpar as informações.
+      </li>
+      <li class="list-group-item">
+        <b>Ordenar:</b>
+        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
         informações.
-      </li>
-      <li class="list-group-item">
-        <b>Ordenar:</b> Clique no cabeçalho da tabela, na coluna desejada, para alterar a
-        ordenação das informações.
       </li>
     </ModalAjuda>
   </div>
@@ -175,7 +185,8 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { maskOnlyNumber } from "@/common/mixins";
+import { clone, filter, orderBy } from "lodash-es";
+import { normalizeInputText } from "@/common/mixins";
 import { ModalDelete, ModalAjuda } from "@/components/modals";
 import { Card } from "@/components/ui";
 const emptyGrade = {
@@ -187,11 +198,11 @@ const emptyGrade = {
 
 export default {
   name: "DashboardGrade",
-  mixins: [maskOnlyNumber],
+  mixins: [normalizeInputText],
   components: { Card, ModalAjuda, ModalDelete },
   data() {
     return {
-      gradeForm: this.$_.clone(emptyGrade),
+      gradeForm: clone(emptyGrade),
       gradeSelected: null,
     };
   },
@@ -203,13 +214,13 @@ export default {
       this.$refs.modalDelete.open();
     },
     cleanGrade() {
-      this.gradeForm = this.$_.clone(emptyGrade);
+      this.gradeForm = clone(emptyGrade);
       this.gradeSelected = null;
     },
     showGrade(grade) {
       this.cleanGrade();
       this.gradeSelected = grade.id;
-      this.gradeForm = this.$_.clone(grade);
+      this.gradeForm = clone(grade);
     },
 
     async handleCreateGrade() {
@@ -264,19 +275,19 @@ export default {
     ...mapGetters(["AllGrades"]),
 
     GradesOrdered() {
-      return this.$_.orderBy(this.AllGrades, "nome");
+      return orderBy(this.AllGrades, "nome");
     },
     GradesCCN() {
-      return this.$_.filter(this.GradesOrdered, ["Curso", 1]);
+      return filter(this.GradesOrdered, ["Curso", 1]);
     },
     GradesEC() {
-      return this.$_.filter(this.GradesOrdered, ["Curso", 2]);
+      return filter(this.GradesOrdered, ["Curso", 2]);
     },
     GradesSI() {
-      return this.$_.filter(this.GradesOrdered, ["Curso", 3]);
+      return filter(this.GradesOrdered, ["Curso", 3]);
     },
     GradesCCD() {
-      return this.$_.filter(this.GradesOrdered, ["Curso", 4]);
+      return filter(this.GradesOrdered, ["Curso", 4]);
     },
     isEditing() {
       return this.gradeSelected != null;
@@ -284,12 +295,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.card-input-maior {
-  width: 210px;
-}
-.card-input-menor {
-  width: 70px;
-}
-</style>

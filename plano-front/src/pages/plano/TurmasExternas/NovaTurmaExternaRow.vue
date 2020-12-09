@@ -15,7 +15,8 @@
           v-for="disciplina in DisciplinasExternasInPerfis"
           :key="disciplina.id"
           :value="disciplina"
-          >{{ disciplina.codigo }}
+        >
+          {{ disciplina.codigo }}
         </option>
       </select>
     </v-td>
@@ -25,7 +26,8 @@
           v-for="disciplina in DisciplinasExternasInPerfisOrderedByNome"
           :key="disciplina.id + disciplina.codigo"
           :value="disciplina"
-          >{{ disciplina.nome }}
+        >
+          {{ disciplina.nome }}
         </option>
       </select>
     </v-td>
@@ -54,7 +56,8 @@
           v-for="horario in HorariosFiltredByTurno"
           :key="horario.id + horario.horario"
           :value="horario.id"
-          >{{ horario.horario }}
+        >
+          {{ horario.horario }}
         </option>
       </select>
       <select v-model.number="turmaForm.Horario2" @change="handleChangeHorario(2)">
@@ -62,7 +65,8 @@
           v-for="horario in HorariosFiltredByTurno"
           :key="horario.horario + horario.id"
           :value="horario.id"
-          >{{ horario.horario }}
+        >
+          {{ horario.horario }}
         </option>
       </select>
     </v-td>
@@ -70,11 +74,8 @@
       <template v-if="!disciplinaIsIntegralEAD">
         <select v-model.number="turmaForm.Sala1">
           <option />
-          <option
-            v-for="sala in AllSalas"
-            :key="sala.id + sala.nome"
-            :value="sala.id"
-            >{{ sala.nome }}
+          <option v-for="sala in AllSalas" :key="sala.id + sala.nome" :value="sala.id">
+            {{ sala.nome }}
           </option>
         </select>
 
@@ -83,11 +84,8 @@
           v-model.number="turmaForm.Sala2"
         >
           <option />
-          <option
-            v-for="sala in AllSalas"
-            :key="sala.nome + sala.id"
-            :value="sala.id"
-            >{{ sala.nome }}
+          <option v-for="sala in AllSalas" :key="sala.nome + sala.id" :value="sala.id">
+            {{ sala.nome }}
           </option>
         </select>
       </template>
@@ -99,6 +97,7 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import { clone, some, orderBy, filter } from "lodash-es";
 import { maskTurmaLetra } from "@/common/mixins";
 
 const emptyTurma = {
@@ -122,7 +121,7 @@ export default {
   mixins: [maskTurmaLetra],
   data() {
     return {
-      turmaForm: this.$_.clone(emptyTurma),
+      turmaForm: clone(emptyTurma),
     };
   },
 
@@ -155,11 +154,10 @@ export default {
         this.setTurnoByHorario(this.turmaForm.Horario2);
     },
     setTurnoByHorario(horarioId) {
-      if (horarioId == 31 && this.disciplinaIsIntegralEAD)
-        this.turmaForm.turno1 = "EAD";
-      else if (this.$_.some(this.HorariosNoturno, ["id", horarioId]))
+      if (horarioId == 31 && this.disciplinaIsIntegralEAD) this.turmaForm.turno1 = "EAD";
+      else if (some(this.HorariosNoturno, ["id", horarioId]))
         this.turmaForm.turno1 = "Noturno";
-      else if (this.$_.some(this.HorariosDiurno, ["id", horarioId]))
+      else if (some(this.HorariosDiurno, ["id", horarioId]))
         this.turmaForm.turno1 = "Diurno";
     },
     async handleCreateTurmaExterna() {
@@ -190,7 +188,7 @@ export default {
     ]),
 
     DisciplinasExternasInPerfisOrderedByNome() {
-      return this.$_.orderBy(this.DisciplinasExternasInPerfis, ["nome"]);
+      return orderBy(this.DisciplinasExternasInPerfis, ["nome"]);
     },
     HorariosFiltredByTurno() {
       if (this.disciplinaIsIntegralEAD) return this.HorariosEAD;
@@ -203,7 +201,7 @@ export default {
         case "EAD":
           return this.HorariosEAD;
         default:
-          return this.$_.filter(this.AllHorarios, (horario) => horario.id != 31); //Todos sem EAD
+          return filter(this.AllHorarios, (horario) => horario.id != 31); //Todos sem EAD
       }
     },
     totalCarga() {

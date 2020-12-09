@@ -1,10 +1,10 @@
 <template>
   <div class="main-component row p-0">
-    <PageHeader :title="'Plano Departamental'">
+    <portal to="page-header">
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="relatorio" @click="toggleAsideModal('relatorio')" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
-    </PageHeader>
+    </portal>
 
     <div class="div-table">
       <BaseTable>
@@ -49,7 +49,7 @@
         </template>
 
         <template #tbody>
-          <tr v-show="DisciplinasInTurmasOrdered.length" class="bg-total-vg">
+          <tr v-if="DisciplinasInTurmasOrdered.length" class="bg-total-vg">
             <v-td width="80" />
             <v-td width="350" align="start">TOTAIS</v-td>
             <v-td width="80" />
@@ -106,7 +106,7 @@
             </tr>
           </template>
 
-          <tr v-show="!DisciplinasInTurmasOrdered.length">
+          <tr v-if="!DisciplinasInTurmasOrdered.length">
             <v-td width="885" colspan="7">
               <b>Nenhuma disciplina encontrada.</b>
               Clique no botão de filtros
@@ -285,7 +285,7 @@
 
     <ModalVagas ref="modalVagas" :turma="turmaClicked" />
 
-    <ModalRelatorio ref="modalRelatorio" @selection-option="pdf($event)" />
+    <ModalRelatorio ref="modalRelatorio" @selection-option="generatePdf($event)" />
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
@@ -313,7 +313,8 @@
 
 <script>
 import { mapGetters } from "vuex";
-import pdfs from "@/common/services/pdfs";
+import { union, difference, orderBy, filter, some } from "lodash-es";
+import { pdfDisciplinasTurmas } from "@/common/services/pdfs";
 import { normalizeText } from "@/common/utils";
 import {
   generateHorariosText,
@@ -381,7 +382,7 @@ export default {
             this.filtroPerfis.selecionados = [...this.PerfisOptions];
           },
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = this.$_.union(
+            this.filtroDisciplinas.selecionados = union(
               this.DisciplinasOptionsFiltered,
               this.filtroDisciplinas.selecionados
             );
@@ -402,7 +403,7 @@ export default {
             this.filtroDisciplinas.selecionados = [];
           },
           Disciplinas: () => {
-            this.filtroDisciplinas.selecionados = this.$_.difference(
+            this.filtroDisciplinas.selecionados = difference(
               this.filtroDisciplinas.selecionados,
               this.DisciplinasOptionsFiltered
             );
@@ -418,10 +419,7 @@ export default {
           },
         },
         btnOk: () => {
-          this.filtroPeriodos.ativados = this.$_.orderBy(
-            this.filtroPeriodos.selecionados,
-            "id"
-          );
+          this.filtroPeriodos.ativados = orderBy(this.filtroPeriodos.selecionados, "id");
 
           this.filtroDisciplinas.ativados = [...this.filtroDisciplinas.selecionados];
         },
@@ -444,23 +442,26 @@ export default {
     getVagasByTurmaId(turmaId) {
       const pedidosInCurrentTurma = this.Pedidos[turmaId];
 
-      return this.$_.reduce(
-        pedidosInCurrentTurma,
+      return pedidosInCurrentTurma.reduce(
         (sum, pedido) => sum + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas,
         0
       );
     },
-    pdf(completo) {
-      let disciplinasSelecionadas = completo
-        ? this.DisciplinasDCCInPerfis
-        : this.DisciplinasInTurmasFiltered;
+    generatePdf(completo) {
+      let disciplinasInTurmas = [];
+      let periodosAtivados = [];
+      if (completo) {
+        disciplinasInTurmas = this.DisciplinasInTurmas;
+        periodosAtivados = this.PeriodosOptions;
+      } else {
+        disciplinasInTurmas = this.DisciplinasInTurmasFiltered;
+        periodosAtivados = this.filtroPeriodos.ativados;
+      }
 
-      pdfs.pdfRelatorioDisciplinas({
-        disciplinasSelecionadas,
-        plano: this.$_.find(this.AllPlanos, [
-          "id",
-          parseInt(localStorage.getItem("Plano")),
-        ]),
+      pdfDisciplinasTurmas({
+        disciplinasInTurmas,
+        periodosAtivados,
+        plano: this.currentPlano,
       });
     },
   },
@@ -475,19 +476,19 @@ export default {
     ]),
 
     DisciplinasInTurmasOrdered() {
-      return this.$_.orderBy(
+      return orderBy(
         this.DisciplinasInTurmasSomatorios,
         ["periodo", this.ordenacaoMain.disciplinas.order],
         ["asc", this.ordenacaoMain.disciplinas.type]
       );
     },
     DisciplinasInTurmasSomatorios() {
-      return this.$_.map(this.DisciplinasInTurmasFiltered, (disciplina) => {
+      return this.DisciplinasInTurmasFiltered.map((disciplina) => {
         const turmas = [];
         let somatorioVagas = 0;
         let somatorioCreditos = 0;
 
-        this.$_.forEach(disciplina.turmas, (turma) => {
+        disciplina.turmas.forEach((turma) => {
           if (turma.Disciplina === disciplina.id) {
             const vagasDaTurma = this.getVagasByTurmaId(turma.id);
             somatorioCreditos += turma.disciplina.creditoTotal;
@@ -509,16 +510,14 @@ export default {
       });
     },
     DisciplinasInTurmasFiltered() {
-      const filteredByDisciplinas = this.$_.filter(
-        this.DisciplinasInTurmas,
-        (disciplina) =>
-          this.$_.some(this.filtroDisciplinas.ativados, ["id", disciplina.id])
+      const filteredByDisciplinas = filter(this.DisciplinasInTurmas, (disciplina) =>
+        some(this.filtroDisciplinas.ativados, ["id", disciplina.id])
       );
 
       const filteredByPeriodos = [];
-      this.$_.forEach(filteredByDisciplinas, (disciplina) => {
-        const turmasFiltred = this.$_.filter(disciplina.turmas, (turma) =>
-          this.$_.some(this.filtroPeriodos.ativados, ["id", turma.periodo])
+      filteredByDisciplinas.forEach((disciplina) => {
+        const turmasFiltred = filter(disciplina.turmas, (turma) =>
+          some(this.filtroPeriodos.ativados, ["id", turma.periodo])
         );
 
         if (turmasFiltred.length) {
@@ -532,13 +531,10 @@ export default {
       return filteredByPeriodos;
     },
     DisciplinasInTurmas() {
-      const turmasOrdered = this.$_.orderBy(this.TurmasInDisciplinasPerfis, "periodo");
+      const turmasOrdered = orderBy(this.TurmasInDisciplinasPerfis, "periodo");
 
-      return this.$_.map(this.DisciplinasDCCInPerfis, (disciplina) => {
-        const turmasDaDisciplina = this.$_.filter(turmasOrdered, [
-          "Disciplina",
-          disciplina.id,
-        ]);
+      return this.DisciplinasDCCInPerfis.map((disciplina) => {
+        const turmasDaDisciplina = filter(turmasOrdered, ["Disciplina", disciplina.id]);
 
         return {
           ...disciplina,
@@ -550,7 +546,7 @@ export default {
       let vagas = 0;
       let creditos = 0;
 
-      this.$_.forEach(this.DisciplinasInTurmasSomatorios, (disciplina) => {
+      this.DisciplinasInTurmasSomatorios.forEach((disciplina) => {
         vagas += disciplina.somatorioVagas;
         creditos += disciplina.somatorioCreditos;
       });
@@ -571,7 +567,7 @@ export default {
       }
 
       let periodoText = "";
-      this.$_.forEach(periodosAtivados, (periodo, index) => {
+      periodosAtivados.forEach((periodo, index) => {
         periodoText += `${periodo.id}º`;
         if (index !== periodosAtivados.length - 1) periodoText += ", ";
       });
@@ -583,22 +579,22 @@ export default {
     },
     //Modal Options
     PerfisOptionsOrdered() {
-      return this.$_.orderBy(
+      return orderBy(
         this.PerfisOptions,
         this.ordenacaoModal.perfis.order,
         this.ordenacaoModal.perfis.type
       );
     },
     PerfisOptions() {
-      return this.$_.map(this.PerfisDCC, (perfil) => {
-        const todasDisciplinasDoPerfil = this.$_.filter(this.DisciplinasOptions, [
+      return this.PerfisDCC.map((perfil) => {
+        const todasDisciplinasDoPerfil = filter(this.DisciplinasOptions, [
           "Perfil",
           perfil.id,
         ]);
-        const disciplinasSelecionadas = this.$_.filter(
-          this.filtroDisciplinas.selecionados,
-          ["Perfil", perfil.id]
-        );
+        const disciplinasSelecionadas = filter(this.filtroDisciplinas.selecionados, [
+          "Perfil",
+          perfil.id,
+        ]);
 
         let halfChecked = false;
         if (todasDisciplinasDoPerfil.length === disciplinasSelecionadas.length) {
@@ -614,7 +610,7 @@ export default {
       });
     },
     DisciplinasOptionsOrdered() {
-      return this.$_.orderBy(
+      return orderBy(
         this.DisciplinasOptionsFiltered,
         this.ordenacaoModal.disciplinas.order,
         this.ordenacaoModal.disciplinas.type
@@ -625,7 +621,7 @@ export default {
 
       const searchNormalized = normalizeText(this.searchDisciplinas);
 
-      return this.$_.filter(this.DisciplinasOptions, (disciplina) => {
+      return filter(this.DisciplinasOptions, (disciplina) => {
         const nome = normalizeText(disciplina.nome);
         const codigo = normalizeText(disciplina.codigo);
 

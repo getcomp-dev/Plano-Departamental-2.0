@@ -1,5 +1,5 @@
 import Vue from "vue";
-import _ from "lodash";
+import { orderBy, filter } from "lodash-es";
 import docenteService from "../../common/services/docente";
 import {
   DOCENTE_FETCHED,
@@ -22,18 +22,12 @@ const mutations = {
   },
 
   [SOCKET_DOCENTE_UPDATED](state, data) {
-    let index = _.findIndex(
-      state.Docentes,
-      (docente) => docente.id === data.Docente.id
-    );
+    const index = state.Docentes.findIndex((docente) => docente.id === data.Docente.id);
     Vue.set(state.Docentes, index, data.Docente);
   },
 
   [SOCKET_DOCENTE_DELETED](state, data) {
-    let index = _.findIndex(
-      state.Docentes,
-      (docente) => docente.id === data.Docente.id
-    );
+    const index = state.Docentes.findIndex((docente) => docente.id === data.Docente.id);
     state.Docentes.splice(index, 1);
   },
 };
@@ -56,10 +50,11 @@ const actions = {
 
 const getters = {
   AllDocentes(state) {
-    return _.orderBy(state.Docentes, "apelido");
+    return orderBy(state.Docentes, "apelido");
   },
-  DocentesAtivos(state, getters) {
-    return _.filter(getters.AllDocentes, ["ativo", true]);
+
+  DocentesAtivos(_, getters) {
+    return filter(getters.AllDocentes, ["ativo", true]);
   },
 };
 

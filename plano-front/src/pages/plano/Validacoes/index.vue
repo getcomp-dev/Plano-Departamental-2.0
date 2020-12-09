@@ -1,9 +1,9 @@
 <template>
   <div class="main-component row" v-if="currentPlano.isEditable">
-    <PageHeader :title="'Validações do Plano'">
+    <portal to="page-header">
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
-    </PageHeader>
+    </portal>
 
     <NavTab
       :currentTab="tabAtivaMain"
@@ -25,7 +25,7 @@
           <v-th-ordination
             :currentOrder="ordenacaoTurmasMain"
             orderToCheck="disciplina.perfil.abreviacao"
-            width="75"
+            width="80"
             align="start"
             title="Período letivo"
           >
@@ -58,7 +58,11 @@
               <v-td width="35">
                 {{ validacaoTurma.periodo }}
               </v-td>
-              <v-td width="75" align="start">
+              <v-td
+                width="80"
+                align="start"
+                :title="validacaoTurma.disciplina.perfil.nome"
+              >
                 {{ validacaoTurma.disciplina.perfil.abreviacao }}
               </v-td>
               <v-td width="80" align="start">
@@ -103,8 +107,8 @@
             </tr>
           </template>
 
-          <tr v-show="!TurmasValidacoesOrdered.length">
-            <v-td width="705">
+          <tr v-if="!TurmasValidacoesOrdered.length">
+            <v-td width="710">
               <b>Nenhum conflito encontrado em turmas.</b>
               Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
@@ -119,7 +123,7 @@
           <v-th-ordination
             :currentOrder="ordenacaoDocentesMain"
             orderToCheck="nome"
-            width="705"
+            width="710"
             align="start"
             colspan="2"
           >
@@ -130,7 +134,7 @@
         <template #tbody>
           <template v-for="validacaoDocente in DocentesValidacoesOrdered">
             <tr :key="validacaoDocente.id + validacaoDocente.nome" class="bg-custom">
-              <v-td colspan="2" width="705" align="start">
+              <v-td colspan="2" width="710" align="start">
                 {{ validacaoDocente.nome }}
               </v-td>
             </tr>
@@ -148,12 +152,12 @@
                 />
               </v-td>
 
-              <v-td width="670" align="start">{{ conflito }}</v-td>
+              <v-td width="675" align="start">{{ conflito }}</v-td>
             </tr>
           </template>
 
-          <tr v-show="!DocentesValidacoesOrdered.length">
-            <v-td width="705">
+          <tr v-if="!DocentesValidacoesOrdered.length">
+            <v-td width="710">
               <b>Nenhum conflito encontrado em docentes.</b>
             </v-td>
           </tr>
@@ -283,6 +287,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { clone, cloneDeep, find, some, filter, orderBy } from "lodash-es";
 import { generateEmptyTurma } from "@/common/utils";
 import {
   toggleItemInArray,
@@ -344,7 +349,7 @@ export default {
       tabAtivaMain: "Turmas",
       asideModalsRefs: ["modalFiltros", "modalAjuda"],
       turmaClicked: generateEmptyTurma(),
-      allConflitos: this.$_.clone(AllConflitosTurmas),
+      allConflitos: clone(AllConflitosTurmas),
       grades1Semestre: { CCD: [], CCN: [], EC: [], SI: [] },
       grades2Semestre: { CCD: [], CCN: [], EC: [], SI: [] },
       ordenacaoTurmasMain: { order: "periodo", type: "asc" },
@@ -410,8 +415,8 @@ export default {
 
     let ano = this.$store.state.plano.Plano[0].ano;
     //CCD
-    g = this.$_.filter(this.$store.state.grade.Grades, ["Curso", 4]);
-    g = this.$_.orderBy(g, "periodoInicio", "desc");
+    g = filter(this.$store.state.grade.Grades, ["Curso", 4]);
+    g = orderBy(g, "periodoInicio", "desc");
     periodoFinal = 0;
     for (let i = 0; i < g.length; i++) {
       periodoInicial = periodoFinal + 1;
@@ -445,8 +450,8 @@ export default {
       }
     }
     //CCN
-    g = this.$_.filter(this.$store.state.grade.Grades, ["Curso", 1]);
-    g = this.$_.orderBy(g, "periodoInicio", "desc");
+    g = filter(this.$store.state.grade.Grades, ["Curso", 1]);
+    g = orderBy(g, "periodoInicio", "desc");
     periodoFinal = 0;
     for (let i = 0; i < g.length; i++) {
       periodoInicial = periodoFinal + 1;
@@ -480,8 +485,8 @@ export default {
       }
     }
     //SI
-    g = this.$_.filter(this.$store.state.grade.Grades, ["Curso", 3]);
-    g = this.$_.orderBy(g, "periodoInicio", "desc");
+    g = filter(this.$store.state.grade.Grades, ["Curso", 3]);
+    g = orderBy(g, "periodoInicio", "desc");
     periodoFinal = 0;
     for (let i = 0; i < g.length; i++) {
       periodoInicial = periodoFinal + 1;
@@ -515,8 +520,8 @@ export default {
       }
     }
     //EC
-    g = this.$_.filter(this.$store.state.grade.Grades, ["Curso", 2]);
-    g = this.$_.orderBy(g, "periodoInicio", "desc");
+    g = filter(this.$store.state.grade.Grades, ["Curso", 2]);
+    g = orderBy(g, "periodoInicio", "desc");
     periodoFinal = 0;
     for (let i = 0; i < g.length; i++) {
       periodoInicial = periodoFinal + 1;
@@ -557,7 +562,7 @@ export default {
       this.$refs.modalEditTurma.open();
     },
     createValidacao(turma) {
-      const validacaoResult = this.$_.cloneDeep(turma);
+      const validacaoResult = cloneDeep(turma);
 
       validacaoResult.docente1Apelido = this.findDocenteApelidoById(turma.Docente1);
       validacaoResult.docente2Apelido = this.findDocenteApelidoById(turma.Docente2);
@@ -649,9 +654,9 @@ export default {
         return !this.isLab(sala1) && !this.isLab(sala2) ? this.allConflitos[5] : false;
       }
     },
-    checkVagaSala(sala_id, pedidosTotais) {
+    checkVagaSala(salaId, pedidosTotais) {
       let sala;
-      if (sala_id != null) sala = this.$_.find(this.AllSalas, (s) => sala_id == s.id);
+      if (salaId != null) sala = find(this.AllSalas, (s) => salaId == s.id);
 
       if (sala != undefined) {
         if (sala.lotacao_maxima < pedidosTotais) {
@@ -684,18 +689,18 @@ export default {
         grades = this.grades2Semestre;
       }
       let conflitos = false;
-      if (this.$_.find(pedidos, { Curso: 4 }).vagasPeriodizadas > 0) {
+      if (find(pedidos, { Curso: 4 }).vagasPeriodizadas > 0) {
         for (let i = 0; i < grades.CCD.length; i++) {
-          let disciplinaGrade = this.$_.find(
-            this.$store.state.disciplinaGrade.DisciplinaGrades,
-            { Grade: grades.CCD[i].id, Disciplina: turma.Disciplina }
-          );
+          let disciplinaGrade = find(this.$store.state.disciplinaGrade.DisciplinaGrades, {
+            Grade: grades.CCD[i].id,
+            Disciplina: turma.Disciplina,
+          });
           if (
             disciplinaGrade !== undefined &&
             disciplinaGrade.periodo >= grades.CCD[i].inicio &&
             disciplinaGrade.periodo <= grades.CCD[i].fim
           ) {
-            let disciplinasPeriodo = this.$_.filter(
+            let disciplinasPeriodo = filter(
               this.$store.state.disciplinaGrade.DisciplinaGrades,
               { Grade: grades.CCD[i].id, periodo: disciplinaGrade.periodo }
             );
@@ -703,18 +708,17 @@ export default {
               if (disciplinasPeriodo[d].Disciplina === turma.Disciplina) {
                 continue;
               }
-              let disciplinaConflito = this.$_.find(
-                this.$store.state.disciplina.Disciplinas,
-                { id: disciplinasPeriodo[d].Disciplina }
-              );
+              let disciplinaConflito = find(this.$store.state.disciplina.Disciplinas, {
+                id: disciplinasPeriodo[d].Disciplina,
+              });
               let externa =
                 disciplinaConflito.Perfil == 13 || disciplinaConflito.Perfil == 15;
-              let turmasDisciplina = this.$_.filter(
+              let turmasDisciplina = filter(
                 externa
                   ? this.$store.state.turmaExterna.Turmas
                   : this.$store.state.turma.Turmas,
                 (t) => {
-                  let pedido = this.$_.find(
+                  let pedido = find(
                     externa
                       ? this.$store.state.pedidoExterno.Pedidos[t.id]
                       : this.$store.state.pedido.Pedidos[t.id],
@@ -748,18 +752,18 @@ export default {
           }
         }
       }
-      if (this.$_.find(pedidos, { Curso: 1 }).vagasPeriodizadas > 0) {
+      if (find(pedidos, { Curso: 1 }).vagasPeriodizadas > 0) {
         for (let i = 0; i < grades.CCN.length; i++) {
-          let disciplinaGrade = this.$_.find(
-            this.$store.state.disciplinaGrade.DisciplinaGrades,
-            { Grade: grades.CCN[i].id, Disciplina: turma.Disciplina }
-          );
+          let disciplinaGrade = find(this.$store.state.disciplinaGrade.DisciplinaGrades, {
+            Grade: grades.CCN[i].id,
+            Disciplina: turma.Disciplina,
+          });
           if (
             disciplinaGrade !== undefined &&
             disciplinaGrade.periodo >= grades.CCN[i].inicio &&
             disciplinaGrade.periodo <= grades.CCN[i].fim
           ) {
-            let disciplinasPeriodo = this.$_.filter(
+            let disciplinasPeriodo = filter(
               this.$store.state.disciplinaGrade.DisciplinaGrades,
               { Grade: grades.CCN[i].id, periodo: disciplinaGrade.periodo }
             );
@@ -767,18 +771,17 @@ export default {
               if (disciplinasPeriodo[d].Disciplina === turma.Disciplina) {
                 continue;
               }
-              let disciplinaConflito = this.$_.find(
-                this.$store.state.disciplina.Disciplinas,
-                { id: disciplinasPeriodo[d].Disciplina }
-              );
+              let disciplinaConflito = find(this.$store.state.disciplina.Disciplinas, {
+                id: disciplinasPeriodo[d].Disciplina,
+              });
               let externa =
                 disciplinaConflito.Perfil == 13 || disciplinaConflito.Perfil == 15;
-              let turmasDisciplina = this.$_.filter(
+              let turmasDisciplina = filter(
                 externa
                   ? this.$store.state.turmaExterna.Turmas
                   : this.$store.state.turma.Turmas,
                 (t) => {
-                  let pedido = this.$_.find(
+                  let pedido = find(
                     externa
                       ? this.$store.state.pedidoExterno.Pedidos[t.id]
                       : this.$store.state.pedido.Pedidos[t.id],
@@ -812,18 +815,18 @@ export default {
           }
         }
       }
-      if (this.$_.find(pedidos, { Curso: 3 }).vagasPeriodizadas > 0) {
+      if (find(pedidos, { Curso: 3 }).vagasPeriodizadas > 0) {
         for (let i = 0; i < grades.SI.length; i++) {
-          let disciplinaGrade = this.$_.find(
-            this.$store.state.disciplinaGrade.DisciplinaGrades,
-            { Grade: grades.SI[i].id, Disciplina: turma.Disciplina }
-          );
+          let disciplinaGrade = find(this.$store.state.disciplinaGrade.DisciplinaGrades, {
+            Grade: grades.SI[i].id,
+            Disciplina: turma.Disciplina,
+          });
           if (
             disciplinaGrade !== undefined &&
             disciplinaGrade.periodo >= grades.SI[i].inicio &&
             disciplinaGrade.periodo <= grades.SI[i].fim
           ) {
-            let disciplinasPeriodo = this.$_.filter(
+            let disciplinasPeriodo = filter(
               this.$store.state.disciplinaGrade.DisciplinaGrades,
               { Grade: grades.SI[i].id, periodo: disciplinaGrade.periodo }
             );
@@ -831,18 +834,17 @@ export default {
               if (disciplinasPeriodo[d].Disciplina === turma.Disciplina) {
                 continue;
               }
-              let disciplinaConflito = this.$_.find(
-                this.$store.state.disciplina.Disciplinas,
-                { id: disciplinasPeriodo[d].Disciplina }
-              );
+              let disciplinaConflito = find(this.$store.state.disciplina.Disciplinas, {
+                id: disciplinasPeriodo[d].Disciplina,
+              });
               let externa =
                 disciplinaConflito.Perfil == 13 || disciplinaConflito.Perfil == 15;
-              let turmasDisciplina = this.$_.filter(
+              let turmasDisciplina = filter(
                 externa
                   ? this.$store.state.turmaExterna.Turmas
                   : this.$store.state.turma.Turmas,
                 (t) => {
-                  let pedido = this.$_.find(
+                  let pedido = find(
                     externa
                       ? this.$store.state.pedidoExterno.Pedidos[t.id]
                       : this.$store.state.pedido.Pedidos[t.id],
@@ -876,18 +878,18 @@ export default {
           }
         }
       }
-      if (this.$_.find(pedidos, { Curso: 2 }).vagasPeriodizadas > 0) {
+      if (find(pedidos, { Curso: 2 }).vagasPeriodizadas > 0) {
         for (let i = 0; i < grades.EC.length; i++) {
-          let disciplinaGrade = this.$_.find(
-            this.$store.state.disciplinaGrade.DisciplinaGrades,
-            { Grade: grades.EC[i].id, Disciplina: turma.Disciplina }
-          );
+          let disciplinaGrade = find(this.$store.state.disciplinaGrade.DisciplinaGrades, {
+            Grade: grades.EC[i].id,
+            Disciplina: turma.Disciplina,
+          });
           if (
             disciplinaGrade !== undefined &&
             disciplinaGrade.periodo >= grades.EC[i].inicio &&
             disciplinaGrade.periodo <= grades.EC[i].fim
           ) {
-            let disciplinasPeriodo = this.$_.filter(
+            let disciplinasPeriodo = filter(
               this.$store.state.disciplinaGrade.DisciplinaGrades,
               { Grade: grades.EC[i].id, periodo: disciplinaGrade.periodo }
             );
@@ -895,18 +897,17 @@ export default {
               if (disciplinasPeriodo[d].Disciplina === turma.Disciplina) {
                 continue;
               }
-              let disciplinaConflito = this.$_.find(
-                this.$store.state.disciplina.Disciplinas,
-                { id: disciplinasPeriodo[d].Disciplina }
-              );
+              let disciplinaConflito = find(this.$store.state.disciplina.Disciplinas, {
+                id: disciplinasPeriodo[d].Disciplina,
+              });
               let externa =
                 disciplinaConflito.Perfil == 13 || disciplinaConflito.Perfil == 15;
-              let turmasDisciplina = this.$_.filter(
+              let turmasDisciplina = filter(
                 externa
                   ? this.$store.state.turmaExterna.Turmas
                   : this.$store.state.turma.Turmas,
                 (t) => {
-                  let pedido = this.$_.find(
+                  let pedido = find(
                     externa
                       ? this.$store.state.pedidoExterno.Pedidos[t.id]
                       : this.$store.state.pedido.Pedidos[t.id],
@@ -945,14 +946,14 @@ export default {
     },
 
     creditosGraduacao(docente) {
-      let turmas = this.$_.filter(this.$store.state.turma.Turmas, (t) => {
+      let turmas = filter(this.$store.state.turma.Turmas, (t) => {
         return t.Docente1 === docente.id || t.Docente2 === docente.id;
       });
 
       let cargaTotalDocente = 0;
 
       for (let i = 0; i < turmas.length; i++) {
-        let disciplina = this.$_.find(this.$store.state.disciplina.Disciplinas, {
+        let disciplina = find(this.$store.state.disciplina.Disciplinas, {
           id: turmas[i].Disciplina,
         });
         let cargaTotalDisciplina = disciplina.cargaTeorica + disciplina.cargaPratica;
@@ -967,7 +968,7 @@ export default {
       return cargaTotalDocente;
     },
     creditosPos(docente) {
-      let turmas = this.$_.filter(this.$store.state.cargaPos.Cargas, (t) => {
+      let turmas = filter(this.$store.state.cargaPos.Cargas, (t) => {
         return t.Docente === docente.id;
       });
 
@@ -980,11 +981,11 @@ export default {
       return cargaTotalDocente;
     },
     filterByPeriodo(periodo) {
-      return this.$_.some(this.filtroPeriodos.ativados, ["id", periodo]);
+      return some(this.filtroPeriodos.ativados, ["id", periodo]);
     },
     filterByConflitos(arrayConflitos) {
-      const conflitosResultantes = this.$_.filter(arrayConflitos, (conflito) =>
-        this.$_.some(
+      const conflitosResultantes = filter(arrayConflitos, (conflito) =>
+        some(
           this.filtroConflitos.ativados,
           (conflitoType) => conflitoType === conflito.type
         )
@@ -993,7 +994,7 @@ export default {
     },
 
     findDocenteApelidoById(id) {
-      let docente = this.$_.find(this.DocentesAtivos, (d) => d.id == id);
+      let docente = find(this.DocentesAtivos, (d) => d.id == id);
       return docente != undefined ? docente.apelido : null;
     },
     totalPedidos(turmaId) {
@@ -1013,7 +1014,7 @@ export default {
         : false;
     },
     isLab(salaId) {
-      let salaResultante = this.$_.find(
+      let salaResultante = find(
         this.AllSalas,
         (sala) => salaId == sala.id && sala.laboratorio
       );
@@ -1029,7 +1030,7 @@ export default {
     ...mapGetters(["AllSalas", "DocentesAtivos", "TurmasInDisciplinasPerfis"]),
 
     TurmasValidacoesOrdered() {
-      return this.$_.orderBy(
+      return orderBy(
         this.TurmasValidacoesFiltred,
         this.ordenacaoTurmasMain.order,
         this.ordenacaoTurmasMain.type
@@ -1038,7 +1039,7 @@ export default {
     TurmasValidacoesFiltred() {
       const turmasResultantes = [];
 
-      this.$_.forEach(this.TurmasValidacoes, (turma) => {
+      this.TurmasValidacoes.forEach((turma) => {
         const filtredConflitos = this.filterByConflitos(turma.conflitos);
         const filtredPeriodo = this.filterByPeriodo(turma.periodo);
 
@@ -1061,7 +1062,7 @@ export default {
     },
 
     DocentesValidacoesOrdered() {
-      return this.$_.orderBy(
+      return orderBy(
         this.DocentesValidacoes,
         this.ordenacaoDocentesMain.order,
         this.ordenacaoDocentesMain.type
@@ -1094,7 +1095,7 @@ export default {
     },
 
     ConflitosOptionsOrdered() {
-      return this.$_.orderBy(AllConflitosTurmas, "msg");
+      return orderBy(AllConflitosTurmas, "msg");
     },
   },
 };

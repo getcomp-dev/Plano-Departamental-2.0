@@ -1,10 +1,8 @@
 import Vue from "vue";
 import $socket from "@/socketInstance.js";
-
-import _ from "lodash";
 import planoService from "../../common/services/plano";
+import { cloneDeepWith, find, orderBy } from "lodash-es";
 import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
-
 import {
   PLANO_FETCHED,
   SOCKET_PLANO_DELETED,
@@ -32,12 +30,12 @@ const mutations = {
   },
 
   [SOCKET_PLANO_UPDATED](state, data) {
-    let index = _.findIndex(state.Plano, (plano) => plano.id === data.Plano.id);
+    let index = state.Plano.findIndex((plano) => plano.id === data.Plano.id);
     Vue.set(state.Plano, index, data.Plano);
   },
 
   [SOCKET_PLANO_DELETED](state, data) {
-    let index = _.findIndex(state.Plano, (plano) => plano.id === data.Plano.id);
+    let index = state.Plano.findIndex((plano) => plano.id === data.Plano.id);
     state.Plano.splice(index, 1);
   },
 };
@@ -104,7 +102,7 @@ const actions = {
   },
 
   async editPlano({ commit }, plano) {
-    const planoNormalized = _.cloneDeepWith(plano, setEmptyValuesToNull);
+    const planoNormalized = cloneDeepWith(plano, setEmptyValuesToNull);
 
     validateObjectKeys(planoNormalized, ["nome", "ano"]);
     await planoService.update(planoNormalized.id, planoNormalized);
@@ -120,13 +118,13 @@ const actions = {
 
 const getters = {
   currentPlano(state, rootGetters) {
-    return _.find(rootGetters.AllPlanos, ["id", state.currentPlanoId]);
+    return find(rootGetters.AllPlanos, ["id", state.currentPlanoId]);
   },
   AllPlanos(state) {
-    return _.orderBy(state.Plano, "ano");
+    return orderBy(state.Plano, "ano");
   },
   AnosDoPlano() {
-    let firstYear = 2019;
+    let firstYear = 2000;
     const currentYear = new Date().getFullYear();
     const lastYear = currentYear + 5;
     const yearsArry = [];

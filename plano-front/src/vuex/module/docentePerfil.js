@@ -1,5 +1,4 @@
 import Vue from "vue";
-import _ from "lodash";
 import docentePerfilService from "../../common/services/docentePerfil";
 import {
   DOCENTE_PERFIL_FETCHED,
@@ -22,8 +21,7 @@ const mutations = {
   },
 
   [SOCKET_DOCENTE_PERFIL_UPDATED](state, data) {
-    let index = _.findIndex(
-      state.DocentePerfis,
+    const index = state.DocentePerfis.findIndex(
       (docentePerfil) =>
         (docentePerfil.DocenteId === data.DocentePerfil.DocenteId) &
         (docentePerfil.Perfil === data.Perfil)
@@ -32,8 +30,7 @@ const mutations = {
   },
 
   [SOCKET_DOCENTE_PERFIL_DELETED](state, data) {
-    let index = _.findIndex(
-      state.DocentePerfis,
+    const index = state.DocentePerfis.findIndex(
       (docentePerfil) =>
         (docentePerfil.DocenteId === data.DocentePerfil.DocenteId) &
         (docentePerfil.Perfil === data.Perfil)

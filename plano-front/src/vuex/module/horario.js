@@ -1,6 +1,6 @@
 import Vue from "vue";
-import _ from "lodash";
 import horarioService from "../../common/services/horario";
+import { orderBy, find, filter } from "lodash-es";
 import {
   HORARIO_FETCHED,
   SOCKET_HORARIO_CREATED,
@@ -22,18 +22,12 @@ const mutations = {
   },
 
   [SOCKET_HORARIO_UPDATED](state, data) {
-    let index = _.findIndex(
-      state.Horarios,
-      (horario) => horario.id === data.Horario.id
-    );
+    const index = state.Horarios.findIndex((horario) => horario.id === data.Horario.id);
     Vue.set(state.Horarios, index, data.Horario);
   },
 
   [SOCKET_HORARIO_DELETED](state, data) {
-    let index = _.findIndex(
-      state.Horarios,
-      (horario) => horario.id === data.Horario.id
-    );
+    const index = state.Horarios.findIndex((horario) => horario.id === data.Horario.id);
     state.Horarios.splice(index, 1);
   },
 };
@@ -56,22 +50,16 @@ const actions = {
 
 const getters = {
   AllHorarios(state) {
-    return _.orderBy(state.Horarios, "horario");
+    return orderBy(state.Horarios, "horario");
   },
   HorariosEAD(state) {
-    return [_.find(state.Horarios, { id: 31 })];
+    return [{ ...find(state.Horarios, ["id", 31]) }];
   },
-  HorariosNoturno(state, getters) {
-    return _.filter(
-      getters.AllHorarios,
-      (h) => parseInt(h.horario.slice(3, 5)) >= 17
-    );
+  HorariosNoturno(_, getters) {
+    return filter(getters.AllHorarios, (h) => parseInt(h.horario.slice(3, 5)) >= 17);
   },
-  HorariosDiurno(state, getters) {
-    return _.filter(
-      getters.AllHorarios,
-      (h) => parseInt(h.horario.slice(3, 5)) < 17
-    );
+  HorariosDiurno(_, getters) {
+    return filter(getters.AllHorarios, (h) => parseInt(h.horario.slice(3, 5)) < 17);
   },
 
   //Usado para as tabelas de Horarios-cursos e Horarios-labs
@@ -96,7 +84,7 @@ const getters = {
     ];
 
     let initialId = 1;
-    _.forEach(listHorarios, (itemHorario) => {
+    listHorarios.forEach((itemHorario) => {
       for (let horarioId = initialId; horarioId <= 28; horarioId += 6) {
         itemHorario.horariosIds.push(horarioId);
       }
@@ -118,7 +106,7 @@ const getters = {
     ];
 
     let initialId = 5;
-    _.forEach(listHorarios, (itemHorario) => {
+    listHorarios.forEach((itemHorario) => {
       for (let horarioId = initialId; horarioId <= 30; horarioId += 6) {
         itemHorario.horariosIds.push(horarioId);
       }
@@ -127,7 +115,7 @@ const getters = {
 
     return listHorarios;
   },
-  ListaDeTodosHorarios(state, getters) {
+  ListaDeTodosHorarios(_, getters) {
     const HorariosExtra = [
       {
         nome: "17-19",
@@ -140,7 +128,7 @@ const getters = {
     ];
 
     let initialId = 32;
-    _.forEach(HorariosExtra, (itemHorario) => {
+    HorariosExtra.forEach((itemHorario) => {
       for (let horarioId = initialId; horarioId <= 41; horarioId += 2) {
         itemHorario.horariosIds.push(horarioId);
       }

@@ -1,9 +1,9 @@
 <template>
   <div class="main-component row">
-    <PageHeader :title="'Logs'">
+    <portal to="page-header">
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
-    </PageHeader>
+    </portal>
 
     <div class="div-table">
       <BaseTable>
@@ -43,7 +43,7 @@
             </v-td>
           </tr>
 
-          <tr v-show="!HistoryOrdered.length">
+          <tr v-if="!HistoryOrdered.length">
             <v-td width="975" colspan="8">
               <b>Nenhuma operação encontrada.</b>
               Clique no botão de filtros
@@ -124,6 +124,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from "vuex";
+import { some, find, filter, orderBy } from "lodash-es";
 import {
   toggleItemInArray,
   toggleAsideModal,
@@ -131,15 +133,11 @@ import {
   preventClickSelection,
 } from "@/common/mixins";
 import { ModalFiltros, ModalAjuda } from "@/components/modals";
-import { mapGetters } from "vuex";
 
 export default {
   name: "DashboardHistory",
   mixins: [toggleItemInArray, toggleAsideModal, convertDateUTC, preventClickSelection],
-  components: {
-    ModalFiltros,
-    ModalAjuda,
-  },
+  components: { ModalFiltros, ModalAjuda },
   data() {
     return {
       asideModalsRefs: ["modalFiltros", "modalAjuda"],
@@ -181,10 +179,13 @@ export default {
   },
 
   beforeMount() {
+    this.fetchAllHistory();
     this.modalFiltrosCallbacks.selectAll.Operacoes();
   },
 
   methods: {
+    ...mapActions(["fetchAllHistory"]),
+
     linhaModificada(h) {
       let linha = h.linhaModificada;
       let aux = undefined;
@@ -192,7 +193,7 @@ export default {
         case "CargaPos": {
           if (h.tipoOperacao === "Delete") {
             aux = linha.split("/");
-            let docente = this.$_.find(this.$store.state.docente.Docentes, {
+            let docente = find(this.$store.state.docente.Docentes, {
               id: parseInt(aux[2]),
             });
             if (docente === undefined) {
@@ -205,16 +206,16 @@ export default {
         }
         case "DisciplinaGrade": {
           aux = linha.split("/");
-          let disciplina = this.$_.find(this.$store.state.disciplina.Disciplinas, {
+          let disciplina = find(this.$store.state.disciplina.Disciplinas, {
             id: parseInt(aux[1]),
           });
-          let grade = this.$_.find(this.$store.state.grade.Grades, {
+          let grade = find(this.$store.state.grade.Grades, {
             id: parseInt(aux[2]),
           });
           let curso =
             grade === undefined
               ? undefined
-              : this.$_.find(this.$store.state.curso.Cursos, {
+              : find(this.$store.state.curso.Cursos, {
                   id: grade.Curso,
                 });
           linha = `${
@@ -229,10 +230,10 @@ export default {
 
         case "DocentePerfil": {
           aux = linha.split("/");
-          let docente = this.$_.find(this.$store.state.docente.Docentes, {
+          let docente = find(this.$store.state.docente.Docentes, {
             id: parseInt(aux[1]),
           });
-          let perfil = this.$_.find(this.$store.state.perfil.Perfis, {
+          let perfil = find(this.$store.state.perfil.Perfis, {
             id: parseInt(aux[0]),
           });
           linha = `${docente === undefined ? aux[1] : docente.nome}/${
@@ -243,7 +244,7 @@ export default {
 
         case "Grade": {
           aux = linha.split("/");
-          let cursoGrade = this.$_.find(this.$store.state.curso.Cursos, {
+          let cursoGrade = find(this.$store.state.curso.Cursos, {
             id: parseInt(aux[0]),
           });
           linha = `${cursoGrade === undefined ? aux[0] : cursoGrade.codigo} - ${aux[1]}`;
@@ -252,16 +253,16 @@ export default {
 
         case "Pedido": {
           aux = linha.split("/");
-          let turma = this.$_.find(this.$store.state.turma.Turmas, {
+          let turma = find(this.$store.state.turma.Turmas, {
             id: parseInt(aux[0]),
           });
           let disciplinaPedido =
             turma === undefined
               ? undefined
-              : this.$_.find(this.$store.state.disciplina.Disciplinas, {
+              : find(this.$store.state.disciplina.Disciplinas, {
                   id: turma.Disciplina,
                 });
-          let cursoPedido = this.$_.find(this.$store.state.curso.Cursos, {
+          let cursoPedido = find(this.$store.state.curso.Cursos, {
             id: parseInt(aux[1]),
           });
           linha = `${
@@ -276,16 +277,16 @@ export default {
 
         case "PedidoExterno": {
           aux = linha.split("/");
-          let turmaExterna = this.$_.find(this.$store.state.turmaExterna.Turmas, {
+          let turmaExterna = find(this.$store.state.turmaExterna.Turmas, {
             id: parseInt(aux[0]),
           });
           let disciplinaPedidoExterno =
             turmaExterna === undefined
               ? undefined
-              : this.$_.find(this.$store.state.disciplina.Disciplinas, {
+              : find(this.$store.state.disciplina.Disciplinas, {
                   id: turmaExterna.Disciplina,
                 });
-          let cursoPedidoExterno = this.$_.find(this.$store.state.curso.Cursos, {
+          let cursoPedidoExterno = find(this.$store.state.curso.Cursos, {
             id: parseInt(aux[1]),
           });
           linha = `${
@@ -298,7 +299,7 @@ export default {
 
         case "Turma": {
           aux = linha.split("/");
-          let disciplinaTurma = this.$_.find(this.$store.state.disciplina.Disciplinas, {
+          let disciplinaTurma = find(this.$store.state.disciplina.Disciplinas, {
             id: parseInt(aux[1]),
           });
           linha = `${disciplinaTurma === undefined ? aux[1] : disciplinaTurma.codigo}/${
@@ -309,10 +310,9 @@ export default {
 
         case "TurmaExterna": {
           aux = linha.split("/");
-          let disciplinaTurmaExterna = this.$_.find(
-            this.$store.state.disciplina.Disciplinas,
-            { id: parseInt(aux[1]) }
-          );
+          let disciplinaTurmaExterna = find(this.$store.state.disciplina.Disciplinas, {
+            id: parseInt(aux[1]),
+          });
           linha = `${
             disciplinaTurmaExterna === undefined ? aux[1] : disciplinaTurmaExterna.codigo
           }/${aux[0]}`;
@@ -325,7 +325,7 @@ export default {
       let v = h.valorAnterior;
       switch (h.campoModificado) {
         case "Curso":
-          v = this.$_.find(this.$store.state.curso.Cursos, {
+          v = find(this.$store.state.curso.Cursos, {
             id: parseInt(h.valorAnterior),
           });
           if (v === undefined) v = h.valorAnterior;
@@ -333,7 +333,7 @@ export default {
           break;
 
         case "Disciplina":
-          v = this.$_.find(this.$store.state.disciplina.Disciplinas, {
+          v = find(this.$store.state.disciplina.Disciplinas, {
             id: parseInt(h.valorAnterior),
           });
           if (v === undefined) v = h.valorAnterior;
@@ -343,7 +343,7 @@ export default {
         case "Docente":
         case "Docente1":
         case "Docente2":
-          v = this.$_.find(this.$store.state.docente.Docentes, {
+          v = find(this.$store.state.docente.Docentes, {
             id: parseInt(h.valorAnterior),
           });
           if (v === undefined) v = h.valorAnterior;
@@ -351,12 +351,12 @@ export default {
           break;
 
         case "Grade":
-          v = this.$_.find(this.$store.state.grade.Grades, {
+          v = find(this.$store.state.grade.Grades, {
             id: parseInt(h.valorAnterior),
           });
           if (v === undefined) v = h.valorAnterior;
           else {
-            let c = this.$_.find(this.$store.state.curso.Cursos, {
+            let c = find(this.$store.state.curso.Cursos, {
               id: parseInt(v.Curso),
             });
             v = `${c === undefined ? v.Curso : c.codigo}/${v.nome}`;
@@ -366,7 +366,7 @@ export default {
         case "Horario":
         case "Horario1":
         case "Horario2":
-          v = this.$_.find(this.$store.state.horario.Horarios, {
+          v = find(this.$store.state.horario.Horarios, {
             id: parseInt(h.valorAnterior),
           });
           if (v === undefined) v = h.valorAnterior;
@@ -374,7 +374,7 @@ export default {
           break;
 
         case "Perfil":
-          v = this.$_.find(this.$store.state.perfil.Perfis, {
+          v = find(this.$store.state.perfil.Perfis, {
             id: parseInt(h.valorAnterior),
           });
           if (v === undefined) v = h.valorAnterior;
@@ -384,7 +384,7 @@ export default {
         case "Sala":
         case "Sala1":
         case "Sala2":
-          v = this.$_.find(this.$store.state.sala.Salas, {
+          v = find(this.$store.state.sala.Salas, {
             id: parseInt(h.valorAnterior),
           });
           if (v === undefined) v = h.valorAnterior;
@@ -398,7 +398,7 @@ export default {
       let v = h.valorNovo;
       switch (h.campoModificado) {
         case "Curso":
-          v = this.$_.find(this.$store.state.curso.Cursos, {
+          v = find(this.$store.state.curso.Cursos, {
             id: parseInt(h.valorNovo),
           });
           if (v === undefined) v = h.valorNovo;
@@ -406,7 +406,7 @@ export default {
           break;
 
         case "Disciplina":
-          v = this.$_.find(this.$store.state.disciplina.Disciplinas, {
+          v = find(this.$store.state.disciplina.Disciplinas, {
             id: parseInt(h.valorNovo),
           });
           if (v === undefined) v = h.valorNovo;
@@ -416,7 +416,7 @@ export default {
         case "Docente":
         case "Docente1":
         case "Docente2":
-          v = this.$_.find(this.$store.state.docente.Docentes, {
+          v = find(this.$store.state.docente.Docentes, {
             id: parseInt(h.valorNovo),
           });
           if (v === undefined) v = h.valorNovo;
@@ -424,12 +424,12 @@ export default {
           break;
 
         case "Grade":
-          v = this.$_.find(this.$store.state.grade.Grades, {
+          v = find(this.$store.state.grade.Grades, {
             id: parseInt(h.valorNovo),
           });
           if (v === undefined) v = h.valorNovo;
           else {
-            let c = this.$_.find(this.$store.state.curso.Cursos, {
+            let c = find(this.$store.state.curso.Cursos, {
               id: parseInt(v.Curso),
             });
             v = `${c === undefined ? v.Curso : c.codigo}/${v.nome}`;
@@ -439,7 +439,7 @@ export default {
         case "Horario":
         case "Horario1":
         case "Horario2":
-          v = this.$_.find(this.$store.state.horario.Horarios, {
+          v = find(this.$store.state.horario.Horarios, {
             id: parseInt(h.valorNovo),
           });
           if (v === undefined) v = h.valorNovo;
@@ -447,7 +447,7 @@ export default {
           break;
 
         case "Perfil":
-          v = this.$_.find(this.$store.state.perfil.Perfis, {
+          v = find(this.$store.state.perfil.Perfis, {
             id: parseInt(h.valorNovo),
           });
           if (v === undefined) v = h.valorNovo;
@@ -457,7 +457,7 @@ export default {
         case "Sala":
         case "Sala1":
         case "Sala2":
-          v = this.$_.find(this.$store.state.sala.Salas, {
+          v = find(this.$store.state.sala.Salas, {
             id: parseInt(h.valorNovo),
           });
           if (v === undefined) v = h.valorNovo;
@@ -468,20 +468,21 @@ export default {
       return v;
     },
   },
+
   computed: {
     ...mapGetters(["onLoading", "History"]),
 
     HistoryOrdered() {
-      return this.$_.orderBy(this.HistoryFilteredByOperacao, "id", "desc");
+      return orderBy(this.HistoryFilteredByOperacao, "id", "desc");
     },
     HistoryFilteredByOperacao() {
-      return this.$_.filter(this.HistoryFilteredByTabelas, (history) =>
-        this.$_.some(this.filtroOperacoes.ativados, ["id", history.tipoOperacao])
+      return filter(this.HistoryFilteredByTabelas, (history) =>
+        some(this.filtroOperacoes.ativados, ["id", history.tipoOperacao])
       );
     },
     HistoryFilteredByTabelas() {
-      return this.$_.filter(this.History, (history) =>
-        this.$_.some(this.filtroTabelas.ativados, ["id", history.tabelaModificada])
+      return filter(this.History, (history) =>
+        some(this.filtroTabelas.ativados, ["id", history.tabelaModificada])
       );
     },
     OperacoesOptions() {

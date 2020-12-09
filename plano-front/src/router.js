@@ -2,33 +2,31 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import store from "./vuex/store";
 // Dashboard
+import Home from "@/pages/dashboard/Home";
 import Login from "@/pages/dashboard/Login";
 import Dashboard from "@/pages/dashboard/Dashboard";
-import DashboardHome from "@/pages/dashboard/Home";
 
 Vue.use(VueRouter);
 
-function requireAuth(to, from, next) {
-  store
-    .dispatch("fetchUsuario")
-    .then(() => {
-      next();
-    })
-    .catch(() => {
-      next({
-        path: "/login",
-        query: { redirect: to.fullPath },
-      });
+async function requireAuth(to, from, next) {
+  try {
+    await store.dispatch("fetchUsuario");
+    next();
+  } catch (error) {
+    next({
+      path: "/login",
+      query: { redirect: to.fullPath },
     });
+  }
 }
 
 function requireAdmin(to, from, next) {
-  if (!store.getters.Admin) next("/");
+  if (!store.getters.currentUser.isAdmin) next("/");
   else next();
 }
 
 function requireSuperAdmin(to, from, next) {
-  if (!store.getters.SuperAdmin) next("/");
+  if (!store.getters.currentUser.isSuperAdmin) next("/");
   else next();
 }
 
@@ -37,52 +35,37 @@ function lazyLoad(componentPath) {
 }
 
 const routes = [
-  { path: "*", redirect: "/dashboard" },
+  { path: "*", redirect: "/" },
+
+  { path: "/login", component: Login },
 
   {
-    path: "/login",
-    name: "login",
-    component: Login,
-  },
-
-  {
-    path: "/logout",
-    name: "logout",
-    beforeEnter: (to, from, next) => {
-      store.commit("USER_LOGGED_OUT");
-      next("/login");
-    },
-  },
-
-  {
-    path: "/dashboard",
+    path: "/",
+    redirect: "/home",
     component: Dashboard,
     beforeEnter: requireAuth,
     children: [
-      { path: "", name: "dashboardHome", component: DashboardHome },
+      //home
+      { path: "/home", component: Home },
 
       //plano
       {
         path: "/plano/turmas-dcc",
-        name: "turmasDcc",
         component: lazyLoad("plano/TurmasDCC"),
         beforeEnter: requireAdmin,
       },
       {
         path: "/plano/turmas-externas",
-        name: "turmasExternas",
         component: lazyLoad("plano/TurmasExternas"),
         beforeEnter: requireAdmin,
       },
       {
         path: "/plano/carga-pos",
-        name: "cargaPos",
         component: lazyLoad("plano/CargaPos"),
         beforeEnter: requireAdmin,
       },
       {
         path: "/plano/validacoes",
-        name: "validacoes",
         component: lazyLoad("plano/Validacoes"),
         beforeEnter: requireAdmin,
       },
@@ -90,108 +73,90 @@ const routes = [
       //relatorios
       {
         path: "/relatorios/carga-professores",
-        name: "cargaProfessores",
         component: lazyLoad("relatorios/CargaProfessores"),
       },
       {
-        path: "/relatorios/grade-disciplinas",
-        name: "gradeDisciplinas",
-        component: lazyLoad("relatorios/GradeDisciplinas"),
+        path: "/relatorios/grades-dcc",
+        component: lazyLoad("relatorios/GradesDCC"),
       },
       {
         path: "/relatorios/horarios-cursos",
-        name: "horariosCursos",
         component: lazyLoad("relatorios/HorariosCursos"),
       },
       {
         path: "/relatorios/horarios-laboratorios",
-        name: "horariosLaboratorios",
         component: lazyLoad("relatorios/HorariosLabs"),
       },
       {
-        path: "/relatorios/relatorio-disciplinas",
-        name: "relatorioDisciplinas",
+        path: "/relatorios/plano-departamental",
         component: lazyLoad("relatorios/PlanoDepartamental"),
       },
       {
         path: "/relatorios/turmas-cursos",
-        name: "turmasCursos",
         component: lazyLoad("relatorios/TurmasCursos"),
       },
 
       //gerenciar
       {
         path: "/gerenciar/cursos",
-        name: "cursos",
         component: lazyLoad("gerenciar/Cursos"),
         beforeEnter: requireSuperAdmin,
       },
       {
         path: "/gerenciar/disciplinas",
-        name: "disciplinas",
         component: lazyLoad("gerenciar/Disciplinas"),
         beforeEnter: requireSuperAdmin,
       },
       {
+        path: "/gerenciar/grades-edit",
+        component: lazyLoad("gerenciar/GradesEdit"),
+        beforeEnter: requireSuperAdmin,
+      },
+      {
         path: "/gerenciar/docentes",
-        name: "docentes",
         component: lazyLoad("gerenciar/Docentes"),
         beforeEnter: requireSuperAdmin,
       },
       {
         path: "/gerenciar/grades",
-        name: "grades",
         component: lazyLoad("gerenciar/Grades"),
-        beforeEnter: requireSuperAdmin,
-      },
-
-      {
-        path: "/gerenciar/perfis",
-        name: "perfis",
-        component: lazyLoad("gerenciar/Perfis"),
-        beforeEnter: requireSuperAdmin,
-      },
-      {
-        path: "/gerenciar/grades-edit",
-        name: "gradesEdit",
-        component: lazyLoad("gerenciar/GradesEdit"),
         beforeEnter: requireSuperAdmin,
       },
       {
         path: "/gerenciar/history",
-        name: "history",
         component: lazyLoad("gerenciar/History"),
         beforeEnter: requireSuperAdmin,
       },
       {
-        path: "/gerenciar/planos",
-        name: "planos",
+        path: "/gerenciar/perfis",
+
+        component: lazyLoad("gerenciar/Perfis"),
+        beforeEnter: requireSuperAdmin,
+      },
+      {
+        path: "/gerenciar/plano-departamental",
         component: lazyLoad("gerenciar/Planos"),
         beforeEnter: requireSuperAdmin,
       },
       {
+        path: "/gerenciar/preferencias-docentes",
+        component: lazyLoad("gerenciar/PreferenciasDocentes"),
+        beforeEnter: requireSuperAdmin,
+      },
+      {
         path: "/gerenciar/salas",
-        name: "salas",
         component: lazyLoad("gerenciar/Salas"),
         beforeEnter: requireSuperAdmin,
       },
       {
         path: "/gerenciar/usuarios",
-        name: "usuarios",
         component: lazyLoad("gerenciar/Usuarios"),
-        beforeEnter: requireSuperAdmin,
-      },
-      {
-        path: "/gerenciar/preferencias-docentes",
-        name: "preferenciasDocentes",
-        component: lazyLoad("gerenciar/PreferenciasDocentes"),
         beforeEnter: requireSuperAdmin,
       },
 
       //historico
       {
         path: "/historico/buscar-turmas",
-        name: "buscarTurmas",
         component: lazyLoad("historico/BuscarTurmas"),
       },
     ],

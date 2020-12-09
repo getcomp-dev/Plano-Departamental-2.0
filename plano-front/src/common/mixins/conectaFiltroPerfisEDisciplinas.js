@@ -1,4 +1,5 @@
 import { toggleItemInArray } from "./index";
+import { filter, find, union, some } from "lodash-es";
 
 export default {
   mixins: [toggleItemInArray],
@@ -11,8 +12,8 @@ export default {
     conectaDisciplinasEmPerfis() {
       this.filtroPerfis.selecionados = [];
 
-      this.filtroPerfis.selecionados = this.$_.filter(this.PerfisOptions, (perfil) =>
-        this.$_.some(this.filtroDisciplinas.selecionados, ["Perfil", perfil.id])
+      this.filtroPerfis.selecionados = filter(this.PerfisOptions, (perfil) =>
+        some(this.filtroDisciplinas.selecionados, ["Perfil", perfil.id])
       );
     },
 
@@ -28,26 +29,23 @@ export default {
         return;
       }
 
-      this.$_.forEach(this.PerfisOptions, (perfil) => {
-        const perfilFounded = this.$_.find(this.filtroPerfis.selecionados, [
-          "id",
-          perfil.id,
-        ]);
+      this.PerfisOptions.forEach((perfil) => {
+        const perfilFounded = find(this.filtroPerfis.selecionados, ["id", perfil.id]);
 
         if (perfilFounded) {
           if (!perfilFounded.halfChecked) {
-            const disciplinasDoPerfil = this.$_.filter(this.DisciplinasOptions, [
+            const disciplinasDoPerfil = filter(this.DisciplinasOptions, [
               "Perfil",
               perfilFounded.id,
             ]);
 
-            this.filtroDisciplinas.selecionados = this.$_.union(
+            this.filtroDisciplinas.selecionados = union(
               disciplinasDoPerfil,
               this.filtroDisciplinas.selecionados
             );
           }
         } else {
-          this.filtroDisciplinas.selecionados = this.$_.filter(
+          this.filtroDisciplinas.selecionados = filter(
             this.filtroDisciplinas.selecionados,
             (disciplina) => disciplina.Perfil !== perfil.id
           );

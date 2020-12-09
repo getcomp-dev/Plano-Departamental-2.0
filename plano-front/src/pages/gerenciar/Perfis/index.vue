@@ -1,8 +1,8 @@
 <template>
   <div class="main-component row">
-    <PageHeader :title="'Perfis'">
+    <portal to="page-header">
       <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
-    </PageHeader>
+    </portal>
 
     <div class="page-content">
       <div class="div-table">
@@ -70,33 +70,34 @@
             <div class="form-group col m-0 px-0">
               <label required for="perfilNome" class="col-form-label">Nome</label>
               <input
-                type="text"
                 id="perfilNome"
-                class="input-maior form-control form-control-sm"
-                @input="perfilForm.nome = $event.target.value.toUpperCase()"
+                type="text"
+                class="form-control form-control-sm input-lg"
+                @change="perfilForm.nome = normalizeInputText($event)"
                 :value="perfilForm.nome"
               />
             </div>
           </div>
 
           <div class="row mb-2 mx-0">
-            <div class="form-group col-8 m-0 px-0">
+            <div class="form-group col m-0 px-0">
               <label required for="abreviacao" class="col-form-label">Abreviação</label>
               <input
-                type="text"
                 id="abreviacao"
-                class="form-control form-control-sm"
-                style="width:150px"
-                v-model="perfilForm.abreviacao"
+                type="text"
+                class="form-control form-control-sm input-md"
+                @keypress="maskLimitLength($event, 10)"
+                @change="perfilForm.abreviacao = normalizeInputText($event)"
+                :value="perfilForm.abreviacao"
               />
             </div>
+
             <div class="form-group col m-0 px-0">
               <label for="cor" class="col-form-label">Cor</label>
               <input
-                type="color"
-                style="width:100%"
-                class="form-control form-control-sm"
                 id="cor"
+                type="color"
+                class="form-control form-control-sm input-md"
                 v-model="perfilForm.cor"
               />
             </div>
@@ -153,10 +154,13 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { orderBy, clone } from "lodash-es";
 import perfilService from "@/common/services/perfil";
+import { normalizeInputText, maskLimitLength } from "@/common/mixins";
 import { Card } from "@/components/ui";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
-import { mapGetters } from "vuex";
+
 const emptyPerfil = {
   id: null,
   nome: null,
@@ -166,6 +170,7 @@ const emptyPerfil = {
 
 export default {
   name: "DashboardPerfis",
+  mixins: [normalizeInputText, maskLimitLength],
   components: {
     ModalAjuda,
     Card,
@@ -174,7 +179,7 @@ export default {
   data() {
     return {
       error: null,
-      perfilForm: this.$_.clone(emptyPerfil),
+      perfilForm: clone(emptyPerfil),
       perfilSelectedId: null,
       ordenacaoPerfisMain: { order: "nome", type: "asc" },
     };
@@ -191,11 +196,11 @@ export default {
     },
     cleanPerfil() {
       this.clearClick();
-      this.perfilForm = this.$_.clone(emptyPerfil);
+      this.perfilForm = clone(emptyPerfil);
       this.error = null;
     },
     showPerfil(perfil) {
-      this.perfilForm = this.$_.clone(perfil);
+      this.perfilForm = clone(perfil);
     },
     openModalDelete() {
       this.$refs.modalDelete.open();
@@ -280,7 +285,7 @@ export default {
     ...mapGetters(["AllPerfis"]),
 
     Perfis() {
-      return this.$_.orderBy(
+      return orderBy(
         this.AllPerfis,
         this.ordenacaoPerfisMain.order,
         this.ordenacaoPerfisMain.type
@@ -293,10 +298,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.card .input-maior {
-  width: 240px;
-  text-align: start;
-}
-</style>

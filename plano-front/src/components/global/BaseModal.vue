@@ -2,7 +2,7 @@
   <transition :name="customAnimation">
     <div
       @click.stop
-      v-show="visibility"
+      v-if="visibility"
       :class="['modal-custom', options.customClasses]"
       :style="options.typeStyles"
     >

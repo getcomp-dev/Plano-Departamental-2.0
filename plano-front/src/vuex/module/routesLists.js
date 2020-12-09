@@ -1,151 +1,151 @@
-import _ from "lodash";
+import { orderBy } from "lodash-es";
 
 const state = {
   routesHome: [
     {
-      routeName: "dashboardHome",
+      path: "/home",
       icon: "home",
-      title: "Dashboard",
+      title: "Dashboard - Home",
       description: `Página inicial.`,
     },
   ],
   routesPlano: [
     {
+      path: "/plano/turmas-dcc",
       title: "Graduação - DCC",
-      routeName: "turmasDcc",
       icon: "clipboard",
       description: `Cadastro de todas as turmas de todas as disciplinas oferecidas pelo DCC. Permite a alteração de vagas, horários, sala e docentes de todas as disciplinas.`,
     },
     {
+      path: "/plano/turmas-externas",
       title: "Graduação - Outros",
-      routeName: "turmasExternas",
       icon: "clipboard",
       description: `Similar a "Graduação - DCC", permite o cadastro de todas as turmas de disciplinas que fazem parte das grades dos cursos cadastrados, mas que são oferecidas por outros departamentos.`,
     },
     {
+      path: "/plano/carga-pos",
       title: "Pós Graduação",
-      routeName: "cargaPos",
       icon: "clipboard",
       description: `Cadastro da carga atribuída a cada docente na pós-graduação.`,
     },
     {
+      path: "/plano/validacoes",
       title: "Validações",
-      routeName: "validacoes",
       icon: "calendar-check",
       description: `Listagem de pendências que precisam ser resolvidas para a finalização do Plano Departamental.`,
     },
   ],
   routesRelatorios: [
     {
+      path: "/relatorios/carga-professores",
       title: "Carga Professores",
-      routeName: "cargaProfessores",
       icon: "file-alt",
       description: `Listagem de todos os professores com suas respectivas disciplinas (graduação e pós-graduação), exibindo o somatório parcial por semestre e a carga total de cada docente.`,
     },
     {
-      title: "Grades Disciplinas",
-      routeName: "gradeDisciplinas",
+      path: "/relatorios/grades-dcc",
+      title: "Grades - DCC",
       icon: "file-alt",
       description: `Listagem de todas as disciplinas que compõem as grades dos cursos do DCC, mostrando a qual período e semestre cada disciplina pertence.`,
     },
     {
+      path: "/relatorios/horarios-cursos",
       title: "Horários - Cursos",
-      routeName: "horariosCursos",
       icon: "file-alt",
       description: `Visualização das grades horárias dos cursos do DCC, permitindo filtragem por semestres e cursos.`,
     },
     {
+      path: "/relatorios/horarios-laboratorios",
       title: "Horários - Laboratórios",
-      routeName: "horariosLaboratorios",
       icon: "file-alt",
       description: `Visualização das alocações dos laboratórios em ambos os semestres.`,
     },
     {
+      path: "/relatorios/plano-departamental",
       title: "Plano Departamental",
-      routeName: "relatorioDisciplinas",
       icon: "file-alt",
       description: `Listagem de turmas, horários e professores alocados por disciplina.`,
     },
     {
+      path: "/relatorios/turmas-cursos",
       title: "Turmas - Cursos",
-      routeName: "turmasCursos",
       icon: "file-alt",
       description: `Listagem de turmas alocadas para cada curso.`,
     },
   ],
   routesGerenciar: [
     {
+      path: "/gerenciar/cursos",
       title: "Cursos",
-      routeName: "cursos",
       icon: "graduation-cap",
       description: `Listagem dos cursos presentes no sistema (incluindo os externos ao DCC), permitindo adicionar ou alterar informações dos cursos.`,
     },
 
     {
+      path: "/gerenciar/disciplinas",
       title: "Disciplinas",
-      routeName: "disciplinas",
       icon: "calendar-alt",
       description: `Listagem de todas as disciplinas cadastradas no sistema. Permite a alteração de nome, código, carga teórica e prática, perfis, além de poder definir se a disciplina é EAD ou não.`,
     },
     {
+      path: "/gerenciar/grades-edit",
       title: "Disciplinas na Grade",
-      routeName: "gradesEdit",
       icon: "table",
       description: `Listagem de todas as disciplinas de uma grade (atual ou antiga) cadastrada no sistema, permitindo a alteração ou adição de novas disciplinas.`,
     },
     {
+      path: "/gerenciar/docentes",
       title: "Docentes",
-      routeName: "docentes",
       icon: "users",
       description: `Listagem de todos os docentes ativos e inativos do DCC, permitindo a alteração de seus perfis.`,
     },
     {
+      path: "/gerenciar/grades",
       title: "Grades",
-      routeName: "grades",
       icon: "sitemap",
       description: `Listagem das grades (atuais ou antigas) dos cursos do DCC que ainda estão em atividade, permitindo a adição de novas grades.`,
     },
     {
+      path: "/gerenciar/history",
       title: "Log",
-      routeName: "history",
       icon: "history",
       description: `Listagem de todas as modificações feitas pelos usuários no sistema.`,
     },
     {
+      path: "/gerenciar/perfis",
       title: "Perfis",
-      routeName: "perfis",
       icon: "th-list",
       description: `Listagem dos perfis cadastrados para as disciplinas, permitindo também a adição e a alteração de perfis, seus nomes e as cores destinadas a eles.`,
     },
     {
-      title: "Plano departamental",
-      routeName: "planos",
+      path: "/gerenciar/plano-departamental",
+      title: "Plano Departamental",
       icon: "calendar-alt",
       description: `Listagem de todos os planos presentes no sistemas, e permite a adição,edição e exclusão de planos.`,
     },
     {
+      path: "/gerenciar/preferencias-docentes",
       title: "Preferências Docentes",
-      routeName: "preferenciasDocentes",
       icon: "users",
       description: `Listagem de preferências dos docentes, e permite importar um documento xlsx com atualiações das preferências.`,
     },
     {
+      path: "/gerenciar/salas",
       title: "Salas",
-      routeName: "salas",
       icon: "university",
       description: `Listagem de todas as salas registradas no sistema. Permite a adição de novas salas e laboratórios.`,
     },
     {
+      path: "/gerenciar/usuarios",
       title: "Usuários",
-      routeName: "usuarios",
       icon: "user",
       description: `Listagem de todos os usuários presentes no sistema, permitindo a adição e a alteração de usuários.`,
     },
   ],
   routesHistorico: [
     {
-      title: "Buscar Turmas",
-      routeName: "buscarTurmas",
+      path: "/historico/buscar-turmas",
+      title: "Buscar Turmas - DCC",
       icon: "search",
       description: `Busca de turmas em todos os planos.`,
     },
@@ -153,6 +153,15 @@ const state = {
 };
 
 const getters = {
+  allRoutes() {
+    return state.routesHome.concat(
+      state.routesPlano,
+      state.routesRelatorios,
+      state.routesGerenciar,
+      state.routesHistorico
+    );
+  },
+
   routesHome(state) {
     return state.routesHome;
   },
@@ -160,13 +169,13 @@ const getters = {
     return state.routesPlano;
   },
   routesRelatorios(state) {
-    return _.orderBy(state.routesRelatorios, ["title"]);
+    return orderBy(state.routesRelatorios, ["title"]);
   },
   routesGerenciar(state) {
-    return _.orderBy(state.routesGerenciar, ["title"]);
+    return orderBy(state.routesGerenciar, ["title"]);
   },
   routesHistorico(state) {
-    return _.orderBy(state.routesHistorico, ["title"]);
+    return orderBy(state.routesHistorico, ["title"]);
   },
 };
 

@@ -1,6 +1,6 @@
 import Vue from "vue";
-import _ from "lodash";
 import disciplinaService from "../../common/services/disciplina";
+import { orderBy, cloneDeepWith, filter, find } from "lodash-es";
 import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
 import {
   DISCIPLINA_FETCHED,
@@ -24,16 +24,14 @@ const mutations = {
   },
 
   [SOCKET_DISCIPLINA_UPDATED](state, data) {
-    let index = _.findIndex(
-      state.Disciplinas,
+    let index = state.Disciplinas.findIndex(
       (disciplina) => disciplina.id === data.Disciplina.id
     );
     Vue.set(state.Disciplinas, index, data.Disciplina);
   },
 
   [SOCKET_DISCIPLINA_DELETED](state, data) {
-    let index = _.findIndex(
-      state.Disciplinas,
+    let index = state.Disciplinas.findIndex(
       (disciplina) => disciplina.id === data.Disciplina.id
     );
     state.Disciplinas.splice(index, 1);
@@ -56,10 +54,7 @@ const actions = {
   },
 
   async createDisciplina({ commit }, disciplina) {
-    const disciplinaNormalized = _.cloneDeepWith(
-      disciplina,
-      setEmptyValuesToNull
-    );
+    const disciplinaNormalized = cloneDeepWith(disciplina, setEmptyValuesToNull);
     validateObjectKeys(disciplinaNormalized, [
       "nome",
       "codigo",
@@ -84,10 +79,7 @@ const actions = {
   },
 
   async editDisciplina({ commit }, disciplina) {
-    const disciplinaNormalized = _.cloneDeepWith(
-      disciplina,
-      setEmptyValuesToNull
-    );
+    const disciplinaNormalized = cloneDeepWith(disciplina, setEmptyValuesToNull);
     validateObjectKeys(disciplinaNormalized, [
       "nome",
       "codigo",
@@ -103,10 +95,7 @@ const actions = {
       return;
     }
 
-    await disciplinaService.update(
-      disciplinaNormalized.id,
-      disciplinaNormalized
-    );
+    await disciplinaService.update(disciplinaNormalized.id, disciplinaNormalized);
 
     commit(PUSH_NOTIFICATION, {
       type: "success",
@@ -126,23 +115,19 @@ const actions = {
 
 const getters = {
   AllDisciplinas(state) {
-    const disciplinasResult = _.map(state.Disciplinas, (disciplina) => ({
+    const disciplinasResult = state.Disciplinas.map((disciplina) => ({
       ...disciplina,
       creditoTotal:
-        parseInt(disciplina.cargaTeorica, 10) +
-        parseInt(disciplina.cargaPratica, 10),
+        parseInt(disciplina.cargaTeorica, 10) + parseInt(disciplina.cargaPratica, 10),
     }));
 
-    return _.orderBy(disciplinasResult, ["codigo"]);
+    return orderBy(disciplinasResult, ["codigo"]);
   },
-  DisciplinasInPerfis(state, getters) {
+  DisciplinasInPerfis(_, getters) {
     const disciplinasResults = [];
 
-    _.forEach(getters.AllDisciplinas, (disciplina) => {
-      const perfilFounded = _.find(getters.AllPerfis, [
-        "id",
-        disciplina.Perfil,
-      ]);
+    getters.AllDisciplinas.forEach((disciplina) => {
+      const perfilFounded = find(getters.AllPerfis, ["id", disciplina.Perfil]);
 
       if (perfilFounded) {
         disciplinasResults.push({
@@ -159,7 +144,7 @@ const getters = {
           perfil: {
             nome: "",
             abreviacao: "",
-            cor: undefined,
+            cor: null,
           },
         });
       }
@@ -167,11 +152,11 @@ const getters = {
 
     return disciplinasResults;
   },
-  DisciplinasDCCInPerfis(state, getters) {
-    return _.filter(getters.DisciplinasInPerfis, ["departamento", 1]);
+  DisciplinasDCCInPerfis(_, getters) {
+    return filter(getters.DisciplinasInPerfis, ["departamento", 1]);
   },
-  DisciplinasExternasInPerfis(state, getters) {
-    return _.filter(getters.DisciplinasInPerfis, ["departamento", 2]);
+  DisciplinasExternasInPerfis(_, getters) {
+    return filter(getters.DisciplinasInPerfis, ["departamento", 2]);
   },
 };
 

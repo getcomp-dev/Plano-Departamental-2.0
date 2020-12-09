@@ -78,6 +78,7 @@
 
 <script>
 import { mapGetters } from "vuex";
+import { union, difference, find, filter, orderBy, some } from "lodash-es";
 import planoService from "@/common/services/plano";
 import turmaService from "@/common/services/turma";
 import pedidoService from "@/common/services/pedido";
@@ -107,15 +108,15 @@ export default {
 
   methods: {
     selectAllDisciplinas() {
-      this.filtrosDisciplinas = this.$_.union(
+      this.filtrosDisciplinas = union(
         this.filtrosDisciplinas,
-        this.$_.map(this.DisciplinasFiltredModal, "id")
+        this.DisciplinasFiltredModal.map((disciplina) => disciplina.id)
       );
     },
     selectNoneDisciplinas() {
-      this.filtrosDisciplinas = this.$_.difference(
+      this.filtrosDisciplinas = difference(
         this.filtrosDisciplinas,
-        this.$_.map(this.DisciplinasFiltredModal, "id")
+        this.DisciplinasFiltredModal.map((disciplina) => disciplina.id)
       );
     },
 
@@ -129,7 +130,7 @@ export default {
       let periodoInicial, periodoFinal;
 
       //CCD
-      grades = this.$_.filter(this.AllGrades, ["Curso", 4]);
+      grades = filter(this.AllGrades, ["Curso", 4]);
       periodoFinal = 0;
       for (let i = 0; i < grades.length; i++) {
         periodoInicial = periodoFinal + 1;
@@ -164,7 +165,7 @@ export default {
       }
 
       //CCN
-      grades = this.$_.filter(this.AllGrades, ["Curso", 1]);
+      grades = filter(this.AllGrades, ["Curso", 1]);
       periodoFinal = 0;
       for (let i = 0; i < grades.length; i++) {
         periodoInicial = periodoFinal + 1;
@@ -199,7 +200,7 @@ export default {
       }
 
       //SI
-      grades = this.$_.filter(this.AllGrades, ["Curso", 3]);
+      grades = filter(this.AllGrades, ["Curso", 3]);
       periodoFinal = 0;
       for (let i = 0; i < grades.length; i++) {
         periodoInicial = periodoFinal + 1;
@@ -234,7 +235,7 @@ export default {
       }
 
       //EC
-      grades = this.$_.filter(this.AllGrades, ["Curso", 2]);
+      grades = filter(this.AllGrades, ["Curso", 2]);
       periodoFinal = 0;
       for (let i = 0; i < grades.length; i++) {
         periodoInicial = periodoFinal + 1;
@@ -277,7 +278,7 @@ export default {
       //# 1 Semestre - Preenche as disciplina da grade
       let disciplinasGrade1Semestre = [];
       for (let i = 0; i < gradesAtivas.semestre1.CCD.length; i++) {
-        let disciplinasGrade = this.$_.filter(
+        let disciplinasGrade = filter(
           this.$store.state.disciplinaGrade.DisciplinaGrades,
           { Grade: gradesAtivas.semestre1.CCD[i].id }
         );
@@ -287,7 +288,7 @@ export default {
               disciplina.periodo >= gradesAtivas.semestre1.CCD[i].inicio &&
               disciplina.periodo <= gradesAtivas.semestre1.CCD[i].fim
             ) {
-              let t = this.$_.find(disciplinasGrade1Semestre, {
+              let t = find(disciplinasGrade1Semestre, {
                 Disciplina: disciplina.Disciplina,
               });
               if (t === undefined) {
@@ -307,7 +308,7 @@ export default {
         });
       }
       for (let i = 0; i < gradesAtivas.semestre1.EC.length; i++) {
-        let disciplinasGrade = this.$_.filter(
+        let disciplinasGrade = filter(
           this.$store.state.disciplinaGrade.DisciplinaGrades,
           { Grade: gradesAtivas.semestre1.EC[i].id }
         );
@@ -317,7 +318,7 @@ export default {
               disciplina.periodo >= gradesAtivas.semestre1.EC[i].inicio &&
               disciplina.periodo <= gradesAtivas.semestre1.EC[i].fim
             ) {
-              let t = this.$_.find(disciplinasGrade1Semestre, {
+              let t = find(disciplinasGrade1Semestre, {
                 Disciplina: disciplina.Disciplina,
               });
               if (t === undefined) {
@@ -337,7 +338,7 @@ export default {
         });
       }
       for (let i = 0; i < gradesAtivas.semestre1.CCN.length; i++) {
-        let disciplinasGrade = this.$_.filter(
+        let disciplinasGrade = filter(
           this.$store.state.disciplinaGrade.DisciplinaGrades,
           { Grade: gradesAtivas.semestre1.CCN[i].id }
         );
@@ -347,7 +348,7 @@ export default {
               disciplina.periodo >= gradesAtivas.semestre1.CCN[i].inicio &&
               disciplina.periodo <= gradesAtivas.semestre1.CCN[i].fim
             ) {
-              let t = this.$_.find(disciplinasGrade1Semestre, {
+              let t = find(disciplinasGrade1Semestre, {
                 Disciplina: disciplina.Disciplina,
               });
               if (t === undefined) {
@@ -367,7 +368,7 @@ export default {
         });
       }
       for (let i = 0; i < gradesAtivas.semestre1.SI.length; i++) {
-        let disciplinasGrade = this.$_.filter(
+        let disciplinasGrade = filter(
           this.$store.state.disciplinaGrade.DisciplinaGrades,
           { Grade: gradesAtivas.semestre1.SI[i].id }
         );
@@ -377,7 +378,7 @@ export default {
               disciplina.periodo >= gradesAtivas.semestre1.SI[i].inicio &&
               disciplina.periodo <= gradesAtivas.semestre1.SI[i].fim
             ) {
-              let t = this.$_.find(disciplinasGrade1Semestre, {
+              let t = find(disciplinasGrade1Semestre, {
                 Disciplina: disciplina.Disciplina,
               });
               if (t === undefined) {
@@ -400,7 +401,7 @@ export default {
       //# 2 Semestre - Preenche as disciplina da grade
       let disciplinasGrade2Semestre = [];
       for (let i = 0; i < gradesAtivas.semestre2.CCD.length; i++) {
-        let disciplinasGrade = this.$_.filter(
+        let disciplinasGrade = filter(
           this.$store.state.disciplinaGrade.DisciplinaGrades,
           { Grade: gradesAtivas.semestre2.CCD[i].id }
         );
@@ -410,7 +411,7 @@ export default {
               disciplina.periodo >= gradesAtivas.semestre2.CCD[i].inicio &&
               disciplina.periodo <= gradesAtivas.semestre2.CCD[i].fim
             ) {
-              let t = this.$_.find(disciplinasGrade2Semestre, {
+              let t = find(disciplinasGrade2Semestre, {
                 Disciplina: disciplina.Disciplina,
               });
               if (t === undefined) {
@@ -430,7 +431,7 @@ export default {
         });
       }
       for (let i = 0; i < gradesAtivas.semestre2.EC.length; i++) {
-        let disciplinasGrade = this.$_.filter(
+        let disciplinasGrade = filter(
           this.$store.state.disciplinaGrade.DisciplinaGrades,
           { Grade: gradesAtivas.semestre2.EC[i].id }
         );
@@ -440,7 +441,7 @@ export default {
               disciplina.periodo >= gradesAtivas.semestre2.EC[i].inicio &&
               disciplina.periodo <= gradesAtivas.semestre2.EC[i].fim
             ) {
-              let t = this.$_.find(disciplinasGrade2Semestre, {
+              let t = find(disciplinasGrade2Semestre, {
                 Disciplina: disciplina.Disciplina,
               });
               if (t === undefined) {
@@ -460,7 +461,7 @@ export default {
         });
       }
       for (let i = 0; i < gradesAtivas.semestre2.CCN.length; i++) {
-        let disciplinasGrade = this.$_.filter(
+        let disciplinasGrade = filter(
           this.$store.state.disciplinaGrade.DisciplinaGrades,
           { Grade: gradesAtivas.semestre2.CCN[i].id }
         );
@@ -470,7 +471,7 @@ export default {
               disciplina.periodo >= gradesAtivas.semestre2.CCN[i].inicio &&
               disciplina.periodo <= gradesAtivas.semestre2.CCN[i].fim
             ) {
-              let t = this.$_.find(disciplinasGrade2Semestre, {
+              let t = find(disciplinasGrade2Semestre, {
                 Disciplina: disciplina.Disciplina,
               });
               if (t === undefined) {
@@ -490,7 +491,7 @@ export default {
         });
       }
       for (let i = 0; i < gradesAtivas.semestre2.SI.length; i++) {
-        let disciplinasGrade = this.$_.filter(
+        let disciplinasGrade = filter(
           this.$store.state.disciplinaGrade.DisciplinaGrades,
           { Grade: gradesAtivas.semestre2.SI[i].id }
         );
@@ -500,7 +501,7 @@ export default {
               disciplina.periodo >= gradesAtivas.semestre2.SI[i].inicio &&
               disciplina.periodo <= gradesAtivas.semestre2.SI[i].fim
             ) {
-              let t = this.$_.find(disciplinasGrade2Semestre, {
+              let t = find(disciplinasGrade2Semestre, {
                 Disciplina: disciplina.Disciplina,
               });
               if (t === undefined) {
@@ -521,20 +522,16 @@ export default {
       }
 
       //Filtra apenas disicplinas DCC
-      disciplinasGrade1Semestre = this.$_.filter(
-        disciplinasGrade1Semestre,
-        (disciplinaGrade) =>
-          this.$_.some(this.DisciplinasDCCInPerfis, ["id", disciplinaGrade.Disciplina])
+      disciplinasGrade1Semestre = filter(disciplinasGrade1Semestre, (disciplinaGrade) =>
+        some(this.DisciplinasDCCInPerfis, ["id", disciplinaGrade.Disciplina])
       );
-      disciplinasGrade2Semestre = this.$_.filter(
-        disciplinasGrade1Semestre,
-        (disciplinaGrade) =>
-          this.$_.some(this.DisciplinasDCCInPerfis, ["id", disciplinaGrade.Disciplina])
+      disciplinasGrade2Semestre = filter(disciplinasGrade1Semestre, (disciplinaGrade) =>
+        some(this.DisciplinasDCCInPerfis, ["id", disciplinaGrade.Disciplina])
       );
 
       // Prenche turmasNovoPlano
-      this.$_.forEach(disciplinasGrade1Semestre, (disciplinaGrade) => {
-        if (!this.$_.includes(this.filtrosDisciplinas, disciplinaGrade.Disciplina)) {
+      disciplinasGrade1Semestre.forEach((disciplinaGrade) => {
+        if (!this.filtrosDisciplinas.includes(disciplinaGrade.Disciplina)) {
           if (
             (disciplinaGrade.CCD || disciplinaGrade.EC) &&
             (disciplinaGrade.CCN || disciplinaGrade.SI)
@@ -576,8 +573,8 @@ export default {
           }
         }
       });
-      this.$_.forEach(disciplinasGrade2Semestre, (disciplinaGrade) => {
-        if (!this.$_.includes(this.filtrosDisciplinas, disciplinaGrade.Disciplina)) {
+      disciplinasGrade2Semestre.forEach((disciplinaGrade) => {
+        if (!this.filtrosDisciplinas.includes(disciplinaGrade.Disciplina)) {
           if (
             (disciplinaGrade.CCD || disciplinaGrade.EC) &&
             (disciplinaGrade.CCN || disciplinaGrade.SI)
@@ -623,7 +620,6 @@ export default {
       return turmasNovoPlano;
     },
     handleCopyPlano() {
-      this.setPartialLoading(true);
       let turmasNovoPlano = this.generateTurmasNovoPlano();
 
       planoService.create(this.plano).then((plano) => {
@@ -703,8 +699,8 @@ export default {
             });
         });
 
-        let turmasCopiar = this.$_.filter(this.$store.state.turma.Turmas, (t) => {
-          let disciplina = this.$_.includes(this.filtrosDisciplinas, t.Disciplina);
+        let turmasCopiar = filter(this.$store.state.turma.Turmas, (t) => {
+          let disciplina = this.filtrosDisciplinas.includes(t.Disciplina);
           if (disciplina) return true;
           else return false;
         });
@@ -779,12 +775,7 @@ export default {
               console.log("erro ao criar turma externa: " + error);
             });
         });
-
-        this.$store.dispatch("fetchAll").then(() => {
-          setTimeout(() => {
-            this.setPartialLoading(false);
-          }, 300);
-        });
+        // this.$store.dispatch("fetchAll");
       });
     },
   },
@@ -793,7 +784,7 @@ export default {
     ...mapGetters(["DisciplinasDCCInPerfis", "AllGrades"]),
 
     DisciplinasOrderedModal() {
-      return this.$_.orderBy(
+      return orderBy(
         this.DisciplinasFiltredModal,
         this.ordenacaoModal.disciplinas.order,
         this.ordenacaoModal.disciplinas.type
@@ -804,7 +795,7 @@ export default {
 
       const searchNormalized = normalizeText(this.searchDisciplinasModal);
 
-      return this.$_.filter(this.DisciplinasDCCInPerfis, (disciplina) => {
+      return filter(this.DisciplinasDCCInPerfis, (disciplina) => {
         const disciplinaNome = normalizeText(disciplina.nome);
         const disciplinaCodigo = normalizeText(disciplina.codigo);
 

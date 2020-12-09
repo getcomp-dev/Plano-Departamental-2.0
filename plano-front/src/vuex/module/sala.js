@@ -1,6 +1,6 @@
 import Vue from "vue";
-import _ from "lodash";
 import salaService from "../../common/services/sala";
+import { orderBy, filter } from "lodash-es";
 import {
   SALA_FETCHED,
   SOCKET_SALA_CREATED,
@@ -22,12 +22,12 @@ const mutations = {
   },
 
   [SOCKET_SALA_UPDATED](state, data) {
-    let index = _.findIndex(state.Salas, (sala) => sala.id === data.Sala.id);
+    const index = state.Salas.findIndex((sala) => sala.id === data.Sala.id);
     Vue.set(state.Salas, index, data.Sala);
   },
 
   [SOCKET_SALA_DELETED](state, data) {
-    let index = _.findIndex(state.Salas, (sala) => sala.id === data.Sala.id);
+    const index = state.Salas.findIndex((sala) => sala.id === data.Sala.id);
     state.Salas.splice(index, 1);
   },
 };
@@ -50,10 +50,11 @@ const actions = {
 
 const getters = {
   AllSalas(state) {
-    return _.orderBy(state.Salas, "nome");
+    return orderBy(state.Salas, "nome");
   },
+
   Laboratorios(state, getters) {
-    return _.filter(getters.AllSalas, ["laboratorio", true]);
+    return filter(getters.AllSalas, ["laboratorio", true]);
   },
 };
 
