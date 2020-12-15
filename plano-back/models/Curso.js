@@ -108,11 +108,10 @@ module.exports = function (sequelize, DataTypes) {
       },
       onDelete: 'CASCADE'
     })
-    
-    Curso.belongsToMany(models.Turma, {
-      through: models.ConceitoTurmaCurso,
+
+    Curso.hasMany(models.ConceitoTurmaCurso, {
       foreignKey: {
-        name:'Curso',
+        name: 'Turma',
         allowNull: false
       },
       onDelete: 'RESTRICT'
