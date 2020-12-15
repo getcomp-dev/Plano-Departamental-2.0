@@ -111,7 +111,7 @@ module.exports = function (sequelize, DataTypes) {
 
     Curso.hasMany(models.ConceitoTurmaCurso, {
       foreignKey: {
-        name: 'Turma',
+        name: 'Curso',
         allowNull: false
       },
       onDelete: 'RESTRICT'
