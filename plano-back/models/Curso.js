@@ -68,6 +68,14 @@ module.exports = function (sequelize, DataTypes) {
       onDelete: 'RESTRICT'
     })
 
+    Curso.hasMany(models.GradeCursoExterno, {
+      foreignKey: {
+        name: 'Curso',
+        allowNull: false
+      },
+      onDelete: 'RESTRICT'
+    })
+
     Curso.hasMany(models.GradeExterna, {
       foreignKey: {
         name: 'Curso',
