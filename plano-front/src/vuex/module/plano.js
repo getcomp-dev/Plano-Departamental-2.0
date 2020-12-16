@@ -58,7 +58,7 @@ const actions = {
 
   async initializeCurrentPlano({ commit, dispatch }) {
     try {
-      dispatch("setFetchingLoading", true);
+      dispatch("setLoading", { type: "fetching", value: true });
 
       const currentPlanoId = localStorage.getItem("Plano")
         ? localStorage.getItem("Plano")
@@ -71,13 +71,13 @@ const actions = {
     } catch (error) {
       console.log(error);
     } finally {
-      dispatch("setFetchingLoading", false);
+      dispatch("setLoading", { type: "fetching", value: false });
     }
   },
 
   async changeCurrentPlano({ dispatch }, planoId) {
     try {
-      dispatch("setFetchingLoading", true);
+      dispatch("setLoading", { type: "fetching", value: true });
 
       dispatch("setCurrentPlanoId", planoId);
       await dispatch("fetchAll");
@@ -85,7 +85,7 @@ const actions = {
     } catch (error) {
       console.log(error);
     } finally {
-      dispatch("setFetchingLoading", false);
+      dispatch("setLoading", { type: "fetching", value: false });
     }
   },
 

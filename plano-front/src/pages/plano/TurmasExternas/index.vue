@@ -396,7 +396,7 @@ export default {
     },
     async handleDeleteTurmas() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         await this.deleteTurmasExternas();
       } catch (error) {
         this.pushNotification({
@@ -404,7 +404,7 @@ export default {
           title: "Erro ao excluir turma(s)!",
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
   },

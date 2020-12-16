@@ -354,7 +354,7 @@ export default {
     },
     async handleDeleteCargasPos() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         await this.deleteCargasPos();
       } catch (error) {
         this.pushNotification({
@@ -362,7 +362,7 @@ export default {
           title: "Erro ao excluir carga(s)!",
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
   },

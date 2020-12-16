@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
 import NavTab from "@/components/ui/NavTab";
 import { normalizeText } from "@/common/utils";
 
@@ -39,8 +38,6 @@ export default {
   },
 
   methods: {
-    ...mapActions(["setTableLoading"]),
-
     toggle() {
       this.$refs.baseModalFiltros.toggle();
     },
@@ -57,9 +54,9 @@ export default {
       this.callbacks.selectNone[currentTabNormalized]();
     },
     async selectOk() {
-      this.setTableLoading(true);
+      this.setLoading({ type: "table", value: true });
       await this.callbacks.btnOk();
-      this.setTableLoading(false);
+      this.setLoading({ type: "table", value: false });
     },
   },
 };

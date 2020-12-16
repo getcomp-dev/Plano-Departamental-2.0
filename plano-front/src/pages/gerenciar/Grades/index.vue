@@ -118,7 +118,7 @@
               </label>
               <select
                 id="gradeCurso"
-                class="form-control form-control-sm input-lg"
+                class="form-control form-control-sm input-xl"
                 v-model.number="gradeForm.Curso"
               >
                 <option :value="4">Ciência da Computação Diurno</option>
@@ -225,7 +225,7 @@ export default {
 
     async handleCreateGrade() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         await this.createGrade(this.gradeForm);
         this.cleanGrade();
       } catch (error) {
@@ -235,12 +235,12 @@ export default {
           text: error.message,
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
     async handleEditGrade() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         await this.editGrade(this.gradeForm);
       } catch (error) {
         this.pushNotification({
@@ -249,12 +249,12 @@ export default {
           text: error.message,
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
     async handleDeleteGrade() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         await this.deleteGrade(this.gradeForm);
         this.cleanGrade();
       } catch (error) {
@@ -266,7 +266,7 @@ export default {
             : "",
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
   },

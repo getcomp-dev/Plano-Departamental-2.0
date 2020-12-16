@@ -4,7 +4,7 @@
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="relatorio" @click="toggleAsideModal('relatorio')" />
       <BaseButton template="download" @click="toggleAsideModal('DownloadTurmasCursos')" />
-      <!--<BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />-->
+      <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </portal>
 
     <div class="div-table">
@@ -31,10 +31,7 @@
               <v-td width="80"></v-td>
             </tr>
 
-            <tr
-              v-for="turma in turmas(curso.id)"
-              :key="`Curso${curso.id}Turma${turma.turma.id}`"
-            >
+            <tr v-for="turma in turmas(curso.id)" :key="`Curso${curso.id}Turma${turma.turma.id}`">
               <v-td width="80"></v-td>
               <v-td width="300"></v-td>
               <v-td width="40">{{ turma.turma.periodo }}</v-td>
@@ -62,11 +59,7 @@
       :callbacks="modalFiltrosCallbacks"
       :tabsOptions="modalFiltrosTabs"
     >
-      <BaseTable
-        type="modal"
-        v-show="modalFiltrosTabs.current === 'Cursos'"
-        :hasSearchBar="true"
-      >
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Cursos'" :hasSearchBar="true">
         <template #thead-search>
           <InputSearch
             v-model="searchCursos"
@@ -153,20 +146,19 @@
         <b>Visualizar plano:</b>
         Clique no ícone filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
-        . Em seguida, utilize as abas para navegar entre os filtros. Selecione as
-        informações que deseja visualizar e clique em OK.
+        . Em seguida, utilize as abas para navegar entre os filtros. Selecione as informações que
+        deseja visualizar e clique em OK.
       </li>
       <li class="list-group-item">
         <b>Relatório :</b>
         Clique no ícone relatório
         <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" />
-        . Em seguida, indique se deseja gerar o relatório completo com todas as
-        disciplinas ou o relatório parcial com as disciplinas exibidas na tela.
+        . Em seguida, indique se deseja gerar o relatório completo com todas as disciplinas ou o
+        relatório parcial com as disciplinas exibidas na tela.
       </li>
       <li class="list-group-item">
         <b>Visualizar vagas por turma:</b>
-        Clique no número de vagas desta turma, na última coluna da tabela, na linha
-        correspondente.
+        Clique no número de vagas desta turma, na última coluna da tabela, na linha correspondente.
       </li>
     </ModalAjuda>
   </div>
@@ -325,17 +317,24 @@ export default {
 
     generatePdf(completo) {
       let cursos;
-      if (completo) cursos = this.AllCursos;
-      else cursos = this.filtroCursos.ativados;
+      let periodos;
+      if (completo) {
+        cursos = this.AllCursos;
+        periodos = [1, 3];
+      } else {
+        cursos = this.filtroCursos.ativados;
+        periodos = this.filtroPeriodos.ativados;
+      }
 
       pdfTurmasCursos({
         cursos,
-        periodos: this.filtroPeriodos.ativados,
+        periodos,
+        plano: this.currentPlano,
       });
     },
 
     async downloadTurmasCursos(periodo) {
-      this.setPartialLoading(true);
+      this.setLoading({ type: "partial", value: true });
       await downloadService
         .generatePdfTurmasCurso({
           Plano: localStorage.getItem("Plano"),
@@ -352,7 +351,7 @@ export default {
               .then((r) => r.blob())
               .then((blob) => {
                 saveAs(blob, "TurmasCursos.zip");
-                this.setPartialLoading(false);
+                this.setLoading({ type: "partial", value: false });
               })
           )
         );

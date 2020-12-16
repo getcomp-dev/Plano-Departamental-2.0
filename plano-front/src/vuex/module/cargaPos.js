@@ -37,7 +37,7 @@ const mutations = {
   },
 
   [TOGGLE_CARGA_POS_TO_DELETE](state, data) {
-    if (data.index === -1) state.Deletar.push(data.carga);
+    if (data.index === -1) state.Deletar.push(data.cargaToDelete);
     else state.Deletar.splice(data.index, 1);
   },
 
@@ -108,7 +108,6 @@ const actions = {
 
   toggleCargaToDelete({ commit, state }, cargaToDelete) {
     const index = state.Deletar.findIndex((carga) => carga.id == cargaToDelete.id);
-
     commit(TOGGLE_CARGA_POS_TO_DELETE, { index, cargaToDelete });
   },
 

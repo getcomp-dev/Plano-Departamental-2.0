@@ -1,53 +1,34 @@
-import {
-  SET_FETCHING_LOADING,
-  SET_PARTIAL_LOADING,
-  SET_TABLE_LOADING,
-} from "../mutation-types";
+import Vue from "vue";
+import { SET_LOADING } from "../mutation-types";
 
 const state = {
-  onPartialLoading: false,
-  onFetchingLoading: false,
-  onTableLoading: false,
+  onLoading: {
+    partial: false,
+    table: false,
+    fetching: false,
+  },
 };
 
 const mutations = {
-  [SET_FETCHING_LOADING](state, data) {
-    state.onFetchingLoading = data;
-  },
-
-  [SET_PARTIAL_LOADING](state, data) {
-    state.onPartialLoading = data;
-  },
-
-  [SET_TABLE_LOADING](state, data) {
-    state.onTableLoading = data;
+  [SET_LOADING](state, data) {
+    Vue.set(state.onLoading, data.type, data.value);
   },
 };
 
 const actions = {
-  setFetchingLoading({ commit }, payload) {
-    commit(SET_FETCHING_LOADING, payload);
-  },
-
-  setPartialLoading({ commit }, payload) {
-    //Tempo mínimo de espera
-    if (!payload) setTimeout(() => commit(SET_PARTIAL_LOADING, payload), 300);
-    else commit("SET_PARTIAL_LOADING", payload);
-  },
-
-  setTableLoading({ commit }, payload) {
-    if (!payload) setTimeout(() => commit(SET_TABLE_LOADING, payload), 300);
-    else commit(SET_TABLE_LOADING, payload);
+  setLoading({ commit }, { type, value }) {
+    if (type === "partial" || type === "table") {
+      if (value) commit(SET_LOADING, { type, value });
+      else setTimeout(() => commit(SET_LOADING, { type, value }), 300); //Tempo mínimo de espera
+    } else if (type == "fetching") {
+      commit(SET_LOADING, { type, value });
+    }
   },
 };
 
 const getters = {
   onLoading(state) {
-    return {
-      fetching: state.onFetchingLoading,
-      partial: state.onPartialLoading,
-      table: state.onTableLoading,
-    };
+    return state.onLoading;
   },
 };
 

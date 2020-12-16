@@ -375,7 +375,7 @@ export default {
 
     async handleCreateDisciplina() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         await this.createDisciplina(this.disciplinaForm);
         this.cleanForm();
       } catch (error) {
@@ -385,12 +385,12 @@ export default {
           text: error.message || "",
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
     async handleEditDisciplina() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         await this.editDisciplina(this.disciplinaForm);
       } catch (error) {
         this.pushNotification({
@@ -399,12 +399,12 @@ export default {
           text: error.message || "",
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
     async handleDeleteDisciplina() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         await this.deleteDisciplina(this.disciplinaForm);
         this.cleanForm();
       } catch (error) {
@@ -414,7 +414,7 @@ export default {
           text: error.message || "",
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
   },

@@ -594,7 +594,7 @@ export default {
     this.clearTurmasToDelete();
 
     ls.off("toggle");
-    for (var c = 0; c < this.AllCursos.length; c++) {
+    for (let c = 0; c < this.AllCursos.length; c++) {
       let id = this.AllCursos[c].id;
       ls.off(`${id}`);
     }
@@ -620,7 +620,7 @@ export default {
 
     async generateXlsx() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
 
         await xlsx.downloadTable({
           pedidos: this.$store.state.pedido.Pedidos,
@@ -641,12 +641,12 @@ export default {
           text: "Tente novamente",
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
     async handleDeleteTurmas() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         await this.deleteTurmas();
       } catch (error) {
         this.pushNotification({
@@ -654,7 +654,7 @@ export default {
           title: "Erro ao excluir turma(s)!",
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
   },

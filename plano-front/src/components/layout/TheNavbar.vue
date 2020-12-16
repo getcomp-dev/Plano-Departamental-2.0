@@ -105,7 +105,6 @@ export default {
   width: 100%;
   height: var(--navbar-height);
   background-color: #343a40;
-  transition: all 0.2s ease;
 }
 /* brand */
 .navbar-container > .navbar-brand {
@@ -119,7 +118,7 @@ export default {
   cursor: pointer;
   color: #cdced0;
   background-color: #272b30;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease;
 }
 .navbar-container > .navbar-brand > .brand-title {
   padding: 0;
@@ -143,7 +142,7 @@ export default {
   color: #cdced0;
   background-color: #272b30;
   font-size: 20px;
-  transition: all 0.2s ease;
+  transition: color 0.2s ease;
 }
 .navbar-container > .navbar-brand:hover,
 .navbar-container > .btn-navbar:hover {
@@ -165,7 +164,6 @@ ul.navbar-nav {
   padding: 0;
   margin: 0;
   padding: 0 5px;
-  transition: all 0.2s ease;
 }
 ul.navbar-nav > li.nav-item {
   display: flex;
@@ -178,9 +176,9 @@ ul.navbar-nav > li.nav-item {
   font-size: 12px;
   color: #9a9da0;
   cursor: pointer;
-  transition: all 0.2s ease;
 }
 ul.navbar-nav > li.nav-item:hover {
+  transition: color 0.2s ease;
   color: #fff;
 }
 ul.navbar-nav > li.nav-item-plano {
@@ -201,7 +199,7 @@ ul.navbar-nav > li.nav-item svg {
 /* input plano */
 ul.navbar-nav > li.nav-item .input-plano {
   text-align: start;
-  width: 150px;
+  width: 160px;
   height: 20px;
   font-size: 12px;
   border-radius: 3px;
@@ -215,7 +213,7 @@ ul.navbar-nav > li.nav-item .input-plano:hover {
   border-color: #ffffffbf;
 }
 
-@media screen and (max-width: 686px) {
+@media screen and (max-width: 700px) {
   ul.navbar-nav > li.nav-item > span {
     display: none;
   }
@@ -223,7 +221,7 @@ ul.navbar-nav > li.nav-item .input-plano:hover {
     padding: 0 10px;
   }
 }
-@media screen and (max-width: 594px) {
+@media screen and (max-width: 605px) {
   .navbar-container > .navbar-brand {
     width: 100% !important;
   }
@@ -240,6 +238,9 @@ ul.navbar-nav > li.nav-item .input-plano:hover {
     justify-content: flex-start;
     margin: 0;
     padding: 0;
+  }
+  ul.navbar-nav li.nav-item:nth-of-type(1) {
+    padding: 0 5px;
   }
   ul.navbar-nav > .nav-item:nth-of-type(2) {
     margin-left: auto;

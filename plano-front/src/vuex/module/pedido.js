@@ -16,9 +16,9 @@ const state = {
 const mutations = {
   [PEDIDO_FETCHED](state, data) {
     state.Pedidos = {};
-    for (var p = 0; p < data.Pedidos.length; p++) {
+    for (let p = 0; p < data.Pedidos.length; p++) {
       if (data.Pedidos[p].hasOwnProperty("Turma")) {
-        var t = data.Pedidos[p].Turma;
+        let t = data.Pedidos[p].Turma;
         if (state.Pedidos[t] === undefined) {
           state.Pedidos[t] = [];
         }
@@ -36,7 +36,8 @@ const mutations = {
     let index = state.Pedidos[data.Pedido.Turma].findIndex(
       (pedido) => pedido.Curso === data.Pedido.Curso
     );
-    Vue.set(state.Pedidos[data.Pedido.Turma], index, data.Pedido);
+
+    if (index !== -1) Vue.set(state.Pedidos[data.Pedido.Turma], index, data.Pedido);
   },
 
   [SOCKET_PEDIDO_DELETED](state, data) {

@@ -6,14 +6,11 @@
       </h2>
 
       <div class="container-horarios px-1" :key="periodo.nome + periodo.id">
-        <div
-          v-for="laboratorio in laboratorios"
-          :key="laboratorio.id + laboratorio.nome"
-        >
+        <div v-for="laboratorio in laboratorios" :key="laboratorio.id + laboratorio.nome">
           <h3 class="lab-title">{{ laboratorio.nome }}</h3>
           <TableHorariosLab
             :laboratorio="laboratorio"
-            :turmas="turmasInPeriodos[`periodo${periodo.id}`]"
+            :turmas="getTurmasDoPeriodo(turmas, periodo.id)"
           />
         </div>
       </div>
@@ -30,7 +27,12 @@ export default {
   props: {
     periodos: { type: Array, required: true },
     laboratorios: { type: Array, required: true },
-    turmasInPeriodos: { type: Object, required: true },
+    turmas: { type: Array, required: true },
+  },
+  methods: {
+    getTurmasDoPeriodo(turmas, periodoId) {
+      return turmas.filter((turma) => turma.periodo === periodoId);
+    },
   },
 };
 </script>

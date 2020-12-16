@@ -113,6 +113,11 @@ const routes = [
         beforeEnter: requireSuperAdmin,
       },
       {
+        path: "/gerenciar/grades-cursos-externos-edit",
+        component: lazyLoad("gerenciar/GradesCursosExternosEdit"),
+        beforeEnter: requireSuperAdmin,
+      },
+      {
         path: "/gerenciar/docentes",
         component: lazyLoad("gerenciar/Docentes"),
         beforeEnter: requireSuperAdmin,
@@ -120,6 +125,11 @@ const routes = [
       {
         path: "/gerenciar/grades",
         component: lazyLoad("gerenciar/Grades"),
+        beforeEnter: requireSuperAdmin,
+      },
+      {
+        path: "/gerenciar/gradesCursosExternos",
+        component: lazyLoad("gerenciar/GradesCursosExternos"),
         beforeEnter: requireSuperAdmin,
       },
       {
@@ -171,12 +181,14 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  store.commit("SET_PARTIAL_LOADING", true);
+  store.commit("SET_LOADING", { type: "partial", value: true });
   next();
 });
 
 router.afterEach(() => {
-  setTimeout(() => store.commit("SET_PARTIAL_LOADING", false), 500);
+  setTimeout(() => {
+    store.commit("SET_LOADING", { type: "partial", value: false });
+  }, 500);
 });
 
 export default router;

@@ -43,7 +43,7 @@ Vue.component("v-th-ordination", VThOrdination);
 import { mapActions, mapGetters } from "vuex";
 Vue.mixin({
   methods: {
-    ...mapActions(["pushNotification", "setPartialLoading"]),
+    ...mapActions(["pushNotification", "setLoading"]),
   },
   computed: {
     ...mapGetters(["currentPlano"]),

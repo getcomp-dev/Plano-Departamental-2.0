@@ -72,7 +72,7 @@
               <input
                 id="perfilNome"
                 type="text"
-                class="form-control form-control-sm input-lg"
+                class="form-control form-control-sm input-xl"
                 @change="perfilForm.nome = normalizeInputText($event)"
                 :value="perfilForm.nome"
               />

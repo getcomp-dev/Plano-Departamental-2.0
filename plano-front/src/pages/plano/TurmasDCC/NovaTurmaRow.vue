@@ -241,7 +241,7 @@ export default {
     },
     async handleCreateTurma() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         this.turmaForm.Plano = this.currentPlano.id;
         await this.createTurma(this.turmaForm);
         await this.fetchAllPedidos();
@@ -259,7 +259,7 @@ export default {
             : error.message,
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
     preferenciaDocente(docente) {

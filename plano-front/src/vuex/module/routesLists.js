@@ -5,7 +5,7 @@ const state = {
     {
       path: "/home",
       icon: "home",
-      title: "Dashboard - Home",
+      title: "Início",
       description: `Página inicial.`,
     },
   ],
@@ -94,6 +94,12 @@ const state = {
       description: `Listagem de todas as disciplinas de uma grade (atual ou antiga) cadastrada no sistema, permitindo a alteração ou adição de novas disciplinas.`,
     },
     {
+      path: "/gerenciar/grades-cursos-externos-edit",
+      title: "Disciplinas na Grade de Cursos Externos",
+      icon: "table",
+      description: `Listagem de todas as disciplinas de uma grade (atual ou antiga) de um curso externo cadastrada no sistema, permitindo a alteração ou adição de novas disciplinas.`,
+    },
+    {
       path: "/gerenciar/docentes",
       title: "Docentes",
       icon: "users",
@@ -104,6 +110,12 @@ const state = {
       title: "Grades",
       icon: "sitemap",
       description: `Listagem das grades (atuais ou antigas) dos cursos do DCC que ainda estão em atividade, permitindo a adição de novas grades.`,
+    },
+    {
+      path: "/gerenciar/gradesCursosExternos",
+      title: "Grades de Cursos Externos",
+      icon: "sitemap",
+      description: `Listagem das grades (atuais ou antigas) dos cursos externos que ainda estão em atividade, permitindo a adição de novas grades.`,
     },
     {
       path: "/gerenciar/history",

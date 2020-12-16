@@ -461,7 +461,7 @@ export default {
     },
     async handleEditTurma() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
 
         await this.editTurma(this.turmaForm);
         this.initialData = clone(this.turmaForm);
@@ -475,7 +475,7 @@ export default {
           text: erroMsg,
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
 

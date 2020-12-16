@@ -47,7 +47,7 @@ const mutations = {
   },
 
   [TOGGLE_TURMA_TO_DELETE](state, data) {
-    if (data.index === -1) state.Deletar.push(data.turma);
+    if (data.index === -1) state.Deletar.push(data.turmaToDelete);
     else state.Deletar.splice(data.index, 1);
   },
 
@@ -102,14 +102,13 @@ const actions = {
     commit(EMPTY_DELETE_TURMA);
     commit(PUSH_NOTIFICATION, {
       type: "success",
-      text: "As turma(s) selecionadas foram excluída(s)",
+      text: "A(s) turma(s) selecionadas foram excluída(s)",
     });
   },
 
-  toggleTurmaToDelete({ commit, state }, turma) {
-    const index = state.Deletar.findIndex(["id", turma.id]);
-
-    commit(TOGGLE_TURMA_TO_DELETE, { index, turma });
+  toggleTurmaToDelete({ commit, state }, turmaToDelete) {
+    const index = state.Deletar.findIndex((turma) => turma.id === turmaToDelete.id);
+    commit(TOGGLE_TURMA_TO_DELETE, { index, turmaToDelete });
   },
 
   clearTurmasToDelete({ commit, state }) {

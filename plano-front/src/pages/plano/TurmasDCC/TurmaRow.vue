@@ -876,7 +876,7 @@ export default {
     },
     async handleEditTurma() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
 
         await this.editTurma(this.turmaForm);
         this.currentData = cloneDeep(this.turmaForm);
@@ -890,7 +890,7 @@ export default {
             : error.message,
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
 

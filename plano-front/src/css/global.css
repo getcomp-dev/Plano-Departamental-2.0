@@ -10,7 +10,7 @@
 @import "./btn-cores.css";
 @import "./slideY-animation.css";
 
-@media screen and (max-width: 594px) {
+@media screen and (max-width: 605px) {
   :root {
     --navbar-height: 60px;
   }
@@ -170,10 +170,10 @@ label[required]:after {
 label[required]:before {
   content: "Campo obrigatório";
   position: absolute;
-  top: -5px;
+  top: calc(-100% - 10px);
   z-index: -1;
   opacity: 0;
-  left: calc(100% + 10px);
+  left: 0;
   pointer-events: none;
   width: max-content;
   height: max-content;

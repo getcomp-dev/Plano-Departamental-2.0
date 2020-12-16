@@ -70,7 +70,7 @@
               <input
                 id="nome"
                 type="text"
-                class="form-control form-control-sm input-lg"
+                class="form-control form-control-sm input-xl"
                 @change="docenteForm.nome = normalizeInputText($event)"
                 :value="docenteForm.nome"
               />
@@ -258,7 +258,7 @@ export default {
 
     async addDocente() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         if (!this.docenteForm.nomesiga) {
           this.docenteForm.nomesiga = this.docenteForm.nome;
         }
@@ -277,12 +277,12 @@ export default {
             : "",
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
     async editDocente() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         if (!this.docenteForm.nome || !this.docenteForm.apelido) {
           throw new Error("Campos obrigatorios invalidos");
         }
@@ -309,12 +309,12 @@ export default {
 
         this.showDocente(this.docenteClickado);
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
     async deleteDocente() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         const response = await docenteService.delete(
           this.docenteForm.id,
           this.docenteForm
@@ -332,7 +332,7 @@ export default {
           text: "O docente não pode estar vinculado a nenhum perfil",
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
 

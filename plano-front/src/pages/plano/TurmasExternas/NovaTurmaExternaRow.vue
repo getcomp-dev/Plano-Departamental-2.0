@@ -162,7 +162,7 @@ export default {
     },
     async handleCreateTurmaExterna() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         await this.createTurmaExterna(this.turmaForm);
       } catch (error) {
         this.pushNotification({
@@ -173,7 +173,7 @@ export default {
             : error.message,
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
   },

@@ -47,7 +47,7 @@ export default {
     },
     async handleEditPedido() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         await this.editPedidoExterno(this.pedidoForm);
       } catch (error) {
         let erroMsg = "";
@@ -60,7 +60,7 @@ export default {
           text: erroMsg,
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
   },

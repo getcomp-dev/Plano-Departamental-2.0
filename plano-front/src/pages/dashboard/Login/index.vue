@@ -44,7 +44,6 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
 import { InputPassword } from "@/components/ui";
 
 export default {
@@ -77,11 +76,9 @@ export default {
   },
 
   methods: {
-    ...mapActions(["setPartialLoading"]),
-
     async handleLogin() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
 
         await this.$store.dispatch("authenticate", this.form);
         if (this.$store.state.route.query.redirect) {
@@ -90,6 +87,7 @@ export default {
           this.$router.replace("/dashboard");
         }
       } catch (error) {
+        this.setLoading({ type: "partial", value: false });
         this.error = error.response
           ? error.response.data.message
           : "Erro na requisição! Tente novamente.";
@@ -97,8 +95,6 @@ export default {
         setTimeout(() => {
           this.error = null;
         }, 3000);
-      } finally {
-        this.setPartialLoading(false);
       }
     },
   },

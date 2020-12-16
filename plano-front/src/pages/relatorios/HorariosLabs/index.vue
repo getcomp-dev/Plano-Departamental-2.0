@@ -11,7 +11,7 @@
         v-show="!onLoading.table && filtroLaboratorios.ativados.length"
         :periodos="filtroPeriodos.ativados"
         :laboratorios="filtroLaboratorios.ativados"
-        :turmasInPeriodos="TurmasInPeriodos"
+        :turmas="TurmasETurmasExternasOrdered"
       />
     </div>
 
@@ -232,6 +232,7 @@ export default {
       pdfHorariosLabs({
         laboratorios,
         periodosAtivados,
+        turmas: this.TurmasETurmasExternasOrdered,
         plano: this.currentPlano,
       });
     },
@@ -260,32 +261,19 @@ export default {
 
       return laboratoriosResultantes;
     },
-    TurmasInPeriodos() {
-      const turmasResultantes = {
-        periodo1: [],
-        periodo2: [],
-        periodo3: [],
-        periodo4: [],
-      };
-
+    TurmasETurmasExternasOrdered() {
       const turmasOredered = orderBy(this.TurmasInDisciplinasPerfis, [
         "periodo",
         "disciplina.nome",
         "letra",
       ]);
-      turmasOredered.forEach((turma) =>
-        turmasResultantes[`periodo${turma.periodo}`].push({ ...turma })
-      );
-
       const turmasExternasOrdered = orderBy(this.TurmasExternasInDisciplinas, [
         "periodo",
         "disciplina.nome",
         "letra",
       ]);
-      turmasExternasOrdered.forEach((turma) =>
-        turmasResultantes[`periodo${turma.periodo}`].push({ ...turma })
-      );
 
+      const turmasResultantes = [...turmasOredered, ...turmasExternasOrdered];
       return turmasResultantes;
     },
     horariosIsEmpty() {

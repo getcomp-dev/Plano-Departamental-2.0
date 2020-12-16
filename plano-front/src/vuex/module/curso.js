@@ -22,7 +22,7 @@ const state = {
 const mutations = {
   [CURSO_FETCHED](state, data) {
     state.Cursos = data.Cursos;
-    for (var c = 0; c < state.Cursos.length; c++) {
+    for (let c = 0; c < state.Cursos.length; c++) {
       state.Ativos[state.Cursos[c].id] = true;
       ls.set(`${state.Cursos[c].id}`, true);
     }
@@ -48,19 +48,19 @@ const mutations = {
   },
 
   [TOGGLE_CURSO_ATIVO](state, id) {
-    var ativo = !state.Ativos[id];
+    let ativo = !state.Ativos[id];
     Vue.set(state.Ativos, id, ativo);
   },
 
   [TOGGLE_ALL_CURSO_ATIVO_TRUE](state) {
-    for (var c = 0; c < state.Cursos.length; c++) {
+    for (let c = 0; c < state.Cursos.length; c++) {
       state.Ativos[state.Cursos[c].id] = true;
     }
     state.Ativos = Object.assign({}, state.Ativos);
   },
 
   [TOGGLE_ALL_CURSO_ATIVO_FALSE](state) {
-    for (var c = 0; c < state.Cursos.length; c++) {
+    for (let c = 0; c < state.Cursos.length; c++) {
       state.Ativos[state.Cursos[c].id] = false;
     }
     state.Ativos = Object.assign({}, state.Ativos);

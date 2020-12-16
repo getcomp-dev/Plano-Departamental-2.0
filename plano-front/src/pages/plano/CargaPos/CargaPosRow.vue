@@ -56,7 +56,7 @@ export default {
     },
     async handleEditCargaPos() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         await this.editCargaPos(this.cargaPosForm);
       } catch (error) {
         this.resetCargaPos();
@@ -67,7 +67,7 @@ export default {
           text: error.message || "",
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
   },

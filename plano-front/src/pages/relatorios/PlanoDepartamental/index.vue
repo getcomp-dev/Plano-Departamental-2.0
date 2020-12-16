@@ -314,7 +314,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { union, difference, orderBy, filter, some } from "lodash-es";
-import { pdfDisciplinasTurmas } from "@/common/services/pdfs";
+import { pdfPlanoDepartamental } from "@/common/services/pdfs";
 import { normalizeText } from "@/common/utils";
 import {
   generateHorariosText,
@@ -458,7 +458,7 @@ export default {
         periodosAtivados = this.filtroPeriodos.ativados;
       }
 
-      pdfDisciplinasTurmas({
+      pdfPlanoDepartamental({
         disciplinasInTurmas,
         periodosAtivados,
         plano: this.currentPlano,

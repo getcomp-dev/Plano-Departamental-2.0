@@ -20,15 +20,14 @@ const mutations = {
 const actions = {
   fetchAllHistory({ commit, state, dispatch }) {
     if (!state.wasFetched) {
-      dispatch("setFetchingLoading", true);
+      dispatch("setLoading", { type: "fetching", value: true });
 
       return new Promise((resolve, reject) => {
         historyService
           .fetchAll()
           .then((response) => {
             commit(HISTORY_FETCHED, response);
-            console.log("fetched");
-            dispatch("setFetchingLoading", false);
+            dispatch("setLoading", { type: "fetching", value: false });
             resolve();
           })
           .catch((error) => {

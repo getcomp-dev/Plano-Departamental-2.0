@@ -620,163 +620,170 @@ export default {
       return turmasNovoPlano;
     },
     handleCopyPlano() {
+      this.setLoading({ type: "partial", value: true });
       let turmasNovoPlano = this.generateTurmasNovoPlano();
 
-      planoService.create(this.plano).then((plano) => {
-        turmasNovoPlano.forEach((t) => {
-          turmaService
-            .create({
-              id: undefined,
-              periodo: t.semestre,
-              letra: t.letra,
-              turno1: t.turno,
-              turno2: undefined,
-              Disciplina: t.Disciplina,
-              Docente1: undefined,
-              Docente2: undefined,
-              Horario1: undefined,
-              Horario2: undefined,
-              Sala1: undefined,
-              Sala2: undefined,
-              Plano: plano.Plano.id,
-            })
-            .then((turma) => {
-              if (t.CCN) {
-                pedidoService
-                  .update(1, turma.Turma.id, {
-                    Turma: turma.Turma.id,
-                    Curso: 1,
-                    vagasPeriodizadas: 1,
-                    vagasNaoPeriodizadas: 0,
-                  })
-                  .then((response) => {})
-                  .catch((error) => {
-                    console.log("erro ao atualizar pedido: " + error);
-                  });
-              }
-              if (t.EC) {
-                pedidoService
-                  .update(2, turma.Turma.id, {
-                    Turma: turma.Turma.id,
-                    Curso: 2,
-                    vagasPeriodizadas: 1,
-                    vagasNaoPeriodizadas: 0,
-                  })
-                  .then((response) => {})
-                  .catch((error) => {
-                    console.log("erro ao atualizar pedido: " + error);
-                  });
-              }
-              if (t.SI) {
-                pedidoService
-                  .update(3, turma.Turma.id, {
-                    Turma: turma.Turma.id,
-                    Curso: 3,
-                    vagasPeriodizadas: 1,
-                    vagasNaoPeriodizadas: 0,
-                  })
-                  .then((response) => {})
-                  .catch((error) => {
-                    console.log("erro ao atualizar pedido: " + error);
-                  });
-              }
-              if (t.CCD) {
-                pedidoService
-                  .update(4, turma.Turma.id, {
-                    Turma: turma.Turma.id,
-                    Curso: 4,
-                    vagasPeriodizadas: 1,
-                    vagasNaoPeriodizadas: 0,
-                  })
-                  .then((response) => {})
-                  .catch((error) => {
-                    console.log("erro ao atualizar pedido: " + error);
-                  });
-              }
-            })
-            .catch((error) => {
-              console.log("erro ao criar turma: " + error);
-            });
-        });
-
-        let turmasCopiar = filter(this.$store.state.turma.Turmas, (t) => {
-          let disciplina = this.filtrosDisciplinas.includes(t.Disciplina);
-          if (disciplina) return true;
-          else return false;
-        });
-
-        turmasCopiar.forEach((t) => {
-          turmaService
-            .create({
-              id: undefined,
-              periodo: t.periodo,
-              letra: t.letra,
-              turno1: t.turno1,
-              turno2: undefined,
-              Disciplina: t.Disciplina,
-              Horario1: t.Horario1,
-              Horario2: t.Horario2,
-              Sala1: undefined,
-              Sala2: undefined,
-              Plano: plano.Plano.id,
-            })
-            .then((turma) => {
-              let pedidos = this.$store.state.pedido.Pedidos[t.id];
-              pedidos.forEach((p) => {
-                pedidoService
-                  .update(p.Curso, turma.Turma.id, {
-                    Turma: turma.Turma.id,
-                    Curso: p.Curso,
-                    vagasPeriodizadas: p.vagasPeriodizadas,
-                    vagasNaoPeriodizadas: 0,
-                  })
-                  .then((response) => {})
-                  .catch((error) => {
-                    console.log("erro ao atualizar pedido: " + error);
-                  });
+      planoService
+        .create(this.plano)
+        .then((plano) => {
+          turmasNovoPlano.forEach((t) => {
+            turmaService
+              .create({
+                id: undefined,
+                periodo: t.semestre,
+                letra: t.letra,
+                turno1: t.turno,
+                turno2: undefined,
+                Disciplina: t.Disciplina,
+                Docente1: undefined,
+                Docente2: undefined,
+                Horario1: undefined,
+                Horario2: undefined,
+                Sala1: undefined,
+                Sala2: undefined,
+                Plano: plano.Plano.id,
+              })
+              .then((turma) => {
+                if (t.CCN) {
+                  pedidoService
+                    .update(1, turma.Turma.id, {
+                      Turma: turma.Turma.id,
+                      Curso: 1,
+                      vagasPeriodizadas: 1,
+                      vagasNaoPeriodizadas: 0,
+                    })
+                    .then((response) => {})
+                    .catch((error) => {
+                      console.log("erro ao atualizar pedido: " + error);
+                    });
+                }
+                if (t.EC) {
+                  pedidoService
+                    .update(2, turma.Turma.id, {
+                      Turma: turma.Turma.id,
+                      Curso: 2,
+                      vagasPeriodizadas: 1,
+                      vagasNaoPeriodizadas: 0,
+                    })
+                    .then((response) => {})
+                    .catch((error) => {
+                      console.log("erro ao atualizar pedido: " + error);
+                    });
+                }
+                if (t.SI) {
+                  pedidoService
+                    .update(3, turma.Turma.id, {
+                      Turma: turma.Turma.id,
+                      Curso: 3,
+                      vagasPeriodizadas: 1,
+                      vagasNaoPeriodizadas: 0,
+                    })
+                    .then((response) => {})
+                    .catch((error) => {
+                      console.log("erro ao atualizar pedido: " + error);
+                    });
+                }
+                if (t.CCD) {
+                  pedidoService
+                    .update(4, turma.Turma.id, {
+                      Turma: turma.Turma.id,
+                      Curso: 4,
+                      vagasPeriodizadas: 1,
+                      vagasNaoPeriodizadas: 0,
+                    })
+                    .then((response) => {})
+                    .catch((error) => {
+                      console.log("erro ao atualizar pedido: " + error);
+                    });
+                }
+              })
+              .catch((error) => {
+                console.log("erro ao criar turma: " + error);
               });
-            })
-            .catch((error) => {
-              console.log("erro ao criar turma externa: " + error);
-            });
-        });
-        this.$store.state.turmaExterna.Turmas.forEach((t) => {
-          turmaExternaService
-            .create({
-              id: undefined,
-              periodo: t.periodo,
-              letra: t.letra,
-              turno1: t.turno1,
-              turno2: undefined,
-              Disciplina: t.Disciplina,
-              Horario1: t.Horario1,
-              Horario2: t.Horario2,
-              Sala1: undefined,
-              Sala2: undefined,
-              Plano: plano.Plano.id,
-            })
-            .then((turma) => {
-              let pedidos = this.$store.state.pedidoExterno.Pedidos[t.id];
-              pedidos.forEach((p) => {
-                pedidoExternoService
-                  .update(p.Curso, turma.Turma.id, {
-                    Turma: turma.Turma.id,
-                    Curso: p.Curso,
-                    vagasPeriodizadas: p.vagasPeriodizadas,
-                    vagasNaoPeriodizadas: p.vagasNaoPeriodizadas,
-                  })
-                  .then((response) => {})
-                  .catch((error) => {
-                    console.log("erro ao atualizar pedido externo: " + error);
-                  });
+          });
+
+          let turmasCopiar = filter(this.$store.state.turma.Turmas, (t) => {
+            let disciplina = this.filtrosDisciplinas.includes(t.Disciplina);
+            if (disciplina) return true;
+            else return false;
+          });
+
+          turmasCopiar.forEach((t) => {
+            turmaService
+              .create({
+                id: undefined,
+                periodo: t.periodo,
+                letra: t.letra,
+                turno1: t.turno1,
+                turno2: undefined,
+                Disciplina: t.Disciplina,
+                Horario1: t.Horario1,
+                Horario2: t.Horario2,
+                Sala1: undefined,
+                Sala2: undefined,
+                Plano: plano.Plano.id,
+              })
+              .then((turma) => {
+                let pedidos = this.$store.state.pedido.Pedidos[t.id];
+                pedidos.forEach((p) => {
+                  pedidoService
+                    .update(p.Curso, turma.Turma.id, {
+                      Turma: turma.Turma.id,
+                      Curso: p.Curso,
+                      vagasPeriodizadas: p.vagasPeriodizadas,
+                      vagasNaoPeriodizadas: 0,
+                    })
+                    .then((response) => {})
+                    .catch((error) => {
+                      console.log("erro ao atualizar pedido: " + error);
+                    });
+                });
+              })
+              .catch((error) => {
+                console.log("erro ao criar turma externa: " + error);
               });
-            })
-            .catch((error) => {
-              console.log("erro ao criar turma externa: " + error);
-            });
+          });
+          this.$store.state.turmaExterna.Turmas.forEach((t) => {
+            turmaExternaService
+              .create({
+                id: undefined,
+                periodo: t.periodo,
+                letra: t.letra,
+                turno1: t.turno1,
+                turno2: undefined,
+                Disciplina: t.Disciplina,
+                Horario1: t.Horario1,
+                Horario2: t.Horario2,
+                Sala1: undefined,
+                Sala2: undefined,
+                Plano: plano.Plano.id,
+              })
+              .then((turma) => {
+                let pedidos = this.$store.state.pedidoExterno.Pedidos[t.id];
+                pedidos.forEach((p) => {
+                  pedidoExternoService
+                    .update(p.Curso, turma.Turma.id, {
+                      Turma: turma.Turma.id,
+                      Curso: p.Curso,
+                      vagasPeriodizadas: p.vagasPeriodizadas,
+                      vagasNaoPeriodizadas: p.vagasNaoPeriodizadas,
+                    })
+                    .then((response) => {})
+                    .catch((error) => {
+                      console.log("erro ao atualizar pedido externo: " + error);
+                    });
+                });
+              })
+              .catch((error) => {
+                console.log("erro ao criar turma externa: " + error);
+              });
+          });
+        })
+        .then(() => {
+          this.$store.dispatch("fetchAll").then(() => {
+            this.setLoading({ type: "partial", value: false });
+          });
         });
-        // this.$store.dispatch("fetchAll");
-      });
     },
   },
 

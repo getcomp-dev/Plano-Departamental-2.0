@@ -141,7 +141,7 @@ export default {
     },
     async handleEditTurma() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         await this.editTurmaExterna(this.turmaForm);
       } catch (error) {
         this.resetTurmaForm();
@@ -154,7 +154,7 @@ export default {
             : error.message,
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
     checkHorario(horario) {

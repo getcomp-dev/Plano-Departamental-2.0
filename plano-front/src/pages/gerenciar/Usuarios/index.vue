@@ -9,7 +9,7 @@
         <BaseTable>
           <template #thead>
             <v-th-ordination
-              :currentOrder="ordenacaoMainUsers"
+              :currentOrder="ordenacaoUsuarios"
               orderToCheck="nome"
               width="150"
               align="start"
@@ -17,7 +17,7 @@
               Nome
             </v-th-ordination>
             <v-th-ordination
-              :currentOrder="ordenacaoMainUsers"
+              :currentOrder="ordenacaoUsuarios"
               orderToCheck="login"
               width="120"
               align="start"
@@ -25,7 +25,7 @@
               Login
             </v-th-ordination>
             <v-th-ordination
-              :currentOrder="ordenacaoMainUsers"
+              :currentOrder="ordenacaoUsuarios"
               orderToCheck="admin"
               orderType="desc"
               width="90"
@@ -34,19 +34,20 @@
               Tipo
             </v-th-ordination>
           </template>
+
           <template #tbody>
             <tr
-              v-for="user in UsersOrdered"
-              :key="user.id"
-              :class="{ 'bg-selected': user.id === userSelected }"
-              @click="handleClickInUser(user)"
+              v-for="usuario in UsuariosOrdered"
+              :key="usuario.id"
+              :class="{ 'bg-selected': usuario.id === usuarioClickado }"
+              @click="selecionaUsuario(usuario)"
             >
-              <v-td width="150" align="start">{{ user.nome }}</v-td>
-              <v-td width="120" align="start">{{ user.login }}</v-td>
-              <v-td width="90" align="start">{{ adminText(user.admin) }}</v-td>
+              <v-td width="150" align="start">{{ usuario.nome }}</v-td>
+              <v-td width="120" align="start">{{ usuario.login }}</v-td>
+              <v-td width="90" align="start">{{ adminText(usuario.admin) }}</v-td>
             </tr>
 
-            <tr v-if="!UsersOrdered.length">
+            <tr v-if="!UsuariosOrdered.length">
               <v-td width="360" colspan="3">
                 <b>Nenhum usuário encontrado</b>
               </v-td>
@@ -58,20 +59,20 @@
       <Card
         :title="'Usuário'"
         :toggleFooter="isEditing"
-        @btn-salvar="editUser"
+        @btn-salvar="handleUpdateUsuario"
         @btn-delete="openModalDelete"
-        @btn-add="createUser"
-        @btn-clean="cleanUser"
+        @btn-add="handleCreateUsuario"
+        @btn-clean="cleanUsuarioForm"
       >
         <template #form-group>
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="userNome">Nome</label>
+              <label required for="usuarioNome">Nome</label>
               <input
+                id="usuarioNome"
                 type="text"
-                id="userNome"
-                class="form-control"
-                v-model="userForm.nome"
+                class="form-control input-lg"
+                v-model="usuarioForm.nome"
               />
             </div>
           </div>
@@ -79,10 +80,10 @@
             <div class="form-group col m-0 px-0">
               <label required for="login">Login</label>
               <input
-                class="form-control"
+                class="form-control input-lg"
                 type="text"
                 id="login"
-                v-model="userForm.login"
+                v-model="usuarioForm.login"
               />
             </div>
           </div>
@@ -95,7 +96,7 @@
                 <InputPassword
                   :iconSize="13"
                   :inputId="'novaSenha'"
-                  v-model="userForm.senha"
+                  v-model="usuarioForm.senha"
                 />
               </div>
             </div>
@@ -105,7 +106,7 @@
                 <label required for="confirmaSenha">Confirmar senha</label>
                 <InputPassword
                   :iconSize="13"
-                  :isInvalid="confirmaSenha != userForm.senha"
+                  :isInvalid="confirmaSenha != usuarioForm.senha"
                   :inputId="'confirmaSenha'"
                   v-model="confirmaSenha"
                 />
@@ -129,7 +130,7 @@
                     <InputPassword
                       :iconSize="13"
                       :inputId="'novaSenha'"
-                      v-model="novaSenha"
+                      v-model="usuarioForm.senha"
                     />
                   </div>
                 </div>
@@ -139,7 +140,7 @@
                     <label required for="confirmaSenha">Confirmar nova senha</label>
                     <InputPassword
                       :iconSize="13"
-                      :isInvalid="confirmaSenha != novaSenha"
+                      :isInvalid="confirmaSenha != usuarioForm.senha"
                       :inputId="'confirmaSenha'"
                       v-model="confirmaSenha"
                     />
@@ -151,11 +152,15 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label for="userAdmin">Tipo</label>
-              <select id="userAdmin" v-model.number="userForm.admin" class="form-control">
-                <option value="0">Consulta</option>
-                <option value="1">Comissão</option>
-                <option value="2">Administrador</option>
+              <label for="usuarioAdmin">Tipo</label>
+              <select
+                id="usuarioAdmin"
+                v-model.number="usuarioForm.admin"
+                class="form-control input-lg"
+              >
+                <option :value="0">Consulta</option>
+                <option :value="1">Comissão</option>
+                <option :value="2">Administrador</option>
               </select>
             </div>
           </div>
@@ -163,12 +168,16 @@
       </Card>
     </div>
 
-    <ModalDelete ref="modalDelete" :isDeleting="isEditing" @btn-deletar="deleteUser">
+    <ModalDelete
+      ref="modalDelete"
+      :isDeleting="isEditing"
+      @btn-deletar="handleDeleteUsuario"
+    >
       <li class="list-group-item">
         <span>
           <template v-if="isEditing">
             Tem certeza que deseja excluír o usuário
-            <b>{{ userForm.nome }}</b>
+            <b>{{ usuarioForm.nome }}</b>
             ?
           </template>
           <template v-else>
@@ -196,7 +205,7 @@
         <b>Deletar:</b>
         Clique na linha da tabela do usuário que deseja remover. Em seguida, no cartão à
         direita, clique em Remover
-        <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
+        <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" />
         e confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
@@ -215,12 +224,12 @@
 </template>
 
 <script>
-import userService from "@/common/services/usuario";
-import { clone, orderBy } from "lodash-es";
+import { orderBy } from "lodash-es";
+import { mapActions, mapGetters } from "vuex";
 import { InputPassword, Card, ButtonSlideSection } from "@/components/ui";
 import { ModalDelete, ModalAjuda } from "@/components/modals";
 
-const emptyUser = {
+const emptyUsuario = {
   nome: "",
   login: "",
   senha: "",
@@ -228,7 +237,7 @@ const emptyUser = {
 };
 
 export default {
-  name: "Usuarios",
+  name: "GerenciarUsuarios",
   components: {
     Card,
     InputPassword,
@@ -238,165 +247,121 @@ export default {
   },
   data() {
     return {
-      userSelected: null,
-      isEditingSenha: false,
-      userForm: clone(emptyUser),
-      novaSenha: "",
+      usuarioForm: emptyUsuario,
       confirmaSenha: "",
-      ordenacaoMainUsers: { order: "nome", type: "asc" },
+      usuarioClickado: null,
+      isEditingSenha: false,
+      ordenacaoUsuarios: { order: "nome", type: "asc" },
     };
   },
 
   methods: {
+    ...mapActions(["updateUsuario", "createUsuario", "deleteUsuario"]),
+
     adminText(admin) {
       if (admin === 0) return "Consulta";
       else if (admin === 1) return "Comissão";
       else if (admin === 2) return "Administrador";
     },
-    toggleEditSenha() {
-      this.isEditingSenha = !this.isEditingSenha;
-      this.novaSenha = "";
-      this.confirmaSenha = "";
-    },
-    handleClickInUser(user) {
-      this.cleanUser();
-      this.userSelected = user.id;
-      this.showUser(user);
-    },
-    showUser(user) {
-      this.userForm = clone(user);
-    },
-    cleanUser() {
-      this.userSelected = null;
-      this.confirmaSenha = "";
-      this.isEditingSenha = false;
-      this.userForm = clone(emptyUser);
-    },
     openModalDelete() {
       this.$refs.modalDelete.open();
     },
-    validateEditUser(user) {
-      return (
-        (!this.isEditingSenha || this.confirmaSenha === this.novaSenha) &&
-        this.validateUser(user)
-      );
+    toggleEditSenha() {
+      this.isEditingSenha = !this.isEditingSenha;
+      this.usuarioForm.senha = "";
+      this.confirmaSenha = "";
     },
-    validateUser(user) {
-      for (const entry of Object.entries(user)) {
-        if ((entry[1] === "" || entry[1] === null) && entry[0] !== "senha") return false;
-      }
-      return true;
+    selecionaUsuario(usuario) {
+      this.cleanUsuarioForm();
+      this.usuarioClickado = usuario.id;
+      this.usuarioForm = { ...usuario };
     },
-    async createUser() {
-      const user = clone(this.userForm);
-
-      if (!this.validateUser(user)) {
-        this.pushNotification({
-          type: "error",
-          text: `Campos obrigátorios incompletos ou inválidos.`,
-        });
-        return;
-      }
-
+    cleanUsuarioForm() {
+      this.usuarioClickado = null;
+      this.confirmaSenha = "";
+      this.isEditingSenha = false;
+      this.usuarioForm = { ...emptyUsuario };
+    },
+    //Services
+    async handleCreateUsuario() {
       try {
-        await userService.create(user);
-        this.pushNotification({
-          type: "success",
-          text: `Usuário criado.`,
-        });
-        this.cleanUser();
+        this.setLoading({ type: "partial", value: true });
+        if (this.confirmaSenha !== this.usuarioForm.senha) {
+          throw new Error("Campo senha e confirmar senha devem ser iguais.");
+        }
+
+        await this.createUsuario({ data: this.usuarioForm, notify: true });
+        this.cleanUsuarioForm();
       } catch (error) {
         this.pushNotification({
           type: "error",
-          text: error,
+          text: error.message,
         });
+      } finally {
+        this.setLoading({ type: "partial", value: false });
       }
     },
-    async editUser() {
-      const user = clone(this.userForm);
-      user.senha = this.novaSenha;
-
-      if (!this.validateEditUser(user)) {
-        this.pushNotification({
-          type: "error",
-          text: `Campos obrigátorios incompletos ou inválidos.`,
-        });
-        return;
-      }
-
+    async handleUpdateUsuario() {
       try {
-        await userService.updateSuper(user.id, user);
-        this.pushNotification({
-          type: "success",
-          text: `Usuário atualizado.`,
-        });
-        this.novaSenha = "";
+        this.setLoading({ type: "partial", value: true });
+        if (this.isEditingSenha && !this.usuarioForm.senha) {
+          throw new Error("Campo <b>senha</b> inválido.");
+        }
+        if (this.confirmaSenha !== this.usuarioForm.senha) {
+          throw new Error("Campo senha e confirmar senha devem ser iguais.");
+        }
+
+        await this.updateUsuario({ data: this.usuarioForm, notify: true });
+        this.usuarioForm.senha = "";
         this.confirmaSenha = "";
       } catch (error) {
         this.pushNotification({
           type: "error",
-          text: "Login ou senha inválida",
+          text: error.message,
         });
+      } finally {
+        this.setLoading({ type: "partial", value: false });
       }
     },
-    async deleteUser() {
-      const user = clone(this.userForm);
-
+    async handleDeleteUsuario() {
       try {
-        await userService.delete(user.id, user);
-        this.pushNotification({
-          type: "success",
-          text: `Usuário ${user.nome} foi removido.`,
-        });
-        this.cleanUser();
+        this.setLoading({ type: "partial", value: true });
+        await this.deleteUsuario({ data: this.usuarioForm, notify: true });
+        this.cleanUsuarioForm();
       } catch (error) {
         this.pushNotification({
           type: "error",
-          text: error,
+          text: error.message,
         });
+      } finally {
+        this.setLoading({ type: "partial", value: false });
       }
     },
   },
 
   computed: {
-    Users() {
-      const usersResultantes = [];
+    ...mapGetters(["AllUsuarios"]),
 
-      this.$store.state.usuario.Usuarios.forEach((user) => {
-        usersResultantes.push({
-          ...user,
-          senha: "",
-        });
-      });
-      return usersResultantes;
-    },
-    UsersOrdered() {
-      const { order, type } = this.ordenacaoMainUsers;
-      const userSorter = (user) => {
-        switch (order) {
-          case "nome":
-          case "login":
-            return user[order].toLowerCase();
-          default:
-            return user[order];
-        }
-      };
+    UsuariosOrdered() {
+      const { order, type } = this.ordenacaoUsuarios;
 
-      return orderBy(this.Users, userSorter, type);
+      return orderBy(
+        this.AllUsuarios,
+        (usuario) => {
+          switch (order) {
+            case "nome":
+            case "login":
+              return usuario[order].toLowerCase();
+            default:
+              return usuario[order];
+          }
+        },
+        type
+      );
     },
     isEditing() {
-      return this.userSelected != null;
+      return this.usuarioClickado != null;
     },
   },
 };
 </script>
-
-<style scoped>
-.card {
-  font-size: 11px;
-}
-.card input,
-.card select {
-  width: 200px !important;
-}
-</style>

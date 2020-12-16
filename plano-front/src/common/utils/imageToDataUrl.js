@@ -2,7 +2,7 @@ function imageToDataUrl(uri) {
   return new Promise(function(resolve, reject) {
     const image = new window.Image();
     image.onload = function() {
-      var canvas = document.createElement("canvas");
+      let canvas = document.createElement("canvas");
       canvas.width = this.naturalWidth;
       canvas.height = this.naturalHeight;
       canvas.getContext("2d").drawImage(this, 0, 0);

@@ -63,7 +63,7 @@ export default {
 
     async handleCreateCargaPos() {
       try {
-        this.setPartialLoading(true);
+        this.setLoading({ type: "partial", value: true });
         await this.createCargaPos(this.cargaPosForm);
       } catch (error) {
         this.pushNotification({
@@ -72,7 +72,7 @@ export default {
           text: error.message || "",
         });
       } finally {
-        this.setPartialLoading(false);
+        this.setLoading({ type: "partial", value: false });
       }
     },
   },
