@@ -37,6 +37,7 @@ const express = require('express'),
   historyRoute = require('./routes/history'),
   copyPlanoRoute = require('./routes/copyPlano'),
   docenteDisciplinaRoute = require('./routes/docenteDisciplina')
+  conceitoTurmaCursoRoute = require('./routes/conceitoTurmaCurso')
 
 
 const app = express()
@@ -91,6 +92,7 @@ app.use('/api/novoPlano', novoPlanoRoute)
 app.use('/api/history', historyRoute)
 app.use('/api/copyPlano', copyPlanoRoute)
 app.use('/api/docenteDisciplina', docenteDisciplinaRoute)
+app.use('/api/conceitoTurmaCurso', conceitoTurmaCursoRoute)
 
 app.use(staticFileMiddleware);
 app.use(history({
