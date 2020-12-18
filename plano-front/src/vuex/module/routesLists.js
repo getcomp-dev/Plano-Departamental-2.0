@@ -89,13 +89,13 @@ const state = {
     },
     {
       path: "/gerenciar/grades-edit",
-      title: "Disciplinas na Grade",
+      title: "Disciplinas na Grade - DCC",
       icon: "table",
       description: `Listagem de todas as disciplinas de uma grade (atual ou antiga) cadastrada no sistema, permitindo a alteração ou adição de novas disciplinas.`,
     },
     {
       path: "/gerenciar/grades-cursos-externos-edit",
-      title: "Disciplinas na Grade de Cursos Externos",
+      title: "Disciplinas na Grade - Outros",
       icon: "table",
       description: `Listagem de todas as disciplinas de uma grade (atual ou antiga) de um curso externo cadastrada no sistema, permitindo a alteração ou adição de novas disciplinas.`,
     },
@@ -107,13 +107,13 @@ const state = {
     },
     {
       path: "/gerenciar/grades",
-      title: "Grades",
+      title: "Grades de Cursos - DCC",
       icon: "sitemap",
       description: `Listagem das grades (atuais ou antigas) dos cursos do DCC que ainda estão em atividade, permitindo a adição de novas grades.`,
     },
     {
       path: "/gerenciar/gradesCursosExternos",
-      title: "Grades de Cursos Externos",
+      title: "Grades de Cursos - Outros",
       icon: "sitemap",
       description: `Listagem das grades (atuais ou antigas) dos cursos externos que ainda estão em atividade, permitindo a adição de novas grades.`,
     },

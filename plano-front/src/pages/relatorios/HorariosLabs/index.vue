@@ -111,15 +111,15 @@
         <b>Visualizar alocação:</b>
         Clique no ícone filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
-        . Em seguida, utilize as abas para navegar entre os filtros. Selecione as
-        informações que deseja visualizar e clique no botão OK.
+        . Em seguida, utilize as abas para navegar entre os filtros. Selecione as informações que
+        deseja visualizar e clique no botão OK.
       </li>
       <li class="list-group-item">
         <b>Relatório:</b>
         Clique no ícone relatório
         <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" />
-        . Em seguida, indique se deseja gerar o relatório completo com todos os
-        laboratórios ou o relatório parcial com as informações exibidas na tela.
+        . Em seguida, indique se deseja gerar o relatório completo com todos os laboratórios ou o
+        relatório parcial com as informações exibidas na tela.
       </li>
     </ModalAjuda>
 
@@ -200,9 +200,7 @@ export default {
           },
         },
         btnOk: () => {
-          this.filtroPeriodos.ativados = [
-            ...orderBy(this.filtroPeriodos.selecionados, "id"),
-          ];
+          this.filtroPeriodos.ativados = [...orderBy(this.filtroPeriodos.selecionados, "id")];
           this.filtroLaboratorios.ativados = [...this.filtroLaboratorios.selecionados];
         },
       },
@@ -220,18 +218,18 @@ export default {
 
   methods: {
     generatePdf(completo) {
-      let laboratorios, periodosAtivados;
+      let laboratorios, periodosAtivos;
       if (completo) {
         laboratorios = this.LaboratoriosOrdered;
-        periodosAtivados = this.PeriodosOptions;
+        periodosAtivos = this.PeriodosOptions;
       } else {
         laboratorios = this.filtroLaboratorios.ativados;
-        periodosAtivados = this.filtroPeriodos.ativados;
+        periodosAtivos = this.filtroPeriodos.ativados;
       }
 
       pdfHorariosLabs({
         laboratorios,
-        periodosAtivados,
+        periodosAtivos,
         turmas: this.TurmasETurmasExternasOrdered,
         plano: this.currentPlano,
       });
@@ -277,9 +275,7 @@ export default {
       return turmasResultantes;
     },
     horariosIsEmpty() {
-      return (
-        !this.filtroPeriodos.ativados.length || !this.filtroLaboratorios.ativados.length
-      );
+      return !this.filtroPeriodos.ativados.length || !this.filtroLaboratorios.ativados.length;
     },
   },
 };

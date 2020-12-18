@@ -21,7 +21,7 @@
 
         <template #tbody>
           <template v-for="curso in filtroCursos.ativados">
-            <tr :key="`Curso${curso.id}`" style="background-color: #f1f1f1">
+            <tr :key="curso.id + curso.codigo" style="background-color: #f1f1f1">
               <v-td width="80">{{ curso.codigo }}</v-td>
               <v-td width="300">{{ curso.nome }}</v-td>
               <v-td width="40"></v-td>
@@ -31,7 +31,7 @@
               <v-td width="80"></v-td>
             </tr>
 
-            <tr v-for="turma in turmas(curso.id)" :key="`Curso${curso.id}Turma${turma.turma.id}`">
+            <tr v-for="turma in getTurmasDoCurso(curso.id)" :key="curso.id + '-' + turma.turma.id">
               <v-td width="80"></v-td>
               <v-td width="300"></v-td>
               <v-td width="40">{{ turma.turma.periodo }}</v-td>
@@ -43,6 +43,10 @@
               </v-td>
             </tr>
           </template>
+
+          <tr v-if="!filtroCursos.ativados.length">
+            <v-td colspan="7" width="740"><b>Nenhum curso encontrado</b></v-td>
+          </tr>
         </template>
       </BaseTable>
     </div>
@@ -121,21 +125,52 @@
       <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Períodos'">
         <template #thead>
           <v-th width="25" />
-          <v-th width="425" align="start">Período Letivo</v-th>
+          <v-th width="425" align="start">Periodos Letivo</v-th>
         </template>
 
         <template #tbody>
-          <tr @click="toggleItemInArray(1, filtroPeriodos.selecionados)">
+          <tr
+            v-for="periodo in PeriodosOptions"
+            :key="periodo.id + periodo.nome"
+            @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
+            v-prevent-click-selection
+          >
             <v-td width="25" type="content">
-              <input type="checkbox" v-model="filtroPeriodos.selecionados" :value="1" />
+              <input
+                type="checkbox"
+                v-model="filtroPeriodos.selecionados"
+                :value="periodo"
+                @click.stop="selecionaPeriodo(periodo)"
+              />
             </v-td>
-            <v-td width="425" align="start">PRIMEIRO</v-td>
+            <v-td width="425" align="start">{{ periodo.nome }}</v-td>
           </tr>
-          <tr @click="toggleItemInArray(3, filtroPeriodos.selecionados)">
+        </template>
+      </BaseTable>
+
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Semestres'">
+        <template #thead>
+          <v-th width="25" />
+          <v-th width="425" align="start">Semestre Letivo</v-th>
+        </template>
+
+        <template #tbody>
+          <tr
+            v-for="semestre in SemestresOptions"
+            :key="semestre.id + semestre.nome"
+            @click="selecionaSemestre(semestre)"
+            v-prevent-click-selection
+          >
             <v-td width="25" type="content">
-              <input type="checkbox" v-model="filtroPeriodos.selecionados" :value="3" />
+              <input
+                type="checkbox"
+                v-model="filtroSemestres.selecionados"
+                :value="semestre"
+                :indeterminate.prop="semestre.halfChecked"
+                @click.stop="selecionaSemestre(semestre)"
+              />
             </v-td>
-            <v-td width="425" align="start">TERCEIRO</v-td>
+            <v-td width="425" align="start">{{ semestre.nome }}</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -166,13 +201,12 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { find, orderBy, filter } from "lodash-es";
+import { find, orderBy, filter, some } from "lodash-es";
 import { pdfTurmasCursos } from "@/common/services/pdfs";
 import { normalizeText } from "@/common/utils";
 import {
   toggleItemInArray,
   toggleAsideModal,
-  conectaFiltroPerfisEDisciplinas,
   conectaFiltrosSemestresEPeriodos,
   preventClickSelection,
 } from "@/common/mixins";
@@ -192,7 +226,6 @@ export default {
   mixins: [
     toggleItemInArray,
     toggleAsideModal,
-    conectaFiltroPerfisEDisciplinas,
     conectaFiltrosSemestresEPeriodos,
     preventClickSelection,
   ],
@@ -225,12 +258,15 @@ export default {
         ativados: [],
       },
       filtroPeriodos: {
-        selecionados: [1, 3],
         ativados: [],
+        selecionados: [],
+      },
+      filtroSemestres: {
+        selecionados: [],
       },
       modalFiltrosTabs: {
         current: "Cursos",
-        array: ["Cursos", "Períodos"],
+        array: ["Cursos", "Períodos", "Semestres"],
       },
       modalFiltrosCallbacks: {
         selectAll: {
@@ -238,7 +274,12 @@ export default {
             this.filtroCursos.selecionados = [...this.CursosFiltrados];
           },
           Periodos: () => {
-            this.filtroPeriodos.selecionados = [1, 3];
+            this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
+            this.filtroSemestres.selecionados = [...this.SemestresOptions];
+          },
+          Semestres: () => {
+            this.filtroSemestres.selecionados = [...this.SemestresOptions];
+            this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
           },
         },
         selectNone: {
@@ -246,6 +287,11 @@ export default {
             this.filtroCursos.selecionados = [];
           },
           Periodos: () => {
+            this.filtroPeriodos.selecionados = [];
+            this.filtroSemestres.selecionados = [];
+          },
+          Semestres: () => {
+            this.filtroSemestres.selecionados = [];
             this.filtroPeriodos.selecionados = [];
           },
         },
@@ -257,12 +303,13 @@ export default {
     };
   },
 
-  mounted() {
-    this.turmas(1);
+  beforeMount() {
+    // this.getTurmasDoCurso(1);
+    this.modalFiltrosCallbacks.selectAll.Periodos();
   },
 
   methods: {
-    turmas(curso) {
+    getTurmasDoCurso(curso) {
       let turmas = [];
       this.TurmasInDisciplinasPerfis.forEach((t) => {
         let pedidos = this.Pedidos[t.id];
@@ -271,16 +318,11 @@ export default {
           turmas.push({ turma: t, pedido: pedido });
         }
       });
+
       return orderBy(
         orderBy(
           orderBy(
-            filter(turmas, (t) => {
-              let periodo = false;
-              this.filtroPeriodos.ativados.forEach((p) => {
-                if (p == t.turma.periodo) periodo = true;
-              });
-              return periodo;
-            }),
+            filter(turmas, (t) => some(this.filtroPeriodos.ativados, ["id", t.turma.periodo])),
             (t) => {
               return t.turma.letra;
             }
@@ -316,11 +358,10 @@ export default {
     },
 
     generatePdf(completo) {
-      let cursos;
-      let periodos;
+      let cursos, periodos;
       if (completo) {
         cursos = this.AllCursos;
-        periodos = [1, 3];
+        periodos = this.PeriodosOptions;
       } else {
         cursos = this.filtroCursos.ativados;
         periodos = this.filtroPeriodos.ativados;
