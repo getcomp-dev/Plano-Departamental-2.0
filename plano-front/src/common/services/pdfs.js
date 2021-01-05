@@ -606,7 +606,7 @@ async function pdfHorariosCursos({ horariosAtivos, cursosAtivos, periodosAtivos,
   pdfMake.createPdf(docDefinition).open();
 }
 
-async function pdfHorariosLabs({ laboratorios, turmasETurmasExternas, periodosAtivos, plano }) {
+async function pdfHorariosLabs({ laboratorios, turmas, periodosAtivos, plano }) {
   const tables = [];
   const logoDcc = await imageToDataUrl(urlLogoDcc);
   const logoUfjf = await imageToDataUrl(urlLogoUfjf);
@@ -635,7 +635,7 @@ async function pdfHorariosLabs({ laboratorios, turmasETurmasExternas, periodosAt
         })
       );
 
-      const turmasDoPeriodo = filter(turmasETurmasExternas, ["periodo", periodo.id]);
+      const turmasDoPeriodo = filter(turmas, ["periodo", periodo.id]);
       if (!turmasDoPeriodo.length) {
         tables.push(makeEmptyPageWarning());
       } else {

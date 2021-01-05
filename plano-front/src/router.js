@@ -80,6 +80,10 @@ const routes = [
         component: lazyLoad("relatorios/GradesDCC"),
       },
       {
+        path: "/relatorios/grades-outros",
+        component: lazyLoad("relatorios/GradesOutros"),
+      },
+      {
         path: "/relatorios/horarios-cursos",
         component: lazyLoad("relatorios/HorariosCursos"),
       },
@@ -185,10 +189,13 @@ router.beforeEach((to, from, next) => {
   next();
 });
 
-router.afterEach(() => {
-  setTimeout(() => {
-    store.commit("SET_LOADING", { type: "partial", value: false });
-  }, 500);
+router.afterEach((to) => {
+  //Exceto rotas que fazem requisição pelo componente
+  if (to.path !== "/gerenciar/history") {
+    setTimeout(() => {
+      store.commit("SET_LOADING", { type: "partial", value: false });
+    }, 500);
+  }
 });
 
 export default router;

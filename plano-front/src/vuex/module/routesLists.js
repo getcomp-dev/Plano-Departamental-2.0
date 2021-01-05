@@ -49,6 +49,12 @@ const state = {
       description: `Listagem de todas as disciplinas que compõem as grades dos cursos do DCC, mostrando a qual período e semestre cada disciplina pertence.`,
     },
     {
+      path: "/relatorios/grades-outros",
+      title: "Grades - Outros",
+      icon: "file-alt",
+      description: `Listagem de todas as disciplinas que compõem as grades dos outros cursos, mostrando a qual período e semestre cada disciplina pertence.`,
+    },
+    {
       path: "/relatorios/horarios-cursos",
       title: "Horários - Cursos",
       icon: "file-alt",
