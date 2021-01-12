@@ -1,10 +1,5 @@
 <template>
-  <BaseModal
-    ref="baseModalAjuda"
-    title="Ajuda"
-    type="ajuda"
-    :hasBackground="true"
-  >
+  <BaseModal ref="baseModalAjuda" title="Ajuda" type="ajuda">
     <template #modal-body>
       <ul class="list-ajuda list-group">
         <slot></slot>

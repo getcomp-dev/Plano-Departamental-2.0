@@ -1,5 +1,5 @@
 import Vue from "vue";
-import vagaService from "../../common/services/vaga";
+import vagaService from "../../services/vaga";
 import {
   VAGA_FETCHED,
   SOCKET_VAGA_CREATED,

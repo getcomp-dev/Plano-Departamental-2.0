@@ -2,19 +2,12 @@
   <div class="main-component row" v-if="currentPlano.isEditable">
     <portal to="page-header">
       <template v-if="isAdding">
-        <BaseButton
-          template="salvar"
-          @click="$refs.novaTurmaRow.handleCreateTurmaExterna()"
-        />
+        <BaseButton template="salvar" @click="$refs.novaTurmaRow.handleCreateTurmaExterna()" />
         <BaseButton template="cancelar" @click="toggleAddRow" />
       </template>
       <template v-else>
         <BaseButton template="adicionar" @click="toggleAddRow" />
-        <BaseButton
-          template="deletar"
-          title="Deletar selecionados"
-          @click="openModalDelete"
-        />
+        <BaseButton template="deletar" title="Deletar selecionados" @click="openModalDelete" />
       </template>
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
@@ -134,11 +127,7 @@
             v-prevent-click-selection
           >
             <v-td width="25" type="content">
-              <input
-                type="checkbox"
-                v-model="filtroDisciplinas.selecionados"
-                :value="disciplina"
-              />
+              <input type="checkbox" v-model="filtroDisciplinas.selecionados" :value="disciplina" />
             </v-td>
             <v-td width="70" align="start">{{ disciplina.codigo }}</v-td>
             <v-td width="295" align="start">{{ disciplina.nome }}</v-td>
@@ -146,9 +135,7 @@
           </tr>
 
           <tr v-if="!DisciplinasOptionsOrdered.length">
-            <v-td colspan="3" width="450">
-              NENHUMA DISCIPLINA ENCONTRADA.
-            </v-td>
+            <v-td colspan="3" width="450">NENHUMA DISCIPLINA ENCONTRADA.</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -240,17 +227,17 @@
         <b>Visualizar conteúdo:</b>
         Clique no ícone de filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
-        no cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar
-        entre os tipos de filtro disponíveis. Marque quais informações deseja visualizar,
-        e para finalizar clique no botão OK.
+        no cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar entre os
+        tipos de filtro disponíveis. Marque quais informações deseja visualizar, e para finalizar
+        clique no botão OK.
       </li>
       <li class="list-group-item">
         <b>Adicionar turma:</b>
         Clique no ícone de adicionar
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
-        no cabeçalho da página. Em seguida, preencha a nova linha que irá aparecer no
-        início da tabela. Note que os campos disciplina e turma são obrigatórios. Após
-        preencher os campos, clique no ícone de salvar
+        no cabeçalho da página. Em seguida, preencha a nova linha que irá aparecer no início da
+        tabela. Note que os campos disciplina e turma são obrigatórios. Após preencher os campos,
+        clique no ícone de salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
         ou de cancelar
         <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />
@@ -258,24 +245,23 @@
       </li>
       <li class="list-group-item">
         <b>Deletar turma:</b>
-        Marque a(s) turma(s) que deseja deletar através da caixa de seleção na coluna mais
-        à esquerda da tabela. Em seguida, clique no ícone de deletar
+        Marque a(s) turma(s) que deseja deletar através da caixa de seleção na coluna mais à
+        esquerda da tabela. Em seguida, clique no ícone de deletar
         <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" />
-        no cabeçalho da página. Confirme a exclusão clicando no botão OK na janela que se
-        abrirá.
+        no cabeçalho da página. Confirme a exclusão clicando no botão OK na janela que se abrirá.
       </li>
       <li class="list-group-item">
         <b>Editar turma:</b>
-        Basta fazer as alterações necessárias diretamente nos campos da tabela. O sistema
-        salvará as modificações automaticamente.
+        Basta fazer as alterações necessárias diretamente nos campos da tabela. O sistema salvará as
+        modificações automaticamente.
       </li>
       <li class="list-group-item">
         <b>Observações:</b>
-        Em cada coluna de um curso, para cada disciplina, existem dois campos de vagas. O
-        campo superior é destinado às vagas de grade, e o inferior é referente às vagas
-        para alunos não periodizados. Para que uma turma externa apareça na grade horária
-        de um determinado curso, na página "Horários", é preciso que pelo menos uma vaga
-        de grade seja destinada a este curso.
+        Em cada coluna de um curso, para cada disciplina, existem dois campos de vagas. O campo
+        superior é destinado às vagas de grade, e o inferior é referente às vagas para alunos não
+        periodizados. Para que uma turma externa apareça na grade horária de um determinado curso,
+        na página "Horários", é preciso que pelo menos uma vaga de grade seja destinada a este
+        curso.
       </li>
     </ModalAjuda>
   </div>
@@ -386,7 +372,11 @@ export default {
   },
 
   methods: {
-    ...mapActions(["deleteTurmasExternas", "clearTurmasExternasToDelete"]),
+    ...mapActions([
+      "deleteTurmasExternas",
+      "clearTurmasExternasToDelete",
+      "fetchAllPedidosExternos",
+    ]),
 
     toggleAddRow() {
       this.isAdding = !this.isAdding;
@@ -411,8 +401,8 @@ export default {
 
   computed: {
     ...mapGetters([
-      "TurmasExternasInDisciplinas",
-      "DisciplinasExternasInPerfis",
+      "AllTurmasExternas",
+      "DisciplinasExternas",
       "TurmasExternasToDelete",
       "PrincipaisCursosDCC",
     ]),
@@ -420,8 +410,8 @@ export default {
     TurmasExternasOrdered() {
       return orderBy(
         this.TurmasExternarFiltredByDisciplinas,
-        ["periodo", this.ordenacaoTurmasMain.order],
-        ["asc", this.ordenacaoTurmasMain.type]
+        ["periodo", this.ordenacaoTurmasMain.order, "letra"],
+        ["asc", this.ordenacaoTurmasMain.type, "asc"]
       );
     },
     TurmasExternarFiltredByDisciplinas() {
@@ -430,7 +420,7 @@ export default {
       );
     },
     TurmasExternarFiltredByPeriodos() {
-      return filter(this.TurmasExternasInDisciplinas, (turma) =>
+      return filter(this.AllTurmasExternas, (turma) =>
         some(this.filtroPeriodos.ativados, ["id", turma.periodo])
       );
     },
@@ -443,16 +433,25 @@ export default {
       );
     },
     DisciplinasOptionsFiltered() {
-      if (this.searchCursosModal === "") return this.DisciplinasExternasInPerfis;
+      if (this.searchCursosModal === "") return this.DisciplinasExternas;
 
       const searchNormalized = normalizeText(this.searchDisciplinasModal);
 
-      return filter(this.DisciplinasExternasInPerfis, (disciplina) => {
+      return filter(this.DisciplinasExternas, (disciplina) => {
         const nome = normalizeText(disciplina.nome);
         const codigo = normalizeText(disciplina.codigo);
 
         return nome.match(searchNormalized) || codigo.match(searchNormalized);
       });
+    },
+    turmasExternasLength() {
+      return this.AllTurmasExternas.length;
+    },
+  },
+
+  watch: {
+    turmasExternasLength() {
+      this.fetchAllPedidosExternos();
     },
   },
 };

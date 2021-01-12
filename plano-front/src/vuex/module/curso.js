@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { orderBy, cloneDeepWith, filter } from "lodash-es";
-import cursoService from "../../common/services/curso";
+import cursoService from "../../services/curso";
 import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
 import ls from "local-storage";
 import {
@@ -158,15 +158,15 @@ const getters = {
   CursosDCC(_, getters) {
     return filter(getters.AllCursos, (curso) => {
       switch (curso.codigo) {
-        case "35A":
-        case "65C":
-        case "76A":
-        case "65B":
-        case "65AB":
-        case "65AC":
-          return true;
-        default:
-          return false;
+      case "35A":
+      case "65C":
+      case "76A":
+      case "65B":
+      case "65AB":
+      case "65AC":
+        return true;
+      default:
+        return false;
       }
     });
   },
@@ -174,13 +174,13 @@ const getters = {
   PrincipaisCursosDCC(state) {
     return filter(state.Cursos, (curso) => {
       switch (curso.codigo) {
-        case "35A":
-        case "65C":
-        case "76A":
-        case "65B":
-          return true;
-        default:
-          return false;
+      case "35A":
+      case "65C":
+      case "76A":
+      case "65B":
+        return true;
+      default:
+        return false;
       }
     });
   },

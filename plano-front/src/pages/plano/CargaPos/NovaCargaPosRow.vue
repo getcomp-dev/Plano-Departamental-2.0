@@ -18,9 +18,7 @@
     </v-td>
     <v-td width="145" type="content">
       <select v-model.number="cargaPosForm.Docente">
-        <option v-if="!DocentesAtivos.length">
-          Nenhum Docente Encontrado
-        </option>
+        <option v-if="!DocentesAtivos.length">Nenhum Docente Encontrado</option>
         <option v-for="docente in DocentesAtivos" :key="docente.id" :value="docente.id">
           {{ docente.apelido }}
         </option>

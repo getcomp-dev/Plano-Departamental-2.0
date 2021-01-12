@@ -13,9 +13,7 @@ function normalizeKeyName(str) {
 const validateObjectKeys = (obj, requiredKeys = []) => {
   for (let i = 0; i < requiredKeys.length; i++) {
     if (obj[requiredKeys[i]] === null)
-      throw new generalError(
-        `Campo <b>${normalizeKeyName(requiredKeys[i])}</b> inválido.`
-      );
+      throw new generalError(`Campo <b>${normalizeKeyName(requiredKeys[i])}</b> inválido.`);
   }
 };
 export default validateObjectKeys;

@@ -130,7 +130,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { filter, find, orderBy } from "lodash-es";
-import { pdfHorariosLabs } from "@/common/services/pdfs";
+import { pdfHorariosLabs } from "@/services/pdfs";
 import {
   toggleItemInArray,
   toggleAsideModal,
@@ -237,13 +237,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters([
-      "onLoading",
-      "Laboratorios",
-      "TurmasInDisciplinasPerfis",
-      "TurmasExternasInDisciplinas",
-      "AllPlanos",
-    ]),
+    ...mapGetters(["onLoading", "Laboratorios", "AllTurmas", "AllTurmasExternas"]),
 
     LaboratoriosOrdered() {
       const laboratoriosResultantes = [];
@@ -260,12 +254,8 @@ export default {
       return laboratoriosResultantes;
     },
     TurmasETurmasExternasOrdered() {
-      const turmasOredered = orderBy(this.TurmasInDisciplinasPerfis, [
-        "periodo",
-        "disciplina.nome",
-        "letra",
-      ]);
-      const turmasExternasOrdered = orderBy(this.TurmasExternasInDisciplinas, [
+      const turmasOredered = orderBy(this.AllTurmas, ["periodo", "disciplina.nome", "letra"]);
+      const turmasExternasOrdered = orderBy(this.AllTurmasExternas, [
         "periodo",
         "disciplina.nome",
         "letra",

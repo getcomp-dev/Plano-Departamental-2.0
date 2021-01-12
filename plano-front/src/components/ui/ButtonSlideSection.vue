@@ -2,11 +2,7 @@
   <div class="container" @click.stop="$emit('handel-click')">
     <span class="title">{{ title }}</span>
 
-    <button
-      type="button"
-      class="btn-arrow"
-      :style="`transform:rotate(${isOpen ? -90 : 0}deg)`"
-    >
+    <button type="button" class="btn-arrow" :style="`transform:rotate(${isOpen ? -90 : 0}deg)`">
       <font-awesome-icon :icon="['fas', 'chevron-left']" />
     </button>
   </div>

@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { find, map } from "lodash-es";
-import docenteDisciplinaService from "../../common/services/docenteDisciplina";
+import docenteDisciplinaService from "../../services/docenteDisciplina";
 import {
   DOCENTE_DISCIPLINA_FETCHED,
   SOCKET_DOCENTE_DISCIPLINA_CREATED,
@@ -61,7 +61,7 @@ const getters = {
     return map(state.DocenteDisciplinas, (pref) => {
       return {
         ...pref,
-        disciplina: find(rootGetters.DisciplinasInPerfis, ["id", pref.Disciplina]),
+        disciplina: find(rootGetters.AllDisciplinas, ["id", pref.Disciplina]),
         docente: find(rootGetters.AllDocentes, ["id", pref.Docente]),
       };
     });

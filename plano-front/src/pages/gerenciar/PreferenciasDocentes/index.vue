@@ -86,8 +86,8 @@
                 @click="openModalEditPreferencia(preferencia)"
                 :title="
                   'Preferência: ' +
-                    preferenciaText(preferencia.preferencia) +
-                    '\nClique para editar'
+                  preferenciaText(preferencia.preferencia) +
+                  '\nClique para editar'
                 "
               >
                 {{ preferencia.preferencia }}
@@ -173,8 +173,8 @@
                 @click="openModalEditPreferencia(preferencia)"
                 :title="
                   'Preferência: ' +
-                    preferenciaText(preferencia.preferencia) +
-                    '\nClique para editar'
+                  preferenciaText(preferencia.preferencia) +
+                  '\nClique para editar'
                 "
               >
                 {{ preferencia.preferencia }}
@@ -208,11 +208,7 @@
         <div class="form-row w-100">
           <div class="form-group col-6">
             <label for="editPref">Preferência:</label>
-            <select
-              id="editPref"
-              class="form-control"
-              v-model="preferenciaForm.preferencia"
-            >
+            <select id="editPref" class="form-control" v-model="preferenciaForm.preferencia">
               <option v-for="pref in [0, 1, 2, 3]" :key="pref" :value="pref">
                 {{ pref }} - {{ preferenciaText(pref) }}
               </option>
@@ -222,12 +218,7 @@
       </template>
 
       <template #modal-footer>
-        <BaseButton
-          color="lightblue"
-          text="Salvar"
-          class="ml-auto"
-          @click="handleEditPrefs"
-        />
+        <BaseButton color="lightblue" text="Salvar" class="ml-auto" @click="handleEditPrefs" />
       </template>
     </BaseModal>
 
@@ -253,7 +244,7 @@
           </div>
 
           <div class="form-row w-100">
-            <div class="form-group col-6 ">
+            <div class="form-group col-6">
               <label for="addDocente">Docente:</label>
               <select id="addDocente" class="form-control" v-model="add.Docente">
                 <option
@@ -291,11 +282,11 @@
               <select
                 id="addDisciplina"
                 class="form-control"
-                style="width:100%"
+                style="width: 100%"
                 v-model="add.Disciplina"
               >
                 <option
-                  v-for="disciplina in DisciplinasDCCInPerfis"
+                  v-for="disciplina in DisciplinasDCCOrderedByNome"
                   :key="disciplina.id + disciplina.codigo"
                   :value="disciplina.id"
                 >
@@ -310,7 +301,7 @@
               <label for="addDisciplina">Código:</label>
               <select id="addDisciplina" class="form-control" v-model="add.Disciplina">
                 <option
-                  v-for="disciplina in DisciplinasDCCInPerfis"
+                  v-for="disciplina in DisciplinasDCCOrderedByCodigo"
                   :key="disciplina.id + disciplina.codigo"
                   :value="disciplina.id"
                 >
@@ -332,12 +323,7 @@
       </template>
 
       <template #modal-footer>
-        <BaseButton
-          color="lightblue"
-          text="Confirmar"
-          class="ml-auto"
-          @click="addPreferencia"
-        />
+        <BaseButton color="lightblue" text="Confirmar" class="ml-auto" @click="addPreferencia" />
       </template>
     </BaseModal>
 
@@ -355,7 +341,7 @@
             <label for="newDisciplina">Disciplina:</label>
             <select id="newDisciplina" class="form-control" v-model="add.Disciplina">
               <option
-                v-for="disciplina in DisciplinasDCCInPerfis"
+                v-for="disciplina in DisciplinasDCCOrderedByNome"
                 :key="disciplina.id + disciplina.codigo"
                 :value="disciplina.id"
               >
@@ -370,7 +356,7 @@
             <label for="newCodigo">Código:</label>
             <select id="newCodigo" class="form-control" v-model="add.Disciplina">
               <option
-                v-for="disciplina in DisciplinasDCCInPerfis"
+                v-for="disciplina in DisciplinasDCCOrderedByCodigo"
                 :key="disciplina.id + disciplina.codigo"
                 :value="disciplina.id"
               >
@@ -404,12 +390,7 @@
       </template>
 
       <template #modal-footer>
-        <BaseButton
-          color="lightblue"
-          class="ml-auto"
-          text="Confirmar"
-          @click="addPreferencia"
-        />
+        <BaseButton color="lightblue" class="ml-auto" text="Confirmar" @click="addPreferencia" />
       </template>
     </BaseModal>
 
@@ -426,12 +407,7 @@
       </template>
 
       <template #modal-footer>
-        <BaseButton
-          color="lightblue"
-          class="ml-auto"
-          text="Importar"
-          @click="importPrefs"
-        />
+        <BaseButton color="lightblue" class="ml-auto" text="Importar" @click="importPrefs" />
       </template>
     </BaseModal>
 
@@ -440,35 +416,33 @@
         <b>Adicionar:</b>
         Clique no ícone de adicionar
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
-        no cabeçalho da página. Em seguida, preencha a janela que se abrirá à direita e
-        para finalizar clique no botão Confirmar. Ou para adicionar uma preferência
-        diretamente numa linha da tabela clique no icone de adicionar
+        no cabeçalho da página. Em seguida, preencha a janela que se abrirá à direita e para
+        finalizar clique no botão Confirmar. Ou para adicionar uma preferência diretamente numa
+        linha da tabela clique no icone de adicionar
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-darkgray" />
-        na coluna Pref. (preferência) da linha que deseja, preencha a janela que se abrirá
-        à direita e para finalizar clique no botão Confirmar.
+        na coluna Pref. (preferência) da linha que deseja, preencha a janela que se abrirá à direita
+        e para finalizar clique no botão Confirmar.
       </li>
       <li class="list-group-item">
         <b>Editar:</b>
-        Clique no numero da coluna Pref. (preferência) na linha que deseja alterar. Em
-        seguida, na janela que se abrirá à direita altere as informações que desejar e
-        clique em Salvar.
+        Clique no numero da coluna Pref. (preferência) na linha que deseja alterar. Em seguida, na
+        janela que se abrirá à direita altere as informações que desejar e clique em Salvar.
       </li>
       <li class="list-group-item">
         <b>Deletar:</b>
-        Basta seguir os passos da edição descrito acima colocando o valor da preferência
-        como zero.
+        Basta seguir os passos da edição descrito acima colocando o valor da preferência como zero.
       </li>
       <li class="list-group-item">
         <b>Alterar visualizaçao da tabela:</b>
         Clique no ícone de alterar visualizaçao
         <font-awesome-icon :icon="['fas', 'sync-alt']" class="icon-gray" />
-        no cabeçalho da página para alterar a visualizaçao das preferencias entre docentes
-        por disciplinas, ou disciplinas por docentes.
+        no cabeçalho da página para alterar a visualizaçao das preferencias entre docentes por
+        disciplinas, ou disciplinas por docentes.
       </li>
       <li class="list-group-item">
         <b>Ordenar:</b>
-        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
-        informações. Note que existem colunas com o icone
+        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das informações.
+        Note que existem colunas com o icone
         <font-awesome-icon :icon="['fas', 'thumbtack']" class="icon-darkgray" />
         que significa que esta ordenação terá pripridade em relação as outras.
       </li>
@@ -480,7 +454,7 @@
 import XLSX from "xlsx";
 import { mapGetters } from "vuex";
 import { find, filter, orderBy, map } from "lodash-es";
-import docenteDisciplinaService from "@/common/services/docenteDisciplina";
+import docenteDisciplinaService from "@/services/docenteDisciplina";
 import { ModalAjuda } from "@/components/modals";
 import { toggleAsideModal } from "@/common/mixins";
 
@@ -531,16 +505,16 @@ export default {
   methods: {
     preferenciaText(preferencia) {
       switch (preferencia) {
-        case 0:
-          return "Inapto";
-        case 1:
-          return "Emergência";
-        case 2:
-          return "Confortável";
-        case 3:
-          return "Interesse";
-        default:
-          break;
+      case 0:
+        return "Inapto";
+      case 1:
+        return "Emergência";
+      case 2:
+        return "Confortável";
+      case 3:
+        return "Interesse";
+      default:
+        break;
       }
     },
     toggleTableMode() {
@@ -603,7 +577,7 @@ export default {
           .then(() => {
             this.pushNotification({
               type: "success",
-              text: `Preferência adicionada com sucesso!`,
+              text: "Preferência adicionada com sucesso!",
             });
 
             this.add.Disciplina = null;
@@ -627,14 +601,13 @@ export default {
             .then(() => {
               this.pushNotification({
                 type: "success",
-                text: `Preferência atualizada com sucesso!`,
+                text: "Preferência atualizada com sucesso!",
               });
             })
             .catch((error) => {
               this.error = "<b>Erro ao atualizar Preferência</b>";
               if (error.response.data.fullMessage) {
-                this.error +=
-                  "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+                this.error += "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
               }
               this.pushNotification({
                 type: "error",
@@ -660,8 +633,7 @@ export default {
               .catch((error) => {
                 this.error = "<b>Erro ao atualizar Preferência</b>";
                 if (error.response.data.fullMessage) {
-                  this.error +=
-                    "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+                  this.error += "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
                 }
                 this.pushNotification({
                   type: "error",
@@ -679,14 +651,13 @@ export default {
               .then(() => {
                 this.pushNotification({
                   type: "success",
-                  text: `Preferência atualizada com sucesso!`,
+                  text: "Preferência atualizada com sucesso!",
                 });
               })
               .catch((error) => {
                 this.error = "<b>Erro ao atualizar Preferência</b>";
                 if (error.response.data.fullMessage) {
-                  this.error +=
-                    "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+                  this.error += "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
                 }
                 this.pushNotification({
                   type: "error",
@@ -702,7 +673,7 @@ export default {
       const reader = new FileReader();
 
       const docentes = this.DocentesAtivos;
-      const disciplinas = this.DisciplinasDCCInPerfis;
+      const disciplinas = this.DisciplinasDCC;
       const preferencias = this.PreferenciasDocentes;
       reader.onload = function(e) {
         const workbook = XLSX.read(e.target.result, { type: "binary" });
@@ -737,10 +708,7 @@ export default {
                   Docente: docente.id,
                   Disciplina: disciplinasCods[j].id,
                 });
-                if (
-                  prefs[i][disciplinasFields[j]] &&
-                  prefs[i][disciplinasFields[j]] != 0
-                ) {
+                if (prefs[i][disciplinasFields[j]] && prefs[i][disciplinasFields[j]] != 0) {
                   let prefDiscForm = {
                     Docente: docente.id,
                     Disciplina: disciplinasCods[j].id,
@@ -759,10 +727,7 @@ export default {
                   }
                 } else {
                   if (prefdisc) {
-                    docenteDisciplinaService.delete(
-                      prefdisc.Disciplina,
-                      prefdisc.Docente
-                    );
+                    docenteDisciplinaService.delete(prefdisc.Disciplina, prefdisc.Docente);
                   }
                 }
               }
@@ -776,7 +741,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["DocentesAtivos", "DisciplinasDCCInPerfis", "PreferenciasDocentes"]),
+    ...mapGetters(["DocentesAtivos", "DisciplinasDCC", "PreferenciasDocentes"]),
 
     DocentesInPreferenciasOrdered() {
       const disciplinasOrd = this.ordenacaoDocentes.disciplinas;
@@ -800,10 +765,7 @@ export default {
       const docentesResult = [];
 
       this.DocentesAtivos.forEach((docente) => {
-        const preferenciasDoDocente = filter(this.PreferenciasDocentes, [
-          "Docente",
-          docente.id,
-        ]);
+        const preferenciasDoDocente = filter(this.PreferenciasDocentes, ["Docente", docente.id]);
 
         if (preferenciasDoDocente.length)
           docentesResult.push({
@@ -814,7 +776,6 @@ export default {
 
       return docentesResult;
     },
-
     DisciplinasInPreferenciasOrdered() {
       const docentesOrd = this.ordenacaoDisciplina.docentes;
       const disciplinasOrd = this.ordenacaoDisciplina.disciplinas;
@@ -836,7 +797,7 @@ export default {
     DisciplinasInPreferencias() {
       const disciplinasResult = [];
 
-      this.DisciplinasDCCInPerfis.forEach((disciplina) => {
+      this.DisciplinasDCC.forEach((disciplina) => {
         const preferenciasDaDisciplina = filter(this.PreferenciasDocentes, [
           "Disciplina",
           disciplina.id,
@@ -850,6 +811,13 @@ export default {
       });
 
       return disciplinasResult;
+    },
+
+    DisciplinasDCCOrderedByNome() {
+      return orderBy(this.DisciplinasDCC, ["nome"]);
+    },
+    DisciplinasDCCOrderedByCodigo() {
+      return orderBy(this.DisciplinasDCC, ["codigo"]);
     },
   },
 };

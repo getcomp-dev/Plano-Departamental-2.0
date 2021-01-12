@@ -1,19 +1,20 @@
 <template>
   <transition name="sidebar-animation">
     <nav v-show="sidebarVisibility" class="sidebar bg-light" @click.stop>
-      <SidebarMenu :menuPages="routesHome" />
+      <SidebarMenu :menuPages="RoutesHome" />
       <SidebarMenu
         v-if="currentUser.isAdmin && currentPlano.isEditable"
         menuTitle="Plano"
-        :menuPages="routesPlano"
+        :menuPages="RoutesPlano"
       />
-      <SidebarMenu menuTitle="Relatórios" :menuPages="routesRelatorios" />
+      <SidebarMenu menuTitle="Relatórios" :menuPages="RoutesRelatorios" />
       <SidebarMenu
         v-if="currentUser.isSuperAdmin"
         menuTitle="Gerenciar"
-        :menuPages="routesGerenciar"
+        :menuPages="RoutesGerenciar"
       />
-      <SidebarMenu menuTitle="Histórico" :menuPages="routesHistorico" />
+      <SidebarMenu menuTitle="Histórico" :menuPages="RoutesHistorico" />
+      <SidebarMenu menuTitle="Validações" :menuPages="RoutesValidacoes" />
     </nav>
   </transition>
 </template>
@@ -29,11 +30,12 @@ export default {
   computed: {
     ...mapGetters([
       "sidebarVisibility",
-      "routesHome",
-      "routesPlano",
-      "routesRelatorios",
-      "routesGerenciar",
-      "routesHistorico",
+      "RoutesHome",
+      "RoutesPlano",
+      "RoutesRelatorios",
+      "RoutesGerenciar",
+      "RoutesHistorico",
+      "RoutesValidacoes",
       "currentUser",
       "currentPlano",
     ]),

@@ -99,9 +99,7 @@
             </div>
 
             <div class="form-group col m-0 px-0">
-              <label required for="periodoInicio" class="col-form-label">
-                Período de Início
-              </label>
+              <label required for="periodoInicio" class="col-form-label">Período de Início</label>
               <input
                 type="text"
                 id="periodoInicio"
@@ -113,9 +111,7 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="gradeCurso" class="col-form-label">
-                Curso da grade
-              </label>
+              <label required for="gradeCurso" class="col-form-label">Curso da grade</label>
               <select
                 id="gradeCurso"
                 class="form-control form-control-sm input-xl"
@@ -132,11 +128,7 @@
       </Card>
     </div>
 
-    <ModalDelete
-      ref="modalDelete"
-      :isDeleting="isEditing"
-      @btn-deletar="handleDeleteGrade"
-    >
+    <ModalDelete ref="modalDelete" :isDeleting="isEditing" @btn-deletar="handleDeleteGrade">
       <li v-if="isEditing" class="list-group-item">
         <span>
           Tem certeza que deseja excluír a grade
@@ -156,15 +148,15 @@
       </li>
       <li class="list-group-item">
         <b>Editar:</b>
-        Clique na linha da tabela da grade que deseja alterar. Em seguida, no cartão à
-        direita, altere as informações que desejar e clique em Salvar
+        Clique na linha da tabela da grade que deseja alterar. Em seguida, no cartão à direita,
+        altere as informações que desejar e clique em Salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
         .
       </li>
       <li class="list-group-item">
         <b>Deletar:</b>
-        Clique na linha da tabela da grade que deseja remover. Em seguida, no cartão à
-        direita, clique em Remover
+        Clique na linha da tabela da grade que deseja remover. Em seguida, no cartão à direita,
+        clique em Remover
         <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
         e confirme a remoção na janela que será aberta.
       </li>
@@ -176,8 +168,7 @@
       </li>
       <li class="list-group-item">
         <b>Ordenar:</b>
-        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
-        informações.
+        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>

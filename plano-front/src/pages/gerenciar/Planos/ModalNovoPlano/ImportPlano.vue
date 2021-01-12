@@ -5,8 +5,8 @@
       <b>.csv</b>
       para importar as turmas de cada periodo do novo plano.
       <br />
-      Note que o formato do arquivo requerido é o relatorio de plano departamental gerado
-      pelo SIGA na página: Acadêmico > Consultas > Plano Departamental.
+      Note que o formato do arquivo requerido é o relatorio de plano departamental gerado pelo SIGA
+      na página: Acadêmico > Consultas > Plano Departamental.
     </p>
 
     <div class="form-row">
@@ -49,53 +49,57 @@
 import { mapActions, mapGetters } from "vuex";
 import { find, some } from "lodash-es";
 import XLSX from "xlsx";
-import planoService from "@/common/services/plano";
-import { generateEmptyTurma, normalizeText } from "@/common/utils";
+import { readFileToBinary, generateEmptyTurma, normalizeText } from "@/common/utils";
 
 export default {
   name: "ModalImportPlano",
   props: { plano: { type: Object, required: true } },
 
   methods: {
-    ...mapActions(["createTurma", "editPedido"]),
+    ...mapActions([
+      "createPlano",
+      "createTurma",
+      "createPedidoOferecido",
+      "updatePedidoOferecido",
+      "fetchAllPedidosOferecidos",
+    ]),
 
     async handleImportPlano() {
-      const [inputFile1Periodo] = this.$refs.input1periodo.files;
-      const [inputFile3Periodo] = this.$refs.input3periodo.files;
-      if (!inputFile1Periodo && !inputFile3Periodo) {
+      const [file1Periodo] = this.$refs.input1periodo.files;
+      const [file3Periodo] = this.$refs.input3periodo.files;
+      if (!file1Periodo && !file3Periodo) {
         throw new Error("Nenhum arquivo selecionado");
       }
 
-      const response = await planoService.create(this.plano);
-      if (inputFile1Periodo)
-        await this.readInputFileTurmas(inputFile1Periodo, response.Plano.id, 1);
-      if (inputFile3Periodo)
-        await this.readInputFileTurmas(inputFile3Periodo, response.Plano.id, 3);
+      this.setLoading({ type: "partial", value: true });
+      try {
+        const planoCreated = await this.createPlano({ data: this.plano });
+        if (file1Periodo) await this.readInputFileTurmas(file1Periodo, planoCreated.id, 1);
+        if (file3Periodo) await this.readInputFileTurmas(file3Periodo, planoCreated.id, 3);
+      } catch (error) {
+        console.log("Erro ao importar", error);
+      }
+
+      // console.clear();
+      this.setLoading({ type: "partial", value: false });
+      this.pushNotification({
+        type: "success",
+        text: "Plano criado e turmas importadas",
+      });
     },
     async readInputFileTurmas(inputFile, planoId, periodo) {
-      const reader = new FileReader();
-
-      reader.onload = async (event) => {
-        this.setLoading({ type: "partial", value: true });
-        const workbook = XLSX.read(event.target.result, { type: "binary" });
-        const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
-        const dataString = JSON.stringify(XLSX.utils.sheet_to_json(firstWorksheet));
-        const dataStringNormalized = dataString
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .replace(/\s/g, "")
-          .toUpperCase();
-
-        const turmas = JSON.parse(dataStringNormalized);
-        await this.createTurmasImported(turmas, planoId, periodo);
-
-        await this.$store.dispatch("fetchAll");
-        this.setLoading({ type: "partial", value: false });
-      };
-
-      reader.readAsBinaryString(inputFile);
+      const fileBase64 = await readFileToBinary(inputFile);
+      const workbook = XLSX.read(fileBase64, { type: "binary" });
+      const firstWorksheet = workbook.Sheets[workbook.SheetNames[0]];
+      const dataString = JSON.stringify(XLSX.utils.sheet_to_json(firstWorksheet));
+      const dataStringNormalized = dataString
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s/g, "")
+        .toUpperCase();
+      const turmas = JSON.parse(dataStringNormalized);
+      await this.createTurmasImported(turmas, planoId, periodo);
     },
-
     async createTurmasImported(turmasImported, planoId, periodo) {
       const keys = {
         disciplinaCod: null,
@@ -119,7 +123,6 @@ export default {
       }
 
       let currentTurma = {};
-
       for (const turmaFile of turmasImported) {
         const newTurma = generateEmptyTurma({
           periodo,
@@ -136,38 +139,58 @@ export default {
 
         this.setDocentes(newTurma, turmaFile[keys.docentes]);
 
-        //Se a nova turma é igual a currentTurma, não cria a turma e cria apenas a vaga
+        //Se a nova turma é igual a currentTurma, não cria a turma e apenas atualiza o pedidos oferecidos
         if (this.turmasIsEqual(currentTurma, newTurma)) {
-          // await this.createPedido(turmaFile, keys, currentTurma.id); //Esperando criar no banco os outros pedidos
+          const pedidoOferecido = this.makePedidoOferecido(turmaFile, keys, currentTurma.id);
+          if (pedidoOferecido) {
+            try {
+              await this.updatePedidoOferecido({ data: pedidoOferecido });
+            } catch (error) {
+              //Se o pedido não existe
+              if (error.response.data.message === "Pedido inválido")
+                await this.createPedidoOferecido({ data: pedidoOferecido });
+            }
+          }
           continue;
         }
 
-        const turmaCreated = await this.createTurma(newTurma); //Se é uma turma nova então cria
-        currentTurma = { ...turmaCreated }; //Atualiza currentTurma
-        // await this.createPedido(turmaFile, keys, turmaCreated.id); //E cria pedido da turma
+        //Se é uma turma nova então cria a turma
+        const turmaCreated = await this.createTurma({ data: newTurma });
+        //Atualiza currentTurma
+        currentTurma = { ...turmaCreated };
+        //E edita o pedido oferecido da turma
+        const pedidoOferecido = this.makePedidoOferecido(turmaFile, keys, turmaCreated.id);
+        if (pedidoOferecido) {
+          await this.createPedidoOferecido({ data: pedidoOferecido });
+        }
       }
+
+      await this.fetchAllPedidosOferecidos();
     },
-    async createPedido(turmaFile, keys, turmaId) {
+
+    //Helpers
+    makePedidoOferecido(turmaFile, keys, turmaId) {
       const pedido = {
         Turma: null,
         Curso: null,
-        vagasNaoPeriodizadas: 0,
-        vagasPeriodizadas: 0,
         vagasOferecidas: 0,
         vagasOcupadas: 0,
       };
       pedido.Turma = turmaId;
-      pedido.Curso = this.findCursoId(turmaFile[keys.cursoCod]);
-      pedido.vagasOferecidas = turmaFile[keys.vagas1];
-      pedido.vagasOcupadas = turmaFile[keys.vagas2];
+      pedido.Curso = this.findCursoIdByCodigo(turmaFile[keys.cursoCod]);
+      pedido.vagasOferecidas = parseInt(turmaFile[keys.vagas1], 10);
+      pedido.vagasOcupadas = parseInt(turmaFile[keys.vagas2], 10);
 
       if (pedido.Curso) {
-        await this.editPedido(pedido);
+        return pedido;
       } else {
-        console.log("Curso não econtrado: " + turmaFile[keys.cursoCod]);
+        console.log(
+          "Curso não econtrado: " + turmaFile[keys.cursoCod],
+          "Turma: " + turmaFile[keys.disciplinaCod] + " - " + turmaFile[keys.letra]
+        );
+        return null;
       }
     },
-
     setDisciplina(turma, strCodigo) {
       if (!strCodigo) return;
 
@@ -214,7 +237,7 @@ export default {
         return "Diurno";
       }
     },
-    findCursoId(cursoCodigo) {
+    findCursoIdByCodigo(cursoCodigo) {
       if (!cursoCodigo) return null;
 
       const cursoFounded = find(this.AllCursos, ["codigo", cursoCodigo]);
@@ -241,7 +264,7 @@ export default {
       }
       //Caso não tenha achando nenhum horario, verifica se tem sala EAD
       if (sala.includes("EAD")) {
-        console.log("Encotrou sala EAD");
+        // console.log("Encotrou sala EAD", sala);
         return 31; //Id horario EAD
       }
 
@@ -252,25 +275,25 @@ export default {
 
       let diaNormalized = null;
       switch (dia.trim().substring(0, 3)) {
-        case "SEG":
-          diaNormalized = "2a";
-          break;
-        case "TER":
-          diaNormalized = "3a";
-          break;
-        case "QUA":
-          diaNormalized = "4a";
-          break;
-        case "QUI":
-          diaNormalized = "5a";
-          break;
-        case "SEX":
-          diaNormalized = "6a";
-          break;
-        case "SAB":
-          return "EAD"; //Se é sabado ja retorna EAD, pois não possui hora
-        default:
-          return null; //Se não achou ja retorna null e nem verifica hora
+      case "SEG":
+        diaNormalized = "2a";
+        break;
+      case "TER":
+        diaNormalized = "3a";
+        break;
+      case "QUA":
+        diaNormalized = "4a";
+        break;
+      case "QUI":
+        diaNormalized = "5a";
+        break;
+      case "SEX":
+        diaNormalized = "6a";
+        break;
+      case "SAB":
+        return "EAD"; //Se é sabado ja retorna EAD, pois não possui hora
+      default:
+        return null; //Se não achou ja retorna null e nem verifica hora
       }
 
       const [horaInicial, horaFinal] = hora.split("AS");
@@ -304,7 +327,6 @@ export default {
       "HorariosNoturno",
       "AllDisciplinas",
       "AllCursos",
-      "AllTurmas",
       "AllSalas",
       "AllDocentes",
       "PeriodosLetivos",

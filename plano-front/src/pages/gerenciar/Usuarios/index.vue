@@ -93,11 +93,7 @@
             <div class="row mb-2 mx-0">
               <div class="form-group col m-0 px-0">
                 <label required for="novaSenha">Senha</label>
-                <InputPassword
-                  :iconSize="13"
-                  :inputId="'novaSenha'"
-                  v-model="usuarioForm.senha"
-                />
+                <InputPassword :iconSize="13" :inputId="'novaSenha'" v-model="usuarioForm.senha" />
               </div>
             </div>
             <!-- confirmar senha -->
@@ -116,10 +112,7 @@
           <!-- Edit -->
           <template v-else-if="isEditing">
             <!-- toggle edit senha -->
-            <ButtonSlideSection
-              :isOpen="isEditingSenha"
-              @handel-click="toggleEditSenha"
-            />
+            <ButtonSlideSection :isOpen="isEditingSenha" @handel-click="toggleEditSenha" />
 
             <!-- edit senha -->
             <transition-group name="slideY" mode="out-in">
@@ -168,11 +161,7 @@
       </Card>
     </div>
 
-    <ModalDelete
-      ref="modalDelete"
-      :isDeleting="isEditing"
-      @btn-deletar="handleDeleteUsuario"
-    >
+    <ModalDelete ref="modalDelete" :isDeleting="isEditing" @btn-deletar="handleDeleteUsuario">
       <li class="list-group-item">
         <span>
           <template v-if="isEditing">
@@ -180,9 +169,7 @@
             <b>{{ usuarioForm.nome }}</b>
             ?
           </template>
-          <template v-else>
-            Nenhum usuário selecionado!
-          </template>
+          <template v-else>Nenhum usuário selecionado!</template>
         </span>
       </li>
     </ModalDelete>
@@ -196,15 +183,15 @@
       </li>
       <li class="list-group-item">
         <b>Editar:</b>
-        Clique na linha da tabela do usuário que deseja alterar. Em seguida, no cartão à
-        direita, altere as informações que desejar e clique em Salvar
+        Clique na linha da tabela do usuário que deseja alterar. Em seguida, no cartão à direita,
+        altere as informações que desejar e clique em Salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
         .
       </li>
       <li class="list-group-item">
         <b>Deletar:</b>
-        Clique na linha da tabela do usuário que deseja remover. Em seguida, no cartão à
-        direita, clique em Remover
+        Clique na linha da tabela do usuário que deseja remover. Em seguida, no cartão à direita,
+        clique em Remover
         <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" />
         e confirme a remoção na janela que será aberta.
       </li>
@@ -216,8 +203,7 @@
       </li>
       <li class="list-group-item">
         <b>Ordenar:</b>
-        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
-        informações.
+        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>
@@ -349,11 +335,11 @@ export default {
         this.AllUsuarios,
         (usuario) => {
           switch (order) {
-            case "nome":
-            case "login":
-              return usuario[order].toLowerCase();
-            default:
-              return usuario[order];
+          case "nome":
+          case "login":
+            return usuario[order].toLowerCase();
+          default:
+            return usuario[order];
           }
         },
         type

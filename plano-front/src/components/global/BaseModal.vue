@@ -1,7 +1,6 @@
 <template>
   <transition :name="customAnimation">
     <div
-      @click.stop
       v-if="visibility"
       :class="['modal-custom', options.customClasses]"
       :style="options.typeStyles"
@@ -30,7 +29,7 @@
 </template>
 
 <script>
-import { EventBus } from "@/plugins/eventBus.js";
+import { mapActions, mapGetters } from "vuex";
 const positions = {
   right: {
     top: "80px",
@@ -51,7 +50,7 @@ export default {
     type: { type: String, default: "" },
     position: { type: String, default: "" },
     title: { type: String, default: "" },
-    hasBackground: { type: Boolean, default: false },
+    hasOverlay: { type: Boolean, default: false },
     hasFooter: { type: Boolean, default: false },
     classes: { type: String, default: "" },
     styles: { type: Object, default: () => {} },
@@ -66,12 +65,13 @@ export default {
     document.addEventListener("keydown", this.closeOnEscKey);
   },
   beforeDestroy() {
-    this.$off("on-close");
-    this.$store.commit("HIDE_MODAL_OVERLAY");
+    this.setModalOverlayVisibility(false);
     document.removeEventListener("keydown", this.closeOnEscKey);
   },
 
   methods: {
+    ...mapActions(["setModalOverlayVisibility"]),
+
     close() {
       this.visibility = false;
     },
@@ -90,46 +90,48 @@ export default {
   },
 
   computed: {
+    ...mapGetters(["modalOverlayVisibility"]),
+
     options() {
       const typeStyles = [];
-      let { type, position, hasBackground, title, hasFooter, styles } = this;
+      let { type, position, hasOverlay, title, hasFooter, styles } = this;
 
       switch (type) {
-        case "editTurma":
-          if (!title) title = "Editar turma";
-          hasBackground = true;
-          typeStyles.push(positions.center, { width: "510px" });
-          break;
+      case "editTurma":
+        if (!title) title = "Editar turma";
+        hasOverlay = true;
+        typeStyles.push(positions.center, { width: "510px" });
+        break;
 
-        case "fromNavbar":
-          hasBackground = true;
-          typeStyles.push(positions.center, { width: "400px" });
-          break;
+      case "fromNavbar":
+        hasOverlay = true;
+        typeStyles.push(positions.center, { width: "400px" });
+        break;
 
-        case "filtros":
-          if (!title) title = "Filtros";
-          if (!hasFooter) hasFooter = true;
-          hasBackground = false;
-          typeStyles.push(positions.right, { width: "510px", height: "610px" });
-          break;
+      case "filtros":
+        if (!title) title = "Filtros";
+        if (!hasFooter) hasFooter = true;
+        hasOverlay = false;
+        typeStyles.push(positions.right, { width: "510px", height: "610px" });
+        break;
 
-        case "ajuda":
-          title = "Ajuda";
-          hasBackground = false;
-          typeStyles.push(positions.right, { width: "510px" });
-          break;
-        case "editVagas":
-          if (!title) title = "Editar Vagas";
-          title = "Vagas";
-          hasBackground = true;
-          typeStyles.push(positions.center, { width: "580px" });
-          break;
+      case "ajuda":
+        title = "Ajuda";
+        hasOverlay = false;
+        typeStyles.push(positions.right, { width: "510px" });
+        break;
+      case "editVagas":
+        if (!title) title = "Editar Vagas";
+        title = "Vagas";
+        hasOverlay = true;
+        typeStyles.push(positions.center, { width: "580px" });
+        break;
 
-        default:
-          if (position) typeStyles.push(positions[position]);
-          else typeStyles.push(positions.center);
-          typeStyles.push({ minWidth: "300px" });
-          break;
+      default:
+        if (position) typeStyles.push(positions[position]);
+        else typeStyles.push(positions.center);
+        typeStyles.push({ minWidth: "300px" });
+        break;
       }
 
       typeStyles.push(styles);
@@ -138,7 +140,7 @@ export default {
       return {
         position,
         typeStyles,
-        hasBackground,
+        hasOverlay,
         title,
         hasFooter,
         customClasses: ["modal-custom", this.classes],
@@ -146,35 +148,31 @@ export default {
     },
     customAnimation() {
       switch (this.type) {
-        case "editTurma":
-        case "editVagas":
-        case "fromNavbar":
-          return "center";
+      case "editTurma":
+      case "editVagas":
+      case "fromNavbar":
+        return "center";
 
-        case "filtros":
-        case "ajuda":
-          return "right";
-        default:
-          if (!this.position) return "center";
-          else return this.position;
+      case "filtros":
+      case "ajuda":
+        return "right";
+      default:
+        if (!this.position) return "center";
+        else return this.position;
       }
     },
   },
 
   watch: {
     visibility(newValue) {
-      if (newValue) {
-        if (this.options.hasBackground) {
-          this.$store.commit("SHOW_MODAL_OVERLAY");
-          EventBus.$on("close-modal", this.close);
-        }
-      } else {
-        this.$emit("on-close");
-
-        if (this.options.hasBackground) {
-          this.$store.commit("HIDE_MODAL_OVERLAY");
-          EventBus.$off("close-modal");
-        }
+      if (this.options.hasOverlay) {
+        this.setModalOverlayVisibility(newValue);
+      }
+    },
+    modalOverlayVisibility(newValue) {
+      //Para fechar o modal quando clicar no olverlay
+      if (this.options.hasOverlay && !newValue && newValue !== this.visibility) {
+        this.close();
       }
     },
   },

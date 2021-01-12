@@ -1,5 +1,8 @@
 const state = {
-  SemestresLetivos: [{ id: 1, nome: "Primeiro" }, { id: 2, nome: "Segundo" }],
+  SemestresLetivos: [
+    { id: 1, nome: "Primeiro" },
+    { id: 2, nome: "Segundo" },
+  ],
 };
 
 const getters = {

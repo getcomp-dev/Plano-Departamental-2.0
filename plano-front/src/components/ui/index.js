@@ -4,12 +4,6 @@ import InputPassword from "./InputPassword.vue";
 import ButtonSlideSection from "./ButtonSlideSection.vue";
 import InputSearch from "./InputSearch.vue";
 import InputsPedidosDCC from "./InputsPedidosDCC.vue";
+import Logo from "./Logo.vue";
 
-export {
-  InputsPedidosDCC,
-  InputSearch,
-  ButtonSlideSection,
-  InputPassword,
-  Card,
-  NavTab,
-};
+export { Logo, InputsPedidosDCC, InputSearch, ButtonSlideSection, InputPassword, Card, NavTab };

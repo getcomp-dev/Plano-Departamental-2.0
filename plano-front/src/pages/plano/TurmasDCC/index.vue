@@ -6,11 +6,7 @@
         <BaseButton template="cancelar" @click="toggleIsAdding" />
       </template>
       <template v-else>
-        <BaseButton
-          template="adicionar"
-          title="Criar nova turma"
-          @click="toggleIsAdding"
-        />
+        <BaseButton template="adicionar" title="Criar nova turma" @click="toggleIsAdding" />
         <BaseButton
           template="deletar"
           title="Deletar turmas selecionadas"
@@ -18,11 +14,7 @@
         />
       </template>
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
-      <BaseButton
-        template="download"
-        title="Baixar tabela em .xlsx"
-        @click="generateXlsx"
-      />
+      <BaseButton template="download" title="Baixar tabela em .xlsx" @click="generateXlsx" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </portal>
 
@@ -212,18 +204,12 @@
             <v-td width="85" align="start">{{ disciplina.perfil.abreviacao }}</v-td>
           </tr>
           <tr v-if="!DisciplinasOptionsOrdered.length">
-            <v-td colspan="3" width="450">
-              NENHUMA DISCIPLINA ENCONTRADA.
-            </v-td>
+            <v-td colspan="3" width="450">NENHUMA DISCIPLINA ENCONTRADA.</v-td>
           </tr>
         </template>
       </BaseTable>
 
-      <BaseTable
-        type="modal"
-        v-show="modalFiltrosTabs.current === 'Cursos'"
-        :hasSearchBar="true"
-      >
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Cursos'" :hasSearchBar="true">
         <template #thead-search>
           <InputSearch
             v-model="searchCursosModal"
@@ -332,11 +318,7 @@
       </template>
     </ModalFiltros>
 
-    <ModalEditTurma
-      ref="modalEditTurma"
-      :turma="turmaClicked"
-      :hasEditDisciplina="true"
-    />
+    <ModalEditTurma ref="modalEditTurma" :turma="turmaClicked" :hasEditDisciplina="true" />
 
     <ModalDelete
       ref="modalDelete"
@@ -345,9 +327,7 @@
       @btn-deletar="handleDeleteTurmas"
       @btn-clear="clearTurmasToDelete"
     >
-      <li v-if="!TurmasToDelete.length" class="list-group-item">
-        Nenhuma turma selecionada.
-      </li>
+      <li v-if="!TurmasToDelete.length" class="list-group-item">Nenhuma turma selecionada.</li>
       <li
         v-for="turma in TurmasToDelete"
         class="list-group-item"
@@ -371,17 +351,17 @@
         <b>Visualizar conteúdo:</b>
         Clique no ícone de filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
-        no cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar
-        entre os tipos de filtro disponíveis. Marque quais informações deseja visualizar,
-        e para finalizar clique no botão OK.
+        no cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar entre os
+        tipos de filtro disponíveis. Marque quais informações deseja visualizar, e para finalizar
+        clique no botão OK.
       </li>
       <li class="list-group-item">
         <b>Adicionar turma:</b>
         Clique no ícone de adicionar
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
-        no cabeçalho da página. Em seguida, preencha a nova linha que irá aparecer no
-        início da tabela. Note que os campos disciplina, turno e turma são obrigatórios.
-        Após preencher os campos, clique no ícone de salvar
+        no cabeçalho da página. Em seguida, preencha a nova linha que irá aparecer no início da
+        tabela. Note que os campos disciplina, turno e turma são obrigatórios. Após preencher os
+        campos, clique no ícone de salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
         ou de cancelar
         <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />
@@ -389,22 +369,21 @@
       </li>
       <li class="list-group-item">
         <b>Deletar turma(s):</b>
-        Marque a(s) turma(s) que deseja deletar através da caixa de seleção na coluna mais
-        à esquerda da tabela. Em seguida, clique no ícone de deletar
+        Marque a(s) turma(s) que deseja deletar através da caixa de seleção na coluna mais à
+        esquerda da tabela. Em seguida, clique no ícone de deletar
         <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" />
-        no cabeçalho da página. Confirme a exclusão clicando no botão OK na janela que se
-        abrirá.
+        no cabeçalho da página. Confirme a exclusão clicando no botão OK na janela que se abrirá.
       </li>
       <li class="list-group-item">
         <b>Editar turma:</b>
-        Existem duas formas de se fazer alterações em uma turma. A primeira forma envolve
-        modificar diretamente os campos na tabela. Neste caso, o sistema salvará
-        automaticamente cada alteração. Na segunda forma, deve-se clicar no ícone
+        Existem duas formas de se fazer alterações em uma turma. A primeira forma envolve modificar
+        diretamente os campos na tabela. Neste caso, o sistema salvará automaticamente cada
+        alteração. Na segunda forma, deve-se clicar no ícone
         <font-awesome-icon :icon="['fas', 'edit']" class="icon-darkgray" />
-        presente na couna "Editar". Uma janela de edição irá se abrir. Neste caso, as
-        alterações realizadas nos campos da metade superior da janela somente serão
-        enviadas ao clicar no botão "Salvar". Já para o quantitativo de vagas na parte
-        inferior, as alterações serão salvas automaticamente.
+        presente na couna "Editar". Uma janela de edição irá se abrir. Neste caso, as alterações
+        realizadas nos campos da metade superior da janela somente serão enviadas ao clicar no botão
+        "Salvar". Já para o quantitativo de vagas na parte inferior, as alterações serão salvas
+        automaticamente.
       </li>
       <li class="list-group-item">
         <b>Relatório:</b>
@@ -414,11 +393,10 @@
       </li>
       <li class="list-group-item">
         <b>Observações:</b>
-        Em cada coluna de um curso, para cada disciplina, existem dois campos de vagas. O
-        campo superior é destinado às vagas de grade, e o inferior é referente às vagas
-        para alunos não periodizados. Para que uma turma apareça na grade horária de um
-        determinado curso, na página "Horários", é preciso que pelo menos uma vaga de
-        grade seja destinada a este curso.
+        Em cada coluna de um curso, para cada disciplina, existem dois campos de vagas. O campo
+        superior é destinado às vagas de grade, e o inferior é referente às vagas para alunos não
+        periodizados. Para que uma turma apareça na grade horária de um determinado curso, na página
+        "Horários", é preciso que pelo menos uma vaga de grade seja destinada a este curso.
       </li>
     </ModalAjuda>
   </div>
@@ -426,7 +404,7 @@
 
 <script>
 import ls from "local-storage";
-import xlsx from "@/common/services/xlsx";
+import xlsx from "@/services/xlsx";
 import { mapGetters, mapActions } from "vuex";
 import { union, difference, orderBy, filter, some } from "lodash-es";
 import { saveAs } from "file-saver";
@@ -440,12 +418,7 @@ import {
   preventClickSelection,
 } from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
-import {
-  ModalDelete,
-  ModalFiltros,
-  ModalEditTurma,
-  ModalAjuda,
-} from "@/components/modals";
+import { ModalDelete, ModalFiltros, ModalEditTurma, ModalAjuda } from "@/components/modals";
 import NovaTurmaRow from "./NovaTurmaRow.vue";
 import TurmaRow from "./TurmaRow.vue";
 
@@ -555,9 +528,7 @@ export default {
         btnOk: () => {
           this.filtroPeriodos.ativados = [...this.filtroPeriodos.selecionados];
           this.filtroDisciplinas.ativadas = [...this.filtroDisciplinas.selecionados];
-          this.filtroCursos.ativados = orderBy(this.filtroCursos.selecionados, [
-            "posicao",
-          ]);
+          this.filtroCursos.ativados = orderBy(this.filtroCursos.selecionados, ["posicao"]);
         },
       },
       ordenacaoModal: {
@@ -601,7 +572,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(["deleteTurmas", "clearTurmasToDelete"]),
+    ...mapActions(["deleteTurmas", "clearTurmasToDelete", "fetchAllPedidos"]),
 
     openModalEditTurma(turma) {
       this.turmaClicked = turma;
@@ -622,15 +593,10 @@ export default {
       try {
         this.setLoading({ type: "partial", value: true });
 
-        await xlsx.downloadTable({
-          pedidos: this.$store.state.pedido.Pedidos,
-          Plano: localStorage.getItem("Plano"),
-        });
+        await xlsx.downloadTable({ pedidos: this.Pedidos, Plano: this.currentPlano.id });
         const tableData = await fetch("http://200.131.219.57:3000/api/xlsx/download", {
           method: "GET",
-          headers: {
-            Authorization: `Bearer ${this.$store.state.auth.token}`,
-          },
+          headers: { Authorization: `Bearer ${this.$store.state.auth.token}` },
         });
         const tableDataBlobed = await tableData.blob();
         await saveAs(tableDataBlobed, "tabela.xlsx");
@@ -664,9 +630,10 @@ export default {
       "AllCursos",
       "CursosDCC",
       "PerfisDCC",
-      "DisciplinasDCCInPerfis",
-      "TurmasInDisciplinasPerfis",
+      "DisciplinasDCC",
+      "AllTurmas",
       "TurmasToDelete",
+      "Pedidos",
     ]),
 
     TurmasOrdered() {
@@ -687,14 +654,11 @@ export default {
     },
     TurmasFiltredByDisciplinas() {
       return filter(this.TurmasFiltredByPeriodos, (turma) =>
-        some(
-          this.filtroDisciplinas.ativadas,
-          (disciplina) => disciplina.id === turma.Disciplina
-        )
+        some(this.filtroDisciplinas.ativadas, (disciplina) => disciplina.id === turma.Disciplina)
       );
     },
     TurmasFiltredByPeriodos() {
-      return filter(this.TurmasInDisciplinasPerfis, (turma) =>
+      return filter(this.AllTurmas, (turma) =>
         some(this.filtroPeriodos.ativados, ["id", turma.periodo])
       );
     },
@@ -708,10 +672,7 @@ export default {
     },
     PerfisOptions() {
       return this.PerfisDCC.map((perfil) => {
-        const todasDisciplinasDoPerfil = filter(this.DisciplinasOptions, [
-          "Perfil",
-          perfil.id,
-        ]);
+        const todasDisciplinasDoPerfil = filter(this.DisciplinasOptions, ["Perfil", perfil.id]);
         const disciplinasSelecionadas = filter(this.filtroDisciplinas.selecionados, [
           "Perfil",
           perfil.id,
@@ -751,7 +712,7 @@ export default {
       });
     },
     DisciplinasOptions() {
-      return this.DisciplinasDCCInPerfis;
+      return this.DisciplinasDCC;
     },
 
     CursosOptionsOrdered() {
@@ -772,6 +733,15 @@ export default {
 
         return nome.match(searchNormalized) || codigo.match(searchNormalized);
       });
+    },
+    turmasLength() {
+      return this.AllTurmas.length;
+    },
+  },
+
+  watch: {
+    turmasLength() {
+      this.fetchAllPedidos();
     },
   },
 };

@@ -4,7 +4,7 @@
     title="Plano Departamental"
     type="editTurma"
     class="modal-plano"
-    :hasBackground="true"
+    :hasOverlay="true"
     :hasFooter="true"
     btnOkText="Criar plano"
   >
@@ -37,12 +37,7 @@
       </template>
 
       <template v-else>
-        <BaseButton
-          text="OK"
-          color="green"
-          class="px-3 ml-auto"
-          @click="handleCreatePlano"
-        />
+        <BaseButton text="OK" color="green" class="px-3 ml-auto" @click="handleCreatePlano" />
       </template>
     </template>
   </BaseModal>

@@ -66,8 +66,8 @@ export default {
 
     text: { type: String, default: "" },
     align: { type: String, default: "center" },
-    width: { type: Number | String, required: true },
-    paddingX: { type: String | Number, default: "5" },
+    width: { type: [String, Number], required: true },
+    paddingX: { type: [String, Number], default: "5" },
   },
 
   methods: {

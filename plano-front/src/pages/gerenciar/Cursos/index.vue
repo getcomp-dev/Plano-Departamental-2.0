@@ -25,11 +25,7 @@
             >
               Nome
             </v-th-ordination>
-            <v-th-ordination
-              :currentOrder="ordenacaoCursos"
-              orderToCheck="turno"
-              width="65"
-            >
+            <v-th-ordination :currentOrder="ordenacaoCursos" orderToCheck="turno" width="65">
               Turno
             </v-th-ordination>
 
@@ -73,10 +69,7 @@
             </tr>
             <tr v-if="!CursosOrdered.length">
               <v-td width="580" colspan="5">
-                <font-awesome-icon
-                  :icon="['fas', 'exclamation-triangle']"
-                  class="icon-red"
-                />
+                <font-awesome-icon :icon="['fas', 'exclamation-triangle']" class="icon-red" />
                 <b>Nenhum curso encontrado!</b>
               </v-td>
             </tr>
@@ -135,9 +128,7 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="alunosEntrada1" class="col-form-label">
-                Alunos 1º Período
-              </label>
+              <label required for="alunosEntrada1" class="col-form-label">Alunos 1º Período</label>
               <input
                 type="number"
                 min="0"
@@ -150,9 +141,7 @@
             </div>
 
             <div class="form-group col m-0 px-0">
-              <label required for="alunosEntrada2" class="col-form-label">
-                Alunos 2º Período
-              </label>
+              <label required for="alunosEntrada2" class="col-form-label">Alunos 2º Período</label>
               <input
                 type="number"
                 min="0"
@@ -168,11 +157,7 @@
       </Card>
     </div>
 
-    <ModalDelete
-      ref="modalDelete"
-      :isDeleting="isEditing"
-      @btn-deletar="handleDeleteCurso"
-    >
+    <ModalDelete ref="modalDelete" :isDeleting="isEditing" @btn-deletar="handleDeleteCurso">
       <li v-if="isEditing" class="list-group-item">
         <span v-html="modalDeleteText"></span>
       </li>
@@ -188,15 +173,15 @@
       </li>
       <li class="list-group-item">
         <b>Editar:</b>
-        Clique na linha da tabela do curso que deseja alterar. Em seguida, no cartão à
-        direita, altere as informações que desejar e clique em Salvar
+        Clique na linha da tabela do curso que deseja alterar. Em seguida, no cartão à direita,
+        altere as informações que desejar e clique em Salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
         .
       </li>
       <li class="list-group-item">
         <b>Deletar:</b>
-        Clique na linha da tabela do curso que deseja remover. Em seguida, no cartão à
-        direita, clique em Remover
+        Clique na linha da tabela do curso que deseja remover. Em seguida, no cartão à direita,
+        clique em Remover
         <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
         e confirme a remoção na janela que será aberta.
       </li>
@@ -208,8 +193,7 @@
       </li>
       <li class="list-group-item">
         <b>Ordenar:</b>
-        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
-        informações.
+        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>
@@ -267,10 +251,7 @@ export default {
       for (let t in this.$store.state.pedido.Pedidos) {
         let pedido = find(this.$store.state.pedido.Pedidos[t], (p) => {
           if (p.Curso === cursoId) {
-            if (
-              parseInt(p.vagasPeriodizadas, 10) > 0 ||
-              parseInt(p.vagasNaoPeriodizadas, 10) > 0
-            ) {
+            if (parseInt(p.vagasPeriodizadas, 10) > 0 || parseInt(p.vagasNaoPeriodizadas, 10) > 0) {
               return true;
             }
           }
@@ -359,11 +340,7 @@ export default {
     ...mapGetters(["AllCursos"]),
 
     CursosOrdered() {
-      return orderBy(
-        this.AllCursos,
-        this.ordenacaoCursos.order,
-        this.ordenacaoCursos.type
-      );
+      return orderBy(this.AllCursos, this.ordenacaoCursos.order, this.ordenacaoCursos.type);
     },
     isEditing() {
       return this.cursoForm.id !== null;

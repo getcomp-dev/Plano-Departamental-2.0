@@ -78,9 +78,7 @@
             </div>
 
             <div class="form-group col m-0 px-0">
-              <label required for="lotacaoMaxima" class="col-form-label">
-                Lotação Máx.
-              </label>
+              <label required for="lotacaoMaxima" class="col-form-label">Lotação Máx.</label>
               <input
                 id="lotacaoMaxima"
                 type="number"
@@ -128,15 +126,15 @@
       </li>
       <li class="list-group-item">
         <b>Editar:</b>
-        Clique na linha da tabela da sala que deseja alterar. Em seguida, no cartão à
-        direita, altere as informações que desejar e clique em Salvar
+        Clique na linha da tabela da sala que deseja alterar. Em seguida, no cartão à direita,
+        altere as informações que desejar e clique em Salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
         .
       </li>
       <li class="list-group-item">
         <b>Deletar:</b>
-        Clique na linha da tabela da sala que deseja remover. Em seguida, no cartão à
-        direita, clique em Remover
+        Clique na linha da tabela da sala que deseja remover. Em seguida, no cartão à direita,
+        clique em Remover
         <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
         e confirme a remoção na janela que será aberta.
       </li>
@@ -148,8 +146,7 @@
       </li>
       <li class="list-group-item">
         <b>Ordenar:</b>
-        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
-        informações.
+        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>
@@ -158,7 +155,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { clone, orderBy } from "lodash-es";
-import salaService from "@/common/services/sala";
+import salaService from "@/services/sala";
 import { generateBooleanText, maskOnlyNumber, normalizeInputText } from "@/common/mixins";
 import { Card } from "@/components/ui";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
@@ -213,7 +210,7 @@ export default {
           this.cleanSala();
           this.$notify({
             group: "general",
-            title: `Sucesso!`,
+            title: "Sucesso!",
             text: `A Sala ${response.Sala.nome} foi criada!`,
             type: "success",
           });
@@ -238,7 +235,7 @@ export default {
         .then((response) => {
           this.$notify({
             group: "general",
-            title: `Sucesso!`,
+            title: "Sucesso!",
             text: `A Sala ${response.Sala.nome} foi atualizada!`,
             type: "success",
           });
@@ -246,12 +243,11 @@ export default {
         .catch((error) => {
           this.error = "<b>Erro ao atualizar Sala</b>";
           if (error.response.data.fullMessage) {
-            this.error +=
-              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+            this.error += "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
           }
           this.$notify({
             group: "general",
-            title: `Erro!`,
+            title: "Erro!",
             text: this.error,
             type: "error",
           });
@@ -264,7 +260,7 @@ export default {
           this.cleanSala();
           this.$notify({
             group: "general",
-            title: `Sucesso!`,
+            title: "Sucesso!",
             text: `A Sala ${response.Sala.nome} foi excluída!`,
             type: "success",
           });
@@ -273,7 +269,7 @@ export default {
           this.error = "<b>Erro ao excluir Sala</b>";
           this.$notify({
             group: "general",
-            title: `Erro!`,
+            title: "Erro!",
             text: this.error,
             type: "error",
           });
@@ -285,11 +281,7 @@ export default {
     ...mapGetters(["AllSalas"]),
 
     SalasOrdered() {
-      return orderBy(
-        this.AllSalas,
-        this.ordenacaoSalasMain.order,
-        this.ordenacaoSalasMain.type
-      );
+      return orderBy(this.AllSalas, this.ordenacaoSalasMain.order, this.ordenacaoSalasMain.type);
     },
     isEdit() {
       return this.salaForm.id != null;

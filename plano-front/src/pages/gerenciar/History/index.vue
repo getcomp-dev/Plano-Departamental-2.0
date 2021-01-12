@@ -74,11 +74,7 @@
             v-prevent-click-selection
           >
             <v-td width="25" type="content">
-              <input
-                type="checkbox"
-                v-model="filtroTabelas.selecionados"
-                :value="tabela"
-              />
+              <input type="checkbox" v-model="filtroTabelas.selecionados" :value="tabela" />
             </v-td>
             <v-td width="425" align="start">{{ tabela.nome }}</v-td>
           </tr>
@@ -98,11 +94,7 @@
             v-prevent-click-selection
           >
             <v-td width="25" type="content">
-              <input
-                type="checkbox"
-                v-model="filtroOperacoes.selecionados"
-                :value="operacao"
-              />
+              <input type="checkbox" v-model="filtroOperacoes.selecionados" :value="operacao" />
             </v-td>
             <v-td width="425" align="start">{{ operacao.nome }}</v-td>
           </tr>
@@ -115,9 +107,9 @@
         <b>Visualizar conteúdo:</b>
         Clique no ícone de filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
-        no cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar
-        entre os tipos de filtro disponíveis. Marque quais informações deseja visualizar,
-        e para finalizar clique no botão OK.
+        no cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar entre os
+        tipos de filtro disponíveis. Marque quais informações deseja visualizar, e para finalizar
+        clique no botão OK.
       </li>
     </ModalAjuda>
   </div>
@@ -190,206 +182,202 @@ export default {
       let linha = h.linhaModificada;
       let aux = undefined;
       switch (h.tabelaModificada) {
-        case "CargaPos": {
-          if (h.tipoOperacao === "Delete") {
-            aux = linha.split("/");
-            let docente = find(this.$store.state.docente.Docentes, {
-              id: parseInt(aux[2]),
-            });
-            if (docente === undefined) {
-              linha = `${aux[0]}/${aux[1]}/${aux[2]}`;
-            } else {
-              linha = `${aux[0]}/${aux[1]}/${docente.apelido}`;
-            }
-          }
-          break;
-        }
-        case "DisciplinaGrade": {
+      case "CargaPos": {
+        if (h.tipoOperacao === "Delete") {
           aux = linha.split("/");
-          let disciplina = find(this.$store.state.disciplina.Disciplinas, {
-            id: parseInt(aux[1]),
-          });
-          let grade = find(this.$store.state.grade.Grades, {
+          let docente = find(this.$store.state.docente.Docentes, {
             id: parseInt(aux[2]),
           });
-          let curso =
+          if (docente === undefined) {
+            linha = `${aux[0]}/${aux[1]}/${aux[2]}`;
+          } else {
+            linha = `${aux[0]}/${aux[1]}/${docente.apelido}`;
+          }
+        }
+        break;
+      }
+      case "DisciplinaGrade": {
+        aux = linha.split("/");
+        let disciplina = find(this.$store.state.disciplina.Disciplinas, {
+          id: parseInt(aux[1]),
+        });
+        let grade = find(this.$store.state.grade.Grades, {
+          id: parseInt(aux[2]),
+        });
+        let curso =
             grade === undefined
               ? undefined
               : find(this.$store.state.curso.Cursos, {
-                  id: grade.Curso,
-                });
-          linha = `${
-            grade === undefined
-              ? aux[2]
-              : (curso === undefined ? "Curso Excluído" : curso.codigo) +
-                " - " +
-                grade.nome
-          }/${disciplina === undefined ? aux[1] : disciplina.codigo}/${aux[0]}`;
-          break;
-        }
+                id: grade.Curso,
+              });
+        linha = `${
+          grade === undefined
+            ? aux[2]
+            : (curso === undefined ? "Curso Excluído" : curso.codigo) + " - " + grade.nome
+        }/${disciplina === undefined ? aux[1] : disciplina.codigo}/${aux[0]}`;
+        break;
+      }
 
-        case "DocentePerfil": {
-          aux = linha.split("/");
-          let docente = find(this.$store.state.docente.Docentes, {
-            id: parseInt(aux[1]),
-          });
-          let perfil = find(this.$store.state.perfil.Perfis, {
-            id: parseInt(aux[0]),
-          });
-          linha = `${docente === undefined ? aux[1] : docente.nome}/${
-            perfil === undefined ? aux[0] : perfil.nome
-          }`;
-          break;
-        }
+      case "DocentePerfil": {
+        aux = linha.split("/");
+        let docente = find(this.$store.state.docente.Docentes, {
+          id: parseInt(aux[1]),
+        });
+        let perfil = find(this.$store.state.perfil.Perfis, {
+          id: parseInt(aux[0]),
+        });
+        linha = `${docente === undefined ? aux[1] : docente.nome}/${
+          perfil === undefined ? aux[0] : perfil.nome
+        }`;
+        break;
+      }
 
-        case "Grade": {
-          aux = linha.split("/");
-          let cursoGrade = find(this.$store.state.curso.Cursos, {
-            id: parseInt(aux[0]),
-          });
-          linha = `${cursoGrade === undefined ? aux[0] : cursoGrade.codigo} - ${aux[1]}`;
-          break;
-        }
+      case "Grade": {
+        aux = linha.split("/");
+        let cursoGrade = find(this.$store.state.curso.Cursos, {
+          id: parseInt(aux[0]),
+        });
+        linha = `${cursoGrade === undefined ? aux[0] : cursoGrade.codigo} - ${aux[1]}`;
+        break;
+      }
 
-        case "Pedido": {
-          aux = linha.split("/");
-          let turma = find(this.$store.state.turma.Turmas, {
-            id: parseInt(aux[0]),
-          });
-          let disciplinaPedido =
+      case "Pedido": {
+        aux = linha.split("/");
+        let turma = find(this.$store.state.turma.Turmas, {
+          id: parseInt(aux[0]),
+        });
+        let disciplinaPedido =
             turma === undefined
               ? undefined
               : find(this.$store.state.disciplina.Disciplinas, {
-                  id: turma.Disciplina,
-                });
-          let cursoPedido = find(this.$store.state.curso.Cursos, {
-            id: parseInt(aux[1]),
-          });
-          linha = `${
-            turma === undefined
-              ? aux[0]
-              : turma.Disciplina === null
+                id: turma.Disciplina,
+              });
+        let cursoPedido = find(this.$store.state.curso.Cursos, {
+          id: parseInt(aux[1]),
+        });
+        linha = `${
+          turma === undefined
+            ? aux[0]
+            : turma.Disciplina === null
               ? "Turma Excluída"
               : disciplinaPedido.codigo + " " + turma.letra
-          }/${cursoPedido === undefined ? aux[1] : cursoPedido.codigo}`;
-          break;
-        }
+        }/${cursoPedido === undefined ? aux[1] : cursoPedido.codigo}`;
+        break;
+      }
 
-        case "PedidoExterno": {
-          aux = linha.split("/");
-          let turmaExterna = find(this.$store.state.turmaExterna.Turmas, {
-            id: parseInt(aux[0]),
-          });
-          let disciplinaPedidoExterno =
+      case "PedidoExterno": {
+        aux = linha.split("/");
+        let turmaExterna = find(this.$store.state.turmaExterna.Turmas, {
+          id: parseInt(aux[0]),
+        });
+        let disciplinaPedidoExterno =
             turmaExterna === undefined
               ? undefined
               : find(this.$store.state.disciplina.Disciplinas, {
-                  id: turmaExterna.Disciplina,
-                });
-          let cursoPedidoExterno = find(this.$store.state.curso.Cursos, {
-            id: parseInt(aux[1]),
-          });
-          linha = `${
-            turmaExterna === undefined
-              ? aux[0]
-              : disciplinaPedidoExterno.codigo + " " + turmaExterna.letra
-          }/${cursoPedidoExterno === undefined ? aux[1] : cursoPedidoExterno.codigo}`;
-          break;
-        }
+                id: turmaExterna.Disciplina,
+              });
+        let cursoPedidoExterno = find(this.$store.state.curso.Cursos, {
+          id: parseInt(aux[1]),
+        });
+        linha = `${
+          turmaExterna === undefined
+            ? aux[0]
+            : disciplinaPedidoExterno.codigo + " " + turmaExterna.letra
+        }/${cursoPedidoExterno === undefined ? aux[1] : cursoPedidoExterno.codigo}`;
+        break;
+      }
 
-        case "Turma": {
-          aux = linha.split("/");
-          let disciplinaTurma = find(this.$store.state.disciplina.Disciplinas, {
-            id: parseInt(aux[1]),
-          });
-          linha = `${disciplinaTurma === undefined ? aux[1] : disciplinaTurma.codigo}/${
-            aux[0]
-          }`;
-          break;
-        }
+      case "Turma": {
+        aux = linha.split("/");
+        let disciplinaTurma = find(this.$store.state.disciplina.Disciplinas, {
+          id: parseInt(aux[1]),
+        });
+        linha = `${disciplinaTurma === undefined ? aux[1] : disciplinaTurma.codigo}/${aux[0]}`;
+        break;
+      }
 
-        case "TurmaExterna": {
-          aux = linha.split("/");
-          let disciplinaTurmaExterna = find(this.$store.state.disciplina.Disciplinas, {
-            id: parseInt(aux[1]),
-          });
-          linha = `${
-            disciplinaTurmaExterna === undefined ? aux[1] : disciplinaTurmaExterna.codigo
-          }/${aux[0]}`;
-          break;
-        }
+      case "TurmaExterna": {
+        aux = linha.split("/");
+        let disciplinaTurmaExterna = find(this.$store.state.disciplina.Disciplinas, {
+          id: parseInt(aux[1]),
+        });
+        linha = `${
+          disciplinaTurmaExterna === undefined ? aux[1] : disciplinaTurmaExterna.codigo
+        }/${aux[0]}`;
+        break;
+      }
       }
       return linha;
     },
     valorAnterior(h) {
       let v = h.valorAnterior;
       switch (h.campoModificado) {
-        case "Curso":
-          v = find(this.$store.state.curso.Cursos, {
-            id: parseInt(h.valorAnterior),
-          });
-          if (v === undefined) v = h.valorAnterior;
-          else v = v.codigo;
-          break;
+      case "Curso":
+        v = find(this.$store.state.curso.Cursos, {
+          id: parseInt(h.valorAnterior),
+        });
+        if (v === undefined) v = h.valorAnterior;
+        else v = v.codigo;
+        break;
 
-        case "Disciplina":
-          v = find(this.$store.state.disciplina.Disciplinas, {
-            id: parseInt(h.valorAnterior),
-          });
-          if (v === undefined) v = h.valorAnterior;
-          else v = v.codigo;
-          break;
+      case "Disciplina":
+        v = find(this.$store.state.disciplina.Disciplinas, {
+          id: parseInt(h.valorAnterior),
+        });
+        if (v === undefined) v = h.valorAnterior;
+        else v = v.codigo;
+        break;
 
-        case "Docente":
-        case "Docente1":
-        case "Docente2":
-          v = find(this.$store.state.docente.Docentes, {
-            id: parseInt(h.valorAnterior),
-          });
-          if (v === undefined) v = h.valorAnterior;
-          else v = v.apelido;
-          break;
+      case "Docente":
+      case "Docente1":
+      case "Docente2":
+        v = find(this.$store.state.docente.Docentes, {
+          id: parseInt(h.valorAnterior),
+        });
+        if (v === undefined) v = h.valorAnterior;
+        else v = v.apelido;
+        break;
 
-        case "Grade":
-          v = find(this.$store.state.grade.Grades, {
-            id: parseInt(h.valorAnterior),
+      case "Grade":
+        v = find(this.$store.state.grade.Grades, {
+          id: parseInt(h.valorAnterior),
+        });
+        if (v === undefined) v = h.valorAnterior;
+        else {
+          let c = find(this.$store.state.curso.Cursos, {
+            id: parseInt(v.Curso),
           });
-          if (v === undefined) v = h.valorAnterior;
-          else {
-            let c = find(this.$store.state.curso.Cursos, {
-              id: parseInt(v.Curso),
-            });
-            v = `${c === undefined ? v.Curso : c.codigo}/${v.nome}`;
-          }
-          break;
+          v = `${c === undefined ? v.Curso : c.codigo}/${v.nome}`;
+        }
+        break;
 
-        case "Horario":
-        case "Horario1":
-        case "Horario2":
-          v = find(this.$store.state.horario.Horarios, {
-            id: parseInt(h.valorAnterior),
-          });
-          if (v === undefined) v = h.valorAnterior;
-          else v = v.horario;
-          break;
+      case "Horario":
+      case "Horario1":
+      case "Horario2":
+        v = find(this.$store.state.horario.Horarios, {
+          id: parseInt(h.valorAnterior),
+        });
+        if (v === undefined) v = h.valorAnterior;
+        else v = v.horario;
+        break;
 
-        case "Perfil":
-          v = find(this.$store.state.perfil.Perfis, {
-            id: parseInt(h.valorAnterior),
-          });
-          if (v === undefined) v = h.valorAnterior;
-          else v = v.nome;
-          break;
+      case "Perfil":
+        v = find(this.$store.state.perfil.Perfis, {
+          id: parseInt(h.valorAnterior),
+        });
+        if (v === undefined) v = h.valorAnterior;
+        else v = v.nome;
+        break;
 
-        case "Sala":
-        case "Sala1":
-        case "Sala2":
-          v = find(this.$store.state.sala.Salas, {
-            id: parseInt(h.valorAnterior),
-          });
-          if (v === undefined) v = h.valorAnterior;
-          else v = v.nome;
-          break;
+      case "Sala":
+      case "Sala1":
+      case "Sala2":
+        v = find(this.$store.state.sala.Salas, {
+          id: parseInt(h.valorAnterior),
+        });
+        if (v === undefined) v = h.valorAnterior;
+        else v = v.nome;
+        break;
       }
 
       return v;
@@ -397,72 +385,72 @@ export default {
     valorNovo(h) {
       let v = h.valorNovo;
       switch (h.campoModificado) {
-        case "Curso":
-          v = find(this.$store.state.curso.Cursos, {
-            id: parseInt(h.valorNovo),
-          });
-          if (v === undefined) v = h.valorNovo;
-          else v = v.codigo;
-          break;
+      case "Curso":
+        v = find(this.$store.state.curso.Cursos, {
+          id: parseInt(h.valorNovo),
+        });
+        if (v === undefined) v = h.valorNovo;
+        else v = v.codigo;
+        break;
 
-        case "Disciplina":
-          v = find(this.$store.state.disciplina.Disciplinas, {
-            id: parseInt(h.valorNovo),
-          });
-          if (v === undefined) v = h.valorNovo;
-          else v = v.codigo;
-          break;
+      case "Disciplina":
+        v = find(this.$store.state.disciplina.Disciplinas, {
+          id: parseInt(h.valorNovo),
+        });
+        if (v === undefined) v = h.valorNovo;
+        else v = v.codigo;
+        break;
 
-        case "Docente":
-        case "Docente1":
-        case "Docente2":
-          v = find(this.$store.state.docente.Docentes, {
-            id: parseInt(h.valorNovo),
-          });
-          if (v === undefined) v = h.valorNovo;
-          else v = v.apelido;
-          break;
+      case "Docente":
+      case "Docente1":
+      case "Docente2":
+        v = find(this.$store.state.docente.Docentes, {
+          id: parseInt(h.valorNovo),
+        });
+        if (v === undefined) v = h.valorNovo;
+        else v = v.apelido;
+        break;
 
-        case "Grade":
-          v = find(this.$store.state.grade.Grades, {
-            id: parseInt(h.valorNovo),
+      case "Grade":
+        v = find(this.$store.state.grade.Grades, {
+          id: parseInt(h.valorNovo),
+        });
+        if (v === undefined) v = h.valorNovo;
+        else {
+          let c = find(this.$store.state.curso.Cursos, {
+            id: parseInt(v.Curso),
           });
-          if (v === undefined) v = h.valorNovo;
-          else {
-            let c = find(this.$store.state.curso.Cursos, {
-              id: parseInt(v.Curso),
-            });
-            v = `${c === undefined ? v.Curso : c.codigo}/${v.nome}`;
-          }
-          break;
+          v = `${c === undefined ? v.Curso : c.codigo}/${v.nome}`;
+        }
+        break;
 
-        case "Horario":
-        case "Horario1":
-        case "Horario2":
-          v = find(this.$store.state.horario.Horarios, {
-            id: parseInt(h.valorNovo),
-          });
-          if (v === undefined) v = h.valorNovo;
-          else v = v.horario;
-          break;
+      case "Horario":
+      case "Horario1":
+      case "Horario2":
+        v = find(this.$store.state.horario.Horarios, {
+          id: parseInt(h.valorNovo),
+        });
+        if (v === undefined) v = h.valorNovo;
+        else v = v.horario;
+        break;
 
-        case "Perfil":
-          v = find(this.$store.state.perfil.Perfis, {
-            id: parseInt(h.valorNovo),
-          });
-          if (v === undefined) v = h.valorNovo;
-          else v = v.nome;
-          break;
+      case "Perfil":
+        v = find(this.$store.state.perfil.Perfis, {
+          id: parseInt(h.valorNovo),
+        });
+        if (v === undefined) v = h.valorNovo;
+        else v = v.nome;
+        break;
 
-        case "Sala":
-        case "Sala1":
-        case "Sala2":
-          v = find(this.$store.state.sala.Salas, {
-            id: parseInt(h.valorNovo),
-          });
-          if (v === undefined) v = h.valorNovo;
-          else v = v.nome;
-          break;
+      case "Sala":
+      case "Sala1":
+      case "Sala2":
+        v = find(this.$store.state.sala.Salas, {
+          id: parseInt(h.valorNovo),
+        });
+        if (v === undefined) v = h.valorNovo;
+        else v = v.nome;
+        break;
       }
 
       return v;

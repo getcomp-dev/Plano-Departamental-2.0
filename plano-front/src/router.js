@@ -36,9 +36,7 @@ function lazyLoad(componentPath) {
 
 const routes = [
   { path: "*", redirect: "/" },
-
   { path: "/login", component: Login },
-
   {
     path: "/",
     redirect: "/home",
@@ -47,7 +45,6 @@ const routes = [
     children: [
       //home
       { path: "/home", component: Home },
-
       //plano
       {
         path: "/plano/turmas-dcc",
@@ -64,12 +61,6 @@ const routes = [
         component: lazyLoad("plano/CargaPos"),
         beforeEnter: requireAdmin,
       },
-      {
-        path: "/plano/validacoes",
-        component: lazyLoad("plano/Validacoes"),
-        beforeEnter: requireAdmin,
-      },
-
       //relatorios
       {
         path: "/relatorios/carga-professores",
@@ -99,7 +90,6 @@ const routes = [
         path: "/relatorios/turmas-cursos",
         component: lazyLoad("relatorios/TurmasCursos"),
       },
-
       //gerenciar
       {
         path: "/gerenciar/cursos",
@@ -167,11 +157,16 @@ const routes = [
         component: lazyLoad("gerenciar/Usuarios"),
         beforeEnter: requireSuperAdmin,
       },
-
       //historico
       {
         path: "/historico/buscar-turmas",
         component: lazyLoad("historico/BuscarTurmas"),
+      },
+      //validacoes
+      {
+        path: "/validacoes/graduacao-dcc",
+        component: lazyLoad("validacoes/graduacaoDCC"),
+        beforeEnter: requireAdmin,
       },
     ],
   },

@@ -36,12 +36,8 @@
               Perfil
             </v-th-ordination>
 
-            <v-th width="40" title="Carga Teórica">
-              C.T.
-            </v-th>
-            <v-th width="40" title="Carga Prática">
-              C.P.
-            </v-th>
+            <v-th width="40" title="Carga Teórica">C.T.</v-th>
+            <v-th width="40" title="Carga Prática">C.P.</v-th>
 
             <v-th-ordination
               :currentOrder="ordenacaoMain.disciplina"
@@ -74,7 +70,7 @@
           </template>
           <template #tbody>
             <tr
-              v-for="disciplina in DisciplinasInPerfisOrdered"
+              v-for="disciplina in DisciplinasOrdered"
               :key="disciplina.id + disciplina.nome"
               @click="handleClickInDisciplina(disciplina)"
               :class="['clickable', disciplinaEstaSelecionada(disciplina.id)]"
@@ -108,12 +104,9 @@
                 {{ textoDepto(disciplina.departamento) }}
               </v-td>
             </tr>
-            <tr v-if="!DisciplinasInPerfisOrdered.length">
+            <tr v-if="!DisciplinasOrdered.length">
               <v-td width="755" colspan="8">
-                <font-awesome-icon
-                  :icon="['fas', 'exclamation-triangle']"
-                  class="icon-red"
-                />
+                <font-awesome-icon :icon="['fas', 'exclamation-triangle']" class="icon-red" />
                 <b>Nenhuma disciplina encontrada!</b>
               </v-td>
             </tr>
@@ -178,9 +171,7 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group m-0 col px-0">
-              <label required for="cargaTeorica" class="col-form-label">
-                Carga Teórica
-              </label>
+              <label required for="cargaTeorica" class="col-form-label">Carga Teórica</label>
               <input
                 id="cargaTeorica"
                 type="number"
@@ -193,9 +184,7 @@
             </div>
 
             <div class="form-group m-0 col px-0">
-              <label required for="cargaPratica" class="col-form-label">
-                Carga Prática
-              </label>
+              <label required for="cargaPratica" class="col-form-label">Carga Prática</label>
               <input
                 id="cargaPratica"
                 type="number"
@@ -237,9 +226,7 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group col m-0 px-0">
-              <label required for="departamento" class="col-form-label">
-                Departamento
-              </label>
+              <label required for="departamento" class="col-form-label">Departamento</label>
               <select
                 id="departamento"
                 type="text"
@@ -255,11 +242,7 @@
       </Card>
     </div>
 
-    <ModalDelete
-      ref="modalDelete"
-      :isDeleting="isEditing"
-      @btn-deletar="handleDeleteDisciplina"
-    >
+    <ModalDelete ref="modalDelete" :isDeleting="isEditing" @btn-deletar="handleDeleteDisciplina">
       <li v-if="isEditing" class="list-group-item">
         <span>
           Tem certeza que deseja excluír a disciplina
@@ -279,15 +262,15 @@
       </li>
       <li class="list-group-item">
         <b>Editar:</b>
-        Clique na linha da tabela da disciplina que deseja alterar. Em seguida, no cartão
-        à direita, altere as informações que desejar e clique em Salvar
+        Clique na linha da tabela da disciplina que deseja alterar. Em seguida, no cartão à direita,
+        altere as informações que desejar e clique em Salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
         .
       </li>
       <li class="list-group-item">
         <b>Deletar:</b>
-        Clique na linha da tabela da disciplina que deseja remover. Em seguida, no cartão
-        à direita, clique em Remover
+        Clique na linha da tabela da disciplina que deseja remover. Em seguida, no cartão à direita,
+        clique em Remover
         <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
         e confirme a remoção na janela que será aberta.
       </li>
@@ -299,8 +282,7 @@
       </li>
       <li class="list-group-item">
         <b>Ordenar:</b>
-        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
-        informações.
+        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>
@@ -420,11 +402,11 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["DisciplinasInPerfis", "AllPerfis"]),
+    ...mapGetters(["AllDisciplinas", "AllPerfis"]),
 
-    DisciplinasInPerfisOrdered() {
+    DisciplinasOrdered() {
       const disciplinasResultantes = orderBy(
-        this.DisciplinasInPerfis,
+        this.AllDisciplinas,
         this.ordenacaoMain.disciplina.order,
         this.ordenacaoMain.disciplina.type
       );

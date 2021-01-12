@@ -1,5 +1,5 @@
 import Vue from "vue";
-import turmaService from "../../common/services/turma";
+import turmaService from "../../services/turma";
 import { find, cloneDeepWith, orderBy } from "lodash-es";
 import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
 import {
@@ -71,25 +71,33 @@ const actions = {
     });
   },
 
-  async createTurma(_, turma) {
-    const turmaNormalized = cloneDeepWith(turma, setEmptyValuesToNull);
+  async createTurma({ commit }, { data, notify }) {
+    const turmaNormalized = cloneDeepWith(data, setEmptyValuesToNull);
     validateObjectKeys(turmaNormalized, ["Disciplina", "letra", "turno1"]);
 
     const response = await turmaService.create(turmaNormalized);
+    if (notify) {
+      commit(PUSH_NOTIFICATION, {
+        type: "success",
+        text: `Turma ${turmaNormalized.letra} foi criada`,
+      });
+    }
     return response.Turma;
   },
 
-  async editTurma({ commit, dispatch }, turma) {
-    const turmaNormalized = cloneDeepWith(turma, setEmptyValuesToNull);
+  async editTurma({ commit, dispatch }, { data, notify }) {
+    const turmaNormalized = cloneDeepWith(data, setEmptyValuesToNull);
     validateObjectKeys(turmaNormalized, ["letra", "Disciplina", "turno1"]);
 
     await turmaService.update(turmaNormalized.id, turmaNormalized);
-
     dispatch("clearTurmasToDelete");
-    commit(PUSH_NOTIFICATION, {
-      type: "success",
-      text: `A turma ${turmaNormalized.letra} foi atualizada`,
-    });
+
+    if (notify) {
+      commit(PUSH_NOTIFICATION, {
+        type: "success",
+        text: `Turma ${turmaNormalized.letra} foi atualizada`,
+      });
+    }
   },
 
   async deleteTurmas({ commit, state }) {
@@ -117,21 +125,13 @@ const actions = {
 };
 
 const getters = {
-  AllTurmas(state) {
-    return orderBy(state.Turmas, ["letra"]);
-  },
-
-  TurmasInDisciplinasPerfis(_, getters) {
-    const turmasResult = [];
-
-    getters.AllTurmas.forEach((turma) => {
-      const disciplinaFounded = find(getters.DisciplinasInPerfis, [
-        "id",
-        turma.Disciplina,
-      ]);
+  AllTurmas(state, getters) {
+    const turmas = [];
+    state.Turmas.forEach((turma) => {
+      const disciplinaFounded = find(getters.AllDisciplinas, ["id", turma.Disciplina]);
 
       if (disciplinaFounded)
-        turmasResult.push({
+        turmas.push({
           ...turma,
           disciplina: {
             ...disciplinaFounded,
@@ -139,7 +139,7 @@ const getters = {
         });
     });
 
-    return turmasResult;
+    return orderBy(turmas, "letra");
   },
 
   TurmasToDelete(state) {

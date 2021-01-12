@@ -1,6 +1,6 @@
 import Vue from "vue";
 import $socket from "@/socketInstance.js";
-import planoService from "../../common/services/plano";
+import planoService from "@/services/plano";
 import { cloneDeepWith, find, orderBy } from "lodash-es";
 import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
 import {
@@ -9,16 +9,17 @@ import {
   SOCKET_PLANO_CREATED,
   SOCKET_PLANO_UPDATED,
   SET_CURRENT_PLANO_ID,
+  PUSH_NOTIFICATION,
 } from "../mutation-types";
 
 const state = {
   Plano: [],
-  currentPlanoId: null,
+  CurrentPlanoId: null,
 };
 
 const mutations = {
   [SET_CURRENT_PLANO_ID](state, data) {
-    state.currentPlanoId = data;
+    state.CurrentPlanoId = data;
   },
 
   [PLANO_FETCHED](state, data) {
@@ -41,14 +42,14 @@ const mutations = {
 };
 
 const actions = {
-  fetchAll({ commit }) {
+  fetchAllPlanos({ commit }) {
     return new Promise((resolve, reject) => {
       planoService
         .fetchAll()
         .then((response) => {
           console.log(response);
           commit(PLANO_FETCHED, response);
-          resolve();
+          resolve(response);
         })
         .catch((error) => {
           reject(error);
@@ -56,15 +57,18 @@ const actions = {
     });
   },
 
-  async initializeCurrentPlano({ commit, dispatch }) {
+  async initializeCurrentPlano({ commit, dispatch, state }) {
     try {
       dispatch("setLoading", { type: "fetching", value: true });
+      await dispatch("fetchAllPlanos");
+      let localStoragePlanoId = parseInt(localStorage.getItem("Plano"), 10);
 
-      const currentPlanoId = localStorage.getItem("Plano")
-        ? localStorage.getItem("Plano")
-        : 1;
-      dispatch("setCurrentPlanoId", currentPlanoId);
+      if (!localStoragePlanoId || !find(state.Plano, ["id", localStoragePlanoId])) {
+        const firstVisiblePlano = find(state.Plano, ["visible", true]);
+        localStoragePlanoId = firstVisiblePlano.id;
+      }
 
+      dispatch("setCurrentPlanoId", localStoragePlanoId);
       await dispatch("fetchAll");
       $socket.open();
       commit("setYear", 2019);
@@ -78,7 +82,6 @@ const actions = {
   async changeCurrentPlano({ dispatch }, planoId) {
     try {
       dispatch("setLoading", { type: "fetching", value: true });
-
       dispatch("setCurrentPlanoId", planoId);
       await dispatch("fetchAll");
       $socket.open();
@@ -89,25 +92,39 @@ const actions = {
     }
   },
 
-  async deletePlano({ commit, dispatch, rootGetters }, plano) {
-    if (plano.id === rootGetters.currentPlanoId) {
-      await dispatch("changeCurrentPlano", 1);
+  async createPlano({ commit }, { data, notify }) {
+    const planoNormalized = cloneDeepWith(data, setEmptyValuesToNull);
+    validateObjectKeys(planoNormalized, ["nome", "ano"]);
+    const response = await planoService.create(planoNormalized);
+
+    if (notify) {
+      commit(PUSH_NOTIFICATION, {
+        text: `Plano ${planoNormalized.nome} foi criado`,
+      });
     }
 
-    await planoService.delete(plano.id, plano);
-
-    commit("PUSH_NOTIFICATION", {
-      text: `Plano ${plano.nome} - ${plano.ano} foi removido`,
-    });
+    return response.Plano;
   },
 
-  async editPlano({ commit }, plano) {
-    const planoNormalized = cloneDeepWith(plano, setEmptyValuesToNull);
+  async deletePlano({ commit }, { data, notify }) {
+    await planoService.delete(data.id, data);
 
+    if (notify) {
+      commit(PUSH_NOTIFICATION, {
+        text: `Plano ${data.nome} - ${data.ano} foi removido`,
+      });
+    }
+  },
+
+  async updatePlano({ commit }, { data, notify }) {
+    const planoNormalized = cloneDeepWith(data, setEmptyValuesToNull);
     validateObjectKeys(planoNormalized, ["nome", "ano"]);
-    await planoService.update(planoNormalized.id, planoNormalized);
+    const response = await planoService.update(planoNormalized.id, planoNormalized);
 
-    commit("PUSH_NOTIFICATION", { text: "Plano atualizado" });
+    if (notify) {
+      commit(PUSH_NOTIFICATION, { text: `Plano ${planoNormalized.nome} atualizado` });
+    }
+    return response.Plano;
   },
 
   setCurrentPlanoId({ commit }, planoId) {
@@ -118,9 +135,9 @@ const actions = {
 
 const getters = {
   currentPlano(state, rootGetters) {
-    return find(rootGetters.AllPlanos, ["id", state.currentPlanoId]);
+    return find(rootGetters.Planos, ["id", state.CurrentPlanoId]);
   },
-  AllPlanos(state) {
+  Planos(state) {
     return orderBy(state.Plano, "ano");
   },
   AnosDoPlano() {

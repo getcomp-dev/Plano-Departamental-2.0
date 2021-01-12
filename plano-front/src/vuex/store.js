@@ -33,10 +33,7 @@ import semestresLetivos from "./module/semestresLetivos";
 import docenteDisciplina from "./module/docenteDisciplina";
 import conceitoTurmaCurso from "./module/conceitoTurmaCurso";
 
-import {
-  HTTP_REQUEST_INCREMENT,
-  HTTP_REQUEST_DECREMENT,
-} from "./mutation-types";
+import { HTTP_REQUEST_INCREMENT, HTTP_REQUEST_DECREMENT } from "./mutation-types";
 
 const state = {
   httpRequestCount: 0,
@@ -99,7 +96,7 @@ export default new Vuex.Store({
     periodosLetivos,
     semestresLetivos,
     docenteDisciplina,
-    conceitoTurmaCurso
+    conceitoTurmaCurso,
   },
 
   strict: process.env.NODE_ENV !== "production",

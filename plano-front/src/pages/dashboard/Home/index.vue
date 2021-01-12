@@ -4,24 +4,21 @@
       <p class="user-paragraph">
         Olá
         <b>{{ currentUser.nome }}</b>
-        este é o sistema de gerenciamento de Plano Departamental do DCC - Departamento de
-        Ciência da Computação.
+        este é o sistema de gerenciamento de Plano Departamental do DCC - Departamento de Ciência da
+        Computação.
         <br />
         Abaixo segue um resumo das funcionalidades de cada página:
       </p>
       <div class="row">
-        <LinkList v-if="currentUser.isAdmin" title="Plano" :pages="routesPlano" />
-        <LinkList title="Relatórios" :pages="routesRelatorios" />
         <LinkList
-          v-if="currentUser.isSuperAdmin"
-          title="Gerenciar"
-          :pages="routesGerenciar"
+          v-if="currentUser.isAdmin && currentPlano.isEditable"
+          title="Plano"
+          :pages="RoutesPlano"
         />
-        <LinkList
-          v-if="currentUser.isSuperAdmin"
-          title="Histórico"
-          :pages="routesHistorico"
-        />
+        <LinkList title="Relatórios" :pages="RoutesRelatorios" />
+        <LinkList v-if="currentUser.isSuperAdmin" title="Gerenciar" :pages="RoutesGerenciar" />
+        <LinkList v-if="currentUser.isSuperAdmin" title="Histórico" :pages="RoutesHistorico" />
+        <LinkList v-if="currentUser.isAdmin" title="Validações" :pages="RoutesValidacoes" />
       </div>
     </div>
   </div>
@@ -37,10 +34,11 @@ export default {
   computed: {
     ...mapGetters([
       "currentUser",
-      "routesPlano",
-      "routesRelatorios",
-      "routesGerenciar",
-      "routesHistorico",
+      "RoutesPlano",
+      "RoutesRelatorios",
+      "RoutesGerenciar",
+      "RoutesHistorico",
+      "RoutesValidacoes",
     ]),
   },
 };
@@ -58,5 +56,6 @@ export default {
 }
 .user-paragraph {
   font-size: 12px;
+  margin-bottom: 5px;
 }
 </style>

@@ -126,15 +126,15 @@
       </li>
       <li class="list-group-item">
         <b>Editar:</b>
-        Clique na linha da tabela do perfil que deseja alterar. Em seguida, no cartão à
-        direita, altere as informações que desejar e clique em Salvar
+        Clique na linha da tabela do perfil que deseja alterar. Em seguida, no cartão à direita,
+        altere as informações que desejar e clique em Salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
         .
       </li>
       <li class="list-group-item">
         <b>Deletar:</b>
-        Clique na linha da tabela do perfil que deseja remover. Em seguida, no cartão à
-        direita, clique em Remover
+        Clique na linha da tabela do perfil que deseja remover. Em seguida, no cartão à direita,
+        clique em Remover
         <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
         e confirme a remoção na janela que será aberta.
       </li>
@@ -146,8 +146,7 @@
       </li>
       <li class="list-group-item">
         <b>Ordenar:</b>
-        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
-        informações.
+        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>
@@ -156,7 +155,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { orderBy, clone } from "lodash-es";
-import perfilService from "@/common/services/perfil";
+import perfilService from "@/services/perfil";
 import { normalizeInputText, maskLimitLength } from "@/common/mixins";
 import { Card } from "@/components/ui";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
@@ -213,7 +212,7 @@ export default {
           this.cleanPerfil();
           this.$notify({
             group: "general",
-            title: `Sucesso!`,
+            title: "Sucesso!",
             text: `O Perfil ${response.Perfil.nome} foi criado!`,
             type: "success",
           });
@@ -221,12 +220,11 @@ export default {
         .catch((error) => {
           this.error = "<b>Erro ao criar Perfil</b>";
           if (error.response.data.fullMessage) {
-            this.error +=
-              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+            this.error += "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
           }
           this.$notify({
             group: "general",
-            title: `Erro!`,
+            title: "Erro!",
             text: this.error,
             type: "error",
           });
@@ -238,7 +236,7 @@ export default {
         .then((response) => {
           this.$notify({
             group: "general",
-            title: `Sucesso!`,
+            title: "Sucesso!",
             text: `O Perfil ${response.Perfil.nome} foi atualizado!`,
             type: "success",
           });
@@ -246,12 +244,11 @@ export default {
         .catch((error) => {
           this.error = "<b>Erro ao atualizar Perfil</b>";
           if (error.response.data.fullMessage) {
-            this.error +=
-              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+            this.error += "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
           }
           this.$notify({
             group: "general",
-            title: `Erro!`,
+            title: "Erro!",
             text: this.error,
             type: "error",
           });
@@ -264,7 +261,7 @@ export default {
           this.cleanPerfil();
           this.$notify({
             group: "general",
-            title: `Sucesso!`,
+            title: "Sucesso!",
             text: `O Perfil ${response.Perfil.nome} foi excluído!`,
             type: "success",
           });
@@ -273,7 +270,7 @@ export default {
           this.error = "<b>Erro ao excluir Perfil</b>";
           this.$notify({
             group: "general",
-            title: `Erro!`,
+            title: "Erro!",
             text: this.error,
             type: "error",
           });
@@ -285,11 +282,7 @@ export default {
     ...mapGetters(["AllPerfis"]),
 
     Perfis() {
-      return orderBy(
-        this.AllPerfis,
-        this.ordenacaoPerfisMain.order,
-        this.ordenacaoPerfisMain.type
-      );
+      return orderBy(this.AllPerfis, this.ordenacaoPerfisMain.order, this.ordenacaoPerfisMain.type);
     },
 
     isEdit() {

@@ -1,5 +1,5 @@
 import Vue from "vue";
-import gradeService from "../../common/services/grade";
+import gradeService from "../../services/grade";
 import { cloneDeepWith, orderBy } from "lodash-es";
 import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
 import {

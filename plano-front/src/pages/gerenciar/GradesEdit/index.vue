@@ -133,16 +133,14 @@
 
           <div class="row mb-2 mx-0">
             <div class="form-group m-0 col px-0">
-              <label required for="periodoDisciplina" class="col-form-label pb-1">
-                Período
-              </label>
+              <label required for="periodoDisciplina" class="col-form-label pb-1">Período</label>
               <div class="d-flex align-items-center">
                 <input
                   :disabled="!hasGradeSelected"
                   type="text"
                   id="periodoDisciplina"
                   class="form-control form-control-sm mr-2"
-                  style="width:100px"
+                  style="width: 100px"
                   v-model="disciplinaGradeForm.periodo"
                   @keypress="maskOnlyNumber"
                 />
@@ -173,11 +171,7 @@
             @click="openModalDelete"
           />
 
-          <BaseButton
-            template="cancelar"
-            :disabled="!hasGradeSelected"
-            @click="cleanDisciplina"
-          />
+          <BaseButton template="cancelar" :disabled="!hasGradeSelected" @click="cleanDisciplina" />
         </template>
       </Card>
     </div>
@@ -200,28 +194,27 @@
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
         <b>Visualizar conteúdo:</b>
-        Na parte superior do cartão à direita, selecione o curso e a grade que deseja
-        visualizar.
+        Na parte superior do cartão à direita, selecione o curso e a grade que deseja visualizar.
       </li>
       <li class="list-group-item">
         <b>Adicionar:</b>
-        Para adicionar uma disciplinas à grade selecionada, com a parte de baixo do cartão
-        à direita em branco, preencha-a e em seguida clique em Adicionar
+        Para adicionar uma disciplinas à grade selecionada, com a parte de baixo do cartão à direita
+        em branco, preencha-a e em seguida clique em Adicionar
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
         .
       </li>
       <li class="list-group-item">
         <b>Editar:</b>
-        Para editar uma disciplinas da grade selecionada clique na linha da tabela da
-        disciplina que deseja alterar. Em seguida, no cartão à direita, altere as
-        informações que desejar e clique em Salvar
+        Para editar uma disciplinas da grade selecionada clique na linha da tabela da disciplina que
+        deseja alterar. Em seguida, no cartão à direita, altere as informações que desejar e clique
+        em Salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
         .
       </li>
       <li class="list-group-item">
         <b>Deletar:</b>
-        Clique na linha da tabela da disciplina que deseja remover. Em seguida, no cartão
-        à direita, clique em Remover
+        Clique na linha da tabela da disciplina que deseja remover. Em seguida, no cartão à direita,
+        clique em Remover
         <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
         e confirme a remoção na janela que será aberta.
       </li>
@@ -233,8 +226,7 @@
       </li>
       <li class="list-group-item">
         <b>Ordenar:</b>
-        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
-        informações.
+        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>
@@ -242,8 +234,8 @@
 
 <script>
 import { clone, find, filter, orderBy } from "lodash-es";
-import disciplinaGradeService from "@/common/services/disciplinaGrade";
-import gradeService from "@/common/services/grade";
+import disciplinaGradeService from "@/services/disciplinaGrade";
+import gradeService from "@/services/grade";
 import { maskOnlyNumber } from "@/common/mixins";
 import { Card } from "@/components/ui";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
@@ -305,7 +297,7 @@ export default {
           this.cleanGradeForm();
           this.$notify({
             group: "general",
-            title: `Sucesso!`,
+            title: "Sucesso!",
             text: `A Grade ${grade_nome} foi excluída!`,
             type: "success",
           });
@@ -314,7 +306,7 @@ export default {
           this.error = "<b>Erro ao excluir Grade</b>";
           this.$notify({
             group: "general",
-            title: `Erro!`,
+            title: "Erro!",
             text: this.error,
             type: "error",
           });
@@ -360,7 +352,7 @@ export default {
           this.cleanGradeForm();
           this.$notify({
             group: "general",
-            title: `Sucesso!`,
+            title: "Sucesso!",
             text: `A Grade ${response.Grade.nome} foi criada!`,
             type: "success",
           });
@@ -368,12 +360,11 @@ export default {
         .catch((error) => {
           this.error = "<b>Erro ao criar Grade</b>";
           if (error.response.data.fullMessage) {
-            this.error +=
-              "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+            this.error += "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
           }
           this.$notify({
             group: "general",
-            title: `Erro!`,
+            title: "Erro!",
             text: this.error,
             type: "error",
           });
@@ -385,7 +376,7 @@ export default {
         .then((response) => {
           this.$notify({
             group: "general",
-            title: `Sucesso!`,
+            title: "Sucesso!",
             text: `A Grade ${response.Grade.nome} foi atualizada!`,
             type: "success",
           });
@@ -394,7 +385,7 @@ export default {
           this.error = "<b>Erro ao atualizar Grade</b>";
           this.$notify({
             group: "general",
-            title: `Erro!`,
+            title: "Erro!",
             text: this.error,
             type: "error",
           });
@@ -414,7 +405,7 @@ export default {
         .then(() => {
           this.$notify({
             group: "general",
-            title: `Sucesso!`,
+            title: "Sucesso!",
             text: `A Disciplina <b>${nome_disciplina}</b> foi adicionada à Grade <b>${this.gradeForm.nome}</b>!`,
             type: "success",
           });
@@ -423,7 +414,7 @@ export default {
           this.error = "<b>Erro ao incluir Disciplina</b>";
           this.$notify({
             group: "general",
-            title: `Erro!`,
+            title: "Erro!",
             text: this.error,
             type: "error",
           });
@@ -439,7 +430,7 @@ export default {
         .then(() => {
           this.$notify({
             group: "general",
-            title: `Sucesso!`,
+            title: "Sucesso!",
             text: `A Disciplina <b>${this.nomeDisciplinaAtual}</b> foi atualizada!`,
             type: "success",
           });
@@ -448,7 +439,7 @@ export default {
           this.error = "<b>Erro ao atualizar Disciplina</b>";
           this.$notify({
             group: "general",
-            title: `Erro!`,
+            title: "Erro!",
             text: this.error,
             type: "error",
           });
@@ -464,7 +455,7 @@ export default {
         .then(() => {
           this.$notify({
             group: "general",
-            title: `Sucesso!`,
+            title: "Sucesso!",
             text: `A Disciplina <b>${this.nomeDisciplinaAtual}</b> foi excluída!`,
             type: "success",
           });
@@ -474,7 +465,7 @@ export default {
           this.error = "<b>Erro ao excluir Disciplina</b>";
           this.$notify({
             group: "general",
-            title: `Erro!`,
+            title: "Erro!",
             text: this.error,
             type: "error",
           });
@@ -499,22 +490,19 @@ export default {
       );
     },
     DisciplinaGradesFiltred() {
-      return filter(
-        this.$store.state.disciplinaGrade.DisciplinaGrades,
-        (disciplinaGrade) => {
-          return find(this.Disciplinas, (disciplina) => {
-            if (
-              this.currentGradeId === disciplinaGrade.Grade &&
-              disciplina.id === disciplinaGrade.Disciplina
-            ) {
-              disciplinaGrade.disciplina_nome = disciplina.nome;
-              disciplinaGrade.disciplina_codigo = disciplina.codigo;
-              return true;
-            }
-            return false;
-          });
-        }
-      );
+      return filter(this.$store.state.disciplinaGrade.DisciplinaGrades, (disciplinaGrade) => {
+        return find(this.Disciplinas, (disciplina) => {
+          if (
+            this.currentGradeId === disciplinaGrade.Grade &&
+            disciplina.id === disciplinaGrade.Disciplina
+          ) {
+            disciplinaGrade.disciplina_nome = disciplina.nome;
+            disciplinaGrade.disciplina_codigo = disciplina.codigo;
+            return true;
+          }
+          return false;
+        });
+      });
     },
     GradesFiltredByCurrentCurso() {
       return filter(this.Grades, (grade) => grade.Curso == this.currentCursoId);

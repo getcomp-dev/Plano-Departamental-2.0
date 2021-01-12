@@ -18,10 +18,7 @@ export default {
     },
     conectaSemestreEmPeriodo() {
       this.SemestresOptions.forEach((semestre) => {
-        const semestreFounded = find(this.filtroSemestres.selecionados, [
-          "id",
-          semestre.id,
-        ]);
+        const semestreFounded = find(this.filtroSemestres.selecionados, ["id", semestre.id]);
 
         if (semestreFounded) {
           if (!semestreFounded.halfChecked) {

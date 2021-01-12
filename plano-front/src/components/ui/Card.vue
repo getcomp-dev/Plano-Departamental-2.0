@@ -4,7 +4,7 @@
       <h1 class="card-title">{{ title }}</h1>
     </div>
     <div class="card-body">
-      <form autocomplete="off">
+      <form autocomplete="off" @submit.prevent>
         <slot name="form-group"></slot>
 
         <div class="row m-0 mt-3 d-flex justify-content-end">

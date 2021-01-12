@@ -25,7 +25,7 @@ export default {
     value: { type: String, default: "" },
     inputId: { type: String, default: "passwordInpt" },
     isInvalid: { type: Boolean, default: false },
-    iconSize: { type: Number, default: 16 },
+    iconSize: { type: [Number, String], default: 16 },
     classes: { type: String, default: "form-control" },
     placeholder: { type: String, default: "" },
   },

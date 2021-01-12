@@ -1,8 +1,5 @@
 <template>
-  <font-awesome-icon
-    :icon="['fas', options.currentIcon]"
-    :class="options.classes"
-  />
+  <font-awesome-icon :icon="['fas', options.currentIcon]" :class="options.classes" />
 </template>
 
 <script>

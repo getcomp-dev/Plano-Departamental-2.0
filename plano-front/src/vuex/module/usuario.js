@@ -1,5 +1,5 @@
 import Vue from "vue";
-import usuarioService from "../../common/services/usuario";
+import usuarioService from "../../services/usuario";
 import { cloneDeep, cloneDeepWith } from "lodash-es";
 import { validateObjectKeys, setEmptyValuesToNull } from "../../common/utils";
 import {

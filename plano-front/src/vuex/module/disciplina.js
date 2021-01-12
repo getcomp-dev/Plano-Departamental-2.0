@@ -1,5 +1,5 @@
 import Vue from "vue";
-import disciplinaService from "../../common/services/disciplina";
+import disciplinaService from "../../services/disciplina";
 import { orderBy, cloneDeepWith, filter, find } from "lodash-es";
 import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
 import {
@@ -24,16 +24,12 @@ const mutations = {
   },
 
   [SOCKET_DISCIPLINA_UPDATED](state, data) {
-    let index = state.Disciplinas.findIndex(
-      (disciplina) => disciplina.id === data.Disciplina.id
-    );
+    let index = state.Disciplinas.findIndex((disciplina) => disciplina.id === data.Disciplina.id);
     Vue.set(state.Disciplinas, index, data.Disciplina);
   },
 
   [SOCKET_DISCIPLINA_DELETED](state, data) {
-    let index = state.Disciplinas.findIndex(
-      (disciplina) => disciplina.id === data.Disciplina.id
-    );
+    let index = state.Disciplinas.findIndex((disciplina) => disciplina.id === data.Disciplina.id);
     state.Disciplinas.splice(index, 1);
   },
 };
@@ -55,12 +51,7 @@ const actions = {
 
   async createDisciplina({ commit }, disciplina) {
     const disciplinaNormalized = cloneDeepWith(disciplina, setEmptyValuesToNull);
-    validateObjectKeys(disciplinaNormalized, [
-      "nome",
-      "codigo",
-      "cargaTeorica",
-      "cargaPratica",
-    ]);
+    validateObjectKeys(disciplinaNormalized, ["nome", "codigo", "cargaTeorica", "cargaPratica"]);
 
     if (disciplinaDCCENaoPossuiPerfil(disciplinaNormalized)) {
       commit(PUSH_NOTIFICATION, {
@@ -80,12 +71,7 @@ const actions = {
 
   async editDisciplina({ commit }, disciplina) {
     const disciplinaNormalized = cloneDeepWith(disciplina, setEmptyValuesToNull);
-    validateObjectKeys(disciplinaNormalized, [
-      "nome",
-      "codigo",
-      "cargaTeorica",
-      "cargaPratica",
-    ]);
+    validateObjectKeys(disciplinaNormalized, ["nome", "codigo", "cargaTeorica", "cargaPratica"]);
 
     if (disciplinaDCCENaoPossuiPerfil(disciplinaNormalized)) {
       commit(PUSH_NOTIFICATION, {
@@ -114,49 +100,30 @@ const actions = {
 };
 
 const getters = {
-  AllDisciplinas(state) {
-    const disciplinasResult = state.Disciplinas.map((disciplina) => ({
-      ...disciplina,
-      creditoTotal:
-        parseInt(disciplina.cargaTeorica, 10) + parseInt(disciplina.cargaPratica, 10),
-    }));
+  AllDisciplinas(state, getters) {
+    const disciplinas = state.Disciplinas.map((disciplina) => {
+      const perfilFound = find(getters.AllPerfis, ["id", disciplina.Perfil]);
 
-    return orderBy(disciplinasResult, ["codigo"]);
-  },
-  DisciplinasInPerfis(_, getters) {
-    const disciplinasResults = [];
-
-    getters.AllDisciplinas.forEach((disciplina) => {
-      const perfilFounded = find(getters.AllPerfis, ["id", disciplina.Perfil]);
-
-      if (perfilFounded) {
-        disciplinasResults.push({
-          ...disciplina,
-          perfil: {
-            nome: perfilFounded.nome,
-            abreviacao: perfilFounded.abreviacao,
-            cor: perfilFounded.cor,
-          },
-        });
-      } else {
-        disciplinasResults.push({
-          ...disciplina,
-          perfil: {
-            nome: "",
-            abreviacao: "",
-            cor: null,
-          },
-        });
-      }
+      return {
+        ...disciplina,
+        creditoTotal: parseInt(disciplina.cargaTeorica, 10) + parseInt(disciplina.cargaPratica, 10),
+        perfil: {
+          nome: perfilFound.nome,
+          abreviacao: perfilFound.abreviacao,
+          cor: perfilFound.cor,
+        },
+      };
     });
 
-    return disciplinasResults;
+    return orderBy(disciplinas, ["codigo"]);
   },
-  DisciplinasDCCInPerfis(_, getters) {
-    return filter(getters.DisciplinasInPerfis, ["departamento", 1]);
+
+  DisciplinasDCC(_, getters) {
+    return filter(getters.AllDisciplinas, ["departamento", 1]);
   },
-  DisciplinasExternasInPerfis(_, getters) {
-    return filter(getters.DisciplinasInPerfis, ["departamento", 2]);
+
+  DisciplinasExternas(_, getters) {
+    return filter(getters.AllDisciplinas, ["departamento", 2]);
   },
 };
 

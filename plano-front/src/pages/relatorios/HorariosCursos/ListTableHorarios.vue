@@ -70,10 +70,7 @@ export default {
       let periodoFinal = this.curso.periodoInicial;
       this.GradesDoCurso.forEach((grade) => {
         this.DisciplinasDasGrades.forEach((disciplinaGrade) => {
-          if (
-            disciplinaGrade.Grade === grade.id &&
-            disciplinaGrade.periodo > periodoFinal
-          ) {
+          if (disciplinaGrade.Grade === grade.id && disciplinaGrade.periodo > periodoFinal) {
             periodoFinal = disciplinaGrade.periodo;
           }
         });

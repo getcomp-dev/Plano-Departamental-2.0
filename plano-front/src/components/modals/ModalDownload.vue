@@ -21,18 +21,12 @@
 
       <div class="loading-container w-100">
         <div class="loading-bar w-100">
-          <div
-            class="loading-bar-content"
-            :style="`width: ${downloadState * 20}%`"
-          ></div>
+          <div class="loading-bar-content" :style="`width: ${downloadState * 20}%`"></div>
         </div>
 
         <p class="loading-text">
           {{ downloadStateText }}
-          <i
-            v-show="downloadState !== 0 && downloadState !== 5"
-            class="loadingEllipsis"
-          ></i>
+          <i v-show="downloadState !== 0 && downloadState !== 5" class="loadingEllipsis"></i>
         </p>
       </div>
     </template>
@@ -41,8 +35,8 @@
 
 <script>
 import { saveAs } from "file-saver";
-import xlsxService from "@/common/services/xlsx";
-import downloadService from "@/common/services/download";
+import xlsxService from "@/services/xlsx";
+import downloadService from "@/services/download";
 
 export default {
   name: "ModalDownload",
@@ -83,15 +77,12 @@ export default {
         await downloadService.download();
         this.downloadState++;
 
-        const planoData = await fetch(
-          "http://200.131.219.57:3000/api/download/all",
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${this.$store.state.auth.token}`,
-            },
-          }
-        );
+        const planoData = await fetch("http://200.131.219.57:3000/api/download/all", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.$store.state.auth.token}`,
+          },
+        });
         const dataBlobed = await planoData.blob();
         await saveAs(dataBlobed, "data.zip");
         this.downloadState++;
@@ -153,38 +144,41 @@ export default {
     },
 
     async downloadTurmasCursos() {
-      await downloadService.generatePdfTurmasCurso({
-        Plano: localStorage.getItem("Plano"),
-      }).then(() =>
-              downloadService.createZipTurmasCursos().then( () =>
-                      fetch("http://200.131.219.57:3000/api/download/downloadTurmasCursosZip", {
-                        method: "GET",
-                        headers: {
-                          Authorization: `Bearer ${this.$store.state.auth.token}`,
-                        },
-                      })
-                              .then((r) => r.blob())
-                              .then((blob) => {
-                                saveAs(blob, "TurmasCursos.zip");
-                              })
-              )
-      )
-
-    }
+      await downloadService
+        .generatePdfTurmasCurso({
+          Plano: localStorage.getItem("Plano"),
+        })
+        .then(() =>
+          downloadService.createZipTurmasCursos().then(() =>
+            fetch("http://200.131.219.57:3000/api/download/downloadTurmasCursosZip", {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${this.$store.state.auth.token}`,
+              },
+            })
+              .then((r) => r.blob())
+              .then((blob) => {
+                saveAs(blob, "TurmasCursos.zip");
+              })
+          )
+        );
+    },
   },
   computed: {
     downloadStateText() {
       switch (this.downloadState) {
-        case 1:
-          return "Preparando arquivos";
-        case 2:
-          return "Criando tabelas";
-        case 3:
-          return "Criando relatórios";
-        case 4:
-          return "Gerando arquivo .zip";
-        case 5:
-          return "Concluído";
+      case 1:
+        return "Preparando arquivos";
+      case 2:
+        return "Criando tabelas";
+      case 3:
+        return "Criando relatórios";
+      case 4:
+        return "Gerando arquivo .zip";
+      case 5:
+        return "Concluído";
+      default:
+        return "";
       }
     },
   },

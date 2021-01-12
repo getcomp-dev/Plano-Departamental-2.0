@@ -22,9 +22,9 @@ export default {
   name: "v-td",
   props: {
     type: { type: String, default: "text" },
-    width: { type: String | Number, required: true },
+    width: { type: [String, Number], required: true },
     align: { type: String, default: "center" },
-    paddingX: { type: String | Number, default: "5" },
+    paddingX: { type: [String, Number], default: "5" },
     whiteSpace: { type: String, default: "nowrap" },
   },
 

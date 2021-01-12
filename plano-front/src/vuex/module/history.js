@@ -1,4 +1,4 @@
-import historyService from "../../common/services/history";
+import historyService from "../../services/history";
 import { HISTORY_FETCHED, SOCKET_HISTORY_CREATED } from "../mutation-types";
 
 const state = {

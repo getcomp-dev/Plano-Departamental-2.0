@@ -1,5 +1,5 @@
 import Vue from "vue";
-import perfilService from "../../common/services/perfil";
+import perfilService from "../../services/perfil";
 import { orderBy, filter } from "lodash-es";
 import {
   PERFIL_FETCHED,

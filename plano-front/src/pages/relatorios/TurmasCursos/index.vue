@@ -10,42 +10,66 @@
     <div class="div-table">
       <BaseTable>
         <template #thead>
-          <v-th width="80" title="Código do Curso">Cód. Curso</v-th>
-          <v-th width="300" title="Nome do Curso">Nome do Curso</v-th>
-          <v-th width="40" title="Período">P.</v-th>
-          <v-th width="80" title="Código da Disciplina">Disciplina</v-th>
-          <v-th width="40" title="Turma">T.</v-th>
+          <v-th-ordination
+            :currentOrder="ordenacaoTable.cursos"
+            orderToCheck="codigo"
+            width="85"
+            paddingX="0"
+            title="Código do curso"
+          >
+            Cód. Curso
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoTable.cursos"
+            orderToCheck="nome"
+            width="300"
+            align="start"
+            title="Nome do Curso"
+          >
+            Nome do Curso
+          </v-th-ordination>
+          <v-th width="30" title="Período">P.</v-th>
+          <v-th width="95" title="Código da Disciplina">Cód. Disciplina</v-th>
+          <v-th width="45" title="Turma">T.</v-th>
           <v-th width="120" title="Horário">Horário</v-th>
-          <v-th width="80" title="Vagas">Vagas</v-th>
+          <v-th width="45" title="Vagas">Vagas</v-th>
         </template>
 
         <template #tbody>
-          <template v-for="curso in filtroCursos.ativados">
-            <tr :key="curso.id + curso.codigo" style="background-color: #f1f1f1">
-              <v-td width="80">{{ curso.codigo }}</v-td>
-              <v-td width="300">{{ curso.nome }}</v-td>
-              <v-td width="40"></v-td>
-              <v-td width="80"></v-td>
+          <template v-for="curso in CursosOrderedTable">
+            <tr :key="curso.id" class="bg-custom">
+              <v-td width="85">{{ curso.codigo }}</v-td>
+              <v-td width="300" align="start" :title="curso.nome">{{ curso.nome }}</v-td>
+              <v-td width="30"></v-td>
+              <v-td width="95"></v-td>
               <v-td width="40"></v-td>
               <v-td width="120"></v-td>
-              <v-td width="80"></v-td>
+              <v-td width="45"></v-td>
             </tr>
 
-            <tr v-for="turma in getTurmasDoCurso(curso.id)" :key="curso.id + '-' + turma.turma.id">
-              <v-td width="80"></v-td>
+            <tr
+              v-for="turma in getTurmasDoCurso(curso.id)"
+              :key="curso.id + turma.letra + turma.id"
+            >
+              <v-td width="85"></v-td>
               <v-td width="300"></v-td>
-              <v-td width="40">{{ turma.turma.periodo }}</v-td>
-              <v-td width="80">{{ turma.turma.disciplina.codigo }}</v-td>
-              <v-td width="40">{{ turma.turma.letra }}</v-td>
-              <v-td width="120">{{ horarioTotal(turma.turma) }}</v-td>
-              <v-td width="80">
-                {{ turma.pedido.vagasPeriodizadas + turma.pedido.vagasNaoPeriodizadas }}
+              <v-td width="30">{{ turma.periodo }}</v-td>
+              <v-td width="95">{{ turma.disciplina.codigo }}</v-td>
+              <v-td width="45">{{ turma.letra }}</v-td>
+              <v-td width="120">{{ generateHorariosText(turma.Horario1, turma.Horario2) }}</v-td>
+              <v-td width="45">
+                {{
+                  turma.pedidoDoCurso.vagasPeriodizadas + turma.pedidoDoCurso.vagasNaoPeriodizadas
+                }}
               </v-td>
             </tr>
           </template>
 
-          <tr v-if="!filtroCursos.ativados.length">
-            <v-td colspan="7" width="740"><b>Nenhum curso encontrado</b></v-td>
+          <tr v-if="!CursosOrderedTable.length">
+            <v-td colspan="7" width="720">
+              <b>Nenhum curso encontrado.</b>
+              Clique no botão de filtros para selecioná-los.
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -55,7 +79,7 @@
 
     <ModalDownloadTurmasCursos
       ref="modalDownloadTurmasCursos"
-      @selection-option="downloadTurmasCursos($event)"
+      @selection-option="downloadFiles($event)"
     />
 
     <ModalFiltros
@@ -100,9 +124,10 @@
 
         <template #tbody>
           <tr
-            v-for="curso in CursosFiltrados"
+            v-for="curso in CursosOptionsOrdered"
             :key="curso.id + curso.nome"
             @click="toggleItemInArray(curso, filtroCursos.selecionados)"
+            v-prevent-click-selection
           >
             <v-td width="25" type="content">
               <input type="checkbox" v-model="filtroCursos.selecionados" :value="curso" />
@@ -114,10 +139,8 @@
             <v-td width="85" align="start">{{ curso.turno }}</v-td>
           </tr>
 
-          <tr v-if="!AllCursos.length">
-            <v-td colspan="3" width="450">
-              NENHUM CURSO ENCONTRADO
-            </v-td>
+          <tr v-if="!CursosOptionsOrdered.length">
+            <v-td colspan="3" width="450">NENHUM CURSO ENCONTRADO</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -201,14 +224,15 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { find, orderBy, filter, some } from "lodash-es";
-import { pdfTurmasCursos } from "@/common/services/pdfs";
+import { orderBy } from "lodash-es";
+import { pdfTurmasCursos } from "@/services/pdfs";
 import { normalizeText } from "@/common/utils";
 import {
   toggleItemInArray,
   toggleAsideModal,
   conectaFiltrosSemestresEPeriodos,
   preventClickSelection,
+  generateHorariosText,
 } from "@/common/mixins";
 import {
   ModalRelatorio,
@@ -217,8 +241,7 @@ import {
   ModalDownloadTurmasCursos,
 } from "@/components/modals";
 import { InputSearch } from "@/components/ui";
-import ModalVagas from "../PlanoDepartamental/ModalVagas";
-import downloadService from "@/common/services/download";
+import downloadService from "@/services/download";
 import { saveAs } from "file-saver";
 
 export default {
@@ -228,18 +251,17 @@ export default {
     toggleAsideModal,
     conectaFiltrosSemestresEPeriodos,
     preventClickSelection,
+    generateHorariosText,
   ],
   components: {
     ModalRelatorio,
     ModalFiltros,
     ModalAjuda,
     InputSearch,
-    ModalVagas,
     ModalDownloadTurmasCursos,
   },
   data() {
     return {
-      turmaClicked: null,
       searchCursos: "",
       asideModalsRefs: [
         "modalAjuda",
@@ -247,8 +269,8 @@ export default {
         "modalFiltros",
         "modalDownloadTurmasCursos",
       ],
-      ordenacaoMain: {
-        disciplinas: { order: "codigo", type: "asc" },
+      ordenacaoTable: {
+        cursos: { order: "codigo", type: "asc" },
       },
       ordenacaoModal: {
         cursos: { order: "codigo", type: "asc" },
@@ -271,7 +293,7 @@ export default {
       modalFiltrosCallbacks: {
         selectAll: {
           Cursos: () => {
-            this.filtroCursos.selecionados = [...this.CursosFiltrados];
+            this.filtroCursos.selecionados = [...this.CursosOptionsFiltered];
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
@@ -304,59 +326,43 @@ export default {
   },
 
   beforeMount() {
-    // this.getTurmasDoCurso(1);
     this.modalFiltrosCallbacks.selectAll.Periodos();
+    this.modalFiltrosCallbacks.selectAll.Cursos();
+    this.modalFiltrosCallbacks.btnOk();
   },
 
   methods: {
-    getTurmasDoCurso(curso) {
-      let turmas = [];
-      this.TurmasInDisciplinasPerfis.forEach((t) => {
-        let pedidos = this.Pedidos[t.id];
-        let pedido = find(pedidos, ["Curso", curso]);
-        if (pedido.vagasPeriodizadas > 0 || pedido.vagasNaoPeriodizadas > 0) {
-          turmas.push({ turma: t, pedido: pedido });
-        }
+    getTurmasDoCurso(cursoId) {
+      const turmas = [];
+      this.AllTurmas.forEach((turma) => {
+        const pedidoDoCurso = this.Pedidos[turma.id].find((pedido) => pedido.Curso === cursoId);
+
+        if (pedidoDoCurso.vagasPeriodizadas > 0 || pedidoDoCurso.vagasNaoPeriodizadas > 0)
+          turmas.push({ ...turma, pedidoDoCurso });
       });
 
-      return orderBy(
-        orderBy(
-          orderBy(
-            filter(turmas, (t) => some(this.filtroPeriodos.ativados, ["id", t.turma.periodo])),
-            (t) => {
-              return t.turma.letra;
-            }
-          ),
-          (t) => {
-            return t.turma.disciplina.codigo;
+      return orderBy(turmas, ["periodo", "disciplina.codigo", "letra"]);
+    },
+    async downloadFiles(periodo) {
+      try {
+        this.setLoading({ type: "partial", value: true });
+        await downloadService.generatePdfTurmasCurso({ Plano: this.currentPlano.id, periodo });
+        await downloadService.createZipTurmasCursos();
+        const downloadData = await fetch(
+          "http://200.131.219.57:3000/api/download/downloadTurmasCursosZip",
+          {
+            method: "GET",
+            headers: { Authorization: `Bearer ${this.$store.state.auth.token}` },
           }
-        ),
-        (t) => {
-          return t.turma.periodo;
-        }
-      );
-    },
-
-    horarioTotal(turma) {
-      let horario1 = find(this.$store.state.horario.Horarios, {
-        id: turma.Horario1,
-      });
-      let horario2 = find(this.$store.state.horario.Horarios, {
-        id: turma.Horario2,
-      });
-      let horarioTotal = undefined;
-      if (horario1 === undefined && horario2 === undefined) {
-        horarioTotal = "";
-      } else if (horario2 === undefined) {
-        horarioTotal = horario1.horario;
-      } else if (horario1 === undefined) {
-        horarioTotal = horario2.horario;
-      } else {
-        horarioTotal = horario1.horario + "/" + horario2.horario;
+        );
+        const downloadDataBlob = await downloadData.blob();
+        saveAs(downloadDataBlob, "TurmasCursos.zip");
+      } catch (error) {
+        console.log("Erro ao gerar download", error);
+      } finally {
+        this.setLoading({ type: "partial", value: false });
       }
-      return horarioTotal;
     },
-
     generatePdf(completo) {
       let cursos, periodos;
       if (completo) {
@@ -367,79 +373,31 @@ export default {
         periodos = this.filtroPeriodos.ativados;
       }
 
-      pdfTurmasCursos({
-        cursos,
-        periodos,
-        plano: this.currentPlano,
-      });
-    },
-
-    async downloadTurmasCursos(periodo) {
-      this.setLoading({ type: "partial", value: true });
-      await downloadService
-        .generatePdfTurmasCurso({
-          Plano: localStorage.getItem("Plano"),
-          periodo: periodo,
-        })
-        .then(() =>
-          downloadService.createZipTurmasCursos().then(() =>
-            fetch("http://200.131.219.57:3000/api/download/downloadTurmasCursosZip", {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${this.$store.state.auth.token}`,
-              },
-            })
-              .then((r) => r.blob())
-              .then((blob) => {
-                saveAs(blob, "TurmasCursos.zip");
-                this.setLoading({ type: "partial", value: false });
-              })
-          )
-        );
+      pdfTurmasCursos({ cursos, periodos, plano: this.currentPlano });
     },
   },
 
   computed: {
-    ...mapGetters([
-      "TurmasInDisciplinasPerfis",
-      "DisciplinasDCCInPerfis",
-      "PerfisDCC",
-      "AllPlanos",
-      "Pedidos",
-      "AllCursos",
-    ]),
+    ...mapGetters(["AllTurmas", "Pedidos", "AllCursos"]),
 
-    CursosOrdered() {
-      return orderBy(this.AllCursos, "codigo");
+    CursosOrderedTable() {
+      const { order, type } = this.ordenacaoTable.cursos;
+      return orderBy(this.filtroCursos.ativados, order, type);
     },
-
-    CursosFiltrados() {
+    CursosOptionsOrdered() {
+      const { order, type } = this.ordenacaoModal.cursos;
+      return orderBy(this.CursosOptionsFiltered, order, type);
+    },
+    CursosOptionsFiltered() {
       if (this.searchCursos === "") return this.AllCursos;
-      else {
-        const searchNormalized = normalizeText(this.searchCursos);
+      const searchNormalized = normalizeText(this.searchCursos);
 
-        return filter(this.AllCursos, (curso) => {
-          const nome = normalizeText(curso.nome);
-          const codigo = normalizeText(curso.codigo);
-
-          return nome.match(searchNormalized) || codigo.match(searchNormalized);
-        });
-      }
+      return this.AllCursos.filter((curso) => {
+        const nome = normalizeText(curso.nome);
+        const codigo = normalizeText(curso.codigo);
+        return nome.match(searchNormalized) || codigo.match(searchNormalized);
+      });
     },
   },
 };
 </script>
-
-<style scoped>
-td.td-vagas:hover {
-  padding: 0 !important;
-  color: var(--light-blue);
-  text-decoration: underline;
-}
-.bg-total-vg {
-  background-color: #cecece;
-}
-.bg-total-vg:hover {
-  background-color: #cecece !important;
-}
-</style>

@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { cloneDeepWith } from "lodash-es";
-import pedidoService from "../../common/services/pedido";
+import pedidoService from "../../services/pedido";
 import { setEmptyValuesToNull } from "@/common/utils";
 import {
   PEDIDO_FETCHED,
@@ -80,16 +80,10 @@ const actions = {
   async editPedido({ commit }, pedido) {
     const pedidoNormalized = cloneDeepWith(pedido, setEmptyValuesToNull);
 
-    if (pedidoNormalized.vagasPeriodizadas === null)
-      pedidoNormalized.vagasPeriodizadas = 0;
-    if (pedidoNormalized.vagasNaoPeriodizadas === null)
-      pedidoNormalized.vagasNaoPeriodizadas = 0;
+    if (pedidoNormalized.vagasPeriodizadas === null) pedidoNormalized.vagasPeriodizadas = 0;
+    if (pedidoNormalized.vagasNaoPeriodizadas === null) pedidoNormalized.vagasNaoPeriodizadas = 0;
 
-    await pedidoService.update(
-      pedidoNormalized.Curso,
-      pedidoNormalized.Turma,
-      pedidoNormalized
-    );
+    await pedidoService.update(pedidoNormalized.Curso, pedidoNormalized.Turma, pedidoNormalized);
 
     commit("PUSH_NOTIFICATION", {
       type: "success",

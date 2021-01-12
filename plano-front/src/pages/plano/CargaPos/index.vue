@@ -2,10 +2,7 @@
   <div class="main-component row" v-if="currentPlano.isEditable">
     <portal to="page-header">
       <template v-if="isAdding">
-        <BaseButton
-          template="salvar"
-          @click="$refs.novaCargaPosRow.handleCreateCargaPos()"
-        />
+        <BaseButton template="salvar" @click="$refs.novaCargaPosRow.handleCreateCargaPos()" />
         <BaseButton template="cancelar" @click="toggleAddRow" />
       </template>
       <template v-else>
@@ -99,11 +96,7 @@
             v-prevent-click-selection
           >
             <v-td width="25" type="content">
-              <input
-                type="checkbox"
-                v-model="filtroProgramas.selecionados"
-                :value="programaPos"
-              />
+              <input type="checkbox" v-model="filtroProgramas.selecionados" :value="programaPos" />
             </v-td>
             <v-td width="425" align="start">{{ programaPos }}</v-td>
           </tr>
@@ -175,9 +168,7 @@
       @btn-deletar="handleDeleteCargasPos"
       @btn-clear="clearCargasPosToDelete"
     >
-      <li v-if="!CargasPosToDelete.length" class="list-group-item">
-        Nenhuma carga selecionada.
-      </li>
+      <li v-if="!CargasPosToDelete.length" class="list-group-item">Nenhuma carga selecionada.</li>
       <li
         v-for="carga in CargasPosToDelete"
         :key="'deletarTurma' + carga.id"
@@ -201,17 +192,17 @@
         <b>Visualizar cargas:</b>
         Clique no ícone de filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
-        no cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar
-        entre os tipos de filtro disponíveis. Marque quais informações deseja visualizar,
-        e para finalizar clique no botão OK.
+        no cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar entre os
+        tipos de filtro disponíveis. Marque quais informações deseja visualizar, e para finalizar
+        clique no botão OK.
       </li>
       <li class="list-group-item">
         <b>Adicionar carga:</b>
         Clique no ícone de adicionar
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
-        no cabeçalho da página. Em seguida, preencha a nova linha que irá aparecer no
-        início da tabela. Note que todos os campos são obrigatórios. Após preenchê-los,
-        clique no ícone de salvar
+        no cabeçalho da página. Em seguida, preencha a nova linha que irá aparecer no início da
+        tabela. Note que todos os campos são obrigatórios. Após preenchê-los, clique no ícone de
+        salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
         ou de cancelar
         <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />
@@ -219,23 +210,22 @@
       </li>
       <li class="list-group-item">
         <b>Deletar carga(s):</b>
-        Marque a(s) carga(s) que deseja deletar através da caixa de seleção na coluna mais
-        à esquerda da tabela. Em seguida, clique no ícone de deletar
+        Marque a(s) carga(s) que deseja deletar através da caixa de seleção na coluna mais à
+        esquerda da tabela. Em seguida, clique no ícone de deletar
         <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" />
-        no cabeçalho da página. Confirme a exclusão clicando no botão OK na janela que se
-        abrirá.
+        no cabeçalho da página. Confirme a exclusão clicando no botão OK na janela que se abrirá.
       </li>
       <li class="list-group-item">
         <b>Editar carga:</b>
-        Basta fazer as alterações necessárias diretamente nos campos da tabela. O sistema
-        salvará as modificações automaticamente.
+        Basta fazer as alterações necessárias diretamente nos campos da tabela. O sistema salvará as
+        modificações automaticamente.
       </li>
       <li class="list-group-item">
         <b>Observações:</b>
-        Note que os filtros por semestre e períodos são interligados. Ao selecionar um
-        semestre, os períodos correspondentes também serão selecionados, e vice versa. O
-        primeiro semestre corresponde ao primeiro e segundo períodos, e o segundo semestre
-        corresponde ao terceiro e quarto períodos.
+        Note que os filtros por semestre e períodos são interligados. Ao selecionar um semestre, os
+        períodos correspondentes também serão selecionados, e vice versa. O primeiro semestre
+        corresponde ao primeiro e segundo períodos, e o segundo semestre corresponde ao terceiro e
+        quarto períodos.
       </li>
     </ModalAjuda>
   </div>
@@ -398,10 +388,7 @@ export default {
     },
     ProgramasInCargaPosFiltredByPrograma() {
       return filter(this.ProgramasInCargaPos, (programa) =>
-        some(
-          this.filtroProgramas.ativados,
-          (programaNome) => programaNome === programa.nome
-        )
+        some(this.filtroProgramas.ativados, (programaNome) => programaNome === programa.nome)
       );
     },
     ProgramasInCargaPos() {

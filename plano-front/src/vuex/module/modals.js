@@ -1,16 +1,18 @@
-import { SHOW_MODAL_OVERLAY, HIDE_MODAL_OVERLAY } from "../mutation-types";
+import { SET_MODAL_OVERLAY_VISIBILITY } from "../mutation-types";
 
 const state = {
   modalOverlayVisibility: false,
 };
 
 const mutations = {
-  [SHOW_MODAL_OVERLAY](state) {
-    state.modalOverlayVisibility = true;
+  [SET_MODAL_OVERLAY_VISIBILITY](state, newValue) {
+    state.modalOverlayVisibility = newValue;
   },
+};
 
-  [HIDE_MODAL_OVERLAY](state) {
-    state.modalOverlayVisibility = false;
+const actions = {
+  setModalOverlayVisibility({ commit }, payload) {
+    commit(SET_MODAL_OVERLAY_VISIBILITY, payload);
   },
 };
 
@@ -23,5 +25,6 @@ const getters = {
 export default {
   state,
   mutations,
+  actions,
   getters,
 };

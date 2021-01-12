@@ -11,11 +11,7 @@
 
     <tr v-for="listItem in ListaDeTodosHorarios" :key="listItem.nome">
       <td class="tg-0lax tg-hor">{{ listItem.nome }}</td>
-      <td
-        v-for="horarioId in listItem.horariosIds"
-        :key="'tdHorario' + horarioId"
-        class="tg-0lax"
-      >
+      <td v-for="horarioId in listItem.horariosIds" :key="'tdHorario' + horarioId" class="tg-0lax">
         <p
           v-for="turma in TurmasFilteredByHorario(horarioId)"
           :key="horarioId + turma.letra + turma.id"
@@ -58,10 +54,8 @@ export default {
     findDocentesApelidoInTurma(turma) {
       let docente1;
       let docente2;
-      if (!isNull(turma.Docente1))
-        docente1 = find(this.AllDocentes, ["id", turma.Docente1]);
-      if (!isNull(turma.Docente2))
-        docente2 = find(this.AllDocentes, ["id", turma.Docente2]);
+      if (!isNull(turma.Docente1)) docente1 = find(this.AllDocentes, ["id", turma.Docente1]);
+      if (!isNull(turma.Docente2)) docente2 = find(this.AllDocentes, ["id", turma.Docente2]);
 
       let apelidos = "";
       if (docente1 !== undefined) {

@@ -1,5 +1,5 @@
 import Vue from "vue";
-import docentePerfilService from "../../common/services/docentePerfil";
+import docentePerfilService from "../../services/docentePerfil";
 import {
   DOCENTE_PERFIL_FETCHED,
   SOCKET_DOCENTE_PERFIL_CREATED,

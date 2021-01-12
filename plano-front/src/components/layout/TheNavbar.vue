@@ -13,9 +13,7 @@
 
     <ul class="navbar-nav">
       <li class="nav-item nav-item-plano">
-        <label class="m-0 pr-2" for="planoAtual">
-          Plano atual
-        </label>
+        <label class="m-0 pr-2" for="planoAtual">Plano atual</label>
         <select
           id="planoAtual"
           class="input-plano"
@@ -45,7 +43,6 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import { filter, find } from "lodash-es";
 export default {
   name: "TheNavbar",
   props: {
@@ -62,10 +59,10 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["sidebarVisibility", "AllPlanos", "currentPlano"]),
+    ...mapGetters(["sidebarVisibility", "Planos", "currentPlano"]),
 
     PlanosVisiveis() {
-      return filter(this.AllPlanos, ["visible", true]);
+      return this.Planos.filter((plano) => plano.visible === true);
     },
   },
 
@@ -74,16 +71,6 @@ export default {
       handler(currentPlano) {
         if (currentPlano) {
           this.planoIdForm = currentPlano.id;
-        } else {
-          const firstVisiblePlano = find(this.AllPlanos, ["visible", true]);
-          this.changeCurrentPlano(firstVisiblePlano.id);
-          this.planoIdForm = firstVisiblePlano.id;
-
-          this.pushNotification({
-            type: "warn",
-            title: "Aviso!",
-            text: `O plano atual foi alterando para o ${firstVisiblePlano.ano} - ${firstVisiblePlano.nome}`,
-          });
         }
       },
       immediate: true,

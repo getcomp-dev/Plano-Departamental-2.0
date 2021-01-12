@@ -3,7 +3,7 @@
     ref="baseModalDelete"
     title="Confirmar exclusão"
     position="center"
-    :hasBackground="true"
+    :hasOverlay="true"
     :hasFooter="isDeleting"
     :styles="{ width: '400px', maxHeight: '600px', fontSize: '14px' }"
   >

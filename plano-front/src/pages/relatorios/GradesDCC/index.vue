@@ -5,11 +5,7 @@
         <div class="input-group-prepend">
           <label class="input-group-text">Ano</label>
         </div>
-        <select
-          class="form-control form-control-top"
-          v-model="novoAno"
-          @change="runNovoAno()"
-        >
+        <select class="form-control form-control-top" v-model="novoAno" @change="runNovoAno()">
           <option
             v-for="i in Array.from(Array(11), (e, i) => i - 5)"
             :key="i"
@@ -208,9 +204,7 @@
           </tr>
 
           <tr v-if="!DisciplinasOptionsOrdered.length">
-            <v-td colspan="3" width="450">
-              NENHUMA DISCIPLINA ENCONTRADA.
-            </v-td>
+            <v-td colspan="3" width="450">NENHUMA DISCIPLINA ENCONTRADA.</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -251,9 +245,7 @@
           </tr>
 
           <tr v-if="!CursosOptionsOrdered.length">
-            <v-td width="450" colspan="3">
-              NENHUM CURSO ENCONTRADO.
-            </v-td>
+            <v-td width="450" colspan="3">NENHUM CURSO ENCONTRADO.</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -264,9 +256,8 @@
         <b>Visualizar disciplinas na grade:</b>
         Clique no ícone filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
-        . Em seguida, utilize as abas para navegar entre os filtros. Selecione as
-        informações que deseja visualizar, incluindo o ano do plano departamental, e
-        clique em OK.
+        . Em seguida, utilize as abas para navegar entre os filtros. Selecione as informações que
+        deseja visualizar, incluindo o ano do plano departamental, e clique em OK.
       </li>
     </ModalAjuda>
   </div>
@@ -471,10 +462,7 @@ export default {
               //verifica se a disciplina está na grade procurada
               if (gradedisciplina.periodo <= this.gradesAtivas[i][j].fim) {
                 //verifica se essa grade está sendo usada para essa disciplina(limite superior)
-                if (
-                  (j > 0 && this.gradesAtivas[i][j - 1].fim < gradedisciplina.periodo) ||
-                  j === 0
-                )
+                if ((j > 0 && this.gradesAtivas[i][j - 1].fim < gradedisciplina.periodo) || j === 0)
                   //verifica se a disciplina não deveria estar incluída na grade anterior, ou se essa é a grade mais recente(limite inferior)
                   break;
                 //caso essa seja a grade correta, encerra o loop nas grades
@@ -488,17 +476,13 @@ export default {
               gradedisciplina.periodo % 2 === 1
             )
               //tem entrada de alunos no 1º semestre ou no 3º semestre -> terá períodos ímpares no primeiro semestre
-              this.disciplinasGrades[parseInt(d, 10)][i - 1][0].push(
-                gradedisciplina.periodo
-              );
+              this.disciplinasGrades[parseInt(d, 10)][i - 1][0].push(gradedisciplina.periodo);
             if (
               (curso.semestreInicial === 2 || curso.semestreInicial === 3) &&
               gradedisciplina.periodo % 2 === 0
             )
               //tem entrada de alunos no 2º semestre ou no 3º semestre -> terá períodos pares no primeiro semestre
-              this.disciplinasGrades[parseInt(d, 10)][i - 1][0].push(
-                gradedisciplina.periodo
-              );
+              this.disciplinasGrades[parseInt(d, 10)][i - 1][0].push(gradedisciplina.periodo);
           }
         }
       });
@@ -545,10 +529,7 @@ export default {
               //verifica se a disciplina está na grade procurada
               if (gradedisciplina.periodo <= this.gradesAtivas[i][j].fim) {
                 //verifica se essa grade está sendo usada para essa disciplina(limite superior)
-                if (
-                  (j > 0 && this.gradesAtivas[i][j - 1].fim < gradedisciplina.periodo) ||
-                  j === 0
-                )
+                if ((j > 0 && this.gradesAtivas[i][j - 1].fim < gradedisciplina.periodo) || j === 0)
                   //verifica se a disciplina não deveria estar incluída na grade anterior, ou se essa é a grade mais recente(limite inferior)
                   break;
                 //caso essa seja a grade correta, encerra o loop nas grades
@@ -562,17 +543,13 @@ export default {
               gradedisciplina.periodo % 2 === 0
             )
               //tem entrada de alunos no 1º semestre ou no 3º semestre -> terá períodos pares no segundo semestre
-              this.disciplinasGrades[parseInt(d, 10)][i - 1][1].push(
-                gradedisciplina.periodo
-              );
+              this.disciplinasGrades[parseInt(d, 10)][i - 1][1].push(gradedisciplina.periodo);
             if (
               (curso.semestreInicial === 2 || curso.semestreInicial === 3) &&
               gradedisciplina.periodo % 2 === 1
             )
               //tem entrada de alunos no 2º semestre ou no 3º semestre -> terá períodos ímpares no segundo semestre
-              this.disciplinasGrades[parseInt(d, 10)][i - 1][1].push(
-                gradedisciplina.periodo
-              );
+              this.disciplinasGrades[parseInt(d, 10)][i - 1][1].push(gradedisciplina.periodo);
           }
         }
       });
@@ -586,7 +563,7 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["PrincipaisCursosDCC", "DisciplinasInPerfis", "AllPerfis"]),
+    ...mapGetters(["PrincipaisCursosDCC", "AllDisciplinas", "AllPerfis"]),
 
     DisciplinasOrderedMain() {
       let disciplinasResult = this.DisciplinasFiltredMain;
@@ -678,7 +655,7 @@ export default {
       });
     },
     DisciplinasOptions() {
-      return this.DisciplinasInPerfis;
+      return this.AllDisciplinas;
     },
     PerfisOptionsOrdered() {
       return orderBy(
@@ -689,10 +666,7 @@ export default {
     },
     PerfisOptions() {
       return this.AllPerfis.map((perfil) => {
-        const todasDisciplinasDoPerfil = filter(this.DisciplinasOptions, [
-          "Perfil",
-          perfil.id,
-        ]);
+        const todasDisciplinasDoPerfil = filter(this.DisciplinasOptions, ["Perfil", perfil.id]);
         const disciplinasSelecionadas = filter(this.filtroDisciplinas.selecionados, [
           "Perfil",
           perfil.id,

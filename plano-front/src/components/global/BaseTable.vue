@@ -35,7 +35,7 @@ export default {
     type: { type: String, default: "main" },
     hasSearchBar: { type: Boolean, default: false },
     styles: { type: String, default: "" },
-    classes: { type: String | Array, default: "" },
+    classes: { type: [String, Array], default: "" },
   },
   computed: {
     ...mapGetters(["onLoading"]),

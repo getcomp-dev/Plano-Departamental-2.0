@@ -1,5 +1,5 @@
 import Vue from "vue";
-import salaService from "../../common/services/sala";
+import salaService from "../../services/sala";
 import { orderBy, filter } from "lodash-es";
 import {
   SALA_FETCHED,

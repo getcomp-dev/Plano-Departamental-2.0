@@ -51,24 +51,14 @@
 
         <template #tbody>
           <tr v-for="turma in TurmasRetornadasOrdered" :key="turma.id + turma.letra">
-            <v-td
-              width="120"
-              align="start"
-              :title="turma.plano.ano + '-' + turma.plano.nome"
-            >
+            <v-td width="120" align="start" :title="turma.plano.ano + '-' + turma.plano.nome">
               <template v-if="turma.plano.ano">
                 {{ turma.plano.ano }} {{ turma.plano.nome }}
               </template>
-              <template v-else>
-                -
-              </template>
+              <template v-else>-</template>
             </v-td>
             <v-td width="30">{{ turma.periodo }}</v-td>
-            <v-td
-              width="80"
-              paddinX="0"
-              :style="{ backgroundColor: turma.disciplina.perfil.cor }"
-            >
+            <v-td width="80" paddinX="0" :style="{ backgroundColor: turma.disciplina.perfil.cor }">
               {{ turma.disciplina.perfil.abreviacao }}
             </v-td>
             <v-td width="80">{{ turma.disciplina.codigo }}</v-td>
@@ -81,11 +71,7 @@
             <v-td width="120" align="start">
               {{ generateHorariosText(turma.Horario1, turma.Horario2) }}
             </v-td>
-            <v-td
-              width="100"
-              align="start"
-              :title="generateSalasText(turma.Sala1, turma.Sala2)"
-            >
+            <v-td width="100" align="start" :title="generateSalasText(turma.Sala1, turma.Sala2)">
               {{ generateSalasText(turma.Sala1, turma.Sala2) }}
             </v-td>
           </tr>
@@ -130,9 +116,7 @@
           </tr>
 
           <tr v-if="!PerfisOptionsOrdered.length">
-            <v-td colspan="3" width="450">
-              Nenhum perfil encontrado
-            </v-td>
+            <v-td colspan="3" width="450">Nenhum perfil encontrado</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -197,18 +181,12 @@
             <v-td width="85" align="start">{{ disciplina.perfil.abreviacao }}</v-td>
           </tr>
           <tr v-if="!DisciplinasOptionsOrdered.length">
-            <v-td colspan="3" width="450">
-              NENHUMA DISCIPLINA ENCONTRADA.
-            </v-td>
+            <v-td colspan="3" width="450">NENHUMA DISCIPLINA ENCONTRADA.</v-td>
           </tr>
         </template>
       </BaseTable>
 
-      <BaseTable
-        type="modal"
-        v-show="modalFiltrosTabs.current === 'Docentes'"
-        :hasSearchBar="true"
-      >
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Docentes'" :hasSearchBar="true">
         <template #thead-search>
           <InputSearch
             v-model="searchDocentesModal"
@@ -243,11 +221,7 @@
             v-prevent-click-selection
           >
             <v-td width="25" type="content">
-              <input
-                type="checkbox"
-                v-model="searchConditions.Docentes"
-                :value="docente.id"
-              />
+              <input type="checkbox" v-model="searchConditions.Docentes" :value="docente.id" />
             </v-td>
             <v-td width="120" align="start">{{ docente.apelido }}</v-td>
             <v-td width="305" align="start">{{ docente.nome }}</v-td>
@@ -312,16 +286,9 @@
         </template>
       </BaseTable>
 
-      <BaseTable
-        type="modal"
-        v-show="modalFiltrosTabs.current === 'Horários'"
-        :hasSearchBar="true"
-      >
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Horários'" :hasSearchBar="true">
         <template #thead-search>
-          <InputSearch
-            v-model="searchHorariosModal"
-            placeholder="Pesquise um horário..."
-          />
+          <InputSearch v-model="searchHorariosModal" placeholder="Pesquise um horário..." />
         </template>
         <template #thead>
           <v-th width="25" />
@@ -336,11 +303,7 @@
             v-prevent-click-selection
           >
             <v-td width="25" type="content">
-              <input
-                type="checkbox"
-                v-model="searchConditions.Horarios"
-                :value="horario.id"
-              />
+              <input type="checkbox" v-model="searchConditions.Horarios" :value="horario.id" />
             </v-td>
             <v-td width="425" align="start">{{ horario.horario }}</v-td>
           </tr>
@@ -351,11 +314,7 @@
         </template>
       </BaseTable>
 
-      <BaseTable
-        type="modal"
-        v-show="modalFiltrosTabs.current === 'Salas'"
-        :hasSearchBar="true"
-      >
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Salas'" :hasSearchBar="true">
         <template #thead-search>
           <InputSearch v-model="searchSalasModal" placeholder="Pesquise uma sala..." />
         </template>
@@ -392,23 +351,19 @@
 
         <template #tbody>
           <tr
-            v-for="plano in AllPlanos"
+            v-for="plano in Planos"
             :key="plano.id + plano.ano + plano.nome"
             @click="toggleSearchCodition('Planos', plano.id)"
             v-prevent-click-selection
           >
             <v-td width="25" type="content">
-              <input
-                type="checkbox"
-                v-model="searchConditions.Planos"
-                :value="plano.id"
-              />
+              <input type="checkbox" v-model="searchConditions.Planos" :value="plano.id" />
             </v-td>
             <v-td width="70" align="start">{{ plano.ano }}</v-td>
             <v-td width="355" align="start">{{ plano.nome }}</v-td>
           </tr>
 
-          <tr v-if="!AllPlanos.length">
+          <tr v-if="!Planos.length">
             <v-td colspan="3" width="450">NENHUM PLANO ENCONTRADO.</v-td>
           </tr>
         </template>
@@ -420,22 +375,22 @@
         <b>Visualizar conteúdo:</b>
         Clique no ícone de filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
-        no cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar
-        entre os tipos de filtro disponíveis. Marque quais informações deseja visualizar,
-        e para finalizar clique no botão OK.
+        no cabeçalho da página e, na janela que se abrirá, utilize as abas para navegar entre os
+        tipos de filtro disponíveis. Marque quais informações deseja visualizar, e para finalizar
+        clique no botão OK.
       </li>
       <li class="list-group-item">
         <b>Ordenar:</b>
-        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
-        informações. Note que existem colunas com o icone
+        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das informações.
+        Note que existem colunas com o icone
         <font-awesome-icon :icon="['fas', 'thumbtack']" class="icon-darkgray" />
         que significa que esta ordenação terá pripridade em relação as outras.
       </li>
       <li class="list-group-item">
         <b>Observações:</b>
-        Note que caso um dos filtros não possua nenhum campo selecionado a busca
-        acontecerá como se todas opções daquele filtro estivesse selecionadas. Ou seja
-        marque apenas os filtros necessários, não é preciso marcar todos os restante.
+        Note que caso um dos filtros não possua nenhum campo selecionado a busca acontecerá como se
+        todas opções daquele filtro estivesse selecionadas. Ou seja marque apenas os filtros
+        necessários, não é preciso marcar todos os restante.
       </li>
     </ModalAjuda>
   </div>
@@ -444,7 +399,7 @@
 <script>
 import { mapGetters } from "vuex";
 import { union, difference, find, filter, orderBy } from "lodash-es";
-import turmaService from "@/common/services/turma";
+import turmaService from "@/services/turma";
 import { normalizeText, generateEmptyTurma } from "@/common/utils";
 import {
   toggleAsideModal,
@@ -548,7 +503,7 @@ export default {
             );
           },
           Planos: () => {
-            this.searchConditions.Planos = this.AllPlanos.map((plano) => plano.id);
+            this.searchConditions.Planos = this.Planos.map((plano) => plano.id);
           },
           Periodos: () => {
             this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
@@ -601,7 +556,7 @@ export default {
             this.filtroPeriodos.selecionados = [];
           },
         },
-        btnOk: async () => {
+        btnOk: async() => {
           this.searchConditions.Disciplinas = this.filtroDisciplinas.selecionados.map(
             (disciplina) => disciplina.id
           );
@@ -651,11 +606,11 @@ export default {
   computed: {
     ...mapGetters([
       "PerfisDCC",
-      "AllPlanos",
+      "Planos",
       "AllDocentes",
       "AllHorarios",
       "AllSalas",
-      "DisciplinasDCCInPerfis",
+      "DisciplinasDCC",
     ]),
 
     TurmasRetornadasOrdered() {
@@ -671,8 +626,8 @@ export default {
       return this.TurmasRetornadas.map((turma) => {
         return {
           ...turma,
-          disciplina: find(this.DisciplinasDCCInPerfis, ["id", turma.Disciplina]),
-          plano: find(this.AllPlanos, ["id", turma.Plano]) || {},
+          disciplina: find(this.DisciplinasDCC, ["id", turma.Disciplina]),
+          plano: find(this.Planos, ["id", turma.Plano]) || {},
         };
       });
     },
@@ -687,10 +642,7 @@ export default {
     },
     PerfisOptions() {
       return this.PerfisDCC.map((perfil) => {
-        const todasDisciplinasDoPerfil = filter(this.DisciplinasOptions, [
-          "Perfil",
-          perfil.id,
-        ]);
+        const todasDisciplinasDoPerfil = filter(this.DisciplinasOptions, ["Perfil", perfil.id]);
         const disciplinasSelecionadas = filter(this.filtroDisciplinas.selecionados, [
           "Perfil",
           perfil.id,
@@ -730,7 +682,7 @@ export default {
       });
     },
     DisciplinasOptions() {
-      return this.DisciplinasDCCInPerfis;
+      return this.DisciplinasDCC;
     },
 
     DocentesOptionsOrdered() {

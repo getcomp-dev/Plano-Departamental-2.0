@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-3 mb-3">
+  <div class="list-container col-12 mb-1">
     <h3 class="list-title">{{ title }}</h3>
     <ul class="list-group">
       <li v-for="page in pages" :key="page.path" class="list-group-item">
@@ -18,28 +18,31 @@ export default {
   props: {
     title: {
       type: String,
-      default: "Nenhum titulo passado para o componente!",
+      default: "Vázio",
     },
     pages: { type: Array, default: () => [] },
   },
 };
 </script>
 
-<style scoped>
-.list-title {
-  margin-top: 2%;
-  font-size: 14px;
-  font-weight: 600;
-  color: #3f3f3f;
-}
+<style lang="scss" scoped>
+.list-container {
+  .list-title {
+    margin-top: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #3f3f3f;
+  }
 
-.list-group {
-  line-height: 30px;
-  font-size: 12px;
-  line-height: inherit;
-  box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
-}
-.list-group .list-group-item {
-  padding: 9px 15px;
+  > .list-group {
+    line-height: 30px;
+    font-size: 12px;
+    line-height: inherit;
+    box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
+
+    > .list-group-item {
+      padding: 9px;
+    }
+  }
 }
 </style>

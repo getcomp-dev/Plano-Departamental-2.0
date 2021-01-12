@@ -7,10 +7,7 @@ dayjs.extend(timezone);
 export default {
   filters: {
     convertDateUTC(dateUTC) {
-      return dayjs
-        .utc(dateUTC)
-        .tz("America/Sao_Paulo")
-        .format("HH:mm - DD/MM/YY");
+      return dayjs.utc(dateUTC).tz("America/Sao_Paulo").format("HH:mm - DD/MM/YY");
     },
   },
 };

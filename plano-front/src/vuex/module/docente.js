@@ -1,6 +1,6 @@
 import Vue from "vue";
 import { orderBy, filter } from "lodash-es";
-import docenteService from "../../common/services/docente";
+import docenteService from "../../services/docente";
 import {
   DOCENTE_FETCHED,
   SOCKET_DOCENTE_CREATED,

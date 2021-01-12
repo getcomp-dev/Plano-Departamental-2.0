@@ -16,7 +16,7 @@
     <div
       v-if="modalOverlayVisibility"
       class="base-modal-overlay"
-      @click.stop="emitCloseCenterModal"
+      @click.stop="setModalOverlayVisibility(false)"
     ></div>
 
     <ModalUser ref="modalUser" />
@@ -27,23 +27,17 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { find, pull } from "lodash-es";
-import bddumpService from "@/common/services/bddump";
-import { EventBus } from "@/plugins/eventBus.js";
+import bddumpService from "@/services/bddump";
 import { TheNavbar, TheSidebar, ThePageHeader } from "@/components/layout";
 import { ModalUser, ModalDownload } from "@/components/modals";
 import { SOCKET_PLANO_UPDATED } from "../../../vuex/mutation-types";
 
 export default {
   name: "TheDashboard",
-  components: {
-    TheSidebar,
-    TheNavbar,
-    ThePageHeader,
-    ModalUser,
-    ModalDownload,
-  },
+  components: { TheSidebar, TheNavbar, ThePageHeader, ModalUser, ModalDownload },
   data() {
     return {
+      planoInitilized: false,
       modalCallbacks: {
         openDownload: () => this.$refs.modalDownload.open(),
         openUser: () => this.$refs.modalUser.open(),
@@ -53,16 +47,13 @@ export default {
 
   created() {
     this.initializeCurrentPlano().then(() => {
-      if (!find(this.AllPlanos, ["id", this.currentPlano.id]).visible) {
-        const firstVisiblePlano = find(this.AllPlanos, ["visible", true]);
-        this.changeCurrentPlano(firstVisiblePlano.id);
-      }
+      this.planoInitilized = true;
     });
     this.unwatch = this.$store.subscribe((mutation) => {
       if (mutation.type === SOCKET_PLANO_UPDATED) {
         if (mutation.payload.Plano.id == localStorage.getItem("Plano")) {
           if (!mutation.payload.Plano.visible) {
-            let planovisivel = find(this.AllPlanos, ["visible", true]);
+            let planovisivel = find(this.Planos, ["visible", true]);
             this.changeCurrentPlano(planovisivel.id);
           }
         }
@@ -75,11 +66,13 @@ export default {
   },
 
   methods: {
-    ...mapActions(["initializeCurrentPlano", "changeCurrentPlano", "closeSidebar"]),
+    ...mapActions([
+      "initializeCurrentPlano",
+      "changeCurrentPlano",
+      "closeSidebar",
+      "setModalOverlayVisibility",
+    ]),
 
-    emitCloseCenterModal() {
-      EventBus.$emit("close-modal");
-    },
     returnFiles() {
       bddumpService.returnFiles().then((response) => {
         this.files = response.Files.filter(function(elm) {
@@ -94,11 +87,28 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["modalOverlayVisibility", "onLoading", "AllPlanos", "allRoutes"]),
+    ...mapGetters(["modalOverlayVisibility", "onLoading", "Planos", "AllRoutes"]),
 
     currentPageTitle() {
-      const currentPage = this.allRoutes.find((route) => route.path === this.$route.path);
+      const currentPage = this.AllRoutes.find((route) => route.path === this.$route.path);
       return currentPage ? currentPage.title : "Pagina nao encontrado!";
+    },
+  },
+  watch: {
+    currentPlano: {
+      handler(newValue) {
+        if (!newValue && this.planoInitilized) {
+          const firstVisiblePlano = find(this.Planos, ["visible", true]);
+          this.changeCurrentPlano(firstVisiblePlano.id);
+
+          this.pushNotification({
+            type: "warn",
+            title: "Aviso!",
+            text: `O plano atual foi alterando para o ${firstVisiblePlano.ano} - ${firstVisiblePlano.nome}`,
+          });
+        }
+      },
+      deep: true,
     },
   },
 };

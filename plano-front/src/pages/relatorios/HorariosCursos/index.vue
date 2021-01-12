@@ -7,10 +7,7 @@
     </portal>
 
     <div v-show="!onLoading.table && algumHorariosEstaAtivo" class="w-100 m-0">
-      <div
-        v-show="filtroPeriodosEstaAtivo.periodo1 && filtroCursos.ativados.length"
-        class="w-100"
-      >
+      <div v-show="filtroPeriodosEstaAtivo.periodo1 && filtroCursos.ativados.length" class="w-100">
         <h2 class="periodo-title">1º Período letivo</h2>
         <ListHorarios
           v-for="curso in CursosComHorariosFiltred"
@@ -40,10 +37,7 @@
         />
       </template>
 
-      <div
-        v-show="filtroPeriodosEstaAtivo.periodo3 && filtroCursos.ativados.length"
-        class="w-100"
-      >
+      <div v-show="filtroPeriodosEstaAtivo.periodo3 && filtroCursos.ativados.length" class="w-100">
         <h2 class="periodo-title">3º Período letivo</h2>
 
         <ListHorarios
@@ -181,15 +175,15 @@
         <b>Visualizar grade:</b>
         Clique no ícone filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
-        . Em seguida, utilize as abas para navegar entre os filtros. Selecione as
-        informações que deseja visualizar e clique no botão OK
+        . Em seguida, utilize as abas para navegar entre os filtros. Selecione as informações que
+        deseja visualizar e clique no botão OK
       </li>
       <li class="list-group-item">
         <b>Relatório:</b>
         Clique no ícone relatório
         <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" />
-        . Em seguida, indique se deseja gerar o relatório completo com a grade completa de
-        todos os cursos ou o relatório parcial com as informações exibidas na tela.
+        . Em seguida, indique se deseja gerar o relatório completo com a grade completa de todos os
+        cursos ou o relatório parcial com as informações exibidas na tela.
       </li>
     </ModalAjuda>
   </div>
@@ -197,8 +191,8 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { pdfHorariosCursos } from "@/common/services/pdfs";
-import { find, some, filter, orderBy, cloneDeep } from "lodash-es";
+import { pdfHorariosCursos } from "@/services/pdfs";
+import { find, some, filter, orderBy } from "lodash-es";
 import {
   toggleItemInArray,
   toggleAsideModal,
@@ -319,20 +313,20 @@ export default {
       else horariosAtivos = this.horariosAtivos3Periodo;
 
       switch (curso) {
-        case 1:
-          horariosAtivos = horariosAtivos.CCN;
-          break;
-        case 2:
-          horariosAtivos = horariosAtivos.EC;
-          break;
-        case 3:
-          horariosAtivos = horariosAtivos.SI;
-          break;
-        case 4:
-          horariosAtivos = horariosAtivos.CCD;
-          break;
-        default:
-          return;
+      case 1:
+        horariosAtivos = horariosAtivos.CCN;
+        break;
+      case 2:
+        horariosAtivos = horariosAtivos.EC;
+        break;
+      case 3:
+        horariosAtivos = horariosAtivos.SI;
+        break;
+      case 4:
+        horariosAtivos = horariosAtivos.CCD;
+        break;
+      default:
+        return;
       }
 
       let periodoGrade;
@@ -377,14 +371,9 @@ export default {
           }
         }
       }
-      let even =
-        this.$store.state.curso.Cursos[curso - 1].semestreInicial % 2 === semestre - 1;
-      let turmas = filter(this.TurmasInDisciplinasPerfis, {
-        periodo: periodo,
-      });
-      let turmasExternas = filter(this.TurmasExternasInDisciplinas, {
-        periodo: periodo,
-      });
+      let even = this.$store.state.curso.Cursos[curso - 1].semestreInicial % 2 === semestre - 1;
+      let turmas = filter(this.AllTurmas, ["periodo", periodo]);
+      let turmasExternas = filter(this.AllTurmasExternas, ["periodo", periodo]);
       let disciplinasGrades = this.DisciplinasDasGrades;
       let inicio = 0;
 
@@ -412,9 +401,7 @@ export default {
                   Turma: turmasExternas[k].id,
                 });
                 if (p.vagasPeriodizadas > 0) {
-                  horariosAtivos[disciplinasGradeAtual[j].periodo - 1].push(
-                    turmasExternas[k]
-                  );
+                  horariosAtivos[disciplinasGradeAtual[j].periodo - 1].push(turmasExternas[k]);
                 }
               }
             }
@@ -426,110 +413,54 @@ export default {
     updateHorarios() {
       for (let i = 0; i < 10; i++) {
         for (let j = 0; j < this.horariosAtivos1Periodo.CCD[i].length; j++)
-          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
-            if (
-              this.horariosAtivos1Periodo.CCD[i][j].id ==
-              this.TurmasInDisciplinasPerfis[k].id
-            ) {
-              this.horariosAtivos1Periodo.CCD[i].splice(
-                j,
-                1,
-                this.TurmasInDisciplinasPerfis[k]
-              );
+          for (let k = 0; k < this.AllTurmas.length; k++) {
+            if (this.horariosAtivos1Periodo.CCD[i][j].id == this.AllTurmas[k].id) {
+              this.horariosAtivos1Periodo.CCD[i].splice(j, 1, this.AllTurmas[k]);
             }
           }
         for (let j = 0; j < this.horariosAtivos1Periodo.CCN[i].length; j++)
-          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
-            if (
-              this.horariosAtivos1Periodo.CCN[i][j].id ==
-              this.TurmasInDisciplinasPerfis[k].id
-            ) {
-              this.horariosAtivos1Periodo.CCN[i].splice(
-                j,
-                1,
-                this.TurmasInDisciplinasPerfis[k]
-              );
+          for (let k = 0; k < this.AllTurmas.length; k++) {
+            if (this.horariosAtivos1Periodo.CCN[i][j].id == this.AllTurmas[k].id) {
+              this.horariosAtivos1Periodo.CCN[i].splice(j, 1, this.AllTurmas[k]);
             }
           }
         for (let j = 0; j < this.horariosAtivos1Periodo.EC[i].length; j++)
-          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
-            if (
-              this.horariosAtivos1Periodo.EC[i][j].id ==
-              this.TurmasInDisciplinasPerfis[k].id
-            ) {
-              this.horariosAtivos1Periodo.EC[i].splice(
-                j,
-                1,
-                this.TurmasInDisciplinasPerfis[k]
-              );
+          for (let k = 0; k < this.AllTurmas.length; k++) {
+            if (this.horariosAtivos1Periodo.EC[i][j].id == this.AllTurmas[k].id) {
+              this.horariosAtivos1Periodo.EC[i].splice(j, 1, this.AllTurmas[k]);
             }
           }
         for (let j = 0; j < this.horariosAtivos1Periodo.SI[i].length; j++)
-          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
-            if (
-              this.horariosAtivos1Periodo.SI[i][j].id ==
-              this.TurmasInDisciplinasPerfis[k].id
-            ) {
-              this.horariosAtivos1Periodo.SI[i].splice(
-                j,
-                1,
-                this.TurmasInDisciplinasPerfis[k]
-              );
+          for (let k = 0; k < this.AllTurmas.length; k++) {
+            if (this.horariosAtivos1Periodo.SI[i][j].id == this.AllTurmas[k].id) {
+              this.horariosAtivos1Periodo.SI[i].splice(j, 1, this.AllTurmas[k]);
             }
           }
       }
 
       for (let i = 0; i < 10; i++) {
         for (let j = 0; j < this.horariosAtivos3Periodo.CCD[i].length; j++)
-          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
-            if (
-              this.horariosAtivos3Periodo.CCD[i][j].id ==
-              this.TurmasInDisciplinasPerfis[k].id
-            ) {
-              this.horariosAtivos3Periodo.CCD[i].splice(
-                j,
-                1,
-                this.TurmasInDisciplinasPerfis[k]
-              );
+          for (let k = 0; k < this.AllTurmas.length; k++) {
+            if (this.horariosAtivos3Periodo.CCD[i][j].id == this.AllTurmas[k].id) {
+              this.horariosAtivos3Periodo.CCD[i].splice(j, 1, this.AllTurmas[k]);
             }
           }
         for (let j = 0; j < this.horariosAtivos3Periodo.CCN[i].length; j++)
-          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
-            if (
-              this.horariosAtivos3Periodo.CCN[i][j].id ==
-              this.TurmasInDisciplinasPerfis[k].id
-            ) {
-              this.horariosAtivos3Periodo.CCN[i].splice(
-                j,
-                1,
-                this.TurmasInDisciplinasPerfis[k]
-              );
+          for (let k = 0; k < this.AllTurmas.length; k++) {
+            if (this.horariosAtivos3Periodo.CCN[i][j].id == this.AllTurmas[k].id) {
+              this.horariosAtivos3Periodo.CCN[i].splice(j, 1, this.AllTurmas[k]);
             }
           }
         for (let j = 0; j < this.horariosAtivos3Periodo.EC[i].length; j++)
-          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
-            if (
-              this.horariosAtivos3Periodo.EC[i][j].id ==
-              this.TurmasInDisciplinasPerfis[k].id
-            ) {
-              this.horariosAtivos3Periodo.EC[i].splice(
-                j,
-                1,
-                this.TurmasInDisciplinasPerfis[k]
-              );
+          for (let k = 0; k < this.AllTurmas.length; k++) {
+            if (this.horariosAtivos3Periodo.EC[i][j].id == this.AllTurmas[k].id) {
+              this.horariosAtivos3Periodo.EC[i].splice(j, 1, this.AllTurmas[k]);
             }
           }
         for (let j = 0; j < this.horariosAtivos3Periodo.SI[i].length; j++)
-          for (let k = 0; k < this.TurmasInDisciplinasPerfis.length; k++) {
-            if (
-              this.horariosAtivos3Periodo.SI[i][j].id ==
-              this.TurmasInDisciplinasPerfis[k].id
-            ) {
-              this.horariosAtivos3Periodo.SI[i].splice(
-                j,
-                1,
-                this.TurmasInDisciplinasPerfis[k]
-              );
+          for (let k = 0; k < this.AllTurmas.length; k++) {
+            if (this.horariosAtivos3Periodo.SI[i][j].id == this.AllTurmas[k].id) {
+              this.horariosAtivos3Periodo.SI[i].splice(j, 1, this.AllTurmas[k]);
             }
           }
       }
@@ -548,7 +479,7 @@ export default {
       if (periodo === 1) horariosAtivos = this.horariosAtivos1Periodo.Eletivas;
       else horariosAtivos = this.horariosAtivos3Periodo.Eletivas;
 
-      let turmas = filter(this.TurmasInDisciplinasPerfis, {
+      let turmas = filter(this.AllTurmas, {
         periodo: periodo,
       });
 
@@ -592,8 +523,7 @@ export default {
               disciplinaGrade.periodo >= gradesAtivas[j][k].inicio
             )
               for (let l = 0; l < disciplinasGradeAtual.length; l++) {
-                if (turmas[i].Disciplina == disciplinasGradeAtual[l].Disciplina)
-                  eletiva = false;
+                if (turmas[i].Disciplina == disciplinasGradeAtual[l].Disciplina) eletiva = false;
               }
           }
         }
@@ -604,10 +534,7 @@ export default {
       }
     },
     getTurmasComPedidoPeriodizado(turma, Pedidos) {
-      return some(
-        Pedidos,
-        (pedido) => pedido.Turma === turma.id && pedido.vagasPeriodizadas > 0
-      );
+      return some(Pedidos, (pedido) => pedido.Turma === turma.id && pedido.vagasPeriodizadas > 0);
     },
     generatePdf(completo) {
       let cursosAtivos, periodosAtivos;
@@ -621,8 +548,10 @@ export default {
 
       pdfHorariosCursos({
         horariosAtivos: {
-          periodo1: cloneDeep(this.horariosAtivos1Periodo),
-          periodo3: cloneDeep(this.horariosAtivos3Periodo),
+          periodo1: this.horariosAtivos1Periodo,
+          periodo2: this.TurmasAtivas2Periodo,
+          periodo3: this.horariosAtivos3Periodo,
+          periodo4: this.TurmasAtivas4Periodo,
         },
         cursosAtivos,
         periodosAtivos,
@@ -634,12 +563,11 @@ export default {
   computed: {
     ...mapGetters([
       "onLoading",
-      "AllDisciplinas",
       "DisciplinasDasGrades",
-      "AllGrades",
       "PrincipaisCursosDCC",
-      "TurmasInDisciplinasPerfis",
-      "TurmasExternasInDisciplinas",
+      "AllGrades",
+      "AllTurmas",
+      "AllTurmasExternas",
       "Pedidos",
       "PedidosExternos",
     ]),
@@ -691,43 +619,27 @@ export default {
     },
 
     TurmasAtivas2Periodo() {
-      const turmasFiltredbyPeriodo = filter(this.TurmasInDisciplinasPerfis, [
-        "periodo",
-        2,
-      ]);
+      const turmasFiltredbyPeriodo = filter(this.AllTurmas, ["periodo", 2]);
       const turmasFiltredByPedidos = filter(turmasFiltredbyPeriodo, (turma) =>
         this.getTurmasComPedidoPeriodizado(turma, this.PedidosDeCursosDCC)
       );
 
-      const turmasExternasFiltredbyPeriodo = filter(this.TurmasExternasInDisciplinas, [
-        "periodo",
-        2,
-      ]);
-      const turmasExternasFiltredbyPeidos = filter(
-        turmasExternasFiltredbyPeriodo,
-        (turma) =>
-          this.getTurmasComPedidoPeriodizado(turma, this.PedidosExternosDeCursosDCC)
+      const turmasExternasFiltredbyPeriodo = filter(this.AllTurmasExternas, ["periodo", 2]);
+      const turmasExternasFiltredbyPeidos = filter(turmasExternasFiltredbyPeriodo, (turma) =>
+        this.getTurmasComPedidoPeriodizado(turma, this.PedidosExternosDeCursosDCC)
       );
 
       return turmasExternasFiltredbyPeidos.concat(turmasFiltredByPedidos);
     },
     TurmasAtivas4Periodo() {
-      const turmasFiltredbyPeriodo = filter(this.TurmasInDisciplinasPerfis, [
-        "periodo",
-        4,
-      ]);
+      const turmasFiltredbyPeriodo = filter(this.AllTurmas, ["periodo", 4]);
       const turmasFiltredByPedidos = filter(turmasFiltredbyPeriodo, (turma) =>
         this.getTurmasComPedidoPeriodizado(turma, this.PedidosDeCursosDCC)
       );
 
-      const turmasExternasFiltredbyPeriodo = filter(this.TurmasExternasInDisciplinas, [
-        "periodo",
-        4,
-      ]);
-      const turmasExternasFiltredbyPeidos = filter(
-        turmasExternasFiltredbyPeriodo,
-        (turma) =>
-          this.getTurmasComPedidoPeriodizado(turma, this.PedidosExternosDeCursosDCC)
+      const turmasExternasFiltredbyPeriodo = filter(this.AllTurmasExternas, ["periodo", 4]);
+      const turmasExternasFiltredbyPeidos = filter(turmasExternasFiltredbyPeriodo, (turma) =>
+        this.getTurmasComPedidoPeriodizado(turma, this.PedidosExternosDeCursosDCC)
       );
 
       return turmasExternasFiltredbyPeidos.concat(turmasFiltredByPedidos);
@@ -791,8 +703,7 @@ export default {
     algumHorariosEstaAtivo() {
       return (
         (this.filtroCursos.ativados.length &&
-          (this.filtroPeriodosEstaAtivo.periodo1 ||
-            this.filtroPeriodosEstaAtivo.periodo3)) ||
+          (this.filtroPeriodosEstaAtivo.periodo1 || this.filtroPeriodosEstaAtivo.periodo3)) ||
         this.filtroPeriodosEstaAtivo.periodo2 ||
         this.filtroPeriodosEstaAtivo.periodo4
       );
@@ -800,7 +711,7 @@ export default {
   },
 
   watch: {
-    TurmasInDisciplinasPerfis() {
+    AllTurmas() {
       this.updateHorarios();
     },
   },

@@ -92,12 +92,7 @@
             <div class="form-group col-auto m-0 p-0 pt-4">
               <div class="d-flex align-items-center">
                 <label for="ativo" class="form-check-label m-0 mr-2">Ativo</label>
-                <input
-                  id="ativo"
-                  type="checkbox"
-                  :value="1"
-                  v-model.number="docenteForm.ativo"
-                />
+                <input id="ativo" type="checkbox" :value="1" v-model.number="docenteForm.ativo" />
               </div>
             </div>
           </div>
@@ -161,15 +156,15 @@
       </li>
       <li class="list-group-item">
         <b>Editar:</b>
-        Clique na linha da tabela do docente que deseja alterar. Em seguida, no cartão à
-        direita, altere as informações que desejar e clique em Salvar
+        Clique na linha da tabela do docente que deseja alterar. Em seguida, no cartão à direita,
+        altere as informações que desejar e clique em Salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
         .
       </li>
       <li class="list-group-item">
         <b>Deletar:</b>
-        Clique na linha da tabela do docente que deseja remover. Em seguida, no cartão à
-        direita, clique em Remover
+        Clique na linha da tabela do docente que deseja remover. Em seguida, no cartão à direita,
+        clique em Remover
         <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
         e confirme a remoção na janela que será aberta.
       </li>
@@ -181,8 +176,7 @@
       </li>
       <li class="list-group-item">
         <b>Ordenar:</b>
-        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das
-        informações.
+        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>
@@ -191,13 +185,9 @@
 <script>
 import { mapGetters } from "vuex";
 import { clone, filter, orderBy } from "lodash-es";
-import docenteService from "@/common/services/docente";
-import docentePerfilService from "@/common/services/docentePerfil";
-import {
-  toggleItemInArray,
-  generateBooleanText,
-  normalizeInputText,
-} from "@/common/mixins";
+import docenteService from "@/services/docente";
+import docentePerfilService from "@/services/docentePerfil";
+import { toggleItemInArray, generateBooleanText, normalizeInputText } from "@/common/mixins";
 import { Card } from "@/components/ui";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
 
@@ -243,10 +233,7 @@ export default {
       this.updatePerfisAssociados();
     },
     updatePerfisAssociados() {
-      const docentePerfisFiltered = filter(this.DocentePerfis, [
-        "DocenteId",
-        this.docenteForm.id,
-      ]);
+      const docentePerfisFiltered = filter(this.DocentePerfis, ["DocenteId", this.docenteForm.id]);
       this.perfilsOfCurrentDocente = docentePerfisFiltered.map(
         (docentePerfil) => docentePerfil.Perfil
       );
@@ -286,10 +273,7 @@ export default {
         if (!this.docenteForm.nome || !this.docenteForm.apelido) {
           throw new Error("Campos obrigatorios invalidos");
         }
-        const response = await docenteService.update(
-          this.docenteForm.id,
-          this.docenteForm
-        );
+        const response = await docenteService.update(this.docenteForm.id, this.docenteForm);
         await this.editDocentePerfil();
 
         this.pushNotification({
@@ -303,8 +287,8 @@ export default {
           text: error.message
             ? error.message
             : error.response.data.fullMessage
-            ? "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>")
-            : "",
+              ? "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>")
+              : "",
         });
 
         this.showDocente(this.docenteClickado);
@@ -315,10 +299,7 @@ export default {
     async deleteDocente() {
       try {
         this.setLoading({ type: "partial", value: true });
-        const response = await docenteService.delete(
-          this.docenteForm.id,
-          this.docenteForm
-        );
+        const response = await docenteService.delete(this.docenteForm.id, this.docenteForm);
 
         this.cleanDocente();
         this.pushNotification({
@@ -328,7 +309,7 @@ export default {
       } catch (error) {
         this.pushNotification({
           type: "error",
-          title: `Erro ao excluir Docente!`,
+          title: "Erro ao excluir Docente!",
           text: "O docente não pode estar vinculado a nenhum perfil",
         });
       } finally {
@@ -339,16 +320,12 @@ export default {
     async editDocentePerfil() {
       //Remove os que não existem em perfisAssociados mas existem em perfilsOfCurrentDocente
       for (let i = 0; i < this.perfilsOfCurrentDocente.length; i++) {
-        const perfilIndex = this.perfisAssociados.indexOf(
-          this.perfilsOfCurrentDocente[i]
-        );
+        const perfilIndex = this.perfisAssociados.indexOf(this.perfilsOfCurrentDocente[i]);
         if (perfilIndex === -1) await this.deletePerfil(this.perfilsOfCurrentDocente[i]);
       }
       //Adiciona os que existem no perfisAssociados mas não existem em perfilsOfCurrentDocente
       for (let i = 0; i < this.perfisAssociados.length; i++) {
-        const perfilIndex = this.perfilsOfCurrentDocente.indexOf(
-          this.perfisAssociados[i]
-        );
+        const perfilIndex = this.perfilsOfCurrentDocente.indexOf(this.perfisAssociados[i]);
         if (perfilIndex === -1) await this.addPerfil(this.perfisAssociados[i]);
       }
     },
