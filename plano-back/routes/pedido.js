@@ -78,6 +78,7 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
         return models.Pedido.update({
             vagasPeriodizadas: req.body.vagasPeriodizadas,
             vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
+            editado: req.body.editado
         }, {
             where:{
                 Curso: req.params.Curso,
