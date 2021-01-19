@@ -363,6 +363,7 @@ async function pdfHorariosCursos(data) {
           })
         );
         const tableHorarios = [makeTableHorarioHeader()];
+        let periodoPossuiAlgumaTurma = false;
         let seg = "",
           ter = "",
           qua = "",
@@ -400,17 +401,25 @@ async function pdfHorariosCursos(data) {
           });
 
           tableHorarios.push(makeTableHorariosBody(d, { seg, ter, qua, qui, sex }, "todos"));
+          if (seg || ter || qua || qui || sex) {
+            periodoPossuiAlgumaTurma = true;
+          }
           seg = ter = qua = qui = sex = "";
         }
 
-        tables.push({
-          table: {
-            widths: ["*", "*", "*", "*", "*", "*"],
-            headerRows: 1,
-            color: "#426",
-            body: tableHorarios,
-          },
-        });
+        if (periodoPossuiAlgumaTurma) {
+          tables.push({
+            table: {
+              widths: ["*", "*", "*", "*", "*", "*"],
+              headerRows: 1,
+              color: "#426",
+              body: tableHorarios,
+            },
+          });
+        } else {
+          tables.push(makeEmptyPageWarning());
+        }
+
         if (index + 1 !== periodos.length) {
           tables.push({ text: "", pageBreak: "after" });
         }

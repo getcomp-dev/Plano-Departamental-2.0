@@ -14,7 +14,7 @@
       <ul class="list-group">
         <li class="list-group-item">Tabela de turmas DCC (.xlsx)</li>
         <li class="list-group-item">Backup do banco de dados (.sql)</li>
-        <li class="list-group-item">PDF de carga dos professores</li>
+        <li class="list-group-item">PDF de carga dos docentes</li>
         <li class="list-group-item">PDF de horarios dos cursos</li>
         <li class="list-group-item">PDF de horarios dos laborátorios</li>
       </ul>

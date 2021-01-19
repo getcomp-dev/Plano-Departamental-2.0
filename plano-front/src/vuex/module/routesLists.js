@@ -33,11 +33,11 @@ const state = {
   ],
   RoutesRelatorios: [
     {
-      path: "/relatorios/carga-professores",
-      title: "Carga Professores",
+      path: "/relatorios/carga-docentes",
+      title: "Carga Docentes",
       icon: "file-alt",
       description:
-        "Listagem de todos os professores com suas respectivas disciplinas (graduação e pós-graduação), exibindo o somatório parcial por semestre e a carga total de cada docente.",
+        "Listagem de todos os docentes com suas respectivas disciplinas (graduação e pós-graduação), exibindo o somatório parcial por semestre e a carga total de cada docente.",
     },
     {
       path: "/relatorios/grades-dcc",
@@ -70,7 +70,7 @@ const state = {
       path: "/relatorios/plano-departamental",
       title: "Plano Departamental",
       icon: "file-alt",
-      description: "Listagem de turmas, horários e professores alocados por disciplina.",
+      description: "Listagem de turmas, horários e docentes alocados por disciplina.",
     },
     {
       path: "/relatorios/turmas-cursos",

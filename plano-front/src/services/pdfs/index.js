@@ -1,11 +1,11 @@
-import pdfCargaProfessores from "./cargaProfessores";
+import pdfCargaDocentes from "./cargaDocentes";
 import pdfTurmasCursos from "./turmasCursos";
 import pdfPlanoDepartamental from "./planoDepartamental";
 import pdfHorariosLabs from "./horariosLabs";
 import pdfHorariosCursos from "./horariosCursos";
 
 export {
-  pdfCargaProfessores,
+  pdfCargaDocentes,
   pdfTurmasCursos,
   pdfPlanoDepartamental,
   pdfHorariosLabs,

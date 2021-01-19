@@ -40,13 +40,13 @@ async function pdfTurmasCursos(data) {
       );
 
       const turmasDoPeriodo = getTurmasDoPeriodo(periodo.id);
-      let possuiAlgumaTurmas = false;
+      let periodoPossuiAlgumaTurma = false;
 
       cursos.forEach((curso) => {
         const turmasDoCurso = filterTurmasDoCurso(turmasDoPeriodo, curso.id);
 
         if (turmasDoCurso.length) {
-          possuiAlgumaTurmas = true;
+          periodoPossuiAlgumaTurma = true;
           tables.push({
             style: "tableExample",
             table: {
@@ -108,7 +108,7 @@ async function pdfTurmasCursos(data) {
         }
       });
 
-      if (!possuiAlgumaTurmas) {
+      if (!periodoPossuiAlgumaTurma) {
         tables.push(makeEmptyPageWarning());
       }
       if (index + 1 != periodos.length) {

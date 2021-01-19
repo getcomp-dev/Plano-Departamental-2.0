@@ -63,8 +63,8 @@ const routes = [
       },
       //relatorios
       {
-        path: "/relatorios/carga-professores",
-        component: lazyLoad("relatorios/CargaProfessores"),
+        path: "/relatorios/carga-docentes",
+        component: lazyLoad("relatorios/CargaDocentes"),
       },
       {
         path: "/relatorios/grades-dcc",

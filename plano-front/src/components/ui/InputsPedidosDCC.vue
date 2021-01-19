@@ -2,7 +2,10 @@
   <div :class="typeClass">
     <input
       type="text"
-      :class="['input-pedidos', { empty: pedidoForm.vagasPeriodizadas == 0 }]"
+      :class="[
+        'input-pedidos',
+        { empty: pedidoForm.vagasPeriodizadas == 0, notEdited: pedidoForm.editado == false },
+      ]"
       v-model.number="pedidoForm.vagasPeriodizadas"
       @change="debouncedEditPedido"
       @keypress="maskOnlyNumber"
@@ -12,7 +15,10 @@
 
     <input
       type="text"
-      :class="['input-pedidos', { empty: pedidoForm.vagasNaoPeriodizadas == 0 }]"
+      :class="[
+        'input-pedidos',
+        { empty: pedidoForm.vagasNaoPeriodizadas == 0, notEdited: pedidoForm.editado == false },
+      ]"
       v-model.number="pedidoForm.vagasNaoPeriodizadas"
       @change="debouncedEditPedido"
       @keypress="maskOnlyNumber"
@@ -49,6 +55,7 @@ export default {
       this.pedidoForm = clone(this.PedidosOfCurrentTurma);
     },
     async handleEditPedido() {
+      this.pedidoForm.editado = true;
       try {
         await this.editPedido(this.pedidoForm);
       } catch (error) {
@@ -113,6 +120,10 @@ input.input-pedidos {
 }
 input.input-pedidos.empty {
   color: #dadada;
+  background-color: #fff;
+}
+input.input-pedidos.notEdited {
+  color: #0080ff;
   background-color: #fff;
 }
 </style>
