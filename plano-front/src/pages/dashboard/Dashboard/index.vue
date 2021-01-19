@@ -49,13 +49,22 @@ export default {
     this.initializeCurrentPlano().then(() => {
       this.planoInitilized = true;
     });
+
     this.unwatch = this.$store.subscribe((mutation) => {
-      if (mutation.type === SOCKET_PLANO_UPDATED) {
-        if (mutation.payload.Plano.id == localStorage.getItem("Plano")) {
-          if (!mutation.payload.Plano.visible) {
-            let planovisivel = find(this.Planos, ["visible", true]);
-            this.changeCurrentPlano(planovisivel.id);
-          }
+      if (
+        mutation.type === SOCKET_PLANO_UPDATED &&
+        mutation.payload.Plano.id == localStorage.getItem("Plano")
+      ) {
+        if (!mutation.payload.Plano.visible) {
+          const firstVisiblePlano = find(this.Planos, ["visible", true]);
+          this.changeCurrentPlano(firstVisiblePlano.id).then(() => {
+            this.pushNotification({
+              type: "warn",
+              duration: 6000,
+              text: `O plano em que você estava foi alterado para não visivel.<br/> Então você foi
+                redirecionado para o plano ${firstVisiblePlano.ano} - ${firstVisiblePlano.nome}`,
+            });
+          });
         }
       }
     });

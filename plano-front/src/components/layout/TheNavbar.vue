@@ -2,8 +2,7 @@
   <nav class="navbar-container shadow">
     <div @click="closeSidebar" class="navbar-brand">
       <router-link :to="{ path: '/home' }" class="brand-title">
-        <font-awesome-icon :icon="['fas', 'graduation-cap']" />
-        SIPlanWeb
+        <Logo />
       </router-link>
     </div>
 
@@ -43,8 +42,10 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { Logo } from "@/components/ui";
 export default {
   name: "TheNavbar",
+  components: { Logo },
   props: {
     modalCallbacks: { type: Object, required: true },
   },
@@ -112,7 +113,6 @@ export default {
   margin: 0;
   font-size: 16px;
   text-align: start;
-  font-family: "Crete Round", serif;
   text-decoration: none;
   color: currentColor;
 }

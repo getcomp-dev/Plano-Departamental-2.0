@@ -37,7 +37,7 @@ export default {
     notificationsQueue: {
       handler(notificationsQueue) {
         const queueTop = notificationsQueue[notificationsQueue.length - 1];
-        this.$notify({ ...queueTop, group: "general" });
+        this.$notify({ ...queueTop });
       },
       immediate: true,
       deep: true,

@@ -87,7 +87,6 @@ table.tg {
   border-color: #ccc;
 }
 table.tg td {
-  font-family: Arial, sans-serif;
   font-size: 11px;
   padding: 0px !important;
   border-style: solid;
@@ -100,7 +99,6 @@ table.tg td {
 }
 table.tg th,
 table.tg .tg-hor {
-  font-family: Arial, sans-serif;
   font-size: 11px;
   font-weight: bold;
   padding: 0px;

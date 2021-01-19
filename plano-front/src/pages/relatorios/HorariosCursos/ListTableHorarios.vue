@@ -49,7 +49,7 @@ export default {
       "ListaDeTodosHorarios",
       "ListaDeHorariosNoturno",
       "ListaDeHorariosDiurno",
-      "DisciplinasDasGrades",
+      "DisciplinasGrades",
       "AllGrades",
     ]),
 
@@ -69,7 +69,7 @@ export default {
 
       let periodoFinal = this.curso.periodoInicial;
       this.GradesDoCurso.forEach((grade) => {
-        this.DisciplinasDasGrades.forEach((disciplinaGrade) => {
+        this.DisciplinasGrades.forEach((disciplinaGrade) => {
           if (disciplinaGrade.Grade === grade.id && disciplinaGrade.periodo > periodoFinal) {
             periodoFinal = disciplinaGrade.periodo;
           }

@@ -5,7 +5,7 @@
       :class="['modal-custom', options.customClasses]"
       :style="options.typeStyles"
     >
-      <header class="modal-custom-header w-100">
+      <header class="header w-100">
         <h2 class="title">{{ options.title }}</h2>
         <button
           type="button"
@@ -17,11 +17,11 @@
         </button>
       </header>
 
-      <main class="modal-custom-body">
+      <main class="body">
         <slot name="modal-body">Modal Body</slot>
       </main>
 
-      <footer v-if="options.hasFooter" class="modal-custom-footer w-100">
+      <footer v-if="options.hasFooter" class="footer w-100">
         <slot name="modal-footer"></slot>
       </footer>
     </div>
@@ -179,7 +179,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .modal-custom {
   position: fixed;
   display: flex;
@@ -189,60 +189,63 @@ export default {
   background: #ffffff;
   box-shadow: 0 2px 10px 0;
   border-radius: 5px;
-}
-/* header */
-.modal-custom-header {
-  position: relative;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  border-bottom: 1px solid #eeeeee;
-  color: #000000;
-  height: 55px;
-}
-.modal-custom-header .title {
-  text-align: start;
-  width: 100%;
-  padding-left: 20px;
-  padding-right: 5px;
-  margin: 0;
-  font-size: 20px;
-}
-.modal-custom-header .btn-close {
-  height: 100% !important;
-  min-height: 55px;
-  width: 70px;
-  font-size: 16px;
-  border: none;
-  color: #2d2e2e;
-  font-weight: bold;
-  text-align: center;
-  background: none;
-  cursor: pointer;
-}
-.modal-custom-header .btn-close:hover {
-  background-color: rgba(192, 192, 192, 0.335);
-}
-/* body */
-.modal-custom-body {
-  position: relative;
-  display: block !important;
-  overflow-y: auto !important;
-  padding: 15px 20px;
-}
-/* footer */
-.modal-custom-footer {
-  border-top: 1px solid #eeeeee;
-  flex-shrink: 0;
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: auto;
-  padding: 0 20px;
-  height: 45px;
+
+  > .header {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border-bottom: 1px solid #eeeeee;
+    color: #000000;
+    height: 55px;
+
+    .title {
+      text-align: start;
+      width: 100%;
+      padding-left: 20px;
+      padding-right: 5px;
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .btn-close {
+      height: 100% !important;
+      min-height: 55px;
+      width: 70px;
+      font-size: 16px;
+      border: none;
+      color: #2d2e2e;
+      font-weight: bold;
+      text-align: center;
+      background: none;
+      cursor: pointer;
+      &:hover {
+        background-color: #c0c0c055;
+      }
+    }
+  }
+
+  > .body {
+    position: relative;
+    display: block !important;
+    overflow-y: auto !important;
+    padding: 15px 20px;
+  }
+
+  > .footer {
+    border-top: 1px solid #eeeeee;
+    flex-shrink: 0;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    padding: 0 20px;
+    height: 45px;
+  }
 }
 
+/* transition */
 .right-enter-active {
   animation: zoomInRight 0.3s ease;
 }
@@ -269,7 +272,6 @@ export default {
     transform: scale(0);
   }
 }
-
 .center-enter-active {
   animation: zoomInCenter 0.3s ease;
 }

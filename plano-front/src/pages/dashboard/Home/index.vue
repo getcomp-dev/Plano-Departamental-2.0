@@ -18,7 +18,11 @@
         <LinkList title="Relatórios" :pages="RoutesRelatorios" />
         <LinkList v-if="currentUser.isSuperAdmin" title="Gerenciar" :pages="RoutesGerenciar" />
         <LinkList v-if="currentUser.isSuperAdmin" title="Histórico" :pages="RoutesHistorico" />
-        <LinkList v-if="currentUser.isAdmin" title="Validações" :pages="RoutesValidacoes" />
+        <LinkList
+          v-if="currentUser.isAdmin && currentPlano.isEditable"
+          title="Validações"
+          :pages="RoutesValidacoes"
+        />
       </div>
     </div>
   </div>

@@ -18,7 +18,7 @@
             </v-th-ordination>
             <v-th-ordination
               :currentOrder="ordenacaoDisciplinasMain"
-              orderToCheck="disciplina_codigo"
+              orderToCheck="disciplina.codigo"
               width="80"
               align="start"
             >
@@ -26,7 +26,7 @@
             </v-th-ordination>
             <v-th-ordination
               :currentOrder="ordenacaoDisciplinasMain"
-              orderToCheck="disciplina_nome"
+              orderToCheck="disciplina.nome"
               width="400"
               align="start"
             >
@@ -47,10 +47,10 @@
               >
                 <v-td width="35">{{ disciplinaGrade.periodo }}</v-td>
                 <v-td width="80" align="start">
-                  {{ disciplinaGrade.disciplina_codigo }}
+                  {{ disciplinaGrade.disciplina.codigo }}
                 </v-td>
                 <v-td width="400" align="start">
-                  {{ disciplinaGrade.disciplina_nome }}
+                  {{ disciplinaGrade.disciplina.nome }}
                 </v-td>
               </tr>
             </template>
@@ -73,8 +73,8 @@
               <select
                 id="cursoAtual"
                 v-model="currentCursoId"
-                v-on:change="changeCurso()"
-                class="form-control form-control-sm input-maior"
+                v-on:change="changeCurso"
+                class="form-control form-control-sm input-xl"
               >
                 <option value="4">Ciência da Computação Diurno</option>
                 <option value="1">Ciência da Computação Noturno</option>
@@ -89,8 +89,8 @@
                 :disabled="!hasCursoSelected"
                 id="gradeSelect"
                 v-model="currentGradeId"
-                @change="changeGrade()"
-                class="form-control form-control-sm input-menor"
+                @change="changeGrade"
+                class="form-control form-control-sm input-sm"
               >
                 <option
                   v-for="grade in GradesFiltredByCurrentCurso"
@@ -111,17 +111,15 @@
               <select
                 :disabled="!hasGradeSelected"
                 type="text"
-                class="form-control form-control-sm input-maior2"
                 id="disciplina"
+                style="width: 376px"
+                class="form-control form-control-sm"
                 v-model="disciplinaGradeForm.Disciplina"
-                @change="clearClick()"
+                @change="clearClick(), updateDisciplinaForm()"
               >
-                <option v-if="Disciplinas.length === 0" type="text" value>
-                  Nenhuma Disciplina Encontrada
-                </option>
+                <option v-if="!DisciplinasOptions.length">Nenhuma Disciplina Encontrada</option>
                 <option
-                  v-else
-                  v-for="disciplina in Disciplinas"
+                  v-for="disciplina in DisciplinasOptions"
                   :key="disciplina.id + disciplina.nome"
                   :value="disciplina.id"
                 >
@@ -139,8 +137,7 @@
                   :disabled="!hasGradeSelected"
                   type="text"
                   id="periodoDisciplina"
-                  class="form-control form-control-sm mr-2"
-                  style="width: 100px"
+                  class="form-control form-control-sm input-sm mr-2"
                   v-model="disciplinaGradeForm.periodo"
                   @keypress="maskOnlyNumber"
                 />
@@ -149,12 +146,13 @@
                   :disabled="!hasGradeSelected"
                   template="salvar"
                   title="Salvar período"
-                  @click="editDisciplinaGrade()"
+                  @click="updateDisciplinaGrade"
                 />
               </div>
             </div>
           </div>
         </template>
+
         <template #footer>
           <BaseButton
             v-show="!isEditDisciplina"
@@ -184,7 +182,7 @@
       <li v-if="isEditDisciplina" class="list-group-item">
         <span>
           Tem certeza que deseja excluír a disciplina
-          <b>{{ nomeDisciplinaAtual }}</b>
+          <b>{{ disciplinaGradeForm.disciplina.nome }}</b>
           ?
         </span>
       </li>
@@ -233,12 +231,12 @@
 </template>
 
 <script>
-import { clone, find, filter, orderBy } from "lodash-es";
+import { cloneDeep, find, filter, orderBy } from "lodash-es";
 import disciplinaGradeService from "@/services/disciplinaGrade";
-import gradeService from "@/services/grade";
 import { maskOnlyNumber } from "@/common/mixins";
 import { Card } from "@/components/ui";
 import { ModalAjuda, ModalDelete } from "@/components/modals";
+import { mapGetters } from "vuex";
 
 const emptyGrade = {
   id: undefined,
@@ -247,84 +245,55 @@ const emptyGrade = {
   nome: undefined,
 };
 const emptyDisciplinaGrade = {
-  periodo: undefined,
+  periodo: 1,
   Disciplina: undefined,
   Grade: undefined,
 };
 export default {
   name: "DashboardGradeEdit",
   mixins: [maskOnlyNumber],
-  components: {
-    Card,
-    ModalAjuda,
-    ModalDelete,
-  },
+  components: { Card, ModalAjuda, ModalDelete },
   data() {
     return {
-      gradeForm: clone(emptyGrade),
-      disciplinaGradeForm: clone(emptyDisciplinaGrade),
-      error: null,
+      gradeForm: cloneDeep(emptyGrade),
+      disciplinaGradeForm: cloneDeep(emptyDisciplinaGrade),
       currentGradeId: null,
       currentCursoId: null,
       disciplinaSelectedId: null,
-      nomeDisciplinaAtual: null,
       ordenacaoDisciplinasMain: { order: "periodo", type: "asc" },
     };
   },
+
   methods: {
     openModalDelete() {
       this.$refs.modalDelete.open();
     },
-
+    updateDisciplinaForm() {
+      const disciplinaFound = this.AllDisciplinas.find(
+        (disciplina) => disciplina.id === this.disciplinaGradeForm.Disciplina
+      );
+      this.disciplinaGradeForm.disciplina = disciplinaFound;
+    },
     handleClickInDisciplina(disciplinaGrade) {
       this.disciplinaSelectedId = disciplinaGrade.Disciplina;
-      this.nomeDisciplinaAtual = disciplinaGrade.disciplina_nome;
 
       this.showDisciplina(disciplinaGrade);
       this.showGrade(this.currentGradeId);
     },
-
     clearClick() {
       this.disciplinaSelectedId = null;
-      this.nomeDisciplinaAtual = null;
-    },
-
-    deleteGrade() {
-      let grade_nome = this.gradeForm.nome;
-      gradeService
-        .delete(this.gradeForm.id, this.gradeForm)
-        .then(() => {
-          this.cleanGradeForm();
-          this.$notify({
-            group: "general",
-            title: "Sucesso!",
-            text: `A Grade ${grade_nome} foi excluída!`,
-            type: "success",
-          });
-        })
-        .catch(() => {
-          this.error = "<b>Erro ao excluir Grade</b>";
-          this.$notify({
-            group: "general",
-            title: "Erro!",
-            text: this.error,
-            type: "error",
-          });
-        });
     },
     cleanGradeForm() {
-      this.gradeForm = clone(emptyGrade);
-      this.error = undefined;
+      this.gradeForm = cloneDeep(emptyGrade);
     },
     cleanDisciplina() {
       this.clearClick();
-      this.disciplinaGradeForm.periodo = undefined;
-      this.disciplinaGradeForm.Disciplina = undefined;
+      this.disciplinaGradeForm = cloneDeep(emptyDisciplinaGrade);
     },
     showGrade(gradeId) {
       this.cleanGradeForm();
-      const grade = find(this.$store.state.grade.Grades, ["id", gradeId]);
-      this.gradeForm = clone(grade);
+      const grade = find(this.AllGrades, ["id", gradeId]);
+      this.gradeForm = cloneDeep(grade);
       this.disciplinaGradeForm.Grade = this.gradeForm.id;
     },
     changeCurso() {
@@ -339,88 +308,33 @@ export default {
     },
     showDisciplina(disciplinaGrade) {
       this.cleanDisciplina;
-      this.disciplinaGradeForm = clone(disciplinaGrade);
+      this.disciplinaGradeForm = cloneDeep(disciplinaGrade);
     },
     isEven(number) {
       return number % 2 === 0;
     },
 
-    addGrade() {
-      gradeService
-        .create(this.gradeForm)
-        .then((response) => {
-          this.cleanGradeForm();
-          this.$notify({
-            group: "general",
-            title: "Sucesso!",
-            text: `A Grade ${response.Grade.nome} foi criada!`,
-            type: "success",
-          });
-        })
-        .catch((error) => {
-          this.error = "<b>Erro ao criar Grade</b>";
-          if (error.response.data.fullMessage) {
-            this.error += "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
-          }
-          this.$notify({
-            group: "general",
-            title: "Erro!",
-            text: this.error,
-            type: "error",
-          });
-        });
-    },
-    editGrade() {
-      gradeService
-        .update(this.gradeForm.id, this.gradeForm)
-        .then((response) => {
-          this.$notify({
-            group: "general",
-            title: "Sucesso!",
-            text: `A Grade ${response.Grade.nome} foi atualizada!`,
-            type: "success",
-          });
-        })
-        .catch(() => {
-          this.error = "<b>Erro ao atualizar Grade</b>";
-          this.$notify({
-            group: "general",
-            title: "Erro!",
-            text: this.error,
-            type: "error",
-          });
-        });
-    },
-
     addDisciplinaGrade() {
-      let nome_disciplina = null;
-      for (const key in this.Disciplinas) {
-        if (this.Disciplinas[key].id == this.disciplinaGradeForm.Disciplina) {
-          nome_disciplina = this.Disciplinas[key].nome;
-          break;
-        }
-      }
       disciplinaGradeService
         .create(this.disciplinaGradeForm)
         .then(() => {
           this.$notify({
             group: "general",
             title: "Sucesso!",
-            text: `A Disciplina <b>${nome_disciplina}</b> foi adicionada à Grade <b>${this.gradeForm.nome}</b>!`,
+            text: `A Disciplina <b>${this.disciplinaGradeForm.disciplina.nome}</b> foi adicionada à Grade <b>${this.gradeForm.nome}</b>!`,
             type: "success",
           });
         })
         .catch(() => {
-          this.error = "<b>Erro ao incluir Disciplina</b>";
           this.$notify({
             group: "general",
             title: "Erro!",
-            text: this.error,
+            text: "Erro ao incluir disciplina, verifique se a disciplina já não existe na grade",
             type: "error",
           });
         });
     },
-    editDisciplinaGrade() {
+    updateDisciplinaGrade() {
       disciplinaGradeService
         .update(
           this.disciplinaGradeForm.Disciplina,
@@ -431,16 +345,15 @@ export default {
           this.$notify({
             group: "general",
             title: "Sucesso!",
-            text: `A Disciplina <b>${this.nomeDisciplinaAtual}</b> foi atualizada!`,
+            text: `A Disciplina <b>${this.disciplinaGradeForm.disciplina.nome}</b> foi atualizada!`,
             type: "success",
           });
         })
         .catch(() => {
-          this.error = "<b>Erro ao atualizar Disciplina</b>";
           this.$notify({
             group: "general",
             title: "Erro!",
-            text: this.error,
+            text: "Erro ao atualizar Disciplina",
             type: "error",
           });
         });
@@ -456,23 +369,25 @@ export default {
           this.$notify({
             group: "general",
             title: "Sucesso!",
-            text: `A Disciplina <b>${this.nomeDisciplinaAtual}</b> foi excluída!`,
+            text: `A Disciplina <b>${this.disciplinaGradeForm.disciplina.nome}</b> foi excluída!`,
             type: "success",
           });
           this.clearClick();
         })
         .catch(() => {
-          this.error = "<b>Erro ao excluir Disciplina</b>";
           this.$notify({
             group: "general",
             title: "Erro!",
-            text: this.error,
+            text: "Erro ao excluir Disciplina",
             type: "error",
           });
         });
     },
   },
+
   computed: {
+    ...mapGetters(["AllGrades", "AllDisciplinas", "DisciplinasGrades"]),
+
     hasCursoSelected() {
       return this.currentCursoId != null;
     },
@@ -490,54 +405,16 @@ export default {
       );
     },
     DisciplinaGradesFiltred() {
-      return filter(this.$store.state.disciplinaGrade.DisciplinaGrades, (disciplinaGrade) => {
-        return find(this.Disciplinas, (disciplina) => {
-          if (
-            this.currentGradeId === disciplinaGrade.Grade &&
-            disciplina.id === disciplinaGrade.Disciplina
-          ) {
-            disciplinaGrade.disciplina_nome = disciplina.nome;
-            disciplinaGrade.disciplina_codigo = disciplina.codigo;
-            return true;
-          }
-          return false;
-        });
-      });
+      return this.DisciplinasGrades.filter(
+        (disciplinaGrade) => this.currentGradeId === disciplinaGrade.Grade
+      );
     },
     GradesFiltredByCurrentCurso() {
-      return filter(this.Grades, (grade) => grade.Curso == this.currentCursoId);
+      return filter(this.AllGrades, (grade) => grade.Curso == this.currentCursoId);
     },
-    Grades() {
-      return this.$store.state.grade.Grades;
-    },
-    Cursos() {
-      return this.$store.state.curso.Cursos;
-    },
-    Disciplinas() {
-      return orderBy(this.$store.state.disciplina.Disciplinas, "nome");
+    DisciplinasOptions() {
+      return orderBy(this.AllDisciplinas, "nome");
     },
   },
 };
 </script>
-
-<style scoped>
-.card .input-maior {
-  width: 200px;
-  text-align: start !important;
-}
-.card .input-maior2 {
-  width: 300px;
-  text-align: start;
-}
-.card .input-menor {
-  width: 80px;
-  text-align: start !important;
-}
-
-.even {
-  background-color: #c8c8c8;
-}
-.notEven {
-  background-color: white;
-}
-</style>

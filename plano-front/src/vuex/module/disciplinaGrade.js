@@ -56,8 +56,24 @@ const actions = {
 };
 
 const getters = {
-  DisciplinasDasGrades(state) {
-    return state.DisciplinaGrades;
+  DisciplinasGrades(state, rootGetters) {
+    const disciplinasGrade = [];
+    state.DisciplinaGrades.forEach((disciplinaGrade) => {
+      const disciplinaFound = rootGetters.AllDisciplinas.find(
+        (disciplina) => disciplina.id === disciplinaGrade.Disciplina
+      );
+
+      if (disciplinaFound) {
+        disciplinasGrade.push({
+          ...disciplinaGrade,
+          disciplina: {
+            ...disciplinaFound,
+          },
+        });
+      }
+    });
+
+    return disciplinasGrade;
   },
 };
 

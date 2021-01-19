@@ -102,8 +102,8 @@ export default {
 };
 </script>
 
-<style scoped>
-.base-btn {
+<style lang="scss" scoped>
+button.base-btn {
   height: max-content;
   margin: 0;
   padding: 0;
@@ -112,55 +112,54 @@ export default {
   cursor: pointer;
   text-align: center;
   transition: all 200ms ease;
-}
-.base-btn:disabled {
-  filter: brightness(75%);
-  cursor: default !important;
-  outline: none !important;
-  pointer-events: none;
-}
-.base-btn:disabled:focus {
-  border: 0 !important;
-  box-shadow: none !important;
+
+  &:disabled {
+    filter: brightness(75%);
+    cursor: default;
+    outline: none;
+    pointer-events: none;
+    &:focus {
+      box-shadow: none;
+    }
+  }
 }
 
-/* ### types ### */
-.btn-icon {
-  width: 32px !important;
+button.btn-icon {
+  width: 32px;
   height: 30px;
   margin: 0 3px;
   display: flex;
   justify-content: center;
   align-items: center;
   background-color: #fff;
-  border: 1px solid rgb(199, 199, 199);
-}
-.base-btn.btn-icon svg {
-  font-size: 16px !important;
-}
-.btn-icon:focus {
-  outline: 0 !important;
-  -webkit-box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.4) !important;
-  box-shadow: 0 0 0 0.1rem rgba(0, 123, 255, 0.4) !important;
-}
-.btn-icon:hover {
-  background-color: #e7e7e7 !important;
+  border: 1px solid #c7c7c7;
+  &:hover {
+    background-color: #e7e7e7;
+  }
+  &:focus {
+    box-shadow: 0 0 0 0.1rem #007bff85 !important;
+  }
+
+  > svg {
+    font-size: 16px;
+  }
 }
 
-.btn-text {
-  height: 25px !important;
-  width: max-content !important;
+button.btn-text {
+  height: 25px;
+  width: max-content;
   padding: 0 10px;
-  border-radius: 0.25rem !important;
-  border: none !important;
-  font-size: 12px !important;
-  color: white !important;
-  word-break: keep-all !important;
-}
-.btn-text + .btn-text {
-  margin-left: 10px !important;
-}
-.btn-text:hover {
-  filter: brightness(85%);
+  border-radius: 0.25rem;
+  border: none;
+  font-size: 12px;
+  color: #fff;
+  word-break: keep-all;
+  &:hover {
+    filter: brightness(85%);
+  }
+
+  & + button.btn-text {
+    margin-left: 10px;
+  }
 }
 </style>

@@ -1,13 +1,13 @@
 import { cloneDeepWith } from "lodash-es";
 import { setEmptyValuesToNull } from "./index";
 
-export default function normalizePedido(pedido) {
+export default function normalizePedido(pedido, keysToCheck) {
   const pedidoNormalized = cloneDeepWith(pedido, setEmptyValuesToNull);
 
-  if (pedidoNormalized.vagasOferecidas === null) pedidoNormalized.vagasOferecidas = 0;
-  if (pedidoNormalized.vagasOcupadas === null) pedidoNormalized.vagasOcupadas = 0;
-  pedidoNormalized.vagasOferecidas = parseInt(pedidoNormalized.vagasOferecidas, 10);
-  pedidoNormalized.vagasOcupadas = parseInt(pedidoNormalized.vagasOcupadas, 10);
+  keysToCheck.forEach((key) => {
+    if (pedidoNormalized[key] === null) pedidoNormalized[key] = 0;
+    pedidoNormalized[key] = parseInt(pedidoNormalized[key], 10);
+  });
 
   return pedidoNormalized;
 }

@@ -80,7 +80,6 @@ export default {
   border-color: #ccc;
 }
 .tg td {
-  font-family: Arial, sans-serif;
   font-size: 11px;
   padding: 0px;
   border-style: solid;
@@ -93,7 +92,6 @@ export default {
 }
 .tg th,
 .tg-hor {
-  font-family: Arial, sans-serif;
   font-size: 11px;
   font-weight: bold;
   padding: 0px;

@@ -25,17 +25,23 @@ const mutations = {
   },
 
   [SOCKET_TURMA_CREATED](state, data) {
-    state.Turmas.push(data.Turma);
+    if (this.state.plano.CurrentPlanoId === data.Turma.Plano) {
+      state.Turmas.push(data.Turma);
+    }
   },
 
   [SOCKET_TURMA_UPDATED](state, data) {
-    let index = state.Turmas.findIndex((turma) => turma.id === data.Turma.id);
-    Vue.set(state.Turmas, index, data.Turma);
+    if (this.state.plano.CurrentPlanoId === data.Turma.Plano) {
+      let index = state.Turmas.findIndex((turma) => turma.id === data.Turma.id);
+      Vue.set(state.Turmas, index, data.Turma);
+    }
   },
 
   [SOCKET_TURMA_DELETED](state, data) {
-    let index = state.Turmas.findIndex((turma) => turma.id === data.Turma.id);
-    state.Turmas.splice(index, 1);
+    if (this.state.plano.CurrentPlanoId === data.Turma.Plano) {
+      let index = state.Turmas.findIndex((turma) => turma.id === data.Turma.id);
+      state.Turmas.splice(index, 1);
+    }
   },
 
   redefinirAtivas1(state, data) {

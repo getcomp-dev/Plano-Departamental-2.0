@@ -6,11 +6,15 @@ const state = {
 };
 
 const mutations = {
-  [PUSH_NOTIFICATION](state, { type = "success", title, text }) {
-    if (!title) title = type === "success" ? "Sucesso!" : "Erro!";
+  [PUSH_NOTIFICATION](state, notificationProps) {
+    let { type = "success", group = "general", title, text, duration } = notificationProps;
+    if (!title) {
+      if (type === "success") title = "Sucesso!";
+      else if (type === "error") title = "Erro!";
+      else if (type === "warn") title = "Aviso!";
+    }
 
-    state.queue.push({ type, title, text });
-
+    state.queue.push({ type, title, text, group, duration });
     if (state.queue.length > state.max) state.queue.shift();
   },
 };

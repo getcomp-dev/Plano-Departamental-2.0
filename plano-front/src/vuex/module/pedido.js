@@ -1,7 +1,6 @@
 import Vue from "vue";
-import { cloneDeepWith } from "lodash-es";
 import pedidoService from "../../services/pedido";
-import { setEmptyValuesToNull } from "@/common/utils";
+import { normalizePedido } from "@/common/utils";
 import {
   PEDIDO_FETCHED,
   SOCKET_PEDIDO_CREATED,
@@ -49,18 +48,8 @@ const mutations = {
 };
 
 const actions = {
-  fetchAll({ commit }) {
-    return new Promise((resolve, reject) => {
-      pedidoService
-        .fetchAll()
-        .then((response) => {
-          commit(PEDIDO_FETCHED, response);
-          resolve();
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
+  fetchAll({ dispatch }) {
+    return dispatch("fetchAllPedidos");
   },
 
   fetchAllPedidos({ commit }) {
@@ -78,17 +67,15 @@ const actions = {
   },
 
   async editPedido({ commit }, pedido) {
-    const pedidoNormalized = cloneDeepWith(pedido, setEmptyValuesToNull);
+    const pedidoNormalized = normalizePedido(pedido, ["vagasPeriodizadas", "vagasNaoPeriodizadas"]);
+    const response = await pedidoService.update(
+      pedidoNormalized.Curso,
+      pedidoNormalized.Turma,
+      pedidoNormalized
+    );
 
-    if (pedidoNormalized.vagasPeriodizadas === null) pedidoNormalized.vagasPeriodizadas = 0;
-    if (pedidoNormalized.vagasNaoPeriodizadas === null) pedidoNormalized.vagasNaoPeriodizadas = 0;
-
-    await pedidoService.update(pedidoNormalized.Curso, pedidoNormalized.Turma, pedidoNormalized);
-
-    commit("PUSH_NOTIFICATION", {
-      type: "success",
-      text: "O pedido foi atualizado",
-    });
+    commit("PUSH_NOTIFICATION", { type: "success", text: "O pedido foi atualizado" });
+    return response.Pedido;
   },
 };
 

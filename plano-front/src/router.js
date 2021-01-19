@@ -168,6 +168,11 @@ const routes = [
         component: lazyLoad("validacoes/graduacaoDCC"),
         beforeEnter: requireAdmin,
       },
+      {
+        path: "/validacoes/lancamento-siga",
+        component: lazyLoad("validacoes/lancamentoSIGA"),
+        beforeEnter: requireAdmin,
+      },
     ],
   },
 ];

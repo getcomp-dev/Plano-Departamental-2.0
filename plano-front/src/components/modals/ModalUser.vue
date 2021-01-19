@@ -208,45 +208,6 @@ export default {
   text-align: start !important;
 }
 
-.container-edit-senha {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  margin: 10px 0;
-  margin-top: 15px;
-  font-size: 14px;
-  padding: 8px 0;
-}
-.container-edit-senha::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  width: 100%;
-  border-top: 1px solid #dee2e6;
-}
-.container-edit-senha::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  border-bottom: 1px solid #dee2e6;
-}
-.btn-edit-senha {
-  padding: 0 5px !important;
-  background-color: transparent !important;
-  line-height: 50%;
-  border: none;
-  margin: 0;
-  background: none;
-}
-.btn-edit-senha i {
-  transition: all 0.25s ease !important;
-}
-.btn-edit-senha:focus {
-  box-shadow: 0 0 0 0.15rem #007bff40 !important;
-}
 .user-container p {
   margin: 0;
   word-break: break-all;

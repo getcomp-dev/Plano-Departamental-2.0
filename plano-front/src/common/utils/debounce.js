@@ -1,6 +1,6 @@
 function debounceEvent(timeOut) {
   return (fn, wait = 500) => clearTimeout(timeOut, (timeOut = setTimeout(() => fn(), wait)));
 }
-const debouce = debounceEvent();
+const debounce = debounceEvent();
 
-export default debouce;
+export default debounce;

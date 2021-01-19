@@ -56,13 +56,7 @@ export default {
   props: { plano: { type: Object, required: true } },
 
   methods: {
-    ...mapActions([
-      "createPlano",
-      "createTurma",
-      "createPedidoOferecido",
-      "updatePedidoOferecido",
-      "fetchAllPedidosOferecidos",
-    ]),
+    ...mapActions(["createPlano", "createTurma", "createPedidoOferecido"]),
 
     async handleImportPlano() {
       const [file1Periodo] = this.$refs.input1periodo.files;
@@ -77,10 +71,9 @@ export default {
         if (file1Periodo) await this.readInputFileTurmas(file1Periodo, planoCreated.id, 1);
         if (file3Periodo) await this.readInputFileTurmas(file3Periodo, planoCreated.id, 3);
       } catch (error) {
-        console.log("Erro ao importar", error);
+        console.log("Erros durante import", error);
       }
 
-      // console.clear();
       this.setLoading({ type: "partial", value: false });
       this.pushNotification({
         type: "success",
@@ -99,6 +92,7 @@ export default {
         .toUpperCase();
       const turmas = JSON.parse(dataStringNormalized);
       await this.createTurmasImported(turmas, planoId, periodo);
+      console.clear();
     },
     async createTurmasImported(turmasImported, planoId, periodo) {
       const keys = {
@@ -139,36 +133,28 @@ export default {
 
         this.setDocentes(newTurma, turmaFile[keys.docentes]);
 
-        //Se a nova turma é igual a currentTurma, não cria a turma e apenas atualiza o pedidos oferecidos
+        //Se a nova newTurma é igual a currentTurma, não cria a turma e apenas cria o pedido
         if (this.turmasIsEqual(currentTurma, newTurma)) {
-          const pedidoOferecido = this.makePedidoOferecido(turmaFile, keys, currentTurma.id);
-          if (pedidoOferecido) {
-            try {
-              await this.updatePedidoOferecido({ data: pedidoOferecido });
-            } catch (error) {
-              //Se o pedido não existe
-              if (error.response.data.message === "Pedido inválido")
-                await this.createPedidoOferecido({ data: pedidoOferecido });
-            }
-          }
-          continue;
-        }
-
-        //Se é uma turma nova então cria a turma
-        const turmaCreated = await this.createTurma({ data: newTurma });
-        //Atualiza currentTurma
-        currentTurma = { ...turmaCreated };
-        //E edita o pedido oferecido da turma
-        const pedidoOferecido = this.makePedidoOferecido(turmaFile, keys, turmaCreated.id);
-        if (pedidoOferecido) {
-          await this.createPedidoOferecido({ data: pedidoOferecido });
+          await this.handleCreatePedidoOferecido(turmaFile, keys, currentTurma.id);
+        } else {
+          //Se é uma turma nova então cria a turma, atualiza currentTurma e cria o pedido
+          const turmaCreated = await this.createTurma({ data: newTurma });
+          currentTurma = { ...turmaCreated };
+          await this.handleCreatePedidoOferecido(turmaFile, keys, turmaCreated.id);
         }
       }
-
-      await this.fetchAllPedidosOferecidos();
     },
 
     //Helpers
+    async handleCreatePedidoOferecido(turmaFile, keys, turmaId) {
+      const pedidoOferecido = this.makePedidoOferecido(turmaFile, keys, turmaId);
+
+      if (pedidoOferecido) {
+        await this.createPedidoOferecido({ data: pedidoOferecido }).catch(() =>
+          console.log("Error na criacao de pedido")
+        );
+      }
+    },
     makePedidoOferecido(turmaFile, keys, turmaId) {
       const pedido = {
         Turma: null,
@@ -184,10 +170,7 @@ export default {
       if (pedido.Curso) {
         return pedido;
       } else {
-        console.log(
-          "Curso não econtrado: " + turmaFile[keys.cursoCod],
-          "Turma: " + turmaFile[keys.disciplinaCod] + " - " + turmaFile[keys.letra]
-        );
+        // console.log("Curso não econtrado: " + turmaFile[keys.cursoCod], turmaFile);
         return null;
       }
     },

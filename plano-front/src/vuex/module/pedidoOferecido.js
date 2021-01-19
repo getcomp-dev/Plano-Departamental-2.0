@@ -68,35 +68,27 @@ const actions = {
   },
 
   async createPedidoOferecido({ commit }, { data, notify }) {
-    const pedidoNormalized = normalizePedido(data);
-
+    const pedidoNormalized = normalizePedido(data, ["vagasOferecidas", "vagasOcupadas"]);
     const response = await pedidoOferecidoService.create(pedidoNormalized);
 
     if (notify) {
-      commit("PUSH_NOTIFICATION", {
-        type: "success",
-        text: "O pedido foi criado",
-      });
+      commit("PUSH_NOTIFICATION", { type: "success", text: "O pedido foi criado" });
     }
     return response.Pedido;
   },
 
   async updatePedidoOferecido({ commit }, { data, notify }) {
-    const pedidoNormalized = normalizePedido(data);
-
-    const pedidoUpdated = await pedidoOferecidoService.update(
+    const pedidoNormalized = normalizePedido(data, ["vagasOferecidas", "vagasOcupadas"]);
+    const response = await pedidoOferecidoService.update(
       pedidoNormalized.Curso,
       pedidoNormalized.Turma,
       pedidoNormalized
     );
 
     if (notify) {
-      commit("PUSH_NOTIFICATION", {
-        type: "success",
-        text: "O pedido foi atualizado",
-      });
+      commit("PUSH_NOTIFICATION", { type: "success", text: "O pedido foi atualizado" });
     }
-    return pedidoUpdated;
+    return response.Pedido;
   },
 };
 

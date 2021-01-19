@@ -53,3 +53,15 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.modal-custom .list-delete > .list-group-item {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  word-wrap: break-word;
+  padding: 5px 15px;
+}
+</style>

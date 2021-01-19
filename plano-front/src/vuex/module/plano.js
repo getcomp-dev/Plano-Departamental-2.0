@@ -61,14 +61,18 @@ const actions = {
     try {
       dispatch("setLoading", { type: "fetching", value: true });
       await dispatch("fetchAllPlanos");
-      let localStoragePlanoId = parseInt(localStorage.getItem("Plano"), 10);
+      let storagePlanoId = parseInt(localStorage.getItem("Plano"), 10);
+      const planoExisteEVisible = find(
+        state.Plano,
+        (plano) => plano.id === storagePlanoId && plano.visible === true
+      );
 
-      if (!localStoragePlanoId || !find(state.Plano, ["id", localStoragePlanoId])) {
+      if (!storagePlanoId || !planoExisteEVisible) {
         const firstVisiblePlano = find(state.Plano, ["visible", true]);
-        localStoragePlanoId = firstVisiblePlano.id;
+        storagePlanoId = firstVisiblePlano.id;
       }
 
-      dispatch("setCurrentPlanoId", localStoragePlanoId);
+      dispatch("setCurrentPlanoId", storagePlanoId);
       await dispatch("fetchAll");
       $socket.open();
       commit("setYear", 2019);
