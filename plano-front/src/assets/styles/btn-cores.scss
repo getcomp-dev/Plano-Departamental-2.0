@@ -1,3 +1,5 @@
+@import "./theme.scss";
+
 /* ### icon-cores ### */
 .icon-green {
   color: #77dd77 !important;
@@ -53,5 +55,5 @@
   background-color: #cf1b1b;
 }
 .text-darkblue {
-  background-color: var(--dark-blue);
+  background-color: $clr-blue;
 }

@@ -23,9 +23,11 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/styles/theme.scss";
+
 .modal-custom .list-ajuda {
   .list-group-item b:first-of-type {
-    color: var(--light-blue);
+    color: $clr-lightblue;
   }
   svg {
     font-size: 12px !important;

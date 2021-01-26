@@ -6,7 +6,7 @@ import {
   is1Semestre,
   is2Semestre,
 } from "./helpers";
-import store from "@/vuex/store";
+import store from "@/store";
 import { orderBy, some } from "lodash-es";
 import pdfMake from "pdfmake/build/pdfmake";
 import pdfFonts from "pdfmake/build/vfs_fonts";

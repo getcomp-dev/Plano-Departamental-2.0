@@ -11,8 +11,11 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/styles/mixins";
+
 .logo {
+  @include no-focus;
   font-family: "Crete Round", serif;
   font-weight: 400;
 }

@@ -169,7 +169,6 @@ export default {
       const turmasFileNormalized = this.normalizeTurmasFile(turmasFile, this.periodoDasTurmas);
 
       this.searchConflictsTurmas(turmasFileNormalized);
-      // this.compareSeTurmaSigaNaoExisteNoSistema();
       this.setLoading({ type: "partial", value: false });
     },
     async readFileTurmas(fileTurmas) {
@@ -244,32 +243,36 @@ export default {
     },
     searchConflictsTurmas(turmasDoArquivo) {
       this.conflitos = [];
-      //Turmas do periodo e exlclui perfil MAC que não esta plano DCC do SIGA
-      const turmasFiltered = this.AllTurmas.filter(
-        (turma) => turma.periodo === this.periodoDasTurmas && turma.disciplina.Perfil != 15
+      //Turmas do periodo selecionado, exclui perfil MAC que não esta plano DCC do SIGA, e exclui as
+      //disciplinas que são do primeiro periodo de algum gradeDCC
+      const turmasDoSistemaFiltered = this.AllTurmas.filter(
+        (turma) =>
+          turma.periodo === this.periodoDasTurmas &&
+          turma.disciplina.Perfil != 15 &&
+          !some(this.DisciplinasGradeDCCPrimeiroPeriodo, ["Disciplina", turma.Disciplina])
       );
 
-      for (const turmaSis of turmasFiltered) {
-        const turmaArq = find(
+      for (const turmaSistema of turmasDoSistemaFiltered) {
+        const turmaFile = find(
           turmasDoArquivo,
-          (turmaArq) =>
-            turmaSis.Disciplina == turmaArq.Disciplina && turmaSis.letra == turmaArq.letra
+          (turmaFile) =>
+            turmaSistema.Disciplina == turmaFile.Disciplina && turmaSistema.letra == turmaFile.letra
         );
 
-        if (!turmaArq) {
-          // console.log("Não encontrada!", turmaSis);
+        if (!turmaFile) {
+          console.log("Turmas apenas no sistema", turmaSistema);
           continue;
         }
 
-        const pedidosdaTurmaSis = this.Pedidos[turmaSis.id];
+        const pedidosdaTurmaSis = this.Pedidos[turmaSistema.id];
 
-        turmaArq.pedidos.forEach((pedidoArq) => {
+        turmaFile.pedidos.forEach((pedidoArq) => {
           const pedidoSisFound = pedidosdaTurmaSis.find(
             (pedidoSis) => pedidoSis.Curso == pedidoArq.Curso
           );
 
           if (!pedidoSisFound) {
-            // console.log("Existe apenas no SIGA, com valor: ", pedidoArq.pedidos);
+            console.log("Turmas apenas no SIGA, com valor: ", pedidoArq.pedidos);
             return;
           }
           const somatorioVagas =
@@ -277,8 +280,8 @@ export default {
 
           if (somatorioVagas != pedidoArq.pedidos) {
             this.conflitos.push({
-              disciplina: turmaSis.disciplina,
-              turma: turmaSis.letra,
+              disciplina: turmaSistema.disciplina,
+              turma: turmaSistema.letra,
               curso: find(this.AllCursos, ["id", pedidoSisFound.Curso]).codigo,
               siga: pedidoArq.pedidos,
               sistema: somatorioVagas == 0 ? "-" : somatorioVagas,
@@ -289,26 +292,15 @@ export default {
         pedidosdaTurmaSis
           .filter((pedido) => pedido.vagasPeriodizadas != 0 || pedido.vagasNaoPeriodizadas != 0)
           .forEach((pedido) => {
-            const pedidoArqFound = turmaArq.pedidos.find(
+            const pedidoArqFound = turmaFile.pedidos.find(
               (pedidoArq) => pedido.Curso == pedidoArq.Curso
             );
             const somatorioVagas = pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas;
 
             if (!pedidoArqFound) {
-              /*
-              console.log(
-                "apenas no sistema",
-                "turma:",
-                turmaSis.disciplina.codigo + " - " + turmaSis.letra,
-                "curso:",
-                find(this.AllCursos, ["id", pedido.Curso]).codigo,
-                somatorioVagas
-              );
-              */
-
               this.conflitos.push({
-                disciplina: turmaSis.disciplina,
-                turma: turmaSis.letra,
+                disciplina: turmaSistema.disciplina,
+                turma: turmaSistema.letra,
                 curso: find(this.AllCursos, ["id", pedido.Curso]).codigo,
                 siga: "-",
                 sistema: somatorioVagas,
@@ -476,38 +468,6 @@ export default {
       });
       return salaFound ? salaFound.id : null;
     },
-    /*
-    // Função antiga de comparar
-    compareSeTurmaSigaNaoExisteNoSistema(turmasDoArquivo) {
-      const turmasFiltered = this.AllTurmas.filter(
-        (turma) => turma.periodo === this.periodoDasTurmas && turma.disciplina.Perfil != 15
-      );
-
-      for (const turmaDoArq of turmasDoArquivo) {
-        const turmaSis = find(
-          turmasFiltered,
-          (turmaSis) =>
-            turmaDoArq.Disciplina == turmaSis.Disciplina && turmaDoArq.letra == turmaSis.letra
-        );
-        // Se não encontrou no sistema
-        if (!turmaSis) {
-          console.log("Não encontrada!", turmaDoArq.disciplinaCodigo + " - " + turmaDoArq.letra);
-          continue;
-        }
-        
-        //this.Pedidos[turmaSis.id] .filter( (pedido) => pedido.vagasPeriodizadas != 0 &&
-        //pedido.vagasNaoPeriodizadas != 0 ) .forEach((pedido) => { const pedidoArqFound =
-        //turmaDoArq.pedidos.find( (pedidoArq) => pedido.Curso == pedidoArq.Curso ); if (!pedidoArqFound) {
-        //console.log( "Pedido não encontrado", pedido, find(this.AllCursos, ["id", pedido.Curso]).codigo,
-        //turmaSis.disciplina.codigo ); return; } const somatorioVagas = pedido.vagasPeriodizadas +
-        //pedido.vagasNaoPeriodizadas; // console.log(pedido, pedidoArqFound); if (somatorioVagas !=
-        //pedidoArqFound.pedidos) console.log( "Turma: " + turmaSis.disciplina.codigo + " - " +
-        //turmaSis.letra, "\nCurso: " + find(this.AllCursos, ["id", pedido.Curso]).codigo, "\nArquivo: " +
-        //pedidoArqFound.pedidos, "\nSistema: " + somatorioVagas ); });
-       
-      }
-    },
-    */
   },
 
   computed: {
@@ -523,11 +483,28 @@ export default {
       "AllDocentes",
       "PeriodosLetivos",
       "Pedidos",
+      "DisciplinasGrades",
     ]),
 
     conflitosOrdered() {
       const { order, type } = this.ordenacaoConflitos;
       return orderBy(this.conflitos, order, type);
+    },
+    DisciplinasGradeDCCPrimeiroPeriodo() {
+      const disciplinasGradeFiltered = this.DisciplinasGrades.filter(
+        (disciplinaGrade) => disciplinaGrade.periodo === 1
+      );
+
+      const disciplinasGradeFilteredUnique = [];
+      disciplinasGradeFiltered.forEach((disciplinaGrade) => {
+        const alredyExist = disciplinasGradeFilteredUnique.find(
+          (uniqueDisciplinaGrade) => uniqueDisciplinaGrade.Disciplina === disciplinaGrade.Disciplina
+        );
+
+        if (!alredyExist) disciplinasGradeFilteredUnique.push({ ...disciplinaGrade });
+      });
+
+      return disciplinasGradeFilteredUnique;
     },
   },
 };

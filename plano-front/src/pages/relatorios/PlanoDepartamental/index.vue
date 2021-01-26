@@ -619,10 +619,12 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/styles/theme.scss";
+
 td.td-vagas:hover {
   padding: 0 !important;
-  color: var(--light-blue);
+  color: $clr-lightblue;
   text-decoration: underline;
 }
 .bg-total-vg {

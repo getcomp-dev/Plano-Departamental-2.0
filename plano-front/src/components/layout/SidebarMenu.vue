@@ -1,83 +1,183 @@
 <template>
-  <div class="sidebar-menu">
-    <h3
-      v-if="menuTitle !== ''"
-      class="title pr-3 pl-2 mt-3 mb-1 text-muted d-flex justify-content-between align-items-center"
+  <section class="sidebar-menu">
+    <div
+      v-if="sectionTitle"
+      class="section-title"
+      :class="{ 'is-open': isOpen }"
+      @click="isOpen = !isOpen"
+      v-prevent-click-selection
     >
-      {{ menuTitle }}
-    </h3>
-    <ul class="nav flex-column mb-2" v-if="menuPages.length">
-      <li v-for="page in menuPages" :key="page.path" @click="closeSidebar">
-        <router-link :to="{ path: page.path }" class="nav-link">
-          <font-awesome-icon :icon="['fas', page.icon]" />
-          <span>
-            {{ page.title }}
-          </span>
-        </router-link>
+      <font-awesome-icon :icon="['fas', icon]" />
+      <span>{{ sectionTitle }}</span>
+      <ButtonArrow class="ml-auto" :state="isOpen" />
+    </div>
+
+    <ul class="nav flex-column" v-if="pages.length && isOpen">
+      <li
+        v-for="page in pages"
+        :key="page.path"
+        :class="['nav-link', { active: $route.path === page.path }]"
+        @click="changeRoute(page.path)"
+      >
+        {{ page.title }}
       </li>
     </ul>
-  </div>
+  </section>
 </template>
 
 <script>
 import { mapActions } from "vuex";
+import { ButtonArrow } from "@/components/ui";
+import { preventClickSelection } from "@/common/mixins";
 
 export default {
-  name: "SidebarMenu",
+  name: "SidebarSection",
+  components: { ButtonArrow },
+  mixins: [preventClickSelection],
   props: {
-    menuPages: { type: Array, default: () => [] },
-    menuTitle: { type: String, default: "" },
+    pages: { type: Array, default: () => [] },
+    sectionTitle: { type: String, default: "" },
+    icon: { type: String, default: "" },
+  },
+  data() {
+    return {
+      isOpen: false,
+    };
+  },
+  beforeMount() {
+    const hasPageActive = this.pages.find((route) => route.path === this.$route.path);
+    if (hasPageActive || !this.sectionTitle) this.isOpen = true;
   },
 
   methods: {
     ...mapActions(["closeSidebar"]),
+
+    changeRoute(path) {
+      if (path !== this.$route.path) {
+        this.$router.push({ path });
+      }
+
+      setTimeout(() => {
+        this.closeSidebar();
+      }, 400);
+    },
   },
 };
 </script>
 
-<style scoped>
-.sidebar-menu .title {
-  font-weight: bold;
-  font-size: 0.75rem;
-  text-transform: uppercase;
-}
-.sidebar-menu .nav li {
+<style lang="scss">
+@import "@/assets/styles/theme";
+@import "@/assets/styles/mixins";
+
+.sidebar-menu {
+  font-size: 12px;
   color: #333;
-  transition: all 100ms ease;
+
+  > .section-title {
+    @include base-transition(all);
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+    padding: 0 5px;
+    margin: 0;
+    font-family: Roboto, "Segoe UI", -apple-system, BlinkMacSystemFont, Oxygen, Ubuntu, Cantarell,
+      "Open Sans", "Helvetica Neue", sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    font-weight: bold;
+    background-color: #ebebeb;
+    text-transform: uppercase;
+    cursor: pointer;
+    &:hover {
+      filter: brightness(90%);
+      color: #000;
+    }
+    &.is-open {
+      filter: brightness(100%);
+      background-color: #c3c3c3;
+      color: #000;
+    }
+
+    > svg {
+      color: currentColor;
+      width: 18px;
+      height: 12px;
+      margin-right: 4px;
+      text-align: start;
+    }
+  }
+
+  ul.nav {
+    padding-bottom: 10px;
+    color: #333;
+  }
+
+  ul.nav > li.nav-link {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 25px;
+    padding: 0 5px;
+    padding-left: 27px; // espaço a esquerda igual do section-title
+    letter-spacing: 0.5px;
+    transition: all 100ms ease;
+    &:hover {
+      cursor: pointer;
+      background-color: $clr-lightblue;
+      color: #fff;
+      &::before {
+        filter: brightness(160%);
+      }
+      &::after {
+        background-color: #fff;
+      }
+    }
+    // backgorund line
+    &::before {
+      content: "";
+      position: absolute;
+      z-index: 5;
+      top: 0;
+      left: 13px;
+      width: 2px;
+      height: 100%;
+      background-color: #62676e;
+      transition: all 400ms ease;
+    }
+    // circle
+    &::after {
+      content: "";
+      position: absolute;
+      z-index: 10;
+      top: 50%;
+      left: 14px;
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      background-color: #6e6e6e;
+      transition: all 400ms ease;
+    }
+  }
+
+  ul.nav > li.nav-link.active {
+    color: #fff;
+    background-color: $clr-blue;
+    transition: all 100ms ease;
+    cursor: default;
+    &::before {
+      filter: brightness(160%);
+    }
+    &::after {
+      background-color: #fff;
+    }
+  }
 }
 
-.sidebar-menu .nav li .nav-link {
-  display: flex;
-  align-items: center;
-  height: 30px;
-  padding: 0 5px;
-  padding-left: 8px;
-  font-weight: 500;
-  font-size: 12px;
-  color: inherit;
-  transition: all 100ms ease;
-}
-.sidebar-menu .nav > li .nav-link:focus {
-  transition: border 100ms ease;
-  box-shadow: none !important;
-  border-left: var(--light-blue) 10px solid !important;
-  outline: #007bff40 solid 2px !important;
-  outline-offset: -1px !important;
-}
-.sidebar-menu .nav > li .nav-link:hover {
-  background-color: #0079fa;
-  color: #fff !important;
-}
-.sidebar-menu .nav > li .nav-link.active {
-  background-color: #0055af;
-  border-left: var(--light-blue) 10px solid;
-  color: white;
-}
-.sidebar-menu .nav > li .nav-link > svg {
-  color: inherit;
-  font-size: 12px;
-  width: 18px;
-  margin-right: 3px;
-  text-align: start;
+.sidebar-menu:first-of-type {
+  > ul.nav {
+    padding: 5px 0;
+  }
 }
 </style>

@@ -114,7 +114,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/styles/theme.scss";
+
 .nav-container {
   width: 100%;
   overflow: hidden;
@@ -148,7 +150,7 @@ export default {
   border-radius: 5px;
   border: 2px solid #909090;
   color: #313131;
-  background-color: var(--light-gray);
+  background-color: $clr-lightgray;
   font-size: 11px;
   cursor: pointer;
   box-shadow: none !important;
@@ -174,7 +176,7 @@ export default {
   -webkit-overflow-scrolling: touch;
 }
 .nav-tabs .nav-link {
-  color: var(--light-blue) !important;
+  color: $clr-lightblue !important;
   cursor: pointer;
   user-select: none;
 }

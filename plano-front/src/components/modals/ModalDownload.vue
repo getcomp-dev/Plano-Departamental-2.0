@@ -185,7 +185,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/styles/theme.scss";
+
 .title-container {
   display: flex;
   justify-content: space-between;
@@ -214,7 +216,7 @@ export default {
 .loading-bar-content {
   transition: all 300ms ease;
   height: 8px;
-  background-color: var(--light-blue);
+  background-color: $clr-lightblue;
 }
 .loading-text {
   font-size: 12px;

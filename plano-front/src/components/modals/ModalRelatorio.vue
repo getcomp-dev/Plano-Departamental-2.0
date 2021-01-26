@@ -46,7 +46,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/styles/theme.scss";
+
 .list-relatorio .list-group-item {
   border: 1px solid rgba(0, 0, 0, 0.125);
   font-size: 11px;
@@ -54,7 +56,7 @@ export default {
 }
 .list-relatorio .list-group-item:hover {
   text-decoration: underline;
-  color: var(--light-blue);
+  color: $clr-lightblue;
   background-color: #ebebeb;
 }
 </style>

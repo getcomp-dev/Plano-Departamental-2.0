@@ -37,12 +37,14 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/styles/theme";
+
 .semestre-title {
   width: 100%;
   font-size: 16px;
   padding: 5px;
-  background-color: var(--light-gray);
+  background-color: $clr-lightgray;
   font-weight: bold;
   text-align: start;
 }

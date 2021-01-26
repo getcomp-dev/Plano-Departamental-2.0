@@ -146,7 +146,7 @@ const emptyGrade = {
 };
 
 export default {
-  name: "DashboardGradeCursosExternos",
+  name: "GerenciarGradesCursosExternos",
   mixins: [normalizeInputText],
   components: { Card, ModalAjuda, ModalDelete },
   data() {

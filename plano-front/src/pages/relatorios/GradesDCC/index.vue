@@ -1,11 +1,11 @@
 <template>
   <div class="main-component row">
     <portal to="page-header">
-      <div class="input-group d-flex align-items-center m-0 mx-2 ml-auto p-0">
+      <div class="input-group">
         <div class="input-group-prepend">
-          <label class="input-group-text">Ano</label>
+          <span class="input-group-text">Ano</span>
         </div>
-        <select class="form-control form-control-top" v-model="novoAno" @change="runNovoAno()">
+        <select class="form-control" v-model="novoAno" @change="runNovoAno">
           <option
             v-for="i in Array.from(Array(11), (e, i) => i - 5)"
             :key="i"

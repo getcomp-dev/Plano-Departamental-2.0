@@ -271,11 +271,13 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/styles/theme";
+
 .text-empty {
   width: 100%;
   font-size: 12px;
   padding: 5px;
-  background-color: var(--light-gray);
+  background-color: $clr-lightgray;
 }
 </style>

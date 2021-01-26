@@ -718,12 +718,14 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/styles/theme";
+
 .periodo-title {
   width: 100%;
   font-size: 16px;
   padding: 5px;
-  background-color: var(--light-gray);
+  background-color: $clr-lightgray;
   text-align: start;
   font-weight: bold;
 }
@@ -732,6 +734,6 @@ export default {
   width: 100%;
   font-size: 12px;
   padding: 5px;
-  background-color: var(--light-gray);
+  background-color: $clr-lightgray;
 }
 </style>

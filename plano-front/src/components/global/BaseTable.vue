@@ -1,7 +1,7 @@
 <template>
   <table
     class="table-custom table table-sm table-bordered"
-    :class="[tableClassType, classes]"
+    :class="[typeClass, classes]"
     :style="styles"
   >
     <thead class="thead-light max-content sticky-row-top">
@@ -17,11 +17,16 @@
     </thead>
 
     <tbody>
-      <div v-if="type === 'main'" class="max-content sticky-row-add">
+      <div v-if="hasAddRow" class="max-content sticky-row-add">
         <slot name="add-row"></slot>
       </div>
 
-      <slot v-if="type !== 'main' || !onLoading.table" name="tbody"></slot>
+      <template v-if="hasLoading">
+        <div class="max-content" v-show="!onLoading.table">
+          <slot name="tbody"></slot>
+        </div>
+      </template>
+      <slot v-else name="tbody"></slot>
     </tbody>
   </table>
 </template>
@@ -37,10 +42,24 @@ export default {
     styles: { type: String, default: "" },
     classes: { type: [String, Array], default: "" },
   },
+  data() {
+    return {
+      hasLoading: false,
+      hasAddRow: false,
+    };
+  },
+
+  beforeMount() {
+    if (this.type === "main") {
+      this.hasLoading = true;
+      this.hasAddRow = true;
+    }
+  },
+
   computed: {
     ...mapGetters(["onLoading"]),
 
-    tableClassType() {
+    typeClass() {
       return `${this.type}-table`;
     },
   },

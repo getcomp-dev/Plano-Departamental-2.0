@@ -73,7 +73,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/styles/theme";
+
 .tg {
   border-collapse: collapse;
   border-spacing: 0;
@@ -117,6 +119,6 @@ export default {
 }
 .tg td p:hover {
   cursor: default;
-  background-color: var(--light-gray) !important;
+  background-color: $clr-lightgray !important;
 }
 </style>

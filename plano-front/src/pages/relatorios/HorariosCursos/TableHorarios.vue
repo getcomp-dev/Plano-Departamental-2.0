@@ -80,7 +80,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/styles/theme";
+
 table.tg {
   border-collapse: collapse;
   border-spacing: 0;
@@ -129,6 +131,6 @@ table.tg td > p {
 }
 table.tg td > p:hover {
   cursor: default;
-  background-color: var(--light-gray) !important;
+  background-color: $clr-lightgray !important;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card" :style="style">
     <div class="card-header">
       <h1 class="card-title">{{ title }}</h1>
     </div>
@@ -40,12 +40,18 @@
 export default {
   name: "Card",
   props: {
-    title: {
-      type: String,
-      required: true,
-    },
+    width: { type: [String, Number], default: null },
+    title: { type: String, required: true },
     toggleFooter: { type: Boolean, default: false },
     isPlano: { type: Boolean, default: false },
+  },
+
+  computed: {
+    style() {
+      return {
+        width: this.width + "px",
+      };
+    },
   },
 };
 </script>

@@ -4,10 +4,13 @@
       type="text"
       :class="[
         'input-pedidos',
-        { empty: pedidoForm.vagasPeriodizadas == 0, notEdited: pedidoForm.editado == false },
+        {
+          empty: pedidoForm.vagasPeriodizadas == 0,
+          notEdited: pedidoForm.editado1 == false && pedidoForm.vagasPeriodizadas !== 0,
+        },
       ]"
       v-model.number="pedidoForm.vagasPeriodizadas"
-      @change="debouncedEditPedido"
+      @blur="debouncedEditPedido(1)"
       @keypress="maskOnlyNumber"
       @paste.prevent
       v-focus-pedido
@@ -17,10 +20,13 @@
       type="text"
       :class="[
         'input-pedidos',
-        { empty: pedidoForm.vagasNaoPeriodizadas == 0, notEdited: pedidoForm.editado == false },
+        {
+          empty: pedidoForm.vagasNaoPeriodizadas == 0,
+          notEdited: pedidoForm.editado2 == false && pedidoForm.vagasNaoPeriodizadas !== 0,
+        },
       ]"
       v-model.number="pedidoForm.vagasNaoPeriodizadas"
-      @change="debouncedEditPedido"
+      @blur="debouncedEditPedido(2)"
       @keypress="maskOnlyNumber"
       @paste.prevent
       v-focus-pedido
@@ -54,20 +60,28 @@ export default {
     resetPedidoForm() {
       this.pedidoForm = clone(this.PedidosOfCurrentTurma);
     },
-    async handleEditPedido() {
-      this.pedidoForm.editado = true;
-      try {
-        await this.editPedido(this.pedidoForm);
-      } catch (error) {
-        let erroMsg = "";
-        if (error.response.data.fullMessage)
-          erroMsg += "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
+    async handleEditPedido(pedido) {
+      if (pedido === 1) this.pedidoForm.editado1 = true;
+      else this.pedidoForm.editado2 = true;
+      if (
+        this.PedidosOfCurrentTurma.vagasPeriodizadas != this.pedidoForm.vagasPeriodizadas ||
+        this.PedidosOfCurrentTurma.vagasNaoPeriodizadas != this.pedidoForm.vagasNaoPeriodizadas ||
+        this.PedidosOfCurrentTurma.editado1 != this.pedidoForm.editado1 ||
+        this.PedidosOfCurrentTurma.editado2 != this.pedidoForm.editado2
+      ) {
+        try {
+          await this.editPedido(this.pedidoForm);
+        } catch (error) {
+          let erroMsg = "";
+          if (error.response.data.fullMessage)
+            erroMsg += "<br/>" + error.response.data.fullMessage.replace("\n", "<br/>");
 
-        this.pushNotification({
-          type: "error",
-          title: "Erro ao atualizar Pedido",
-          text: erroMsg,
-        });
+          this.pushNotification({
+            type: "error",
+            title: "Erro ao atualizar Pedido",
+            text: erroMsg,
+          });
+        }
       }
     },
   },
@@ -124,6 +138,5 @@ input.input-pedidos.empty {
 }
 input.input-pedidos.notEdited {
   color: #0080ff;
-  background-color: #fff;
 }
 </style>

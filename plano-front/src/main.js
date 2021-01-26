@@ -1,6 +1,6 @@
 import Vue from "vue";
 import App from "./App.vue";
-import store from "./vuex/store";
+import store from "./store";
 import router from "./router";
 import axios from "./services/axios";
 import { sync } from "vuex-router-sync";
@@ -12,7 +12,6 @@ import { VBPopover } from "bootstrap-vue";
 sync(store, router);
 axios(Vue, store);
 Vue.use(VueSocketio, SocketIoInstance, store);
-
 Vue.directive("b-popover", VBPopover);
 Vue.use(PortalVue);
 Vue.use(Notifications);

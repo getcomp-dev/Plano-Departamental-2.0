@@ -5,5 +5,15 @@ import ButtonSlideSection from "./ButtonSlideSection.vue";
 import InputSearch from "./InputSearch.vue";
 import InputsPedidosDCC from "./InputsPedidosDCC.vue";
 import Logo from "./Logo.vue";
+import ButtonArrow from "./ButtonArrow.vue";
 
-export { Logo, InputsPedidosDCC, InputSearch, ButtonSlideSection, InputPassword, Card, NavTab };
+export {
+  Logo,
+  ButtonArrow,
+  InputsPedidosDCC,
+  InputSearch,
+  ButtonSlideSection,
+  InputPassword,
+  Card,
+  NavTab,
+};

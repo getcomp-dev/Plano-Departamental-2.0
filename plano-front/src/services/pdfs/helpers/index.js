@@ -1,4 +1,4 @@
-import store from "@/vuex/store";
+import store from "@/store";
 import { isNull, filter, find, orderBy, sortBy } from "lodash-es";
 import { imageToDataUrl } from "@/common/utils";
 import urlLogoUfjf from "@/assets/images/logo-ufjf.png";

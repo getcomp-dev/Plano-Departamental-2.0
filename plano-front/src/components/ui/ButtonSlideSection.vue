@@ -2,15 +2,15 @@
   <div class="container" @click.stop="$emit('handel-click')">
     <span class="title">{{ title }}</span>
 
-    <button type="button" class="btn-arrow" :style="`transform:rotate(${isOpen ? -90 : 0}deg)`">
-      <font-awesome-icon :icon="['fas', 'chevron-left']" />
-    </button>
+    <ButtonArrow :state="isOpen" />
   </div>
 </template>
 
 <script>
+import { ButtonArrow } from "@/components/ui";
 export default {
   name: "ButtonSlideSection",
+  components: { ButtonArrow },
   props: {
     title: { type: String, default: "Editar senha" },
     isOpen: { type: Boolean, default: false },
@@ -52,23 +52,5 @@ export default {
 .container > .title {
   font-weight: normal;
   font-size: inherit;
-}
-
-.container > .btn-arrow {
-  padding: 0 5px;
-  line-height: 50%;
-  border: none;
-  margin: 0;
-  outline: 0;
-  background: none;
-  color: currentColor;
-  background-color: transparent;
-  transition: transform 0.25s ease;
-}
-.container > .btn-arrow > svg {
-  color: currentColor;
-}
-.container > .btn-arrow:focus {
-  box-shadow: none !important;
 }
 </style>

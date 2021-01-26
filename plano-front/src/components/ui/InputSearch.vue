@@ -42,7 +42,9 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/styles/theme";
+
 .input-search-container {
   position: relative;
   width: 100%;
@@ -51,7 +53,7 @@ export default {
   width: 100%;
   height: 25px;
   font-size: 12px;
-  color: var(--dark-gray);
+  color: $clr-darkgray;
   padding: 5px;
   padding-right: 38px;
   border: 1px solid #949494aa;
@@ -75,7 +77,7 @@ export default {
   height: calc(100% - 2px);
   font-size: 12px;
   padding: 0;
-  color: var(--dark-gray);
+  color: $clr-darkgray;
   background-color: #fff;
   border: 0;
   border-top-right-radius: 4px;
@@ -85,7 +87,7 @@ export default {
   transition: all 0.2s ease;
 }
 .input-search-container > .btn-search:hover {
-  background-color: var(--light-gray);
+  background-color: $clr-lightgray;
 }
 
 .input-search-container > .btn-search:focus {

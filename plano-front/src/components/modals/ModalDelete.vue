@@ -23,7 +23,7 @@
           @click="emitClearDelete"
         />
       </div>
-      <BaseButton text="Deletar" color="red" class="px-3" @click="emitDelete" />
+      <BaseButton text="Excluír" color="red" class="px-3" @click="emitDelete" />
     </template>
   </BaseModal>
 </template>
