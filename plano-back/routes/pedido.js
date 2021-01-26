@@ -39,7 +39,7 @@ router.post('/', function (req, res, next) {
 })
 
 router.get('/', function (req, res, next) {
-    models.Pedido.findAll({attributes: ['vagasPeriodizadas', 'vagasNaoPeriodizadas', 'createdAt', 'updatedAt', 'Curso', 'Turma', 'editado']}).then(function (pedidos) {
+    models.Pedido.findAll({attributes: ['vagasPeriodizadas', 'vagasNaoPeriodizadas', 'createdAt', 'updatedAt', 'Curso', 'Turma', 'editado1', 'editado2']}).then(function (pedidos) {
 
         res.send({
             success: true,
@@ -78,7 +78,9 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
         return models.Pedido.update({
             vagasPeriodizadas: req.body.vagasPeriodizadas,
             vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
-            editado: req.body.editado
+            editado1: req.body.editado1,
+            editado2: req.body.editado2,
+
         }, {
             where:{
                 Curso: req.params.Curso,
@@ -86,7 +88,7 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
             }
         }).then(() => {
             return models.Pedido.findOne({
-                attributes: ['vagasPeriodizadas', 'vagasNaoPeriodizadas', 'createdAt', 'updatedAt', 'Curso', 'Turma'],
+                attributes: ['vagasPeriodizadas', 'vagasNaoPeriodizadas', 'createdAt', 'updatedAt', 'Curso', 'Turma', 'editado1', 'editado2'],
                 where: {
                     Curso: req.params.Curso,
                     Turma: req.params.Turma
