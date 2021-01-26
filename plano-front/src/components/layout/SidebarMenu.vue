@@ -3,12 +3,12 @@
     <div
       v-if="sectionTitle"
       class="section-title"
-      :class="{ 'is-open': isOpen }"
+      :class="[{ 'is-open': isOpen }, { 'has-current-page': hasCurrentPage }]"
       @click="isOpen = !isOpen"
       v-prevent-click-selection
     >
       <font-awesome-icon :icon="['fas', icon]" />
-      <span>{{ sectionTitle }}</span>
+      {{ sectionTitle }}
       <ButtonArrow class="ml-auto" :state="isOpen" />
     </div>
 
@@ -16,7 +16,7 @@
       <li
         v-for="page in pages"
         :key="page.path"
-        :class="['nav-link', { active: $route.path === page.path }]"
+        :class="['nav-link', { 'is-active': $route.path === page.path }]"
         @click="changeRoute(page.path)"
       >
         {{ page.title }}
@@ -62,6 +62,12 @@ export default {
       }, 400);
     },
   },
+  computed: {
+    hasCurrentPage() {
+      const pageFound = this.pages.find((page) => page.path === this.$route.path);
+      return pageFound ? true : false;
+    },
+  },
 };
 </script>
 
@@ -75,6 +81,7 @@ export default {
 
   > .section-title {
     @include base-transition(all);
+    position: relative;
     display: flex;
     align-items: center;
     width: 100%;
@@ -97,6 +104,22 @@ export default {
       filter: brightness(100%);
       background-color: #c3c3c3;
       color: #000;
+    }
+    &::after {
+      content: "";
+      position: absolute;
+      z-index: 10;
+      top: 50%;
+      right: 25px;
+      transform: translate(-50%, -50%);
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      background-color: transparent;
+      transition: all 400ms ease;
+    }
+    &:not(.is-open).has-current-page::after {
+      background-color: $clr-blue;
     }
 
     > svg {
@@ -161,7 +184,7 @@ export default {
     }
   }
 
-  ul.nav > li.nav-link.active {
+  ul.nav > li.nav-link.is-active {
     color: #fff;
     background-color: $clr-blue;
     transition: all 100ms ease;
