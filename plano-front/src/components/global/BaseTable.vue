@@ -120,9 +120,6 @@ export default {
     text-align: center;
     margin: 0 !important;
     padding: 0 5px;
-    &:hover {
-      cursor: default;
-    }
   }
   /* Inputs */
   tbody tr > td {

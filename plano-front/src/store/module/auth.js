@@ -9,7 +9,7 @@ import {
 
 const state = {
   token: localStorage.getItem("token"),
-  Usuario: undefined,
+  Usuario: null,
 };
 
 const mutations = {
@@ -33,9 +33,9 @@ const mutations = {
   },
 
   [USER_LOGGED_OUT](state) {
-    state.token = undefined;
+    state.token = null;
     localStorage.removeItem("token");
-    state.Usuario = undefined;
+    state.Usuario = null;
   },
 };
 
@@ -80,16 +80,25 @@ const actions = {
 
 const getters = {
   currentUser(state) {
+    let isAdmin = false,
+      isSuperAdmin = false,
+      type = "";
+    if (state.Usuario) {
+      isAdmin = state.Usuario.admin >= 1;
+      isSuperAdmin = state.Usuario.admin >= 2;
+      type = textUserType(state.Usuario.admin);
+    }
+
     return {
       ...state.Usuario,
-      isAdmin: state.Usuario.admin >= 1,
-      isSuperAdmin: state.Usuario.admin >= 2,
-      type: adminText(state.Usuario.admin),
+      isAdmin,
+      isSuperAdmin,
+      type,
     };
   },
 };
 
-function adminText(admin) {
+function textUserType(admin) {
   if (admin === 0) return "Consulta";
   else if (admin === 1) return "Comissão";
   else if (admin === 2) return "Administrador";

@@ -85,10 +85,10 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["onLoading", "Planos", "AllRoutes"]),
+    ...mapGetters(["onLoading", "Planos", "AllPages"]),
 
     currentPageTitle() {
-      const currentPage = this.AllRoutes.find((route) => route.path === this.$route.path);
+      const currentPage = this.AllPages.find((page) => page.path === this.$route.path);
       return currentPage ? currentPage.title : "Pagina nao encontrado!";
     },
   },

@@ -174,9 +174,12 @@ export default {
     this.fetchAllHistory();
     this.modalFiltrosCallbacks.selectAll.Operacoes();
   },
+  beforeDestroy() {
+    this.clearHistoryState();
+  },
 
   methods: {
-    ...mapActions(["fetchAllHistory"]),
+    ...mapActions(["fetchAllHistory", "clearHistoryState"]),
 
     linhaModificada(h) {
       let linha = h.linhaModificada;

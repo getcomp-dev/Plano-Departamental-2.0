@@ -65,7 +65,7 @@ export default {
     document.addEventListener("keydown", this.closeOnEscKey);
   },
   beforeDestroy() {
-    this.setModalOverlayVisibility(false);
+    if (this.options.hasOverlay) this.setModalOverlayVisibility(false);
     document.removeEventListener("keydown", this.closeOnEscKey);
   },
 
@@ -165,9 +165,7 @@ export default {
 
   watch: {
     visibility(newValue) {
-      if (this.options.hasOverlay) {
-        this.setModalOverlayVisibility(newValue);
-      }
+      if (this.options.hasOverlay) this.setModalOverlayVisibility(newValue);
     },
     modalOverlayVisibility(newValue) {
       //Para fechar o modal quando clicar no olverlay

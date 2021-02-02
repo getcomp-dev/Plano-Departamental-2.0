@@ -6,33 +6,40 @@
     class="modal-plano"
     :hasOverlay="true"
     :hasFooter="true"
-    btnOkText="Criar plano"
   >
     <template #modal-body>
       <NavTab
         :currentTab="currentTab"
-        :allTabs="['Copiar', 'Importar']"
+        :allTabs="['Importar', 'Copiar']"
         @change-tab="currentTab = $event"
       />
-
-      <CopyPlano v-show="currentTab === 'Copiar'" ref="copyPlano" :plano="plano" />
-      <ImportPlano v-show="currentTab === 'Importar'" ref="importPlano" :plano="plano" />
+      <ImportPlano
+        v-show="currentTab === 'Importar'"
+        ref="importPlano"
+        :plano="plano"
+        :closeModal="close"
+      />
+      <CopyPlano
+        v-show="currentTab === 'Copiar'"
+        ref="copyPlano"
+        :plano="plano"
+        :closeModal="close"
+      />
     </template>
 
     <template #modal-footer>
       <template v-if="currentTab === 'Copiar'">
-        <div>
-          <BaseButton
-            text="Selecionar Todos"
-            color="lightblue"
-            @click="$refs.copyPlano.selectAllDisciplinas()"
-          />
-          <BaseButton
-            text="Desmarcar Todos"
-            color="gray"
-            @click="$refs.copyPlano.selectNoneDisciplinas()"
-          />
-        </div>
+        <BaseButton
+          text="Selecionar Todos"
+          color="lightblue"
+          @click="$refs.copyPlano.selectAllDisciplinas()"
+        />
+        <BaseButton
+          text="Desmarcar Todos"
+          color="gray"
+          @click="$refs.copyPlano.selectNoneDisciplinas()"
+        />
+
         <BaseButton text="OK" color="green" class="px-3" @click="handleCreatePlano" />
       </template>
 
@@ -56,7 +63,7 @@ export default {
   },
   data() {
     return {
-      currentTab: "Copiar",
+      currentTab: "Importar",
     };
   },
 
@@ -68,19 +75,10 @@ export default {
       this.$refs.baseModalPlano.close();
     },
     async handleCreatePlano() {
-      try {
-        if (this.currentTab === "Importar") {
-          await this.$refs.importPlano.handleImportPlano();
-        } else if (this.currentTab === "Copiar") {
-          await this.$refs.copyPlano.handleCopyPlano();
-        }
-
-        this.close();
-      } catch (error) {
-        this.pushNotification({
-          type: "error",
-          text: error.message,
-        });
+      if (this.currentTab === "Importar") {
+        await this.$refs.importPlano.handleImportPlano();
+      } else if (this.currentTab === "Copiar") {
+        await this.$refs.copyPlano.handleCopyPlano();
       }
     },
   },

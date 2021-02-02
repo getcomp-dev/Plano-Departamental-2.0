@@ -32,18 +32,21 @@ const mutations = {
   },
 
   [SOCKET_PEDIDO_UPDATED](state, data) {
-    let index = state.Pedidos[data.Pedido.Turma].findIndex(
+    if (!state.Pedidos[data.Pedido.Turma]) return;
+
+    const index = state.Pedidos[data.Pedido.Turma].findIndex(
       (pedido) => pedido.Curso === data.Pedido.Curso
     );
-
     if (index !== -1) Vue.set(state.Pedidos[data.Pedido.Turma], index, data.Pedido);
   },
 
   [SOCKET_PEDIDO_DELETED](state, data) {
-    let index = state.Pedidos[data.Pedido.Turma].findIndex(
+    if (!state.Pedidos[data.Pedido.Turma]) return;
+
+    const index = state.Pedidos[data.Pedido.Turma].findIndex(
       (pedido) => pedido.Curso === data.Pedido.Curso
     );
-    state.Pedidos[data.Pedido.Turma].splice(index, 1);
+    if (index !== -1) state.Pedidos[data.Pedido.Turma].splice(index, 1);
   },
 };
 

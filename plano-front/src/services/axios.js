@@ -1,4 +1,3 @@
-import { HTTP_REQUEST_INCREMENT, HTTP_REQUEST_DECREMENT } from "@/store/mutation-types";
 import axios from "axios";
 import VueAxios from "vue-axios";
 
@@ -8,7 +7,6 @@ export default function(Vue, store) {
 
   Vue.axios.interceptors.request.use(
     function(config) {
-      store.commit(HTTP_REQUEST_INCREMENT);
       if (store.state.auth.token) {
         config.headers["authorization"] = `Bearer ${store.state.auth.token}`;
       }
@@ -16,7 +14,6 @@ export default function(Vue, store) {
       return config;
     },
     function(error) {
-      store.commit(HTTP_REQUEST_DECREMENT);
       console.log("REQUEST ERROR");
       console.log(error);
       return Promise.reject(error);
@@ -25,12 +22,9 @@ export default function(Vue, store) {
 
   Vue.axios.interceptors.response.use(
     function(response) {
-      store.commit(HTTP_REQUEST_DECREMENT);
-
       return response;
     },
     function(error) {
-      store.commit(HTTP_REQUEST_DECREMENT);
       if (!error.response) {
         console.log("RESPONSE ERROR");
         console.log(error);

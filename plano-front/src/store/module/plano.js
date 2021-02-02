@@ -87,7 +87,7 @@ const actions = {
     try {
       dispatch("setLoading", { type: "fetching", value: true });
       dispatch("setCurrentPlanoId", planoId);
-      await dispatch("fetchAll");
+      await dispatch("fetchAllTurmas");
       $socket.open();
     } catch (error) {
       console.log(error);

@@ -12,17 +12,12 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  store.commit("SET_LOADING", { type: "partial", value: true });
+  store.dispatch("setLoading", { type: "route", value: true });
   next();
 });
 
-router.afterEach((to) => {
-  //Exceto rotas que fazem requisição pelo componente
-  if (to.path !== "/gerenciar/history") {
-    setTimeout(() => {
-      store.commit("SET_LOADING", { type: "partial", value: false });
-    }, 500);
-  }
+router.afterEach(() => {
+  store.dispatch("setLoading", { type: "route", value: false, wait: 500 });
 });
 
 export default router;

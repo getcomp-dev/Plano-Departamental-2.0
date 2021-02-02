@@ -42,6 +42,7 @@ export default {
 <style scoped>
 .v-td {
   margin: 0;
+  cursor: default;
 }
 .v-td.td-text {
   display: block-inline;

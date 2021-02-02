@@ -1,18 +1,15 @@
 <template>
   <transition name="fade-transition">
-    <div
-      v-if="onLoading.fetching || onLoading.partial || onLoading.table"
-      class="container-loading"
-      @click.stop
-      @keydown.stop
-      @keypress.stop
-    >
-      <div class="lds-ring">
+    <div v-if="onAnyLoading" class="container-loading" @click.stop @keydown.stop @keypress.stop>
+      <div class="loading-spin">
         <div></div>
         <div></div>
         <div></div>
         <div></div>
       </div>
+      <span v-if="onLoading.progress" class="progress-text">
+        {{ loadingProgress.currentPercentage }}%
+      </span>
     </div>
   </transition>
 </template>
@@ -22,7 +19,11 @@ import { mapGetters } from "vuex";
 export default {
   name: "LoadingView",
   computed: {
-    ...mapGetters(["onLoading"]),
+    ...mapGetters(["onLoading", "loadingProgress"]),
+
+    onAnyLoading() {
+      return Object.values(this.onLoading).some((loading) => loading === true);
+    },
   },
 };
 </script>
@@ -42,11 +43,11 @@ export default {
   backdrop-filter: blur(0.5px);
   cursor: wait;
 
-  .lds-ring {
+  .loading-spin {
     position: fixed;
     display: inline-block;
-    width: 64px;
-    height: 64px;
+    width: 70px;
+    height: 70px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -56,11 +57,11 @@ export default {
       position: absolute;
       top: 0;
       left: 0;
-      width: 64px;
-      height: 64px;
+      width: 70px;
+      height: 70px;
       border: 8px solid $clr-darkgray;
       border-radius: 50%;
-      animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+      animation: loading-spining 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
       border-color: $clr-darkgray transparent transparent transparent;
       &:nth-child(1) {
         animation-delay: -0.45s;
@@ -73,9 +74,21 @@ export default {
       }
     }
   }
+
+  .progress-text {
+    font-weight: bold;
+    transition: all ease 200ms;
+    font-size: 15px;
+    position: absolute;
+    color: #fff;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-shadow: 2px 2px 2px #000, 0 0 25px #000, 0 0 5px #000;
+  }
 }
 
-@keyframes lds-ring {
+@keyframes loading-spining {
   0% {
     transform: rotate(0deg);
   }

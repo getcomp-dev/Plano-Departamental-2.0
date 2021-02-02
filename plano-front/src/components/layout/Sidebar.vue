@@ -1,34 +1,22 @@
 <template>
   <transition name="sidebar-transition">
     <nav v-show="sidebarVisibility" class="sidebar" @click.stop>
-      <SidebarMenu :pages="RoutesHome" />
+      <SidebarMenu :pages="PagesHome" />
       <SidebarMenu
         v-if="currentUser.isAdmin && currentPlano.isEditable"
         sectionTitle="Plano"
-        :pages="RoutesPlano"
-        :icon="RoutesPlano[0].icon"
+        :pages="PagesPlano"
+        icon="clipboard"
       />
-      <SidebarMenu
-        sectionTitle="Relatórios"
-        :pages="RoutesRelatorios"
-        :icon="RoutesRelatorios[0].icon"
-      />
+      <SidebarMenu sectionTitle="Relatórios" :pages="PagesRelatorios" icon="file-alt" />
       <SidebarMenu
         v-if="currentUser.isSuperAdmin"
         sectionTitle="Gerenciar"
-        :pages="RoutesGerenciar"
-        :icon="RoutesGerenciar[5].icon"
+        :pages="PagesGerenciar"
+        icon="sitemap"
       />
-      <SidebarMenu
-        sectionTitle="Histórico"
-        :pages="RoutesHistorico"
-        :icon="RoutesHistorico[0].icon"
-      />
-      <SidebarMenu
-        sectionTitle="Validações"
-        :pages="RoutesValidacoes"
-        :icon="RoutesValidacoes[0].icon"
-      />
+      <SidebarMenu sectionTitle="Histórico" :pages="PagesHistorico" icon="search" />
+      <SidebarMenu sectionTitle="Validações" :pages="PagesValidacoes" icon="calendar-check" />
     </nav>
   </transition>
 </template>
@@ -44,12 +32,12 @@ export default {
   computed: {
     ...mapGetters([
       "sidebarVisibility",
-      "RoutesHome",
-      "RoutesPlano",
-      "RoutesRelatorios",
-      "RoutesGerenciar",
-      "RoutesHistorico",
-      "RoutesValidacoes",
+      "PagesHome",
+      "PagesPlano",
+      "PagesRelatorios",
+      "PagesGerenciar",
+      "PagesHistorico",
+      "PagesValidacoes",
       "currentUser",
       "currentPlano",
     ]),

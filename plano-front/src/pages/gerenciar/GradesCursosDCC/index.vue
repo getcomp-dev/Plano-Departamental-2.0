@@ -14,7 +14,9 @@
 
           <template #tbody>
             <tr class="bg-custom">
-              <v-td width="220">Ciência da Computação Diurno</v-td>
+              <v-td width="220" title="CIÊNCIA DA COMPUTAÇÃO DIURNO">
+                CIÊNCIA DA COMPUTAÇÃO DIURNO
+              </v-td>
               <v-td width="100" />
             </tr>
 
@@ -29,7 +31,9 @@
             </tr>
 
             <tr class="bg-custom">
-              <v-td width="220">Ciência da Computação Noturno</v-td>
+              <v-td width="220" title="CIÊNCIA DA COMPUTAÇÃO NOTURNO">
+                CIÊNCIA DA COMPUTAÇÃO NOTURNO
+              </v-td>
               <v-td width="100" />
             </tr>
             <tr
@@ -43,7 +47,7 @@
             </tr>
 
             <tr class="bg-custom">
-              <v-td width="220">Sistemas de informação</v-td>
+              <v-td width="220" title="SISTEMAS DE INFORMAÇÃO">SISTEMAS DE INFORMAÇÃO</v-td>
               <v-td width="100" />
             </tr>
             <tr
@@ -57,7 +61,7 @@
             </tr>
 
             <tr class="bg-custom">
-              <v-td width="220">Engenharia da Computação</v-td>
+              <v-td width="220" title="ENGENHARIA DA COMPUTAÇÃO">ENGENHARIA DA COMPUTAÇÃO</v-td>
               <v-td width="100" />
             </tr>
             <tr

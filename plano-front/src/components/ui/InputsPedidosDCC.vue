@@ -138,5 +138,6 @@ input.input-pedidos.empty {
 }
 input.input-pedidos.notEdited {
   color: #0080ff;
+  background-color: #e0efef;
 }
 </style>

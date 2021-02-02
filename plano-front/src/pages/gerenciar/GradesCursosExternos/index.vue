@@ -15,7 +15,7 @@
           <template #tbody>
             <template v-for="curso in CursosComGrades">
               <tr class="bg-custom" :key="curso.id + curso.nome">
-                <v-td width="220">{{ curso.nome }}</v-td>
+                <v-td width="220" :title="curso.nome">{{ curso.nome }}</v-td>
                 <v-td width="100" />
               </tr>
               <tr

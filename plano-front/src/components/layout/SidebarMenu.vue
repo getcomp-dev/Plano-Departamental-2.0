@@ -13,13 +13,10 @@
     </div>
 
     <ul class="nav flex-column" v-if="pages.length && isOpen">
-      <li
-        v-for="page in pages"
-        :key="page.path"
-        :class="['nav-link', { 'is-active': $route.path === page.path }]"
-        @click="changeRoute(page.path)"
-      >
-        {{ page.title }}
+      <li v-for="page in pages" :key="page.path" class="nav-item">
+        <router-link :to="page.path" @click.native="closeSidebarDelayed" class="nav-link">
+          {{ page.title }}
+        </router-link>
       </li>
     </ul>
   </section>
@@ -45,18 +42,13 @@ export default {
     };
   },
   beforeMount() {
-    const hasPageActive = this.pages.find((route) => route.path === this.$route.path);
-    if (hasPageActive || !this.sectionTitle) this.isOpen = true;
+    if (this.hasCurrentPage || !this.sectionTitle) this.isOpen = true;
   },
 
   methods: {
     ...mapActions(["closeSidebar"]),
 
-    changeRoute(path) {
-      if (path !== this.$route.path) {
-        this.$router.push({ path });
-      }
-
+    closeSidebarDelayed() {
       setTimeout(() => {
         this.closeSidebar();
       }, 400);
@@ -134,21 +126,30 @@ export default {
   ul.nav {
     padding-bottom: 10px;
     color: #333;
+
+    > li.nav-item {
+      width: 100%;
+      height: 25px;
+    }
   }
 
-  ul.nav > li.nav-link {
+  ul.nav > li.nav-item > a.nav-link {
+    @include no-focus();
     position: relative;
     display: flex;
     align-items: center;
-    height: 25px;
+    width: 100%;
+    height: 100%;
     padding: 0 5px;
     padding-left: 27px; // espaço a esquerda igual do section-title
+    color: inherit;
     letter-spacing: 0.5px;
+    text-decoration: none;
     transition: all 100ms ease;
     &:hover {
       cursor: pointer;
-      background-color: $clr-lightblue;
       color: #fff;
+      background-color: $clr-lightblue;
       &::before {
         filter: brightness(160%);
       }
@@ -184,7 +185,7 @@ export default {
     }
   }
 
-  ul.nav > li.nav-link.is-active {
+  ul.nav > li.nav-item > a.nav-link.active {
     color: #fff;
     background-color: $clr-blue;
     transition: all 100ms ease;

@@ -78,6 +78,7 @@ import turmaExternaService from "@/services/turmaExterna";
 import { normalizeText } from "@/common/utils";
 import { toggleItemInArray, preventClickSelection } from "@/common/mixins";
 import { InputSearch } from "@/components/ui";
+//import semestresLetivos from "../../../../store/module/semestresLetivos";
 
 export default {
   name: "ModalNovoPlano",
@@ -85,6 +86,7 @@ export default {
   components: { InputSearch },
   props: {
     plano: { type: Object, required: true },
+    closeModal: { type: Function, required: true },
   },
   data() {
     return {
@@ -263,9 +265,81 @@ export default {
 
       return gradesAtivas;
     },
+
+    generateGradesExternasAtivas(ano) {
+      const gradesAtivas = {
+        semestre1: {},
+        semestre2: {},
+      };
+
+      let cursosComGrades = filter(this.AllCursos, (curso) => {
+        const gradeFound = this.AllGradesCursosExternos.find((grade) => grade.Curso === curso.id);
+        return gradeFound ? true : false;
+      });
+
+      let grades;
+      let periodoInicial, periodoFinal;
+
+      cursosComGrades.forEach((c) => {
+        gradesAtivas.semestre1[c.codigo] = [];
+        gradesAtivas.semestre2[c.codigo] = [];
+
+        //define grades ativas por periodo
+        grades = filter(this.AllGradesCursosExternos, ["Curso", c.id]);
+        periodoFinal = 0;
+        for (let i = 0; i < grades.length; i++) {
+          periodoInicial = periodoFinal + 1;
+          periodoFinal =
+            1 +
+            2 * (parseInt(ano, 10) - parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (1 - parseInt(grades[i].periodoInicio.slice(5, 6), 10)) / 2;
+          if (isNaN(periodoFinal)) {
+            periodoFinal = 10;
+          }
+          gradesAtivas.semestre1[c.codigo].push({
+            id: grades[i].id,
+            inicio: periodoInicial,
+            fim: periodoFinal,
+          });
+          if (periodoFinal > 9) {
+            break;
+          }
+        }
+        periodoFinal = 0;
+        for (let i = 0; i < grades.length; i++) {
+          periodoInicial = periodoFinal + 1;
+          periodoFinal =
+            1 +
+            2 * (parseInt(ano, 10) - parseInt(grades[i].periodoInicio.slice(0, 4), 10)) +
+            (3 - parseInt(grades[i].periodoInicio.slice(5, 6), 10)) / 2;
+          if (isNaN(periodoFinal)) {
+            periodoFinal = 10;
+          }
+          gradesAtivas.semestre2[c.codigo].push({
+            id: grades[i].id,
+            inicio: periodoInicial,
+            fim: periodoFinal,
+          });
+          if (periodoFinal > 9) {
+            break;
+          }
+        }
+      });
+
+      return gradesAtivas;
+    },
+
     generateTurmasNovoPlano() {
       const gradesAtivas = this.generateGradesAtivas(this.plano.ano);
+      const gradesExternasAtivas = this.generateGradesExternasAtivas(this.plano.ano);
       const turmasNovoPlano = [];
+
+      let periodoEntrada = function(curso, semestre, periodoDisciplina) {
+        if (curso.semestreInicial === 3) return true;
+        else if (curso.semestreInicial === 2)
+          return periodoDisciplina % 2 === (semestre === 1 ? 0 : 1);
+        else return periodoDisciplina % 2 === (semestre === 1 ? 1 : 0);
+      };
 
       //# 1 Semestre - Preenche as disciplina da grade
       let disciplinasGrade1Semestre = [];
@@ -384,6 +458,40 @@ export default {
             }
           }
         });
+      }
+      for (let prop in gradesExternasAtivas.semestre1) {
+        let curso = find(this.AllCursos, { codigo: prop });
+        for (let i = 0; i < gradesExternasAtivas.semestre1[prop].length; i++) {
+          let disciplinasGrade = filter(this.DisciplinasDasGradesCursosExternos, {
+            Grade: gradesExternasAtivas.semestre1[prop][i].id,
+          });
+
+          disciplinasGrade.forEach((disciplina) => {
+            if (periodoEntrada(curso, 1, disciplina.periodo)) {
+              if (
+                disciplina.periodo >= gradesExternasAtivas.semestre1[prop][i].inicio &&
+                disciplina.periodo <= gradesExternasAtivas.semestre1[prop][i].fim
+              ) {
+                let t = find(disciplinasGrade1Semestre, {
+                  Disciplina: disciplina.Disciplina,
+                });
+                if (t === undefined) {
+                  disciplinasGrade1Semestre.push({
+                    Disciplina: disciplina.Disciplina,
+                    CCD: false,
+                    EC: false,
+                    CCN: false,
+                    SI: false,
+                    [prop]: true,
+                    periodo: 1,
+                  });
+                } else {
+                  t[prop] = true;
+                }
+              }
+            }
+          });
+        }
       }
 
       //# 2 Semestre - Preenche as disciplina da grade
@@ -504,6 +612,40 @@ export default {
           }
         });
       }
+      for (let prop in gradesExternasAtivas.semestre1) {
+        let curso = find(this.AllCursos, { codigo: prop });
+        for (let i = 0; i < gradesExternasAtivas.semestre1[prop].length; i++) {
+          let disciplinasGrade = filter(this.DisciplinasDasGradesCursosExternos, {
+            Grade: gradesExternasAtivas.semestre2[prop][i].id,
+          });
+
+          disciplinasGrade.forEach((disciplina) => {
+            if (periodoEntrada(curso, 2, disciplina.periodo)) {
+              if (
+                disciplina.periodo >= gradesExternasAtivas.semestre2[prop][i].inicio &&
+                disciplina.periodo <= gradesExternasAtivas.semestre2[prop][i].fim
+              ) {
+                let t = find(disciplinasGrade2Semestre, {
+                  Disciplina: disciplina.Disciplina,
+                });
+                if (t === undefined) {
+                  disciplinasGrade2Semestre.push({
+                    Disciplina: disciplina.Disciplina,
+                    CCD: false,
+                    EC: false,
+                    CCN: false,
+                    SI: false,
+                    [prop]: true,
+                    periodo: 1,
+                  });
+                } else {
+                  t[prop] = true;
+                }
+              }
+            }
+          });
+        }
+      }
 
       //Filtra apenas disicplinas DCC
       disciplinasGrade1Semestre = filter(disciplinasGrade1Semestre, (disciplinaGrade) =>
@@ -520,14 +662,27 @@ export default {
             (disciplinaGrade.CCD || disciplinaGrade.EC) &&
             (disciplinaGrade.CCN || disciplinaGrade.SI)
           ) {
-            turmasNovoPlano.push({
+            let turma = {
               semestre: 1,
               Disciplina: disciplinaGrade.Disciplina,
               turno: "Diurno",
               letra: "A",
               CCD: disciplinaGrade.CCD,
               EC: disciplinaGrade.EC,
-            });
+            };
+            for (let prop in disciplinaGrade) {
+              if (
+                prop !== "Disciplina" &&
+                prop !== "CCD" &&
+                prop !== "EC" &&
+                prop !== "CCN" &&
+                prop !== "SI" &&
+                prop !== "periodo"
+              ) {
+                turma[prop] = disciplinaGrade[prop];
+              }
+            }
+            turmasNovoPlano.push(turma);
             turmasNovoPlano.push({
               semestre: 1,
               Disciplina: disciplinaGrade.Disciplina,
@@ -537,23 +692,49 @@ export default {
               SI: disciplinaGrade.SI,
             });
           } else if (disciplinaGrade.CCD || disciplinaGrade.EC) {
-            turmasNovoPlano.push({
+            let turma = {
               semestre: 1,
               Disciplina: disciplinaGrade.Disciplina,
               turno: "Diurno",
               letra: "A",
               CCD: disciplinaGrade.CCD,
               EC: disciplinaGrade.EC,
-            });
+            };
+            for (let prop in disciplinaGrade) {
+              if (
+                prop !== "Disciplina" &&
+                prop !== "CCD" &&
+                prop !== "EC" &&
+                prop !== "CCN" &&
+                prop !== "SI" &&
+                prop !== "periodo"
+              ) {
+                turma[prop] = disciplinaGrade[prop];
+              }
+            }
+            turmasNovoPlano.push(turma);
           } else if (disciplinaGrade.CCN || disciplinaGrade.SI) {
-            turmasNovoPlano.push({
+            let turma = {
               semestre: 1,
               Disciplina: disciplinaGrade.Disciplina,
               turno: "Noturno",
               letra: "A",
               CCN: disciplinaGrade.CCN,
               SI: disciplinaGrade.SI,
-            });
+            };
+            for (let prop in disciplinaGrade) {
+              if (
+                prop !== "Disciplina" &&
+                prop !== "CCD" &&
+                prop !== "EC" &&
+                prop !== "CCN" &&
+                prop !== "SI" &&
+                prop !== "periodo"
+              ) {
+                turma[prop] = disciplinaGrade[prop];
+              }
+            }
+            turmasNovoPlano.push(turma);
           }
         }
       });
@@ -563,14 +744,27 @@ export default {
             (disciplinaGrade.CCD || disciplinaGrade.EC) &&
             (disciplinaGrade.CCN || disciplinaGrade.SI)
           ) {
-            turmasNovoPlano.push({
+            let turma = {
               semestre: 3,
               Disciplina: disciplinaGrade.Disciplina,
               turno: "Diurno",
               letra: "A",
               CCD: disciplinaGrade.CCD,
               EC: disciplinaGrade.EC,
-            });
+            };
+            for (let prop in disciplinaGrade) {
+              if (
+                prop !== "Disciplina" &&
+                prop !== "CCD" &&
+                prop !== "EC" &&
+                prop !== "CCN" &&
+                prop !== "SI" &&
+                prop !== "periodo"
+              ) {
+                turma[prop] = disciplinaGrade[prop];
+              }
+            }
+            turmasNovoPlano.push(turma);
             turmasNovoPlano.push({
               semestre: 3,
               Disciplina: disciplinaGrade.Disciplina,
@@ -580,27 +774,54 @@ export default {
               SI: disciplinaGrade.SI,
             });
           } else if (disciplinaGrade.CCD || disciplinaGrade.EC) {
-            turmasNovoPlano.push({
+            let turma = {
               semestre: 3,
               Disciplina: disciplinaGrade.Disciplina,
               turno: "Diurno",
               letra: "A",
               CCD: disciplinaGrade.CCD,
               EC: disciplinaGrade.EC,
-            });
+            };
+            for (let prop in disciplinaGrade) {
+              if (
+                prop !== "Disciplina" &&
+                prop !== "CCD" &&
+                prop !== "EC" &&
+                prop !== "CCN" &&
+                prop !== "SI" &&
+                prop !== "periodo"
+              ) {
+                turma[prop] = disciplinaGrade[prop];
+              }
+            }
+            turmasNovoPlano.push(turma);
           } else if (disciplinaGrade.CCN || disciplinaGrade.SI) {
-            turmasNovoPlano.push({
+            let turma = {
               semestre: 3,
               Disciplina: disciplinaGrade.Disciplina,
               turno: "Noturno",
               letra: "A",
               CCN: disciplinaGrade.CCN,
               SI: disciplinaGrade.SI,
-            });
+            };
+            for (let prop in disciplinaGrade) {
+              if (
+                prop !== "Disciplina" &&
+                prop !== "CCD" &&
+                prop !== "EC" &&
+                prop !== "CCN" &&
+                prop !== "SI" &&
+                prop !== "periodo"
+              ) {
+                turma[prop] = disciplinaGrade[prop];
+              }
+            }
+            turmasNovoPlano.push(turma);
           }
         }
       });
 
+      console.log(turmasNovoPlano);
       return turmasNovoPlano;
     },
     handleCopyPlano() {
@@ -765,13 +986,20 @@ export default {
         .then(() => {
           this.$store.dispatch("fetchAll").then(() => {
             this.setLoading({ type: "partial", value: false });
+            this.closeModal();
           });
         });
     },
   },
 
   computed: {
-    ...mapGetters(["DisciplinasDCC", "AllGrades"]),
+    ...mapGetters([
+      "DisciplinasDCC",
+      "AllGrades",
+      "AllCursos",
+      "AllGradesCursosExternos",
+      "DisciplinasDasGradesCursosExternos",
+    ]),
 
     DisciplinasOrderedModal() {
       return orderBy(

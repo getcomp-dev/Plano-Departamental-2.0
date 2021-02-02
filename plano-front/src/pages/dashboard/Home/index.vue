@@ -9,19 +9,20 @@
         <br />
         Abaixo segue um resumo das funcionalidades de cada página:
       </p>
+
       <div class="row">
         <LinkList
           v-if="currentUser.isAdmin && currentPlano.isEditable"
           title="Plano"
-          :pages="RoutesPlano"
+          :pages="PagesPlano"
         />
-        <LinkList title="Relatórios" :pages="RoutesRelatorios" />
-        <LinkList v-if="currentUser.isSuperAdmin" title="Gerenciar" :pages="RoutesGerenciar" />
-        <LinkList v-if="currentUser.isSuperAdmin" title="Histórico" :pages="RoutesHistorico" />
+        <LinkList title="Relatórios" :pages="PagesRelatorios" />
+        <LinkList v-if="currentUser.isSuperAdmin" title="Gerenciar" :pages="PagesGerenciar" />
+        <LinkList v-if="currentUser.isSuperAdmin" title="Histórico" :pages="PagesHistorico" />
         <LinkList
           v-if="currentUser.isAdmin && currentPlano.isEditable"
           title="Validações"
-          :pages="RoutesValidacoes"
+          :pages="PagesValidacoes"
         />
       </div>
     </div>
@@ -38,11 +39,11 @@ export default {
   computed: {
     ...mapGetters([
       "currentUser",
-      "RoutesPlano",
-      "RoutesRelatorios",
-      "RoutesGerenciar",
-      "RoutesHistorico",
-      "RoutesValidacoes",
+      "PagesPlano",
+      "PagesRelatorios",
+      "PagesGerenciar",
+      "PagesHistorico",
+      "PagesValidacoes",
     ]),
   },
 };

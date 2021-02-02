@@ -51,30 +51,33 @@ label[required] {
   &:after {
     content: "*";
     position: absolute;
+    display: flex;
+    justify-content: center;
     top: 0;
-    right: -10px;
+    left: 100%;
+    width: 20px;
     font-size: 16px;
-    color: rgb(241, 3, 3);
+    color: #f10303;
   }
+
   &:before {
     content: "Campo obrigatório";
+    display: none;
     position: absolute;
+    z-index: 500;
     top: calc(-100% - 10px);
-    z-index: -1;
-    opacity: 0;
     left: 0;
-    pointer-events: none;
+    transform: translateX(-30%);
     width: max-content;
-    height: max-content;
     font-size: 12px;
     padding: 3px 5px;
     color: $clr-lightgray;
     background-color: #585858;
     transition: all 200ms;
+    pointer-events: none;
   }
   &:hover:before {
-    opacity: 1;
-    z-index: 500;
+    display: block;
   }
 }
 
@@ -96,6 +99,9 @@ label[required] {
 }
 .clickable {
   cursor: pointer !important;
+  * {
+    cursor: pointer !important;
+  }
 }
 .max-content {
   width: -webkit-max-content !important;
