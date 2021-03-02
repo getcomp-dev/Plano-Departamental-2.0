@@ -20,7 +20,7 @@ const operations = {
             Plano: form.Plano
         }).then(
             function(turma) {
-                process.send({turma: turma});
+                process.send({turma: turma, sucess: true});
                 process.disconnect();
             }
         ).catch(
@@ -69,7 +69,12 @@ const operations = {
             }
         }).then(
             function(pedido) {
-                process.send({result: pedido});
+                process.send({pedido: pedido, success: true});
+                process.disconnect();
+            }
+        ).catch(
+            function(err) {
+                process.send({err: err, success: false});
                 process.disconnect();
             }
         )
@@ -82,7 +87,12 @@ const operations = {
             Turma: form.Turma
         }).then(
             function(pedido) {
-                process.send({result: pedido});
+                process.send({pedido: pedido, success: true});
+                process.disconnect();
+            }
+        ).catch(
+            function(err) {
+                process.send({err: err, success: false});
                 process.disconnect();
             }
         )

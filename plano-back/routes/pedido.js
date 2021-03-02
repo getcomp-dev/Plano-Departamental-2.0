@@ -75,38 +75,22 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
         if(pedido.Turma != req.body.Turma)
             history({fieldName:'Turma', lineId:`${pedido.Turma}/${pedido.Curso}`, oldValue: pedido.Turma, newValue: req.body.Turma, operationType:'Edit', user: req.usuario.nome})
 
-        return models.Pedido.update({
-            vagasPeriodizadas: req.body.vagasPeriodizadas,
-            vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
-            editado1: req.body.editado1,
-            editado2: req.body.editado2,
+        let child = child_process.fork('./library/childProcesses.js', ['pedido'])
+        child.send(req.body)
+        child.on('message', function(result){
+            if(result.success){
+                ioBroadcast(SM.PEDIDO_UPDATED, {'msg': 'Pedido atualizado!', 'Pedido': result.pedido})
+                console.log('\nRequest de '+req.usuario.nome+'\n')
 
-        }, {
-            where:{
-                Curso: req.params.Curso,
-                Turma: req.params.Turma
+                res.send({
+                    success: true,
+                    message: 'Pedido atualizado',
+                    Pedido: result.pedido
+                })
+            }else{
+                return next(result.err, req, res)
             }
-        }).then(() => {
-            return models.Pedido.findOne({
-                attributes: ['vagasPeriodizadas', 'vagasNaoPeriodizadas', 'createdAt', 'updatedAt', 'Curso', 'Turma', 'editado1', 'editado2'],
-                where: {
-                    Curso: req.params.Curso,
-                    Turma: req.params.Turma
-                }
-            })
         })
-
-    }).then(function (pedido) {
-        ioBroadcast(SM.PEDIDO_UPDATED, {'msg': 'Pedido atualizado!', 'Pedido': pedido})
-        console.log('\nRequest de '+req.usuario.nome+'\n')
-
-        res.send({
-            success: true,
-            message: 'Pedido atualizado',
-            Pedido: pedido
-        })
-    }).catch(function (err) {
-        return next(err, req, res)
     })
 })
 
