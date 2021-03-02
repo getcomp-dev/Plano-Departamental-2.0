@@ -20,7 +20,12 @@ const operations = {
             Plano: form.Plano
         }).then(
             function(turma) {
-                process.send({result: turma});
+                process.send({turma: turma});
+                process.disconnect();
+            }
+        ).catch(
+            function(err) {
+                process.send({err: err, success: false});
                 process.disconnect();
             }
         )

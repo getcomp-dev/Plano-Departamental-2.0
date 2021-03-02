@@ -21,7 +21,7 @@ const history = function(params){
 
 router.post('/', function (req, res, next) {
     console.log('\nRequest de '+req.usuario.nome+'\n')
-    let child = child_process.fork('../library/childProcesses.js', ['turmaExterna'])
+    let child = child_process.fork('./library/childProcesses.js', ['turmaExterna'])
     child.send(req.body)
     child.on('message', function(result){
         if(result.success){
