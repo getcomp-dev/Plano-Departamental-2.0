@@ -80,11 +80,14 @@ const operations = {
         )
     },
     pedidoExterno: function(form){
-        pedido.updateAttributes({
+        models.PedidoExterno.update({
             vagasPeriodizadas: form.vagasPeriodizadas,
-            vagasNaoPeriodizadas: form.vagasNaoPeriodizadas,
-            Curso: form.Curso,
-            Turma: form.Turma
+            vagasNaoPeriodizadas: form.vagasNaoPeriodizadas
+        }, {
+            where:{
+                Curso: form.Curso,
+                Turma: form.Turma
+            }
         }).then(
             function(pedido) {
                 process.send({pedido: pedido, success: true});

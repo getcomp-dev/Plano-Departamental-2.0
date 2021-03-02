@@ -1,7 +1,8 @@
 const models = require('../models/index'),
     router = require('express').Router(),
     ioBroadcast = require('../library/socketIO').broadcast,
-    SM = require('../library/SocketMessages')
+    SM = require('../library/SocketMessages'),
+    child_process = require('child_process')
 
 const history = function(params){
     models.History.create({
@@ -73,25 +74,22 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
         if(pedido.Turma != req.body.Turma)
             history({fieldName:'Turma', lineId:`${pedido.Turma}/${pedido.Curso}`, oldValue: pedido.Turma, newValue: req.body.Turma, operationType:'Edit', user: req.usuario.nome})
 
+        let child = child_process.fork('./library/childProcesses.js', ['pedidoExterno'])
+        child.send(req.body)
+        child.on('message', function(result){
+            if(result.success){
+                ioBroadcast(SM.PEDIDO_EXTERNO_UPDATED, {'msg': 'Pedido atualizado!', 'Pedido': result.pedido})
 
-
-        return pedido.updateAttributes({
-            vagasPeriodizadas: req.body.vagasPeriodizadas,
-            vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
-            Curso: req.body.Curso,
-            Turma: req.body.Turma
+                console.log('\nRequest de '+req.usuario.nome+'\n')
+                res.send({
+                    success: true,
+                    message: 'Pedido atualizado',
+                    Pedido: result.pedido
+                })
+            }else{
+                return next(result.err, req, res)
+            }
         })
-    }).then(function (pedido) {
-        ioBroadcast(SM.PEDIDO_EXTERNO_UPDATED, {'msg': 'Pedido atualizado!', 'Pedido': pedido})
-
-        console.log('\nRequest de '+req.usuario.nome+'\n')
-        res.send({
-            success: true,
-            message: 'Pedido atualizado',
-            Pedido: pedido
-        })
-    }).catch(function (err) {
-        return next(err, req, res)
     })
 })
 

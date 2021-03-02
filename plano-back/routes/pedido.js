@@ -1,7 +1,8 @@
 const models = require('../models/index'),
     router = require('express').Router(),
     ioBroadcast = require('../library/socketIO').broadcast,
-    SM = require('../library/SocketMessages')
+    SM = require('../library/SocketMessages'),
+    child_process = require('child_process')
 
 const history = function(params){
     models.History.create({
