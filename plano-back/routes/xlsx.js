@@ -14,7 +14,7 @@ router.post('/', function(req, res, next){
         horarios = models.Horario.findAll(),
         salas = models.Sala.findAll(),
         perfis = models.Perfil.findAll()
-    let PlanoAtual = parseInt(req.body.Plano)
+    let PlanoAtual = parseInt(req.body.Plano )
 
     Promise.all([cursos, turmas, disciplinas, docentes, horarios, salas, perfis]).then(function (result) {
         let cursos = [],
