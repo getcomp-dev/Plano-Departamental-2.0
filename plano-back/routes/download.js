@@ -118,7 +118,9 @@ router.get('/all', function(req, res, next){
 })
 
 router.post('/syncdrive', function(req, res, next){
-    axios.post('http://200.131.219.57:3001').then( res => res.send(res))
+    axios.post('http://200.131.219.57:3001').then( () => {
+	res.send("DONE!")
+    })
 })
 
 module.exports = router
