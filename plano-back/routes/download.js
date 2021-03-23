@@ -2,7 +2,8 @@ const express = require('express'),
       router = require('express').Router(),
       JSZip = require('jszip'),
       fs = require('fs'),
-      mysqldump = require('mysqldump')
+      mysqldump = require('mysqldump'),
+      axios = require('axios')
 
 
 router.get('/', function(req, res, next){
@@ -114,6 +115,10 @@ router.get('/downloadTurmasCursosZip', function(req, res, next){
 
 router.get('/all', function(req, res, next){
     res.download('./data.zip', 'data.zip')
+})
+
+router.post('/syncdrive', function(req, res, next){
+    axios.post('http://200.131.219.57:3001').then( res => res.send(res))
 })
 
 module.exports = router
