@@ -8,27 +8,21 @@ import toggleAsideModal from "./toggleAsideModal";
 import cursoPopoverContent from "./cursoPopoverContent";
 import vFocusPedido from "./vFocusPedido";
 import conectaFiltrosSemestresEPeriodos from "./conectaFiltrosSemestresEPeriodos";
-import convertDateUTC from "./convertDateUTC";
 import maskEmptyToZero from "./maskEmptyToZero";
 import conectaFiltroPerfisEDisciplinas from "./conectaFiltroPerfisEDisciplinas";
 import preventClickSelection from "./preventClickSelection";
-import generateBooleanText from "./generateBooleanText";
-import normalizeInputText from "./normalizeInputText";
-import maskLimitLength from "./maskLimitLength";
+import redirectIfPlanoNotEditable from "./redirectIfPlanoNotEditable";
 
 export {
-  maskLimitLength,
-  normalizeInputText,
+  redirectIfPlanoNotEditable,
   preventClickSelection,
   conectaFiltroPerfisEDisciplinas,
   conectaFiltrosSemestresEPeriodos,
   maskEmptyToZero,
-  convertDateUTC,
   vFocusPedido,
   cursoPopoverContent,
   toggleAsideModal,
   generateSalasText,
-  generateBooleanText,
   generateDocentesText,
   generateHorariosText,
   maskOnlyNumber,

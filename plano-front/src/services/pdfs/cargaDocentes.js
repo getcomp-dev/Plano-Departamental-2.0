@@ -8,11 +8,8 @@ import {
 } from "./helpers";
 import store from "@/store";
 import { orderBy, some } from "lodash-es";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-async function pdfCargaDocentes(data) {
+export async function pdfCargaDocentes(data) {
   const { docentesCarga, docenteSemAlocacaoCarga, periodosAtivos, plano } = data;
   const tables = [];
   const headerImages = await getHeaderImages();
@@ -270,10 +267,12 @@ async function pdfCargaDocentes(data) {
       };
     },
   };
+
+  const { default: pdfMake } = await import("pdfmake/build/pdfmake");
+  const { default: pdfFonts } = await import("pdfmake/build/vfs_fonts");
+  pdfMake.vfs = pdfFonts.pdfMake.vfs;
   pdfMake.createPdf(docDefinition).open();
 }
-
-export default pdfCargaDocentes;
 
 function makeDocenteBodyHeader() {
   return [

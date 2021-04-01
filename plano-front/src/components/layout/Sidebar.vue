@@ -1,33 +1,33 @@
 <template>
   <transition name="sidebar-transition">
     <nav v-show="sidebarVisibility" class="sidebar" @click.stop>
-      <SidebarMenu :pages="PagesHome" />
-      <SidebarMenu
+      <SidebarSection :pages="PagesHome" />
+      <SidebarSection
         v-if="currentUser.isAdmin && currentPlano.isEditable"
         sectionTitle="Plano"
         :pages="PagesPlano"
         icon="clipboard"
       />
-      <SidebarMenu sectionTitle="Relatórios" :pages="PagesRelatorios" icon="file-alt" />
-      <SidebarMenu
+      <SidebarSection sectionTitle="Relatórios" :pages="PagesRelatorios" icon="file-alt" />
+      <SidebarSection
         v-if="currentUser.isSuperAdmin"
         sectionTitle="Gerenciar"
         :pages="PagesGerenciar"
         icon="sitemap"
       />
-      <SidebarMenu sectionTitle="Histórico" :pages="PagesHistorico" icon="search" />
-      <SidebarMenu sectionTitle="Validações" :pages="PagesValidacoes" icon="calendar-check" />
+      <SidebarSection sectionTitle="Histórico" :pages="PagesHistorico" icon="search" />
+      <SidebarSection sectionTitle="Validações" :pages="PagesValidacoes" icon="calendar-check" />
     </nav>
   </transition>
 </template>
 
 <script>
 import { mapGetters } from "vuex";
-import SidebarMenu from "./SidebarMenu.vue";
+import SidebarSection from "./SidebarSection.vue";
 
 export default {
   name: "Sidebar",
-  components: { SidebarMenu },
+  components: { SidebarSection },
 
   computed: {
     ...mapGetters([
@@ -63,8 +63,7 @@ export default {
   background-color: #fff;
   padding: 0;
   padding-bottom: 10px;
-  font-size: 14px;
-  box-shadow: 0px 0px 75px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 5px 0px 10px 0px rgba(0, 0, 0, 0.4);
 }
 
 /* transition */

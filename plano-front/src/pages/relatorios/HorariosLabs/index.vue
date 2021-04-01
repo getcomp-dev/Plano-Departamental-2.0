@@ -108,7 +108,7 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Visualizar alocação:</b>
+        <b>Visualizar conteúdo:</b>
         Clique no ícone filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
         . Em seguida, utilize as abas para navegar entre os filtros. Selecione as informações que
@@ -130,7 +130,6 @@
 <script>
 import { mapGetters } from "vuex";
 import { filter, find, orderBy } from "lodash-es";
-import { pdfHorariosLabs } from "@/services/pdfs";
 import {
   toggleItemInArray,
   toggleAsideModal,
@@ -142,18 +141,13 @@ import ListHorariosLab from "./ListHorariosLab";
 
 export default {
   name: "DashboardLaboratoriosAlocacao",
+  components: { ModalRelatorio, ModalAjuda, ModalFiltros, ListHorariosLab },
   mixins: [
     toggleItemInArray,
     toggleAsideModal,
     conectaFiltrosSemestresEPeriodos,
     preventClickSelection,
   ],
-  components: {
-    ModalRelatorio,
-    ModalAjuda,
-    ModalFiltros,
-    ListHorariosLab,
-  },
   data() {
     return {
       asideModalsRefs: ["modalFiltros", "modalAjuda", "modalRelatorio"],
@@ -217,7 +211,9 @@ export default {
   },
 
   methods: {
-    generatePdf(completo) {
+    async generatePdf(completo) {
+      const { pdfHorariosLabs } = await import("@/services/pdfs/horariosLabs");
+
       let laboratorios, periodosAtivos;
       if (completo) {
         laboratorios = this.LaboratoriosOrdered;

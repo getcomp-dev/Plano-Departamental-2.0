@@ -9,65 +9,70 @@
         <BaseTable>
           <template #thead>
             <v-th-ordination
-              :currentOrder="ordenacaoMain.disciplina"
-              orderToCheck="codigo"
-              width="85"
-              align="start"
-            >
-              Código
-            </v-th-ordination>
-
-            <v-th-ordination
-              :currentOrder="ordenacaoMain.disciplina"
-              orderToCheck="nome"
-              width="300"
-              align="start"
-            >
-              Nome
-            </v-th-ordination>
-
-            <v-th-ordination
               :orderFixed="true"
               :currentOrder="ordenacaoMain.perfil"
               orderToCheck="perfil.abreviacao"
               width="80"
               align="start"
+              title="Perfil da Disciplina"
             >
               Perfil
             </v-th-ordination>
+            <v-th-ordination
+              :currentOrder="ordenacaoMain.disciplina"
+              orderToCheck="codigo"
+              width="85"
+              align="start"
+              title="Código da Disciplina"
+            >
+              Código
+            </v-th-ordination>
+            <v-th-ordination
+              :currentOrder="ordenacaoMain.disciplina"
+              orderToCheck="nome"
+              width="300"
+              align="start"
+              title="Nome da Disciplina"
+            >
+              Nome
+            </v-th-ordination>
 
-            <v-th width="40" title="Carga Teórica">C.T.</v-th>
-            <v-th width="40" title="Carga Prática">C.P.</v-th>
+            <v-th colspan="2" paddingX="0" width="110" title="Carga da Disciplina">
+              Carga
+              <v-th width="55" title="Carga Teórica">Teórica</v-th>
+              <v-th width="55" title="Carga Prática">Prática</v-th>
+            </v-th>
 
             <v-th-ordination
               :currentOrder="ordenacaoMain.disciplina"
               orderToCheck="ead"
               orderType="desc"
               width="70"
+              title="Disciplina em EAD"
             >
               EAD
             </v-th-ordination>
-
             <v-th-ordination
               :currentOrder="ordenacaoMain.disciplina"
               orderToCheck="laboratorio"
               orderType="desc"
-              width="70"
-              title="Laborátorio"
+              width="85"
+              paddingX="0"
+              title="Disciplina em Laborátorio"
             >
-              Lab.
+              Laborátorio
             </v-th-ordination>
-
             <v-th-ordination
               :currentOrder="ordenacaoMain.disciplina"
               orderToCheck="departamento"
-              width="70"
-              title="Departamento"
-              align="start"
+              width="95"
+              paddingX="0"
+              title="Departamento da Disciplina"
             >
-              Depto.
+              Departamento
             </v-th-ordination>
           </template>
+
           <template #tbody>
             <tr
               v-for="disciplina in DisciplinasOrdered"
@@ -75,12 +80,6 @@
               @click="handleClickInDisciplina(disciplina)"
               :class="['clickable', disciplinaEstaSelecionada(disciplina.id)]"
             >
-              <v-td width="85" align="start">
-                {{ disciplina.codigo }}
-              </v-td>
-              <v-td width="300" align="start">
-                {{ disciplina.nome }}
-              </v-td>
               <v-td
                 width="80"
                 align="start"
@@ -88,24 +87,32 @@
               >
                 {{ disciplina.perfil.abreviacao }}
               </v-td>
-              <v-td width="40">
+              <v-td width="85" align="start">
+                {{ disciplina.codigo }}
+              </v-td>
+              <v-td width="300" align="start">
+                {{ disciplina.nome }}
+              </v-td>
+
+              <v-td width="55">
                 {{ disciplina.cargaTeorica }}
               </v-td>
-              <v-td width="40">
+              <v-td width="55">
                 {{ disciplina.cargaPratica }}
               </v-td>
               <v-td width="70">
                 {{ textoEad(disciplina.ead) }}
               </v-td>
-              <v-td width="70">
+              <v-td width="85">
                 {{ textoLab(disciplina.laboratorio) }}
               </v-td>
-              <v-td width="70" align="start">
+              <v-td width="95">
                 {{ textoDepto(disciplina.departamento) }}
               </v-td>
             </tr>
+
             <tr v-if="!DisciplinasOrdered.length">
-              <v-td width="755" colspan="8">
+              <v-td width="825" colspan="8">
                 <font-awesome-icon :icon="['fas', 'exclamation-triangle']" class="icon-red" />
                 <b>Nenhuma disciplina encontrada!</b>
               </v-td>
@@ -115,127 +122,99 @@
       </div>
 
       <Card
-        :title="'Disciplina'"
+        title="Disciplina"
+        width="380"
         :toggleFooter="isEditing"
         @btn-salvar="handleEditDisciplina"
         @btn-delete="openModalDelete"
         @btn-add="handleCreateDisciplina"
         @btn-clean="cleanForm"
       >
-        <template #form-group>
-          <div class="row mb-2 mx-0">
-            <div class="form-group m-0 col px-0">
-              <label required for="disciplinaNome" class="col-form-label">Nome</label>
-              <input
-                type="text"
-                id="disciplinaNome"
-                class="form-control form-control-sm"
-                @change="disciplinaForm.nome = normalizeInputText($event)"
-                :value="disciplinaForm.nome"
-              />
-            </div>
-          </div>
+        <template #body>
+          <VInput label="Nome" v-model="disciplinaForm.nome" :validation="$v.disciplinaForm.nome" />
 
-          <div class="row mb-2 mx-0">
-            <div class="form-group m-0 col px-0">
-              <label required for="codigo" class="col-form-label">Código</label>
-              <input
-                id="codigo"
-                type="text"
-                class="form-control form-control-sm input-md"
-                @change="disciplinaForm.codigo = normalizeInputText($event)"
-                :value="disciplinaForm.codigo"
+          <div class="row">
+            <div class="col">
+              <VInput
+                label="Código"
+                v-model="disciplinaForm.codigo"
+                :validation="$v.disciplinaForm.codigo"
               />
             </div>
-            <div class="form-group m-0 col px-0">
-              <label required for="perfil" class="col-form-label">Perfil</label>
-              <select
-                id="perfil"
-                class="form-control form-control-sm input-md"
+            <div class="col">
+              <VSelect
+                label="Turno"
                 v-model="disciplinaForm.Perfil"
+                :validation="$v.disciplinaForm.Perfil"
               >
-                <option v-if="AllPerfis.length === 0" type="text" value>
+                <b-form-select-option v-if="!AllPerfis.length" value="">
                   Nenhum Perfil Encontrado
-                </option>
-                <option value="" v-if="disciplinaForm.departamento === 2"></option>
-                <option
+                </b-form-select-option>
+                <b-form-select-option
                   v-for="perfil in AllPerfis"
                   :key="perfil.id + perfil.nome"
                   :value="perfil.id"
                 >
                   {{ perfil.abreviacao }}
-                </option>
-              </select>
+                </b-form-select-option>
+              </VSelect>
             </div>
           </div>
 
-          <div class="row mb-2 mx-0">
-            <div class="form-group m-0 col px-0">
-              <label required for="cargaTeorica" class="col-form-label">Carga Teórica</label>
-              <input
-                id="cargaTeorica"
-                type="number"
-                min="0"
-                class="form-control form-control-sm text-center input-md"
+          <div class="row">
+            <div class="col">
+              <VInput
+                inputType="number"
+                label="Carga Teórica"
                 v-model.number="disciplinaForm.cargaTeorica"
-                @keypress="maskOnlyNumber"
-                @blur="maskEmptyToZero($event, disciplinaForm, 'cargaTeorica')"
+                :validation="$v.disciplinaForm.cargaTeorica"
               />
             </div>
-
-            <div class="form-group m-0 col px-0">
-              <label required for="cargaPratica" class="col-form-label">Carga Prática</label>
-              <input
-                id="cargaPratica"
-                type="number"
-                min="0"
-                class="form-control form-control-sm text-center input-md"
+            <div class="col">
+              <VInput
+                inputType="number"
+                label="Carga Prática"
                 v-model.number="disciplinaForm.cargaPratica"
-                @keypress="maskOnlyNumber"
-                @blur="maskEmptyToZero($event, disciplinaForm, 'cargaPratica')"
+                :validation="$v.disciplinaForm.cargaPratica"
               />
             </div>
           </div>
 
-          <div class="row mb-2 mx-0">
-            <div class="form-group col m-0 px-0">
-              <label required for="laboratorio" class="col-form-label">Laboratório</label>
-              <select
-                id="laboratorio"
-                class="form-control form-control-sm input-md"
+          <div class="row">
+            <div class="col">
+              <VSelect
+                label="Laboratório"
                 v-model.number="disciplinaForm.laboratorio"
+                :validation="$v.disciplinaForm.laboratorio"
               >
-                <option :value="0">Não</option>
-                <option :value="1">Sim</option>
-                <option :value="2">Desejável</option>
-              </select>
+                <b-form-select-option value="0">Não</b-form-select-option>
+                <b-form-select-option value="1">Sim</b-form-select-option>
+                <b-form-select-option value="2">Desejável</b-form-select-option>
+              </VSelect>
             </div>
-            <div class="form-group col m-0 px-0">
-              <label required for="ead" class="col-form-label">EAD</label>
-              <select
-                id="ead"
-                class="form-control form-control-sm input-md"
+            <div class="col">
+              <VSelect
+                label="EAD"
                 v-model.number="disciplinaForm.ead"
+                :validation="$v.disciplinaForm.ead"
               >
-                <option :value="0">Não</option>
-                <option :value="1">Integral</option>
-                <option :value="2">Parcial</option>
-              </select>
+                <b-form-select-option value="0">Não</b-form-select-option>
+                <b-form-select-option value="1">Integral</b-form-select-option>
+                <b-form-select-option value="2">Parcial</b-form-select-option>
+              </VSelect>
             </div>
           </div>
 
-          <div class="row mb-2 mx-0">
-            <div class="form-group col m-0 px-0">
-              <label required for="departamento" class="col-form-label">Departamento</label>
-              <select
-                id="departamento"
-                type="text"
-                class="form-control form-control-sm input-md"
+          <div class="row">
+            <div class="col-6">
+              <VSelect
+                label="Departamento"
                 v-model.number="disciplinaForm.departamento"
+                :validation="$v.disciplinaForm.departamento"
               >
-                <option :value="1">{{ textoDepto(1) }}</option>
-                <option :value="2">{{ textoDepto(2) }}</option>
-              </select>
+                <b-form-select-option value="1">{{ textoDepto(1) }}</b-form-select-option>
+                <b-form-select-option value="2">{{ textoDepto(2) }}</b-form-select-option>
+              </VSelect>
             </div>
           </div>
         </template>
@@ -255,34 +234,30 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Adicionar:</b>
+        <b>Adicionar disciplina:</b>
         Preencha o cartão em branco à direita e em seguida, clique em Adicionar
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
         .
       </li>
       <li class="list-group-item">
-        <b>Editar:</b>
+        <b>Editar disciplina:</b>
         Clique na linha da tabela da disciplina que deseja alterar. Em seguida, no cartão à direita,
         altere as informações que desejar e clique em Salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
         .
       </li>
       <li class="list-group-item">
-        <b>Deletar:</b>
+        <b>Deletar disciplina:</b>
         Clique na linha da tabela da disciplina que deseja remover. Em seguida, no cartão à direita,
         clique em Remover
         <font-awesome-icon :icon="['fas', 'trash-alt']" class="icon-red" />
         e confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
-        <b>Limpar:</b>
+        <b>Limpar formulário:</b>
         No cartão à direita, clique em Cancelar
         <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />
         , para limpar as informações.
-      </li>
-      <li class="list-group-item">
-        <b>Ordenar:</b>
-        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das informações.
       </li>
     </ModalAjuda>
   </div>
@@ -290,49 +265,49 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { clone, orderBy } from "lodash-es";
-import { maskOnlyNumber, maskEmptyToZero, normalizeInputText } from "@/common/mixins";
+import { orderBy } from "lodash-es";
+import { required, integer } from "vuelidate/lib/validators";
+import { makeEmptyDisciplina } from "@utils/factories";
 import { ModalDelete, ModalAjuda } from "@/components/modals";
-import { Card } from "@/components/ui";
-
-const emptyDisciplina = {
-  id: null,
-  nome: "",
-  codigo: "",
-  Perfil: "",
-  cargaTeorica: 0,
-  cargaPratica: 0,
-  laboratorio: 0,
-  ead: 0,
-  departamento: 1,
-};
+import { Card, VInput, VSelect } from "@/components/ui";
 
 export default {
   name: "DashboardDisciplina",
-  mixins: [maskOnlyNumber, maskEmptyToZero, normalizeInputText],
-  components: { Card, ModalDelete, ModalAjuda },
+  components: { Card, VInput, VSelect, ModalDelete, ModalAjuda },
   data() {
     return {
       disciplinaSelecionada: "",
-      disciplinaForm: clone(emptyDisciplina),
+      disciplinaForm: makeEmptyDisciplina(),
       ordenacaoMain: {
         disciplina: { order: "codigo", type: "asc" },
         perfil: { order: "perfil.abreviacao", type: "asc" },
       },
     };
   },
+  validations: {
+    disciplinaForm: {
+      nome: { required },
+      codigo: { required },
+      Perfil: { required },
+      cargaTeorica: { required, integer },
+      cargaPratica: { required, integer },
+      laboratorio: { required },
+      ead: { required },
+      departamento: { required },
+    },
+  },
 
   methods: {
     ...mapActions(["createDisciplina", "editDisciplina", "deleteDisciplina"]),
 
     handleClickInDisciplina(disciplina) {
-      this.cleanForm();
       this.disciplinaSelecionada = disciplina.id;
-      this.disciplinaForm = clone(disciplina);
+      this.disciplinaForm = { ...disciplina };
     },
     cleanForm() {
       this.disciplinaSelecionada = "";
-      this.disciplinaForm = clone(emptyDisciplina);
+      this.disciplinaForm = makeEmptyDisciplina();
+      this.$nextTick(() => this.$v.$reset());
     },
     disciplinaEstaSelecionada(disciplinaId) {
       return this.disciplinaSelecionada === disciplinaId ? "bg-selected" : "";
@@ -356,9 +331,12 @@ export default {
     },
 
     async handleCreateDisciplina() {
+      this.$v.disciplinaForm.$touch();
+      if (this.$v.disciplinaForm.$anyError) return;
+
       try {
         this.setLoading({ type: "partial", value: true });
-        await this.createDisciplina(this.disciplinaForm);
+        await this.createDisciplina({ ...this.disciplinaForm });
         this.cleanForm();
       } catch (error) {
         this.pushNotification({
@@ -371,9 +349,12 @@ export default {
       }
     },
     async handleEditDisciplina() {
+      this.$v.disciplinaForm.$touch();
+      if (this.$v.disciplinaForm.$anyError) return;
+
       try {
         this.setLoading({ type: "partial", value: true });
-        await this.editDisciplina(this.disciplinaForm);
+        await this.editDisciplina({ ...this.disciplinaForm });
       } catch (error) {
         this.pushNotification({
           type: "error",
@@ -385,9 +366,12 @@ export default {
       }
     },
     async handleDeleteDisciplina() {
+      this.$v.disciplinaForm.$touch();
+      if (this.$v.disciplinaForm.$anyError) return;
+
       try {
         this.setLoading({ type: "partial", value: true });
-        await this.deleteDisciplina(this.disciplinaForm);
+        await this.deleteDisciplina({ ...this.disciplinaForm });
         this.cleanForm();
       } catch (error) {
         this.pushNotification({

@@ -8,25 +8,17 @@
       <div class="card-body">
         <h2 class="sub-title">Login</h2>
 
-        <form class="form-login" @submit.prevent="handleLogin">
-          <label for="userLogin" class="sr-only">Usuário</label>
-          <input
-            type="text"
-            id="userLogin"
-            class="form-control"
-            placeholder="Usuário"
+        <form class="form-login" @submit.prevent="doLogin">
+          <VInput
             v-model="form.login"
+            placeholder="Usuário"
+            :upperCase="false"
+            :validation="$v.form.login"
+            class="mb-2"
             v-focus
           />
+          <VInputPassword placeholder="Senha" v-model="form.senha" :validation="$v.form.senha" />
 
-          <label for="userSenha" class="sr-only">Senha</label>
-          <InputPassword
-            id="userSenha"
-            placeholder="Senha"
-            classes="form-control"
-            iconSize="14"
-            v-model="form.senha"
-          />
           <button type="submit" class="btn btn-sm btn-block mt-4 mb-3">Entrar</button>
         </form>
 
@@ -39,11 +31,12 @@
 </template>
 
 <script>
-import { Logo, InputPassword } from "@/components/ui";
+import { required } from "vuelidate/lib/validators";
+import { Logo, VInput, VInputPassword } from "@/components/ui";
 
 export default {
   name: "Login",
-  components: { Logo, InputPassword },
+  components: { Logo, VInput, VInputPassword },
   directives: {
     focus: {
       inserted(el) {
@@ -61,6 +54,12 @@ export default {
       error: null,
     };
   },
+  validations: {
+    form: {
+      login: { required },
+      senha: { required },
+    },
+  },
 
   created() {
     this.checkIfIsAlreadyLogged();
@@ -76,10 +75,12 @@ export default {
       }
     },
 
-    async handleLogin() {
+    async doLogin() {
+      this.$v.form.$touch();
+      if (this.$v.form.$anyError) return;
+
       try {
         this.setLoading({ type: "partial", value: true });
-
         await this.$store.dispatch("authenticate", this.form);
         if (this.$store.state.route.query.redirect) {
           this.$router.replace(this.$store.state.route.query.redirect);
@@ -108,14 +109,13 @@ $clr-gray: #c3c3c3;
 $clr-text: #262626;
 
 .login-container {
-  position: relative;
   background-color: #e7e7e7;
   width: 100vw;
   height: 100vh;
 }
 
 .card {
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -153,17 +153,6 @@ $clr-text: #262626;
       width: 100%;
       margin: 0.5rem auto;
       padding: 0;
-      position: relative;
-
-      ::v-deep .form-control {
-        color: $clr-text;
-        width: 100%;
-        padding: 2px 10px;
-        font-size: 14px;
-        margin-bottom: 10px;
-        height: 30px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.07);
-      }
 
       > button.btn {
         box-shadow: 0px 2px 10px rgba(59, 59, 59, 0.2);

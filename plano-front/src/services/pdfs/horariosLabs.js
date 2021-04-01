@@ -5,11 +5,8 @@ import {
   getTurmasDaSala,
   checkTurmaHorarioLabs,
 } from "./helpers";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-async function pdfHorariosLabs(data) {
+export async function pdfHorariosLabs(data) {
   const { laboratorios, turmas, periodosAtivos, plano } = data;
   const tables = [];
   const headerImages = await getHeaderImages();
@@ -265,7 +262,9 @@ async function pdfHorariosLabs(data) {
       };
     },
   };
+
+  const { default: pdfMake } = await import("pdfmake/build/pdfmake");
+  const { default: pdfFonts } = await import("pdfmake/build/vfs_fonts");
+  pdfMake.vfs = pdfFonts.pdfMake.vfs;
   pdfMake.createPdf(docDefinition).open();
 }
-
-export default pdfHorariosLabs;

@@ -26,7 +26,7 @@
 
 <script>
 import NavTab from "@/components/ui/NavTab";
-import { normalizeText } from "@/common/utils";
+import { normalizeText, wait } from "@/common/utils";
 
 export default {
   name: "ModalFiltros",
@@ -44,7 +44,6 @@ export default {
     close() {
       this.$refs.baseModalFiltros.close();
     },
-
     selectAll() {
       const currentTabNormalized = normalizeText(this.tabsOptions.current, false);
       this.callbacks.selectAll[currentTabNormalized]();
@@ -55,6 +54,7 @@ export default {
     },
     async selectOk() {
       this.setLoading({ type: "table", value: true });
+      await wait(200); // delay to enter the loading
       await this.callbacks.btnOk();
       this.setLoading({ type: "table", value: false });
     },

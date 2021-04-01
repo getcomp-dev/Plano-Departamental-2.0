@@ -55,7 +55,11 @@ const actions = {
   },
 };
 
-const getters = {};
+const getters = {
+  DocentesPerfis(state) {
+    return state.DocentePerfis;
+  },
+};
 
 export default {
   state,

@@ -18,6 +18,9 @@ input[type="checkbox"]:focus {
 svg {
   user-select: none;
 }
+label {
+  margin: 0;
+}
 img {
   -webkit-user-drag: none;
   -khtml-user-drag: none;

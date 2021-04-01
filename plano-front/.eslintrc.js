@@ -13,7 +13,13 @@ module.exports = {
     "arrow-parens": ["error", "always"],
     "max-len": [
       "error",
-      { code: 100, ignoreStrings: true, ignoreTemplateLiterals: true, ignoreComments: true },
+      {
+        code: 100,
+        ignoreStrings: true,
+        ignoreUrls: true,
+        ignoreTemplateLiterals: true,
+        ignoreComments: true,
+      },
     ],
     "comma-dangle": [
       2,

@@ -59,7 +59,7 @@ const actions = {
       text: `A grade ${gradeNormalized.nome} foi criada`,
     });
   },
-  async editGrade({ commit }, grade) {
+  async updateGrade({ commit }, grade) {
     const gradeNormalized = cloneDeepWith(grade, setEmptyValuesToNull);
     validateObjectKeys(gradeNormalized, ["nome", "periodoInicio", "Curso"]);
 

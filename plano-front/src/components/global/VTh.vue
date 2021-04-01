@@ -1,10 +1,11 @@
 <template>
   <th
     :style="{
-      textAlign: align,
+      textAlign: 'center',
+      padding: 0,
       width: thWidth,
       maxWidth: thWidth,
-      padding: thPadding,
+      verticalAlign: 'middle',
     }"
   >
     <slot></slot>
@@ -15,17 +16,12 @@
 export default {
   name: "v-th",
   props: {
-    width: { type: [String, Number], required: true },
-    align: { type: String, default: "center" },
-    paddingX: { type: [String, Number], default: "5" },
+    width: { type: [String, Number], default: "" },
   },
 
   computed: {
     thWidth() {
       return `${this.width}px`;
-    },
-    thPadding() {
-      return `0 ${this.paddingX}px`;
     },
   },
 };

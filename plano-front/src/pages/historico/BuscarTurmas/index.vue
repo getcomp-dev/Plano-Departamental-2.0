@@ -14,16 +14,17 @@
             orderToCheck="plano.ano"
             width="120"
             align="start"
-            title="Ano/nome"
+            title="Ano/nome do Plano"
           >
             Plano
           </v-th-ordination>
-          <v-th width="30" title="Período letivo">P.</v-th>
+          <v-th width="65" title="Período letivo, ordenação fixa">Período</v-th>
           <v-th-ordination
             :orderFixed="true"
             :currentOrder="ordenacaoMain.perfis"
             orderToCheck="disciplina.perfil.abreviacao"
             width="80"
+            title="Perfil da Disciplina"
           >
             Perfil
           </v-th-ordination>
@@ -31,6 +32,7 @@
             :currentOrder="ordenacaoMain.turmas"
             orderToCheck="disciplina.codigo"
             width="80"
+            title="Código da Disciplina"
           >
             Código
           </v-th-ordination>
@@ -39,12 +41,13 @@
             orderToCheck="disciplina.nome"
             width="330"
             align="start"
+            title="Nome da Disciplina"
           >
             Disciplina
           </v-th-ordination>
-          <v-th width="35" title="Turma">T.</v-th>
-          <v-th width="200" align="start">Docente</v-th>
-          <v-th width="80">Turno</v-th>
+          <v-th width="45">Turma</v-th>
+          <v-th width="200" align="start" title="Nome do Docente">Docente</v-th>
+          <v-th width="80" align="start">Turno</v-th>
           <v-th width="120" align="start">Horário</v-th>
           <v-th width="100" align="start">Sala</v-th>
         </template>
@@ -57,22 +60,31 @@
               </template>
               <template v-else>-</template>
             </v-td>
-            <v-td width="30">{{ turma.periodo }}</v-td>
+            <v-td width="65">{{ turma.periodo }}</v-td>
             <v-td width="80" paddinX="0" :style="{ backgroundColor: turma.disciplina.perfil.cor }">
               {{ turma.disciplina.perfil.abreviacao }}
             </v-td>
             <v-td width="80">{{ turma.disciplina.codigo }}</v-td>
             <v-td width="330" align="start">{{ turma.disciplina.nome }}</v-td>
-            <v-td width="35" paddinX="0">{{ turma.letra }}</v-td>
+            <v-td width="45" paddinX="0">{{ turma.letra }}</v-td>
             <v-td width="200" align="start">
               {{ generateDocentesText(turma.Docente1, turma.Docente2) }}
             </v-td>
-            <v-td width="80">{{ turma.turno1 }}</v-td>
+            <v-td width="80" align="start">{{ turma.turno1 }}</v-td>
             <v-td width="120" align="start">
               {{ generateHorariosText(turma.Horario1, turma.Horario2) }}
             </v-td>
             <v-td width="100" align="start" :title="generateSalasText(turma.Sala1, turma.Sala2)">
               {{ generateSalasText(turma.Sala1, turma.Sala2) }}
+            </v-td>
+          </tr>
+
+          <tr v-if="!TurmasRetornadasOrdered.length">
+            <v-td :width="1220">
+              <b>Nenhuma turma encontrada.</b>
+              Clique no botão de filtros
+              <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+              para selecioná-las.
             </v-td>
           </tr>
         </template>
@@ -92,8 +104,9 @@
             orderToCheck="nome"
             width="425"
             align="start"
-            text="Nome"
-          />
+          >
+            Nome
+          </v-th-ordination>
         </template>
 
         <template #tbody>
@@ -127,7 +140,7 @@
         :hasSearchBar="true"
       >
         <template #thead-search>
-          <InputSearch
+          <VInputSearch
             v-model="searchDisciplinasModal"
             placeholder="Pesquise nome ou codigo de uma disciplina..."
           />
@@ -138,25 +151,25 @@
             :currentOrder="ordenacaoModal.disciplinas"
             orderToCheck="codigo"
             width="70"
-            align="start"
-            text="Código"
-          />
+          >
+            Código
+          </v-th-ordination>
 
           <v-th-ordination
             :currentOrder="ordenacaoModal.disciplinas"
             orderToCheck="nome"
             width="270"
-            align="start"
-            text="Nome"
-          />
+          >
+            Nome
+          </v-th-ordination>
 
           <v-th-ordination
             :currentOrder="ordenacaoModal.disciplinas"
             orderToCheck="perfil.abreviacao"
             width="85"
-            align="start"
-            text="Perfil"
-          />
+          >
+            Perfil
+          </v-th-ordination>
         </template>
 
         <template #tbody>
@@ -188,7 +201,7 @@
 
       <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Docentes'" :hasSearchBar="true">
         <template #thead-search>
-          <InputSearch
+          <VInputSearch
             v-model="searchDocentesModal"
             placeholder="Pesquise nome ou apelido de um docente..."
           />
@@ -288,7 +301,7 @@
 
       <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Horários'" :hasSearchBar="true">
         <template #thead-search>
-          <InputSearch v-model="searchHorariosModal" placeholder="Pesquise um horário..." />
+          <VInputSearch v-model="searchHorariosModal" placeholder="Pesquise um horário..." />
         </template>
         <template #thead>
           <v-th width="25" />
@@ -316,7 +329,7 @@
 
       <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Salas'" :hasSearchBar="true">
         <template #thead-search>
-          <InputSearch v-model="searchSalasModal" placeholder="Pesquise uma sala..." />
+          <VInputSearch v-model="searchSalasModal" placeholder="Pesquise uma sala..." />
         </template>
         <template #thead>
           <v-th width="25" />
@@ -380,13 +393,6 @@
         clique no botão OK.
       </li>
       <li class="list-group-item">
-        <b>Ordenar:</b>
-        Clique no cabeçalho da tabela, na coluna desejada, para alterar a ordenação das informações.
-        Note que existem colunas com o icone
-        <font-awesome-icon :icon="['fas', 'thumbtack']" class="icon-darkgray" />
-        que significa que esta ordenação terá pripridade em relação as outras.
-      </li>
-      <li class="list-group-item">
         <b>Observações:</b>
         Note que caso um dos filtros não possua nenhum campo selecionado a busca acontecerá como se
         todas opções daquele filtro estivesse selecionadas. Ou seja marque apenas os filtros
@@ -410,7 +416,7 @@ import {
   conectaFiltroPerfisEDisciplinas,
   conectaFiltrosSemestresEPeriodos,
 } from "@/common/mixins";
-import { InputSearch } from "@/components/ui";
+import { VInputSearch } from "@/components/ui";
 import { ModalFiltros, ModalAjuda } from "@/components/modals";
 
 export default {
@@ -427,7 +433,7 @@ export default {
   components: {
     ModalAjuda,
     ModalFiltros,
-    InputSearch,
+    VInputSearch,
   },
   data() {
     return {

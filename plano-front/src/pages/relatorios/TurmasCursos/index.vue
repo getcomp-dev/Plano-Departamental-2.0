@@ -17,7 +17,7 @@
             paddingX="0"
             title="Código do curso"
           >
-            Cód. Curso
+            Código
           </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoTable.cursos"
@@ -26,13 +26,13 @@
             align="start"
             title="Nome do Curso"
           >
-            Nome do Curso
+            Curso
           </v-th-ordination>
-          <v-th width="30" title="Período">P.</v-th>
+          <v-th width="65" title="Período letivo, ordenação fixa">Periodo</v-th>
           <v-th width="95" title="Código da Disciplina">Cód. Disciplina</v-th>
-          <v-th width="45" title="Turma">T.</v-th>
+          <v-th width="45" title="Turma">Turma</v-th>
           <v-th width="120" title="Horário">Horário</v-th>
-          <v-th width="45" title="Vagas">Vagas</v-th>
+          <v-th width="45" paddingX="0" title="Vagas do Plano Grade+Extra">Vagas</v-th>
         </template>
 
         <template #tbody>
@@ -40,7 +40,7 @@
             <tr :key="curso.id" class="bg-custom">
               <v-td width="85">{{ curso.codigo }}</v-td>
               <v-td width="300" align="start" :title="curso.nome">{{ curso.nome }}</v-td>
-              <v-td width="30"></v-td>
+              <v-td width="65"></v-td>
               <v-td width="95"></v-td>
               <v-td width="40"></v-td>
               <v-td width="120"></v-td>
@@ -53,7 +53,7 @@
             >
               <v-td width="85"></v-td>
               <v-td width="300"></v-td>
-              <v-td width="30">{{ turma.periodo }}</v-td>
+              <v-td width="65">{{ turma.periodo }}</v-td>
               <v-td width="95">{{ turma.disciplina.codigo }}</v-td>
               <v-td width="45">{{ turma.letra }}</v-td>
               <v-td width="120">{{ generateHorariosText(turma.Horario1, turma.Horario2) }}</v-td>
@@ -66,7 +66,7 @@
           </template>
 
           <tr v-if="!CursosOrderedTable.length">
-            <v-td colspan="7" width="720">
+            <v-td colspan="7" width="755">
               <b>Nenhum curso encontrado.</b>
               Clique no botão de filtros para selecioná-los.
             </v-td>
@@ -89,7 +89,7 @@
     >
       <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Cursos'" :hasSearchBar="true">
         <template #thead-search>
-          <InputSearch
+          <VInputSearch
             v-model="searchCursos"
             placeholder="Pesquise nome ou codigo de um curso..."
           />
@@ -201,22 +201,19 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Visualizar plano:</b>
+        <b>Visualizar conteúdo:</b>
         Clique no ícone filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
         . Em seguida, utilize as abas para navegar entre os filtros. Selecione as informações que
         deseja visualizar e clique em OK.
       </li>
+
       <li class="list-group-item">
         <b>Relatório :</b>
         Clique no ícone relatório
         <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" />
         . Em seguida, indique se deseja gerar o relatório completo com todas as disciplinas ou o
         relatório parcial com as disciplinas exibidas na tela.
-      </li>
-      <li class="list-group-item">
-        <b>Visualizar vagas por turma:</b>
-        Clique no número de vagas desta turma, na última coluna da tabela, na linha correspondente.
       </li>
     </ModalAjuda>
   </div>
@@ -225,7 +222,6 @@
 <script>
 import { mapGetters } from "vuex";
 import { orderBy } from "lodash-es";
-import { pdfTurmasCursos } from "@/services/pdfs";
 import { normalizeText } from "@/common/utils";
 import {
   toggleItemInArray,
@@ -240,12 +236,19 @@ import {
   ModalFiltros,
   ModalDownloadTurmasCursos,
 } from "@/components/modals";
-import { InputSearch } from "@/components/ui";
+import { VInputSearch } from "@/components/ui";
 import downloadService from "@/services/download";
 import { saveAs } from "file-saver";
 
 export default {
   name: "TurmasCursos",
+  components: {
+    ModalRelatorio,
+    ModalFiltros,
+    ModalAjuda,
+    VInputSearch,
+    ModalDownloadTurmasCursos,
+  },
   mixins: [
     toggleItemInArray,
     toggleAsideModal,
@@ -253,13 +256,6 @@ export default {
     preventClickSelection,
     generateHorariosText,
   ],
-  components: {
-    ModalRelatorio,
-    ModalFiltros,
-    ModalAjuda,
-    InputSearch,
-    ModalDownloadTurmasCursos,
-  },
   data() {
     return {
       searchCursos: "",
@@ -363,7 +359,9 @@ export default {
         this.setLoading({ type: "partial", value: false });
       }
     },
-    generatePdf(completo) {
+    async generatePdf(completo) {
+      const { pdfTurmasCursos } = await import("@/services/pdfs/turmasCursos");
+
       let cursos, periodos;
       if (completo) {
         cursos = this.AllCursos;

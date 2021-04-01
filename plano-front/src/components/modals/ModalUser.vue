@@ -1,65 +1,63 @@
 <template>
-  <BaseModal ref="baseModalUser" :title="'Usuário'" :type="'fromNavbar'">
+  <BaseModal ref="baseModalUser" title="Usuário" type="fromNavbar">
     <template #modal-body>
-      <div class="user-container w-100">
-        <div class="user-header border px-3 py-2 w-100">
-          <div class="d-flex w-100 align-items-center">
-            <img class="user-img" src="@/assets/images/user.png" alt="Usuário" />
-            <div class="d-flex flex-column w-100">
-              <p class="mx-2">
-                <b>Nome:</b>
-                {{ currentUser.nome }}
-              </p>
-              <p class="mx-2">
-                <b>Login:</b>
-                {{ currentUser.login }}
-              </p>
-              <p class="mx-2">
-                <b>Tipo:</b>
-                {{ currentUser.type }}
-              </p>
-            </div>
+      <div class="w-100 d-flex justify-content-between align-items-center border py-1 px-3">
+        <div class="d-flex w-100 align-items-center">
+          <img class="user-img" src="@/assets/images/user.png" width="50px" alt="Usuário cover" />
+          <div class="d-flex flex-column w-100">
+            <p class="mx-2 m-0">
+              <b>Nome:</b>
+              {{ currentUser.nome }}
+            </p>
+            <p class="mx-2 m-0">
+              <b>Login:</b>
+              {{ currentUser.login }}
+            </p>
+            <p class="mx-2 m-0">
+              <b>Tipo:</b>
+              {{ currentUser.type }}
+            </p>
           </div>
-          <BaseButton text="Logout" color="red" @click="doLogout" />
         </div>
+        <BaseButton text="Logout" color="red" @click="doLogout" />
+      </div>
 
-        <div v-if="currentUser.isAdmin" class="w-100 border rounded-bottom py-2 px-3">
-          <div class="form-row">
-            <label required for="nome">Nome</label>
-            <input class="form-control" type="text" id="nome" v-model="userForm.nome" />
-          </div>
-          <div class="form-row">
-            <label required for="login">Login</label>
-            <input class="form-control" type="text" id="login" v-model="userForm.login" />
-          </div>
-          <div class="form-row">
-            <label required for="senhaAtual">Senha atual</label>
-            <InputPassword :isInvalid="false" :inputId="'senhaAtual'" v-model="senhaAtual" />
-          </div>
-          <!-- toggle edit senha -->
-          <ButtonSlideSection :isOpen="isEditingSenha" @handel-click="toggleEditSenha" />
+      <div v-if="currentUser.isAdmin" class="w-100 border rounded-bottom py-2 px-3">
+        <VInput
+          label="Nome"
+          v-model="userForm.nome"
+          :validation="$v.userForm.nome"
+          :upperCase="false"
+        />
+        <VInput
+          label="Login"
+          v-model="userForm.login"
+          :validation="$v.userForm.login"
+          :upperCase="false"
+        />
+        <VInputPassword label="Senha" v-model="senhaAtual" :validation="$v.senhaAtual" />
 
-          <transition-group name="slideY" mode="out-in">
-            <template v-if="isEditingSenha">
-              <div :key="'newPass'" class="form-row">
-                <label required for="novaSenha">Nova senha</label>
-                <InputPassword :inputId="'novaSenha'" v-model="userForm.senha" />
-              </div>
+        <SectionSlider :isOpen="isEditingSenha" @handel-click="toggleEditSenha" />
+        <transition-group name="slideY" mode="out-in">
+          <template v-if="isEditingSenha">
+            <VInputPassword
+              key="newPass'"
+              label="Nova senha"
+              v-model="userForm.senha"
+              :validation="$v.userForm.senha"
+            />
+            <VInputPassword
+              key="repeatPass"
+              label="Confirmar nova senha"
+              v-model="confirmaSenha"
+              :validation="$v.confirmaSenha"
+            />
+          </template>
+        </transition-group>
 
-              <div :key="'repeatPass'" class="form-row">
-                <label required for="confirmaSenha">Confirmar nova senha</label>
-                <InputPassword
-                  :isInvalid="confirmaSenha != userForm.senha"
-                  :inputId="'confirmaSenha'"
-                  v-model="confirmaSenha"
-                />
-              </div>
-            </template>
-          </transition-group>
-          <div :key="'btns'" class="mt-3 mb-1 d-flex justify-content-end">
-            <BaseButton class="paddingX-20" text="Cancelar" color="gray" @click="close" />
-            <BaseButton class="paddingX-20" text="Salvar" color="blue" @click="editUser" />
-          </div>
+        <div class="mt-3 mb-1 d-flex justify-content-end">
+          <BaseButton class="paddingX-20" text="Cancelar" color="gray" @click="clearEditUserForm" />
+          <BaseButton class="paddingX-20" text="Salvar" color="blue" @click="handleUpdateUser" />
         </div>
       </div>
     </template>
@@ -68,28 +66,43 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { clone } from "lodash-es";
+import { requiredIf, required, integer } from "vuelidate/lib/validators";
 import userService from "@/services/usuario";
-import { InputPassword, ButtonSlideSection } from "@/components/ui";
-
-const emptyUser = {
-  nome: "",
-  login: "",
-  senha: "",
-  admin: 0,
-};
+import { makeEmptyUser } from "@utils/factories";
+import { VInput, VInputPassword, SectionSlider } from "@/components/ui";
 
 export default {
   name: "ModalUser",
-  components: { InputPassword, ButtonSlideSection },
+  components: { VInput, VInputPassword, SectionSlider },
   data() {
     return {
-      userForm: clone(emptyUser),
+      userForm: makeEmptyUser(),
       currentTab: "edit",
       confirmaSenha: "",
       senhaAtual: "",
       isEditingSenha: false,
     };
+  },
+  validations: {
+    userForm: {
+      nome: { required },
+      login: { required },
+      senha: {
+        requiredIf: requiredIf(function() {
+          return this.isEditingSenha;
+        }),
+      },
+      admin: { required, integer },
+    },
+    confirmaSenha: {
+      requiredIf: requiredIf(function() {
+        return this.isEditingSenha;
+      }),
+      sameAsPassword: function(value) {
+        return this.userForm.senha === value;
+      },
+    },
+    senhaAtual: { required },
   },
 
   beforeMount() {
@@ -102,45 +115,40 @@ export default {
     open() {
       this.$refs.baseModalUser.open();
     },
-    close() {
-      this.$refs.baseModalUser.close();
-    },
+
     toggleEditSenha() {
       this.isEditingSenha = !this.isEditingSenha;
       this.userForm.senha = "";
       this.confirmaSenha = "";
+      this.$nextTick(() => {
+        this.$v.confirmaSenha.$reset();
+        this.$v.userForm.senha.$reset();
+      });
     },
     clearEditUserForm() {
-      this.userForm = clone(emptyUser);
-      this.isEditingSenha = false;
+      this.userForm = makeEmptyUser();
       this.userForm.nome = this.currentUser.nome;
       this.userForm.login = this.currentUser.login;
       this.userForm.admin = this.currentUser.admin;
       this.confirmaSenha = "";
       this.senhaAtual = "";
+      this.isEditingSenha = false;
+      this.$nextTick(() => this.$v.$reset());
     },
-    validateEditUser(user) {
-      return (!this.isEditingSenha || this.confirmaSenha === user.senha) && this.validateUser(user);
-    },
-    validateUser(user) {
-      for (const value of Object.values(user)) {
-        if (value === "" || value === null) return false;
-      }
-      return true;
-    },
-
-    async editUser() {
-      const user = clone(this.userForm);
+    async handleUpdateUser() {
+      const user = { ...this.userForm };
       user.senhaAtual = this.senhaAtual;
       user.admin = this.currentUser.admin;
-
       if (!this.isEditingSenha) user.senha = this.senhaAtual;
 
-      if (!this.validateEditUser(user)) {
-        this.pushNotification({
-          type: "error",
-          text: "Campos obrigátorios incompletos ou inválidos.",
-        });
+      this.$v.userForm.$touch();
+      this.$v.confirmaSenha.$touch();
+      this.$v.senhaAtual.$touch();
+      if (
+        this.$v.userForm.$anyError ||
+        this.$v.confirmaSenha.$anyError ||
+        this.$v.senhaAtual.$anyError
+      ) {
         return;
       }
 
@@ -155,7 +163,7 @@ export default {
         this.pushNotification({
           type: "error",
           title: "Erro ao editar usuário",
-          text: "Senha atual incorreta.",
+          text: "Verifique se a senha atual esta correta",
         });
       }
     },
@@ -166,50 +174,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.user-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  font-size: 14px;
-}
-.user-container .user-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.user-header .user-img {
-  width: 50px;
-}
-
-.user-container .form-row {
-  position: relative;
-  margin: 0 !important;
-  margin-bottom: 10px !important;
-}
-.form-row label {
-  font-weight: bold;
-}
-.form-row label > i {
-  color: #f30000;
-}
-::v-deep .form-row input.form-control {
-  height: 30px !important;
-  font-size: 14px !important;
-  padding: 2px 8px !important;
-  text-align: start !important;
-}
-.form-row input[type="checkbox"] {
-  height: 14px !important;
-  font-size: 10px !important;
-  padding: 2px 8px !important;
-  text-align: start !important;
-}
-
-.user-container p {
-  margin: 0;
-  word-break: break-all;
-}
-</style>
