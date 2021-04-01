@@ -69,16 +69,16 @@ const operations = {
             }
         }).then(
             function() {
-		models.Pedido.findOne({
-			attributes: ['vagasPeriodizadas', 'vagasNaoPeriodizadas', 'createdAt', 'updatedAt', 'Curso', 'Turma'],
-			where: {
-				Curso: form.Curso,
-				Turma: form.Turma
-			}
-		}).then( function(pedido) {
-	                process.send({pedido: pedido, success: true});
-	                process.disconnect();
-		})
+		        models.Pedido.findOne({
+			        attributes: ['vagasPeriodizadas', 'vagasNaoPeriodizadas', 'createdAt', 'updatedAt', 'Curso', 'Turma'],
+			        where: {
+				        Curso: form.Curso,
+				        Turma: form.Turma
+			        }
+		    }).then( function(pedido) {
+	            process.send({pedido: pedido, success: true});
+	            process.disconnect();
+		    })
             }
         ).catch(
             function(err) {
@@ -97,9 +97,17 @@ const operations = {
                 Turma: form.Turma
             }
         }).then(
-            function(pedido) {
-                process.send({pedido: pedido, success: true});
-                process.disconnect();
+            function() {
+                models.PedidoExterno.findOne({
+                    attributes: ['vagasPeriodizadas', 'vagasNaoPeriodizadas', 'createdAt', 'updatedAt', 'Curso', 'Turma'],
+                    where: {
+                        Curso: form.Curso,
+                        Turma: form.Turma
+                    }
+                }).then( function(pedido) {
+                    process.send({pedido: pedido, success: true});
+                    process.disconnect();
+                })
             }
         ).catch(
             function(err) {
