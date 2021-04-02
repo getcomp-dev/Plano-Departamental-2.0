@@ -22,11 +22,13 @@ const operations = {
             function(turma) {
                 process.send({turma: turma, success: true});
                 process.disconnect();
+                process.exit();
             }
         ).catch(
             function(err) {
                 process.send({err: err, success: false});
                 process.disconnect();
+                process.exit();
             }
         )
     },
@@ -46,11 +48,13 @@ const operations = {
             function(turma) {
                 process.send({turma: turma, success: true});
                 process.disconnect();
+                process.exit();
             }
         ).catch(
             function(err) {
                 process.send({err: err, success: false});
                 process.disconnect();
+                process.exit();
             }
         )
 
@@ -78,12 +82,14 @@ const operations = {
 		    }).then( function(pedido) {
 	            process.send({pedido: pedido, success: true});
 	            process.disconnect();
+	            process.exit();
 		    })
             }
         ).catch(
             function(err) {
                 process.send({err: err, success: false});
                 process.disconnect();
+                process.exit();
             }
         )
     },
@@ -107,12 +113,14 @@ const operations = {
                 }).then( function(pedido) {
                     process.send({pedido: pedido, success: true});
                     process.disconnect();
+                    process.exit();
                 })
             }
         ).catch(
             function(err) {
                 process.send({err: err, success: false});
                 process.disconnect();
+                process.exit();
             }
         )
     }
