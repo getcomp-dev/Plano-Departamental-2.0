@@ -49,9 +49,9 @@
             <tr class="bg-custom" :key="programa.nome">
               <v-td width="75">{{ programa.nome }}</v-td>
               <v-td width="25" />
-              <v-td width="55" />
+              <v-td width="65" />
               <v-td width="145" />
-              <v-td width="60" title="Total de carga">
+              <v-td width="80" title="Total de carga">
                 {{ calculaTotalDeCreditosDaCarga(programa.cargas) }}
               </v-td>
             </tr>

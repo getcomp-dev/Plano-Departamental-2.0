@@ -47,7 +47,11 @@ const mutations = {
 };
 
 const actions = {
-  fetchAll({ commit }) {
+  fetchAll({ dispatch }) {
+    return dispatch("fetchAllCargaPos");
+  },
+
+  fetchAllCargaPos({ commit }) {
     return new Promise((resolve, reject) => {
       cargaPosService
         .fetchAll(localStorage.getItem("Plano"))
@@ -74,9 +78,10 @@ const actions = {
     });
   },
 
-  async editCargaPos({ commit, dispatch }, carga) {
+  async editCargaPos({ commit, dispatch, rootGetters }, carga) {
     const cargaNormalized = cloneDeepWith(carga, setEmptyValuesToNull);
     validateObjectKeys(cargaNormalized, ["creditos", "programa"]);
+    cargaNormalized.Plano = rootGetters.currentPlano.id;
 
     await cargaPosService.update(cargaNormalized.id, cargaNormalized);
 

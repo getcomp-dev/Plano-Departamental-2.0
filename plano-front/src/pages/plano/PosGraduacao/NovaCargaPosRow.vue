@@ -28,7 +28,7 @@
       <input
         type="text"
         v-model.number="cargaPosForm.creditos"
-        @keypress="maskOnlyNumber"
+        @keypress="maskOnlyNumber($event, { allowDot: true })"
         @paste.prevent
       />
     </v-td>

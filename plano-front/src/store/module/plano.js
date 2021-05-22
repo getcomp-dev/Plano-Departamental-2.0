@@ -89,6 +89,7 @@ const actions = {
       dispatch("setCurrentPlanoId", planoId);
       await dispatch("fetchAllTurmas");
       await dispatch("fetchAllPedidos");
+      await dispatch("fetchAllCargaPos");
       $socket.open();
     } catch (error) {
       console.log(error);
