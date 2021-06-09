@@ -18,9 +18,9 @@ module.exports = function (sequelize, DataTypes) {
       allowNull: false
     },
     admin: {
-      type: DataTypes.BOOLEAN,
+      type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: false
+      defaultValue: 0
     }
   }, {
     freezeTableName: true,

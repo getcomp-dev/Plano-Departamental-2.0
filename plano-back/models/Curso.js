@@ -68,6 +68,22 @@ module.exports = function (sequelize, DataTypes) {
       onDelete: 'RESTRICT'
     })
 
+    Curso.hasMany(models.GradeCursoExterno, {
+      foreignKey: {
+        name: 'Curso',
+        allowNull: false
+      },
+      onDelete: 'RESTRICT'
+    })
+
+    Curso.hasMany(models.GradeExterna, {
+      foreignKey: {
+        name: 'Curso',
+        allowNull: false
+      },
+      onDelete: 'RESTRICT'
+    })
+
     Curso.belongsToMany(models.Turma, {
       through: models.Vaga,
       foreignKey: 'Curso',
@@ -83,6 +99,15 @@ module.exports = function (sequelize, DataTypes) {
       onDelete: 'CASCADE'
     })
 
+    Curso.belongsToMany(models.Turma, {
+      through: models.PedidoOferecido,
+      foreignKey: {
+        name:'Curso',
+        allowNull: false
+      },
+      onDelete: 'CASCADE'
+    })
+
     Curso.belongsToMany(models.TurmaExterna, {
       through: models.PedidoExterno,
       foreignKey: {
@@ -90,6 +115,14 @@ module.exports = function (sequelize, DataTypes) {
           allowNull: false
       },
       onDelete: 'CASCADE'
+    })
+
+    Curso.hasMany(models.ConceitoTurmaCurso, {
+      foreignKey: {
+        name: 'Curso',
+        allowNull: false
+      },
+      onDelete: 'RESTRICT'
     })
   }
 

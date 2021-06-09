@@ -2,7 +2,8 @@ const models = require('../models/index'),
     router = require('express').Router(),
     ioBroadcast = require('../library/socketIO').broadcast,
     SM = require('../library/SocketMessages'),
-    CustomError = require('../library/CustomError')
+    CustomError = require('../library/CustomError'),
+    child_process = require('child_process')
 
 const history = function(params){
     models.History.create({
@@ -20,35 +21,29 @@ const history = function(params){
 
 router.post('/', function (req, res, next) {
     console.log('\nRequest de '+req.usuario.nome+'\n')
-    models.TurmaExterna.create({
-        periodo: req.body.periodo,
-        letra: req.body.letra,
-        turno1:  req.body.turno1,
-        turno2: req.body.turno2,
-        Disciplina: req.body.Disciplina,
-        Horario1: req.body.Horario1,
-        Horario2: req.body.Horario2,
-        Sala1: req.body.Sala1,
-        Sala2: req.body.Sala2
+    let child = child_process.fork('./library/childProcesses.js', ['turmaExterna'])
+    child.send(req.body)
+    child.on('message', function(result){
+        if(result.success){
+            ioBroadcast(SM.TURMA_EXTERNA_CREATED, {'msg': 'Turma criada!', 'Turma': result.turma})
+            console.log('\nRequest de '+req.usuario.nome+'\n')
 
-    }).then(function (turma) {
-        ioBroadcast(SM.TURMA_EXTERNA_CREATED, {'msg': 'Turma criada!', 'Turma': turma})
-        console.log('\nRequest de '+req.usuario.nome+'\n')
+            history({operationType: "Create", user: req.usuario.nome, lineId: `${result.turma.letra}/${result.turma.Disciplina}`})
 
-        history({operationType: "Create", user: req.usuario.nome, lineId: `${turma.letra}/${turma.Disciplina}`})
+            res.send({
+                success: true,
+                message: 'Turma criada!',
+                Turma: result.turma
+            })
+        }else{
+            return next(result.err, req, res)
+        }
 
-        res.send({
-            success: true,
-            message: 'Turma criada!',
-            Turma: turma
-        })
-    }).catch(function (err) {
-        return next(err, req, res)
     })
 })
 
-router.get('/', function (req, res, next) {
-    models.TurmaExterna.findAll().then(function (turmas) {
+router.get('/Plano/:id([0-9]+)', function (req, res, next) {
+    models.TurmaExterna.findAll({where:{Plano:req.params.id}}).then(function (turmas) {
         res.send({
             success: true,
             message: 'Turmas Externas listadas',

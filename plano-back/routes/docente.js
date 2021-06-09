@@ -22,6 +22,7 @@ router.post('/', function (req, res, next) {
     models.Docente.create({
         nome: req.body.nome,
         apelido: req.body.apelido,
+        nomesiga: req.body.nomesiga,
         creditos: req.body.creditos,
         ativo: req.body.ativo
     }).then(function (docente) {
@@ -68,6 +69,10 @@ router.post('/:id([0-9]+)', function (req, res, next) {
         if(docente.apelido != req.body.apelido)
             history({fieldName:'Apelido', lineId:docente.nome, oldValue: docente.apelido, newValue: req.body.apelido, operationType:'Edit', user: req.usuario.nome})
 
+        if(docente.nomesiga != req.body.nomesiga)
+            history({fieldName:'Nome Siga', lineId:docente.nome, oldValue: docente.nomesiga, newValue: req.body.nomesiga, operationType:'Edit', user: req.usuario.nome})
+
+
         if(docente.creditos != req.body.creditos)
             history({fieldName:'Creditos', lineId:docente.nome, oldValue: docente.creditos, newValue: req.body.creditos, operationType:'Edit', user: req.usuario.nome})
 
@@ -77,6 +82,7 @@ router.post('/:id([0-9]+)', function (req, res, next) {
         return docente.updateAttributes({
             nome: req.body.nome,
             apelido: req.body.apelido,
+            nomesiga: req.body.nomesiga,
             creditos: req.body.creditos,
             ativo: req.body.ativo
         })

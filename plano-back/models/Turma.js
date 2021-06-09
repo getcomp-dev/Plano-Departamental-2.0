@@ -24,7 +24,7 @@ module.exports = function (sequelize, DataTypes) {
       indexes:[
           {
             unique:true,
-            fields:['letra', 'periodo', 'Disciplina']
+            fields:['letra', 'periodo', 'Disciplina', 'Plano']
           }
       ]
   })
@@ -49,6 +49,23 @@ module.exports = function (sequelize, DataTypes) {
         allowNull:true
       },
       onDelete:'CASCADE'
+    })
+
+    Turma.belongsToMany(models.Curso, {
+      through: models.PedidoOferecido,
+      foreignKey: {
+        name:'Turma',
+        allowNull:true
+      },
+      onDelete:'CASCADE'
+    })
+
+    Turma.hasMany(models.ConceitoTurmaCurso, {
+      foreignKey: {
+        name: 'Turma',
+        allowNull: false
+      },
+      onDelete: 'RESTRICT'
     })
   }
 

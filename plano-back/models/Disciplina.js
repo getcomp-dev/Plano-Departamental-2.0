@@ -26,6 +26,11 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false
     },
+    departamento: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      default: 1
+    },
   }, {
     freezeTableName: true,
     timestamps: false
@@ -55,6 +60,24 @@ module.exports = function (sequelize, DataTypes) {
 
     Disciplina.belongsToMany(models.Grade, {
       through: models.DisciplinaGrade,
+      foreignKey: 'Disciplina',
+      onDelete: 'RESTRICT'
+    })
+
+    Disciplina.belongsToMany(models.GradeCursoExterno, {
+      through: models.DisciplinaGradeCursoExterno,
+      foreignKey: 'Disciplina',
+      onDelete: 'RESTRICT'
+    })
+
+    Disciplina.belongsToMany(models.GradeExterna, {
+      through: models.DisciplinaGradeExterna,
+      foreignKey: 'Disciplina',
+      onDelete: 'RESTRICT'
+    })
+
+    Disciplina.belongsToMany(models.Docente, {
+      through: models.DocenteDisciplina,
       foreignKey: 'Disciplina',
       onDelete: 'RESTRICT'
     })

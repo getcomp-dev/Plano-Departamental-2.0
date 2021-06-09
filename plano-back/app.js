@@ -14,11 +14,16 @@ const express = require('express'),
   cursoRoute = require('./routes/curso'),
   disciplinaRoute = require('./routes/disciplina'),
   pedidoRoute = require('./routes/pedido'),
+  pedidoOferecidoRoute = require('./routes/pedidoOferecido'),
   pedidoExternoRoute = require('./routes/pedidoExterno'),
   docenteRoute = require('./routes/docente'),
   docentePerfilRoute = require('./routes/docentePerfil'),
   gradeRoute = require('./routes/grade'),
   disciplinaGradeRoute = require('./routes/disciplinaGrade'),
+  gradeCursoExternoRoute = require('./routes/gradeCursoExterno'),
+  disciplinaGradeCursoExternoRoute = require('./routes/disciplinaGradeCursoExterno'),
+  gradeExternaRoute = require('./routes/gradeExterna'),
+  disciplinaGradeExternaRoute = require('./routes/disciplinaGradeExterna'),
   turmaRoute = require('./routes/turma'),
   turmaExternaRoute = require('./routes/turmaExterna'),
   salaRoute = require('./routes/sala'),
@@ -31,7 +36,10 @@ const express = require('express'),
   pdfsRoute = require('./routes/pdfs'),
   downloads = require('./routes/download'),
   novoPlanoRoute = require('./routes/novoPlano'),
-  historyRoute = require('./routes/history')
+  historyRoute = require('./routes/history'),
+  copyPlanoRoute = require('./routes/copyPlano'),
+  docenteDisciplinaRoute = require('./routes/docenteDisciplina')
+  conceitoTurmaCursoRoute = require('./routes/conceitoTurmaCurso')
 
 
 const app = express()
@@ -63,11 +71,16 @@ app.use('/api/perfil', perfilRoute)
 app.use('/api/curso', cursoRoute)
 app.use('/api/disciplina', disciplinaRoute)
 app.use('/api/pedido', pedidoRoute)
+app.use('/api/pedidoOferecido', pedidoOferecidoRoute)
 app.use('/api/pedidoExterno', pedidoExternoRoute)
 app.use('/api/docente', docenteRoute)
 app.use('/api/docentePerfil', docentePerfilRoute)
 app.use('/api/disciplinaGrade', disciplinaGradeRoute)
 app.use('/api/grade', gradeRoute)
+app.use('/api/disciplinaGradeCursoExterno', disciplinaGradeCursoExternoRoute)
+app.use('/api/gradeCursoExterno', gradeCursoExternoRoute)
+app.use('/api/disciplinaGradeExterna', disciplinaGradeExternaRoute)
+app.use('/api/gradeExterna', gradeExternaRoute)
 app.use('/api/turma', turmaRoute)
 app.use('/api/turmaExterna', turmaExternaRoute)
 app.use('/api/sala', salaRoute)
@@ -81,6 +94,9 @@ app.use('/api/pdf', pdfsRoute)
 app.use('/api/download', downloads)
 app.use('/api/novoPlano', novoPlanoRoute)
 app.use('/api/history', historyRoute)
+app.use('/api/copyPlano', copyPlanoRoute)
+app.use('/api/docenteDisciplina', docenteDisciplinaRoute)
+app.use('/api/conceitoTurmaCurso', conceitoTurmaCursoRoute)
 
 app.use(staticFileMiddleware);
 app.use(history({

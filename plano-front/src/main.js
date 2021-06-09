@@ -1,46 +1,54 @@
 import Vue from "vue";
 import App from "./App.vue";
-
-import store from "./vuex/store";
+import store from "./store";
 import router from "./router";
+import axios from "./services/axios";
 import { sync } from "vuex-router-sync";
-
-sync(store, router);
-
-import axios from "./common/services/axios";
-
-axios(Vue, store);
-// css
-import "./assets/css/botoes.css";
-import "./assets/css/tables.css";
-import "./assets/css/global.css";
-// bootstrap
-import BootstrapVue from "bootstrap-vue";
-import "bootstrap/dist/css/bootstrap.css";
-import "bootstrap-vue/dist/bootstrap-vue.css";
-import "./assets/css/fontawesome-all.css";
-Vue.use(BootstrapVue);
-
+import SocketIoInstance from "./socketInstance.js";
+import VueSocketio from "vue-socket.io";
 import PortalVue from "portal-vue";
-Vue.use(PortalVue);
-
 import Notifications from "vue-notification";
-
+import { VBPopover } from "bootstrap-vue";
+sync(store, router);
+axios(Vue, store);
+Vue.use(VueSocketio, SocketIoInstance, store);
+Vue.directive("b-popover", VBPopover);
+Vue.use(PortalVue);
 Vue.use(Notifications);
 
-import socketio from "socket.io-client";
-import VueSocketio from "vue-socket.io";
+//Global components
+import { BaseTable, BaseModal, BaseButton, VTd, VTh, VThOrdination } from "./components/global";
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-Vue.use(
-  VueSocketio,
-  socketio("http://200.131.219.57:3000", { autoConnect: false }),
-  store
-);
+library.add(fas);
+Vue.component("font-awesome-icon", FontAwesomeIcon);
+Vue.component("BaseButton", BaseButton);
+Vue.component("BaseTable", BaseTable);
+Vue.component("BaseModal", BaseModal);
+Vue.component("v-td", VTd);
+Vue.component("v-th", VTh);
+Vue.component("v-th-ordination", VThOrdination);
+
+//Global mixins
+import { mapActions, mapGetters } from "vuex";
+Vue.mixin({
+  methods: {
+    ...mapActions(["pushNotification", "setLoading"]),
+  },
+  computed: {
+    ...mapGetters(["currentPlano"]),
+  },
+});
+
+//css
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./assets/styles/global.scss";
 
 Vue.config.productionTip = false;
 
 var vm = new Vue({
-  data: { onLoad: false },
   router,
   store,
   render: (h) => h(App),

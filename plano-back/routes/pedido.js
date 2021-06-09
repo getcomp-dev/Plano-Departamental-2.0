@@ -1,7 +1,8 @@
 const models = require('../models/index'),
     router = require('express').Router(),
     ioBroadcast = require('../library/socketIO').broadcast,
-    SM = require('../library/SocketMessages')
+    SM = require('../library/SocketMessages'),
+    child_process = require('child_process')
 
 const history = function(params){
     models.History.create({
@@ -39,7 +40,7 @@ router.post('/', function (req, res, next) {
 })
 
 router.get('/', function (req, res, next) {
-    models.Pedido.findAll().then(function (pedidos) {
+    models.Pedido.findAll({attributes: ['vagasPeriodizadas', 'vagasNaoPeriodizadas', 'createdAt', 'updatedAt', 'Curso', 'Turma', 'editado1', 'editado2']}).then(function (pedidos) {
 
         res.send({
             success: true,
@@ -53,8 +54,8 @@ router.get('/', function (req, res, next) {
 
 router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
     console.log('\nRequest de '+req.usuario.nome+'\n')
-
     models.Pedido.findOne({
+        attributes: ['vagasPeriodizadas', 'vagasNaoPeriodizadas', 'createdAt', 'updatedAt', 'Curso', 'Turma'],
         where: {
             Curso: req.params.Curso,
             Turma: req.params.Turma
@@ -75,24 +76,22 @@ router.post('/:Curso([0-9]+)&&:Turma([0-9]+)', function (req, res, next) {
         if(pedido.Turma != req.body.Turma)
             history({fieldName:'Turma', lineId:`${pedido.Turma}/${pedido.Curso}`, oldValue: pedido.Turma, newValue: req.body.Turma, operationType:'Edit', user: req.usuario.nome})
 
+        let child = child_process.fork('./library/childProcesses.js', ['pedido'])
+        child.send(req.body)
+        child.on('message', function(result){
+            if(result.success){
+                ioBroadcast(SM.PEDIDO_UPDATED, {'msg': 'Pedido atualizado!', 'Pedido': result.pedido})
+                console.log('\nRequest de '+req.usuario.nome+'\n')
 
-        return pedido.updateAttributes({
-            vagasPeriodizadas: req.body.vagasPeriodizadas,
-            vagasNaoPeriodizadas: req.body.vagasNaoPeriodizadas,
-            Curso: req.body.Curso,
-            Turma: req.body.Turma
+                res.send({
+                    success: true,
+                    message: 'Pedido atualizado',
+                    Pedido: result.pedido
+                })
+            }else{
+                return next(result.err, req, res)
+            }
         })
-    }).then(function (pedido) {
-        ioBroadcast(SM.PEDIDO_UPDATED, {'msg': 'Pedido atualizado!', 'Pedido': pedido})
-        console.log('\nRequest de '+req.usuario.nome+'\n')
-
-        res.send({
-            success: true,
-            message: 'Pedido atualizado',
-            Pedido: pedido
-        })
-    }).catch(function (err) {
-        return next(err, req, res)
     })
 })
 

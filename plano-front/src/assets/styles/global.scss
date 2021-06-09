@@ -1,0 +1,129 @@
+@import url("https://fonts.googleapis.com/css2?family=Crete+Round&display=swap");
+@import "./reset.scss";
+@import "./btn-cores.scss";
+@import "./slideY-animation.scss";
+@import "./theme.scss";
+
+:root {
+  --navbar-height: 30px;
+}
+@media screen and (max-width: 614px) {
+  :root {
+    --navbar-height: 60px;
+  }
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+
+  main > .main-component {
+    width: 100%;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+  }
+  main .page-content {
+    display: flex;
+    justify-content: space-between;
+    justify-items: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    flex-wrap: wrap;
+  }
+}
+
+.popover {
+  font-size: 11px;
+  .popover-header {
+    font-size: 11px;
+    font-weight: bold;
+  }
+  .popover-body {
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+}
+
+label[required] {
+  position: relative;
+
+  &:after {
+    content: "*";
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    top: 0;
+    left: 100%;
+    width: 20px;
+    font-size: 16px;
+    color: #f10303;
+  }
+
+  &:before {
+    content: "Campo obrigatório";
+    display: none;
+    position: absolute;
+    z-index: 500;
+    top: calc(-100% - 10px);
+    left: 0;
+    transform: translateX(-30%);
+    width: max-content;
+    font-size: 12px;
+    padding: 3px 5px;
+    color: $clr-lightgray;
+    background-color: #585858;
+    transition: all 200ms;
+    pointer-events: none;
+  }
+  &:hover:before {
+    display: block;
+  }
+}
+
+.modal-custom .list-group {
+  font-size: 12px;
+  text-align: start;
+  line-height: 1.5;
+}
+/* Others */
+.div-table {
+  overflow: hidden;
+  height: -webkit-max-content;
+  height: -moz-max-content;
+  height: max-content;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  padding: 0;
+}
+.clickable {
+  cursor: pointer !important;
+  * {
+    cursor: pointer !important;
+  }
+}
+.max-content {
+  width: -webkit-max-content !important;
+  width: -moz-max-content !important;
+  width: max-content !important;
+}
+.low-opacity {
+  opacity: 0.4;
+}
+.borderX-0 {
+  border-right: none !important;
+  border-left: none !important;
+}
+.paddingX-20 {
+  padding-right: 20px !important;
+  padding-left: 20px !important;
+}
+
+/* Transitions */
+.fade-transition-enter-active {
+  animation: fadeIn 300ms;
+}
+.fade-transition-leave-active {
+  animation: fadeOut 300ms;
+}

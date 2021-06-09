@@ -2,7 +2,10 @@ const models = require('../models/index'),
     router = require('express').Router(),
     ioBroadcast = require('../library/socketIO').broadcast,
     SM = require('../library/SocketMessages'),
-    CustomError = require('../library/CustomError')
+    CustomError = require('../library/CustomError'),
+    child_process = require('child_process')
+
+const { Op } = require("sequelize");
 
 const history = function(params){
     models.History.create({
@@ -19,38 +22,61 @@ const history = function(params){
 }
 
 router.post('/', function (req, res, next) {
-    console.log('\nRequest de '+req.usuario.nome+'\n')
-    models.Turma.create({
-        periodo: req.body.periodo,
-        letra: req.body.letra,
-        turno1:  req.body.turno1,
-        turno2: req.body.turno2,
-        Disciplina: req.body.Disciplina,
-        Docente1: req.body.Docente1,
-        Docente2: req.body.Docente2,
-        Horario1: req.body.Horario1,
-        Horario2: req.body.Horario2,
-        Sala1: req.body.Sala1,
-        Sala2: req.body.Sala2
+    console.log('\nRequest de '+req.usuario.nome+'\n');
+    let child = child_process.fork('./library/childProcesses.js', ['turma'])
+    child.send(req.body)
+    child.on('message', function(result){
+        if(result.success){
+            ioBroadcast(SM.TURMA_CREATED, {'msg': 'Turma criada!', 'Turma': result.turma})
+            console.log('\nRequest de '+req.usuario.nome+'\n')
 
-    }).then(function (turma) {
-        ioBroadcast(SM.TURMA_CREATED, {'msg': 'Turma criada!', 'Turma': turma})
-        console.log('\nRequest de '+req.usuario.nome+'\n')
+            history({operationType: "Create", user: req.usuario.nome, lineId: `${result.turma.letra}/${result.turma.Disciplina}`})
 
-        history({operationType: "Create", user: req.usuario.nome, lineId: `${turma.letra}/${turma.Disciplina}`})
+            res.send({
+                success: true,
+                message: 'Turma criada!',
+                Turma: result.turma
+            })
+        }else{
+            return next(result.err, req, res)
+        }
 
+    })
+})
+
+router.get('/Plano/:id([0-9]+)', function (req, res, next) {
+    models.Turma.findAll({where:{Plano:req.params.id}}).then(function (turmas) {
         res.send({
             success: true,
-            message: 'Turma criada!',
-            Turma: turma
+            message: 'Turmas listadas',
+            Turmas: turmas
         })
     }).catch(function (err) {
         return next(err, req, res)
     })
 })
 
-router.get('/', function (req, res, next) {
-    models.Turma.findAll().then(function (turmas) {
+router.post('/busca', function (req, res, next) {
+    console.log(req.body.Docentes.length)
+    models.Turma.findAll({where:{
+        [Op.and]: [
+            (req.body.Planos.length > 0 ? {Plano: [...req.body.Planos]} : true),
+            (req.body.Disciplinas.length > 0 ? {Disciplina: [req.body.Disciplinas]} : true),
+            (req.body.Docentes.length > 0 ? {[Op.or]: [
+                {Docente1: [...req.body.Docentes]},
+                {Docente2: [...req.body.Docentes]}
+            ]} : true),
+            (req.body.Horarios.length > 0 ? {[Op.or]: [
+                {Horario1: [...req.body.Horarios]},
+                {Horario2: [...req.body.Horarios]}
+            ]} : true),
+            (req.body.Salas.length > 0 ? {[Op.or]: [
+                {Sala1: [...req.body.Salas]},
+                {Sala2: [...req.body.Salas]}
+            ]} : true),
+            (req.body.Periodos.length > 0 ? {periodo: [...req.body.Periodos]} : true),
+        ]
+        }}).then(function (turmas) {
         res.send({
             success: true,
             message: 'Turmas listadas',

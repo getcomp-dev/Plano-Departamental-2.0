@@ -10,6 +10,10 @@ module.exports = function (sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false
     },
+    nomesiga: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     creditos: {
       type: DataTypes.INTEGER,
       allowNull: false
@@ -51,6 +55,12 @@ module.exports = function (sequelize, DataTypes) {
         name: 'Docente',
         allowNull:true
       },
+      onDelete: 'RESTRICT'
+    })
+
+    Docente.belongsToMany(models.Disciplina, {
+      through: models.DocenteDisciplina,
+      foreignKey: 'Docente',
       onDelete: 'RESTRICT'
     })
   }

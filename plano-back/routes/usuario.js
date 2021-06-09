@@ -67,6 +67,43 @@ router.post('/:id([0-9]+)', function (req, res, next) {
     })
 })
 
+router.post('/super/:id([0-9]+)', function (req, res, next) {
+    models.Usuario.findOne({
+        where: {
+            id: req.params.id
+        }
+    }).then(function (usuario) {
+        if (!usuario)
+            throw new CustomError(400, 'Usuário inválido')
+        if(req.body.senha){
+            return usuario.updateAttributes({
+
+                nome: req.body.nome,
+                login: req.body.login,
+                senha:  passwordHash.generate(req.body.senha),
+                admin: req.body.admin
+            })
+        } else {
+            return usuario.updateAttributes({
+
+                nome: req.body.nome,
+                login: req.body.login,
+                admin: req.body.admin
+            })
+        }
+
+    }).then(function (usuario) {
+        ioBroadcast(SM.USUARIO_UPDATED, {'msg': 'Usu[ario atualizado!', 'Usuario': usuario})
+        res.send({
+            success: true,
+            message: 'Usuário atualizado',
+            Usuario: _.omit(usuario.toJSON(), 'senha')
+        })
+    }).catch(function (err) {
+        return next(err, req, res)
+    })
+})
+
 router.delete('/:id([0-9]+)', function (req, res, next) {
     models.Usuario.findOne({
         where: {

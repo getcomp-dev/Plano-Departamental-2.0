@@ -2,7 +2,8 @@ const express = require('express'),
       router = require('express').Router(),
       JSZip = require('jszip'),
       fs = require('fs'),
-      mysqldump = require('mysqldump')
+      mysqldump = require('mysqldump'),
+      axios = require('axios')
 
 
 router.get('/', function(req, res, next){
@@ -36,6 +37,14 @@ router.get('/', function(req, res, next){
         })
         zip.file("Horarios.pdf", horarios)
         console.log('pdf adicionado ao .zip')
+
+        let plano = fs.readFileSync('./Plano-departamental.pdf', (err, data) => {
+            if(err) throw err
+            return data
+        })
+        zip.file("Plano-departamental.pdf", plano)
+        console.log('pdf adicionado ao .zip')
+
         console.log('criando sql')
         fs.open('backup.sql', 'w', function (err, file) {
             if (err) throw err;
@@ -47,7 +56,7 @@ router.get('/', function(req, res, next){
                     host: 'localhost',
                     user: 'root',
                     password: '',
-                    database: 'plano_dev',
+                    database: 'mult_planos',
                 },dumpToFile: './backup.sql',
             }
         ).then(() => {
@@ -68,8 +77,50 @@ router.get('/', function(req, res, next){
 
 })
 
+router.get('/createTurmasCursosZip', async function(req, res, next){
+    const zip = new JSZip()
+    let filenames = fs.readdirSync('/home/planodcc/Plano-Departamental-2.0/plano-back/TurmasCursos')
+    let promises = []
+    filenames.forEach((f) => {
+        promises.push(new Promise((resolve, reject) => {
+            fs.readFile(`./TurmasCursos/${f}`, (err, data) => {
+                if(err) {
+                    reject(err)
+                    throw err
+                }
+                else {
+                    console.log(`${f}, ${Buffer.byteLength(data)} bytes`)
+                    zip.file(f, data, {binary: true, compression : "DEFLATE"})
+                    resolve(data)
+                }
+            })
+        }))
+
+    })
+    Promise.all(promises).then(() => {
+        zip.generateNodeStream({type:'nodebuffer',streamFiles:false})
+            .pipe(fs.createWriteStream('TurmasCursos.zip'))
+            .on('finish', function () {
+                console.log("TurmasCursos.zip written.");
+                res.send({success: true})
+            });
+
+    })
+
+})
+
+router.get('/downloadTurmasCursosZip', function(req, res, next){
+    res.download('./TurmasCursos.zip', 'TurmasCursos.zip')
+})
+
 router.get('/all', function(req, res, next){
     res.download('./data.zip', 'data.zip')
+})
+
+router.post('/syncdrive', function(req, res, next){
+    axios.post('http://200.131.219.57:3001').then( () => {
+	res.send("DONE!")
+    })
 })
 
 module.exports = router

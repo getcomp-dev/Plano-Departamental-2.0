@@ -1,0 +1,29 @@
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin base-transition($property) {
+  transition: $property ease 200ms;
+}
+
+@mixin no-focus {
+  &:focus {
+    box-shadow: none !important;
+    outline: 0 !important;
+  }
+}
+
+@mixin custom-scrollbar($width) {
+  & ::-webkit-scrollbar-track {
+    background-color: #f4f4f4;
+  }
+  &::-webkit-scrollbar {
+    width: $width;
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #666;
+  }
+}

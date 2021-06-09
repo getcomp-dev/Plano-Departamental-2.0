@@ -9,7 +9,15 @@ module.exports = function (sequelize, DataTypes) {
     vagasNaoPeriodizadas: {
       type: DataTypes.INTEGER,
       allowNull: false
-    }
+    },
+    editado1: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
+    },
+    editado2: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true
+    },
   }, {
     freezeTableName: true
   })

@@ -14,6 +14,7 @@ router.post('/', function(req, res, next){
         horarios = models.Horario.findAll(),
         salas = models.Sala.findAll(),
         perfis = models.Perfil.findAll()
+    let PlanoAtual = parseInt(req.body.Plano )
 
     Promise.all([cursos, turmas, disciplinas, docentes, horarios, salas, perfis]).then(function (result) {
         let cursos = [],
@@ -32,13 +33,14 @@ router.post('/', function(req, res, next){
         result[6].forEach((perfil) => perfis.push(perfil.dataValues))
 
         cursos = _.orderBy(cursos, 'posicao')
-        turmas = _.orderBy(_.orderBy(_.orderBy(_.orderBy(_.filter(turmas, function(t) { return t.Disciplina !== null}), 'letra'), 'Disciplina'), 'Perfil'), 'periodo')
+        turmas = _.orderBy(_.orderBy(_.orderBy(_.orderBy(_.filter(_.filter(turmas, {Plano: PlanoAtual}), function(t) { return t.Disciplina !== null}), 'letra'), 'Disciplina'), 'Perfil'), 'periodo')
 
         let data = []
         var header = ["S.", "Cod", "Disciplina", "C.", "Turma", "Horário", "Docente", "Turno", "Sala", "Total"]
         if (cursos.length > 0) {
             cursos.forEach(function (curso) {
-                header.push(curso.codigo)
+                header.push(curso.codigo + ' Grade')
+                header.push(curso.codigo + ' Extra')
             })
         }
         data.push(header)
@@ -61,7 +63,7 @@ router.post('/', function(req, res, next){
                 line.push(turma.periodo)
 
                 if (disciplina !== undefined) {
-                    console.log(disciplina.nome)
+
                     line.push(disciplina.codigo)
                     line.push(disciplina.nome)
                     let carga = (disciplina.cargaTeorica + disciplina.cargaPratica)
@@ -168,7 +170,8 @@ router.post('/', function(req, res, next){
                                 return false
                         })
                         if(pedido){
-                            pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
+                            ((pedido.vagasPeriodizadas === 0) ? pds.push('') : pds.push(pedido.vagasPeriodizadas));
+                            ((pedido.vagasNaoPeriodizadas === 0) ? pds.push('') : pds.push(pedido.vagasNaoPeriodizadas));
                             total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
                         }else{
                             pds.push('')
@@ -178,7 +181,7 @@ router.post('/', function(req, res, next){
                     }
                 }
                 line.push(total)
-                console.log(pds)
+
                 pds.forEach(function(pd){
                     line.push(pd)
                 })
@@ -204,7 +207,7 @@ router.post('/', function(req, res, next){
                     line.push(turma.periodo)
 
                     if (disciplina !== undefined) {
-                        console.log(disciplina.nome)
+
                         line.push(disciplina.codigo)
                         line.push(disciplina.nome)
                         let carga = (disciplina.cargaTeorica + disciplina.cargaPratica)
@@ -310,7 +313,8 @@ router.post('/', function(req, res, next){
                                     return false
                             })
                             if(pedido){
-                                pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
+                                ((pedido.vagasPeriodizadas === 0) ? pds.push('') : pds.push(pedido.vagasPeriodizadas));
+                                ((pedido.vagasNaoPeriodizadas === 0) ? pds.push('') : pds.push(pedido.vagasNaoPeriodizadas));
                                 total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
                             }else{
                                 pds.push('')
@@ -320,7 +324,7 @@ router.post('/', function(req, res, next){
                         }
                     }
                     line.push(total)
-                    console.log(pds)
+
                     pds.forEach(function(pd){
                         line.push(pd)
                     })
@@ -341,10 +345,10 @@ router.post('/', function(req, res, next){
             result[0].forEach(turma => turmasExternas.push(turma.dataValues))
             result[1].forEach(pedido => pedidosExternos.push(pedido.dataValues))
 
-            turmasExternas = _.orderBy(_.orderBy(_.filter(turmasExternas, function(t) { return t.Disciplina !== null}), 'letra'), 'Disciplina')
+            turmasExternas = _.orderBy(_.orderBy(_.filter(turmasExternas, {Plano: PlanoAtual}), 'letra'), 'Disciplina')
 
             let dataExterna = []
-            const header = ["S.", "Cod", "Disciplina", "C.", "Turma", "Horário", "Turno", "Sala", "Total", "35A", "65B", "76A", "65C"]
+            const header = ["S.", "Cod", "Disciplina", "C.", "Turma", "Horário", "Turno", "Sala", "Total", "35A Grade", "35A Extra", "65B Grade", "65B Extra", "76A Grade", "76A Extra", "65C Grade", "65C Extra"]
             dataExterna.push(header)
             for(let i=0; i < turmasExternas.length; i++) {
                 let turma = turmasExternas[i]
@@ -360,7 +364,7 @@ router.post('/', function(req, res, next){
                 line.push(turma.periodo)
 
                 if (disciplina !== undefined) {
-                    console.log(disciplina.nome)
+
                     line.push(disciplina.codigo)
                     line.push(disciplina.nome)
                     let carga = (disciplina.cargaTeorica + disciplina.cargaPratica)
@@ -436,8 +440,8 @@ router.post('/', function(req, res, next){
                             return false
                     })
                     if (pedido) {
-                        console.log(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
-                        pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
+                        ((pedido.vagasPeriodizadas === 0) ? pds.push('') : pds.push(pedido.vagasPeriodizadas));
+                        ((pedido.vagasNaoPeriodizadas === 0) ? pds.push('') : pds.push(pedido.vagasNaoPeriodizadas));
                         total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
                     } else {
                         pds.push('')
@@ -451,7 +455,6 @@ router.post('/', function(req, res, next){
                 })
                 dataExterna.push(line)
             }
-            console.log("parte 2")
             for(let i=0; i < turmasExternas.length; i++) {
                 let turma = turmasExternas[i]
                 if (turma.periodo === 1)
@@ -466,7 +469,7 @@ router.post('/', function(req, res, next){
                 line.push(turma.periodo)
 
                 if (disciplina !== undefined) {
-                    console.log(disciplina.nome)
+
                     line.push(disciplina.codigo)
                     line.push(disciplina.nome)
                     let carga = (disciplina.cargaTeorica + disciplina.cargaPratica)
@@ -542,8 +545,8 @@ router.post('/', function(req, res, next){
                             return false
                     })
                     if (pedido) {
-                        console.log(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
-                        pds.push(pedido.vagasPeriodizadas + '/' + pedido.vagasNaoPeriodizadas)
+                        ((pedido.vagasPeriodizadas === 0) ? pds.push('') : pds.push(pedido.vagasPeriodizadas));
+                        ((pedido.vagasNaoPeriodizadas === 0) ? pds.push('') : pds.push(pedido.vagasNaoPeriodizadas));
                         total = total + pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas
                     } else {
                         pds.push('')
@@ -557,16 +560,16 @@ router.post('/', function(req, res, next){
                 })
                 dataExterna.push(line)
             }
-            console.log(dataExterna)
+
             let wsExterno = XLSX.utils.aoa_to_sheet(dataExterna)
             XLSX.utils.book_append_sheet(wb, wsExterno, "Externas")
-            console.log("Sheet adicionado")
+
 
             models.CargaPos.findAll().then(function(result){
                 let cargas = []
                 result.forEach(carga => cargas.push(carga.dataValues))
 
-                cargas = _.orderBy(_.orderBy(cargas, 'Docente'), 'trimestre')
+                cargas = _.orderBy(_.orderBy(_.filter(cargas, {Plano: PlanoAtual}), 'Docente'), 'trimestre')
                 let dataPos = []
                 const header = ["T.", "Docente", "Programa", "C."]
                 dataPos.push(header)

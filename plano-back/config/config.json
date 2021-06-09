@@ -3,7 +3,7 @@
     "database": {
       "username": "root",
       "password": "",
-      "database": "plano_dev",
+      "database": "mult_planos",
       "options": {
         "host": "127.0.0.1",
         "dialect": "mysql",
