@@ -10,6 +10,10 @@
       <span v-if="onLoading.progress" class="progress-text">
         {{ loadingProgress.currentPercentage }}%
       </span>
+
+      <div class="content">
+        <portal-target name="loading-content" />
+      </div>
     </div>
   </transition>
 </template>
@@ -43,6 +47,15 @@ export default {
   backdrop-filter: blur(0.5px);
   cursor: wait;
 
+  .content {
+    position: fixed;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
   .loading-spin {
     position: fixed;
     display: inline-block;

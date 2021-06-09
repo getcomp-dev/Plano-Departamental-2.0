@@ -29,6 +29,13 @@ export default {
       .catch((error) => Promise.reject(error));
   },
 
+  syncDrive(config = {}) {
+    return Vue.axios
+      .post("/download/syncdrive", config)
+      .then((response) => Promise.resolve(response.data))
+      .catch((error) => Promise.reject(error));
+  },
+
   downloadZipTurmasCursos(config = {}) {
     return Vue.axios
       .get("/download/downloadTurmasCursosZip", config)

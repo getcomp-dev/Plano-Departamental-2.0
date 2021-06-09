@@ -3,7 +3,7 @@
     ref="baseModalPlano"
     title="Plano Departamental"
     type="editTurma"
-    class="modal-plano"
+    classes="modal-plano"
     :hasOverlay="true"
     :hasFooter="true"
   >
@@ -14,13 +14,13 @@
         @change-tab="currentTab = $event"
       />
       <ImportPlano
-        v-show="currentTab === 'Importar'"
+        v-if="currentTab === 'Importar'"
         ref="importPlano"
         :plano="plano"
         :closeModal="close"
       />
       <CopyPlano
-        v-show="currentTab === 'Copiar'"
+        v-if="currentTab === 'Copiar'"
         ref="copyPlano"
         :plano="plano"
         :closeModal="close"
@@ -40,7 +40,7 @@
           @click="$refs.copyPlano.selectNoneDisciplinas()"
         />
 
-        <BaseButton text="OK" color="green" class="px-3" @click="handleCreatePlano" />
+        <BaseButton text="OK" color="green" class="px-3 ml-auto" @click="handleCreatePlano" />
       </template>
 
       <template v-else>

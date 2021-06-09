@@ -11,11 +11,8 @@ import {
   getCursoById,
 } from "./helpers";
 import { filter, orderBy } from "lodash-es";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
-async function pdfPlanoDepartamental(data) {
+export async function pdfPlanoDepartamental(data) {
   const { disciplinasInTurmas, periodosAtivos, plano } = data;
   const tables = [];
   const headerImages = await getHeaderImages();
@@ -89,7 +86,7 @@ async function pdfPlanoDepartamental(data) {
             tables.push({
               style: "tableExample",
               table: {
-                widths: [36, 35, "*", 18, 36, 28, 32, 42],
+                widths: [50, 35, "*", 18, 36, 28, 32, 42],
                 headerRows: 1,
                 color: "#426",
                 body: [
@@ -226,7 +223,9 @@ async function pdfPlanoDepartamental(data) {
       };
     },
   };
+
+  const { default: pdfMake } = await import("pdfmake/build/pdfmake");
+  const { default: pdfFonts } = await import("pdfmake/build/vfs_fonts");
+  pdfMake.vfs = pdfFonts.pdfMake.vfs;
   pdfMake.createPdf(docDefinition).open();
 }
-
-export default pdfPlanoDepartamental;

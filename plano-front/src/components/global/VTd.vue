@@ -7,6 +7,7 @@
       textAlign: align,
       whiteSpace: whiteSpace,
     }"
+    :title="title ? title : defualtTitle"
     :class="`v-td td-${type}`"
     @click="$emit('click')"
   >
@@ -22,10 +23,11 @@ export default {
   name: "v-td",
   props: {
     type: { type: String, default: "text" },
-    width: { type: [String, Number], required: true },
+    width: { type: [String, Number], defualt: "" },
     align: { type: String, default: "center" },
     paddingX: { type: [String, Number], default: "5" },
     whiteSpace: { type: String, default: "nowrap" },
+    title: { type: [String, Number], default: "" },
   },
 
   computed: {
@@ -34,6 +36,15 @@ export default {
     },
     tdPadding() {
       return `0 ${this.paddingX}px`;
+    },
+    defualtTitle() {
+      if (
+        "default" in this.$slots &&
+        this.$slots.default.length === 1 &&
+        this.$slots.default[0].text
+      )
+        return this.$slots.default[0].text;
+      else return "";
     },
   },
 };

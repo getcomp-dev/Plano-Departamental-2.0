@@ -1,73 +1,37 @@
 <template>
-  <v-th
-    @click.native="toggleOrder"
-    :align="align"
-    :width="width"
-    :paddingX="paddingX"
-    class="clickable"
-  >
-    <div v-if="orderFixed" class="container-fixed-order">
+  <v-th @click.native="toggleOrder" :width="width" class="v-th">
+    <div class="position-relative max-content mx-auto">
+      <slot></slot>
+
       <font-awesome-icon
-        v-if="align === 'center'"
+        v-if="orderFixed"
         :icon="['fas', 'thumbtack']"
-        :class="{ 'low-opacity': currentOrder.order === null }"
+        :class="['icon-fixed', { 'low-opacity': currentOrder.order === null }]"
         title="Ordenação fixa"
       />
-      <span>
-        {{ text }}
-        <template v-if="text === ''">
-          <slot></slot>
-        </template>
-      </span>
 
-      <div>
-        <font-awesome-icon
-          :icon="['fas', 'thumbtack']"
-          v-if="align === 'start'"
-          class="mx-1"
-          :class="{ 'low-opacity': currentOrder.order === null }"
-          title="Ordenação fixa"
-        />
-
-        <OrdinationArrow
-          :currentOrder="currentOrder"
-          :orderToCheck="orderToCheck"
-          :orderType="orderType"
-        />
-      </div>
-    </div>
-
-    <template v-else>
-      {{ text }}
-      <template v-if="text === ''">
-        <slot></slot>
-      </template>
       <OrdinationArrow
+        :class="['icon-arrow', { 'is-fixed': orderFixed }]"
         :currentOrder="currentOrder"
         :orderToCheck="orderToCheck"
         :orderType="orderType"
       />
-    </template>
+    </div>
   </v-th>
 </template>
 
 <script>
-import Vth from "./VTh";
 import OrdinationArrow from "@/components/ui/OrdinationArrow";
 
 export default {
   name: "v-th-ordination",
-  components: { OrdinationArrow, "v-th": Vth },
+  components: { OrdinationArrow },
   props: {
     currentOrder: { type: Object, required: true },
     orderToCheck: { type: String, required: true },
     orderType: { type: String, default: "asc" },
     orderFixed: { type: Boolean, default: false },
-
-    text: { type: String, default: "" },
-    align: { type: String, default: "center" },
     width: { type: [String, Number], required: true },
-    paddingX: { type: [String, Number], default: "5" },
   },
 
   methods: {
@@ -87,19 +51,33 @@ export default {
       }
     },
   },
-  computed: {
-    tdWidth() {
-      return `${parseInt(this.width, 10)}px`;
-    },
-  },
 };
 </script>
 
-<style scoped>
-.container-fixed-order {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+<style lang="scss" scoped>
+.v-th {
+  &:hover {
+    transition: all ease 0.3s;
+    filter: brightness(95%);
+    cursor: pointer;
+  }
+
+  svg {
+    width: 7.5px !important;
+
+    &.icon-arrow {
+      position: absolute;
+      top: 50%;
+      right: -14px;
+      transform: translate(-50%, -50%);
+    }
+
+    &.icon-fixed {
+      position: absolute;
+      top: 50%;
+      left: -14px;
+      transform: translate(50%, -50%);
+    }
+  }
 }
 </style>

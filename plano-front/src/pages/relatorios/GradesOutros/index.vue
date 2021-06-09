@@ -6,15 +6,12 @@
           <span class="input-group-text">Ano</span>
         </div>
         <select class="form-control" v-model="novoAno" @change="runNovoAno">
-          <option
-            v-for="i in Array.from(Array(11), (e, i) => i - 5)"
-            :key="i"
-            :value="AnoAtual + i"
-          >
-            {{ AnoAtual + i }}
+          <option v-for="ano in AnosDoPlano" :key="'ano' + ano" :value="ano">
+            {{ ano }}
           </option>
         </select>
       </div>
+
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </portal>
@@ -122,7 +119,7 @@
         :hasSearchBar="true"
       >
         <template #thead-search>
-          <InputSearch
+          <VInputSearch
             v-model="searchDisciplinas"
             placeholder="Pesquise nome ou codigo de uma disciplina..."
           />
@@ -227,11 +224,17 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Visualizar disciplinas na grade:</b>
+        <b>Visualizar conteúdo:</b>
         Clique no ícone filtros
         <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
         . Em seguida, utilize as abas para navegar entre os filtros. Selecione as informações que
         deseja visualizar, incluindo o ano do plano departamental, e clique em OK.
+      </li>
+      <li class="list-group-item">
+        <b>Alterar ano:</b>
+        Utilizando o componente de ano no cabeçalho da página é possivel alterar o ano de
+        visualização das grades. Com isso pode-se observar a transição entre diferentes grades com o
+        passar dos anos.
       </li>
     </ModalAjuda>
   </div>
@@ -247,24 +250,19 @@ import {
   conectaFiltroPerfisEDisciplinas,
   preventClickSelection,
 } from "@/common/mixins";
-import { InputSearch } from "@/components/ui";
+import { VInputSearch } from "@/components/ui";
 import { ModalAjuda, ModalFiltros } from "@/components/modals";
 import DisciplinaOutrosRow from "./DisciplinaRow";
 
 export default {
   name: "GradesDCC",
+  components: { VInputSearch, ModalAjuda, ModalFiltros, DisciplinaOutrosRow },
   mixins: [
     toggleItemInArray,
     toggleAsideModal,
     conectaFiltroPerfisEDisciplinas,
     preventClickSelection,
   ],
-  components: {
-    InputSearch,
-    ModalAjuda,
-    ModalFiltros,
-    DisciplinaOutrosRow,
-  },
   data() {
     return {
       searchDisciplinas: "",
@@ -386,7 +384,6 @@ export default {
         );
       });
     },
-
     get1Periodo() {
       //Armazena os períodos de cada disciplina no primeiro semestre
       //retorna lista com os ids das disciplinas
@@ -515,11 +512,9 @@ export default {
         });
       });
     },
-
     somaPeriodos(periodo1, periodo2) {
       const periodo1Number = periodo1.length ? periodo1[0] : 100;
       const periodo2Number = periodo2.length ? periodo2[0] : 100;
-
       return periodo1Number + periodo2Number;
     },
   },
@@ -531,7 +526,8 @@ export default {
       "AllPerfis",
       "AllCursos",
       "AllGradesCursosExternos",
-      "DisciplinasDasGradesCursosExternos",
+      "DisciplinasGradesExternas",
+      "AnosDoPlano",
     ]),
 
     CursosComGrades() {
@@ -544,7 +540,6 @@ export default {
       Cursos = orderBy(Cursos, "codigo");
       return Cursos;
     },
-
     DisciplinasOrderedMain() {
       let disciplinasResult = this.DisciplinasFiltredMain;
 
@@ -589,12 +584,6 @@ export default {
 
       return disciplinaResult;
     },
-
-    AnoAtual() {
-      return find(this.$store.state.plano.Plano, {
-        id: parseInt(localStorage.getItem("Plano"), 10),
-      }).ano;
-    },
     cursosAtivados() {
       return {
         CCD: some(this.filtroCursos.ativados, ["codigo", "65C"]),
@@ -623,17 +612,15 @@ export default {
         return nome.match(searchNormalized) || codigo.match(searchNormalized);
       });
     },
-
     DisciplinasComGrades() {
       let Disciplinas = [];
-      this.DisciplinasDasGradesCursosExternos.forEach((g) => {
+      this.DisciplinasGradesExternas.forEach((g) => {
         if (!find(Disciplinas, { id: g.Disciplina })) {
           Disciplinas.push(find(this.AllDisciplinas, { id: g.Disciplina }));
         }
       });
       return Disciplinas;
     },
-
     DisciplinasOptions() {
       return this.DisciplinasComGrades;
     },

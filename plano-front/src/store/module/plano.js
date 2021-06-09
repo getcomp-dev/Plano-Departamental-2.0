@@ -88,6 +88,8 @@ const actions = {
       dispatch("setLoading", { type: "fetching", value: true });
       dispatch("setCurrentPlanoId", planoId);
       await dispatch("fetchAllTurmas");
+      await dispatch("fetchAllPedidos");
+      await dispatch("fetchAllCargaPos");
       $socket.open();
     } catch (error) {
       console.log(error);
@@ -148,15 +150,15 @@ const getters = {
     let firstYear = 2000;
     const currentYear = new Date().getFullYear();
     const lastYear = currentYear + 5;
-    const yearsArry = [];
+    const yearsArray = [];
 
     while (firstYear <= lastYear) {
-      yearsArry.push(parseInt(firstYear, 10));
+      yearsArray.push(parseInt(firstYear, 10));
       firstYear++;
     }
-    yearsArry.push(2099); // plano de dev
+    yearsArray.push(2099); // plano de dev
 
-    return yearsArry;
+    return yearsArray;
   },
 };
 

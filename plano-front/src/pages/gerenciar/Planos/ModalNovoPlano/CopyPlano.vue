@@ -9,7 +9,7 @@
     <div class="div-table">
       <BaseTable type="modal" :hasSearchBar="true" :styles="'max-height:500px; height:500px'">
         <template #thead-search>
-          <InputSearch
+          <VInputSearch
             v-model="searchDisciplinasModal"
             placeholder="Pesquise nome ou codigo de uma disciplina..."
           />
@@ -77,13 +77,12 @@ import pedidoExternoService from "@/services/pedidoExterno";
 import turmaExternaService from "@/services/turmaExterna";
 import { normalizeText } from "@/common/utils";
 import { toggleItemInArray, preventClickSelection } from "@/common/mixins";
-import { InputSearch } from "@/components/ui";
-//import semestresLetivos from "../../../../store/module/semestresLetivos";
+import { VInputSearch } from "@/components/ui";
 
 export default {
   name: "ModalNovoPlano",
   mixins: [toggleItemInArray, preventClickSelection],
-  components: { InputSearch },
+  components: { VInputSearch },
   props: {
     plano: { type: Object, required: true },
     closeModal: { type: Function, required: true },
@@ -462,7 +461,7 @@ export default {
       for (let prop in gradesExternasAtivas.semestre1) {
         let curso = find(this.AllCursos, { codigo: prop });
         for (let i = 0; i < gradesExternasAtivas.semestre1[prop].length; i++) {
-          let disciplinasGrade = filter(this.DisciplinasDasGradesCursosExternos, {
+          let disciplinasGrade = filter(this.DisciplinasGradesExternas, {
             Grade: gradesExternasAtivas.semestre1[prop][i].id,
           });
 
@@ -612,10 +611,10 @@ export default {
           }
         });
       }
-      for (let prop in gradesExternasAtivas.semestre1) {
+      for (let prop in gradesExternasAtivas.semestre2) {
         let curso = find(this.AllCursos, { codigo: prop });
-        for (let i = 0; i < gradesExternasAtivas.semestre1[prop].length; i++) {
-          let disciplinasGrade = filter(this.DisciplinasDasGradesCursosExternos, {
+        for (let i = 0; i < gradesExternasAtivas.semestre2[prop].length; i++) {
+          let disciplinasGrade = filter(this.DisciplinasGradesExternas, {
             Grade: gradesExternasAtivas.semestre2[prop][i].id,
           });
 
@@ -900,6 +899,31 @@ export default {
                       console.log("erro ao atualizar pedido: " + error);
                     });
                 }
+                for (let prop in t) {
+                  if (
+                    prop !== "Disciplina" &&
+                    prop !== "CCD" &&
+                    prop !== "EC" &&
+                    prop !== "CCN" &&
+                    prop !== "SI" &&
+                    prop !== "semestre" &&
+                    prop !== "turno" &&
+                    prop !== "letra"
+                  ) {
+                    let c = find(this.AllCursos, { codigo: prop });
+                    pedidoService
+                      .update(c.id, turma.Turma.id, {
+                        Turma: turma.Turma.id,
+                        Curso: c.id,
+                        vagasPeriodizadas: 1,
+                        vagasNaoPeriodizadas: 0,
+                      })
+                      .then(() => {})
+                      .catch((error) => {
+                        console.log("erro ao atualizar pedido: " + error);
+                      });
+                  }
+                }
               })
               .catch((error) => {
                 console.log("erro ao criar turma: " + error);
@@ -998,7 +1022,7 @@ export default {
       "AllGrades",
       "AllCursos",
       "AllGradesCursosExternos",
-      "DisciplinasDasGradesCursosExternos",
+      "DisciplinasGradesExternas",
     ]),
 
     DisciplinasOrderedModal() {

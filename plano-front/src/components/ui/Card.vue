@@ -4,34 +4,34 @@
       <h1 class="card-title">{{ title }}</h1>
     </div>
     <div class="card-body">
-      <form autocomplete="off" @submit.prevent>
-        <slot name="form-group"></slot>
+      <slot name="body"></slot>
+    </div>
 
-        <div class="row m-0 mt-3 d-flex justify-content-end">
-          <slot name="footer">
-            <template v-if="toggleFooter">
-              <BaseButton
-                v-if="isPlano"
-                title="Copiar Plano"
-                type="icon"
-                color="lightblue"
-                @click="$emit('btn-copy')"
-              >
-                <font-awesome-icon :icon="['fas', 'copy']" />
-              </BaseButton>
+    <div class="card-footer">
+      <div class="row m-0 d-flex justify-content-end">
+        <slot name="footer">
+          <template v-if="toggleFooter">
+            <BaseButton
+              v-if="isPlano"
+              title="Copiar Plano"
+              type="icon"
+              color="lightblue"
+              @click="$emit('btn-copy')"
+            >
+              <font-awesome-icon :icon="['fas', 'copy']" />
+            </BaseButton>
 
-              <BaseButton template="Salvar" @click="$emit('btn-salvar')" />
-              <BaseButton template="deletar" @click="$emit('btn-delete')" />
-            </template>
+            <BaseButton template="Salvar" @click="$emit('btn-salvar')" />
+            <BaseButton template="deletar" @click="$emit('btn-delete')" />
+          </template>
 
-            <template v-else>
-              <BaseButton template="adicionar" @click="$emit('btn-add')" />
-            </template>
+          <template v-else>
+            <BaseButton template="adicionar" @click="$emit('btn-add')" />
+          </template>
 
-            <BaseButton template="cancelar" @click="$emit('btn-clean')" />
-          </slot>
-        </div>
-      </form>
+          <BaseButton template="cancelar" @click="$emit('btn-clean')" />
+        </slot>
+      </div>
     </div>
   </div>
 </template>
@@ -56,76 +56,70 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .card {
   width: max-content;
   box-shadow: 0px 6px 6px rgba(0, 0, 0, 0.15);
   margin-bottom: 10px;
   margin-left: 5px;
 }
-.card-title {
-  font-size: 16px !important;
-  font-weight: normal !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  text-align: center !important;
-}
-.card-body {
-  font-size: 12px !important;
-  padding-top: 15px !important;
-}
-.card > .card-body label {
-  line-height: 1.2;
-  font-size: 12px;
-  text-align: start;
+
+.card > .card-header > .card-title {
+  font-size: 16px;
   padding: 0;
-  margin-bottom: 3px;
-}
-.card > .card-body .form-check label {
-  height: 25px;
-  display: flex;
-  align-items: center;
+  margin: 0;
+  text-align: center;
 }
 
-.card > .card-body select,
-.card > .card-body input[type="text"],
-.card > .card-body input[type="number"],
-.card > .card-body input[type="color"],
-.card > .card-body input[type="password"] {
-  width: 100%;
-  height: 28px;
-  padding: 0 5px !important;
-  font-size: 12px !important;
-  text-align: start;
-}
-.card > .card-body select {
-  padding: 0 !important;
-}
-
-.card > .card-body .input-xl {
-  width: 270px !important;
-}
-.card > .card-body .input-lg {
-  width: 200px !important;
-}
-.card > .card-body .input-md {
-  width: 130px !important;
-}
-.card > .card-body .input-sm {
-  width: 80px !important;
-}
-
-.card > .card-body .form-group + .form-group {
-  padding-left: 10px !important;
-}
-.card > .card-body textarea {
-  width: 100%;
-  padding: 5px;
+.card > .card-body {
   font-size: 12px;
-  text-align: start;
+  padding-top: 15px;
+  padding-bottom: 15px;
+
+  label {
+    line-height: 1.2;
+    font-size: 12px;
+  }
+
+  select,
+  input:not([type="checkbox"]) {
+    font-size: 12px;
+    width: 100%;
+    height: 28px;
+    padding-left: 5px;
+  }
+
+  .input-xl {
+    width: 270px !important;
+  }
+  .input-lg {
+    width: 200px !important;
+  }
+  .input-md {
+    width: 130px !important;
+  }
+  .input-sm {
+    width: 80px !important;
+  }
+
+  div.form-group + div.form-group:not([role="group"]) {
+    padding-left: 10px !important;
+  }
+
+  textarea {
+    width: 100%;
+    padding: 5px;
+    font-size: 12px;
+    text-align: start;
+  }
 }
-.card .btn-icon {
-  margin-right: 0 !important;
-  margin-left: 5px !important;
+
+.card > .card-footer {
+  padding-top: 10px;
+  padding-bottom: 10px;
+
+  .btn-icon:last-of-type {
+    margin-right: 0;
+  }
 }
 </style>

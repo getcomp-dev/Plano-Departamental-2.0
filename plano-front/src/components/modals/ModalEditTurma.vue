@@ -6,271 +6,211 @@
     @on-close="resetTurmaForm"
   >
     <template #modal-body v-if="turma.disciplina !== null">
-      <div class="form-container row m-0 p-0 w-100">
-        <!-- Disciplina e Codigo -->
-        <div v-if="hasEditDisciplina" class="form-row w-100">
-          <div class="form-group col">
-            <label for="disciplinaNome">Disciplina:</label>
-            <select
-              type="text"
-              style="width: 260px"
-              id="disciplinaNome"
-              class="form-control"
+      <div class="form-container">
+        <!-- Disciplina, Codigo e Creditos -->
+        <div v-if="hasEditDisciplina" class="row">
+          <div class="col-8">
+            <VSelect
+              label="Disciplina"
               v-model="turmaForm.disciplina"
               @change="setDefaultHorarios"
+              :validation="$v.turmaForm.disciplina"
             >
-              <option v-if="!DisciplinasOrderedByNome.length" type="text" value>
-                Nenhuma Disciplina Encontrada
-              </option>
-              <option
+              <VOption
                 v-for="disciplina in DisciplinasOrderedByNome"
-                :key="'2-' + disciplina.id"
+                :key="disciplina.id + disciplina.codigo"
                 :value="disciplina"
-              >
-                {{ disciplina.nome }}
-              </option>
-            </select>
+                :text="disciplina.nome"
+              />
+            </VSelect>
           </div>
-          <div class="form-group col-4">
-            <label for="disciplinaCodigo">Código:</label>
-            <select
-              type="text"
-              style="width: 120px"
-              id="disciplinaCodigo"
-              class="form-control"
+          <div class="col">
+            <VSelect
+              label="Código"
               v-model="turmaForm.disciplina"
               @change="setDefaultHorarios"
+              :validation="$v.turmaForm.disciplina"
             >
-              <option v-if="!DisciplinasOrderedByCodigo.length" type="text" value>
-                Nenhuma Disciplina Encontrada
-              </option>
-              <option
-                v-for="disciplina in DisciplinasOrderedByCodigo"
-                :key="'1-' + disciplina.id"
+              <VOption
+                v-for="disciplina in DisciplinasOrderedByNome"
+                :key="disciplina.codigo + disciplina.id"
                 :value="disciplina"
-              >
-                {{ disciplina.codigo }}
-              </option>
-            </select>
+                :text="disciplina.codigo"
+              />
+            </VSelect>
           </div>
         </div>
-        <div v-else class="form-row w-100 m-0 mb-2 pr-1">
-          <p class="modal-title col p-0 m-0">
+        <div v-else class="row">
+          <p class="col modal-title">
             {{ turmaForm.disciplina.codigo + " - " + turmaForm.disciplina.nome }}
           </p>
-          <span class="modal-title p-0 m-0 text-right" style="font-weight: normal">
+          <span class="col-auto modal-title text-right" style="font-weight: normal">
             Créditos: {{ turmaForm.disciplina.creditoTotal }}
           </span>
         </div>
-
-        <!-- Período, Turma e Creditos -->
-        <div class="form-row w-100">
-          <div class="form-group col">
-            <label for="selectPeriodo">Período:</label>
-            <select
-              type="email"
-              class="form-control"
-              id="selectPeriodo"
+        <!-- Período, Turma e turno -->
+        <div class="row">
+          <div class="col">
+            <VSelect
+              label="Período"
               v-model.number="turmaForm.periodo"
-              style="width: 60px"
-              v-on:change="checkHorariosPeriodo"
+              :validation="$v.turmaForm.periodo"
+              @change="checkHorariosPeriodo"
             >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-            </select>
+              <VOption
+                v-for="periodoId in [1, 2, 3, 4]"
+                :key="'periodoId' + periodoId"
+                :value="periodoId"
+                :text="periodoId"
+              />
+            </VSelect>
           </div>
-          <div class="form-group col">
-            <label for="inputLetra">Turma:</label>
-            <input
-              type="text"
-              class="form-control"
-              id="inputLetra"
-              style="width: 50px; text-align: center"
-              :value="turmaForm.letra"
-              @change="turmaForm.letra = normalizeInputText($event)"
-              @keypress="maskTurmaLetra"
-            />
+          <div class="col">
+            <VInput label="Turma" v-model="turmaForm.letra" :validation="$v.turmaForm.letra" />
           </div>
-          <div class="form-group col">
-            <label for="SelectTurno">Turno:</label>
-            <select
-              type="text"
-              style="width: 90px"
-              id="SelectTurno"
-              class="form-control"
-              v-model="turmaForm.turno1"
-              @input="handleChangeTurno"
+          <div class="col">
+            <VSelect
+              label="Turno"
+              v-model.number="turmaForm.turno1"
+              :validation="$v.turmaForm.turno1"
+              @change="handleChangeTurno"
             >
               <template v-if="disciplinaIsIntegralEAD">
-                <option value="EAD">EAD</option>
+                <VOption value="EAD" text="EAD" />
               </template>
               <template v-else>
-                <option value="Diurno">Diurno</option>
-                <option value="Noturno">Noturno</option>
+                <VOption value="Diurno" text="Diurno" />
+                <VOption value="Noturno" text="Noturno" />
               </template>
-            </select>
+            </VSelect>
           </div>
         </div>
         <!-- Docente, Horarios e Salas -->
-        <div class="form-row w-100 mb-2">
-          <div class="form-group col">
-            <label for="SelectDocente1">Docentes:</label>
-            <select
-              type="text"
-              class="form-control"
-              style="width: 130px"
-              id="SelectDocente1"
-              v-model="turmaForm.Docente1"
-              v-on:change="checkDocente(1)"
+        <div class="row">
+          <div class="col">
+            <VSelect
+              label="Docentes"
+              v-model.number="turmaForm.Docente1"
+              :validation="$v.turmaForm.Docente1"
+              @change="checkDocente(1)"
+              :emptyPlaceholder="false"
             >
-              <option v-if="!DocentesOrdered.length" type="text" value="">
-                Nenhum Docente Encontrado
-              </option>
-              <option v-else type="text" value=""></option>
-              <option
+              <VOption />
+              <VOption
                 v-for="docente in DocentesOrdered"
-                :key="'1-docente-id' + docente.id"
+                :key="docente.id + docente.apelido"
                 :value="docente.id"
-              >
-                {{ docente.apelido }}
-              </option>
-            </select>
-            <select
-              type="text"
-              class="form-control mt-1"
-              style="width: 130px"
-              id="docente2"
-              v-model="turmaForm.Docente2"
-              v-on:change="checkDocente(2)"
+                :text="docente.apelido"
+              />
+            </VSelect>
+            <VSelect
+              v-model.number="turmaForm.Docente2"
+              :validation="$v.turmaForm.Docente2"
+              @change="checkDocente(2)"
+              :emptyPlaceholder="false"
             >
-              <option v-if="!DocentesOrdered.length" type="text" value="">
-                Nenhum Docente Encontrado
-              </option>
-              <option v-else type="text" value=""></option>
-              <option
+              <VOption />
+              <VOption
                 v-for="docente in DocentesOrdered"
-                :key="'2-docente-id' + docente.id"
+                :key="docente.apelido + docente.id"
                 :value="docente.id"
-              >
-                {{ docente.apelido }}
-              </option>
-            </select>
+                :text="docente.apelido"
+              />
+            </VSelect>
           </div>
 
-          <div class="form-group col">
-            <label for="horario1">Horarios:</label>
-            <select
-              type="text"
-              class="form-control"
-              style="width: 100px"
-              id="horario1"
+          <div class="col">
+            <VSelect
+              label="Horários"
               v-model="turmaForm.Horario1"
+              :validation="$v.turmaForm.Horario1"
               @change="checkHorario(1), setTurnoByHorario(1)"
+              :emptyPlaceholder="false"
             >
-              <option v-if="!disciplinaIsIntegralEAD" type="text" value=""></option>
-              <option
+              <VOption v-if="!disciplinaIsIntegralEAD" />
+              <VOption
                 v-for="horario in HorariosFiltredByTurno"
-                :key="'1-horario-id' + horario.id"
+                :key="horario.id + horario.horario"
                 :value="horario.id"
-              >
-                {{ horario.horario }}
-              </option>
-            </select>
+                :text="horario.horario"
+              />
+            </VSelect>
 
-            <select
-              v-if="hasMoreThan4Creditos"
-              type="text"
-              class="form-control mt-1"
-              style="width: 100px"
-              id="horario2"
+            <VSelect
               v-model="turmaForm.Horario2"
+              :validation="$v.turmaForm.Horario2"
               @change="checkHorario(2), setTurnoByHorario(2)"
+              :emptyPlaceholder="false"
             >
               <template v-if="disciplinaIsParcialEAD">
-                <option
+                <VOption
                   v-for="horario in HorariosEAD"
-                  :key="'2-horarioEAD-id' + horario.id"
+                  :key="horario.horario + horario.id"
                   :value="horario.id"
-                >
-                  {{ horario.horario }}
-                </option>
+                  :text="horario.horario"
+                />
               </template>
               <template v-else>
-                <option v-if="!disciplinaIsIntegralEAD" type="text" value=""></option>
-                <option
+                <VOption v-if="!disciplinaIsIntegralEAD" />
+                <VOption
                   v-for="horario in HorariosFiltredByTurno"
-                  :key="'2-horario-id' + horario.id"
+                  :key="horario.horario + horario.id"
                   :value="horario.id"
-                >
-                  {{ horario.horario }}
-                </option>
+                  :text="horario.horario"
+                />
               </template>
-            </select>
+            </VSelect>
           </div>
 
-          <div class="form-group col">
-            <template v-if="turmaForm.disciplina && !disciplinaIsIntegralEAD">
-              <label for="sala1">Salas:</label>
-              <select
-                type="text"
-                class="form-control mb-1"
-                style="width: 120px"
-                id="sala1"
-                v-model="turmaForm.Sala1"
-                v-on:change="checkSala()"
-              >
-                <option v-if="AllSalas.length === 0" type="text" value="">
-                  Nenhuma Sala Encontrada
-                </option>
-                <option v-else value=""></option>
-                <option v-for="sala in AllSalas" :key="'1-sala-id' + sala.id" :value="sala.id">
-                  {{ sala.nome }}
-                </option>
-              </select>
-              <select
-                v-if="hasMoreThan4Creditos && turmaForm.disciplina.ead != 2"
-                type="text"
-                class="form-control"
-                style="width: 120px"
-                id="sala2"
-                v-model="turmaForm.Sala2"
-                v-on:change="checkSala()"
-              >
-                <option v-if="AllSalas.length === 0" type="text" value="">
-                  Nenhuma Sala Encontrada
-                </option>
-                <option v-else value=""></option>
-                <option v-for="sala in AllSalas" :key="'2-sala-id' + sala.id" :value="sala.id">
-                  {{ sala.nome }}
-                </option>
-              </select>
-            </template>
+          <div class="col">
+            <VSelect
+              label="Salas"
+              v-model="turmaForm.Sala1"
+              :validation="$v.turmaForm.Sala1"
+              @change="checkSala"
+              :emptyPlaceholder="false"
+            >
+              <VOption />
+              <VOption
+                v-for="sala in AllSalas"
+                :key="sala.nome + sala.id"
+                :value="sala.id"
+                :text="sala.nome"
+              />
+            </VSelect>
+            <VSelect
+              v-model="turmaForm.Sala2"
+              :validation="$v.turmaForm.Sala2"
+              @change="checkSala"
+              :emptyPlaceholder="false"
+            >
+              <VOption />
+              <VOption
+                v-for="sala in AllSalas"
+                :key="sala.nome + sala.id"
+                :value="sala.id"
+                :text="sala.nome"
+              />
+            </VSelect>
           </div>
         </div>
         <!-- Botoes -->
-        <div class="w-100 mb-2">
-          <BaseButton class="paddingX-20" color="green" text="Salvar" @click="handleEditTurma" />
+        <div class="d-flex justify-content-end mt-3 mb-2">
           <BaseButton class="paddingX-20" color="gray" text="Cancelar" @click="resetTurmaForm" />
+          <BaseButton class="paddingX-20" color="green" text="Salvar" @click="handleEditTurma" />
         </div>
       </div>
+
       <hr class="mb-1 mt-0 w-100" />
-      <!-- TURMA VAGAS -->
-      <div class="w-100 d-flex justify-content-between mb-1">
-        <h3 class="modal-title">VAGAS</h3>
 
-        <p class="modal-title" style="font-weight: normal">Total: {{ totalPedidos }}</p>
+      <div class="row mb-1">
+        <h3 class="col modal-title">VAGAS</h3>
+        <p class="col-auto modal-title" style="font-weight: normal">Total: {{ totalPedidos }}</p>
       </div>
-
       <div class="div-table">
-        <BaseTable
-          type="main"
-          :styles="'height:350px;font-size:10px!important'"
-          :hasSearchBar="true"
-        >
+        <BaseTable styles="height:350px;font-size:10px!important" :hasSearchBar="true">
           <template #thead-search>
-            <InputSearch
+            <VInputSearch
               v-model="searchCursos"
               placeholder="Pesquise nome ou codigo de um curso..."
             />
@@ -279,34 +219,36 @@
             <v-th-ordination
               :currentOrder="ordemVagas"
               orderToCheck="codigo"
-              width="50"
+              width="65"
               align="start"
-              title="Código"
-              text="Cód."
-            />
+            >
+              Código
+            </v-th-ordination>
             <v-th-ordination
               :currentOrder="ordemVagas"
               orderToCheck="nome"
-              width="320"
+              width="305"
               align="start"
-              text="Nome"
-            />
+            >
+              Nome
+            </v-th-ordination>
             <v-th-ordination
               :currentOrder="ordemVagas"
               orderToCheck="VagasTotais"
               width="80"
               orderType="desc"
               title="Vagas periodizadas / Não periodizadas"
-              text="Vagas"
-            />
+            >
+              Vagas
+            </v-th-ordination>
           </template#thead>
 
           <template#tbody>
             <tr v-for="curso in CursosTableOrdered" :key="curso.id + curso.codigo">
-              <v-td width="50" align="start">
+              <v-td width="65" align="start">
                 {{ curso.codigo }}
               </v-td>
-              <v-td width="320" align="start" :title="curso.nome">
+              <v-td width="305" align="start" :title="curso.nome">
                 {{ curso.nome }}
               </v-td>
               <v-td width="80" type="content">
@@ -327,15 +269,15 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 import { isNull, clone, find, filter, orderBy } from "lodash-es";
+import { requiredIf, required, maxLength, integer, alpha } from "vuelidate/lib/validators";
 import { normalizeText } from "@/common/utils";
-import { maskTurmaLetra, normalizeInputText } from "@/common/mixins";
-import InputSearch from "../ui/InputSearch";
+import { VInput, VSelect, VOption } from "@/components/ui";
+import VInputSearch from "../ui/VInputSearch";
 import InputsPedidosDCC from "../ui/InputsPedidosDCC.vue";
 
 export default {
   name: "ModalEditTurma",
-  mixins: [maskTurmaLetra, normalizeInputText],
-  components: { InputSearch, InputsPedidosDCC },
+  components: { VInputSearch, VInput, InputsPedidosDCC, VSelect, VOption },
   props: {
     turma: { type: Object, required: true },
     hasEditDisciplina: { type: Boolean, default: false },
@@ -349,6 +291,22 @@ export default {
       ordemVagas: { order: "VagasTotais", type: "desc" },
     };
   },
+  validations: {
+    turmaForm: {
+      disciplina: {
+        requiredIf: requiredIf(function() {
+          return this.hasEditDisciplina;
+        }),
+      },
+      periodo: { required, integer },
+      turno1: { required },
+      letra: { required, alpha, maxLength: maxLength(3) },
+      Docente1: { integer },
+      Docente2: { integer },
+      Sala1: { integer },
+      Sala2: { integer },
+    },
+  },
 
   methods: {
     ...mapActions(["editTurma"]),
@@ -359,7 +317,6 @@ export default {
     close() {
       this.$refs.baseModalEditTurma.close();
     },
-
     handleChangeTurno() {
       this.turmaForm.Horario1 = null;
       if (!this.disciplinaIsParcialEAD) this.turmaForm.Horario2 = null;
@@ -368,6 +325,7 @@ export default {
       this.turmaForm = clone(this.turma);
       this.initialData = clone(this.turma);
       this.setDefaultHorarios();
+      this.$nextTick(() => this.$v.$reset());
     },
     setDefaultHorarios() {
       if (this.turmaForm.disciplina === null) return;
@@ -440,9 +398,11 @@ export default {
         this.turmaForm.turno1 = "Noturno";
     },
     async handleEditTurma() {
+      this.$v.turmaForm.$touch();
+      if (this.$v.turmaForm.$anyError) return;
+
       try {
         this.setLoading({ type: "partial", value: true });
-
         await this.editTurma({ data: this.turmaForm, notify: true });
         this.initialData = clone(this.turmaForm);
       } catch (error) {
@@ -458,18 +418,16 @@ export default {
         this.setLoading({ type: "partial", value: false });
       }
     },
-
     checkHorariosPeriodo() {
       const hasConflictDocenteInHorario1 = this.checkHorarioDocente(1);
       const hasConflictDocenteInHorario2 = this.checkHorarioDocente(2);
       const hasConflictSalasInHorario1 = this.checkHorarioSala(1);
       const hasConflictSalasInHorario2 = this.checkHorarioSala(2);
 
-      if (hasConflictDocenteInHorario1 && hasConflictSalasInHorario1) {
-        this.turmaForm.Horario1 = null;
+      if (hasConflictDocenteInHorario1 || hasConflictSalasInHorario1) {
         this.turmaForm.periodo = this.initialData.periodo;
-      } else if (hasConflictDocenteInHorario2 && hasConflictSalasInHorario2) {
-        this.turmaForm.Horario2 = null;
+      }
+      if (hasConflictDocenteInHorario2 || hasConflictSalasInHorario2) {
         this.turmaForm.periodo = this.initialData.periodo;
       }
     },
@@ -1195,25 +1153,8 @@ export default {
 </script>
 
 <style scoped>
-.modal-turma {
-  width: 100%;
-  height: 100%;
-}
 .form-container {
   font-size: 12px;
-}
-.form-group {
-  margin: 5px auto;
-}
-.form-control {
-  height: 25px !important;
-  font-size: 12px !important;
-  padding: 2px 5px !important;
-  text-align: start;
-}
-.form-container label {
-  font-weight: bold;
-  margin-bottom: 5px;
 }
 .modal-title {
   font-size: 14px;
