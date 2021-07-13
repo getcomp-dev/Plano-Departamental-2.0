@@ -35,7 +35,6 @@ const express = require('express'),
   xlsxDownload = require('./routes/xlsx'),
   pdfsRoute = require('./routes/pdfs'),
   downloads = require('./routes/download'),
-  novoPlanoRoute = require('./routes/novoPlano'),
   historyRoute = require('./routes/history'),
   copyPlanoRoute = require('./routes/copyPlano'),
   docenteDisciplinaRoute = require('./routes/docenteDisciplina')
