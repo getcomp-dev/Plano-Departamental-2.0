@@ -35,7 +35,6 @@ const express = require('express'),
   xlsxDownload = require('./routes/xlsx'),
   pdfsRoute = require('./routes/pdfs'),
   downloads = require('./routes/download'),
-  novoPlanoRoute = require('./routes/novoPlano'),
   historyRoute = require('./routes/history'),
   copyPlanoRoute = require('./routes/copyPlano'),
   docenteDisciplinaRoute = require('./routes/docenteDisciplina')
@@ -92,7 +91,6 @@ app.use('/api/plano', planoRoute)
 app.use('/api/xlsx', xlsxDownload)
 app.use('/api/pdf', pdfsRoute)
 app.use('/api/download', downloads)
-app.use('/api/novoPlano', novoPlanoRoute)
 app.use('/api/history', historyRoute)
 app.use('/api/copyPlano', copyPlanoRoute)
 app.use('/api/docenteDisciplina', docenteDisciplinaRoute)
