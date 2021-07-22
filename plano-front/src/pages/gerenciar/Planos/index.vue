@@ -143,27 +143,27 @@
 
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
-        <b>Adicionar plano:</b>
+        <b>Adicionar plano departamental:</b>
         Preencha o cartão em branco à direita e em seguida, clique em Adicionar
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
         .
       </li>
       <li class="list-group-item">
-        <b>Editar plano:</b>
+        <b>Editar plano departamental:</b>
         Clique na linha da tabela do plano que deseja alterar. Em seguida, no cartão à direita,
         altere as informações que desejar e clique em Salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
         .
       </li>
       <li class="list-group-item">
-        <b>Deletar plano:</b>
+        <b>Deletar plano departamental:</b>
         Clique na linha da tabela do plano que deseja remover. Em seguida, no cartão à direita,
         clique em Remover
         <font-awesome-icon :icon="['fas', 'trash']" class="icon-red" />
         e confirme a remoção na janela que será aberta.
       </li>
       <li class="list-group-item">
-        <b>Copiar plano:</b>
+        <b>Copiar plano departamental:</b>
         Clique na linha da tabela do plano que deseja copiar. Em seguida, no cartão à direita,
         clique em Copiar
         <font-awesome-icon :icon="['fas', 'copy']" class="icon-lightblue" />

@@ -255,7 +255,7 @@
         <b>Editar turma:</b>
         Clique no ícone
         <font-awesome-icon :icon="['fas', 'edit']" class="icon-darkgray" />
-        presente na couna "Editar". Uma janela de edição irá se abrir. As alterações realizadas nos
+        presente na coluna "Editar". Uma janela de edição irá se abrir. As alterações realizadas nos
         campos da metade superior da janela somente serão enviadas ao clicar no botão "Salvar". Já
         para o quantitativo de vagas na parte inferior, as alterações serão salvas automaticamente.
       </li>

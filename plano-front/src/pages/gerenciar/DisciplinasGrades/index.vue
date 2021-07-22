@@ -30,8 +30,8 @@
       </li>
       <li class="list-group-item">
         <b>Adicionar disciplina na grade:</b>
-        Para adicionar uma disciplinas à grade selecionada, com a parte de baixo do cartão à direita
-        em branco, preencha-a e em seguida clique em Adicionar
+        Para adicionar uma disciplina à grade selecionada, preencha o cartão à direita com os dados
+        necessários e em seguida clique em Adicionar.
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
         .
       </li>

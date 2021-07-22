@@ -258,7 +258,7 @@
         correspondente.
       </li>
       <li class="list-group-item">
-        <b>Relatório :</b>
+        <b>Relatório:</b>
         Clique no ícone relatório
         <font-awesome-icon :icon="['fas', 'file-alt']" class="icon-gray" />
         . Em seguida, indique se deseja gerar o relatório completo com todas as disciplinas ou o

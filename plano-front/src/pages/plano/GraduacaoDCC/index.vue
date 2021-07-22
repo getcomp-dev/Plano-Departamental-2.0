@@ -358,9 +358,9 @@
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
         no cabeçalho da página. Em seguida, preencha a nova linha que irá aparecer no início da
         tabela. Note que os campos disciplina, turno e turma são obrigatórios. Após preencher os
-        campos, clique no ícone de salvar
+        campos, clique no ícone de Salvar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-green" />
-        ou de cancelar
+        ou de Cancelar
         <font-awesome-icon :icon="['fas', 'times']" class="icon-gray" />
         .
       </li>
@@ -390,10 +390,10 @@
       </li>
       <li class="list-group-item">
         <b>Cores das vagas:</b>
-        Quando a caixa de vaga esta azul significa que aquele é o valor do plano anterior e que
+        Quando a caixa de vaga está azul, significa que aquele é o valor do plano anterior e que
         ainda não foi alterado.
         <br />
-        Mas note que, esta funcionalidade apenas aparece caso o valor anterior seja diferente de
+        Porém note que, esta funcionalidade apenas aparece caso o valor anterior seja diferente de
         zero e o plano atual tenha sido gerado utilizando a funcionalidade de copiar plano presente
         na página de
         <router-link to="/gerenciar/plano-departamental">gerenciar plano departamental</router-link>
@@ -404,7 +404,7 @@
         Em cada coluna de um curso, para cada disciplina, existem dois campos de vagas. O campo
         superior é destinado às vagas de grade, e o inferior é referente às vagas para alunos não
         periodizados. Para que uma turma apareça na grade horária de um determinado curso, na página
-        "Horários", é preciso que pelo menos uma vaga de grade seja destinada a este curso.
+        "Horários", é necessário que pelo menos uma vaga de grade seja destinada a este curso.
       </li>
     </ModalAjuda>
   </div>

@@ -9,9 +9,9 @@
           <b>Ordenar tabela:</b>
           Clique no cabeçalho da coluna desejada na tabela, caso haja um ícone de seta
           <font-awesome-icon :icon="['fas', 'arrow-down']" class="icon-darkgray" />
-          , para alterar a ordenação do conteúdo. Note que podem existir colunas com o icone
+          , para alterar a ordenação do conteúdo. Note que podem existir colunas com o ícone
           <font-awesome-icon :icon="['fas', 'thumbtack']" class="icon-darkgray" />
-          que significa que esta ordenação terá pripridade em relação as outras.
+          que significa que esta ordenação terá prioridade em relação as outras.
         </li>
 
         <slot></slot>

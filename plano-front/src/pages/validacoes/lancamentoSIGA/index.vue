@@ -103,7 +103,7 @@
     <ModalAjuda ref="modalAjuda">
       <li class="list-group-item">
         <b>Visualizar conteúdo:</b>
-        Preencha o cartão a direita com o período do plano atual que deseja validar, em seguida
+        Preencha o cartão à direita com o período do plano atual que deseja validar, em seguida
         selecione o arquivo (.csv) de plano gerado pelo SIGA para o período correspondente. E para
         finalizar clique no botão iniciar
         <font-awesome-icon :icon="['fas', 'check']" class="icon-blue" />

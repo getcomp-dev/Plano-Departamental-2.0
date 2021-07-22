@@ -394,9 +394,9 @@
       </li>
       <li class="list-group-item">
         <b>Observações:</b>
-        Note que caso um dos filtros não possua nenhum campo selecionado a busca acontecerá como se
-        todas opções daquele filtro estivesse selecionadas. Ou seja marque apenas os filtros
-        necessários, não é preciso marcar todos os restante.
+        Caso um dos filtros não possua nenhum campo selecionado, a busca acontecerá como se todas
+        opções daquele filtro estivessem selecionadas, ou seja, marque apenas os filtros
+        necessários. Não é necessário marcar todos os restantes.
       </li>
     </ModalAjuda>
   </div>

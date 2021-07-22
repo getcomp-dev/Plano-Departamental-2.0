@@ -1,4 +1,5 @@
 <template>
+  <!-- eslint-disable  -->
   <div class="main-component">
     <portal to="page-header">
       <BaseButton template="adicionar" @click="toggleAsideModal('newPref')" />
@@ -428,26 +429,27 @@
         Clique no ícone de adicionar
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-green" />
         no cabeçalho da página. Em seguida, preencha a janela que se abrirá à direita e para
-        finalizar clique no botão Confirmar. Ou para adicionar uma preferência diretamente numa
-        linha da tabela clique no icone de adicionar
+        finalizar clique no botão Confirmar. Para adicionar uma preferência diretamente numa linha
+        da tabela clique no icone de adicionar
         <font-awesome-icon :icon="['fas', 'plus']" class="icon-darkgray" />
-        na coluna Pref. (preferência) da linha que deseja, preencha a janela que se abrirá à direita
+        na coluna Pref. (Preferência) da linha que deseja, preencha a janela que se abrirá à direita
         e para finalizar clique no botão Confirmar.
       </li>
       <li class="list-group-item">
         <b>Editar preferência do docente:</b>
-        Clique no numero da coluna Pref. (preferência) na linha que deseja alterar. Em seguida, na
-        janela que se abrirá à direita altere as informações que desejar e clique em Salvar.
+        Clique no número da coluna Pref. (Preferência) na linha que deseja alterar. Em seguida, na
+        janela que se abrirá à direita, altere as informações que desejar e clique em Salvar.
       </li>
       <li class="list-group-item">
         <b>Deletar preferência do docente:</b>
-        Basta seguir os passos da edição descrito acima colocando o valor da preferência como zero.
+        Clique no número da coluna Pref. (Preferência) na linha que deseja remover. Em seguida, na
+        janela que se abrirá à direita, coloque o valor de preferência como zero (Inapto).
       </li>
       <li class="list-group-item">
-        <b>Alterar visualizaçao da tabela:</b>
-        Clique no ícone de alterar visualizaçao
+        <b>Alterar visualização da tabela:</b>
+        Clique no ícone de alterar visualização
         <font-awesome-icon :icon="['fas', 'sync-alt']" class="icon-gray" />
-        no cabeçalho da página para alterar a visualizaçao das preferencias entre docentes por
+        no cabeçalho da página para alterar a visualização das preferências entre docentes por
         disciplinas, ou disciplinas por docentes.
       </li>
     </ModalAjuda>
