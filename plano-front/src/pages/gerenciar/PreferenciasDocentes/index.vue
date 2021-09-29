@@ -39,7 +39,7 @@
           </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoDisciplina.docentes"
-            orderToCheck="docente.apelido"
+            orderToCheck="docente.nome"
             width="120"
             align="start"
             title="Nome do Docente"
@@ -83,7 +83,7 @@
               <v-td width="420" />
               <v-td width="80" />
               <v-td width="120" align="start" :title="preferencia.docente.nome">
-                {{ preferencia.docente.apelido }}
+                {{ preferencia.docente.nome }}
               </v-td>
               <v-td
                 width="100"
@@ -115,7 +115,7 @@
           </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoDocentes.disciplinas"
-            orderToCheck="disciplina.codigo"
+            orderToCheck="disciplina.nome"
             width="90"
             title="Código da Disciplina"
           >
@@ -498,13 +498,13 @@ export default {
       error: null,
       tableMode: "docente",
       ordenacaoDocentes: {
-        docentes: { order: "nome", type: "asc" },
+        docentes: { order: "apelido", type: "asc" },
         disciplinas: { order: "disciplina.codigo", type: "asc" },
         pref: { order: "preferencia", type: "desc" },
       },
       ordenacaoDisciplina: {
         disciplinas: { order: "codigo", type: "asc" },
-        docentes: { order: "docente.apelido", type: "asc" },
+        docentes: { order: "docente.nome", type: "asc" },
         pref: { order: "preferencia", type: "desc" },
       },
     };
