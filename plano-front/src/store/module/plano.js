@@ -2,6 +2,7 @@ import Vue from "vue";
 import $socket from "@/socketInstance.js";
 import planoService from "@/services/plano";
 import { cloneDeepWith, find, orderBy } from "lodash-es";
+import { filter } from "lodash-es";
 import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
 import {
   PLANO_FETCHED,
@@ -60,19 +61,16 @@ const actions = {
   async initializeCurrentPlano({ commit, dispatch, state }) {
     try {
       dispatch("setLoading", { type: "fetching", value: true });
-      await dispatch("fetchAllPlanos");
-      let storagePlanoId = parseInt(localStorage.getItem("Plano"), 10);
-      const planoExisteEVisible = find(
-        state.Plano,
-        (plano) => plano.id === storagePlanoId && plano.visible === true
-      );
+      await dispatch("fetchAllPlanos"); // busca e seta array com todos planos no state.Plano
 
-      if (!storagePlanoId || !planoExisteEVisible) {
-        const firstVisiblePlano = find(state.Plano, ["visible", true]);
-        storagePlanoId = firstVisiblePlano.id;
-      }
+      const allVisiblePlanos = filter(state.Plano, ["visible", true]); // filtra somente os planos visiveis
+      const latestVisiblePlano = allVisiblePlanos.reduce((acc, plano) => {
+        // encontra o plano com maior ano
+        if (plano.ano >= acc.ano) return { ...plano };
+        else return { ...acc };
+      }, allVisiblePlanos[0]);
 
-      dispatch("setCurrentPlanoId", storagePlanoId);
+      dispatch("setCurrentPlanoId", latestVisiblePlano.id);
       await dispatch("fetchAll");
       $socket.open();
       commit("setYear", 2019);
