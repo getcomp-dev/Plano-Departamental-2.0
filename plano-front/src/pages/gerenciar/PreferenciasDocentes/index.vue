@@ -3,6 +3,7 @@
   <div class="main-component">
     <portal to="page-header">
       <BaseButton template="adicionar" @click="toggleAsideModal('newPref')" />
+      <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="file-upload" @click="toggleAsideModal('upload')" />
       <BaseButton template="swap-modes" @click="toggleTableMode" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
@@ -59,46 +60,56 @@
         </template>
 
         <template #tbody>
-          <template v-for="disciplina in DisciplinasInPreferenciasOrdered">
-            <tr :key="disciplina.id" class="bg-custom">
-              <v-td width="90" align="start">{{ disciplina.codigo }}</v-td>
-              <v-td width="420" align="start">{{ disciplina.nome }}</v-td>
-              <v-td width="80" paddingX="2">{{ disciplina.perfil.abreviacao }}</v-td>
-              <v-td width="120" />
-              <v-td
-                width="100"
-                class="clickable"
-                type="content"
-                @click="openModalAddPreferencia(disciplina)"
-              >
-                <font-awesome-icon :icon="['fas', 'plus']" class="icon-darkgray" />
-              </v-td>
-            </tr>
+          <template v-if="DisciplinasFiltered.length && DocentesFiltered.length">
+            <template v-for="disciplina in DisciplinasInPreferenciasOrdered">
+              <tr :key="disciplina.id" class="bg-custom">
+                <v-td width="90" align="start">{{ disciplina.codigo }}</v-td>
+                <v-td width="420" align="start">{{ disciplina.nome }}</v-td>
+                <v-td width="80" paddingX="2">{{ disciplina.perfil.abreviacao }}</v-td>
+                <v-td width="120" />
+                <v-td
+                  width="100"
+                  class="clickable"
+                  type="content"
+                  @click="openModalAddPreferencia(disciplina)"
+                >
+                  <font-awesome-icon :icon="['fas', 'plus']" class="icon-darkgray" />
+                </v-td>
+              </tr>
 
-            <tr
-              v-for="preferencia in disciplina.preferencias"
-              :key="preferencia.Docente + '-' + preferencia.Disciplina"
-            >
-              <v-td width="90" />
-              <v-td width="420" />
-              <v-td width="80" />
-              <v-td width="120" align="start" :title="preferencia.docente.nome">
-                {{ preferencia.docente.nome }}
-              </v-td>
-              <v-td
-                width="100"
-                class="td-pref"
-                @click="openModalEditPreferencia(preferencia)"
-                :title="
-                  'Preferência: ' +
-                  preferenciaText(preferencia.preferencia) +
-                  '\nClique para editar'
-                "
+              <tr
+                v-for="preferencia in disciplina.preferencias"
+                :key="preferencia.Docente + '-' + preferencia.Disciplina"
               >
-                {{ preferencia.preferencia }}
-              </v-td>
-            </tr>
+                <v-td width="90" />
+                <v-td width="420" />
+                <v-td width="80" />
+                <v-td width="120" align="start" :title="preferencia.docente.nome">
+                  {{ preferencia.docente.apelido }}
+                </v-td>
+                <v-td
+                  width="100"
+                  class="td-pref"
+                  @click="openModalEditPreferencia(preferencia)"
+                  :title="
+                    'Preferência: ' +
+                    preferenciaText(preferencia.preferencia) +
+                    '\nClique para editar'
+                  "
+                >
+                  {{ preferencia.preferencia }}
+                </v-td>
+              </tr>
+            </template>
           </template>
+          <tr v-else>
+            <v-td>
+              <b>Nenhuma disciplina encontrada.</b>
+              Clique no botão de filtros
+              <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+              para selecioná-las.
+            </v-td>
+          </tr>
         </template>
       </BaseTable>
 
@@ -151,45 +162,55 @@
         </template>
 
         <template #tbody>
-          <template v-for="docente in DocentesInPreferenciasOrdered">
-            <tr :key="docente.id" class="bg-custom">
-              <v-td width="120" align="start">{{ docente.apelido }}</v-td>
-              <v-td width="90" />
-              <v-td width="420" />
-              <v-td width="80" />
-              <v-td
-                width="100"
-                type="content"
-                class="clickable"
-                @click="openModalAddPreferencia(docente)"
-              >
-                <font-awesome-icon :icon="['fas', 'plus']" class="icon-darkgray" />
-              </v-td>
-            </tr>
+          <template v-if="DisciplinasFiltered.length && DocentesFiltered.length">
+            <template v-for="docente in DocentesInPreferenciasOrdered">
+              <tr :key="docente.id" class="bg-custom">
+                <v-td width="120" align="start">{{ docente.apelido }}</v-td>
+                <v-td width="90" />
+                <v-td width="420" />
+                <v-td width="80" />
+                <v-td
+                  width="100"
+                  type="content"
+                  class="clickable"
+                  @click="openModalAddPreferencia(docente)"
+                >
+                  <font-awesome-icon :icon="['fas', 'plus']" class="icon-darkgray" />
+                </v-td>
+              </tr>
 
-            <tr
-              v-for="preferencia in docente.preferencias"
-              :key="preferencia.Docente + '-' + preferencia.Disciplina"
-            >
-              <v-td width="120" />
-              <v-td width="90">{{ preferencia.disciplina.codigo }}</v-td>
-              <v-td width="420" align="start">{{ preferencia.disciplina.nome }}</v-td>
-              <v-td width="80">{{ preferencia.disciplina.perfil.abreviacao }}</v-td>
-              <v-td
-                width="100"
-                class="td-pref"
-                type="content"
-                @click="openModalEditPreferencia(preferencia)"
-                :title="
-                  'Preferência: ' +
-                  preferenciaText(preferencia.preferencia) +
-                  '\nClique para editar'
-                "
+              <tr
+                v-for="preferencia in docente.preferencias"
+                :key="preferencia.Docente + '-' + preferencia.Disciplina"
               >
-                {{ preferencia.preferencia }}
-              </v-td>
-            </tr>
+                <v-td width="120" />
+                <v-td width="90">{{ preferencia.disciplina.codigo }}</v-td>
+                <v-td width="420" align="start">{{ preferencia.disciplina.nome }}</v-td>
+                <v-td width="80">{{ preferencia.disciplina.perfil.abreviacao }}</v-td>
+                <v-td
+                  width="100"
+                  class="td-pref"
+                  type="content"
+                  @click="openModalEditPreferencia(preferencia)"
+                  :title="
+                    'Preferência: ' +
+                    preferenciaText(preferencia.preferencia) +
+                    '\nClique para editar'
+                  "
+                >
+                  {{ preferencia.preferencia }}
+                </v-td>
+              </tr>
+            </template>
           </template>
+          <tr v-else>
+            <v-td>
+              <b>Nenhuma disciplina encontrada.</b>
+              Clique no botão de filtros
+              <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+              para selecioná-las.
+            </v-td>
+          </tr>
         </template>
       </BaseTable>
     </div>
@@ -406,6 +427,146 @@
       </template>
     </BaseModal>
 
+    <ModalFiltros
+      ref="modalFiltros"
+      :callbacks="modalFiltrosCallbacks"
+      :tabsOptions="modalFiltrosTabs"
+    >
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Perfis'">
+        <template #thead>
+          <v-th width="25" />
+          <v-th-ordination
+            :currentOrder="ordenacaoModal.perfis"
+            orderToCheck="nome"
+            width="425"
+            align="start"
+          >
+            Nome
+          </v-th-ordination>
+        </template>
+
+        <template #tbody>
+          <tr
+            v-for="perfil in PerfisOptionsOrdered"
+            :key="perfil.id + perfil.nome"
+            @click.stop="selectPerfis(perfil)"
+          >
+            <v-td width="25" type="content">
+              <input
+                type="checkbox"
+                v-model="filtroPerfis.selecionados"
+                :value="perfil"
+                :indeterminate.prop="perfil.halfChecked"
+                @click.stop="selectPerfis(perfil)"
+              />
+            </v-td>
+            <v-td width="425" align="start">{{ perfil.nome }}</v-td>
+          </tr>
+        </template>
+      </BaseTable>
+
+      <BaseTable
+        type="modal"
+        v-show="modalFiltrosTabs.current === 'Disciplinas'"
+        :hasSearchBar="true"
+      >
+        <template #thead-search>
+          <VInputSearch
+            v-model="searchDisciplinas"
+            placeholder="Pesquise nome ou codigo de uma disciplina..."
+          />
+        </template>
+        <template #thead>
+          <v-th width="25" />
+          <v-th-ordination
+            :currentOrder="ordenacaoModal.disciplinas"
+            orderToCheck="codigo"
+            width="70"
+            align="start"
+          >
+            Código
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoModal.disciplinas"
+            orderToCheck="nome"
+            width="270"
+            align="start"
+          >
+            Nome
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoModal.disciplinas"
+            orderToCheck="perfil.abreviacao"
+            width="85"
+            align="start"
+          >
+            Perfil
+          </v-th-ordination>
+        </template>
+
+        <template #tbody>
+          <tr
+            v-for="disciplina in DisciplinasOptionsOrdered"
+            :key="disciplina.id + disciplina.nome"
+            @click="selectDisciplina(disciplina)"
+            v-prevent-click-selection
+          >
+            <v-td width="25" type="content">
+              <input
+                type="checkbox"
+                v-model="filtroDisciplinas.selecionados"
+                :value="disciplina"
+                @click.stop="selectDisciplina(disciplina)"
+              />
+            </v-td>
+            <v-td width="70" align="start">{{ disciplina.codigo }}</v-td>
+            <v-td align="start" width="270">
+              {{ disciplina.nome }}
+            </v-td>
+            <v-td width="85" align="start">{{ disciplina.perfil.abreviacao }}</v-td>
+          </tr>
+
+          <tr v-if="!DisciplinasOptionsOrdered.length">
+            <v-td colspan="3" width="450">NENHUMA DISCIPLINA ENCONTRADA.</v-td>
+          </tr>
+        </template>
+      </BaseTable>
+
+      <BaseTable v-show="modalFiltrosTabs.current === 'Docentes'" type="modal" :hasSearchBar="true">
+        <template #thead-search>
+          <VInputSearch
+            v-model="searchDocentes"
+            placeholder="Pesquise pelo apelido de um docente..."
+          />
+        </template>
+        <template #thead>
+          <v-th width="25" />
+          <v-th-ordination
+            :currentOrder="ordenacaoModal.docentes"
+            orderToCheck="apelido"
+            width="425"
+            align="start"
+          >
+            Nome
+          </v-th-ordination>
+        </template>
+
+        <template #tbody>
+          <tr
+            v-for="docente in DocentesOptionsOrdered"
+            :key="docente.id + docente.apelido"
+            @click="toggleItemInArray(docente, filtroDocentes.selecionados)"
+            v-prevent-click-selection
+          >
+            <v-td width="25" type="content">
+              <input type="checkbox" v-model="filtroDocentes.selecionados" :value="docente" />
+            </v-td>
+            <v-td width="425" align="start">{{ docente.apelido }}</v-td>
+          </tr>
+        </template>
+      </BaseTable>
+    </ModalFiltros>
+
     <BaseModal
       ref="modalUpload"
       class="modal-pref"
@@ -459,26 +620,105 @@
 <script>
 import XLSX from "xlsx";
 import { mapGetters } from "vuex";
-import { find, filter, orderBy, map } from "lodash-es";
+import { union, difference, find, filter, orderBy, map } from "lodash-es";
 import { required, integer } from "vuelidate/lib/validators";
+import { normalizeText } from "@/common/utils";
 import docenteDisciplinaService from "@/services/docenteDisciplina";
-import { ModalAjuda } from "@/components/modals";
-import { toggleAsideModal } from "@/common/mixins";
-import { VSelect, VOption, VInputFile } from "@/components/ui";
+import { ModalAjuda, ModalFiltros } from "@/components/modals";
+import {
+  toggleAsideModal,
+  conectaFiltroPerfisEDisciplinas,
+  preventClickSelection,
+} from "@/common/mixins";
+import { VSelect, VOption, VInputFile, VInputSearch } from "@/components/ui";
 
 export default {
   name: "PreferenciasDocentes",
-  components: { ModalAjuda, VInputFile, VSelect, VOption },
-  mixins: [toggleAsideModal],
+  components: {
+    ModalAjuda,
+    VInputFile,
+    VSelect,
+    VOption,
+    ModalFiltros,
+    VInputSearch,
+  },
+  mixins: [toggleAsideModal, conectaFiltroPerfisEDisciplinas, preventClickSelection],
   data() {
     return {
+      searchDisciplinas: "",
+      searchDocentes: "",
       asideModalsRefs: [
         "modalAjuda",
         "modalAddPref",
         "modalEditPref",
         "modalNewPref",
         "modalUpload",
+        "modalFiltros",
       ],
+      ordenacaoModal: {
+        perfis: { order: "nome", type: "asc" },
+        disciplinas: { order: "codigo", type: "asc" },
+        docentes: { order: "apelido", type: "asc" },
+      },
+      filtroDisciplinas: {
+        ativados: [],
+        selecionados: [],
+      },
+      filtroPerfis: {
+        selecionados: [],
+      },
+      filtroDocentes: {
+        ativados: [],
+        selecionados: [],
+      },
+      modalFiltrosTabs: {
+        current: "Perfis",
+        array: ["Perfis", "Disciplinas", "Docentes"],
+      },
+      modalFiltrosCallbacks: {
+        selectAll: {
+          Perfis: () => {
+            this.filtroDisciplinas.selecionados = [...this.DisciplinasOptions];
+            this.filtroPerfis.selecionados = [...this.PerfisOptions];
+          },
+          Disciplinas: () => {
+            this.filtroDisciplinas.selecionados = union(
+              this.DisciplinasOptionsFiltered,
+              this.filtroDisciplinas.selecionados
+            );
+            this.conectaDisciplinasEmPerfis();
+          },
+          Docentes: () => {
+            this.filtroDocentes.selecionados = union(
+              this.filtroDocentes.selecionados,
+              this.DocentesOptionsFiltered
+            );
+          },
+        },
+        selectNone: {
+          Docentes: () => {
+            this.filtroDocentes.selecionados = difference(
+              this.filtroDocentes.selecionados,
+              this.DocentesOptionsFiltered
+            );
+          },
+          Perfis: () => {
+            this.filtroPerfis.selecionados = [];
+            this.filtroDisciplinas.selecionados = [];
+          },
+          Disciplinas: () => {
+            this.filtroDisciplinas.selecionados = difference(
+              this.filtroDisciplinas.selecionados,
+              this.DisciplinasOptionsFiltered
+            );
+            this.conectaDisciplinasEmPerfis();
+          },
+        },
+        btnOk: () => {
+          this.filtroDisciplinas.ativados = [...this.filtroDisciplinas.selecionados];
+          this.filtroDocentes.ativados = [...this.filtroDocentes.selecionados];
+        },
+      },
       fileXlsxPrefs: null,
       preferenciaForm: {
         Docente: null,
@@ -509,6 +749,13 @@ export default {
       },
     };
   },
+  beforeMount() {
+    this.modalFiltrosCallbacks.selectAll.Perfis();
+    this.modalFiltrosCallbacks.selectAll.Disciplinas();
+    this.modalFiltrosCallbacks.selectAll.Docentes();
+    this.modalFiltrosCallbacks.btnOk();
+  },
+
   validations: {
     fileXlsxPrefs: { required },
     preferenciaForm: {
@@ -526,7 +773,6 @@ export default {
       preferencia: { required, integer },
     },
   },
-
   methods: {
     preferenciaText(preferencia) {
       switch (preferencia) {
@@ -545,7 +791,6 @@ export default {
     toggleTableMode() {
       if (this.tableMode === "docente") this.tableMode = "disciplina";
       else this.tableMode = "docente";
-
       this.$refs.modalNewPref.close();
       this.$refs.modalAddPref.close();
       this.$refs.modalEditPref.close();
@@ -559,13 +804,11 @@ export default {
       this.edit.docente = { ...preferencia.docente };
       this.edit.disciplina = { ...preferencia.disciplina };
       let p = preferencia.preferencia;
-
       if (p === 0) {
         this.edit.isZero = true;
       } else {
         this.edit.isZero = false;
       }
-
       this.preferenciaForm = {
         Docente: preferencia.Docente,
         Disciplina: preferencia.Disciplina,
@@ -581,7 +824,6 @@ export default {
       } else {
         this.add.Docente = data;
       }
-
       this.closeAllModals();
       this.$nextTick(() => this.$v.$reset());
       this.$refs.modalAddPref.open();
@@ -591,17 +833,14 @@ export default {
         Docente: docente.id,
         Disciplina: disciplina.id,
       });
-
       return preferenciaFounded ? preferenciaFounded.preferencia : 0;
     },
     addPreferencia() {
       this.$v.add.$touch();
       if (this.$v.add.$anyError) return;
-
       const preferenciaToAdd = { ...this.add };
       if (this.add.Docente.id) preferenciaToAdd.Docente = this.add.Docente.id;
       if (this.add.Disciplina.id) preferenciaToAdd.Disciplina = this.add.Disciplina.id;
-
       docenteDisciplinaService
         .create(preferenciaToAdd)
         .then(() => {
@@ -621,7 +860,6 @@ export default {
     handleEditPrefs() {
       this.$v.preferenciaForm.$touch();
       if (this.$v.preferenciaForm.$anyError) return;
-
       if (this.edit.isZero) {
         if (this.preferenciaForm.preferencia != 0) {
           docenteDisciplinaService
@@ -699,9 +937,7 @@ export default {
     importPrefs() {
       this.$v.fileXlsxPrefs.$touch();
       if (this.$v.fileXlsxPrefs.$anyError) return;
-
       const reader = new FileReader();
-
       const docentes = this.DocentesAtivos;
       const disciplinas = this.DisciplinasDCC;
       const preferencias = this.PreferenciasDocentes;
@@ -769,15 +1005,13 @@ export default {
       this.$refs.modalUpload.close();
     },
   },
-
   computed: {
-    ...mapGetters(["DocentesAtivos", "DisciplinasDCC", "PreferenciasDocentes"]),
+    ...mapGetters(["DocentesAtivos", "DisciplinasDCC", "PreferenciasDocentes", "PerfisDCC"]),
 
     DocentesInPreferenciasOrdered() {
       const disciplinasOrd = this.ordenacaoDocentes.disciplinas;
       const docentesOrd = this.ordenacaoDocentes.docentes;
       const preferenciaOrd = this.ordenacaoDocentes.pref;
-
       const docentesOrdered = map(this.DocentesInPreferencias, (docente) => {
         return {
           ...docente,
@@ -788,29 +1022,24 @@ export default {
           ),
         };
       });
-
       return orderBy(docentesOrdered, docentesOrd.order, docentesOrd.type);
     },
     DocentesInPreferencias() {
       const docentesResult = [];
-
-      this.DocentesAtivos.forEach((docente) => {
-        const preferenciasDoDocente = filter(this.PreferenciasDocentes, ["Docente", docente.id]);
-
+      this.DocentesFiltered.forEach((docente) => {
+        const preferenciasDoDocente = filter(this.DisciplinasFiltered, ["Docente", docente.id]);
         if (preferenciasDoDocente.length)
           docentesResult.push({
             ...preferenciasDoDocente[0].docente,
             preferencias: preferenciasDoDocente,
           });
       });
-
       return docentesResult;
     },
     DisciplinasInPreferenciasOrdered() {
       const docentesOrd = this.ordenacaoDisciplina.docentes;
       const disciplinasOrd = this.ordenacaoDisciplina.disciplinas;
       const preferenciaOrd = this.ordenacaoDisciplina.pref;
-
       const disciplinasOrdered = map(this.DisciplinasInPreferencias, (disciplina) => {
         return {
           ...disciplina,
@@ -821,33 +1050,124 @@ export default {
           ),
         };
       });
-
       return orderBy(disciplinasOrdered, disciplinasOrd.order, disciplinasOrd.type);
     },
     DisciplinasInPreferencias() {
       const disciplinasResult = [];
-
       this.DisciplinasDCC.forEach((disciplina) => {
-        const preferenciasDaDisciplina = filter(this.PreferenciasDocentes, [
+        const preferenciasDaDisciplina = filter(this.DisciplinasFiltered, [
           "Disciplina",
           disciplina.id,
         ]);
-
         if (preferenciasDaDisciplina.length)
           disciplinasResult.push({
             ...preferenciasDaDisciplina[0].disciplina,
             preferencias: preferenciasDaDisciplina,
           });
       });
-
       return disciplinasResult;
     },
+    DisciplinasFiltered() {
+      if (!this.filtroDisciplinas.ativados.length) return [];
 
+      const preferenciasDocente = []; //Disciplinas selecionadas no filtro
+
+      this.PreferenciasDocentes.forEach((preferencia) => {
+        if (
+          this.filtroDisciplinas.ativados.includes(preferencia.disciplina) &&
+          this.filtroDocentes.ativados.includes(preferencia.docente)
+        ) {
+          preferenciasDocente.push(preferencia);
+        }
+      });
+      return preferenciasDocente;
+    },
+    DocentesFiltered() {
+      if (!this.filtroDocentes.ativados.length) return [];
+
+      const docentesFiltrados = []; //Docentes selecionados no filtro
+
+      this.DocentesAtivos.forEach((docente) => {
+        if (this.filtroDocentes.ativados.includes(docente)) {
+          docentesFiltrados.push(docente);
+        }
+      });
+      return docentesFiltrados;
+    },
     DisciplinasDCCOrderedByNome() {
       return orderBy(this.DisciplinasDCC, ["nome"]);
     },
     DisciplinasDCCOrderedByCodigo() {
       return orderBy(this.DisciplinasDCC, ["codigo"]);
+    },
+    //Modal Options
+    PerfisOptionsOrdered() {
+      return orderBy(
+        this.PerfisOptions,
+        this.ordenacaoModal.perfis.order,
+        this.ordenacaoModal.perfis.type
+      );
+    },
+    PerfisOptions() {
+      return this.PerfisDCC.map((perfil) => {
+        const todasDisciplinasDoPerfil = filter(this.DisciplinasOptions, ["Perfil", perfil.id]);
+        const disciplinasSelecionadas = filter(this.filtroDisciplinas.selecionados, [
+          "Perfil",
+          perfil.id,
+        ]);
+
+        let halfChecked = false;
+        if (todasDisciplinasDoPerfil.length === disciplinasSelecionadas.length) {
+          halfChecked = false;
+        } else if (disciplinasSelecionadas.length > 0) {
+          halfChecked = true;
+        }
+
+        return {
+          ...perfil,
+          halfChecked,
+        };
+      });
+    },
+    DisciplinasOptionsFiltered() {
+      if (this.searchDisciplinas === "") return this.DisciplinasOptions;
+
+      const searchNormalized = normalizeText(this.searchDisciplinas);
+
+      return filter(this.DisciplinasOptions, (disciplina) => {
+        const nome = normalizeText(disciplina.nome);
+        const codigo = normalizeText(disciplina.codigo);
+
+        return nome.match(searchNormalized) || codigo.match(searchNormalized);
+      });
+    },
+    DisciplinasOptionsOrdered() {
+      return orderBy(
+        this.DisciplinasOptionsFiltered,
+        this.ordenacaoModal.disciplinas.order,
+        this.ordenacaoModal.disciplinas.type
+      );
+    },
+    DisciplinasOptions() {
+      return this.DisciplinasDCC;
+    },
+    DocentesOptionsOrdered() {
+      return orderBy(
+        this.DocentesOptionsFiltered,
+        this.ordenacaoModal.docentes.order,
+        this.ordenacaoModal.docentes.type
+      );
+    },
+    DocentesOptionsFiltered() {
+      if (this.searchDocentes === "") return this.DocentesAtivos;
+
+      const searchNormalized = normalizeText(this.searchDocentes);
+
+      return this.DocentesAtivos.filter((docente) => {
+        const docenteApelido = normalizeText(docente.apelido);
+
+        return docenteApelido.match(searchNormalized);
+      });
     },
   },
 };
@@ -859,7 +1179,6 @@ export default {
   text-decoration: underline;
   cursor: pointer;
 }
-
 .modal-pref {
   font-size: 14px;
 }

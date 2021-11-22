@@ -10,7 +10,7 @@
       <BaseTable>
         <template #thead>
           <v-th-ordination
-            :currentOrder="orednacaoDocentesMain"
+            :currentOrder="ordenacaoDocentesMain"
             orderToCheck="apelido"
             width="130"
             align="start"
@@ -238,7 +238,7 @@ export default {
     return {
       searchDocentes: "",
       asideModalsRefs: ["modalFiltros", "modalAjuda", "modalRelatorio"],
-      orednacaoDocentesMain: { order: "apelido", type: "asc" },
+      ordenacaoDocentesMain: { order: "apelido", type: "asc" },
       ordenacaoDocentesModal: { order: "apelido", type: "asc" },
       filtroDocentes: {
         ativados: [],
@@ -462,8 +462,8 @@ export default {
     DocentesCargaOrdered() {
       return orderBy(
         this.DocentesCargaFiltered,
-        this.orednacaoDocentesMain.order,
-        this.orednacaoDocentesMain.type
+        this.ordenacaoDocentesMain.order,
+        this.ordenacaoDocentesMain.type
       );
     },
     DocentesCargaFiltered() {
