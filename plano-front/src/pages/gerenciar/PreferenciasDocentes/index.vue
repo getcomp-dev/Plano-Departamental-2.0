@@ -103,7 +103,7 @@
             </template>
           </template>
           <tr v-else>
-            <v-td>
+            <v-td width="810">
               <b>Nenhuma disciplina encontrada.</b>
               Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
@@ -204,7 +204,7 @@
             </template>
           </template>
           <tr v-else>
-            <v-td>
+            <v-td width="810">
               <b>Nenhuma disciplina encontrada.</b>
               Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
