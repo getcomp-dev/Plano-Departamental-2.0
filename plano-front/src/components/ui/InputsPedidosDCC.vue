@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       pedidoForm: null,
-      debouncedEditPedido: debounce(this.handleEditPedido, 1500),
+      debouncedEditPedido: debounce(this.handleEditPedido, 3000),
     };
   },
 
