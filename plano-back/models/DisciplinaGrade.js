@@ -5,6 +5,11 @@ module.exports = function (sequelize, DataTypes) {
     periodo: {
       type: DataTypes.INTEGER,
       allowNull: false
+    },
+    obrigatoria: {
+      type: DataTypes.TINYINT,
+      allowNull: false,
+      default: 0
     }
   }, {
     freezeTableName: true,

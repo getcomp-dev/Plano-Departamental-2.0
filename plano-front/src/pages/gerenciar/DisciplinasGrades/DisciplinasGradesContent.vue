@@ -36,6 +36,14 @@
             >
               Disciplina
             </v-th-ordination>
+            <v-th-ordination
+              :currentOrder="ordenacaoDisciplinasMain"
+              orderToCheck="obrigatoria"
+              width="70"
+              title="Disciplina Obrigatória na Grade"
+            >
+              Obrigatória
+            </v-th-ordination>
           </template>
 
           <template #tbody>
@@ -52,16 +60,19 @@
               <v-td width="70">{{ disciplinaGrade.periodo }}</v-td>
               <v-td width="80" align="start">{{ disciplinaGrade.disciplina.codigo }}</v-td>
               <v-td width="400" align="start">{{ disciplinaGrade.disciplina.nome }}</v-td>
+
+              <v-td width="70" v-if="disciplinaGrade.obrigatoria">Sim</v-td>
+              <v-td v-else width="70">-</v-td>
             </tr>
 
             <tr v-if="!hasGradeSelected">
-              <v-td width="545" colspan="3">
+              <v-td width="620" colspan="3">
                 <b>Nenhuma disciplina encontrada</b>
                 , selecione uma grade.
               </v-td>
             </tr>
             <tr v-else-if="!DisciplinaGradesOrdered.length">
-              <v-td width="545" colspan="3">
+              <v-td width="620" colspan="3">
                 <b>Nenhuma disciplina encontrada</b>
                 na grade selecionada.
               </v-td>
@@ -123,7 +134,7 @@
         </VSelect>
 
         <div class="row">
-          <div class="col-7">
+          <div class="col-4">
             <VSelect
               label="Código"
               v-model="disciplinaGradeForm.Disciplina"
@@ -150,6 +161,24 @@
               :min="1"
               :disabled="!hasGradeSelected"
             />
+          </div>
+
+          <div class="col-3">
+            <VSelect
+              label="Obrigatória"
+              v-model="disciplinaGradeForm.obrigatoria"
+              :validation="$v.disciplinaGradeForm.obrigatoria"
+              @change="handleSelectObrigatoria"
+              :disabled="!hasDisciplinaSelected"
+            >
+              <VOption v-if="!DisciplinasOptions.length" text="-" />
+              <VOption
+                v-for="opcao in obrigatoriaOpcoes"
+                :key="opcao"
+                :text="opcao"
+                :value="opcao"
+              />
+            </VSelect>
           </div>
 
           <div class="col">
@@ -235,14 +264,17 @@ export default {
       gradeForm: makeEmptyGrade(),
       currentGradeId: null,
       currentCursoId: null,
+      currentDisciplina: null,
       disciplinaSelectedId: null,
       ordenacaoDisciplinasMain: { order: "periodo", type: "asc" },
+      obrigatoriaOpcoes: ["Não", "Sim"],
     };
   },
   validations: {
     disciplinaGradeForm: {
       periodo: { required, integer, maxValue: maxValue(15), minValue: minValue(1) },
       Disciplina: { required },
+      obrigatoria: { required },
     },
   },
 
@@ -252,12 +284,15 @@ export default {
       this.clearDisciplina();
       this.clearGradeForm();
       this.currentGradeId = null;
+      this.currentDisciplina = null;
     },
     handleSelectGrade() {
       this.clearDisciplina();
+      this.currentDisciplina = null;
       if (this.currentGradeId) this.showGrade(this.currentGradeId);
     },
     handleSelectDisciplina() {
+      this.currentDisciplina = this.disciplinaGradeForm.Disciplina;
       const disciplinaFound = this.AllDisciplinas.find(
         (disciplina) => disciplina.id === this.disciplinaGradeForm.Disciplina
       );
@@ -265,6 +300,9 @@ export default {
 
       this.disciplinaGradeForm.disciplina = { ...disciplinaFound };
       this.disciplinaGradeForm.Grade = this.currentGradeId;
+      this.disciplinaGradeForm.obrigatoria = this.obrigatoriaOpcoes[
+        this.isDisciplinaObrigatoria(this.disciplinaGradeForm.disciplina)
+      ];
 
       const disciplinaDaGradeAtual = this.DisciplinaGradesFiltred.find(
         (disciplinaGrade) => disciplinaGrade.Disciplina === disciplinaFound.id
@@ -276,7 +314,20 @@ export default {
         this.clearClick();
       }
     },
+    handleSelectObrigatoria() {
+      return (this.currentObrigatoria = this.disciplinaGradeForm.obrigatoria);
+    },
+    isDisciplinaObrigatoria(disciplina) {
+      if (!disciplina) return;
+
+      for (const disciplinaGrade of this.DisciplinaGradesOrdered) {
+        if (disciplinaGrade.disciplina.id === disciplina.id) {
+          return disciplinaGrade.obrigatoria;
+        }
+      }
+    },
     handleClickInDisciplina(disciplinaGrade) {
+      this.currentDisciplina = this.disciplinaGradeForm.Disciplina;
       this.disciplinaSelectedId = disciplinaGrade.Disciplina;
       this.showGrade(this.currentGradeId);
       this.showDisciplina(disciplinaGrade);
@@ -298,7 +349,17 @@ export default {
     },
     showDisciplina(disciplinaGrade) {
       this.disciplinaGradeForm = cloneDeep(disciplinaGrade);
+      this.disciplinaGradeForm.obrigatoria = this.obrigatoriaOpcoes[
+        this.isDisciplinaObrigatoria(this.disciplinaGradeForm.disciplina)
+      ];
       this.disciplinaGradeForm.Grade = this.gradeForm.id;
+    },
+    converteObrigatoriaParaNum(opcao) {
+      if (!opcao) return;
+
+      if (typeof opcao === "number") return opcao;
+
+      return opcao === "Sim" ? 1 : 0;
     },
     isEven(number) {
       return number % 2 === 0;
@@ -310,12 +371,13 @@ export default {
       try {
         this.setLoading({ type: "partial", value: true });
         const disciplinaGrade = { ...this.disciplinaGradeForm };
+        disciplinaGrade.obrigatoria = this.converteObrigatoriaParaNum(disciplinaGrade.obrigatoria);
         const response = await this.disciplinaGradeServices.create(disciplinaGrade);
         this.disciplinaSelectedId = response.DisciplinaGrade.Disciplina;
         this.$notify({
           group: "general",
           title: "Sucesso!",
-          text: `A disciplina <b>${disciplinaGrade.disciplina.nome}</b> foi adicionada à grade 
+          text: `A disciplina <b>${disciplinaGrade.disciplina.nome}</b> foi adicionada à grade
           <b>${this.gradeForm.nome}</b>`,
           type: "success",
         });
@@ -337,6 +399,7 @@ export default {
       try {
         this.setLoading({ type: "partial", value: true });
         const disciplinaGrade = { ...this.disciplinaGradeForm };
+        disciplinaGrade.obrigatoria = this.converteObrigatoriaParaNum(disciplinaGrade.obrigatoria);
         await this.disciplinaGradeServices.update(
           disciplinaGrade.Disciplina,
           disciplinaGrade.Grade,
@@ -363,6 +426,7 @@ export default {
       try {
         this.setLoading({ type: "partial", value: true });
         const disciplinaGrade = { ...this.disciplinaGradeForm };
+        disciplinaGrade.obrigatoria = this.converteObrigatoriaParaNum(disciplinaGrade.obrigatoria);
         await this.disciplinaGradeServices.delete(
           disciplinaGrade.Disciplina,
           disciplinaGrade.Grade,
@@ -397,6 +461,9 @@ export default {
     },
     hasGradeSelected() {
       return this.currentGradeId != null;
+    },
+    hasDisciplinaSelected() {
+      return this.currentDisciplina != null;
     },
     isEditDisciplina() {
       return this.disciplinaSelectedId !== null;

@@ -22,7 +22,8 @@ router.post('/', function (req, res, next) {
     models.DisciplinaGrade.create({
         periodo: req.body.periodo,
         Disciplina: req.body.Disciplina,
-        Grade: req.body.Grade
+        Grade: req.body.Grade,
+        obrigatoria: req.body.obrigatoria
     }).then(function (disciplinaGrade) {
         ioBroadcast(SM.DISCIPLINA_GRADE_CREATED, {'msg': 'Disciplina adicionada à Grade!', 'DisciplinaGrade': disciplinaGrade})
         console.log('\nRequest de '+req.usuario.nome+'\n')
@@ -70,12 +71,12 @@ router.post('/:Disciplina([0-9]+)&&:Grade([0-9]+)', function (req, res, next) {
 
         if(disciplinaGrade.Grade != req.body.Grade)
             history({fieldName:'Grade', lineId:`${disciplinaGrade.periodo}/${disciplinaGrade.Disciplina}/${disciplinaGrade.Grade}`, oldValue: disciplinaGrade.Grade, newValue: req.body.Grade, operationType:'Edit', user: req.usuario.nome})
-
-
+            
         return disciplinaGrade.updateAttributes({
             periodo: req.body.periodo,
             Disciplina: req.body.Disciplina,
-            Grade: req.body.Grade
+            Grade: req.body.Grade,
+            obrigatoria: req.body.obrigatoria
         })
     }).then(function (disciplinaGrade) {
         ioBroadcast(SM.DISCIPLINA_GRADE_UPDATED, {'msg': 'Disciplina da grade atualizada!', 'DisciplinaGrade': disciplinaGrade})
