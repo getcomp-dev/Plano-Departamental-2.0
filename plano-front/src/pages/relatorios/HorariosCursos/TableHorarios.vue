@@ -17,7 +17,6 @@
           :key="horarioId + turma.id + turma.periodo"
           v-b-popover.hover.right="{
             title: turma.disciplina.nome + ' - ' + turma.letra,
-
             content: turma.docenteApelido,
           }"
         >

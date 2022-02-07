@@ -6,11 +6,15 @@
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </portal>
 
-    <div v-show="!onLoading.table && algumHorariosEstaAtivo" class="w-100 m-0">
+    <div
+      v-show="!onLoading.table && algumHorariosEstaAtivo && algumTipoEstaAtivo"
+      class="w-100 m-0"
+    >
       <div v-show="filtroPeriodosEstaAtivo.periodo1 && filtroCursos.ativados.length" class="w-100">
         <h2 class="periodo-title">1º Período letivo</h2>
+
         <ListHorarios
-          v-for="curso in CursosComHorariosFiltred"
+          v-for="curso in cursosComHorariosFiltred"
           :key="curso.codigo + curso.periodoInicial1Semestre"
           :title="curso.nome"
           :curso="{
@@ -19,14 +23,16 @@
             periodoInicial: curso.periodoInicial1Semestre,
           }"
           :horariosTurmas="curso.horarios1Periodo"
+          :eletivasAtivas="filtroEletivasEstaAtivo"
+          :obrigatoriasAtivas="filtroObrigatoriasEstaAtivo"
         />
-        <ListHorarios
+      </div>
+      <!-- <ListHorarios
           v-if="filtroEletivasEstaAtivo"
           :template="'extra'"
           :title="'Eletivas'"
           :horariosTurmas="horariosAtivos1Periodo.Eletivas"
-        />
-      </div>
+        /> -->
 
       <template v-if="filtroPeriodosEstaAtivo.periodo2">
         <h2 class="periodo-title">2º Período letivo</h2>
@@ -34,6 +40,8 @@
           :template="'extra'"
           :title="'Cursos de inverno'"
           :horariosTurmas="TurmasAtivas2Periodo"
+          :eletivasAtivas="filtroEletivasEstaAtivo"
+          :obrigatoriasAtivas="filtroObrigatoriasEstaAtivo"
         />
       </template>
 
@@ -41,7 +49,7 @@
         <h2 class="periodo-title">3º Período letivo</h2>
 
         <ListHorarios
-          v-for="curso in CursosComHorariosFiltred"
+          v-for="curso in cursosComHorariosFiltred"
           :key="curso.codigo + curso.periodoInicial2Semestre"
           :title="curso.nome"
           :curso="{
@@ -50,13 +58,15 @@
             periodoInicial: curso.periodoInicial2Semestre,
           }"
           :horariosTurmas="curso.horarios3Periodo"
+          :eletivasAtivas="filtroEletivasEstaAtivo"
+          :obrigatoriasAtivas="filtroObrigatoriasEstaAtivo"
         />
-        <ListHorarios
+        <!-- <ListHorarios
           v-if="filtroEletivasEstaAtivo"
           :template="'extra'"
           :title="'Eletivas'"
           :horariosTurmas="horariosAtivos3Periodo.Eletivas"
-        />
+        /> -->
       </div>
 
       <template v-if="filtroPeriodosEstaAtivo.periodo4">
@@ -66,11 +76,13 @@
           :template="'extra'"
           :title="'Cursos de verão'"
           :horariosTurmas="TurmasAtivas4Periodo"
+          :eletivasAtivas="filtroEletivasEstaAtivo"
+          :obrigatoriasAtivas="filtroObrigatoriasEstaAtivo"
         />
       </template>
     </div>
 
-    <p v-show="!algumHorariosEstaAtivo" class="text-empty">
+    <p v-show="!algumHorariosEstaAtivo || !algumTipoEstaAtivo" class="text-empty">
       <b>Nenhum horário encontrado.</b>
       Clique no botão de filtros
       <font-awesome-icon :icon="['fas', 'list-ul']" class="mx-1" />
@@ -166,6 +178,30 @@
           </tr>
         </template>
       </BaseTable>
+
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Tipos'">
+        <template #thead>
+          <v-th width="25" />
+          <v-th width="425" align="start">Tipo de disciplina</v-th>
+        </template>
+        <template #tbody>
+          <tr
+            v-for="tipoDisciplina in getTiposDisciplina"
+            :key="tipoDisciplina"
+            @click.stop="toggleItemInArray(tipoDisciplina, filtroTiposDisciplina.selecionados)"
+            v-prevent-click-selection
+          >
+            <v-td width="25">
+              <input
+                type="checkbox"
+                v-model="filtroTiposDisciplina.selecionados"
+                :value="tipoDisciplina"
+              />
+            </v-td>
+            <v-td width="425" align="start">{{ tipoDisciplina }}</v-td>
+          </tr>
+        </template>
+      </BaseTable>
     </ModalFiltros>
 
     <ModalRelatorio ref="modalRelatorio" @selection-option="generatePdf($event)" />
@@ -214,19 +250,20 @@ export default {
     return {
       asideModalsRefs: ["modalFiltros", "modalAjuda", "modalRelatorio"],
       ordemCursos: { order: "codigo", type: "asc" },
+      tiposDisciplina: ["Eletivas", "Obrigatórias"],
       horariosAtivos1Periodo: {
-        CCD: [[], [], [], [], [], [], [], [], [], []],
-        CCN: [[], [], [], [], [], [], [], [], [], []],
-        EC: [[], [], [], [], [], [], [], [], [], []],
-        SI: [[], [], [], [], [], [], [], [], [], []],
-        Eletivas: [],
+        CCD: [[], [], [], [], [], [], [], [], [], [], []], // Último elemento dos arrays são as eletivas
+        CCN: [[], [], [], [], [], [], [], [], [], [], []],
+        EC: [[], [], [], [], [], [], [], [], [], [], []],
+        SI: [[], [], [], [], [], [], [], [], [], [], []],
+        // Eletivas: [[], [], [], []],
       },
       horariosAtivos3Periodo: {
-        CCD: [[], [], [], [], [], [], [], [], [], []],
-        CCN: [[], [], [], [], [], [], [], [], [], []],
-        EC: [[], [], [], [], [], [], [], [], [], []],
-        SI: [[], [], [], [], [], [], [], [], [], []],
-        Eletivas: [],
+        CCD: [[], [], [], [], [], [], [], [], [], [], []],
+        CCN: [[], [], [], [], [], [], [], [], [], [], []],
+        EC: [[], [], [], [], [], [], [], [], [], [], []],
+        SI: [[], [], [], [], [], [], [], [], [], [], []],
+        // Eletivas: [[], [], [] ,[]]
       },
       filtroCursos: {
         selecionados: [],
@@ -239,9 +276,12 @@ export default {
       filtroSemestres: {
         selecionados: [],
       },
+      filtroTiposDisciplina: {
+        selecionados: [],
+      },
       modalFiltrosTabs: {
         current: "Cursos",
-        array: ["Cursos", "Períodos", "Semestres"],
+        array: ["Cursos", "Períodos", "Semestres", "Tipos"],
       },
       modalFiltrosCallbacks: {
         selectAll: {
@@ -256,6 +296,9 @@ export default {
             this.filtroSemestres.selecionados = [...this.SemestresOptions];
             this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
           },
+          Tipos: () => {
+            this.filtroTiposDisciplina.selecionados = [...this.tiposDisciplina];
+          },
         },
         selectNone: {
           Cursos: () => {
@@ -268,6 +311,9 @@ export default {
           Semestres: () => {
             this.filtroSemestres.selecionados = [];
             this.filtroPeriodos.selecionados = [];
+          },
+          Tipos: () => {
+            this.filtroTiposDisciplina.selecionados = [];
           },
         },
         btnOk: () => {
@@ -291,6 +337,7 @@ export default {
       (periodo) => periodo.id === 1 || periodo.id === 3
     );
     this.modalFiltrosCallbacks.selectAll.Cursos();
+    this.modalFiltrosCallbacks.selectAll.Tipos();
     this.modalFiltrosCallbacks.btnOk();
   },
 
@@ -470,8 +517,8 @@ export default {
     createHorarioEletivas(periodo) {
       let horariosAtivos;
 
-      if (periodo === 1) horariosAtivos = this.horariosAtivos1Periodo.Eletivas;
-      else horariosAtivos = this.horariosAtivos3Periodo.Eletivas;
+      if (periodo === 1) horariosAtivos = this.horariosAtivos1Periodo;
+      else horariosAtivos = this.horariosAtivos3Periodo;
 
       let turmas = filter(this.AllTurmas, {
         periodo: periodo,
@@ -501,7 +548,7 @@ export default {
           gradesAtivas[i - 1][gradesAtivas[i - 1].length - 1].fim = 10;
         }
       }
-      let eletiva = true;
+      // let eletiva = true;
       for (let i = 0; i < turmas.length; i++) {
         for (let j = 0; j < 4; j++) {
           for (let k = 0; k < gradesAtivas[j].length; k++) {
@@ -516,16 +563,35 @@ export default {
               disciplinaGrade.periodo < gradesAtivas[j][k].fim &&
               disciplinaGrade.periodo >= gradesAtivas[j][k].inicio
             )
-              for (let l = 0; l < disciplinasGradeAtual.length; l++) {
-                if (turmas[i].Disciplina == disciplinasGradeAtual[l].Disciplina) eletiva = false;
+              if (!disciplinaGrade.obrigatoria) {
+                switch (j) {
+                case 0:
+                  horariosAtivos.CCN[10].push(turmas[i]);
+                  break;
+                case 1:
+                  horariosAtivos.EC[10].push(turmas[i]);
+                  break;
+                case 2:
+                  horariosAtivos.SI[10].push(turmas[i]);
+                  break;
+                case 3:
+                  horariosAtivos.CCD[10].push(turmas[i]);
+                  break;
+                default:
+                  return;
+                }
+                // for (let l = 0; l < disciplinasGradeAtual.length; l++) {
+                //     if (turmas[i].Disciplina == disciplinasGradeAtual[l].Disciplina) eletiva = false;
+                // }
               }
           }
         }
-        if (eletiva) {
-          horariosAtivos.push(turmas[i]);
-        }
-        eletiva = true;
       }
+      //   if (eletiva) {
+      //       horariosAtivos.push(turmas[i]);
+      //   }
+      //   eletiva = true;
+      // }
     },
     getTurmasComPedidoPeriodizado(turma, Pedidos) {
       return some(Pedidos, (pedido) => pedido.Turma === turma.id && pedido.vagasPeriodizadas > 0);
@@ -567,8 +633,7 @@ export default {
       "Pedidos",
       "PedidosExternos",
     ]),
-
-    CursosComHorariosFiltred() {
+    cursosComHorariosFiltred() {
       return filter(this.CursosComHorarios, (curso) =>
         some(this.filtroCursos.ativados, ["codigo", curso.codigo])
       );
@@ -668,16 +733,19 @@ export default {
     },
     CursosModal() {
       const cursosResultantes = [...this.PrincipaisCursosDCC];
-      cursosResultantes.push({
-        nome: "ELETIVAS",
-        codigo: "-",
-      });
+      // cursosResultantes.push({
+      //   nome: "ELETIVAS",
+      //   codigo: "-",
+      // });
 
       return cursosResultantes;
     },
 
     filtroEletivasEstaAtivo() {
-      return some(this.filtroCursos.ativados, (curso) => curso.codigo === "-");
+      return some(this.filtroTiposDisciplina.selecionados, (tipo) => tipo === "Eletivas");
+    },
+    filtroObrigatoriasEstaAtivo() {
+      return some(this.filtroTiposDisciplina.selecionados, (tipo) => tipo === "Obrigatórias");
     },
     filtroPeriodosEstaAtivo() {
       const periodosResult = {
@@ -703,6 +771,12 @@ export default {
         this.filtroPeriodosEstaAtivo.periodo2 ||
         this.filtroPeriodosEstaAtivo.periodo4
       );
+    },
+    algumTipoEstaAtivo() {
+      return this.filtroEletivasEstaAtivo || this.filtroObrigatoriasEstaAtivo;
+    },
+    getTiposDisciplina() {
+      return this.tiposDisciplina;
     },
   },
 

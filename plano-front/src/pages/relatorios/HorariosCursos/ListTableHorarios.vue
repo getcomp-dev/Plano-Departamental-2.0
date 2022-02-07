@@ -6,21 +6,34 @@
 
     <div class="container-horarios">
       <template v-if="template === 'curso'">
-        <div
-          v-for="periodo in PeriodosDaGradeDoCurso"
-          :key="periodo.indice + periodo.nome + curso.periodoInicial"
-          class="div-table"
-        >
-          <h4 class="periodo-title">{{ periodo.nome }}</h4>
+        <template v-if="obrigatoriasAtivas">
+          <div
+            v-for="periodo in PeriodosDaGradeDoCurso"
+            :key="periodo.indice + periodo.nome + curso.periodoInicial"
+            class="div-table"
+          >
+            <h4 class="periodo-title">{{ periodo.nome }}</h4>
+
+            <TableHorarios
+              :Turmas="horariosObrigatorias[periodo.indice]"
+              :listaDeHorarios="listaDeHorariosFiltredByTurno(periodo.nome)"
+            />
+          </div>
+        </template>
+      </template>
+
+      <template v-if="eletivasAtivas">
+        <div class="div-table">
+          <h4 class="periodo-title">Eletivas</h4>
 
           <TableHorarios
-            :Turmas="horariosTurmas[periodo.indice]"
-            :listaDeHorarios="listaDeHorariosFiltredByTurno"
+            :Turmas="horariosEletivas[0]"
+            :listaDeHorarios="listaDeHorariosFiltredByTurno('Eletivas')"
           />
         </div>
       </template>
 
-      <div v-else class="div-table">
+      <div v-if="template === 'extra'" class="div-table">
         <TableHorarios :Turmas="horariosTurmas" :listaDeHorarios="ListaDeTodosHorarios" />
       </div>
     </div>
@@ -37,11 +50,39 @@ export default {
   components: {
     TableHorarios,
   },
+  data() {
+    return {
+      listaHorariosCombinada: [],
+      ordemHorarios: { order: "id", type: "asc" },
+      horariosEletivas: [],
+      horariosObrigatorias: [],
+    };
+  },
   props: {
     template: { type: String, default: "curso" },
     title: { type: String, required: true },
     curso: { type: Object, default: () => {} },
     horariosTurmas: { type: Array, required: true },
+    eletivasAtivas: { type: Boolean, required: true },
+    obrigatoriasAtivas: { type: Boolean, required: true },
+  },
+  beforeMount() {
+    this.separaObrigatoriasDeEletivas();
+  },
+  methods: {
+    listaDeHorariosFiltredByTurno(nomePeriodo) {
+      if (this.template !== "curso") return;
+
+      if (this.eletivasAtivas && nomePeriodo === "Eletivas") return this.ListaDeTodosHorarios;
+
+      if (this.curso.turno === "Diurno") return this.ListaDeHorariosDiurno;
+      else return this.ListaDeHorariosNoturno;
+    },
+    separaObrigatoriasDeEletivas() {
+      this.horariosEletivas.push(this.horariosTurmas[10]);
+
+      for (let i = 0; i < 10; i++) this.horariosObrigatorias.push(this.horariosTurmas[i]);
+    },
   },
 
   computed: {
@@ -53,12 +94,6 @@ export default {
       "AllGrades",
     ]),
 
-    listaDeHorariosFiltredByTurno() {
-      if (this.template !== "curso") return;
-
-      if (this.curso.turno === "Diurno") return this.ListaDeHorariosDiurno;
-      else return this.ListaDeHorariosNoturno;
-    },
     GradesDoCurso() {
       if (this.template !== "curso") return;
 
@@ -75,7 +110,6 @@ export default {
           }
         });
       });
-
       return periodoFinal;
     },
     PeriodosDaGradeDoCurso() {
