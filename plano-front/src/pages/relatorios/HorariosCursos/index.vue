@@ -277,6 +277,7 @@ export default {
         selecionados: [],
       },
       filtroTiposDisciplina: {
+        ativados: [],
         selecionados: [],
       },
       modalFiltrosTabs: {
@@ -319,6 +320,7 @@ export default {
         btnOk: () => {
           this.filtroPeriodos.ativados = [...this.filtroPeriodos.selecionados];
           this.filtroCursos.ativados = [...this.filtroCursos.selecionados];
+          this.filtroTiposDisciplina.ativados = [...this.filtroTiposDisciplina.selecionados];
         },
       },
     };
@@ -742,10 +744,10 @@ export default {
     },
 
     filtroEletivasEstaAtivo() {
-      return some(this.filtroTiposDisciplina.selecionados, (tipo) => tipo === "Eletivas");
+      return some(this.filtroTiposDisciplina.ativados, (tipo) => tipo === "Eletivas");
     },
     filtroObrigatoriasEstaAtivo() {
-      return some(this.filtroTiposDisciplina.selecionados, (tipo) => tipo === "Obrigatórias");
+      return some(this.filtroTiposDisciplina.ativados, (tipo) => tipo === "Obrigatórias");
     },
     filtroPeriodosEstaAtivo() {
       const periodosResult = {
