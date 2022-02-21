@@ -4,6 +4,7 @@
       {{ disciplina.perfil.abreviacao }}
     </v-td>
     <v-td width="100">{{ disciplina.codigo }}</v-td>
+    <v-td width="75">{{ disciplina.creditoTotal }}</v-td>
     <v-td width="380" align="start" :title="disciplina.nome">
       {{ disciplina.nome }}
     </v-td>

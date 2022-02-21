@@ -36,6 +36,13 @@
           </v-th-ordination>
           <v-th-ordination
             :currentOrder="ordenacaoMain.disciplinas"
+            orderToCheck="creditoTotal"
+            width="75"
+          >
+            Créditos
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoMain.disciplinas"
             orderToCheck="nome"
             width="380"
             align="start"
