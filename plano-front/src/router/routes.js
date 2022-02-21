@@ -76,13 +76,17 @@ const routesGerenciar = [
     beforeEnter: requireSuperAdmin,
   },
   {
+    path: "/gerenciar/horarios",
+    component: lazyLoad("gerenciar/Horarios"),
+    beforeEnter: requireSuperAdmin,
+  },
+  {
     path: "/gerenciar/history",
     component: lazyLoad("gerenciar/HistoryLog"),
     beforeEnter: requireSuperAdmin,
   },
   {
     path: "/gerenciar/perfis",
-
     component: lazyLoad("gerenciar/Perfis"),
     beforeEnter: requireSuperAdmin,
   },

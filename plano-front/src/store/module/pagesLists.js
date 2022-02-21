@@ -103,6 +103,11 @@ const state = {
       description: "Listagem de todas as modificações feitas pelos usuários no sistema.",
     },
     {
+      path: "/gerenciar/horarios",
+      title: "Horários",
+      description: "Listagem de todas os horários. Permite adicionar, editar e excluir horários.",
+    },
+    {
       path: "/gerenciar/perfis",
       title: "Perfis",
       description:

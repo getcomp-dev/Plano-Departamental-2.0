@@ -561,10 +561,11 @@ export default {
               Disciplina: turmas[i].Disciplina,
             });
             if (
-              disciplinaGrade &&
-              disciplinaGrade.periodo < gradesAtivas[j][k].fim &&
-              disciplinaGrade.periodo >= gradesAtivas[j][k].inicio
-            )
+              disciplinaGrade
+              // &&
+              // disciplinaGrade.periodo < gradesAtivas[j][k].fim &&
+              // disciplinaGrade.periodo >= gradesAtivas[j][k].inicio
+            ) {
               if (!disciplinaGrade.obrigatoria) {
                 switch (j) {
                 case 0:
@@ -586,6 +587,7 @@ export default {
                 //     if (turmas[i].Disciplina == disciplinasGradeAtual[l].Disciplina) eletiva = false;
                 // }
               }
+            }
           }
         }
       }
