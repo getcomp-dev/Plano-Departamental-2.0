@@ -3,11 +3,12 @@
     <portal to="page-header">
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="relatorio" @click="toggleAsideModal('relatorio')" />
+      <BaseButton template="swap-modes" @click="toggleTableMode()" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </portal>
 
     <div class="div-table">
-      <BaseTable>
+      <BaseTable v-if="disciplinasAmarradas">
         <template #thead>
           <v-th-ordination
             :currentOrder="ordenacaoMain.disciplinas"
@@ -36,6 +37,7 @@
           <v-th width="45" title="Turma">Turma</v-th>
           <v-th width="150" align="start" title="Apelido do Docente">Docentes</v-th>
           <v-th width="130">Horário</v-th>
+          <v-th width="90">Sala(s)</v-th>
 
           <template v-if="filtroPeriodos.ativados.length">
             <v-th width="65" paddingX="0" :title="theadTitle.creditos">Créditos</v-th>
@@ -65,13 +67,66 @@
                 :turma="turma"
                 :creditoTotal="disciplina.creditoTotal"
                 :showVagas="!!filtroPeriodos.ativados.length"
+                :disciplinasAmarradas="true"
                 @click-in-turma-vaga="handleClickInTurmaVaga"
               />
             </template>
           </template>
 
           <tr v-else>
-            <v-td :width="`${filtroPeriodos.ativados.length ? 1205 : 900}`">
+            <v-td :width="`${filtroPeriodos.ativados.length ? 1295 : 990}`">
+              <b>Nenhuma disciplina encontrada.</b>
+              Clique no botão de filtros
+              <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+              para selecioná-las.
+            </v-td>
+          </tr>
+        </template>
+      </BaseTable>
+
+      <BaseTable v-else>
+        <template #thead>
+          <v-th width="80">Código</v-th>
+          <v-th width="350" align="start">Nome</v-th>
+          <v-th width="80" align="center">Perfil</v-th>
+          <v-th width="65" title="Período letivo, ordenação fixa">Período</v-th>
+          <v-th width="45" title="Turma">Turma</v-th>
+          <v-th width="150" align="start" title="Apelido do Docente">Docentes</v-th>
+          <v-th width="130">Horário</v-th>
+          <v-th-ordination :currentOrder="ordenacaoMain.turmas" orderToCheck="Sala1" width="90">
+            Sala(s)
+          </v-th-ordination>
+
+          <template v-if="filtroPeriodos.ativados.length">
+            <v-th width="65" paddingX="0" :title="theadTitle.creditos">Créditos</v-th>
+            <v-th width="80" paddingX="0" title="Vagas Plano (SIPlanWeb)">
+              Vagas Plano
+              <v-th width="80" paddingX="0" :title="theadTitle.vagas">Grade+Extra</v-th>
+            </v-th>
+
+            <v-th colspan="2" width="160" paddingX="0" title="Vagas SIGA">
+              Vagas SIGA
+              <v-th width="80" paddingX="0" :title="theadTitle.vagasOferecidas">Oferecidas</v-th>
+              <v-th width="80" paddingX="0" :title="theadTitle.vagasOferecidas">Ocupadas</v-th>
+            </v-th>
+          </template>
+        </template>
+
+        <template #tbody>
+          <template v-if="turmasDisciplinasOrdered.length">
+            <TurmaRow
+              v-for="turma in turmasDisciplinasOrdered"
+              :key="turma.id + turma.letra + turma.disciplina.id"
+              :turma="turma"
+              :creditoTotal="turma.disciplina.creditoTotal"
+              :showVagas="!!filtroPeriodos.ativados.length"
+              :disciplinasAmarradas="false"
+              @click-in-turma-vaga="handleClickInTurmaVaga"
+            />
+          </template>
+
+          <tr v-else>
+            <v-td :width="`${filtroPeriodos.ativados.length ? 1295 : 990}`">
               <b>Nenhuma disciplina encontrada.</b>
               Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
@@ -310,11 +365,13 @@ export default {
       asideModalsRefs: ["modalFiltros", "modalAjuda", "modalRelatorio"],
       ordenacaoMain: {
         disciplinas: { order: "codigo", type: "asc" },
+        turmas: { order: "Sala1.nome", type: "desc" },
       },
       ordenacaoModal: {
         perfis: { order: "nome", type: "asc" },
         disciplinas: { order: "codigo", type: "asc" },
       },
+      disciplinasAmarradas: true,
       filtroDisciplinas: {
         ativados: [],
         selecionados: [],
@@ -393,6 +450,9 @@ export default {
   },
 
   methods: {
+    toggleTableMode() {
+      this.disciplinasAmarradas = !this.disciplinasAmarradas;
+    },
     handleClickInTurmaVaga(turma) {
       this.turmaClicked = turma;
       this.$refs.modalVagas.open();
@@ -442,8 +502,33 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["AllTurmas", "DisciplinasDCC", "PerfisDCC", "Pedidos", "AllPedidosSIGA"]),
+    ...mapGetters([
+      "AllTurmas",
+      "DisciplinasDCC",
+      "PerfisDCC",
+      "Pedidos",
+      "AllPedidosSIGA",
+      "AllSalas",
+    ]),
 
+    turmasDisciplinasOrdered() {
+      return orderBy(
+        this.turmasDisciplinasFiltred,
+        this.ordenacaoMain.turmas.order,
+        this.ordenacaoMain.turmas.type
+      );
+    },
+    turmasDisciplinasFiltred() {
+      let turmasDisciplinas = [];
+
+      for (const disciplina of this.DisciplinasDataSummated) {
+        for (const turma of disciplina.turmas) {
+          turmasDisciplinas.push(turma);
+        }
+      }
+
+      return turmasDisciplinas;
+    },
     DisciplinasDataOrdered() {
       return orderBy(
         this.DisciplinasDataSummated,

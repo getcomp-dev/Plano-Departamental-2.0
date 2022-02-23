@@ -7,6 +7,7 @@
     <v-td width="45">{{ totalsSummation.numeroDeTurmas }}</v-td>
     <v-td width="150" />
     <v-td width="130" />
+    <v-td width="90" />
     <v-td width="65">{{ totalsSummation.creditos }}</v-td>
     <v-td width="80">{{ totalsSummation.vagas }}</v-td>
     <v-td width="80">{{ totalsSummation.vagasOferecidas }}</v-td>
