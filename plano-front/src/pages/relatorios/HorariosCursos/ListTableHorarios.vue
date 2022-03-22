@@ -21,21 +21,21 @@
           </div>
         </template>
       </template>
+    </div>
 
-      <template v-if="eletivasAtivas">
-        <div class="div-table">
-          <h4 class="periodo-title">Eletivas</h4>
+    <template v-if="eletivasAtivas">
+      <div class="div-table-eletivas">
+        <h4 class="periodo-title">Eletivas</h4>
 
-          <TableHorarios
-            :Turmas="horariosEletivas[0]"
-            :listaDeHorarios="listaDeHorariosFiltredByTurno('Eletivas')"
-          />
-        </div>
-      </template>
-
-      <div v-if="template === 'extra'" class="div-table">
-        <TableHorarios :Turmas="horariosTurmas" :listaDeHorarios="ListaDeTodosHorarios" />
+        <TableHorarios
+          :Turmas="horariosEletivas[0]"
+          :listaDeHorarios="listaDeHorariosFiltredByTurno('Eletivas')"
+        />
       </div>
+    </template>
+
+    <div v-if="template === 'extra'" class="div-table">
+      <TableHorarios :Turmas="horariosTurmas" :listaDeHorarios="ListaDeTodosHorarios" />
     </div>
   </div>
 </template>
@@ -142,9 +142,14 @@ export default {
   justify-content: space-between;
   grid-column-gap: 5px;
   grid-row-gap: 10px;
+  margin-bottom: 10px;
+}
+
+.div-table-eletivas {
   margin-bottom: 25px;
 }
-.container-horarios .periodo-title {
+
+.periodo-title {
   font-size: 12px;
   font-weight: normal;
   margin-bottom: 5px;

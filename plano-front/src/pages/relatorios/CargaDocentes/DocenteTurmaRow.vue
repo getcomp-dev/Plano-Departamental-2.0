@@ -1,6 +1,7 @@
 <template>
   <tr>
-    <v-td width="130" />
+    <v-td v-if="docente" width="130">{{ docente.apelido }}</v-td>
+    <v-td v-else width="130" />
     <v-td width="65">{{ turma.periodo }}</v-td>
     <v-td width="80">{{ turma.disciplina.codigo }}</v-td>
     <v-td width="300" align="start">{{ turma.disciplina.nome }}</v-td>
@@ -26,6 +27,8 @@ export default {
   mixins: [generateHorariosText],
   props: {
     turma: { type: Object, required: true },
+    profsAmarrados: { type: Boolean, required: true },
+    docente: { type: Object, required: false },
   },
 
   computed: {

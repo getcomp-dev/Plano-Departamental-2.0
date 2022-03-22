@@ -119,12 +119,18 @@ export default {
         if (nomeSala1 !== "" && nomeSala2 !== "") break;
       }
 
-      if (this.turma.Sala1 !== null && this.turma.Sala2 === null) return nomeSala1;
+      if (this.turma.Sala1 !== null && this.turma.Sala2 === null) {
+        return this.turma.disciplina.creditoTotal === 2 ? `${nomeSala1}` : `${nomeSala1} / -`;
+      }
 
-      if (this.turma.Sala2 !== null && this.turma.Sala1 === null) return nomeSala2;
+      if (this.turma.Sala2 !== null && this.turma.Sala1 === null) {
+        return this.turma.disciplina.creditoTotal === 2 ? `${nomeSala2}` : `- / ${nomeSala2}`;
+      }
 
-      if (this.turma.Sala1 !== null && this.turma.Sala2 !== null)
-        return `${nomeSala1} / ${nomeSala2}`;
+      if (this.turma.Sala1 !== null && this.turma.Sala2 !== null) {
+        if (this.turma.Sala1 === this.turma.Sala2) return `${nomeSala1}`;
+        else return `${nomeSala1} / ${nomeSala2}`;
+      }
     },
   },
 

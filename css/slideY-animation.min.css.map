@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,oBAAoB,AAAC,CACnB,SAAS,CAAE,mBAAmB,CAC/B,AACD,AAAA,oBAAoB,AAAC,CACnB,SAAS,CAAE,iBAAiB,CAC7B,AACD,UAAU,CAAV,SAAU,CACR,IAAI,CACF,OAAO,CAAE,CAAC,CACV,SAAS,CAAE,gBAAgB,CAE7B,EAAE,CACA,OAAO,CAAE,CAAC,CACV,SAAS,CAAE,aAAa,EAG5B,UAAU,CAAV,OAAU,CACR,IAAI,CACF,OAAO,CAAE,CAAC,CACV,SAAS,CAAE,aAAa,CAE1B,EAAE,CACA,OAAO,CAAE,CAAC,CACV,SAAS,CAAE,gBAAgB",
+    "sources": [
+        "../plano-front/src/assets/styles/slideY-animation.scss"
+    ],
+    "names": [],
+    "file": "slideY-animation.min.css"
+}

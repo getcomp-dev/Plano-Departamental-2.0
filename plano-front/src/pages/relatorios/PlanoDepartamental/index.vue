@@ -55,7 +55,7 @@
         </template>
 
         <template #tbody>
-          <template v-if="DisciplinasDataOrdered.length">
+          <template v-if="DisciplinasDataOrdered.length && turmasDisciplinasOrdered.length">
             <TotalsRow :totalsSummation="totalsSummation" />
 
             <template v-for="disciplina in DisciplinasDataOrdered">
@@ -83,22 +83,49 @@
           </tr>
         </template>
       </BaseTable>
-
       <BaseTable v-else>
         <template #thead>
-          <v-th width="80">Código</v-th>
-          <v-th width="350" align="start">Nome</v-th>
-          <v-th width="80" align="center">Perfil</v-th>
-          <v-th width="65" title="Período letivo, ordenação fixa">Período</v-th>
+          <v-th-ordination
+            :currentOrder="ordenacaoMain.turmas"
+            orderToCheck="disciplina.codigo"
+            width="80"
+          >
+            Código
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoMain.turmas"
+            orderToCheck="disciplina.nome"
+            width="350"
+          >
+            Nome
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoMain.turmas"
+            orderToCheck="disciplina.perfil.abreviacao"
+            width="80"
+          >
+            Perfil
+          </v-th-ordination>
+          <v-th-ordination :currentOrder="ordenacaoMain.turmas" orderToCheck="periodo" width="65">
+            Período
+          </v-th-ordination>
           <v-th width="45" title="Turma">Turma</v-th>
-          <v-th width="150" align="start" title="Apelido do Docente">Docentes</v-th>
+          <v-th width="150">Docente</v-th>
           <v-th width="130">Horário</v-th>
-          <v-th-ordination :currentOrder="ordenacaoMain.turmas" orderToCheck="Sala1" width="90">
+          <v-th-ordination :currentOrder="ordenacaoMain.turmas" orderToCheck="nomeSala1" width="90">
             Sala(s)
           </v-th-ordination>
 
           <template v-if="filtroPeriodos.ativados.length">
-            <v-th width="65" paddingX="0" :title="theadTitle.creditos">Créditos</v-th>
+            <v-th-ordination
+              :currentOrder="ordenacaoMain.turmas"
+              orderToCheck="disciplina.creditoTotal"
+              width="65"
+              paddingX="0"
+              :title="theadTitle.creditos"
+            >
+              Créditos
+            </v-th-ordination>
             <v-th width="80" paddingX="0" title="Vagas Plano (SIPlanWeb)">
               Vagas Plano
               <v-th width="80" paddingX="0" :title="theadTitle.vagas">Grade+Extra</v-th>
@@ -113,7 +140,7 @@
         </template>
 
         <template #tbody>
-          <template v-if="turmasDisciplinasOrdered.length">
+          <template v-if="DisciplinasDataOrdered.length && turmasDisciplinasOrdered.length">
             <TurmaRow
               v-for="turma in turmasDisciplinasOrdered"
               :key="turma.id + turma.letra + turma.disciplina.id"
@@ -294,6 +321,32 @@
           </tr>
         </template>
       </BaseTable>
+
+      <BaseTable type="modal" v-show="modalFiltrosTabs.current === 'Salas'">
+        <template #thead>
+          <v-th width="25" />
+          <v-th width="425" align="start">Salas</v-th>
+        </template>
+
+        <template #tbody>
+          <tr
+            v-for="sala in SalasOptions"
+            :key="sala.id + sala.nome"
+            @click="toggleItemInArray(sala, filtroSalas.selecionados)"
+            v-prevent-click-selection
+          >
+            <v-td width="25" type="content">
+              <input
+                type="checkbox"
+                v-model="filtroSalas.selecionados"
+                :value="sala"
+                @click.stop="toggleItemInArray(sala, filtroSalas.selecionados)"
+              />
+            </v-td>
+            <v-td width="425" align="start">{{ sala.nome }}</v-td>
+          </tr>
+        </template>
+      </BaseTable>
     </ModalFiltros>
 
     <ModalVagas ref="modalVagas" :turma="turmaClicked" />
@@ -332,6 +385,7 @@ import {
   conectaFiltroPerfisEDisciplinas,
   conectaFiltrosSemestresEPeriodos,
   preventClickSelection,
+  toggleItemInArray,
 } from "@/common/mixins";
 import { VInputSearch } from "@/components/ui";
 import { ModalRelatorio, ModalAjuda, ModalFiltros } from "@/components/modals";
@@ -339,6 +393,7 @@ import ModalVagas from "./ModalVagas";
 import TotalsRow from "./Table/TotalsRow.vue";
 import DisciplinaRow from "./Table/DisciplinaRow.vue";
 import TurmaRow from "./Table/TurmaRow.vue";
+import VThOrdination from "../../../components/global/VThOrdination.vue";
 
 export default {
   name: "PlanoDepartamental",
@@ -351,12 +406,14 @@ export default {
     TotalsRow,
     DisciplinaRow,
     TurmaRow,
+    VThOrdination,
   },
   mixins: [
     toggleAsideModal,
     conectaFiltroPerfisEDisciplinas,
     conectaFiltrosSemestresEPeriodos,
     preventClickSelection,
+    toggleItemInArray,
   ],
   data() {
     return {
@@ -365,7 +422,8 @@ export default {
       asideModalsRefs: ["modalFiltros", "modalAjuda", "modalRelatorio"],
       ordenacaoMain: {
         disciplinas: { order: "codigo", type: "asc" },
-        turmas: { order: "Sala1.nome", type: "desc" },
+        turmas: { order: "nomeSala1", type: "asc" },
+        salas: { order: "nome", type: "asc" },
       },
       ordenacaoModal: {
         perfis: { order: "nome", type: "asc" },
@@ -386,9 +444,13 @@ export default {
       filtroSemestres: {
         selecionados: [],
       },
+      filtroSalas: {
+        ativados: [],
+        selecionados: [],
+      },
       modalFiltrosTabs: {
         current: "Perfis",
-        array: ["Perfis", "Disciplinas", "Períodos", "Semestres"],
+        array: ["Perfis", "Disciplinas", "Períodos", "Semestres", "Salas"],
       },
       modalFiltrosCallbacks: {
         selectAll: {
@@ -411,6 +473,9 @@ export default {
             this.filtroSemestres.selecionados = [...this.SemestresOptions];
             this.filtroPeriodos.selecionados = [...this.PeriodosOptions];
           },
+          Salas: () => {
+            this.filtroSalas.selecionados = [...this.SalasOptions];
+          },
         },
         selectNone: {
           Perfis: () => {
@@ -432,11 +497,17 @@ export default {
             this.filtroSemestres.selecionados = [];
             this.filtroPeriodos.selecionados = [];
           },
+          Salas: () => {
+            this.filtroSalas.selecionados = [];
+          },
         },
         btnOk: () => {
           this.filtroPeriodos.ativados = orderBy(this.filtroPeriodos.selecionados, "id");
 
           this.filtroDisciplinas.ativados = [...this.filtroDisciplinas.selecionados];
+
+          this.verificaSalaNula();
+          this.filtroSalas.ativados = [...this.filtroSalas.selecionados];
         },
       },
     };
@@ -446,10 +517,21 @@ export default {
     this.modalFiltrosCallbacks.selectAll.Periodos();
     this.modalFiltrosCallbacks.selectAll.Perfis();
     this.modalFiltrosCallbacks.selectAll.Disciplinas();
+    this.modalFiltrosCallbacks.selectAll.Salas();
     this.modalFiltrosCallbacks.btnOk();
   },
 
   methods: {
+    verificaSalaNula() {
+      for (const sala of this.filtroSalas.selecionados) {
+        if (sala.id === 999) {
+          let salaNula = sala;
+          this.filtroSalas.selecionados.splice(this.filtroSalas.selecionados.indexOf(sala), 1);
+          this.filtroSalas.selecionados.unshift(salaNula);
+          break;
+        }
+      }
+    },
     toggleTableMode() {
       this.disciplinasAmarradas = !this.disciplinasAmarradas;
     },
@@ -499,6 +581,25 @@ export default {
         plano: this.currentPlano,
       });
     },
+    addNomeSala(turma, nomeSala1) {
+      return {
+        Disciplina: turma.Disciplina,
+        Docente1: turma.Docente1,
+        Docente2: turma.Docente2,
+        Horario1: turma.Horario1,
+        Horario2: turma.Horario2,
+        Plano: turma.Plano,
+        Sala1: turma.Sala1,
+        Sala2: turma.Sala2,
+        disciplina: turma.disciplina,
+        id: turma.id,
+        letra: turma.letra,
+        periodo: turma.periodo,
+        turno1: turma.turno1,
+        turno2: turma.turno2,
+        nomeSala1: nomeSala1,
+      };
+    },
   },
 
   computed: {
@@ -513,10 +614,27 @@ export default {
 
     turmasDisciplinasOrdered() {
       return orderBy(
-        this.turmasDisciplinasFiltred,
+        this.turmasWithNames,
         this.ordenacaoMain.turmas.order,
         this.ordenacaoMain.turmas.type
       );
+    },
+    turmasWithNames() {
+      let turmasSalas = [];
+      for (const turma of this.turmasDisciplinasFiltred) {
+        for (const sala of this.AllSalas) {
+          if (turma.Sala1 === null) {
+            turmasSalas.push(this.addNomeSala(turma, "SEM SALA"));
+            break;
+          }
+
+          if (sala.id === turma.Sala1) {
+            turmasSalas.push(this.addNomeSala(turma, sala.nome));
+            break;
+          }
+        }
+      }
+      return turmasSalas;
     },
     turmasDisciplinasFiltred() {
       let turmasDisciplinas = [];
@@ -578,12 +696,28 @@ export default {
 
       const disciplinasFilteredByPeriodos = [];
       disciplinasFilteredByDisciplinas.forEach((disciplina) => {
-        const turmasDaDisciplina = disciplina.turmas.filter((turma) =>
-          some(this.filtroPeriodos.ativados, ["id", turma.periodo])
-        );
+        if (this.filtroSalas.ativados[0].id === 999) {
+          const turmasDaDisciplina = disciplina.turmas.filter(
+            (turma) =>
+              (some(this.filtroSalas.ativados, ["id", turma.Sala1 || turma.Sala2]) ||
+                (turma.Sala1 === null && turma.Sala2 === null) ||
+                (turma.Sala2 === null && turma.disciplina.creditoTotal === 4)) &&
+              some(this.filtroPeriodos.ativados, ["id", turma.periodo])
+          );
 
-        if (turmasDaDisciplina.length) {
-          disciplinasFilteredByPeriodos.push({ ...disciplina, turmas: turmasDaDisciplina });
+          if (turmasDaDisciplina.length) {
+            disciplinasFilteredByPeriodos.push({ ...disciplina, turmas: turmasDaDisciplina });
+          }
+        } else {
+          const turmasDaDisciplina = disciplina.turmas.filter(
+            (turma) =>
+              some(this.filtroSalas.ativados, ["id", turma.Sala1 || turma.Sala2]) &&
+              some(this.filtroPeriodos.ativados, ["id", turma.periodo])
+          );
+
+          if (turmasDaDisciplina.length) {
+            disciplinasFilteredByPeriodos.push({ ...disciplina, turmas: turmasDaDisciplina });
+          }
         }
       });
 
@@ -687,6 +821,16 @@ export default {
     },
     DisciplinasOptions() {
       return this.DisciplinasDCC;
+    },
+    SalasOptions() {
+      let AllSalasMaisNull = [...this.AllSalas];
+      AllSalasMaisNull.unshift({
+        id: 999,
+        nome: "Sem sala",
+        laboratorio: 0,
+        lotacao_maxima: 0,
+      });
+      return AllSalasMaisNull;
     },
   },
 };

@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "",
+    "sources": [
+        "../plano-front/src/assets/styles/mixins.scss"
+    ],
+    "names": [],
+    "file": "mixins.min.css"
+}

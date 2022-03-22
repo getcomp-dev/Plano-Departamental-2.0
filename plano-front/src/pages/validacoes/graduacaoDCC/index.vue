@@ -401,7 +401,8 @@ export default {
     let g;
     let periodoInicial, periodoFinal;
 
-    let ano = this.$store.state.plano.Plano[0].ano;
+    let ano = filter(this.$store.state.plano.Plano, ["id", this.$store.state.plano.CurrentPlanoId]);
+    console.log(ano);
     //CCD
     g = filter(this.$store.state.grade.Grades, ["Curso", 4]);
     g = orderBy(g, "periodoInicio", "desc");

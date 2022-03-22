@@ -3,14 +3,15 @@
     <portal to="page-header">
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="relatorio" @click="toggleAsideModal('relatorio')" />
+      <BaseButton template="swap-modes" @click="toggleTableMode()" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </portal>
 
     <div class="div-table">
-      <BaseTable>
+      <BaseTable v-if="professoresAmarrados">
         <template #thead>
           <v-th-ordination
-            :currentOrder="ordenacaoDocentesMain"
+            :currentOrder="ordenacaoMain.docentes"
             orderToCheck="apelido"
             width="130"
             align="start"
@@ -43,6 +44,7 @@
                   v-for="turma in docente.turmas[`semestre${semestre.id}`]"
                   :key="semestre.id + turma.letra + turma.id + docente.nome"
                   :turma="turma"
+                  :profsAmarrados="professoresAmarrados"
                 />
                 <DocenteCargaPosRow
                   v-for="carga in docente.cargasPos[`semestre${semestre.id}`]"
@@ -58,6 +60,84 @@
                 v-for="turma in DocenteSemAlocacaoCargaFiltered.turmas"
                 :key="turma.id + turma.letra + turma.periodo"
                 :turma="turma"
+                :profsAmarrados="professoresAmarrados"
+              />
+            </template>
+          </template>
+
+          <tr v-else>
+            <v-td width="815">
+              <b>Nenhum docente encontrado.</b>
+              Clique no botão de filtros
+              <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+              para selecioná-los.
+            </v-td>
+          </tr>
+        </template>
+      </BaseTable>
+      <BaseTable v-else>
+        <template #thead>
+          <v-th-ordination
+            :currentOrder="ordenacaoMain.cargas"
+            orderToCheck="docente.apelido"
+            width="130"
+            align="start"
+          >
+            Docente
+          </v-th-ordination>
+          <v-th width="65" align="start">Período</v-th>
+          <v-th-ordination
+            :currentOrder="ordenacaoMain.cargas"
+            orderToCheck="turma.disciplina.codigo"
+            width="80"
+            align="start"
+          >
+            Código
+          </v-th-ordination>
+          <v-th-ordination
+            :currentOrder="ordenacaoMain.cargas"
+            orderToCheck="turma.disciplina.nome"
+            width="300"
+            align="start"
+          >
+            Disciplina
+          </v-th-ordination>
+          <v-th width="45">Turma</v-th>
+          <v-th-ordination
+            :currentOrder="ordenacaoMain.cargas"
+            orderToCheck="turma.Horario1"
+            width="130"
+            align="start"
+          >
+            Horários
+          </v-th-ordination>
+
+          <v-th width="200" colspan="3" paddingX="0">
+            Créditos
+            <v-th width="75" paddingX="0" title="Créditos do 1º Semestre letivo">1º Semestre</v-th>
+            <v-th width="75" paddingX="0" title="Créditos do 2º Semestre letivo">2º Semestre</v-th>
+            <v-th width="50" paddingX="0" title="Total de créditos do 1º e 2º Semestre letivo">
+              Total
+            </v-th>
+          </v-th>
+        </template>
+
+        <template #tbody>
+          <template v-if="algumFiltroEstaAtivo">
+            <DocenteTurmaRow
+              v-for="(carga, index) in AllCargasOrdered"
+              :key="index"
+              :turma="carga.turma"
+              :docente="carga.docente"
+              :profsAmarrados="professoresAmarrados"
+            />
+
+            <template v-if="DocenteSemAlocacaoCargaFiltered">
+              <DocenteTurmaRow
+                v-for="turma in DocenteSemAlocacaoCargaFiltered.turmas"
+                :key="turma.id + turma.letra + turma.periodo"
+                :turma="turma"
+                :profsAmarrados="professoresAmarrados"
               />
             </template>
           </template>
@@ -238,8 +318,12 @@ export default {
     return {
       searchDocentes: "",
       asideModalsRefs: ["modalFiltros", "modalAjuda", "modalRelatorio"],
-      ordenacaoDocentesMain: { order: "apelido", type: "asc" },
+      ordenacaoMain: {
+        docentes: { order: "apelido", type: "asc" },
+        cargas: { order: "docente.apelido", type: "asc" },
+      },
       ordenacaoDocentesModal: { order: "apelido", type: "asc" },
+      professoresAmarrados: true,
       filtroDocentes: {
         ativados: [],
         selecionados: [],
@@ -310,6 +394,9 @@ export default {
   },
 
   methods: {
+    toggleTableMode() {
+      this.professoresAmarrados = !this.professoresAmarrados;
+    },
     makeTurmasDoDocente(docenteId, periodos) {
       const turmasFilteredByDocente = { semestre1: [], semestre2: [] };
       let creditos1Semestre = 0;
@@ -454,17 +541,57 @@ export default {
         plano: this.currentPlano,
       });
     },
+    setCarga(cargaDocente, turma) {
+      let obj = {
+        docente: {
+          apelido: cargaDocente.apelido,
+          nome: cargaDocente.nome,
+          nomesiga: cargaDocente.nomesiga,
+        },
+        ativo: cargaDocente.ativo,
+        cargasPos: cargaDocente.cargasPos,
+        creditos: cargaDocente.creditos,
+        creditos1Semestre: cargaDocente.creditos1Semestre,
+        creditos2Semestre: cargaDocente.creditos2Semestre,
+        id: cargaDocente.id,
+        turma: turma,
+      };
+      return obj;
+    },
   },
 
   computed: {
     ...mapGetters(["DocentesAtivos", "AllTurmas", "AllCargasPos"]),
 
+    AllCargasOrdered() {
+      return orderBy(
+        this.ReestruturaCarga,
+        this.ordenacaoMain.cargas.order,
+        this.ordenacaoMain.cargas.type
+      );
+    },
     DocentesCargaOrdered() {
       return orderBy(
         this.DocentesCargaFiltered,
-        this.ordenacaoDocentesMain.order,
-        this.ordenacaoDocentesMain.type
+        this.ordenacaoMain.docentes.order,
+        this.ordenacaoMain.docentes.type
       );
+    },
+    ReestruturaCarga() {
+      let allCargas = [];
+      for (const cargaDocente of this.DocentesCargaFiltered) {
+        for (const turma of cargaDocente.turmas.semestre1) {
+          const carga = this.setCarga(cargaDocente, turma);
+          if (!allCargas.includes(carga)) allCargas.push(carga);
+        }
+
+        for (const turma of cargaDocente.turmas.semestre2) {
+          const carga = this.setCarga(cargaDocente, turma);
+          if (!allCargas.includes(carga)) allCargas.push(carga);
+        }
+      }
+      console.log(allCargas);
+      return allCargas;
     },
     DocentesCargaFiltered() {
       const docentesFiltered = this.DocentesAtivos.filter((docente) =>
