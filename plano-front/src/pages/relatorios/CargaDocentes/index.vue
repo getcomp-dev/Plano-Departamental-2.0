@@ -590,7 +590,6 @@ export default {
           if (!allCargas.includes(carga)) allCargas.push(carga);
         }
       }
-      console.log(allCargas);
       return allCargas;
     },
     DocentesCargaFiltered() {

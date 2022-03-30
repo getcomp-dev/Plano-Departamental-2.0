@@ -28,25 +28,21 @@
 
           <template #tbody>
             <tr
-              v-for="curso in CursosOrdered"
-              :key="curso.id + curso.codigo"
-              @click="handleClickInCurso(curso)"
+              v-for="horario in HorariosOrdered"
+              :key="horario.id + horario.horario"
+              @click="handleClickInHorario(horario)"
               class=""
-              :class="['clickable', { 'bg-selected': cursoSelecionado === curso.id }]"
+              :class="['clickable', { 'bg-selected': horarioSelecionado === horario.id }]"
             >
-              <v-td width="75">{{ curso.codigo }}</v-td>
-              <v-td width="300" align="start" :title="curso.nome">
-                {{ curso.nome }}
-              </v-td>
-              <v-td width="70">{{ curso.turno }}</v-td>
-              <v-td width="85">{{ curso.alunosEntrada }}</v-td>
-              <v-td width="85">{{ curso.alunosEntrada2 }}</v-td>
+              <v-td width="90">{{ horario.horario }}</v-td>
+              <v-td v-if="horario.ativo" width="70">Sim</v-td>
+              <v-td v-else width="70">-</v-td>
             </tr>
 
-            <tr v-if="!CursosOrdered.length">
+            <tr v-if="!HorariosOrdered.length">
               <v-td width="580" colspan="5">
                 <font-awesome-icon :icon="['fas', 'exclamation-triangle']" class="icon-red" />
-                <b>Nenhum curso encontrado!</b>
+                <b>Nenhum horário encontrado!</b>
               </v-td>
             </tr>
           </template>
@@ -54,59 +50,28 @@
       </div>
 
       <Card
-        title="Curso"
+        title="Horário"
         width="320"
         :toggleFooter="isEditing"
-        @btn-salvar="handleEditCurso"
+        @btn-salvar="handleEditHorario"
         @btn-delete="openModalDelete"
-        @btn-add="handleCreateCurso"
+        @btn-add="handleCreateHorario"
         @btn-clean="clearForm"
       >
         <template #body>
-          <VInput label="Nome" v-model="cursoForm.nome" :validation="$v.cursoForm.nome" />
+          <VInput label="Nome" v-model="horarioForm.horario" :validation="$v.horarioForm.horario" />
+          <!-- <VInput label="Dia e Horário" v-model="horarioForm.horario"/> -->
 
-          <div class="row">
-            <div class="col">
-              <VInput label="Código" v-model="cursoForm.codigo" :validation="$v.cursoForm.codigo" />
-            </div>
-            <div class="col">
-              <VSelect label="Turno" v-model="cursoForm.turno" :validation="$v.cursoForm.turno">
-                <b-form-select-option value="Diurno">DIURNO</b-form-select-option>
-                <b-form-select-option value="Noturno">NOTURNO</b-form-select-option>
-                <b-form-select-option value="Integral">INTEGRAL</b-form-select-option>
-              </VSelect>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col">
-              <VInput
-                inputType="number"
-                label="Alunos 1º Período"
-                v-model.number="cursoForm.alunosEntrada"
-                :validation="$v.cursoForm.alunosEntrada"
-                textAlign="center"
-              />
-            </div>
-            <div class="col">
-              <VInput
-                inputType="number"
-                label="Alunos 2º Período"
-                v-model.number="cursoForm.alunosEntrada2"
-                :validation="$v.cursoForm.alunosEntrada2"
-                textAlign="center"
-              />
-            </div>
-          </div>
+          <VCheckbox label="Ativo" v-model="horarioForm.ativo" />
         </template>
       </Card>
     </div>
 
-    <ModalDelete ref="modalDelete" :isDeleting="isEditing" @btn-deletar="handleDeleteCurso">
+    <ModalDelete ref="modalDelete" :isDeleting="isEditing" @btn-deletar="handleDeleteHorario">
       <li v-if="isEditing" class="list-group-item">
         <span v-html="modalDeleteText"></span>
       </li>
-      <li v-else class="list-group-item">Nenhuma curso selecionado.</li>
+      <li v-else class="list-group-item">Nenhuma horário selecionado.</li>
     </ModalDelete>
 
     <ModalAjuda ref="modalAjuda">
@@ -141,9 +106,114 @@
 </template>
 
 <script>
-import { ModalAjuda } from "@/components/modals";
-import VThOrdination from "../../../components/global/VThOrdination.vue";
+import { mapActions, mapGetters } from "vuex";
+import { ModalDelete, ModalAjuda } from "@/components/modals";
+import { required } from "vuelidate/lib/validators";
+import { Card, VInput, VCheckbox } from "@/components/ui";
+import { makeEmptyHorario } from "@utils/factories";
+import { orderBy } from "lodash-es";
+
 export default {
-  components: { ModalAjuda, VThOrdination },
+  name: "DashboardHorarios",
+  components: { Card, VInput, ModalDelete, ModalAjuda, VCheckbox },
+  data() {
+    return {
+      modalDeleteText: "",
+      horarioSelecionado: "",
+      horarioForm: makeEmptyHorario(),
+      ordenacaoHorarios: { order: "horario", type: "asc" },
+    };
+  },
+  validations: {
+    horarioForm: {
+      horario: { required },
+      ativo: { required },
+    },
+  },
+
+  methods: {
+    ...mapActions(["createHorario", "editHorario", "deleteHorario"]),
+
+    handleClickInHorario(horario) {
+      this.horarioSelecionado = horario.id;
+      this.horarioForm = { ...horario };
+    },
+    clearForm() {
+      this.horarioSelecionado = "";
+      this.horarioForm = makeEmptyHorario();
+      this.$nextTick(() => this.$v.$reset());
+    },
+    openModalDelete() {
+      this.modalDeleteText = `Tem certeza que deseja excluír o horário
+      <b>${this.horarioForm.horario}</b>?`;
+
+      this.$refs.modalDelete.open();
+    },
+
+    async handleCreateHorario() {
+      this.$v.horarioForm.$touch();
+      if (this.$v.horarioForm.$anyError) return;
+
+      try {
+        this.setLoading({ type: "partial", value: true });
+        await this.createHorario({ ...this.horarioForm });
+        this.clearForm();
+      } catch (error) {
+        this.pushNotification({
+          type: "error",
+          title: "Erro ao criar novo horário!",
+          text: error.message || "",
+        });
+      } finally {
+        this.setLoading({ type: "partial", value: false });
+      }
+    },
+    async handleEditHorario() {
+      this.$v.horarioForm.$touch();
+      if (this.$v.horarioForm.$anyError) return;
+
+      try {
+        this.setLoading({ type: "partial", value: true });
+        await this.editHorario({ ...this.horarioForm });
+      } catch (error) {
+        this.pushNotification({
+          type: "error",
+          title: "Erro ao editar horário!",
+          text: error.message || "",
+        });
+      } finally {
+        this.setLoading({ type: "partial", value: false });
+      }
+    },
+    async handleDeleteHorario() {
+      this.$v.horarioForm.$touch();
+      if (this.$v.horarioForm.$anyError) return;
+
+      try {
+        this.setLoading({ type: "partial", value: true });
+        await this.deleteHorario({ ...this.horarioForm });
+        this.clearForm();
+      } catch (error) {
+        this.pushNotification({
+          type: "error",
+          title: "Erro ao deletar horário!",
+          text: error.message || "",
+        });
+      } finally {
+        this.setLoading({ type: "partial", value: false });
+      }
+    },
+  },
+
+  computed: {
+    ...mapGetters(["AllHorarios"]),
+
+    HorariosOrdered() {
+      return orderBy(this.AllHorarios, this.ordenacaoHorarios.order, this.ordenacaoHorarios.type);
+    },
+    isEditing() {
+      return this.horarioForm.id !== null;
+    },
+  },
 };
 </script>

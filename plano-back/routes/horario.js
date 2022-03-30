@@ -7,7 +7,8 @@ const models = require('../models/index'),
 router.post('/', function (req, res, next) {
     console.log('\nRequest de '+req.usuario.nome+'\n')
     models.Horario.create({
-        horario: req.body.horario
+        horario: req.body.horario,
+        ativo: req.body.ativo
     }).then(function (horario) {
         ioBroadcast(SM.HORARIO_CREATED, {'msg': 'Horário criado!', 'Horario': horario})
         console.log('\nRequest de '+req.usuario.nome+'\n')
@@ -45,7 +46,8 @@ router.post('/:id([0-9]+)', function (req, res, next) {
             throw new CustomError(400, 'Horário inválido')
 
         return horario.updateAttributes({
-            horario: req.body.horario
+            horario: req.body.horario,
+            ativo: req.body.ativo
         })
     }).then(function (horario) {
         ioBroadcast(SM.HORARIO_UPDATED, {'msg': 'Horário atualizado!', 'Horario': horario})

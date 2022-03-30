@@ -1,11 +1,13 @@
 import Vue from "vue";
 import horarioService from "../../services/horario";
-import { orderBy, find, filter } from "lodash-es";
+import { orderBy, find, filter, cloneDeepWith } from "lodash-es";
+import { validateObjectKeys, setEmptyValuesToNull } from "@/common/utils";
 import {
   HORARIO_FETCHED,
   SOCKET_HORARIO_CREATED,
   SOCKET_HORARIO_DELETED,
   SOCKET_HORARIO_UPDATED,
+  PUSH_NOTIFICATION,
 } from "../mutation-types";
 
 const state = {
@@ -44,6 +46,40 @@ const actions = {
         .catch((error) => {
           reject(error);
         });
+    });
+  },
+
+  async createHorario({ commit, dispatch }, horario) {
+    const horarioNormalized = cloneDeepWith(horario, setEmptyValuesToNull);
+    validateObjectKeys(horarioNormalized, ["horario", "ativo"]);
+
+    await horarioService.create(horarioNormalized);
+    await dispatch("fetchAllHorarios");
+
+    commit(PUSH_NOTIFICATION, {
+      type: "success",
+      text: `O horário ${horarioNormalized.horario} foi criado`,
+    });
+  },
+
+  async editHorario({ commit }, horario) {
+    const horarioNormalized = cloneDeepWith(horario, setEmptyValuesToNull);
+    validateObjectKeys(horarioNormalized, ["horario", "ativo"]);
+
+    await horarioService.update(horarioNormalized.id, horarioNormalized);
+
+    commit(PUSH_NOTIFICATION, {
+      type: "success",
+      text: `O horário ${horarioNormalized.horario} foi atualizado`,
+    });
+  },
+
+  async deleteHorario({ commit }, horario) {
+    await horarioService.delete(horario.id, horario);
+
+    commit(PUSH_NOTIFICATION, {
+      type: "success",
+      text: `O horário ${horario.horario} foi excluído`,
     });
   },
 };

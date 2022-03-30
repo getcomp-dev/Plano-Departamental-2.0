@@ -5,6 +5,11 @@ module.exports = function (sequelize, DataTypes) {
         horario: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        ativo: {
+            type: DataTypes.BOOLEAN,
+            allowNull: true,
+            defaultValue: 1
         }
     }, {
         freezeTableName: true,
