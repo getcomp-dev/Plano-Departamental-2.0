@@ -607,6 +607,13 @@
         janela que se abrirá à direita, coloque o valor de preferência como zero (Inapto).
       </li>
       <li class="list-group-item">
+        <b>Visualizar conteúdo:</b>
+        Clique no ícone filtros
+        <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
+        . Em seguida, utilize as abas para navegar entre os filtros. Selecione as informações que
+        deseja visualizar e clique em OK.
+      </li>
+      <li class="list-group-item">
         <b>Alterar visualização da tabela:</b>
         Clique no ícone de alterar visualização
         <font-awesome-icon :icon="['fas', 'sync-alt']" class="icon-gray" />

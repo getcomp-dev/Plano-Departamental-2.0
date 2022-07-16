@@ -19,7 +19,7 @@ const state = {
       path: "/plano/turmas-externas",
       title: "Graduação - Outros",
       description:
-        "Cadastro de todas as turmas de disciplinas que não são oferecidas pelo DCC, mas fazem parte das grades de cursos do DCC. Permite a alteração de vagas, horários das turmas.",
+        "Cadastro de turmas de disciplinas externas, mas que fazem parte das grades de cursos do DCC. Permite a alteração de vagas, horários das turmas.",
     },
     {
       path: "/plano/carga-pos",
@@ -32,7 +32,7 @@ const state = {
       path: "/relatorios/carga-docentes",
       title: "Carga Docentes",
       description:
-        "Listagem de todos os docentes com suas respectivas disciplinas (graduação e pós-graduação). Exibindo o somatório parcial por semestre e a carga total de cada docente.",
+        "Listagem dos docentes com suas respectivas disciplinas (graduação e pós). Exibe o somatório parcial por semestre e a carga total de cada docente.",
     },
     {
       path: "/relatorios/grades-dcc",
@@ -83,7 +83,7 @@ const state = {
       path: "/gerenciar/disciplinas-grades",
       title: "Disciplinas na Grade",
       description:
-        "Listagem de todas as disciplinas de uma grade (atual ou antiga) cadastrada no sistema. Permite adicionar, editar e excluir disciplinas em uma determinada grades.",
+        "Listagem das disciplinas de uma grade cadastrada no sistema. Permite adicionar, editar e excluir disciplinas em uma determinada grade.",
     },
     {
       path: "/gerenciar/docentes",
@@ -95,7 +95,7 @@ const state = {
       path: "/gerenciar/grades-cursos",
       title: "Grades Cursos",
       description:
-        "Listagem de todas as grades (atuais e antigas) de cursos DCC e Outros que ainda estão em atividade. Permite adicionar, editar e excluir grades.",
+        "Listagem das grades (atuais e antigas) de cursos DCC e Outros que ainda estão em atividade. Permite adicionar, editar e excluir grades.",
     },
     {
       path: "/gerenciar/history",
@@ -117,13 +117,13 @@ const state = {
       path: "/gerenciar/plano-departamental",
       title: "Plano Departamental",
       description:
-        "Listagem de todos os planos presentes no sistema. Permite adicionar, editar, cópiar e excluir planos, além de também permitir importar planos através do arquivo (.csv) gerado pelo SIGA.",
+        "Listagem dos planos presentes no sistema. Permite adicionar, editar, copiar, importar e excluir planos.",
     },
     {
       path: "/gerenciar/preferencias-docentes",
       title: "Preferências Docentes",
       description:
-        "Listagem de preferências de disciplinas dos docentes. Permite adicionar, editar e excluir preferências, alem de também permitir importar preferencias através de um arquivo (.xlsx).",
+        "Listagem de preferências de disciplinas dos docentes. Permite adicionar, editar, importar e excluir preferências.",
     },
     {
       path: "/gerenciar/salas",
@@ -156,7 +156,7 @@ const state = {
       path: "/validacoes/lancamento-siga",
       title: "Lançamento SIGA",
       description:
-        "Listagem das diferenças entre o plano atual do sistemas e o lançamento presente no SIGA. Através da comparação do arquivo (.csv) gerado pelo SIGA.",
+        "Listagem das diferenças entre o plano atual do sistema e o lançamento presente no SIGA.",
     },
   ],
 };

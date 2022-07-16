@@ -361,6 +361,12 @@
         deseja visualizar e clique em OK.
       </li>
       <li class="list-group-item">
+        <b>Alterar visualização da tabela:</b>
+        Clique no ícone de alterar visualização
+        <font-awesome-icon :icon="['fas', 'sync-alt']" class="icon-gray" />
+        no cabeçalho da página para alterar a visualização, com disciplinas amarradas ou não.
+      </li>
+      <li class="list-group-item">
         <b>Visualizar vagas por turma:</b>
         Clique no número de vagas desta turma, em uma das três últimas colunas da tabela, na linha
         correspondente.

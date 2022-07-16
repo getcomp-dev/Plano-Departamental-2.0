@@ -126,7 +126,7 @@ export default {
   left: 0;
   width: 100%;
   height: var(--navbar-height);
-  background-color: $clr-darkgray;
+  background-color: $clr-mainred;
   font-size: 12px;
 
   > .navbar-brand {
@@ -137,8 +137,8 @@ export default {
     height: 30px;
     margin: 0;
     padding: 0;
-    color: $clr-text-gray;
-    background-color: $clr-dark;
+    color: white;
+    background-color: $clr-darkred;
     font-size: 16px;
     text-align: start;
     &:hover {
@@ -156,11 +156,11 @@ export default {
     margin: 0;
     border: none;
     outline: none;
-    color: $clr-text-gray;
-    background-color: $clr-dark;
+    color: white;
+    background-color: $clr-darkred;
     font-size: 20px;
-    border-left: #1f1f1f 2px solid;
-    border-right: #1f1f1f 2px solid;
+    border-left: #fff 2px solid;
+    border-right: #fff 2px solid;
     &:hover {
       color: #fff;
     }
@@ -183,7 +183,7 @@ export default {
       height: 100%;
       padding: 0 8px;
       margin: 0 3px;
-      color: $clr-text-gray;
+      color: white;
       filter: brightness(85%);
       cursor: pointer;
       &:hover {
@@ -212,8 +212,8 @@ export default {
         border-radius: 3px;
         padding: 0 2px;
         color: currentColor;
-        border-color: $clr-text-gray;
-        background-color: #3f464d;
+        border-color: white;
+        background-color: $clr-darkred;
         &:hover {
           color: #fff;
           border-color: #fff;

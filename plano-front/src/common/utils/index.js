@@ -10,6 +10,7 @@ import parseCSVFileToArray from "./parseCSVFileToArray";
 import parseDateUTC from "./parseDateUTC";
 import booleanToText from "./booleanToText";
 import wait from "./wait";
+import validateDisciplinasGrades from "./validateDisciplinasGrades";
 
 export {
   wait,
@@ -24,4 +25,5 @@ export {
   setEmptyValuesToNull,
   validateObjectKeys,
   generateEmptyTurma,
+  validateDisciplinasGrades,
 };

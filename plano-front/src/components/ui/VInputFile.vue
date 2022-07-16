@@ -69,5 +69,6 @@ export default {
 <style scoped>
 ::v-deep .custom-file-label {
   line-height: 1.5 !important;
+  cursor: pointer;
 }
 </style>

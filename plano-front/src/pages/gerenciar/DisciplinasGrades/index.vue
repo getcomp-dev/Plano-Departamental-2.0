@@ -1,6 +1,14 @@
 <template>
   <div class="main-component row">
     <portal to="page-header">
+      <BaseButton
+        title="Importar disciplinas na grade"
+        type="icon"
+        color="gray"
+        @click="handleImportarDisciplinas"
+      >
+        <font-awesome-icon :icon="['fas', 'file-import']" />
+      </BaseButton>
       <BaseButton template="ajuda" @click="$refs.modalAjuda.toggle()" />
     </portal>
 
@@ -24,6 +32,14 @@
     </keep-alive>
 
     <ModalAjuda ref="modalAjuda">
+      <li class="list-group-item">
+        <b>Importar Disciplinas na Grade:</b>
+        Para importar as disciplinas da grade, clique no ícone de importação
+        <font-awesome-icon :icon="['fas', 'file-import']" />
+        para abrir o modal e selecionar o curso e grade, além do arquivo
+        <strong>.csv</strong>
+        para importação.
+      </li>
       <li class="list-group-item">
         <b>Visualizar conteúdo:</b>
         Na parte superior do cartão à direita, selecione o curso e a grade que deseja visualizar.
@@ -57,6 +73,8 @@
         , para limpar as informações da disciplina porém a grade continuará selecionada.
       </li>
     </ModalAjuda>
+
+    <ModalImportacao ref="modalImportacao" />
   </div>
 </template>
 
@@ -66,14 +84,21 @@ import disciplinaGradeExternoService from "@/services/disciplinaGradeCursoExtern
 import disciplinaGradeService from "@/services/disciplinaGrade";
 import { ModalAjuda } from "@/components/modals";
 import DisciplinasGradesContent from "./DisciplinasGradesContent";
+import ModalImportacao from "./ModalImportacao.vue";
 
 export default {
   name: "GerenciarGrades",
-  components: { DisciplinasGradesContent, ModalAjuda },
+  components: { DisciplinasGradesContent, ModalAjuda, ModalImportacao },
   data() {
     return {
       currentTab: "DCC",
     };
+  },
+
+  methods: {
+    handleImportarDisciplinas() {
+      this.$refs.modalImportacao.open();
+    },
   },
 
   computed: {

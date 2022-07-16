@@ -19,7 +19,7 @@
         @click="$emit('change-tab', tab)"
       >
         <a
-          class="nav-link border border-right-0"
+          class="nav-link border border-colored border-right-0"
           :class="['clickable', { active: currentTab === tab }]"
         >
           {{ tab }}
@@ -148,7 +148,7 @@ export default {
   height: 30px;
 
   border-radius: 5px;
-  border: 2px solid #909090;
+  border: 2px solid $clr-mainred;
   color: #313131;
   background-color: $clr-lightgray;
   font-size: 11px;
@@ -159,8 +159,8 @@ export default {
 }
 
 .btn-slide:hover {
-  background-color: #f8f8f8;
-  color: #000;
+  background-color: $clr-lighterred;
+  color: #fff;
   box-shadow: 0px 0px 20px 5px #50505071 !important;
 }
 
@@ -176,7 +176,7 @@ export default {
   -webkit-overflow-scrolling: touch;
 }
 .nav-tabs .nav-link {
-  color: $clr-lightblue !important;
+  color: $clr-mainred !important;
   cursor: pointer;
   user-select: none;
 }
@@ -188,7 +188,8 @@ export default {
 }
 .nav-tabs .nav-link.active {
   background-color: #e9ecef !important;
-  color: #495057 !important;
+  // color: $mainred !important;
+  font-weight: bold;
   cursor: default !important;
   text-decoration: none !important;
   transition: background-color 100ms;

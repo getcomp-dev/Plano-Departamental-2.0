@@ -57,7 +57,10 @@
                 { 'bg-selected': disciplinaSelectedId === disciplinaGrade.Disciplina },
               ]"
             >
-              <v-td width="70">{{ disciplinaGrade.periodo }}</v-td>
+              <v-td v-if="disciplinaGrade.periodo !== 15" width="70">
+                {{ disciplinaGrade.periodo }}
+              </v-td>
+              <v-td v-else width="70">-</v-td>
               <v-td width="80" align="start">{{ disciplinaGrade.disciplina.codigo }}</v-td>
               <v-td width="400" align="start">{{ disciplinaGrade.disciplina.nome }}</v-td>
 

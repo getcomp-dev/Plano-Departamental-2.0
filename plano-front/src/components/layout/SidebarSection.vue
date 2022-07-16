@@ -149,7 +149,7 @@ export default {
     &:hover {
       cursor: pointer;
       color: #fff;
-      background-color: $clr-lightblue;
+      background-color: $clr-lightred;
       &::before {
         filter: brightness(160%);
       }
@@ -166,7 +166,7 @@ export default {
       left: 13px;
       width: 2px;
       height: 100%;
-      background-color: #62676e;
+      background-color: $clr-lightred;
       transition: all 400ms ease;
     }
     // circle
@@ -180,14 +180,14 @@ export default {
       width: 8px;
       height: 8px;
       border-radius: 4px;
-      background-color: #6e6e6e;
+      background-color: $clr-lightred;
       transition: all 400ms ease;
     }
   }
 
   ul.nav > li.nav-item > a.nav-link.active {
     color: #fff;
-    background-color: $clr-blue;
+    background-color: $clr-mainred;
     transition: all 100ms ease;
     cursor: default;
     &::before {

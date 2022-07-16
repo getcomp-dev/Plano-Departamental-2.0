@@ -1,10 +1,6 @@
 <template>
-  <table
-    class="table-custom table table-sm table-bordered"
-    :class="[typeClass, classes]"
-    :style="styles"
-  >
-    <thead class="thead-light max-content sticky-row-top">
+  <table class="table-custom table-sm table-bordered" :class="[typeClass, classes]" :style="styles">
+    <thead class="thead-color max-content sticky-row-top">
       <div class="div-search sticky-row-top" v-if="hasSearchBar">
         <slot name="thead-search"></slot>
       </div>
@@ -67,6 +63,8 @@ export default {
 </script>
 
 <style lang="scss">
+@import "@/assets/styles/theme.scss";
+
 .table-custom {
   display: block;
   overflow-y: scroll;
@@ -77,14 +75,16 @@ export default {
   thead {
     display: block !important;
     background-color: #e9ecef !important;
+    color: white;
 
     tr th {
       word-wrap: break-word;
       height: 18px;
       user-select: none;
-      border-color: #d7d9da !important;
-      border-left-color: #d1d2d3 !important;
-      border-right-color: #d1d2d3 !important;
+      background-color: $clr-lightred;
+      border-color: $clr-mainred !important;
+      border-left-color: $clr-mainred !important;
+      border-right-color: $clr-mainred !important;
 
       // th aninhado com multiplas linhas
       > th {
@@ -121,6 +121,7 @@ export default {
     display: block !important;
     width: max-content;
     background-color: #fff;
+
     tr:hover {
       background-color: #dbdbdb;
     }
@@ -129,7 +130,7 @@ export default {
     }
     tr.bg-selected,
     tr.bg-selected:hover {
-      background-color: #787878 !important;
+      background-color: $clr-lightred !important;
       color: #fff !important;
       cursor: default;
     }
