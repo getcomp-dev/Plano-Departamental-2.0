@@ -81,9 +81,12 @@ export default {
           finalValue: disciplinasGrades.length,
         });
 
-        const disciplinasGradeSelecionada = this.DisciplinasGrades.filter((disc) => {
-          disc.Grade === this.gradeSelecionada.id;
+        const disciplinasGradeSelecionada = [];
+
+        this.DisciplinasGrades.forEach((disc) => {
+          if (disc.Grade === this.gradeSelecionada.id) disciplinasGradeSelecionada.push(disc);
         });
+
         for (const discGrade of disciplinasGrades) {
           this.handleCreateDisciplinasNaGrade(discGrade, disciplinasGradeSelecionada);
         }
@@ -103,7 +106,7 @@ export default {
         await this.finishProgressBar();
       }
     },
-    handleCreateDisciplinasNaGrade(disciplinaGrade, discsGradeSelecionada) {
+    async handleCreateDisciplinasNaGrade(disciplinaGrade, discsGradeSelecionada) {
       if (!disciplinaGrade || !discsGradeSelecionada.length) return;
 
       let objDiscGrade = {
@@ -123,7 +126,7 @@ export default {
       objDiscGrade.obrigatoria = +disciplinaGrade.OBRIGATORIA;
 
       if (typeof objDiscGrade.Disciplina === "number")
-        this.createDisciplinasGrade(objDiscGrade, discsGradeSelecionada);
+        await this.createDisciplinasGrade(objDiscGrade, discsGradeSelecionada);
     },
     async createDisciplinasGrade(disciplinaGrade, disciplinasGradeSelecionada) {
       const temDisciplina = this.checkDiscGradeExiste(disciplinaGrade, disciplinasGradeSelecionada);
