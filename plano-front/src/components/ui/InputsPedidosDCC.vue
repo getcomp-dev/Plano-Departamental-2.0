@@ -141,10 +141,10 @@ export default {
 }
 
 input.input-pedidos {
+  display: inline-block !important;
   background-color: #dbdbdb;
 }
-input.input-pedidos.empty,
-input.input-pedidos:empty {
+input.input-pedidos.empty {
   color: #dadada;
   background-color: #fff;
 }
