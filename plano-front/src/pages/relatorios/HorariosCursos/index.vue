@@ -13,19 +13,22 @@
       <div v-show="filtroPeriodosEstaAtivo.periodo1 && filtroCursos.ativados.length" class="w-100">
         <h2 class="periodo-title">1º Período letivo</h2>
 
-        <ListHorarios
-          v-for="curso in cursosComHorariosFiltred"
-          :key="curso.codigo + curso.periodoInicial1Semestre"
-          :title="curso.nome"
-          :curso="{
-            id: curso.id,
-            turno: curso.turno,
-            periodoInicial: curso.periodoInicial1Semestre,
-          }"
-          :horariosTurmas="curso.horarios1Periodo"
-          :eletivasAtivas="filtroEletivasEstaAtivo"
-          :obrigatoriasAtivas="filtroObrigatoriasEstaAtivo"
-        />
+        <div class="table-cursos">
+          <ListHorarios
+            v-for="curso in cursosComHorariosFiltred"
+            :key="curso.codigo + curso.periodoInicial1Semestre"
+            :title="curso.nome"
+            :curso="{
+              id: curso.id,
+              turno: curso.turno,
+              periodoInicial: curso.periodoInicial1Semestre,
+            }"
+            :horariosTurmas="curso.horarios1Periodo"
+            :eletivasAtivas="filtroEletivasEstaAtivo"
+            :obrigatoriasAtivas="filtroObrigatoriasEstaAtivo"
+            :numPeriodos="curso.numPeriodos"
+          />
+        </div>
       </div>
       <!-- <ListHorarios
           v-if="filtroEletivasEstaAtivo"
@@ -42,25 +45,29 @@
           :horariosTurmas="TurmasAtivas2Periodo"
           :eletivasAtivas="filtroEletivasEstaAtivo"
           :obrigatoriasAtivas="filtroObrigatoriasEstaAtivo"
+          :numPeriodos="curso.numPeriodos"
         />
       </template>
 
       <div v-show="filtroPeriodosEstaAtivo.periodo3 && filtroCursos.ativados.length" class="w-100">
         <h2 class="periodo-title">3º Período letivo</h2>
 
-        <ListHorarios
-          v-for="curso in cursosComHorariosFiltred"
-          :key="curso.codigo + curso.periodoInicial2Semestre"
-          :title="curso.nome"
-          :curso="{
-            id: curso.id,
-            turno: curso.turno,
-            periodoInicial: curso.periodoInicial2Semestre,
-          }"
-          :horariosTurmas="curso.horarios3Periodo"
-          :eletivasAtivas="filtroEletivasEstaAtivo"
-          :obrigatoriasAtivas="filtroObrigatoriasEstaAtivo"
-        />
+        <div class="table-cursos">
+          <ListHorarios
+            v-for="curso in cursosComHorariosFiltred"
+            :key="curso.codigo + curso.periodoInicial2Semestre"
+            :title="curso.nome"
+            :curso="{
+              id: curso.id,
+              turno: curso.turno,
+              periodoInicial: curso.periodoInicial2Semestre,
+            }"
+            :horariosTurmas="curso.horarios3Periodo"
+            :eletivasAtivas="filtroEletivasEstaAtivo"
+            :obrigatoriasAtivas="filtroObrigatoriasEstaAtivo"
+            :numPeriodos="curso.numPeriodos"
+          />
+        </div>
         <!-- <ListHorarios
           v-if="filtroEletivasEstaAtivo"
           :template="'extra'"
@@ -78,6 +85,7 @@
           :horariosTurmas="TurmasAtivas4Periodo"
           :eletivasAtivas="filtroEletivasEstaAtivo"
           :obrigatoriasAtivas="filtroObrigatoriasEstaAtivo"
+          :numPeriodos="curso.numPeriodos"
         />
       </template>
     </div>
@@ -652,24 +660,7 @@ export default {
           periodoInicial2Semestre: 2,
           horarios1Periodo: this.horariosAtivos1Periodo.CCD,
           horarios3Periodo: this.horariosAtivos3Periodo.CCD,
-        },
-        {
-          ...find(this.PrincipaisCursosDCC, (curso) => curso.codigo === "35A"),
-          nome: "Ciência da Computação - noturno",
-          turno: "Noturno",
-          periodoInicial1Semestre: 2,
-          periodoInicial2Semestre: 1,
-          horarios1Periodo: this.horariosAtivos1Periodo.CCN,
-          horarios3Periodo: this.horariosAtivos3Periodo.CCN,
-        },
-        {
-          ...find(this.PrincipaisCursosDCC, (curso) => curso.codigo === "76A"),
-          nome: "Sistemas de Informação",
-          turno: "Noturno",
-          periodoInicial1Semestre: 2,
-          periodoInicial2Semestre: 1,
-          horarios1Periodo: this.horariosAtivos1Periodo.SI,
-          horarios3Periodo: this.horariosAtivos3Periodo.SI,
+          numPeriodos: 8,
         },
         {
           ...find(this.PrincipaisCursosDCC, (curso) => curso.codigo === "65B"),
@@ -679,6 +670,27 @@ export default {
           periodoInicial2Semestre: 2,
           horarios1Periodo: this.horariosAtivos1Periodo.EC,
           horarios3Periodo: this.horariosAtivos3Periodo.EC,
+          numPeriodos: 10,
+        },
+        {
+          ...find(this.PrincipaisCursosDCC, (curso) => curso.codigo === "35A"),
+          nome: "Ciência da Computação - noturno",
+          turno: "Noturno",
+          periodoInicial1Semestre: 2,
+          periodoInicial2Semestre: 1,
+          horarios1Periodo: this.horariosAtivos1Periodo.CCN,
+          horarios3Periodo: this.horariosAtivos3Periodo.CCN,
+          numPeriodos: 9,
+        },
+        {
+          ...find(this.PrincipaisCursosDCC, (curso) => curso.codigo === "76A"),
+          nome: "Sistemas de Informação",
+          turno: "Noturno",
+          periodoInicial1Semestre: 2,
+          periodoInicial2Semestre: 1,
+          horarios1Periodo: this.horariosAtivos1Periodo.SI,
+          horarios3Periodo: this.horariosAtivos3Periodo.SI,
+          numPeriodos: 8,
         },
       ];
     },
@@ -809,5 +821,10 @@ export default {
   font-size: 12px;
   padding: 5px;
   background-color: $clr-lightgray;
+}
+
+.table-cursos {
+  display: flex;
+  width: 100%;
 }
 </style>

@@ -15,24 +15,26 @@
             <h4 class="periodo-title">{{ periodo.nome }}</h4>
 
             <TableHorarios
+              class="table-horarios"
               :Turmas="horariosObrigatorias[periodo.indice]"
               :listaDeHorarios="listaDeHorariosFiltredByTurno(periodo.nome)"
             />
           </div>
         </template>
       </template>
+
+      <template v-if="eletivasAtivas">
+        <div class="div-table-eletivas">
+          <h4 class="periodo-title">Eletivas</h4>
+
+          <TableHorarios
+            class="table-horarios"
+            :Turmas="horariosEletivas[0]"
+            :listaDeHorarios="listaDeHorariosFiltredByTurno('Eletivas')"
+          />
+        </div>
+      </template>
     </div>
-
-    <template v-if="eletivasAtivas">
-      <div class="div-table-eletivas">
-        <h4 class="periodo-title">Eletivas</h4>
-
-        <TableHorarios
-          :Turmas="horariosEletivas[0]"
-          :listaDeHorarios="listaDeHorariosFiltredByTurno('Eletivas')"
-        />
-      </div>
-    </template>
 
     <div v-if="template === 'extra'" class="div-table">
       <TableHorarios :Turmas="horariosTurmas" :listaDeHorarios="ListaDeTodosHorarios" />
@@ -42,7 +44,7 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { filter } from "lodash-es";
+// import { filter } from "lodash-es";
 import TableHorarios from "./TableHorarios.vue";
 
 export default {
@@ -65,6 +67,7 @@ export default {
     horariosTurmas: { type: Array, required: true },
     eletivasAtivas: { type: Boolean, required: true },
     obrigatoriasAtivas: { type: Boolean, required: true },
+    numPeriodos: { type: Number, required: true },
   },
   beforeMount() {
     this.separaObrigatoriasDeEletivas();
@@ -94,29 +97,31 @@ export default {
       "AllGrades",
     ]),
 
-    GradesDoCurso() {
-      if (this.template !== "curso") return;
+    // GradesDoCurso() {
+    //   if (this.template !== "curso") return;
 
-      return filter(this.AllGrades, (grade) => grade.Curso === this.curso.id);
-    },
-    PeriodoFinalDoCurso() {
-      if (this.template !== "curso") return;
+    //   return filter(this.AllGrades, (grade) => grade.Curso === this.curso.id);
+    // },
+    // PeriodoFinalDoCurso() {
+    //   if (this.template !== "curso") return;
 
-      let periodoFinal = this.curso.periodoInicial;
-      this.GradesDoCurso.forEach((grade) => {
-        this.DisciplinasGrades.forEach((disciplinaGrade) => {
-          if (disciplinaGrade.Grade === grade.id && disciplinaGrade.periodo > periodoFinal) {
-            periodoFinal = disciplinaGrade.periodo;
-          }
-        });
-      });
-      return periodoFinal;
-    },
+    //   let periodoFinal = this.curso.periodoInicial;
+    //   this.GradesDoCurso.forEach((grade) => {
+    //     this.DisciplinasGrades.forEach((disciplinaGrade) => {
+    //       if (disciplinaGrade.Grade === grade.id && disciplinaGrade.periodo > periodoFinal) {
+    //         periodoFinal = disciplinaGrade.periodo;
+    //       }
+    //     });
+    //   });
+    //   return periodoFinal;
+    // },
     PeriodosDaGradeDoCurso() {
       if (this.template !== "curso") return;
 
       const periodosResult = [];
-      for (let i = this.curso.periodoInicial; i <= this.PeriodoFinalDoCurso; i += 2) {
+      // for (let i = this.curso.periodoInicial; i <= this.PeriodoFinalDoCurso; i += 2) {
+      console.log(this.curso + " tem " + this.numPeriodos + " periodos");
+      for (let i = this.curso.periodoInicial; i <= this.numPeriodos; i += 2) {
         periodosResult.push({
           indice: i - 1,
           nome: `${i}º Período`,
@@ -134,8 +139,16 @@ export default {
   text-align: start;
   font-size: 12px;
   font-weight: bold;
+  margin-left: 5%;
 }
+
 .container-horarios {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* .container-horarios {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, 306px);
@@ -143,7 +156,7 @@ export default {
   grid-column-gap: 5px;
   grid-row-gap: 10px;
   margin-bottom: 10px;
-}
+} */
 
 .div-table-eletivas {
   margin-bottom: 25px;
@@ -153,5 +166,9 @@ export default {
   font-size: 12px;
   font-weight: normal;
   margin-bottom: 5px;
+}
+
+.table-horarios {
+  margin-bottom: 20px;
 }
 </style>
