@@ -54,7 +54,7 @@ export default {
   },
   data() {
     return {
-      listaHorariosCombinada: [],
+      // listaHorariosCombinada: [],
       ordemHorarios: { order: "id", type: "asc" },
       horariosEletivas: [],
       horariosObrigatorias: [],

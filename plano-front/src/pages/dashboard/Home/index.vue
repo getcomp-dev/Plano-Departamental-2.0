@@ -32,8 +32,8 @@
         />
         <PagesBlock v-if="currentUser.isSuperAdmin" title="Histórico" :pages="PagesHistorico" />
       </div>
-      <div class="welcome-container pl-3">
-        <p class="mb-3">
+      <div class="welcome-container">
+        <p class="mb-3 pl-3">
           <span class="hello-text">
             Olá
             <b>{{ currentUser.nome }}</b>
@@ -44,8 +44,8 @@
           Passe o mouse no bloco desejado para exibir a sua funcionalidade.
         </p>
         <div class="img-block">
-          <img src="../../../assets/images/logo-dcc.png" alt="Logo DCC" id="logoDCC" />
-          <img src="../../../assets/images/logo-ufjf.png" alt="Logo UFJF" id="logoUFJF" />
+          <img src="../../../assets/images/dcc.png" alt="Logo DCC" id="logoDCC" />
+          <img src="../../../assets/images/logo-ufuf-2.png" alt="Logo UFJF" id="logoUFJF" />
         </div>
       </div>
     </div>
@@ -119,16 +119,17 @@ export default {
 }
 
 .img-block {
+  width: 100%;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 }
 
 #logoUFJF {
-  width: 250px;
+  width: 150px;
 }
 
 #logoDCC {
-  width: 175px;
+  width: 150px;
 }
 </style>

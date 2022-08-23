@@ -96,6 +96,7 @@ export default {
 }
 
 input.input-pedidos {
+  display: inline-block !important;
   background-color: #dbdbdb;
 }
 input.input-pedidos.empty {

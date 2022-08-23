@@ -30,12 +30,6 @@
           />
         </div>
       </div>
-      <!-- <ListHorarios
-          v-if="filtroEletivasEstaAtivo"
-          :template="'extra'"
-          :title="'Eletivas'"
-          :horariosTurmas="horariosAtivos1Periodo.Eletivas"
-        /> -->
 
       <template v-if="filtroPeriodosEstaAtivo.periodo2">
         <h2 class="periodo-title">2º Período letivo</h2>
@@ -68,12 +62,6 @@
             :numPeriodos="curso.numPeriodos"
           />
         </div>
-        <!-- <ListHorarios
-          v-if="filtroEletivasEstaAtivo"
-          :template="'extra'"
-          :title="'Eletivas'"
-          :horariosTurmas="horariosAtivos3Periodo.Eletivas"
-        /> -->
       </div>
 
       <template v-if="filtroPeriodosEstaAtivo.periodo4">
@@ -349,6 +337,10 @@ export default {
     this.modalFiltrosCallbacks.selectAll.Cursos();
     this.modalFiltrosCallbacks.selectAll.Tipos();
     this.modalFiltrosCallbacks.btnOk();
+
+    this.horariosAtivos1Periodo.CCD[10].forEach((ds) => {
+      console.log(ds.disciplina.codigo);
+    });
   },
 
   methods: {

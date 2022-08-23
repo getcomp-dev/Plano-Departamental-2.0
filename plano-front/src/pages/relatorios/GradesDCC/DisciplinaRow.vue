@@ -34,9 +34,11 @@ export default {
     generateGradeText(grade) {
       let textResult = "";
       if (grade.semestre1.length) {
-        textResult += `${grade.semestre1}º Período: 1º Semestre`;
+        if (grade.semestre1[0] === 15) textResult += "Eletiva";
+        else textResult += `${grade.semestre1}º Período: 1º Semestre`;
       } else if (grade.semestre2.length) {
-        textResult += `${grade.semestre2}º Período: 2º Semestre`;
+        if (grade.semestre2[0] === 15) textResult += "Eletiva";
+        else textResult += `${grade.semestre2}º Período: 2º Semestre`;
       }
 
       return textResult;
