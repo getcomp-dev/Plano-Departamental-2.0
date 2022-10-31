@@ -326,10 +326,10 @@ export default {
     for (let i = 1; i < 5; i++) {
       this.createHorarios(i, 1);
       this.createHorarios(i, 3);
-    }
-    this.createHorarioEletivas(1);
-    this.createHorarioEletivas(3);
 
+      this.createHorarioEletivas(i, 1);
+      this.createHorarioEletivas(i, 3);
+    }
     this.filtroPeriodos.selecionados = filter(
       this.PeriodosOptions,
       (periodo) => periodo.id === 1 || periodo.id === 3
@@ -337,10 +337,6 @@ export default {
     this.modalFiltrosCallbacks.selectAll.Cursos();
     this.modalFiltrosCallbacks.selectAll.Tipos();
     this.modalFiltrosCallbacks.btnOk();
-
-    this.horariosAtivos1Periodo.CCD[10].forEach((ds) => {
-      console.log(ds.disciplina.codigo);
-    });
   },
 
   methods: {
@@ -516,86 +512,103 @@ export default {
         Ativas2: this.horariosAtivos3Periodo,
       });
     },
-    createHorarioEletivas(periodo) {
+    createHorarioEletivas(curso, periodo) {
       let horariosAtivos;
+      let semestre = periodo === 1 || periodo === 2 ? 1 : 2;
 
       if (periodo === 1) horariosAtivos = this.horariosAtivos1Periodo;
       else horariosAtivos = this.horariosAtivos3Periodo;
 
-      let turmas = filter(this.AllTurmas, {
-        periodo: periodo,
-      });
+      switch (curso) {
+      case 1:
+        horariosAtivos = horariosAtivos.CCN[10];
+        break;
+      case 2:
+        horariosAtivos = horariosAtivos.EC[10];
+        break;
+      case 3:
+        horariosAtivos = horariosAtivos.SI[10];
+        break;
+      case 4:
+        horariosAtivos = horariosAtivos.CCD[10];
+        break;
+      default:
+        return;
+      }
+
+      let periodoGrade;
+      if (semestre === 1) periodoGrade = 1;
+      else periodoGrade = 3;
 
       let plano = find(this.$store.state.plano.Plano, {
         id: parseInt(localStorage.getItem("Plano")),
       });
 
-      let gradesAtivas = [[], [], [], []];
+      let gradesCurso = filter(this.AllGrades, { Curso: curso });
+      let gradesAtivas = [];
 
-      for (let i = 1; i < 5; i++) {
-        let gradesCurso = filter(this.AllGrades, { Curso: i });
-        let inicio = 0;
-        gradesCurso.forEach((g) => {
-          let fim =
-            1 +
-            2 * (plano.ano - parseInt(g.periodoInicio.slice(0, 4), 10)) +
-            (periodo - parseInt(g.periodoInicio.slice(5, 6), 10)) / 2;
-          if (fim > 10) {
-            fim = 10;
+      gradesCurso.forEach((g) => {
+        let fim =
+          1 +
+          2 * (plano.ano - parseInt(g.periodoInicio.slice(0, 4), 10)) +
+          (periodoGrade - parseInt(g.periodoInicio.slice(5, 6), 10)) / 2;
+        if (fim > 10) {
+          fim = 10;
+        }
+        gradesAtivas.push({ grade: g, fim: fim });
+      });
+
+      if (gradesAtivas[gradesAtivas.length - 1].fim !== 10) {
+        gradesAtivas[gradesAtivas.length - 1].fim = 10;
+      }
+
+      let pedidos = [];
+      for (let t in this.$store.state.pedido.Pedidos) {
+        for (let pedido in this.$store.state.pedido.Pedidos[t]) {
+          if (this.$store.state.pedido.Pedidos[t][pedido].Curso === curso) {
+            pedidos.push(this.$store.state.pedido.Pedidos[t][pedido]);
           }
-          gradesAtivas[i - 1].push({ grade: g, fim: fim, inicio: inicio });
-          inicio = fim;
-        });
-        if (gradesAtivas[i - 1][gradesAtivas[i - 1].length - 1].fim !== 10) {
-          gradesAtivas[i - 1][gradesAtivas[i - 1].length - 1].fim = 10;
         }
       }
-      // let eletiva = true;
-      for (let i = 0; i < turmas.length; i++) {
-        for (let j = 0; j < 4; j++) {
-          for (let k = 0; k < gradesAtivas[j].length; k++) {
-            let disciplinasGradeAtual = filter(this.DisciplinasGrades, {
-              Grade: gradesAtivas[j][k].grade.id,
-            });
-            let disciplinaGrade = find(disciplinasGradeAtual, {
-              Disciplina: turmas[i].Disciplina,
-            });
-            if (
-              disciplinaGrade
-              // &&
-              // disciplinaGrade.periodo < gradesAtivas[j][k].fim &&
-              // disciplinaGrade.periodo >= gradesAtivas[j][k].inicio
-            ) {
-              if (!disciplinaGrade.obrigatoria) {
-                switch (j) {
-                case 0:
-                  horariosAtivos.CCN[10].push(turmas[i]);
-                  break;
-                case 1:
-                  horariosAtivos.EC[10].push(turmas[i]);
-                  break;
-                case 2:
-                  horariosAtivos.SI[10].push(turmas[i]);
-                  break;
-                case 3:
-                  horariosAtivos.CCD[10].push(turmas[i]);
-                  break;
-                default:
-                  return;
-                }
-                // for (let l = 0; l < disciplinasGradeAtual.length; l++) {
-                //     if (turmas[i].Disciplina == disciplinasGradeAtual[l].Disciplina) eletiva = false;
-                // }
+
+      let pedidosExternos = [];
+      for (let t in this.$store.state.pedidoExterno.Pedidos) {
+        for (let pedido in this.$store.state.pedidoExterno.Pedidos[t]) {
+          if (this.$store.state.pedidoExterno.Pedidos[t][pedido].Curso === curso) {
+            pedidosExternos.push(this.$store.state.pedidoExterno.Pedidos[t][pedido]);
+          }
+        }
+      }
+
+      let turmas = filter(this.AllTurmas, ["periodo", periodo]);
+      let turmasExternas = filter(this.AllTurmasExternas, ["periodo", periodo]);
+      let disciplinasGrades = this.DisciplinasGrades;
+      let inicio = 0;
+
+      for (let i = 0; inicio < 10 && i < gradesAtivas.length; i++) {
+        let disciplinasGradeAtual = filter(disciplinasGrades, {
+          Grade: gradesAtivas[i].grade.id,
+        });
+        for (let j = 0; j < disciplinasGradeAtual.length; j++) {
+          if (!disciplinasGradeAtual[j].obrigatoria) {
+            for (let k = 0; k < turmas.length; k++) {
+              if (disciplinasGradeAtual[j].Disciplina == turmas[k].Disciplina) {
+                const p = find(pedidos, { Turma: turmas[k].id });
+                if ((p && p.vagasPeriodizadas > 0) || p.vagasNaoPeriodizadas > 0)
+                  horariosAtivos.push(turmas[k]);
+              }
+            }
+            for (let k = 0; k < turmasExternas.length; k++) {
+              if (disciplinasGradeAtual[j].Disciplina == turmasExternas[k].Disciplina) {
+                const p = find(pedidosExternos, { Turma: turmasExternas[k].id });
+                if ((p && p.vagasPeriodizadas > 0) || p.vagasNaoPeriodizadas > 0)
+                  horariosAtivos.push(turmasExternas[k]);
               }
             }
           }
         }
+        inicio = gradesAtivas[i].fim;
       }
-      //   if (eletiva) {
-      //       horariosAtivos.push(turmas[i]);
-      //   }
-      //   eletiva = true;
-      // }
     },
     getTurmasComPedidoPeriodizado(turma, Pedidos) {
       return some(Pedidos, (pedido) => pedido.Turma === turma.id && pedido.vagasPeriodizadas > 0);

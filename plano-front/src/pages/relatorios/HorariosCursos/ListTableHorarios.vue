@@ -120,7 +120,6 @@ export default {
 
       const periodosResult = [];
       // for (let i = this.curso.periodoInicial; i <= this.PeriodoFinalDoCurso; i += 2) {
-      console.log(this.curso + " tem " + this.numPeriodos + " periodos");
       for (let i = this.curso.periodoInicial; i <= this.numPeriodos; i += 2) {
         periodosResult.push({
           indice: i - 1,
