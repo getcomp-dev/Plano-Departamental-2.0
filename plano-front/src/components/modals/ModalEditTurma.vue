@@ -215,7 +215,7 @@
               placeholder="Pesquise nome ou codigo de um curso..."
             />
           </template>
-          <template#thead>
+          <template #thead>
             <v-th-ordination
               :currentOrder="ordemVagas"
               orderToCheck="codigo"
@@ -241,9 +241,18 @@
             >
               Vagas
             </v-th-ordination>
-          </template#thead>
+            <v-th-ordination
+              :currentOrder="ordemVagas"
+              orderToCheck="VagasTotais"
+              width="80"
+              orderType="desc"
+              title="Vagas periodizadas / Não periodizadas (Último ano)"
+            >
+              Anterior
+            </v-th-ordination>
+          </template>
 
-          <template#tbody>
+          <template #tbody>
             <tr v-for="curso in CursosTableOrdered" :key="curso.id + curso.codigo">
               <v-td width="65" align="start">
                 {{ curso.codigo }}
@@ -254,12 +263,20 @@
               <v-td width="80" type="content">
                 <InputsPedidosDCC type="modal" :index="curso.indiceVaga" :turma="turma" />
               </v-td>
+              <v-td width="80" type="content">
+                <InputsPedidosDCC
+                  :disabled="true"
+                  type="modal"
+                  :index="curso.indiceVaga"
+                  :turma="turma"
+                />
+              </v-td>
             </tr>
 
             <tr v-if="!CursosTableOrdered.length">
               <v-td colspan="3" width="450">NENHUM CURSO ENCONTRADO</v-td>
             </tr>
-          </template#tbody>
+          </template>
         </BaseTable>
       </div>
     </template>

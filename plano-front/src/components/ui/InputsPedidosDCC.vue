@@ -2,6 +2,7 @@
   <div :class="typeClass">
     <input
       type="text"
+      :disabled="disabled"
       :title="titlePedido.periodizado"
       :class="[
         'input-pedidos',
@@ -19,6 +20,7 @@
 
     <input
       type="text"
+      :disabled="disabled"
       :title="titlePedido.naoPeriodizado"
       :class="[
         'input-pedidos',
@@ -48,6 +50,7 @@ export default {
     type: { type: String, default: "main" },
     turma: { type: Object, required: true },
     index: { type: Number, required: true },
+    disabled: { type: Boolean, required: false, default: false },
   },
   data() {
     return {
@@ -151,5 +154,9 @@ input.input-pedidos.empty {
 input.input-pedidos.notEdited {
   color: #0080ff;
   background-color: #e0efef;
+}
+
+input:disabled {
+  opacity: 0.6;
 }
 </style>
