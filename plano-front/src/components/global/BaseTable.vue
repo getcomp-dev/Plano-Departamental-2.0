@@ -1,5 +1,9 @@
 <template>
-  <table class="table-custom table-sm table-bordered" :class="[typeClass, classes]" :style="styles">
+  <table
+    class="table-custom table-sm table-bordered table-striped"
+    :class="[typeClass, classes]"
+    :style="styles"
+  >
     <thead class="thead-color max-content sticky-row-top">
       <div class="div-search sticky-row-top" v-if="hasSearchBar">
         <slot name="thead-search"></slot>

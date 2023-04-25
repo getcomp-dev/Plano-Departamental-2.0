@@ -1,6 +1,6 @@
 <template>
-  <tr class="turmarow max-content" :style="{ backgroundColor: turmaForm.disciplina.perfil.cor }">
-    <v-td width="25" type="content">
+  <tr class="turmarow max-content">
+    <v-td width="25" type="content" :style="{ backgroundColor: turmaForm.disciplina.perfil.cor }">
       <input type="checkbox" v-model="toggleToDelete" :value="turma" />
     </v-td>
     <v-td width="40" type="content">
