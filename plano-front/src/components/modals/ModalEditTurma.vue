@@ -264,12 +264,17 @@
                 <InputsPedidosDCC type="modal" :index="curso.indiceVaga" :turma="turma" />
               </v-td>
               <v-td width="80" type="content">
-                <InputsPedidosDCC
-                  :disabled="true"
-                  type="modal"
-                  :index="curso.indiceVaga"
-                  :turma="turma"
-                />
+                <div
+                  class="anterior-col"
+                  v-if="!getVagasPeriodoAnterior(curso, turma, 1)[0]"
+                  title="Não oferecida"
+                >
+                  N.O.
+                </div>
+                <div class="anterior-col" v-else>
+                  <div class="anterior-cell">{{ getVagasPeriodoAnterior(curso, turma, 1)[1] }}</div>
+                  <div class="anterior-cell">{{ getVagasPeriodoAnterior(curso, turma, 2)[1] }}</div>
+                </div>
               </v-td>
             </tr>
 
@@ -306,6 +311,8 @@ export default {
       initialDisciplina: null,
       searchCursos: "",
       ordemVagas: { order: "VagasTotais", type: "desc" },
+      oldTurma: null,
+      oldPedidos: null,
     };
   },
   validations: {
@@ -1069,10 +1076,27 @@ export default {
       }
       return false;
     },
+    getVagasPeriodoAnterior(curso, turma, num) {
+      if (!this.oldTurma) {
+        this.oldTurma = this.AllTurmasAnteriores.find((tur) => tur.Disciplina === turma.Disciplina);
+        this.oldPedidos = Object.values(this.Pedidos).find((ped) => {
+          return ped[0].Turma === this.oldTurma.id;
+        });
+      }
+
+      const pedido = this.oldPedidos.find((ped) => ped.Curso === curso.id);
+
+      if (pedido.vagasPeriodizadas === 0 && pedido.vagasNaoPeriodizadas === 0) return [false, 0];
+
+      if (num === 1) return [true, pedido.vagasPeriodizadas];
+      else return [true, pedido.vagasNaoPeriodizadas];
+    },
   },
 
   computed: {
     ...mapGetters([
+      "AllTurmasAnteriores",
+      "Pedidos",
       "AllCursos",
       "DisciplinasDCC",
       "AllSalas",
@@ -1158,6 +1182,11 @@ export default {
     currentTurmaPedidos() {
       return this.$store.state.pedido.Pedidos[this.turma.id];
     },
+
+    TurmaOferecidaAnteriormente() {
+      const pedidos = pedidos.find((ped) => ped.Curso === this.cursoSetado.id);
+      return pedidos.vagasPeriodizadas > 0 || pedidos.vagasNaoPeriodizadas > 0;
+    },
   },
 
   watch: {
@@ -1169,7 +1198,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .form-container {
   font-size: 12px;
 }
@@ -1177,5 +1206,25 @@ export default {
   font-size: 14px;
   text-align: start;
   font-weight: bold;
+}
+
+.anterior-col {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  .anterior-cell {
+    background: #dbdbdb;
+    border: 1px solid black;
+    width: 30px;
+    height: 18px;
+    margin: 0 4px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.8;
+  }
 }
 </style>

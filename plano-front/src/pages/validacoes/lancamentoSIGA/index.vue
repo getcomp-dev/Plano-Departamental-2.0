@@ -199,8 +199,8 @@ export default {
 
         const pedidoSIGA = parseTurmaSIGAToPedido(turmaSIGA, keysTurmaSIGA, null);
         if (pedidoSIGA) {
-          const { vagasOferecidas, vagasOcupadas } = pedidoSIGA;
-          pedidoSIGA.totalVagas = vagasOferecidas + vagasOcupadas;
+          const { vagasOferecidas } = pedidoSIGA;
+          pedidoSIGA.totalVagas = vagasOferecidas;
         }
 
         // Se turma igual ao currentTurma apenas adiciona o pedido na turma anterior
