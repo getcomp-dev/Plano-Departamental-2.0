@@ -94,7 +94,7 @@ export default {
       case "editTurma":
         if (!title) title = "Editar turma";
         hasOverlay = true;
-        typeStyles.push(positions.center, { width: "510px" });
+        typeStyles.push(positions.center, { width: "590px" });
         position = "center";
         break;
       case "fromNavbar":
