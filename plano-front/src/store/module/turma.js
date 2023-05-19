@@ -17,11 +17,13 @@ const state = {
   Ativas1: [],
   Ativas2: [],
   Deletar: [],
+  Anteriores: [],
 };
 
 const mutations = {
   [TURMA_FETCHED](state, data) {
-    state.Turmas = data.Turmas;
+    state.Turmas = data.data.Turmas;
+    state.Anteriores = data.anterior.Turmas;
   },
 
   [SOCKET_TURMA_CREATED](state, data) {
@@ -67,12 +69,18 @@ const actions = {
     return dispatch("fetchAllTurmas");
   },
 
-  fetchAllTurmas({ commit }) {
+  async fetchAllTurmas(context) {
+    const plAtual = context.rootGetters.Planos.find(
+      (plan) => plan.id === Number(localStorage.getItem("Plano"))
+    );
+    const plAnt = context.rootGetters.Planos.find((plan) => plan.nome === String(plAtual.ano - 1));
+    const anterior = await turmaService.fetchAll(plAnt.id);
+
     return new Promise((resolve, reject) => {
       turmaService
         .fetchAll(localStorage.getItem("Plano"))
         .then((response) => {
-          commit(TURMA_FETCHED, response);
+          context.commit(TURMA_FETCHED, { data: response, anterior });
           resolve();
         })
         .catch((error) => {
@@ -154,6 +162,23 @@ const getters = {
 
   TurmasToDelete(state) {
     return state.Deletar;
+  },
+
+  AllTurmasAnteriores(state, getters) {
+    const turmas = [];
+    state.Anteriores.forEach((turma) => {
+      const disciplinaFounded = find(getters.AllDisciplinas, ["id", turma.Disciplina]);
+
+      if (disciplinaFounded)
+        turmas.push({
+          ...turma,
+          disciplina: {
+            ...disciplinaFounded,
+          },
+        });
+    });
+
+    return orderBy(turmas, "letra");
   },
 };
 
