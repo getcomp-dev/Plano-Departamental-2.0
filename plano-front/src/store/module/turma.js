@@ -73,8 +73,8 @@ const actions = {
     const plAtual = context.rootGetters.Planos.find(
       (plan) => plan.id === Number(localStorage.getItem("Plano"))
     );
-    const plAnt = context.rootGetters.Planos.find((plan) => plan.nome === String(plAtual.ano - 1));
-    const anterior = await turmaService.fetchAll(plAnt.id);
+    const plAnt = plAtual.anterior;
+    const anterior = await turmaService.fetchAll(plAnt);
 
     return new Promise((resolve, reject) => {
       turmaService
