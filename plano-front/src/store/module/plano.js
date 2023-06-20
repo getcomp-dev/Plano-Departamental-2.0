@@ -86,6 +86,7 @@ const actions = {
       dispatch("setLoading", { type: "fetching", value: true });
       dispatch("setCurrentPlanoId", planoId);
       await dispatch("fetchAllTurmas");
+      await dispatch("fetchAllTurmasExternas");
       await dispatch("fetchAllPedidos");
       await dispatch("fetchAllCargaPos");
       $socket.open();

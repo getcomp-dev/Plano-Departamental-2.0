@@ -67,13 +67,27 @@
         </BaseTable>
       </div>
 
-      <Card title="Plano Departamental" width="330">
+      <Card title="Plano Departamental" width="450">
         <template #body>
           <div class="row">
-            <div class="col-8">
+            <div class="col-5">
               <VInput label="Nome" v-model="planoForm.nome" :validation="$v.planoForm.nome" />
             </div>
-            <div class="col">
+            <div class="col-4">
+              <VSelect
+                label="Plano anterior"
+                v-model="planoForm.anterior"
+                :validation="$v.planoForm.anterior"
+              >
+                <VOption
+                  v-for="plano in PlanosOrdered"
+                  :key="plano.id"
+                  :value="plano.id"
+                  :text="plano.ano + ' - ' + plano.nome"
+                />
+              </VSelect>
+            </div>
+            <div class="col-3">
               <VSelect label="Ano" v-model.number="planoForm.ano" :validation="$v.planoForm.ano">
                 <VOption v-for="ano in AnosDoPlano" :key="'ano' + ano" :value="ano" :text="ano" />
               </VSelect>
@@ -205,6 +219,7 @@ const emptyPlano = {
   obs: "",
   isEditable: true,
   visible: true,
+  anterior: localStorage.getItem("Plano"),
 };
 
 export default {
@@ -232,6 +247,7 @@ export default {
     planoForm: {
       ano: { required, numeric },
       nome: { required, maxLength: maxLength(14) },
+      anterior: { numeric },
     },
   },
 
