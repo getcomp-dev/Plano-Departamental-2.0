@@ -16,6 +16,10 @@ module.exports = function (sequelize, DataTypes) {
         },
         visible: {
             type: DataTypes.BOOLEAN
+        },
+        anterior: {
+            type: DataTypes.INTEGER,
+            allowNull: true
         }
     }, {
         freezeTableName: true,
