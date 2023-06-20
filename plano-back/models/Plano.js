@@ -18,7 +18,7 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.BOOLEAN
         },
         anterior: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             allowNull: true
         }
     }, {
