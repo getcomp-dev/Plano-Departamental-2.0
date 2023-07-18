@@ -37,9 +37,8 @@
           :template="'extra'"
           :title="'Cursos de inverno'"
           :horariosTurmas="TurmasAtivas2Periodo"
-          :eletivasAtivas="filtroEletivasEstaAtivo"
+          :eletivasAtivas="false"
           :obrigatoriasAtivas="filtroObrigatoriasEstaAtivo"
-          :numPeriodos="curso.numPeriodos"
         />
       </template>
 
@@ -71,9 +70,8 @@
           :template="'extra'"
           :title="'Cursos de verão'"
           :horariosTurmas="TurmasAtivas4Periodo"
-          :eletivasAtivas="filtroEletivasEstaAtivo"
+          :eletivasAtivas="false"
           :obrigatoriasAtivas="filtroObrigatoriasEstaAtivo"
-          :numPeriodos="curso.numPeriodos"
         />
       </template>
     </div>
@@ -831,5 +829,19 @@ export default {
 .table-cursos {
   display: flex;
   width: 100%;
+}
+
+@media screen and (max-width: 1280px) {
+  .table-cursos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .table-cursos {
+    display: flex;
+    flex-direction: column;
+  }
 }
 </style>

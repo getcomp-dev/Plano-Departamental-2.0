@@ -36,7 +36,7 @@
                 orderType="desc"
                 width="85"
                 paddingX="0"
-                title="Entrada de alunos 1º período"
+                title="Entrada de alunos 1º semestre"
               >
                 Primeiro
               </v-th-ordination>
@@ -46,7 +46,7 @@
                 orderType="desc"
                 width="85"
                 paddingX="0"
-                title="Entrada de alunos 3º período"
+                title="Entrada de alunos 3º semestre"
               >
                 Terceiro
               </v-th-ordination>
@@ -109,7 +109,7 @@
             <div class="col">
               <VInput
                 inputType="number"
-                label="Alunos 1º Período"
+                label="Alunos 1º Semestre"
                 v-model.number="cursoForm.alunosEntrada"
                 :validation="$v.cursoForm.alunosEntrada"
                 textAlign="center"
@@ -118,7 +118,7 @@
             <div class="col">
               <VInput
                 inputType="number"
-                label="Alunos 2º Período"
+                label="Alunos 3º Semestre"
                 v-model.number="cursoForm.alunosEntrada2"
                 :validation="$v.cursoForm.alunosEntrada2"
                 textAlign="center"
