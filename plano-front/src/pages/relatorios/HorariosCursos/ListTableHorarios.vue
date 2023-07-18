@@ -37,7 +37,11 @@
     </div>
 
     <div v-if="template === 'extra'" class="div-table">
-      <TableHorarios :Turmas="horariosTurmas" :listaDeHorarios="ListaDeTodosHorarios" />
+      <TableHorarios
+        class="table-horarios extra-table"
+        :Turmas="horariosTurmas"
+        :listaDeHorarios="ListaDeTodosHorarios"
+      />
     </div>
   </div>
 </template>
@@ -67,7 +71,7 @@ export default {
     horariosTurmas: { type: Array, required: true },
     eletivasAtivas: { type: Boolean, required: true },
     obrigatoriasAtivas: { type: Boolean, required: true },
-    numPeriodos: { type: Number, required: true },
+    numPeriodos: { type: Number, default: 10 },
   },
   beforeMount() {
     this.separaObrigatoriasDeEletivas();
@@ -138,7 +142,7 @@ export default {
   text-align: start;
   font-size: 12px;
   font-weight: bold;
-  margin-left: 5%;
+  margin-left: 2vw;
 }
 
 .container-horarios {
@@ -155,10 +159,10 @@ export default {
   grid-column-gap: 5px;
   grid-row-gap: 10px;
   margin-bottom: 10px;
-} */
+} .*/
 
-.div-table-eletivas {
-  margin-bottom: 25px;
+.extra-table {
+  margin-left: 4vw;
 }
 
 .periodo-title {

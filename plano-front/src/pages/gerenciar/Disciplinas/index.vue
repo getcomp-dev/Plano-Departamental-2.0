@@ -143,7 +143,7 @@
             </div>
             <div class="col">
               <VSelect
-                label="Turno"
+                label="Perfil"
                 v-model="disciplinaForm.Perfil"
                 :validation="$v.disciplinaForm.Perfil"
               >
