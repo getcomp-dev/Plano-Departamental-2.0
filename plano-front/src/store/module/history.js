@@ -19,12 +19,12 @@ const mutations = {
 };
 
 const actions = {
-  fetchAllHistory({ commit, dispatch }) {
+  fetchAllHistory({ commit, dispatch }, limitDate) {
     dispatch("setLoading", { type: "partial", value: true });
 
     return new Promise((resolve, reject) => {
       historyService
-        .fetchAll()
+        .fetchAll({ limitDate })
         .then((response) => {
           commit(HISTORY_FETCHED, response);
           resolve();

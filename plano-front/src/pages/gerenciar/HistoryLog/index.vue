@@ -119,7 +119,7 @@
 import { mapActions, mapGetters } from "vuex";
 import { some, find, orderBy } from "lodash-es";
 import { toggleItemInArray, toggleAsideModal, preventClickSelection } from "@mixins";
-import { parseDateUTC } from "@/common/utils";
+import { parseDateUTC, formatDate } from "@/common/utils";
 import { ModalFiltros, ModalAjuda } from "@/components/modals";
 
 export default {
@@ -167,7 +167,18 @@ export default {
   },
 
   beforeMount() {
-    this.fetchAllHistory();
+    const date = new Date();
+    const result = date.getDate() - 30;
+    if (result <= 0) {
+      date.setDate(0);
+      date.setDate(date.getDate() - -1 * result);
+    } else {
+      date.setDate(date.getDate() - result);
+    }
+
+    const formatted = formatDate(date.getFullYear(), date.getMonth() + 1, date.getDate());
+
+    this.fetchAllHistory(formatted);
     this.modalFiltrosCallbacks.selectAll.Operacoes();
   },
   beforeDestroy() {

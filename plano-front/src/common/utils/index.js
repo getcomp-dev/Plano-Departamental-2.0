@@ -11,6 +11,7 @@ import parseDateUTC from "./parseDateUTC";
 import booleanToText from "./booleanToText";
 import wait from "./wait";
 import validateDisciplinasGrades from "./validateDisciplinasGrades";
+import formatDate from "./formatDate.js";
 
 export {
   wait,
@@ -26,4 +27,5 @@ export {
   validateObjectKeys,
   generateEmptyTurma,
   validateDisciplinasGrades,
+  formatDate,
 };
