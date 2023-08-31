@@ -47,11 +47,11 @@
         <template #tbody>
           <template v-for="programa in ProgramasInCargaPosOrdered">
             <tr class="bg-custom" :key="programa.nome">
-              <v-td width="75">{{ programa.nome }}</v-td>
-              <v-td width="25" />
-              <v-td width="65" />
-              <v-td width="145" />
-              <v-td width="80" title="Total de carga">
+              <v-td class="table-data" width="75">{{ programa.nome }}</v-td>
+              <v-td class="table-data" width="25" />
+              <v-td class="table-data" width="65" />
+              <v-td class="table-data" width="145" />
+              <v-td class="table-data" width="80" title="Total de carga">
                 {{ calculaTotalDeCreditosDaCarga(programa.cargas) }}
               </v-td>
             </tr>
@@ -64,7 +64,7 @@
           </template>
 
           <tr v-if="!ProgramasInCargaPosOrdered.length">
-            <v-td width="390" whiteSpace="normal">
+            <v-td class="table-data" width="390" whiteSpace="normal">
               <b>Nenhuma carga encontrada.</b>
               Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
@@ -93,10 +93,10 @@
             @click="toggleItemInArray(programaPos, filtroProgramas.selecionados)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td class="table-data" width="25" type="content">
               <input type="checkbox" v-model="filtroProgramas.selecionados" :value="programaPos" />
             </v-td>
-            <v-td width="425" align="start">{{ programaPos }}</v-td>
+            <v-td class="table-data" width="425" align="start">{{ programaPos }}</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -114,7 +114,7 @@
             @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td class="table-data" width="25" type="content">
               <input
                 type="checkbox"
                 v-model="filtroPeriodos.selecionados"
@@ -122,8 +122,8 @@
                 @click.stop="selecionaPeriodo(periodo)"
               />
             </v-td>
-            <v-td width="425" align="start">
-              {{ periodo.nome.split("(")[0] }}
+            <v-td style="text-transform: capitalize; font-size: 11px" width="425" align="start">
+              {{ periodo.nome.split("(")[0].toLowerCase() }}
             </v-td>
           </tr>
         </template>
@@ -142,7 +142,7 @@
             @click="selecionaSemestre(semestre)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td class="table-data" width="25" type="content">
               <input
                 type="checkbox"
                 v-model="filtroSemestres.selecionados"
@@ -151,8 +151,8 @@
                 @click.stop="selecionaSemestre(semestre)"
               />
             </v-td>
-            <v-td width="425" align="start">
-              {{ semestre.nome }}
+            <v-td style="text-transform: capitalize; font-size: 11px" width="425" align="start">
+              {{ semestre.nome.toLowerCase() }}
             </v-td>
           </tr>
         </template>

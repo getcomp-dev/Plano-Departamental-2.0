@@ -5,13 +5,13 @@
     <v-td width="80" />
     <v-td width="65">{{ turma.periodo }}</v-td>
     <v-td width="45" paddingX="0">{{ turma.letra }}</v-td>
-    <v-td width="150" align="start">
-      {{ generateDocentesText(turma.Docente1, turma.Docente2) }}
+    <v-td width="150" align="start" class="table-data">
+      {{ generateDocentesText(turma.Docente1, turma.Docente2).toLowerCase() }}
     </v-td>
     <v-td width="130" paddingX="0">
       {{ generateHorariosText(turma.Horario1, turma.Horario2) }}
     </v-td>
-    <v-td width="90">{{ getSalasConvertidas() }}</v-td>
+    <v-td width="90" class="table-data">{{ getSalasConvertidas().toLowerCase() }}</v-td>
     <v-td width="65">{{ creditoTotal }}</v-td>
 
     <template v-if="showVagas">

@@ -47,7 +47,9 @@
                 :value="laboratorio"
               />
             </v-td>
-            <v-td width="425" align="start">{{ laboratorio.nome }}</v-td>
+            <v-td width="425" align="start" style="text-transform: capitalize; font-size: 11px">
+              {{ laboratorio.nome.toLowerCase() }}
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -73,7 +75,9 @@
                 @click.stop="selecionaPeriodo(periodo)"
               />
             </v-td>
-            <v-td width="425" align="start">{{ periodo.nome }}</v-td>
+            <v-td width="425" align="start" style="text-transform: capitalize; font-size: 11px">
+              {{ periodo.nome.toLowerCase() }}
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -100,7 +104,9 @@
                 @click.stop="selecionaSemestre(semestre)"
               />
             </v-td>
-            <v-td width="425" align="start">{{ semestre.nome }}</v-td>
+            <v-td width="425" align="start" style="text-transform: capitalize; font-size: 11px">
+              {{ semestre.nome.toLowerCase() }}
+            </v-td>
           </tr>
         </template>
       </BaseTable>

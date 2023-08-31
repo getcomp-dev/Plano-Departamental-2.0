@@ -36,8 +36,12 @@
               :class="['clickable', { 'bg-selected': perfilSelecionadoId === perfil.id }]"
               @click="handleClickInPerfil(perfil)"
             >
-              <v-td width="350" align="start">{{ perfil.nome }}</v-td>
-              <v-td width="90" align="start">{{ perfil.abreviacao }}</v-td>
+              <v-td width="350" align="start" class="table-data">
+                {{ perfil.nome.toLowerCase() }}
+              </v-td>
+              <v-td width="90" align="start" class="table-data">
+                {{ perfil.abreviacao.toLowerCase() }}
+              </v-td>
               <v-td width="65" type="content">
                 <div
                   :style="{

@@ -63,10 +63,14 @@
           <template v-if="DisciplinasFiltered.length && DocentesFiltered.length">
             <template v-for="disciplina in DisciplinasInPreferenciasOrdered">
               <tr :key="disciplina.id" class="bg-custom">
-                <v-td width="90" align="start">{{ disciplina.codigo }}</v-td>
-                <v-td width="420" align="start">{{ disciplina.nome }}</v-td>
-                <v-td width="80" paddingX="2">{{ disciplina.perfil.abreviacao }}</v-td>
-                <v-td width="120" />
+                <v-td class="table-data" width="90" align="start">{{ disciplina.codigo }}</v-td>
+                <v-td class="table-data" width="420" align="start">
+                  {{ disciplina.nome.toLowerCase() }}
+                </v-td>
+                <v-td class="table-data" width="80" paddingX="2">
+                  {{ disciplina.perfil.abreviacao.toLowerCase() }}
+                </v-td>
+                <v-td class="table-data" width="120" />
                 <v-td
                   width="100"
                   class="clickable"
@@ -81,10 +85,15 @@
                 v-for="preferencia in disciplina.preferencias"
                 :key="preferencia.Docente + '-' + preferencia.Disciplina"
               >
-                <v-td width="90" />
-                <v-td width="420" />
-                <v-td width="80" />
-                <v-td width="120" align="start" :title="preferencia.docente.nome">
+                <v-td class="table-data" width="90" />
+                <v-td class="table-data" width="420" />
+                <v-td class="table-data" width="80" />
+                <v-td
+                  class="table-data"
+                  width="120"
+                  align="start"
+                  :title="preferencia.docente.nome"
+                >
                   {{ preferencia.docente.apelido }}
                 </v-td>
                 <v-td
@@ -103,7 +112,7 @@
             </template>
           </template>
           <tr v-else>
-            <v-td width="810">
+            <v-td class="table-data" width="810">
               <b>Nenhuma disciplina encontrada.</b>
               Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
@@ -165,10 +174,12 @@
           <template v-if="DisciplinasFiltered.length && DocentesFiltered.length">
             <template v-for="docente in DocentesInPreferenciasOrdered">
               <tr :key="docente.id" class="bg-custom">
-                <v-td width="120" align="start">{{ docente.apelido }}</v-td>
-                <v-td width="90" />
-                <v-td width="420" />
-                <v-td width="80" />
+                <v-td class="table-data" width="120" align="start">
+                  {{ docente.apelido.toLowerCase() }}
+                </v-td>
+                <v-td class="table-data" width="90" />
+                <v-td class="table-data" width="420" />
+                <v-td class="table-data" width="80" />
                 <v-td
                   width="100"
                   type="content"
@@ -183,10 +194,14 @@
                 v-for="preferencia in docente.preferencias"
                 :key="preferencia.Docente + '-' + preferencia.Disciplina"
               >
-                <v-td width="120" />
-                <v-td width="90">{{ preferencia.disciplina.codigo }}</v-td>
-                <v-td width="420" align="start">{{ preferencia.disciplina.nome }}</v-td>
-                <v-td width="80">{{ preferencia.disciplina.perfil.abreviacao }}</v-td>
+                <v-td class="table-data" width="120" />
+                <v-td class="table-data" width="90">{{ preferencia.disciplina.codigo }}</v-td>
+                <v-td class="table-data" width="420" align="start">
+                  {{ preferencia.disciplina.nome.toLowerCase() }}
+                </v-td>
+                <v-td class="table-data" width="80">
+                  {{ preferencia.disciplina.perfil.abreviacao.toLowerCase() }}
+                </v-td>
                 <v-td
                   width="100"
                   class="td-pref"
@@ -204,7 +219,7 @@
             </template>
           </template>
           <tr v-else>
-            <v-td width="810">
+            <v-td class="table-data" width="810">
               <b>Nenhuma disciplina encontrada.</b>
               Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
@@ -225,9 +240,9 @@
     >
       <template #modal-body>
         <div class="row">
-          <span class="col-12 mb-2">
+          <span class="col-12 mb-2" style="text-transform: capitalize">
             <b>Docente:</b>
-            {{ edit.docente ? edit.docente.nome : "" }}
+            {{ edit.docente ? edit.docente.nome.toLowerCase() : "" }}
           </span>
           <span class="col-12">
             <b>Disciplina:</b>
@@ -277,8 +292,9 @@
 
           <div class="row">
             <div class="col">
-              <VSelect label="Docente" v-model.number="add.Docente" :validation="$v.add.Docente">
+              <VSelect v-model.number="add.Docente" :validation="$v.add.Docente">
                 <VOption
+                  style="text-transform: capitalize"
                   v-for="docente in DocentesAtivos"
                   :key="docente.id + docente.nome"
                   :value="docente.id"
@@ -451,7 +467,7 @@
             :key="perfil.id + perfil.nome"
             @click.stop="selectPerfis(perfil)"
           >
-            <v-td width="25" type="content">
+            <v-td class="table-data" width="25" type="content">
               <input
                 type="checkbox"
                 v-model="filtroPerfis.selecionados"
@@ -460,7 +476,9 @@
                 @click.stop="selectPerfis(perfil)"
               />
             </v-td>
-            <v-td width="425" align="start">{{ perfil.nome }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="425" align="start">
+              {{ perfil.nome.toLowerCase() }}
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -511,7 +529,7 @@
             @click="selectDisciplina(disciplina)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td class="table-data" width="25" type="content">
               <input
                 type="checkbox"
                 v-model="filtroDisciplinas.selecionados"
@@ -519,15 +537,17 @@
                 @click.stop="selectDisciplina(disciplina)"
               />
             </v-td>
-            <v-td width="70" align="start">{{ disciplina.codigo }}</v-td>
-            <v-td align="start" width="270">
-              {{ disciplina.nome }}
+            <v-td class="table-data" width="70" align="start">{{ disciplina.codigo }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" align="start" width="270">
+              {{ disciplina.nome.toLowerCase() }}
             </v-td>
-            <v-td width="85" align="start">{{ disciplina.perfil.abreviacao }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="85" align="start">
+              {{ disciplina.perfil.abreviacao.toLowerCase() }}
+            </v-td>
           </tr>
 
           <tr v-if="!DisciplinasOptionsOrdered.length">
-            <v-td colspan="3" width="450">NENHUMA DISCIPLINA ENCONTRADA.</v-td>
+            <v-td class="table-data" colspan="3" width="450">NENHUMA DISCIPLINA ENCONTRADA.</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -558,10 +578,12 @@
             @click="toggleItemInArray(docente, filtroDocentes.selecionados)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td class="table-data" width="25" type="content">
               <input type="checkbox" v-model="filtroDocentes.selecionados" :value="docente" />
             </v-td>
-            <v-td width="425" align="start">{{ docente.apelido }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="425" align="start">
+              {{ docente.apelido.toLowerCase() }}
+            </v-td>
           </tr>
         </template>
       </BaseTable>

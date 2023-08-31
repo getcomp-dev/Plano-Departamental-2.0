@@ -1,13 +1,19 @@
 <template>
   <tr>
-    <v-td width="80" :style="{ backgroundColor: disciplina.perfil.cor }">
-      {{ disciplina.perfil.abreviacao }}
+    <v-td class="table-data" width="80" :style="{ backgroundColor: disciplina.perfil.cor }">
+      {{ disciplina.perfil.abreviacao.toLowerCase() }}
     </v-td>
-    <v-td width="100">{{ disciplina.codigo }}</v-td>
-    <v-td width="380" align="start" :title="disciplina.nome">
-      {{ disciplina.nome }}
+    <v-td class="table-data" width="100">{{ disciplina.codigo }}</v-td>
+    <v-td class="table-data" width="380" align="start" :title="disciplina.nome">
+      {{ disciplina.nome.toLowerCase() }}
     </v-td>
-    <v-td width="140" paddingX="2" v-for="curso in cursosComGrades" :key="curso.codigo + curso.id">
+    <v-td
+      class="table-data"
+      width="140"
+      paddingX="2"
+      v-for="curso in cursosComGrades"
+      :key="curso.codigo + curso.id"
+    >
       {{ generateGradeText(disciplina[curso.id]) }}
     </v-td>
   </tr>

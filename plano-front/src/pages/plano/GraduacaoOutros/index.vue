@@ -62,7 +62,7 @@
           />
 
           <tr v-if="!TurmasExternasOrdered.length">
-            <v-td width="1045">
+            <v-td class="table-data" width="1045">
               <b>Nenhuma turma encontrada.</b>
               Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
@@ -124,16 +124,22 @@
             @click="toggleItemInArray(disciplina, filtroDisciplinas.selecionados)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td class="table-data" width="25" type="content">
               <input type="checkbox" v-model="filtroDisciplinas.selecionados" :value="disciplina" />
             </v-td>
             <v-td width="70" align="start">{{ disciplina.codigo }}</v-td>
-            <v-td width="295" align="start">{{ disciplina.nome }}</v-td>
-            <v-td width="60" align="start">{{ disciplina.perfil.abreviacao }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="295" align="start">
+              {{ disciplina.nome.toLowerCase() }}
+            </v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="60" align="start">
+              {{ disciplina.perfil.abreviacao.toLowerCase() }}
+            </v-td>
           </tr>
 
           <tr v-if="!DisciplinasOptionsOrdered.length">
-            <v-td colspan="3" width="450">NENHUMA DISCIPLINA ENCONTRADA.</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" colspan="3" width="450">
+              NENHUMA DISCIPLINA ENCONTRADA.
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -151,7 +157,7 @@
             @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td class="table-data" width="25" type="content">
               <input
                 type="checkbox"
                 v-model="filtroPeriodos.selecionados"
@@ -159,7 +165,9 @@
                 @click.stop="selecionaPeriodo(periodo)"
               />
             </v-td>
-            <v-td width="425" align="start">{{ periodo.nome }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="425" align="start">
+              {{ periodo.nome.toLowerCase() }}
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -177,7 +185,7 @@
             @click="selecionaSemestre(semestre)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td style="text-transform: capitalize; font-size: 11px" width="25" type="content">
               <input
                 type="checkbox"
                 v-model="filtroSemestres.selecionados"
@@ -186,7 +194,9 @@
                 @click.stop="selecionaSemestre(semestre)"
               />
             </v-td>
-            <v-td width="425" align="start">{{ semestre.nome }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="425" align="start">
+              {{ semestre.nome.toLowerCase() }}
+            </v-td>
           </tr>
         </template>
       </BaseTable>

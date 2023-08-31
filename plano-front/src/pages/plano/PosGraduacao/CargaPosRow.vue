@@ -1,10 +1,10 @@
 <template>
   <tr class="cargapos-row">
-    <v-td width="75" />
-    <v-td width="25" type="content">
+    <v-td class="table-data" width="75" />
+    <v-td class="table-data" width="25" type="content">
       <input type="checkbox" v-model="toggleToDelete" :value="carga" />
     </v-td>
-    <v-td width="65" type="content">
+    <v-td class="table-data" width="65" type="content">
       <select v-model.number="cargaPosForm.trimestre" @change="handleEditCargaPos">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -13,13 +13,13 @@
       </select>
     </v-td>
     <v-td width="145" type="content">
-      <select v-model.number="cargaPosForm.Docente" @change="handleEditCargaPos">
+      <select v-model.number="cargaPosForm.Docente" @change="handleEditCargaPos" class="table-data">
         <option v-for="docente in DocentesAtivos" :key="docente.id" :value="docente.id">
-          {{ docente.apelido }}
+          {{ docente.apelido.toLowerCase() }}
         </option>
       </select>
     </v-td>
-    <v-td width="80" type="content">
+    <v-td class="table-data" width="80" type="content">
       <input
         type="text"
         v-model.number="cargaPosForm.creditos"

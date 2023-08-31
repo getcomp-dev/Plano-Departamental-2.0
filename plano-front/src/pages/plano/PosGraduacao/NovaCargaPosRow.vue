@@ -20,7 +20,7 @@
       <select v-model.number="cargaPosForm.Docente">
         <option v-if="!DocentesAtivos.length">Nenhum Docente Encontrado</option>
         <option v-for="docente in DocentesAtivos" :key="docente.id" :value="docente.id">
-          {{ docente.apelido }}
+          {{ docente.apelido.toLowerCase() }}
         </option>
       </select>
     </v-td>

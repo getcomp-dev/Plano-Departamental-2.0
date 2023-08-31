@@ -1,7 +1,7 @@
 <template>
   <tr class="novaturma">
-    <v-td width="25" type="content" />
-    <v-td width="65" type="content">
+    <v-td class="table-data" width="25" type="content" />
+    <v-td class="table-data" width="65" type="content">
       <select v-model.number="turmaForm.periodo">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -9,7 +9,7 @@
         <option value="4">4</option>
       </select>
     </v-td>
-    <v-td width="80" type="content">
+    <v-td class="table-data" width="80" type="content">
       <select v-model="turmaForm.disciplina" @change="handleChangeDisciplina">
         <option v-for="disciplina in DisciplinasExternas" :key="disciplina.id" :value="disciplina">
           {{ disciplina.codigo }}
@@ -17,18 +17,18 @@
       </select>
     </v-td>
     <v-td width="330" type="content">
-      <select v-model="turmaForm.disciplina" @change="handleChangeDisciplina">
+      <select v-model="turmaForm.disciplina" @change="handleChangeDisciplina" class="table-data">
         <option
           v-for="disciplina in DisciplinasExternasOrderedByNome"
           :key="disciplina.id + disciplina.codigo"
           :value="disciplina"
         >
-          {{ disciplina.nome }}
+          {{ disciplina.nome.toLowerCase() }}
         </option>
       </select>
     </v-td>
-    <v-td width="55">{{ totalCarga }}</v-td>
-    <v-td width="45" type="content">
+    <v-td class="table-data" width="55">{{ totalCarga }}</v-td>
+    <v-td class="table-data" width="45" type="content">
       <input
         type="text"
         style="width: 30px"
@@ -37,7 +37,7 @@
         @keypress="maskTurmaLetra"
       />
     </v-td>
-    <v-td width="80" type="content">
+    <v-td class="table-data" width="80" type="content">
       <select v-model="turmaForm.turno1" @change="handleChangeTurno">
         <option v-if="disciplinaIsIntegralEAD" value="EAD">EAD</option>
         <template v-else>
@@ -46,7 +46,7 @@
         </template>
       </select>
     </v-td>
-    <v-td width="85" type="content">
+    <v-td class="table-data" width="85" type="content">
       <select v-model.number="turmaForm.Horario1" @change="handleChangeHorario(1)">
         <option
           v-for="horario in HorariosFiltredByTurno"
@@ -66,7 +66,7 @@
         </option>
       </select>
     </v-td>
-    <v-td width="95" type="content">
+    <v-td class="table-data" width="95" type="content">
       <template v-if="!disciplinaIsIntegralEAD">
         <select v-model.number="turmaForm.Sala1">
           <option />
@@ -83,8 +83,8 @@
         </select>
       </template>
     </v-td>
-    <v-td width="45" />
-    <v-td width="35" v-for="cursosEmptySpace in 4" :key="cursosEmptySpace" />
+    <v-td class="table-data" width="45" />
+    <v-td class="table-data" width="35" v-for="cursosEmptySpace in 4" :key="cursosEmptySpace" />
   </tr>
 </template>
 

@@ -1,21 +1,20 @@
 <template>
-  <div class="w-100 pl-1">
+  <div class="w-100">
     <h3 class="title">
       {{ title }}
     </h3>
 
-    <div class="container-horarios">
+    <div class="container-horarios px-1">
       <template v-if="template === 'curso'">
         <template v-if="obrigatoriasAtivas">
           <div
             v-for="periodo in PeriodosDaGradeDoCurso"
             :key="periodo.indice + periodo.nome + curso.periodoInicial"
-            class="div-table"
+            class="table-data"
           >
             <h4 class="periodo-title">{{ periodo.nome }}</h4>
 
             <TableHorarios
-              class="table-horarios"
               :Turmas="horariosObrigatorias[periodo.indice]"
               :listaDeHorarios="listaDeHorariosFiltredByTurno(periodo.nome)"
             />
@@ -24,7 +23,7 @@
       </template>
 
       <template v-if="eletivasAtivas">
-        <div class="div-table-eletivas">
+        <div class="div-table-horariosCursos-eletivas">
           <h4 class="periodo-title">Eletivas</h4>
 
           <TableHorarios
@@ -36,7 +35,7 @@
       </template>
     </div>
 
-    <div v-if="template === 'extra'" class="div-table">
+    <div v-if="template === 'extra'" class="table-data">
       <TableHorarios
         class="table-horarios extra-table"
         :Turmas="horariosTurmas"
@@ -136,39 +135,35 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import "@/assets/styles/theme";
 .title {
   width: 100%;
-  text-align: start;
-  font-size: 12px;
+  font-size: 16px;
+  padding: 5px;
   font-weight: bold;
-  margin-left: 2vw;
+  text-align: start;
 }
 
 .container-horarios {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* .container-horarios {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(auto-fill, 306px);
   justify-content: space-between;
   grid-column-gap: 5px;
-  grid-row-gap: 10px;
-  margin-bottom: 10px;
-} .*/
+  grid-row-gap: 30px;
+  margin-bottom: 2px;
+}
 
 .extra-table {
   margin-left: 4vw;
 }
 
 .periodo-title {
+  width: 100%;
+  text-align: start;
   font-size: 12px;
-  font-weight: normal;
-  margin-bottom: 5px;
+  font-weight: bold;
 }
 
 .table-horarios {

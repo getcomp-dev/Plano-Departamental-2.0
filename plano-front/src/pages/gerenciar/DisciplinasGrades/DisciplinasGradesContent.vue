@@ -57,25 +57,29 @@
                 { 'bg-selected': disciplinaSelectedId === disciplinaGrade.Disciplina },
               ]"
             >
-              <v-td v-if="disciplinaGrade.periodo !== 15" width="70">
+              <v-td class="table-data" v-if="disciplinaGrade.periodo !== 15" width="70">
                 {{ disciplinaGrade.periodo }}
               </v-td>
-              <v-td v-else width="70">-</v-td>
-              <v-td width="80" align="start">{{ disciplinaGrade.disciplina.codigo }}</v-td>
-              <v-td width="400" align="start">{{ disciplinaGrade.disciplina.nome }}</v-td>
+              <v-td class="table-data" v-else width="70">-</v-td>
+              <v-td class="table-data" width="80" align="start">
+                {{ disciplinaGrade.disciplina.codigo }}
+              </v-td>
+              <v-td class="table-data" width="400" align="start">
+                {{ disciplinaGrade.disciplina.nome.toLowerCase() }}
+              </v-td>
 
-              <v-td width="70" v-if="disciplinaGrade.obrigatoria">Sim</v-td>
-              <v-td v-else width="70">-</v-td>
+              <v-td class="table-data" width="70" v-if="disciplinaGrade.obrigatoria">Sim</v-td>
+              <v-td class="table-data" v-else width="70">-</v-td>
             </tr>
 
             <tr v-if="!hasGradeSelected">
-              <v-td width="620" colspan="3">
+              <v-td class="table-data" width="620" colspan="3">
                 <b>Nenhuma disciplina encontrada</b>
                 , selecione uma grade.
               </v-td>
             </tr>
             <tr v-else-if="!DisciplinaGradesOrdered.length">
-              <v-td width="620" colspan="3">
+              <v-td class="table-data" width="620" colspan="3">
                 <b>Nenhuma disciplina encontrada</b>
                 na grade selecionada.
               </v-td>
@@ -303,9 +307,8 @@ export default {
 
       this.disciplinaGradeForm.disciplina = { ...disciplinaFound };
       this.disciplinaGradeForm.Grade = this.currentGradeId;
-      this.disciplinaGradeForm.obrigatoria = this.obrigatoriaOpcoes[
-        this.isDisciplinaObrigatoria(this.disciplinaGradeForm.disciplina)
-      ];
+      this.disciplinaGradeForm.obrigatoria =
+        this.obrigatoriaOpcoes[this.isDisciplinaObrigatoria(this.disciplinaGradeForm.disciplina)];
 
       const disciplinaDaGradeAtual = this.DisciplinaGradesFiltred.find(
         (disciplinaGrade) => disciplinaGrade.Disciplina === disciplinaFound.id
@@ -352,9 +355,8 @@ export default {
     },
     showDisciplina(disciplinaGrade) {
       this.disciplinaGradeForm = cloneDeep(disciplinaGrade);
-      this.disciplinaGradeForm.obrigatoria = this.obrigatoriaOpcoes[
-        this.isDisciplinaObrigatoria(this.disciplinaGradeForm.disciplina)
-      ];
+      this.disciplinaGradeForm.obrigatoria =
+        this.obrigatoriaOpcoes[this.isDisciplinaObrigatoria(this.disciplinaGradeForm.disciplina)];
       this.disciplinaGradeForm.Grade = this.gradeForm.id;
     },
     converteObrigatoriaParaNum(opcao) {

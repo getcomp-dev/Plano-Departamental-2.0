@@ -39,26 +39,32 @@
           <template v-if="CursosOrderedTable.length && TurmasFiltered.length">
             <template v-for="curso in CursosOrderedTable">
               <tr :key="curso.id" class="bg-custom">
-                <v-td width="85">{{ curso.codigo }}</v-td>
-                <v-td width="300" align="start" :title="curso.nome">{{ curso.nome }}</v-td>
-                <v-td width="65"></v-td>
-                <v-td width="95"></v-td>
-                <v-td width="40"></v-td>
-                <v-td width="120"></v-td>
-                <v-td width="45"></v-td>
+                <v-td class="table-data" width="85">{{ curso.codigo }}</v-td>
+                <v-td class="table-data" width="300" align="start" :title="curso.nome">
+                  {{ curso.nome.toLowerCase() }}
+                </v-td>
+                <v-td class="table-data" width="65"></v-td>
+                <v-td class="table-data" width="95"></v-td>
+                <v-td class="table-data" width="40"></v-td>
+                <v-td class="table-data" width="120"></v-td>
+                <v-td class="table-data" width="45"></v-td>
               </tr>
 
               <tr
                 v-for="turma in getTurmasDoCurso(curso.id)"
                 :key="curso.id + turma.letra + turma.id"
               >
-                <v-td width="85"></v-td>
-                <v-td width="300"></v-td>
-                <v-td width="65">{{ turma.periodo }}</v-td>
-                <v-td width="95" :title="turma.disciplina.nome">{{ turma.disciplina.codigo }}</v-td>
-                <v-td width="45">{{ turma.letra }}</v-td>
-                <v-td width="120">{{ generateHorariosText(turma.Horario1, turma.Horario2) }}</v-td>
-                <v-td width="45">
+                <v-td class="table-data" width="85"></v-td>
+                <v-td class="table-data" width="300"></v-td>
+                <v-td class="table-data" width="65">{{ turma.periodo }}</v-td>
+                <v-td class="table-data" width="95" :title="turma.disciplina.nome">
+                  {{ turma.disciplina.codigo }}
+                </v-td>
+                <v-td class="table-data" width="45">{{ turma.letra }}</v-td>
+                <v-td class="table-data" width="120">
+                  {{ generateHorariosText(turma.Horario1, turma.Horario2) }}
+                </v-td>
+                <v-td class="table-data" width="45">
                   {{
                     turma.pedidoDoCurso.vagasPeriodizadas + turma.pedidoDoCurso.vagasNaoPeriodizadas
                   }}
@@ -67,7 +73,7 @@
             </template>
           </template>
           <tr v-else-if="!CursosOrderedTable.length">
-            <v-td colspan="7" width="755">
+            <v-td class="table-data" colspan="7" width="755">
               <b>Nenhum curso encontrado.</b>
               Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
@@ -76,7 +82,7 @@
           </tr>
 
           <tr v-else-if="!TurmasFiltered.length">
-            <v-td colspan="7" width="755">
+            <v-td class="table-data" colspan="7" width="755">
               <b>Nenhuma disciplina encontrada.</b>
               Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
@@ -141,18 +147,29 @@
             @click="toggleItemInArray(curso, filtroCursos.selecionados)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td style="text-transform: capitalize; font-size: 11px" width="25" type="content">
               <input type="checkbox" v-model="filtroCursos.selecionados" :value="curso" />
             </v-td>
-            <v-td width="70" align="start">{{ curso.codigo }}</v-td>
-            <v-td align="start" width="270" :title="curso.nome">
-              {{ curso.nome }}
+            <v-td style="text-transform: capitalize; font-size: 11px" width="70" align="start">
+              {{ curso.codigo }}
             </v-td>
-            <v-td width="85" align="start">{{ curso.turno }}</v-td>
+            <v-td
+              style="text-transform: capitalize; font-size: 11px"
+              align="start"
+              width="270"
+              :title="curso.nome"
+            >
+              {{ curso.nome.toLowerCase() }}
+            </v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="85" align="start">
+              {{ curso.turno.toLowerCase() }}
+            </v-td>
           </tr>
 
           <tr v-if="!CursosOptionsOrdered.length">
-            <v-td colspan="3" width="450">NENHUM CURSO ENCONTRADO</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" colspan="3" width="450">
+              NENHUM CURSO ENCONTRADO
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -170,7 +187,7 @@
             @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td style="text-transform: capitalize; font-size: 11px" width="25" type="content">
               <input
                 type="checkbox"
                 v-model="filtroPeriodos.selecionados"
@@ -178,7 +195,9 @@
                 @click.stop="selecionaPeriodo(periodo)"
               />
             </v-td>
-            <v-td width="425" align="start">{{ periodo.nome }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="425" align="start">
+              {{ periodo.nome.toLowerCase() }}
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -196,7 +215,7 @@
             @click="selecionaSemestre(semestre)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td style="text-transform: capitalize; font-size: 11px" width="25" type="content">
               <input
                 type="checkbox"
                 v-model="filtroSemestres.selecionados"
@@ -205,7 +224,9 @@
                 @click.stop="selecionaSemestre(semestre)"
               />
             </v-td>
-            <v-td width="425" align="start">{{ semestre.nome }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="425" align="start">
+              {{ semestre.nome.toLowerCase() }}
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -229,7 +250,7 @@
             :key="perfil.id + perfil.nome"
             @click.stop="selectPerfis(perfil)"
           >
-            <v-td width="25" type="content">
+            <v-td style="text-transform: capitalize; font-size: 11px" width="25" type="content">
               <input
                 type="checkbox"
                 v-model="filtroPerfis.selecionados"
@@ -238,7 +259,9 @@
                 @click.stop="selectPerfis(perfil)"
               />
             </v-td>
-            <v-td width="425" align="start">{{ perfil.nome }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="425" align="start">
+              {{ perfil.nome.toLowerCase() }}
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -289,7 +312,7 @@
             @click="selectDisciplina(disciplina)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td style="text-transform: capitalize; font-size: 11px" width="25" type="content">
               <input
                 type="checkbox"
                 v-model="filtroDisciplinas.selecionados"
@@ -297,15 +320,21 @@
                 @click.stop="selectDisciplina(disciplina)"
               />
             </v-td>
-            <v-td width="70" align="start">{{ disciplina.codigo }}</v-td>
-            <v-td align="start" width="270">
-              {{ disciplina.nome }}
+            <v-td style="text-transform: capitalize; font-size: 11px" width="70" align="start">
+              {{ disciplina.codigo }}
             </v-td>
-            <v-td width="85" align="start">{{ disciplina.perfil.abreviacao }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" align="start" width="270">
+              {{ disciplina.nome.toLowerCase() }}
+            </v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="85" align="start">
+              {{ disciplina.perfil.abreviacao.toLowerCase() }}
+            </v-td>
           </tr>
 
           <tr v-if="!DisciplinasOptionsOrdered.length">
-            <v-td colspan="3" width="450">NENHUMA DISCIPLINA ENCONTRADA.</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" colspan="3" width="450">
+              NENHUMA DISCIPLINA ENCONTRADA.
+            </v-td>
           </tr>
         </template>
       </BaseTable>
