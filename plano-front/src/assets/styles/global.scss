@@ -18,12 +18,13 @@
   width: 100%;
   height: 100%;
 
-  main > .main-component {
+  main>.main-component {
     width: 100%;
     overflow: hidden;
     margin: 0;
     padding: 0;
   }
+
   main .page-content {
     display: flex;
     justify-content: space-between;
@@ -36,10 +37,12 @@
 
 .popover {
   font-size: 11px;
+
   .popover-header {
     font-size: 11px;
     font-weight: bold;
   }
+
   .popover-body {
     padding-top: 3px;
     padding-bottom: 3px;
@@ -77,6 +80,7 @@ label[required] {
     transition: all 200ms;
     pointer-events: none;
   }
+
   &:hover:before {
     display: block;
   }
@@ -91,41 +95,46 @@ label[required] {
 /* Others */
 .div-table {
   overflow: hidden;
-  height: -webkit-max-content;
-  height: -moz-max-content;
-  height: max-content;
+  height: 723px;
   width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
-  padding: 0;
 }
+
 .clickable {
   cursor: pointer !important;
+
   * {
     cursor: pointer !important;
   }
 }
+
 .max-content {
   width: -webkit-max-content !important;
   width: -moz-max-content !important;
   width: max-content !important;
 }
+
 .low-opacity {
   opacity: 0.4;
 }
+
 .borderX-0 {
   border-right: none !important;
   border-left: none !important;
 }
+
 .paddingX-20 {
   padding-right: 20px !important;
   padding-left: 20px !important;
 }
+
 // bootstrap overwrites
 .alert {
   margin-bottom: 0.5rem;
   padding: 8px 10px;
 }
+
 // inputs feedback
 .invalid-feedback {
   font-size: 11px;
@@ -136,6 +145,7 @@ label[required] {
 .fade-transition-enter-active {
   animation: fadeIn 300ms;
 }
+
 .fade-transition-leave-active {
   animation: fadeOut 300ms;
 }
@@ -155,6 +165,7 @@ label[required] {
   font-size: 1.25rem;
   height: calc(1.5em + 1rem + 2px);
 }
+
 .b-custom-control-lg .custom-file-label,
 .b-custom-control-lg .custom-file-label:after,
 .input-group-lg .custom-file-label,
@@ -162,10 +173,12 @@ label[required] {
   padding: 0.5rem 1rem;
   line-height: 1.5;
 }
+
 .b-custom-control-lg .custom-file-label,
 .input-group-lg .custom-file-label {
   border-radius: 0.3rem;
 }
+
 .b-custom-control-lg .custom-file-label::after,
 .input-group-lg .custom-file-label::after {
   font-size: inherit;
@@ -182,6 +195,7 @@ label[required] {
   font-size: 0.875rem;
   height: calc(1.5em + 0.5rem + 2px);
 }
+
 .b-custom-control-sm .custom-file-label,
 .b-custom-control-sm .custom-file-label:after,
 .input-group-sm .custom-file-label,
@@ -189,13 +203,20 @@ label[required] {
   padding: 0.25rem 0.5rem;
   line-height: 1.5;
 }
+
 .b-custom-control-sm .custom-file-label,
 .input-group-sm .custom-file-label {
   border-radius: 0.2rem;
 }
+
 .b-custom-control-sm .custom-file-label::after,
 .input-group-sm .custom-file-label::after {
   font-size: inherit;
   height: calc(1.5em + 0.5rem);
   border-radius: 0 0.2rem 0.2rem 0;
+}
+
+.table-data {
+  text-transform: capitalize;
+  font-weight: 11px;
 }

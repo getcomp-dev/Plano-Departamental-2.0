@@ -54,33 +54,50 @@
 
         <template #tbody>
           <tr v-for="turma in TurmasRetornadasOrdered" :key="turma.id + turma.letra">
-            <v-td width="120" align="start" :title="turma.plano.ano + '-' + turma.plano.nome">
+            <v-td
+              class="table-data"
+              width="120"
+              align="start"
+              :title="turma.plano.ano + '-' + turma.plano.nome"
+            >
               <template v-if="turma.plano.ano">
-                {{ turma.plano.ano }} {{ turma.plano.nome }}
+                {{ turma.plano.ano }} {{ turma.plano.nome.toLowerCase() }}
               </template>
               <template v-else>-</template>
             </v-td>
-            <v-td width="65">{{ turma.periodo }}</v-td>
-            <v-td width="80" paddinX="0" :style="{ backgroundColor: turma.disciplina.perfil.cor }">
-              {{ turma.disciplina.perfil.abreviacao }}
+            <v-td class="table-data" width="65">{{ turma.periodo }}</v-td>
+            <v-td
+              class="table-data"
+              width="80"
+              paddinX="0"
+              :style="{ backgroundColor: turma.disciplina.perfil.cor }"
+            >
+              {{ turma.disciplina.perfil.abreviacao.toLowerCase() }}
             </v-td>
-            <v-td width="80">{{ turma.disciplina.codigo }}</v-td>
-            <v-td width="330" align="start">{{ turma.disciplina.nome }}</v-td>
-            <v-td width="45" paddinX="0">{{ turma.letra }}</v-td>
-            <v-td width="200" align="start">
-              {{ generateDocentesText(turma.Docente1, turma.Docente2) }}
+            <v-td class="table-data" width="80">{{ turma.disciplina.codigo }}</v-td>
+            <v-td class="table-data" width="330" align="start">
+              {{ turma.disciplina.nome.toLowerCase() }}
             </v-td>
-            <v-td width="80" align="start">{{ turma.turno1 }}</v-td>
-            <v-td width="120" align="start">
+            <v-td class="table-data" width="45" paddinX="0">{{ turma.letra }}</v-td>
+            <v-td class="table-data" width="200" align="start">
+              {{ generateDocentesText(turma.Docente1, turma.Docente2).toLowerCase() }}
+            </v-td>
+            <v-td class="table-data" width="80" align="start">{{ turma.turno1 }}</v-td>
+            <v-td class="table-data" width="120" align="start">
               {{ generateHorariosText(turma.Horario1, turma.Horario2) }}
             </v-td>
-            <v-td width="100" align="start" :title="generateSalasText(turma.Sala1, turma.Sala2)">
-              {{ generateSalasText(turma.Sala1, turma.Sala2) }}
+            <v-td
+              class="table-data"
+              width="100"
+              align="start"
+              :title="generateSalasText(turma.Sala1, turma.Sala2)"
+            >
+              {{ generateSalasText(turma.Sala1, turma.Sala2).toLowerCase() }}
             </v-td>
           </tr>
 
           <tr v-if="!TurmasRetornadasOrdered.length">
-            <v-td :width="1220">
+            <v-td class="table-data" :width="1220">
               <b>Nenhuma turma encontrada.</b>
               Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
@@ -116,7 +133,7 @@
             @click="selectPerfis(perfil)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td class="table-data" width="25" type="content">
               <input
                 type="checkbox"
                 v-model="filtroPerfis.selecionados"
@@ -125,11 +142,15 @@
                 @click.stop="selectPerfis(perfil)"
               />
             </v-td>
-            <v-td width="425" align="start">{{ perfil.nome }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="425" align="start">
+              {{ perfil.nome.toLowerCase() }}
+            </v-td>
           </tr>
 
           <tr v-if="!PerfisOptionsOrdered.length">
-            <v-td colspan="3" width="450">Nenhum perfil encontrado</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" colspan="3" width="450">
+              Nenhum perfil encontrado
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -179,7 +200,7 @@
             @click="selectDisciplina(disciplina)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td class="table-data" width="25" type="content">
               <input
                 type="checkbox"
                 v-model="filtroDisciplinas.selecionados"
@@ -187,14 +208,23 @@
                 @click.stop="selectDisciplina(disciplina)"
               />
             </v-td>
-            <v-td width="70" align="start">{{ disciplina.codigo }}</v-td>
-            <v-td align="start" width="270" :title="disciplina.nome">
-              {{ disciplina.nome }}
+            <v-td style="text-transform: capitalize; font-size: 11px" width="70" align="start">
+              {{ disciplina.codigo }}
             </v-td>
-            <v-td width="85" align="start">{{ disciplina.perfil.abreviacao }}</v-td>
+            <v-td
+              style="text-transform: capitalize; font-size: 11px"
+              align="start"
+              width="270"
+              :title="disciplina.nome"
+            >
+              {{ disciplina.nome.toLowerCase() }}
+            </v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="85" align="start">
+              {{ disciplina.perfil.abreviacao.toLowerCase() }}
+            </v-td>
           </tr>
           <tr v-if="!DisciplinasOptionsOrdered.length">
-            <v-td colspan="3" width="450">NENHUMA DISCIPLINA ENCONTRADA.</v-td>
+            <v-td class="table-data" colspan="3" width="450">NENHUMA DISCIPLINA ENCONTRADA.</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -233,15 +263,21 @@
             @click="toggleSearchCodition('Docentes', docente.id)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td class="table-data" width="25" type="content">
               <input type="checkbox" v-model="searchConditions.Docentes" :value="docente.id" />
             </v-td>
-            <v-td width="120" align="start">{{ docente.apelido }}</v-td>
-            <v-td width="305" align="start">{{ docente.nome }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="120" align="start">
+              {{ docente.apelido.toLowerCase() }}
+            </v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="305" align="start">
+              {{ docente.nome.toLowerCase() }}
+            </v-td>
           </tr>
 
           <tr v-if="!DocentesOptionsOrdered.length">
-            <v-td colspan="3" width="450">NENHUM DOCENTE ENCONTRADO.</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" colspan="3" width="450">
+              NENHUM DOCENTE ENCONTRADO.
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -259,7 +295,7 @@
             @click="selecionaPeriodo(periodo, filtroPeriodos.selecionados)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td class="table-data" width="25" type="content">
               <input
                 type="checkbox"
                 v-model="filtroPeriodos.selecionados"
@@ -267,7 +303,9 @@
                 @click.stop="selecionaPeriodo(periodo)"
               />
             </v-td>
-            <v-td width="425" align="start">{{ periodo.nome }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="425" align="start">
+              {{ periodo.nome.toLowerCase() }}
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -285,7 +323,7 @@
             @click="selecionaSemestre(semestre)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td class="table-data" width="25" type="content">
               <input
                 type="checkbox"
                 v-model="filtroSemestres.selecionados"
@@ -294,7 +332,9 @@
                 @click.stop="selecionaSemestre(semestre)"
               />
             </v-td>
-            <v-td width="425" align="start">{{ semestre.nome }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="425" align="start">
+              {{ semestre.nome.toLowerCase() }}
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -315,14 +355,18 @@
             @click="toggleSearchCodition('Horarios', horario.id)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td style="text-transform: capitalize; font-size: 11px" width="25" type="content">
               <input type="checkbox" v-model="searchConditions.Horarios" :value="horario.id" />
             </v-td>
-            <v-td width="425" align="start">{{ horario.horario }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="425" align="start">
+              {{ horario.horario }}
+            </v-td>
           </tr>
 
           <tr v-if="!HorariosOptionsFiltered.length">
-            <v-td colspan="2" width="450">NENHUM HORÁRIO ENCONTRADO.</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" colspan="2" width="450">
+              NENHUM HORÁRIO ENCONTRADO.
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -343,14 +387,18 @@
             @click="toggleSearchCodition('Salas', sala.id)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td class="table-data" width="25" type="content">
               <input type="checkbox" v-model="searchConditions.Salas" :value="sala.id" />
             </v-td>
-            <v-td width="425" align="start">{{ sala.nome }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="425" align="start">
+              {{ sala.nome.toLowerCase() }}
+            </v-td>
           </tr>
 
           <tr v-if="!SalasOptionsFiltered.length">
-            <v-td colspan="2" width="450">NENHUMA SALA ENCONTRADA.</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" colspan="2" width="450">
+              NENHUMA SALA ENCONTRADA.
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -369,15 +417,21 @@
             @click="toggleSearchCodition('Planos', plano.id)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td class="table-data" width="25" type="content">
               <input type="checkbox" v-model="searchConditions.Planos" :value="plano.id" />
             </v-td>
-            <v-td width="70" align="start">{{ plano.ano }}</v-td>
-            <v-td width="355" align="start">{{ plano.nome }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="70" align="start">
+              {{ plano.ano }}
+            </v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="355" align="start">
+              {{ plano.nome.toLowerCase() }}
+            </v-td>
           </tr>
 
           <tr v-if="!Planos.length">
-            <v-td colspan="3" width="450">NENHUM PLANO ENCONTRADO.</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" colspan="3" width="450">
+              NENHUM PLANO ENCONTRADO.
+            </v-td>
           </tr>
         </template>
       </BaseTable>

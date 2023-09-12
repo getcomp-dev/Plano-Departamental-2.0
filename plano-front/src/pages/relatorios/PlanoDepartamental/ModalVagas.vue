@@ -91,19 +91,19 @@
 
           <template #tbody>
             <tr v-for="pedido in PedidosDataOrdered" :key="pedido.curso.codigo + pedido.Turma">
-              <v-td width="65" align="start">{{ pedido.curso.codigo }}</v-td>
-              <v-td width="300" align="start" :title="pedido.curso.nome">
+              <v-td class="table-data" width="65" align="start">{{ pedido.curso.codigo }}</v-td>
+              <v-td class="table-data" width="300" align="start" :title="pedido.curso.nome">
                 {{ pedido.curso.nome }}
               </v-td>
-              <v-td width="70">{{ pedido.vagasPeriodizadas }}</v-td>
-              <v-td width="70">{{ pedido.vagasNaoPeriodizadas }}</v-td>
-              <v-td width="50">{{ pedido.totalVagas }}</v-td>
-              <v-td width="80">{{ pedido.vagasOferecidas }}</v-td>
-              <v-td width="80">{{ pedido.vagasOcupadas }}</v-td>
+              <v-td class="table-data" width="70">{{ pedido.vagasPeriodizadas }}</v-td>
+              <v-td class="table-data" width="70">{{ pedido.vagasNaoPeriodizadas }}</v-td>
+              <v-td class="table-data" width="50">{{ pedido.totalVagas }}</v-td>
+              <v-td class="table-data" width="80">{{ pedido.vagasOferecidas }}</v-td>
+              <v-td class="table-data" width="80">{{ pedido.vagasOcupadas }}</v-td>
             </tr>
 
             <tr v-if="!PedidosDataOrdered.length">
-              <v-td colspan="5" width="715">
+              <v-td class="table-data" colspan="5" width="715">
                 <b>Turma atual não possui nenhuma vaga cadastrada</b>
               </v-td>
             </tr>

@@ -1,6 +1,13 @@
 <template>
   <tr class="bg-custom">
-    <v-td width="130" align="start" :title="docente.nome">{{ docente.apelido }}</v-td>
+    <v-td
+      width="130"
+      align="start"
+      :title="docente.nome"
+      style="text-transform: capitalize; font-size: 11px"
+    >
+      {{ docente.apelido.toLowerCase() }}
+    </v-td>
     <v-td width="620" colspan="5" />
     <v-td width="75">
       {{ docente.creditos1Semestre ? docente.creditos1Semestre : "" }}

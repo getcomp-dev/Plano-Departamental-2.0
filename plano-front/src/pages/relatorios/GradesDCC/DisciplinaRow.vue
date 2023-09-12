@@ -1,23 +1,23 @@
 <template>
   <tr>
-    <v-td width="80" :style="{ backgroundColor: disciplina.perfil.cor }">
-      {{ disciplina.perfil.abreviacao }}
+    <v-td class="table-data" width="80" :style="{ backgroundColor: disciplina.perfil.cor }">
+      {{ disciplina.perfil.abreviacao.toLowerCase() }}
     </v-td>
-    <v-td width="100">{{ disciplina.codigo }}</v-td>
-    <v-td width="75">{{ disciplina.creditoTotal }}</v-td>
-    <v-td width="380" align="start" :title="disciplina.nome">
-      {{ disciplina.nome }}
+    <v-td class="table-data" width="100">{{ disciplina.codigo }}</v-td>
+    <v-td class="table-data" width="75">{{ disciplina.creditoTotal }}</v-td>
+    <v-td class="table-data" width="380" align="start" :title="disciplina.nome">
+      {{ disciplina.nome.toLowerCase() }}
     </v-td>
-    <v-td width="140" paddingX="2" v-if="cursosAtivados.CCN">
+    <v-td class="table-data" width="140" paddingX="2" v-if="cursosAtivados.CCN">
       {{ generateGradeText(disciplina.gradeCCN) }}
     </v-td>
-    <v-td width="140" paddingX="2" v-if="cursosAtivados.CCD">
+    <v-td class="table-data" width="140" paddingX="2" v-if="cursosAtivados.CCD">
       {{ generateGradeText(disciplina.gradeCCD) }}
     </v-td>
-    <v-td width="140" paddingX="2" v-if="cursosAtivados.EC">
+    <v-td class="table-data" width="140" paddingX="2" v-if="cursosAtivados.EC">
       {{ generateGradeText(disciplina.gradeEC) }}
     </v-td>
-    <v-td width="140" paddingX="2" v-if="cursosAtivados.SI">
+    <v-td class="table-data" width="140" paddingX="2" v-if="cursosAtivados.SI">
       {{ generateGradeText(disciplina.gradeSI) }}
     </v-td>
   </tr>

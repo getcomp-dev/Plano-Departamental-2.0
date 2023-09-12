@@ -81,38 +81,39 @@
               :class="['clickable', disciplinaEstaSelecionada(disciplina.id)]"
             >
               <v-td
+                class="table-data"
                 width="80"
                 align="start"
                 :style="{ backgroundColor: disciplina.perfil.cor, color: '#212529' }"
               >
-                {{ disciplina.perfil.abreviacao }}
+                {{ disciplina.perfil.abreviacao.toLowerCase() }}
               </v-td>
-              <v-td width="85" align="start">
+              <v-td class="table-data" width="85" align="start">
                 {{ disciplina.codigo }}
               </v-td>
-              <v-td width="300" align="start">
-                {{ disciplina.nome }}
+              <v-td width="300" align="start" style="text-transform: capitalize">
+                {{ disciplina.nome.toLowerCase() }}
               </v-td>
 
-              <v-td width="55">
+              <v-td class="table-data" width="55">
                 {{ disciplina.cargaTeorica }}
               </v-td>
-              <v-td width="55">
+              <v-td class="table-data" width="55">
                 {{ disciplina.cargaPratica }}
               </v-td>
-              <v-td width="70">
+              <v-td class="table-data" width="70">
                 {{ textoEad(disciplina.ead) }}
               </v-td>
-              <v-td width="85">
+              <v-td class="table-data" width="85">
                 {{ textoLab(disciplina.laboratorio) }}
               </v-td>
-              <v-td width="95">
+              <v-td class="table-data" width="95">
                 {{ textoDepto(disciplina.departamento) }}
               </v-td>
             </tr>
 
             <tr v-if="!DisciplinasOrdered.length">
-              <v-td width="825" colspan="8">
+              <v-td class="table-data" width="825" colspan="8">
                 <font-awesome-icon :icon="['fas', 'exclamation-triangle']" class="icon-red" />
                 <b>Nenhuma disciplina encontrada!</b>
               </v-td>
@@ -154,8 +155,9 @@
                   v-for="perfil in AllPerfis"
                   :key="perfil.id + perfil.nome"
                   :value="perfil.id"
+                  style="text-transform: capitalize"
                 >
-                  {{ perfil.abreviacao }}
+                  {{ perfil.abreviacao.toLowerCase() }}
                 </b-form-select-option>
               </VSelect>
             </div>

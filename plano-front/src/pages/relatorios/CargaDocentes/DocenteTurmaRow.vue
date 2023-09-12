@@ -1,21 +1,23 @@
 <template>
   <tr>
-    <v-td v-if="docente" width="130">{{ docente.apelido }}</v-td>
-    <v-td v-else width="130" />
-    <v-td width="65">{{ turma.periodo }}</v-td>
-    <v-td width="80">{{ turma.disciplina.codigo }}</v-td>
-    <v-td width="300" align="start">{{ turma.disciplina.nome }}</v-td>
-    <v-td width="45">{{ turma.letra }}</v-td>
-    <v-td width="130">
+    <v-td class="table-data" v-if="docente" width="130">{{ docente.apelido.toLowerCase() }}</v-td>
+    <v-td class="table-data" v-else width="130" />
+    <v-td class="table-data" width="65">{{ turma.periodo }}</v-td>
+    <v-td class="table-data" width="80">{{ turma.disciplina.codigo }}</v-td>
+    <v-td class="table-data" width="300" align="start">
+      {{ turma.disciplina.nome.toLowerCase() }}
+    </v-td>
+    <v-td class="table-data" width="45">{{ turma.letra }}</v-td>
+    <v-td class="table-data" width="130">
       {{ generateHorariosText(turma.Horario1, turma.Horario2) }}
     </v-td>
-    <v-td width="75">
+    <v-td class="table-data" width="75">
       {{ turmaIs1Semestre ? turma.creditosDaTurma : "" }}
     </v-td>
-    <v-td width="75">
+    <v-td class="table-data" width="75">
       {{ turmaIs2Semestre ? turma.creditosDaTurma : "" }}
     </v-td>
-    <v-td width="50" />
+    <v-td class="table-data" width="50" />
   </tr>
 </template>
 

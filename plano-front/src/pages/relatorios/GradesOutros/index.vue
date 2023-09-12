@@ -63,7 +63,7 @@
           />
 
           <tr v-if="!DisciplinasOrderedMain.length">
-            <v-td width="1120">
+            <v-td class="table-data" width="1120">
               <b>Nenhuma disciplina encontrada.</b>
               Clique no botão de filtros
               <font-awesome-icon :icon="['fas', 'list-ul']" class="icon-gray" />
@@ -108,7 +108,9 @@
                 @click.stop="selectPerfis(perfil)"
               />
             </v-td>
-            <v-td width="425" align="start">{{ perfil.nome }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="425" align="start">
+              {{ perfil.nome.toLowerCase() }}
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -167,15 +169,24 @@
                 @click.stop="selectDisciplina(disciplina)"
               />
             </v-td>
-            <v-td width="70" align="start">{{ disciplina.codigo }}</v-td>
-            <v-td align="start" width="270" :title="disciplina.nome">
-              {{ disciplina.nome }}
+            <v-td class="table-data" width="70" align="start">{{ disciplina.codigo }}</v-td>
+            <v-td
+              style="text-transform: capitalize; font-size: 11px"
+              align="start"
+              width="270"
+              :title="disciplina.nome"
+            >
+              {{ disciplina.nome.toLowerCase() }}
             </v-td>
-            <v-td width="85" align="start">{{ disciplina.perfil.abreviacao }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="85" align="start">
+              {{ disciplina.perfil.abreviacao.toLowerCase() }}
+            </v-td>
           </tr>
 
           <tr v-if="!DisciplinasOptionsOrdered.length">
-            <v-td colspan="3" width="450">NENHUMA DISCIPLINA ENCONTRADA.</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" colspan="3" width="450">
+              NENHUMA DISCIPLINA ENCONTRADA.
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -208,15 +219,21 @@
             @click="toggleItemInArray(curso, filtroCursos.selecionados)"
             v-prevent-click-selection
           >
-            <v-td width="25" type="content">
+            <v-td class="table-data" width="25" type="content">
               <input type="checkbox" v-model="filtroCursos.selecionados" :value="curso" />
             </v-td>
-            <v-td width="70" align="start">{{ curso.codigo.toUpperCase() }}</v-td>
-            <v-td width="355" align="start">{{ curso.nome }}</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="70" align="start">
+              {{ curso.codigo.toUpperCase() }}
+            </v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="355" align="start">
+              {{ curso.nome.toLowerCase() }}
+            </v-td>
           </tr>
 
           <tr v-if="!CursosComGrades.length">
-            <v-td width="450" colspan="3">NENHUM CURSO ENCONTRADO.</v-td>
+            <v-td style="text-transform: capitalize; font-size: 11px" width="450" colspan="3">
+              NENHUM CURSO ENCONTRADO.
+            </v-td>
           </tr>
         </template>
       </BaseTable>
