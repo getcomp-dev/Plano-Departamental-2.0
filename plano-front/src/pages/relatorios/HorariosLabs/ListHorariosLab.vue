@@ -6,8 +6,12 @@
       </h2>
 
       <div class="container-horarios px-1" :key="periodo.nome + periodo.id">
-        <div v-for="laboratorio in laboratorios" :key="laboratorio.id + laboratorio.nome">
-          <h3 class="lab-title">{{ laboratorio.nome }}</h3>
+        <div
+          v-for="laboratorio in laboratorios"
+          :key="laboratorio.id + laboratorio.nome"
+          class="table-data"
+        >
+          <h3 class="lab-title">{{ laboratorio.nome.toLowerCase() }}</h3>
           <TableHorariosLab
             :laboratorio="laboratorio"
             :turmas="getTurmasDoPeriodo(turmas, periodo.id)"

@@ -2,13 +2,14 @@
   <div :class="typeClass">
     <input
       type="text"
-      :disabled="disabled"
       :title="titlePedido.periodizado"
       :class="[
         'input-pedidos',
         {
           empty: pedidoForm.vagasPeriodizadas == 0,
           notEdited: pedidoForm.editado1 == false && pedidoForm.vagasPeriodizadas !== 0,
+          altera_1: pedidoForm.vagasPeriodizadas !== 0 && curso.semestreInicial !== turma.periodo,
+          altera_2: pedidoForm.vagasPeriodizadas === 0 && curso.semestreInicial === turma.periodo,
         },
       ]"
       v-model.number="pedidoForm.vagasPeriodizadas"
@@ -50,7 +51,7 @@ export default {
     type: { type: String, default: "main" },
     turma: { type: Object, required: true },
     index: { type: Number, required: true },
-    disabled: { type: Boolean, required: false, default: false },
+    curso: { type: Object, required: true },
   },
   data() {
     return {
@@ -156,7 +157,13 @@ input.input-pedidos.notEdited {
   background-color: #e0efef;
 }
 
-input:disabled {
-  opacity: 0.6;
+input.input-pedidos.altera_1 {
+  color: white;
+  background-color: #ec6b6f;
+}
+
+input.input-pedidos.altera_2 {
+  color: black;
+  background-color: #f4f4c2;
 }
 </style>

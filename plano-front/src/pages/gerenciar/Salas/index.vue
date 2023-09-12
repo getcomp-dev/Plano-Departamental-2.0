@@ -44,7 +44,9 @@
               :class="['clickable', { 'bg-selected': salaSelectedId === sala.id }]"
               @click="handleClickInSala(sala)"
             >
-              <v-td width="100" align="start">{{ sala.nome }}</v-td>
+              <v-td width="100" align="start" class="table-data">
+                {{ sala.nome.toLowerCase() }}
+              </v-td>
               <v-td width="95">{{ booleanToText(sala.laboratorio) }}</v-td>
               <v-td width="110">{{ sala.lotacao_maxima }}</v-td>
             </tr>

@@ -43,13 +43,19 @@
               :class="{ 'bg-selected': usuario.id === usuarioSelectedId }"
               @click="handleClickInUsuario(usuario)"
             >
-              <v-td width="150" align="start">{{ usuario.nome }}</v-td>
-              <v-td width="120" align="start">{{ usuario.login }}</v-td>
-              <v-td width="90" align="start">{{ adminText(usuario.admin) }}</v-td>
+              <v-td class="table-data" width="150" align="start">
+                {{ usuario.nome.toLowerCase() }}
+              </v-td>
+              <v-td class="table-data" width="120" align="start">
+                {{ usuario.login.toLowerCase() }}
+              </v-td>
+              <v-td class="table-data" width="90" align="start">
+                {{ adminText(usuario.admin) }}
+              </v-td>
             </tr>
 
             <tr v-if="!UsuariosOrdered.length">
-              <v-td width="360" colspan="3">
+              <v-td class="table-data" width="360" colspan="3">
                 <b>Nenhum usuário encontrado</b>
               </v-td>
             </tr>

@@ -43,13 +43,17 @@
               :class="[{ 'bg-selected': docenteSelecionadoId == docente.id }, 'clickable']"
               @click="handleClickInDocente(docente)"
             >
-              <v-td width="240" align="start">{{ docente.nome }}</v-td>
-              <v-td width="120" align="start">{{ docente.apelido }}</v-td>
-              <v-td width="65">{{ booleanToText(docente.ativo) }}</v-td>
+              <v-td class="table-data" width="240" align="start">
+                {{ docente.nome.toLowerCase() }}
+              </v-td>
+              <v-td class="table-data" width="120" align="start">
+                {{ docente.apelido.toLowerCase() }}
+              </v-td>
+              <v-td class="table-data" width="65">{{ booleanToText(docente.ativo) }}</v-td>
             </tr>
 
             <tr v-if="!DocentesOrdered.length">
-              <v-td width="425" colspan="3">
+              <v-td class="table-data" width="425" colspan="3">
                 <font-awesome-icon :icon="['fas', 'exclamation-triangle']" class="icon-red" />
                 <b>Nenhum docente encontrado</b>
               </v-td>
@@ -101,7 +105,7 @@
                       :key="perfil.id + perfil.abreviacao"
                       @click="toggleItemInArray(perfil.id, perfisDocenteForm)"
                     >
-                      <v-td width="25" type="content">
+                      <v-td class="table-data" width="25" type="content">
                         <input
                           type="checkbox"
                           style="width: 11px"
@@ -109,7 +113,7 @@
                           :value="perfil.id"
                         />
                       </v-td>
-                      <v-td width="235" align="start" :title="perfil.nome">
+                      <v-td class="table-data" width="235" align="start" :title="perfil.nome">
                         {{ perfil.nome }}
                       </v-td>
                     </tr>

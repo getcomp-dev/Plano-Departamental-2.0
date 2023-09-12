@@ -25,7 +25,9 @@
           <template #tbody>
             <template v-for="curso in CursosComGradesOrdered">
               <tr :key="curso.id" class="bg-custom">
-                <v-td width="220" align="start" :title="curso.nome">{{ curso.nome }}</v-td>
+                <v-td width="220" align="start" class="table-data" :title="curso.nome">
+                  {{ curso.nome.toLowerCase() }}
+                </v-td>
                 <v-td width="100" />
               </tr>
               <tr

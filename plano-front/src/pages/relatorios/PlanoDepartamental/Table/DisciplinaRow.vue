@@ -1,8 +1,8 @@
 <template>
   <tr :key="disciplina.id + disciplina.codigo" class="bg-custom">
     <v-td width="80">{{ disciplina.codigo }}</v-td>
-    <v-td width="350" align="start">{{ disciplina.nome }}</v-td>
-    <v-td width="80">{{ disciplina.perfil.abreviacao }}</v-td>
+    <v-td width="350" align="start" class="table-data">{{ disciplina.nome.toLowerCase() }}</v-td>
+    <v-td width="80" class="table-data">{{ disciplina.perfil.abreviacao.toLowerCase() }}</v-td>
     <v-td width="65" />
     <v-td width="45">{{ disciplina.turmas.length }}</v-td>
     <v-td colspan="2" />

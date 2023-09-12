@@ -61,13 +61,13 @@
               class=""
               :class="['clickable', { 'bg-selected': cursoSelecionado === curso.id }]"
             >
-              <v-td width="75">{{ curso.codigo }}</v-td>
-              <v-td width="300" align="start" :title="curso.nome">
-                {{ curso.nome }}
+              <v-td width="75" style="font-weight: 11px">{{ curso.codigo }}</v-td>
+              <v-td width="300" align="start" :title="curso.nome" class="table-data">
+                {{ curso.nome.toLowerCase() }}
               </v-td>
-              <v-td width="70">{{ curso.turno }}</v-td>
-              <v-td width="85">{{ curso.alunosEntrada }}</v-td>
-              <v-td width="85">{{ curso.alunosEntrada2 }}</v-td>
+              <v-td width="70" class="table-data">{{ curso.turno.toLowerCase() }}</v-td>
+              <v-td width="85" style="font-weight: 11px">{{ curso.alunosEntrada }}</v-td>
+              <v-td width="85" style="font-weight: 11px">{{ curso.alunosEntrada2 }}</v-td>
             </tr>
 
             <tr v-if="!CursosOrdered.length">
@@ -98,9 +98,9 @@
             </div>
             <div class="col">
               <VSelect label="Turno" v-model="cursoForm.turno" :validation="$v.cursoForm.turno">
-                <b-form-select-option value="Diurno">DIURNO</b-form-select-option>
-                <b-form-select-option value="Noturno">NOTURNO</b-form-select-option>
-                <b-form-select-option value="Integral">INTEGRAL</b-form-select-option>
+                <b-form-select-option value="Diurno">Diurno</b-form-select-option>
+                <b-form-select-option value="Noturno">Noturno</b-form-select-option>
+                <b-form-select-option value="Integral">Integral</b-form-select-option>
               </VSelect>
             </div>
           </div>
