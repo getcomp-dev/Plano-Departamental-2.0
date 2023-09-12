@@ -21,14 +21,22 @@
     <div class="div-table">
       <BaseTable>
         <template #thead>
-          <v-th width="25" />
-          <v-th width="40" paddingX="0">Editar</v-th>
-          <v-th width="65" paddingX="0" title="Período letivo, ordenação fixa">Período</v-th>
+          <v-th style="position: sticky; left: 0px" width="25" />
+          <v-th style="position: sticky; left: 25px" width="40" paddingX="0">Editar</v-th>
+          <v-th
+            style="position: sticky; left: 65px"
+            width="65"
+            paddingX="0"
+            title="Período letivo, ordenação fixa"
+          >
+            Período
+          </v-th>
           <v-th-ordination
             :orderFixed="true"
             :currentOrder="ordenacaoMain.perfis"
             orderToCheck="disciplina.perfil.abreviacao"
             width="80"
+            style="position: sticky; left: 130px"
           >
             Perfil
           </v-th-ordination>
@@ -36,6 +44,7 @@
             :currentOrder="ordenacaoMain.turmas"
             orderToCheck="disciplina.codigo"
             width="80"
+            style="position: sticky; left: 210px"
           >
             Código
           </v-th-ordination>
@@ -44,16 +53,17 @@
             orderToCheck="disciplina.nome"
             width="330"
             align="start"
+            style="position: sticky; left: 290px"
           >
             Disciplina
           </v-th-ordination>
-          <v-th width="60" paddingX="0">Créditos</v-th>
-          <v-th width="45" paddingX="0">Turma</v-th>
-          <v-th width="160" align="start">Docente</v-th>
-          <v-th width="80">Turno</v-th>
-          <v-th width="85">Horário</v-th>
-          <v-th width="95">Sala</v-th>
-          <v-th width="45" title="Total de vagas">Total</v-th>
+          <v-th style="position: sticky; left: 620px" width="60" paddingX="0">Créditos</v-th>
+          <v-th style="position: sticky; left: 680px" width="45" paddingX="0">Turma</v-th>
+          <v-th style="position: sticky; left: 725px" width="160" align="start">Docente</v-th>
+          <v-th style="position: sticky; left: 885px" width="80">Turno</v-th>
+          <v-th style="position: sticky; left: 965px" width="85">Horário</v-th>
+          <v-th style="position: sticky; left: 1050px" width="95">Sala</v-th>
+          <v-th style="position: sticky; left: 1145" width="45" title="Total de vagas">Total</v-th>
           <v-th
             width="35"
             paddingX="0"

@@ -1,14 +1,19 @@
 <template>
   <tr class="turmarow max-content">
-    <v-td width="25" type="content" :style="{ backgroundColor: turmaForm.disciplina.perfil.cor }">
+    <v-td
+      style="position: sticky; left: 0px"
+      width="25"
+      type="content"
+      :style="{ backgroundColor: turmaForm.disciplina.perfil.cor }"
+    >
       <input type="checkbox" v-model="toggleToDelete" :value="turma" />
     </v-td>
-    <v-td width="40" type="content">
+    <v-td style="position: sticky; left: 25px" width="40" type="content">
       <button class="btn-table" @click.stop="$emit('click-edit', turma)">
         <font-awesome-icon :icon="['fas', 'edit']" class="btn-table-icon icon-darkgray" />
       </button>
     </v-td>
-    <v-td width="65" type="content">
+    <v-td style="position: sticky; left: 65px" width="65" type="content">
       <select v-model.number="turmaForm.periodo" @change="checkHorariosPeriodo()">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -16,13 +21,19 @@
         <option value="4">4</option>
       </select>
     </v-td>
-    <v-td width="80" paddingX="2">
+    <v-td style="position: sticky; left: 130px" width="80" paddingX="2">
       {{ turmaForm.disciplina.perfil.abreviacao }}
     </v-td>
-    <v-td width="80" paddingX="2">{{ turmaForm.disciplina.codigo }}</v-td>
-    <v-td width="330" align="start">{{ turmaForm.disciplina.nome }}</v-td>
-    <v-td width="60">{{ turmaForm.disciplina.creditoTotal }}</v-td>
-    <v-td width="45" type="content">
+    <v-td style="position: sticky; left: 210px" width="80" paddingX="2">
+      {{ turmaForm.disciplina.codigo }}
+    </v-td>
+    <v-td style="position: sticky; left: 290px" width="330" align="start">
+      {{ turmaForm.disciplina.nome }}
+    </v-td>
+    <v-td style="position: sticky; left: 620px" width="60">
+      {{ turmaForm.disciplina.creditoTotal }}
+    </v-td>
+    <v-td style="position: sticky; left: 680px" width="45" type="content">
       <input
         type="text"
         style="width: 30px"
@@ -32,7 +43,7 @@
         @keypress="maskTurmaLetra"
       />
     </v-td>
-    <v-td width="160" type="none" paddingX="3">
+    <v-td style="position: sticky; left: 725px" width="160" type="none" paddingX="3">
       <div class="d-flex align-items-center w-100">
         <div class="d-flex flex-column" style="width: 130px">
           <select v-model.number="turmaForm.Docente1" @change="checkDocente">
@@ -76,7 +87,7 @@
         />
       </div>
     </v-td>
-    <v-td width="80" type="content">
+    <v-td style="position: sticky; left: 885px" width="80" type="content">
       <select type="text" v-model="turmaForm.turno1" @change="handleEditTurma">
         <option v-if="isIntegralEAD" value="EAD">EAD</option>
         <template v-else>
@@ -85,7 +96,7 @@
         </template>
       </select>
     </v-td>
-    <v-td width="85" type="content">
+    <v-td style="position: sticky; left: 965px" width="85" type="content">
       <select @change="checkHorario(1)" v-model.number="turmaForm.Horario1">
         <option v-if="!isIntegralEAD" />
         <option
@@ -124,7 +135,7 @@
         </template>
       </select>
     </v-td>
-    <v-td width="95" type="content">
+    <v-td style="position: sticky; left: 1050px" width="95" type="content">
       <template v-if="!isIntegralEAD">
         <select v-model.number="turmaForm.Sala1" @change="checkSala">
           <option v-if="!AllSalas.length" type="text">Nenhuma Sala Encontrada</option>
@@ -149,7 +160,7 @@
         </select>
       </template>
     </v-td>
-    <v-td width="45" type="content">
+    <v-td style="position: sticky; left: 1145" width="45" type="content">
       <div class="d-flex flex-column justify-content-between py-1">
         <b class="mb-1">
           {{ totalPedidosNaoPeriodizados + totalPedidosPeriodizados }}
@@ -970,6 +981,10 @@ export default {
 </script>
 
 <style scoped>
+.sticky-col {
+  position: sticky;
+}
+
 .turmarow {
   font-size: 11px;
 }
