@@ -11,5 +11,6 @@
     "webpack-loader": "^0.0.1",
     "worker-loader": "^2.0.0",
     "xlsx": "^0.14.1"
-  }
+  },
+  "packageManager": "yarn@3.5.1"
 }
