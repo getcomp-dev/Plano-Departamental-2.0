@@ -1,15 +1,12 @@
 <template>
-  <div class="main-component row">
+  <div class="main-component row p-0">
     <portal to="page-header">
       <BaseButton template="filtros" @click="toggleAsideModal('filtros')" />
       <BaseButton template="relatorio" @click="toggleAsideModal('relatorio')" />
       <BaseButton template="ajuda" @click="toggleAsideModal('ajuda')" />
     </portal>
 
-    <div
-      v-show="!onLoading.table && algumHorariosEstaAtivo && algumTipoEstaAtivo"
-      class="w-100 m-0"
-    >
+    <div v-show="!onLoading.table && algumHorariosEstaAtivo && algumTipoEstaAtivo" class="w-100">
       <div v-show="filtroPeriodosEstaAtivo.periodo1 && filtroCursos.ativados.length" class="w-100">
         <h2 class="periodo-title">1º Período letivo</h2>
 
@@ -115,7 +112,7 @@
               <input type="checkbox" v-model="filtroCursos.selecionados" :value="curso" />
             </v-td>
             <v-td width="70">{{ curso.codigo }}</v-td>
-            <v-td width="355" aling="start">{{ curso.nome }}</v-td>
+            <v-td width="355" aling="start" class="table-data">{{ curso.nome.toLowerCase() }}</v-td>
           </tr>
         </template>
       </BaseTable>
@@ -141,7 +138,9 @@
                 @click.stop="selecionaPeriodo(periodo)"
               />
             </v-td>
-            <v-td width="425" align="start">{{ periodo.nome }}</v-td>
+            <v-td width="425" align="start" style="text-transform: capitalize; font-size: 11px">
+              {{ periodo.nome }}
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -168,7 +167,9 @@
                 @click.stop="selecionaSemestre(semestre)"
               />
             </v-td>
-            <v-td width="425" align="start">{{ semestre.nome }}</v-td>
+            <v-td width="425" align="start" style="text-transform: capitalize; font-size: 11px">
+              {{ semestre.nome }}
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -192,7 +193,9 @@
                 :value="tipoDisciplina"
               />
             </v-td>
-            <v-td width="425" align="start">{{ tipoDisciplina }}</v-td>
+            <v-td width="425" align="start" style="text-transform: capitalize; font-size: 11px">
+              {{ tipoDisciplina }}
+            </v-td>
           </tr>
         </template>
       </BaseTable>
@@ -814,7 +817,8 @@ export default {
   width: 100%;
   font-size: 16px;
   padding: 5px;
-  background-color: $clr-lightgray;
+  color: white;
+  background-color: #AF1E23;
   text-align: start;
   font-weight: bold;
 }
