@@ -1,19 +1,19 @@
 <template>
-  <tr class="turmarow max-content">
+  <tr class="turmarow max-content" :class="{ highlighted: turmaForm.highlighted }">
     <v-td
-      style="position: sticky; left: 0px"
+      class="table-data"
       width="25"
       type="content"
       :style="{ backgroundColor: turmaForm.disciplina.perfil.cor }"
     >
       <input type="checkbox" v-model="toggleToDelete" :value="turma" />
     </v-td>
-    <v-td style="position: sticky; left: 25px" width="40" type="content">
+    <v-td class="table-data" width="40" type="content">
       <button class="btn-table" @click.stop="$emit('click-edit', turma)">
         <font-awesome-icon :icon="['fas', 'edit']" class="btn-table-icon icon-darkgray" />
       </button>
     </v-td>
-    <v-td style="position: sticky; left: 65px" width="65" type="content">
+    <v-td class="table-data" width="65" type="content">
       <select v-model.number="turmaForm.periodo" @change="checkHorariosPeriodo()">
         <option value="1">1</option>
         <option value="2">2</option>
@@ -21,19 +21,15 @@
         <option value="4">4</option>
       </select>
     </v-td>
-    <v-td style="position: sticky; left: 130px" width="80" paddingX="2">
-      {{ turmaForm.disciplina.perfil.abreviacao }}
+    <v-td class="table-data" width="80" paddingX="2">
+      {{ turmaForm.disciplina.perfil.abreviacao.toLowerCase() }}
     </v-td>
-    <v-td style="position: sticky; left: 210px" width="80" paddingX="2">
-      {{ turmaForm.disciplina.codigo }}
+    <v-td class="table-data" width="80" paddingX="2">{{ turmaForm.disciplina.codigo }}</v-td>
+    <v-td class="table-data" width="330" align="start">
+      {{ turmaForm.disciplina.nome.toLowerCase() }}
     </v-td>
-    <v-td style="position: sticky; left: 290px" width="330" align="start">
-      {{ turmaForm.disciplina.nome }}
-    </v-td>
-    <v-td style="position: sticky; left: 620px" width="60">
-      {{ turmaForm.disciplina.creditoTotal }}
-    </v-td>
-    <v-td style="position: sticky; left: 680px" width="45" type="content">
+    <v-td class="table-data" width="60">{{ turmaForm.disciplina.creditoTotal }}</v-td>
+    <v-td class="table-data" width="45" type="content">
       <input
         type="text"
         style="width: 30px"
@@ -43,17 +39,21 @@
         @keypress="maskTurmaLetra"
       />
     </v-td>
-    <v-td style="position: sticky; left: 725px" width="160" type="none" paddingX="3">
+    <v-td class="table-data" width="160" type="none" paddingX="3">
       <div class="d-flex align-items-center w-100">
-        <div class="d-flex flex-column" style="width: 130px">
-          <select v-model.number="turmaForm.Docente1" @change="checkDocente">
+        <div class="d-flex flex-column" style="width: 130px; text-transform: capitalize">
+          <select
+            v-model.number="turmaForm.Docente1"
+            @change="checkDocente"
+            style="text-transform: capitalize"
+          >
             <option />
             <option
               v-for="docente in DocentesByPreferencia"
               :key="docente.id + docente.apelido"
               :value="docente.id"
             >
-              {{ docente.apelido }}
+              {{ docente.apelido.toLowerCase() }}
               {{
                 orderByPreferencia && getPreferenciaDocente(docente)
                   ? "- " + getPreferenciaDocente(docente)
@@ -62,14 +62,18 @@
             </option>
           </select>
 
-          <select v-model.number="turmaForm.Docente2" @change="checkDocente">
+          <select
+            v-model.number="turmaForm.Docente2"
+            @change="checkDocente"
+            style="text-transform: capitalize"
+          >
             <option />
             <option
               v-for="docente in DocentesByPreferencia"
               :key="docente.apelido + docente.id"
               :value="docente.id"
             >
-              {{ docente.apelido }}
+              {{ docente.apelido.toLowerCase() }}
               {{
                 orderByPreferencia && getPreferenciaDocente(docente)
                   ? "- " + getPreferenciaDocente(docente)
@@ -87,7 +91,7 @@
         />
       </div>
     </v-td>
-    <v-td style="position: sticky; left: 885px" width="80" type="content">
+    <v-td class="table-data" width="80" type="content">
       <select type="text" v-model="turmaForm.turno1" @change="handleEditTurma">
         <option v-if="isIntegralEAD" value="EAD">EAD</option>
         <template v-else>
@@ -96,7 +100,7 @@
         </template>
       </select>
     </v-td>
-    <v-td style="position: sticky; left: 965px" width="85" type="content">
+    <v-td class="table-data" width="85" type="content">
       <select @change="checkHorario(1)" v-model.number="turmaForm.Horario1">
         <option v-if="!isIntegralEAD" />
         <option
@@ -135,7 +139,7 @@
         </template>
       </select>
     </v-td>
-    <v-td style="position: sticky; left: 1050px" width="95" type="content">
+    <v-td class="table-data" width="95" type="content">
       <template v-if="!isIntegralEAD">
         <select v-model.number="turmaForm.Sala1" @change="checkSala">
           <option v-if="!AllSalas.length" type="text">Nenhuma Sala Encontrada</option>
@@ -160,7 +164,7 @@
         </select>
       </template>
     </v-td>
-    <v-td style="position: sticky; left: 1145" width="45" type="content">
+    <v-td class="table-data" width="45" type="content">
       <div class="d-flex flex-column justify-content-between py-1">
         <b class="mb-1">
           {{ totalPedidosNaoPeriodizados + totalPedidosPeriodizados }}
@@ -169,20 +173,24 @@
       </div>
     </v-td>
     <v-td
+      class="table-data"
       v-for="curso in cursosAtivados"
       :key="curso.id + curso.codigo"
       width="35"
       paddingX="0"
       type="none"
     >
-      <template v-for="(pedido, index) in PedidosDaTurma">
-        <InputsPedidosDCC
-          v-if="pedido.Curso === curso.id"
-          :key="pedido.Turma + curso.Curso"
-          :index="index"
-          :turma="turma"
-          type="main"
-        />
+        <template v-for="(pedido, index) in PedidosDaTurma">
+          <template>
+            <InputsPedidosDCC
+              v-if="pedido.Curso === curso.id"
+              :key="pedido.Turma + curso.Curso"
+              :index="index"
+              :turma="turma"
+              :curso="curso"
+              type="main"
+            />
+        </template>
       </template>
     </v-td>
   </tr>
@@ -202,10 +210,21 @@ export default {
   },
   props: {
     turma: Object,
+    curso: Object,
     cursosAtivados: Array,
+    classes: Object,
   },
   data() {
     return {
+      somasPorCurso: [],
+      todasAsSomas: [],
+      resultado: [],
+      classes: {
+        highlighted: -1,
+        edited: -1,
+      },
+      periodoAtual: 1,
+      dataAtual: new Date("August 20, 69 00:20:18"),
       currentData: null,
       turmaForm: null,
       orderByPreferencia: false,
@@ -214,6 +233,8 @@ export default {
 
   methods: {
     ...mapActions(["toggleTurmaToDelete", "editTurma"]),
+
+    // retorna a letra da turma que há o conflito
 
     resetTurmaForm() {
       this.turmaForm = clone(this.turma);
@@ -224,6 +245,26 @@ export default {
       this.turmaForm.Horario1 = null;
       this.turmaForm.Horario2 = null;
     },
+    calcularSomaPorCurso(pedido, curso) {
+    // Verifica se o curso do pedido corresponde ao curso atual
+    if (pedido.Curso === curso.id) {
+      // Verifica se a posição do curso já existe no vetor
+      if (!this.somasPorCurso[curso.id]) {
+        // Se não existir, crie-a e inicialize com 0
+        this.somasPorCurso[curso.id] = 0;
+      }
+      // Some as vagasPeriodizadas e vagasNaoPeriodizadas ao valor atual
+      this.somasPorCurso[curso.id] += pedido.vagasPeriodizadas + pedido.vagasNaoPeriodizadas;
+    }
+    
+    /*const comprimento = this.somasPorCurso.length;
+    for (let i = 0; i < comprimento; i++) {
+        if(this.somasPorCurso[curso.id]){
+          this.resultado[curso.id] += this.somasPorCurso[curso.id]; 
+        }
+    }*/
+    
+  },
     setDefaultHorarios() {
       if (this.turma.disciplina.ead === 1) {
         this.turmaForm.turno1 = "EAD";
@@ -232,6 +273,14 @@ export default {
       } else if (this.turma.disciplina.ead === 2) {
         this.turmaForm.Horario2 = 31;
       }
+    },
+    verificaElementoComId(array, idDesejado) {
+      for (let i = 0; i < array.length; i++) {
+        if ("id" in array[i] && array[i].id === idDesejado) {
+          return true;
+        }
+      }
+      return false;
     },
     checkHorariosPeriodo() {
       if (!this.checkHorarioDocente(1) && !this.checkHorarioSala(1)) {
@@ -273,6 +322,156 @@ export default {
         if (!s1) this.turmaForm.Sala1 = this.currentData.Sala1;
         if (!s2) this.turmaForm.Sala2 = this.currentData.Sala2;
       }
+    },
+    checkHorario_Conflitos(TF, t) {
+      if (TF >= 4 && TF <= 29) {
+        // OU É 16-18 OU 19-21
+        if (TF % 2 === 0) {
+          // É 16-18
+          if (t % 2 !== 0 && t >= 32 && t <= 40) {
+            // verifica se tur.Horario é 17-19
+            if (
+              t / TF === 32 / 4 ||
+              t / TF === 34 / 10 ||
+              t / TF === 36 / 16 ||
+              t / TF === 38 / 22 ||
+              t / TF === 40 / 28
+            ) {
+              // compara 16-18 com 17-19
+              return true; // retorna verdadeiro para o conflito
+            }
+          }
+        } else if (TF % 2 !== 0) {
+          // É 19-21
+          if (t % 2 !== 0 && t >= 33 && t <= 41) {
+            // verifica se tur.Horario é 18-20
+            if (
+              t / TF === 33 / 5 ||
+              t / TF === 35 / 11 ||
+              t / TF === 37 / 17 ||
+              t / TF === 39 / 23 ||
+              t / TF === 41 / 29
+            ) {
+              // compara 19-21 com 18-20
+              return true; // retorna verdadeiro para o conflito
+            }
+          }
+        }
+      } else if (TF >= 32 && TF <= 41) {
+        // OU É 17-19 OU É 18-20
+        if (TF % 2 === 0) {
+          // É 17 - 19
+          if (t % 2 === 0 && t >= 4 && t <= 28) {
+            // verifica se tur.Horario é 16-18
+            if (
+              t / TF === 4 / 32 ||
+              t / TF === 10 / 34 ||
+              t / TF === 16 / 36 ||
+              t / TF === 22 / 38 ||
+              t / TF === 28 / 40
+            ) {
+              // compara 17-19 com 16-18
+              return true; // retorna verdadeiro para o conflito
+            }
+          } else if (t % 2 !== 0 && t >= 33 && t <= 41) {
+            // verifica se tur.Horario é 18-20
+            if (
+              t / TF === 33 / 32 ||
+              t / TF === 35 / 34 ||
+              t / TF === 37 / 36 ||
+              t / TF === 39 / 38 ||
+              t / TF === 41 / 40
+            ) {
+              // compara 17-19 com 18-20
+              return true; // retorna verdadeiro para o conflito
+            }
+          }
+        } else if (TF % 2 !== 0) {
+          // É 18-20
+          if (t % 2 === 0 && t >= 32 && t <= 40) {
+            // verifica se tur.Horario é 17-19
+            if (
+              t / TF === 32 / 33 ||
+              t / TF === 34 / 35 ||
+              t / TF === 36 / 37 ||
+              t / TF === 38 / 39 ||
+              t / TF === 40 / 41
+            ) {
+              // compara 18-20 com 17-19
+              return true; // retorna verdadeiro para o conflito
+            }
+          } else if (t % 2 !== 0 && t >= 5 && t <= 29) {
+            // verifica se tur.HOrario é 19-21
+            if (
+              t / TF === 5 / 33 ||
+              t / TF === 11 / 35 ||
+              t / TF === 17 / 37 ||
+              t / TF === 23 / 39 ||
+              t / TF === 29 / 41
+            ) {
+              // compara 18-20 com 19-21
+              return true; // retorna verdadeiro para o conflito
+            }
+          }
+        }
+      }
+      return false; // não há conflito de interseção
+    },
+    retorna_HorarioString(horario) {
+      var horarios = new Map();
+      horarios.set(1, "2a 08-10");
+      horarios.set(2, "2a 10-12");
+      horarios.set(3, "2a 14-16");
+      horarios.set(4, "2a 16-18");
+      horarios.set(32, "2a 17-19");
+      horarios.set(33, "2a 18-20");
+      horarios.set(5, "2a 19-21");
+      horarios.set(6, "2a 21-23");
+
+      horarios.set(7, "3a 08-10");
+      horarios.set(8, "3a 10-12");
+      horarios.set(9, "3a 14-16");
+      horarios.set(10, "3a 16-18");
+      horarios.set(34, "3a 17-19");
+      horarios.set(35, "3a 18-20");
+      horarios.set(11, "3a 19-21");
+      horarios.set(12, "3a 21-23");
+
+      horarios.set(13, "4a 08-10");
+      horarios.set(14, "4a 10-12");
+      horarios.set(15, "4a 14-16");
+      horarios.set(16, "4a 16-18");
+      horarios.set(36, "4a 17-19");
+      horarios.set(37, "4a 18-20");
+      horarios.set(17, "4a 19-21");
+      horarios.set(18, "4a 21-23");
+
+      horarios.set(19, "5a 08-10");
+      horarios.set(20, "5a 10-12");
+      horarios.set(21, "5a 14-16");
+      horarios.set(22, "5a 16-18");
+      horarios.set(38, "5a 17-19");
+      horarios.set(39, "5a 18-20");
+      horarios.set(23, "5a 19-21");
+      horarios.set(24, "5a 21-23");
+
+      horarios.set(25, "6a 08-10");
+      horarios.set(26, "6a 10-12");
+      horarios.set(27, "6a 14-16");
+      horarios.set(28, "6a 16-18");
+      horarios.set(40, "6a 17-19");
+      horarios.set(41, "6a 18-20");
+      horarios.set(29, "6a 19-21");
+      horarios.set(30, "6a 21-23");
+      let retorno = "";
+
+      for (var [key, value] of horarios) {
+        if (horario === key) {
+          retorno = value;
+        }
+      }
+      horarios.clear();
+      return retorno;
     },
     checkHorarioDocente(horario) {
       let horarios1618 = [4, 10, 16, 22, 28];
@@ -326,20 +525,662 @@ export default {
       }
       return false;
     },
-    notifyHorarioDocente(horario, docente) {
-      let h =
-        horario === 1
-          ? find(this.AllHorarios, ["id", this.turmaForm.Horario1])
-          : find(this.AllHorarios, ["id", this.turmaForm.Horario2]);
+    notifyHorarioDocente(docente) {
+      let extraInfo = this.encontrarTurmaDuplicada_HorarioDocente();
       let d =
         docente === 1
           ? find(this.DocentesAtivos, ["id", this.turmaForm.Docente1])
           : find(this.DocentesAtivos, ["id", this.turmaForm.Docente2]);
-      let text = `Conflito no horário ${h.horario} com o docente ${d.apelido}`;
+      let text = `Conflito com o docente ${d.apelido} no horário ${extraInfo}`;
+
       this.pushNotification({
         text: text,
         type: "error",
       });
+    },
+    encontrarTurmaDuplicada_HorarioDocente() {
+      const found = this.AllTurmas.find((tur) => tur.id === this.turmaForm.id);
+      let index = this.AllTurmas.indexOf(found);
+      let lista = [...this.AllTurmas];
+
+      lista.splice(index, 1);
+
+      for (const tur of lista) {
+        // Comparação de uma turma com um Professor (turmaForm) e um horario com uma turma de um professor e dois horários ok ok ok OK
+        if (
+          this.turmaForm.Horario2 === null &&
+          this.turmaForm.Docente2 === null &&
+          tur.Horario2 !== null &&
+          tur.Docente2 === null
+        ) {
+          if (
+            this.turmaForm.Docente1 === tur.Docente1 &&
+            this.turmaForm.Horario1 === tur.Horario1 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            this.turmaForm.Docente1 === tur.Docente1 &&
+            this.turmaForm.Horario1 === tur.Horario2 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            this.turmaForm.Docente1 === tur.Docente1 &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            this.turmaForm.Docente1 === tur.Docente1 &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario2) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+
+        // Comparação turma com um professor e um horário com uma turma dois professores e dois horários  ok ok ok ok
+        if (
+          this.turmaForm.Horario2 === null &&
+          this.turmaForm.Docente2 === null &&
+          tur.Docente2 !== null &&
+          tur.Horario2 !== null
+        ) {
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2) &&
+            this.turmaForm.Horario1 === tur.Horario1 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2) &&
+            this.turmaForm.Horario1 === tur.Horario2 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2) &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2) &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario2) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+        // Comparação turma com um professor e dois horarios com uma turma com dois professores e dois horários ok ok ok ok
+        if (
+          this.turmaForm.Horario2 !== null &&
+          this.turmaForm.Docente2 === null &&
+          tur.Horario2 !== null &&
+          tur.Docente2 !== null
+        ) {
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2) &&
+            (this.turmaForm.Horario1 === tur.Horario1 ||
+              this.turmaForm.Horario2 === tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2) &&
+            (this.turmaForm.Horario1 === tur.Horario2 ||
+              this.turmaForm.Horario2 === tur.Horario2) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2) &&
+            (this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) ||
+              this.checkHorario_Conflitos(this.turmaForm.Horario2, tur.Horario1)) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2) &&
+            (this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario2) ||
+              this.checkHorario_Conflitos(this.turmaForm.Horario2, tur.Horario2)) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+        // Comparação de uma turma de um professor e dois horários com uma turma com um Professor e um horario  ok ok ok OK
+        if (
+          this.turmaForm.Docente2 === null &&
+          this.turmaForm.Horario2 !== null &&
+          tur.Docente2 === null &&
+          tur.Horario2 === null
+        ) {
+          if (
+            this.turmaForm.Docente1 === tur.Docente1 &&
+            (this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) ||
+              this.checkHorario_Conflitos(this.turmaForm.Horario2, tur.Horario1) ||
+              this.turmaForm.Horario1 === tur.Horario1 ||
+              this.turmaForm.Horario2 === tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+        // Comparação de uma turma dois professores e dois horários com uma turma com um professor e um horário  ok ok ok ok
+        if (
+          this.turmaForm.Horario2 !== null &&
+          this.turmaForm.Docente2 !== null &&
+          tur.Horario2 === null &&
+          tur.Docente2 === null
+        ) {
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1) &&
+            (this.turmaForm.Horario1 === tur.Horario1 ||
+              this.turmaForm.Horario2 === tur.Horario1 ||
+              this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) ||
+              this.checkHorario_Conflitos(this.turmaForm.Horario2, tur.Horario1)) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+        // Comparação turma com dois professores e dois horários com uma turma com um professor e dois horarios ok ok ok ok
+        if (
+          this.turmaForm.Horario2 !== null &&
+          this.turmaForm.Docente2 !== null &&
+          tur.Docente2 === null &&
+          tur.Horario2 !== null
+        ) {
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1) &&
+            this.turmaForm.Horario1 === tur.Horario1 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1) &&
+            this.turmaForm.Horario2 === tur.Horario1 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1) &&
+            this.turmaForm.Horario1 === tur.Horario2 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1) &&
+            this.turmaForm.Horario2 === tur.Horario2 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1) &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1) &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario2) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1) &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario2, tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1) &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario2, tur.Horario2) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+        // Comparação de uma turma com um horário com outra turma com um professor e um horário  OK OK OK OK
+        if (
+          this.turmaForm.Horario2 === null &&
+          this.turmaForm.Docente2 === null &&
+          tur.Horario2 === null &&
+          tur.Docente2 === null
+        ) {
+          if (
+            this.turmaForm.Horario1 === tur.Horario1 &&
+            this.turmaForm.Docente1 === tur.Docente1 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {            
+            this.$emit("conflict", {highlighted: tur.id, edited: this.turmaForm.id} );
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) &&
+            this.turmaForm.Docente1 === tur.Docente1 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            this.$emit("conflict", {highlighted: tur.id, edited: this.turmaForm.id});
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+        // Comparação de uma turma com dois horários e um professor com uma turma com um professor e dois horários ok OK OK OK
+        if (
+          this.turmaForm.Horario2 !== null &&
+          this.turmaForm.Docente2 === null &&
+          tur.Horario2 !== null &&
+          tur.Docente2 === null
+        ) {
+          if (
+            this.turmaForm.Docente1 === tur.Docente1 &&
+            (this.turmaForm.Horario1 === tur.Horario1 ||
+              this.turmaForm.Horario2 === tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            this.turmaForm.Docente1 === tur.Docente1 &&
+            (this.turmaForm.Horario1 === tur.Horario2 ||
+              this.turmaForm.Horario2 === tur.Horario2) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            this.turmaForm.Docente1 === tur.Docente1 &&
+            (this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) ||
+              this.checkHorario_Conflitos(this.turmaForm.Horario2, tur.Horario1)) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            this.turmaForm.Docente1 === tur.Docente1 &&
+            (this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario2) ||
+              this.checkHorario_Conflitos(this.turmaForm.Horario2, tur.Horario2)) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+        // Comparação de uma turma com dois professores e dois horários com uma turmas com dois professores e dois horários OK OK OK ok
+        if (
+          this.turmaForm.Docente2 !== null &&
+          this.turmaForm.Horario2 !== null &&
+          tur.Docente2 !== null &&
+          tur.Horario2 !== null
+        ) {
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2 ||
+              this.turmaForm.Docente2 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente2) &&
+            (this.turmaForm.Horario1 === tur.Horario1 ||
+              this.turmaForm.Horario2 === tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2 ||
+              this.turmaForm.Docente2 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente2) &&
+            (this.turmaForm.Horario1 === tur.Horario2 ||
+              this.turmaForm.Horario2 === tur.Horario2) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2 ||
+              this.turmaForm.Docente2 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente2) &&
+            (this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) ||
+              this.checkHorario_Conflitos(this.turmaForm.Horario2, tur.Horario1)) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2 ||
+              this.turmaForm.Docente2 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente2) &&
+            (this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario2) ||
+              this.checkHorario_Conflitos(this.turmaForm.Horario2, tur.Horario2)) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+        // Comparação de uma turma com dois professores e um horário com uma turma com um professor e um horário
+        if (
+          this.turmaForm.Docente2 !== null &&
+          this.turmaForm.Horario2 === null &&
+          tur.Docente2 === null &&
+          tur.Horario2 === null
+        ) {
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1) &&
+            this.turmaForm.Horario1 === tur.Horario1 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1) &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+        // Comparação de uma turma com um professor e um horário com uma turma com dois professores e um horário
+        if (
+          this.turmaForm.Docente2 === null &&
+          this.turmaForm.Horario2 === null &&
+          tur.Docente2 !== null &&
+          tur.Horario2 === null
+        ) {
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2) &&
+            this.turmaForm.Horario1 === tur.Horario1 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2) &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+
+        // Comparação de uma turma com dois professores e um horário com uma turma com um professor e dois horários
+        if (
+          this.turmaForm.Docente2 !== null &&
+          this.turmaForm.Horario2 === null &&
+          tur.Docente2 === null &&
+          tur.Horario2 !== null
+        ) {
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1) &&
+            this.turmaForm.Horario1 === tur.Horario1 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1) &&
+            this.turmaForm.Horario1 === tur.Horario2 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1) &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1) &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario2) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+        // Comparação de uma turma com um professor e dois horários com uma turma com dois professores e um horário
+        if (
+          this.turmaForm.Docente2 === null &&
+          this.turmaForm.Horario2 !== null &&
+          tur.Docente2 !== null &&
+          tur.Horario2 === null
+        ) {
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2) &&
+            (this.turmaForm.Horario1 === tur.Horario1 ||
+              this.turmaForm.Horario2 === tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              (this.turmaForm.Docente1 === tur.Docente2 &&
+                (this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) ||
+                  this.checkHorario_Conflitos(this.turmaForm.Horario2, tur.Horario1)))) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+        // Comparação de uma turma com dois professores e um horário com uma turma com dois professores e dois horários
+        if (
+          this.turmaForm.Docente2 !== null &&
+          this.turmaForm.Horario2 === null &&
+          tur.Docente2 !== null &&
+          tur.Horario2 !== null
+        ) {
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2 ||
+              this.turmaForm.Docente2 === tur.Docente2) &&
+            this.turmaForm.Horario1 === tur.Horario1 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2 ||
+              this.turmaForm.Docente2 === tur.Docente2) &&
+            this.turmaForm.Horario1 === tur.Horario2 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2 ||
+              this.turmaForm.Docente2 === tur.Docente2) &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2 ||
+              this.turmaForm.Docente2 === tur.Docente2) &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario2) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+        // Comparação de uma turma com dois professores e dois horários com uma turma com dois professores e um horário
+        if (
+          this.turmaForm.Docente2 !== null &&
+          this.turmaForm.Horario2 !== null &&
+          tur.Docente2 !== null &&
+          tur.Horario2 === null
+        ) {
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2 ||
+              this.turmaForm.Docente2 === tur.Docente2) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Docente1 === tur.Docente1 ||
+              this.turmaForm.Docente2 === tur.Docente1 ||
+              this.turmaForm.Docente1 === tur.Docente2 ||
+              this.turmaForm.Docente2 === tur.Docente2) &&
+            (this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) ||
+              this.checkHorario_Conflitos(this.turmaForm.Horario2, tur.Horario1)) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+      }
+      return false;
     },
     checkHorarioDocente1618(horario, docente) {
       let conflitos = filter(this.$store.state.turma.Turmas, (t) => {
@@ -529,6 +1370,7 @@ export default {
       }
       return false;
     },
+
     checkHorarioDocenteGeral(horario, docente) {
       let conflitos = filter(this.$store.state.turma.Turmas, (t) => {
         if (this.turmaForm.periodo != t.periodo) {
@@ -608,22 +1450,192 @@ export default {
       }
       return false;
     },
-    notifyHorarioSala(horario, sala) {
-      let h =
-        horario === 1
-          ? find(this.AllHorarios, ["id", this.turmaForm.Horario1])
-          : find(this.AllHorarios, ["id", this.turmaForm.Horario2]);
+    notifyHorarioSala(sala) {
+      let extraInfo = this.encontrarTurmaDuplicada_HorarioSala();
+
       let s =
         sala === 1
           ? find(this.AllSalas, ["id", this.turmaForm.Sala1])
           : find(this.AllSalas, ["id", this.turmaForm.Sala2]);
 
-      let text = `Conflito no horário ${h.horario} com a sala ${s.nome}`;
+      let text = `Conflito com a sala ${s.nome} no horário ${extraInfo}`;
       this.pushNotification({
         text: text,
         type: "error",
       });
     },
+    encontrarTurmaDuplicada_HorarioSala() {
+      const found = this.AllTurmas.find((tur) => tur.id === this.turmaForm.id);
+      let index = this.AllTurmas.indexOf(found);
+      let lista = [...this.AllTurmas];
+
+      lista.splice(index, 1);
+
+      for (const tur of lista) {
+        // Comparação de uma turma com uma sala (turmaForm) e um horario com uma turma duas salas e dois horários ok ok
+        if (
+          this.turmaForm.Horario2 === null &&
+          this.turmaForm.Sala2 === null &&
+          tur.Horario2 !== null &&
+          tur.Sala2 !== null
+        ) {
+          if (
+            (this.turmaForm.Sala1 === tur.Sala1 || this.turmaForm.Sala1 === tur.Sala2) &&
+            this.turmaForm.Horario1 === tur.Horario1 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Sala1 === tur.Sala1 || this.turmaForm.Sala1 === tur.Sala2) &&
+            this.turmaForm.Horario1 === tur.Horario2 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Sala1 === tur.Sala1 || this.turmaForm.Sala1 === tur.Sala2) &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Sala1 === tur.Sala1 || this.turmaForm.Sala1 === tur.Sala2) &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario2) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+        // Comparação turma com uma sala e um horário com uma turma sala e um horário ok ok
+
+        if (
+          this.turmaForm.Horario2 === null &&
+          this.turmaForm.Sala2 === null &&
+          tur.Horario2 === null &&
+          tur.Sala2 === null
+        ) {
+          if (
+            this.turmaForm.Sala1 === tur.Sala1 &&
+            this.turmaForm.Horario1 === tur.Horario1 &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            this.turmaForm.Sala1 === tur.Sala1 &&
+            this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+        // Comparação turma com duas salas e dois horarios     ok ok
+        if (
+          this.turmaForm.Horario2 !== null &&
+          this.turmaForm.Sala2 !== null &&
+          tur.Horario2 !== null &&
+          tur.Sala2 !== null
+        ) {
+          if (
+            (this.turmaForm.Sala1 === tur.Sala1 ||
+              this.turmaForm.Sala1 === tur.Sala2 ||
+              this.turmaForm.Sala2 === tur.Sala1 ||
+              this.turmaForm.Sala2 === tur.Sala2) &&
+            (this.turmaForm.Horario1 === tur.Horario1 ||
+              this.turmaForm.Horario2 === tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Sala1 === tur.Sala1 ||
+              this.turmaForm.Sala1 === tur.Sala2 ||
+              this.turmaForm.Sala2 === tur.Sala1 ||
+              this.turmaForm.Sala2 === tur.Sala2) &&
+            (this.turmaForm.Horario1 === tur.Horario2 ||
+              this.turmaForm.Horario2 === tur.Horario2) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Sala1 === tur.Sala1 ||
+              this.turmaForm.Sala1 === tur.Sala2 ||
+              this.turmaForm.Sala2 === tur.Sala1 ||
+              this.turmaForm.Sala2 === tur.Sala2) &&
+            (this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) ||
+              this.checkHorario_Conflitos(this.turmaForm.Horario2, tur.Horario1)) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Sala1 === tur.Sala1 ||
+              this.turmaForm.Sala1 === tur.Sala2 ||
+              this.turmaForm.Sala2 === tur.Sala1 ||
+              this.turmaForm.Sala2 === tur.Sala2) &&
+            (this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario2) ||
+              this.checkHorario_Conflitos(this.turmaForm.Horario2, tur.Horario2)) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario2)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+
+        // Comparação de uma turma com duas salas e dois horarios com uma turma com um horário e uma sala ok ok
+        if (
+          this.turmaForm.Horario2 !== null &&
+          this.turmaForm.Sala2 !== null &&
+          tur.Horario2 === null &&
+          tur.Sala2 === null
+        ) {
+          if (
+            (this.turmaForm.Sala1 === tur.Sala1 || this.turmaForm.Sala2 === tur.Sala1) &&
+            (this.turmaForm.Horario1 === tur.Horario1 ||
+              this.turmaForm.Horario2 === tur.Horario1) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+          if (
+            (this.turmaForm.Sala1 === tur.Sala1 || this.turmaForm.Sala2 === tur.Sala1) &&
+            (this.checkHorario_Conflitos(this.turmaForm.Horario1, tur.Horario1) ||
+              this.checkHorario_Conflitos(this.turmaForm.Horario2, tur.Horario1)) &&
+            this.turmaForm.periodo === tur.periodo
+          ) {
+            return `${this.retorna_HorarioString(tur.Horario1)}. ${tur.disciplina.codigo} - ${
+              tur.letra
+            }`;
+          }
+        }
+      }
+      return "";
+    },
+
     checkHorarioSala1618(horario, sala) {
       let conflitos = filter(
         this.$store.state.turma.Turmas.concat(this.$store.state.turmaExterna.Turmas),
@@ -889,12 +1901,16 @@ export default {
       return p ? p.preferencia : false;
     },
   },
+  
 
   computed: {
     ...mapGetters([
       "DocentesAtivos",
       "AllSalas",
       "AllHorarios",
+      "AllCursos",
+      "AllDisciplinas",
+      "AllTurmas",
       "HorariosEAD",
       "HorariosNoturno",
       "HorariosDiurno",
@@ -978,13 +1994,28 @@ export default {
     },
   },
 };
+
+function Notification(options) {
+  this.message = options.message;
+  this.onClick = options.onClick;
+}
+
+Notification.prototype.show = function() {
+  const notificationDiv = document.createElement("div");
+  notificationDiv.textContent = this.message;
+  notificationDiv.style.backgroundColor = "blue";
+  notificationDiv.style.color = "white";
+  notificationDiv.style.cursor = "pointer";
+  notificationDiv.addEventListener("click", this.onClick);
+
+  document.body.appendChild(notificationDiv);
+};
 </script>
 
 <style scoped>
-.sticky-col {
-  position: sticky;
+.highlighted {
+  background-color: #fbfb97 !important;
 }
-
 .turmarow {
   font-size: 11px;
 }
