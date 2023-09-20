@@ -11,10 +11,11 @@
 
     <tr v-for="listItem in listaDeHorarios" :key="listItem.nome">
       <td class="tg-0lax tg-hor">{{ listItem.nome }}</td>
-      <td v-for="horarioId in listItem.horariosIds" :key="'tdHorario' + horarioId" class="tg-0lax">
+      <td v-for="horarioId in listItem.horariosIds" :key="'tdHorario' + horarioId" class="tg-0lax" >
         <p
           v-for="turma in TurmasFilteredByHorario(horarioId)"
           :key="horarioId + turma.id + turma.periodo"
+          :class="{ 'highlight-yellow': (!turma.disciplina.codigo.includes('DCC')), 'hover-highlight': !turma.disciplina.codigo.includes('DCC')}"
           v-b-popover.hover.right="{
             title: turma.disciplina.nome + ' - ' + turma.letra,
             content: turma.docenteApelido,
@@ -82,21 +83,32 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/styles/theme";
 
+.highlight-yellow {
+  background-color: yellow;
+}
+
+.hover-highlight:hover {
+  cursor: pointer; 
+  background-color: #ffffe0; 
+}
+
 table.tg {
   border-collapse: collapse;
   border-spacing: 0;
   border-color: #ccc;
 }
 table.tg td {
+
   font-size: 11px;
   padding: 0px !important;
   border-style: solid;
   border-width: 1px;
   overflow: hidden;
   word-break: break-word;
-  border-color: rgba(189, 189, 189, 0.644);
+  border-color: black;
   color: #333;
   background-color: #fff;
+  line-height: 22px;
 }
 table.tg th,
 table.tg .tg-hor {
@@ -107,9 +119,9 @@ table.tg .tg-hor {
   border-width: 1px;
   overflow: hidden;
   word-break: normal;
-  border-color: rgba(189, 189, 189, 0.623);
-  color: #333;
-  background-color: #e9ecef !important;
+  border-color: black;
+  color: white;
+  background-color: #dc3545 !important;
 }
 table.tg .tg-0lax {
   vertical-align: center;
