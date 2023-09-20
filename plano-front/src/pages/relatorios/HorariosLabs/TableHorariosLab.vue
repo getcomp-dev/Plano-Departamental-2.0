@@ -76,24 +76,35 @@ export default {
 <style lang="scss" scoped>
 @import "@/assets/styles/theme";
 
-.tg {
+.highlight-yellow {
+  background-color: yellow;
+}
+
+.hover-highlight:hover {
+  cursor: pointer; 
+  background-color: #ffffe0; 
+}
+
+table.tg {
   border-collapse: collapse;
   border-spacing: 0;
   border-color: #ccc;
 }
-.tg td {
+table.tg td {
+
   font-size: 11px;
-  padding: 0px;
+  padding: 0px !important;
   border-style: solid;
   border-width: 1px;
   overflow: hidden;
   word-break: break-word;
-  border-color: rgba(189, 189, 189, 0.644);
+  border-color: black;
   color: #333;
   background-color: #fff;
+  line-height: 15px;
 }
-.tg th,
-.tg-hor {
+table.tg th,
+table.tg .tg-hor {
   font-size: 11px;
   font-weight: bold;
   padding: 0px;
@@ -101,23 +112,28 @@ export default {
   border-width: 1px;
   overflow: hidden;
   word-break: normal;
-  border-color: rgba(189, 189, 189, 0.623);
-  color: #333;
-  background-color: #e9ecef !important;
-  min-width: 50px !important;
+  border-color: black;
+  color: white;
+  background-color: #dc3545 !important;
 }
-.tg .tg-0lax {
+table.tg .tg-0lax {
   vertical-align: center;
   text-align: center;
   height: 22px;
-  min-width: 66px;
+  min-width: 50px !important;
+  width: 50px !important;
 }
-.tg td p {
-  min-width: 64px !important;
+table.tg td > p {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-width: 48px !important;
   padding: 0 1px !important;
   margin: 0 !important;
 }
-.tg td p:hover {
+table.tg td > p:hover {
   cursor: default;
   background-color: $clr-lightgray !important;
 }
