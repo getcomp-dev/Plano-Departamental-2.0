@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>&#x1f9ea; Cen&aacute;rios de Teste e Comportamentos Esperados</title>
+            <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only],
+.vscode-high-contrast:not(.vscode-high-contrast-light) img[src$=\#gh-light-mode-only],
+.vscode-high-contrast-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+            
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+<style>
+:root {
+  --color-note: #0969da;
+  --color-tip: #1a7f37;
+  --color-warning: #9a6700;
+  --color-severe: #bc4c00;
+  --color-caution: #d1242f;
+  --color-important: #8250df;
+}
+
+</style>
+<style>
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-note: #2f81f7;
+    --color-tip: #3fb950;
+    --color-warning: #d29922;
+    --color-severe: #db6d28;
+    --color-caution: #f85149;
+    --color-important: #a371f7;
+  }
+}
+
+</style>
+<style>
+.markdown-alert {
+  padding: 0.5rem 1rem;
+  margin-bottom: 16px;
+  color: inherit;
+  border-left: .25em solid #888;
+}
+
+.markdown-alert>:first-child {
+  margin-top: 0
+}
+
+.markdown-alert>:last-child {
+  margin-bottom: 0
+}
+
+.markdown-alert .markdown-alert-title {
+  display: flex;
+  font-weight: 500;
+  align-items: center;
+  line-height: 1
+}
+
+.markdown-alert .markdown-alert-title .octicon {
+  margin-right: 0.5rem;
+  display: inline-block;
+  overflow: visible !important;
+  vertical-align: text-bottom;
+  fill: currentColor;
+}
+
+.markdown-alert.markdown-alert-note {
+  border-left-color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-note .markdown-alert-title {
+  color: var(--color-note);
+}
+
+.markdown-alert.markdown-alert-important {
+  border-left-color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-important .markdown-alert-title {
+  color: var(--color-important);
+}
+
+.markdown-alert.markdown-alert-warning {
+  border-left-color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-warning .markdown-alert-title {
+  color: var(--color-warning);
+}
+
+.markdown-alert.markdown-alert-tip {
+  border-left-color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-tip .markdown-alert-title {
+  color: var(--color-tip);
+}
+
+.markdown-alert.markdown-alert-caution {
+  border-left-color: var(--color-caution);
+}
+
+.markdown-alert.markdown-alert-caution .markdown-alert-title {
+  color: var(--color-caution);
+}
+
+</style>
+        
+        </head>
+        <body class="vscode-body vscode-light">
+            <h1 id="-cenários-de-teste-e-comportamentos-esperados">🧪 Cenários de Teste e Comportamentos Esperados</h1>
+<h2 id="-sumário">📋 Sumário</h2>
+<ul>
+<li><a href="#-sum%C3%A1rio">📋 Sumário</a></li>
+<li><a href="#-objetivo">🎯 Objetivo</a></li>
+<li><a href="#-estrutura-de-testes">🏗️ Estrutura de Testes</a></li>
+<li><a href="#-gest%C3%A3o-de-turmas---cen%C3%A1rios-detalhados">🏫 Gestão de Turmas - Cenários Detalhados</a></li>
+<li><a href="#-gest%C3%A3o-de-disciplinas---cen%C3%A1rios-detalhados">📚 Gestão de Disciplinas - Cenários Detalhados</a></li>
+<li><a href="#-processo-de-matr%C3%ADculas---cen%C3%A1rios-detalhados">🎓 Processo de Matrículas - Cenários Detalhados</a></li>
+<li><a href="#-estados-de-sistema">🔄 Estados de Sistema</a></li>
+<li><a href="#-matriz-de-falhas">⚠️ Matriz de Falhas</a></li>
+</ul>
+<hr>
+<h2 id="-objetivo">🎯 Objetivo</h2>
+<p>Esta documentação detalha <strong>EXATAMENTE</strong> como a aplicação deve se comportar em cada cenário, incluindo:</p>
+<ul>
+<li>✅ <strong>Cenários de Sucesso</strong>: Fluxo normal esperado</li>
+<li>❌ <strong>Cenários de Erro</strong>: Comportamentos quando algo dá errado</li>
+<li>🔄 <strong>Cenários de Fallback</strong>: Como a aplicação se recupera</li>
+<li>⚠️ <strong>Estados Inconsistentes</strong>: Como detectar bugs vs features</li>
+<li>🧪 <strong>Casos Limite</strong>: Situações extremas ou incomuns</li>
+</ul>
+<h2 id="️-estrutura-de-testes">🏗️ Estrutura de Testes</h2>
+<p>Cada cenário segue o padrão:</p>
+<pre><code>🎯 CENÁRIO: [Nome do cenário]
+📋 CONTEXTO: [Estado inicial do sistema]
+⚡ AÇÃO: [O que o usuário faz]
+✅ RESULTADO ESPERADO: [O que deve acontecer]
+❌ POSSÍVEIS FALHAS: [O que pode dar errado]
+🔄 FALLBACKS: [Como o sistema deve reagir]
+🧪 COMO TESTAR: [Passos específicos para reproduzir]
+</code></pre>
+<hr>
+<h2 id="-gestão-de-turmas---cenários-detalhados">🏫 Gestão de Turmas - Cenários Detalhados</h2>
+<h3 id="1️⃣-criação-de-turma---fluxo-normal">1️⃣ Criação de Turma - Fluxo Normal</h3>
+<h4 id="-cenário-11-criação-de-turma-básica-com-sucesso">🎯 CENÁRIO 1.1: Criação de Turma Básica com Sucesso</h4>
+<p><strong>📋 CONTEXTO:</strong></p>
+<ul>
+<li>Sistema online e responsivo</li>
+<li>Usuário logado como Coordenador</li>
+<li>Plano ativo existente (status = 'ativo')</li>
+<li>Pelo menos 1 disciplina cadastrada (status = 'ativa')</li>
+<li>Pelo menos 1 docente cadastrado (status = 'ativo')</li>
+</ul>
+<p><strong>⚡ AÇÃO:</strong></p>
+<ol>
+<li>Usuário acessa <code>/turmas/nova</code></li>
+<li>Seleciona disciplina: &quot;DCC001 - INTRODUÇÃO À PROGRAMAÇÃO&quot;</li>
+<li>Digita letra: &quot;A&quot;</li>
+<li>Seleciona turno: &quot;MATUTINO&quot;</li>
+<li>Seleciona docente: &quot;João Silva Santos&quot;</li>
+<li>Clica &quot;Salvar &amp; Ativar&quot;</li>
+</ol>
+<p><strong>✅ RESULTADO ESPERADO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1. Validações em tempo real DEVEM passar:</span>
+- <span class="hljs-title class_">Campo</span> <span class="hljs-attr">disciplina</span>: VÁ<span class="hljs-variable constant_">LIDO</span>
+- <span class="hljs-title class_">Campo</span> <span class="hljs-attr">letra</span>: VÁ<span class="hljs-variable constant_">LIDO</span> (verificação de unicidade retorna <span class="hljs-literal">true</span>)
+- <span class="hljs-title class_">Campo</span> <span class="hljs-attr">turno</span>: VÁ<span class="hljs-variable constant_">LIDO</span>
+- <span class="hljs-title class_">Campo</span> <span class="hljs-attr">docente</span>: VÁ<span class="hljs-variable constant_">LIDO</span> (carga horária suficiente)
+
+<span class="hljs-comment">// 2. Submissão do formulário:</span>
+<span class="hljs-variable constant_">POST</span> /turmas
+{
+  <span class="hljs-string">&quot;disciplinaId&quot;</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-string">&quot;letra&quot;</span>: <span class="hljs-string">&quot;A&quot;</span>,
+  <span class="hljs-string">&quot;periodo&quot;</span>: <span class="hljs-literal">null</span>,
+  <span class="hljs-string">&quot;turno1&quot;</span>: <span class="hljs-string">&quot;MATUTINO&quot;</span>,
+  <span class="hljs-string">&quot;turno2&quot;</span>: <span class="hljs-literal">null</span>,
+  <span class="hljs-string">&quot;docente1Id&quot;</span>: <span class="hljs-number">5</span>,
+  <span class="hljs-string">&quot;docente2Id&quot;</span>: <span class="hljs-literal">null</span>,
+  <span class="hljs-string">&quot;salaId&quot;</span>: <span class="hljs-literal">null</span>,
+  <span class="hljs-string">&quot;horarioId&quot;</span>: <span class="hljs-literal">null</span>,
+  <span class="hljs-string">&quot;planoId&quot;</span>: <span class="hljs-number">2024001</span>,
+  <span class="hljs-string">&quot;status&quot;</span>: <span class="hljs-string">&quot;ativa&quot;</span>
+}
+
+<span class="hljs-comment">// 3. Backend DEVE:</span>
+- <span class="hljs-title class_">Validar</span> dados (200ms máximo)
+- <span class="hljs-title class_">Criar</span> registro na tabela <span class="hljs-title class_">Turma</span>
+- <span class="hljs-title class_">Gerar</span> pedidos automáticos para cursos relacionados
+- <span class="hljs-title class_">Emitir</span> evento <span class="hljs-title class_">Socket</span>.<span class="hljs-property">IO</span>
+- <span class="hljs-title class_">Retornar</span> status <span class="hljs-number">201</span>
+
+<span class="hljs-comment">// 4. Resposta esperada:</span>
+{
+  <span class="hljs-string">&quot;success&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-string">&quot;data&quot;</span>: {
+    <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">123</span>,
+    <span class="hljs-string">&quot;disciplina&quot;</span>: { <span class="hljs-string">&quot;codigo&quot;</span>: <span class="hljs-string">&quot;DCC001&quot;</span>, <span class="hljs-string">&quot;nome&quot;</span>: <span class="hljs-string">&quot;INTRODUÇÃO À PROGRAMAÇÃO&quot;</span> },
+    <span class="hljs-string">&quot;letra&quot;</span>: <span class="hljs-string">&quot;A&quot;</span>,
+    <span class="hljs-string">&quot;periodo&quot;</span>: <span class="hljs-literal">null</span>,
+    <span class="hljs-string">&quot;turno1&quot;</span>: <span class="hljs-string">&quot;MATUTINO&quot;</span>,
+    <span class="hljs-string">&quot;docente1&quot;</span>: { <span class="hljs-string">&quot;nome&quot;</span>: <span class="hljs-string">&quot;JOÃO SILVA SANTOS&quot;</span>, <span class="hljs-string">&quot;apelido&quot;</span>: <span class="hljs-string">&quot;JOÃO SILVA&quot;</span> },
+    <span class="hljs-string">&quot;status&quot;</span>: <span class="hljs-string">&quot;ativa&quot;</span>,
+    <span class="hljs-string">&quot;createdAt&quot;</span>: <span class="hljs-string">&quot;2024-01-15T10:30:00Z&quot;</span>
+  },
+  <span class="hljs-string">&quot;message&quot;</span>: <span class="hljs-string">&quot;Turma criada com sucesso&quot;</span>
+}
+
+<span class="hljs-comment">// 5. Interface DEVE:</span>
+- <span class="hljs-title class_">Exibir</span> toast <span class="hljs-attr">verde</span>: <span class="hljs-string">&quot;Turma criada com sucesso&quot;</span>
+- <span class="hljs-title class_">Redirecionar</span> para /turmas após 2s
+- <span class="hljs-title class_">Atualizar</span> contadores no dashboard
+- <span class="hljs-title class_">Emitir</span> notificação <span class="hljs-title class_">Socket</span>.<span class="hljs-property">IO</span> para outros usuários
+</code></pre>
+<p><strong>🧪 COMO TESTAR:</strong></p>
+<ol>
+<li>Limpar banco de dados de teste</li>
+<li>Inserir dados mínimos (1 plano ativo, 1 disciplina, 1 docente)</li>
+<li>Fazer login como coordenador</li>
+<li>Seguir fluxo exato acima</li>
+<li>Verificar se cada passo acontece conforme especificado</li>
+</ol>
+<hr>
+<h4 id="-cenário-12-falha-na-validação-de-unicidade">🎯 CENÁRIO 1.2: Falha na Validação de Unicidade</h4>
+<p><strong>📋 CONTEXTO:</strong></p>
+<ul>
+<li>Sistema funcionando normalmente</li>
+<li>Usuário logado como Coordenador</li>
+<li>Já existe turma &quot;DCC001-A&quot; no plano ativo</li>
+<li>Usuário tenta criar nova turma &quot;DCC001-A&quot;</li>
+</ul>
+<p><strong>⚡ AÇÃO:</strong></p>
+<ol>
+<li>Acessa formulário de nova turma</li>
+<li>Seleciona disciplina &quot;DCC001&quot;</li>
+<li>Digita letra &quot;A&quot; e sai do campo (evento onBlur)</li>
+</ol>
+<p><strong>✅ RESULTADO ESPERADO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1. Validação em tempo real DEVE disparar:</span>
+<span class="hljs-variable constant_">GET</span> /turmas/validar-unicidade?letra=A&amp;disciplinaId=<span class="hljs-number">1</span>&amp;planoId=<span class="hljs-number">2024001</span>
+
+<span class="hljs-comment">// 2. Backend DEVE retornar:</span>
+{
+  <span class="hljs-string">&quot;disponivel&quot;</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-string">&quot;mensagem&quot;</span>: <span class="hljs-string">&quot;Já existe turma A para disciplina DCC001 no plano 2024/1&quot;</span>,
+  <span class="hljs-string">&quot;turmaExistente&quot;</span>: {
+    <span class="hljs-string">&quot;id&quot;</span>: <span class="hljs-number">45</span>,
+    <span class="hljs-string">&quot;letra&quot;</span>: <span class="hljs-string">&quot;A&quot;</span>,
+    <span class="hljs-string">&quot;docente&quot;</span>: <span class="hljs-string">&quot;Prof. Maria Silva&quot;</span>
+  }
+}
+
+<span class="hljs-comment">// 3. Interface DEVE:</span>
+- <span class="hljs-title class_">Campo</span> letra fica vermelho (<span class="hljs-attr">classe</span>: <span class="hljs-string">&#x27;is-invalid&#x27;</span>)
+- <span class="hljs-title class_">Exibe</span> <span class="hljs-attr">mensagem</span>: <span class="hljs-string">&quot;Já existe turma A para disciplina DCC001 no plano 2024/1&quot;</span>
+- <span class="hljs-title class_">Bot</span>ão <span class="hljs-string">&quot;Salvar&quot;</span> fica <span class="hljs-variable constant_">DESABILITADO</span>
+- <span class="hljs-title class_">Foco</span> permanece no campo letra
+- Não faz nova requisição se usuário digitar mesma letra novamente
+</code></pre>
+<p><strong>❌ POSSÍVEL FALHA:</strong>
+Se validação não disparar ou campo não ficar inválido = <strong>BUG</strong></p>
+<p><strong>🔄 FALLBACK:</strong>
+Se API de validação falhar:</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// Interface deve assumir conflito e mostrar:</span>
+<span class="hljs-string">&quot;⚠️ Não foi possível verificar disponibilidade. Verifique se letra já existe.&quot;</span>
+</code></pre>
+<p><strong>🧪 COMO TESTAR:</strong></p>
+<ol>
+<li>Criar turma DCC001-A manualmente no banco</li>
+<li>Tentar criar outra DCC001-A via interface</li>
+<li>Verificar se campo fica inválido IMEDIATAMENTE ao sair do campo</li>
+<li>Verificar se mensagem é exata</li>
+<li>Verificar se botão fica desabilitado</li>
+</ol>
+<hr>
+<h4 id="-cenário-13-sobrecarga-de-docente">🎯 CENÁRIO 1.3: Sobrecarga de Docente</h4>
+<p><strong>📋 CONTEXTO:</strong></p>
+<ul>
+<li>Docente &quot;João Silva&quot; tem limite de 20 créditos</li>
+<li>Já possui 18 créditos alocados em outras turmas</li>
+<li>Disciplina DCC001 tem 6 créditos (4h teórica + 2h prática)</li>
+<li>Total seria 24 créditos (excede limite)</li>
+</ul>
+<p><strong>⚡ AÇÃO:</strong></p>
+<ol>
+<li>Seleciona disciplina DCC001 (6 créditos)</li>
+<li>Seleciona docente &quot;João Silva&quot;</li>
+<li>Sistema calcula carga em tempo real</li>
+</ol>
+<p><strong>✅ RESULTADO ESPERADO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1. Cálculo automático DEVE disparar:</span>
+<span class="hljs-variable constant_">GET</span> /docentes/<span class="hljs-number">5</span>/carga-atual
+<span class="hljs-variable constant_">GET</span> /disciplinas/<span class="hljs-number">1</span>/carga-horaria
+
+<span class="hljs-comment">// 2. Cálculo DEVE ser:</span>
+cargaAtual = <span class="hljs-number">18</span> créditos
+cargaDisciplina = <span class="hljs-number">6</span> créditos
+novaCargatotal = <span class="hljs-number">18</span> + <span class="hljs-number">6</span> = <span class="hljs-number">24</span> créditos
+limite = <span class="hljs-number">20</span> créditos
+sobrecarga = <span class="hljs-number">24</span> - <span class="hljs-number">20</span> = <span class="hljs-number">4</span> créditos
+
+<span class="hljs-comment">// 3. Interface DEVE exibir:</span>
+⚠️ <span class="hljs-variable constant_">WARNING</span> (amarelo): <span class="hljs-string">&quot;Docente ficará com sobrecarga: 24/20 créditos (+4 créditos excedentes)&quot;</span>
+
+<span class="hljs-comment">// 4. Comportamento esperado:</span>
+- <span class="hljs-title class_">Campo</span> docente fica amarelo (warning, não erro)
+- <span class="hljs-title class_">Bot</span>ão <span class="hljs-string">&quot;Salvar&quot;</span> <span class="hljs-variable constant_">PERMANECE</span> <span class="hljs-variable constant_">HABILITADO</span> (sobrecarga é permitida)
+- <span class="hljs-title class_">Exibe</span> tooltip <span class="hljs-attr">explicativo</span>: <span class="hljs-string">&quot;Sobrecarga será reportada à coordenação&quot;</span>
+- <span class="hljs-title class_">Se</span> usuário tentar salvar, <span class="hljs-variable constant_">DEVE</span> aparecer confirmaçã<span class="hljs-attr">o</span>:
+  <span class="hljs-string">&quot;⚠️ Docente ficará sobrecarregado. Confirma a alocação?&quot;</span>
+</code></pre>
+<p><strong>❌ POSSÍVEL FALHA:</strong>
+Se cálculo der resultado diferente ou não aparecer warning = <strong>BUG</strong></p>
+<p><strong>🔄 FALLBACK:</strong>
+Se API de carga falhar:</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// Interface deve assumir carga OK e mostrar:</span>
+<span class="hljs-string">&quot;⚠️ Não foi possível verificar carga do docente. Prosseguir por sua conta e risco.&quot;</span>
+</code></pre>
+<hr>
+<h4 id="-cenário-14-falha-de-conexão-durante-salvamento">🎯 CENÁRIO 1.4: Falha de Conexão Durante Salvamento</h4>
+<p><strong>📋 CONTEXTO:</strong></p>
+<ul>
+<li>Formulário preenchido corretamente</li>
+<li>Todas as validações passaram</li>
+<li>Usuário clica &quot;Salvar &amp; Ativar&quot;</li>
+<li>Conexão com servidor falha durante POST</li>
+</ul>
+<p><strong>⚡ AÇÃO:</strong></p>
+<ol>
+<li>Usuário clica &quot;Salvar &amp; Ativar&quot;</li>
+<li>Requisição POST /turmas inicia</li>
+<li>Conexão é perdida ou servidor não responde</li>
+</ol>
+<p><strong>✅ RESULTADO ESPERADO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1. Interface DEVE imediatamente:</span>
+- <span class="hljs-title class_">Mostrar</span> loading spinner no botão
+- <span class="hljs-title class_">Desabilitar</span> todos os campos <span class="hljs-keyword">do</span> formulário
+- <span class="hljs-title class_">Texto</span> <span class="hljs-keyword">do</span> botão vira <span class="hljs-string">&quot;Salvando...&quot;</span>
+
+<span class="hljs-comment">// 2. Após timeout (30s), DEVE:</span>
+- <span class="hljs-title class_">Remover</span> loading
+- <span class="hljs-title class_">Reabilitar</span> campos
+- <span class="hljs-title class_">Texto</span> <span class="hljs-keyword">do</span> botão volta para <span class="hljs-string">&quot;Salvar &amp; Ativar&quot;</span>
+- <span class="hljs-title class_">Exibir</span> <span class="hljs-attr">erro</span>: <span class="hljs-string">&quot;❌ Falha na conexão. Dados NÃO foram salvos. Tente novamente.&quot;</span>
+
+<span class="hljs-comment">// 3. Dados do formulário DEVEM:</span>
+- <span class="hljs-title class_">Permanecer</span> preenchidos (não perder dados)
+- <span class="hljs-title class_">Manter</span> todas <span class="hljs-keyword">as</span> validações anteriores
+- <span class="hljs-title class_">Permitir</span> nova tentativa imediatamente
+
+<span class="hljs-comment">// 4. Logs DEVEM ser gerados:</span>
+<span class="hljs-variable language_">console</span>.<span class="hljs-title function_">error</span>(<span class="hljs-string">&#x27;[TURMA_CREATE] Network error:&#x27;</span>, error);
+</code></pre>
+<p><strong>❌ POSSÍVEL FALHA:</strong></p>
+<ul>
+<li>Se formulário for limpo após erro = <strong>BUG</strong></li>
+<li>Se usuário perder dados digitados = <strong>BUG</strong></li>
+<li>Se não exibir erro claro = <strong>BUG</strong></li>
+</ul>
+<p><strong>🔄 FALLBACK AUTOMÁTICO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// Sistema DEVE tentar 3 vezes automaticamente:</span>
+<span class="hljs-keyword">try</span> {
+  <span class="hljs-keyword">await</span> <span class="hljs-title function_">criarTurma</span>(data);
+} <span class="hljs-keyword">catch</span> (error) {
+  <span class="hljs-keyword">if</span> (tentativas &lt; <span class="hljs-number">3</span>) {
+    <span class="hljs-built_in">setTimeout</span>(<span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">tentarNovamente</span>(), <span class="hljs-number">1000</span> * tentativas);
+  } <span class="hljs-keyword">else</span> {
+    <span class="hljs-title function_">exibirErroDefinitivo</span>();
+  }
+}
+</code></pre>
+<hr>
+<h3 id="2️⃣-edição-de-turma---cenários-complexos">2️⃣ Edição de Turma - Cenários Complexos</h3>
+<h4 id="-cenário-21-edição-com-alunos-matriculados">🎯 CENÁRIO 2.1: Edição com Alunos Matriculados</h4>
+<p><strong>📋 CONTEXTO:</strong></p>
+<ul>
+<li>Turma DCC001-A existente com status &quot;ativa&quot;</li>
+<li>25 alunos já matriculados na turma</li>
+<li>Coordenador tenta alterar docente de &quot;Prof. João&quot; para &quot;Prof. Maria&quot;</li>
+</ul>
+<p><strong>⚡ AÇÃO:</strong></p>
+<ol>
+<li>Clica &quot;Editar&quot; na turma DCC001-A</li>
+<li>Altera campo docente para &quot;Prof. Maria&quot;</li>
+<li>Clica &quot;Salvar&quot;</li>
+</ol>
+<p><strong>✅ RESULTADO ESPERADO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1. Sistema DEVE detectar impacto:</span>
+<span class="hljs-variable constant_">GET</span> /turmas/<span class="hljs-number">123</span>/impacto-alteracao
+{
+  <span class="hljs-string">&quot;alunosMatriculados&quot;</span>: <span class="hljs-number">25</span>,
+  <span class="hljs-string">&quot;permitido&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-string">&quot;requerConfirmacao&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-string">&quot;avisos&quot;</span>: [<span class="hljs-string">&quot;25 alunos matriculados serão notificados&quot;</span>]
+}
+
+<span class="hljs-comment">// 2. Interface DEVE exibir modal:</span>
+┌─────────────────────────────────────────────┐
+│ ⚠️ <span class="hljs-title class_">Confirmar</span> <span class="hljs-title class_">Altera</span>ção                      │
+├─────────────────────────────────────────────┤
+│ <span class="hljs-title class_">Esta</span> alteração afetará:                     │
+│ • <span class="hljs-number">25</span> alunos matriculados                    │
+│ • <span class="hljs-title class_">Notifica</span>ções serão enviadas               │
+│ • <span class="hljs-title class_">Hor</span>ário pode mudar                        │
+│                                             │
+│ <span class="hljs-title class_">Deseja</span> continuar?                           │
+│ ┌─────────────┐  ┌─────────────┐           │
+│ │ <span class="hljs-title class_">Cancelar</span>    │  │ <span class="hljs-title class_">Confirmar</span>   │           │
+│ └─────────────┘  └─────────────┘           │
+└─────────────────────────────────────────────┘
+
+<span class="hljs-comment">// 3. Se confirmar, DEVE:</span>
+- <span class="hljs-title class_">Salvar</span> alteração no banco
+- <span class="hljs-title class_">Gerar</span> log de alteração
+- <span class="hljs-title class_">Enviar</span> notificações para <span class="hljs-number">25</span> alunos
+- <span class="hljs-title class_">Exibir</span> <span class="hljs-attr">sucesso</span>: <span class="hljs-string">&quot;Docente alterado. 25 alunos foram notificados.&quot;</span>
+- <span class="hljs-title class_">Redirecionar</span> para lista de turmas
+
+<span class="hljs-comment">// 4. Email para alunos DEVE conter:</span>
+<span class="hljs-title class_">Assunto</span>: <span class="hljs-string">&quot;Alteração no docente - DCC001 Turma A&quot;</span>
+<span class="hljs-title class_">Corpo</span>: <span class="hljs-string">&quot;O docente da turma foi alterado de Prof. João Silva para Prof. Maria Santos...&quot;</span>
+</code></pre>
+<p><strong>❌ POSSÍVEIS FALHAS:</strong></p>
+<ul>
+<li>Se não detectar alunos matriculados = <strong>BUG</strong></li>
+<li>Se não exibir confirmação = <strong>BUG</strong></li>
+<li>Se notificações não forem enviadas = <strong>BUG</strong></li>
+</ul>
+<hr>
+<h4 id="-cenário-22-tentativa-de-edição-com-campos-bloqueados">🎯 CENÁRIO 2.2: Tentativa de Edição com Campos Bloqueados</h4>
+<p><strong>📋 CONTEXTO:</strong></p>
+<ul>
+<li>Turma com alunos matriculados</li>
+<li>Usuário tenta alterar código da disciplina (campo que deve estar bloqueado)</li>
+</ul>
+<p><strong>⚡ AÇÃO:</strong></p>
+<ol>
+<li>Acessa edição de turma com matriculas</li>
+<li>Tenta alterar campo &quot;disciplina&quot; no formulário</li>
+</ol>
+<p><strong>✅ RESULTADO ESPERADO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1. Campo disciplina DEVE estar:</span>
+- <span class="hljs-title class_">Visualmente</span> desabilitado (cinza)
+- <span class="hljs-attr">HTML</span>: disabled=<span class="hljs-string">&quot;true&quot;</span>
+- <span class="hljs-title class_">Com</span> <span class="hljs-attr">tooltip</span>: <span class="hljs-string">&quot;Não é possível alterar disciplina com alunos matriculados&quot;</span>
+
+<span class="hljs-comment">// 2. Se usuário tentar forçar via JavaScript:</span>
+- <span class="hljs-title class_">Backend</span> <span class="hljs-variable constant_">DEVE</span> rejeitar com erro <span class="hljs-number">400</span>
+- <span class="hljs-title class_">Mensagem</span>: <span class="hljs-string">&quot;Campo disciplina não pode ser alterado para turma com matrículas&quot;</span>
+
+<span class="hljs-comment">// 3. Interface DEVE ignorar tentativas:</span>
+- Não permitir seleção no dropdown
+- Não aceitar digitação
+- Não enviar campo na requisição
+</code></pre>
+<p><strong>❌ FALHA CRÍTICA:</strong>
+Se campo for editável ou aceitar alteração = <strong>BUG DE SEGURANÇA</strong></p>
+<hr>
+<h3 id="3️⃣-gestão-de-vagas---cenários-de-negócio">3️⃣ Gestão de Vagas - Cenários de Negócio</h3>
+<h4 id="-cenário-31-cálculo-automático-de-vagas-baseado-em-histórico">🎯 CENÁRIO 3.1: Cálculo Automático de Vagas Baseado em Histórico</h4>
+<p><strong>📋 CONTEXTO:</strong></p>
+<ul>
+<li>Nova turma DCC001-A sendo criada</li>
+<li>Histórico dos últimos 3 semestres:
+<ul>
+<li>2023/2: 28 matriculados</li>
+<li>2023/1: 32 matriculados</li>
+<li>2022/2: 25 matriculados</li>
+</ul>
+</li>
+<li>Disciplina obrigatória com taxa de reprovação 15%</li>
+</ul>
+<p><strong>⚡ AÇÃO:</strong></p>
+<ol>
+<li>Sistema cria nova turma DCC001-A</li>
+<li>Algoritmo automático calcula vagas</li>
+</ol>
+<p><strong>✅ RESULTADO ESPERADO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1. Cálculo DEVE ser executado:</span>
+<span class="hljs-keyword">const</span> s1 = <span class="hljs-number">28</span>, s2 = <span class="hljs-number">32</span>, s3 = <span class="hljs-number">25</span>;
+<span class="hljs-keyword">const</span> mediaPonderada = (s1 * <span class="hljs-number">0.5</span>) + (s2 * <span class="hljs-number">0.3</span>) + (s3 * <span class="hljs-number">0.2</span>);
+<span class="hljs-comment">// mediaPonderada = 14 + 9.6 + 5 = 28.6</span>
+
+<span class="hljs-keyword">const</span> fatorSazonalidade = <span class="hljs-number">1.0</span>; <span class="hljs-comment">// semestre normal</span>
+<span class="hljs-keyword">const</span> fatorReprovacao = <span class="hljs-number">1.0</span>;   <span class="hljs-comment">// taxa &lt; 30%</span>
+<span class="hljs-keyword">const</span> fatorObrigatoria = <span class="hljs-number">1.0</span>;  <span class="hljs-comment">// é obrigatória</span>
+
+<span class="hljs-keyword">const</span> vagasSugeridas = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">ceil</span>(<span class="hljs-number">28.6</span> * <span class="hljs-number">1.0</span> * <span class="hljs-number">1.0</span> * <span class="hljs-number">1.0</span>) = <span class="hljs-number">29</span> vagas
+
+<span class="hljs-comment">// 2. Distribuição automática DEVE ser:</span>
+<span class="hljs-keyword">const</span> vagasPeriodizadas = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">ceil</span>(<span class="hljs-number">29</span> * <span class="hljs-number">0.7</span>) = <span class="hljs-number">21</span> vagas
+<span class="hljs-keyword">const</span> vagasNaoPeriodizadas = <span class="hljs-number">29</span> - <span class="hljs-number">21</span> = <span class="hljs-number">8</span> vagas
+
+<span class="hljs-comment">// 3. Pedidos DEVEM ser criados automaticamente:</span>
+<span class="hljs-variable constant_">INSERT</span> <span class="hljs-variable constant_">INTO</span> <span class="hljs-title class_">Pedido</span> (<span class="hljs-title class_">TurmaId</span>, <span class="hljs-title class_">CursoId</span>, vagasPeriodizadas, vagasNaoPeriodizadas)
+<span class="hljs-variable constant_">VALUES</span> (<span class="hljs-number">123</span>, <span class="hljs-number">1</span>, <span class="hljs-number">21</span>, <span class="hljs-number">8</span>) -- <span class="hljs-title class_">Ci</span>ência da <span class="hljs-title class_">Computa</span>ção
+
+<span class="hljs-comment">// 4. Interface DEVE exibir:</span>
+<span class="hljs-string">&quot;📊 Vagas calculadas automaticamente: 29 (21 periodizadas + 8 não-periodizadas)&quot;</span>
+</code></pre>
+<p><strong>❌ POSSÍVEL FALHA:</strong>
+Se cálculo der resultado diferente = <strong>BUG NO ALGORITMO</strong></p>
+<p><strong>🧪 COMO TESTAR:</strong></p>
+<ol>
+<li>Inserir dados históricos exatos no banco</li>
+<li>Criar turma nova</li>
+<li>Verificar se cálculo é exatamente: Math.ceil(28.6) = 29</li>
+<li>Verificar distribuição 70/30</li>
+</ol>
+<hr>
+<h4 id="-cenário-32-ajuste-manual-de-vagas-com-validação-de-capacidade">🎯 CENÁRIO 3.2: Ajuste Manual de Vagas com Validação de Capacidade</h4>
+<p><strong>📋 CONTEXTO:</strong></p>
+<ul>
+<li>Turma DCC001-A tem capacidade máxima de 40 alunos (definida pela sala)</li>
+<li>Pedidos atuais totalizam 35 vagas</li>
+<li>Coordenador tenta aumentar para 45 vagas (excede capacidade)</li>
+</ul>
+<p><strong>⚡ AÇÃO:</strong></p>
+<ol>
+<li>Acessa gestão de vagas da turma</li>
+<li>Altera vagas de Ciência da Computação de 30 para 40</li>
+<li>Total passa de 35 para 45 vagas</li>
+<li>Clica &quot;Salvar&quot;</li>
+</ol>
+<p><strong>✅ RESULTADO ESPERADO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1. Validação DEVE disparar:</span>
+<span class="hljs-keyword">const</span> totalVagas = <span class="hljs-number">45</span>;
+<span class="hljs-keyword">const</span> capacidadeMaxima = <span class="hljs-number">40</span>;
+<span class="hljs-keyword">const</span> excesso = <span class="hljs-number">45</span> - <span class="hljs-number">40</span> = <span class="hljs-number">5</span> vagas;
+
+<span class="hljs-comment">// 2. Sistema DEVE rejeitar:</span>
+{
+  <span class="hljs-string">&quot;success&quot;</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-string">&quot;error&quot;</span>: <span class="hljs-string">&quot;CAPACITY_EXCEEDED&quot;</span>,
+  <span class="hljs-string">&quot;message&quot;</span>: <span class="hljs-string">&quot;Total de vagas (45) excede capacidade da sala (40)&quot;</span>,
+  <span class="hljs-string">&quot;details&quot;</span>: {
+    <span class="hljs-string">&quot;totalVagas&quot;</span>: <span class="hljs-number">45</span>,
+    <span class="hljs-string">&quot;capacidadeMaxima&quot;</span>: <span class="hljs-number">40</span>,
+    <span class="hljs-string">&quot;excesso&quot;</span>: <span class="hljs-number">5</span>
+  }
+}
+
+<span class="hljs-comment">// 3. Interface DEVE:</span>
+- <span class="hljs-title class_">Campo</span> ficar vermelho
+- <span class="hljs-title class_">Exibir</span> <span class="hljs-attr">erro</span>: <span class="hljs-string">&quot;❌ Total de vagas (45) excede capacidade da sala (40)&quot;</span>
+- <span class="hljs-title class_">Sugerir</span>: <span class="hljs-string">&quot;Reduza em 5 vagas ou altere para sala maior&quot;</span>
+- <span class="hljs-title class_">Bot</span>ão <span class="hljs-string">&quot;Salvar&quot;</span> ficar desabilitado
+- <span class="hljs-title class_">Valores</span> retornarem ao estado anterior automaticamente
+</code></pre>
+<p><strong>❌ POSSÍVEL FALHA:</strong>
+Se sistema aceitar vagas acima da capacidade = <strong>BUG CRÍTICO</strong></p>
+<hr>
+<h2 id="-gestão-de-disciplinas---cenários-detalhados">📚 Gestão de Disciplinas - Cenários Detalhados</h2>
+<h3 id="4️⃣-validação-de-dependências-circulares">4️⃣ Validação de Dependências Circulares</h3>
+<h4 id="-cenário-41-detecção-de-dependência-circular-simples">🎯 CENÁRIO 4.1: Detecção de Dependência Circular Simples</h4>
+<p><strong>📋 CONTEXTO:</strong></p>
+<ul>
+<li>DCC001 → pré-requisito: nenhum</li>
+<li>DCC002 → pré-requisito: DCC001</li>
+<li>Usuário tenta fazer DCC001 → pré-requisito: DCC002 (criaria ciclo)</li>
+</ul>
+<p><strong>⚡ AÇÃO:</strong></p>
+<ol>
+<li>Edita disciplina DCC001</li>
+<li>Tenta adicionar DCC002 como pré-requisito</li>
+<li>Clica &quot;Adicionar pré-requisito&quot;</li>
+</ol>
+<p><strong>✅ RESULTADO ESPERADO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1. Sistema DEVE executar algoritmo de detecção:</span>
+<span class="hljs-variable constant_">POST</span> /disciplinas/verificar-ciclo
+{
+  <span class="hljs-string">&quot;disciplinaAtual&quot;</span>: <span class="hljs-number">1</span>,      <span class="hljs-comment">// DCC001</span>
+  <span class="hljs-string">&quot;novoPreRequisito&quot;</span>: <span class="hljs-number">2</span>,     <span class="hljs-comment">// DCC002</span>
+  <span class="hljs-string">&quot;preRequisitosExistentes&quot;</span>: []
+}
+
+<span class="hljs-comment">// 2. Algoritmo DFS DEVE detectar:</span>
+grafo = {
+  <span class="hljs-number">1</span>: [<span class="hljs-number">2</span>],    <span class="hljs-comment">// DCC001 → DCC002</span>
+  <span class="hljs-number">2</span>: [<span class="hljs-number">1</span>]     <span class="hljs-comment">// DCC002 → DCC001 (já existe)</span>
+}
+<span class="hljs-comment">// CICLO DETECTADO: 1 → 2 → 1</span>
+
+<span class="hljs-comment">// 3. Resposta DEVE ser:</span>
+{
+  <span class="hljs-string">&quot;temCiclo&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-string">&quot;caminhoCiclo&quot;</span>: [<span class="hljs-string">&quot;DCC001&quot;</span>, <span class="hljs-string">&quot;DCC002&quot;</span>, <span class="hljs-string">&quot;DCC001&quot;</span>],
+  <span class="hljs-string">&quot;mensagem&quot;</span>: <span class="hljs-string">&quot;Esta adição criaria dependência circular: DCC001 → DCC002 → DCC001&quot;</span>
+}
+
+<span class="hljs-comment">// 4. Interface DEVE:</span>
+- NÃO adicionar <span class="hljs-title class_">DCC002</span> à lista
+- <span class="hljs-title class_">Exibir</span> erro <span class="hljs-attr">vermelho</span>: <span class="hljs-string">&quot;❌ Dependência circular detectada: DCC001 → DCC002 → DCC001&quot;</span>
+- <span class="hljs-title class_">Destacar</span> o caminho <span class="hljs-keyword">do</span> ciclo
+- <span class="hljs-title class_">Campo</span> de seleção voltar para <span class="hljs-string">&quot;Selecione...&quot;</span>
+</code></pre>
+<p><strong>❌ FALHA CRÍTICA:</strong>
+Se dependência circular for aceita = <strong>BUG DE LÓGICA GRAVE</strong></p>
+<p><strong>🧪 COMO TESTAR:</strong></p>
+<ol>
+<li>Criar DCC001 sem pré-requisitos</li>
+<li>Criar DCC002 com pré-requisito DCC001</li>
+<li>Tentar adicionar DCC002 como pré-requisito de DCC001</li>
+<li>Verificar se erro é exibido IMEDIATAMENTE</li>
+</ol>
+<hr>
+<h4 id="-cenário-42-dependência-circular-complexa-3-disciplinas">🎯 CENÁRIO 4.2: Dependência Circular Complexa (3+ disciplinas)</h4>
+<p><strong>📋 CONTEXTO:</strong></p>
+<ul>
+<li>DCC001 → pré-req: nenhum</li>
+<li>DCC002 → pré-req: DCC001</li>
+<li>DCC003 → pré-req: DCC002</li>
+<li>Usuário tenta fazer DCC001 → pré-req: DCC003 (ciclo: 1→3→2→1)</li>
+</ul>
+<p><strong>⚡ AÇÃO:</strong>
+Tenta adicionar DCC003 como pré-requisito de DCC001</p>
+<p><strong>✅ RESULTADO ESPERADO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// Algoritmo DEVE detectar caminho:</span>
+<span class="hljs-comment">// DCC001 → DCC003 → DCC002 → DCC001 (ciclo de 3 elementos)</span>
+
+{
+  <span class="hljs-string">&quot;temCiclo&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-string">&quot;caminhoCiclo&quot;</span>: [<span class="hljs-string">&quot;DCC001&quot;</span>, <span class="hljs-string">&quot;DCC003&quot;</span>, <span class="hljs-string">&quot;DCC002&quot;</span>, <span class="hljs-string">&quot;DCC001&quot;</span>],
+  <span class="hljs-string">&quot;tamanhoRodilha&quot;</span>: <span class="hljs-number">3</span>,
+  <span class="hljs-string">&quot;disciplinasAfetadas&quot;</span>: [<span class="hljs-string">&quot;DCC001&quot;</span>, <span class="hljs-string">&quot;DCC002&quot;</span>, <span class="hljs-string">&quot;DCC003&quot;</span>]
+}
+
+<span class="hljs-comment">// Interface deve mostrar diagrama visual:</span>
+<span class="hljs-title class_">DCC001</span> ──→ <span class="hljs-title class_">DCC003</span>
+  ↑           ↓
+  └── <span class="hljs-title class_">DCC002</span> ←─┘
+</code></pre>
+<hr>
+<h3 id="5️⃣-sistema-de-competências-docentes">5️⃣ Sistema de Competências Docentes</h3>
+<h4 id="-cenário-51-cálculo-automático-de-competência-com-base-em-histórico">🎯 CENÁRIO 5.1: Cálculo Automático de Competência com Base em Histórico</h4>
+<p><strong>📋 CONTEXTO:</strong></p>
+<ul>
+<li>Prof. João Silva nunca lecionou DCC001</li>
+<li>Tem formação em Ciência da Computação (área específica)</li>
+<li>8 anos de experiência docente</li>
+<li>Avaliação média dos alunos: 4.2/5.0</li>
+<li>Nenhuma capacitação específica na área</li>
+</ul>
+<p><strong>⚡ AÇÃO:</strong>
+Sistema calcula competência automaticamente</p>
+<p><strong>✅ RESULTADO ESPERADO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// Cálculo detalhado DEVE ser:</span>
+<span class="hljs-keyword">let</span> score = <span class="hljs-number">0</span>;
+<span class="hljs-keyword">const</span> evidencias = [];
+
+<span class="hljs-comment">// 1. Experiência específica (peso 40%):</span>
+<span class="hljs-keyword">const</span> experienciaEspecifica = <span class="hljs-number">0</span>; <span class="hljs-comment">// nunca lecionou</span>
+score += <span class="hljs-number">0</span>;
+evidencias.<span class="hljs-title function_">push</span>(<span class="hljs-string">&quot;⚠️ Primeira vez nesta disciplina&quot;</span>);
+
+<span class="hljs-comment">// 2. Formação acadêmica (peso 20%):</span>
+<span class="hljs-keyword">const</span> areaCompativel = <span class="hljs-string">&quot;especifica&quot;</span>; <span class="hljs-comment">// Ciência da Computação</span>
+score += <span class="hljs-number">20</span>;
+evidencias.<span class="hljs-title function_">push</span>(<span class="hljs-string">&quot;✅ Formação específica na área&quot;</span>);
+
+<span class="hljs-comment">// 3. Avaliação dos alunos (peso 25%):</span>
+<span class="hljs-keyword">const</span> avaliacaoNormalizada = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(<span class="hljs-number">0</span>, <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(<span class="hljs-number">1</span>, (<span class="hljs-number">4.2</span> - <span class="hljs-number">2</span>) / <span class="hljs-number">3</span>)) = <span class="hljs-number">0.73</span>;
+score += <span class="hljs-number">25</span> * <span class="hljs-number">0.73</span> = <span class="hljs-number">18.25</span>;
+evidencias.<span class="hljs-title function_">push</span>(<span class="hljs-string">&quot;✅ Boa avaliação: 4.2/5.0&quot;</span>);
+
+<span class="hljs-comment">// 4. Experiência geral (peso 10%):</span>
+<span class="hljs-keyword">const</span> experienciaNormalizada = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(<span class="hljs-number">1</span>, <span class="hljs-number">8</span> / <span class="hljs-number">10</span>) = <span class="hljs-number">0.8</span>;
+score += <span class="hljs-number">10</span> * <span class="hljs-number">0.8</span> = <span class="hljs-number">8</span>;
+evidencias.<span class="hljs-title function_">push</span>(<span class="hljs-string">&quot;✅ 8 anos de experiência&quot;</span>);
+
+<span class="hljs-comment">// 5. Capacitações (peso 5%):</span>
+score += <span class="hljs-number">0</span>; <span class="hljs-comment">// nenhuma capacitação</span>
+evidencias.<span class="hljs-title function_">push</span>(<span class="hljs-string">&quot;⚠️ Sem capacitações específicas&quot;</span>);
+
+<span class="hljs-comment">// Score final: 0 + 20 + 18.25 + 8 + 0 = 46.25 ≈ 46 pontos</span>
+
+<span class="hljs-comment">// 6. Determinar nível:</span>
+<span class="hljs-comment">// 46 está entre 45-65, logo: APTO</span>
+<span class="hljs-keyword">const</span> nivel = <span class="hljs-string">&quot;APTO&quot;</span>;
+
+<span class="hljs-comment">// 7. Resultado DEVE ser:</span>
+{
+  <span class="hljs-string">&quot;nivel&quot;</span>: <span class="hljs-string">&quot;APTO&quot;</span>,
+  <span class="hljs-string">&quot;score&quot;</span>: <span class="hljs-number">46</span>,
+  <span class="hljs-string">&quot;evidencias&quot;</span>: [
+    <span class="hljs-string">&quot;⚠️ Primeira vez nesta disciplina&quot;</span>,
+    <span class="hljs-string">&quot;✅ Formação específica na área&quot;</span>,
+    <span class="hljs-string">&quot;✅ Boa avaliação: 4.2/5.0&quot;</span>,
+    <span class="hljs-string">&quot;✅ 8 anos de experiência&quot;</span>,
+    <span class="hljs-string">&quot;⚠️ Sem capacitações específicas&quot;</span>
+  ],
+  <span class="hljs-string">&quot;sugerido&quot;</span>: <span class="hljs-literal">true</span>,
+  <span class="hljs-string">&quot;dataCalculo&quot;</span>: <span class="hljs-string">&quot;2024-01-15T10:30:00Z&quot;</span>
+}
+</code></pre>
+<p><strong>❌ POSSÍVEL FALHA:</strong>
+Qualquer variação no cálculo acima = <strong>BUG NO ALGORITMO</strong></p>
+<hr>
+<h2 id="-processo-de-matrículas---cenários-críticos">🎓 Processo de Matrículas - Cenários Críticos</h2>
+<h3 id="6️⃣-algoritmo-de-priorização-complexo">6️⃣ Algoritmo de Priorização Complexo</h3>
+<h4 id="-cenário-61-cálculo-de-prioridade-com-múltiplos-fatores">🎯 CENÁRIO 6.1: Cálculo de Prioridade com Múltiplos Fatores</h4>
+<p><strong>📋 CONTEXTO:</strong></p>
+<ul>
+<li>Aluno: João Silva, CC 2020, 7º semestre</li>
+<li>IRA: 8.5</li>
+<li>Tempo no curso: 4 anos (entrou em 2020)</li>
+<li>Disciplina: DCC401 (7º período recomendado)</li>
+<li>Solicitação feita em 01/12/2023 08:30</li>
+<li>Abertura do período: 01/12/2023 08:00</li>
+<li>Situação especial: Formando</li>
+</ul>
+<p><strong>⚡ AÇÃO:</strong>
+Sistema calcula prioridade para alocação de vaga</p>
+<p><strong>✅ RESULTADO ESPERADO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// Cálculo detalhado DEVE ser:</span>
+<span class="hljs-keyword">const</span> pesos = {
+  <span class="hljs-attr">periodoCorreto</span>: <span class="hljs-number">0.40</span>,      <span class="hljs-comment">// 40%</span>
+  <span class="hljs-attr">ira</span>: <span class="hljs-number">0.25</span>,                 <span class="hljs-comment">// 25%</span>
+  <span class="hljs-attr">tempoNoCurso</span>: <span class="hljs-number">0.15</span>,        <span class="hljs-comment">// 15%</span>
+  <span class="hljs-attr">situacaoEspecial</span>: <span class="hljs-number">0.10</span>,    <span class="hljs-comment">// 10%</span>
+  <span class="hljs-attr">ordemSolicitacao</span>: <span class="hljs-number">0.05</span>     <span class="hljs-comment">// 5%</span>
+};
+
+<span class="hljs-comment">// 1. Período correto (40%):</span>
+<span class="hljs-comment">// Disciplina do 7º período, aluno no 7º semestre</span>
+<span class="hljs-keyword">const</span> scorePeriodoCorreto = <span class="hljs-number">1.0</span>; <span class="hljs-comment">// período exato</span>
+scoreDetalhado.<span class="hljs-property">periodoCorreto</span> = <span class="hljs-number">1.0</span>;
+
+<span class="hljs-comment">// 2. IRA (25%):</span>
+<span class="hljs-comment">// IRA 8.5, função sigmóide: 1 / (1 + exp(-(8.5 - 6) * 1.5))</span>
+<span class="hljs-keyword">const</span> scoreIRA = <span class="hljs-number">1</span> / (<span class="hljs-number">1</span> + <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">exp</span>(-(<span class="hljs-number">8.5</span> - <span class="hljs-number">6</span>) * <span class="hljs-number">1.5</span>)) = <span class="hljs-number">0.95</span>;
+scoreDetalhado.<span class="hljs-property">ira</span> = <span class="hljs-number">0.95</span>;
+
+<span class="hljs-comment">// 3. Tempo no curso (15%):</span>
+<span class="hljs-comment">// 4 anos = 8 semestres, curso de 8 semestres (CC)</span>
+<span class="hljs-keyword">const</span> proporcaoTempo = <span class="hljs-number">8</span> / <span class="hljs-number">8</span> = <span class="hljs-number">1.0</span>;
+<span class="hljs-keyword">const</span> scoreTempoNoCurso = <span class="hljs-number">0.9</span>; <span class="hljs-comment">// aluno no tempo esperado</span>
+scoreDetalhado.<span class="hljs-property">tempoNoCurso</span> = <span class="hljs-number">0.9</span>;
+
+<span class="hljs-comment">// 4. Situação especial (10%):</span>
+<span class="hljs-keyword">const</span> isFormando = <span class="hljs-literal">true</span>;
+<span class="hljs-keyword">let</span> scoreSituacaoEspecial = <span class="hljs-number">0.5</span>; <span class="hljs-comment">// base</span>
+scoreSituacaoEspecial += <span class="hljs-number">0.4</span>;    <span class="hljs-comment">// formando</span>
+scoreDetalhado.<span class="hljs-property">situacaoEspecial</span> = <span class="hljs-number">0.9</span>;
+
+<span class="hljs-comment">// 5. Ordem de solicitação (5%):</span>
+<span class="hljs-comment">// 30 minutos após abertura = 0.5h</span>
+<span class="hljs-keyword">const</span> horasDesdeAbertura = <span class="hljs-number">0.5</span>;
+<span class="hljs-keyword">const</span> scoreOrdemSolicitacao = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">max</span>(<span class="hljs-number">0</span>, <span class="hljs-number">1</span> - (<span class="hljs-number">0.5</span> / (<span class="hljs-number">7</span> * <span class="hljs-number">24</span>))) = <span class="hljs-number">0.996</span>;
+scoreDetalhado.<span class="hljs-property">ordemSolicitacao</span> = <span class="hljs-number">0.996</span>;
+
+<span class="hljs-comment">// Score final ponderado:</span>
+<span class="hljs-keyword">const</span> scoreFinal =
+  (<span class="hljs-number">1.0</span> * <span class="hljs-number">0.40</span>) +     <span class="hljs-comment">// período correto</span>
+  (<span class="hljs-number">0.95</span> * <span class="hljs-number">0.25</span>) +    <span class="hljs-comment">// IRA</span>
+  (<span class="hljs-number">0.9</span> * <span class="hljs-number">0.15</span>) +     <span class="hljs-comment">// tempo no curso</span>
+  (<span class="hljs-number">0.9</span> * <span class="hljs-number">0.10</span>) +     <span class="hljs-comment">// situação especial</span>
+  (<span class="hljs-number">0.996</span> * <span class="hljs-number">0.05</span>);    <span class="hljs-comment">// ordem solicitação</span>
+
+<span class="hljs-comment">// scoreFinal = 0.40 + 0.2375 + 0.135 + 0.09 + 0.0498 = 0.9123</span>
+<span class="hljs-comment">// Em escala 0-100: 91.23 ≈ 91 pontos</span>
+
+<span class="hljs-comment">// Categoria: score &gt;= 80 = &quot;MAXIMA&quot;</span>
+
+<span class="hljs-comment">// 7. Resultado DEVE ser:</span>
+{
+  <span class="hljs-string">&quot;scoreFinal&quot;</span>: <span class="hljs-number">91</span>,
+  <span class="hljs-string">&quot;categoria&quot;</span>: <span class="hljs-string">&quot;MAXIMA&quot;</span>,
+  <span class="hljs-string">&quot;detalhamento&quot;</span>: {
+    <span class="hljs-string">&quot;periodoCorreto&quot;</span>: <span class="hljs-number">1.0</span>,
+    <span class="hljs-string">&quot;ira&quot;</span>: <span class="hljs-number">0.95</span>,
+    <span class="hljs-string">&quot;tempoNoCurso&quot;</span>: <span class="hljs-number">0.9</span>,
+    <span class="hljs-string">&quot;situacaoEspecial&quot;</span>: <span class="hljs-number">0.9</span>,
+    <span class="hljs-string">&quot;ordemSolicitacao&quot;</span>: <span class="hljs-number">0.996</span>
+  },
+  <span class="hljs-string">&quot;explicacao&quot;</span>: [
+    <span class="hljs-string">&quot;✅ Disciplina no período correto (7º)&quot;</span>,
+    <span class="hljs-string">&quot;✅ IRA excelente (8.5)&quot;</span>,
+    <span class="hljs-string">&quot;✅ Tempo adequado no curso (8/8 semestres)&quot;</span>,
+    <span class="hljs-string">&quot;🎓 Aluno formando (prioridade máxima)&quot;</span>,
+    <span class="hljs-string">&quot;✅ Solicitação feita rapidamente (30min após abertura)&quot;</span>
+  ]
+}
+</code></pre>
+<p><strong>❌ FALHA CRÍTICA:</strong>
+Qualquer variação no cálculo = <strong>BUG NO ALGORITMO DE PRIORIDADE</strong></p>
+<hr>
+<h4 id="-cenário-62-processamento-de-fila-com-múltiplas-prioridades">🎯 CENÁRIO 6.2: Processamento de Fila com Múltiplas Prioridades</h4>
+<p><strong>📋 CONTEXTO:</strong></p>
+<ul>
+<li>Disciplina DCC401 tem 30 vagas</li>
+<li>45 pedidos recebidos</li>
+<li>Alunos com diferentes prioridades:
+<ul>
+<li>3 alunos MAXIMA (scores: 91, 89, 87)</li>
+<li>8 alunos ALTA (scores: 75-84)</li>
+<li>15 alunos MEDIA (scores: 50-65)</li>
+<li>19 alunos BAIXA (scores: 35-49)</li>
+</ul>
+</li>
+</ul>
+<p><strong>⚡ AÇÃO:</strong>
+Sistema processa alocação automática</p>
+<p><strong>✅ RESULTADO ESPERADO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1. Ordenação DEVE ser por score decrescente:</span>
+<span class="hljs-keyword">const</span> pedidosOrdenados = [
+  { <span class="hljs-attr">alunoId</span>: <span class="hljs-number">101</span>, <span class="hljs-attr">score</span>: <span class="hljs-number">91</span>, <span class="hljs-attr">nome</span>: <span class="hljs-string">&quot;João Silva&quot;</span> },      <span class="hljs-comment">// MAXIMA</span>
+  { <span class="hljs-attr">alunoId</span>: <span class="hljs-number">102</span>, <span class="hljs-attr">score</span>: <span class="hljs-number">89</span>, <span class="hljs-attr">nome</span>: <span class="hljs-string">&quot;Maria Santos&quot;</span> },    <span class="hljs-comment">// MAXIMA</span>
+  { <span class="hljs-attr">alunoId</span>: <span class="hljs-number">103</span>, <span class="hljs-attr">score</span>: <span class="hljs-number">87</span>, <span class="hljs-attr">nome</span>: <span class="hljs-string">&quot;Pedro Costa&quot;</span> },     <span class="hljs-comment">// MAXIMA</span>
+  { <span class="hljs-attr">alunoId</span>: <span class="hljs-number">104</span>, <span class="hljs-attr">score</span>: <span class="hljs-number">84</span>, <span class="hljs-attr">nome</span>: <span class="hljs-string">&quot;Ana Silva&quot;</span> },       <span class="hljs-comment">// ALTA</span>
+  <span class="hljs-comment">// ... continuando em ordem decrescente</span>
+  { <span class="hljs-attr">alunoId</span>: <span class="hljs-number">145</span>, <span class="hljs-attr">score</span>: <span class="hljs-number">35</span>, <span class="hljs-attr">nome</span>: <span class="hljs-string">&quot;Carlos Lima&quot;</span> }      <span class="hljs-comment">// BAIXA (último)</span>
+];
+
+<span class="hljs-comment">// 2. Alocação DEVE seguir ordem estrita:</span>
+<span class="hljs-comment">// Vagas 1-30: primeiros 30 da lista ordenada</span>
+<span class="hljs-comment">// Lista de espera: posições 31-45</span>
+
+<span class="hljs-comment">// 3. Resultado DEVE ser:</span>
+<span class="hljs-keyword">const</span> resultado = {
+  <span class="hljs-attr">aprovados</span>: [
+    { <span class="hljs-attr">alunoId</span>: <span class="hljs-number">101</span>, <span class="hljs-attr">vaga</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">prioridade</span>: <span class="hljs-string">&quot;MAXIMA&quot;</span> },
+    { <span class="hljs-attr">alunoId</span>: <span class="hljs-number">102</span>, <span class="hljs-attr">vaga</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">prioridade</span>: <span class="hljs-string">&quot;MAXIMA&quot;</span> },
+    <span class="hljs-comment">// ... até 30</span>
+    { <span class="hljs-attr">alunoId</span>: <span class="hljs-number">130</span>, <span class="hljs-attr">vaga</span>: <span class="hljs-number">30</span>, <span class="hljs-attr">prioridade</span>: <span class="hljs-string">&quot;MEDIA&quot;</span> }
+  ],
+  <span class="hljs-attr">listaEspera</span>: [
+    { <span class="hljs-attr">alunoId</span>: <span class="hljs-number">131</span>, <span class="hljs-attr">posicao</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">prioridade</span>: <span class="hljs-string">&quot;MEDIA&quot;</span> },
+    { <span class="hljs-attr">alunoId</span>: <span class="hljs-number">132</span>, <span class="hljs-attr">posicao</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">prioridade</span>: <span class="hljs-string">&quot;MEDIA&quot;</span> },
+    <span class="hljs-comment">// ... até 15</span>
+    { <span class="hljs-attr">alunoId</span>: <span class="hljs-number">145</span>, <span class="hljs-attr">posicao</span>: <span class="hljs-number">15</span>, <span class="hljs-attr">prioridade</span>: <span class="hljs-string">&quot;BAIXA&quot;</span> }
+  ]
+};
+
+<span class="hljs-comment">// 4. Verificação de integridade:</span>
+- <span class="hljs-title class_">Todos</span> os <span class="hljs-variable constant_">MAXIMA</span> devem estar aprovados ✓
+- <span class="hljs-title class_">Nenhum</span> <span class="hljs-variable constant_">BAIXA</span> deve estar aprovado se há <span class="hljs-variable constant_">ALTA</span> na lista de espera ✓
+- <span class="hljs-title class_">Ordem</span> dentro da mesma categoria deve ser por score ✓
+</code></pre>
+<p><strong>❌ FALHAS CRÍTICAS:</strong></p>
+<ul>
+<li>Se aluno BAIXA for aprovado antes de ALTA = <strong>BUG GRAVE</strong></li>
+<li>Se ordem não for respeitada = <strong>BUG NO ALGORITMO</strong></li>
+</ul>
+<hr>
+<h3 id="7️⃣-sistema-de-redistribuição-inteligente">7️⃣ Sistema de Redistribuição Inteligente</h3>
+<h4 id="-cenário-71-redistribuição-por-desequilíbrio-de-demanda">🎯 CENÁRIO 7.1: Redistribuição por Desequilíbrio de Demanda</h4>
+<p><strong>📋 CONTEXTO:</strong></p>
+<ul>
+<li>DCC401 Turma A: 50 pedidos, 30 vagas (déficit: 20)</li>
+<li>DCC401 Turma B: 15 pedidos, 30 vagas (excesso: 15)</li>
+<li>Ambas as turmas são idênticas (mesmo horário, mesmo docente)</li>
+</ul>
+<p><strong>⚡ AÇÃO:</strong>
+Sistema executa algoritmo de balanceamento</p>
+<p><strong>✅ RESULTADO ESPERADO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1. Detecção de desequilíbrio:</span>
+<span class="hljs-keyword">const</span> turmaA = { <span class="hljs-attr">pedidos</span>: <span class="hljs-number">50</span>, <span class="hljs-attr">vagas</span>: <span class="hljs-number">30</span>, <span class="hljs-attr">razao</span>: <span class="hljs-number">50</span>/<span class="hljs-number">30</span> = <span class="hljs-number">1.67</span> };
+<span class="hljs-keyword">const</span> turmaB = { <span class="hljs-attr">pedidos</span>: <span class="hljs-number">15</span>, <span class="hljs-attr">vagas</span>: <span class="hljs-number">30</span>, <span class="hljs-attr">razao</span>: <span class="hljs-number">15</span>/<span class="hljs-number">30</span> = <span class="hljs-number">0.50</span> };
+<span class="hljs-keyword">const</span> desequilibrio = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">abs</span>(<span class="hljs-number">1.67</span> - <span class="hljs-number">0.50</span>) = <span class="hljs-number">1.17</span> &gt; <span class="hljs-number">0.3</span>; <span class="hljs-comment">// DESEQUILIBRADO</span>
+
+<span class="hljs-comment">// 2. Cálculo de redistribuição ideal:</span>
+<span class="hljs-keyword">const</span> totalPedidos = <span class="hljs-number">50</span> + <span class="hljs-number">15</span> = <span class="hljs-number">65</span>;
+<span class="hljs-keyword">const</span> totalVagas = <span class="hljs-number">30</span> + <span class="hljs-number">30</span> = <span class="hljs-number">60</span>;
+<span class="hljs-keyword">const</span> distribuicaoIdeal = totalPedidos / <span class="hljs-number">2</span> = <span class="hljs-number">32.5</span>;
+
+<span class="hljs-comment">// Redistribuição sugerida:</span>
+<span class="hljs-keyword">const</span> novaDistribuicaoA = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(<span class="hljs-number">32</span>, <span class="hljs-number">30</span>) = <span class="hljs-number">30</span>; <span class="hljs-comment">// mantém limite da sala</span>
+<span class="hljs-keyword">const</span> novaDistribuicaoB = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(<span class="hljs-number">33</span>, <span class="hljs-number">30</span>) = <span class="hljs-number">30</span>; <span class="hljs-comment">// mantém limite da sala</span>
+
+<span class="hljs-comment">// 3. Como não é possível redistribuir vagas (salas cheias),</span>
+<span class="hljs-comment">//    o sistema DEVE sugerir:</span>
+{
+  <span class="hljs-string">&quot;tipo&quot;</span>: <span class="hljs-string">&quot;NOVA_TURMA_NECESSARIA&quot;</span>,
+  <span class="hljs-string">&quot;motivo&quot;</span>: <span class="hljs-string">&quot;Demanda (65) excede capacidade total (60)&quot;</span>,
+  <span class="hljs-string">&quot;sugestoes&quot;</span>: [
+    <span class="hljs-string">&quot;Abrir DCC401 Turma C com 20 vagas&quot;</span>,
+    <span class="hljs-string">&quot;Aumentar capacidade das salas existentes&quot;</span>
+  ],
+  <span class="hljs-string">&quot;impacto&quot;</span>: {
+    <span class="hljs-string">&quot;alunosNaoAtendidos&quot;</span>: <span class="hljs-number">5</span>,
+    <span class="hljs-string">&quot;listaEsperaTotalAtual&quot;</span>: <span class="hljs-number">15</span>
+  }
+}
+
+<span class="hljs-comment">// 4. Interface DEVE exibir:</span>
+<span class="hljs-string">&quot;⚠️ Demanda alta detectada para DCC401.
+Recomenda-se abrir nova turma ou aumentar capacidade das salas.&quot;</span>
+</code></pre>
+<hr>
+<h4 id="-cenário-72-redistribuição-com-preferências-de-horário">🎯 CENÁRIO 7.2: Redistribuição com Preferências de Horário</h4>
+<p><strong>📋 CONTEXTO:</strong></p>
+<ul>
+<li>DCC401 Turma A (Manhã): 35 pedidos, 30 vagas</li>
+<li>DCC401 Turma B (Noite): 20 pedidos, 30 vagas</li>
+<li>15 alunos da Turma A marcaram &quot;aceito realocação&quot;</li>
+<li>5 alunos têm restrição de horário (trabalham de dia)</li>
+</ul>
+<p><strong>⚡ AÇÃO:</strong>
+Sistema tenta redistribuir considerando preferências</p>
+<p><strong>✅ RESULTADO ESPERADO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// 1. Análise de elegibilidade para redistribuição:</span>
+<span class="hljs-keyword">const</span> elegiveisRealocacao = alunosDeficit.<span class="hljs-title function_">filter</span>(<span class="hljs-function"><span class="hljs-params">aluno</span> =&gt;</span> {
+  <span class="hljs-keyword">return</span> aluno.<span class="hljs-property">aceitaRealocacao</span> &amp;&amp; !aluno.<span class="hljs-property">restricaoHorario</span>;
+});
+<span class="hljs-comment">// Resultado: 10 alunos elegíveis (15 - 5 com restrição)</span>
+
+<span class="hljs-comment">// 2. Cálculo de redistribuição:</span>
+<span class="hljs-keyword">const</span> deficitTurmaA = <span class="hljs-number">35</span> - <span class="hljs-number">30</span> = <span class="hljs-number">5</span>;
+<span class="hljs-keyword">const</span> excessoTurmaB = <span class="hljs-number">30</span> - <span class="hljs-number">20</span> = <span class="hljs-number">10</span>;
+<span class="hljs-keyword">const</span> podeRealimar = <span class="hljs-title class_">Math</span>.<span class="hljs-title function_">min</span>(deficitTurmaA, excessoTurmaB, elegiveisRealocacao.<span class="hljs-property">length</span>);
+<span class="hljs-comment">// podeReallocar = min(5, 10, 10) = 5 alunos</span>
+
+<span class="hljs-comment">// 3. Seleção dos 5 alunos para realocar:</span>
+<span class="hljs-comment">// Critério: menores prioridades primeiro (preservar altas prioridades na turma preferida)</span>
+<span class="hljs-keyword">const</span> alunosParaRealocar = elegiveisRealocacao
+  .<span class="hljs-title function_">sort</span>(<span class="hljs-function">(<span class="hljs-params">a, b</span>) =&gt;</span> a.<span class="hljs-property">prioridadeScore</span> - b.<span class="hljs-property">prioridadeScore</span>)
+  .<span class="hljs-title function_">slice</span>(<span class="hljs-number">0</span>, <span class="hljs-number">5</span>);
+
+<span class="hljs-comment">// 4. Resultado da redistribuição:</span>
+<span class="hljs-keyword">const</span> redistribuicao = {
+  <span class="hljs-attr">turmaA</span>: { <span class="hljs-attr">vagasApos</span>: <span class="hljs-number">30</span>, <span class="hljs-attr">pedidosApos</span>: <span class="hljs-number">30</span> },  <span class="hljs-comment">// balanceada</span>
+  <span class="hljs-attr">turmaB</span>: { <span class="hljs-attr">vagasApos</span>: <span class="hljs-number">25</span>, <span class="hljs-attr">pedidosApos</span>: <span class="hljs-number">25</span> },  <span class="hljs-comment">// balanceada</span>
+  <span class="hljs-attr">alunosRealocados</span>: <span class="hljs-number">5</span>,
+  <span class="hljs-attr">alunosNotificados</span>: <span class="hljs-number">5</span>
+};
+
+<span class="hljs-comment">// 5. Notificações DEVEM ser enviadas:</span>
+alunosParaRealocar.<span class="hljs-title function_">forEach</span>(<span class="hljs-function"><span class="hljs-params">aluno</span> =&gt;</span> {
+  <span class="hljs-title function_">enviarEmail</span>(aluno.<span class="hljs-property">email</span>, {
+    <span class="hljs-attr">assunto</span>: <span class="hljs-string">&quot;Realocação de turma - DCC401&quot;</span>,
+    <span class="hljs-attr">corpo</span>: <span class="hljs-string">`Você foi realocado da Turma A (manhã) para Turma B (noite)
+            conforme sua indicação de aceitar realocação.`</span>
+  });
+});
+</code></pre>
+<p><strong>🧪 COMO TESTAR:</strong></p>
+<ol>
+<li>Criar cenário com desequilíbrio específico</li>
+<li>Marcar exatamente 15 alunos como &quot;aceita realocação&quot;</li>
+<li>Marcar 5 com restrição de horário</li>
+<li>Executar redistribuição</li>
+<li>Verificar se exatamente 5 foram realocados</li>
+<li>Verificar se foram os de menor prioridade</li>
+</ol>
+<hr>
+<h2 id="-estados-de-sistema">🔄 Estados de Sistema</h2>
+<h3 id="8️⃣-máquina-de-estados-para-turma">8️⃣ Máquina de Estados para Turma</h3>
+<h4 id="-cenário-81-transições-de-estado-válidas">🎯 CENÁRIO 8.1: Transições de Estado Válidas</h4>
+<p><strong>📋 CONTEXTO:</strong>
+Estados possíveis: <code>rascunho</code> → <code>ativa</code> → <code>cancelada</code> → <code>concluida</code></p>
+<p><strong>⚡ TRANSIÇÕES VÁLIDAS:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-keyword">const</span> transicaoesPermitidas = {
+  <span class="hljs-string">&#x27;rascunho&#x27;</span>: [<span class="hljs-string">&#x27;ativa&#x27;</span>, <span class="hljs-string">&#x27;cancelada&#x27;</span>],
+  <span class="hljs-string">&#x27;ativa&#x27;</span>: [<span class="hljs-string">&#x27;cancelada&#x27;</span>, <span class="hljs-string">&#x27;concluida&#x27;</span>],
+  <span class="hljs-string">&#x27;cancelada&#x27;</span>: [],  <span class="hljs-comment">// estado final</span>
+  <span class="hljs-string">&#x27;concluida&#x27;</span>: []   <span class="hljs-comment">// estado final</span>
+};
+
+<span class="hljs-comment">// CENÁRIO 8.1a: rascunho → ativa</span>
+<span class="hljs-keyword">const</span> turma = { <span class="hljs-attr">id</span>: <span class="hljs-number">1</span>, <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;rascunho&#x27;</span> };
+<span class="hljs-keyword">const</span> resultado = <span class="hljs-keyword">await</span> <span class="hljs-title function_">alterarStatus</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;ativa&#x27;</span>);
+<span class="hljs-comment">// DEVE retornar: { success: true, statusAnterior: &#x27;rascunho&#x27;, statusNovo: &#x27;ativa&#x27; }</span>
+
+<span class="hljs-comment">// CENÁRIO 8.1b: rascunho → cancelada</span>
+<span class="hljs-keyword">const</span> resultado2 = <span class="hljs-keyword">await</span> <span class="hljs-title function_">alterarStatus</span>(<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;cancelada&#x27;</span>);
+<span class="hljs-comment">// DEVE retornar: { success: true, statusAnterior: &#x27;rascunho&#x27;, statusNovo: &#x27;cancelada&#x27; }</span>
+
+<span class="hljs-comment">// CENÁRIO 8.1c: ativa → concluida</span>
+<span class="hljs-keyword">const</span> turmaAtiva = { <span class="hljs-attr">id</span>: <span class="hljs-number">2</span>, <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;ativa&#x27;</span> };
+<span class="hljs-keyword">const</span> resultado3 = <span class="hljs-keyword">await</span> <span class="hljs-title function_">alterarStatus</span>(<span class="hljs-number">2</span>, <span class="hljs-string">&#x27;concluida&#x27;</span>);
+<span class="hljs-comment">// DEVE retornar: { success: true, statusAnterior: &#x27;ativa&#x27;, statusNovo: &#x27;concluida&#x27; }</span>
+</code></pre>
+<p><strong>✅ COMPORTAMENTO ESPERADO:</strong></p>
+<ul>
+<li>Transições válidas são aceitas</li>
+<li>Log de transição é criado</li>
+<li>Timestamps são atualizados</li>
+<li>Eventos <a href="http://Socket.IO">Socket.IO</a> são emitidos</li>
+</ul>
+<hr>
+<h4 id="-cenário-82-transições-de-estado-inválidas">🎯 CENÁRIO 8.2: Transições de Estado Inválidas</h4>
+<p><strong>⚡ TRANSIÇÕES INVÁLIDAS:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// CENÁRIO 8.2a: cancelada → ativa (INVÁLIDO)</span>
+<span class="hljs-keyword">const</span> turmaCancelada = { <span class="hljs-attr">id</span>: <span class="hljs-number">3</span>, <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;cancelada&#x27;</span> };
+<span class="hljs-keyword">const</span> resultado = <span class="hljs-keyword">await</span> <span class="hljs-title function_">alterarStatus</span>(<span class="hljs-number">3</span>, <span class="hljs-string">&#x27;ativa&#x27;</span>);
+
+<span class="hljs-comment">// DEVE retornar erro:</span>
+{
+  <span class="hljs-string">&quot;success&quot;</span>: <span class="hljs-literal">false</span>,
+  <span class="hljs-string">&quot;error&quot;</span>: <span class="hljs-string">&quot;INVALID_TRANSITION&quot;</span>,
+  <span class="hljs-string">&quot;message&quot;</span>: <span class="hljs-string">&quot;Transição inválida: cancelada → ativa não é permitida&quot;</span>,
+  <span class="hljs-string">&quot;estadoAtual&quot;</span>: <span class="hljs-string">&quot;cancelada&quot;</span>,
+  <span class="hljs-string">&quot;estadoTentado&quot;</span>: <span class="hljs-string">&quot;ativa&quot;</span>,
+  <span class="hljs-string">&quot;transicoesPossiveis&quot;</span>: []
+}
+
+<span class="hljs-comment">// CENÁRIO 8.2b: concluida → rascunho (INVÁLIDO)</span>
+<span class="hljs-keyword">const</span> turmaConcluida = { <span class="hljs-attr">id</span>: <span class="hljs-number">4</span>, <span class="hljs-attr">status</span>: <span class="hljs-string">&#x27;concluida&#x27;</span> };
+<span class="hljs-keyword">const</span> resultado2 = <span class="hljs-keyword">await</span> <span class="hljs-title function_">alterarStatus</span>(<span class="hljs-number">4</span>, <span class="hljs-string">&#x27;rascunho&#x27;</span>);
+
+<span class="hljs-comment">// DEVE retornar erro similar com:</span>
+<span class="hljs-string">&quot;message&quot;</span>: <span class="hljs-string">&quot;Transição inválida: concluida → rascunho não é permitida&quot;</span>
+</code></pre>
+<p><strong>❌ FALHA CRÍTICA:</strong>
+Se transição inválida for aceita = <strong>BUG DE LÓGICA GRAVE</strong></p>
+<hr>
+<h3 id="9️⃣-estados-de-matrícula-e-consistência">9️⃣ Estados de Matrícula e Consistência</h3>
+<h4 id="-cenário-91-verificação-de-consistência-de-dados">🎯 CENÁRIO 9.1: Verificação de Consistência de Dados</h4>
+<p><strong>📋 CONTEXTO:</strong></p>
+<ul>
+<li>Aluno tem matrícula &quot;confirmada&quot; em DCC001</li>
+<li>Sistema verifica se turma correspondente existe e está ativa</li>
+</ul>
+<p><strong>⚡ AÇÃO:</strong>
+Executar verificação de integridade</p>
+<p><strong>✅ RESULTADO ESPERADO:</strong></p>
+<pre><code class="language-javascript"><span class="hljs-comment">// Query de verificação DEVE executar:</span>
+<span class="hljs-variable constant_">SELECT</span>
+  m.<span class="hljs-property">id</span> <span class="hljs-keyword">as</span> matriculaId,
+  m.<span class="hljs-property">status</span> <span class="hljs-keyword">as</span> statusMatricula,
+  t.<span class="hljs-property">id</span> <span class="hljs-keyword">as</span> turmaId,
+  t.<span class="hljs-property">status</span> <span class="hljs-keyword">as</span> statusTurma,
+  <span class="hljs-variable constant_">CASE</span>
+    <span class="hljs-variable constant_">WHEN</span> t.<span class="hljs-property">status</span> != <span class="hljs-string">&#x27;ativa&#x27;</span> <span class="hljs-variable constant_">THEN</span> <span class="hljs-string">&#x27;INCONSISTENTE&#x27;</span>
+    <span class="hljs-variable constant_">WHEN</span> t.<span class="hljs-property">id</span> <span class="hljs-variable constant_">IS</span> <span class="hljs-variable constant_">NULL</span> <span class="hljs-variable constant_">THEN</span> <span class="hljs-string">&#x27;TURMA_NAO_EXISTE&#x27;</span>
+    <span class="hljs-variable constant_">ELSE</span> <span class="hljs-string">&#x27;CONSISTENTE&#x27;</span>
+  <span class="hljs-variable constant_">END</span> <span class="hljs-keyword">as</span> situacao
+<span class="hljs-variable constant_">FROM</span> <span class="hljs-title class_">Matricula</span> m
+<span class="hljs-variable constant_">LEFT</span> <span class="hljs-variable constant_">JOIN</span> <span class="hljs-title class_">Turma</span> t <span class="hljs-variable constant_">ON</span> t.<span class="hljs-property">id</span> = m.<span class="hljs-property">TurmaId</span>
+<span class="hljs-variable constant_">WHERE</span> m.<span class="hljs-property">status</span> = <span class="hljs-string">&#x27;confirmada&#x27;</span>
+<span class="hljs-variable constant_">AND</span> (t.<span class="hljs-property">status</span> != <span class="hljs-string">&#x27;ativa&#x27;</span> <span class="hljs-variable constant_">OR</span> t.<span class="hljs-property">id</span> <span class="hljs-variable constant_">IS</span> <span class="hljs-variable constant_">NULL</span>);
+
+<span class="hljs-comment">// Se retornar registros, sistema DEVE:</span>
+{
+  <span class="hljs-string">&quot;inconsistenciasDetectadas&quot;</span>: [
+    {
+      <span class="hljs-string">&quot;matriculaId&quot;</span>: <span class="hljs-number">123</span>,
+      <span class="hljs-string">&quot;alunoNome&quot;</span>: <span class="hljs-string">&quot;João Silva&quot;</span>,
+      <span class="hljs-string">&quot;problema&quot;</span>: <span class="hljs-string">&quot;TURMA_CANCELADA&quot;</span>,
+      <span class="hljs-string">&quot;descricao&quot;</span>: <span class="hljs-string">&quot;Aluno matriculado em turma cancelada&quot;</span>,
+      <span class="hljs-string">&quot;acaoRecomendada&quot;</span>: <span class="hljs-string">&quot;Cancelar matrícula ou realocar para turma ativa&quot;</span>
+    }
+  ],
+  <span class="hljs-string">&quot;totalInconsistencias&quot;</span>: <span class="hljs-number">1</span>,
+  <span class="hljs-string">&quot;acaoAutomatica&quot;</span>: <span class="hljs-string">&quot;NOTIFICAR_COORDENACAO&quot;</span>
+}
+
+<span class="hljs-comment">// Interface DEVE exibir alerta:</span>
+<span class="hljs-string">&quot;⚠️ 1 inconsistência detectada no sistema. Verificar relatório de integridade.&quot;</span>
+</code></pre>
+<p><strong>❌ FALHA CRÍTICA:</strong>
+Se inconsistências não forem detectadas = <strong>BUG DE INTEGRIDADE</strong></p>
+<hr>
+<h2 id="️-matriz-de-falhas">⚠️ Matriz de Falhas</h2>
+<h3 id="-cenários-de-falha-crítica">🚨 Cenários de Falha Crítica</h3>
+<table>
+<thead>
+<tr>
+<th><strong>Cenário</strong></th>
+<th><strong>Comportamento Esperado</strong></th>
+<th><strong>Comportamento de Bug</strong></th>
+<th><strong>Severidade</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dependência circular aceita</td>
+<td>Sistema rejeita com erro claro</td>
+<td>Aceita dependência, quebra pré-requisitos</td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td>Vaga acima da capacidade</td>
+<td>Sistema rejeita, sugere alternativas</td>
+<td>Aceita, causa superlotação</td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td>Transição de estado inválida</td>
+<td>Sistema rejeita com erro</td>
+<td>Aceita transição, dados inconsistentes</td>
+<td>🔴 CRÍTICA</td>
+</tr>
+<tr>
+<td>Prioridade calculada errada</td>
+<td>Fórmula matemática exata</td>
+<td>Cálculo diferente do esperado</td>
+<td>🟡 ALTA</td>
+</tr>
+<tr>
+<td>Validação de unicidade falhando</td>
+<td>Campo fica inválido em tempo real</td>
+<td>Aceita duplicata</td>
+<td>🟡 ALTA</td>
+</tr>
+<tr>
+<td>Notificações não enviadas</td>
+<td>Email/SMS enviado para todos afetados</td>
+<td>Usuários não são informados</td>
+<td>🟡 ALTA</td>
+</tr>
+<tr>
+<td>Dados perdidos em erro de rede</td>
+<td>Formulário mantém dados, permite retry</td>
+<td>Formulário limpo, dados perdidos</td>
+<td>🟡 MÉDIA</td>
+</tr>
+<tr>
+<td>Loading spinner não aparece</td>
+<td>Interface mostra feedback visual</td>
+<td>Usuário não sabe se ação está processando</td>
+<td>🟢 BAIXA</td>
+</tr>
+</tbody>
+</table>
+<h3 id="-scripts-de-teste-automatizado">🔧 Scripts de Teste Automatizado</h3>
+<pre><code class="language-javascript"><span class="hljs-comment">// Script para validar comportamentos críticos</span>
+<span class="hljs-title function_">describe</span>(<span class="hljs-string">&#x27;Comportamentos Críticos&#x27;</span>, <span class="hljs-function">() =&gt;</span> {
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;CRÍTICO: Dependência circular deve ser rejeitada&#x27;</span>, <span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-comment">// Arrange</span>
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">criarDisciplina</span>(<span class="hljs-string">&#x27;DCC001&#x27;</span>, []);
+    <span class="hljs-keyword">await</span> <span class="hljs-title function_">criarDisciplina</span>(<span class="hljs-string">&#x27;DCC002&#x27;</span>, [<span class="hljs-string">&#x27;DCC001&#x27;</span>]);
+
+    <span class="hljs-comment">// Act</span>
+    <span class="hljs-keyword">const</span> resultado = <span class="hljs-keyword">await</span> <span class="hljs-title function_">adicionarPreRequisito</span>(<span class="hljs-string">&#x27;DCC001&#x27;</span>, <span class="hljs-string">&#x27;DCC002&#x27;</span>);
+
+    <span class="hljs-comment">// Assert</span>
+    <span class="hljs-title function_">expect</span>(resultado.<span class="hljs-property">sucesso</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-literal">false</span>);
+    <span class="hljs-title function_">expect</span>(resultado.<span class="hljs-property">erro</span>).<span class="hljs-title function_">toContain</span>(<span class="hljs-string">&#x27;dependência circular&#x27;</span>);
+    <span class="hljs-title function_">expect</span>(resultado.<span class="hljs-property">caminhoCiclo</span>).<span class="hljs-title function_">toEqual</span>([<span class="hljs-string">&#x27;DCC001&#x27;</span>, <span class="hljs-string">&#x27;DCC002&#x27;</span>, <span class="hljs-string">&#x27;DCC001&#x27;</span>]);
+  });
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;CRÍTICO: Vagas não podem exceder capacidade da sala&#x27;</span>, <span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-comment">// Arrange</span>
+    <span class="hljs-keyword">const</span> sala = <span class="hljs-keyword">await</span> <span class="hljs-title function_">criarSala</span>({ <span class="hljs-attr">capacidade</span>: <span class="hljs-number">40</span> });
+    <span class="hljs-keyword">const</span> turma = <span class="hljs-keyword">await</span> <span class="hljs-title function_">criarTurma</span>({ <span class="hljs-attr">salaId</span>: sala.<span class="hljs-property">id</span> });
+
+    <span class="hljs-comment">// Act</span>
+    <span class="hljs-keyword">const</span> resultado = <span class="hljs-keyword">await</span> <span class="hljs-title function_">definirVagas</span>(turma.<span class="hljs-property">id</span>, <span class="hljs-number">45</span>);
+
+    <span class="hljs-comment">// Assert</span>
+    <span class="hljs-title function_">expect</span>(resultado.<span class="hljs-property">sucesso</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-literal">false</span>);
+    <span class="hljs-title function_">expect</span>(resultado.<span class="hljs-property">erro</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-string">&#x27;CAPACITY_EXCEEDED&#x27;</span>);
+    <span class="hljs-title function_">expect</span>(resultado.<span class="hljs-property">excesso</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-number">5</span>);
+  });
+
+  <span class="hljs-title function_">test</span>(<span class="hljs-string">&#x27;ALTA: Cálculo de prioridade deve ser exato&#x27;</span>, <span class="hljs-keyword">async</span> () =&gt; {
+    <span class="hljs-comment">// Arrange</span>
+    <span class="hljs-keyword">const</span> aluno = <span class="hljs-title function_">criarAlunoMock</span>({
+      <span class="hljs-attr">ira</span>: <span class="hljs-number">8.5</span>,
+      <span class="hljs-attr">tempoNoCurso</span>: <span class="hljs-number">8</span>,
+      <span class="hljs-attr">formando</span>: <span class="hljs-literal">true</span>,
+      <span class="hljs-attr">periodoAtual</span>: <span class="hljs-number">7</span>
+    });
+    <span class="hljs-keyword">const</span> disciplina = <span class="hljs-title function_">criarDisciplinaMock</span>({ <span class="hljs-attr">periodoRecomendado</span>: <span class="hljs-number">7</span> });
+
+    <span class="hljs-comment">// Act</span>
+    <span class="hljs-keyword">const</span> prioridade = <span class="hljs-title function_">calcularPrioridade</span>(aluno, disciplina);
+
+    <span class="hljs-comment">// Assert</span>
+    <span class="hljs-title function_">expect</span>(prioridade.<span class="hljs-property">scoreFinal</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-number">91</span>); <span class="hljs-comment">// Exato conforme cálculo documentado</span>
+    <span class="hljs-title function_">expect</span>(prioridade.<span class="hljs-property">categoria</span>).<span class="hljs-title function_">toBe</span>(<span class="hljs-string">&#x27;MAXIMA&#x27;</span>);
+  });
+
+});
+</code></pre>
+<hr>
+<div align="center">
+<h3 id="-conclusão">🎯 Conclusão</h3>
+<p>Esta documentação detalha <strong>EXATAMENTE</strong> como sua aplicação deve se comportar em cada situação. Use-a como:</p>
+<p>✅ <strong>Especificação de Testes</strong>: Cada cenário pode virar um teste automatizado
+✅ <strong>Detecção de Bugs</strong>: Compare comportamento real vs esperado
+✅ <strong>Documentação de Falhas</strong>: Identifique o que é bug vs feature
+✅ <strong>Guia de Debug</strong>: Entenda onde procurar quando algo der errado</p>
+<hr>
+<p><strong>📝 Documento extremamente detalhado - Para identificação precisa de bugs vs features</strong></p>
+</div>
+            
+            
+        </body>
+        </html>
