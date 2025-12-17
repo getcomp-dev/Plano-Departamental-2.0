@@ -5,6 +5,7 @@
         <option value="PGCC">PGCC</option>
         <option value="PGEM">PGEM</option>
         <option value="PGMC">PGMC</option>
+        <option value="PGMC">PCOM</option>
       </select>
     </v-td>
     <v-td width="25" />
