@@ -398,7 +398,7 @@ export default {
       }));
     },
     AllProgramasPosOrdered() {
-      return orderBy(["PGCC", "PGMC", "PGEM"], String, "asc");
+      return orderBy(["PGCC", "PGMC", "PGEM", "PCOM"], String, "asc");
     },
   },
 };
